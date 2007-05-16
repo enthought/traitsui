@@ -31,6 +31,12 @@ from enthought.traits.ui.wx.basic_editor_factory \
 
 from enthought.pyface.image_resource \
     import ImageResource
+
+try:
+    from enthought.util.wx.drag_and_drop \
+        import PythonDropSource, PythonDropTarget
+except:
+    PythonDropSource = PythonDropTarget = None
  
 #-------------------------------------------------------------------------------
 #  'ListStrAdapter' class:
@@ -106,12 +112,17 @@ class ListStrAdapter ( HasPrivateTraits ):
             list item. 
         """
         return str( self.get_item( object, trait, index ) )
+        
+    def set_item ( self, object, trait, index, value ):
+        """ Sets the value of the *object.trait[index]* list item.
+        """
+        getattr( object, trait )[ index ] = value
      
     def set_text ( self, object, trait, index, text ):
         """ Sets the text for a specified *object.trait[index]* list item to
             *text*.
         """
-        getattr( object, trait )[ index ] = text
+        self.set_item( object, trait, index, text )
         
     def get_default_value ( self, object, trait ):
         """ Returns a new default value for the specified *object.trait* list.
@@ -230,6 +241,10 @@ class _ListStrEditor ( Editor ):
         wx.EVT_LIST_ITEM_SELECTED(    parent, id, self._item_selected )
         wx.EVT_LIST_ITEM_DESELECTED(  parent, id, self._item_selected )
         wx.EVT_LIST_KEY_DOWN(         parent, id, self._key_down )
+
+        # Set up the drag and drop target:
+        if PythonDropTarget is not None:
+            control.SetDropTarget( PythonDropTarget( self ) )
         
         # Initialize the editor title:
         self.title = factory.title
@@ -390,8 +405,27 @@ class _ListStrEditor ( Editor ):
         """ Handles the user beginning a drag operation with the left mouse
             button.
         """
-        # fixme: NOT IMPLEMENTED YET
-        pass
+        if PythonDropSource is not None:
+            adapter      = self.factory.adapter
+            object, name = self.object, self.name
+            index        = event.GetIndex()
+            selected     = self._get_selected()
+            drag_items   = []
+            for index in selected:
+                drag = adapter.drag( object, name, index )
+                if drag is None:
+                    return
+                    
+                drag_items.append( drag )
+                
+            self._drag_indices = selected
+            try:
+                if len( drag_items ) == 1:
+                    drag_items = drag_items[0]
+                    
+                PythonDropSource( self.control, drag_items )
+            finally:
+                self._drag_indices = None
         
     def _begin_label_edit ( self, event ):
         """ Handles the user starting to edit an item label.
@@ -445,6 +479,88 @@ class _ListStrEditor ( Editor ):
             self._edit_current()
         else:
             event.Skip()
+
+    #-- Drag and drop Event Handlers -------------------------------------------
+
+    def wx_dropped_on ( self, x, y, data, drag_result ):
+        """ Handles a Python object being dropped on the list control.
+        """
+        index, flags = self.control.HitTest( wx.Point( x, y ) )
+        if index != -1:
+            self._drop_index = index
+            
+            if not isinstance( data, list ):
+                return self._wx_dropped_on( data, drag_result )
+                
+            data.reverse()
+            for item in data:
+                rc = self._wx_dropped_on( item, drag_result )
+                    
+            return rc
+            
+        return wx.DragNone
+
+    def _wx_dropped_on ( self, data, drag_result ):
+        adapter      = self.factory.adapter
+        object, name = self.object, self.name
+        index        = self._drop_index
+        destination  = adapter.dropped( object, name, index, data )
+        indices      = self._drag_indices
+        if (indices is not None) and (drag_result == wx.DragMove):
+            indices.reverse()
+            for an_index in indices:
+                if an_index < index:
+                    index -= 1
+                elif (an_index == index) and (destination == 'replace'):
+                    continue
+                    
+                adapter.delete( object, name, an_index )
+                
+            self._drag_indices = None
+            self._drop_index   = index
+            
+        if destination == 'replace':
+            adapter.set_item( object, name, index, data )
+        else:
+            if destination == 'after':
+                index += 1
+            adapter.insert( object, name, index, data )
+            
+        return drag_result
+        
+    def wx_drag_over ( self, x, y, data, drag_result ):
+        """ Handles a Python object being dragged over the tree.
+        """
+        if isinstance( data, list ):
+            rc = wx.DragNone
+            for item in data:
+                rc = self.wx_drag_over( x, y, item, drag_result )
+                if rc == wx.DragNone:
+                    break
+                    
+            return rc
+            
+        index, flags = self.control.HitTest( wx.Point( x, y ) )
+        if ((index != -1) and 
+            self.factory.adapter.can_drop( self.object, self.name, index, 
+                                           data )):
+            return drag_result
+            
+        return wx.DragNone
+
+    #---------------------------------------------------------------------------
+    #  Makes sure that the target is not the same as or a child of the source
+    #  object:
+    #---------------------------------------------------------------------------
+
+    def _is_drag_ok ( self, snid, source, target ):
+        if (snid is None) or (target is source):
+            return False
+        for cnid in self._nodes( snid ):
+            if not self._is_drag_ok( cnid, self._get_node_data( cnid )[2],
+                                     target ):
+                return False
+        return True
         
     #-- Private Methods --------------------------------------------------------
     
