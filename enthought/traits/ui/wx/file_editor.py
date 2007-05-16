@@ -1,33 +1,41 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 10/21/2004
 #
-#  Symbols defined: ToolkitEditorFactory
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   10/21/2004
 #
 #------------------------------------------------------------------------------
+
 """ Defines file editors and the file editor factoryfor the wxPython user 
 interface toolkit.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
 
 import wx
 
-from os.path             import abspath, splitext
-from enthought.traits.api    import List, Str, false
-from enthought.traits.ui.api import View, Group
-from text_editor         import ToolkitEditorFactory as EditorFactory
-from text_editor         import SimpleEditor         as SimpleTextEditor
+from os.path \
+    import abspath, splitext
+    
+from enthought.traits.api \
+    import List, Str, false
+    
+from enthought.traits.ui.api \
+    import View, Group
+    
+from text_editor \
+    import ToolkitEditorFactory as EditorFactory, \
+           SimpleEditor         as SimpleTextEditor
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:
@@ -43,16 +51,22 @@ filter_trait = List( Str )
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for file editors.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
     
-    # Wildcard filter to apply to the file dialog
-    filter       = filter_trait  
+    # Wildcard filter to apply to the file dialog:
+    filter = filter_trait
+    
     # Should file extension be truncated?
-    truncate_ext = false      
-    # Is user input set on every keystroke? This value overrides the default.
-    auto_set     = false      
+    truncate_ext = false
+    
+    # Is user input set on every keystroke? (Overrides the default)
+    auto_set = False      
+    
+    # Is user input set when the Enter key is pressed? (Overrides the default)
+    enter_set = True
     
     #---------------------------------------------------------------------------
     #  Traits view definition:  
@@ -94,6 +108,7 @@ class SimpleEditor ( SimpleTextEditor ):
     button that opens a file-selection dialog box. The user can also drag and
     drop a file onto this control.
     """
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -105,15 +120,18 @@ class SimpleEditor ( SimpleTextEditor ):
         """
         self.control = panel = wx.Panel( parent, -1 )
         sizer        = wx.BoxSizer( wx.HORIZONTAL )
+        
         if self.factory.enter_set:
             control = wx.TextCtrl( panel, -1, '', style = wx.TE_PROCESS_ENTER )
             wx.EVT_TEXT_ENTER( panel, control.GetId(), self.update_object )
         else:
             control = wx.TextCtrl( panel, -1, '' )
+            
         self._filename = control
         wx.EVT_KILL_FOCUS( control, self.update_object )
         if self.factory.auto_set:
             wx.EVT_TEXT( panel, control.GetId(), self.update_object )
+            
         sizer.Add( control, 1, wx.EXPAND | wx.ALIGN_CENTER )
         button = wx.Button( panel, -1, 'Browse...' )
         sizer.Add( button, 0, wx.LEFT | wx.ALIGN_CENTER, 8 )
@@ -131,7 +149,8 @@ class SimpleEditor ( SimpleTextEditor ):
         try:
             filename = self._filename.GetValue()
             if self.factory.truncate_ext:
-                filename = splitext( filename )[0] 
+                filename = splitext( filename )[0]
+                
             self.value = filename
         except TraitError, excp:
             pass
@@ -159,7 +178,8 @@ class SimpleEditor ( SimpleTextEditor ):
         dlg.Destroy()
         if rc:
             if self.factory.truncate_ext:
-                filename = splitext( filename )[0] 
+                filename = splitext( filename )[0]
+                
             self.value = filename
             self.update_editor()
 
@@ -174,6 +194,7 @@ class SimpleEditor ( SimpleTextEditor ):
         dlg.SetFilename( self._filename.GetValue() )
         if len( self.factory.filter ) > 0:
             dlg.SetWildcard( '|'.join( self.factory.filter[:] ) )
+            
         return dlg
 
 #-------------------------------------------------------------------------------
@@ -190,5 +211,6 @@ class FileDropTarget ( wx.FileDropTarget ):
     def OnDropFiles ( self, x, y, filenames ):
         self.editor.value = filenames[-1]
         self.editor.update_editor()
+        
         return True
         
