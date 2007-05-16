@@ -60,7 +60,7 @@ class ListStrAdapter ( HasPrivateTraits ):
     
     # Specifies where a dropped item should be placed in the list relative to
     # the item it is dropped on:
-    drop = Enum( 'after', 'before', 'replace' )
+    drop = Enum( 'after', 'before' )
     
     # Specifies the default value for a new list item:
     default_value = Any( '' )
@@ -93,8 +93,6 @@ class ListStrAdapter ( HasPrivateTraits ):
             specified *object.trait[index]* list item. The possible return
             values are:
                 
-            'replace'
-                Replace the item dropped on with the specified *value*.
             'before'
                 Insert the specified *value* before the dropped on item.
             'after'
@@ -201,6 +199,15 @@ class _ListStrEditor ( Editor ):
     
     # Should the selected item be edited after rebuilding the editor list:
     edit = Bool( False )
+           
+    # The adapter from list items to editor values:                       
+    adapter = Instance( ListStrAdapter )
+    
+    # Dictionaly mapping image names to wx.ImageList indices:
+    images = Any( {} )
+    
+    # Dictionary mapping ImageResource objects to wx.ImageList indices:
+    image_resources = Any( {} )
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -212,8 +219,9 @@ class _ListStrEditor ( Editor ):
             widget.
         """
         # Determine the style to use for the list control:
-        factory = self.factory
-        style   = wx.LC_REPORT
+        factory      = self.factory
+        self.adapter = factory.adapter
+        style        = wx.LC_REPORT
         
         if factory.editable:
             style |= wx.LC_EDIT_LABELS 
@@ -264,6 +272,10 @@ class _ListStrEditor ( Editor ):
         # replacements:
         self.context_object.on_trait_change( self.update_editor,
                                 self.extended_name + '_items', dispatch = 'ui' )
+                                
+        # Create the mapping from user supplied images to wx.ImageList indices:
+        for image_resource in factory.images:
+            self._add_image( image_resource )
         
         # Set the list control's tooltip:
         self.set_tooltip()
@@ -280,7 +292,7 @@ class _ListStrEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        adapter = self.factory.adapter
+        adapter = self.adapter
         control, object, name = self.control, self.object, self.name
         control.DeleteAllItems()
         for i in range( len( self.value ) ):
@@ -406,11 +418,13 @@ class _ListStrEditor ( Editor ):
             button.
         """
         if PythonDropSource is not None:
-            adapter      = self.factory.adapter
+            adapter      = self.adapter
             object, name = self.object, self.name
             index        = event.GetIndex()
             selected     = self._get_selected()
             drag_items   = []
+            
+            # Collect all of the selected items to drag:
             for index in selected:
                 drag = adapter.drag( object, name, index )
                 if drag is None:
@@ -418,27 +432,43 @@ class _ListStrEditor ( Editor ):
                     
                 drag_items.append( drag )
                 
+            # Save the drag item indices, so that we can later handle a 
+            # completed 'move' operation:
             self._drag_indices = selected
+            
             try:
+                # If only one item is being dragged, drag it as a item, not a
+                # list:
                 if len( drag_items ) == 1:
                     drag_items = drag_items[0]
-                    
-                PythonDropSource( self.control, drag_items )
+                
+                # Perform the drag and drop operation:
+                ds = PythonDropSource( self.control, drag_items )
+                
+                # If the result was a drag move:
+                if ds.result == wx.DragMove:
+                    # Then delete all of the original items (in reverse order
+                    # from highest to lowest, so the indices don't need to be
+                    # adjusted):
+                    indices = self._drag_indices
+                    indices.reverse()
+                    for index in indices:
+                        adapter.delete( object, name, index )
             finally:
                 self._drag_indices = None
         
     def _begin_label_edit ( self, event ):
         """ Handles the user starting to edit an item label.
         """
-        if not self.factory.adapter.can_edit( self.object, self.name, 
-                                              event.GetIndex() ):
+        if not self.adapter.can_edit( self.object, self.name, 
+                                      event.GetIndex() ):
             event.Veto()
         
     def _end_label_edit ( self, event ):
         """ Handles the user finishing editing an item label.
         """
-        self.factory.adapter.set_text( self.object, self.name, event.GetIndex(),
-                                       event.GetText() )
+        self.adapter.set_text( self.object, self.name, event.GetIndex(),
+                               event.GetText() )
         self.index = event.GetIndex() + 1
        
     def _item_selected ( self, event ):
@@ -471,62 +501,73 @@ class _ListStrEditor ( Editor ):
             self._delete_current()
         elif key == wx.WXK_INSERT:
             self._insert_current()
-        elif key == wx.WXK_UP:
+        elif key == wx.WXK_LEFT:
             self._move_up_current()
-        elif key == wx.WXK_DOWN:
+        elif key == wx.WXK_RIGHT:
             self._move_down_current()
-        elif key in ( wx.WXK_LEFT, wx.WXK_RIGHT ):
+        elif key in ( wx.WXK_RETURN, wx.WXK_ESCAPE ):
             self._edit_current()
         else:
             event.Skip()
 
-    #-- Drag and drop Event Handlers -------------------------------------------
+    #-- Drag and Drop Event Handlers -------------------------------------------
 
     def wx_dropped_on ( self, x, y, data, drag_result ):
         """ Handles a Python object being dropped on the list control.
         """
         index, flags = self.control.HitTest( wx.Point( x, y ) )
+        
+        # If the user dropped it below the bottom of the list, set the target
+        # as 1 past the end of the list:
+        if (index == -1) and ((flags & wx.LIST_HITTEST_NOWHERE) != 0):
+            index = len( self.value )
+            
+        # If we have a valid drop target index, proceed:
         if index != -1:
-            self._drop_index = index
-            
             if not isinstance( data, list ):
-                return self._wx_dropped_on( data, drag_result )
-                
-            data.reverse()
-            for item in data:
-                rc = self._wx_dropped_on( item, drag_result )
+                # Handle the case of just a single item being dropped:
+                self._wx_dropped_on( index, data )
+            else:
+                # Handles the case of a list of items being dropped, being 
+                # careful to preserve the original order of the source items if
+                # possible:
+                data.reverse()
+                for item in data:
+                    self._wx_dropped_on( index, item )
                     
-            return rc
+            # Return a successful drop result:
+            return drag_result
             
+        # Indicate we could not process the drop:
         return wx.DragNone
 
-    def _wx_dropped_on ( self, data, drag_result ):
-        adapter      = self.factory.adapter
+    def _wx_dropped_on ( self, index, item ):
+        """ Helper method for handling a single item dropped on the list 
+            control.
+        """
+        adapter      = self.adapter
         object, name = self.object, self.name
-        index        = self._drop_index
-        destination  = adapter.dropped( object, name, index, data )
-        indices      = self._drag_indices
-        if (indices is not None) and (drag_result == wx.DragMove):
-            indices.reverse()
-            for an_index in indices:
-                if an_index < index:
-                    index -= 1
-                elif (an_index == index) and (destination == 'replace'):
-                    continue
+        
+        # Obtain the destination of the dropped item relative to the target: 
+        destination = adapter.dropped( object, name, index, item )
+        
+        # Adjust the target index accordingly:
+        if destination == 'after':
+            index += 1
+            
+        # Insert the dropped item at the requested position:
+        adapter.insert( object, name, index, item )
+        
+        # If the source for the drag was also this list control, we need to
+        # adjust the original source indices to account for their new position
+        # after the drag operation:
+        indices = self._drag_indices
+        if indices is not None:
+            for i in range( len( indices ) - 1, -1, -1 ):
+                if indices[i] < index:
+                    break
                     
-                adapter.delete( object, name, an_index )
-                
-            self._drag_indices = None
-            self._drop_index   = index
-            
-        if destination == 'replace':
-            adapter.set_item( object, name, index, data )
-        else:
-            if destination == 'after':
-                index += 1
-            adapter.insert( object, name, index, data )
-            
-        return drag_result
+                indices[i] += 1
         
     def wx_drag_over ( self, x, y, data, drag_result ):
         """ Handles a Python object being dragged over the tree.
@@ -541,34 +582,50 @@ class _ListStrEditor ( Editor ):
             return rc
             
         index, flags = self.control.HitTest( wx.Point( x, y ) )
+        
+        # If the user dropped it below the bottom of the list, set the target
+        # as 1 past the end of the list:
+        if (index == -1) and ((flags & wx.LIST_HITTEST_NOWHERE) != 0):
+            index = len( self.value )
+           
+        # If the drag target index is valid and the adapter says it is OK to
+        # drop the data here, then indicate the data can be dropped:
         if ((index != -1) and 
-            self.factory.adapter.can_drop( self.object, self.name, index, 
-                                           data )):
+            self.adapter.can_drop( self.object, self.name, index, data )):
             return drag_result
             
+        # Else indicate that we will not accept the data:
         return wx.DragNone
-
-    #---------------------------------------------------------------------------
-    #  Makes sure that the target is not the same as or a child of the source
-    #  object:
-    #---------------------------------------------------------------------------
-
-    def _is_drag_ok ( self, snid, source, target ):
-        if (snid is None) or (target is source):
-            return False
-        for cnid in self._nodes( snid ):
-            if not self._is_drag_ok( cnid, self._get_node_data( cnid )[2],
-                                     target ):
-                return False
-        return True
         
     #-- Private Methods --------------------------------------------------------
     
+    def _add_image ( self, image_resource ):
+        """ Adds a new image to the wx.ImageList and its associated mapping.
+        """
+        bitmap = image_resource.create_image().ConvertToBitmap()
+        
+        image_list = self._image_list
+        if image_list is None:
+            self._image_list = image_list = wx.ImageList( bitmap.GetWidth(), 
+                                                          bitmap.GetHeight() )
+            self.control.AssignImageList( image_list, wx.IMAGE_LIST_SMALL )
+           
+        self.image_resources[image_resource] = \
+        self.images[ image_resource.name ]   = index = image_list.Add( bitmap )
+        
+        return index
+        
     def _get_image ( self, image ):
         """ Converts a user specified image to a wx.ListCtrl image index.
         """
-        # fixme: NOT IMPLEMENTED YET
-        return None
+        if isinstance( image, ImageResource ):
+            result = self.image_resources.get( image )
+            if result is not None:
+                return result
+                
+            return self._add_image( image )
+            
+        return self.images.get( image )
         
     def _get_selected ( self ):
         """ Returns a list of the indices of all currently selected list items.
@@ -590,7 +647,7 @@ class _ListStrEditor ( Editor ):
         """ Append a new item to the end of the list control.
         """
         if 'append' in self.factory.operations:
-            adapter    = self.factory.adapter
+            adapter    = self.adapter
             self.index = self.control.GetItemCount()
             self.edit  = True
             adapter.insert( self.object, self.name, self.index,
@@ -602,7 +659,7 @@ class _ListStrEditor ( Editor ):
         if 'insert' in self.factory.operations:
             selected = self._get_selected()
             if len( selected ) == 1:
-                adapter = self.factory.adapter
+                adapter = self.adapter
                 adapter.insert( self.object, self.name, selected[0],
                            adapter.get_default_value( self.object, self.name ) )
                 self.index = selected[0]
@@ -616,7 +673,7 @@ class _ListStrEditor ( Editor ):
             if len( selected ) == 0:
                 return
                 
-            delete = self.factory.adapter.delete
+            delete = self.adapter.delete
             selected.reverse()
             for index in selected:
                 delete( self.object, self.name, index )
@@ -631,7 +688,7 @@ class _ListStrEditor ( Editor ):
             if len( selected ) == 1:
                 index = selected[0]
                 if index > 0:
-                    adapter      = self.factory.adapter
+                    adapter      = self.adapter
                     object, name = self.object, self.name
                     item         = adapter.get_item( object, name, index )
                     adapter.delete( object, name, index )
@@ -646,7 +703,7 @@ class _ListStrEditor ( Editor ):
             if len( selected ) == 1:
                 index = selected[0]
                 if index < (self.control.GetItemCount() - 1):
-                    adapter      = self.factory.adapter
+                    adapter      = self.adapter
                     object, name = self.object, self.name
                     item         = adapter.get_item( object, name, index )
                     adapter.delete( object, name, index )
@@ -656,17 +713,18 @@ class _ListStrEditor ( Editor ):
     def _edit_current ( self ):
         """ Allows the user to edit the current item in the list control.
         """
-        if 'replace' in self.factory.operations:
+        if 'edit' in self.factory.operations:
             selected = self._get_selected()
             if len( selected ) == 1:
                 self.control.EditLabel( selected[0] )
                     
 #-------------------------------------------------------------------------------
-#  Create the editor factory object:
+#  'ListStrEditor' editor factory class:
 #-------------------------------------------------------------------------------
 
-# wxPython editor factory for list of string editors:
 class ListStrEditor ( BasicEditorFactory ):
+    """ wxPython editor factory for list of string editors.
+    """
   
     #-- Trait Definitions ------------------------------------------------------
     
@@ -697,12 +755,12 @@ class ListStrEditor ( BasicEditorFactory ):
     title_name = Str
     
     # What type of operations are allowed on the list:
-    operations = List( Enum( 'delete', 'insert', 'append', 'replace', 'move' ),
-                       [ 'delete', 'insert', 'append', 'replace', 'move' ] )
+    operations = List( Enum( 'delete', 'insert', 'append', 'edit', 'move' ),
+                       [ 'delete', 'insert', 'append', 'edit', 'move' ] )
            
     # The adapter from list items to editor values:                       
     adapter = Instance( ListStrAdapter, () )
                        
     # The set of images that can be used:                       
-    images = Dict( Str, Instance( ImageResource ) )  
+    images = List( ImageResource )  
     
