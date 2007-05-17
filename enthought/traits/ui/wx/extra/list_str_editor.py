@@ -297,6 +297,7 @@ class _ListStrEditor ( Editor ):
         wx.EVT_LIST_ITEM_SELECTED(    parent, id, self._item_selected )
         wx.EVT_LIST_ITEM_DESELECTED(  parent, id, self._item_selected )
         wx.EVT_LIST_KEY_DOWN(         parent, id, self._key_down )
+        wx.EVT_SIZE(                  control, self._size_modified )
 
         # Set up the drag and drop target:
         if PythonDropTarget is not None:
@@ -553,6 +554,12 @@ class _ListStrEditor ( Editor ):
             self._edit_current()
         else:
             event.Skip()
+
+    def _size_modified ( self, size ):
+        """ Handles the size of the list control being changed.
+        """
+        dx, dy = self.control.GetClientSizeTuple()
+        self.control.SetColumnWidth( 0, dx )
 
     #-- Drag and Drop Event Handlers -------------------------------------------
 
