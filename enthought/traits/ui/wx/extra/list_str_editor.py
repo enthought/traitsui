@@ -341,6 +341,8 @@ class _ListStrEditor ( Editor ):
         control.SetItemCount( n )
         control.RefreshItems( 0, n - 1 )
         
+        self.control.SetColumnWidth( 0, control.GetClientSizeTuple()[0]  )
+        
         edit,  self.edit  = self.edit,  False
         index, self.index = self.index, None
         
@@ -551,7 +553,7 @@ class _ListStrEditor ( Editor ):
         """ Handles the size of the list control being changed.
         """
         dx, dy = self.control.GetClientSizeTuple()
-        self.control.SetColumnWidth( 0, dx - 17 )
+        self.control.SetColumnWidth( 0, dx - 1 )
 
     #-- Drag and Drop Event Handlers -------------------------------------------
 
