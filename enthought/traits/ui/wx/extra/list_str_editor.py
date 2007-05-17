@@ -167,6 +167,53 @@ class ListStrAdapter ( HasPrivateTraits ):
             return None
         
         return self.image
+        
+#-------------------------------------------------------------------------------
+#  'wxListCtrl' class:  
+#-------------------------------------------------------------------------------
+    
+class wxListCtrl ( wx.ListCtrl ):
+    """ Subclass of wx.ListCtrl to provide correct virtual list behavior.
+    """
+    
+    def OnGetItemAttr ( self, index ):
+        """ Returns the display attributes to use for the specified list item.
+        """
+        # fixme: There appears to be a bug in wx in that they do not correctly 
+        # manage the reference count for the returned object, and it seems to be
+        # gc'ed before they finish using it. So we store an object reference to
+        # it to prevent it from going away too soon...
+        self._attr = attr = wx.ListItemAttr()
+        editor = self._editor
+        
+        color = editor.adapter.get_bg_color( editor.object, editor.name, index )
+        if color is not None:
+            attr.SetBackgroundColour( color )
+                
+        color = editor.adapter.get_text_color( editor.object, editor.name,
+                                               index ) 
+        if color is not None:
+            attr.SetTextColour( color )
+            
+        return attr
+    
+    def OnGetItemImage ( self, index ):
+        """ Returns the image index to use for the specified list item.
+        """
+        editor = self._editor
+        image  = editor._get_image( editor.adapter.get_image( editor.object, 
+                                                          editor.name, index ) )
+        if image is not None:
+            return image
+            
+        return -1
+        
+    def OnGetItemText ( self, index, column ):
+        """ Returns the text to use for the specified list item.
+        """
+        editor = self._editor
+                                    
+        return editor.adapter.get_text( editor.object, editor.name, index )
 
 #-------------------------------------------------------------------------------
 #  '_ListStrEditor' class:
@@ -221,7 +268,7 @@ class _ListStrEditor ( Editor ):
         # Determine the style to use for the list control:
         factory      = self.factory
         self.adapter = factory.adapter
-        style        = wx.LC_REPORT
+        style        = wx.LC_REPORT | wx.LC_VIRTUAL
         
         if factory.editable:
             style |= wx.LC_EDIT_LABELS 
@@ -235,8 +282,9 @@ class _ListStrEditor ( Editor ):
         if (factory.title == '') and (factory.title_name == ''):
             style |= wx.LC_NO_HEADER
             
-        # Create the list control:
-        self.control = control = wx.ListCtrl( parent, -1, style = style )
+        # Create the list control and link it back to us:
+        self.control = control = wxListCtrl( parent, -1, style = style )
+        control._editor = self
         
         # Create the list control column:
         control.InsertColumn( 0, '' )
@@ -292,43 +340,39 @@ class _ListStrEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        adapter = self.adapter
-        control, object, name = self.control, self.object, self.name
+        control = self.control
+        n       = len( self.value )
+        top     = control.GetTopItem()
+        pn      = control.GetCountPerPage()
+        
         control.DeleteAllItems()
-        for i in range( len( self.value ) ):
-            list_item = wx.ListItem()
-            
-            list_item.SetId( i )
-            
-            color = adapter.get_bg_color( object, name, i ) 
-            if color is not None:
-                list_item.SetBackgroundColour( color )
-                
-            color = adapter.get_text_color( object, name, i ) 
-            if color is not None:
-                list_item.SetTextColour( color )
-                                    
-            list_item.SetText( adapter.get_text( object, name, i ) )
-            
-            image = self._get_image( adapter.get_image( object, name, i ) )
-            if image is not None:
-                list_item.SetImage( image )
-                
-            control.InsertItem( list_item )
-           
-        index, self.index = self.index, None
+        control.SetItemCount( n )
+        
         edit,  self.edit  = self.edit,  False
+        index, self.index = self.index, None
+        
         if index is not None:
-            if index >= control.GetItemCount():
+            if index >= n:
                 index -= 1
                 if index < 0:
-                    return
+                    index = None
+        
+        if index is None:
+            control.EnsureVisible( top + pn - 1 )
+            return
             
-            control.SetItemState( index, wx.LIST_STATE_SELECTED,
-                                         wx.LIST_STATE_SELECTED )
+        if 0 <= (index - top) < pn:
+            control.EnsureVisible( top + pn - 1 )
+        elif index < top:
+            control.EnsureVisible( index + pn - 1 )
+        else:
+            control.EnsureVisible( index )
+
+        control.SetItemState( index, wx.LIST_STATE_SELECTED,
+                                     wx.LIST_STATE_SELECTED )
                                          
-            if edit:
-                control.EditLabel( index )
+        if edit:
+            control.EditLabel( index )
         
     #-- Trait Event Handlers ---------------------------------------------------
     
@@ -367,6 +411,17 @@ class _ListStrEditor ( Editor ):
             except:
                 pass
         
+    def _multi_selected_items_changed ( self, event ):
+        """ Handles the editor's 'multi_selected' trait being modified.
+        """
+        values = self.values
+        try:
+            self._multi_selected_indices_items_changed( TraitListEvent( 0,
+                [ values.index( item ) for item in event.removed ],
+                [ values.index( item ) for item in event.added   ] ) )
+        except:
+            pass
+        
     def _multi_selected_indices_changed ( self, selected_indices ):
         """ Handles the editor's 'multi_selected_indices' trait being changed.
         """
@@ -385,17 +440,6 @@ class _ListStrEditor ( Editor ):
             # Unselect all remaining selected items that aren't selected now:
             for index in selected:
                 control.SetItemState( index, 0, wx.LIST_STATE_SELECTED ) 
-        
-    def _multi_selected_items_changed ( self, event ):
-        """ Handles the editor's 'multi_selected' trait being modified.
-        """
-        values = self.values
-        try:
-            self._multi_selected_indices_items_changed( TraitListEvent( 0,
-                [ values.index( item ) for item in event.removed ],
-                [ values.index( item ) for item in event.added   ] ) )
-        except:
-            pass
         
     def _multi_selected_indices_items_changed ( self, event ):
         """ Handles the editor's 'multi_selected_indices' trait being modified.
