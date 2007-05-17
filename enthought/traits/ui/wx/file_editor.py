@@ -129,6 +129,7 @@ class SimpleEditor ( SimpleTextEditor ):
             
         self._filename = control
         wx.EVT_KILL_FOCUS( control, self.update_object )
+        
         if self.factory.auto_set:
             wx.EVT_TEXT( panel, control.GetId(), self.update_object )
             

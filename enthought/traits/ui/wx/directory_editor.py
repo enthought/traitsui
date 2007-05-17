@@ -1,30 +1,32 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 10/21/2004
 #
-#  Symbols defined: ToolkitEditorFactory
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   10/21/2004
 #
 #------------------------------------------------------------------------------
+
 """ Defines various directory editor and the directory editor factory for the 
 wxPython user interface toolkit.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
 
 import wx
 
-from file_editor import ToolkitEditorFactory as EditorFactory
-from file_editor import SimpleEditor         as SimpleFileEditor
+from file_editor \
+    import ToolkitEditorFactory as EditorFactory, \
+           SimpleEditor         as SimpleFileEditor
 
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -33,6 +35,7 @@ from file_editor import SimpleEditor         as SimpleFileEditor
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for directory editors.
     """
+    
     #---------------------------------------------------------------------------
     #  'Editor' factory methods:
     #---------------------------------------------------------------------------
@@ -56,6 +59,7 @@ class SimpleEditor ( SimpleFileEditor ):
     """ Simple style of editor for directories, which displays a text field
     and a **Browse** button that opens a directory-selection dialog box.
     """
+    
     #---------------------------------------------------------------------------
     #  Creates the correct type of file dialog:
     #---------------------------------------------------------------------------
@@ -65,5 +69,6 @@ class SimpleEditor ( SimpleFileEditor ):
         """
         dlg =  wx.DirDialog( self.control, message = 'Select a Directory' )
         dlg.SetPath( self._filename.GetValue() )
+        
         return dlg
         
