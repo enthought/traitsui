@@ -49,21 +49,21 @@ class ListStrAdapter ( HasPrivateTraits ):
     
     #-- Trait Definitions ------------------------------------------------------
     
-    # The default background color for list items:
-    bg_color = Color( None )
+    # Specifies the default value for a new list item:
+    default_value = Any( '' )
     
     # The default text color for list items:
     text_color = Color( None )
     
+    # The default background color for list items:
+    bg_color = Color( None )
+    
     # The name of the default image to use for list items:
-    image = Str
+    image = Str( None )
     
     # Specifies where a dropped item should be placed in the list relative to
     # the item it is dropped on:
     drop = Enum( 'after', 'before' )
-    
-    # Specifies the default value for a new list item:
-    default_value = Any( '' )
     
     #-- Adapter Methods --------------------------------------------------------
     
@@ -100,6 +100,32 @@ class ListStrAdapter ( HasPrivateTraits ):
         """
         return self.drop
         
+    def get_default_value ( self, object, trait ):
+        """ Returns a new default value for the specified *object.trait* list.
+        """
+        return self.default_value
+        
+    def get_text_color ( self, object, trait, index ):
+        """ Returns the text color for a specified *object.trait[index]* list
+            item. A result of None means use the default list item text color. 
+        """
+        return self.text_color_
+     
+    def get_bg_color ( self, object, trait, index ):
+        """ Returns the background color for a specified *object.trait[index]*
+            list item. A result of None means use the default list item 
+            background color.
+        """
+        return self.bg_color_
+        
+    def get_image ( self, object, trait, index ):
+        """ Returns the name of the image to use for a specified 
+            *object.trait[index]* list item. A result of None means no image
+            should be used. Otherwise, the result should either be the name of
+            the image, or an ImageResource item specifying the image to use.
+        """
+        return self.image
+        
     def get_item ( self, object, trait, index ):
         """ Returns the value of the *object.trait[index]* list item.
         """
@@ -122,11 +148,6 @@ class ListStrAdapter ( HasPrivateTraits ):
         """
         self.set_item( object, trait, index, text )
         
-    def get_default_value ( self, object, trait ):
-        """ Returns a new default value for the specified *object.trait* list.
-        """
-        return self.default_value
-        
     def delete ( self, object, trait, index ):
         """ Deletes the specified *object.trait[index]* list item.
         """
@@ -137,36 +158,6 @@ class ListStrAdapter ( HasPrivateTraits ):
             index.
         """
         getattr( object, trait ) [ index: index ] = [ value ]
-     
-    def get_bg_color ( self, object, trait, index ):
-        """ Returns the background color for a specified *object.trait[index]*
-            list item. A result of None means use the default list item 
-            background color.
-        """
-        if self.bg_color is None:
-            return None
-            
-        return self.bg_color_
-        
-    def get_text_color ( self, object, trait, index ):
-        """ Returns the text color for a specified *object.trait[index]* list
-            item. A result of None means use the default list item text color. 
-        """
-        if self.text_color is None:
-            return None
-            
-        return self.text_color_
-        
-    def get_image ( self, object, trait, index ):
-        """ Returns the name of the image to use for a specified 
-            *object.trait[index]* list item. A result of None means no image
-            should be used. Otherwise, the result should either be the name of
-            the image, or an ImageResource item specifying the image to use.
-        """
-        if self.image == '':
-            return None
-        
-        return self.image
         
 #-------------------------------------------------------------------------------
 #  'wxListCtrl' class:  
@@ -348,6 +339,7 @@ class _ListStrEditor ( Editor ):
         
         control.DeleteAllItems()
         control.SetItemCount( n )
+        control.RefreshItems( 0, n - 1 )
         
         edit,  self.edit  = self.edit,  False
         index, self.index = self.index, None
@@ -359,11 +351,11 @@ class _ListStrEditor ( Editor ):
                     index = None
         
         if index is None:
-            control.EnsureVisible( top + pn - 1 )
+            control.EnsureVisible( top + pn - 2 )
             return
-            
+         
         if 0 <= (index - top) < pn:
-            control.EnsureVisible( top + pn - 1 )
+            control.EnsureVisible( top + pn - 2 )
         elif index < top:
             control.EnsureVisible( index + pn - 1 )
         else:
@@ -559,7 +551,7 @@ class _ListStrEditor ( Editor ):
         """ Handles the size of the list control being changed.
         """
         dx, dy = self.control.GetClientSizeTuple()
-        self.control.SetColumnWidth( 0, dx )
+        self.control.SetColumnWidth( 0, dx - 17 )
 
     #-- Drag and Drop Event Handlers -------------------------------------------
 
