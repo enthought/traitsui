@@ -340,8 +340,7 @@ class _ListStrEditor ( Editor ):
         control.DeleteAllItems()
         control.SetItemCount( n )
         control.RefreshItems( 0, n - 1 )
-        
-        self.control.SetColumnWidth( 0, control.GetClientSizeTuple()[0]  )
+        control.SetColumnWidth( 0, control.GetClientSizeTuple()[0]  )
         
         edit,  self.edit  = self.edit,  False
         index, self.index = self.index, None
@@ -363,8 +362,9 @@ class _ListStrEditor ( Editor ):
         else:
             control.EnsureVisible( index )
 
-        control.SetItemState( index, wx.LIST_STATE_SELECTED,
-                                     wx.LIST_STATE_SELECTED )
+        control.SetItemState( index, 
+            wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED,
+            wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED  )
                                          
         if edit:
             control.EditLabel( index )
