@@ -21,7 +21,7 @@ import wx
 
 from enthought.traits.api \
     import HasPrivateTraits, Color, Str, Int, Enum, List, Bool, Instance, Any, \
-           Dict, TraitListEvent
+           Dict, Event, TraitListEvent, Interface, on_trait_change
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -37,6 +37,32 @@ try:
         import PythonDropSource, PythonDropTarget
 except:
     PythonDropSource = PythonDropTarget = None
+    
+#-------------------------------------------------------------------------------
+#  Constants:
+#-------------------------------------------------------------------------------
+
+# Result indicating that no handler to produce a result was found:
+NoResult = ( False, None )
+
+#-------------------------------------------------------------------------------
+#  'IListStrAdapter' interface:
+#-------------------------------------------------------------------------------
+
+class IListStrAdapter ( Interface ):
+    
+    # Current item being adapted:
+    item = Any
+    
+    def accepts ( self, item ):
+        """ Returns *True* if the adapter knows how to handle *item*, and 
+            *False* otherwise.
+        """
+        
+    def is_cacheable ( self, item ):
+        """ Returns *True* if the value of *accepts* only depends only upon the 
+            type of *item*, and *False* otherwise.
+        """
  
 #-------------------------------------------------------------------------------
 #  'ListStrAdapter' class:
@@ -52,43 +78,62 @@ class ListStrAdapter ( HasPrivateTraits ):
     # Specifies the default value for a new list item:
     default_value = Any( '' )
     
-    # The default text color for list items:
-    text_color = Color( None )
+    # The default text color for list items (even, odd, any rows):
+    even_text_color = Color( None, update = True )
+    odd_text_color  = Color( None, update = True )
+    text_color      = Color( None, update = True )
     
-    # The default background color for list items:
-    bg_color = Color( None )
+    # The default background color for list items (even, odd, any rows):
+    even_bg_color = Color( None, update = True )
+    odd_bg_color  = Color( None, update = True )
+    bg_color      = Color( None, update = True )
     
     # The name of the default image to use for list items:
-    image = Str( None )
+    image = Str( None, update = True )
+    
+    # Can the text value of each list item be edited:
+    can_edit = Bool( True )
     
     # Specifies where a dropped item should be placed in the list relative to
     # the item it is dropped on:
-    drop = Enum( 'after', 'before' )
+    dropped = Enum( 'after', 'before' )
     
-    #-- Adapter Methods --------------------------------------------------------
+    # The current item being adapted:
+    item = Any
     
-    def can_edit ( self, object, trait, index ):
+    # List of optional delegated adapters:
+    adapters = List( IListStrAdapter, update = True )
+    
+    # Cache of attribute handlers:
+    cache = Any( {} )
+    
+    # Event fired when the cache is flushed:
+    cache_flushed = Event( update = True )
+    
+    #-- Adapter methods that are sensitive to item type ------------------------
+    
+    def get_can_edit ( self, object, trait, index ):
         """ Returns whether the user can edit a specified *object.trait[index]*
             list item. A True result indicates the value can be edited, while
             a False result indicates that it cannot be edited.
         """
-        return True
+        return self._result_for( 'get_can_edit', object, trait, index )
     
-    def drag ( self, object, trait, index ):
+    def get_drag ( self, object, trait, index ):
         """ Returns the 'drag' value for a specified *object.trait[index]*
             list item. A result of *None* means that the item cannot be dragged.
         """
-        return self.get_text( object, trait, index )
+        return self._result_for( 'get_drag', object, trait, index )
         
-    def can_drop ( self, object, trait, index, value ):
+    def get_can_drop ( self, object, trait, index, value ):
         """ Returns whether the specified *value* can be dropped on the
             specified *object.trait[index]* list item. A value of **True** means
             the *value* can be dropped; and a value of **False** indicates that
             it cannot be dropped.
         """
-        return isinstance( value, basestring )
+        return self._result_for( 'get_can_drop', object, trait, index, value )
         
-    def dropped ( self, object, trait, index, value ):
+    def get_dropped ( self, object, trait, index, value ):
         """ Returns how to handle a specified *value* being dropped on a
             specified *object.trait[index]* list item. The possible return
             values are:
@@ -98,25 +143,20 @@ class ListStrAdapter ( HasPrivateTraits ):
             'after'
                 Insert the specified *value* after the dropped on item.
         """
-        return self.drop
-        
-    def get_default_value ( self, object, trait ):
-        """ Returns a new default value for the specified *object.trait* list.
-        """
-        return self.default_value
+        return self._result_for( 'get_dropped', object, trait, index, value )
         
     def get_text_color ( self, object, trait, index ):
         """ Returns the text color for a specified *object.trait[index]* list
             item. A result of None means use the default list item text color. 
         """
-        return self.text_color_
+        return self._result_for( 'get_text_color', object, trait, index )
      
     def get_bg_color ( self, object, trait, index ):
         """ Returns the background color for a specified *object.trait[index]*
             list item. A result of None means use the default list item 
             background color.
         """
-        return self.bg_color_
+        return self._result_for( 'get_bg_color', object, trait, index )
         
     def get_image ( self, object, trait, index ):
         """ Returns the name of the image to use for a specified 
@@ -124,29 +164,36 @@ class ListStrAdapter ( HasPrivateTraits ):
             should be used. Otherwise, the result should either be the name of
             the image, or an ImageResource item specifying the image to use.
         """
-        return self.image
+        return self._result_for( 'get_image', object, trait, index )
         
     def get_item ( self, object, trait, index ):
         """ Returns the value of the *object.trait[index]* list item.
         """
-        return getattr( object, trait )[ index ]
+        return self._result_for( 'get_item', object, trait, index )
      
     def get_text ( self, object, trait, index ):
         """ Returns the text to display for a specified *object.trait[index]*
             list item. 
         """
-        return str( self.get_item( object, trait, index ) )
-        
-    def set_item ( self, object, trait, index, value ):
-        """ Sets the value of the *object.trait[index]* list item.
-        """
-        getattr( object, trait )[ index ] = value
+        return self._result_for( 'get_text', object, trait, index )
      
     def set_text ( self, object, trait, index, text ):
         """ Sets the text for a specified *object.trait[index]* list item to
             *text*.
         """
-        self.set_item( object, trait, index, text )
+        return self._result_for( 'set_text', object, trait, index )
+ 
+    #-- Adapter methods that are not sensitive to item type --------------------
+    
+    def get_default_value ( self, object, trait ):
+        """ Returns a new default value for the specified *object.trait* list.
+        """
+        return self.default_value
+        
+    def set_item ( self, object, trait, index, value ):
+        """ Sets the value of the *object.trait[index]* list item.
+        """
+        getattr( object, trait )[ index ] = value
         
     def delete ( self, object, trait, index ):
         """ Deletes the specified *object.trait[index]* list item.
@@ -158,6 +205,101 @@ class ListStrAdapter ( HasPrivateTraits ):
             index.
         """
         getattr( object, trait ) [ index: index ] = [ value ]
+        
+    #-- Private Adapter Implementation Methods ---------------------------------
+        
+    def _get_can_edit ( self, object, trait, index ):
+        return self.can_edit
+        
+    def _get_drag ( self, object, trait, index ):
+        return self.get_text( object, trait, index )
+        
+    def _get_can_drop ( self, object, trait, index, value ):
+        return isinstance( value, basestring )
+        
+    def _get_dropped ( self, object, trait, index, value ):
+        return self.dropped
+
+    def _get_text_color ( self, object, trait, index ):
+        if (index % 2) == 0:
+            return self.even_text_color_ or self.text_color_
+            
+        return self.odd_text_color or self.text_color_
+        
+    def _get_bg_color ( self, object, trait, index ):
+        if (index % 2) == 0:
+            return self.even_bg_color_ or self.bg_color_
+            
+        return self.odd_bg_color or self.self.bg_color_
+        
+    def _get_image ( self, object, trait, index ):
+        return self.image
+        
+    def _get_item ( self, object, trait, index ):
+        return getattr( object, trait )[ index ]
+        
+    def _get_text ( self, object, trait, index ):
+        return str( self.get_item( object, trait, index ) )
+     
+    def _set_text ( self, object, trait, index, text ):
+        self.set_item( object, trait, index, text )
+    
+    #-- Private Methods --------------------------------------------------------
+    
+    def _result_for ( self, name, object, trait, index, *args ):
+        """ Returns the value of the specified *name* attribute for the
+            specified *object.trait[index]* list item.
+        """
+        self.item  = item = getattr( object, trait )[ index ]
+        item_class = item.__class__
+        key        = '%s:%s' % ( item_class.__name__, name )
+        handler    = self.cache.get( key )
+        if handler is not None:
+            return handler( item, *args )
+            
+        prefix     = name[:4]
+        trait_name = name[4:]   
+            
+        for adapter in self.adapters:
+            if adapter.accepts( item ):
+                handler = getattr( adapter, name, None )
+                if handler is not None:
+                    if adapter.is_cacheable( item ):
+                        break
+                        
+                    return handler( item, *args )
+                    
+                if ((prefix == 'get_') and 
+                    (adapter.trait( trait_name ) is not None)):
+                    handler = lambda item: getattr( adapter.set( item = item ),
+                                                    trait_name )
+                    if adapter.is_cacheable( item ):
+                        break
+                        
+                    return handler( item, *args )
+        else:
+            for klass in item_class.__mro__:
+                cname = '%s_%s' % ( klass.__name__, trait_name )
+                
+                handler = getattr( self, prefix + cname, None )
+                if handler is not None:
+                    break
+                    
+                if (prefix == 'get_') and (self.trait( cname ) is not None):
+                    handler = lambda item: getattr( self, cname )
+            else:   
+                return getattr( self, '_' + name )( object, trait, index, 
+                                                    *args )
+            
+        self.cache[ key ] = handler
+        return handler( item, *args )
+        
+    @on_trait_change( 'adapters.+update' )        
+    def _flush_cache ( self ):
+        """ Flushes the cache when any trait on any adapter changes.
+        """
+        self.cache = {}
+        self.cache_flushed = True
         
 #-------------------------------------------------------------------------------
 #  'wxListCtrl' class:  
@@ -228,6 +370,14 @@ class _ListStrEditor ( Editor ):
     # the initial state of the editor factory 'multi_select' trait):
     selected_index         = Int
     multi_selected_indices = List( Int )
+    
+    # The most recently actived item and its index:
+    activated       = Any
+    activated_index = Int
+    
+    # The most recently right_clicked item and its index:
+    right_clicked       = Event
+    right_clicked_index = Event
 
     # Is the table editor is scrollable? This value overrides the default.
     scrollable = True
@@ -256,10 +406,14 @@ class _ListStrEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        # Determine the style to use for the list control:
-        factory      = self.factory
+        factory = self.factory
+        
+        # Set up the adapter to use:
         self.adapter = factory.adapter
-        style        = wx.LC_REPORT | wx.LC_VIRTUAL
+        self.sync_value( factory.adapter_name, 'adapter', 'from' )
+        
+        # Determine the style to use for the list control:
+        style = wx.LC_REPORT | wx.LC_VIRTUAL
         
         if factory.editable:
             style |= wx.LC_EDIT_LABELS 
@@ -288,6 +442,8 @@ class _ListStrEditor ( Editor ):
         wx.EVT_LIST_ITEM_SELECTED(    parent, id, self._item_selected )
         wx.EVT_LIST_ITEM_DESELECTED(  parent, id, self._item_selected )
         wx.EVT_LIST_KEY_DOWN(         parent, id, self._key_down )
+        wx.EVT_LIST_ITEM_RIGHT_CLICK( parent, id, self._right_clicked )
+        wx.EVT_LIST_ITEM_ACTIVATED(   parent, id, self._item_activated )
         wx.EVT_SIZE(                  control, self._size_modified )
 
         # Set up the drag and drop target:
@@ -308,6 +464,14 @@ class _ListStrEditor ( Editor ):
             self.sync_value( factory.selected, 'selected', 'both' )
             self.sync_value( factory.selected_index, 'selected_index', 'both' )
             
+        # Synchronize other interesting traits as necessary:
+        self.sync_value( factory.activated, 'activated', 'to' )
+        self.sync_value( factory.activated_index, 'activated_index', 'to' )
+            
+        self.sync_value( factory.right_clicked, 'right_clicked', 'to' )
+        self.sync_value( factory.right_clicked_index, 'right_clicked_index', 
+                         'to' )
+            
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
         self.context_object.on_trait_change( self.update_editor,
@@ -316,6 +480,10 @@ class _ListStrEditor ( Editor ):
         # Create the mapping from user supplied images to wx.ImageList indices:
         for image_resource in factory.images:
             self._add_image( image_resource )
+            
+        # Refresh the editor whenever the adapter changes:
+        self.on_trait_change( self._refresh, 'adapter.+update', 
+                              dispatch = 'ui' )
         
         # Set the list control's tooltip:
         self.set_tooltip()
@@ -327,6 +495,7 @@ class _ListStrEditor ( Editor ):
         
         self.context_object.on_trait_change( self.update_editor,
                                   self.extended_name + '_items', remove = True )
+        self.on_trait_change( self._refresh, 'adapter.+update', remove = True ) 
                         
     def update_editor ( self ):
         """ Updates the editor when the object trait changes externally to the
@@ -465,7 +634,7 @@ class _ListStrEditor ( Editor ):
             
             # Collect all of the selected items to drag:
             for index in selected:
-                drag = adapter.drag( object, name, index )
+                drag = adapter.get_drag( object, name, index )
                 if drag is None:
                     return
                     
@@ -476,7 +645,7 @@ class _ListStrEditor ( Editor ):
             self._drag_indices = selected
             
             try:
-                # If only one item is being dragged, drag it as a item, not a
+                # If only one item is being dragged, drag it as an item, not a
                 # list:
                 if len( drag_items ) == 1:
                     drag_items = drag_items[0]
@@ -499,8 +668,8 @@ class _ListStrEditor ( Editor ):
     def _begin_label_edit ( self, event ):
         """ Handles the user starting to edit an item label.
         """
-        if not self.adapter.can_edit( self.object, self.name, 
-                                      event.GetIndex() ):
+        if not self.adapter.get_can_edit( self.object, self.name, 
+                                          event.GetIndex() ):
             event.Veto()
         
     def _end_label_edit ( self, event ):
@@ -515,20 +684,36 @@ class _ListStrEditor ( Editor ):
         """
         self._no_update = True
         try:
-            values           = self.value
+            get_item         = self.adapter.get_item
+            object, name     = self.object, self.name
             selected_indices = self._get_selected()
             if self.factory.multi_select:
                 self.multi_selected_indices = selected_indices
-                self.multi_selected = [ values[ index ] 
+                self.multi_selected = [ get_item( object, name, index ) 
                                         for index in selected_indices]
             elif len( selected_indices ) == 0:
                 self.selected_index = -1
                 self.selected       = None
             else:
                 self.selected_index = selected_indices[0]
-                self.selected       = values[ selected_indices[0] ]
+                self.selected       = get_item( object, name, 
+                                                selected_indices[0] )
         finally:
             self._no_update = False
+            
+    def _item_activated ( self, event ):
+        """ Handles an item being activated (double-clicked or enter pressed).
+        """
+        self.activated_index = event.GetIndex()
+        self.activated       = self.adapter.get_item( self.object, self.name,
+                                                      self.activated_index )
+            
+    def _right_clicked ( self, event ):
+        """ Handles an item being right clicked.
+        """
+        self.right_clicked_index = index = event.GetIndex()
+        self.right_clicked = self.adapter.get_item( self.object, self.name,
+                                                    index )
             
     def _key_down ( self, event ):
         """ Handles the user pressing a key in the list control.
@@ -594,7 +779,7 @@ class _ListStrEditor ( Editor ):
         object, name = self.object, self.name
         
         # Obtain the destination of the dropped item relative to the target: 
-        destination = adapter.dropped( object, name, index, item )
+        destination = adapter.get_dropped( object, name, index, item )
         
         # Adjust the target index accordingly:
         if destination == 'after':
@@ -636,13 +821,18 @@ class _ListStrEditor ( Editor ):
         # If the drag target index is valid and the adapter says it is OK to
         # drop the data here, then indicate the data can be dropped:
         if ((index != -1) and 
-            self.adapter.can_drop( self.object, self.name, index, data )):
+            self.adapter.get_can_drop( self.object, self.name, index, data )):
             return drag_result
             
         # Else indicate that we will not accept the data:
         return wx.DragNone
         
     #-- Private Methods --------------------------------------------------------
+    
+    def _refresh ( self ):
+        """ Refreshes the contents of the editor's list control.
+        """
+        self.control.RefreshItems( 0, len( self.value ) - 1 )
     
     def _add_image ( self, image_resource ):
         """ Adds a new image to the wx.ImageList and its associated mapping.
@@ -784,6 +974,22 @@ class ListStrEditor ( BasicEditorFactory ):
     # indices with:
     selected_index = Str
     
+    # The optional extended name of the trait to synchronize the activated value
+    # with:
+    activated = Str
+    
+    # The optional extended name of the trait to synchronize the activated 
+    # value's index with:
+    activated_index = Str
+    
+    # The optional extended name of the trait to synchronize the right clicked
+    # value with:
+    right_clicked = Str
+    
+    # The optional extended name of the trait to synchronize the right clicked
+    # value's index with:
+    right_clicked_index = Str
+    
     # Can the user edit the values?
     editable = Bool( True )
                  
@@ -798,13 +1004,16 @@ class ListStrEditor ( BasicEditorFactory ):
     
     # The optional extended name of the trait containing the editor title:
     title_name = Str
+           
+    # The adapter from list items to editor values:                       
+    adapter = Instance( ListStrAdapter, () )
+    
+    # The optional extended name of the trait containing the adapter:
+    adapter_name = Str
     
     # What type of operations are allowed on the list:
     operations = List( Enum( 'delete', 'insert', 'append', 'edit', 'move' ),
                        [ 'delete', 'insert', 'append', 'edit', 'move' ] )
-           
-    # The adapter from list items to editor values:                       
-    adapter = Instance( ListStrAdapter, () )
                        
     # The set of images that can be used:                       
     images = List( ImageResource )  
