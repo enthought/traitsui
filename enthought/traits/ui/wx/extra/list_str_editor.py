@@ -181,7 +181,7 @@ class ListStrAdapter ( HasPrivateTraits ):
         """ Sets the text for a specified *object.trait[index]* list item to
             *text*.
         """
-        return self._result_for( 'set_text', object, trait, index )
+        return self._result_for( 'set_text', object, trait, index, text )
  
     #-- Adapter methods that are not sensitive to item type --------------------
     
@@ -250,7 +250,12 @@ class ListStrAdapter ( HasPrivateTraits ):
         """ Returns the value of the specified *name* attribute for the
             specified *object.trait[index]* list item.
         """
-        self.item  = item = getattr( object, trait )[ index ]
+        items = getattr( object, trait )
+        if index >= len( items ):
+            self.item = item = None
+        else:
+            self.item = item = items[ index ]
+            
         item_class = item.__class__
         key        = '%s:%s' % ( item_class.__name__, name )
         handler    = self.cache.get( key )
@@ -747,10 +752,12 @@ class _ListStrEditor ( Editor ):
         """
         index, flags = self.control.HitTest( wx.Point( x, y ) )
         
-        # If the user dropped it below the bottom of the list, set the target
-        # as 1 past the end of the list:
-        if (index == -1) and ((flags & wx.LIST_HITTEST_NOWHERE) != 0):
-            index = len( self.value )
+        # If the user dropped it on an empty list, set the target as past the 
+        # end of the list:
+        if ((index == -1) and 
+            ((flags & wx.LIST_HITTEST_NOWHERE) != 0) and
+            (self.control.GetItemCount() == 0)):
+            index = 0
             
         # If we have a valid drop target index, proceed:
         if index != -1:
@@ -813,10 +820,12 @@ class _ListStrEditor ( Editor ):
             
         index, flags = self.control.HitTest( wx.Point( x, y ) )
         
-        # If the user dropped it below the bottom of the list, set the target
-        # as 1 past the end of the list:
-        if (index == -1) and ((flags & wx.LIST_HITTEST_NOWHERE) != 0):
-            index = len( self.value )
+        # If the user is dragging over an empty list, set the target to the end
+        # of the list:
+        if ((index == -1) and 
+            ((flags & wx.LIST_HITTEST_NOWHERE) != 0) and
+            (self.control.GetItemCount() == 0)):
+            index = 0
            
         # If the drag target index is valid and the adapter says it is OK to
         # drop the data here, then indicate the data can be dropped:
