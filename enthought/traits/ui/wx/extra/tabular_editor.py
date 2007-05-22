@@ -404,12 +404,15 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         self.value = value
         self.row   = row
-        items      = getattr( object, trait )
-        if row >= len( items ):
-            self.item = item = None
-        else:
-            self.item = item = items[ row ]
+        item       = None
+        try:
+            items = getattr( object, trait )
+            if row < len( items ):
+                item = items[ row ]
+        except:
+            pass
             
+        self.item  = item
         item_class = item.__class__
         key        = '%s:%s:%d' % ( item_class.__name__, name, column )
         handler    = self.cache.get( key )
@@ -444,26 +447,33 @@ class TabularAdapter ( HasPrivateTraits ):
         else:
             self.column = column_id = self.column_map[ column ]
             for klass in item_class.__mro__:
-                cname = '%s_%s_%s' % ( klass.__name__, column_id, trait_name )
+                handler = (self._get_handler_for(
+                        '%s_%s_%s' % ( klass.__name__, column_id, trait_name ),
+                        prefix ) or 
+                    self._get_handler_for(
+                        '%s_%s' % ( klass.__name__, trait_name ), prefix ))
+                if handler is not None:
+                    break
                     
-                if self.trait( cname ) is not None:
-                    if prefix == 'get_':
-                        handler = lambda: getattr( self, cname )
-                    else:
-                        handler = lambda: setattr( self, cname, self.value )
-                
-                cname = '%s_%s' % ( klass.__name__, trait_name )
-                    
-                if self.trait( cname ) is not None:
-                    if prefix == 'get_':
-                        handler = lambda: getattr( self, cname )
-                    else:
-                        handler = lambda: setattr( self, cname, self.value )
             else:  
-                handler = getattr( self, '_' + name )
+                handler = (self._get_handler_for( '%s_%s' % ( column_id, 
+                              trait_name ), prefix ) or
+                          getattr( self, '_' + name ))
             
         self.cache[ key ] = handler
         return handler()
+
+    def _get_handler_for ( self, name, prefix ):
+        """ Returns the handler for a specified trait name (or None if not
+            found).
+        """
+        if self.trait( name ) is not None:
+            if prefix == 'get_':
+                return lambda: getattr( self, name )
+                
+            return lambda: setattr( self, name, self.value )
+            
+        return None
         
     @on_trait_change( 'columns,adapters.+update' )        
     def _flush_cache ( self ):
