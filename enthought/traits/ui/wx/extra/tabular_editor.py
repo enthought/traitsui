@@ -128,20 +128,20 @@ class TabularAdapter ( HasPrivateTraits ):
     default_value = Any( '' )
     
     # The default text color for table rows (even, odd, any rows):
-    even_text_color = Color( None, update = True )
-    odd_text_color  = Color( None, update = True )
-    text_color      = Color( None, update = True )
+    even_text_color    = Color( None, update = True )
+    odd_text_color     = Color( None, update = True )
+    default_text_color = Color( None, update = True )
     
     # The default background color for table rows (even, odd, any rows):
-    even_bg_color = Color( None, update = True )
-    odd_bg_color  = Color( None, update = True )
-    bg_color      = Color( None, update = True )
-    
-    # The name of the default image to use for column items:
-    image = Str( None, update = True )
+    even_bg_color    = Color( None, update = True )
+    odd_bg_color     = Color( None, update = True )
+    default_bg_color = Color( None, update = True )
     
     # Can the text value of each item be edited:
     can_edit = Bool( True )
+    
+    # The value to be dragged for a specified row item:
+    drag = Property
     
     # Can any arbitrary value be dropped onto the tabular view:
     can_drop = Bool( False )
@@ -150,7 +150,19 @@ class TabularAdapter ( HasPrivateTraits ):
     # the item it is dropped on:
     dropped = Enum( 'after', 'before' )
     
-    # The tooltip information for row items:
+    # The text color for a row item:
+    text_color = Property
+    
+    # The background color for a row item:
+    bg_color = Property
+    
+    # The name of the default image to use for column items:
+    image = Str( None, update = True )
+    
+    # The text of a row/column item:
+    text = Property
+    
+    # The tooltip information for a row/column item:
     tooltip = Str
     
     # The row index of the current item being adapted:
@@ -296,43 +308,22 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         getattr( object, trait ) [ row: row ] = [ value ]
         
-    #-- Private Adapter Implementation Methods ---------------------------------
-        
-    def _get_can_edit ( self ):
-        return self.can_edit
+    #-- Property Implementations -----------------------------------------------
         
     def _get_drag ( self ):
         return self.item
-        
-    def _get_can_drop ( self ):
-        return self.can_drop
-        
-    def _get_dropped ( self ):
-        return self.dropped
 
     def _get_text_color ( self ):
         if (self.row % 2) == 0:
-            return self.even_text_color_ or self.text_color_
+            return self.even_text_color_ or self.default_text_color
             
-        return self.odd_text_color or self.text_color_
+        return self.odd_text_color or self.default_text_color_
         
     def _get_bg_color ( self ):
         if (self.row % 2) == 0:
-            return self.even_bg_color_ or self.bg_color_
+            return self.even_bg_color_ or self.default_bg_color_
             
-        return self.odd_bg_color or self.bg_color_
-        
-    def _get_image ( self ):
-        return self.image
-        
-    def _get_item ( self ):
-        return self.item
-        
-    def _set_item ( self ):
-        if isinstance( self.column, int ):
-            self.item[ self.column ] = self.value
-        else:
-            setattr( self.item, self.column, self.value )
+        return self.odd_bg_color or self.default_bg_color_
         
     def _get_text ( self ):
         if isinstance( self.column, int ):
@@ -345,9 +336,6 @@ class TabularAdapter ( HasPrivateTraits ):
             self.item[ column ] = self.value
         else:    
             setattr( self.item, self.column, self.value )
-        
-    def _get_tooltip ( self ):
-        return self.tooltip
         
     #-- Property Implementations -----------------------------------------------
     
@@ -425,7 +413,7 @@ class TabularAdapter ( HasPrivateTraits ):
         except:
             pass
             
-        self.item  = item
+        self._item = item
         item_class = item.__class__
         key        = '%s:%s:%d' % ( item_class.__name__, name, column )
         handler    = self.cache.get( key )
@@ -469,8 +457,8 @@ class TabularAdapter ( HasPrivateTraits ):
                     
             else:  
                 handler = (self._get_handler_for( '%s_%s' % ( column_id, 
-                              trait_name ), prefix ) or
-                          getattr( self, '_' + name ))
+                              trait_name ), prefix ) or 
+                           self._get_handler_for( trait_name, 'get_' ))
             
         self.cache[ key ] = handler
         return handler()
