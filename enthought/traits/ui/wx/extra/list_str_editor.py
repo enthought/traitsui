@@ -258,7 +258,7 @@ class ListStrAdapter ( HasPrivateTraits ):
         if (self.index % 2) == 0:
             return self.even_bg_color_ or self.bg_color_
             
-        return self.odd_bg_color or self.self.bg_color_
+        return self.odd_bg_color or self.bg_color_
         
     def _get_image ( self ):
         return self.image
