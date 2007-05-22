@@ -674,8 +674,9 @@ class _ListStrEditor ( Editor ):
                 # Perform the drag and drop operation:
                 ds = PythonDropSource( self.control, drag_items )
                 
-                # If the result was a drag move:
-                if ds.result == wx.DragMove:
+                # If moves are allowed and the result was a drag move:
+                if ((ds.result == wx.DragMove) and 
+                    (self._drag_local or self.factory.drag_move)):
                     # Then delete all of the original items (in reverse order
                     # from highest to lowest, so the indices don't need to be
                     # adjusted):
@@ -685,6 +686,7 @@ class _ListStrEditor ( Editor ):
                         adapter.delete( object, name, index )
             finally:
                 self._drag_indices = None
+                self._drag_local   = False
         
     def _begin_label_edit ( self, event ):
         """ Handles the user starting to edit an item label.
@@ -787,6 +789,10 @@ class _ListStrEditor ( Editor ):
                 data.reverse()
                 for item in data:
                     self._wx_dropped_on( index, item )
+            
+            # If this was an inter-list drag, mark it as 'local':
+            if self._drag_indices is not None:
+                self._drag_local = True
                     
             # Return a successful drop result:
             return drag_result
@@ -1039,6 +1045,10 @@ class ListStrEditor ( BasicEditorFactory ):
     # What type of operations are allowed on the list:
     operations = List( Enum( 'delete', 'insert', 'append', 'edit', 'move' ),
                        [ 'delete', 'insert', 'append', 'edit', 'move' ] )
+                       
+    # Are 'drag_move' operations allowed (i.e. True), or should they always be 
+    # treated as 'drag_copy' operations (i.e. False):
+    drag_move = Bool( False )
                        
     # The set of images that can be used:                       
     images = List( ImageResource )  
