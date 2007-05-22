@@ -150,6 +150,9 @@ class TabularAdapter ( HasPrivateTraits ):
     # the item it is dropped on:
     dropped = Enum( 'after', 'before' )
     
+    # The tooltip information for row items:
+    tooltip = Str
+    
     # The row index of the current item being adapted:
     row = Int
     
@@ -260,6 +263,11 @@ class TabularAdapter ( HasPrivateTraits ):
             *text*.
         """
         self._result_for( 'set_text', object, trait, row, 0, text )
+        
+    def get_tooltip ( self, object, trait, row ):
+        """ Returns the tooltip for a specified row.
+        """
+        return self._result_for( 'get_tooltip', object, trait, row, 0 )
  
     #-- Adapter methods that are not sensitive to item type --------------------
     
@@ -338,6 +346,9 @@ class TabularAdapter ( HasPrivateTraits ):
         else:    
             setattr( self.item, self.column, self.value )
         
+    def _get_tooltip ( self ):
+        return self.tooltip
+        
     #-- Property Implementations -----------------------------------------------
     
     @cached_property
@@ -371,6 +382,7 @@ class TabularAdapter ( HasPrivateTraits ):
             for label in adapter.columns:
                 if not isinstance( label, basestring ):
                     label = label[0]
+                    
                 indices.append( labels.index( label ) )
                 
         return map
@@ -636,6 +648,7 @@ class _TabularEditor ( Editor ):
         wx.EVT_LIST_KEY_DOWN(         parent, id, self._key_down )
         wx.EVT_LIST_ITEM_RIGHT_CLICK( parent, id, self._right_clicked )
         wx.EVT_LIST_ITEM_ACTIVATED(   parent, id, self._item_activated )
+        wx.EVT_MOTION(                control, self._mouse_move )
 
         # Set up the drag and drop target:
         if PythonDropTarget is not None:
@@ -921,6 +934,21 @@ class _TabularEditor ( Editor ):
             self._edit_current()
         else:
             event.Skip()
+            
+    def _mouse_move ( self, event ):
+        """ Handles the user moving the mouse.
+        """
+        row, flags = self.control.HitTest( wx.Point( event.GetX(),
+                                                     event.GetY() ) )
+        if row != self._last_row:
+            self._last_row = row
+            tooltip = self.adapter.get_tooltip( self.object, self.name, row )
+            if tooltip != self._last_tooltip:
+                self._last_tooltip= tooltip
+                wx.ToolTip.Enable( False )
+                wx.ToolTip.Enable( True )
+                self.control.SetToolTip( wx.ToolTip( tooltip ) )
+                
 
     #-- Drag and Drop Event Handlers -------------------------------------------
 
