@@ -264,10 +264,10 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         self._result_for( 'set_text', object, trait, row, 0, text )
         
-    def get_tooltip ( self, object, trait, row ):
+    def get_tooltip ( self, object, trait, row, column ):
         """ Returns the tooltip for a specified row.
         """
-        return self._result_for( 'get_tooltip', object, trait, row, 0 )
+        return self._result_for( 'get_tooltip', object, trait, row, column )
  
     #-- Adapter methods that are not sensitive to item type --------------------
     
@@ -938,17 +938,21 @@ class _TabularEditor ( Editor ):
     def _mouse_move ( self, event ):
         """ Handles the user moving the mouse.
         """
-        row, flags = self.control.HitTest( wx.Point( event.GetX(),
-                                                     event.GetY() ) )
-        if row != self._last_row:
-            self._last_row = row
-            tooltip = self.adapter.get_tooltip( self.object, self.name, row )
+        x          = event.GetX()
+        column     = self._get_column( x )
+        row, flags = self.control.HitTest( wx.Point( x, event.GetY() ) )
+        if (row != self._last_row) or (column != self._last_column):
+            self._last_row, self._last_column = row, column
+            if (row == -1) or (column is None):
+                tooltip = ''
+            else:
+                tooltip = self.adapter.get_tooltip( self.object, self.name,
+                                                    row, column )
             if tooltip != self._last_tooltip:
-                self._last_tooltip= tooltip
+                self._last_tooltip = tooltip
                 wx.ToolTip.Enable( False )
                 wx.ToolTip.Enable( True )
                 self.control.SetToolTip( wx.ToolTip( tooltip ) )
-                
 
     #-- Drag and Drop Event Handlers -------------------------------------------
 
@@ -1178,6 +1182,18 @@ class _TabularEditor ( Editor ):
             selected = self._get_selected()
             if len( selected ) == 1:
                 self.control.EditLabel( selected[0] )
+                
+    def _get_column ( self, x ):
+        """ Returns the column index corresponding to a specified x position.
+        """
+        if x >= 0:
+            control = self.control
+            for i in range( control.GetColumnCount() ):
+                x -= control.GetColumnWidth( i )
+                if x < 0:
+                    return i
+                
+        return None
                     
 #-------------------------------------------------------------------------------
 #  'TabularEditor' editor factory class:
