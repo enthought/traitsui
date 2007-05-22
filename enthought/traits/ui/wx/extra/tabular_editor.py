@@ -402,9 +402,10 @@ class TabularAdapter ( HasPrivateTraits ):
         """ Returns/Sets the value of the specified *name* attribute for the
             specified *object.trait[row].column* item.
         """
-        self.value = value
-        self.row   = row
-        item       = None
+        self.value  = value
+        self.row    = row
+        self.column = column_id = self.column_map[ column ]
+        item        = None
         try:
             items = getattr( object, trait )
             if row < len( items ):
@@ -445,7 +446,6 @@ class TabularAdapter ( HasPrivateTraits ):
                             
                         return handler()
         else:
-            self.column = column_id = self.column_map[ column ]
             for klass in item_class.__mro__:
                 handler = (self._get_handler_for(
                         '%s_%s_%s' % ( klass.__name__, column_id, trait_name ),
