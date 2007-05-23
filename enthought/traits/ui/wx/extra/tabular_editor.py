@@ -23,8 +23,8 @@ import wx
 
 from enthought.traits.api \
     import HasPrivateTraits, Color, Str, Int, Enum, List, Bool, Instance, Any, \
-           Dict, Event, Property, TraitListEvent, Interface, on_trait_change, \
-           cached_property, implements
+           Font, Dict, Event, Property, TraitListEvent, Interface, \
+           on_trait_change, cached_property, implements
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -40,6 +40,17 @@ try:
         import PythonDropSource, PythonDropTarget
 except:
     PythonDropSource = PythonDropTarget = None
+    
+#-------------------------------------------------------------------------------
+#  Constants:
+#-------------------------------------------------------------------------------
+
+# Mapping for trait alignment values to wx alignment values:
+alignment_map = {
+    'left':   wx.LIST_FORMAT_LEFT,
+    'center': wx.LIST_FORMAT_CENTRE,
+    'right':  wx.LIST_FORMAT_RIGHT
+}
 
 #-------------------------------------------------------------------------------
 #  'ITabularAdapter' interface:
@@ -114,7 +125,7 @@ class TabularAdapter ( HasPrivateTraits ):
         by a ListStrEditor.
     """
     
-    #-- Trait Definitions ------------------------------------------------------
+    #-- Public Trait Definitions -----------------------------------------------
     
     # A list of columns that should appear in the table. Each entry can have one
     # of two forms: string or ( string, any ), where *string* is the UI name of
@@ -137,6 +148,12 @@ class TabularAdapter ( HasPrivateTraits ):
     odd_bg_color     = Color( None, update = True )
     default_bg_color = Color( None, update = True )
     
+    # Alignment to use for a specified column:
+    alignment = Enum( 'left', 'center', 'right' )
+    
+    # Width of a specified column:
+    width = Int( -1 )
+    
     # Can the text value of each item be edited:
     can_edit = Bool( True )
     
@@ -149,6 +166,9 @@ class TabularAdapter ( HasPrivateTraits ):
     # Specifies where a dropped item should be placed in the table relative to
     # the item it is dropped on:
     dropped = Enum( 'after', 'before' )
+    
+    # The font for a row item:
+    font = Font
     
     # The text color for a row item:
     text_color = Property
@@ -165,6 +185,11 @@ class TabularAdapter ( HasPrivateTraits ):
     # The tooltip information for a row/column item:
     tooltip = Str
     
+    # List of optional delegated adapters:
+    adapters = List( ITabularAdapter, update = True )
+
+    #-- Traits Set by the Editor -----------------------------------------------
+    
     # The row index of the current item being adapted:
     row = Int
     
@@ -176,9 +201,6 @@ class TabularAdapter ( HasPrivateTraits ):
     
     # The current value (if any):
     value = Any
-    
-    # List of optional delegated adapters:
-    adapters = List( ITabularAdapter, update = True )
     
     #-- Private Trait Definitions ----------------------------------------------
     
@@ -203,7 +225,17 @@ class TabularAdapter ( HasPrivateTraits ):
     adapter_column_map = Property( depends_on = 'adapters,columns' )
     
     #-- Adapter methods that are sensitive to item type ------------------------
-    
+
+    def get_alignment ( self, object, trait, column ):
+        """ Returns the alignment style to use for a specified column.
+        """
+        return self._result_for( 'get_alignment', object, trait, 0, column )
+
+    def get_width ( self, object, trait, column ):
+        """ Returns the width to use for a specified column.
+        """
+        return self._result_for( 'get_width', object, trait, 0, column )
+        
     def get_can_edit ( self, object, trait, row ):
         """ Returns whether the user can edit a specified 
             *object.trait[row]* item. A True result indicates the value 
@@ -238,16 +270,21 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         return self._result_for( 'get_dropped', object, trait, row, 0, value )
         
+    def get_font ( self, object, trait, row ):
+        """ Returns the font for a specified *object.trait[row]* item. A result 
+            of None means use the default font. 
+        """
+        return self._result_for( 'get_font', object, trait, row, 0 )
+        
     def get_text_color ( self, object, trait, row ):
-        """ Returns the text color for a specified *object.trait[row].column* 
+        """ Returns the text color for a specified *object.trait[row]* 
             item. A result of None means use the default text color. 
         """
         return self._result_for( 'get_text_color', object, trait, row, 0 )
      
     def get_bg_color ( self, object, trait, row ):
-        """ Returns the background color for a specified 
-            *object.trait[row].column* item. A result of None means use the 
-            default background color.
+        """ Returns the background color for a specified *object.trait[row]*
+            item. A result of None means use the default background color.
         """
         return self._result_for( 'get_bg_color', object, trait, row, 0 )
         
@@ -498,16 +535,21 @@ class wxListCtrl ( wx.ListCtrl ):
         # manage the reference count for the returned object, and it seems to be
         # gc'ed before they finish using it. So we store an object reference to
         # it to prevent it from going away too soon...
-        self._attr = attr = wx.ListItemAttr()
-        editor = self._editor
+        self._attr   = attr = wx.ListItemAttr()
+        editor       = self._editor
+        object, name = editor.object, editor.name
         
-        color = editor.adapter.get_bg_color( editor.object, editor.name, row )
+        color = editor.adapter.get_bg_color( object, name, row )
         if color is not None:
             attr.SetBackgroundColour( color )
                 
-        color = editor.adapter.get_text_color( editor.object, editor.name, row )
+        color = editor.adapter.get_text_color( object, name, row )
         if color is not None:
             attr.SetTextColour( color )
+                
+        font = editor.adapter.get_font( object, name, row )
+        if font is not None:
+            attr.SetFont( font )
             
         return attr
     
@@ -604,7 +646,7 @@ class _TabularEditor ( Editor ):
         self.sync_value( factory.adapter_name, 'adapter', 'from' )
         
         # Determine the style to use for the list control:
-        style = wx.LC_REPORT | wx.LC_VIRTUAL
+        style = wx.LC_REPORT | wx.LC_VIRTUAL | wx.BORDER_NONE
         
         if factory.editable:
             style |= wx.LC_EDIT_LABELS 
@@ -624,7 +666,7 @@ class _TabularEditor ( Editor ):
         
         # Create the list control column:
         #fixme: what do we do here?
-        control.InsertColumn( 0, '' )
+        #control.InsertColumn( 0, '' )
         
         # Set up the list control's event handlers:
         id = control.GetId()
@@ -637,6 +679,7 @@ class _TabularEditor ( Editor ):
         wx.EVT_LIST_ITEM_RIGHT_CLICK( parent, id, self._right_clicked )
         wx.EVT_LIST_ITEM_ACTIVATED(   parent, id, self._item_activated )
         wx.EVT_MOTION(                control, self._mouse_move )
+        wx.EVT_SIZE(                  control, self._size_modified )
 
         # Set up the drag and drop target:
         if PythonDropTarget is not None:
@@ -922,6 +965,14 @@ class _TabularEditor ( Editor ):
             self._edit_current()
         else:
             event.Skip()
+
+    def _size_modified ( self, size ):
+        """ Handles the size of the list control being changed.
+        """
+        control = self.control
+        if control.GetColumnCount() == 1:
+            dx, dy = control.GetClientSizeTuple()
+            control.SetColumnWidth( 0, dx - 1 )
             
     def _mouse_move ( self, event ):
         """ Handles the user moving the mouse.
@@ -1049,8 +1100,14 @@ class _TabularEditor ( Editor ):
         """
         control = self.control
         control.ClearAll()
+        get_alignment = self.adapter.get_alignment
+        get_width     = self.adapter.get_width
+        object, name  = self.object, self.name
         for i, label in enumerate( self.adapter.label_map ):
-            control.InsertColumn( i, label )
+            control.InsertColumn( i, label, 
+                       alignment_map.get( get_alignment( object, name, i ), 
+                                                         wx.LIST_FORMAT_LEFT ),
+                       get_width( object, name, i ) )
     
     def _add_image ( self, image_resource ):
         """ Adds a new image to the wx.ImageList and its associated mapping.
