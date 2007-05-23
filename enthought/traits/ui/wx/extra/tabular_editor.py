@@ -453,7 +453,7 @@ class TabularAdapter ( HasPrivateTraits ):
         except:
             pass
             
-        self._item = item
+        self.item  = item
         item_class = item.__class__
         key        = '%s:%s:%d' % ( item_class.__name__, name, column )
         handler    = self.cache.get( key )
