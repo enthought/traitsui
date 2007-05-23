@@ -1123,36 +1123,34 @@ class _TabularEditor ( Editor ):
         dx, dy       = control.GetClientSizeTuple()
         n            = control.GetColumnCount()
         get_width    = self.adapter.get_width
-        cache        = self._width_cache
-        cache        = None
-        if (cache is None) or (len( cache ) != n):
-            pdx = 0
-            wdx = 0.0
-            self._width_cache = cache = []
-            for i in range( n ):
-                width = float( get_width( object, name, i ) )
-                if width <= 0.0:
-                    width = 0.1
-                if width <= 1.0:
-                    wdx += width
-                else:
-                    pdx += int( width )
-                    
-                cache.append( width )
+        pdx          = 0
+        wdx          = 0.0
+        widths       = []
+        for i in range( n ):
+            width = float( get_width( object, name, i ) )
+            if width <= 0.0:
+                width = 0.1
+            if width <= 1.0:
+                wdx += width
+            else:
+                pdx += int( width )
                 
-            adx = max( 0, dx - pdx )
+            widths.append( width )
             
-            control.Freeze()
-            for i in range( n ):
-                width = cache[i]
-                if width <= 1.0:
-                    cache[i] = max( 40, int( round( (adx * width)/wdx ) ) )
-                    wdx     -= width
-                    width    = cache[i]
-                    adx     -= width
-                    
-                control.SetColumnWidth( i, width )
-            control.Thaw()
+        adx = max( 0, dx - pdx )
+        
+        control.Freeze()
+        for i in range( n ):
+            width = widths[i]
+            if width <= 1.0:
+                widths[i] = w = max( 40, int( round( (adx * width) / wdx ) ) )
+                wdx      -= width
+                width     = w
+                adx      -= width
+                
+            control.SetColumnWidth( i, width )
+            
+        control.Thaw()
     
     def _add_image ( self, image_resource ):
         """ Adds a new image to the wx.ImageList and its associated mapping.
