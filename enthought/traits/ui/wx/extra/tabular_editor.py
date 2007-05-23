@@ -22,9 +22,9 @@
 import wx
 
 from enthought.traits.api \
-    import HasPrivateTraits, Color, Str, Int, Enum, List, Bool, Instance, Any, \
-           Font, Dict, Event, Property, TraitListEvent, Interface, \
-           on_trait_change, cached_property, implements
+    import HasPrivateTraits, Color, Str, Int, Float, Enum, List, Bool, \
+           Instance, Any, Font, Dict, Event, Property, TraitListEvent, \
+           Interface, on_trait_change, cached_property, implements
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -34,6 +34,9 @@ from enthought.traits.ui.wx.basic_editor_factory \
 
 from enthought.pyface.image_resource \
     import ImageResource
+    
+from enthought.util.wx.do_later \
+    import do_later
 
 try:
     from enthought.util.wx.drag_and_drop \
@@ -152,7 +155,7 @@ class TabularAdapter ( HasPrivateTraits ):
     alignment = Enum( 'left', 'center', 'right' )
     
     # Width of a specified column:
-    width = Int( -1 )
+    width = Float( -1 )
     
     # Can the text value of each item be edited:
     can_edit = Bool( True )
@@ -970,9 +973,12 @@ class _TabularEditor ( Editor ):
         """ Handles the size of the list control being changed.
         """
         control = self.control
-        if control.GetColumnCount() == 1:
+        n       = control.GetColumnCount()
+        if n == 1:
             dx, dy = control.GetClientSizeTuple()
             control.SetColumnWidth( 0, dx - 1 )
+        elif n > 1:
+            do_later( self._set_column_widths )
             
     def _mouse_move ( self, event ):
         """ Handles the user moving the mouse.
@@ -1106,8 +1112,45 @@ class _TabularEditor ( Editor ):
         for i, label in enumerate( self.adapter.label_map ):
             control.InsertColumn( i, label, 
                        alignment_map.get( get_alignment( object, name, i ), 
-                                                         wx.LIST_FORMAT_LEFT ),
-                       get_width( object, name, i ) )
+                                                         wx.LIST_FORMAT_LEFT ) )
+        self._set_column_widths()
+                       
+    def _set_column_widths ( self ):
+        """ Set the column widths for the current set of columns.
+        """
+        object, name = self.object, self.name
+        control      = self.control
+        dx, dy       = control.GetSizeTuple()
+        dx          -= 17
+        n            = control.GetColumnCount()
+        get_width    = self.adapter.get_width
+        cache        = self._width_cache
+        cache        = None
+        if (cache is None) or (len( cache ) != n):
+            pdx = 0
+            wdx = 0.0
+            self._width_cache = cache = []
+            for i in range( n ):
+                width = float( get_width( object, name, i ) )
+                if width <= 0.0:
+                    width = 0.1
+                if width <= 1.0:
+                    wdx += width
+                else:
+                    pdx += int( width )
+                    
+                cache.append( width )
+                
+            adx = max( 0, dx - pdx )
+            
+            control.Freeze()
+            for i in range( n ):
+                width = cache[i]
+                if width <= 1.0:
+                    cache[i] = width = max( 40, int( (adx * width) / wdx ) )
+                    
+                control.SetColumnWidth( i, width )
+            control.Thaw()
     
     def _add_image ( self, image_resource ):
         """ Adds a new image to the wx.ImageList and its associated mapping.
