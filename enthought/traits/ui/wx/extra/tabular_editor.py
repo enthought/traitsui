@@ -1120,8 +1120,7 @@ class _TabularEditor ( Editor ):
         """
         object, name = self.object, self.name
         control      = self.control
-        dx, dy       = control.GetSizeTuple()
-        dx          -= 17
+        dx, dy       = control.GetClientSizeTuple()
         n            = control.GetColumnCount()
         get_width    = self.adapter.get_width
         cache        = self._width_cache
@@ -1147,7 +1146,10 @@ class _TabularEditor ( Editor ):
             for i in range( n ):
                 width = cache[i]
                 if width <= 1.0:
-                    cache[i] = width = max( 40, int( (adx * width) / wdx ) )
+                    cache[i] = max( 40, int( round( (adx * width)/wdx ) ) )
+                    wdx     -= width
+                    width    = cache[i]
+                    adx     -= width
                     
                 control.SetColumnWidth( i, width )
             control.Thaw()
