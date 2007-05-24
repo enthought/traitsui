@@ -1105,6 +1105,28 @@ class _TabularEditor ( Editor ):
         # Else indicate that we will not accept the data:
         return wx.DragNone
         
+    #-- UI preference save/restore interface -----------------------------------
+
+    def restore_prefs ( self, prefs ):
+        """ Restores any saved user preference information associated with the
+            editor.
+        """
+        self._cached_widths = cws = prefs.get( 'cached_widths' )
+        if cws is not None:
+            set_column_width = self.control.SetColumnWidth
+            for i, width in enumerate( cws ):
+                if width is not None:
+                    set_column_width( i, width )
+
+    def save_prefs ( self ):
+        """ Returns any user preference information associated with the editor.
+        """
+        cws = self._cached_widths
+        if cws is not None:
+            cws = [ ( None, cw )[ cw >= 0 ] for cw in cws ]
+        
+        return { 'cached_widths': cws } 
+        
     #-- Private Methods --------------------------------------------------------
     
     def _refresh ( self ):
@@ -1150,11 +1172,12 @@ class _TabularEditor ( Editor ):
                     width = 0.1
                 if width <= 1.0:
                     wdx += width
+                    cached[i] = -1
                 else:
                     width = int( width )
+                    pdx  += width
                     if cw is None:
                         cached[i] = width 
-                    pdx += width
             else:
                 cached[i] = width = current[i]
                 pdx += width
@@ -1169,7 +1192,7 @@ class _TabularEditor ( Editor ):
             if width < 0:
                 width = widths[i]
                 if width <= 1.0:
-                    widths[i] = w = max( 40, int( round( (adx * width)/wdx ) ) )
+                    widths[i] = w = max( 30, int( round( (adx * width)/wdx ) ) )
                     wdx      -= width
                     width     = w
                     adx      -= width
