@@ -681,6 +681,8 @@ class _TabularEditor ( Editor ):
         wx.EVT_LIST_KEY_DOWN(         parent, id, self._key_down )
         wx.EVT_LIST_ITEM_RIGHT_CLICK( parent, id, self._right_clicked )
         wx.EVT_LIST_ITEM_ACTIVATED(   parent, id, self._item_activated )
+        wx.EVT_LIST_COL_END_DRAG(     parent, id, self._size_modified )
+        wx.EVT_LIST_COL_RIGHT_CLICK(  parent, id, self._column_right_clicked )
         wx.EVT_MOTION(                control, self._mouse_move )
         wx.EVT_SIZE(                  control, self._size_modified )
 
@@ -969,7 +971,16 @@ class _TabularEditor ( Editor ):
         else:
             event.Skip()
 
-    def _size_modified ( self, size ):
+    def _column_right_clicked ( self, event ):
+        """ Handles the user right-clicking a column header.
+        """
+        column = event.GetColumn()
+        if ((self._cached_widths is not None) and 
+            (0 <= column < len( self._cached_widths ))):
+            self._cached_widths[ column ] = None
+            self._size_modified( event )
+        
+    def _size_modified ( self, event ):
         """ Handles the size of the list control being changed.
         """
         control = self.control
@@ -1126,14 +1137,27 @@ class _TabularEditor ( Editor ):
         pdx          = 0
         wdx          = 0.0
         widths       = []
+        cached       = self._cached_widths
+        current      = [ control.GetColumnWidth( i ) for i in range( n ) ]
+        if (cached is None) or (len( cached ) != n):
+            self._cached_widths = cached = [ None ] * n
+            
         for i in range( n ):
-            width = float( get_width( object, name, i ) )
-            if width <= 0.0:
-                width = 0.1
-            if width <= 1.0:
-                wdx += width
+            cw = cached[i]
+            if (cw is None) or (-cw == current[i]):
+                width = float( get_width( object, name, i ) )
+                if width <= 0.0:
+                    width = 0.1
+                if width <= 1.0:
+                    wdx += width
+                else:
+                    width = int( width )
+                    if cw is None:
+                        cached[i] = width 
+                    pdx += width
             else:
-                pdx += int( width )
+                cached[i] = width = current[i]
+                pdx += width
                 
             widths.append( width )
             
@@ -1141,12 +1165,15 @@ class _TabularEditor ( Editor ):
         
         control.Freeze()
         for i in range( n ):
-            width = widths[i]
-            if width <= 1.0:
-                widths[i] = w = max( 40, int( round( (adx * width) / wdx ) ) )
-                wdx      -= width
-                width     = w
-                adx      -= width
+            width = cached[i]
+            if width < 0:
+                width = widths[i]
+                if width <= 1.0:
+                    widths[i] = w = max( 40, int( round( (adx * width)/wdx ) ) )
+                    wdx      -= width
+                    width     = w
+                    adx      -= width
+                    cached[i] = -w
                 
             control.SetColumnWidth( i, width )
             
