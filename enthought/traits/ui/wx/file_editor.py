@@ -15,7 +15,7 @@
 #------------------------------------------------------------------------------
 
 """ Defines file editors and the file editor factoryfor the wxPython user 
-interface toolkit.
+    interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -25,10 +25,10 @@ interface toolkit.
 import wx
 
 from os.path \
-    import abspath, splitext
+    import abspath, splitext, isfile
     
 from enthought.traits.api \
-    import List, Str, false
+    import List, Str, Event, Bool
     
 from enthought.traits.ui.api \
     import View, Group
@@ -59,14 +59,23 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Wildcard filter to apply to the file dialog:
     filter = filter_trait
     
-    # Should file extension be truncated?
-    truncate_ext = false
+    # Optional extended trait name of the trait containing the list of filters:
+    filter_name = Str
     
-    # Is user input set on every keystroke? (Overrides the default)
+    # Should file extension be truncated?
+    truncate_ext = Bool( False )
+    
+    # Is user input set on every keystroke? (Overrides the default) ('simple' 
+    # style only):
     auto_set = False      
     
     # Is user input set when the Enter key is pressed? (Overrides the default)
+    # ('simple' style only):
     enter_set = True
+    
+    # Optional extended trait name used to notify the editor when the file 
+    # system view should be reloaded ('custom' style only):
+    reload_name = Str
     
     #---------------------------------------------------------------------------
     #  Traits view definition:  
@@ -92,7 +101,7 @@ class ToolkitEditorFactory ( EditorFactory ):
                              description = description ) 
     
     def custom_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
+        return CustomEditor( parent,
                              factory     = self, 
                              ui          = ui, 
                              object      = object, 
@@ -105,8 +114,8 @@ class ToolkitEditorFactory ( EditorFactory ):
                                
 class SimpleEditor ( SimpleTextEditor ):
     """ Simple style of file editor, consisting of a text field and a **Browse**
-    button that opens a file-selection dialog box. The user can also drag and
-    drop a file onto this control.
+        button that opens a file-selection dialog box. The user can also drag 
+        and drop a file onto this control.
     """
     
     #---------------------------------------------------------------------------
@@ -197,6 +206,99 @@ class SimpleEditor ( SimpleTextEditor ):
             dlg.SetWildcard( '|'.join( self.factory.filter[:] ) )
             
         return dlg
+                                      
+#-------------------------------------------------------------------------------
+#  'CustomEditor' class:
+#-------------------------------------------------------------------------------
+                               
+class CustomEditor ( SimpleTextEditor ):
+    """ Custom style of file editor, consisting of a file system tree view.
+    """
+
+    # Is the file editor scrollable? This value overrides the default.
+    scrollable = True
+    
+    # Wildcard filter to apply to the file dialog:
+    filter = filter_trait
+    
+    # Event fired when the file system view should be rebuilt:
+    reload = Event
+    
+    #---------------------------------------------------------------------------
+    #  Finishes initializing the editor by creating the underlying toolkit
+    #  widget:
+    #---------------------------------------------------------------------------
+        
+    def init ( self, parent ):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        style   = self.get_style()
+        factory = self.factory
+        if (len( factory.filter ) > 0) or (factory.filter_name != ''):
+            style |= wx.DIRCTRL_SHOW_FILTERS
+            
+        self.control = wx.GenericDirCtrl( parent, style = style )
+        self._tree   = tree = self.control.GetTreeCtrl()
+        wx.EVT_TREE_SEL_CHANGED( tree, tree.GetId(), self.update_object )
+        
+        self.filter = factory.filter
+        self.sync_value( factory.filter_name, 'filter', 'from', is_list = True )
+        self.sync_value( factory.reload_name, 'reload', 'from' )
+        
+        self.set_tooltip()
+
+    #---------------------------------------------------------------------------
+    #  Handles the user changing the contents of the edit control:
+    #---------------------------------------------------------------------------
+  
+    def update_object ( self, event ):
+        """ Handles the user changing the contents of the edit control.
+        """
+        if self.control is not None:
+            path = self.control.GetPath()
+            if isfile( path ):
+                if self.factory.truncate_ext:
+                    path = splitext( path )[0]
+                    
+                self.value = path
+        
+    #---------------------------------------------------------------------------
+    #  Updates the editor when the object trait changes external to the editor:
+    #---------------------------------------------------------------------------
+        
+    def update_editor ( self ):
+        """ Updates the editor when the object trait changes externally to the 
+            editor.
+        """
+        self.control.SetPath( self.str_value )
+        
+    #---------------------------------------------------------------------------
+    #  Returns the basic style to use for the control:
+    #---------------------------------------------------------------------------
+    
+    def get_style ( self ):
+        """ Returns the basic style to use for the control.
+        """
+        return wx.DIRCTRL_EDIT_LABELS
+        
+    #---------------------------------------------------------------------------
+    #  Handles the 'filter' trait being changed:
+    #---------------------------------------------------------------------------
+    
+    def _filter_changed ( self ):
+        """ Handles the 'filter' trait being changed.
+        """
+        self.control.SetFilter( '|'.join( self.filter[:] ) )
+        
+    #---------------------------------------------------------------------------
+    #  Handles the 'reload' trait being changed:
+    #---------------------------------------------------------------------------
+    
+    def _reload_changed ( self ):
+        """ Handles the 'reload' trait being changed.
+        """
+        self.control.ReCreateTree()
 
 #-------------------------------------------------------------------------------
 #  'FileDropTarget' class:  

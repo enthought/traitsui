@@ -375,7 +375,7 @@ class TableEditor ( Editor ):
     # The Traits UI associated with the table editor toolbar
     toolbar_ui = Instance( UI )
 
-    # Is the table editor is scrollable? This value overrides the default.
+    # Is the table editor scrollable? This value overrides the default.
     scrollable = True
 
     # Is 'auto_add' mode in effect? (I.e., new rows are automatically added to

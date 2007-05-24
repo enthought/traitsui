@@ -10,15 +10,14 @@
 #  Thanks for using Enthought open source!
 #  
 #  Author: David C. Morrill
-#
-#  Date: 01/27/2006
-#
-#  Symbols defined: ToolkitEditorFactory
+#  Date:   01/27/2006
 #
 #------------------------------------------------------------------------------
+
 """ Defines a source code editor and code editor factory, for the wxPython user
-interface toolkit, useful for tools such as debuggers.
+    interface toolkit, useful for tools such as debuggers.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -66,6 +65,7 @@ SELECTED_MARKER = 2
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for code editors.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -141,6 +141,7 @@ class ToolkitEditorFactory ( EditorFactory ):
 class SourceEditor ( Editor ):
     """ Editor for source code, which displays a PyFace PythonEditor.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
@@ -295,6 +296,7 @@ class SourceEditor ( Editor ):
         control.GotoLine( line )
         if self.factory.auto_scroll:
             control.ScrollToLine( line - (control.LinesOnScreen() / 2) )
+            
         control.Refresh()
                                   
     #---------------------------------------------------------------------------
@@ -366,7 +368,7 @@ class SourceEditor ( Editor ):
             self._editor.on_trait_change( self.key_pressed, 'key_pressed',
                                           remove = True )
                                           
-#-- UI preference save/restore interface ---------------------------------------
+    #-- UI preference save/restore interface -----------------------------------
 
     #---------------------------------------------------------------------------
     #  Restores any saved user preference information associated with the 
