@@ -142,13 +142,13 @@ class TabularAdapter ( HasPrivateTraits ):
     default_value = Any( '' )
     
     # The default text color for table rows (even, odd, any rows):
-    even_text_color    = Color( None, update = True )
     odd_text_color     = Color( None, update = True )
+    even_text_color    = Color( None, update = True )
     default_text_color = Color( None, update = True )
     
     # The default background color for table rows (even, odd, any rows):
-    even_bg_color    = Color( None, update = True )
     odd_bg_color     = Color( None, update = True )
+    even_bg_color    = Color( None, update = True )
     default_bg_color = Color( None, update = True )
     
     # Alignment to use for a specified column:
@@ -354,13 +354,13 @@ class TabularAdapter ( HasPrivateTraits ):
         return self.item
 
     def _get_text_color ( self ):
-        if (self.row % 2) == 0:
+        if (self.row % 2) == 1:
             return self.even_text_color_ or self.default_text_color
             
         return self.odd_text_color or self.default_text_color_
         
     def _get_bg_color ( self ):
-        if (self.row % 2) == 0:
+        if (self.row % 2) == 1:
             return self.even_bg_color_ or self.default_bg_color_
             
         return self.odd_bg_color or self.default_bg_color_
@@ -662,6 +662,9 @@ class _TabularEditor ( Editor ):
             
         if not factory.multi_select:
             style |= wx.LC_SINGLE_SEL
+            
+        if not factory.show_titles:
+            style |= wx.LC_NO_HEADER
             
         # Create the list control and link it back to us:
         self.control = control = wxListCtrl( parent, -1, style = style )
@@ -1151,8 +1154,11 @@ class _TabularEditor ( Editor ):
     def _set_column_widths ( self ):
         """ Set the column widths for the current set of columns.
         """
+        control = self.control
+        if control is None:
+            return
+            
         object, name = self.object, self.name
-        control      = self.control
         dx, dy       = control.GetClientSizeTuple()
         n            = control.GetColumnCount()
         get_width    = self.adapter.get_width
@@ -1345,6 +1351,9 @@ class TabularEditor ( BasicEditorFactory ):
     
     # The editor class to be created:
     klass = _TabularEditor
+    
+    # Should column headers (i.e. titles) be displayed?
+    show_titles = Bool( True )
     
     # The optional extended name of the trait to synchronize the selection 
     # values with:
