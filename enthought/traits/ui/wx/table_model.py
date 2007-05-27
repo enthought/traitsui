@@ -108,6 +108,9 @@ class TableModel ( GridModel ):
         object.on_trait_change( self.fire_content_changed, name + '.+', 
                                 dispatch = 'ui' )
 
+        # Call handler when the mouse_cell changes:
+        self.on_trait_change( self._on_mouse_cell_changed, "mouse_cell" )
+        
         # Set up listeners for any column definitions changing:
         editor.on_trait_change( self.update_columns, 'columns',
                                 dispatch = 'ui' )
@@ -653,6 +656,16 @@ class TableModel ( GridModel ):
         self._filtered_cache = None
 
         self.fire_structure_changed()
+
+    def _on_mouse_cell_changed ( self, object, name, old, new ):
+        """ Calls on_mouse_over() on the column object corresponding to the
+            new (row, col), indicating that the mouse moved in that cell.
+        """
+        (row, col) = new
+        col_obj = self.__get_column( col )
+        if hasattr( col_obj, 'on_mouse_over' ):
+            row_obj = self.get_filtered_item( row )
+            col_obj.on_mouse_over( row_obj )
 
     #---------------------------------------------------------------------------
     #  Private interface:
