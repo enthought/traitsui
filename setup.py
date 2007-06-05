@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'enthought.traits.ui.wx',
-    version = '2.1.0',
+    version = '3.0.0b1',
     description  = 'WxPython backend for enthought.traits',
     author       = 'David C. Morrill',
     author_email = 'dmorrill@enthought.com',
@@ -13,8 +13,8 @@ setup(
     include_package_data = True,
     install_requires = [
         #'wx',  # fixme: not available as an egg on all platforms.
-        "enthought.model",
-        "enthought.traits",
+        "enthought.model >=2.0.0b1 <3.0.0",
+        "enthought.traits >=3.0.0b1, <4.0.0",
     ],
     namespace_packages = [
         "enthought",
