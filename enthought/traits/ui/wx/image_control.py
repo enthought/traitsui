@@ -1,22 +1,23 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 10/29/2004
 #
-#  Symbols defined: ImageControl
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date: 10/29/2004
 #
 #------------------------------------------------------------------------------
+
 """ Defines a wxPython ImageControl widget that is used by various trait 
-editors to display trait values iconically.
+    editors to display trait values iconically.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -29,12 +30,14 @@ import wx
        
 class ImageControl ( wx.Window ):
     """ A wxPython control that displays an image, which can be selected or
-    unselected by mouse clicks.
+        unselected by mouse clicks.
     """
+    
     # Pens used to draw the 'selection' marker:
     _selectedPenDark = wx.Pen( 
         wx.SystemSettings_GetColour( wx.SYS_COLOUR_3DSHADOW ), 1, 
         wx.SOLID )
+        
     _selectedPenLight = wx.Pen( 
         wx.SystemSettings_GetColour( wx.SYS_COLOUR_3DHIGHLIGHT ), 1, 
         wx.SOLID )
@@ -43,12 +46,13 @@ class ImageControl ( wx.Window ):
     #  Initializes the object:
     #---------------------------------------------------------------------------
      
-    def __init__ ( self, parent, bitmap, selected = None, handler = None ):
+    def __init__ ( self, parent, bitmap, selected = None, handler = None, 
+                         padding = 10 ):
         """ Initializes the object.
         """
         wx.Window.__init__( self, parent, -1, 
-                            size = wx.Size( bitmap.GetWidth()  + 10, 
-                                            bitmap.GetHeight() + 10 ) )
+                            size = wx.Size( bitmap.GetWidth()  + padding, 
+                                            bitmap.GetHeight() + padding ) )
         self._bitmap      = bitmap
         self._selected    = selected
         self._handler     = handler
@@ -80,8 +84,10 @@ class ImageControl ( wx.Window ):
                             control.Selected()):
                             control.Selected( False )
                             break
+                            
                 self._selected = selected
                 self.Refresh()
+                
         return self._selected
         
     #---------------------------------------------------------------------------
@@ -95,6 +101,7 @@ class ImageControl ( wx.Window ):
             if bitmap != self._bitmap:
                 self._bitmap = bitmap
                 self.Refresh()
+                
         return self._bitmap
         
     #---------------------------------------------------------------------------
@@ -108,6 +115,7 @@ class ImageControl ( wx.Window ):
             if handler != self._handler:
                 self._handler = handler
                 self.Refresh()
+                
         return self._handler
     
     #---------------------------------------------------------------------------
@@ -188,6 +196,7 @@ class ImageControl ( wx.Window ):
             
         pens = [ self._selectedPenLight, self._selectedPenDark ]
         bd   = self._button_down
+        
         if self._mouse_over:
             wdc.SetBrush( wx.TRANSPARENT_BRUSH )
             wdc.SetPen( pens[ bd ] )
@@ -197,7 +206,7 @@ class ImageControl ( wx.Window ):
             wdc.DrawLine( wdx - 1, 1, wdx - 1, wdy )
             wdc.DrawLine( 1, wdy - 1, wdx - 1, wdy - 1 )
             
-        if self._selected == True:
+        if self._selected is True:
             wdc.SetBrush( wx.TRANSPARENT_BRUSH )
             wdc.SetPen( pens[ bd ] )
             wdc.DrawLine( 1, 1, wdx - 1, 1 )
