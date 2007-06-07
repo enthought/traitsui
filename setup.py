@@ -13,7 +13,7 @@ setup(
     include_package_data = True,
     install_requires = [
         #'wx',  # fixme: not available as an egg on all platforms.
-        "enthought.model >=2.0.0b1 <3.0.0",
+        "enthought.model >=2.0.0b1, <3.0.0",
         "enthought.traits >=3.0.0b1, <4.0.0",
     ],
     namespace_packages = [
