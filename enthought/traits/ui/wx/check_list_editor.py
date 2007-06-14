@@ -1,22 +1,23 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
 #
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-#
-# Author: David C. Morrill
-# Date: 10/21/2004
-#
-#  Symbols defined: ToolkitEditorFactory
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+# 
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+# 
+#  Author: David C. Morrill
+#  Date:   10/21/2004
 #
 #------------------------------------------------------------------------------
+
 """ Defines the various editors and the editor factory for multi-selection
-enumerations, for the wxPython user interface toolkit.
+    enumerations, for the wxPython user interface toolkit.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -37,9 +38,7 @@ from editor_factory \
 from editor \
     import EditorWithList
 
-
 logger = logging.getLogger(__name__)
-
 
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -48,6 +47,7 @@ logger = logging.getLogger(__name__)
 class ToolkitEditorFactory ( EditorWithListFactory ):
     """ wxPython editor factory for checklists.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -90,6 +90,7 @@ class ToolkitEditorFactory ( EditorWithListFactory ):
 class SimpleEditor ( EditorWithList ):
     """ Simple style of editor for checklists, which displays a combo box.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -198,8 +199,9 @@ class SimpleEditor ( EditorWithList ):
 
 class CustomEditor ( SimpleEditor ):
     """ Custom style of editor for checklists, which displays a set of check
-    boxes.
+        boxes.
     """
+    
     #---------------------------------------------------------------------------
     #  Creates the initial editor control:
     #---------------------------------------------------------------------------
@@ -299,6 +301,7 @@ class CustomEditor ( SimpleEditor ):
 class TextEditor ( BaseTextEditor ):
     """ Text style of editor for checklists, which displays a text field.
     """
+    
     #---------------------------------------------------------------------------
     #  Handles the user changing the contents of the edit control:
     #---------------------------------------------------------------------------

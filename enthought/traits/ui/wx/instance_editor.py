@@ -612,7 +612,7 @@ class SimpleEditor ( CustomEditor ):
         if button is not None:
             label = self.factory.label
             if label == '':
-                label = user_name_for( self.name)
+                label = user_name_for( self.name )
             button.SetLabel( label )
             button.Enable( isinstance( self.value, HasTraits ) )
 

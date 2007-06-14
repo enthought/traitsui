@@ -1,22 +1,23 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 11/01/2004
 #
-#  Symbols defined: ui_live
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   11/01/2004
 #
 #------------------------------------------------------------------------------
+
 """ Creates a wxPython user interface for a specified UI object, where the UI
-is "live", meaning that it immediately updates its underlying object(s).
+    is "live", meaning that it immediately updates its underlying object(s).
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -87,6 +88,7 @@ def ui_dialog ( ui, parent, is_modal ):
 class LiveWindow ( BaseDialog ):
     """ User interface window that immediately updates its underlying object(s).
     """
+    
     #---------------------------------------------------------------------------
     #  Initializes the object:
     #---------------------------------------------------------------------------
