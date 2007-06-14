@@ -614,7 +614,7 @@ class _TabularEditor ( Editor ):
     # The most recently right_clicked item and its index:
     right_clicked     = Event
     right_clicked_row = Event
-
+    
     # Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
     
@@ -632,6 +632,12 @@ class _TabularEditor ( Editor ):
     
     # Dictionary mapping ImageResource objects to wx.ImageList indices:
     image_resources = Any( {} )
+    
+    # Sort order. If its possive the order is Ascending, if its negative
+    # the order is decending. The value is swapped every time a sort is
+    # requested so requesting it twice will sort in one direction then the
+    # other
+    sort_order = Int(1)
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -665,11 +671,11 @@ class _TabularEditor ( Editor ):
             
         if not factory.show_titles:
             style |= wx.LC_NO_HEADER
-            
+
         # Create the list control and link it back to us:
         self.control = control = wxListCtrl( parent, -1, style = style )
         control._editor = self
-        
+                
         # Create the list control column:
         #fixme: what do we do here?
         #control.InsertColumn( 0, '' )
@@ -686,6 +692,7 @@ class _TabularEditor ( Editor ):
         wx.EVT_LIST_ITEM_ACTIVATED(   parent, id, self._item_activated )
         wx.EVT_LIST_COL_END_DRAG(     parent, id, self._size_modified )
         wx.EVT_LIST_COL_RIGHT_CLICK(  parent, id, self._column_right_clicked )
+        wx.EVT_LIST_COL_CLICK(        parent, id, self._column_clicked )
         wx.EVT_MOTION(                control, self._mouse_move )
         wx.EVT_SIZE(                  control, self._size_modified )
 
@@ -734,7 +741,7 @@ class _TabularEditor ( Editor ):
         
         # Set the list control's tooltip:
         self.set_tooltip()
-
+        
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
@@ -946,7 +953,7 @@ class _TabularEditor ( Editor ):
         """
         self.activated_row = event.GetIndex()
         self.activated     = self.adapter.get_item( self.object, self.name,
-                                                    self.activated_row )
+                                                    self.activated_row )        
             
     def _right_clicked ( self, event ):
         """ Handles an item being right clicked.
@@ -983,6 +990,14 @@ class _TabularEditor ( Editor ):
             self._cached_widths[ column ] = None
             self._size_modified( event )
         
+    def _column_clicked (self, event ):
+        """ Handles the user clicking a column header to sort
+            the data by the column that was clicked on
+        """
+        column = event.GetColumn()
+        self.value.sort( lambda x,y: cmp(x[column], y[column])*self.sort_order )
+        self.sort_order *= -1
+        
     def _size_modified ( self, event ):
         """ Handles the size of the list control being changed.
         """
@@ -992,8 +1007,8 @@ class _TabularEditor ( Editor ):
             dx, dy = control.GetClientSizeTuple()
             control.SetColumnWidth( 0, dx - 1 )
         elif n > 1:
-            do_later( self._set_column_widths )
-            
+            do_later( self._set_column_widths )            
+
     def _mouse_move ( self, event ):
         """ Handles the user moving the mouse.
         """
@@ -1191,7 +1206,7 @@ class _TabularEditor ( Editor ):
             widths.append( width )
             
         adx = max( 0, dx - pdx )
-        
+
         control.Freeze()
         for i in range( n ):
             width = cached[i]
@@ -1205,7 +1220,7 @@ class _TabularEditor ( Editor ):
                     cached[i] = -w
                 
             control.SetColumnWidth( i, width )
-            
+
         control.Thaw()
     
     def _add_image ( self, image_resource ):
@@ -1406,5 +1421,5 @@ class TabularEditor ( BasicEditorFactory ):
     drag_move = Bool( False )
                        
     # The set of images that can be used:                       
-    images = List( ImageResource )  
-    
+    images = List( ImageResource )
+
