@@ -1,23 +1,26 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 11/01/2004
 #
-#  Symbols defined: ui_panel
-#                   panel
-#                   fill_panel_for_group
-#
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   11/01/2004
+# 
+#   Symbols defined: ui_panel
+#                    panel
+#                    fill_panel_for_group
+# 
 #------------------------------------------------------------------------------
+
 """ Creates a panel-based wxPython user interface for a specified UI object.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -134,6 +137,7 @@ def ui_panel_for ( ui, parent, buttons ):
 class Panel ( BaseDialog ):
     """ wxPython user interface panel for Traits-based user interfaces.
     """
+
     #---------------------------------------------------------------------------
     #  Initializes the object: 
     #---------------------------------------------------------------------------
@@ -478,6 +482,7 @@ def fill_panel_for_group ( panel, group, ui, suppress_label = False,
 class FillPanel ( object ):
     """ A subpanel for a single group of items.
     """
+
     #---------------------------------------------------------------------------
     #  Initializes the object:
     #---------------------------------------------------------------------------
@@ -509,13 +514,23 @@ class FillPanel ( object ):
                                            panel, self.add_notebook_item, True )
                 self.resizable     = True
             return
-                 
+          
+        bg_image = group.bg_image
         if (is_dock_window             or 
             (id != '')                 or
+            (bg_image is not None)     or
             (group.visible_when != '') or
             (group.enabled_when != '')):
-            new_panel = wx.Panel( panel, -1 )
-            sizer     = panel.GetSizer()
+            if bg_image is not None:
+                from image_slice import ImageSlice, ImagePanel, ImageSizer
+                
+                image_slice = ImageSlice( image = bg_image )
+                new_panel   = ImagePanel( panel, image_slice )
+                image_sizer = ImageSizer( image_slice )
+                new_panel.SetSizer( image_sizer )
+            else:
+                new_panel = wx.Panel( panel, -1 )
+            sizer = panel.GetSizer()
             if sizer is None:
                 sizer = wx.BoxSizer( wx.VERTICAL )
                 panel.SetSizer( sizer )
@@ -599,6 +614,10 @@ class FillPanel ( object ):
                                                     ui = ui, element = group ),
                                      export   = group.export,
                                      control  = panel ) ] )
+                         
+        # If we are using an background image, add the sizer to the image sizer:
+        if bg_image is not None:
+            image_sizer.Add( self.sizer, 1, wx.EXPAND )
         
     #---------------------------------------------------------------------------
     #  Adds a set of groups or items separated by splitter bars to a DockWindow:    
@@ -743,6 +762,9 @@ class FillPanel ( object ):
         # Process each Item in the list:
         for item in content:
             
+            # Get the background image (if any):
+            bg_image = item.bg_image
+            
             # Get the name in order to determine its type:
             name = item.name
             
@@ -758,7 +780,12 @@ class FillPanel ( object ):
                     if (cols > 1) and show_labels:
                         item_sizer.Add( ( 1, 1 ) )
                         
-                    if item.style == 'simple':
+                    if bg_image is not None:
+                        from image_slice import ImageText
+                        
+                        label = ImageText( panel, bg_image, label )
+                        item_sizer.Add( label, 0, wx.EXPAND )
+                    elif item.style == 'simple':
                         # Add a simple text label:
                         label = wx.StaticText( panel, -1, label, 
                                                style = wx.ALIGN_LEFT )
@@ -768,7 +795,7 @@ class FillPanel ( object ):
                         label = heading_text( panel, text = label ).control
                         item_sizer.Add( label, 0, 
                                         wx.TOP | wx.BOTTOM | wx.EXPAND, 3 )
-                                            
+                                        
                     if item.emphasized:
                         self._add_emphasis( label )
                         
@@ -850,15 +877,28 @@ class FillPanel ( object ):
                 if item.format_str != '':
                     editor_factory.format_str = item.format_str
 
+            # Set up the background image (if used):
+            item_panel = panel
+            if bg_image is not None:
+                from image_slice import ImageSlice, ImagePanel, ImageSizer
+                
+                image_slice = ImageSlice(
+                    transparent = item.has_bg_image is not None ).set(
+                    image       = bg_image, 
+                )
+                item_panel  = ImagePanel( panel, image_slice )
+                image_sizer = ImageSizer( image_slice, 3, 3, 3, 3 )
+                item_panel.SetSizer( image_sizer )
+                    
             # Create the requested type of editor from the editor factory:
             factory_method = getattr( editor_factory, item.style + '_editor' )
             editor         = factory_method( ui, object, name, item.tooltip, 
-                                        panel ).set( 
+                                        item_panel ).set( 
                                  item        = item,
                                  object_name = item.object )
                                  
             # Tell editor to actually build the editing widget:
-            editor.prepare( panel )
+            editor.prepare( item_panel )
             
             # Set the initial 'enabled' state of the editor from the factory:
             editor.enabled = editor_factory.enabled
@@ -871,34 +911,38 @@ class FillPanel ( object ):
             if item.has_focus:
                 editor.control.SetFocus()
                 
-            # Set the correct size on the editor's control, as specified by
-            # the user:
+            # Set up the reference to the correct 'control' to use in the 
+            # following section, depending upon whether we have wrapped an
+            # ImagePanel around the editor control or not:
+            control = editor.control
+            if bg_image is None:
+                width, height = control.GetSizeTuple()
+            else:
+                image_sizer.Add( control, 1, wx.EXPAND ) 
+                control       = item_panel
+                width, height = control.GetAdjustedSize()
+                
+            # Set the correct size on the control, as specified by the user:
             scrollable  = editor.scrollable
             item_width  = item.width
             item_height = item.height
-            
             if (item_width != -1) or (item_height != -1):
-                width, height = editor.control.GetSizeTuple()
-                
                 if item_width < -1:
-                    item_width = -item_width
+                    item_width  = -item_width
+                    fixed_width = True
                 else:
-                    if (item_width != -1) and (not self.is_horizontal):
-                        fixed_width = True
                     item_width = max( item_width, width )
                     
                 if item_height < -1:
                     item_height = -item_height
                     scrollable  = False
                 else:
-                    if (item_height != -1) and self.is_horizontal:
-                        fixed_width = True
                     item_height = max( item_height, height )
                     
-                editor.control.SetMinSize( wx.Size( item_width, item_height ) )
+                control.SetMinSize( wx.Size( item_width, item_height ) )
                 
-            # Bind the item to the editor control and all of its children:
-            self._set_owner( editor.control, item )
+            # Bind the item to the control and all of its children:
+            self._set_owner( control, item )
                 
             # Bind the editor into the UIInfo object name space so it can be 
             # referred to by a Handler while the user interface is active:
@@ -949,7 +993,7 @@ class FillPanel ( object ):
             if fixed_width:
                 layout_style &= ~wx.EXPAND
                 
-            item_sizer.Add( editor.control, growable,
+            item_sizer.Add( control, growable, 
                             flags | layout_style | wx.ALIGN_CENTER_VERTICAL,
                             max( 0, border_size + padding + item.padding ) )
             
@@ -988,8 +1032,16 @@ class FillPanel ( object ):
         label = item.get_label( ui )
         if (label == '') or (label[-1:] in '?=:;,.<>/\\\'"-+#|'):
             suffix = ''
-        control = wx.StaticText( parent, -1, label + suffix,
-                                 style = wx.ALIGN_RIGHT )
+            
+        # Use the special 'StaticText' class if the parent object is a control
+        # whose background is defined by an ImageSlice object:
+        klass = wx.StaticText
+        if hasattr( parent, '_image_slice' ):
+            from image_slice import StaticText
+            
+            klass = StaticText
+            
+        control = klass( parent, -1, label + suffix, style = wx.ALIGN_RIGHT )
         self._set_owner( control, item )
         if item.emphasized:
             self._add_emphasis( control )
@@ -1044,8 +1096,9 @@ class FillPanel ( object ):
 #-------------------------------------------------------------------------------
         
 class DockWindowGroupEditor ( GroupEditor ):
-    """ Editor for a group, which displays a DockWindow.
+    """ Editor for a group which displays a DockWindow.
     """
+
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -1053,7 +1106,7 @@ class DockWindowGroupEditor ( GroupEditor ):
     # DockWindow for the group
     dock_window = Instance( wx.Window )
 
-#-- UI preference save/restore interface ---------------------------------------
+    #-- UI preference save/restore interface -----------------------------------
 
     #---------------------------------------------------------------------------
     #  Restores any saved user preference information associated with the 
@@ -1080,8 +1133,8 @@ class DockWindowGroupEditor ( GroupEditor ):
         """
         return { 'structure': self.dock_window.GetSizer().GetStructure() }
         
-#-- End UI preference save/restore interface -----------------------------------                         
-
+    #-- End UI preference save/restore interface -------------------------------                         
+    
 #-------------------------------------------------------------------------------
 #  'HTMLHelpWindow' class:
 #-------------------------------------------------------------------------------
@@ -1089,6 +1142,7 @@ class DockWindowGroupEditor ( GroupEditor ):
 class HTMLHelpWindow ( wx.Frame ):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
+
     #---------------------------------------------------------------------------
     #  Initializes the object:
     #---------------------------------------------------------------------------

@@ -15,7 +15,7 @@
 #------------------------------------------------------------------------------
 
 """ Defines helper functions used to define wxPython-based trait editors and
-trait editor factories.
+    trait editor factories.
 """
 
 #-------------------------------------------------------------------------------
