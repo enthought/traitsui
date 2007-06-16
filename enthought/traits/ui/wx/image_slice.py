@@ -39,6 +39,27 @@ from numpy \
     import reshape, fromstring, uint8
     
 #-------------------------------------------------------------------------------
+#  Recursively paint the parent's background if they have an associated image 
+#  slice.
+#-------------------------------------------------------------------------------
+
+def paint_parent ( dc, window, x, y ):
+    """ Recursively paint the parent's background if they have an associated
+        image slice.
+    """
+    parent = window.GetParent()
+    slice  = getattr( parent, '_image_slice', None )
+    if slice is not None:
+        wx, wy = window.GetPositionTuple()
+        x     += wx
+        y     += wy
+        paint_parent( dc, parent, x, y )
+        dx, dy = parent.GetSizeTuple()
+        slice.fill( dc, -x, -y, dx, dy )
+
+    return parent
+    
+#-------------------------------------------------------------------------------
 #  'ImageSlice' class:
 #-------------------------------------------------------------------------------
 
@@ -423,10 +444,7 @@ class StaticText ( wx.StaticText ):
         """
         # Fill the background using the parent's ImageSlice object:
         dc     = wx.PaintDC( self )
-        x, y   = self.GetPositionTuple()
-        parent = self.GetParent()
-        dx, dy = parent.GetSizeTuple()
-        parent._image_slice.fill( dc, -x, -y, dx, dy )
+        parent = paint_parent( dc, self, 0, 0 )
         
         # Now draw the text over it:
         dc.SetBackgroundMode( wx.TRANSPARENT )
@@ -480,17 +498,11 @@ class ImagePanel ( wx.Panel ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        dc     = wx.PaintDC( self )
-        parent = self.GetParent()
-        slice  = getattr( parent, '_image_slice', None )
-        if slice is not None:
-            x, y   = self.GetPositionTuple()
-            dx, dy = parent.GetSizeTuple()
-            slice.fill( dc, -x, -y, dx, dy )
-            
+        dc = wx.PaintDC( self )
+        paint_parent( dc, self, 0, 0 )
         wdx, wdy = self.GetSizeTuple()
         self._image_slice.fill( dc, 0, 0, wdx, wdy )
-
+            
 #-------------------------------------------------------------------------------
 #  'ImageSizer' class:
 #-------------------------------------------------------------------------------
@@ -610,12 +622,7 @@ class ImageText ( wx.Window ):
         """
         dc = wx.PaintDC( self )
         if self._fill is not False:
-            parent = self.GetParent()
-            slice  = getattr( parent, '_image_slice', None )
-            if slice is not None:
-                x, y   = self.GetPositionTuple()
-                dx, dy = parent.GetSizeTuple()
-                slice.fill( dc, -x, -y, dx, dy )
+            paint_parent( dc, self, 0, 0 )
                 
         self._fill = True
         wdx, wdy   = self.GetClientSizeTuple()
@@ -627,7 +634,7 @@ class ImageText ( wx.Window ):
         dc.SetFont( self.GetFont() )
         tx, ty, tdx, tdy = self._get_text_bounds()
         dc.DrawText( text, tx, ty )
-        
+         
     def GetMinSize ( self ):
         """ Returns the minimum size for the window.
         """

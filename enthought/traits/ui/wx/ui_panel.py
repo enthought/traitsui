@@ -515,16 +515,19 @@ class FillPanel ( object ):
                 self.resizable     = True
             return
           
-        bg_image = group.bg_image
+        theme = group.theme
         if (is_dock_window             or 
             (id != '')                 or
-            (bg_image is not None)     or
+            (theme is not None)        or
             (group.visible_when != '') or
             (group.enabled_when != '')):
-            if bg_image is not None:
+            if theme is not None:
                 from image_slice import ImageSlice, ImagePanel, ImageSizer
                 
-                image_slice = ImageSlice( image = bg_image )
+                image_slice = ImageSlice( 
+                    transparent = group.has_theme ).set(
+                    image       = theme
+                )
                 new_panel   = ImagePanel( panel, image_slice )
                 image_sizer = ImageSizer( image_slice )
                 new_panel.SetSizer( image_sizer )
@@ -616,7 +619,7 @@ class FillPanel ( object ):
                                      control  = panel ) ] )
                          
         # If we are using an background image, add the sizer to the image sizer:
-        if bg_image is not None:
+        if theme is not None:
             image_sizer.Add( self.sizer, 1, wx.EXPAND )
         
     #---------------------------------------------------------------------------
@@ -762,8 +765,8 @@ class FillPanel ( object ):
         # Process each Item in the list:
         for item in content:
             
-            # Get the background image (if any):
-            bg_image = item.bg_image
+            # Get the theme image (if any):
+            theme = item.theme
             
             # Get the name in order to determine its type:
             name = item.name
@@ -780,10 +783,10 @@ class FillPanel ( object ):
                     if (cols > 1) and show_labels:
                         item_sizer.Add( ( 1, 1 ) )
                         
-                    if bg_image is not None:
+                    if theme is not None:
                         from image_slice import ImageText
                         
-                        label = ImageText( panel, bg_image, label )
+                        label = ImageText( panel, theme, label )
                         item_sizer.Add( label, 0, wx.EXPAND )
                     elif item.style == 'simple':
                         # Add a simple text label:
@@ -879,12 +882,12 @@ class FillPanel ( object ):
 
             # Set up the background image (if used):
             item_panel = panel
-            if bg_image is not None:
+            if theme is not None:
                 from image_slice import ImageSlice, ImagePanel, ImageSizer
                 
                 image_slice = ImageSlice(
-                    transparent = item.has_bg_image is not None ).set(
-                    image       = bg_image, 
+                    transparent = item.has_theme ).set(
+                    image       = theme 
                 )
                 item_panel  = ImagePanel( panel, image_slice )
                 image_sizer = ImageSizer( image_slice, 3, 3, 3, 3 )
@@ -915,7 +918,7 @@ class FillPanel ( object ):
             # following section, depending upon whether we have wrapped an
             # ImagePanel around the editor control or not:
             control = editor.control
-            if bg_image is None:
+            if theme is None:
                 width, height = control.GetSizeTuple()
             else:
                 image_sizer.Add( control, 1, wx.EXPAND ) 

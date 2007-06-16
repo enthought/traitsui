@@ -54,7 +54,7 @@ class _ImageTextEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = ImageText( parent, self.factory.bg_image, 
+        self.control = ImageText( parent, self.factory.theme, 
                                   alignment = self.factory.alignment ) 
         self.set_tooltip()
                         
@@ -80,7 +80,7 @@ class ImageTextEditor ( BasicEditorFactory ):
     
     # The background image to display:
     # fixme: Provide a default value.
-    bg_image = Image
+    theme = Image
     
     # The alignment of the text within the control:
     alignment = Enum( 'left', 'right', 'center' )
