@@ -1033,27 +1033,39 @@ class FillPanel ( object ):
         """ Creates an item label.
         """
         label = item.get_label( ui )
-        if (label == '') or (label[-1:] in '?=:;,.<>/\\\'"-+#|'):
+        if (label == '') or (label[-1:] in '?=:;,.<>/\\"\'-+#|'):
             suffix = ''
+
+        theme = item.label_theme
+        if theme is not None:
+            from image_slice import ImageText
             
-        # Use the special 'StaticText' class if the parent object is a control
-        # whose background is defined by an ImageSlice object:
-        klass = wx.StaticText
-        if hasattr( parent, '_image_slice' ):
-            from image_slice import StaticText
-            
-            klass = StaticText
-            
-        control = klass( parent, -1, label + suffix, style = wx.ALIGN_RIGHT )
+            control = ImageText( parent, theme, label + suffix, 'right' )
+        else:            
+            # Use the special 'StaticText' class if the parent object is a 
+            # control whose background is defined by an ImageSlice object:
+            klass = wx.StaticText
+            if hasattr( parent, '_image_slice' ):
+                from image_slice import StaticText
+                
+                klass = StaticText
+                
+            control = klass( parent, -1, label + suffix, 
+                             style = wx.ALIGN_RIGHT )
+                             
         self._set_owner( control, item )
+        
         if item.emphasized:
             self._add_emphasis( control )
+            
         wx.EVT_LEFT_UP( control, show_help_popup )
         control.help = item.get_help( ui )
         sizer.Add( control, 0, self.label_flags | wx.ALIGN_CENTER_VERTICAL | 
                                pad_side, self.label_pad )
+                               
         if desc != '':
             control.SetToolTipString( 'Specifies ' + desc )
+            
         return control
 
     #---------------------------------------------------------------------------

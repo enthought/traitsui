@@ -641,9 +641,10 @@ class ImageText ( wx.Window ):
         tdx, tdy, descent, leading = self._get_text_size()
         slice = self._image_slice
         
-        return wx.Size( slice.left + slice.right + tdx + 8,
-                        max( slice.top + slice.bottom,
-                             slice.xtop + slice.xbottom + tdy + 8 ) )
+        return wx.Size( max( slice.left  + slice.right,
+                             slice.xleft + slice.xright  + tdx + 8 ),
+                        max( slice.top   + slice.bottom,
+                             slice.xtop  + slice.xbottom + tdy + 8 ) )
                         
     def SetFont ( self, font ):
         """ Set the window font.
