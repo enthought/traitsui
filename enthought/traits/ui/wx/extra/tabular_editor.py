@@ -113,7 +113,7 @@ class AnITabularAdapter ( HasPrivateTraits ):
     # *string* value in the associated *TabularAdapter* class.
     columns = List( Str )
     
-    # Does the adapter know how to handler the current *item* or not:
+    # Does the adapter know how to handle the current *item* or not:
     accepts = Bool( True )
     
     # Does the value of *accepts* depend only upon the type of *item*?
@@ -633,11 +633,10 @@ class _TabularEditor ( Editor ):
     # Dictionary mapping ImageResource objects to wx.ImageList indices:
     image_resources = Any( {} )
     
-    # Sort order. If its possive the order is Ascending, if its negative
-    # the order is decending. The value is swapped every time a sort is
-    # requested so requesting it twice will sort in one direction then the
-    # other
-    sort_order = Int(1)
+    # Sort order. If positive, the order is ascending. If negative, the order
+    # is descending. The value is swapped every time a sort is requested so 
+    # requesting it twice will sort in one direction, then the other:
+    sort_order = Int( 1 )
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -990,12 +989,13 @@ class _TabularEditor ( Editor ):
             self._cached_widths[ column ] = None
             self._size_modified( event )
         
-    def _column_clicked (self, event ):
-        """ Handles the user clicking a column header to sort
-            the data by the column that was clicked on
+    def _column_clicked ( self, event ):
+        """ Handles the user clicking a column header to sort the data by the 
+            column that was clicked on.
         """
         column = event.GetColumn()
-        self.value.sort( lambda x,y: cmp(x[column], y[column])*self.sort_order )
+        self.value.sort( lambda x, y: cmp( x[ column ], y[ column ] ) * 
+                                      self.sort_order )
         self.sort_order *= -1
         
     def _size_modified ( self, event ):

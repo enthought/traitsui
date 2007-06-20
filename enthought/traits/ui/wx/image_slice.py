@@ -57,7 +57,7 @@ def paint_parent ( dc, window, x, y ):
         dx, dy = parent.GetSizeTuple()
         slice.fill( dc, -x, -y, dx, dy )
 
-    return parent
+    return slice
     
 #-------------------------------------------------------------------------------
 #  'ImageSlice' class:
@@ -350,8 +350,11 @@ class ImageSlice ( HasPrivateTraits ):
         last_y = dy - 1
         last_x = dx - 1
         
-        # Mark all edges as 'scanning':
-        l = r = t = b = True
+        # Mark which edges as 'scanning':
+        # Note, we currently only scan up and down because it seems to produce
+        # more eye-pleasing results with rounded corners.
+        t = b = True
+        l = r = False
         
         # Keep looping while at last one edge is still 'scanning':
         while l or r or t or b:
@@ -414,6 +417,9 @@ class ImageSlice ( HasPrivateTraits ):
         """
         return (abs( data[ y0: y0 + dy, x0: x0 + dx ] - 
                      data[ y1: y1 + dy, x1: x1 + dx ] ).sum() < 0.10 * dx * dy)
+                     
+# Define a reusable, default ImageSlice object:
+default_image_slice = ImageSlice()
 
 #-------------------------------------------------------------------------------
 #  'StaticText' class:  
@@ -443,12 +449,12 @@ class StaticText ( wx.StaticText ):
             parent object's ImageSlice object.
         """
         # Fill the background using the parent's ImageSlice object:
-        dc     = wx.PaintDC( self )
-        parent = paint_parent( dc, self, 0, 0 )
+        dc    = wx.PaintDC( self )
+        slice = paint_parent( dc, self, 0, 0 )
         
         # Now draw the text over it:
         dc.SetBackgroundMode( wx.TRANSPARENT )
-        dc.SetTextForeground( parent._image_slice.text_color )
+        dc.SetTextForeground( slice.text_color )
         dc.SetFont( wx.SystemSettings_GetFont( wx.SYS_DEFAULT_GUI_FONT ) )
         dc.DrawText( self.GetLabel(), 0, 0 )
 
@@ -597,8 +603,11 @@ class ImageText ( wx.Window ):
     def __init__ ( self, parent, image, text = '', alignment = 'center' ):
         """ Initializes the object.
         """
-        self._image_slice = ImageSlice( transparent = True ).set(
-                                        image       = image )
+        self._image_slice = None
+        if image is not None:
+            self._image_slice = ImageSlice( transparent = True ).set(
+                                            image       = image )
+                                            
         super( ImageText, self ).__init__( parent, -1, 
                                            style = wx.FULL_REPAINT_ON_RESIZE )
                                            
@@ -610,7 +619,9 @@ class ImageText ( wx.Window ):
         wx.EVT_ERASE_BACKGROUND( self, self._erase_background )
         wx.EVT_PAINT( self, self._on_paint )
         
-        self.SetMinSize( self.GetMinSize() )
+        size = self.GetMinSize()
+        self.SetMinSize( size )
+        self.SetSize( size )
             
     def _erase_background ( self, event ):
         """ Do not erase the background here (do it in the 'on_paint' handler).
@@ -622,13 +633,14 @@ class ImageText ( wx.Window ):
         """
         dc = wx.PaintDC( self )
         if self._fill is not False:
-            paint_parent( dc, self, 0, 0 )
-                
+            slice = paint_parent( dc, self, 0, 0 )
+            
         self._fill = True
         wdx, wdy   = self.GetClientSizeTuple()
         text       = self.GetLabel()
-        slice      = self._image_slice
-        slice.fill( dc, 0, 0, wdx, wdy )
+        if self._image_slice is not None:
+            slice = self._image_slice
+            slice.fill( dc, 0, 0, wdx, wdy )
         dc.SetBackgroundMode( wx.TRANSPARENT )
         dc.SetTextForeground( slice.text_color )
         dc.SetFont( self.GetFont() )
@@ -639,12 +651,15 @@ class ImageText ( wx.Window ):
         """ Returns the minimum size for the window.
         """
         tdx, tdy, descent, leading = self._get_text_size()
+        
         slice = self._image_slice
+        if slice is None:
+            return wx.Size( tdx, tdy )
         
         return wx.Size( max( slice.left  + slice.right,
                              slice.xleft + slice.xright  + tdx + 8 ),
                         max( slice.top   + slice.bottom,
-                             slice.xtop  + slice.xbottom + tdy + 8 ) )
+                             slice.xtop  + slice.xbottom + tdy + 4 ) )
                         
     def SetFont ( self, font ):
         """ Set the window font.
@@ -664,7 +679,7 @@ class ImageText ( wx.Window ):
         """ Refreshes the contents of the control.
         """
         if self._fill is True:
-            self._fill = False  
+            self._fill = (self._image_slice is None)
         
         if self._text_size is not None:
             self.RefreshRect( wx.Rect( *self._get_text_bounds() ), False )
@@ -680,6 +695,9 @@ class ImageText ( wx.Window ):
             if text is None:
                 text = self.GetLabel()
                 
+            if text.strip() == '':
+                text = 'M'
+                
             self._text_size = self.GetFullTextExtent( text )
             
         return self._text_size
@@ -690,7 +708,7 @@ class ImageText ( wx.Window ):
         """
         tdx, tdy, descent, leading = self._get_text_size()
         wdx, wdy = self.GetClientSizeTuple()
-        slice    = self._image_slice
+        slice    = self._image_slice or default_image_slice
         ady      = wdy - slice.xtop  - slice.xbottom
         ty       = slice.xtop  + ((ady - (tdy - descent)) / 2) - 1
         if self._alignment == 0:

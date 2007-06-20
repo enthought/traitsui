@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
 #
-#  Traits UI simple, read-only single line text editor with an image background.
+#  Traits UI simple, read-only single line text editor with a themed (i.e.
+#  image) background.
 #
 #  Written by: David C. Morrill
 #
@@ -10,8 +11,8 @@
 #
 #-------------------------------------------------------------------------------
 
-""" Traits UI simple, read-only single line text editor with an image 
-    background.
+""" Traits UI simple, read-only single line text editor with a themed 
+    (i.e. image) background.
 """
 
 #-------------------------------------------------------------------------------
@@ -37,12 +38,12 @@ from image_slice \
     import ImageText
 
 #-------------------------------------------------------------------------------
-#  '_ImageTextEditor' class:
+#  '_ThemedTextEditor' class:
 #-------------------------------------------------------------------------------
                                
-class _ImageTextEditor ( Editor ):
-    """ Traits UI simple, read-only single line text editor with an image 
-        background.
+class _ThemedTextEditor ( Editor ):
+    """ Traits UI simple, read-only single line text editor with a themed
+        (i.e. image background).
     """
         
     #---------------------------------------------------------------------------
@@ -72,14 +73,13 @@ class _ImageTextEditor ( Editor ):
 #  Create the editor factory object:
 #-------------------------------------------------------------------------------
 
-# wxPython editor factory for LED editors:
-class ImageTextEditor ( BasicEditorFactory ):
+# wxPython editor factory for themed text editors:
+class ThemedTextEditor ( BasicEditorFactory ):
     
     # The editor class to be created:
-    klass = _ImageTextEditor
+    klass = _ThemedTextEditor
     
-    # The background image to display:
-    # fixme: Provide a default value.
+    # The background theme image to display:
     theme = Image
     
     # The alignment of the text within the control:

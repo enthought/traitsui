@@ -515,7 +515,7 @@ class FillPanel ( object ):
                 self.resizable     = True
             return
           
-        theme = group.theme
+        theme = group.group_theme
         if (is_dock_window             or 
             (id != '')                 or
             (theme is not None)        or
@@ -766,7 +766,7 @@ class FillPanel ( object ):
         for item in content:
             
             # Get the theme image (if any):
-            theme = item.theme
+            theme = item.item_theme
             
             # Get the name in order to determine its type:
             name = item.name
