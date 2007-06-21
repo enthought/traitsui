@@ -25,9 +25,7 @@ user interface toolkit.
 #-------------------------------------------------------------------------------
 
 import wx
-    
-from enthought.util.numerix \
-    import zeros, typecode
+import numpy    
     
 from enthought.traits.api \
     import HasTraits, Int, Float, Instance, false
@@ -115,9 +113,16 @@ class SimpleEditor ( Editor ):
             object = self.value
             shape  = object.shape
             _as    = self._as
-            for i in range( shape[0] ):
-                for j in range( shape[1] ):
-                    setattr( _as, 'f%d_%d' % ( i, j ), object[i,j] )
+            
+            # 1D
+            if len( shape ) == 1:
+                for i in range( shape[0] ):
+                    setattr( _as, 'f%d' % i, object[i] )
+            # 2D
+            elif len( shape ) == 2:
+                for i in range( shape[0] ):
+                    for j in range( shape[1] ):
+                        setattr( _as, 'f%d_%d' % ( i, j ), object[i,j] )
                 
     #---------------------------------------------------------------------------
     #  Updates the array value associated with the editor:  
@@ -169,9 +174,44 @@ class ArrayStructure ( HasTraits ):
         
         # Determine the correct trait type to use for each element:
         trait = Float
-        if isinstance( object[0,0], int ):
+
+        if object.dtype.type == 'i':
             trait = Int
-            
+
+        if len( object.shape ) == 1:
+            self.view = self._one_dim_view( object, style, width, trait )
+        elif len( object.shape ) == 2:
+            self.view = self._two_dim_view( object, style, width, trait )
+        else:
+            raise TraitError("Only 1D or 2D arrays supported")
+
+
+    #---------------------------------------------------------------------------
+    #  1D view:
+    #---------------------------------------------------------------------------
+
+    def _one_dim_view( self, object, style, width, trait ):
+        content = []
+        shape   = object.shape
+        items = []
+        for i in range( shape[0] ):
+            name = 'f%d' % i
+            self.add_trait( name, trait( object[i], event = 'field' ) )
+            items.append( Item( name  = name, 
+                                style = style,
+                                width = width ) )
+        group = Group( orientation = 'horizontal', 
+                       show_labels = False,
+                       *items )
+        content.append( group )
+        return View( Group( show_labels = False, *content ) )
+
+
+    #---------------------------------------------------------------------------
+    #  2D view:
+    #---------------------------------------------------------------------------
+
+    def _two_dim_view( self, object, style, width, trait ):
         content = []
         shape   = object.shape
         for i in range( shape[0] ):
@@ -186,7 +226,8 @@ class ArrayStructure ( HasTraits ):
                            show_labels = False,
                            *items )
             content.append( group )
-        self.view = View( Group( show_labels = False, *content ) )
+        return View( Group( show_labels = False, *content ) )
+        
 
     #---------------------------------------------------------------------------
     #  Updates the underlying tuple when any field changes value:
@@ -198,10 +239,17 @@ class ArrayStructure ( HasTraits ):
         # Get the array we are mirroring:
         object = self.editor.value
         shape  = object.shape
-        value  = zeros( shape, typecode( object ) )
-        for i in range( shape[0] ):
-            for j in range( shape[1] ):
-                value[i,j] = getattr( self, 'f%d_%d' % ( i, j ) )
+        value  = numpy.zeros( shape, object.dtype )
+        
+        # 1D
+        if len( shape ) == 1:
+            for i in range( shape[0] ):
+                value[i] = getattr( self, 'f%d' % i )
+        # 2D
+        elif len( shape ) == 2:
+            for i in range( shape[0] ):
+                for j in range( shape[1] ):
+                    value[i,j] = getattr( self, 'f%d_%d' % ( i, j ) )
                      
         self.editor.update_array( value )
         
