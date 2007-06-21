@@ -675,10 +675,6 @@ class _TabularEditor ( Editor ):
         self.control = control = wxListCtrl( parent, -1, style = style )
         control._editor = self
 
-        # Default size
-        size = wx.Size(390,400)
-        self.control.SetSize(size)
-
         # Create the list control column:
         #fixme: what do we do here?
         #control.InsertColumn( 0, '' )
