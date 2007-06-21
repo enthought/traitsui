@@ -310,7 +310,7 @@ class Panel ( BaseDialog ):
 def panel ( ui, parent ):
     """ Creates a panel-based wxPython user interface for a specified UI object.
     
-    This function does not modify the UI object passed to it
+        This function does not modify the UI object passed to it
     """
     # Bind the context values to the 'info' object:
     ui.info.bind_context()
@@ -336,7 +336,7 @@ def panel ( ui, parent ):
         return panel
         
     # Create a notebook which will contain a page for each group in the content:
-    nb    = create_notebook_for_items( content, ui, parent )
+    nb    = create_notebook_for_items( content, ui, parent, None )
     nb.ui = ui
     
     # Notice when the notebook page changes (to display correct help)
@@ -350,8 +350,8 @@ def panel ( ui, parent ):
 #  pages:  
 #-------------------------------------------------------------------------------
                                                       
-def create_notebook_for_items ( content, ui, parent, item_handler   = None,
-                                                     is_dock_window = False ):
+def create_notebook_for_items ( content, ui, parent, group,
+                                item_handler = None, is_dock_window = False ):
     """ Creates a notebook and adds a list of groups or items to it as separate 
         pages.
     """
@@ -361,8 +361,9 @@ def create_notebook_for_items ( content, ui, parent, item_handler   = None,
         nb = DockWindow( parent, handler      = ui.handler, 
                                  handler_args = ( ui.info, ),
                                  id           = ui.id ).control
-    pages = []
-    count = 0
+    pages     = []
+    count     = 0
+    has_theme = ((group is not None) and (group.group_theme is not None))
     
     # Create a notebook page for each group or item in the content:
     active = 0
@@ -390,7 +391,15 @@ def create_notebook_for_items ( content, ui, parent, item_handler   = None,
             count    += 1
             if page_name == '':
                page_name = 'Page %d' % count
-            panel = wx.Panel( nb, -1 )
+               
+            sizer = wx.BoxSizer( wx.VERTICAL )
+            if has_theme:
+                panel, image_sizer = add_image_panel( nb, group )
+                image_sizer.Add( sizer, 1, wx.EXPAND )
+            else:   
+                panel = wx.Panel( nb, -1 )
+                panel.SetSizer( sizer )
+                
             pages.append( DockControl( name     = page_name,
                                        image    = item.image,
                                        id       = item.get_id(),
@@ -399,9 +408,7 @@ def create_notebook_for_items ( content, ui, parent, item_handler   = None,
                                                       ui = ui, element = item ),
                                        export   = item.export,
                                        control  = panel ) )
-            sizer = wx.BoxSizer( wx.VERTICAL )
             item_handler( item, panel, sizer )
-            panel.SetSizer( sizer )
             panel.GetSizer().Fit( panel )
     
     region = DockRegion( contents = pages, active = active )
@@ -414,6 +421,25 @@ def create_notebook_for_items ( content, ui, parent, item_handler   = None,
 
     # Return the notebook as the result:
     return nb
+        
+#-------------------------------------------------------------------------------
+#  Creates a themed ImagePanel for the specified group and parent window:
+#-------------------------------------------------------------------------------
+
+def add_image_panel ( window, group ):
+    """ Creates a themed ImagePanel for the specified group and parent window.
+    """
+    from image_slice import ImageSlice, ImagePanel, ImageSizer
+    
+    image_slice = ImageSlice( 
+        transparent = group.has_theme ).set(
+        image       = group.group_theme
+    )
+    panel       = ImagePanel( window, image_slice )
+    image_sizer = ImageSizer( image_slice )
+    panel.SetSizer( image_sizer )
+    
+    return ( panel, image_sizer )
     
 #-------------------------------------------------------------------------------
 #  Handles a notebook page being 'turned':
@@ -508,10 +534,10 @@ class FillPanel ( object ):
         if is_dock_window and (is_splitter or is_tabbed):
             if is_splitter:
                 self.dock_contents = self.add_dock_window_splitter_items( 
-                                                                panel, content )
+                                              panel, content, group )
             else:
                 self.dock_contents = create_notebook_for_items( content, ui,
-                                           panel, self.add_notebook_item, True )
+                                    panel, group, self.add_notebook_item, True )
                 self.resizable     = True
             return
           
@@ -522,15 +548,7 @@ class FillPanel ( object ):
             (group.visible_when != '') or
             (group.enabled_when != '')):
             if theme is not None:
-                from image_slice import ImageSlice, ImagePanel, ImageSizer
-                
-                image_slice = ImageSlice( 
-                    transparent = group.has_theme ).set(
-                    image       = theme
-                )
-                new_panel   = ImagePanel( panel, image_slice )
-                image_sizer = ImageSizer( image_slice )
-                new_panel.SetSizer( image_sizer )
+                new_panel, image_sizer = add_image_panel( panel, group )
             else:
                 new_panel = wx.Panel( panel, -1 )
             sizer = panel.GetSizer()
@@ -587,12 +605,12 @@ class FillPanel ( object ):
             if editor is not None:
                 editor.dock_window = dw
             dw.SetSizer( DockSizer( contents = 
-                         self.add_dock_window_splitter_items( dw, content ) ) )
+                   self.add_dock_window_splitter_items( dw, content, group ) ) )
             self.sizer.Add( dw, 1, wx.EXPAND )
         elif len( content ) > 0:
             if is_tabbed:
                 self.resizable = True
-                dw = create_notebook_for_items( content, ui, panel, 
+                dw = create_notebook_for_items( content, ui, panel, group,
                                                 self.add_notebook_item )
                 if editor is not None:
                     editor.dock_window = dw
@@ -626,11 +644,11 @@ class FillPanel ( object ):
     #  Adds a set of groups or items separated by splitter bars to a DockWindow:    
     #---------------------------------------------------------------------------
 
-    def add_dock_window_splitter_items ( self, window, content ):
+    def add_dock_window_splitter_items ( self, window, content, group ):
         """ Adds a set of groups or items separated by splitter bars to a
             DockWindow.
         """
-        contents = [ self.add_dock_window_splitter_item( window, item )
+        contents = [ self.add_dock_window_splitter_item( window, item, group )
                      for item in content ]
            
         # Create a splitter group to hold the contents:
@@ -648,31 +666,39 @@ class FillPanel ( object ):
     #  Adds a single group or item to a DockWindow:
     #---------------------------------------------------------------------------
             
-    def add_dock_window_splitter_item ( self, window, item ):
+    def add_dock_window_splitter_item ( self, window, item, group ):
         """ Adds a single group or item to a DockWindow.
         """
         if isinstance( item, Group ):
             sizer, resizable, contents = fill_panel_for_group( window,
                 item, self.ui, suppress_label = True, is_dock_window = True )
             self.resizable |= resizable
+            
             return contents
+        
+        orientation = wx.VERTICAL
+        if self.is_horizontal:
+            orientation = wx.HORIZONTAL
+        sizer = wx.BoxSizer( orientation )
+        
+        if group.group_theme is not None:
+            panel, image_sizer = add_image_panel( window, group )
+            image_sizer.Add( sizer, 1, wx.EXPAND )
         else:
-            panel       = wx.Panel( window, -1 )
-            orientation = wx.VERTICAL
-            if self.is_horizontal:
-                orientation = wx.HORIZONTAL
-            sizer = wx.BoxSizer( orientation )
-            self.add_items( [ item ], panel, sizer )
+            panel = wx.Panel( window, -1 )
             panel.SetSizer( sizer )
-            return DockRegion( contents = [ 
-                     DockControl( name     = item.get_label( self.ui ),
-                                  image    = item.image,
-                                  id       = item.get_id(),
-                                  style    = item.dock,
-                                  dockable = DockableViewElement( 
-                                                 ui = self.ui, element = item ),
-                                  export   = item.export,
-                                  control  = panel ) ] )
+            
+        self.add_items( [ item ], panel, sizer )
+        
+        return DockRegion( contents = [ 
+                 DockControl( name     = item.get_label( self.ui ),
+                              image    = item.image,
+                              id       = item.get_id(),
+                              style    = item.dock,
+                              dockable = DockableViewElement( 
+                                             ui = self.ui, element = item ),
+                              export   = item.export,
+                              control  = panel ) ] )
         
     #---------------------------------------------------------------------------
     #  Adds a single Item to a notebook:  
