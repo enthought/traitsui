@@ -23,9 +23,7 @@ interface toolkit.
 #-------------------------------------------------------------------------------
 
 import wx
-
-from enthought.util.numerix \
-    import compress
+import numpy
 
 from enthought.traits.api \
     import HasPrivateTraits, List, Enum, Str, Instance, Int, Any, Callable, \
@@ -521,7 +519,7 @@ class NumericEditor ( Editor ):
             if model_selection is None:
                 self._external_selection = []
             else:
-                self._external_selection = list( compress( model_selection,
+                self._external_selection = list( numpy.compress( model_selection,
                                           self.model.model_indices, axis = 0 ) )
             self._check_selection_status()
 

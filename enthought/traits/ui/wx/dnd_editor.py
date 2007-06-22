@@ -17,6 +17,7 @@ a drop target only, or both a drop target and a drag source.
 #-------------------------------------------------------------------------------
 
 import wx
+import numpy
 
 from cPickle \
     import load
@@ -29,9 +30,6 @@ from editor \
     
 from editor_factory \
     import EditorFactory
-
-from enthought.util.numerix \
-    import array, fromstring, reshape, UnsignedInt8, ravel
 
 from enthought.util.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
@@ -239,11 +237,11 @@ class SimpleEditor ( Editor ):
         if not control.IsEnabled():
             if self._mono_image is None:
                 img  = self._img
-                data = reshape( fromstring( img.GetData(), UnsignedInt8 ), 
-                          ( -1, 3 ) ) * array( [ [ 0.297, 0.589, 0.114 ] ] )
+                data = numpy.reshape( numpy.fromstring( img.GetData(), numpy.uint8 ), 
+                          ( -1, 3 ) ) * numpy.array( [ [ 0.297, 0.589, 0.114 ] ] )
                 g = data[ :, 0 ] + data[ :, 1 ] + data[ :, 2 ]
                 data[ :, 0 ] = data[ :, 1 ] = data[ :, 2 ] = g
-                img.SetData( ravel( data.astype( UnsignedInt8 ) ).tostring() )
+                img.SetData( numpy.ravel( data.astype( numpy.uint8 ) ).tostring() )
                 img.SetMaskColour( 0, 0, 0 )
                 self._mono_image = img.ConvertToBitmap()
                 self._img        = None
