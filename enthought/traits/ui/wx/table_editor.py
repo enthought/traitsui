@@ -27,7 +27,7 @@ import wx
 
 from enthought.traits.api \
     import true, false, Int, List, Instance, Str, Color, Font, Any, Button, \
-           Tuple, Dict, HasPrivateTraits, Trait, Bool, Callable
+           Tuple, Dict, HasPrivateTraits, Trait, Bool, Callable, Range
 
 from enthought.traits.ui.api \
     import View, Item, UI, InstanceEditor, EnumEditor, Handler, SetEditor, \
@@ -172,6 +172,9 @@ class ToolkitEditorFactory ( EditorFactory ):
 
     # Should grid lines be shown on the table?
     show_lines = true
+
+    # The vertical scroll increment for the table:
+    scroll_dy = Range( 1, 32 )
 
     # Grid line color
     line_color = Color( 0xC4C0A9 )
@@ -391,6 +394,7 @@ class TableEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        
         factory       = self.factory
         self.filter   = factory.filter
         self.auto_add = (factory.auto_add and (factory.row_factory is not None))
@@ -524,6 +528,7 @@ class TableEditor ( Editor ):
             row_label_width              = factory.row_label_width )
         _grid = grid._grid
         _grid.AutoSizeRows()
+        _grid.SetScrollLineY( factory.scroll_dy )
         if factory.rows > 0:
             self.scrollable = False
             dy = (_grid.GetColLabelSize() +
