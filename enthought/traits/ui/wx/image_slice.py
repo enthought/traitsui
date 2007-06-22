@@ -27,13 +27,17 @@ from colorsys \
     import rgb_to_hls
 
 from enthought.traits.api \
-    import HasPrivateTraits, Instance, Int, List, Bool
+    import HasPrivateTraits, Instance, Str, Int, List, Bool, Color, Font, \
+           Float, Enum
 
 from enthought.pyface.image_resource \
     import ImageResource
     
+from enthought.util.wx.do_later \
+    import do_after
+    
 from constants \
-    import WindowColor
+    import WindowColor, ErrorColor
   
 from numpy \
     import reshape, fromstring, uint8
@@ -112,6 +116,9 @@ class ImageSlice ( HasPrivateTraits ):
     # Fixed minimum size of current image:
     fdx = Int
     fdy = Int
+    
+    # The background color of the image:
+    bg_color = Color
     
     #-- Public Methods ---------------------------------------------------------
     
@@ -290,15 +297,18 @@ class ImageSlice ( HasPrivateTraits ):
             # Re-analyze the new bitmap:
             self._analyze_bitmap( bitmap )
         else:
-            self.top    = min( 32, self.dys[0] )
-            self.bottom = min( 32, self.dys[-1] )
-            self.left   = min( 32, self.dxs[0] )
-            self.right  = min( 32, self.dxs[-1] )
+            self.top    = min( dy / 2, self.dys[0] )
+            self.bottom = min( dy / 2, self.dys[-1] )
+            self.left   = min( dx / 2, self.dxs[0] )
+            self.right  = min( dx / 2, self.dxs[-1] )
             
             self._find_best_borders( data )
+
+            # Save the background color:            
+            r, g, b       = data[ dy / 2, dx / 2 ]
+            self.bg_color = (0x10000 * r) + (0x100 * g) + b
             
             # Find the best contrasting text color (black or white):
-            r, g, b = data[ dy / 2, dx / 2 ]
             h, l, s = rgb_to_hls( r / 255.0, g / 255.0, b / 255.0 )
             self.text_color = wx.BLACK
             if l < 0.50:
@@ -488,10 +498,13 @@ class ImagePanel ( wx.Panel ):
             dx, dy = control.GetSizeTuple()
             
         slice = self._image_slice
-        size  = wx.Size( dx + min( slice.left, slice.xleft ) + 
-                              min( slice.right, slice.xright ),
-                         dy + min( slice.top, slice.xtop ) +
-                              min( slice.bottom, slice.xbottom ) )
+        sizer = self.GetSizer()
+        size  = wx.Size( dx + min( slice.left, slice.xleft )   + 
+                              min( slice.right, slice.xright ) + 
+                              sizer._left_padding + sizer._right_padding,
+                         dy + min( slice.top, slice.xtop )       +
+                              min( slice.bottom, slice.xbottom ) +
+                              sizer._top_padding + sizer._bottom_padding )
         self.SetSize( size )
         
         return size
@@ -721,3 +734,324 @@ class ImageText ( wx.Window ):
             
         return ( tx, ty, tdx, tdy )
 
+#-------------------------------------------------------------------------------
+#  Class 'ImageSlider'  
+#-------------------------------------------------------------------------------
+
+class ImageSlider ( HasPrivateTraits ):
+    """ Defines a slider control that displays an ImageSlice in its background.
+    """
+    
+    # The low end of the slider range:
+    low = Float
+    
+    # The high end of the slider range:
+    high = Float
+    
+    # The smallest allowed increment:
+    increment = Float
+    
+    # The current value:
+    value = Float
+    
+    # Should the current value be displayed as text?
+    show_value = Bool( True )
+    
+    # The alignment of the text within the slider:
+    alignment = Enum( 'center', 'left', 'right' )
+    
+    # The color to use for the slider bar:
+    slider_color = Color( 0xC0C0C0 )
+    
+    # The background color for the slider:
+    bg_color = Color( 'white' )
+    
+    # The color of the slider tip:
+    tip_color = Color( 0xFF7300 )
+    
+    # The color to use for the value text:
+    text_color = Color( 'black' )
+    
+    #-- Private Traits ---------------------------------------------------------
+    
+    # The wxPython controlfor this object:
+    control = Instance( wx.Window )
+    
+    # The current text being displayed:
+    text = Str
+    
+    #-- Public Methods ---------------------------------------------------------
+    
+    def create_control ( self, parent ):
+        """ Creates the underlying wx.Window for the object.
+        """
+        self.control = control = wx.Window( parent, -1,
+                                            size  = wx.Size( 100, 20 ),
+                                            style = wx.FULL_REPAINT_ON_RESIZE |
+                                                    wx.TAB_TRAVERSAL )
+                                           
+        # Set up the painting event handlers:
+        wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
+        wx.EVT_PAINT( control, self._on_paint )
+        wx.EVT_SET_FOCUS( control, self._set_focus )
+        
+        # Set up mouse event handlers:
+        wx.EVT_LEFT_DOWN( control, self._left_down )
+        wx.EVT_LEFT_UP(   control, self._left_up )
+        wx.EVT_MOTION(    control, self._mouse_move )
+        
+        # Make sure the text value gets initialized:
+        self._value_changed()
+        
+        return control
+        
+    #-- Private Methods --------------------------------------------------------
+
+    def _get_text_bounds ( self ):
+        """ Get the window bounds of where the current text should be
+            displayed.
+        """
+        tdx, tdy, descent, leading = self._get_text_size()
+        wdx, wdy = self.control.GetClientSizeTuple()
+        ty       = ((wdy - (tdy - descent)) / 2) - 2
+        if self.alignment == 'left':
+            tx = 4
+        elif self.alignment == 'center':
+            tx = (wdx - tdx) / 2
+        else:
+            tx = wdx - tdx - 4
+            
+        return ( tx, ty, tdx, tdy )
+        
+    def _get_text_size ( self ):
+        """ Returns the text size information for the window.
+        """
+        if self._text_size is None:
+            self._text_size = self.control.GetFullTextExtent( 
+                                               self.text.strip() or 'M' )
+            
+        return self._text_size
+        
+    def _refresh ( self ):
+        """ Refreshes the contents of the control.
+        """
+        if self.control is not None:
+            self.control.Refresh()
+        
+    def _set_slider_position ( self, x, y ):
+        """ Calculates a new slider value for a specified (x,y) coordinate.
+        """
+        wdx, wdy = self.control.GetSizeTuple()
+        if (3 <= x < wdx) and (0 <= y < wdy):
+            value = self.low + (((x - 3) * (self.high - self.low)) / (wdx - 4))
+            increment = self.increment
+            if increment > 0:
+                value = round( value / increment ) * increment
+            self.value = value
+            
+    def _delayed_click ( self ):
+        """ Handle a delayed click response.
+        """
+        if self._pending:
+            self._pending = False
+            self._set_slider_position( self._x, self._y )
+
+    def _pop_up_text ( self ):
+        """ Pop-up a text control to allow the user to enter a value using
+            the keyboard.
+        """
+        control = self.control
+        text    = wx.TextCtrl( control, -1, self.text,
+                               size = control.GetSize(),
+                               style = wx.TE_PROCESS_ENTER )
+        text.SetSelection( -1, -1 )
+        text.SetFocus()
+        wx.EVT_TEXT_ENTER( control, text.GetId(), self._text_completed )
+        wx.EVT_KILL_FOCUS( text, self._text_completed )
+        wx.EVT_CHAR( text, self._key_entered )
+
+    def _destroy_text ( self ):
+        """ Destroys the current text control.
+        """
+        # We set '_x' to prevent a SetFocus event from causing an infinite
+        # loop when we destroy the text control (then we clear it):
+        self._x = 1
+        self.control.DestroyChildren()
+        self._x = None
+        
+    #--- wxPython Event Handlers -----------------------------------------------
+            
+    def _erase_background ( self, event ):
+        """ Do not erase the background here (do it in the 'on_paint' handler).
+        """
+        pass
+           
+    def _on_paint ( self, event ):
+        """ Paint the background using the associated ImageSlice object.
+        """
+        control = self.control
+        dc      = wx.PaintDC( control )
+            
+        # Draw the slider bar:
+        wdx, wdy = control.GetClientSizeTuple()
+        dx = max( 0, min( wdx - 2, 
+                  int( round( ((wdx - 3) * (self.value - self.low)) / 
+                                           (self.high - self.low) ) ) ) )
+        
+        dc.SetBrush( wx.Brush( self.slider_color_ ) )
+        dc.SetPen( wx.TRANSPARENT_PEN )
+        dc.DrawRectangle( 0, 0, dx + 3, wdy )
+        
+        # Draw the rest of the background:
+        dc.SetBrush( wx.Brush( self.bg_color_ ) )
+        dc.DrawRectangle( dx + 3, 0, wdx - dx - 3, wdy )
+        
+        # Draw the slider tip:
+        dc.SetBrush( wx.Brush( self.tip_color_ ) )
+        dc.DrawRectangle( dx, 0, 3, wdy )
+        
+        # Draw the current text value (if requested):
+        if self.show_value:
+            dc.SetBackgroundMode( wx.TRANSPARENT )
+            dc.SetTextForeground( self.text_color_ )
+            tx, ty, tdx, tdy = self._get_text_bounds()
+            dc.DrawText( self.text, tx, ty )
+    
+    def _set_focus ( self, event ):
+        """ Handle the control getting the keyboard focus.
+        """
+        if self._x is None:
+            self._pop_up_text()
+            
+        event.Skip()
+    
+    def _left_down ( self, event ):
+        """ Handles the left mouse being pressed.
+        """
+        self._x, self._y = event.GetX(), event.GetY()
+        self._pending    = True
+        self.control.CaptureMouse()
+        self.control.SetFocus()
+        do_after( 150, self._delayed_click )
+    
+    def _left_up ( self, event ):
+        """ Handles the left mouse button being released.
+        """
+        self.control.ReleaseMouse()
+        if self._pending:
+            self._pop_up_text()
+            
+        self._x = self._y = self._pending = None
+        
+    def _mouse_move ( self, event ):
+        """ Handles the mouse moving.
+        """
+        if self._x is not None:
+            x, y = event.GetX(), event.GetY()
+            if self._pending:
+                if (abs( x - self._x ) + abs( y - self._y )) < 3:
+                    return
+                self._pending = False
+            self._set_slider_position( x, y )
+            
+    def _text_completed ( self, event ):
+        control = event.GetEventObject()
+        try:
+            self.value = float( control.GetValue() )
+            self._destroy_text()
+        except:
+            control.SetBackgroundColour( ErrorColor )
+        
+    def _key_entered ( self, event ):
+        key_code = event.GetKeyCode()
+        if key_code == wx.WXK_ESCAPE:
+            self._destroy_text()
+            return
+        
+        if key_code == wx.WXK_TAB:
+            if event.ShiftDown():
+                self.control.Navigate( 0 )
+            else:
+                self.control.Navigate()
+            return
+            
+        event.Skip()
+            
+    #-- Trait Event Handlers ---------------------------------------------------
+    
+    def _value_changed ( self ):
+        self.text       = '%g' % self.value
+        self._text_size = None
+        self._refresh()
+
+#-------------------------------------------------------------------------------
+#  Class 'CenteredImageResource'  
+#-------------------------------------------------------------------------------
+        
+class CenteredImageResource ( ImageResource ):
+    
+    # The image resource being centered:
+    image_resource = Instance( ImageResource )
+    
+    # The background color to use:
+    bg_color = Color( 0xE0E0E0 )
+    
+    # Optional text to display centered over image:
+    text = Str
+    
+    # The color of the text:
+    text_color = Color( 'black' )
+    
+    # The font to use for displaying the text:
+    font = Font( 'Arial 12' )
+    
+    # The size of the image to center in:
+    width  = Int
+    height = Int
+
+    #-- Private Traits ---------------------------------------------------------
+    
+    # The cached version of the centered image:
+    _image = Instance( wx.Image )
+    
+    #-- object Method Implementations ------------------------------------------
+    
+    def __init__ ( self, **traits ):
+        """ Initializes the object. """
+        self.set( **traits )
+        
+    #-- ImageResource Method Implementations -----------------------------------
+    
+    def create_image( self, size = None ):
+        """ Creates a toolkit specific image for this resource. """
+        if self._image is None:
+            dx, dy = self.width, self.height
+            bitmap = wx.EmptyBitmap( dx, dy )
+            mdc    = wx.MemoryDC()
+            mdc.SelectObject( bitmap )
+            mdc.SetBrush( wx.Brush( self.bg_color_ ) )
+            mdc.SetPen( wx.TRANSPARENT_PEN )
+            mdc.DrawRectangle( 0, 0, dx, dy )
+            
+            bitmap2  = self.image_resource.create_bitmap()
+            bdx, bdy = bitmap2.GetWidth(), bitmap2.GetHeight()
+            mdc2     = wx.MemoryDC()
+            mdc2.SelectObject( bitmap2 )
+            
+            mdc.Blit( (dx - bdx) / 2, (dy - bdy) / 2, bdx, bdy, mdc2, 0, 0, 
+                      useMask = True )
+                      
+            text = self.text
+            if text != '':
+                mdc.SetBackgroundMode( wx.TRANSPARENT )
+                mdc.SetTextForeground( self.text_color_ )
+                mdc.SetFont( self.font )
+                tdx, tdy, descent, leading = mdc.GetFullTextExtent( text )  
+                mdc.DrawText( text, (dx - tdx) / 2, ((dy - tdy) / 2) - 1 )
+                
+            mdc.SelectObject(  wx.NullBitmap )
+            mdc2.SelectObject( wx.NullBitmap )
+            
+            self._image = bitmap.ConvertToImage()
+            
+        return self._image

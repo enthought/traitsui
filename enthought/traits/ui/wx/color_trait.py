@@ -48,7 +48,7 @@ def convert_to_color ( object, name, value ):
     elif isinstance( value, str ) and value in standard_colors:
         return wx.NamedColour(value)
         
-    elif type( value ) is int:
+    elif isinstance( value, int ):
         num = int( value )
         return wx.Colour( num / 0x10000, (num / 0x100) & 0xFF, num & 0xFF )
         
