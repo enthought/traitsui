@@ -90,11 +90,16 @@ class Editor ( UIEditor ):
         if desc == '':
             desc = self.object.base_trait( self.name ).desc
             if desc is None:
-                return
+                return False
+                
             desc = 'Specifies ' + desc
+            
         if control is None:
             control = self.control
+            
         control.SetToolTipString( desc )
+        
+        return True
             
     #---------------------------------------------------------------------------
     #  Handles the 'enabled' state of the editor being changed:
