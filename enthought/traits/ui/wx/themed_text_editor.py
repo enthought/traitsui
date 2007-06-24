@@ -181,14 +181,15 @@ class _ThemedTextEditor ( Editor ):
             padding_y = slice.xtop  + slice.xbottom                                            
                                             
         self.control = control = wx.Window( parent, -1,
-                              size  = wx.Size( padding_x + 70, padding_y + 20 ),
-                              style = wx.FULL_REPAINT_ON_RESIZE )
+                            size  = wx.Size( padding_x + 70, padding_y + 20 ),
+                            style = wx.FULL_REPAINT_ON_RESIZE | wx.WANTS_CHARS )
                                            
         self._text_size = self._fill = None  
         
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
         wx.EVT_PAINT( control, self._on_paint )
+        wx.EVT_CHAR(  control, self._inactive_key_entered )
         
         # Only handle 'focus' events if we are not read-only:
         if not self.readonly:
@@ -407,6 +408,17 @@ class _ThemedTextEditor ( Editor ):
                 else:
                     self.control.Navigate()
                     
+            return
+            
+        event.Skip()
+        
+    def _inactive_key_entered ( self, event ):
+        """ Handles individual key strokes while the text control is inactive.
+        """
+        if event.GetKeyCode() == wx.WXK_RETURN:
+            if self._text is None:
+                self._pop_up_text()
+                
             return
             
         event.Skip()
