@@ -599,7 +599,7 @@ class ImageSizer ( wx.PySizer ):
 #  Class 'ImageText'  
 #-------------------------------------------------------------------------------
 
-class ImageText ( wx.Window ):
+class ImageText ( wx.PyWindow ):
     """ Defines a text control that displays an ImageSlice in its background.
     """
     
@@ -631,7 +631,14 @@ class ImageText ( wx.Window ):
         size = self.GetMinSize()
         self.SetMinSize( size )
         self.SetSize( size )
-            
+        
+    def AcceptsFocus ( self ):
+        """ Indicate that we are a static control that does not accept focus.
+        """
+        return False
+        
+    #-- wxPython Event Handlers ------------------------------------------------
+    
     def _erase_background ( self, event ):
         """ Do not erase the background here (do it in the 'on_paint' handler).
         """

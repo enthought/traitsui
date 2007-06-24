@@ -236,7 +236,6 @@ class _ThemedTextEditor ( Editor ):
                 if self._error is not None:
                     self._error     = None
                     self.ui.errors -= 1
-                    
                 return True
                     
             except TraitError, excp:
@@ -266,6 +265,7 @@ class _ThemedTextEditor ( Editor ):
         """
         self._text.SetBackgroundColour( ErrorColor )
         self._text.Refresh()
+        wx.Bell()
         
         if self._error is None:
             self._error     = True
@@ -279,12 +279,10 @@ class _ThemedTextEditor ( Editor ):
         """
         control = self.control
         factory = self.factory
-        style   = self.text_styles[ self.factory.alignment ]
+        style   = (self.text_styles[ self.factory.alignment ] | 
+                   wx.TE_PROCESS_ENTER)
         if factory.password:
             style |= wx.TE_PASSWORD
-            
-        if factory.enter_set:
-            style |= wx.TE_PROCESS_ENTER
             
         self._text = text = wx.TextCtrl( control, -1, self.str_value, 
                                    size = control.GetSize(), style = style )
@@ -293,9 +291,7 @@ class _ThemedTextEditor ( Editor ):
         
         wx.EVT_KILL_FOCUS( text, self._text_completed )
         wx.EVT_CHAR( text, self._key_entered )
-        
-        if factory.enter_set:
-            wx.EVT_TEXT_ENTER( control, text.GetId(), self.update_object )
+        wx.EVT_TEXT_ENTER( control, text.GetId(), self.update_object )
         
         if factory.auto_set and (not factory.is_grid_cell):
            wx.EVT_TEXT( control, text.GetId(), self.update_object )
@@ -410,6 +406,7 @@ class _ThemedTextEditor ( Editor ):
                     self.control.Navigate( 0 )
                 else:
                     self.control.Navigate()
+                    
             return
             
         event.Skip()
