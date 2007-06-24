@@ -267,6 +267,7 @@ class _ThemedSliderEditor ( Editor ):
         if factory.show_value:
             dc.SetBackgroundMode( wx.TRANSPARENT )
             dc.SetTextForeground( factory.text_color_ )
+            dc.SetFont( control.GetFont() )
             tx, ty, tdx, tdy = self._get_text_bounds()
             dc.DrawText( self.text, tx, ty )
     
