@@ -29,6 +29,9 @@ from colorsys \
 from enthought.traits.api \
     import HasPrivateTraits, Instance, Str, Int, List, Bool, Color, Font
 
+from enthought.traits.ui.api \
+    import Margins
+
 from enthought.pyface.image_resource \
     import ImageResource
     
@@ -609,7 +612,11 @@ class ImageText ( wx.PyWindow ):
         'right':  2
     }
     
-    def __init__ ( self, parent, image, text = '', alignment = 'center' ):
+    #-- wx.PyWindow Method Overrides -------------------------------------------
+    
+    def __init__ ( self, parent, image, text      = '', 
+                                        alignment = 'center', 
+                                        margins   = Margins( 0 ) ):
         """ Initializes the object.
         """
         self._image_slice = None
@@ -621,6 +628,7 @@ class ImageText ( wx.PyWindow ):
                                            style = wx.FULL_REPAINT_ON_RESIZE )
                                            
         self._alignment = self.alignment_map.get( alignment, 1 )
+        self._margins   = margins
         self._text_size = self._fill = None  
         self.SetLabel( text )
         
@@ -667,6 +675,9 @@ class ImageText ( wx.PyWindow ):
         """ Returns the minimum size for the window.
         """
         tdx, tdy, descent, leading = self._get_text_size()
+        margins = self._margins
+        tdx    += (margins.left + margins.right)
+        tdy    += (margins.top  + margins.bottom)
         
         slice = self._image_slice
         if slice is None:
@@ -725,16 +736,17 @@ class ImageText ( wx.PyWindow ):
         tdx, tdy, descent, leading = self._get_text_size()
         wdx, wdy = self.GetClientSizeTuple()
         slice    = self._image_slice or default_image_slice
-        ady      = wdy - slice.xtop  - slice.xbottom
-        ty       = slice.xtop  + ((ady - (tdy - descent)) / 2) - 1
+        margins  = self._margins
+        ady      = wdy - slice.xtop - slice.xbottom
+        ty       = slice.xtop + margins.top + 2 + ((ady - tdy) / 2)
         if self._alignment == 0:
-            tx = slice.xleft + 4
+            tx = slice.xleft + margins.left + 4
         elif self._alignment == 1:
             adx = wdx - slice.xleft - slice.xright
-            tx  = slice.xleft + (adx - tdx) / 2
+            tx  = slice.xleft + margins.left + 4 + ((adx - tdx) / 2)
         else:
-            tx = wdx - tdx - slice.xright - 4
-            
+            tx = wdx - tdx - slice.xright - margins.right - 4
+          
         return ( tx, ty, tdx, tdy )
 
 #-------------------------------------------------------------------------------

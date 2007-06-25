@@ -436,7 +436,9 @@ def add_image_panel ( window, group ):
         image       = group.group_theme
     )
     panel       = ImagePanel( window, image_slice )
-    image_sizer = ImageSizer( image_slice )
+    margins     = group.group_theme_margins
+    image_sizer = ImageSizer( image_slice, margins.top,  margins.bottom, 
+                                           margins.left, margins.right )
     panel.SetSizer( image_sizer )
     
     return ( panel, image_sizer )
@@ -812,7 +814,8 @@ class FillPanel ( object ):
                     if theme is not None:
                         from image_slice import ImageText
                         
-                        label = ImageText( panel, theme, label )
+                        label = ImageText( panel, theme, label, 
+                                           margins = item.label_theme_margins )
                         item_sizer.Add( label, 0, wx.EXPAND )
                     elif item.style == 'simple':
                         # Add a simple text label:
@@ -916,7 +919,9 @@ class FillPanel ( object ):
                     image       = theme 
                 )
                 item_panel  = ImagePanel( panel, image_slice )
-                image_sizer = ImageSizer( image_slice, 3, 3, 3, 3 )
+                margins     = item.item_theme_margins
+                image_sizer = ImageSizer( image_slice, 
+                    margins.top, margins.bottom, margins.left, margins.right )
                 item_panel.SetSizer( image_sizer )
                     
             # Create the requested type of editor from the editor factory:
@@ -1066,7 +1071,8 @@ class FillPanel ( object ):
         if theme is not None:
             from image_slice import ImageText
             
-            control = ImageText( parent, theme, label + suffix, 'right' )
+            control = ImageText( parent, theme, label + suffix, 'right', 
+                                 item.label_theme_margins )
         else:            
             # Use the special 'StaticText' class if the parent object is a 
             # control whose background is defined by an ImageSlice object:
