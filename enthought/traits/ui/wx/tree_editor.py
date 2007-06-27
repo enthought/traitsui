@@ -642,7 +642,7 @@ class SimpleEditor ( Editor ):
                 path      = self
             else:
                 path = node.get_icon_path( object )
-                if isinstance(path, basestring):
+                if isinstance( path, basestring ):
                     path = [ path, node ]
                 else:
                     path.append( node )

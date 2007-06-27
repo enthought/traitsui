@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 #
-#  Traits UI simple, themed slider-based interger or float value editor.
+#  Traits UI simple, themed slider-based integer or float value editor.
 #
 #  Written by: David C. Morrill
 #
@@ -10,7 +10,7 @@
 #
 #-------------------------------------------------------------------------------
 
-""" Traits UI simple, themed slider-based interger or float value editor.
+""" Traits UI simple, themed slider-based integer or float value editor.
 """
 
 #-------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ from constants \
 #-------------------------------------------------------------------------------
                                
 class _ThemedSliderEditor ( Editor ):
-    """ Traits UI simple, themed slider-based interger or float value editor.
+    """ Traits UI simple, themed slider-based integer or float value editor.
     """
     
     # The low end of the slider range:

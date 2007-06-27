@@ -22,9 +22,10 @@
 import wx
 
 from enthought.traits.api \
-    import HasPrivateTraits, Color, Str, Int, Float, Enum, List, Bool, \
-           Instance, Any, Font, Dict, Event, Property, TraitListEvent, \
-           Interface, on_trait_change, cached_property, implements
+    import HasPrivateTraits, HasStrictTraits, Color, Str, Int, Float, Enum, \
+           List, Bool, Instance, Any, Font, Dict, Event, Property, \
+           TraitListEvent, Interface, on_trait_change, cached_property, \
+           implements
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -348,6 +349,11 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         getattr( object, trait ) [ row: row ] = [ value ]
         
+    def get_column ( self, index ):
+        """ Returns the column id corresponding to a specified column index.
+        """
+        return self.column_map[ index ]
+        
     #-- Property Implementations -----------------------------------------------
         
     def _get_drag ( self ):
@@ -585,7 +591,7 @@ class wxListCtrl ( wx.ListCtrl ):
                                     
         return editor.adapter.get_text( editor.object, editor.name, row, 
                                         column )
-
+    
 #-------------------------------------------------------------------------------
 #  '_TabularEditor' class:
 #-------------------------------------------------------------------------------
@@ -604,16 +610,24 @@ class _TabularEditor ( Editor ):
     
     # The current set of selected item indices (which one is used depends upon 
     # the initial state of the editor factory 'multi_select' trait):
-    selected_row        = Int
+    selected_row        = Int( -1 )
     multi_selected_rows = List( Int )
     
     # The most recently actived item and its index:
     activated     = Any
     activated_row = Int
     
-    # The most recently right_clicked item and its index:
-    right_clicked     = Event
-    right_clicked_row = Event
+    # The most recent left click data:
+    clicked = Instance( 'TabularEditorEvent' )
+    
+    # The most recent left double click data:
+    dclicked = Instance( 'TabularEditorEvent' )
+    
+    # The most recent right click data:
+    right_clicked = Instance( 'TabularEditorEvent' )
+    
+    # The most recent right double click data:
+    right_dclicked = Instance( 'TabularEditorEvent' )
     
     # Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
@@ -687,11 +701,14 @@ class _TabularEditor ( Editor ):
         wx.EVT_LIST_ITEM_SELECTED(    parent, id, self._item_selected )
         wx.EVT_LIST_ITEM_DESELECTED(  parent, id, self._item_selected )
         wx.EVT_LIST_KEY_DOWN(         parent, id, self._key_down )
-        wx.EVT_LIST_ITEM_RIGHT_CLICK( parent, id, self._right_clicked )
         wx.EVT_LIST_ITEM_ACTIVATED(   parent, id, self._item_activated )
         wx.EVT_LIST_COL_END_DRAG(     parent, id, self._size_modified )
         wx.EVT_LIST_COL_RIGHT_CLICK(  parent, id, self._column_right_clicked )
         wx.EVT_LIST_COL_CLICK(        parent, id, self._column_clicked )
+        wx.EVT_LEFT_DOWN(             control, self._left_down )
+        wx.EVT_LEFT_DCLICK(           control, self._left_dclick )
+        wx.EVT_RIGHT_DOWN(            control, self._right_down )
+        wx.EVT_RIGHT_DCLICK(          control, self._right_dclick )
         wx.EVT_MOTION(                control, self._mouse_move )
         wx.EVT_SIZE(                  control, self._size_modified )
 
@@ -710,12 +727,14 @@ class _TabularEditor ( Editor ):
             self.sync_value( factory.selected_row, 'selected_row', 'both' )
             
         # Synchronize other interesting traits as necessary:
-        self.sync_value( factory.activated, 'activated', 'to' )
+        self.sync_value( factory.activated,     'activated',     'to' )
         self.sync_value( factory.activated_row, 'activated_row', 'to' )
             
-        self.sync_value( factory.right_clicked, 'right_clicked', 'to' )
-        self.sync_value( factory.right_clicked_row, 'right_clicked_row', 
-                         'to' )
+        self.sync_value( factory.clicked,  'clicked',  'to' )
+        self.sync_value( factory.dclicked, 'dclicked', 'to' )
+        
+        self.sync_value( factory.right_clicked,  'right_clicked',  'to' )
+        self.sync_value( factory.right_dclicked, 'right_dclicked', 'to' )
             
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
@@ -797,18 +816,26 @@ class _TabularEditor ( Editor ):
         """ Handles the editor's 'selected' trait being changed.
         """
         if not self._no_update:
-            try:
-                self.control.SetItemState( self.value.index( selected ), 
+            if selected is None:
+                for row in self._get_selected():
+                    self.control.SetItemState( row, 0, wx.LIST_STATE_SELECTED )
+            else:
+                try:
+                    self.control.SetItemState( self.value.index( selected ), 
                                 wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED )
-            except:
-                pass
+                except:
+                    pass
         
-    def _selected_row_changed ( self, selected_row ):
+    def _selected_row_changed ( self, old, new ):
         """ Handles the editor's 'selected_index' trait being changed.
         """
         if not self._no_update:
-            self.control.SetItemState( selected_row, wx.LIST_STATE_SELECTED, 
-                                                     wx.LIST_STATE_SELECTED ) 
+            if new < 0:
+                if old >= 0:
+                    self.control.SetItemState( old, 0, wx.LIST_STATE_SELECTED ) 
+            else:
+                self.control.SetItemState( new, wx.LIST_STATE_SELECTED, 
+                                                wx.LIST_STATE_SELECTED ) 
         
     def _multi_selected_changed ( self, selected ):
         """ Handles the editor's 'multi_selected' trait being changed.
@@ -867,6 +894,26 @@ class _TabularEditor ( Editor ):
         
     #-- List Control Event Handlers --------------------------------------------
     
+    def _left_down ( self, event ):
+        """ Handles the left mouse button being pressed.
+        """
+        self._mouse_click( event, 'clicked' )
+        
+    def _left_dclick ( self, event ):
+        """ Handles the left mouse button being double clicked.
+        """
+        self._mouse_click( event, 'dclicked' )
+    
+    def _right_down ( self, event ):
+        """ Handles the right mouse button being pressed.
+        """
+        self._mouse_click( event, 'right_clicked' )
+        
+    def _right_dclick ( self, event ):
+        """ Handles the right mouse button being double clicked.
+        """
+        self._mouse_click( event, 'right_dclicked' )
+        
     def _begin_drag ( self, event ):
         """ Handles the user beginning a drag operation with the left mouse
             button.
@@ -953,13 +1000,6 @@ class _TabularEditor ( Editor ):
         self.activated_row = event.GetIndex()
         self.activated     = self.adapter.get_item( self.object, self.name,
                                                     self.activated_row )        
-            
-    def _right_clicked ( self, event ):
-        """ Handles an item being right clicked.
-        """
-        self.right_clicked_row = row = event.GetIndex()
-        self.right_clicked     = self.adapter.get_item( self.object, self.name,
-                                                        row )
             
     def _key_down ( self, event ):
         """ Handles the user pressing a key in the list control.
@@ -1342,7 +1382,7 @@ class _TabularEditor ( Editor ):
             if len( selected ) == 1:
                 self.control.EditLabel( selected[0] )
                 
-    def _get_column ( self, x ):
+    def _get_column ( self, x, translate = False ):
         """ Returns the column index corresponding to a specified x position.
         """
         if x >= 0:
@@ -1350,10 +1390,54 @@ class _TabularEditor ( Editor ):
             for i in range( control.GetColumnCount() ):
                 x -= control.GetColumnWidth( i )
                 if x < 0:
+                    if translate:
+                        return self.adapter.get_column( i )
+                        
                     return i
                 
         return None
-                    
+        
+    def _mouse_click ( self, event, trait ):
+        """ Generate a TabularEditorEvent event for a specified mouse event and
+            editor trait name.
+        """
+        x          = event.GetX()
+        row, flags = self.control.HitTest( wx.Point( x, event.GetY() ) )
+        if row != wx.NOT_FOUND:
+            setattr( self, trait, TabularEditorEvent(
+                editor = self,
+                row    = row, 
+                column = self._get_column( x, translate = True )
+            ) )
+        
+        event.Skip()
+
+#-------------------------------------------------------------------------------
+#  'TabularEditorEvent' class:  
+#-------------------------------------------------------------------------------
+                              
+class TabularEditorEvent ( HasStrictTraits ):
+    
+    # The index of the row:
+    row = Int
+    
+    # The id of the column (either a string or an integer):
+    column = Any
+    
+    # The row item:
+    item = Property
+    
+    #-- Private Traits ---------------------------------------------------------
+    
+    # The editor the event is associated with:
+    editor = Instance( _TabularEditor )
+    
+    #-- Property Implementations -----------------------------------------------
+
+    def _get_item ( self ):
+        editor = self.editor
+        return editor.adapter.get_item( editor.object, editor.name, self.row ) 
+        
 #-------------------------------------------------------------------------------
 #  'TabularEditor' editor factory class:
 #-------------------------------------------------------------------------------
@@ -1386,13 +1470,21 @@ class TabularEditor ( BasicEditorFactory ):
     # value's row with:
     activated_row = Str
     
-    # The optional extended name of the trait to synchronize the right clicked
-    # value with:
+    # The optional extended name of the trait to synchronize left click data
+    # with. The data is a TabularEditorEvent:
+    clicked = Str
+    
+    # The optional extended name of the trait to synchronize left double click
+    # data with. The data is a TabularEditorEvent:
+    dclicked = Str
+    
+    # The optional extended name of the trait to synchronize right click data
+    # with. The data is a TabularEditorEvent:
     right_clicked = Str
     
-    # The optional extended name of the trait to synchronize the right clicked
-    # value's row with:
-    right_clicked_row = Str
+    # The optional extended name of the trait to synchronize right double
+    # clicked data with. The data is a TabularEditorEvent:
+    right_dclicked = Str
     
     # Can the user edit the values?
     editable = Bool( True )
