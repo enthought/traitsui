@@ -22,10 +22,10 @@
 import wx
 
 from enthought.traits.api \
-    import HasPrivateTraits, HasStrictTraits, Color, Str, Int, Float, Enum, \
-           List, Bool, Instance, Any, Font, Dict, Event, Property, \
-           TraitListEvent, Interface, on_trait_change, cached_property, \
-           implements
+    import HasTraits, HasPrivateTraits, HasStrictTraits, Color, Str, Int, \
+           Float, Enum, List, Bool, Instance, Any, Font, Dict, Event, \
+           Property, TraitListEvent, Interface, on_trait_change, \
+           cached_property, implements
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -155,6 +155,9 @@ class TabularAdapter ( HasPrivateTraits ):
     # Alignment to use for a specified column:
     alignment = Enum( 'left', 'center', 'right' )
     
+    # The Python format string to use for a specified column:
+    format = Str( '%s' )
+    
     # Width of a specified column:
     width = Float( -1 )
     
@@ -194,11 +197,20 @@ class TabularAdapter ( HasPrivateTraits ):
 
     #-- Traits Set by the Editor -----------------------------------------------
     
+    # The object whose trait is being edited:
+    object = Instance( HasTraits )
+    
+    # The name of the trait being edited:
+    name = Str
+    
     # The row index of the current item being adapted:
     row = Int
     
+    # The column index of the current item being adapted:
+    column = Int
+    
     # The current column id being adapted (if any):
-    column = Any
+    column_id = Any
     
     # Current item being adapted:
     item = Any
@@ -299,6 +311,11 @@ class TabularAdapter ( HasPrivateTraits ):
             the image, or an ImageResource item specifying the image to use.
         """
         return self._result_for( 'get_image', object, trait, row, column )
+
+    def get_format ( self, object, trait, row, column ):
+        """ Returns the Python format string to use for a specified column.
+        """
+        return self._result_for( 'get_format', object, trait, row, column )
      
     def get_text ( self, object, trait, row, column ):
         """ Returns the text to display for a specified 
@@ -370,16 +387,18 @@ class TabularAdapter ( HasPrivateTraits ):
         return self.odd_bg_color or self.default_bg_color_
         
     def _get_text ( self ):
-        if isinstance( self.column, int ):
-            return str( self.item[ self.column ] )
+        format = self.get_format( self.object, self.name, 
+                                  self.row, self.column )
+        if isinstance( self.column_id, int ):
+            return format % self.item[ self.column_id ]
             
-        return str( getattr( self.item, self.column ) )
+        return format % getattr( self.item, self.column_id )
      
     def _set_text ( self ):
-        if isinstance( self.column, int ):
-            self.item[ column ] = self.value
+        if isinstance( self.column_id, int ):
+            self.item[ self.column_id ] = self.value
         else:    
-            setattr( self.item, self.column, self.value )
+            setattr( self.item, self.column_id, self.value )
         
     #-- Property Implementations -----------------------------------------------
     
@@ -446,13 +465,16 @@ class TabularAdapter ( HasPrivateTraits ):
         """ Returns/Sets the value of the specified *name* attribute for the
             specified *object.trait[row].column* item.
         """
-        self.value  = value
-        self.row    = row
-        self.column = column_id = self.column_map[ column ]
-        self.item   = item = self.get_item( object, trait, row )
-        item_class  = item.__class__
-        key         = '%s:%s:%d' % ( item_class.__name__, name, column )
-        handler     = self.cache.get( key )
+        self.object    = object
+        self.name      = trait
+        self.row       = row
+        self.column    = column
+        self.column_id = column_id = self.column_map[ column ]
+        self.value     = value
+        self.item      = item = self.get_item( object, trait, row )
+        item_class     = item.__class__
+        key            = '%s:%s:%d' % ( item_class.__name__, name, column )
+        handler        = self.cache.get( key )
         if handler is not None:
             return handler()
             
@@ -579,7 +601,7 @@ class wxListCtrl ( wx.ListCtrl ):
         """
         editor = self._editor
                                     
-        return editor.adapter.get_text( editor.object, editor.name, row, 
+        return editor.adapter.get_text( editor.object, editor.name, row,
                                         column )
     
 #-------------------------------------------------------------------------------
