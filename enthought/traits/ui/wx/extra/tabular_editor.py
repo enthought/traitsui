@@ -299,11 +299,6 @@ class TabularAdapter ( HasPrivateTraits ):
             the image, or an ImageResource item specifying the image to use.
         """
         return self._result_for( 'get_image', object, trait, row, column )
-        
-    def get_item ( self, object, trait, row ):
-        """ Returns the value of the *object.trait[row]* item.
-        """
-        return self._result_for( 'get_item', object, trait, row, 0 )
      
     def get_text ( self, object, trait, row, column ):
         """ Returns the text to display for a specified 
@@ -323,6 +318,14 @@ class TabularAdapter ( HasPrivateTraits ):
         return self._result_for( 'get_tooltip', object, trait, row, column )
  
     #-- Adapter methods that are not sensitive to item type --------------------
+        
+    def get_item ( self, object, trait, row ):
+        """ Returns the value of the *object.trait[row]* item.
+        """
+        try:
+            return getattr( object, trait )[ row ]
+        except:
+            return None
     
     def len ( self, object, trait ):
         """ Returns the number of items in the specified *object.trait" list.
@@ -333,11 +336,6 @@ class TabularAdapter ( HasPrivateTraits ):
         """ Returns a new default value for the specified *object.trait* list.
         """
         return self.default_value
-        
-    def set_row ( self, object, trait, row, value ):
-        """ Sets the value of the *object.trait[row]* item.
-        """
-        getattr( object, trait )[ row ] = value
         
     def delete ( self, object, trait, row ):
         """ Deletes the specified *object.trait[row]* item.
@@ -451,18 +449,10 @@ class TabularAdapter ( HasPrivateTraits ):
         self.value  = value
         self.row    = row
         self.column = column_id = self.column_map[ column ]
-        item        = None
-        try:
-            items = getattr( object, trait )
-            if row < len( items ):
-                item = items[ row ]
-        except:
-            pass
-            
-        self.item  = item
-        item_class = item.__class__
-        key        = '%s:%s:%d' % ( item_class.__name__, name, column )
-        handler    = self.cache.get( key )
+        self.item   = item = self.get_item( object, trait, row )
+        item_class  = item.__class__
+        key         = '%s:%s:%d' % ( item_class.__name__, name, column )
+        handler     = self.cache.get( key )
         if handler is not None:
             return handler()
             
