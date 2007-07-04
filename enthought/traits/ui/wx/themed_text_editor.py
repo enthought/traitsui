@@ -195,6 +195,9 @@ class _ThemedTextEditor ( Editor ):
         if not self.readonly:
             wx.EVT_SET_FOCUS( control, self._set_focus )
             wx.EVT_LEFT_UP(   control, self._set_focus )
+            
+            # Only handler 'resize' events if we are not read-only:
+            wx.EVT_SIZE( control, self._resize )
            
         self.set_tooltip()
         
@@ -378,6 +381,12 @@ class _ThemedTextEditor ( Editor ):
         dc.SetFont( control.GetFont() )
         tx, ty, tdx, tdy = self._get_text_bounds()
         dc.DrawText( self._get_text(), tx, ty )
+        
+    def _resize ( self, event ):
+        """ Handles the control being resized.
+        """
+        if self._text is not None:
+            self._text.SetSize( self.control.GetSize() )
     
     def _set_focus ( self, event ):
         """ Handle the control getting the keyboard focus.
