@@ -20,7 +20,7 @@
 import wx
 
 from enthought.traits.api \
-    import HasPrivateTraits, Instance, Str
+    import Instance, Str
     
 from enthought.traits.ui.ui_traits \
     import Image, HasPadding, Padding, Position, Alignment, Spacing
