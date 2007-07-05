@@ -37,7 +37,7 @@ from enthought.pyface.image_resource \
     import ImageResource
     
 from image_slice \
-    import ImageSlice, paint_parent, default_image_slice
+    import image_slice_for, paint_parent, default_image_slice
     
 from constants \
     import OKColor, ErrorColor
@@ -175,10 +175,9 @@ class _ThemedTextEditor ( Editor ):
         self._image_slice     = None
         padding_x = padding_y = 0
         if factory.theme is not None:
-            self._image_slice = slice = ImageSlice(
-                               transparent = True ).set( image = factory.theme )
-            padding_x = slice.xleft + slice.xright                                            
-            padding_y = slice.xtop  + slice.xbottom                                            
+            self._image_slice = slice = image_slice_for( factory.theme )
+            padding_x         = slice.xleft + slice.xright                                            
+            padding_y         = slice.xtop  + slice.xbottom                                            
                                             
         self.control = control = wx.Window( parent, -1,
                             size  = wx.Size( padding_x + 70, padding_y + 20 ),
@@ -191,8 +190,8 @@ class _ThemedTextEditor ( Editor ):
         wx.EVT_PAINT( control, self._on_paint )
         wx.EVT_CHAR(  control, self._inactive_key_entered )
         
-        # Only handle 'focus' events if we are not read-only:
         if not self.readonly:
+            # Only handle 'focus' events if we are not read-only:
             wx.EVT_SET_FOCUS( control, self._set_focus )
             wx.EVT_LEFT_UP(   control, self._set_focus )
             

@@ -27,7 +27,7 @@ from colorsys \
     import rgb_to_hls
 
 from enthought.traits.api \
-    import HasPrivateTraits, Instance, Str, Int, List, Bool, Color, Font
+    import HasPrivateTraits, Instance, Str, Int, List, Bool, Color, Font, Enum
 
 from enthought.traits.ui.api \
     import Margins
@@ -76,6 +76,10 @@ class ImageSlice ( HasPrivateTraits ):
     # The minimum number of adjacent, identical rows/columns needed to identify 
     # a repeatable section:
     threshold = Int( 10 )
+    
+    # The maximum number of 'stretchable' rows and columns:
+    stretch_rows    = Enum( 1, 2 )
+    stretch_columns = Enum( 1, 2 )
     
     # Should transparent regions be left unchanged:
     transparent = Bool( False )
@@ -245,9 +249,9 @@ class ImageSlice ( HasPrivateTraits ):
         if n == 0:
             regen   = True
             matches = [ ( dy / 2, 1 ) ]
-        elif n > 2:
+        elif n > self.stretch_rows:
             matches.sort( lambda l, r: cmp( r[1], l[1] ) )
-            matches = matches[:2]
+            matches = matches[ : self.stretch_rows ]
             
         # Calculate and save the horizontal slice sizes:
         self.fdy, self.dys = self._calculate_dxy( dy, matches )
@@ -272,9 +276,9 @@ class ImageSlice ( HasPrivateTraits ):
         if n == 0:
             regen   = True
             matches = [ ( dx / 2, 1 ) ]
-        elif n > 2:
+        elif n > self.stretch_columns:
             matches.sort( lambda l, r: cmp( r[1], l[1] ) )
-            matches = matches[:2]
+            matches = matches[ : self.stretch_columns ]
          
         # Calculate and save the vertical slice sizes:
         self.fdx, self.dxs = self._calculate_dxy( dx, matches )
@@ -429,6 +433,25 @@ class ImageSlice ( HasPrivateTraits ):
                      
 # Define a reusable, default ImageSlice object:
 default_image_slice = ImageSlice()
+
+#-------------------------------------------------------------------------------
+#  Returns a (possibly cached) ImageSlice:
+#-------------------------------------------------------------------------------
+
+image_slice_cache = {}
+
+def image_slice_for ( image, transparent = True ):
+    """ Returns a (possibly cached) ImageSlice.
+    """
+    global image_slice_cache
+
+    key    = ( image, transparent )
+    result = image_slice_cache.get( key )
+    if result is None:
+        image_slice_cache[ key ] = result = \
+            ImageSlice( transparent = transparent ).set( image = image )
+            
+    return result
 
 #-------------------------------------------------------------------------------
 #  'StaticText' class:  
@@ -621,8 +644,7 @@ class ImageText ( wx.PyWindow ):
         """
         self._image_slice = None
         if image is not None:
-            self._image_slice = ImageSlice( transparent = True ).set(
-                                            image       = image )
+            self._image_slice = image_slice_for( image )
                                             
         super( ImageText, self ).__init__( parent, -1, 
                                            style = wx.FULL_REPAINT_ON_RESIZE )

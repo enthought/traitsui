@@ -25,7 +25,7 @@ from enthought.traits.ui.ui_traits \
     import Image, HasPadding, Padding, Position, Alignment, Spacing
     
 from image_slice \
-    import ImageSlice, paint_parent, default_image_slice
+    import image_slice_for, paint_parent, default_image_slice
     
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -196,8 +196,7 @@ class ThemedControl ( HasPrivateTraits ):
         if theme is None:
             self._image_slice = None
         else:
-            self._image_slice = ImageSlice( transparent = True ).set(
-                                            image       = theme )
+            self._image_slice = image_slice_for( theme )
         
     def _image_changed ( self, image ):
         """ Handles the image being changed by updating the corresponding 

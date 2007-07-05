@@ -429,12 +429,9 @@ def create_notebook_for_items ( content, ui, parent, group,
 def add_image_panel ( window, group ):
     """ Creates a themed ImagePanel for the specified group and parent window.
     """
-    from image_slice import ImageSlice, ImagePanel, ImageSizer
+    from image_slice import image_slice_for, ImagePanel, ImageSizer
     
-    image_slice = ImageSlice( 
-        transparent = group.has_theme ).set(
-        image       = group.group_theme
-    )
+    image_slice = image_slice_for( group.group_theme, group.has_theme )
     panel       = ImagePanel( window, image_slice )
     margins     = group.group_theme_margins
     image_sizer = ImageSizer( image_slice, margins.top,  margins.bottom, 
@@ -912,12 +909,9 @@ class FillPanel ( object ):
             # Set up the background image (if used):
             item_panel = panel
             if theme is not None:
-                from image_slice import ImageSlice, ImagePanel, ImageSizer
+                from image_slice import image_slice_for, ImagePanel, ImageSizer
                 
-                image_slice = ImageSlice(
-                    transparent = item.has_theme ).set(
-                    image       = theme 
-                )
+                image_slice = image_slice_for( theme, item.has_theme )
                 item_panel  = ImagePanel( panel, image_slice )
                 margins     = item.item_theme_margins
                 image_sizer = ImageSizer( image_slice, 
