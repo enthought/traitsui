@@ -55,17 +55,20 @@ class _ThemedButtonEditor ( Editor ):
             widget.
         """
         # Create the button and its control:
+        item    = self.item
         factory = self.factory
         label   = factory.label
         if (label == '') and (factory.image is None):
-            label = self.item.label
+            label = item.label
             
         self.button = button = ThemedControl( **factory.get(
-            'theme', 'image', 'position', 'spacing', 'padding' ) ).set(
-            text       = label, 
-            alignment  = 'center', 
-            controller = self,
-            min_size   = ( 80, 0 ) )
+            'image', 'position', 'spacing', 'padding' ) ).set(
+            text        = label, 
+            alignment   = 'center', 
+            controller  = self,
+            transparent = (item.item_theme is not None) or item.has_theme,
+            min_size    = ( 80, 0 ) ).set(
+            theme       = factory.theme )
         self.control = button.create_control( parent )
 
         # Set the tooltip:

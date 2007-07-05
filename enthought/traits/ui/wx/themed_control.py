@@ -53,6 +53,9 @@ class ThemedControl ( HasPrivateTraits ):
     # The (optional) theme to be drawn in the control's background:
     theme = Image( event = 'updated' )
     
+    # Should the theme be transparent?
+    transparent = Bool( True )
+    
     # An (optional) image to be drawn inside the control:
     image = Image( event = 'updated' )
     
@@ -196,7 +199,7 @@ class ThemedControl ( HasPrivateTraits ):
         if theme is None:
             self._image_slice = None
         else:
-            self._image_slice = image_slice_for( theme )
+            self._image_slice = image_slice_for( theme, self.transparent )
         
     def _image_changed ( self, image ):
         """ Handles the image being changed by updating the corresponding 

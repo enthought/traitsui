@@ -117,6 +117,9 @@ class _ThemedSliderEditor ( Editor ):
         wx.EVT_LEFT_DOWN( control, self._left_down )
         wx.EVT_LEFT_UP(   control, self._left_up )
         wx.EVT_MOTION(    control, self._mouse_move )
+        
+        # Set up the control resize handler:
+        wx.EVT_SIZE( control, self._resize )
 
         # Set the tooltip:
         if not self.set_tooltip():
@@ -211,11 +214,11 @@ class _ThemedSliderEditor ( Editor ):
         """ Pop-up a text control to allow the user to enter a value using
             the keyboard.
         """
-        control = self.control
-        text    = wx.TextCtrl( control, -1, self.text,
-                         size  = control.GetSize(),
-                         style = self.text_styles[ self.factory.alignment ] |
-                                 wx.TE_PROCESS_ENTER )
+        control    = self.control
+        self._text = text = wx.TextCtrl( control, -1, self.text,
+                            size  = control.GetSize(),
+                            style = self.text_styles[ self.factory.alignment ] |
+                                    wx.TE_PROCESS_ENTER )
         text.SetSelection( -1, -1 )
         text.SetFocus()
         wx.EVT_TEXT_ENTER( control, text.GetId(), self._text_completed )
@@ -225,11 +228,8 @@ class _ThemedSliderEditor ( Editor ):
     def _destroy_text ( self ):
         """ Destroys the current text control.
         """
-        # We set '_x' to prevent a SetFocus event from causing an infinite
-        # loop when we destroy the text control (then we clear it):
-        self._x = 1
         self.control.DestroyChildren()
-        self._x = None
+        self._text = None
         
     #--- wxPython Event Handlers -----------------------------------------------
             
@@ -270,11 +270,17 @@ class _ThemedSliderEditor ( Editor ):
             dc.SetFont( control.GetFont() )
             tx, ty, tdx, tdy = self._get_text_bounds()
             dc.DrawText( self.text, tx, ty )
+        
+    def _resize ( self, event ):
+        """ Handles the control being resized.
+        """
+        if self._text is not None:
+            self._text.SetSize( self.control.GetSize() )
     
     def _set_focus ( self, event ):
         """ Handle the control getting the keyboard focus.
         """
-        if self._x is None:
+        if (self._x is None) and (self._text is None):
             self._pop_up_text()
             
         event.Skip()

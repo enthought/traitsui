@@ -55,8 +55,9 @@ class _ThemedCheckboxEditor ( Editor ):
             widget.
         """
         # Create the checkbox and its control:
+        item      = self.item
         factory   = self.factory
-        label     = factory.label or self.item.label
+        label     = factory.label or item.label
         alignment = 'left'
         min_size  = ( 0, 0 )
         if factory.theme is not None:
@@ -64,11 +65,13 @@ class _ThemedCheckboxEditor ( Editor ):
             min_size  = ( 80, 0 )
             
         self.checkbox = checkbox = ThemedControl( **factory.get(
-            'theme', 'image', 'position', 'spacing', 'padding' ) ).set(
-            text       = label, 
-            alignment  = alignment,
-            controller = self,
-            min_size   = min_size )
+            'image', 'position', 'spacing', 'padding' ) ).set(
+            text        = label, 
+            alignment   = alignment,
+            controller  = self,
+            transparent = (item.item_theme is not None) or item.has_theme,
+            min_size    = min_size ).set(
+            theme       = factory.theme )
         self.control = checkbox.create_control( parent )
 
         # Set the tooltip:
