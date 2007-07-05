@@ -244,7 +244,7 @@ class ThemedControl ( HasPrivateTraits ):
             
         # Draw the text (if any):
         tx, ty, tdx, tdy = self.text_bounds
-        if tdx != '':
+        if tdx != 0:
             dc.SetBackgroundMode( wx.TRANSPARENT )
             dc.SetTextForeground( slice.text_color )
             dc.SetFont( control.GetFont() )

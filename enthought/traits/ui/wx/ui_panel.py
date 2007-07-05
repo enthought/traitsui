@@ -394,7 +394,8 @@ def create_notebook_for_items ( content, ui, parent, group,
                
             sizer = wx.BoxSizer( wx.VERTICAL )
             if has_theme:
-                panel, image_sizer = add_image_panel( nb, group )
+                image_panel, image_sizer = add_image_panel( nb, group )
+                panel = image_panel.control
                 image_sizer.Add( sizer, 1, wx.EXPAND )
             else:   
                 panel = wx.Panel( nb, -1 )
@@ -432,13 +433,16 @@ def add_image_panel ( window, group ):
     from image_slice import image_slice_for, ImagePanel, ImageSizer
     
     image_slice = image_slice_for( group.group_theme, group.has_theme )
-    panel       = ImagePanel( window, image_slice )
+    image_panel = ImagePanel( image_slice = image_slice, 
+                              text        = group.label,
+                              alignment   = group.group_theme_alignment )
+    panel       = image_panel.create_control( window )
     margins     = group.group_theme_margins
     image_sizer = ImageSizer( image_slice, margins.top,  margins.bottom, 
                                            margins.left, margins.right )
     panel.SetSizer( image_sizer )
     
-    return ( panel, image_sizer )
+    return ( image_panel, image_sizer )
     
 #-------------------------------------------------------------------------------
 #  Handles a notebook page being 'turned':
@@ -547,7 +551,9 @@ class FillPanel ( object ):
             (group.visible_when != '') or
             (group.enabled_when != '')):
             if theme is not None:
-                new_panel, image_sizer = add_image_panel( panel, group )
+                image_panel, image_sizer = add_image_panel( panel, group )
+                new_panel       = image_panel.control
+                suppress_label |= image_panel.can_show_text
             else:
                 new_panel = wx.Panel( panel, -1 )
             sizer = panel.GetSizer()
@@ -681,7 +687,8 @@ class FillPanel ( object ):
         sizer = wx.BoxSizer( orientation )
         
         if group.group_theme is not None:
-            panel, image_sizer = add_image_panel( window, group )
+            image_panel, image_sizer = add_image_panel( window, group )
+            panel = image_panel.control
             image_sizer.Add( sizer, 1, wx.EXPAND )
         else:
             panel = wx.Panel( window, -1 )
@@ -912,7 +919,12 @@ class FillPanel ( object ):
                 from image_slice import image_slice_for, ImagePanel, ImageSizer
                 
                 image_slice = image_slice_for( theme, item.has_theme )
-                item_panel  = ImagePanel( panel, image_slice )
+                image_panel = ImagePanel( 
+                    image_slice = image_slice,
+                    text        = item.get_label( ui ),
+                    alignment   = item.item_theme_alignment
+                )
+                item_panel  = image_panel.create_control( panel )
                 margins     = item.item_theme_margins
                 image_sizer = ImageSizer( image_slice, 
                     margins.top, margins.bottom, margins.left, margins.right )
@@ -948,7 +960,7 @@ class FillPanel ( object ):
             else:
                 image_sizer.Add( control, 1, wx.EXPAND ) 
                 control       = item_panel
-                width, height = control.GetAdjustedSize()
+                width, height = image_panel.adjusted_size
                 
             # Set the correct size on the control, as specified by the user:
             scrollable  = editor.scrollable

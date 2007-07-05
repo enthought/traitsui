@@ -27,10 +27,14 @@ from colorsys \
     import rgb_to_hls
 
 from enthought.traits.api \
-    import HasPrivateTraits, Instance, Str, Int, List, Bool, Color, Font, Enum
+    import HasPrivateTraits, Instance, Str, Int, List, Bool, Color, Font, \
+           Enum, Property, cached_property
 
 from enthought.traits.ui.api \
     import Margins
+
+from enthought.traits.ui.ui_traits \
+    import Alignment
 
 from enthought.pyface.image_resource \
     import ImageResource
@@ -40,6 +44,13 @@ from constants \
   
 from numpy \
     import reshape, fromstring, uint8
+    
+#-------------------------------------------------------------------------------
+#  Constants:
+#-------------------------------------------------------------------------------
+
+# Size of an empty text string:
+ZeroTextSize = ( 0, 0, 0, 0 )
     
 #-------------------------------------------------------------------------------
 #  Recursively paint the parent's background if they have an associated image 
@@ -494,43 +505,94 @@ class StaticText ( wx.StaticText ):
 #  'ImagePanel' class:  
 #-------------------------------------------------------------------------------    
                       
-class ImagePanel ( wx.Panel ):
+class ImagePanel ( HasPrivateTraits ):
     
-    def __init__ ( self, parent, image_slice ):
-        """ Defines a panel whose background is defined by an ImageSlice object.
+    # The ImageSlice used to paint the background:
+    image_slice = Instance( ImageSlice )
+    
+    # The optional text to display in the top or bottom of the image slice:
+    text = Str
+    
+    # The alignment of the text within the image slice:
+    alignment = Alignment( 'center' )
+    
+    # Is the image panel capable of displaying text?
+    can_show_text = Property
+    
+    # The adjusted size of the panel, taking into account the size of its
+    # current children and the image border:
+    adjusted_size = Property
+    
+    # The underlying wx.Panel control:
+    control = Instance( wx.Panel )
+
+    #-- Private Traits ---------------------------------------------------------
+    
+    # The size of the current text:
+    text_size = Property( depends_on = 'text, control' )
+    
+    #-- Public Methods ---------------------------------------------------------
+    
+    def create_control ( self, parent ):
+        """ Creates the underlying wx.Panel control.
         """
-        
-        super( ImagePanel, self ).__init__( parent, -1, 
-                                            style = wx.TAB_TRAVERSAL | 
-                                                    wx.FULL_REPAINT_ON_RESIZE )
+        self.control = control = wx.Panel( parent, -1, 
+                                           style = wx.TAB_TRAVERSAL | 
+                                                   wx.FULL_REPAINT_ON_RESIZE )
                                                     
-        # Save the ImageSlice object we will use to paint the background:
-        self._image_slice = image_slice
+        # Attach the image slice to the control:
+        control._image_slice = self.image_slice
         
         # Set up the painting event handlers:
-        wx.EVT_ERASE_BACKGROUND( self, self._erase_background )
-        wx.EVT_PAINT( self, self._on_paint )
+        wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
+        wx.EVT_PAINT( control, self._on_paint )
         
-    def GetAdjustedSize ( self ):
+        return control
+        
+    #-- Property Implementations -----------------------------------------------
+    
+    def _get_adjusted_size ( self ):
         """ Returns the adjusted size of the panel taking into account the
             size of its current children and the image border.
         """
-        dx, dy = 0, 0
-        for control in self.GetChildren():
-            dx, dy = control.GetSizeTuple()
+        control = self.control
+        dx, dy  = 0, 0
+        for child in control.GetChildren():
+            dx, dy = child.GetSizeTuple()
             
-        slice = self._image_slice
-        sizer = self.GetSizer()
+        slice = self.image_slice
+        sizer = control.GetSizer()
         size  = wx.Size( dx + min( slice.left, slice.xleft )   + 
                               min( slice.right, slice.xright ) + 
                               sizer._left_padding + sizer._right_padding,
                          dy + min( slice.top, slice.xtop )       +
                               min( slice.bottom, slice.xbottom ) +
                               sizer._top_padding + sizer._bottom_padding )
-        self.SetSize( size )
+        control.SetSize( size )
         
         return size
+        
+    @cached_property
+    def _get_can_show_text ( self ):
+        """ Returns whether or not the image panel is capable of displaying
+            text.
+        """
+        tdx, tdy, descent, leading = self.control.GetFullTextExtent( 'Myj' )
+        slice = self.image_slice
+        tdy  += 4
+        return ((tdy <= slice.xtop) or (tdy <= slice.xbottom))
+        
+    @cached_property
+    def _get_text_size ( self ):
+        """ Returns the text size information for the window.
+        """
+        if (self.text == '') or (self.control is None):
+            return ZeroTextSize
             
+        return self.control.GetFullTextExtent( self.text )
+    
+    #-- wx.Python Event Handlers -----------------------------------------------
+    
     def _erase_background ( self, event ):
         """ Do not erase the background here (do it in the 'on_paint' handler).
         """
@@ -539,10 +601,37 @@ class ImagePanel ( wx.Panel ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        dc = wx.PaintDC( self )
-        paint_parent( dc, self, 0, 0 )
-        wdx, wdy = self.GetSizeTuple()
-        self._image_slice.fill( dc, 0, 0, wdx, wdy )
+        # Paint the panel background:
+        control = self.control
+        dc      = wx.PaintDC( control )
+        paint_parent( dc, control, 0, 0 )
+        wdx, wdy = control.GetSizeTuple()
+        slice    = self.image_slice
+        slice.fill( dc, 0, 0, wdx, wdy )
+        
+        # If we have text and have room to draw it, then do so:
+        text = self.text
+        if (text != '') and self.can_show_text:
+            dc.SetBackgroundMode( wx.TRANSPARENT )
+            dc.SetTextForeground( slice.text_color )
+            dc.SetFont( control.GetFont() )
+            
+            tdx, tdy, descent, leading = self.text_size
+            if (tdy + 4) <= slice.xtop:
+                ty = (slice.xtop - tdy) / 2
+            else:
+                ty = wdy - slice.xbottom + ((slice.xbottom - tdy) / 2)
+                
+            if self.alignment == 'left':
+                tx = slice.left + 2
+            elif self.alignment == 'center':
+                tx = slice.left + ((wdx - slice.left - slice.right - tdx) / 2)
+            else:
+                tx = wdx - tdx - slice.right - 2
+                
+            # fixme: Might need to set clipping region here...
+            dc.DrawText( text, tx, ty )
+            
             
 #-------------------------------------------------------------------------------
 #  'ImageSizer' class:
