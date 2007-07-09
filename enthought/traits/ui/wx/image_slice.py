@@ -25,6 +25,9 @@ import wx
 
 from colorsys \
     import rgb_to_hls
+  
+from numpy \
+    import reshape, fromstring, uint8
 
 from enthought.traits.api \
     import HasPrivateTraits, Instance, Str, Int, List, Bool, Color, Font, \
@@ -41,9 +44,9 @@ from enthought.pyface.image_resource \
     
 from constants \
     import WindowColor
-  
-from numpy \
-    import reshape, fromstring, uint8
+
+from themed_window \
+    import ThemedWindow
     
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -505,10 +508,7 @@ class StaticText ( wx.StaticText ):
 #  'ImagePanel' class:  
 #-------------------------------------------------------------------------------    
                       
-class ImagePanel ( HasPrivateTraits ):
-    
-    # The ImageSlice used to paint the background:
-    image_slice = Instance( ImageSlice )
+class ImagePanel ( ThemedWindow ):
     
     # The optional text to display in the top or bottom of the image slice:
     text = Str( event = 'updated' )
@@ -543,13 +543,14 @@ class ImagePanel ( HasPrivateTraits ):
         self.control = control = wx.Panel( parent, -1,
                                            style = wx.TAB_TRAVERSAL | 
                                                    wx.FULL_REPAINT_ON_RESIZE )
+                           
+        # Initialize the control (set-up event handlers, ...)
+        self.init_control()
                                                     
         # Attach the image slice to the control:
         control._image_slice = self.image_slice
         
-        # Set up the painting event handlers:
-        wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
-        wx.EVT_PAINT( control, self._on_paint )
+        # Set up resize event handler:
         wx.EVT_SIZE( control, self._on_size )
         
         return control
@@ -609,30 +610,20 @@ class ImagePanel ( HasPrivateTraits ):
             self.control.Refresh()
     
     #-- wx.Python Event Handlers -----------------------------------------------
-    
-    def _erase_background ( self, event ):
-        """ Do not erase the background here (do it in the 'on_paint' handler).
-        """
-        pass
            
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        # Paint the panel background:
-        control = self.control
-        dc      = wx.PaintDC( control )
-        paint_parent( dc, control, 0, 0 )
-        wdx, wdy = control.GetSizeTuple()
-        slice    = self.image_slice
-        slice.fill( dc, 0, 0, wdx, wdy )
+        dc, slice = super( ImagePanel, self )._on_paint( event )
         
         # If we have text and have room to draw it, then do so:
         text = self.text
         if (text != '') and self.can_show_text:
             dc.SetBackgroundMode( wx.TRANSPARENT )
             dc.SetTextForeground( slice.text_color )
-            dc.SetFont( control.GetFont() )
+            dc.SetFont( self.control.GetFont() )
             
+            wdx, wdy = self.control.GetClientSizeTuple()
             tdx, tdy, descent, leading = self.text_size
             if (tdy + 4) <= slice.xtop:
                 ty = (slice.xtop - tdy) / 2

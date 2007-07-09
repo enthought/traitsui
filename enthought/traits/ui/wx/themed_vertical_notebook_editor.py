@@ -69,8 +69,8 @@ class _ThemedVerticalNotebookEditor ( Editor ):
         """
         factory = self.factory
         self.notebook = ThemedVerticalNotebook( **factory.get( 
-            'closed_theme', 'open_theme', 'multiple_open', 'alignment' ) ).set(
-            editor = self )
+            'closed_theme', 'open_theme', 'multiple_open', 'scrollable', 
+            'double_click', 'alignment' ) ).set( editor = self )
         self.control = self.notebook.create_control( parent )
 
         # Set up the additional 'list items changed' event handler needed for
@@ -131,7 +131,7 @@ class _ThemedVerticalNotebookEditor ( Editor ):
         for object in new:
             notebook.open( self._find_page( object ) )
             
-    def _selected_list_changed ( self, event ):
+    def _selected_list_items_changed ( self, event ):
         self._selected_list_changed( event.removed, event.added )
         
     @on_trait_change( 'notebook:pages:is_open' )
@@ -218,6 +218,12 @@ class ThemedVerticalNotebookEditor ( BasicEditorFactory ):
     
     # Allow multiple open pages at once?
     multiple_open = Bool( False )
+    
+    # Should the notebook be scrollable?
+    scrollable = Bool( False )
+    
+    # Use double clicks (True) or single clicks (False) to open/close pages:
+    double_click = Bool( True )
     
     # Extended name to use for each notebook page. It can be either the actual
     # name or the name of an attribute on the object in the form:

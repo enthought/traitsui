@@ -170,7 +170,9 @@ class ThemedPage ( HasPrivateTraits ):
         image_slice = image_slice_for( self.open_theme )
         result      = ImagePanel( image_slice = image_slice,
                                   text        = self.name,
-                                  alignment   = self.notebook.alignment )
+                                  alignment   = self.notebook.alignment,
+                                  controller  = self,
+                                  state       = 'open' )
         item_panel  = result.create_control( self.notebook.control )
         item_panel.SetSizer( ImageSizer( image_slice ) )
         
@@ -233,11 +235,31 @@ class ThemedPage ( HasPrivateTraits ):
         
     #-- ThemedControl Mouse Event Handlers -------------------------------------
     
+    def open_left_down ( self, x, y, event ):
+        """ Handles the user clicking on an open notebook page to close it.
+        """
+        if not self.notebook.double_click:
+            self.notebook.close( self )
+    
+    def open_left_dclick ( self, x, y, event ):
+        """ Handles the user double clicking on an open notebook page to close
+            it.
+        """
+        if self.notebook.double_click:
+            self.notebook.close( self )
+    
+    def closed_left_down ( self, x, y, event ):
+        """ Handles the user clicking on a closed notebook page to open it.
+        """
+        if not self.notebook.double_click:
+            self.notebook.open( self )
+    
     def closed_left_dclick ( self, x, y, event ):
         """ Handles the user double clicking on a closed notebook page to open
             it.
         """
-        self.notebook.open( self )
+        if self.notebook.double_click:
+            self.notebook.open( self )
         
 #-------------------------------------------------------------------------------
 #  'ThemedVerticalNotebook' class:
@@ -260,6 +282,12 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
     # Allow multiple open pages at once?
     multiple_open = Bool( False )
     
+    # Should the notebook be scrollable?
+    scrollable = Bool( False )
+    
+    # Use double clicks (True) or single clicks (False) to open/close pages:
+    double_click = Bool( True )
+    
     # The alignment of the page names within the notebook tab:
     alignment = Alignment
     
@@ -279,8 +307,16 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
     def create_control ( self, parent ):
         """ Creates the underlying wxPython window used for the notebook.
         """
-        self.control = control = wx.Panel( parent, -1 )
-        control._image_slice   = getattr( parent, '_image_slice', None )
+        # Create the correct type of window based on whether or not it should
+        # be scrollable:
+        if self.scrollable:
+            self.control = control = wx.ScrolledWindow( parent )
+            control.SetScrollRate( 6, 6 )
+            control.SetMinSize( wx.Size( 0, 0 ) )
+        else:
+            self.control = control = wx.Panel( parent, -1 )
+        
+        control._image_slice = getattr( parent, '_image_slice', None )
         control.SetSizer( ThemedVerticalNotebookSizer( self ) )
         
         # Set up the painting event handlers:
@@ -376,6 +412,8 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
         """
         control = self.control
         if control is not None:
+            # Set the virtual size of the canvas (so scroll bars work right):
+            control.SetVirtualSize( control.GetSizer().CalcMin() ) 
             control.Layout()
             control.Refresh()
         

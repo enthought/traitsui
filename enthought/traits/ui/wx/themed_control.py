@@ -18,14 +18,17 @@
 import wx
 
 from enthought.traits.api \
-    import HasTraits, HasPrivateTraits, Str, Int, Enum, Bool, Property, Event, \
-           Tuple, Instance, cached_property
+    import HasTraits, Str, Int, Enum, Bool, Property, Event, Tuple, Instance, \
+           cached_property
     
 from enthought.traits.ui.ui_traits \
     import Image, HasPadding, Padding, Position, Alignment, Spacing
     
 from image_slice \
-    import image_slice_for, paint_parent, default_image_slice
+    import image_slice_for, default_image_slice
+    
+from themed_window \
+    import ThemedWindow
     
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -46,7 +49,7 @@ TheControl = 2
 #  'ThemedControl' class:
 #-------------------------------------------------------------------------------
 
-class ThemedControl ( HasPrivateTraits ):
+class ThemedControl ( ThemedWindow ):
     
     #-- Public Traits ----------------------------------------------------------
     
@@ -78,9 +81,6 @@ class ThemedControl ( HasPrivateTraits ):
     # Is the text value private (like a password):
     password = Bool( False, event = 'updated' )
     
-    # Optional controller used for overriding event handling:
-    controller = Instance( HasTraits )
-    
     # Offset to display text and image from calculated position:
     offset = Tuple( Int, Int, event = 'updated' )
     
@@ -91,9 +91,6 @@ class ThemedControl ( HasPrivateTraits ):
     
     # An event fired when any display related value changes:
     updated = Event
-    
-    # The current mouse event state:
-    state = Str( 'normal' )
     
     # The underlying wx.Window control:
     control = Instance( wx.Window )
@@ -121,25 +118,12 @@ class ThemedControl ( HasPrivateTraits ):
         self.control = control = wx.Window( parent, -1,
                             size  = wx.Size( 70, 20 ),
                             style = wx.FULL_REPAINT_ON_RESIZE | wx.WANTS_CHARS )
-                            
-        # Set up the painting event handlers:
-        wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
-        wx.EVT_PAINT( control, self._on_paint )
+            
+        # Initialize the control (set-up event handlers, ...):
+        self.init_control()
         
         # Set up the resize event handler:
         wx.EVT_SIZE( control, self._on_resize )
-        
-        # Set up mouse event handlers:
-        wx.EVT_LEFT_DOWN(     control, self._left_down )
-        wx.EVT_LEFT_UP(       control, self._left_up )
-        wx.EVT_LEFT_DCLICK(   control, self._left_dclick )
-        wx.EVT_MIDDLE_DOWN(   control, self._middle_down )
-        wx.EVT_MIDDLE_UP(     control, self._middle_up )
-        wx.EVT_MIDDLE_DCLICK( control, self._middle_dclick )
-        wx.EVT_RIGHT_DOWN(    control, self._right_down )
-        wx.EVT_RIGHT_UP(      control, self._right_up )
-        wx.EVT_RIGHT_DCLICK(  control, self._right_dclick )
-        wx.EVT_MOTION(        control, self._mouse_move )
         
         # Make sure the control is sized correctly:
         size = self.best_size
@@ -147,13 +131,6 @@ class ThemedControl ( HasPrivateTraits ):
         control.SetSize( size )
         
         return control
-        
-    def in_control ( self, x, y ):
-        """ Returns whether a specified (x,y) coordinate is inside the control
-            or not.
-        """
-        wdx, wdy = self.control.GetClientSizeTuple()
-        return ((0 <= x < wdx) and (0 <= y < wdy))
         
     #-- Property Implementations -----------------------------------------------
         
@@ -205,9 +182,9 @@ class ThemedControl ( HasPrivateTraits ):
         
     def _theme_changed ( self, theme ):
         if theme is None:
-            self._image_slice = None
+            self.image_slice = None
         else:
-            self._image_slice = image_slice_for( theme, self.transparent )
+            self.image_slice = image_slice_for( theme, self.transparent )
         
     def _image_changed ( self, image ):
         """ Handles the image being changed by updating the corresponding 
@@ -228,19 +205,7 @@ class ThemedControl ( HasPrivateTraits ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        control = self.control
-        dc      = wx.PaintDC( control )
-        
-        # Repaint the parent's theme (if necessary):
-        if self._fill is not False:
-            slice = paint_parent( dc, control, 0, 0 )
-        self._fill = True
-        
-        # Draw the background theme (if any):
-        wdx, wdy = control.GetClientSizeTuple()
-        if self._image_slice is not None:
-            slice = self._image_slice
-            slice.fill( dc, 0, 0, wdx, wdy )
+        dc, slice = super( ThemedControl, self )._on_paint( event )
         
         # Get the text and image offset to use:
         ox, oy = self.offset
@@ -255,89 +220,15 @@ class ThemedControl ( HasPrivateTraits ):
         if tdx != 0:
             dc.SetBackgroundMode( wx.TRANSPARENT )
             dc.SetTextForeground( slice.text_color )
-            dc.SetFont( control.GetFont() )
+            dc.SetFont( self.control.GetFont() )
             dc.DrawText( self.current_text, tx + ox, ty + oy )
             
     def _on_resize ( self, event ):
         """ Handles the control being resized.
         """
         self.updated = True
-    
-    def _left_down ( self, event ):
-        """ Handles a left mouse button down event.
-        """
-        self.control.SetFocus()
-        self._mouse_event( 'left_down', event )
-        self.control.CaptureMouse()
-        
-    def _left_up ( self, event ):
-        """ Handles a left mouse button up event.
-        """
-        self.control.ReleaseMouse()
-        self._mouse_event( 'left_up', event )
-    
-    def _left_dclick ( self, event ):
-        """ Handles a left mouse button double click event.
-        """
-        self._mouse_event( 'left_dclick', event )
-        self.control.CaptureMouse()
-    
-    def _middle_down ( self, event ):
-        """ Handles a middle mouse button down event.
-        """
-        self._mouse_event( 'middle_down', event )
-        self.control.CaptureMouse()
-        
-    def _middle_up ( self, event ):
-        """ Handles a middle mouse button up event.
-        """
-        self.control.ReleaseMouse()
-        self._mouse_event( 'middle_up', event )
-    
-    def _middle_dclick ( self, event ):
-        """ Handles a middle mouse button double click event.
-        """
-        self._mouse_event( 'middle_dclick', event )
-        self.control.CaptureMouse()
-    
-    def _right_down ( self, event ):
-        """ Handles a right mouse button down event.
-        """
-        self._mouse_event( 'right_down', event )
-        self.control.CaptureMouse()
-        
-    def _right_up ( self, event ):
-        """ Handles a right mouse button up event.
-        """
-        self.control.ReleaseMouse()
-        self._mouse_event( 'right_up', event )
-    
-    def _right_dclick ( self, event ):
-        """ Handles a right mouse button double click event.
-        """
-        self._mouse_event( 'right_dclick', event )
-        self.control.CaptureMouse()
-        
-    def _mouse_move ( self, event ):
-        """ Handles a mouse move event.
-        """
-        self._mouse_event( 'mouse_move', event )
         
     #-- Private Methods --------------------------------------------------------
-    
-    def _mouse_event ( self, name, event ):
-        """ Routes a mouse event to the proper handler (if any).
-        """
-        method_name = '%s_%s' % ( self.state, name )
-        
-        if self.controller is not None:
-            method = getattr( self.controller, method_name, None )
-            
-        if method is None:
-            method = getattr( self, method_name, None )
-            
-        if method is not None:
-            method( event.GetX(), event.GetY(), event )
         
     def _get_bounds_for ( self, item ):
         """ Returns all text and image related position and size information.
@@ -356,7 +247,7 @@ class ThemedControl ( HasPrivateTraits ):
             return EmptyBounds
             
         wdx, wdy  = control.GetClientSizeTuple()
-        slice     = self._image_slice or default_image_slice
+        slice     = self.image_slice or default_image_slice
         spacing   = (tdx != 0) * (bdx != 0) * self.spacing
         padding   = self.padding
         alignment = self.alignment
