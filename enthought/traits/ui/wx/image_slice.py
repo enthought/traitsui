@@ -511,10 +511,10 @@ class ImagePanel ( HasPrivateTraits ):
     image_slice = Instance( ImageSlice )
     
     # The optional text to display in the top or bottom of the image slice:
-    text = Str
+    text = Str( event = 'updated' )
     
     # The alignment of the text within the image slice:
-    alignment = Alignment( 'center' )
+    alignment = Alignment( 'center', event = 'updated' )
     
     # Is the image panel capable of displaying text?
     can_show_text = Property
@@ -522,6 +522,10 @@ class ImagePanel ( HasPrivateTraits ):
     # The adjusted size of the panel, taking into account the size of its
     # current children and the image border:
     adjusted_size = Property
+    
+    # The best size of the panel, taking into account the best size of its
+    # children and the image border:
+    best_size = Property
     
     # The underlying wx.Panel control:
     control = Instance( wx.Panel )
@@ -536,7 +540,7 @@ class ImagePanel ( HasPrivateTraits ):
     def create_control ( self, parent ):
         """ Creates the underlying wx.Panel control.
         """
-        self.control = control = wx.Panel( parent, -1, 
+        self.control = control = wx.Panel( parent, -1,
                                            style = wx.TAB_TRAVERSAL | 
                                                    wx.FULL_REPAINT_ON_RESIZE )
                                                     
@@ -546,6 +550,7 @@ class ImagePanel ( HasPrivateTraits ):
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
         wx.EVT_PAINT( control, self._on_paint )
+        wx.EVT_SIZE( control, self._on_size )
         
         return control
         
@@ -560,17 +565,21 @@ class ImagePanel ( HasPrivateTraits ):
         for child in control.GetChildren():
             dx, dy = child.GetSizeTuple()
             
-        slice = self.image_slice
-        sizer = control.GetSizer()
-        size  = wx.Size( dx + min( slice.left, slice.xleft )   + 
-                              min( slice.right, slice.xright ) + 
-                              sizer._left_padding + sizer._right_padding,
-                         dy + min( slice.top, slice.xtop )       +
-                              min( slice.bottom, slice.xbottom ) +
-                              sizer._top_padding + sizer._bottom_padding )
+        size = self._adjusted_size_of( dx, dy ) 
         control.SetSize( size )
         
         return size
+    
+    def _get_best_size ( self ):
+        """ Returns the best size of the panel taking into account the
+            best size of its current children and the image border.
+        """
+        control = self.control
+        dx, dy  = 0, 0
+        for child in control.GetChildren():
+            dx, dy = child.GetBestSize()
+            
+        return self._adjusted_size_of( dx, dy ) 
         
     @cached_property
     def _get_can_show_text ( self ):
@@ -590,6 +599,14 @@ class ImagePanel ( HasPrivateTraits ):
             return ZeroTextSize
             
         return self.control.GetFullTextExtent( self.text )
+        
+    #-- Trait Event Handlers ---------------------------------------------------
+    
+    def _updated_changed ( self ):
+        """ Handles a change that requires the control to be updated.
+        """
+        if self.control is not None:
+            self.control.Refresh()
     
     #-- wx.Python Event Handlers -----------------------------------------------
     
@@ -632,6 +649,26 @@ class ImagePanel ( HasPrivateTraits ):
             # fixme: Might need to set clipping region here...
             dc.DrawText( text, tx, ty )
             
+    def _on_size ( self, event ):
+        """ Handles the control being resized.
+        """
+        self.control.Layout()
+        self.control.Refresh()
+        
+    #-- Private Methods --------------------------------------------------------
+    
+    def _adjusted_size_of ( self, dx, dy ):
+        """ Returns the adjusted size of its children, taking into account the
+            image slice border.
+        """
+        slice = self.image_slice
+        sizer = self.control.GetSizer()
+        return wx.Size( dx + min( slice.left, slice.xleft )   + 
+                             min( slice.right, slice.xright ) + 
+                             sizer._left_padding + sizer._right_padding,
+                        dy + min( slice.top, slice.xtop )       +
+                             min( slice.bottom, slice.xbottom ) +
+                             sizer._top_padding + sizer._bottom_padding )
             
 #-------------------------------------------------------------------------------
 #  'ImageSizer' class:

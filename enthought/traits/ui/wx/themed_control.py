@@ -101,6 +101,9 @@ class ThemedControl ( HasPrivateTraits ):
     # The current text value to display:
     current_text = Property( depends_on = 'text, password' )
     
+    # The best size for the control:
+    best_size = Property
+    
     # The size of the current text:
     text_size = Property( depends_on = 'current_text, control' )
     
@@ -139,9 +142,7 @@ class ThemedControl ( HasPrivateTraits ):
         wx.EVT_MOTION(        control, self._mouse_move )
         
         # Make sure the control is sized correctly:
-        cx, cy, cdx, cdy = self._get_bounds_for( TheControl )
-        mdx, mdy         = self.min_size
-        size             = wx.Size( max( cdx, mdx ), max( cdy, mdy ) )
+        size = self.best_size
         control.SetMinSize( size )
         control.SetSize( size )
         
@@ -164,6 +165,13 @@ class ThemedControl ( HasPrivateTraits ):
             return '*' * len( self.text )
             
         return self.text
+        
+    def _get_best_size ( self ):
+        """ Returns the 'best' size for the control.
+        """
+        cx, cy, cdx, cdy = self._get_bounds_for( TheControl )
+        mdx, mdy         = self.min_size
+        return wx.Size( max( cdx, mdx ), max( cdy, mdy ) )
         
     @cached_property
     def _get_text_size ( self ):
