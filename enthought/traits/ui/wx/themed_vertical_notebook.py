@@ -274,10 +274,10 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
     #-- Public Traits ----------------------------------------------------------
     
     # The theme to use for 'closed' notebook pages:
-    closed_theme = Image
+    closed_theme = Image( '@BH5' )
     
     # The theme to use for 'open' notebook pages:
-    open_theme = Image
+    open_theme = Image( 'nb_open' )
     
     # Allow multiple open pages at once?
     multiple_open = Bool( False )
@@ -286,7 +286,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
     scrollable = Bool( False )
     
     # Use double clicks (True) or single clicks (False) to open/close pages:
-    double_click = Bool( True )
+    double_click = Bool( False )
     
     # The alignment of the page names within the notebook tab:
     alignment = Alignment

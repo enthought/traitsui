@@ -468,43 +468,6 @@ def image_slice_for ( image, transparent = True ):
     return result
 
 #-------------------------------------------------------------------------------
-#  'StaticText' class:  
-#-------------------------------------------------------------------------------    
-                      
-class StaticText ( wx.StaticText ):
-    """ Draws a static text control that is compatible with the operation of 
-        an ImageSlice (i.e. paints background using the associated ImageSlice).
-    """
-    
-    def __init__ ( self, *args, **kw ):
-        """ Initializes the object.
-        """
-        super( StaticText, self ).__init__( *args, **kw )
-        
-        # Set up the event handlers we need to override:
-        wx.EVT_ERASE_BACKGROUND( self, self._erase_background )
-        wx.EVT_PAINT( self, self._on_paint )
-            
-    def _erase_background ( self, event ):
-        """ Do not erase the background here (do it in the 'on_paint' handler).
-        """
-        pass
-           
-    def _on_paint ( self, event ):
-        """ Paints the static text after first filling the background the the
-            parent object's ImageSlice object.
-        """
-        # Fill the background using the parent's ImageSlice object:
-        dc    = wx.PaintDC( self )
-        slice = paint_parent( dc, self, 0, 0 )
-        
-        # Now draw the text over it:
-        dc.SetBackgroundMode( wx.TRANSPARENT )
-        dc.SetTextForeground( slice.text_color )
-        dc.SetFont( wx.SystemSettings_GetFont( wx.SYS_DEFAULT_GUI_FONT ) )
-        dc.DrawText( self.GetLabel(), 0, 0 )
-
-#-------------------------------------------------------------------------------
 #  'ImagePanel' class:  
 #-------------------------------------------------------------------------------    
                       
@@ -549,6 +512,9 @@ class ImagePanel ( ThemedWindow ):
                                                     
         # Attach the image slice to the control:
         control._image_slice = self.image_slice
+        
+        # Set the panel's background colour to the image slice bg_color:
+        control.SetBackgroundColour( self.image_slice.bg_color )
         
         # Set up resize event handler:
         wx.EVT_SIZE( control, self._on_size )

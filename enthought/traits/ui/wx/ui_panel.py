@@ -497,11 +497,12 @@ def show_help_popup ( event ):
 #-------------------------------------------------------------------------------
     
 def fill_panel_for_group ( panel, group, ui, suppress_label = False, 
-                                             is_dock_window = False ):
+                           is_dock_window = False, create_panel = False ):
     """ Builds the user interface for a specified Group within a specified 
         Panel.
     """
-    fp = FillPanel( panel, group, ui, suppress_label, is_dock_window )
+    fp = FillPanel( panel, group, ui, suppress_label, is_dock_window,
+                    create_panel )
     return ( fp.control or fp.sizer, fp.resizable, fp.dock_contents )
     
 #-------------------------------------------------------------------------------
@@ -516,7 +517,8 @@ class FillPanel ( object ):
     #  Initializes the object:
     #---------------------------------------------------------------------------
     
-    def __init__ ( self, panel, group, ui, suppress_label, is_dock_window ):
+    def __init__ ( self, panel, group, ui, suppress_label, is_dock_window, 
+                   create_panel ):
         """ Initializes the object.
         """
         # Get the contents of the group:
@@ -527,8 +529,9 @@ class FillPanel ( object ):
         self.ui            = ui
         self.group         = group
         self.is_horizontal = (group.orientation == 'horizontal')
-        is_splitter        = (group.layout == 'split')
-        is_tabbed          = (group.layout == 'tabbed')
+        layout             = group.layout
+        is_splitter        = (layout == 'split')
+        is_tabbed          = (layout == 'tabbed')
         id                 = group.id
         
         # Assume our contents are not resizable:
@@ -546,6 +549,7 @@ class FillPanel ( object ):
           
         theme = group.group_theme
         if (is_dock_window             or 
+            create_panel               or
             (id != '')                 or
             (theme is not None)        or
             (group.visible_when != '') or
@@ -590,7 +594,7 @@ class FillPanel ( object ):
             self._set_owner( box, group )
             self.sizer = wx.StaticBoxSizer( box, orientation )
         else:
-            if group.layout == 'flow':
+            if layout == 'flow':
                 self.sizer = FlowSizer( orientation )
             else:
                 self.sizer = wx.BoxSizer( orientation )
@@ -622,6 +626,10 @@ class FillPanel ( object ):
                 ###self.sizer.Add( dw, 1, wx.EXPAND | wx.ALL, 2 )
                 self.sizer.Add( dw, 1, wx.EXPAND )
             # Check if content is all Group objects:
+            elif layout == 'fold':
+                self.resizable = True
+                self.sizer.Add( self.create_fold_for_items( panel, content ), 
+                                1, wx.EXPAND )
             elif isinstance( content[0], Group ):
                 # If so, add them to the panel and exit:
                 self.add_groups( content, panel )
@@ -705,6 +713,55 @@ class FillPanel ( object ):
                                              ui = self.ui, element = item ),
                               export   = item.export,
                               control  = panel ) ] )
+        
+    #---------------------------------------------------------------------------
+    #  Adds a set of groups or items as vertical notebook pages to a vertical
+    #  notebook:
+    #---------------------------------------------------------------------------
+
+    def create_fold_for_items ( self, window, content ):
+        """ Adds a set of groups or items as vertical notebook pages to a 
+            vertical notebook.
+        """
+        from themed_vertical_notebook import ThemedVerticalNotebook
+        
+        # Create the vertical notebook:
+        nb     = ThemedVerticalNotebook( scrollable = True,
+                                         alignment  = 'center' )
+        result = nb.create_control( window )
+                      
+        # Create the notebook pages:
+        nb.pages = [ self.create_fold_for_item( nb, item ) for item in content ]
+            
+        # Return the notebook we created:
+        return result
+        
+    #---------------------------------------------------------------------------
+    #  Adds a single group or item to a vertical notebook:
+    #---------------------------------------------------------------------------
+            
+    def create_fold_for_item ( self, notebook, item ):
+        """ Adds a single group or item to a vertical notebook.
+        """
+        # Create a new notebook page:
+        page = notebook.create_page()
+
+        # Create the page contents:
+        if isinstance( item, Group ):
+            panel, resizable, contents = fill_panel_for_group( page.parent,
+                item, self.ui, suppress_label = True, create_panel = True )
+        else:
+            panel = wx.Panel( page.parent, -1 )
+            sizer = wx.BoxSizer( wx.VERTICAL )
+            panel.SetSizer( sizer )
+            self.add_items( [ item ], panel, sizer )
+        
+        # Set the page name and control:
+        page.name    = item.get_label( self.ui )
+        page.control = panel
+        
+        # Return the new notebook page:
+        return page
         
     #---------------------------------------------------------------------------
     #  Adds a single Item to a notebook:  
@@ -1080,16 +1137,8 @@ class FillPanel ( object ):
             control = ImageText( parent, theme, label + suffix, 'right', 
                                  item.label_theme_margins )
         else:            
-            # Use the special 'StaticText' class if the parent object is a 
-            # control whose background is defined by an ImageSlice object:
-            klass = wx.StaticText
-            if hasattr( parent, '_image_slice' ):
-                from image_slice import StaticText
-                
-                klass = StaticText
-                
-            control = klass( parent, -1, label + suffix, 
-                             style = wx.ALIGN_RIGHT )
+            control = wx.StaticText( parent, -1, label + suffix, 
+                                     style = wx.ALIGN_RIGHT )
                              
         self._set_owner( control, item )
         
