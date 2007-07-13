@@ -26,6 +26,9 @@ from enthought.traits.api \
     import HasPrivateTraits, Instance, Enum, Range, Str, Float, Bool, Color, \
            TraitError
     
+from enthought.traits.ui.ui_traits \
+    import Alignment
+    
 from enthought.traits.ui.wx.editor \
     import Editor
     
@@ -376,7 +379,7 @@ class ThemedSliderEditor ( BasicEditorFactory ):
     show_value = Bool( True )
     
     # The alignment of the text within the slider:
-    alignment = Enum( 'center', 'left', 'right' )
+    alignment = Alignment( 'center' )
     
     # The color to use for the slider bar:
     slider_color = Color( 0xC0C0C0 )

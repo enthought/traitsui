@@ -23,7 +23,7 @@ from enthought.traits.api \
     import Instance, Str
     
 from enthought.traits.ui.ui_traits \
-    import Image, HasPadding, Padding, Position, Alignment, Spacing
+    import ATheme, Image, Position, Spacing
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -58,20 +58,15 @@ class _ThemedCheckboxEditor ( Editor ):
         item      = self.item
         factory   = self.factory
         label     = factory.label or item.label
-        alignment = 'left'
         min_size  = ( 0, 0 )
         if factory.theme is not None:
-            alignment = 'center'
             min_size  = ( 80, 0 )
             
         self.checkbox = checkbox = ThemedControl( **factory.get(
-            'image', 'position', 'spacing', 'padding' ) ).set(
-            text        = label, 
-            alignment   = alignment,
-            controller  = self,
-            transparent = (item.item_theme is not None) or item.has_theme,
-            min_size    = min_size ).set(
-            theme       = factory.theme )
+            'image', 'position', 'spacing', 'theme' ) ).set(
+            text       = label, 
+            controller = self,
+            min_size   = min_size )
         self.control = checkbox.create_control( parent )
 
         # Set the tooltip:
@@ -171,16 +166,16 @@ class ThemedCheckboxEditor ( BasicEditorFactory ):
     label = Str
     
     # The basic theme for the checkbox (i.e. the 'off' state):
-    theme = Image
+    theme = ATheme
     
     # The optional 'on' state theme for the checkbox:
-    on_theme = Image
+    on_theme = ATheme
     
     # The optional 'hover off' state theme for the checkbox:
-    hover_off_theme = Image
+    hover_off_theme = ATheme
     
     # The optional 'hover on' state theme for the checbox:
-    hover_on_theme = Image
+    hover_on_theme = ATheme
     
     # The optional image to display in the checkbox (i.e. the 'off' state):
     image = Image( 'cb_off' )
@@ -199,9 +194,6 @@ class ThemedCheckboxEditor ( BasicEditorFactory ):
     
     # The amount of space between the image and the text:
     spacing = Spacing
-    
-    # The amount of padding between the text/image and the border:
-    padding = HasPadding( Padding( left = 4, right = 4, top = 2, bottom = 2 ) )
     
 #-------------------------------------------------------------------------------
 #  Helper function for creating themed checkboxes:  

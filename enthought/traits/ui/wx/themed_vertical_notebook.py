@@ -26,10 +26,10 @@ from enthought.traits.api \
            Event, Any, on_trait_change, cached_property
 
 from enthought.traits.ui.api \
-    import UI
+    import UI, Theme
     
 from enthought.traits.ui.ui_traits \
-    import Image, Alignment
+    import ATheme
     
 from enthought.traits.ui.editor \
     import Editor
@@ -38,7 +38,7 @@ from constants \
     import WindowColor
     
 from image_slice \
-    import paint_parent, image_slice_for, ImagePanel, ImageSizer
+    import paint_parent, ImagePanel
     
 from themed_control \
     import ThemedControl
@@ -89,10 +89,10 @@ class ThemedPage ( HasPrivateTraits ):
     notebook = Instance( 'ThemedVerticalNotebook' )
     
     # The theme used to display a closed page:
-    closed_theme = Image
+    closed_theme = ATheme
     
     # The theme use to display an open page:
-    open_theme = Image
+    open_theme = ATheme
     
     # The control representing the closed page:
     closed_page = Property( depends_on = 'closed_theme' )
@@ -154,11 +154,11 @@ class ThemedPage ( HasPrivateTraits ):
     def _get_closed_page ( self ):
         """ Returns the 'closed' form of the notebook page.
         """
-        result = ThemedControl( theme      = self.closed_theme,
-                                text       = self.name,
-                                alignment  = self.notebook.alignment,
-                                controller = self,
-                                state      = 'closed' )
+        result = ThemedControl( theme             = self.closed_theme,
+                                text              = self.name,
+                                controller        = self,
+                                default_alignment = 'center',
+                                state             = 'closed' )
         result.create_control( self.notebook.control )
         
         return result
@@ -167,14 +167,12 @@ class ThemedPage ( HasPrivateTraits ):
     def _get_open_page ( self ):
         """ Returns the 'open' form of the notebook page.
         """
-        image_slice = image_slice_for( self.open_theme )
-        result      = ImagePanel( image_slice = image_slice,
-                                  text        = self.name,
-                                  alignment   = self.notebook.alignment,
-                                  controller  = self,
-                                  state       = 'open' )
-        item_panel  = result.create_control( self.notebook.control )
-        item_panel.SetSizer( ImageSizer( image_slice ) )
+        result = ImagePanel( theme             = self.open_theme,
+                             text              = self.name,
+                             controller        = self,
+                             default_alignment = 'center',
+                             state             = 'open' )
+        result.create_control( self.notebook.control )
         
         return result
         
@@ -274,10 +272,10 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
     #-- Public Traits ----------------------------------------------------------
     
     # The theme to use for 'closed' notebook pages:
-    closed_theme = Image( '@BH5' )
+    closed_theme = ATheme( Theme( '@BH5', margins = 0 ) )
     
     # The theme to use for 'open' notebook pages:
-    open_theme = Image( 'nb_open' )
+    open_theme = ATheme( Theme( 'nb_open', margins = 0 ) )
     
     # Allow multiple open pages at once?
     multiple_open = Bool( False )
@@ -287,9 +285,6 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
     
     # Use double clicks (True) or single clicks (False) to open/close pages:
     double_click = Bool( False )
-    
-    # The alignment of the page names within the notebook tab:
-    alignment = Alignment
     
     # The pages contained in the notebook:
     pages = List( ThemedPage )
@@ -393,17 +388,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        control = self.control
-        dc      = wx.PaintDC( control )
-        
-        # Repaint the parent's theme (if necessary):
-        if paint_parent( dc, control, 0, 0 ) is None:
-            
-            # Otherwise, just paint the normal window background color:
-            dx, dy = control.GetClientSizeTuple()
-            dc.SetBrush( wx.Brush( WindowColor ) )
-            dc.SetPen( wx.TRANSPARENT_PEN )
-            dc.DrawRectangle( 0, 0, dx, dy )
+        paint_parent( wx.PaintDC( self.control ), self.control, force = True )
     
     #-- Private Methods --------------------------------------------------------
     

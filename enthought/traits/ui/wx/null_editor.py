@@ -69,17 +69,7 @@ class NullEditor ( Editor ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        control = self.control
-        dc      = wx.PaintDC( control )
-        
-        # Repaint the parent's theme (if necessary):
-        if paint_parent( dc, control, 0, 0 ) is None:
-            
-            # Otherwise, just paint the normal window background color:
-            dx, dy = control.GetClientSizeTuple()
-            dc.SetBrush( wx.Brush( WindowColor ) )
-            dc.SetPen( wx.TRANSPARENT_PEN )
-            dc.DrawRectangle( 0, 0, dx, dy )
+        paint_parent( wx.PaintDC( self.control ), self.control, force = True )
 
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:

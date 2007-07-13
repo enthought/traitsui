@@ -17,7 +17,10 @@
 import wx
 
 from enthought.traits.api \
-    import HasPrivateTraits, HasTraits, Instance, Str, Any
+    import HasPrivateTraits, HasTraits, Instance, Str, Enum, Any
+
+from enthought.traits.ui.ui_traits \
+    import ATheme
     
 #-------------------------------------------------------------------------------
 #  'ThemedWindow' class:
@@ -25,10 +28,13 @@ from enthought.traits.api \
         
 class ThemedWindow ( HasPrivateTraits ):
 
-    # Public Traits ------------------------------------------------------------
+    #-- Public Traits ----------------------------------------------------------
     
-    # The image slice associated with the window:
-    image_slice = Any
+    # The theme associated with this window:
+    theme = ATheme
+    
+    # The default alignment to use:
+    default_alignment = Enum( 'left', 'center', 'right' )
     
     # The current mouse event state:
     state = Str( 'normal' )
@@ -82,15 +88,16 @@ class ThemedWindow ( HasPrivateTraits ):
         dc      = wx.PaintDC( control )
         
         # Repaint the parent's theme (if necessary):
-        if self._fill is not False:
-            slice = paint_parent( dc, control, 0, 0 )
-        self._fill = True
+        slice = paint_parent( dc, control )
         
         # Draw the background theme (if any):
-        if self.image_slice is not None:
-            wdx, wdy = control.GetClientSizeTuple()
-            slice    = self.image_slice
-            slice.fill( dc, 0, 0, wdx, wdy )
+        if self.theme is not None:
+            slice2 = self.theme.image_slice
+            if slice2 is not None:
+                wdx, wdy = control.GetClientSizeTuple()
+                slice2.fill( dc, 0, 0, wdx, wdy, slice is not None )
+                
+                return ( dc, slice2 )
     
         return ( dc, slice )
     

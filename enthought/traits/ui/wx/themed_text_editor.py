@@ -22,22 +22,23 @@
 import wx
 
 from enthought.traits.api \
-    import Enum, Instance, Bool, Dict, Str, Any, TraitError
+    import Enum, Instance, Bool, Dict, Str, Any, Property, TraitError, \
+           cached_property
+    
+from enthought.traits.ui.ui_traits \
+    import ATheme
     
 from enthought.traits.ui.wx.editor \
     import Editor
     
 from enthought.traits.ui.wx.editor_factory \
     import EditorFactory
-    
-from enthought.traits.ui.ui_traits \
-    import Image
 
 from enthought.pyface.image_resource \
     import ImageResource
     
 from image_slice \
-    import image_slice_for, paint_parent, default_image_slice
+    import paint_parent, default_image_slice
     
 from constants \
     import OKColor, ErrorColor
@@ -66,10 +67,7 @@ class ThemedTextEditor ( EditorFactory ):
     #---------------------------------------------------------------------------
     
     # The background theme image to display:
-    theme = Image
-    
-    # The alignment of the text within the control:
-    alignment = Enum( 'left', 'right', 'center' )
+    theme = ATheme
     
     # Dictionary that maps user input to other values:
     mapping = Dict( Str, Any )
@@ -145,12 +143,19 @@ class _ThemedTextEditor ( Editor ):
     # Function used to evaluate textual user input:
     evaluate = Any
     
+    # The text alignment to use:
+    alignment = Property
+    
+    # The image slice to use:
+    image_slice = Property
+    
     #-- Class Variables --------------------------------------------------------
     
     text_styles = {
-        'left':   wx.TE_LEFT,
-        'center': wx.TE_CENTRE,
-        'right':  wx.TE_RIGHT
+        'default': wx.TE_LEFT,
+        'left':    wx.TE_LEFT,
+        'center':  wx.TE_CENTRE,
+        'right':   wx.TE_RIGHT
     }
         
     #---------------------------------------------------------------------------
@@ -172,12 +177,11 @@ class _ThemedTextEditor ( Editor ):
         self.evaluate = evaluate
         self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
         
-        self._image_slice     = None
         padding_x = padding_y = 0
         if factory.theme is not None:
-            self._image_slice = slice = image_slice_for( factory.theme )
-            padding_x         = slice.xleft + slice.xright                                            
-            padding_y         = slice.xtop  + slice.xbottom                                            
+            slice     = self.image_slice
+            padding_x = slice.xleft + slice.xright                                            
+            padding_y = slice.xtop  + slice.xbottom                                            
                                             
         self.control = control = wx.Window( parent, -1,
                             size  = wx.Size( padding_x + 70, padding_y + 20 ),
@@ -282,8 +286,7 @@ class _ThemedTextEditor ( Editor ):
         """
         control = self.control
         factory = self.factory
-        style   = (self.text_styles[ self.factory.alignment ] | 
-                   wx.TE_PROCESS_ENTER)
+        style   = (self.text_styles[ self.alignment ] | wx.TE_PROCESS_ENTER)
         if factory.password:
             style |= wx.TE_PASSWORD
             
@@ -309,7 +312,7 @@ class _ThemedTextEditor ( Editor ):
         """ Refreshes the contents of the control.
         """
         if self._fill is True:
-            self._fill = (self._image_slice is None)
+            self._fill = (self.image_slice is default_image_slice)
         
         if self._text_size is not None:
             self.control.RefreshRect( wx.Rect( *self._get_text_bounds() ), 
@@ -333,17 +336,17 @@ class _ThemedTextEditor ( Editor ):
         """
         tdx, tdy, descent, leading = self._get_text_size()
         wdx, wdy  = self.control.GetClientSizeTuple()
-        slice     = self._image_slice or default_image_slice
+        slice     = self.image_slice
         ady       = wdy - slice.xtop  - slice.xbottom
         ty        = slice.xtop  + ((ady - (tdy - descent)) / 2) - 1
-        alignment = self.factory.alignment
-        if alignment == 'left':
-            tx = slice.xleft + 4
-        elif alignment == 'center':
+        alignment = self.alignment
+        if alignment == 'center':
             adx = wdx - slice.xleft - slice.xright
             tx  = slice.xleft + (adx - tdx) / 2
-        else:
+        elif alignment == 'right':
             tx = wdx - tdx - slice.xright - 4
+        else:
+            tx = slice.xleft + 4
             
         return ( tx, ty, tdx, tdy )
         
@@ -354,6 +357,24 @@ class _ThemedTextEditor ( Editor ):
             return '*' * len( self.str_value )
             
         return self.str_value
+        
+    #-- Property Implementations -----------------------------------------------
+    
+    @cached_property
+    def _get_alignment ( self ):
+        theme = self.factory.theme
+        if theme is not None:
+            return theme.alignment
+            
+        return 'left'
+        
+    @cached_property
+    def _get_image_slice ( self ):
+        theme = self.factory.theme
+        if theme is not None:
+            return theme.image_slice or default_image_slice
+            
+        return default_image_slice
 
     #-- wxPython Event Handlers ------------------------------------------------
     
@@ -367,14 +388,16 @@ class _ThemedTextEditor ( Editor ):
         """
         control = self.control
         dc      = wx.PaintDC( control )
+        slice   = None
         if self._fill is not False:
-            slice = paint_parent( dc, control, 0, 0 )
+            slice = paint_parent( dc, control )
             
         self._fill = True
         wdx, wdy   = control.GetClientSizeTuple()
-        if self._image_slice is not None:
-            slice = self._image_slice
-            slice.fill( dc, 0, 0, wdx, wdy )
+        slice2     = self.image_slice
+        if slice2 is not default_image_slice:
+            slice2.fill( dc, 0, 0, wdx, wdy, slice is not None )
+            slice2 = slice
         dc.SetBackgroundMode( wx.TRANSPARENT )
         dc.SetTextForeground( slice.text_color )
         dc.SetFont( control.GetFont() )

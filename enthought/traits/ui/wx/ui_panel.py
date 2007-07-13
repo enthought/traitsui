@@ -430,19 +430,12 @@ def create_notebook_for_items ( content, ui, parent, group,
 def add_image_panel ( window, group ):
     """ Creates a themed ImagePanel for the specified group and parent window.
     """
-    from image_slice import image_slice_for, ImagePanel, ImageSizer
+    from image_slice import ImagePanel
     
-    image_slice = image_slice_for( group.group_theme, group.has_theme )
-    image_panel = ImagePanel( image_slice = image_slice, 
-                              text        = group.label,
-                              alignment   = group.group_theme_alignment )
+    image_panel = ImagePanel( theme = group.group_theme, text = group.label )
     panel       = image_panel.create_control( window )
-    margins     = group.group_theme_margins
-    image_sizer = ImageSizer( image_slice, margins.top,  margins.bottom, 
-                                           margins.left, margins.right )
-    panel.SetSizer( image_sizer )
     
-    return ( image_panel, image_sizer )
+    return ( image_panel, panel.GetSizer() )
     
 #-------------------------------------------------------------------------------
 #  Handles a notebook page being 'turned':
@@ -726,8 +719,7 @@ class FillPanel ( object ):
         from themed_vertical_notebook import ThemedVerticalNotebook
         
         # Create the vertical notebook:
-        nb     = ThemedVerticalNotebook( scrollable = True,
-                                         alignment  = 'center' )
+        nb     = ThemedVerticalNotebook( scrollable = True )
         result = nb.create_control( window )
                       
         # Create the notebook pages:
@@ -854,7 +846,7 @@ class FillPanel ( object ):
         # Process each Item in the list:
         for item in content:
             
-            # Get the theme image (if any):
+            # Get the item theme (if any):
             theme = item.item_theme
             
             # Get the name in order to determine its type:
@@ -875,8 +867,7 @@ class FillPanel ( object ):
                     if theme is not None:
                         from image_slice import ImageText
                         
-                        label = ImageText( panel, theme, label, 
-                                           margins = item.label_theme_margins )
+                        label = ImageText( panel, theme, label )
                         item_sizer.Add( label, 0, wx.EXPAND )
                     elif item.style == 'simple':
                         # Add a simple text label:
@@ -973,19 +964,11 @@ class FillPanel ( object ):
             # Set up the background image (if used):
             item_panel = panel
             if theme is not None:
-                from image_slice import image_slice_for, ImagePanel, ImageSizer
+                from image_slice import ImagePanel
                 
-                image_slice = image_slice_for( theme, item.has_theme )
-                image_panel = ImagePanel( 
-                    image_slice = image_slice,
-                    text        = item.get_label( ui ),
-                    alignment   = item.item_theme_alignment
-                )
+                image_panel = ImagePanel( theme = theme,
+                                          text  = item.get_label( ui ) )
                 item_panel  = image_panel.create_control( panel )
-                margins     = item.item_theme_margins
-                image_sizer = ImageSizer( image_slice, 
-                    margins.top, margins.bottom, margins.left, margins.right )
-                item_panel.SetSizer( image_sizer )
                     
             # Create the requested type of editor from the editor factory:
             factory_method = getattr( editor_factory, item.style + '_editor' )
@@ -1015,7 +998,7 @@ class FillPanel ( object ):
             if theme is None:
                 width, height = control.GetSizeTuple()
             else:
-                image_sizer.Add( control, 1, wx.EXPAND ) 
+                item_panel.GetSizer().Add( control, 1, wx.EXPAND ) 
                 control       = item_panel
                 width, height = image_panel.adjusted_size
                 
@@ -1134,8 +1117,7 @@ class FillPanel ( object ):
         if theme is not None:
             from image_slice import ImageText
             
-            control = ImageText( parent, theme, label + suffix, 'right', 
-                                 item.label_theme_margins )
+            control = ImageText( parent, theme, label + suffix )
         else:            
             control = wx.StaticText( parent, -1, label + suffix, 
                                      style = wx.ALIGN_RIGHT )

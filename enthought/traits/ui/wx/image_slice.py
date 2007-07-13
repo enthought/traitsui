@@ -30,14 +30,8 @@ from numpy \
     import reshape, fromstring, uint8
 
 from enthought.traits.api \
-    import HasPrivateTraits, Instance, Str, Int, List, Bool, Color, Font, \
-           Enum, Property, cached_property
-
-from enthought.traits.ui.api \
-    import Margins
-
-from enthought.traits.ui.ui_traits \
-    import Alignment
+    import HasPrivateTraits, Instance, Int, List, Color, Str, Enum, Property, \
+           cached_property
 
 from enthought.pyface.image_resource \
     import ImageResource
@@ -60,19 +54,22 @@ ZeroTextSize = ( 0, 0, 0, 0 )
 #  slice.
 #-------------------------------------------------------------------------------
 
-def paint_parent ( dc, window, x, y ):
+def paint_parent ( dc, window, force = False ):
     """ Recursively paint the parent's background if they have an associated
         image slice.
     """
     parent = window.GetParent()
     slice  = getattr( parent, '_image_slice', None )
     if slice is not None:
-        wx, wy = window.GetPositionTuple()
-        x     += wx
-        y     += wy
-        paint_parent( dc, parent, x, y )
+        x, y   = window.GetPositionTuple()
         dx, dy = parent.GetSizeTuple()
         slice.fill( dc, -x, -y, dx, dy )
+    elif force:
+        # Otherwise, just paint the normal window background color:
+        dx, dy = control.GetClientSizeTuple()
+        dc.SetBrush( wx.Brush( window.GetBackgroundColour() ) )
+        dc.SetPen( wx.TRANSPARENT_PEN )
+        dc.DrawRectangle( 0, 0, dx, dy )
 
     return slice
     
@@ -95,13 +92,6 @@ class ImageSlice ( HasPrivateTraits ):
     stretch_rows    = Enum( 1, 2 )
     stretch_columns = Enum( 1, 2 )
     
-    # Should transparent regions be left unchanged:
-    transparent = Bool( False )
-    
-    # Orginal size of the current image:
-    width  = Int
-    height = Int
-    
     # Width/height of the image borders:
     top    = Int
     bottom = Int
@@ -117,10 +107,16 @@ class ImageSlice ( HasPrivateTraits ):
     # The color to use for overlaid text:
     text_color = Instance( wx.Colour )
     
+    # The background color of the image:
+    bg_color = Color
+    
     #-- Private Traits ---------------------------------------------------------
     
-    # The current image's bitmap:
-    bitmap = Instance( wx.Bitmap )
+    # The current image's opaque bitmap:
+    opaque_bitmap = Instance( wx.Bitmap )
+    
+    # The current image's transparent bitmap:
+    transparent_bitmap = Instance( wx.Bitmap )
     
     # Size of the current image:
     dx = Int
@@ -134,21 +130,21 @@ class ImageSlice ( HasPrivateTraits ):
     fdx = Int
     fdy = Int
     
-    # The background color of the image:
-    bg_color = Color
-    
     #-- Public Methods ---------------------------------------------------------
     
-    def fill ( self, dc, x, y, dx, dy ):
+    def fill ( self, dc, x, y, dx, dy, transparent = False ):
         """ 'Stretch fill' the specified region of a device context with the
             sliced image.
         """
         # Create the source image dc:
         idc = wx.MemoryDC()
-        idc.SelectObject( self.bitmap )
+        if transparent:
+            idc.SelectObject( self.transparent_bitmap )
+        else:
+            idc.SelectObject( self.opaque_bitmap )
         
         # Set up the drawing parameters:
-        sdx, sdy = self.dx,  self.dy
+        sdx, sdy = self.dx, self.dx
         dxs, dys = self.dxs, self.dys
         tdx, tdy = dx - self.fdx, dy - self.fdy
         
@@ -202,46 +198,46 @@ class ImageSlice ( HasPrivateTraits ):
     
     #-- Event Handlers ---------------------------------------------------------
     
-    def _image_changed ( self ):
+    def _image_changed ( self, image ):
         """ Handles the 'image' trait being changed.
         """
-        image = self.image.create_image()
-        self.width, self.height = image.GetWidth(), image.GetHeight()
-        self._analyze_bitmap( image.ConvertToBitmap() )
+        # Save the original bitmap as the transparent version:
+        self.transparent_bitmap = bitmap = \
+            image.create_image().ConvertToBitmap()
+        
+        # Save the bitmap size information:
+        self.dx = dx = bitmap.GetWidth()
+        self.dy = dy = bitmap.GetHeight()
+        
+        # Create the opaque version of the bitmap:
+        self.opaque_bitmap = wx.EmptyBitmap( dx, dy )
+        mdc2 = wx.MemoryDC()
+        mdc2.SelectObject( self.opaque_bitmap )
+        mdc2.SetBrush( wx.Brush( WindowColor ) )
+        mdc2.SetPen( wx.TRANSPARENT_PEN )
+        mdc2.DrawRectangle( 0, 0, dx, dy )
+        mdc = wx.MemoryDC()
+        mdc.SelectObject( bitmap )
+        mdc2.Blit( 0, 0, dx, dy, mdc, 0, 0, useMask = True )
+        mdc.SelectObject(  wx.NullBitmap )
+        mdc2.SelectObject( wx.NullBitmap )
+            
+        # Finally, analyze the image to find out its characteristics:
+        self._analyze_bitmap()
         
     #-- Private Methods --------------------------------------------------------
     
-    def _analyze_bitmap ( self, bitmap ):
-        """ Analyzes a specified bitmap.
+    def _analyze_bitmap ( self ):
+        """ Analyzes the bitmap.
         """
         # Get the image data:
         threshold = self.threshold
-        self.dy   = dy = bitmap.GetHeight()
-        self.dx   = dx = bitmap.GetWidth()
-        
-        # Create a new bitmap using the default window background color:
-        if self.transparent:
-            self.bitmap = bitmap
-        else:
-            self.bitmap = wx.EmptyBitmap( dx, dy )
-            mdc2        = wx.MemoryDC()
-            mdc2.SelectObject( self.bitmap )
-            mdc2.SetBrush( wx.Brush( WindowColor ) )
-            mdc2.SetPen( wx.TRANSPARENT_PEN )
-            mdc2.DrawRectangle( 0, 0, dx, dy )
-            mdc = wx.MemoryDC()
-            mdc.SelectObject( bitmap )
-            mdc2.Blit( 0, 0, dx, dy, mdc, 0, 0, useMask = True )
-            mdc2.SelectObject( wx.NullBitmap )
-            
-        image = self.bitmap.ConvertToImage()
+        bitmap    = self.opaque_bitmap
+        dx, dy    = self.dx, self.dy
+        image     = bitmap.ConvertToImage()
         
         # Convert the bitmap data to a numpy array for analysis:
-        data = reshape( fromstring( image.GetData(), uint8 ), 
-                               ( dy, dx, 3 ) )
-                               
-        # Assume we will not have to regenerate the bitmap (for speed):
-        regen = False
+        data = reshape( fromstring( image.GetData(), uint8 ), ( dy, dx, 3 ) )
                              
         # Find the horizontal slices:
         matches  = []
@@ -261,7 +257,6 @@ class ImageSlice ( HasPrivateTraits ):
            
         n = len( matches )
         if n == 0:
-            regen   = True
             matches = [ ( dy / 2, 1 ) ]
         elif n > self.stretch_rows:
             matches.sort( lambda l, r: cmp( r[1], l[1] ) )
@@ -288,7 +283,6 @@ class ImageSlice ( HasPrivateTraits ):
             
         n = len( matches )
         if n == 0:
-            regen   = True
             matches = [ ( dx / 2, 1 ) ]
         elif n > self.stretch_columns:
             matches.sort( lambda l, r: cmp( r[1], l[1] ) )
@@ -297,39 +291,24 @@ class ImageSlice ( HasPrivateTraits ):
         # Calculate and save the vertical slice sizes:
         self.fdx, self.dxs = self._calculate_dxy( dx, matches )
         
-        # Check if we have to regenerate the bitmap:
-        # fixme: We can't do a 'regen' for a transparent bitmap because we are
-        # not able to regenerate the associated wx.Mask for the bitmap
-        # correctly (yet).
-        if regen and (not self.transparent):
-            # Create a bigger version of the bitmap, so that the repeatable
-            # sections are larger (faster Blits):
-            ndx, ndy = dx + 2 * threshold, dy + 2 * threshold
-            bitmap   = wx.EmptyBitmap( ndx, ndy )
-            mdc      = wx.MemoryDC()
-            mdc.SelectObject( bitmap )
-            self.fill( mdc, 0, 0, ndx, ndy )
-            mdc.SelectObject( wx.NullBitmap )
-            
-            # Re-analyze the new bitmap:
-            self._analyze_bitmap( bitmap )
-        else:
-            self.top    = min( dy / 2, self.dys[0] )
-            self.bottom = min( dy / 2, self.dys[-1] )
-            self.left   = min( dx / 2, self.dxs[0] )
-            self.right  = min( dx / 2, self.dxs[-1] )
-            
-            self._find_best_borders( data )
-
-            # Save the background color:            
-            r, g, b       = data[ dy / 2, dx / 2 ]
-            self.bg_color = (0x10000 * r) + (0x100 * g) + b
-            
-            # Find the best contrasting text color (black or white):
-            h, l, s = rgb_to_hls( r / 255.0, g / 255.0, b / 255.0 )
-            self.text_color = wx.BLACK
-            if l < 0.50:
-                self.text_color = wx.WHITE
+        # Save the border size information:
+        self.top    = min( dy / 2, self.dys[0] )
+        self.bottom = min( dy / 2, self.dys[-1] )
+        self.left   = min( dx / 2, self.dxs[0] )
+        self.right  = min( dx / 2, self.dxs[-1] )
+        
+        # Find the optimal size for the borders (i.e. xleft, xright, ... ):
+        self._find_best_borders( data )
+        
+        # Save the background color:            
+        r, g, b       = data[ dy / 2, dx / 2 ]
+        self.bg_color = (0x10000 * r) + (0x100 * g) + b
+        
+        # Find the best contrasting text color (black or white):
+        h, l, s = rgb_to_hls( r / 255.0, g / 255.0, b / 255.0 )
+        self.text_color = wx.BLACK
+        if l < 0.50:
+            self.text_color = wx.WHITE
     
     def _fill ( self, idc, ix, iy, idx, idy, dc, x, y, dx, dy ):
         """ Performs a stretch fill of a region of an image into a region of a
@@ -454,16 +433,14 @@ default_image_slice = ImageSlice()
 
 image_slice_cache = {}
 
-def image_slice_for ( image, transparent = True ):
+def image_slice_for ( image ):
     """ Returns a (possibly cached) ImageSlice.
     """
     global image_slice_cache
 
-    key    = ( image, transparent )
-    result = image_slice_cache.get( key )
+    result = image_slice_cache.get( image )
     if result is None:
-        image_slice_cache[ key ] = result = \
-            ImageSlice( transparent = transparent ).set( image = image )
+        image_slice_cache[ image ] = result = ImageSlice( image = image )
             
     return result
 
@@ -475,9 +452,6 @@ class ImagePanel ( ThemedWindow ):
     
     # The optional text to display in the top or bottom of the image slice:
     text = Str( event = 'updated' )
-    
-    # The alignment of the text within the image slice:
-    alignment = Alignment( 'center', event = 'updated' )
     
     # Is the image panel capable of displaying text?
     can_show_text = Property
@@ -506,15 +480,18 @@ class ImagePanel ( ThemedWindow ):
         self.control = control = wx.Panel( parent, -1,
                                            style = wx.TAB_TRAVERSAL | 
                                                    wx.FULL_REPAINT_ON_RESIZE )
-                           
+    
+        # Set up the sizer for the control:                                                   
+        control.SetSizer( ImageSizer( self.theme ) )
+                                                   
         # Initialize the control (set-up event handlers, ...)
         self.init_control()
                                                     
         # Attach the image slice to the control:
-        control._image_slice = self.image_slice
+        control._image_slice = self.theme.image_slice
         
         # Set the panel's background colour to the image slice bg_color:
-        control.SetBackgroundColour( self.image_slice.bg_color )
+        control.SetBackgroundColour( control._image_slice.bg_color )
         
         # Set up resize event handler:
         wx.EVT_SIZE( control, self._on_size )
@@ -554,7 +531,7 @@ class ImagePanel ( ThemedWindow ):
             text.
         """
         tdx, tdy, descent, leading = self.control.GetFullTextExtent( 'Myj' )
-        slice = self.image_slice
+        slice = self.theme.image_slice
         tdy  += 4
         return ((tdy <= slice.xtop) or (tdy <= slice.xbottom))
         
@@ -596,15 +573,17 @@ class ImagePanel ( ThemedWindow ):
             else:
                 ty = wdy - slice.xbottom + ((slice.xbottom - tdy) / 2)
                 
-            if self.alignment == 'left':
+            alignment = self.theme.alignment
+            if alignment == 'left':
                 tx = slice.left + 2
-            elif self.alignment == 'center':
-                tx = slice.left + ((wdx - slice.left - slice.right - tdx) / 2)
-            else:
+            elif alignment == 'right':
                 tx = wdx - tdx - slice.right - 2
+            else:
+                tx = slice.left + ((wdx - slice.left - slice.right - tdx) / 2)
                 
             # fixme: Might need to set clipping region here...
-            dc.DrawText( text, tx, ty )
+            ox, oy = self.theme.offset
+            dc.DrawText( text, tx + ox, ty + oy )
             
     def _on_size ( self, event ):
         """ Handles the control being resized.
@@ -618,7 +597,7 @@ class ImagePanel ( ThemedWindow ):
         """ Returns the adjusted size of its children, taking into account the
             image slice border.
         """
-        slice = self.image_slice
+        slice = self.theme.image_slice
         sizer = self.control.GetSizer()
         return wx.Size( dx + min( slice.left, slice.xleft )   + 
                              min( slice.right, slice.xright ) + 
@@ -640,20 +619,24 @@ class ImageSizer ( wx.PySizer ):
     #  Initializes the object:
     #---------------------------------------------------------------------------
 
-    def __init__ ( self, image_slice, top_padding = 0, bottom_padding = 0,
-                         left_padding = 0, right_padding = 0):
+    def __init__ ( self, theme ):
         """ Initializes the object.
         """
         super( ImageSizer, self ).__init__()
         
         # Save the ImageSlice object which determines the inset border size:
-        self._image_slice = image_slice
+        self._image_slice = theme.image_slice
         
         # Save the padding information:
-        self._top_padding    = top_padding
-        self._bottom_padding = bottom_padding
-        self._left_padding   = left_padding
-        self._right_padding  = right_padding
+        margins = theme.margins
+        if margins is not None:
+            self._left_padding   = margins.left
+            self._right_padding  = margins.right
+            self._top_padding    = margins.top
+            self._bottom_padding = margins.bottom
+        else:
+            self._left_padding   = self._right_padding = self._top_padding = \
+            self._bottom_padding = 0
 
     #---------------------------------------------------------------------------
     #  Calculates the minimum size needed by the sizer:
@@ -712,28 +695,17 @@ class ImageText ( wx.PyWindow ):
     """ Defines a text control that displays an ImageSlice in its background.
     """
     
-    alignment_map = {
-        'left':   0,
-        'center': 1,
-        'right':  2
-    }
-    
     #-- wx.PyWindow Method Overrides -------------------------------------------
     
-    def __init__ ( self, parent, image, text      = '', 
-                                        alignment = 'center', 
-                                        margins   = Margins( 0 ) ):
+    def __init__ ( self, parent, theme, text = '' ): 
         """ Initializes the object.
         """
-        self._image_slice = None
-        if image is not None:
-            self._image_slice = image_slice_for( image )
+        self._theme       = theme
+        self._image_slice = theme.image_slice
                                             
         super( ImageText, self ).__init__( parent, -1, 
                                            style = wx.FULL_REPAINT_ON_RESIZE )
                                            
-        self._alignment = self.alignment_map.get( alignment, 1 )
-        self._margins   = margins
         self._text_size = self._fill = None  
         self.SetLabel( text )
         
@@ -760,18 +732,17 @@ class ImageText ( wx.PyWindow ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        dc = wx.PaintDC( self )
+        dc    = wx.PaintDC( self )
+        slice = None
         if self._fill is not False:
-            slice = paint_parent( dc, self, 0, 0 )
+            slice = paint_parent( dc, self )
             
         self._fill = True
         wdx, wdy   = self.GetClientSizeTuple()
         text       = self.GetLabel()
-        if self._image_slice is not None:
-            slice = self._image_slice
-            slice.fill( dc, 0, 0, wdx, wdy )
+        self._image_slice.fill( dc, 0, 0, wdx, wdy, slice is not None )
         dc.SetBackgroundMode( wx.TRANSPARENT )
-        dc.SetTextForeground( slice.text_color )
+        dc.SetTextForeground( self._image_slice.text_color )
         dc.SetFont( self.GetFont() )
         tx, ty, tdx, tdy = self._get_text_bounds()
         dc.DrawText( text, tx, ty )
@@ -780,13 +751,10 @@ class ImageText ( wx.PyWindow ):
         """ Returns the minimum size for the window.
         """
         tdx, tdy, descent, leading = self._get_text_size()
-        margins = self._margins
+        margins = self._theme.margins
         tdx    += (margins.left + margins.right)
         tdy    += (margins.top  + margins.bottom)
-        
-        slice = self._image_slice
-        if slice is None:
-            return wx.Size( tdx, tdy )
+        slice   = self._image_slice
         
         return wx.Size( max( slice.left  + slice.right,
                              slice.xleft + slice.xright  + tdx + 8 ),
@@ -811,7 +779,7 @@ class ImageText ( wx.PyWindow ):
         """ Refreshes the contents of the control.
         """
         if self._fill is True:
-            self._fill = (self._image_slice is None)
+            self._fill = False
         
         if self._text_size is not None:
             self.RefreshRect( wx.Rect( *self._get_text_bounds() ), False )
@@ -840,88 +808,18 @@ class ImageText ( wx.PyWindow ):
         """
         tdx, tdy, descent, leading = self._get_text_size()
         wdx, wdy = self.GetClientSizeTuple()
-        slice    = self._image_slice or default_image_slice
-        margins  = self._margins
+        slice    = self._image_slice
+        margins  = self._theme.margins
         ady      = wdy - slice.xtop - slice.xbottom
         ty       = slice.xtop + margins.top + 2 + ((ady - tdy) / 2)
-        if self._alignment == 0:
+        alignment = self._theme.alignment
+        if alignment == 'left':
             tx = slice.xleft + margins.left + 4
-        elif self._alignment == 1:
+        elif alignment == 'center':
             adx = wdx - slice.xleft - slice.xright
             tx  = slice.xleft + margins.left + 4 + ((adx - tdx) / 2)
         else:
             tx = wdx - tdx - slice.xright - margins.right - 4
           
         return ( tx, ty, tdx, tdy )
-
-#-------------------------------------------------------------------------------
-#  Class 'CenteredImageResource'  
-#-------------------------------------------------------------------------------
         
-class CenteredImageResource ( ImageResource ):
-    
-    # The image resource being centered:
-    image_resource = Instance( ImageResource )
-    
-    # The background color to use:
-    bg_color = Color( 0xE0E0E0 )
-    
-    # Optional text to display centered over image:
-    text = Str
-    
-    # The color of the text:
-    text_color = Color( 'black' )
-    
-    # The font to use for displaying the text:
-    font = Font( 'Arial 12' )
-    
-    # The size of the image to center in:
-    width  = Int
-    height = Int
-
-    #-- Private Traits ---------------------------------------------------------
-    
-    # The cached version of the centered image:
-    _image = Instance( wx.Image )
-    
-    #-- object Method Implementations ------------------------------------------
-    
-    def __init__ ( self, **traits ):
-        """ Initializes the object. """
-        self.set( **traits )
-        
-    #-- ImageResource Method Implementations -----------------------------------
-    
-    def create_image( self, size = None ):
-        """ Creates a toolkit specific image for this resource. """
-        if self._image is None:
-            dx, dy = self.width, self.height
-            bitmap = wx.EmptyBitmap( dx, dy )
-            mdc    = wx.MemoryDC()
-            mdc.SelectObject( bitmap )
-            mdc.SetBrush( wx.Brush( self.bg_color_ ) )
-            mdc.SetPen( wx.TRANSPARENT_PEN )
-            mdc.DrawRectangle( 0, 0, dx, dy )
-            
-            bitmap2  = self.image_resource.create_bitmap()
-            bdx, bdy = bitmap2.GetWidth(), bitmap2.GetHeight()
-            mdc2     = wx.MemoryDC()
-            mdc2.SelectObject( bitmap2 )
-            
-            mdc.Blit( (dx - bdx) / 2, (dy - bdy) / 2, bdx, bdy, mdc2, 0, 0, 
-                      useMask = True )
-                      
-            text = self.text
-            if text != '':
-                mdc.SetBackgroundMode( wx.TRANSPARENT )
-                mdc.SetTextForeground( self.text_color_ )
-                mdc.SetFont( self.font )
-                tdx, tdy, descent, leading = mdc.GetFullTextExtent( text )  
-                mdc.DrawText( text, (dx - tdx) / 2, ((dy - tdy) / 2) - 1 )
-                
-            mdc.SelectObject(  wx.NullBitmap )
-            mdc2.SelectObject( wx.NullBitmap )
-            
-            self._image = bitmap.ConvertToImage()
-            
-        return self._image

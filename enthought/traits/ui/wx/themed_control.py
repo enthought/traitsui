@@ -19,13 +19,16 @@ import wx
 
 from enthought.traits.api \
     import HasTraits, Str, Int, Enum, Bool, Property, Event, Tuple, Instance, \
-           cached_property
+           cached_property, on_trait_change
+    
+from enthought.traits.ui.api \
+    import default_theme
     
 from enthought.traits.ui.ui_traits \
     import Image, HasPadding, Padding, Position, Alignment, Spacing
     
 from image_slice \
-    import image_slice_for, default_image_slice
+    import default_image_slice
     
 from themed_window \
     import ThemedWindow
@@ -53,12 +56,6 @@ class ThemedControl ( ThemedWindow ):
     
     #-- Public Traits ----------------------------------------------------------
     
-    # The (optional) theme to be drawn in the control's background:
-    theme = Image( event = 'updated' )
-    
-    # Should the theme be transparent?
-    transparent = Bool( True )
-    
     # An (optional) image to be drawn inside the control:
     image = Image( event = 'updated' )
     
@@ -68,21 +65,14 @@ class ThemedControl ( ThemedWindow ):
     # The position of the image relative to the text:
     position = Position( event = 'updated' )
     
-    # The alignment of the text within the control:
-    alignment = Alignment( event = 'updated' )
-    
     # The amount of spacing between the image and the text:
     spacing = Spacing( event = 'updated' )
-    
-    # The amount of padding between the image/text and the border:
-    padding = HasPadding( Padding( left = 4, right = 4, top = 2, bottom = 2 ),
-                          event = 'updated' )
     
     # Is the text value private (like a password):
     password = Bool( False, event = 'updated' )
     
-    # Offset to display text and image from calculated position:
-    offset = Tuple( Int, Int, event = 'updated' )
+    # An additional, optional offset to apply to the text/image position:
+    offset = Tuple( Int, Int )
     
     # Minimum default size for the control:
     min_size = Tuple( Int, Int )
@@ -180,11 +170,9 @@ class ThemedControl ( ThemedWindow ):
         if self.control is not None:
             self.control.Refresh()
         
-    def _theme_changed ( self, theme ):
-        if theme is None:
-            self.image_slice = None
-        else:
-            self.image_slice = image_slice_for( theme, self.transparent )
+    @on_trait_change( 'theme.+' )
+    def _on_theme_changed ( self ):
+        self._updated_changed()
         
     def _image_changed ( self, image ):
         """ Handles the image being changed by updating the corresponding 
@@ -208,7 +196,10 @@ class ThemedControl ( ThemedWindow ):
         dc, slice = super( ThemedControl, self )._on_paint( event )
         
         # Get the text and image offset to use:
-        ox, oy = self.offset
+        ox, oy   = (self.theme or default_theme).offset
+        ox2, oy2 = self.offset
+        ox      += ox2
+        oy      += oy2
         
         # Draw the bitmap (if any):
         ix, iy, idx, idy = self.bitmap_bounds
@@ -247,10 +238,10 @@ class ThemedControl ( ThemedWindow ):
             return EmptyBounds
             
         wdx, wdy  = control.GetClientSizeTuple()
-        slice     = self.image_slice or default_image_slice
         spacing   = (tdx != 0) * (bdx != 0) * self.spacing
-        padding   = self.padding
-        alignment = self.alignment
+        theme     = self.theme or default_theme
+        slice     = theme.image_slice or default_image_slice
+        margins   = theme.margins
         
         position = self.position
         if position in ( 'above', 'below' ):
@@ -261,21 +252,24 @@ class ThemedControl ( ThemedWindow ):
             cdy = max( tdy, bdy )
         
         if item == TheControl:
-            cdx += padding.left + padding.right
-            cdy += padding.top  + padding.bottom
+            cdx += margins.left + margins.right
+            cdy += margins.top  + margins.bottom
             
             return ( 0, 0, max( slice.left  + slice.right,
                                 slice.xleft + slice.xright  + cdx ),
                            max( slice.top   + slice.bottom,
                                 slice.xtop  + slice.xbottom + cdy ) )
         
+        alignment = theme.alignment
+        if alignment == 'default':
+            alignment = self.default_alignment
         if alignment == 'left':
-            x = slice.xleft + padding.left
+            x = slice.xleft + margins.left
         elif alignment == 'center':
-            x = slice.xleft + padding.left + ((wdx - slice.xleft - slice.xright
-                            - padding.left - padding.right - cdx) / 2)
+            x = slice.xleft + margins.left + ((wdx - slice.xleft - slice.xright
+                            - margins.left - margins.right - cdx) / 2)
         else:
-            x = wdx - slice.xright - padding.right - cdx
+            x = wdx - slice.xright - margins.right - cdx
             
         if position == 'left':
             bx = x
@@ -288,8 +282,8 @@ class ThemedControl ( ThemedWindow ):
             tx = x - (tdx / 2 )
             bx = x - (bdx / 2 )
             
-        y = slice.xtop + padding.top + ((wdy - slice.xtop - slice.xbottom - 
-                         padding.top - padding.bottom - cdy) / 2)
+        y = slice.xtop + margins.top + ((wdy - slice.xtop - slice.xbottom - 
+                         margins.top - margins.bottom - cdy) / 2)
         if position == 'above':
             by = y
             ty = by + bdy + spacing

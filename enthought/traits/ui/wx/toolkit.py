@@ -1,22 +1,23 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
 #
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-#
-# Author: David C. Morrill
-# Date: 10/13/2004
-#
-#  Symbols defined: GUIToolkit
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   10/13/2004
 #
 #------------------------------------------------------------------------------
+
 """ Defines the concrete implementations of the traits Toolkit interface for
-the wxPython user interface toolkit.
+    the wxPython user interface toolkit.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -31,13 +32,13 @@ if _app is None:
     _app = wx.PySimpleApp()
 
 from enthought.traits.api \
-    import HasPrivateTraits, Instance
+    import HasPrivateTraits, Instance, Property, Category, cached_property
 
 from enthought.traits.trait_notifiers \
     import set_ui_handler
 
 from enthought.traits.ui.api \
-    import UI
+    import UI, Theme
 
 from enthought.traits.ui.toolkit \
     import Toolkit
@@ -648,4 +649,28 @@ class DragHandler ( HasPrivateTraits ):
         if result is None:
             result = drag_result
         return result
+        
+#-------------------------------------------------------------------------------
+#  Defines the extensions needed to make the generic Theme class specific to
+#  wxPython:
+#-------------------------------------------------------------------------------
+            
+class WXTheme ( Category, Theme ):
+    """ Defines the extensions needed to make the generic Theme class specific
+        to wxPython.
+    """
+    
+    # The image slice used to draw the theme:
+    image_slice = Property( depends_on = 'image' )
+    
+    #-- Property Implementations -----------------------------------------------
+    
+    @cached_property
+    def _get_image_slice ( self ):
+        from image_slice import image_slice_for
+        
+        if self.image is None:
+            return None
+            
+        return image_slice_for( self.image )
 

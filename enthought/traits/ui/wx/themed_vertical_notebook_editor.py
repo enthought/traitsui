@@ -30,7 +30,7 @@ from enthought.traits.ui.wx.basic_editor_factory \
     import BasicEditorFactory
     
 from enthought.traits.ui.ui_traits \
-    import Image, Alignment, AView
+    import AView, ATheme
     
 from themed_vertical_notebook \
     import ThemedVerticalNotebook
@@ -70,7 +70,7 @@ class _ThemedVerticalNotebookEditor ( Editor ):
         factory = self.factory
         self.notebook = ThemedVerticalNotebook( **factory.get( 
             'closed_theme', 'open_theme', 'multiple_open', 'scrollable', 
-            'double_click', 'alignment' ) ).set( editor = self )
+            'double_click' ) ).set( editor = self )
         self.control = self.notebook.create_control( parent )
 
         # Set up the additional 'list items changed' event handler needed for
@@ -211,10 +211,10 @@ class ThemedVerticalNotebookEditor ( BasicEditorFactory ):
     klass = _ThemedVerticalNotebookEditor
     
     # The theme to use for closed notebook pages:
-    closed_theme = Image
+    closed_theme = ATheme
     
     # The theme to use for open notebook pages:
-    open_theme = Image
+    open_theme = ATheme
     
     # Allow multiple open pages at once?
     multiple_open = Bool( False )
@@ -229,9 +229,6 @@ class ThemedVerticalNotebookEditor ( BasicEditorFactory ):
     # name or the name of an attribute on the object in the form:
     # '.name[.name...]'
     page_name = Str
-    
-    # The alignment of the name within the page title:
-    alignment = Alignment
     
     # Name of the view to use for each page:
     view = AView

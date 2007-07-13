@@ -21,9 +21,12 @@ import wx
 
 from enthought.traits.api \
     import Instance, Str
+
+from enthought.traits.ui.api \
+    import Theme
     
 from enthought.traits.ui.ui_traits \
-    import Image, HasPadding, Padding, Position, Alignment, Spacing
+    import ATheme, Image, Margins, Position, Spacing
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -55,20 +58,17 @@ class _ThemedButtonEditor ( Editor ):
             widget.
         """
         # Create the button and its control:
-        item    = self.item
         factory = self.factory
         label   = factory.label
         if (label == '') and (factory.image is None):
-            label = item.label
+            label = self.item.label
             
         self.button = button = ThemedControl( **factory.get(
-            'image', 'position', 'spacing', 'padding' ) ).set(
-            text        = label, 
-            alignment   = 'center', 
-            controller  = self,
-            transparent = (item.item_theme is not None) or item.has_theme,
-            min_size    = ( 80, 0 ) ).set(
-            theme       = factory.theme )
+            'theme', 'image', 'position', 'spacing' ) ).set(
+            text              = label, 
+            controller        = self,
+            default_alignment = 'center',
+            min_size          = ( 80, 0 ) )
         self.control = button.create_control( parent )
 
         # Set the tooltip:
@@ -136,13 +136,13 @@ class ThemedButtonEditor ( BasicEditorFactory ):
     label = Str
     
     # The basic theme for the button (i.e. the 'up' state):
-    theme = Image( '@BG5' )
+    theme = ATheme( '@BG5' )
     
     # The optional 'down' state theme for the button:
-    down_theme = Image( '@BE5' )
+    down_theme = ATheme( '@BE5' )
     
     # The optional 'hover' state theme for the button:
-    hover_theme = Image( '@BG6' )
+    hover_theme = ATheme( '@BG6' )
     
     # The optional image to display in the button:
     image = Image
@@ -152,7 +152,4 @@ class ThemedButtonEditor ( BasicEditorFactory ):
     
     # The amount of space between the image and the text:
     spacing = Spacing
-    
-    # The amount of padding between the text/image and the border:
-    padding = HasPadding( Padding( left = 4, right = 4, top = 2, bottom = 2 ) )
                  
