@@ -360,7 +360,8 @@ def create_notebook_for_items ( content, ui, parent, group,
     else:
         nb = DockWindow( parent, handler      = ui.handler, 
                                  handler_args = ( ui.info, ),
-                                 id           = ui.id ).control
+                                 id           = ui.id,
+                                 theme        = group.dock_theme ).control
     pages     = []
     count     = 0
     has_theme = ((group is not None) and (group.group_theme is not None))
@@ -603,7 +604,8 @@ class FillPanel ( object ):
         if is_splitter:
             dw = DockWindow( panel, handler      = ui.handler,
                                     handler_args = ( ui.info, ),
-                                    id           = ui.id ).control
+                                    id           = ui.id,
+                                    theme        = group.dock_theme ).control
             if editor is not None:
                 editor.dock_window = dw
             dw.SetSizer( DockSizer( contents = 

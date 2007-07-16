@@ -47,6 +47,9 @@ from enthought.traits.trait_base \
 
 from enthought.traits.ui.api \
     import View, Item, TreeNode, ObjectTreeNode, MultiTreeNode
+    
+from enthought.traits.ui.dock_window_theme \
+    import DockWindowTheme
 
 from enthought.traits.ui.undo \
     import ListUndoItem
@@ -126,6 +129,9 @@ class ToolkitEditorFactory ( EditorFactory ):
 
     # Reference to a shared object editor
     editor = Instance( EditorFactory )
+    
+    # The DockWindow graphical theme
+    dock_theme = Instance( DockWindowTheme )
 
     # Show icons for tree nodes?
     show_icons = true
@@ -256,8 +262,10 @@ class SimpleEditor ( Editor ):
                                                                 style = style )
             else:
                 # If editable, create a tree control and an editor panel:
-                self._is_dock_window    = True
-                self.control = splitter = DockWindow( parent ).control
+                self._is_dock_window = True
+                theme = factory.dock_theme or self.item.container.dock_theme
+                self.control = splitter = DockWindow( parent, 
+                                                      theme = theme ).control
                 self._tree   = tree     = wx.TreeCtrl( splitter, -1,
                                                        style = style )
                 self._editor = editor   = wx.ScrolledWindow( splitter )

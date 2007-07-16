@@ -533,7 +533,8 @@ class ImagePanel ( ThemedWindow ):
         tdx, tdy, descent, leading = self.control.GetFullTextExtent( 'Myj' )
         slice = self.theme.image_slice
         tdy  += 4
-        return ((tdy <= slice.xtop) or (tdy <= slice.xbottom))
+        return ((tdy <= slice.xtop) or (tdy <= slice.xbottom) or
+                (slice.xleft >= 40) or (slice.xright >= 40))
         
     @cached_property
     def _get_text_size ( self ):
@@ -566,20 +567,37 @@ class ImagePanel ( ThemedWindow ):
             dc.SetTextForeground( slice.text_color )
             dc.SetFont( self.control.GetFont() )
             
-            wdx, wdy = self.control.GetClientSizeTuple()
+            alignment = self.theme.alignment
+            wdx, wdy  = self.control.GetClientSizeTuple()
             tdx, tdy, descent, leading = self.text_size
+            tx = None
             if (tdy + 4) <= slice.xtop:
                 ty = (slice.xtop - tdy) / 2
+            elif (tdy + 4) <= slice.xbottom:
+                ty = wdy - ((slice.xbottom + tdy) / 2)
             else:
-                ty = wdy - slice.xbottom + ((slice.xbottom - tdy) / 2)
-                
-            alignment = self.theme.alignment
-            if alignment == 'left':
-                tx = slice.left + 2
-            elif alignment == 'right':
-                tx = wdx - tdx - slice.right - 2
-            else:
-                tx = slice.left + ((wdx - slice.left - slice.right - tdx) / 2)
+                ty = (wdy + slice.xtop - slice.xbottom - tdy) / 2
+                if slice.xleft >= 40:
+                    if alignment == 'left':
+                        tx = 4
+                    elif alignment == 'right':
+                        tx = slice.xleft - tdx - 4
+                    else:
+                        tx = (slice.xleft - tdx) / 2
+                elif alignment == 'left':
+                    tx = wdx - slice.xright + 4
+                elif alignment == 'right':
+                    tx = wdx - tdx - 4
+                else:
+                    tx = wdx - ((slice.xright + tdx) / 2)
+                    
+            if tx is None:
+                if alignment == 'left':
+                    tx = slice.left + 4
+                elif alignment == 'right':
+                    tx = wdx - tdx - slice.right - 4
+                else:
+                    tx = (wdx + slice.left - slice.right - tdx) / 2
                 
             # fixme: Might need to set clipping region here...
             ox, oy = self.theme.offset

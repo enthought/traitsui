@@ -25,15 +25,6 @@ wxPython user interface toolkit..
 import wx
 
 import wx.lib.scrolledpanel as wxsp
-
-from constants \
-    import scrollbar_dx
-    
-from editor_factory \
-    import EditorFactory
-    
-from editor \
-    import Editor
     
 from enthought.traits.api \
     import Trait, HasTraits, BaseTraitHandler, Range, Str, Any, Instance, \
@@ -48,12 +39,24 @@ from enthought.traits.ui.api \
 from enthought.traits.ui.ui_traits \
     import style_trait, AView
     
+from enthought.traits.ui.dock_window_theme \
+    import DockWindowTheme
+    
 from enthought.traits.ui.dockable_view_element \
     import DockableViewElement
     
 from enthought.pyface.dock.core \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl, \
            DockStyle
+
+from constants \
+    import scrollbar_dx
+    
+from editor_factory \
+    import EditorFactory
+    
+from editor \
+    import Editor
     
 from helper \
     import bitmap_cache
@@ -107,7 +110,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     #-- Notebook Specific Traits -----------------------------------------------
     
     # Are notebook items deletable?
-    deletable = false   
+    deletable = false
+    
+    # The DockWindow graphical theme:
+    dock_theme = Instance( DockWindowTheme )
     
     # Dock page style to use for each DockControl:
     dock_style = DockStyle 
@@ -658,8 +664,10 @@ class NotebookEditor ( Editor ):
             widget.
         """
         # Create a DockWindow to hold each separate object's view:
-        self.control = DockWindow( parent ).control
-        self.control.SetSizer( DockSizer( DockSection() ) )
+        theme = self.factory.dock_theme or self.item.container.dock_theme
+        dw    = DockWindow( parent, theme = theme )
+        self.control = dw.control
+        self.control.SetSizer( DockSizer( DockSection( dock_window = dw ) ) )
 
         # Set up the additional 'list items changed' event handler needed for
         # a list based trait:

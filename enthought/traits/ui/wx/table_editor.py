@@ -41,6 +41,9 @@ from enthought.traits.ui.table_column \
 
 from enthought.traits.ui.table_filter \
     import TableFilter
+    
+from enthought.traits.ui.dock_window_theme \
+    import DockWindowTheme
 
 from enthought.traits.ui.ui_traits \
     import AView
@@ -145,6 +148,9 @@ class ToolkitEditorFactory ( EditorFactory ):
 
     # Should the table items be presented in reverse order?
     reverse = false
+    
+    # The DockWindow graphical theme:
+    dock_theme = Instance( DockWindowTheme )
 
     # View to use when editing table items.
     # NOTE: If not specified, the table items are not editable in a separate
@@ -421,7 +427,8 @@ class TableEditor ( Editor ):
         else:
             item         = self.item
             name         = item.get_label( self.ui )
-            self.control = dw = DockWindow( parent ).control
+            theme        = factory.dock_theme or item.container.dock_theme
+            self.control = dw = DockWindow( parent, theme = theme ).control
             panel        = wx.Panel( dw, -1 )
             sizer        = wx.BoxSizer( wx.VERTICAL )
             dc           = DockControl( name    = name + ' Table',
