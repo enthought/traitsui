@@ -1415,13 +1415,20 @@ class _TabularEditor ( Editor ):
         """
         x          = event.GetX()
         row, flags = self.control.HitTest( wx.Point( x, event.GetY() ) )
-        if row != wx.NOT_FOUND:
+        if row == wx.NOT_FOUND:
+            if self.factory.multi_select:
+                self.multi_selected = []
+                self.multi_selected_rows = []
+            else:
+                self.selected = None
+                self.selected_row = -1
+        else:
             setattr( self, trait, TabularEditorEvent(
                 editor = self,
                 row    = row, 
                 column = self._get_column( x, translate = True )
             ) )
-        
+
         event.Skip()
 
 #-------------------------------------------------------------------------------
