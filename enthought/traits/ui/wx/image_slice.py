@@ -66,7 +66,7 @@ def paint_parent ( dc, window, force = False ):
         slice.fill( dc, -x, -y, dx, dy )
     elif force:
         # Otherwise, just paint the normal window background color:
-        dx, dy = control.GetClientSizeTuple()
+        dx, dy = window.GetClientSizeTuple()
         dc.SetBrush( wx.Brush( window.GetBackgroundColour() ) )
         dc.SetPen( wx.TRANSPARENT_PEN )
         dc.DrawRectangle( 0, 0, dx, dy )
