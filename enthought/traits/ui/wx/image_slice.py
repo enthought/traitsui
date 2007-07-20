@@ -825,19 +825,22 @@ class ImageText ( wx.PyWindow ):
             displayed.
         """
         tdx, tdy, descent, leading = self._get_text_size()
-        wdx, wdy = self.GetClientSizeTuple()
-        slice    = self._image_slice
-        margins  = self._theme.margins
-        ady      = wdy - slice.xtop - slice.xbottom
-        ty       = slice.xtop + margins.top + 2 + ((ady - tdy) / 2)
-        alignment = self._theme.alignment
+        wdx, wdy  = self.GetClientSizeTuple()
+        slice     = self._image_slice
+        theme     = self._theme
+        margins   = theme.margins
+        ady       = wdy - slice.xtop - slice.xbottom
+        ty        = (wdy + slice.xtop + margins.top - slice.xtop - 
+                           slice.xbottom - tdy) / 2
+        alignment = theme.alignment
         if alignment == 'left':
-            tx = slice.xleft + margins.left + 4
+            tx = slice.xleft + margins.left
         elif alignment == 'center':
             adx = wdx - slice.xleft - slice.xright
             tx  = slice.xleft + margins.left + 4 + ((adx - tdx) / 2)
         else:
-            tx = wdx - tdx - slice.xright - margins.right - 4
+            tx = wdx - tdx - slice.xright - margins.right
           
-        return ( tx, ty, tdx, tdy )
+        ox, oy = theme.offset
+        return ( tx + ox, ty + oy, tdx, tdy )
         
