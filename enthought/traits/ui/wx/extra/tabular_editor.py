@@ -1059,7 +1059,9 @@ class _TabularEditor ( Editor ):
             dx, dy = control.GetClientSizeTuple()
             control.SetColumnWidth( 0, dx - 1 )
         elif n > 1:
-            do_later( self._set_column_widths )            
+            do_later( self._set_column_widths )
+            
+        event.Skip()
 
     def _mouse_move ( self, event ):
         """ Handles the user moving the mouse.
