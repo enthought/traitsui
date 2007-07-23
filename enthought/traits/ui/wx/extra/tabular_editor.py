@@ -640,6 +640,9 @@ class _TabularEditor ( Editor ):
     
     # The most recent right double click data:
     right_dclicked = Instance( 'TabularEditorEvent' )
+
+    # The most recent column click data:
+    column_clicked = Instance( 'TabularEditorEvent' )
     
     # Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
@@ -658,12 +661,7 @@ class _TabularEditor ( Editor ):
     
     # Dictionary mapping ImageResource objects to wx.ImageList indices:
     image_resources = Any( {} )
-    
-    # Sort order. If positive, the order is ascending. If negative, the order
-    # is descending. The value is swapped every time a sort is requested so 
-    # requesting it twice will sort in one direction, then the other:
-    sort_order = Int( 1 )
-        
+                
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -747,7 +745,9 @@ class _TabularEditor ( Editor ):
         
         self.sync_value( factory.right_clicked,  'right_clicked',  'to' )
         self.sync_value( factory.right_dclicked, 'right_dclicked', 'to' )
-            
+
+        self.sync_value( factory.column_clicked, 'column_clicked', 'to' )
+        
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
         self.context_object.on_trait_change( self.update_editor,
@@ -1040,16 +1040,19 @@ class _TabularEditor ( Editor ):
             (0 <= column < len( self._cached_widths ))):
             self._cached_widths[ column ] = None
             self._size_modified( event )
-        
+            
     def _column_clicked ( self, event ):
-        """ Handles the user clicking a column header to sort the data by the 
-            column that was clicked on.
+        """ Handles the right mouse button being double clicked.
         """
-        column = event.GetColumn()
-        self.value.sort( lambda x, y: cmp( x[ column ], y[ column ] ) * 
-                                      self.sort_order )
-        self.sort_order *= -1
+        editor_event = TabularEditorEvent(
+            editor = self,
+            row    = 0, 
+            column = event.GetColumn()
+        )
         
+        setattr( self, 'column_clicked', editor_event)
+        event.Skip()
+                
     def _size_modified ( self, event ):
         """ Handles the size of the list control being changed.
         """
@@ -1507,6 +1510,10 @@ class TabularEditor ( BasicEditorFactory ):
     # clicked data with. The data is a TabularEditorEvent:
     right_dclicked = Str
     
+    # The optional extended name of the trait to synchronize column
+    # clicked data with. The data is a TabularEditorEvent:
+    column_clicked = Str
+    
     # Can the user edit the values?
     editable = Bool( True )
                  
@@ -1532,7 +1539,7 @@ class TabularEditor ( BasicEditorFactory ):
     # Are 'drag_move' operations allowed (i.e. True), or should they always be 
     # treated as 'drag_copy' operations (i.e. False):
     drag_move = Bool( False )
-                       
+                           
     # The set of images that can be used:                       
     images = List( ImageResource )
 
