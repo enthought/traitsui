@@ -38,7 +38,7 @@ from enthought.traits.ui.menu \
 from enthought.traits.ui.table_column \
     import NumericColumn, ObjectColumn
 
-from enthought.util.wx.do_later \
+from enthought.pyface.timer.api \
     import do_later
 
 from enthought.pyface.grid.api \

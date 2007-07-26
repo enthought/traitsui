@@ -27,7 +27,7 @@ from enthought.traits.ui.wx.editor \
 from enthought.traits.ui.wx.basic_editor_factory \
     import BasicEditorFactory
     
-from enthought.util.wx.do_later \
+from enthought.pyface.timer.api \
     import do_after
                                       
 #-------------------------------------------------------------------------------

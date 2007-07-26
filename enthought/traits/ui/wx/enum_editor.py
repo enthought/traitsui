@@ -45,7 +45,7 @@ from enthought.traits.api \
 from enthought.traits.ui.ui_traits \
     import SequenceTypes
 
-from enthought.util.wx.do_later \
+from enthought.pyface.timer.api \
     import do_later
 
 #-------------------------------------------------------------------------------

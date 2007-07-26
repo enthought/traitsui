@@ -36,7 +36,7 @@ from enthought.traits.ui.wx.basic_editor_factory \
 from enthought.pyface.image_resource \
     import ImageResource
     
-from enthought.util.wx.do_later \
+from enthought.pyface.timer.api \
     import do_later
 
 try:

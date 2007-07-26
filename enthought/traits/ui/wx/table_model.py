@@ -40,7 +40,7 @@ from enthought.pyface.grid.grid_cell_renderer \
 from enthought.pyface.grid.trait_grid_cell_adapter \
     import TraitGridCellAdapter
 
-from enthought.util.wx.do_later \
+from enthought.pyface.timer.api \
     import do_later
 
 #-------------------------------------------------------------------------------
