@@ -22,10 +22,18 @@ wxPython user interface toolkit.
 #-------------------------------------------------------------------------------
 
 import wx
+    
+from enthought.traits.api \
+    import List, Str, true
 
-from editor_factory   import EditorFactory
-from editor           import Editor
-from enthought.traits.api import List, Str, true
+from editor_factory \
+    import EditorFactory
+    
+from editor \
+    import Editor
+    
+from helper \
+    import traits_ui_panel
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:
@@ -97,7 +105,7 @@ class CompoundEditor ( Editor ):
             widget.
         """
         # Create a panel to hold all of the component trait editors:
-        self.control = panel = wx.Panel( parent, -1 )
+        self.control = panel = traits_ui_panel( parent, -1 )
         sizer        = wx.BoxSizer( wx.VERTICAL )
         
         # Add all of the component trait editors:

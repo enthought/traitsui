@@ -46,6 +46,9 @@ from image_control \
 from enthought.traits.api \
     import Str, Type, Module, Any
 
+from helper \
+    import traits_ui_panel
+    
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
 #-------------------------------------------------------------------------------
@@ -244,7 +247,7 @@ class CustomEditor ( Editor ):
         """ Populates a specified window with a grid of image buttons.
         """
         # Create the panel to hold the ImageControl buttons:
-        self.control = panel = wx.Panel( parent, -1 )
+        self.control = panel = traits_ui_panel( parent, -1 )
         
         # Create the main sizer:
         if self.factory.cols > 1:

@@ -20,7 +20,7 @@
 import wx
 
 from enthought.traits.api \
-    import Instance, Str
+    import Instance, Str, on_trait_change
 
 from enthought.traits.ui.api \
     import Theme
@@ -61,7 +61,7 @@ class _ThemedButtonEditor ( Editor ):
         factory = self.factory
         label   = factory.label
         if (label == '') and (factory.image is None):
-            label = self.item.label
+            label = self.item.get_label( self.ui )
             
         self.button = button = ThemedControl( **factory.get(
             'theme', 'image', 'position', 'spacing' ) ).set(
@@ -84,16 +84,34 @@ class _ThemedButtonEditor ( Editor ):
         """
         pass
     
+    #-- Trait Event Handlers ---------------------------------------------------
+    
+    @on_trait_change( 'button.enabled' )
+    def _on_enabled_changed ( self ):
+        """ Handles the button 'enabled' state changing.
+        """
+        if self.button.enabled:
+            self.button.set( state  = 'normal', 
+                             offset = ( 0, 0 ),
+                             theme  = self.factory.theme )
+        else:
+            self.button.set( state  = 'disabled', 
+                             offset = ( 0, 0 ),
+                             theme  = self.factory.disabled_theme or 
+                                      self.factory.theme )
+    
     #-- ThemedControl Event Handlers -------------------------------------------
     
     def normal_left_down ( self, x, y, event ):
-        self.button.set( state  = 'down',
-                         offset = ( 1, 1 ),
-                         theme  = self.factory.down_theme or self.factory.theme)
+        if self.control.IsEnabled():
+            self.button.set( state  = 'down',
+                             offset = ( 1, 1 ),
+                             theme  = self.factory.down_theme or 
+                                      self.factory.theme )
         
     def normal_mouse_move ( self, x, y, event ):
         hover = self.factory.hover_theme
-        if hover is not None:
+        if self.control.IsEnabled() and (hover is not None):
             self.button.set( state = 'hover', theme = hover )
             self.control.CaptureMouse()
             
@@ -143,6 +161,9 @@ class ThemedButtonEditor ( BasicEditorFactory ):
     
     # The optional 'hover' state theme for the button:
     hover_theme = ATheme( '@BG6' )
+    
+    # The optional 'disabled' state theme for the button:
+    disabled_theme = ATheme( '@GG3' )
     
     # The optional image to display in the button:
     image = Image

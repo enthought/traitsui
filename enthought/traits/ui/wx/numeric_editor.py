@@ -68,6 +68,9 @@ from editor \
 
 from basic_editor_factory \
     import BasicEditorFactory
+    
+from helper \
+    import traits_ui_panel
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -182,7 +185,7 @@ class NumericEditor ( Editor ):
                                 other_columns = factory.other_columns[:] )
         grid_model.on_trait_change( self._model_sorted, 'sorted',
                                     dispatch = 'ui' )
-        self.control = panel = wx.Panel( parent, -1 )
+        self.control = panel = traits_ui_panel( parent, -1 )
         sizer        = wx.BoxSizer( wx.VERTICAL )
         self._create_toolbar( panel, sizer )
 
@@ -952,7 +955,7 @@ class NumericEditorToolbar ( HasPrivateTraits ):
     #  Performs the action described by a specified Action object:
     #---------------------------------------------------------------------------
 
-    def perform ( self, action ):
+    def perform ( self, action, action_event = None ):
         """ Performs the action described by a specified Action object.
         """
         getattr( self.editor, action.action )()

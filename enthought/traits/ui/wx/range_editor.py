@@ -42,6 +42,9 @@ from editor \
     
 from constants \
     import OKColor, ErrorColor
+    
+from helper \
+    import traits_ui_panel
 
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -309,7 +312,7 @@ class SimpleSliderEditor ( Editor ):
         self.sync_value( factory.high_name, 'high', 'from' )
         low  = self.low
         high = self.high
-        self.control = panel = wx.Panel( parent, -1 )
+        self.control = panel = traits_ui_panel( parent, -1 )
         sizer  = wx.BoxSizer( wx.HORIZONTAL )
         fvalue = self.value
         
@@ -509,7 +512,7 @@ class LargeRangeSliderEditor ( Editor ):
         high = self.cur_high
 
         self._set_format()
-        self.control = panel = wx.Panel( parent, -1 )
+        self.control = panel = traits_ui_panel( parent, -1 )
         sizer  = wx.BoxSizer( wx.HORIZONTAL )
         fvalue = self.value
         try:

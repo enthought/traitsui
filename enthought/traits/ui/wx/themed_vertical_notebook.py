@@ -42,6 +42,9 @@ from image_slice \
     
 from themed_control \
     import ThemedControl
+    
+from helper \
+    import traits_ui_panel
 
 #-------------------------------------------------------------------------------
 #  'ThemedPage' class:  
@@ -309,7 +312,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
             control.SetScrollRate( 6, 6 )
             control.SetMinSize( wx.Size( 0, 0 ) )
         else:
-            self.control = control = wx.Panel( parent, -1 )
+            self.control = control = traits_ui_panel( parent, -1 )
         
         control._image_slice = getattr( parent, '_image_slice', None )
         control.SetSizer( ThemedVerticalNotebookSizer( self ) )
@@ -388,7 +391,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        paint_parent( wx.PaintDC( self.control ), self.control, force = True )
+        paint_parent( wx.PaintDC( self.control ), self.control )
     
     #-- Private Methods --------------------------------------------------------
     

@@ -27,7 +27,7 @@ interface toolkit.
 import wx
 
 from helper \
-    import enum_values_changed
+    import enum_values_changed, traits_ui_panel
 
 from editor \
     import Editor
@@ -149,7 +149,7 @@ class SimpleEditor ( Editor ):
             factory.on_trait_change( self.update_editor, 'values_modified', 
                                      dispatch = 'ui' )
             
-        self.control = panel = wx.Panel( parent, -1 )
+        self.control = panel = traits_ui_panel( parent, -1 )
         hsizer       = wx.BoxSizer( wx.HORIZONTAL )
         vsizer       = wx.BoxSizer( wx.VERTICAL )
         

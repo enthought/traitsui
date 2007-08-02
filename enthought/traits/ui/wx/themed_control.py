@@ -77,6 +77,9 @@ class ThemedControl ( ThemedWindow ):
     # Minimum default size for the control:
     min_size = Tuple( Int, Int )
     
+    # Is the control enabled:
+    enabled = Bool( True )
+    
     #-- Private Traits ---------------------------------------------------------
     
     # An event fired when any display related value changes:
@@ -193,6 +196,8 @@ class ThemedControl ( ThemedWindow ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
+        self.enabled = self.control.IsEnabled()
+        
         dc, slice = super( ThemedControl, self )._on_paint( event )
         
         # Get the text and image offset to use:

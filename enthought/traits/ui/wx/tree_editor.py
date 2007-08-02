@@ -67,7 +67,7 @@ from editor_factory \
     import EditorFactory
 
 from helper \
-    import Orientation
+    import Orientation, traits_ui_panel
 
 #-------------------------------------------------------------------------------
 #  Global data:
@@ -223,7 +223,7 @@ class SimpleEditor ( Editor ):
                     factory._editor = self
 
                     # Create the trait editor panel:
-                    self.control = wx.Panel( parent, -1 )
+                    self.control = traits_ui_panel( parent, -1 )
                     self.control._node_ui = self.control._editor_nid = None
 
                     # Check to see if there are any existing editors that are
@@ -1512,7 +1512,7 @@ class SimpleEditor ( Editor ):
     #  Performs the action described by a specified Action object:
     #---------------------------------------------------------------------------
 
-    def perform ( self, action ):
+    def perform ( self, action, action_event = None ):
         """ Performs the action described by a specified Action object.
         """
         self.ui.do_undoable( self._perform, action )

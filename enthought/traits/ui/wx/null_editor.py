@@ -69,7 +69,7 @@ class NullEditor ( Editor ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        paint_parent( wx.PaintDC( self.control ), self.control, force = True )
+        paint_parent( wx.PaintDC( self.control ), self.control )
 
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:

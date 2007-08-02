@@ -40,7 +40,7 @@ from editor \
     import Editor
 
 from helper \
-    import position_near
+    import position_near, traits_ui_panel
 
 from color_editor \
     import color_samples
@@ -390,7 +390,7 @@ def color_editor_for ( editor, parent, update_handler = None ):
     """ Creates a custom color editor panel for a specified editor.
     """
     # Create a panel to hold all of the buttons:
-    panel = wx.Panel( parent, -1 )
+    panel = traits_ui_panel( parent, -1 )
     sizer = wx.BoxSizer( wx.HORIZONTAL )
     panel._swatch_editor = swatch_editor = editor.factory.simple_editor(
               editor.ui, editor.object, editor.name, editor.description, panel )

@@ -207,7 +207,7 @@ class SimpleEditor ( Editor ):
     def update_object ( self, event ):
         """ Handles the user entering input data in the edit control.
         """
-        if not self._no_update:
+        if (not self._no_update) and (self.control is not None):
             try:
                 self.value = self._get_user_value()
                 self.control.SetBackgroundColour( self.ok_color )

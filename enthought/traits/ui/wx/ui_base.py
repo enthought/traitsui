@@ -201,7 +201,7 @@ class BaseDialog ( object ):
     #  Returns whether the menu action should be defined in the user interface:
     #---------------------------------------------------------------------------
 
-    def can_add_to_menu ( self, action ):
+    def can_add_to_menu ( self, action, action_event = None ):
         """ Returns whether the action should be defined in the user interface.
         """
         if action.defined_when == '':

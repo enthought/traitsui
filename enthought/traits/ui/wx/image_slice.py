@@ -42,6 +42,9 @@ from constants \
 from themed_window \
     import ThemedWindow
     
+from helper \
+    import traits_ui_panel
+    
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------
@@ -54,7 +57,7 @@ ZeroTextSize = ( 0, 0, 0, 0 )
 #  slice.
 #-------------------------------------------------------------------------------
 
-def paint_parent ( dc, window, force = False ):
+def paint_parent ( dc, window ):
     """ Recursively paint the parent's background if they have an associated
         image slice.
     """
@@ -64,10 +67,10 @@ def paint_parent ( dc, window, force = False ):
         x, y   = window.GetPositionTuple()
         dx, dy = parent.GetSizeTuple()
         slice.fill( dc, -x, -y, dx, dy )
-    elif force:
+    else:
         # Otherwise, just paint the normal window background color:
         dx, dy = window.GetClientSizeTuple()
-        dc.SetBrush( wx.Brush( window.GetBackgroundColour() ) )
+        dc.SetBrush( wx.Brush( parent.GetBackgroundColour() ) )
         dc.SetPen( wx.TRANSPARENT_PEN )
         dc.DrawRectangle( 0, 0, dx, dy )
 
@@ -477,9 +480,8 @@ class ImagePanel ( ThemedWindow ):
     def create_control ( self, parent ):
         """ Creates the underlying wx.Panel control.
         """
-        self.control = control = wx.Panel( parent, -1,
-                                           style = wx.TAB_TRAVERSAL | 
-                                                   wx.FULL_REPAINT_ON_RESIZE )
+        self.control = control = traits_ui_panel( parent, -1,
+                          style = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE )
     
         # Set up the sizer for the control:                                                   
         control.SetSizer( ImageSizer( self.theme ) )
@@ -750,15 +752,14 @@ class ImageText ( wx.PyWindow ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        dc    = wx.PaintDC( self )
-        slice = None
+        dc = wx.PaintDC( self )
         if self._fill is not False:
-            slice = paint_parent( dc, self )
+            paint_parent( dc, self )
             
         self._fill = True
         wdx, wdy   = self.GetClientSizeTuple()
         text       = self.GetLabel()
-        self._image_slice.fill( dc, 0, 0, wdx, wdy, slice is not None )
+        self._image_slice.fill( dc, 0, 0, wdx, wdy, True )
         dc.SetBackgroundMode( wx.TRANSPARENT )
         dc.SetTextForeground( self._image_slice.text_color )
         dc.SetFont( self.GetFont() )

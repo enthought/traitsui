@@ -73,7 +73,7 @@ from table_model \
     import TableModel, TraitGridSelection
 
 from helper \
-    import Orientation
+    import Orientation, traits_ui_panel
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -414,7 +414,7 @@ class TableEditor ( Editor ):
             selected = items[0]
 
         if factory.edit_view == ' ':
-            self.control = panel = wx.Panel( parent, -1 )
+            self.control = panel = traits_ui_panel( parent, -1 )
             sizer        = wx.BoxSizer( wx.VERTICAL )
             self._create_toolbar( panel, sizer )
 
@@ -429,7 +429,7 @@ class TableEditor ( Editor ):
             name         = item.get_label( self.ui )
             theme        = factory.dock_theme or item.container.dock_theme
             self.control = dw = DockWindow( parent, theme = theme ).control
-            panel        = wx.Panel( dw, -1 )
+            panel        = traits_ui_panel( dw, -1 )
             sizer        = wx.BoxSizer( wx.VERTICAL )
             dc           = DockControl( name    = name + ' Table',
                                         id      = 'table',
@@ -1058,7 +1058,7 @@ class TableEditor ( Editor ):
     #  Performs the action described by a specified Action object:
     #---------------------------------------------------------------------------
 
-    def perform ( self, action ):
+    def perform ( self, action, action_event = None ):
         """ Performs the action described by a specified Action object.
         """
         self.ui.do_undoable( self._perform, action )
@@ -1403,6 +1403,7 @@ class TableEditorToolbar ( HasPrivateTraits ):
                                show_divider    = False,
                                *actions )
             self.control = toolbar.create_tool_bar( parent, self )
+            self.control.SetBackgroundColour( parent.GetBackgroundColour() )
 
             # fixme: Why do we have to explictly set the size of the toolbar?
             #        Is there some method that needs to be called to do the
@@ -1455,7 +1456,7 @@ class TableEditorToolbar ( HasPrivateTraits ):
     #  Performs the action described by a specified Action object:
     #---------------------------------------------------------------------------
 
-    def perform ( self, action ):
+    def perform ( self, action, action_event = None ):
         """ Performs the action described by a specified Action object.
         """
         getattr( self.editor, action.action )()

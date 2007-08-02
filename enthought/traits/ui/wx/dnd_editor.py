@@ -7,11 +7,14 @@
 #  (c) Copyright 2006 by Enthought, Inc.
 #
 #------------------------------------------------------------------------------
+
 """ Defines the various editors and editor factory for a drag-and-drop editor,
-for the wxPython user interface toolkit. A drag-and-drop editor represents its
-value as a simple image which, depending upon the editor style, can be either
-a drop target only, or both a drop target and a drag source.
+    for the wxPython user interface toolkit. A drag-and-drop editor represents 
+    its value as a simple image which, depending upon the editor style, can be
+    a drag source only, a drop target only, or both a drag source and a drop
+    target.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -23,7 +26,10 @@ from cPickle \
     import load
 
 from enthought.traits.api \
-    import Instance, true
+    import Instance, Bool
+    
+from enthought.traits.ui.ui_traits \
+    import Image
     
 from editor \
     import Editor
@@ -47,13 +53,16 @@ from enthought.pyface.image_resource \
 #  Constants:
 #-------------------------------------------------------------------------------
 
-# The image to use when the editor accepts files
+# The image to use when the editor accepts files:
 file_image = ImageResource( 'file' ).create_image()
 
-# The image to use when the editor accepts objects
+# The image to use when the editor accepts objects:
 object_image = ImageResource( 'object' ).create_image()
 
-# String types
+# The image to use when the editor is disabled:
+inactive_image = ImageResource( 'inactive' ).create_image()
+
+# String types:
 string_type = ( str, unicode )
 
 #-------------------------------------------------------------------------------
@@ -63,12 +72,16 @@ string_type = ( str, unicode )
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for drag-and-drop editors.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
     
-    # The image to use for the target
-    image = Instance( ImageResource, allow_none = True )
+    # The image to use for the target:
+    image = Image
+    
+    # The image to use when the target is disabled:
+    disabled_image = Image
     
     #---------------------------------------------------------------------------
     #  'Editor' factory methods:
@@ -112,17 +125,18 @@ class ToolkitEditorFactory ( EditorFactory ):
                                
 class SimpleEditor ( Editor ):
     """ Simply style of editor for a drag-and-drop editor, which is both a drag
-    source and a drop target.
+        source and a drop target.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
 
     # Is the editor a drop target?
-    drop_target = true
+    drop_target = Bool( True )
     
     # Is the editor a drag source?
-    drag_source = true
+    drag_source = Bool( True )
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -144,12 +158,27 @@ class SimpleEditor ( Editor ):
         image = self.factory.image
         if image is not None:
             image = image.create_image()
-        elif self._is_file:
-            image = file_image
+            disabled_image = self.factory.disabled_image
+            if disabled_image is not None:
+                disabled_image = disabled_image.create_image()
         else:
-            image = object_image
-        self._img    = image
-        self._image  = image.ConvertToBitmap()
+            disabled_image = inactive_image
+            image          = object_image
+            if self._is_file:
+                image = file_image
+                
+        self._image = image.ConvertToBitmap()
+        if disabled_image is not None:
+            self._disabled_image = disabled_image.ConvertToBitmap()
+        else:
+            data = numpy.reshape( numpy.fromstring( image.GetData(), 
+                                                    numpy.uint8 ), 
+                      ( -1, 3 ) ) * numpy.array( [ [ 0.297, 0.589, 0.114 ] ] )
+            g = data[ :, 0 ] + data[ :, 1 ] + data[ :, 2 ]
+            data[ :, 0 ] = data[ :, 1 ] = data[ :, 2 ] = g
+            image.SetData( numpy.ravel( data.astype(numpy.uint8) ).tostring() )
+            image.SetMaskColour( 0, 0, 0 )
+            self._disabled_image = image.ConvertToBitmap()
         
         # Create the control and set up the event handlers:
         self.control = control = wx.Window( parent, -1, 
@@ -184,8 +213,10 @@ class SimpleEditor ( Editor ):
         """ Returns the processed version of a drag request's data.
         """
         if isinstance( data, list ):
+            
             if isinstance( data[0], Binding ):
                 data = [ item.obj for item in data ]
+                
             if isinstance( data[0], File ):
                 data = [ item.absolute_path for item in data ]
                 if not self._is_file:
@@ -199,6 +230,7 @@ class SimpleEditor ( Editor ):
         else:
             if isinstance( data, Binding ):
                 data = data.obj
+                
             if isinstance( data, File ):
                 data = data.absolute_path
                 if not self._is_file:
@@ -235,17 +267,7 @@ class SimpleEditor ( Editor ):
         image   = self._image
         control = self.control
         if not control.IsEnabled():
-            if self._mono_image is None:
-                img  = self._img
-                data = numpy.reshape( numpy.fromstring( img.GetData(), numpy.uint8 ), 
-                          ( -1, 3 ) ) * numpy.array( [ [ 0.297, 0.589, 0.114 ] ] )
-                g = data[ :, 0 ] + data[ :, 1 ] + data[ :, 2 ]
-                data[ :, 0 ] = data[ :, 1 ] = data[ :, 2 ] = g
-                img.SetData( numpy.ravel( data.astype( numpy.uint8 ) ).tostring() )
-                img.SetMaskColour( 0, 0, 0 )
-                self._mono_image = img.ConvertToBitmap()
-                self._img        = None
-            image = self._mono_image
+            image = self._disabled_image
             
         wdx, wdy = control.GetClientSizeTuple()
         wx.PaintDC( control ).DrawBitmap( image,
@@ -366,6 +388,7 @@ class FileDropSource ( wx.DropSource ):
         data_object = wx.FileDataObject()
         if isinstance( files, string_type ):
             files = [ files ]
+            
         for file in files:
             data_object.AddFile( file )
 

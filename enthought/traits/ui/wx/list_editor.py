@@ -15,7 +15,7 @@
 #------------------------------------------------------------------------------
 
 """ Defines the various list editors and the list editor factory for the 
-wxPython user interface toolkit..
+    wxPython user interface toolkit..
 """
 
 #-------------------------------------------------------------------------------
@@ -261,6 +261,7 @@ class SimpleEditor ( Editor ):
         
         # Create a scrolled window to hold all of the list item controls:
         self.control = wxsp.ScrolledPanel( parent, -1 )
+        self.control.SetBackgroundColour( parent.GetBackgroundColour() )
         self.control.SetAutoLayout( True )
         
         # Remember the editor to use for each individual list item:
@@ -720,7 +721,7 @@ class NotebookEditor ( Editor ):
             if monitoring:
                 object.on_trait_change( self.update_page_name, 
                                      self.factory.page_name[1:], remove = True )
-            dock_control.close( layout = layout, force = True )                                        
+            dock_control.close( layout = layout, force = True )
             del self._uis[ index ]
 
         # Add a page for each added object:

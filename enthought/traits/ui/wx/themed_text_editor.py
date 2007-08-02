@@ -42,6 +42,9 @@ from image_slice \
     
 from constants \
     import OKColor, ErrorColor
+    
+from themed_control \
+    import ThemedControl
 
 #-------------------------------------------------------------------------------
 #  Define a simple identity mapping:
@@ -116,29 +119,25 @@ class ThemedTextEditor ( EditorFactory ):
                                   description = description ) 
     
     def readonly_editor ( self, ui, object, name, description, parent ):
-        return _ThemedTextEditor( parent,
+        return _ReadonlyTextEditor( parent,
                                   factory     = self, 
                                   ui          = ui, 
                                   object      = object, 
                                   name        = name, 
-                                  description = description,
-                                  readonly    = True )
+                                  description = description )
 
 #-------------------------------------------------------------------------------
 #  '_ThemedTextEditor' class:
 #-------------------------------------------------------------------------------
                                
 class _ThemedTextEditor ( Editor ):
-    """ Traits UI simple, read-only single line text editor with a themed
-        (i.e. image background).
+    """ Traits UI simple, single line text editor with a themed (i.e. image 
+        background).
     """
     
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
-    
-    # Is the editor read-only?
-    readonly = Bool( False )
         
     # Function used to evaluate textual user input:
     evaluate = Any
@@ -194,13 +193,12 @@ class _ThemedTextEditor ( Editor ):
         wx.EVT_PAINT( control, self._on_paint )
         wx.EVT_CHAR(  control, self._inactive_key_entered )
         
-        if not self.readonly:
-            # Only handle 'focus' events if we are not read-only:
-            wx.EVT_SET_FOCUS( control, self._set_focus )
-            wx.EVT_LEFT_UP(   control, self._set_focus )
+        # Handle 'focus' events:
+        wx.EVT_SET_FOCUS( control, self._set_focus )
+        wx.EVT_LEFT_UP(   control, self._set_focus )
             
-            # Only handler 'resize' events if we are not read-only:
-            wx.EVT_SIZE( control, self._resize )
+        # Handle 'resize' events:
+        wx.EVT_SIZE( control, self._resize )
            
         self.set_tooltip()
         
@@ -396,8 +394,8 @@ class _ThemedTextEditor ( Editor ):
         wdx, wdy   = control.GetClientSizeTuple()
         slice2     = self.image_slice
         if slice2 is not default_image_slice:
-            slice2.fill( dc, 0, 0, wdx, wdy, slice is not None )
-            slice2 = slice
+            slice2.fill( dc, 0, 0, wdx, wdy, True )
+            slice = slice2
         dc.SetBackgroundMode( wx.TRANSPARENT )
         dc.SetTextForeground( slice.text_color )
         dc.SetFont( control.GetFont() )
@@ -453,4 +451,39 @@ class _ThemedTextEditor ( Editor ):
             return
             
         event.Skip()
-                 
+
+#-------------------------------------------------------------------------------
+#  '_ReadonlyTextEditor' class:
+#-------------------------------------------------------------------------------
+                               
+class _ReadonlyTextEditor ( Editor ):
+    """ Traits UI simple, read-only single line text view with a themed (i.e.
+        image background).
+    """
+        
+    #---------------------------------------------------------------------------
+    #  Finishes initializing the editor by creating the underlying toolkit
+    #  widget:
+    #---------------------------------------------------------------------------
+        
+    def init ( self, parent ):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        self._control = ThemedControl( theme = self.factory.theme )
+        self.control  = self._control.create_control( parent )
+        self.set_tooltip()
+        
+    #---------------------------------------------------------------------------
+    #  Updates the editor when the object trait changes external to the editor:
+    #---------------------------------------------------------------------------
+        
+    def update_editor ( self ):
+        """ Updates the editor when the object trait changes externally to the
+            editor.
+        """
+        self._control.text = self.value
+        
+        # Make sure the control is sized correctly:
+        self.control.SetMinSize( self._control.best_size )
+        

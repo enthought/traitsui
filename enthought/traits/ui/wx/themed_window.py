@@ -95,7 +95,7 @@ class ThemedWindow ( HasPrivateTraits ):
             slice2 = self.theme.image_slice
             if slice2 is not None:
                 wdx, wdy = control.GetClientSizeTuple()
-                slice2.fill( dc, 0, 0, wdx, wdy, slice is not None )
+                slice2.fill( dc, 0, 0, wdx, wdy, True )
                 
                 return ( dc, slice2 )
     

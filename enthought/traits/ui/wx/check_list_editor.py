@@ -37,6 +37,9 @@ from editor_factory \
 
 from editor \
     import EditorWithList
+    
+from helper \
+    import traits_ui_panel
 
 logger = logging.getLogger(__name__)
 
@@ -210,7 +213,7 @@ class CustomEditor ( SimpleEditor ):
         """ Creates the initial editor control.
         """
         # Create a panel to hold all of the check boxes
-        self.control = panel = wx.Panel( parent, -1 )
+        self.control = panel = traits_ui_panel( parent, -1 )
 
     #---------------------------------------------------------------------------
     #  Rebuilds the editor after its definition is modified:

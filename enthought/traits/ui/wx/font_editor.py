@@ -1,33 +1,36 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 10/21/2004
-#
-#  Symbols defined: ToolkitEditorFactory
-#                   WxFont
-#
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   10/21/2004
+#  
 #------------------------------------------------------------------------------
+
 """ Defines the various font editors and the font editor factory, for the
-wxPython user interface toolkit..
+    wxPython user interface toolkit..
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
 
 import wx
 
-from editor_factory import EditorFactory, SimpleEditor, TextEditor, \
-                           ReadonlyEditor
-from editor         import Editor
-from helper         import choice_width
+from editor_factory \
+    import EditorFactory, SimpleEditor, TextEditor, ReadonlyEditor
+    
+from editor \
+    import Editor
+    
+from helper \
+    import choice_width, traits_ui_panel
      
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -201,7 +204,7 @@ class CustomFontEditor ( Editor ):
             widget.
         """
         # Create a panel to hold all of the buttons:
-        self.control = panel = wx.Panel( parent, -1 )
+        self.control = panel = traits_ui_panel( parent, -1 )
         sizer = wx.BoxSizer( wx.VERTICAL )
         
         # Add the standard font control:

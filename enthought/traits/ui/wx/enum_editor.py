@@ -34,7 +34,7 @@ from constants \
     import OKColor, ErrorColor
     
 from helper \
-    import enum_values_changed
+    import enum_values_changed, traits_ui_panel
     
 from editor_factory \
     import EditorFactory
@@ -444,7 +444,7 @@ class RadioEditor ( BaseEditor ):
         super( RadioEditor, self ).init( parent )
             
         # Create a panel to hold all of the radio buttons:
-        self.control = wx.Panel( parent, -1 )
+        self.control = traits_ui_panel( parent, -1 )
         self.rebuild_editor()
    
     #---------------------------------------------------------------------------

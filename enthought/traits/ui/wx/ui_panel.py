@@ -60,7 +60,7 @@ from enthought.pyface.sizers.flow \
     import FlowSizer
     
 from helper \
-    import position_near, GroupEditor
+    import position_near, traits_ui_panel, GroupEditor
     
 from constants \
     import screen_dx, screen_dy, WindowColor
@@ -185,7 +185,7 @@ class Panel ( BaseDialog ):
             cpanel.SetSizer( None )
             cpanel.DestroyChildren()
         else:
-            self.control = cpanel = wx.Panel( parent, -1 )
+            self.control = cpanel = traits_ui_panel( parent, -1 )
         
         # Create the actual trait sheet panel and imbed it in a scrollable 
         # window (if requested):
@@ -320,7 +320,7 @@ def panel ( ui, parent ):
     
     # If there is 0 or 1 Groups in the content, create a single panel for it:
     if len( content ) <= 1:
-        panel = wx.Panel( parent, -1 )
+        panel = traits_ui_panel( parent, -1 )
         if len( content ) == 1:
             # Fill the panel with the Group's content:
             sg_sizer, resizable, contents = fill_panel_for_group( panel, 
@@ -399,7 +399,7 @@ def create_notebook_for_items ( content, ui, parent, group,
                 panel = image_panel.control
                 image_sizer.Add( sizer, 1, wx.EXPAND )
             else:   
-                panel = wx.Panel( nb, -1 )
+                panel = traits_ui_panel( nb, -1 )
                 panel.SetSizer( sizer )
                 
             pages.append( DockControl( name     = page_name,
@@ -553,7 +553,7 @@ class FillPanel ( object ):
                 new_panel       = image_panel.control
                 suppress_label |= image_panel.can_show_text
             else:
-                new_panel = wx.Panel( panel, -1 )
+                new_panel = traits_ui_panel( panel, -1 )
             sizer = panel.GetSizer()
             if sizer is None:
                 sizer = wx.BoxSizer( wx.VERTICAL )
@@ -694,7 +694,7 @@ class FillPanel ( object ):
             panel = image_panel.control
             image_sizer.Add( sizer, 1, wx.EXPAND )
         else:
-            panel = wx.Panel( window, -1 )
+            panel = traits_ui_panel( window, -1 )
             panel.SetSizer( sizer )
             
         self.add_items( [ item ], panel, sizer )
@@ -745,7 +745,7 @@ class FillPanel ( object ):
             panel, resizable, contents = fill_panel_for_group( page.parent,
                 item, self.ui, suppress_label = True, create_panel = True )
         else:
-            panel = wx.Panel( page.parent, -1 )
+            panel = traits_ui_panel( page.parent, -1 )
             sizer = wx.BoxSizer( wx.VERTICAL )
             panel.SetSizer( sizer )
             self.add_items( [ item ], panel, sizer )

@@ -37,7 +37,7 @@ from editor \
     import Editor
 
 from helper \
-    import position_near
+    import position_near, traits_ui_panel
     
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
 try:
@@ -319,7 +319,7 @@ class ReadonlyColorEditor ( ReadonlyEditor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = wx.Panel( parent, -1, size = wx.Size( 50, 16 ) )
+        self.control = traits_ui_panel( parent, -1, size = wx.Size( 50, 16 ) )
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -358,7 +358,7 @@ def color_editor_for ( editor, parent, update_handler = None ):
     """ Creates a custom color editor panel for a specified editor.
     """
     # Create a panel to hold all of the buttons:
-    panel = wx.Panel( parent, -1 )
+    panel = traits_ui_panel( parent, -1 )
     sizer = wx.BoxSizer( wx.HORIZONTAL )
     panel._swatch_editor = swatch_editor = editor.factory.simple_editor( 
               editor.ui, editor.object, editor.name, editor.description, panel )

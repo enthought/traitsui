@@ -14,8 +14,8 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines helper functions used to define wxPython-based trait editors and
-    trait editor factories.
+""" Defines helper functions and classes used to define wxPython-based trait
+    editors and trait editor factories.
 """
 
 #-------------------------------------------------------------------------------
@@ -195,6 +195,20 @@ def enum_values_changed ( values ):
         inverse_mapping[ value ] = name
         
     return ( names, mapping, inverse_mapping )  
+
+#-------------------------------------------------------------------------------
+#  Creates a wx.Panel that correctly sets its background color to be the same
+#  as its parents:
+#-------------------------------------------------------------------------------
+                
+def traits_ui_panel ( parent, *args, **kw ):
+    """ Creates a wx.Panel that correctly sets its background color to be the 
+        same as its parents.
+    """
+    panel = wx.Panel( parent, *args, **kw )
+    panel.SetBackgroundColour( parent.GetBackgroundColour() )
+    
+    return panel
     
 #-------------------------------------------------------------------------------
 #  'GroupEditor' class:
