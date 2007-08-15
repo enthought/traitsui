@@ -175,7 +175,7 @@ class EditorWithList ( Editor ):
         factory = self.factory
         name    = factory.name
         if name != '':
-            self.list_object, self.list_name = self.list_value = \
+            self.list_object, self.list_name, self.list_value = \
                 self.parse_extended_name( name ) 
         else:
             self.list_object, self.list_name = factory, 'values'
