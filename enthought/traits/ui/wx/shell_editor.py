@@ -7,8 +7,10 @@
 #  (c) Copyright 2005 by Enthought, Inc.
 #
 #-------------------------------------------------------------------------------
-""" Defines an editor that allows the user to used to debug UI-related problems.
+
+""" Editor that displays an interactive Python shell.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -32,6 +34,7 @@ from enthought.pyface.python_shell \
 class ShellEditor ( Editor ):
     """ Editor that displays an interactive Python shell.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------

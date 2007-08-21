@@ -358,10 +358,12 @@ def create_notebook_for_items ( content, ui, parent, group,
     if is_dock_window:
         nb = parent
     else:
-        nb = DockWindow( parent, handler      = ui.handler, 
+        dw = DockWindow( parent, handler      = ui.handler, 
                                  handler_args = ( ui.info, ),
-                                 id           = ui.id,
-                                 theme        = group.dock_theme ).control
+                                 id           = ui.id )
+        if group is not None:
+            dw.theme = group.dock_theme
+        nb = dw.control
     pages     = []
     count     = 0
     has_theme = ((group is not None) and (group.group_theme is not None))
@@ -431,7 +433,7 @@ def create_notebook_for_items ( content, ui, parent, group,
 def add_image_panel ( window, group ):
     """ Creates a themed ImagePanel for the specified group and parent window.
     """
-    from image_slice import ImagePanel
+    from image_panel import ImagePanel
     
     image_panel = ImagePanel( theme = group.group_theme, text = group.label )
     panel       = image_panel.create_control( window )
@@ -867,7 +869,7 @@ class FillPanel ( object ):
                         item_sizer.Add( ( 1, 1 ) )
                         
                     if theme is not None:
-                        from image_slice import ImageText
+                        from image_text import ImageText
                         
                         label = ImageText( panel, theme, label )
                         item_sizer.Add( label, 0, wx.EXPAND )
@@ -966,7 +968,7 @@ class FillPanel ( object ):
             # Set up the background image (if used):
             item_panel = panel
             if theme is not None:
-                from image_slice import ImagePanel
+                from image_panel import ImagePanel
                 
                 image_panel = ImagePanel( theme = theme,
                                           text  = item.get_label( ui ) )
@@ -1117,7 +1119,7 @@ class FillPanel ( object ):
 
         theme = item.label_theme
         if theme is not None:
-            from image_slice import ImageText
+            from image_text import ImageText
             
             control = ImageText( parent, theme, label + suffix )
         else:            

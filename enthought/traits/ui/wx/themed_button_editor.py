@@ -109,7 +109,7 @@ class _ThemedButtonEditor ( Editor ):
                              theme  = self.factory.down_theme or 
                                       self.factory.theme )
         
-    def normal_mouse_move ( self, x, y, event ):
+    def normal_motion ( self, x, y, event ):
         hover = self.factory.hover_theme
         if self.control.IsEnabled() and (hover is not None):
             self.button.set( state = 'hover', theme = hover )
@@ -119,7 +119,7 @@ class _ThemedButtonEditor ( Editor ):
         self.control.ReleaseMouse()
         self.normal_left_down( x, y, event )
         
-    def hover_mouse_move ( self, x, y, event ):
+    def hover_motion ( self, x, y, event ):
         if not self.button.in_control( x, y ):
             self.control.ReleaseMouse()
             self.button.set( state = 'normal', theme = self.factory.theme )
@@ -132,7 +132,7 @@ class _ThemedButtonEditor ( Editor ):
                          offset = ( 0, 0 ), 
                          theme  = self.factory.theme )
         
-    def down_mouse_move ( self, x, y, event ):
+    def down_motion ( self, x, y, event ):
         theme = self.factory.down_theme or self.factory.theme
         is_in = self.button.in_control( x, y )
         if not is_in:

@@ -119,7 +119,7 @@ class _ThemedSliderEditor ( Editor ):
         # Set up mouse event handlers:
         wx.EVT_LEFT_DOWN( control, self._left_down )
         wx.EVT_LEFT_UP(   control, self._left_up )
-        wx.EVT_MOTION(    control, self._mouse_move )
+        wx.EVT_MOTION(    control, self._motion )
         
         # Set up the control resize handler:
         wx.EVT_SIZE( control, self._resize )
@@ -306,7 +306,7 @@ class _ThemedSliderEditor ( Editor ):
             
         self._x = self._y = self._pending = None
         
-    def _mouse_move ( self, event ):
+    def _motion ( self, event ):
         """ Handles the mouse moving.
         """
         if self._x is not None:

@@ -80,7 +80,7 @@ class ITabularAdapter ( Interface ):
     # *string* value in the associated *TabularAdapter* class.
     columns = List( Str )
     
-    # Does the adapter know how to handler the current *item* or not:
+    # Does the adapter know how to handle the current *item* or not:
     accepts = Bool
     
     # Does the value of *accepts* depend only upon the type of *item*?
@@ -675,7 +675,6 @@ class _TabularEditor ( Editor ):
         
         # Set up the adapter to use:
         self.adapter = factory.adapter
-        self.sync_value( factory.adapter_name, 'adapter', 'from' )
         
         # Determine the style to use for the list control:
         style = wx.LC_REPORT | wx.LC_VIRTUAL | wx.BORDER_NONE
@@ -719,7 +718,7 @@ class _TabularEditor ( Editor ):
         wx.EVT_LEFT_DCLICK(           control, self._left_dclick )
         wx.EVT_RIGHT_DOWN(            control, self._right_down )
         wx.EVT_RIGHT_DCLICK(          control, self._right_dclick )
-        wx.EVT_MOTION(                control, self._mouse_move )
+        wx.EVT_MOTION(                control, self._motion )
         wx.EVT_SIZE(                  control, self._size_modified )
 
         # Set up the drag and drop target:
@@ -1066,7 +1065,7 @@ class _TabularEditor ( Editor ):
             
         event.Skip()
 
-    def _mouse_move ( self, event ):
+    def _motion ( self, event ):
         """ Handles the user moving the mouse.
         """
         x          = event.GetX()
@@ -1528,9 +1527,6 @@ class TabularEditor ( BasicEditorFactory ):
            
     # The adapter from trait values to editor values:                       
     adapter = Instance( TabularAdapter, () )
-    
-    # The optional extended name of the trait containing the adapter:
-    adapter_name = Str
     
     # What type of operations are allowed on the list:
     operations = List( Enum( 'delete', 'insert', 'append', 'edit', 'move' ),

@@ -22,6 +22,9 @@ from enthought.traits.api \
 from enthought.traits.ui.ui_traits \
     import ATheme
     
+from helper \
+    import init_wx_handlers
+    
 #-------------------------------------------------------------------------------
 #  'ThemedWindow' class:
 #-------------------------------------------------------------------------------
@@ -47,23 +50,7 @@ class ThemedWindow ( HasPrivateTraits ):
     def init_control ( self ):
         """ Initializes the underlying wx.Window object.
         """
-        control = self.control
-        
-        # Set up the painting event handlers:
-        wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
-        wx.EVT_PAINT( control, self._on_paint )
-        
-        # Set up mouse event handlers:
-        wx.EVT_LEFT_DOWN(     control, self._left_down )
-        wx.EVT_LEFT_UP(       control, self._left_up )
-        wx.EVT_LEFT_DCLICK(   control, self._left_dclick )
-        wx.EVT_MIDDLE_DOWN(   control, self._middle_down )
-        wx.EVT_MIDDLE_UP(     control, self._middle_up )
-        wx.EVT_MIDDLE_DCLICK( control, self._middle_dclick )
-        wx.EVT_RIGHT_DOWN(    control, self._right_down )
-        wx.EVT_RIGHT_UP(      control, self._right_up )
-        wx.EVT_RIGHT_DCLICK(  control, self._right_dclick )
-        wx.EVT_MOTION(        control, self._mouse_move )
+        init_wx_handlers( self.control, self )
         
     def in_control ( self, x, y ):
         """ Returns whether a specified (x,y) coordinate is inside the control
@@ -72,6 +59,19 @@ class ThemedWindow ( HasPrivateTraits ):
         wdx, wdy = self.control.GetClientSizeTuple()
         return ((0 <= x < wdx) and (0 <= y < wdy))
         
+    def refresh ( self ):
+        """ Refreshes the contents of the control.
+        """
+        if self.control is not None:
+            self.control.Refresh()
+        
+    #-- Trait Event Handlers ---------------------------------------------------
+    
+    def _theme_changed ( self ):
+        """ Handles the 'theme' trait being changed.
+        """
+        self.refresh()
+        
     #-- wxPython Event Handlers ------------------------------------------------
     
     def _erase_background ( self, event ):
@@ -79,7 +79,7 @@ class ThemedWindow ( HasPrivateTraits ):
         """
         pass
            
-    def _on_paint ( self, event ):
+    def _paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
         from image_slice import paint_parent
@@ -100,13 +100,21 @@ class ThemedWindow ( HasPrivateTraits ):
                 return ( dc, slice2 )
     
         return ( dc, slice )
+        
+    def _size ( self, event ):
+        """ Handles the control being resized.
+        """
+        control = self.control
+        if control is not None:
+            control.Layout()
+            control.Refresh()
     
     def _left_down ( self, event ):
         """ Handles a left mouse button down event.
         """
         self.control.SetFocus()
-        self._mouse_event( 'left_down', event )
         self.control.CaptureMouse()
+        self._mouse_event( 'left_down', event )
         
     def _left_up ( self, event ):
         """ Handles a left mouse button up event.
@@ -117,14 +125,14 @@ class ThemedWindow ( HasPrivateTraits ):
     def _left_dclick ( self, event ):
         """ Handles a left mouse button double click event.
         """
-        self._mouse_event( 'left_dclick', event )
         self.control.CaptureMouse()
+        self._mouse_event( 'left_dclick', event )
     
     def _middle_down ( self, event ):
         """ Handles a middle mouse button down event.
         """
-        self._mouse_event( 'middle_down', event )
         self.control.CaptureMouse()
+        self._mouse_event( 'middle_down', event )
         
     def _middle_up ( self, event ):
         """ Handles a middle mouse button up event.
@@ -135,14 +143,14 @@ class ThemedWindow ( HasPrivateTraits ):
     def _middle_dclick ( self, event ):
         """ Handles a middle mouse button double click event.
         """
-        self._mouse_event( 'middle_dclick', event )
         self.control.CaptureMouse()
+        self._mouse_event( 'middle_dclick', event )
     
     def _right_down ( self, event ):
         """ Handles a right mouse button down event.
         """
-        self._mouse_event( 'right_down', event )
         self.control.CaptureMouse()
+        self._mouse_event( 'right_down', event )
         
     def _right_up ( self, event ):
         """ Handles a right mouse button up event.
@@ -153,13 +161,13 @@ class ThemedWindow ( HasPrivateTraits ):
     def _right_dclick ( self, event ):
         """ Handles a right mouse button double click event.
         """
-        self._mouse_event( 'right_dclick', event )
         self.control.CaptureMouse()
+        self._mouse_event( 'right_dclick', event )
         
-    def _mouse_move ( self, event ):
+    def _motion ( self, event ):
         """ Handles a mouse move event.
         """
-        self._mouse_event( 'mouse_move', event )
+        self._mouse_event( 'motion', event )
         
     #-- Private Methods --------------------------------------------------------
     

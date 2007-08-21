@@ -38,7 +38,10 @@ from constants \
     import WindowColor
     
 from image_slice \
-    import paint_parent, ImagePanel
+    import paint_parent
+    
+from image_panel \
+    import ImagePanel
     
 from themed_control \
     import ThemedControl
@@ -319,7 +322,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
         
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
-        wx.EVT_PAINT( control, self._on_paint )
+        wx.EVT_PAINT( control, self._paint )
         
         return control
     
@@ -388,7 +391,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
         """
         pass
            
-    def _on_paint ( self, event ):
+    def _paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
         paint_parent( wx.PaintDC( self.control ), self.control )

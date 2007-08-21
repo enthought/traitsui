@@ -209,6 +209,38 @@ def traits_ui_panel ( parent, *args, **kw ):
     panel.SetBackgroundColour( parent.GetBackgroundColour() )
     
     return panel
+
+#-------------------------------------------------------------------------------
+#  Initializes standard wx event handlers for a specified control and object:
+#-------------------------------------------------------------------------------
+        
+# Standard wx event handlers:    
+handlers = ( 
+    ( wx.EVT_ERASE_BACKGROUND, '_erase_background' ),
+    ( wx.EVT_PAINT,            '_paint' ),
+    ( wx.EVT_SIZE,             '_size' ),
+    ( wx.EVT_LEFT_DOWN,        '_left_down' ),
+    ( wx.EVT_LEFT_UP,          '_left_up' ),
+    ( wx.EVT_LEFT_DCLICK,      '_left_dclick' ),
+    ( wx.EVT_MIDDLE_DOWN,      '_middle_down' ),
+    ( wx.EVT_MIDDLE_UP,        '_middle_up' ),
+    ( wx.EVT_MIDDLE_DCLICK,    '_middle_dclick' ),
+    ( wx.EVT_RIGHT_DOWN,       '_right_down' ),
+    ( wx.EVT_RIGHT_UP,         '_right_up' ),
+    ( wx.EVT_RIGHT_DCLICK,     '_right_dclick' ),
+    ( wx.EVT_MOTION,           '_motion' )
+)    
+    
+def init_wx_handlers ( control, object, prefix = '' ):
+    """ Initializes a standard set of wx event handlers for a specified control
+        and object using a specified prefix.
+    """
+    global handlers
+    
+    for handler, name in handlers:
+        method = getattr( object, prefix + name, None )
+        if method is not None:
+            handler( control, method )
     
 #-------------------------------------------------------------------------------
 #  'GroupEditor' class:

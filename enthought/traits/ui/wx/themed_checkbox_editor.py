@@ -87,7 +87,7 @@ class _ThemedCheckboxEditor ( Editor ):
     
     #-- ThemedControl Event Handlers -------------------------------------------
         
-    def normal_mouse_move ( self, x, y, event ):
+    def normal_motion ( self, x, y, event ):
         self._set_hover_theme( 'hover' )
         self.control.CaptureMouse()
             
@@ -95,7 +95,7 @@ class _ThemedCheckboxEditor ( Editor ):
         self.control.ReleaseMouse()
         self._set_hover_theme( 'down', not self.value )
         
-    def hover_mouse_move ( self, x, y, event ):
+    def hover_motion ( self, x, y, event ):
         if not self.checkbox.in_control( x, y ):
             self.control.ReleaseMouse()
             self._set_theme( 'normal' )
@@ -103,11 +103,11 @@ class _ThemedCheckboxEditor ( Editor ):
     def down_left_up ( self, x, y, event ):
         if self.checkbox.in_control( x, y ):
             self.value = not self.value
-            self.normal_mouse_move( x, y, event )
+            self.normal_motion( x, y, event )
         else:
             self._set_theme( 'normal' )
         
-    def down_mouse_move ( self, x, y, event ):
+    def down_motion ( self, x, y, event ):
         if not self.checkbox.in_control( x, y ):
             self._set_theme()
         else:

@@ -115,9 +115,6 @@ class ThemedControl ( ThemedWindow ):
         # Initialize the control (set-up event handlers, ...):
         self.init_control()
         
-        # Set up the resize event handler:
-        wx.EVT_SIZE( control, self._on_resize )
-        
         # Make sure the control is sized correctly:
         size = self.best_size
         control.SetMinSize( size )
@@ -193,12 +190,12 @@ class ThemedControl ( ThemedWindow ):
         """
         pass
            
-    def _on_paint ( self, event ):
+    def _paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
         self.enabled = self.control.IsEnabled()
         
-        dc, slice = super( ThemedControl, self )._on_paint( event )
+        dc, slice = super( ThemedControl, self )._paint( event )
         
         # Get the text and image offset to use:
         ox, oy   = (self.theme or default_theme).offset
@@ -218,11 +215,6 @@ class ThemedControl ( ThemedWindow ):
             dc.SetTextForeground( slice.text_color )
             dc.SetFont( self.control.GetFont() )
             dc.DrawText( self.current_text, tx + ox, ty + oy )
-            
-    def _on_resize ( self, event ):
-        """ Handles the control being resized.
-        """
-        self.updated = True
         
     #-- Private Methods --------------------------------------------------------
         
