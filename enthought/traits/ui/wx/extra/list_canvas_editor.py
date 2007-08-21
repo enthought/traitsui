@@ -82,7 +82,7 @@ pen_styles = {
 # Dictionay of standard images used:
 images = {
     'feature':  ImageResource( 'feature' ),
-    'clone':    ImageResource( 'drag' ),
+    'clone':    ImageResource( 'clone' ),
     'drag':     ImageResource( 'drag' ),
     'close':    ImageResource( 'close' ),
     'minimize': ImageResource( 'minimize' ),
@@ -312,7 +312,7 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     drag = Instance( HasTraits )
     
     # Can the current list canvas item be cloned?
-    can_clone = Bool( True )
+    can_clone = Bool( False )
     
     # Specifies the clone of the current list canvas item:
     clone = Instance( HasTraits )
@@ -1672,6 +1672,12 @@ if __name__ == '__main__':
     grid_info  = GridInfo( visible = 'always', snapping = False )
     guide_info = GuideInfo()
     
+    class TestAdapter ( ListCanvasAdapter ):
+        
+        can_drag          = True
+        Person_can_clone  = Bool( True )
+        Person_can_delete = Bool( True )
+    
     class Person ( HasTraits ):
         name   = Str
         age    = Range( 0, 100 )
@@ -1686,6 +1692,7 @@ if __name__ == '__main__':
             Item( 'people',
                   show_label = False,
                   editor = ListCanvasEditor( scrollable = True,
+                                             adapter    = TestAdapter(),
                                              snap_info  = snap_info,
                                              grid_info  = grid_info,
                                              guide_info = guide_info )
