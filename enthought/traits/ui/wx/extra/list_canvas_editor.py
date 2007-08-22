@@ -24,13 +24,13 @@ import wx
 from enthought.traits.api \
     import HasTraits, HasPrivateTraits, HasStrictTraits, Interface, Instance, \
            List, Enum, Color, Bool, Range, Str, Float, Event, Tuple, Property, \
-           Any, implements, on_trait_change
+           Delegate, Any, Missing, implements, on_trait_change
     
 from enthought.traits.trait_base \
     import user_name_for
            
 from enthought.traits.ui.api \
-    import UI, View, Item, Theme
+    import UI, View, Item, Theme, Editor
     
 from enthought.traits.ui.ui_traits \
     import ATheme
@@ -53,6 +53,9 @@ from enthought.traits.ui.wx.themed_checkbox_editor \
 from enthought.traits.ui.wx.themed_slider_editor \
     import ThemedSliderEditor
     
+from enthought.traits.ui.wx.helper \
+    import init_wx_handlers
+    
 from enthought.pyface.dock.api \
     import add_feature
     
@@ -61,9 +64,9 @@ from enthought.pyface.timer.api \
 
 from enthought.pyface.image_resource \
     import ImageResource
-    
-from enthought.traits.ui.wx.helper \
-    import init_wx_handlers
+
+from enthought.util.wx.drag_and_drop \
+    import PythonDropSource
     
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -82,13 +85,21 @@ pen_styles = {
 # Dictionay of standard images used:
 images = {
     'feature':  ImageResource( 'feature' ),
+    'selected': ImageResource( 'selected' ),
     'clone':    ImageResource( 'clone' ),
     'drag':     ImageResource( 'drag' ),
-    'close':    ImageResource( 'close' ),
     'minimize': ImageResource( 'minimize' ),
-    'restore':  ImageResource( 'restore' ),
-    'selected': ImageResource( 'selected' )
+    'maximize': ImageResource( 'maximize' ),
+    'close':    ImageResource( 'close' ),
+    
+    'add':      ImageResource( 'add' ),
+    'clear':    ImageResource( 'clear' ),
+    'load':     ImageResource( 'load' ),
+    'save':     ImageResource( 'save' ),
 }
+
+# The numeric value of the 'move mode' bit mask:
+MOVE_MODE = 12
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:
@@ -261,20 +272,17 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     #-- Traits that are item specific ------------------------------------------
     
     # The default theme to use for the current active list canvas item:
-    ###theme_active = ATheme( Theme( '@BL5', margins = ( -6, -2 ) ) )
     theme_active = ATheme( Theme( 'default_active', 
                                   offset = ( 0, 2 ), margins = ( -15, 2 ) ) )
     
     # The default theme to use for the current inactive list canvas item (if 
     # None is returned, the value of *theme_active* is used):
-    ###theme_inactive = ATheme( Theme( '@BLB', margins = ( -6, -2 ) ) )
     theme_inactive = ATheme( Theme( 'default_inactive', 
                                     offset = ( 0, 2 ), margins = ( -15, 2 ) ) )
     
     # The default theme to use while the pointer hovers over the current
     # inactive list canvas item (if None is returned, the value of 
     # *theme_inactive* is used):
-    ###theme_hover = ATheme( Theme( '@BLC', margins = ( -6, -2 ) ) )
     theme_hover = ATheme( Theme( 'default_hover', 
                                  offset = ( 0, 2 ), margins = ( -15, 2 ) ) )
     
@@ -309,13 +317,13 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     
     # Returns the draggable form of the current list canvas item (or None if
     # the current item can not be dragged):
-    drag = Instance( HasTraits )
+    drag = Any( Missing )
     
     # Can the current list canvas item be cloned?
     can_clone = Bool( False )
     
     # Specifies the clone of the current list canvas item:
-    clone = Instance( HasTraits )
+    clone = Any( Missing )
     
     # Specifies the Traits UI View to use for the current canvas list item when
     # it is added to the canvas:
@@ -447,10 +455,14 @@ class ListCanvasAdapter ( HasPrivateTraits ):
         """
         return self._result_for( 'get_can_drag', item )
                 
-    def get_drag ( self, item ):     
+    def get_drag ( self, item ):
         """ Returns the draggable form of the specified item.
         """
-        return self._result_for( 'get_drag', item )
+        result = self._result_for( 'get_drag', item )
+        if result is Missing:
+            result = item
+            
+        return result
                 
     def get_can_clone ( self, item ):     
         """ Returns whether or not the specified item can be cloned on the 
@@ -461,7 +473,11 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     def get_clone ( self, item ):     
         """ Returns the clone of the specified item.
         """
-        return self._result_for( 'get_clone', item )
+        result = self._result_for( 'get_clone', item )
+        if result is Missing:
+            result = item.__class__( **item.get( transient = None ) )
+            
+        return result
                 
     def get_view ( self, item ):     
         """ Returns the view to use for the specified item when it is added to
@@ -728,12 +744,151 @@ class GridInfo ( HasStrictTraits ):
                         'canvas to the first grid cell'
         )
     )
+    
+#-------------------------------------------------------------------------------
+#  'ListCanvasPanel' class:  
+#-------------------------------------------------------------------------------
+        
+class ListCanvasPanel ( ImagePanel ):
+    """ Base class for list canvas widgets.
+    """
+
+    #-- Private Traits ---------------------------------------------------------
+    
+    # The layout bounds dictionary:
+    layout = Any( {} )
+ 
+    #-- wx.Python Event Handlers -----------------------------------------------
+           
+    def _paint ( self, event ):
+        """ Paint the background using the associated ImageSlice object.
+        """
+        global images
+        
+        # Note that we specifically skip our parent class's method 
+        # implementation since it doesn't quite do what we want. So we just use
+        # it's parent class's implementation:
+        dc, slice = super( ImagePanel, self )._paint( event )
+        
+        # Draw each item in the layout dictionary:
+        for name, bounds in self.layout.items():
+            x, y, dx, dy = bounds
+            
+            # Check if the item is defined by a bitmap:
+            bitmap = images.get( name )
+            if bitmap is not None:
+                # Display the item's bitmap:
+                dc.DrawBitmap( images[ name ], x, y, True )
+            else:
+                # Otherwise, it must be a text string:
+                text = getattr( self, name ).strip()
+                if text != '':
+                    dc.SetBackgroundMode( wx.TRANSPARENT )
+                    dc.SetTextForeground( slice.text_color )
+                    dc.SetFont( self.control.GetFont() )
+                    # fixme: Might need to set clipping region here...
+                    dc.DrawText( text, x, y )
+        
+    def _size ( self, event ):
+        """ Handles the control being resized.
+        """
+        self._layout()
+        
+        super( ListCanvasPanel, self )._size( event )
+    
+    #-- Mouse Event Handlers ---------------------------------------------------
+    
+    def normal_left_down ( self, x, y, event ):
+        """ Handles the user pressing the left mouse button.
+        """
+        # Search for a layout item containing the (x,y) point:
+        for name, bounds in self.layout.items():
+            xb, yb, dxb, dyb = bounds
+            if (xb <= x < (xb + dxb)) and (yb <= y < (yb + dyb)):
+                # See if we have a handler for it:
+                method = getattr( self, '%s_left_down' % name, None )
+                if method is not None:
+                    # Invoke the handler:
+                    method( x, y, event )
+                    return True
+                
+                method = getattr( self, '%s_left_up' % name, None )
+                if method is not None:
+                    self._pending_button = name
+                    return True
+                    
+                break
+                
+        return False
+                
+    def normal_left_up ( self, x, y, event ):
+        """ Handles the left mouse button being released.
+        """
+        name   = self._pending_button
+        bounds = self.layout.get( name )
+        if bounds is not None:
+            self._pending_button = None
+            xb, yb, dxb, dyb     = bounds
+            if (xb <= x < (xb + dxb)) and (yb <= y < (yb + dyb)):
+                getattr( self, '%s_left_up' % name )( x, y, event )
+    
+    #-- Private Methods --------------------------------------------------------
+    
+    def _layout ( self ):
+        """ Lays out the contents of the control's title bar.
+        """
+        self.layout = {}
+        dxt, dyt, descent, leading = self.control.GetFullTextExtent( 'Myj' )
+        theme = self.theme
+        slice = theme.image_slice
+        dyt  += 4
+        if (dyt <= slice.xtop) or (dyt <= slice.xbottom):
+            dxw, dyw = self.control.GetClientSizeTuple()
+            xo, yo   = theme.offset
+            if dyt <= slice.xtop:
+                yt = yo + ((slice.xtop - dyt + 4) / 2)
+                yc = (2 * yo) + slice.xtop
+            else:
+                yt = yo + dyw - ((slice.xbottom + dyt + 4) / 2)
+                yc = (2 * (yo + dyw)) - slice.xbottom
+            
+            xl = xo + slice.xleft
+            xr = xo + dxw - slice.xright
+              
+            self._layout_items ( xl, xr, yc, yt, dyt - 4 )
+            
+    def _layout_items ( self, xl, xr, yc, yt, dyt ):
+        """ Must be overridden in sub-class.
+        """
+        raise NotImplementedError
+            
+    def _layout_button ( self, name, x, y, direction = -1 ):
+        """ Lays out the position of an image button.
+        """
+        global images
+        
+        bm = images[ name ]
+        if isinstance( bm, ImageResource ):
+            images[ name ] = bm = bm.create_image().ConvertToBitmap()
+            
+        dx = bm.GetWidth()
+        dy = bm.GetHeight()
+        
+        if direction < 0:
+            x -= dx
+            rx = x - 2
+        else:
+            rx = x + dx + 2
+            
+        self.layout[ name ] = ( x, (y - dy) / 2, dx, dy )
+        
+        return rx
         
 #-------------------------------------------------------------------------------
 #  'ListCanvasItem' class:
 #-------------------------------------------------------------------------------
 
-class ListCanvasItem ( ImagePanel ):
+class ListCanvasItem ( ListCanvasPanel ):
     """ Defines a list canvas item, one or more of which can be added to a list 
         canvas.
     """
@@ -755,6 +910,9 @@ class ListCanvasItem ( ImagePanel ):
     # The size of the item on the list canvas:
     size = Property
     
+    # Is the item initially hidden?
+    hidden = Bool( False )
+    
     #-- Private Traits ---------------------------------------------------------
     
     # The title of this item:
@@ -763,8 +921,8 @@ class ListCanvasItem ( ImagePanel ):
     # The Traits UI for the associated object:
     ui = Instance( UI )
     
-    # The layout bounds dictionary:
-    layout = Any( {} )
+    # Is the item minimized?
+    minimized = Bool( False )
     
     #-- Public Methods ---------------------------------------------------------
     
@@ -783,6 +941,13 @@ class ListCanvasItem ( ImagePanel ):
     def initialize_position ( self ):
         """ Initializes the position and size of the item.
         """
+        # fixme: This is a hack to prevent 'flashing' when a clone is created:
+        if self.hidden:
+            self.hidden = False
+            self.control.Show( False )
+            
+            return
+            
         # Get the values needed to compute the initial postion and size of the
         # item:
         canvas   = self.canvas
@@ -920,6 +1085,12 @@ class ListCanvasItem ( ImagePanel ):
         if control is not None:
             self.ui.control.SetBackgroundColour( control.GetBackgroundColour() )
             
+    @on_trait_change( 'minimized' )
+    def _on_layout ( self ):
+        """ Handles a trait requiring layout to be run being changed.
+        """
+        self._layout()
+            
     @on_trait_change( 'title' )
     def _on_update ( self ):
         """ Handles a trait changing that requires the item to be refreshed on
@@ -939,6 +1110,9 @@ class ListCanvasItem ( ImagePanel ):
             state.
         """
         mode = self._set_cursor( x, y )
+        if (mode == MOVE_MODE) and self.normal_left_down( x, y, event ):
+            return
+            
         if mode > 0:
             self.control.ReleaseMouse()
             self.canvas.begin_drag( self, mode, x, y )
@@ -949,6 +1123,8 @@ class ListCanvasItem ( ImagePanel ):
         """
         self._drag_mode = None
         self._set_cursor( x, y )
+        
+        self.normal_left_up( x, y, event )
     
     def inactive_motion ( self, x, y, event ):
         """ Handles a mouse motion event while in the inactive state.
@@ -974,45 +1150,81 @@ class ListCanvasItem ( ImagePanel ):
         self.canvas.activate( self )
         self.control.ReleaseMouse()
         self.active_left_down( x, y, event )
- 
-    #-- wx.Python Event Handlers -----------------------------------------------
-           
-    def _paint ( self, event ):
-        """ Paint the background using the associated ImageSlice object.
+        
+    #-- Toolbar Button Event Handlers ------------------------------------------
+    
+    def clone_left_down ( self, x, y, event ):
+        """ Handles the user clicking the 'clone' button.
         """
-        global images
+        canvas = self.canvas
+        clone  = canvas.adapter.get_clone( self.object )
+        if clone is not None:
+            self.control.ReleaseMouse()
+            canvas.add_object( clone, hidden = True )
+            do_later( self._drag_clone, x, y )
+    
+    def drag_left_down ( self, x, y, event ):
+        """ Handles the user clicking the 'drag' button.
+        """
+        drag_object = self.canvas.adapter.get_drag( self.object )
+        if drag_object is not None:
+            self.control.ReleaseMouse()
+            PythonDropSource( self.control, drag_object )
+    
+    def minimize_left_up ( self, x, y, event ):
+        """ Handles the user clicking the 'minimize' button.
+        """
+        control = self.ui.control
+        control.Show( False )
+        control.SetSize( wx.Size( 0, 0 ) )
         
-        # Note that we specifically skip our parent class's method 
-        # implementation since it doesn't quite do what we want. So we just use
-        # it's parent class's implementation:
-        dc, slice = super( ImagePanel, self )._paint( event )
+        control = self.control
+        self._original_size = dx, dy = control.GetSizeTuple()
+        ignore, dy = self.adjusted_size
+        control.SetSize( wx.Size( dx, dy ) ) 
+        control.Layout()
+        control.Refresh()
         
-        # Draw each item in the layout dictionary:
-        for name, bounds in self.layout.items():
-            x, y, dx, dy = bounds
+        self.minimized = True
+    
+    def maximize_left_up ( self, x, y, event ):
+        """ Handles the user clicking the 'maximize' button.
+        """
+        self.ui.control.Show( True )
+        
+        control = self.control
+        control.SetSize( self._original_size )
+        del self._original_size
+        control.Layout()
+        control.Refresh()
+        
+        self.minimized = False
+    
+    def close_left_up ( self, x, y, event ):
+        """ Handles the user clicking the 'close' button.
+        """
+        adapter = self.canvas.adapter
+        rc      = adapter.get_can_close( self.object )
+        if rc == Modified:
+            # fixme: Pop up a prompt dialog here...
+            rc = True ### TEMPORARY
             
-            # If the item is for item's title:
-            if name == 'title':
-                # Display it as text:
-                title = self.title.strip()
-                if self.title != '':
-                    dc.SetBackgroundMode( wx.TRANSPARENT )
-                    dc.SetTextForeground( slice.text_color )
-                    dc.SetFont( self.control.GetFont() )
-                    # fixme: Might need to set clipping region here...
-                    dc.DrawText( title, x, y )
-            else:
-                # Otherwise, display the item's bitmap:
-                dc.DrawBitmap( images[ name ], x, y, True )
-        
-    def _size ( self, event ):
-        """ Handles the control being resized.
-        """
-        self._layout()
-        
-        super( ListCanvasItem, self )._size( event )
+        if rc is True:
+            self.canvas.remove_item( self )
+            adapter.set_closed( self.object )
 
     #-- Private Methods --------------------------------------------------------
+    
+    def _drag_clone ( self, x, y ):
+        """ Drag the new created clone of this item.
+        """
+        # fixme: Shouldn't be reaching into the canvas items to get the clone...
+        item   = self.canvas.items[-1]
+        xs,  ys  = self.position
+        dxs, dys = self.size
+        item.control.SetDimensions( xs, ys, dxs, dys )
+        item.control.Show( True )
+        self.canvas.begin_drag( item, MOVE_MODE, x, y )
    
     def _set_cursor ( self, x, y ):
         """ Sets the correct mouse cursor for a specified mouse position.
@@ -1054,79 +1266,44 @@ class ListCanvasItem ( ImagePanel ):
             if (mode == 0) and adapter.get_can_move( self.object ):
                 slice = self.theme.image_slice
                 if (y < slice.xtop) or (y >= (dy - slice.xbottom)):
-                    mode = 12
+                    mode = MOVE_MODE
                 
         self.control.SetCursor( get_cursor( cursor ) )
         
         return mode
-        
-    def _layout ( self ):
+    
+    #-- ListCanvasPanel Method Overrides ---------------------------------------
+    
+    def _layout_items ( self, xl, xr, yc, yt, dyt ):
         """ Lays out the contents of the item's title bar.
         """
-        self.layout = {}
-        tdx, tdy, descent, leading = self.control.GetFullTextExtent( 'Myj' )
-        theme = self.theme
-        slice = theme.image_slice
-        tdy  += 4
-        if (tdy <= slice.xtop) or (tdy <= slice.xbottom):
-            wdx, wdy = self.control.GetClientSizeTuple()
-            ox, oy   = theme.offset
-            if tdy <= slice.xtop:
-                ty = oy + ((slice.xtop - tdy + 4) / 2)
-                ay = (2 * oy) + slice.xtop
-            else:
-                ty = oy + wdy - ((slice.xbottom + tdy + 4) / 2)
-                ay = (2 * (oy + wdy)) - slice.xbottom
-            
-            xl = ox + slice.xleft
-            xr = ox + wdx - slice.xright
-                
-            adapter = self.canvas.adapter
-            object  = self.object
-
-            # fixme: Add support for the 'feature' button...
-            if adapter.get_can_delete( object ):
-                xr = self._layout_button( 'close', xr, ay )
-                
-            xr = self._layout_button( 'minimize', xr, ay )
-            
-            if adapter.get_can_drag( object ):
-                xr = self._layout_button( 'drag', xr, ay )
-                
-            if adapter.get_can_clone( object ):
-                xr = self._layout_button( 'clone', xr, ay )
-            # fixme: Add support for the 'select' button...
-            
-            # Add the layout information for the title:
-            self.layout[ 'title' ] = ( xl, ty, xr - xl, tdy - 4 )
-            
-    def _layout_button ( self, name, x, y, direction = -1 ):
-        """ Lays out the position of an image button.
-        """
-        global images
+        adapter = self.canvas.adapter
+        object  = self.object
         
-        bm = images[ name ]
-        if isinstance( bm, ImageResource ):
-            images[ name ] = bm = bm.create_image().ConvertToBitmap()
-            
-        dx = bm.GetWidth()
-        dy = bm.GetHeight()
-        
-        if direction < 0:
-            x -= dx
-            rx = x - 2
+        # fixme: Add support for the 'feature' button...
+        if adapter.get_can_delete( object ):
+            xr = self._layout_button( 'close', xr, yc )
+         
+        if self.minimized:
+            xr = self._layout_button( 'maximize', xr, yc )
         else:
-            rx = x + dx + 2
-            
-        self.layout[ name ] = ( x, (y - dy) / 2, dx, dy )
+            xr = self._layout_button( 'minimize', xr, yc )
         
-        return rx
+        if adapter.get_can_drag( object ):
+            xr = self._layout_button( 'drag', xr, yc )
+            
+        if adapter.get_can_clone( object ):
+            xr = self._layout_button( 'clone', xr, yc )
+        # fixme: Add support for the 'select' button...
+        
+        # Add the layout information for the title:
+        self.layout[ 'title' ] = ( xl, yt, xr - xl, dyt )
     
 #-------------------------------------------------------------------------------
 #  'ListCanvas' class:
 #-------------------------------------------------------------------------------
 
-class ListCanvas ( ImagePanel ):
+class ListCanvas ( ListCanvasPanel ):
     """ Defines the main list canvas editor widget, which contains and manages
         all of the list canvas items.
     """
@@ -1170,6 +1347,16 @@ class ListCanvas ( ImagePanel ):
     # The wx Control acting as the list canvas:
     canvas = Instance( wx.Window )
     
+    # The Traits editor the list canvas is associated with:
+    editor = Instance( Editor )
+    
+    # fixme: This is a hack used when cloning list item's
+    # Should the next list canvas item created be initially hidden:
+    hidden = Bool( False )
+    
+    # The current adapter status:
+    status = Delegate( 'adapter' )
+    
     #-- Public Methods ---------------------------------------------------------
     
     def create_control ( self, parent, scrollable = False ):
@@ -1200,7 +1387,12 @@ class ListCanvas ( ImagePanel ):
     def create_object ( self, object ):
         """ Creates a specified HasTraits object as a new list canvas item.
         """ 
-        return ListCanvasItem( canvas = self ).set( object = object )
+        result = ListCanvasItem( canvas = self, 
+                                 hidden = self.hidden ).set( 
+                                 object = object )
+        self.hidden = False
+        
+        return result
         
     def replace_items ( self, items = [], i = 0, j = -1 ):
         """ Replaces the [i:j] items in the current items list with the 
@@ -1232,6 +1424,17 @@ class ListCanvas ( ImagePanel ):
             
         # Update the canvas bounds (if necessary):
         self._adjust_size()
+        
+    def remove_item ( self, item ):
+        """ Removes a specified list canvas item from the canvas.
+        """
+        del self.editor.value[ self.items.index( item ) ]
+        
+    def add_object ( self, object, hidden = False ):
+        """ Adds a new object to the canvas.
+        """
+        self.hidden = hidden
+        self.editor.value.append( object )
         
     def initial_position_for ( self, dx, dy ):
         """ Returns the initial position for an item of the specified width and
@@ -1398,6 +1601,13 @@ class ListCanvas ( ImagePanel ):
             canvas.
         """
         self._refresh_canvas()
+            
+    @on_trait_change( 'status' )
+    def _on_update ( self ):
+        """ Handles a trait changing that requires the list canvas to be 
+            refreshed on the display.
+        """
+        self.refresh()
         
     #-- Mouse Event Handlers ---------------------------------------------------
     
@@ -1421,6 +1631,29 @@ class ListCanvas ( ImagePanel ):
         
         # Update the canvas size:
         self._adjust_size()
+        
+    #-- Toolbar Button Event Handlers ------------------------------------------
+    
+    def add_left_up ( self, x, y, event ):
+        """ Handles the user clicking the 'add' button.
+        """
+        pass # fixme: NOT IMPLEMENTED YET
+    
+    def clear_left_up ( self, x, y, event ):
+        """ Handles the user clicking the 'clear' button.
+        """
+        # fixme: Prompt the user before doing the clear...
+        del self.editor.value[:]
+    
+    def load_left_up ( self, x, y, event ):
+        """ Handles the user clicking the 'load' button.
+        """
+        pass # fixme: NOT IMPLEMENTED YET
+    
+    def save_left_up ( self, x, y, event ):
+        """ Handles the user clicking the 'save' button.
+        """
+        pass # fixme: NOT IMPLEMENTED YET
         
     #-- Other wx Event Handlers ------------------------------------------------
     
@@ -1479,6 +1712,29 @@ class ListCanvas ( ImagePanel ):
             # Draw the y guide lines:
             for y in ys.keys():
                 dc.DrawLine( 0, y, wdx, y )
+    
+    #-- ListCanvasPanel Method Overrides ---------------------------------------
+    
+    def _layout_items ( self, xl, xr, yc, yt, dyt ):
+        """ Lays out the contents of the item's title bar.
+        """
+        operations = self.operations
+        
+        if 'save' in operations:
+            xr = self._layout_button( 'save', xr, yc )
+        
+        if 'load' in operations:
+            xr = self._layout_button( 'load', xr, yc )
+        
+        if 'clear' in operations:
+            xr = self._layout_button( 'clear', xr, yc )
+        
+        if ('add' in operations) and (len( self.add ) > 0):
+            xr = self._layout_button( 'add', xr, yc )
+        
+        if 'status' in operations:
+            # Add the layout information for the title:
+            self.layout[ 'status' ] = ( xl, yt, xr - xl, dyt )
                 
     #-- Private Methods --------------------------------------------------------
     
@@ -1583,7 +1839,8 @@ class _ListCanvasEditor ( Editor ):
             add_feature( feature )
         
         # Create the underlying wx control:
-        lc = self.list_canvas
+        lc        = self.list_canvas
+        lc.editor = self                               
         lc.set( **factory.get( 'theme', 'adapter', 'snap_info', 'guide_info',
                                'grid_info', 'operations', 'add' ) )
         self.control = lc.create_control( parent, factory.scrollable )
@@ -1644,7 +1901,7 @@ class ListCanvasEditor ( BasicEditorFactory ):
     features = List
     
     # The theme to use for the list canvas:
-    theme = ATheme( '@G45' )
+    theme = ATheme( 'default_canvas' )
     
     # The snapping information to use for the list canvas:
     snap_info = Instance( SnapInfo, () )
@@ -1674,7 +1931,7 @@ if __name__ == '__main__':
     
     class TestAdapter ( ListCanvasAdapter ):
         
-        can_drag          = True
+        Person_can_drag   = Bool( True )
         Person_can_clone  = Bool( True )
         Person_can_delete = Bool( True )
     
@@ -1691,11 +1948,14 @@ if __name__ == '__main__':
         view = View( 
             Item( 'people',
                   show_label = False,
-                  editor = ListCanvasEditor( scrollable = True,
-                                             adapter    = TestAdapter(),
-                                             snap_info  = snap_info,
-                                             grid_info  = grid_info,
-                                             guide_info = guide_info )
+                  editor = ListCanvasEditor(
+                               scrollable = True,
+                               adapter    = TestAdapter(),
+                               operations = [ 'add', 'clear', 'load', 'save' ],
+                               add        = [ Person ],
+                               snap_info  = snap_info,
+                               grid_info  = grid_info,
+                               guide_info = guide_info )
             ),
             title     = 'List Canvas Test',
             id        = 'enthought.traits.ui.wx.extra.list_canvas_editor',
@@ -1720,4 +1980,7 @@ if __name__ == '__main__':
         snap_info, grid_info, guide_info
     ]
         
-    People( people = people ).configure_traits()
+    #People( people = people ).configure_traits()
+    
+    from enthought.developer.develop import develop
+    develop( People( people = people ) )
