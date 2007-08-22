@@ -1038,14 +1038,27 @@ class ListCanvasItem ( ListCanvasPanel ):
         # Update the position and size of the control:
         if (xo != cx) or (yo != cy) or (dxo != cdx) or (dyo != cdy):
             self.control.SetDimensions( xo, yo, dxo, dyo )
+            
+        # Return the net change:
+        return ( (xo - cx), (yo - cy), (dxo - cdx), (dyo - cdy) )
         
     #-- Property Implementations -----------------------------------------------
     
     def _get_position ( self ):
         return self.control.GetPositionTuple()
         
+    def _set_position ( self, position ):
+        if position != self.position:
+            self.control.SetPosition( position )
+            self.refresh()
+        
     def _get_size ( self ):
         return self.control.GetSizeTuple()
+        
+    def _set_size ( self, size ):
+        if size != self.size:
+            self.control.SetSize( size )
+            self.refresh()
             
     #-- Trait Event Handlers ---------------------------------------------------
     
@@ -1115,7 +1128,7 @@ class ListCanvasItem ( ListCanvasPanel ):
             
         if mode > 0:
             self.control.ReleaseMouse()
-            self.canvas.begin_drag( self, mode, x, y )
+            self.canvas.begin_drag( self, mode, x, y, event )
         
     def active_left_up ( self, x, y, event ):
         """ Handles the user releasing the left mouse button while in the active
@@ -1178,27 +1191,33 @@ class ListCanvasItem ( ListCanvasPanel ):
         control.Show( False )
         control.SetSize( wx.Size( 0, 0 ) )
         
-        control = self.control
-        self._original_size = dx, dy = control.GetSizeTuple()
-        ignore, dy = self.adjusted_size
-        control.SetSize( wx.Size( dx, dy ) ) 
-        control.Layout()
-        control.Refresh()
+        self._original_size = dx, dy = self.size
+        dxa, dya  = self.adjusted_size
+        self.size = ( dx, dya ) 
+        self.control.Layout()
+        self.control.Refresh()
         
         self.minimized = True
+        
+        if event.ControlDown():
+            x, y = self.position
+            self.canvas.adjust_positions_y( x, y + dy, dx, dx, dya - dy ) 
     
     def maximize_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'maximize' button.
         """
         self.ui.control.Show( True )
         
-        control = self.control
-        control.SetSize( self._original_size )
+        dx, dy    = self.size
+        self.size = dxo, dyo = self._original_size
         del self._original_size
-        control.Layout()
-        control.Refresh()
+        self.control.Layout()
+        self.control.Refresh()
         
         self.minimized = False
+        
+        x, y = self.position
+        self.canvas.adjust_positions_y( x, y + dy, dx, dxo, dyo - dy ) 
     
     def close_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'close' button.
@@ -1458,6 +1477,63 @@ class ListCanvas ( ListCanvasPanel ):
             
         return ( xmax, ymax )
         
+    def adjust_positions_y ( self, x, y, dx0, dx, dy ):
+        """ Adjust the position of all windows that are immediately below and
+            lined up with the specified window position.
+        """
+        for item in self.items:
+            xi,  yi  = item.position
+            dxi, dyi = item.size
+            if (x == xi) and (y == yi) and (dx0 == dxi):
+                item.position = ( xi, yi + dy )
+                item.size     = ( dx, dyi )
+                self.adjust_positions_y( x, yi + dyi, dx0, dx, dy )
+                self.adjust_positions_xl( xi, yi, dyi, dy )
+                self.adjust_positions_xr( xi + dxi, yi, dyi, dx - dx0, dy )
+                break
+                
+    def adjust_positions_xl ( self, x, y, dy0, dy ):
+        for item in self.items:
+            xi,  yi  = item.position
+            dxi, dyi = item.size
+            if (x == (xi + dxi)) and (y == yi) and (dy0 == dyi):
+                item.position = ( xi, yi + dy )
+                self.adjust_positions_y( xi, yi + dyi, dxi, dxi, dy )
+                self.adjust_positions_xl( xi, yi, dyi, dy )
+                break
+                
+    def adjust_positions_xr ( self, x, y, dy0, dx, dy ):
+        for item in self.items:
+            xi,  yi  = item.position
+            dxi, dyi = item.size
+            if (x == xi) and (y == yi) and (dy0 == dyi):
+                item.position = ( xi + dx, yi + dy )
+                self.adjust_positions_y( xi, yi + dyi, dxi, dxi, dy )
+                self.adjust_positions_xr( xi + dxi, yi, dyi, dx, dy )
+                break
+                
+    def lego_set_for ( self, item ):
+        """ Return the 'lego' (i.e. connected) set for the specified item.
+        """
+        return self._lego_set_for( item, set() )
+        
+    def _lego_set_for ( self, item, result ):
+        result.add( item )
+         
+        x,  y  = item.position
+        dx, dy = item.size
+        for itemi in self.items:
+            if itemi not in result:
+                xi,  yi  = itemi.position
+                dxi, dyi = itemi.size
+                if (((x == xi) and (dx == dxi) and
+                     (((yi + dyi) == y) or ((y + dy) == yi))) or
+                    ((y == yi) and (dy == dyi) and
+                     (((xi + dxi) == x) or ((x + dx) == xi)))):
+                        self._lego_set_for( itemi, result )
+                    
+        return result
+        
     def activate ( self, item ):
         """ Activates a specified list canvas item.
         """
@@ -1476,7 +1552,7 @@ class ListCanvas ( ListCanvasPanel ):
                 item.state = 'active'
                 self.adapter.set_activated( item.object )
                 
-    def begin_drag ( self, item, mode, x, y ):
+    def begin_drag ( self, item, mode, x, y, event ):
         """ Handles a drag operation for a specified list item.
         """
         x, y            = self._event_xy( x, y )
@@ -1484,10 +1560,14 @@ class ListCanvas ( ListCanvasPanel ):
         dx, dy          = item.size
         x1, y1          = self.position
         self._drag_item = item
+        if event.ControlDown():
+            self._drag_set = self.lego_set_for( item )
+        else:
+            self._drag_set = set( [ item ] )
         self._drag_info = ( mode, x0, y0, dx, dy, x0 + x1 + x, y0 + y1 + y )
         self.state      = 'dragging'
         if (self.snap_info.distance > 0) and self.guide_info.snapping:
-            self._drag_guides = self._guide_lines()
+            self._drag_guides = self._guide_lines( self._drag_set )
         self.control.CaptureMouse()
         self._refresh_canvas_drag( True )
         
@@ -1616,13 +1696,20 @@ class ListCanvas ( ListCanvasPanel ):
         """
         x, y = self._event_xy( x, y )
         mode, x0, y0, dx, dy, xo, yo = self._drag_info
-        self._drag_item.resize( mode, x0, y0, dx, dy, x - xo, y - yo )
+        rx, ry, rdx, rdy = self._drag_item.resize( mode, x0, y0, dx, dy,
+                                                   x - xo, y - yo )
+        if ((rx != 0) or (ry != 0)) and (rdx == 0) and (rdy == 0):
+            drag_item = self._drag_item
+            for item in self._drag_set:
+                if item is not drag_item:
+                    x, y = item.position
+                    item.position = ( x + rx, y + ry )
         
     def dragging_left_up ( self, x, y, event ):
         """ Handles the left mouse button being released while moving or
             resizing a list item.
         """
-        self._drag_item = self._drag_guides = None 
+        self._drag_item = self._drag_set = self._drag_guides = None 
         self.state      = 'normal'
         self._refresh_canvas_drag( False )
         
@@ -1700,7 +1787,7 @@ class ListCanvas ( ListCanvasPanel ):
             (len( self.items ) > 0)):
                 
             # Determine the set of guide lines to draw:
-            xs, ys = self._guide_lines()
+            xs, ys = self._guide_lines( self_drag_set )
             
             # Set up the pen for drawing guide lines:
             dc.SetPen( wx.Pen( gi.color_, 1, pen_styles[ gi.style ] ) )
@@ -1759,15 +1846,17 @@ class ListCanvas ( ListCanvasPanel ):
         for item in self.items:
             item.refresh()
         
-    def _guide_lines ( self ):
+    def _guide_lines ( self, ignore ):
         """ Returns the x and y coordinates for all guide lines.
         """
+        if ignore is None:
+            ignore = set()
+            
         dx, dy    = self.size
         xs        = { 0: None, dx - 1: None }
         ys        = { 0: None, dy - 1: None }
-        skip_item = self._drag_item
         for item in self.items:
-            if item is not skip_item:
+            if item not in ignore:
                 x,  y  = item.position
                 dx, dy = item.size
                 xs[ x ]      = None
@@ -1901,7 +1990,7 @@ class ListCanvasEditor ( BasicEditorFactory ):
     features = List
     
     # The theme to use for the list canvas:
-    theme = ATheme( 'default_canvas' )
+    theme = ATheme( Theme( 'default_canvas', offset = ( 0, 2 ) ) )
     
     # The snapping information to use for the list canvas:
     snap_info = Instance( SnapInfo, () )
@@ -1925,6 +2014,8 @@ class ListCanvasEditor ( BasicEditorFactory ):
 #-- Test Case ------------------------------------------------------------------
 
 if __name__ == '__main__':
+    from enthought.traits.api import File
+    
     snap_info  = SnapInfo( distance = 8 )
     grid_info  = GridInfo( visible = 'always', snapping = False )
     guide_info = GuideInfo()
@@ -1941,6 +2032,13 @@ if __name__ == '__main__':
         gender = Enum( 'Male', 'Female' )
         
         view = View( 'name', 'age', 'gender' )
+        
+    class AFile ( HasTraits ):
+        file = File
+        
+        view = View( 
+            Item( 'file', style = 'custom', show_label = False )
+        )
         
     class People ( HasTraits ):
         people = List
@@ -1977,6 +2075,8 @@ if __name__ == '__main__':
         Person( name   = 'Tina Gerlitz',
                 age    = 51,
                 gender = 'Female' ),
+        AFile(),
+        AFile(),
         snap_info, grid_info, guide_info
     ]
         
