@@ -910,6 +910,9 @@ class ListCanvasItem ( ListCanvasPanel ):
     # The size of the item on the list canvas:
     size = Property
     
+    # The bounds of the item on the list canvas:
+    bounds = Property
+    
     # Is the item initially hidden?
     hidden = Bool( False )
     
@@ -1048,17 +1051,19 @@ class ListCanvasItem ( ListCanvasPanel ):
         return self.control.GetPositionTuple()
         
     def _set_position ( self, position ):
-        if position != self.position:
-            self.control.SetPosition( position )
-            self.refresh()
+        self.control.SetPosition( position )
         
     def _get_size ( self ):
         return self.control.GetSizeTuple()
         
     def _set_size ( self, size ):
-        if size != self.size:
-            self.control.SetSize( size )
-            self.refresh()
+        self.control.SetSize( size )
+            
+    def _get_bounds ( self ):
+        return (self.control.GetPositionTuple() + self.control.GetSizeTuple())
+        
+    def _set_bounds ( self, bounds ):
+        self.control.SetDimensions( *bounds )
             
     #-- Trait Event Handlers ---------------------------------------------------
     
@@ -1187,37 +1192,54 @@ class ListCanvasItem ( ListCanvasPanel ):
     def minimize_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'minimize' button.
         """
-        control = self.ui.control
-        control.Show( False )
-        control.SetSize( wx.Size( 0, 0 ) )
+        has_lego_set = event.ControlDown()
+        if has_lego_set:
+            strict = event.ShiftDown()
+            items  = self.canvas.lego_set_for( self, strict )
+            
+        dxi, dyi, dyc = self._minimize()
         
-        self._original_size = dx, dy = self.size
-        dxa, dya  = self.adjusted_size
-        self.size = ( dx, dya ) 
-        self.control.Layout()
-        self.control.Refresh()
-        
-        self.minimized = True
-        
-        if event.ControlDown():
-            x, y = self.position
-            self.canvas.adjust_positions_y( x, y + dy, dx, dx, dya - dy ) 
+        if has_lego_set:
+            xi, yi = self.position
+            for item in items:
+                x, y, dx, dy = item.bounds
+                if strict:
+                    if (y == yi) and (dy == dyi):
+                        item._minimize()
+                        continue
+                        
+                elif max( y, yi ) < min( y + dy, yi + dyi ):
+                    item._minimize()
+                    continue
+                        
+                if y >= (yi + dyi):
+                    item.position = ( x, y + dyc )
     
     def maximize_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'maximize' button.
         """
-        self.ui.control.Show( True )
+        has_lego_set = event.ControlDown()
+        if has_lego_set:
+            strict = event.ShiftDown()
+            items  = self.canvas.lego_set_for( self, strict )
+            
+        dxi, dyi, dyc = self._maximize()
         
-        dx, dy    = self.size
-        self.size = dxo, dyo = self._original_size
-        del self._original_size
-        self.control.Layout()
-        self.control.Refresh()
-        
-        self.minimized = False
-        
-        x, y = self.position
-        self.canvas.adjust_positions_y( x, y + dy, dx, dxo, dyo - dy ) 
+        if has_lego_set:
+            xi, yi = self.position
+            for item in items:
+                x, y, dx, dy = item.bounds
+                if strict:
+                    if (y == yi) and (dy == dyi):
+                        item._maximize()
+                        continue
+                        
+                elif max( y, yi ) < min( y + dy, yi + dyi ):
+                    item._maximize()
+                    continue
+                    
+                if y >= (yi + dyi):
+                    item.position = ( x, y + dyc )
     
     def close_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'close' button.
@@ -1233,7 +1255,42 @@ class ListCanvasItem ( ListCanvasPanel ):
             adapter.set_closed( self.object )
 
     #-- Private Methods --------------------------------------------------------
-    
+
+    def _minimize ( self ):
+        """ Minimizes the item and returns the original size.
+        """
+        dxi, dyi = self.size
+        if self.minimized:
+            return ( dxi, dyi, 0 )
+            
+        control = self.ui.control
+        control.Show( False )
+        control.SetSize( wx.Size( 0, 0 ) )
+        
+        self._original_size = ( dxi, dyi )
+        dxa, dya  = self.adjusted_size
+        self.size = ( dxi, dya ) 
+        
+        self.minimized = True
+            
+        return ( dxi, dyi, dya - dyi )
+        
+    def _maximize ( self ):
+        """ Maximizes the item and returns the original size.
+        """
+        dxi, dyi = self.size
+        if not self.minimized:
+            return ( dxi, dyi, 0 )
+            
+        self.ui.control.Show( True )
+        
+        self.size = dxo, dyo = self._original_size
+        del self._original_size
+        
+        self.minimized = False
+        
+        return ( dxi, dyi, dyo - dyi )        
+        
     def _drag_clone ( self, x, y ):
         """ Drag the new created clone of this item.
         """
@@ -1512,12 +1569,12 @@ class ListCanvas ( ListCanvasPanel ):
                 self.adjust_positions_xr( xi + dxi, yi, dyi, dx, dy )
                 break
                 
-    def lego_set_for ( self, item ):
+    def lego_set_for ( self, item, strict ):
         """ Return the 'lego' (i.e. connected) set for the specified item.
         """
-        return self._lego_set_for( item, set() )
+        return self._lego_set_for( item, strict, set() )
         
-    def _lego_set_for ( self, item, result ):
+    def _lego_set_for ( self, item, strict, result ):
         result.add( item )
          
         x,  y  = item.position
@@ -1526,11 +1583,20 @@ class ListCanvas ( ListCanvasPanel ):
             if itemi not in result:
                 xi,  yi  = itemi.position
                 dxi, dyi = itemi.size
-                if (((x == xi) and (dx == dxi) and
-                     (((yi + dyi) == y) or ((y + dy) == yi))) or
-                    ((y == yi) and (dy == dyi) and
-                     (((xi + dxi) == x) or ((x + dx) == xi)))):
-                        self._lego_set_for( itemi, result )
+                if strict:
+                    if ((((x == xi) and (dx == dxi)) and 
+                          (((yi + dyi) == y) or ((y + dy) == yi))) or
+                         (((y == yi) and (dy == dyi)) and 
+                          (((xi + dxi) == x) or ((x + dx) == xi)))):
+                        self._lego_set_for( itemi, strict, result )
+                else:
+                    xl, xr = max( x, xi ), min( x + dx, xi + dxi )
+                    yt, yb = max( y, yi ), min( y + dy, yi + dyi )
+                    if (((xl < xr) and 
+                         (((yi + dyi) == y) or ((y + dy) == yi))) or
+                        ((yt < yb) and 
+                         (((xi + dxi) == x) or ((x + dx) == xi)))):
+                        self._lego_set_for( itemi, strict, result )
                     
         return result
         
@@ -1561,7 +1627,7 @@ class ListCanvas ( ListCanvasPanel ):
         x1, y1          = self.position
         self._drag_item = item
         if event.ControlDown():
-            self._drag_set = self.lego_set_for( item )
+            self._drag_set = self.lego_set_for( item, event.ShiftDown() )
         else:
             self._drag_set = set( [ item ] )
         self._drag_info = ( mode, x0, y0, dx, dy, x0 + x1 + x, y0 + y1 + y )
@@ -1696,14 +1762,43 @@ class ListCanvas ( ListCanvasPanel ):
         """
         x, y = self._event_xy( x, y )
         mode, x0, y0, dx, dy, xo, yo = self._drag_info
-        rx, ry, rdx, rdy = self._drag_item.resize( mode, x0, y0, dx, dy,
+        drag_item = self._drag_item
+        xi,  yi   = drag_item.position 
+        dxi, dyi  = drag_item.size 
+        rx, ry, rdx, rdy = drag_item.resize( mode, x0, y0, dx, dy,
                                                    x - xo, y - yo )
-        if ((rx != 0) or (ry != 0)) and (rdx == 0) and (rdy == 0):
-            drag_item = self._drag_item
+        if ((rx != 0) or (ry != 0)) or (rdx != 0) or (rdy != 0):
             for item in self._drag_set:
                 if item is not drag_item:
-                    x, y = item.position
-                    item.position = ( x + rx, y + ry )
+                    x, y, dx, dy = item.bounds
+                    if (mode & 0x03) != 0:
+                        if (mode & 0x01) != 0:
+                            if (mode & 0x04) != 0:
+                                if x == xi:
+                                    x  += rx
+                                    dx += rdx
+                                elif (x + dx) <= xi:
+                                    x += rx
+                            elif (x + dx) == (xi + dxi):
+                                dx += rdx
+                            elif x >= (xi + dxi):
+                                x += rdx
+                        if (mode & 0x02) != 0:
+                            if (mode & 0x08) != 0:
+                                if y == yi:
+                                    y  += ry
+                                    dy += rdy
+                                elif (y + dy) <= yi:
+                                    y += ry
+                            elif (y + dy) == (yi + dyi):
+                                dy += rdy
+                            elif y >= (yi + dyi):
+                                y += rdy
+                    else:
+                        x += rx
+                        y += ry
+                        
+                    item.bounds = x, y, dx, dy
         
     def dragging_left_up ( self, x, y, event ):
         """ Handles the left mouse button being released while moving or
@@ -2080,7 +2175,7 @@ if __name__ == '__main__':
         snap_info, grid_info, guide_info
     ]
         
-    #People( people = people ).configure_traits()
+    People( people = people ).configure_traits()
     
-    from enthought.developer.develop import develop
-    develop( People( people = people ) )
+    #from enthought.developer.develop import develop
+    #develop( People( people = people ) )
