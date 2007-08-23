@@ -133,7 +133,7 @@ def get_cursor ( cursor_id ):
         stock_cursors[ cursor_id ] = cursor = wx.StockCursor( cursor_id )
         
     return cursor
-    
+        
 #-------------------------------------------------------------------------------
 #  'IListCanvasAdapter' interface:
 #-------------------------------------------------------------------------------
@@ -339,6 +339,10 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     # when it is added to the canvas:
     view_model = Instance( HasTraits )
     
+    # Specifies the 'ListCanvasItemMonitor' object used to monitor the current
+    # list canvas item:
+    monitor = Instance( 'ListCanvasItemMonitor' )
+    
     # Specifies the initial size to make the current canvas list item when it
     # is added to the canvas. The value is a tuple of the form: (width,height),
     # where the width and height values have the following meaning:
@@ -497,6 +501,18 @@ class ListCanvasAdapter ( HasPrivateTraits ):
         """
         return self._result_for( 'get_view_model', item )
                 
+    def get_monitor ( self, item ):
+        """ Returns the 'ListCanvasItemMonitor' object used to monitor the
+            specified item when it is added to the canvas.
+        """
+        result = self._result_for( 'get_monitor', item )
+        if result is not None:
+            if not isinstance( result, ListCanvasItemMonitor ):
+                result = result()
+            result.adapter = self
+            
+        return result
+                
     def get_size ( self, item ):     
         """ Returns the size to use for the view of the specified item when it
             is added to the canvas.
@@ -604,7 +620,7 @@ class ListCanvasAdapter ( HasPrivateTraits ):
             # Look for a specialized handler based on a class in the item's mro:
             for klass in item_class.__mro__:
                 handler = self._get_handler_for(
-                              '%s_%s' % ( klass.__name__, trait_name ), prefix ) 
+                              '%s_%s' % ( klass.__name__, trait_name ), prefix )
                 if handler is not None:
                     break
                     
@@ -769,6 +785,18 @@ class ListCanvasPanel ( ImagePanel ):
     # The layout bounds dictionary:
     layout = Any( {} )
  
+    #-- ThemedWindow Method Overrides ------------------------------------------
+    
+    def refresh ( self, item = None ):
+        """ Refreshes the contents of the control.
+        """
+        if self.control is not None:
+            if item is None:
+                self.control.Refresh()
+            else:
+                self.control.RefreshRect( wx.Rect( *self.layout[ item ] ), 
+                                          False )
+    
     #-- wx.Python Event Handlers -----------------------------------------------
            
     def _paint ( self, event ):
@@ -912,6 +940,9 @@ class ListCanvasItem ( ListCanvasPanel ):
     # The list canvas this item is displayed on:
     canvas = Instance( 'ListCanvas' )
     
+    # The monitor object (if any) associated with this item:
+    monitor = Instance( 'ListCanvasItemMonitor' )
+    
     # The current mouse event state (override):
     state = 'inactive'
     
@@ -943,6 +974,9 @@ class ListCanvasItem ( ListCanvasPanel ):
     def dispose ( self ):
         """ Removes the item from the canvas it is contained in.
         """
+        # Unhook the monitor:
+        self.monitor = None
+        
         # Close the Traits UI contained in the item:
         if self.ui is not None:
             self.ui.dispose()
@@ -1051,7 +1085,7 @@ class ListCanvasItem ( ListCanvasPanel ):
         
         # Update the position and size of the control:
         if (xo != cx) or (yo != cy) or (dxo != cdx) or (dyo != cdy):
-            self.control.SetDimensions( xo, yo, dxo, dyo )
+            self.bounds = ( xo, yo, dxo, dyo )
             
         # Return the net change:
         return ( (xo - cx), (yo - cy), (dxo - cdx), (dyo - cdy) )
@@ -1062,19 +1096,35 @@ class ListCanvasItem ( ListCanvasPanel ):
         return self.control.GetPositionTuple()
         
     def _set_position ( self, position ):
-        self.control.SetPosition( position )
+        old_position = self.control.GetPositionTuple()
+        if position != old_position:
+            old_bounds = self.bounds
+            self.control.SetPosition( position )
+            self.trait_property_changed( 'position', old_position, position )
+            self.trait_property_changed( 'bounds',   old_bounds,   self.bounds )
         
     def _get_size ( self ):
         return self.control.GetSizeTuple()
         
     def _set_size ( self, size ):
-        self.control.SetSize( size )
+        old_size = self.control.GetSizeTuple()
+        if size != old_size:
+            old_bounds = self.bounds
+            self.control.SetSize( size )
+            self.trait_property_changed( 'size',   old_size,   size )
+            self.trait_property_changed( 'bounds', old_bounds, self.bounds )
             
     def _get_bounds ( self ):
         return (self.control.GetPositionTuple() + self.control.GetSizeTuple())
         
     def _set_bounds ( self, bounds ):
-        self.control.SetDimensions( *bounds )
+        control    = self.control
+        old_bounds = control.GetPositionTuple() + control.GetSizeTuple()
+        if bounds != old_bounds:
+            self.control.SetDimensions( *bounds )
+            self.trait_property_changed( 'bounds',   old_bounds,     bounds )
+            self.trait_property_changed( 'position', old_bounds[:2], bounds[:2])
+            self.trait_property_changed( 'size',     old_bounds[2:], bounds[2:])
             
     #-- Trait Event Handlers ---------------------------------------------------
     
@@ -1093,6 +1143,15 @@ class ListCanvasItem ( ListCanvasPanel ):
                               kind   = 'subpanel' )
             
         control.GetSizer().Add( ui.control, 1, wx.EXPAND )
+        
+    def _monitor_changed ( self, old, new ):
+        """ Handles the 'monitor' trait being changed.
+        """
+        if old is not None:
+            old.item = None
+            
+        if new is not None:
+            new.item = self
         
     def _state_changed ( self, state ):
         """ Handles the control 'state' being changed.
@@ -1487,9 +1546,11 @@ class ListCanvas ( ListCanvasPanel ):
     def create_object ( self, object ):
         """ Creates a specified HasTraits object as a new list canvas item.
         """ 
-        result = ListCanvasItem( canvas = self, 
-                                 hidden = self.hidden ).set( 
-                                 object = object )
+        result = ListCanvasItem( canvas  = self, 
+                                 hidden  = self.hidden ).set( 
+                                 object  = object,
+                                 monitor = self.adapter.get_monitor( object ) )
+                                         
         self.hidden = False
         
         return result
@@ -1825,7 +1886,7 @@ class ListCanvas ( ListCanvasPanel ):
         """ Handles a trait changing that requires the list canvas to be 
             refreshed on the display.
         """
-        self.refresh()
+        do_later( self.refresh, 'status' )
         
     #-- Mouse Event Handlers ---------------------------------------------------
     
@@ -2098,6 +2159,20 @@ class ListCanvas ( ListCanvasPanel ):
         xvs, yvs = self.canvas.GetViewStart()
         dx, dy   = self.canvas.GetScrollPixelsPerUnit()
         return ( x + (xvs * dx), y + (yvs * dy) )
+
+#-------------------------------------------------------------------------------
+#  'ListCanvasItemMonitor' class:
+#-------------------------------------------------------------------------------
+
+class ListCanvasItemMonitor ( HasPrivateTraits ):
+    
+    #-- Interface Traits -------------------------------------------------------
+    
+    # The list canvas item this is a monitor for:
+    item = Instance( ListCanvasItem )
+    
+    # The list canvas adapter that created this monitor:
+    adapter = Instance( ListCanvasAdapter )
             
 #-------------------------------------------------------------------------------
 #  '_ListCanvasEditor' class:
@@ -2219,17 +2294,31 @@ class ListCanvasEditor ( BasicEditorFactory ):
 #-- Test Case ------------------------------------------------------------------
 
 if __name__ == '__main__':
-    from enthought.traits.api import File
+    from enthought.traits.api import File, Constant
     
     snap_info  = SnapInfo( distance = 10 )
     grid_info  = GridInfo( visible = 'always', snapping = False )
     guide_info = GuideInfo()
+    
+    class PersonMonitor ( ListCanvasItemMonitor ):
+        
+        @on_trait_change( 'item.object.name' )
+        def _name_modified ( self, name ):
+            self.item.title = name
+            
+        @on_trait_change( 'item.position' )
+        def _position_modified ( self, position ):
+            self.adapter.status = '%s moved to (%s,%s)' % (
+                                  self.item.title, position[0], position[1] )
+                                                          
     
     class TestAdapter ( ListCanvasAdapter ):
         
         Person_can_drag   = Bool( True )
         Person_can_clone  = Bool( True )
         Person_can_delete = Bool( True )
+        # fixme: Why doesn't Constant work...
+        Person_monitor    = Any( PersonMonitor )
         Person_can_close  = Any( Modified )
         Person_title      = Property
         
@@ -2259,7 +2348,8 @@ if __name__ == '__main__':
                   editor = ListCanvasEditor(
                                scrollable = True,
                                adapter    = TestAdapter(),
-                               operations = [ 'add', 'clear', 'load', 'save' ],
+                               operations = [ 'add', 'clear', 'load', 'save',
+                                              'status' ],
                                add        = [ Person ],
                                snap_info  = snap_info,
                                grid_info  = grid_info,
