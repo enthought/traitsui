@@ -24,7 +24,10 @@ import wx
 from enthought.traits.api \
     import HasTraits, HasPrivateTraits, HasStrictTraits, Interface, Instance, \
            List, Enum, Color, Bool, Range, Str, Float, Event, Tuple, Property, \
-           Delegate, Any, Missing, implements, on_trait_change
+           Delegate, Any, Missing, implements, on_trait_change, cached_property
+           
+from enthought.traits.trait_base \
+    import SequenceTypes
     
 from enthought.traits.trait_base \
     import user_name_for
@@ -33,10 +36,10 @@ from enthought.traits.ui.api \
     import UI, View, Item, Theme, Editor
     
 from enthought.traits.ui.ui_traits \
-    import ATheme
-    
-from enthought.traits.ui.ui_traits \
-    import AView
+    import ATheme, AView
+           
+from enthought.traits.ui.menu \
+    import Menu, Action
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -287,7 +290,7 @@ class ListCanvasAdapter ( HasPrivateTraits ):
                                  offset = ( 0, 2 ), margins = ( -15, 2 ) ) )
     
     # The title to use for the current list canvas item:
-    title = Str
+    title = Property # Str
     
     # The unique id of the current list canvas item:
     unique_id = Str
@@ -532,6 +535,11 @@ class ListCanvasAdapter ( HasPrivateTraits ):
             handler cache.
         """
         self.cache = {}
+        
+    #-- Property Implementations -----------------------------------------------
+    
+    def _get_title ( self ):
+        return user_name_for( self.item.__class__.__name__ )
         
     #-- Private Methods --------------------------------------------------------
     
@@ -1074,8 +1082,7 @@ class ListCanvasItem ( ListCanvasPanel ):
         adapter    = canvas.adapter
         self.theme = adapter.get_theme_inactive( object )
         control    = self.create_control( canvas.canvas )
-        self.title = (adapter.get_title( object ) or 
-                      user_name_for( object.__class__.__name__ ))
+        self.title = adapter.get_title( object ) 
         view_model = adapter.get_view_model( object ) or object
         self.ui    = ui = view_model.edit_traits(
                               parent = control, 
@@ -1218,28 +1225,25 @@ class ListCanvasItem ( ListCanvasPanel ):
     def maximize_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'maximize' button.
         """
-        has_lego_set = event.ControlDown()
-        if has_lego_set:
-            strict = event.ShiftDown()
-            items  = self.canvas.lego_set_for( self, strict )
-            
+        strict = event.ShiftDown()
+        items  = self.canvas.lego_set_for( self, strict )
+        
         dxi, dyi, dyc = self._maximize()
         
-        if has_lego_set:
-            xi, yi = self.position
-            for item in items:
-                x, y, dx, dy = item.bounds
-                if strict:
-                    if (y == yi) and (dy == dyi):
-                        item._maximize()
-                        continue
-                        
-                elif max( y, yi ) < min( y + dy, yi + dyi ):
-                    item._maximize()
+        xi, yi, dxin, dyin = self.bounds
+        for item in items:
+            x, y, dx, dy = item.bounds
+            if strict:
+                if (y == yi) and (dy == dyi):
+                    item._maximize( dyin )
                     continue
                     
-                if y >= (yi + dyi):
-                    item.position = ( x, y + dyc )
+            elif max( y, yi ) < min( y + dy, yi + dyi ):
+                item._maximize()
+                continue
+                
+            if y >= (yi + dyi):
+                item.position = ( x, y + dyc )
     
     def close_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'close' button.
@@ -1275,7 +1279,7 @@ class ListCanvasItem ( ListCanvasPanel ):
             
         return ( dxi, dyi, dya - dyi )
         
-    def _maximize ( self ):
+    def _maximize ( self, height = None ):
         """ Maximizes the item and returns the original size.
         """
         dxi, dyi = self.size
@@ -1284,7 +1288,10 @@ class ListCanvasItem ( ListCanvasPanel ):
             
         self.ui.control.Show( True )
         
-        self.size = dxo, dyo = self._original_size
+        dxo, dyo = self._original_size
+        if height is not None:
+            dyo = height
+        self.size = ( dxo, dyo )
         del self._original_size
         
         self.minimized = False
@@ -1432,6 +1439,13 @@ class ListCanvas ( ListCanvasPanel ):
     
     # The current adapter status:
     status = Delegate( 'adapter' )
+    
+    # The menu used to select an item to be added:
+    add_menu = Property( depends_on = 'add' ) # Instance( Menu )
+    
+    # The list of classes referenced by the 'add_menu' and derived from the
+    # 'add' list:
+    add_classes = Any( [] )
     
     #-- Public Methods ---------------------------------------------------------
     
@@ -1739,6 +1753,43 @@ class ListCanvas ( ListCanvasPanel ):
     def _get_size ( self ):
         return self.canvas.GetSizeTuple()
         
+    @cached_property
+    def _get_add_menu ( self ):
+        self.add_classes = classes = []
+        
+        def menu_items ( items ):
+            result = []
+            name   = menu_name = ''
+            for item in items:
+                if isinstance( item, SequenceTypes ):
+                    value = menu_items( item )
+                    if value is not None:
+                        result.append( value )
+                elif isinstance( item, basestring ):
+                    name = item
+                    if menu_name == '':
+                        menu_name = item
+                else:
+                    if name == '': 
+                        name = user_name_for( item.__name__ )
+                    result.append( Action( 
+                            name   = name,
+                            action = "self._add_object(%d)" % len( classes ) ) )
+                    name = ''
+                    classes.append( item )
+                 
+            if len( result ) == 1:
+                return result[0]
+            
+            return Menu( name = menu_name, *result )
+            
+        result = menu_items( self.add )
+        if isinstance( result, Menu ):
+            return result
+            
+        return Menu( result, name = 'popup' )
+            
+        
     #-- Trait Event Handlers ---------------------------------------------------
     
     @on_trait_change( 'snap_info.+, grid_info.+, guide_info.+' )
@@ -1819,7 +1870,9 @@ class ListCanvas ( ListCanvasPanel ):
     def add_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'add' button.
         """
-        pass # fixme: NOT IMPLEMENTED YET
+        control = self.control
+        control.PopupMenuXY( self.add_menu.create_menu( control, self ), 
+                             x - 10, y - 10 )
     
     def clear_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'clear' button.
@@ -1917,9 +1970,47 @@ class ListCanvas ( ListCanvasPanel ):
         if 'status' in operations:
             # Add the layout information for the title:
             self.layout[ 'status' ] = ( xl, yt, xr - xl, dyt )
+
+    #-- Pyface Menu Interface Implementation -----------------------------------
+            
+    def add_to_menu ( self, menu_item ):
+        """ Adds a menu item to the menu bar being constructed.
+        """
+        pass
+                
+    def add_to_toolbar ( self, toolbar_item ):
+        """ Adds a tool bar item to the tool bar being constructed.
+        """
+        pass
+        
+    def can_add_to_menu ( self, action ):
+        """ Returns whether the action should be defined in the user interface.
+        """
+        return True
+        
+    def can_add_to_toolbar ( self, action ):
+        """ Returns whether the toolbar action should be defined in the user 
+            interface.
+        """
+        return True
+                
+    def perform ( self, action ):
+        """ Performs the action described by a specified Action object.
+        """
+        action = action.action
+        if action[ : 5 ] == 'self.':
+            eval( action, globals(), { 'self': self } )
+        else:
+            getattr( self, action )()
                 
     #-- Private Methods --------------------------------------------------------
     
+    def _add_object ( self, index ):
+        """ Adds the object class spwith the specified 'add_classes' index to
+            the list canvas.
+        """
+        self.editor.value.append( self.add_classes[ index ]() )
+        
     def _refresh_canvas ( self ):
         """ Refresh the contents of the canvas.
         """
@@ -2120,6 +2211,10 @@ if __name__ == '__main__':
         Person_can_drag   = Bool( True )
         Person_can_clone  = Bool( True )
         Person_can_delete = Bool( True )
+        Person_title      = Property
+        
+        def _get_Person_title ( self ):
+            return (self.item.name or '<undefined>')
     
     class Person ( HasTraits ):
         name   = Str
