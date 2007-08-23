@@ -27,7 +27,7 @@ class ColorColumn ( ObjectColumn ):
         if type( color_values ) is tuple:
             wxcolor = WxColour( *self._as_int_rgb_tuple( color_values ) )
         else:
-            wxcolor = super( ColorObjectColumn, self ).get_cell_color( object )
+            wxcolor = super( ColorColumn, self ).get_cell_color( object )
         return wxcolor
 
     def get_value ( self, object ):
