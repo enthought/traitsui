@@ -59,6 +59,9 @@ from enthought.traits.ui.wx.themed_slider_editor \
 from enthought.traits.ui.wx.helper \
     import init_wx_handlers
     
+from enthought.pyface.api \
+    import confirm, YES
+    
 from enthought.pyface.dock.api \
     import add_feature
     
@@ -639,7 +642,7 @@ class SnapInfo ( HasStrictTraits ):
     
     # The magnetic 'snap' distance for edge snapping while dragging (a distance
     # of 0 means no snapping):
-    distance = Range( 0, 10, 0 )
+    distance = Range( 0, 15, 0 )
     
     #-- Trait View Definitions -------------------------------------------------
     
@@ -1186,7 +1189,7 @@ class ListCanvasItem ( ListCanvasPanel ):
         if clone is not None:
             self.control.ReleaseMouse()
             canvas.add_object( clone, hidden = True )
-            do_later( self._drag_clone, x, y )
+            do_later( self._drag_clone, x, y, event )
     
     def drag_left_down ( self, x, y, event ):
         """ Handles the user clicking the 'drag' button.
@@ -1251,10 +1254,11 @@ class ListCanvasItem ( ListCanvasPanel ):
         adapter = self.canvas.adapter
         rc      = adapter.get_can_close( self.object )
         if rc == Modified:
-            # fixme: Pop up a prompt dialog here...
-            rc = True ### TEMPORARY
-            
-        if rc is True:
+            rc = (confirm( self.control, 
+                           'Changes have been made.\n\nAre you sure you want '
+                           'to close this item?', 'Confirm close' ) == YES)
+                          
+        if rc:
             self.canvas.remove_item( self )
             adapter.set_closed( self.object )
 
@@ -1298,7 +1302,7 @@ class ListCanvasItem ( ListCanvasPanel ):
         
         return ( dxi, dyi, dyo - dyi )        
         
-    def _drag_clone ( self, x, y ):
+    def _drag_clone ( self, x, y, event ):
         """ Drag the new created clone of this item.
         """
         # fixme: Shouldn't be reaching into the canvas items to get the clone...
@@ -1307,7 +1311,7 @@ class ListCanvasItem ( ListCanvasPanel ):
         dxs, dys = self.size
         item.control.SetDimensions( xs, ys, dxs, dys )
         item.control.Show( True )
-        self.canvas.begin_drag( item, MOVE_MODE, x, y )
+        self.canvas.begin_drag( item, MOVE_MODE, x, y, event )
    
     def _set_cursor ( self, x, y ):
         """ Sets the correct mouse cursor for a specified mouse position.
@@ -1644,9 +1648,11 @@ class ListCanvas ( ListCanvasPanel ):
             self._drag_set = self.lego_set_for( item, event.ShiftDown() )
         else:
             self._drag_set = set( [ item ] )
-        self._drag_info = ( mode, x0, y0, dx, dy, x0 + x1 + x, y0 + y1 + y )
-        self.state      = 'dragging'
-        if (self.snap_info.distance > 0) and self.guide_info.snapping:
+        self._drag_info     = ( mode, x0, y0, dx, dy, x0 + x1 + x, y0 + y1 + y )
+        self.state          = 'dragging'
+        self._drag_snapping = (not event.AltDown())
+        if ((self.snap_info.distance > 0) and self._drag_snapping and 
+             self.guide_info.snapping):
             self._drag_guides = self._guide_lines( self._drag_set )
         self.control.CaptureMouse()
         self._refresh_canvas_drag( True )
@@ -1658,7 +1664,7 @@ class ListCanvas ( ListCanvasPanel ):
         # If snapping distance is 0, then it is effectively turned off, so just
         # return the original delta:
         snap = self.snap_info.distance
-        if snap == 0:
+        if (snap == 0) or (not self._drag_snapping):
             return dx
             
         # Compute the adjusted x-coordinate:
@@ -1705,7 +1711,7 @@ class ListCanvas ( ListCanvasPanel ):
         # If snapping distance is 0, then it is effectively turned off, so just
         # return the original delta:
         snap = self.snap_info.distance
-        if snap == 0:
+        if (snap == 0) or (not self._drag_snapping):
             return dy
             
         # Compute the adjusted x-coordinate:
@@ -1877,8 +1883,9 @@ class ListCanvas ( ListCanvasPanel ):
     def clear_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'clear' button.
         """
-        # fixme: Prompt the user before doing the clear...
-        del self.editor.value[:]
+        if confirm( self.control, 'Are you sure you want delete all items?',
+                    'Confirm delete' ) == YES:
+            del self.editor.value[:]
     
     def load_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'load' button.
@@ -2202,7 +2209,7 @@ class ListCanvasEditor ( BasicEditorFactory ):
 if __name__ == '__main__':
     from enthought.traits.api import File
     
-    snap_info  = SnapInfo( distance = 8 )
+    snap_info  = SnapInfo( distance = 10 )
     grid_info  = GridInfo( visible = 'always', snapping = False )
     guide_info = GuideInfo()
     
@@ -2211,6 +2218,7 @@ if __name__ == '__main__':
         Person_can_drag   = Bool( True )
         Person_can_clone  = Bool( True )
         Person_can_delete = Bool( True )
+        Person_can_close  = Any( Modified )
         Person_title      = Property
         
         def _get_Person_title ( self ):
