@@ -792,7 +792,8 @@ class _TabularEditor ( Editor ):
         
         control.DeleteAllItems()
         control.SetItemCount( n )
-        control.RefreshItems( 0, n - 1 )
+        if n > 0:
+            control.RefreshItems( 0, n - 1 )
         
         edit, self.edit = self.edit, False
         row,  self.row  = self.row,  None
