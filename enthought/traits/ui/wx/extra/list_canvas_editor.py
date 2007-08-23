@@ -1224,12 +1224,15 @@ class ListCanvasItem ( ListCanvasPanel ):
                         
                 if y >= (yi + dyi):
                     item.position = ( x, y + dyc )
+        
+        # Update the canvas:
+        self.canvas.update()
     
     def maximize_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'maximize' button.
         """
         strict = event.ShiftDown()
-        items  = self.canvas.lego_set_for( self, strict )
+        items  = self.canvas.lego_set_for( self, False )
         
         dxi, dyi, dyc = self._maximize()
         
@@ -1247,6 +1250,9 @@ class ListCanvasItem ( ListCanvasPanel ):
                 
             if y >= (yi + dyi):
                 item.position = ( x, y + dyc )
+        
+        # Update the canvas:
+        self.canvas.update()
     
     def close_left_up ( self, x, y, event ):
         """ Handles the user clicking the 'close' button.
@@ -1750,6 +1756,15 @@ class ListCanvas ( ListCanvasPanel ):
                 
         # Return the delta:
         return dy        
+
+    def update ( self ):
+        """ Updates the contents of the canvas and its bounds.
+        """
+        # Refresh all canvas items:
+        self._refresh_items()
+        
+        # Update the canvas size:
+        self._adjust_size()
         
     #-- Property Implementations -----------------------------------------------
     
@@ -1865,11 +1880,8 @@ class ListCanvas ( ListCanvasPanel ):
         self.state      = 'normal'
         self._refresh_canvas_drag( False )
         
-        # Refresh all canvas items:
-        self._refresh_items()
-        
-        # Update the canvas size:
-        self._adjust_size()
+        # Update the canvas:
+        self.update()
         
     #-- Toolbar Button Event Handlers ------------------------------------------
     
