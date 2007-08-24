@@ -803,9 +803,11 @@ class _TabularEditor ( Editor ):
                 row -= 1
                 if row < 0:
                     row = None
-        
+
         if row is None:
-            control.EnsureVisible( top + pn - 2 )
+            visible = top + pn - 2
+            if visible >= 0 and visible < control.GetItemCount():
+                control.EnsureVisible( visible )
             return
          
         if 0 <= (row - top) < pn:
