@@ -888,7 +888,7 @@ class ListCanvasPanel ( ImagePanel ):
                 yt = yo + ((slice.xtop - dyt + 4) / 2)
                 yc = (2 * yo) + slice.xtop
             else:
-                yt = yo + dyw - ((slice.xbottom + dyt + 4) / 2)
+                yt = yo + dyw - ((slice.xbottom + dyt - 2) / 2)
                 yc = (2 * (yo + dyw)) - slice.xbottom
             
             xl = xo + slice.xleft
@@ -955,8 +955,14 @@ class ListCanvasItem ( ListCanvasPanel ):
     # The bounds of the item on the list canvas:
     bounds = Property
     
+    # The list of immediate neighbors of the item:
+    neighbors = Property # List( ListCanvasItem )
+    
     # Is the item initially hidden?
     hidden = Bool( False )
+    
+    # The item has been moved or resized:
+    moved = Event
     
     #-- Private Traits ---------------------------------------------------------
     
@@ -1125,6 +1131,9 @@ class ListCanvasItem ( ListCanvasPanel ):
             self.trait_property_changed( 'bounds',   old_bounds,     bounds )
             self.trait_property_changed( 'position', old_bounds[:2], bounds[:2])
             self.trait_property_changed( 'size',     old_bounds[2:], bounds[2:])
+            
+    def _get_neighbors ( self ):
+        return self.canvas.neighbor_set_for( self )
             
     #-- Trait Event Handlers ---------------------------------------------------
     
@@ -1684,6 +1693,26 @@ class ListCanvas ( ListCanvasPanel ):
                         self._lego_set_for( itemi, strict, result )
                     
         return result
+                
+    def neighbor_set_for ( self, item ):
+        """ Return the set of neighbors which share an edge with the specified 
+            item.
+        """
+        result = []
+        x,  y  = item.position
+        dx, dy = item.size
+        dx     += x
+        dy     += y
+        for itemi in self.items:
+            xi,  yi  = itemi.position
+            dxi, dyi = itemi.size
+            if (((max( x, xi ) < min( dx, xi + dxi )) and 
+                 (((yi + dyi) == y) or (dy == yi))) or
+                ((max( y, yi ) < min( dy, yi + dyi )) and 
+                 (((xi + dxi) == x) or (dx == xi)))):
+                result.append( itemi )
+                    
+        return result
         
     def activate ( self, item ):
         """ Activates a specified list canvas item.
@@ -1715,6 +1744,7 @@ class ListCanvas ( ListCanvasPanel ):
             self._drag_set = self.lego_set_for( item, event.ShiftDown() )
         else:
             self._drag_set = set( [ item ] )
+        self._drag_moved    = set()
         self._drag_info     = ( mode, x0, y0, dx, dy, x0 + x1 + x, y0 + y1 + y )
         self.state          = 'dragging'
         self._drag_snapping = (not event.AltDown())
@@ -1901,9 +1931,11 @@ class ListCanvas ( ListCanvasPanel ):
         rx, ry, rdx, rdy = drag_item.resize( mode, x0, y0, dx, dy,
                                                    x - xo, y - yo )
         if ((rx != 0) or (ry != 0)) or (rdx != 0) or (rdy != 0):
+            drag_moved = self._drag_moved
+            drag_moved.add( drag_item )
             for item in self._drag_set:
                 if item is not drag_item:
-                    x, y, dx, dy = item.bounds
+                    x, y, dx, dy = bounds = item.bounds
                     if (mode & 0x03) != 0:
                         if (mode & 0x01) != 0:
                             if (mode & 0x04) != 0:
@@ -1931,14 +1963,19 @@ class ListCanvas ( ListCanvasPanel ):
                         x += rx
                         y += ry
                         
-                    item.bounds = x, y, dx, dy
+                    if bounds != ( x, y, dx, dy ):
+                        item.bounds = x, y, dx, dy
+                        drag_moved.add( item )
         
     def dragging_left_up ( self, x, y, event ):
         """ Handles the left mouse button being released while moving or
             resizing a list item.
         """
-        self._drag_item = self._drag_set = self._drag_guides = None 
-        self.state      = 'normal'
+        for item in self._drag_moved:
+            item.moved = True
+        self._drag_item   = self._drag_set = self._drag_moved = \
+        self._drag_guides = None 
+        self.state        = 'normal'
         self._refresh_canvas_drag( False )
         
         # Update the canvas:
@@ -2302,22 +2339,30 @@ if __name__ == '__main__':
     
     class PersonMonitor ( ListCanvasItemMonitor ):
         
-        @on_trait_change( 'item.object.name' )
+        @on_trait_change( 'item:object:name' )
         def _name_modified ( self, name ):
             self.item.title = name
             
-        @on_trait_change( 'item.position' )
-        def _position_modified ( self, position ):
-            self.adapter.status = '%s moved to (%s,%s)' % (
-                                  self.item.title, position[0], position[1] )
-                                                          
+        @on_trait_change( 'item:moved' )
+        def _position_modified ( self ):
+            position = self.item.position
+            self.adapter.status = '%s moved to (%s,%s) [%s]' % (
+                   self.item.title, position[0], position[1],
+                   ', '.join( [ item.title for item in self.item.neighbors ] ) )
     
     class TestAdapter ( ListCanvasAdapter ):
+        
+        Person_theme_active   = ATheme( Theme( 'Person_active',   
+                                               offset = ( 0, -3 ) ) )
+        Person_theme_inactive = ATheme( Theme( 'Person_inactive',
+                                               offset = ( 0, -3 ) ) )
+        Person_theme_hover    = ATheme( Theme( 'Person_hover',
+                                               offset = ( 0, -3 ) ) )
         
         Person_can_drag   = Bool( True )
         Person_can_clone  = Bool( True )
         Person_can_delete = Bool( True )
-        # fixme: Why doesn't Constant work...
+        # fixme: Why can't we use 'Constant' for this?...
         Person_monitor    = Any( PersonMonitor )
         Person_can_close  = Any( Modified )
         Person_title      = Property
