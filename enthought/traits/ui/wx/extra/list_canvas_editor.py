@@ -268,6 +268,18 @@ class IListCanvasItem ( Interface ):
     list_canvas_item_deactivated = Event
     
 #-------------------------------------------------------------------------------
+#  'IListCanvasAware' interface:
+#-------------------------------------------------------------------------------
+
+class IListCanvasAware ( Interface ):
+    """ Interface for objects that want to be aware that they are being used
+        on a list canvas.
+    """
+    
+    # The list canvas item associated with this object:
+    list_canvas_item = Instance( 'ListCanvasItem' )
+    
+#-------------------------------------------------------------------------------
 #  'ListCanvasAdapter' class:
 #-------------------------------------------------------------------------------
 
@@ -1096,6 +1108,11 @@ class ListCanvasItem ( ListCanvasPanel ):
         # Return the net change:
         return ( (xo - cx), (yo - cy), (dxo - cdx), (dyo - cdy) )
         
+    def activate ( self ):
+        """ Activates this list canvas item.
+        """
+        self.canvas.activate( self )
+        
     #-- Property Implementations -----------------------------------------------
     
     def _get_position ( self ):
@@ -1152,6 +1169,10 @@ class ListCanvasItem ( ListCanvasPanel ):
                               kind   = 'subpanel' )
             
         control.GetSizer().Add( ui.control, 1, wx.EXPAND )
+        
+        # Check to see if the object is list canvas aware:
+        if object.has_traits_interface( IListCanvasAware ):
+            object.list_canvas_item = self
         
     def _monitor_changed ( self, old, new ):
         """ Handles the 'monitor' trait being changed.
@@ -1243,7 +1264,7 @@ class ListCanvasItem ( ListCanvasPanel ):
         """ Handles the user pressing the left mouse button while in the 
             inactive state.
         """
-        self.canvas.activate( self )
+        self.activate()
         self.control.ReleaseMouse()
         self.active_left_down( x, y, event )
         
@@ -2331,12 +2352,133 @@ class ListCanvasEditor ( BasicEditorFactory ):
 #-- Test Case ------------------------------------------------------------------
 
 if __name__ == '__main__':
-    from enthought.traits.api import File, Constant
+    from enthought.traits.api \
+        import File, Constant, Int
+    
+    from enthought.traits.ui.api \
+        import ListEditor, ValueEditor
+        
+    from enthought.traits.ui.wx.extra.tabular_editor \
+        import TabularEditor, TabularAdapter
     
     snap_info  = SnapInfo( distance = 10 )
     grid_info  = GridInfo( visible = 'always', snapping = False )
     guide_info = GuideInfo()
     
+    class CanvasItemsTabularAdapter ( TabularAdapter ):
+        
+        columns = [ ( 'Title', 'title' ) ]
+        
+        def _get_text ( self ):
+            return self.item
+   
+    class CanvasItems ( HasPrivateTraits ):
+        
+        implements( IListCanvasAware )
+        
+        #-- IListCanvasAware Implementation ------------------------------------
+        
+        # The list canvas item associated with this object:
+        list_canvas_item = Instance( 'ListCanvasItem' )
+        
+        #-- Private Traits -----------------------------------------------------
+        
+        # The titles of all list canvas items:
+        titles = Property( depends_on = 'list_canvas_item:canvas:items.title' )
+        
+        # The index of the currently selected title:
+        index = Int
+        
+        #-- Trait View Definitions ---------------------------------------------
+        
+        view = View(
+            Item( 'titles', 
+                  show_label = False,
+                  editor     = TabularEditor(
+                                   selected_row = 'index',
+                                   editable     = False,
+                                   adapter      = CanvasItemsTabularAdapter()
+                               )
+            )
+        )
+        
+        #-- Property Implementations -------------------------------------------
+        
+        @cached_property
+        def _get_titles ( self ):
+            if self.list_canvas_item is None:
+                return []
+                
+            return [ item.title for item in self.list_canvas_item.canvas.items ]
+            
+        #-- Trait Event Handlers -----------------------------------------------
+        
+        def _index_changed ( self, index ):
+            """ Handles the user selecting a title row.
+            """
+            self.list_canvas_item.canvas.items[ index ].activate()
+            
+    class ItemSnoop ( HasPrivateTraits ):
+        
+        #-- Private Traits -----------------------------------------------------
+        
+        # The list canvas item being snooped:
+        item = Instance( ListCanvasItem )
+        
+        # The item's title:
+        title = Property # ( Str )
+        
+        #-- Trait View Definitions ---------------------------------------------
+        
+        view = View(
+            Item( 'item',
+                  show_label = False,
+                  editor     = ValueEditor()
+            )
+        )
+        
+        #-- Property Implementations -------------------------------------------
+        
+        def _get_title ( self ):
+            return self.item.title
+            
+    class CanvasSnoop ( HasPrivateTraits ):
+        
+        implements( IListCanvasAware )
+        
+        #-- IListCanvasAware Implementation ------------------------------------
+        
+        # The list canvas item associated with this object:
+        list_canvas_item = Instance( 'ListCanvasItem' )
+        
+        #-- Private Traits -----------------------------------------------------
+        
+        # The titles of all list canvas items:
+        neighbors = List( ItemSnoop )
+        
+        #-- Trait View Definitions ---------------------------------------------
+        
+        view = View(
+            Item( 'neighbors',
+                  show_label = False,
+                  style      = 'custom',
+                  editor     = ListEditor( use_notebook = True,
+                                           dock_style   = 'tab',
+                                           export       = 'DockWindowShell',
+                                           page_name    = '.title' )
+            )
+        )
+        
+        #-- Trait Event Handlers -----------------------------------------------
+        
+        @on_trait_change( 'list_canvas_item:moved' )
+        def _update_neighbors ( self ):
+            if self.list_canvas_item is None:
+                self.neighbors = []
+            else:
+                self.neighbors = [ ItemSnoop( item = item )
+                                   for item in self.list_canvas_item.neighbors ]
+     
     class PersonMonitor ( ListCanvasItemMonitor ):
         
         @on_trait_change( 'item:object:name' )
@@ -2358,6 +2500,7 @@ if __name__ == '__main__':
                                                offset = ( 0, -3 ) ) )
         Person_theme_hover    = ATheme( Theme( 'Person_hover',
                                                offset = ( 0, -3 ) ) )
+        CanvasSnoop_size      = Tuple( ( 250, 250 ) )
         
         Person_can_drag   = Bool( True )
         Person_can_clone  = Bool( True )
@@ -2422,7 +2565,7 @@ if __name__ == '__main__':
                 gender = 'Female' ),
         AFile(),
         AFile(),
-        snap_info, grid_info, guide_info
+        snap_info, grid_info, guide_info, CanvasItems(), CanvasSnoop()
     ]
         
     People( people = people ).configure_traits()
