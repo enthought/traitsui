@@ -174,11 +174,12 @@ class SimpleColorEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        from enthought.enable.wx import Window
-        from enthought.enable    import Label
+        from enthought.enable2.wx_backend import Window
+        from enthought.enable2.label import Label
         
         window = Window( parent, 
-            component = Label( '', border_size = 1, font = 'modern 9' )
+            component = Label(text='', border_size=1, font='modern 10',
+                resizable="hv")
         )
         self._swatch = window.component
         self.control = window.control
@@ -333,11 +334,12 @@ class ReadonlyColorEditor ( ReadonlyEditor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        from enthought.enable.wx import Window
-        from enthought.enable    import Label
+        from enthought.enable2.wx_backend import Window
+        from enthought.enable2.label import Label
         
         window = Window( parent, 
-                    component = Label( '', border_size = 1, font = 'modern 9' ) )
+                    component = Label(text='', border_size=1, font='modern 10',
+                        resizable="hv"))
         self._swatch = window.component
         self.control = window.control
         self.control.SetSize( ( 110, 20 ) )
@@ -369,18 +371,19 @@ class ReadonlyColorEditor ( ReadonlyEditor ):
 def set_color ( editor ):
     """  Sets the color of the specified color control.
     """
-    from enthought.enable.base import white_color, black_color
+    from enthought.enable2.api import color_table
     
     color   = editor.factory.get_color( editor )
     control = editor._swatch
-    control.bg_color = color
+    control.bgcolor = color
+    control.request_redraw()
     
     if ((color[0] > 0.75) or
         (color[1] > 0.75) or
         (color[2] > 0.75)):
-        control.color = black_color
+        control.color = color_table["black"]
     else:
-        control.color = white_color
+        control.color = color_table["white"]
 
 #----------------------------------------------------------------------------
 #  Creates a custom color editor panel for a specified editor:
