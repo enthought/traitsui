@@ -17,8 +17,9 @@
 #-------------------------------------------------------------------------------
 
 from enthought.kiva.traits.kiva_font_trait import KivaFont
-from enthought.traits.api    import HasStrictTraits, Trait, Font, Color, \
-                                RGBColor, RGBAColor, Str, Range, List, Instance
+from enthought.enable2.traits.api import RGBAColor
+from enthought.traits.api import HasStrictTraits, Trait, Font, Color, \
+                                Str, Range, List, Instance
 from enthought.traits.ui.api import CodeEditor, View
 
 #-------------------------------------------------------------------------------

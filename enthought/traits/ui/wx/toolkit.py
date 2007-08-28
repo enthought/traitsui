@@ -398,10 +398,6 @@ class GUIToolkit ( Toolkit ):
         import rgb_color_trait as rgbct
         return rgbct.RGBColor( *args, **traits )
 
-    def rgba_color_trait ( self, *args, **traits ):
-        import rgba_color_trait as rgbact
-        return rgbact.RGBAColor( *args, **traits )
-
     def font_trait ( self, *args, **traits ):
         import font_trait as ft
         return ft.WxFont( *args, **traits )
@@ -530,11 +526,6 @@ class GUIToolkit ( Toolkit ):
     def rgb_color_editor ( self, *args, **traits ):
         import rgb_color_editor as rgbce
         return rgbce.ToolkitEditorFactory( *args, **traits )
-
-    # RGBA Color:
-    def rgba_color_editor ( self, *args, **traits ):
-        import rgba_color_editor as rgbace
-        return rgbace.ToolkitEditorFactory( *args, **traits )
 
     # Set:
     def set_editor ( self, *args, **traits ):

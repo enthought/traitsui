@@ -18,7 +18,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.traits.api import HasStrictTraits, RGBAColor, Enum
+from enthought.traits.api import HasStrictTraits, Enum
+from enthought.enable2.traits.api import RGBAColor
 
 #-------------------------------------------------------------------------------
 #  'ColorInfo' class:
