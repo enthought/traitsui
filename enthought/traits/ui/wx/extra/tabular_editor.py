@@ -749,8 +749,11 @@ class _TabularEditor ( Editor ):
         
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
-        self.context_object.on_trait_change( self.update_editor,
+        try:
+            self.context_object.on_trait_change( self.update_editor,
                                 self.extended_name + '_items', dispatch = 'ui' )
+        except:
+            pass
                                 
         # Create the mapping from user supplied images to wx.ImageList indices:
         for image_resource in factory.images:
