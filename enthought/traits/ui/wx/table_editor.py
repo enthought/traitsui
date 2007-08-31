@@ -26,8 +26,8 @@ interface toolkit.
 import wx
 
 from enthought.traits.api \
-    import true, false, Int, List, Instance, Str, Color, Font, Any, Button, \
-           Tuple, Dict, HasPrivateTraits, Trait, Bool, Callable, Range
+    import true, false, Int, Float, List, Instance, Str, Color, Font, Any, \
+           Button, Tuple, Dict, HasPrivateTraits, Trait, Bool, Callable, Range
 
 from enthought.traits.ui.api \
     import View, Item, UI, InstanceEditor, EnumEditor, Handler, SetEditor, \
@@ -161,10 +161,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     edit_view_handler = Instance( Handler )
 
     # Width to use for the edit view
-    edit_view_width = Int( -1 )
+    edit_view_width = Float( -1.0 )
 
     # Height to use for the edit view
-    edit_view_height = Int( -1 )
+    edit_view_height = Float( -1.0 )
 
     # Layout orientation of the table and its associated editor pane. This
     # attribute applies only if **edit_view** is not ' '.

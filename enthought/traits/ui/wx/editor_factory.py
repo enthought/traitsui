@@ -185,7 +185,7 @@ class ReadonlyEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        if self.item.resizable or (self.item.height != -1):
+        if self.item.resizable or (self.item.height != -1.0):
             self.control = wx.TextCtrl( parent, -1, self.str_value,
                        style = wx.NO_BORDER | wx.TE_MULTILINE | wx.TE_READONLY )
             self.control.SetBackgroundColour( WindowColor )                                      
@@ -204,7 +204,7 @@ class ReadonlyEditor ( Editor ):
             editor.
         """
         new_value = self.str_value
-        if self.item.resizable or (self.item.height!= -1):
+        if self.item.resizable or (self.item.height!= -1.0):
             if self.control.GetValue() != new_value:
                 self.control.SetValue( new_value )
         elif self.control.GetLabel() != new_value:
