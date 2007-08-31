@@ -562,7 +562,7 @@ class FillPanel ( object ):
                 panel.SetSizer( sizer )
             self.control = panel = new_panel
             if is_splitter or is_tabbed:
-                editor = DockWindowGroupEditor( control = panel )
+                editor = DockWindowGroupEditor( control = panel, ui = ui )
             else:
                 editor = GroupEditor( control = panel )
             if id != '':

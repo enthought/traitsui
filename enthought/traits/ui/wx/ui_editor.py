@@ -16,9 +16,11 @@
 #  Symbols defined: UIEditor
 #
 #------------------------------------------------------------------------------
+
 """ Defines the BasicUIEditor class, which allows creating editors that define
-their function by creating an embedded Traits UI.
+    their function by creating an embedded Traits UI.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -39,12 +41,13 @@ from editor \
 class UIEditor ( Editor ):
     """ An editor that creates an embedded Traits UI.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
         
     # The Traits UI created by the editor
-    ui = Instance( UI )
+    editor_ui = Instance( UI )
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -55,8 +58,8 @@ class UIEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.ui      = self.init_ui( parent )
-        self.control = self.ui.control
+        self.editor_ui = self.init_ui( parent )
+        self.control   = self.editor_ui.control
         
     #---------------------------------------------------------------------------
     #  Creates the traits UI for the editor (must be overridden by a subclass):  
@@ -87,8 +90,8 @@ class UIEditor ( Editor ):
         """ Disposes of the contents of an editor.
         """
         # Make sure the imbedded traits UI is disposed of properly:
-        if self.ui is not None:
-            self.ui.dispose()
+        if self.editor_ui is not None:
+            self.editor_ui.dispose()
             
         super( UIEditor, self ).dispose()
         
@@ -103,7 +106,7 @@ class UIEditor ( Editor ):
         """ Restores any saved user preference information associated with the 
             editor.
         """
-        self.ui.set_prefs( prefs )
+        self.editor_ui.set_prefs( prefs )
             
     #---------------------------------------------------------------------------
     #  Returns any user preference information associated with the editor:
@@ -112,7 +115,7 @@ class UIEditor ( Editor ):
     def save_prefs ( self ):
         """ Returns any user preference information associated with the editor.
         """
-        return self.ui.get_prefs()
+        return self.editor_ui.get_prefs()
         
 #-- End UI preference save/restore interface -----------------------------------                         
         
