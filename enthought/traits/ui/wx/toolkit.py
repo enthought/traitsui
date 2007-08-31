@@ -387,6 +387,25 @@ class GUIToolkit ( Toolkit ):
             method( ui.info, owner, event )
 
     #---------------------------------------------------------------------------
+    #  Destroys a specified GUI toolkit control:  
+    #---------------------------------------------------------------------------
+    
+    def destroy_control ( self, control ):
+        """ Destroys a specified GUI toolkit control.
+        """
+        control.Destroy()
+
+    #---------------------------------------------------------------------------
+    #  Destroys all of the child controls of a specified GUI toolkit control:  
+    #---------------------------------------------------------------------------
+    
+    def destroy_children ( self, control ):
+        """ Destroys all of the child controls of a specified GUI toolkit 
+            control.
+        """
+        control.DestroyChildren()
+
+    #---------------------------------------------------------------------------
     #  GUI toolkit dependent trait definitions:
     #---------------------------------------------------------------------------
 
