@@ -24,7 +24,8 @@ import wx
 from enthought.traits.api \
     import HasTraits, HasPrivateTraits, HasStrictTraits, Interface, Instance, \
            List, Enum, Color, Bool, Range, Str, Float, Event, Tuple, Property, \
-           Delegate, Any, Missing, implements, on_trait_change, cached_property
+           Delegate, Any, Missing, Undefined, implements, on_trait_change, \
+           cached_property
            
 from enthought.traits.trait_base \
     import SequenceTypes
@@ -72,7 +73,7 @@ from enthought.pyface.image_resource \
     import ImageResource
 
 from enthought.util.wx.drag_and_drop \
-    import PythonDropSource
+    import PythonDropSource, PythonDropTarget
     
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -159,7 +160,7 @@ class IListCanvasAdapter ( Interface ):
 #  'AnIListCanvasAdapter' interface:
 #-------------------------------------------------------------------------------
 
-class AnIListCanvasAdapter ( Interface ):
+class AnIListCanvasAdapter ( HasPrivateTraits ):
     """ A concrete implementation of the IListCanvasAdapter interface.
     """
     
@@ -216,7 +217,11 @@ class IListCanvasItem ( Interface ):
     # Can the current drag object be dropped on the list canvas item?
     list_canvas_item_can_drop = Bool
     
-    # If the preceding trait is implemented, then this trait should be 
+    # The item (or list of items) to be added to the canvas when the current
+    # drag object is dropped on the list canvas item:
+    list_canvas_item_dropped = Any # List/Instance/None
+    
+    # If the preceding two traits are implemented, then this trait should be 
     # implemented as well if you need to know what object is being dropped:
     list_canvas_item_drop = Instance( HasTraits )
     
@@ -316,9 +321,15 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     # Can the current list canvas item be resized?
     can_resize = Bool( True )
     
-    # Can the current drag object be dropped on the current list canvas item
-    # (or on the canvas itself if the current list canvas item is None)? 
-    can_drop = Bool( False )
+    # Can the current drag object be dropped on the current item (or on the 
+    # canvas itself if the current item is an instance of ListCanvas)? 
+    can_drop = Property # Bool
+    
+    # The item or list of items to be added to the canvas when the current drag
+    # object is dropped on the current item (or on the canvas itself of the 
+    # current item is an instance of ListCanvas). A value of *None* means that
+    # no object should be added to the canvas:
+    dropped = Property # List/Instance/None
     
     # Can the current list canvas item be deleted (i.e. is close allowed)?
     can_delete = Bool( False )
@@ -394,8 +405,8 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     
     #-- Traits set by the editor -----------------------------------------------
     
-    # The current list canvas item (a value of **None** means the entire 
-    # canvas):
+    # The current list canvas item (an instance of **ListCanvas** means the 
+    # entire canvas):
     item = Instance( HasTraits )
 
     # The current item being dropped (if any):
@@ -459,6 +470,13 @@ class ListCanvasAdapter ( HasPrivateTraits ):
             dropped on the specified item.
         """
         return self._result_for( 'get_can_drop', item, drop )
+        
+    def get_dropped ( self, item, drop ):
+        """ Returns the item (or list of items) to be added to the canvas when
+            the specified droppable object is dropped on the specified item 
+            (or canvas).
+        """
+        return self._result_for( 'get_dropped', item, drop )
                 
     def get_can_delete ( self, item ):     
         """ Returns whether or not the specified item can be deleted from the
@@ -572,6 +590,24 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     def _get_title ( self ):
         return user_name_for( self.item.__class__.__name__ )
         
+    def _get_can_drop ( self ):
+        result = self._result_for(
+                      'get_can_receive_%s' % self.drop.__class__.__name__,
+                      self.item, self.drop )
+        if result is not Undefined:
+            return result
+            
+        return False
+                    
+    def _get_dropped ( self ):
+        result = self._result_for(
+                      'get_received_%s' % self.drop.__class__.__name__,
+                      self.item, self.drop )
+        if result is not Undefined:
+            return result
+            
+        return self.drop
+        
     #-- Private Methods --------------------------------------------------------
     
     def _result_for ( self, name, item, drop = None ):
@@ -639,6 +675,12 @@ class ListCanvasAdapter ( HasPrivateTraits ):
             else:  
                 # If none found, just use the generic trait for the handler:
                 handler = self._get_handler_for( trait_name, prefix )
+                
+                # If we couldn't resolve it, it must be one of the
+                # 'can_receive_xxx' or 'received_xxx' special cases, so indicate 
+                # that the result is undefined:
+                if handler is None:
+                    return Undefined
             
         # Cache the resulting handler, so we don't have to look it up again:
         self.cache[ key ] = handler
@@ -1060,6 +1102,12 @@ class ListCanvasItem ( ListCanvasPanel ):
         # Set the item's position and size:
         self.control.SetDimensions( x, y, dx, dy )
         
+        # Set the tooltip for the control:
+        self._set_tooltip()
+        
+        # Set up to handle drop events:
+        self.control.SetDropTarget( PythonDropTarget( self ) )
+        
     def resize ( self, mode, xo, yo, dxo, dyo, dx, dy ):
         """ Resize the control while in drag mode.
         """
@@ -1249,6 +1297,7 @@ class ListCanvasItem ( ListCanvasPanel ):
         self.state = 'hover'
         self.control.CaptureMouse()
         self._set_cursor( x, y )
+        self._set_tooltip()
         
     def hover_motion ( self, x, y, event ):
         """ Handles a mouse motion event while in the hover state.
@@ -1356,6 +1405,43 @@ class ListCanvasItem ( ListCanvasPanel ):
         if rc:
             self.canvas.remove_item( self )
             adapter.set_closed( self.object )
+        
+    #-- Drag and Drop Event Handlers -------------------------------------------
+
+    def wx_dropped_on ( self, x, y, data, drag_result ):
+        """ Handles an object being dropped on a list item.
+        """
+        canvas = self.canvas
+        if not isinstance( data, SequenceTypes ):
+            # Handle the case of just a single item being dropped:
+            canvas.dropped_on( self, data )
+        else:
+            # Handles the case of a list of items being dropped:
+            for item in data:
+                canvas.dropped_on( self, item )
+            
+        # Return a successful drop result:
+        return drag_result
+         
+    def wx_drag_any ( self, x, y, data, drag_result ):
+        """ Handles a Python object being dragged over the tree.
+        """
+        if isinstance( data, SequenceTypes ):
+            rc = wx.DragNone
+            for item in data:
+                rc = self.wx_drag_any( x, y, item, drag_result )
+                if rc == wx.DragNone:
+                    break
+                    
+            return rc
+           
+        # If the adapter says it is OK to drop the data here, then indicate the
+        # data can be dropped:
+        if self.canvas.adapter.get_can_drop( self.object, data ):
+            return drag_result
+            
+        # Else indicate that we will not accept the data:
+        return wx.DragNone
 
     #-- Private Methods --------------------------------------------------------
 
@@ -1411,7 +1497,7 @@ class ListCanvasItem ( ListCanvasPanel ):
     def _set_cursor ( self, x, y ):
         """ Sets the correct mouse cursor for a specified mouse position.
         """
-        n      = 4
+        n      = 3
         cursor = wx.CURSOR_ARROW
         dx, dy = self.size
         mode   = 0
@@ -1446,13 +1532,22 @@ class ListCanvasItem ( ListCanvasPanel ):
                  
             # If not, check if the pointer is in a valid 'move' position:
             if (mode == 0) and adapter.get_can_move( self.object ):
-                slice = self.theme.image_slice
-                if (y < slice.xtop) or (y >= (dy - slice.xbottom)):
+                theme = self.theme
+                slice = theme.image_slice
+                if ((y < max( slice.xtop + theme.margins.top, 6)) or
+                    (y >= (dy - max( slice.xbottom - theme.margins.bottom, 
+                                     6 )))):
                     mode = MOVE_MODE
                 
         self.control.SetCursor( get_cursor( cursor ) )
         
         return mode
+        
+    def _set_tooltip ( self ):
+        """ Sets the tooltip for the item's control.
+        """
+        self.control.SetToolTip( 
+            wx.ToolTip( self.canvas.adapter.get_tooltip( self.object ) ) )
     
     #-- ListCanvasPanel Method Overrides ---------------------------------------
     
@@ -1567,7 +1662,10 @@ class ListCanvas ( ListCanvasPanel ):
         canvas.SetBackgroundColour( control.GetBackgroundColour() )
                                                    
         # Initialize the wx event handlers for the canvas control:                                                   
-        init_wx_handlers( self.canvas, self, 'canvas' )                                                   
+        init_wx_handlers( self.canvas, self, 'canvas' )
+        
+        # Set up to handle drop events:
+        canvas.SetDropTarget( PythonDropTarget( self ) )
             
         control.GetSizer().Add( self.canvas, 1, wx.EXPAND )
         
@@ -1877,6 +1975,17 @@ class ListCanvas ( ListCanvasPanel ):
         
         # Update the canvas size:
         self._adjust_size()
+
+    def dropped_on ( self, item, drop ):
+        """ Handles a single item dropped on a list item or canvas.
+        """
+        objects = self.adapter.get_dropped( item, drop )
+        if objects is not None:
+            if isinstance( objects, SequenceTypes ):
+                for object in objects:
+                    self.add_object( object )
+            else:
+                self.add_object( objects )
         
     #-- Property Implementations -----------------------------------------------
     
@@ -2028,6 +2137,42 @@ class ListCanvas ( ListCanvasPanel ):
         """
         pass # fixme: NOT IMPLEMENTED YET
         
+    #-- Drag and Drop Event Handlers -------------------------------------------
+
+    def wx_dropped_on ( self, x, y, data, drag_result ):
+        """ Handles an object being dropped on a list canvas.
+        """
+        if not isinstance( data, SequenceTypes ):
+            # Handle the case of just a single item being dropped:
+            self.dropped_on( self, data )
+        else:
+            # Handles the case of a list of items being dropped:
+            for item in data:
+                self.dropped_on( self, item )
+            
+        # Return a successful drop result:
+        return drag_result
+        
+    def wx_drag_any ( self, x, y, data, drag_result ):
+        """ Handles a Python object being dragged over the tree.
+        """
+        if isinstance( data, SequenceTypes ):
+            rc = wx.DragNone
+            for item in data:
+                rc = self.wx_drag_any( x, y, item, drag_result )
+                if rc == wx.DragNone:
+                    break
+                    
+            return rc
+           
+        # If the adapter says it is OK to drop the data here, then indicate the
+        # data can be dropped:
+        if self.adapter.get_can_drop( self, data ):
+            return drag_result
+            
+        # Else indicate that we will not accept the data:
+        return wx.DragNone
+        
     #-- Other wx Event Handlers ------------------------------------------------
     
     def canvas_erase_background ( self, event ):
@@ -2144,7 +2289,7 @@ class ListCanvas ( ListCanvasPanel ):
     #-- Private Methods --------------------------------------------------------
     
     def _add_object ( self, index ):
-        """ Adds the object class spwith the specified 'add_classes' index to
+        """ Adds the object class with the specified 'add_classes' index to
             the list canvas.
         """
         self.editor.value.append( self.add_classes[ index ]() )
@@ -2244,7 +2389,7 @@ class _ListCanvasEditor ( Editor ):
     #-- Private Traits ---------------------------------------------------------
     
     # The list canvas used by the editor:
-    list_canvas = Instance( ListCanvas, () )
+    canvas = Instance( ListCanvas, () )
     
     #---------------------------------------------------------------------------
     #  Trait definitions:  
@@ -2266,7 +2411,7 @@ class _ListCanvasEditor ( Editor ):
             add_feature( feature )
         
         # Create the underlying wx control:
-        lc        = self.list_canvas
+        lc        = self.canvas
         lc.editor = self                               
         lc.set( **factory.get( 'theme', 'adapter', 'snap_info', 'guide_info',
                                'grid_info', 'operations', 'add' ) )
@@ -2289,14 +2434,14 @@ class _ListCanvasEditor ( Editor ):
             do_later( self.update_editor )
             return
             
-        lc = self.list_canvas
-        lc.replace_items( [ lc.create_object( object ) 
-                            for object in self.value ] ) 
+        canvas = self.canvas
+        canvas.replace_items( [ canvas.create_object( object ) 
+                                for object in self.value ] ) 
                 
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        self.list_canvas.replace_items()
+        self.canvas.replace_items()
         
         super( _ListCanvasEditor, self ).dispose()
      
@@ -2306,10 +2451,11 @@ class _ListCanvasEditor ( Editor ):
         """ Updates the editor when an item in the object trait changes 
             externally to the editor.
         """
-        lc = self.list_canvas
-        lc.replace_items( [ lc.create_object( object )
-                            for object in event.added ],
-                          event.index, event.index + len( event.removed ) )
+        canvas = self.canvas
+        canvas.replace_items(
+            [ canvas.create_object( object ) for object in event.added ],
+            event.index, event.index + len( event.removed )
+        )
 
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:
@@ -2478,6 +2624,39 @@ if __name__ == '__main__':
             else:
                 self.neighbors = [ ItemSnoop( item = item )
                                    for item in self.list_canvas_item.neighbors ]
+                                   
+    class ObjectTrait ( HasPrivateTraits ):
+        
+        # The object whose trait is being displayed:
+        object = Instance( HasTraits )
+        
+        # The name of the object trait being displayed:
+        name = Str
+        
+        # The value of the specified object trait:
+        value = Property
+        
+        #-- Property Implementations -------------------------------------------
+        
+        def _get_value ( self ):
+            return getattr( self.object, self.name )
+            
+        def _set_value ( self, value ):
+            old = getattr( self.object, self.name )
+            if value != old:
+                setattr( self.object, self.name, value )
+                self.trait_property_changed( 'value', old, value )
+        
+        #-- Method Overrides ---------------------------------------------------
+        
+        def trait_view ( self, *args, **traits ):
+            name = self.name
+            return View(
+                Item( 'value', 
+                      label  = name, 
+                      editor = self.object.trait( name ).get_editor()
+                )
+            )
      
     class PersonMonitor ( ListCanvasItemMonitor ):
         
@@ -2500,18 +2679,29 @@ if __name__ == '__main__':
                                                offset = ( 0, -3 ) ) )
         Person_theme_hover    = ATheme( Theme( 'Person_hover',
                                                offset = ( 0, -3 ) ) )
-        CanvasSnoop_size      = Tuple( ( 250, 250 ) )
+        ObjectTrait_theme_active   = ATheme( Theme( '@J08', margins = 3 ) )
+        ObjectTrait_theme_inactive = ATheme( Theme( '@J07', margins = 3 ) )
+        ObjectTrait_theme_hover    = ATheme( Theme( '@J0A', margins = 3 ) )
+        CanvasItems_size    = Tuple( ( 180, 250 ) )
+        CanvasSnoop_size    = Tuple( ( 250, 250 ) )
         
-        Person_can_drag   = Bool( True )
-        Person_can_clone  = Bool( True )
-        Person_can_delete = Bool( True )
+        Person_tooltip      = Property
+        Person_can_drag     = Bool( True )
+        Person_can_clone    = Bool( True )
+        Person_can_delete   = Bool( True )
         # fixme: Why can't we use 'Constant' for this?...
-        Person_monitor    = Any( PersonMonitor )
-        Person_can_close  = Any( Modified )
-        Person_title      = Property
+        Person_monitor      = Any( PersonMonitor )
+        Person_can_close    = Any( Modified )
+        Person_title        = Property
+        ListCanvas_can_receive_Person   = Bool( True )
+        ListCanvas_can_receive_NoneType = Bool( True )
+        File_view = Any( View( Item( 'path' ) ) )
         
         def _get_Person_title ( self ):
             return (self.item.name or '<undefined>')
+            
+        def _get_Person_tooltip ( self ):
+            return ('A person named %s' % self.item.name)
     
     class Person ( HasTraits ):
         name   = Str
@@ -2549,11 +2739,13 @@ if __name__ == '__main__':
             height    = 0.75,
             resizable = True 
         )
+
+    nick = Person( name   = 'Nick Adams', 
+                   age    = 37,
+                   gender = 'Male' )
         
     people = [ 
-        Person( name   = 'Nick Adams', 
-                age    = 37,
-                gender = 'Male' ),
+        nick,
         Person( name   = 'Joan Thomas',
                 age    = 42,
                 gender = 'Female' ),
@@ -2565,6 +2757,9 @@ if __name__ == '__main__':
                 gender = 'Female' ),
         AFile(),
         AFile(),
+        ObjectTrait( object = nick, name = 'name'   ), 
+        ObjectTrait( object = nick, name = 'age'    ), 
+        ObjectTrait( object = nick, name = 'gender' ), 
         snap_info, grid_info, guide_info, CanvasItems(), CanvasSnoop()
     ]
         
