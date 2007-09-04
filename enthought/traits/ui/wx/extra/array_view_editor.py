@@ -34,6 +34,9 @@ from enthought.traits.ui.wx.basic_editor_factory \
 
 class ArrayViewAdapter ( TabularAdapter ):
     
+    # Is the array 1D or 2D?
+    is_2d = Bool( True )
+    
     # Should array rows and columns be transposed:
     transpose  = Bool( False )
     
@@ -45,15 +48,21 @@ class ArrayViewAdapter ( TabularAdapter ):
         return str( self.row )
      
     def _get_text ( self ):
-        return self.format % self.item[ self.column_id ]
+        if self.is_2d:
+            return self.format % self.item[ self.column_id ]
+            
+        return self.format % self.item
         
     def get_item ( self, object, trait, row ):
         """ Returns the value of the *object.trait[row]* item.
         """
-        if self.transpose:
-            return getattr( object, trait )[:,row]
+        if self.is_2d:
+            if self.transpose:
+                return getattr( object, trait )[:,row]
+                
+            return super( ArrayViewAdapter, self ).get_item( object, trait, row )
             
-        return super( ArrayViewAdapter, self ).get_item( object, trait, row )
+        return getattr( object, trait )[ row ]
     
     def len ( self, object, trait ):
         """ Returns the number of items in the specified *object.trait" list.
@@ -105,7 +114,8 @@ class _ArrayViewEditor ( UIEditor ):
         factory = self.factory
         cols    = 1
         titles  = [ 'Data' ]
-        if len_shape == 2:
+        is_2d   = (len_shape == 2)
+        if is_2d:
             index = 1
             if factory.transpose:
                 index = 0
@@ -133,7 +143,8 @@ class _ArrayViewEditor ( UIEditor ):
         if factory.show_index:
             columns.insert( 0, ( 'Index', 'index' ) )
             
-        self.adapter = ArrayViewAdapter( columns   = columns,
+        self.adapter = ArrayViewAdapter( is_2d     = is_2d,
+                                         columns   = columns,
                                          transpose = factory.transpose,
                                          format    = factory.format )
             
@@ -159,29 +170,3 @@ class ArrayViewEditor ( BasicEditorFactory ):
     # The format used to display each array element:
     format = Str( '%s' )
 
-    
-if __name__ == '__main__':
-    from enthought.traits.api import Array
-    from numpy.random         import random
-    
-    class Test ( HasTraits ):
-        data = Array
-        
-        view = View(
-            Item( 'data', 
-                  id = 'data',
-                  show_label = False,
-                  editor     = ArrayViewEditor( format     = '%.4f',
-                                                show_index = False,
-                                                transpose  = True,
-                                                titles     = [ 'c' ] )
-            ),
-            title     = 'Array View Editor Test',
-            id        = 'junk',
-            width     = 0.25,
-            height    = 0.6,
-            resizable = True
-        )
-        
-    Test( data = random( ( 3, 100000 ) ) ).configure_traits()
-    
