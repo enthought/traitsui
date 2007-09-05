@@ -112,6 +112,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Optional key bindings associated with the editor    
     key_bindings = Instance( KeyBindings )
     
+    # Calltip clicked event
+    calltip_clicked = Str
+        
     #---------------------------------------------------------------------------
     #  'Editor' factory methods:
     #---------------------------------------------------------------------------
@@ -166,6 +169,9 @@ class SourceEditor ( Editor ):
     
     # The current column
     column = Event
+    
+    # calltip clicked event
+    calltip_clicked = Event
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -180,8 +186,21 @@ class SourceEditor ( Editor ):
         self._editor = editor  = PythonEditor( parent, 
                                  show_line_numbers = factory.show_line_numbers )
         self.control = control = editor.control
+        
+        # There are a number of events which aren't well documented that look 
+        # to be useful in future implmentations, below are a subset of the 
+        # events that look interesting:
+        #    EVT_STC_AUTOCOMP_SELECTION
+        #    EVT_STC_HOTSPOT_CLICK
+        #    EVT_STC_HOTSPOT_DCLICK
+        #    EVT_STC_DOUBLECLICK
+        #    EVT_STC_MARGINCLICK
+        
         control.SetSize( ( 300, 124 ) )
+        
+        # Set up the events
         wx.EVT_KILL_FOCUS( control, self.wx_update_object )
+        stc.EVT_STC_CALLTIP_CLICK( control, control.GetId(), self._calltip_clicked )
         if factory.auto_scroll and (factory.selected_line != ''):
             wx.EVT_SIZE( control, self._update_selected_line )
         if factory.auto_set:
@@ -211,6 +230,7 @@ class SourceEditor ( Editor ):
         self.sync_value( factory.selected_text, 'selected_text', 'to' )
         self.sync_value( factory.line, 'line' )
         self.sync_value( factory.column, 'column' )
+        self.sync_value( factory.calltip_clicked, 'calltip_clicked')
             
         # Check if we need to monitor the line or column position being changed:
         if (factory.line != '') or (factory.column != ''):
@@ -261,6 +281,14 @@ class SourceEditor ( Editor ):
             self._mark_lines_changed()
             self._selected_line_changed()
         self._locked = False
+        
+    
+    #---------------------------------------------------------------------------
+    #  Handles the calltip being clicked:
+    #---------------------------------------------------------------------------
+    
+    def _calltip_clicked(self, event):
+        self.calltip_clicked = True
         
     #---------------------------------------------------------------------------
     #  Handles the set of 'marked lines' being changed:  
