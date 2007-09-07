@@ -23,9 +23,9 @@ import wx
 
 from enthought.traits.api \
     import HasTraits, HasPrivateTraits, HasStrictTraits, Interface, Instance, \
-           List, Enum, Color, Bool, Range, Str, Float, Event, Tuple, Property, \
-           Delegate, Any, Missing, Undefined, implements, on_trait_change, \
-           cached_property
+           List, Enum, Color, Bool, Range, Str, Float, Int, Event, Tuple, \
+           Property, Delegate, Any, Missing, Undefined, implements, \
+           on_trait_change, cached_property
            
 from enthought.traits.trait_base \
     import SequenceTypes
@@ -1412,13 +1412,16 @@ class ListCanvasItem ( ListCanvasPanel ):
         """ Handles an object being dropped on a list item.
         """
         canvas = self.canvas
+        xi, yi = self.position
+        x     += xi
+        y     += yi
         if not isinstance( data, SequenceTypes ):
             # Handle the case of just a single item being dropped:
-            canvas.dropped_on( self, data )
+            canvas.dropped_on( self, data, x, y )
         else:
             # Handles the case of a list of items being dropped:
             for item in data:
-                canvas.dropped_on( self, item )
+                canvas.dropped_on( self, item, x, y )
             
         # Return a successful drop result:
         return drag_result
@@ -1584,7 +1587,12 @@ class ListCanvas ( ListCanvasPanel ):
     """ Defines the main list canvas editor widget, which contains and manages
         all of the list canvas items.
     """
-
+    
+    #-- Public Traits ----------------------------------------------------------
+    
+    # The preferred position for the next item added to the canvas:
+    preferred_position = Tuple( Int, Int )
+    
     #-- Private Traits ---------------------------------------------------------
     
     # Is the canvas scrollable?
@@ -1729,6 +1737,11 @@ class ListCanvas ( ListCanvasPanel ):
         """ Returns the initial position for an item of the specified width and
             height.
         """
+        x, y = self.preferred_position
+        if (x > 0) or (y > 0):
+            self.preferred_position = ( 0, 0 )
+            return self.best_position_for( x, y, dx, dy )
+            
         xmax = ymax = ynext = 0
         cdx, cdy = self.size
         
@@ -1746,6 +1759,99 @@ class ListCanvas ( ListCanvasPanel ):
             xmax = 0
             
         return ( xmax, ymax )
+        
+    def best_position_for ( self, x, y, dx, dy, vertical = True ):
+        """ Returns the best position for an item of the specified width and
+            height that is closest to a specified position.
+        """
+        # Start with the entire canvas (extended in the favored direction):
+        cdx, cdy = self.size
+        if vertical:
+            rects = [ ( 0, 0, cdx, 1000000 ) ]
+        else:
+            rects = [ ( 0, 0, 1000000, cdy ) ]
+        
+        # Now carve up the space in a set of unfilled rectangles big enough to
+        # hold the target rectangle:
+        for item in self.items:
+            new_rects = []
+            xli, yti = item.position
+            dxi, dyi = item.size
+            xri      = xli + dxi
+            ybi      = yti + dyi
+            for rect in rects:
+                xlr, ytr, xrr, ybr = rect
+                if (xri <= xlr) or (xli >= xrr) or (ybi <= ytr) or (yti >= ybr):
+                    # No intersection, pass the rectangle through unchanged:
+                    new_rects.append( rect )
+                else:
+                    # Otherwise, split it up into 4 smaller rectangles, but
+                    # only pass ones big enough to hold the target rectangle:
+                    if (xli - xlr) >= dx:
+                        new_rects.append( ( xlr, ytr, xli, ybr ) )
+                    if (xrr - xri) >= dx:
+                        new_rects.append( ( xri, ytr, xrr, ybr ) )
+                    if (yti - ytr) >= dy:
+                        new_rects.append( ( xlr, ytr, xrr, yti ) )
+                    if (ybr - ybi) >= dy:
+                        new_rects.append( ( xlr, ybi, xrr, ybr ) )
+                        
+            # Set up this pass's result for use with the next rectangle:
+            rects = new_rects
+            
+        # Find the rectangle closest to the desired point from the set of
+        # rectangles large enough to hold the target rectangle:
+        best_dist = 1000000000
+        for xl, yt, xr, yb in rects:
+            dxl, dxr, dyt, dyb = x - xl, x - xr, y - yt, y - yb
+            
+            if (dxl >= 0) and (dxr < 0):
+                dxb = 0
+            else:
+                dxb = min( abs( dxl ), abs( dxr ) )
+                
+            if (dyt >= 0) and (dyb < 0):
+                dyb = 0
+            else:
+                dyb = min( abs( dyt ), abs( dyb ) )
+                
+            dist = (dxb * dxb) + (dyb * dyb)
+            if dist < best_dist:
+                best_rect = ( xl, yt, xr, yb )
+                if dist == 0:
+                    break
+                best_dist = dist
+            
+        # Get the bounds of the selected rectangle:
+        xl, yt, xr, yb = best_rect
+        
+        # Now determine the position within the selected rectangle closest to 
+        # the desired point but still allowing the target retangle to be 
+        # completely contained within the selected rectangle:
+        x, y = min( max( x, xl ), xr - dx ), min( max( y, yt ), yb - dy )
+        
+        # Set up snapping guides if needed:
+        if ((self.snap_info.distance > 0) and self.guide_info.snapping):
+            self._drag_guides = self._guide_lines( self._drag_set )
+        
+        # Now perform snapping (if enabled):
+        dxs = self.snap_x( x )
+        if dxs == 0:
+            x += self.snap_x( x + dx )
+        else:
+            x += dxs
+            
+        dys = self.snap_y( y )
+        if dys == 0:
+            y += self.snap_y( y + dy )
+        else:
+            y += dys
+            
+        # Discard the guide lines (if any):
+        self._drag_guides = None
+        
+        # Return the best position:
+        return ( min( max( x, xl ), xr - dx ), min( max( y, yt ), yb - dy ) )
         
     def adjust_positions_y ( self, x, y, dx0, dx, dy ):
         """ Adjust the position of all windows that are immediately below and
@@ -1873,7 +1979,7 @@ class ListCanvas ( ListCanvasPanel ):
         self.control.CaptureMouse()
         self._refresh_canvas_drag( True )
         
-    def snap_x ( self, x, dx ):
+    def snap_x ( self, x, dx = 0 ):
         """ Adjust an x-coordinate to take into account any grid or guide line
             snapping in effect.
         """
@@ -1920,7 +2026,7 @@ class ListCanvas ( ListCanvasPanel ):
         # Return the delta:
         return dx
         
-    def snap_y ( self, y, dy ):
+    def snap_y ( self, y, dy = 0 ):
         """ Adjust an y-coordinate to take into account any grid or guide line
             snapping in effect.
         """
@@ -1976,15 +2082,17 @@ class ListCanvas ( ListCanvasPanel ):
         # Update the canvas size:
         self._adjust_size()
 
-    def dropped_on ( self, item, drop ):
+    def dropped_on ( self, item, drop, x, y ):
         """ Handles a single item dropped on a list item or canvas.
         """
         objects = self.adapter.get_dropped( item, drop )
         if objects is not None:
             if isinstance( objects, SequenceTypes ):
                 for object in objects:
+                    self.preferred_position = ( x, y )
                     self.add_object( object )
             else:
+                self.preferred_position = ( x, y )
                 self.add_object( objects )
         
     #-- Property Implementations -----------------------------------------------
@@ -2144,11 +2252,11 @@ class ListCanvas ( ListCanvasPanel ):
         """
         if not isinstance( data, SequenceTypes ):
             # Handle the case of just a single item being dropped:
-            self.dropped_on( self, data )
+            self.dropped_on( self, data, x, y )
         else:
             # Handles the case of a list of items being dropped:
             for item in data:
-                self.dropped_on( self, item )
+                self.dropped_on( self, item, x, y )
             
         # Return a successful drop result:
         return drag_result
