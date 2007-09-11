@@ -145,7 +145,11 @@ class ToolkitEditorFactory ( EditorFactory ):
         """ Returns the text representation of a specified color value.
         """
         if isinstance( color, ColorTypes ):
-            return "(%d,%d,%d)" % ( color.Red(), color.Green(), color.Blue() )
+            alpha = color.Alpha()
+            if alpha == 255:
+                return "(%d,%d,%d)" % ( color.Red(), color.Green(), color.Blue() )
+
+            return "(%d,%d,%d,%d)" % ( color.Red(), color.Green(), color.Blue(), alpha )
             
         return color
                                       

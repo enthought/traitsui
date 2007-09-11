@@ -39,6 +39,22 @@ except:
 def convert_to_color ( object, name, value ):
     """ Converts a number into a wxColour object.
     """
+    # Try the toolkit agnostic format.
+    try:
+        tup = eval(value)
+    except:
+        tup = value
+
+    if isinstance(tup, tuple):
+        if 3 <= len(tup) <= 4:
+            for c in tup:
+                if not isinstance(c, int):
+                    raise TraitError
+
+            return wx.Colour(*tup)
+        else:
+            raise TraitError
+
     if isinstance( value, ColourPtr ):
         return wx.Colour( value.Red(), value.Green(), value.Blue() )
         
@@ -51,12 +67,14 @@ def convert_to_color ( object, name, value ):
     elif isinstance( value, int ):
         num = int( value )
         return wx.Colour( num / 0x10000, (num / 0x100) & 0xFF, num & 0xFF )
-        
+
     raise TraitError
 
-convert_to_color.info = ('a wx.Colour instance, an integer which in hex is of '
-                         'the form 0xRRGGBB, where RR is red, GG is green, '
-                         'and BB is blue')
+convert_to_color.info = ('a string of the form (r,g,b) or (r,g,b,a) where r, '
+                         'g, b, and a are integers from 0 to 255, a wx.Colour '
+                         'instance, an integer which in hex is of the form '
+                         '0xRRGGBB, where RR is red, GG is green, and BB is '
+                         'blue')
              
 #-------------------------------------------------------------------------------
 #  Standard colors:
