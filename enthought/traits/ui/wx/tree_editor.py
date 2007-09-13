@@ -713,6 +713,18 @@ class SimpleEditor ( Editor ):
         
         return ( expanded, node, nid )
 
+    def _object_info_for ( self, object, name = '' ):
+        """ Returns the tree node data for a specified object as a list of the
+            form: [ ( expanded, node, nid ), ... ].
+        """
+        result = []
+        for name2, nid in self._map[ id( object ) ]:
+            if name == name2:
+                expanded, node, ignore = self._get_node_data( nid )
+                result.append( ( expanded, node, nid ) )
+        
+        return result
+
     #---------------------------------------------------------------------------
     #  Returns the TreeNode associated with a specified object:
     #---------------------------------------------------------------------------
@@ -1701,28 +1713,28 @@ class SimpleEditor ( Editor ):
     def _children_replaced ( self, object, name = '', new = None ):
         """ Handles the children of a node being completely replaced.
         """
-        tree                = self._tree
-        expanded, node, nid = self._object_info( object, name )
-        children            = node.get_children( object )
+        tree = self._tree
+        for expanded, node, nid in self._object_info_for( object, name ):
+            children = node.get_children( object )
 
-        # Only add/remove the changes if the node has already been expanded:
-        if expanded:
-            # Delete all current child nodes:
-            for cnid in self._nodes_for( nid ):
-                self._delete_node( cnid )
-
-            # Add all of the children back in as new nodes:
-            for child in children:
-                child, child_node = self._node_for( child )
-                if child_node is not None:
-                    self._append_node( nid, child_node, child )
-
-        # Indicate whether the node has any children now:
-        tree.SetItemHasChildren( nid, len( children ) > 0 )
-
-        # Try to expand the node (if requested):
-        if node.can_auto_open( object ):
-            tree.Expand( nid )
+            # Only add/remove the changes if the node has already been expanded:
+            if expanded:
+                # Delete all current child nodes:
+                for cnid in self._nodes_for( nid ):
+                    self._delete_node( cnid )
+    
+                # Add all of the children back in as new nodes:
+                for child in children:
+                    child, child_node = self._node_for( child )
+                    if child_node is not None:
+                        self._append_node( nid, child_node, child )
+    
+            # Indicate whether the node has any children now:
+            tree.SetItemHasChildren( nid, len( children ) > 0 )
+    
+            # Try to expand the node (if requested):
+            if node.can_auto_open( object ):
+                tree.Expand( nid )
 
     #---------------------------------------------------------------------------
     #  Handles the children of a node being changed:
@@ -1736,39 +1748,39 @@ class SimpleEditor ( Editor ):
         name = name[:-6]
         self.log_change( self._get_undo_item, object, name, event )
 
-        # Get information about the node that was changed:
-        tree                = self._tree
-        expanded, node, nid = self._object_info( object, name )
-        children            = node.get_children( object )
-
-        # If the new children aren't all at the end, just remove/add them all:
-        n = len( event.added )
-        if (n > 0) and ((event.index + n) != len( children )):
-            self._children_replaced( object, name, event )
-            return
-
-        # Only add/remove the changes if the node has already been expanded:
-        if expanded:
-            # Remove all of the children that were deleted:
-            start = event.index
-            end   = start + len( event.removed )
-            for cnid in self._nodes_for( nid )[ start: end ]:
-                self._delete_node( cnid )
-
-            # Add all of the children that were added:
-            for child in event.added:
-                child, child_node = self._node_for( child )
-                if child_node is not None:
-                    self._append_node( nid, child_node, child )
-
-        # Indicate whether the node has any children now:
-        tree.SetItemHasChildren( nid, len( children ) > 0 )
-
-        # Try to expand the node (if requested):
-        root = tree.GetRootItem()
-        if node.can_auto_open( object ):
-            if ( nid != root ) or not self.factory.hide_root:
-                tree.Expand( nid )
+        start = event.index
+        n     = len( event.added )
+        end   = start + len( event.removed )
+        tree  = self._tree
+        
+        for expanded, node, nid in self._object_info_for( object, name ):
+            children = node.get_children( object )
+            
+            # If the new children aren't all at the end, remove/add them all:
+            if (n > 0) and ((start + n) != len( children )):
+                self._children_replaced( object, name, event )
+                return
+    
+            # Only add/remove the changes if the node has already been expanded:
+            if expanded:
+                # Remove all of the children that were deleted:
+                for cnid in self._nodes_for( nid )[ start: end ]:
+                    self._delete_node( cnid )
+    
+                # Add all of the children that were added:
+                for child in event.added:
+                    child, child_node = self._node_for( child )
+                    if child_node is not None:
+                        self._append_node( nid, child_node, child )
+    
+            # Indicate whether the node has any children now:
+            tree.SetItemHasChildren( nid, len( children ) > 0 )
+    
+            # Try to expand the node (if requested):
+            root = tree.GetRootItem()
+            if node.can_auto_open( object ):
+                if ( nid != root ) or not self.factory.hide_root:
+                    tree.Expand( nid )
 
     #---------------------------------------------------------------------------
     #   Handles the label of an object being changed:
