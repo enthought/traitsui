@@ -1245,9 +1245,13 @@ class SimpleEditor ( Editor ):
             self._menu_parent_object = parent_object
 
             menu = node.get_menu( object )
+            
             if menu is None:
+                # Use the standard, default menu:
                 menu = self._standard_menu( node, object )
-            else:
+                
+            elif isinstance( menu, Menu ):
+                # Use the menu specified by the node:
                 group = menu.find_group( NewAction )
                 if group is not None:
                     # Only set it the first time:
@@ -1255,11 +1259,19 @@ class SimpleEditor ( Editor ):
                     actions  = self._new_actions( node, object )
                     if len( actions ) > 0:
                         group.insert( 0, Menu( name = 'New', *actions ) )
+                        
+            else:
+                # All other values mean no menu should be displayed:
+                menu = None
 
-            wxmenu = menu.create_menu( self._tree, self )
-            self._tree.PopupMenuXY( wxmenu,
-                                    point[0] - 10, point[1] - 10 )
-            wxmenu.Destroy()
+            # Only display the menu if a valid menu is defined:
+            if menu is not None:
+                wxmenu = menu.create_menu( self._tree, self )
+                self._tree.PopupMenuXY( wxmenu,
+                                        point[0] - 10, point[1] - 10 )
+                wxmenu.Destroy()
+                
+            # Reset all menu related cached values:
             self._data = self._context = self._menu_node = \
             self._menu_parent_node = self._menu_parent_object = None
 
