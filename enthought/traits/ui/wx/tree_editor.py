@@ -15,7 +15,7 @@
 #------------------------------------------------------------------------------
 
 """ Defines the tree editor and the tree editor factory, for the wxPython user 
-interface toolkit.
+    interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -185,6 +185,7 @@ class ToolkitEditorFactory ( EditorFactory ):
 class SimpleEditor ( Editor ):
     """ Simple style of tree editor.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -555,26 +556,22 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
 
     def _delete_node ( self, nid ):
-        """ Deletes a specified tree node and all its children.
+        """ Deletes a specified tree node and all of its children.
         """
-        for cnid in [ cnid for cnid in self._nodes( nid ) ]:
+        for cnid in self._nodes_for( nid ):
             self._delete_node( cnid )
+            
         expanded, node, object = self._get_node_data( nid )
-        self._remove_listeners( node, object )
-
-        # If a node has several named children (i.e. has several traits which
-        # define separate sub-nodes for the main node for the object), then
-        # there will be several nodes that refer to the same object (i.e. the
-        # parent node and each of the trait sub-nodes). Only the parent node
-        # can be deleted, but because of the recursive nature of this method,
-        # the first deleted sub-node will cause the object to be removed from
-        # the map (below). This is why the 'del' is wrapped in a 'try' block...
-        # to catch the error when the n'th sub-node or parent sub-node tries
-        # to delete the already deleted object from the map.
-        try:
-            del self._map[ id( object ) ]
-        except:
-            pass
+        id_object   = id( object )
+        object_info = self._map[ id_object ]
+        for i, info in enumerate( object_info ):
+            if nid == info[1]:
+                del object_info[i]
+                break
+                
+        if len( object_info ) == 0:
+            self._remove_listeners( node, object )
+            del self._map[ id_object ]
 
         # We set the '_locked' flag here because wx seems to generate a
         # 'node selected' event when the node is deleted. This can lead to
@@ -619,6 +616,11 @@ class SimpleEditor ( Editor ):
         while cnid.IsOk():
             yield cnid
             cnid, cookie = tree.GetNextChild( nid, cookie )
+            
+    def _nodes_for ( self, nid ):
+        """ Returns all child node ids of a specified node id.
+        """
+        return [ cnid for cnid in self._nodes( nid ) ]
 
     #---------------------------------------------------------------------------
     #  Return the index of a specified node id within its parent:
@@ -628,6 +630,7 @@ class SimpleEditor ( Editor ):
         pnid = self._tree.GetItemParent( nid )
         if not pnid.IsOk():
             return ( None, None, None )
+            
         for i, cnid in enumerate( self._nodes( pnid ) ):
             if cnid == nid:
                 ignore, pnode, pobject = self._get_node_data( pnid )
@@ -674,6 +677,7 @@ class SimpleEditor ( Editor ):
         if node.allows_children( object ):
             node.when_children_replaced( object, self._children_replaced, False)
             node.when_children_changed(  object, self._children_updated,  False)
+            
         node.when_label_changed( object, self._label_updated, False )
 
     #---------------------------------------------------------------------------
@@ -686,6 +690,7 @@ class SimpleEditor ( Editor ):
         if node.allows_children( object ):
             node.when_children_replaced( object, self._children_replaced, True )
             node.when_children_changed(  object, self._children_updated,  True )
+            
         node.when_label_changed( object, self._label_updated, True )
 
     #---------------------------------------------------------------------------
@@ -703,7 +708,9 @@ class SimpleEditor ( Editor ):
                 break
         else:
             nid = info[0][1]
+            
         expanded, node, ignore = self._get_node_data( nid )
+        
         return ( expanded, node, nid )
 
     #---------------------------------------------------------------------------
@@ -928,6 +935,7 @@ class SimpleEditor ( Editor ):
         info = self._map.get( id( object ) )
         if info is None:
             return None
+            
         for name2, nid in info:
             if name == name2:
                 return nid
@@ -956,6 +964,7 @@ class SimpleEditor ( Editor ):
         """
         if nid == self._root_nid:
             return self._root_nid_data
+            
         return self._tree.GetPyData( nid )
 
     def _set_node_data ( self, nid, data ):
@@ -991,6 +1000,7 @@ class SimpleEditor ( Editor ):
             pnid = self._tree.GetItemParent( nid )
             if pnid.IsOk():
                 return self.get_object( pnid )
+                
         return None
 
     #---------------------------------------------------------------------------
@@ -1003,6 +1013,7 @@ class SimpleEditor ( Editor ):
         nid = self._get_object_nid( object, name )
         if nid is not None:
             return self._get_node_data( nid )[1]
+            
         return None
 
 #----- Tree event handlers: ----------------------------------------------------
@@ -1637,10 +1648,11 @@ class SimpleEditor ( Editor ):
                 if self.ui.history is None:
                     # If no undo history, ask user to confirm the delete:
                     dlg = wx.MessageDialog(
-                                self._tree,
-                                'Are you sure you want to delete %s?' % node.get_label( object ),
-                                'Confirm Deletion',
-                                style = wx.OK | wx.CANCEL | wx.ICON_EXCLAMATION )
+                              self._tree,
+                              'Are you sure you want to delete %s?' % 
+                                  node.get_label( object ),
+                              'Confirm Deletion',
+                              style = wx.OK | wx.CANCEL | wx.ICON_EXCLAMATION )
                     if dlg.ShowModal() != wx.ID_OK:
                         return
 
@@ -1696,7 +1708,7 @@ class SimpleEditor ( Editor ):
         # Only add/remove the changes if the node has already been expanded:
         if expanded:
             # Delete all current child nodes:
-            for cnid in [ cnid for cnid in self._nodes( nid ) ]:
+            for cnid in self._nodes_for( nid ):
                 self._delete_node( cnid )
 
             # Add all of the children back in as new nodes:
@@ -1738,8 +1750,9 @@ class SimpleEditor ( Editor ):
         # Only add/remove the changes if the node has already been expanded:
         if expanded:
             # Remove all of the children that were deleted:
-            for child in event.removed:
-                expanded, child_node, cnid = self._object_info( child )
+            start = event.index
+            end   = start + len( event.removed )
+            for cnid in self._nodes_for( nid )[ start: end ]:
                 self._delete_node( cnid )
 
             # Add all of the children that were added:
@@ -1811,6 +1824,7 @@ class SimpleEditor ( Editor ):
 class ObjectLabel ( HasStrictTraits ):
     """ An editable label for an object.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
