@@ -368,6 +368,7 @@ class SimpleEditor ( Editor ):
             nid = self._tree.GetRootItem()
             if nid.IsOk():
                 self._delete_node( nid )
+                
         super( SimpleEditor, self ).dispose()
 
     #---------------------------------------------------------------------------
@@ -378,12 +379,12 @@ class SimpleEditor ( Editor ):
         """ Returns the style settings used for displaying the wx tree.
         """
         factory = self.factory
-        style = wx.TR_EDIT_LABELS | wx.TR_HAS_BUTTONS | wx.CLIP_CHILDREN
+        style   = wx.TR_EDIT_LABELS | wx.TR_HAS_BUTTONS | wx.CLIP_CHILDREN
 
         # Turn lines off if explicit or for appearance on *nix:
-        if ( factory.lines_mode == 'off' ) or \
-           ( factory.lines_mode == 'appearance' and os.name == 'posix' ) :
-               style |= wx.TR_NO_LINES
+        if ((factory.lines_mode == 'off') or
+            ((factory.lines_mode == 'appearance') and (os.name == 'posix'))):
+            style |= wx.TR_NO_LINES
 
         if factory.hide_root:
             style |= (wx.TR_HIDE_ROOT | wx.TR_LINES_AT_ROOT)
@@ -845,10 +846,13 @@ class SimpleEditor ( Editor ):
         nid = None
         if hasattr( event, 'GetItem' ):
             nid = event.GetItem()
+            
         if (nid is None) or (not nid.IsOk()):
             nid, flags = self._tree.HitTest( point )
+            
         if nid.IsOk():
             return self._get_node_data( nid ) + ( nid, point )
+            
         return ( None, None, None, nid, point )
 
     #---------------------------------------------------------------------------
@@ -1233,11 +1237,11 @@ class SimpleEditor ( Editor ):
             expanded, node, object, nid, point = self._unpack_event( event )
             if node is not None:
                 try:
-                    self._dragging = True
+                    self._dragging = nid
                     PythonDropSource( self._tree,
                                       node.get_drag_object( object ) )
                 finally:
-                    self._dragging = False
+                    self._dragging = None
 
     #---------------------------------------------------------------------------
     #  Handles the user right clicking on a tree node:
@@ -1405,13 +1409,13 @@ class SimpleEditor ( Editor ):
                 if not node._is_droppable( object, data, False ):
                     return wx.DragNone
 
-                if self._dragging:
-                    nid  = self._object_info( data )[2]
+                if self._dragging is not None:
                     data = node._drop_object( object, data, False )
                     if data is not None:
                         try:
                             self._begin_undo()
-                            self._undoable_delete( *self._node_index( nid ) )
+                            self._undoable_delete( 
+                                     *self._node_index( self._dragging ) )
                             self._undoable_append( node, object, data, False )
                         finally:
                             self._end_undo()
@@ -1424,12 +1428,11 @@ class SimpleEditor ( Editor ):
 
             to_node, to_object, to_index = self._node_index( nid )
             if to_node is not None:
-                if self._dragging:
-                    nid  = self._object_info( data )[2]
+                if self._dragging is not None:
                     data = node._drop_object( to_object, data, False )
                     if data is not None:
                         from_node, from_object, from_index = \
-                            self._node_index( nid )
+                            self._node_index( self._dragging )
                         if ((to_object is from_object) and
                             (to_index > from_index)):
                             to_index -= 1
@@ -1460,15 +1463,18 @@ class SimpleEditor ( Editor ):
         """
         expanded, node, object, nid, point = self._hit_test( wx.Point( x, y ) )
         insert = False
+        
         if (node is not None) and (drag_result == wx.DragCopy):
             node, object, index = self._node_index( nid )
             insert = True
-        if (self._dragging and
-            (not self._is_drag_ok( self._get_object_nid( data ),
-                                   data, object ))):
+            
+        if ((self._dragging is not None) and
+            (not self._is_drag_ok( self._dragging, data, object ))):
             return wx.DragNone
+            
         if (node is not None) and node._is_droppable( object, data, insert ):
             return drag_result
+            
         return wx.DragNone
 
     #---------------------------------------------------------------------------
@@ -1479,10 +1485,12 @@ class SimpleEditor ( Editor ):
     def _is_drag_ok ( self, snid, source, target ):
         if (snid is None) or (target is source):
             return False
+            
         for cnid in self._nodes( snid ):
             if not self._is_drag_ok( cnid, self._get_node_data( cnid )[2],
                                      target ):
                 return False
+                
         return True
 
 #----- pyface.action 'controller' interface implementation: --------------------
@@ -1571,6 +1579,7 @@ class SimpleEditor ( Editor ):
             except:
                 # fixme: Should the exception be logged somewhere?
                 pass
+                
             return
 
         method = getattr( handler, method_name, None )
