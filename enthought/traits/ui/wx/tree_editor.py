@@ -272,7 +272,7 @@ class SimpleEditor ( Editor ):
                 self._editor = editor   = wx.ScrolledWindow( splitter )
                 editor.SetSizer( wx.BoxSizer( wx.VERTICAL ) )
                 editor.SetScrollRate( 16, 16 )
-                editor.SetMinSize( wx.Size( 0, 0 ) )
+                editor.SetMinSize( wx.Size( 100, 100 ) )
 
                 self._editor._node_ui = self._editor._editor_nid = None
                 item = self.item
