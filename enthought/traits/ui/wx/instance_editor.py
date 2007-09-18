@@ -461,6 +461,7 @@ class CustomEditor ( Editor ):
             sizer.Add( control, stretch, wx.EXPAND )
             panel.SetSizer( sizer )
             control.Thaw()
+            self.control.Layout()
             self.control.GetParent().Layout()
         
     #---------------------------------------------------------------------------
