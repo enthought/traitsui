@@ -132,6 +132,9 @@ class ToolkitEditorFactory ( EditorFactory ):
 
     # Is the table editable?
     editable = true
+    
+    # Should the editor become active after the first click
+    edit_on_first_click = true
 
     # Can the user reorder the items in the table?
     reorderable = false
@@ -528,6 +531,7 @@ class TableEditor ( Editor ):
             selection_text_color         = factory.selection_color,
             autosize                     = factory.auto_size,
             read_only                    = not factory.editable,
+            edit_on_first_click          = factory.edit_on_first_click,
             selection_mode               = selection_mode,
             allow_column_sort            = factory.sortable,
             allow_row_sort               = False,
