@@ -57,8 +57,6 @@ class ShellEditor ( Editor ):
             locals = value
         self._shell  = shell = PythonShell( parent, locals = locals )
         self.control = shell.control
-        self.context_object.on_trait_change( self._update_editor, 
-                                self.extended_name, remove = True )
         if locals is None:
             object = self.object
             shell.bind( 'self', object )
@@ -70,6 +68,7 @@ class ShellEditor ( Editor ):
                 self._base_locals = locals = {}
                 for name in self.control.interp.locals.keys():
                     locals[ name ] = None
+                    
         self.set_tooltip()
 
     #---------------------------------------------------------------------------
@@ -106,7 +105,11 @@ class ShellEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        if not self.factory.share:
+        if self.factory.share:
+            value = self.value
+            if isinstance( value, dict ):
+                self.control.interp.locals = value
+        else:
             locals      = self.control.interp.locals
             base_locals = self._base_locals
             if base_locals is None:
