@@ -1,22 +1,23 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
 # 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date: 10/21/2004
 # 
-# Author: David C. Morrill
-# Date: 10/21/2004
-#
-#  Symbols defined: ToolkitEditorFactory
-#
 #------------------------------------------------------------------------------
+
 """ Defines the various range editors and the range editor factory, for the 
-wxPython user interface toolkit.
+    wxPython user interface toolkit.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -29,7 +30,7 @@ from math \
     
 from enthought.traits.api \
      import CTrait, TraitError, Property, Range, Enum, Str, Int, Float, Any, \
-            true, false
+            Bool
 
 from enthought.traits.ui.api \
     import View
@@ -53,6 +54,7 @@ from helper \
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for range editors.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -61,10 +63,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     cols = Range( 1, 20 )
     
     # Is user input set on every keystroke?
-    auto_set = true
+    auto_set = Bool( True )
     
     # Is user input set when the Enter key is pressed?
-    enter_set = false
+    enter_set = Bool( False )
     
     # Label for the low end of the range
     low_label = Str
@@ -85,7 +87,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     format = Str( '%s' )
     
     # Is the range for floating pointer numbers (vs. integers)?
-    is_float = true
+    is_float = Bool( True )
     
     # Low end of range
     low = Property
@@ -127,9 +129,9 @@ class ToolkitEditorFactory ( EditorFactory ):
             self.low  = handler._low
             self.high = handler._high
         else:
-            if self.low is None:
+            if (self.low is None) and (self.low_name == ''):
                 self.low  = 0.0
-            if self.high is None:
+            if (self.high is None) and (self.high_name == ''):
                 self.high = 1.0
             
     #---------------------------------------------------------------------------
@@ -142,7 +144,8 @@ class ToolkitEditorFactory ( EditorFactory ):
     def _set_low ( self, low ):
         old_low         = self._low
         self._low = low = self._cast( low )
-        self.is_float   = (type( low ) is float)
+        self.is_float   = isinstance( low, float )
+        
         if (self.low_label == '') or (self.low_label == str( old_low )):
             self.low_label = str( low  )
             
@@ -152,13 +155,15 @@ class ToolkitEditorFactory ( EditorFactory ):
     def _set_high ( self, high ):
         old_high          = self._high
         self._high = high = self._cast( high )
-        self.is_float     = (type( high ) is float)
+        self.is_float     = isinstance( high, float )
+        
         if (self.high_label == '') or (self.high_label == str( old_high )):
             self.high_label = str( high )
             
     def _cast ( self, value ):
         if type( value ) is not str:
             return value
+            
         try:
             return int( value )
         except:
@@ -273,6 +278,7 @@ class SimpleSliderEditor ( Editor ):
     The user can set a value either by moving the slider or by typing a value 
     in the text field.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
@@ -322,6 +328,7 @@ class SimpleSliderEditor ( Editor ):
         except:
             fvalue_text = ''
             fvalue      = low
+            
         if high > low:
             ivalue = int( (float( fvalue - low ) / (high - low)) * 10000 )
         else:
@@ -383,8 +390,10 @@ class SimpleSliderEditor ( Editor ):
                             (self.high - self.low))
         if not self.factory.is_float:
             value = int( value )
+            
         self.control.text.SetValue( self.format % value )
         event_type = event.GetEventType()
+        
         if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
             (self.factory.auto_set and 
              (event_type == wx.wxEVT_SCROLL_THUMBTRACK))):
@@ -404,9 +413,11 @@ class SimpleSliderEditor ( Editor ):
                 # The entered something that didn't eval as a number, (e.g., 'foo')
                 # pretend it didn't happen
                 value = self.value
-                self.control.text.SetValue(str(value))
+                self.control.text.SetValue( str( value ) )
+                
             if not self.factory.is_float:
                 value = int( value )
+                
             self.value = value 
             self.control.slider.SetValue( 
                 int( ((float( value ) - self.low) / 
@@ -431,10 +442,12 @@ class SimpleSliderEditor ( Editor ):
         except:
             text  = ''
             value = low
+            
         if high > low:
             ivalue = int( (float( value - low ) / (high - low)) * 10000.0 )
         else:
             ivalue = low
+            
         self.control.text.SetValue( text )
         self.control.slider.SetValue( ivalue )
         
@@ -459,6 +472,7 @@ class SimpleSliderEditor ( Editor ):
                 self.value = float( high )
             else:
                 self.value = int( high )
+                
         if self._label_hi is not None:
             self._label_hi.SetLabel( self.format % high  )
             self.update_editor()
@@ -470,19 +484,20 @@ class SimpleSliderEditor ( Editor ):
 class LargeRangeSliderEditor ( Editor ):
     """ A slider editor for large ranges. 
     
-    The editor displays a slider and a text field. A subset of the total range
-    is displayed in the slider; arrow buttons at each end of the slider let
-    the user move the displayed range higher or lower.
+       The editor displays a slider and a text field. A subset of the total 
+       range is displayed in the slider; arrow buttons at each end of the 
+       slider let the user move the displayed range higher or lower.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
         
     # Low value for the slider range
-    low = Any(0)
+    low = Any( 0 )
     
     # High value for the slider range
-    high = Any(1)
+    high = Any( 1 )
     
     # Low end of displayed range
     cur_low = Float
@@ -491,7 +506,7 @@ class LargeRangeSliderEditor ( Editor ):
     cur_high = Float
     
     # Flag indicating that the UI is in the process of being updated
-    ui_changing = false
+    ui_changing = Bool( False )
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -505,8 +520,10 @@ class LargeRangeSliderEditor ( Editor ):
         factory = self.factory
         if not factory.low_name:
             self.set( low = factory.low, trait_change_notify = False )
+            
         if not factory.high_name:
             self.set( high = factory.high, trait_change_notify = False )
+            
         self.init_range()
         low  = self.cur_low
         high = self.cur_high
@@ -521,6 +538,7 @@ class LargeRangeSliderEditor ( Editor ):
         except:
             fvalue_text = ''
             fvalue      = factory.low
+            
         ivalue = int( (float( fvalue - low ) / (high - low)) * 10000 )
         
         # Lower limit label:
@@ -646,6 +664,7 @@ class LargeRangeSliderEditor ( Editor ):
         except:
             value = low
         self.value = value
+        
         if not self.ui_changing:
             self.init_range()
             self.update_range_ui()
@@ -664,10 +683,12 @@ class LargeRangeSliderEditor ( Editor ):
         self.control.text.SetValue( text )
         factory = self.factory
         f_low, f_high = self.low, self.high
+        
         if low == f_low:
             self.control.button_lo.Disable()
         else:
             self.control.button_lo.Enable()
+            
         if high == f_high:
             self.control.button_hi.Disable()
         else:
@@ -681,7 +702,8 @@ class LargeRangeSliderEditor ( Editor ):
         low, high = self.low, self.high
         if high is None and low is not None:
             high = -low
-        mag       = abs( value )
+            
+        mag = abs( value )
         if mag <= 10.0:
             cur_low  = max( value - 10, low )
             cur_high = min( value + 10, high )
@@ -775,6 +797,7 @@ class LargeRangeSliderEditor ( Editor ):
 class SimpleSpinEditor ( Editor ):
     """ A simple style of range editor that displays a spin box control.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
@@ -797,8 +820,10 @@ class SimpleSpinEditor ( Editor ):
         factory = self.factory
         if not factory.low_name:
             self.low = factory.low
+            
         if not factory.high_name:
             self.high = factory.high
+            
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
         low  = self.low
@@ -870,9 +895,10 @@ class SimpleSpinEditor ( Editor ):
                                
 class RangeTextEditor ( TextEditor ):
     """ Editor for ranges that displays a text field. If the user enters a 
-    value that is outside the allowed range, the background of the field
-    changes color to indicate an error.
+        value that is outside the allowed range, the background of the field
+        changes color to indicate an error.
     """
+    
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
     #---------------------------------------------------------------------------
@@ -885,6 +911,7 @@ class RangeTextEditor ( TextEditor ):
             self.control.SetBackgroundColour( OKColor )
         except:
             self.control.SetBackgroundColour( ErrorColor )
+            
         self.control.Refresh()
         
 #-------------------------------------------------------------------------------
@@ -902,7 +929,7 @@ def SimpleEnumEditor ( parent, factory, ui, object, name, description ):
 def CustomEnumEditor ( parent, factory, ui, object, name, description, 
                        style = 'custom' ):
     """ Factory adapter that returns a enumeration editor of the specified 
-    style.
+        style.
     """
     if factory._enum is None:
         import enum_editor
