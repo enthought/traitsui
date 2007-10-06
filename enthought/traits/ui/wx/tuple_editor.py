@@ -1,22 +1,22 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
 # 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 12/13/2004
-#
-#  Symbols defined: ToolkitEditorFactory
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date: 12/13/2004
 #
 #------------------------------------------------------------------------------
 """ Defines the tuple editor and the tuple editor factory, for the wxPython 
-user interface toolkit.
+    user interface toolkit.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -45,14 +45,17 @@ from editor_factory \
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for tuple editors.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
     
-    # Trait definitions for each tuple field
-    traits = Any         
-    # Labels for each of the tuple fields
-    labels = List( Str ) 
+    # Trait definitions for each tuple field:
+    traits = Any
+    
+    # Labels for each of the tuple fields:
+    labels = List( Str )
+    
     # Number of tuple fields or rows
     cols   = Int( 1 )    
     
@@ -78,6 +81,7 @@ class SimpleEditor ( Editor ):
     The editor displays an editor for each of the fields in the tuple, based on
     the type of each field. 
     """
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -110,6 +114,7 @@ class SimpleEditor ( Editor ):
 class TupleStructure ( HasTraits ):
     """ Creates a view containing items for each field in a tuple.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------

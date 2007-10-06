@@ -364,9 +364,10 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         getattr( object, trait ) [ row: row ] = [ value ]
         
-    def get_column ( self, index ):
+    def get_column ( self, object, trait, index ):
         """ Returns the column id corresponding to a specified column index.
         """
+        self.object, self.name = object, trait
         return self.column_map[ index ]
         
     #-- Property Implementations -----------------------------------------------
@@ -387,12 +388,10 @@ class TabularAdapter ( HasPrivateTraits ):
         return self.odd_bg_color or self.default_bg_color_
         
     def _get_text ( self ):
-        format = self.get_format( self.object, self.name, 
-                                  self.row, self.column )
         if isinstance( self.column_id, int ):
-            return format % self.item[ self.column_id ]
+            return self.item[ self.column_id ]
             
-        return format % getattr( self.item, self.column_id )
+        return getattr( self.item, self.column_id )
      
     def _set_text ( self ):
         if isinstance( self.column_id, int ):
@@ -480,7 +479,7 @@ class TabularAdapter ( HasPrivateTraits ):
             
         prefix     = name[:4]
         trait_name = name[4:]   
-            
+
         for i, adapter in enumerate( self.adapters ):
             if column in self.adapter_column_indices[i]:
                 adapter.row    = row
@@ -504,20 +503,20 @@ class TabularAdapter ( HasPrivateTraits ):
                             
                         return handler()
         else:
-            for klass in item_class.__mro__:
-                handler = (self._get_handler_for(
-                        '%s_%s_%s' % ( klass.__name__, column_id, trait_name ),
-                        prefix ) or 
-                    self._get_handler_for(
-                        '%s_%s' % ( klass.__name__, trait_name ), prefix ))
-                if handler is not None:
-                    break
+            if item is not None:
+                for klass in item_class.__mro__:
+                    handler = (self._get_handler_for( '%s_%s_%s' % 
+                          ( klass.__name__, column_id, trait_name ), prefix ) or 
+                        self._get_handler_for( '%s_%s' % 
+                          ( klass.__name__, trait_name ), prefix ))
+                    if handler is not None:
+                        break
                     
-            else:  
+            if handler is None: 
                 handler = (self._get_handler_for( '%s_%s' % ( column_id, 
                               trait_name ), prefix ) or 
                            self._get_handler_for( trait_name, 'get_' ))
-            
+                           
         self.cache[ key ] = handler
         return handler()
 
@@ -600,9 +599,11 @@ class wxListCtrl ( wx.ListCtrl ):
         """ Returns the text to use for the specified list item.
         """
         editor = self._editor
+        format = editor.adapter.get_format( editor.object, editor.name, row, 
+                                            column )
                                     
-        return editor.adapter.get_text( editor.object, editor.name, row,
-                                        column )
+        return format % editor.adapter.get_text( editor.object, editor.name, 
+                                                 row, column )
     
 #-------------------------------------------------------------------------------
 #  '_TabularEditor' class:
@@ -778,6 +779,27 @@ class _TabularEditor ( Editor ):
         """ Disposes of the contents of an editor.
         """
         super( _TabularEditor, self ).dispose()
+        
+        # Remove all of the wx event handlers:
+        control = self.control
+        parent  = control.GetParent()
+        id      = control.GetId()
+        wx.EVT_LIST_BEGIN_DRAG(       parent, id, None )
+        wx.EVT_LIST_BEGIN_LABEL_EDIT( parent, id, None )
+        wx.EVT_LIST_END_LABEL_EDIT(   parent, id, None )
+        wx.EVT_LIST_ITEM_SELECTED(    parent, id, None )
+        wx.EVT_LIST_ITEM_DESELECTED(  parent, id, None )
+        wx.EVT_LIST_KEY_DOWN(         parent, id, None )
+        wx.EVT_LIST_ITEM_ACTIVATED(   parent, id, None )
+        wx.EVT_LIST_COL_END_DRAG(     parent, id, None )
+        wx.EVT_LIST_COL_RIGHT_CLICK(  parent, id, None )
+        wx.EVT_LIST_COL_CLICK(        parent, id, None )
+        wx.EVT_LEFT_DOWN(             control,    None )
+        wx.EVT_LEFT_DCLICK(           control,    None )
+        wx.EVT_RIGHT_DOWN(            control,    None )
+        wx.EVT_RIGHT_DCLICK(          control,    None )
+        wx.EVT_MOTION(                control,    None )
+        wx.EVT_SIZE(                  control,    None )
         
         self.context_object.on_trait_change( self.update_editor,
                                   self.extended_name + '_items', remove = True )
@@ -1219,10 +1241,11 @@ class _TabularEditor ( Editor ):
         """
         control = self.control
         control.ClearAll()
-        get_alignment = self.adapter.get_alignment
-        get_width     = self.adapter.get_width
-        object, name  = self.object, self.name
-        for i, label in enumerate( self.adapter.label_map ):
+        adapter, object, name  = self.adapter, self.object, self.name
+        adapter.object, adapter.name = object, name
+        get_alignment = adapter.get_alignment
+        get_width     = adapter.get_width
+        for i, label in enumerate( adapter.label_map ):
             control.InsertColumn( i, label, 
                        alignment_map.get( get_alignment( object, name, i ), 
                                                          wx.LIST_FORMAT_LEFT ) )
@@ -1413,7 +1436,8 @@ class _TabularEditor ( Editor ):
                 x -= control.GetColumnWidth( i )
                 if x < 0:
                     if translate:
-                        return self.adapter.get_column( i )
+                        return self.adapter.get_column( 
+                                   self.object, self.name, i )
                         
                     return i
                 
