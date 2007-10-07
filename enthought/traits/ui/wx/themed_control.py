@@ -216,6 +216,12 @@ class ThemedControl ( ThemedWindow ):
             dc.SetFont( self.control.GetFont() )
             dc.DrawText( self.current_text, tx + ox, ty + oy )
         
+    def _size ( self, event ):
+        """ Handles the control being resized.
+        """
+        super( ThemedControl, self )._size( event )
+        self.updated = True
+        
     #-- Private Methods --------------------------------------------------------
         
     def _get_bounds_for ( self, item ):
