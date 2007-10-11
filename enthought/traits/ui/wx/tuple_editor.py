@@ -13,6 +13,7 @@
 #  Date: 12/13/2004
 #
 #------------------------------------------------------------------------------
+
 """ Defines the tuple editor and the tuple editor factory, for the wxPython 
     user interface toolkit.
 """
@@ -30,7 +31,7 @@ from enthought.traits.api \
     import HasTraits, List, Tuple, Str, Int, Any
     
 from enthought.traits.ui.api \
-    import View, Group, Item
+    import View, Group, Item, EditorFactory as UIEditorFactory
     
 from editor \
     import Editor
@@ -56,8 +57,11 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Labels for each of the tuple fields:
     labels = List( Str )
     
-    # Number of tuple fields or rows
-    cols   = Int( 1 )    
+    # Editors for each of the tuple fields:
+    editors = List( UIEditorFactory )
+    
+    # Number of tuple fields or rows:
+    cols = Int( 1 )    
     
     #---------------------------------------------------------------------------
     #  'Editor' factory methods:
@@ -78,8 +82,8 @@ class ToolkitEditorFactory ( EditorFactory ):
 class SimpleEditor ( Editor ):
     """ Simple style of editor for tuples.
     
-    The editor displays an editor for each of the fields in the tuple, based on
-    the type of each field. 
+        The editor displays an editor for each of the fields in the tuple, 
+        based on the type of each field. 
     """
     
     #---------------------------------------------------------------------------
@@ -138,6 +142,7 @@ class TupleStructure ( HasTraits ):
         factory = editor.factory
         traits  = factory.traits
         labels  = factory.labels
+        editors = factory.editors
         cols    = factory.cols
         
         # Save the reference to the editor:
@@ -151,9 +156,16 @@ class TupleStructure ( HasTraits ):
         content     = []
         self.fields = len( object )
         len_labels  = len( labels )
+        len_editors = len( editors )
         
+        if traits is None:
+            type = editor.trait.handler
+            if isinstance( type, Tuple ):
+                traits = type.traits
+                
         if not isinstance( traits, SequenceTypes ):
             traits = [ traits ]
+            
         len_traits = len( traits )
         if len_traits == 0:
             traits     = [ Any ]
@@ -161,20 +173,27 @@ class TupleStructure ( HasTraits ):
             
         for i, value in enumerate( object ):
             trait = traits[ i % len_traits ]
+            
+            label = ''
             if i < len_labels:
                 label = labels[i]
-            else:
-                label = ''
+                
+            editor = None
+            if i < len_editors:
+                editor = editors[i]
+                
             name = 'f%d' % i
             self.add_trait( name, trait( value, event = 'field' ) )
-            item = Item( name = name, label = label )
+            item = Item( name = name, label = label, editor = editor )
             if cols <= 1:
                 content.append( item )
             else:
                 if (i % cols) == 0:
                     group = Group( orientation = 'horizontal' )
                     content.append( group )
+                    
                 group.content.append( item )
+                
         self.view = View( Group( show_labels = (len_labels != 0), *content ) )
 
     #---------------------------------------------------------------------------
