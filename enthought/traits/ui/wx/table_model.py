@@ -1,20 +1,23 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
 #
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-#
-# Author: David C. Morrill
-# Date: 07/01/2005
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+# 
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+# 
+#  Author: David C. Morrill
+#  Date: 07/01/2005
 #
 #------------------------------------------------------------------------------
+
 """ Defines the table grid model used by the table editor based on the PyFace
-grid control.
+    grid control.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -48,7 +51,8 @@ from enthought.pyface.timer.api \
 #-------------------------------------------------------------------------------
 
 class TraitGridSelection ( HasPrivateTraits ):
-    """ Structure for holding specification information. """
+    """ Structure for holding specification information. 
+    """
 
     # The selected object
     obj = Any
@@ -63,6 +67,7 @@ class TraitGridSelection ( HasPrivateTraits ):
 class TableModel ( GridModel ):
     """ Model for table data.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -126,9 +131,7 @@ class TableModel ( GridModel ):
             if row is not None:
                 row.on_trait_change( self.on_auto_add_row, dispatch = 'ui' )
 
-    #---------------------------------------------------------------------------
-    #  'TableModel' interface:
-    #---------------------------------------------------------------------------
+    #-- TableModel Interface ---------------------------------------------------
 
     #---------------------------------------------------------------------------
     #  Disposes of the model when it is no longer needed:
@@ -181,6 +184,20 @@ class TableModel ( GridModel ):
             logger.error( 'TableModel error: Request for invalid row %d out of '
                           '%d' % ( index, len( self.__filtered_items() ) ) )
             return None
+            
+    #---------------------------------------------------------------------------
+    #  Returns the raw, unfiltered index corresponding to a specified filtered 
+    #  index:
+    #---------------------------------------------------------------------------
+
+    def raw_index_of ( self, row ):
+        """ Returns the raw, unfiltered index corresponding to a specified 
+            filtered index.
+        """
+        if self._filtered_cache is None:
+            return row
+
+        return self._filtered_map[ row ]
 
     #---------------------------------------------------------------------------
     #  Inserts an object after a specified filtered index:
@@ -241,9 +258,7 @@ class TableModel ( GridModel ):
         self.column_sorted = GridSortEvent(index = -1)
         #self.fire_structure_changed()
 
-    #---------------------------------------------------------------------------
-    #  Event handlers:
-    #---------------------------------------------------------------------------
+    #-- Event Handlers ---------------------------------------------------------
 
     #---------------------------------------------------------------------------
     #  Handles a new filter being assigned:
@@ -285,9 +300,7 @@ class TableModel ( GridModel ):
         do_later( self.editor.add_row, object,
                                        len( self.get_filtered_items() ) - 2 )
 
-    #---------------------------------------------------------------------------
-    #  'GridModel' interface:
-    #---------------------------------------------------------------------------
+    #-- GridModel Interface ----------------------------------------------------
 
     def get_column_count ( self ):
         """ Returns the number of columns for this table.
@@ -301,7 +314,8 @@ class TableModel ( GridModel ):
 
     def get_column_size ( self, index ):
         """ Returns the size in pixels of the column indexed by *index*.
-            A value of -1 or None means to use the default. """
+            A value of -1 or None means to use the default. 
+        """
         return self.__get_column( index ).get_width()
 
     def get_cols_drag_value ( self, cols ):
@@ -374,7 +388,7 @@ class TableModel ( GridModel ):
 
     def get_rows_selection_value ( self, rows ):
         """ Returns a list of TraitGridSelection objects containing the
-        object corresponding to the selected rows.
+            object corresponding to the selected rows.
         """
         items = self.__filtered_items()
         return [ TraitGridSelection( obj = items[ row ] ) for row in rows ]
@@ -394,6 +408,7 @@ class TableModel ( GridModel ):
         editor = column.get_editor( object )
         if editor is None:
             return None
+            
         return TraitGridCellAdapter( editor, column.get_object( object ),
                              column.name, '', context = self.editor.ui.context )
 
@@ -405,7 +420,8 @@ class TableModel ( GridModel ):
 
     def get_cell_bg_color ( self, row, col ):
         """ Returns a wxColour object specifying the background color
-            of the specified cell. """
+            of the specified cell. 
+        """
         obj = self.get_filtered_item( row )
         return self.__get_column( col ).get_cell_color( obj )
 
@@ -441,10 +457,12 @@ class TableModel ( GridModel ):
         items = self.__filtered_items()
         cells = []
         for selection in selection_list:
-            try:
-                row = items.index( selection.obj )
-            except ValueError:
-                continue
+            row = -1
+            if selection.obj is not None:
+               try:
+                   row = items.index( selection.obj )
+               except ValueError:
+                   continue
 
             column = -1
             if selection.name != '':
@@ -463,11 +481,15 @@ class TableModel ( GridModel ):
         column = self.__get_column( col )
         menu   = column.get_menu( self.get_filtered_item( row ) )
         editor = self.editor
+        
         if menu is None:
             menu = editor.factory.menu
+            
         if menu is not None:
             editor.prepare_menu( row, column )
+            
             return ( menu, editor )
+            
         return None
 
     def get_value ( self, row, col ):
@@ -629,13 +651,13 @@ class TableModel ( GridModel ):
     def _insert_rows_into_model ( self, pos, new_data ):
         """ Inserts the given new rows into the model.
         """
-        raw_pos = self.__raw_index_of( pos )
+        raw_pos = self.raw_index_of( pos )
         self.__items()[ raw_pos: raw_pos ] = new_data
 
     def _delete_rows_from_model ( self, pos, num_rows ):
         """ Deletes the specified rows from the model.
         """
-        raw_rows = [ self.__raw_index_of( i )
+        raw_rows = [ self.raw_index_of( i )
                      for i in range( pos, pos + num_rows ) ]
         raw_rows.sort()
         raw_rows.reverse()
@@ -690,8 +712,10 @@ class TableModel ( GridModel ):
         result = self.editor.value
         if not isinstance( result, SequenceTypes ):
             return [ result ]
+            
         if ordered and self.reverse:
             return ReversedList( result )
+            
         return result
 
     def __filtered_items ( self ):
@@ -721,15 +745,6 @@ class TableModel ( GridModel ):
                 self._filtered_cache.append( self.auto_add_row )
 
         return fc
-
-    def __raw_index_of ( self, row ):
-        """ Returns the raw index into the underlying model of a specified
-            filtered row index.
-        """
-        if self._filtered_cache is None:
-            return row
-
-        return self._filtered_map[ row ]
 
     def __get_data_column ( self, col ):
         """ Returns a list of model data from the column indexed by *col*.
@@ -795,6 +810,7 @@ class ReversedList ( object ):
         """
         list = self.list[:]
         list.reverse()
+        
         return list.index( value )
 
     #---------------------------------------------------------------------------
@@ -843,8 +859,10 @@ class ReversedList ( object ):
         """
         if index < 0:
             return (-1 - index)
+            
         result = (len( self.list ) - index - 1)
         if result >= 0:
             return result
+            
         return index
 
