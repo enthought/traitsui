@@ -159,7 +159,7 @@ class TupleStructure ( HasTraits ):
         len_editors = len( editors )
         
         if traits is None:
-            type = editor.trait.handler
+            type = editor.value_trait.handler
             if isinstance( type, Tuple ):
                 traits = type.traits
                 
