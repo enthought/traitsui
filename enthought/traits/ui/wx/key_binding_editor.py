@@ -7,10 +7,12 @@
 #  (c) Copyright 2005 by Enthought, Inc.
 #
 #-------------------------------------------------------------------------------
+
 """ Defines the key binding editor for use with the KeyBinding class. This is a 
-specialized editor used to associate a particular key with a control (i.e., the
-key binding editor).
+    specialized editor used to associate a particular key with a control (i.e., 
+    the key binding editor).
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -43,6 +45,7 @@ from key_event_to_name \
 class KeyBindingEditor ( Editor ):
     """ An editor for modifying bindings of keys to controls.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
@@ -62,8 +65,7 @@ class KeyBindingEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = KeyBindingCtrl( self, parent )
-        self.control.SetSize( wx.Size( 160, 19 ) )
+        self.control = KeyBindingCtrl( self, parent, size = wx.Size( 160, 19 ) )
 
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
@@ -132,6 +134,7 @@ ToolkitEditorFactory = BasicEditorFactory( klass = KeyBindingEditor )
 class KeyBindingCtrl ( wx.Window ):
     """ wxPython control for editing key bindings.
     """
+    
     #---------------------------------------------------------------------------
     #  Initialize the object:
     #---------------------------------------------------------------------------
