@@ -123,6 +123,13 @@ class ToolkitEditorFactory ( EditorFactory ):
 
     # The desired number of visible rows in the table
     rows = Int
+    
+    # The optional extended name of the trait used to specify an external filter
+    # for the table data. The value of the trait must either be an instance of
+    # TableEditor, a callable that accepts one argument (a table row) and 
+    # returns True or False to indicate whether the specified object passes the
+    # filter or not, or **None** to indicate that no filter is to be applied:
+    filter_name = Str
 
     # Initial filter that should be applied to the table
     filter = Instance( TableFilter )
@@ -426,8 +433,8 @@ class TableEditor ( Editor ):
     # Is the editor in column mode (i.e. not row or cell mode)?
     in_column_mode = Property
 
-    # Current filter object:
-    filter = Instance( TableFilter, allow_none = True )
+    # Current filter object (should be a TableFilter or callable or None):
+    filter = Any
 
     # The grid widget associated with the editor:
     grid = Instance( Grid )
@@ -550,6 +557,7 @@ class TableEditor ( Editor ):
         # Set up the required externally synchronized traits (if any):                          
         sv      = self.sync_value
         is_list = (mode[-1] == 's')
+        sv( factory.filter_name, 'filter', 'from' )
         sv( factory.columns_name, 'columns', 'from', is_list = True )
         sv( factory.selected, 'selected_%s' % mode, is_list = is_list )
         if is_list:

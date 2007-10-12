@@ -729,8 +729,10 @@ class TableModel ( GridModel ):
                 nitems = [ nitem for nitem in enumerate( items ) ]
                 self.filter_summary = 'All %s items' % len( nitems )
             else:
+                if not callable( filter ):
+                    filter = filter.filter
                 nitems = [ nitem for nitem in enumerate( items )
-                           if filter.filter( nitem[1] ) ]
+                           if filter( nitem[1] ) ]
                 self.filter_summary = '%s of %s items' % ( len( nitems ),
                                                            len( items ) )
             sorter = self._sorter
