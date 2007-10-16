@@ -747,27 +747,41 @@ class TableEditor ( Editor ):
     #  Adds a new object as a new row after the currently selected indices:
     #---------------------------------------------------------------------------
 
-    def add_row ( self ):
+    def add_row ( self, object = None, index = None ):
         """ Adds a specified object as a new row after the specified index.
         """
         filtered_items = self.model.get_filtered_items
-        indices        = self.selected_indices
-        if len( indices ) == 0:
-            indices = [ len( filtered_items() ) - 1 ]
-        indices.reverse()
         
-        insert_item_after = self.model.insert_filtered_item_after
-        objects           = []
-        in_row_mode       = self.in_row_mode
-        for index in indices:
-            object = self.create_new_row()
-            if object is None:
-                break
+        if index is None:
+            indices = self.selected_indices
+            if len( indices ) == 0:
+                indices = [ len( filtered_items() ) - 1 ]
+            indices.reverse()
+        else:
+            indices = [ index ]
             
+        if object is None:
+            objects = []
+            for index in indices:
+                object = self.create_new_row()
+                if object is None:
+                    if in_row_mode:
+                        self.set_selection()
+                    return
+                    
+                objects.append( object )
+        else:
+            objects = [ object ]
+        
+        items             = []
+        insert_item_after = self.model.insert_filtered_item_after
+        in_row_mode       = self.in_row_mode
+        for i, index in enumerate( indices ):
+            object = objects[i]
             index, extend = insert_item_after( index, object )
             
             if in_row_mode and (object in filtered_items()):
-                objects.append( object )
+                items.append( object )
                 
             self._add_undo( ListUndoItem( object = self.object,
                                           name   = self.name,
@@ -775,7 +789,7 @@ class TableEditor ( Editor ):
                                           added  = [ object ] ), extend )
 
         if in_row_mode:
-            self.set_selection( *objects )
+            self.set_selection( *items )
         
     #-- Property Implementations -----------------------------------------------
     
@@ -909,17 +923,21 @@ class TableEditor ( Editor ):
         """ Handles the user selecting items (rows, columns, cells) in the 
             table.
         """
-        gfi = self.model.get_filtered_item
-        rio = self.model.raw_index_of
-        tl  = self.grid._grid.GetSelectionBlockTopLeft()
-        br  = iter( self.grid._grid.GetSelectionBlockBottomRight() )
+        gfi  = self.model.get_filtered_item
+        rio  = self.model.raw_index_of
+        tl   = self.grid._grid.GetSelectionBlockTopLeft()
+        br   = iter( self.grid._grid.GetSelectionBlockBottomRight() )
+        rows = len( self.model.get_filtered_items() )
+        if self.auto_add:
+            rows -= 1
         
         # Get the row items and indices in the selection:
         values = []
         for row0, col0 in tl:
             row1, col1 = br.next()
             for row in xrange( row0, row1 + 1 ):
-                values.append( ( rio( row ), gfi( row ) ) )
+                if row < rows:
+                    values.append( ( rio( row ), gfi( row ) ) )
           
         if len( values ) > 0:
             # Sort by increasing row index:
@@ -941,17 +959,21 @@ class TableEditor ( Editor ):
     def _selection_rows_updated ( self, event ):
         """ Handles multiple row selection changes.
         """
-        gfi = self.model.get_filtered_item
-        rio = self.model.raw_index_of
-        tl  = self.grid._grid.GetSelectionBlockTopLeft()
-        br  = iter( self.grid._grid.GetSelectionBlockBottomRight() )
+        gfi  = self.model.get_filtered_item
+        rio  = self.model.raw_index_of
+        tl   = self.grid._grid.GetSelectionBlockTopLeft()
+        br   = iter( self.grid._grid.GetSelectionBlockBottomRight() )
+        rows = len( self.model.get_filtered_items() )
+        if self.auto_add:
+            rows -= 1
         
         # Get the row items and indices in the selection:
         values = []
         for row0, col0 in tl:
             row1, col1 = br.next()
             for row in xrange( row0, row1 + 1 ):
-                values.append( ( rio( row ), gfi( row ) ) )
+                if row < rows:
+                    values.append( ( rio( row ), gfi( row ) ) )
                 
         # Sort by increasing row index:
         values.sort( lambda l, r: cmp( l[0], r[0] ) )                

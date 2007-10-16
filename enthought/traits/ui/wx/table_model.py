@@ -294,9 +294,11 @@ class TableModel ( GridModel ):
         """
         object = self.auto_add_row
         object.on_trait_change( self.on_auto_add_row, remove = True )
+        
         self.auto_add_row = row = self.editor.create_new_row()
         if row is not None:
             row.on_trait_change( self.on_auto_add_row, dispatch = 'ui' )
+            
         do_later( self.editor.add_row, object,
                                        len( self.get_filtered_items() ) - 2 )
 
