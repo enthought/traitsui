@@ -631,14 +631,14 @@ class TableEditor ( Editor ):
         if factory.row_height > 0: 
             _grid.SetDefaultRowSize( factory.row_height )
             
+        dy = 300
         if factory.rows > 0: 
             self.scrollable = False 
             dy = (_grid.GetColLabelSize() + 
-                  (factory.rows * _grid.GetRowSize( 0 ))) 
-            _grid.SetSizeHints( -1, dy, -1, dy ) 
-        else: 
-            _grid.SetSizeHints( -1, 0 )
+                 (factory.rows * _grid.GetRowSize( 0 ))) 
             
+        _grid.SetSizeHints( -1, dy, -1, dy )
+        
         sizer.Add( grid.control, 1, wx.EXPAND ) 
         
         return grid.control
