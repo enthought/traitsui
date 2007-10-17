@@ -934,6 +934,21 @@ class TableEditor ( Editor ):
 
         return result
 
+    #-- Public Methods ---------------------------------------------------------
+             
+    def filter_modified ( self ):
+        """ Handles updating the selection when some aspect of the current
+            filter has changed.
+        """
+        values = self.selected_values
+        if len( values ) > 0:
+            if self.in_column_mode:
+                self.set_extended_selection( values ) 
+            else:
+                items = self.model.get_filtered_items()
+                self.set_extended_selection( 
+                         [ item for item in values if item[0] in items ] ) 
+    
     #-- Event Handlers ---------------------------------------------------------
 
     #---------------------------------------------------------------------------
@@ -1234,14 +1249,7 @@ class TableEditor ( Editor ):
             
         elif self.model is not None:
              self.model.filter = new_filter
-             values = self.selected_values
-             if len( values ) > 0:
-                 if self.in_column_mode:
-                     self.set_extended_selection( values ) 
-                 else:
-                     items = self.model.get_filtered_items()
-                     self.set_extended_selection( 
-                              [ item for item in values if item[0] in items ] ) 
+             self.filter_modified()
 
     #---------------------------------------------------------------------------
     #  Refresh the list of available filters:

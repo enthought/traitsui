@@ -285,6 +285,7 @@ class TableModel ( GridModel ):
         """
         self._filtered_cache = None
         self.fire_structure_changed()
+        self.editor.filter_modified()
 
     #---------------------------------------------------------------------------
     #  Handles the user modifying the current 'auto_add' mode row:
