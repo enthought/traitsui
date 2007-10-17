@@ -625,11 +625,13 @@ class TableEditor ( Editor ):
             row_label_width              = factory.row_label_width 
         )
         _grid = grid._grid
-        _grid.AutoSizeRows()
         _grid.SetScrollLineY( factory.scroll_dy )
      
-        if factory.row_height > 0: 
-            _grid.SetDefaultRowSize( factory.row_height )
+        # Set the default size for each table row:
+        height = factory.row_height
+        if height <= 0:
+            height = _grid.GetRowSize( 0 ) + 4
+        _grid.SetDefaultRowSize( height )
             
         dy = 300
         if factory.rows > 0: 
