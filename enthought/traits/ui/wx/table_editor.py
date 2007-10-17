@@ -46,7 +46,7 @@ from enthought.traits.ui.dock_window_theme \
     import DockWindowTheme
 
 from enthought.traits.ui.ui_traits \
-    import AView
+    import AView, SequenceTypes
 
 from enthought.pyface.grid.api \
     import Grid
@@ -244,6 +244,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     # The initial height of each row (<= 0 means use default value):
     row_height = Int( 0 )
     
+    # The optional extended name of the trait that the indices of the items 
+    # currently passing the table filter are synced with:
+    filtered_indices = Str
+    
     # The selection mode of the table. The meaning of the various values are as
     # follows:
     # - row:     Entire rows are selected. At most one row can be selected at 
@@ -260,8 +264,8 @@ class ToolkitEditorFactory ( EditorFactory ):
     #            at once.
     selection_mode = Enum( 'row', 'rows', 'column', 'columns', 'cell', 'cells' )
 
-    # The optional extended trait name of the trait that the current selection
-    # is synced with:
+    # The optional extended name of the trait that the current selection is
+    # synced with:
     selected = Str
     
     # The optional extended trait name of the trait that the indices of the
@@ -427,6 +431,9 @@ class TableEditor ( Editor ):
     
     selected_values  = Property
     
+    # The indices of the table items currently passing the table filter:
+    filtered_indices = List( Int )
+    
     # Is the editor in row mode (i.e. not column or cell mode)?
     in_row_mode = Property
     
@@ -559,6 +566,7 @@ class TableEditor ( Editor ):
         is_list = (mode[-1] == 's')
         sv( factory.filter_name, 'filter', 'from' )
         sv( factory.columns_name, 'columns', 'from', is_list = True )
+        sv( factory.filtered_indices, 'filtered_indices', 'to' )
         sv( factory.selected, 'selected_%s' % mode, is_list = is_list )
         if is_list:
             sv( factory.selected_indices, 'selected_%s_indices' % mode[:-1], 
@@ -619,13 +627,20 @@ class TableEditor ( Editor ):
         _grid = grid._grid
         _grid.AutoSizeRows()
         _grid.SetScrollLineY( factory.scroll_dy )
-            
-        if factory.row_height > 0:
+     
+        if factory.row_height > 0: 
             _grid.SetDefaultRowSize( factory.row_height )
-        
-        self.scrollable = False
-        sizer.Add( grid.control, 1, wx.EXPAND )
             
+        if factory.rows > 0: 
+            self.scrollable = False 
+            dy = (_grid.GetColLabelSize() + 
+                  (factory.rows * _grid.GetRowSize( 0 ))) 
+            _grid.SetSizeHints( -1, dy, -1, dy ) 
+        else: 
+            _grid.SetSizeHints( -1, 0 )
+            
+        sizer.Add( grid.control, 1, wx.EXPAND ) 
+        
         return grid.control
 
     #---------------------------------------------------------------------------
@@ -713,6 +728,9 @@ class TableEditor ( Editor ):
     def set_selection ( self, *objects ):
         """ Sets the current selection to a set of specified objects.
         """
+        if (len( objects ) == 1) and isinstance( objects[0], SequenceTypes ):
+            objects = objects[0]
+            
         self.grid.set_selection( [ TraitGridSelection( obj = object )
                                    for object in objects ] )
 
@@ -724,6 +742,9 @@ class TableEditor ( Editor ):
         """ Sets the current selection to a set of specified object/column 
             pairs.
         """
+        if (len( pairs ) == 1) and isinstance( pairs[0], list ):
+            pairs = pairs[0]
+            
         self.grid.set_selection(
             [ TraitGridSelection( obj = object, name = name )
               for object, name in pairs ] )
@@ -789,7 +810,7 @@ class TableEditor ( Editor ):
                                           added  = [ object ] ), extend )
 
         if in_row_mode:
-            self.set_selection( *items )
+            self.set_selection( items )
         
     #-- Property Implementations -----------------------------------------------
     
@@ -1102,6 +1123,62 @@ class TableEditor ( Editor ):
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, cells )
         
+    def _selected_row_changed ( self, item ):
+        if item is None:
+            self.set_selection()
+        else:
+            self.set_selection( item )
+        
+    def _selected_row_index_changed ( self, row ):
+        if row < 0:
+            self.set_selection()
+        else:
+            self.set_selection( self.value[ row ] )
+        
+    def _selected_rows_changed ( self, items ):
+        self.set_selection( items )
+        
+    def _selected_row_indices_changed ( self, indices ):
+        value = self.value
+        self.set_selection( [ value[i] for i in indices ] )
+        
+    def _selected_column_changed ( self, name ):
+        self.set_extended_selection( ( None, name ) )
+        
+    def _selected_column_index_changed ( self, index ):
+        if index < 0:
+            self.set_extended_selection()
+        else:
+            self.set_extended_selection(
+                ( None, self.model.get_column_name[ index ] ) )
+        
+    def _selected_columns_changed ( self, names ):
+        self.set_extended_selection( [ ( None, name ) for name in names ] )
+        
+    def _selected_column_indices_changed ( self, indices ):
+        gcn = self.model.get_column_name
+        self.set_extended_selection( [ ( None, gcn( i ) ) for i in indices ] )
+        
+    def _selected_cell_changed ( self, cell ):
+        self.set_extended_selection( [ cell ] )
+        
+    def _selected_cell_index_changed ( self, pair ):
+        row, column = pair
+        if (row < 0) or (column < 0):
+            self.set_extended_selection()
+        else:
+            self.set_extended_selection( 
+                ( self.value[ row ], self.model.get_column_name[ column ] ) )
+        
+    def _selected_cells_changed ( self, cells ):
+        self.set_extended_selection( cells )
+        
+    def _selected_cell_indices_changed ( self, pairs ):
+        value = self.value
+        gcn   = self.model.get_column_name
+        self.set_extended_selection( [ ( value[ row ], gcn( column ) ) 
+                                       for row, column in pairs ] )
+        
     def _update_toolbar ( self, has_selection ):
         """ Updates the toolbar after a selection change.
         """
@@ -1143,7 +1220,7 @@ class TableEditor ( Editor ):
         self.toolbar.no_sort.enabled = True
         values = self.selected_values
         if len( values ) > 0:
-            do_later( self.set_extended_selection, *values )
+            do_later( self.set_extended_selection, values )
 
     #---------------------------------------------------------------------------
     #  Handles the current filter being changed:
@@ -1160,11 +1237,11 @@ class TableEditor ( Editor ):
              values = self.selected_values
              if len( values ) > 0:
                  if self.in_column_mode:
-                     self.set_extended_selection( *values ) 
+                     self.set_extended_selection( values ) 
                  else:
                      items = self.model.get_filtered_items()
                      self.set_extended_selection( 
-                              *[ item for item in values if item[0] in items ] ) 
+                              [ item for item in values if item[0] in items ] ) 
 
     #---------------------------------------------------------------------------
     #  Refresh the list of available filters:
@@ -1218,7 +1295,7 @@ class TableEditor ( Editor ):
         self.toolbar.no_sort.enabled = False
         values = self.selected_values
         if len( values ) > 0:
-            self.set_extended_selection( *values )
+            self.set_extended_selection( values )
 
     #---------------------------------------------------------------------------
     #  Handles the user requesting to move the current item up one row:
@@ -1236,7 +1313,7 @@ class TableEditor ( Editor ):
             model.delete_filtered_item_at( index )
             model.insert_filtered_item_after( index, object )
             
-        self.set_selection( *objects )
+        self.set_selection( objects )
 
     #---------------------------------------------------------------------------
     #  Handles the user requesting to move the current item down one row:
@@ -1255,7 +1332,7 @@ class TableEditor ( Editor ):
             model.delete_filtered_item_at( index )
             model.insert_filtered_item_after( index, object )
             
-        self.set_selection( *objects )
+        self.set_selection( objects )
 
     #---------------------------------------------------------------------------
     #  Handles the user requesting a table search:
@@ -1315,7 +1392,7 @@ class TableEditor ( Editor ):
                 if indices[i] < 0:
                     del indices[i]
             
-        self.set_selection( *[ items[i] for i in indices ] )
+        self.set_selection( [ items[i] for i in indices ] )
 
     #---------------------------------------------------------------------------
     #  Handles the user requesting to set the user preference items for the
@@ -1920,7 +1997,7 @@ class TableSearchHandler ( Handler ):
             filter = info.object.filter
             items  = [ item for item in editor.model.get_filtered_items()
                        if filter( item ) ]
-            editor.set_selection( *items )
+            editor.set_selection( items )
             
             if len( items ) == 1:
                 self.status = '1 item selected'

@@ -197,7 +197,7 @@ class TableModel ( GridModel ):
         if self._filtered_cache is None:
             return row
 
-        return self._filtered_map[ row ]
+        return self.editor.filtered_indices[ row ]
 
     #---------------------------------------------------------------------------
     #  Inserts an object after a specified filtered index:
@@ -207,12 +207,12 @@ class TableModel ( GridModel ):
         """ Inserts an object after a specified filtered index.
         """
         mapped_index = 0
-        n            = len( self._filtered_map )
+        n            = len( self.editor.filtered_indices )
         if index >= n:
             if (index != 0) or (n != 0):
                 raise IndexError
         elif index >= 0:
-            mapped_index = self._filtered_map[ index ] + 1
+            mapped_index = self.editor.filtered_indices[ index ] + 1
         self.__items().insert( mapped_index, item )
         sorted = self._sort_model()
         if sorted:
@@ -227,9 +227,10 @@ class TableModel ( GridModel ):
     def delete_filtered_item_at ( self, index ):
         """ Deletes the object at the specified filtered index.
         """
-        if index >= len( self._filtered_map ):
+        if index >= len( self.editor.filtered_indices ):
             raise IndexError
-        mapped_index = self._filtered_map[ index ]
+            
+        mapped_index = self.editor.filtered_indices[ index ]
         items        = self.__items()
         object       = items[ mapped_index ]
         del items[ mapped_index ]
@@ -743,8 +744,8 @@ class TableModel ( GridModel ):
                 if self._reverse:
                     nitems.reverse()
 
-            self._filtered_map        = [ x[0] for x in nitems ]
-            self._filtered_cache = fc = [ x[1] for x in nitems ]
+            self.editor.filtered_indices = [ x[0] for x in nitems ]
+            self._filtered_cache = fc    = [ x[1] for x in nitems ]
             if self.auto_add_row is not None:
                 self._filtered_cache.append( self.auto_add_row )
 
