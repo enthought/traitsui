@@ -824,9 +824,14 @@ class TableEditor ( Editor ):
         """
         columns = self.columns
         frm     = columns.index( from_column )
-        to      = columns.index( to_column )
+        if to_column is None:
+            to = len( columns )
+        else:
+            to = columns.index( to_column )
         del columns[ frm ]
         columns.insert( to - (frm < to), from_column )
+        
+        return True
         
     #-- Property Implementations -----------------------------------------------
     

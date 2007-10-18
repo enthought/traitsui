@@ -645,8 +645,11 @@ class TableModel ( GridModel ):
         """ Moves a specified **frm** column to before the specified **to**
             column. Returns **True** if successful; **False** otherwise.
         """
-        return self.editor.move_column( self.__get_column( frm ), 
-                                        self.__get_column( to ) )
+        to_column = None
+        if to < len( self.__get_columns() ):
+            to_column = self.__get_column( to )
+            
+        return self.editor.move_column( self.__get_column( frm ), to_column ) 
 
     #---------------------------------------------------------------------------
     #  Protected interface:
