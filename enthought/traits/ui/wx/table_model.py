@@ -641,6 +641,13 @@ class TableModel ( GridModel ):
 
         return new_rows
 
+    def _move_column ( self, frm, to ):
+        """ Moves a specified **frm** column to before the specified **to**
+            column. Returns **True** if successful; **False** otherwise.
+        """
+        return self.editor.move_column( self.__get_column( frm ), 
+                                        self.__get_column( to ) )
+
     #---------------------------------------------------------------------------
     #  Protected interface:
     #---------------------------------------------------------------------------

@@ -633,7 +633,7 @@ class TableEditor ( Editor ):
             height = _grid.GetRowSize( 0 ) + 4
         _grid.SetDefaultRowSize( height )
             
-        dy = 300
+        dy = -1
         if factory.rows > 0: 
             self.scrollable = False 
             dy = (_grid.GetColLabelSize() + 
@@ -813,6 +813,20 @@ class TableEditor ( Editor ):
 
         if in_row_mode:
             self.set_selection( items )
+            
+    #---------------------------------------------------------------------------
+    #  Moves a column from one place to another:
+    #---------------------------------------------------------------------------
+     
+    def move_column ( self, from_column, to_column ):
+        """ Moves the specified **from_column** from its current position to
+            just preceding the specified **to_column**.
+        """
+        columns = self.columns
+        frm     = columns.index( from_column )
+        to      = columns.index( to_column )
+        del columns[ frm ]
+        columns.insert( to - (frm < to), from_column )
         
     #-- Property Implementations -----------------------------------------------
     
