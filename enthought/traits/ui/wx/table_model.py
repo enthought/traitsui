@@ -23,7 +23,8 @@
 #-------------------------------------------------------------------------------
 
 from enthought.traits.api \
-    import HasTraits, HasPrivateTraits, Any, Str, List, Instance, Event, false
+    import HasTraits, HasPrivateTraits, Any, Str, List, Instance, Event, Bool, \
+           on_trait_change
 
 from enthought.traits.ui.api \
     import Editor
@@ -82,7 +83,7 @@ class TableModel ( GridModel ):
     filter_summary = Str( 'All items' )
 
     # Display the table items in reverse order?
-    reverse = false
+    reverse = Bool( False )
 
     # Event fired when the table has been sorted
     sorted = Event
@@ -260,26 +261,12 @@ class TableModel ( GridModel ):
         #self.fire_structure_changed()
 
     #-- Event Handlers ---------------------------------------------------------
-
-    #---------------------------------------------------------------------------
-    #  Handles a new filter being assigned:
-    #---------------------------------------------------------------------------
-
-    def _filter_changed ( self, old, new ):
-        """ Handles a new filter being assigned.
-        """
-        if old is not None:
-            old.on_trait_change( self._filter_modified, remove = True )
-            
-        if new is not None:
-            new.on_trait_change( self._filter_modified, dispatch = 'ui' )
-            
-        self._filter_modified()
-
+    
     #---------------------------------------------------------------------------
     #  Handles the contents of the filter being changed:
     #---------------------------------------------------------------------------
 
+    @on_trait_change( 'filter.+' )
     def _filter_modified ( self ):
         """ Handles the contents of the filter being changed.
         """

@@ -897,8 +897,6 @@ class TableEditor ( Editor ):
         """
         factory = self.factory
         try:
-            self.filter = prefs.get( 'filter',  self.filter )
-
             filters = prefs.get( 'filters', None )
             if filters is not None:
                 factory.filters = ([ f for f in factory.filters if f.template ]
@@ -942,12 +940,10 @@ class TableEditor ( Editor ):
         """
         get_col_size = self.grid._grid.GetColSize
         result = {
-            'filter':    self.filter,
-            'filters':   [ f for f in self.factory.filters
-                           if not f.template ],
-            'columns':   [ c.get_label() for c in self.columns ],
-            'widths':    [ get_col_size( i )
-                           for i in range( len( self.columns ) ) ]
+            'filters': [ f for f in self.factory.filters if not f.template ],
+            'columns': [ c.get_label() for c in self.columns ],
+            'widths':  [ get_col_size( i )
+                         for i in range( len( self.columns ) ) ]
         }
         
         if self.factory.edit_view != ' ':
