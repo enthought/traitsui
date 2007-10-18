@@ -630,7 +630,7 @@ class TableEditor ( Editor ):
         # Set the default size for each table row:
         height = factory.row_height
         if height <= 0:
-            height = _grid.GetRowSize( 0 ) + 4
+            height = _grid.GetTextExtent( 'My' )[1] + 6
         _grid.SetDefaultRowSize( height )
             
         dy = -1
