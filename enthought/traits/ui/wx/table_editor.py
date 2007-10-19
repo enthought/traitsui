@@ -580,8 +580,8 @@ class TableEditor ( Editor ):
             'selection_changed', dispatch = 'ui' )
 
         # Make sure the selection is initialized:
-        if (len( items ) > 0) and row_mode:
-            self.set_selection( items[0] )
+        if row_mode:
+            self.set_selection( items[0:1] )
         else:
             self.set_selection()
 
@@ -727,14 +727,13 @@ class TableEditor ( Editor ):
     #  Sets the current selection to a set of specified objects:
     #---------------------------------------------------------------------------
 
-    def set_selection ( self, *objects ):
+    def set_selection ( self, objects = [], notify = True ):
         """ Sets the current selection to a set of specified objects.
         """
-        if (len( objects ) == 1) and isinstance( objects[0], SequenceTypes ):
-            objects = objects[0]
-            
+        if not isinstance( objects, SequenceTypes ):
+            objects = [ objects ]
         self.grid.set_selection( [ TraitGridSelection( obj = object )
-                                   for object in objects ] )
+                                   for object in objects ], notify = notify )
 
     #---------------------------------------------------------------------------
     #  Sets the current selection to a set of specified object/column pairs:
@@ -964,7 +963,7 @@ class TableEditor ( Editor ):
             else:
                 items = self.model.get_filtered_items()
                 self.set_extended_selection( 
-                         [ item for item in values if item[0] in items ] ) 
+                         [ item for item in values if item[0] in items ] )
     
     #-- Event Handlers ---------------------------------------------------------
 
@@ -1000,8 +999,9 @@ class TableEditor ( Editor ):
             index, row = -1, None
          
         # Save the new selection information:
-        self.selected_row       = row        
-        self.selected_row_index = index
+        self.set( selected_row_index  = index,
+                  trait_change_notify = False )
+        self.selected_row = row        
             
         # Update the toolbar status:
         self._update_toolbar( row is not None )
@@ -1032,8 +1032,9 @@ class TableEditor ( Editor ):
         values.sort( lambda l, r: cmp( l[0], r[0] ) )                
          
         # Save the new selection information:
+        self.trait_set( selected_row_indices = [ v[0] for v in values ],
+                        trait_change_notify  = False )
         self.selected_rows = rows = [ v[1] for v in values ]
-        self.selected_row_indices = [ v[0] for v in values ]
             
         # Update the toolbar status:
         self._update_toolbar( len( values ) > 0 )
@@ -1063,8 +1064,9 @@ class TableEditor ( Editor ):
             index, column = -1, ''
          
         # Save the new selection information:
-        self.selected_column       = column        
-        self.selected_column_index = index
+        self.set( selected_column_index = index,
+                  trait_change_notify   = False )      
+        self.selected_column = column        
 
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, column )
@@ -1087,8 +1089,9 @@ class TableEditor ( Editor ):
         values.sort( lambda l, r: cmp( l[0], r[0] ) )                
          
         # Save the new selection information:
+        self.set( selected_column_indices = [ v[0] for v in values ],
+                  trait_change_notify     = False )
         self.selected_columns = columns = [ v[1] for v in values ]
-        self.selected_column_indices    = [ v[0] for v in values ] 
 
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, columns )
@@ -1120,8 +1123,9 @@ class TableEditor ( Editor ):
             index, cell = ( -1, -1 ), ( None, '' )
             
         # Save the new selection information:
-        self.selected_cell       = cell        
-        self.selected_cell_index = index 
+        self.set( selected_cell_index = index,
+                  trait_change_notify = False )
+        self.selected_cell = cell        
 
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, cell )
@@ -1149,30 +1153,31 @@ class TableEditor ( Editor ):
         values.sort( lambda l, r: cmp( l[0], r[0] ) )                
          
         # Save the new selection information:
+        self.set( selected_cell_indices = [ v[0] for v in values ],
+                  trait_change_notify   = False )
         self.selected_cells = cells = [ v[1] for v in values ]        
-        self.selected_cell_indices  = [ v[0] for v in values ] 
 
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, cells )
         
     def _selected_row_changed ( self, item ):
         if item is None:
-            self.set_selection()
+            self.set_selection( notify = False )
         else:
-            self.set_selection( item )
+            self.set_selection( item, notify = False )
         
     def _selected_row_index_changed ( self, row ):
         if row < 0:
-            self.set_selection()
+            self.set_selection( notify = False )
         else:
-            self.set_selection( self.value[ row ] )
+            self.set_selection( self.value[ row ], notify = False )
         
     def _selected_rows_changed ( self, items ):
-        self.set_selection( items )
+        self.set_selection( items, notify = False )
         
     def _selected_row_indices_changed ( self, indices ):
         value = self.value
-        self.set_selection( [ value[i] for i in indices ] )
+        self.set_selection( [ value[i] for i in indices ], notify = False )
         
     def _selected_column_changed ( self, name ):
         self.set_extended_selection( ( None, name ) )
