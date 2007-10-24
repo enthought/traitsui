@@ -404,6 +404,18 @@ class GUIToolkit ( Toolkit ):
             control.
         """
         control.DestroyChildren()
+        
+    #---------------------------------------------------------------------------
+    #  Returns a renderer used to render 'themed' table cells for a specified 
+    #  TableColumn object:
+    #---------------------------------------------------------------------------
+    
+    def themed_cell_renderer ( self, column ):
+        """ Returns a renderer used to render 'themed' table cells for a 
+            specified TableColum object.
+        """
+        from themed_cell_renderer import ThemedCellRenderer
+        return ThemedCellRenderer( column )
 
     #---------------------------------------------------------------------------
     #  GUI toolkit dependent trait definitions:

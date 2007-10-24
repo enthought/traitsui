@@ -686,8 +686,6 @@ class TableEditor ( Editor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        super( TableEditor, self ).dispose()
-        
         if self.toolbar_ui is not None:
             self.toolbar_ui.dispose()
             
@@ -702,6 +700,8 @@ class TableEditor ( Editor ):
                                     remove = True )
         self.grid.dispose()
         self.model.dispose()
+        
+        super( TableEditor, self ).dispose()
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
