@@ -142,11 +142,12 @@ class ShellEditor ( Editor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        super( ShellEditor, self ).dispose()
         self._shell.on_trait_change( self.update_object, 'command_executed', 
                                      remove = True )
         if self._base_locals is None:
             self.object.on_trait_change( self.update_any, remove = True )
+            
+        super( ShellEditor, self ).dispose()
 
     #---------------------------------------------------------------------------
     #  Restores any saved user preference information associated with the 

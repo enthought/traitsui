@@ -222,8 +222,8 @@ class CustomEditor ( SimpleEditor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        super( CustomEditor, self ).dispose()
-
         self._control.on_trait_change( self.update_object, 'clicked',
                                        remove = True )
+                                       
+        super( CustomEditor, self ).dispose()
 

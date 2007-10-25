@@ -778,8 +778,6 @@ class _TabularEditor ( Editor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        super( _TabularEditor, self ).dispose()
-        
         # Remove all of the wx event handlers:
         control = self.control
         parent  = control.GetParent()
@@ -805,6 +803,8 @@ class _TabularEditor ( Editor ):
                                   self.extended_name + '_items', remove = True )
         self.on_trait_change( self._refresh, 'adapter.+update',  remove = True ) 
         self.on_trait_change( self._rebuild, 'adapter.columns',  remove = True )
+        
+        super( _TabularEditor, self ).dispose()
                         
     def update_editor ( self ):
         """ Updates the editor when the object trait changes externally to the

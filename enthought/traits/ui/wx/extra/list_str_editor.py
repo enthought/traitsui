@@ -512,12 +512,12 @@ class _ListStrEditor ( Editor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        super( _ListStrEditor, self ).dispose()
-        
         self.context_object.on_trait_change( self.update_editor,
                                   self.extended_name + '_items', remove = True )
         self.on_trait_change( self._refresh, 'adapter.+update', remove = True ) 
                         
+        super( _ListStrEditor, self ).dispose()
+        
     def update_editor ( self ):
         """ Updates the editor when the object trait changes externally to the
             editor.

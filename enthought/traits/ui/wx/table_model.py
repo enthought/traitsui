@@ -158,6 +158,9 @@ class TableModel ( GridModel ):
         # Make sure we have removed listeners from the current filter also:
         if self.filter is not None:
             self.filter.on_trait_change( self._filter_modified, remove = True )
+            
+        # Clean-up any links that should be broken:
+        self.editor = None
 
     #---------------------------------------------------------------------------
     #  Returns all model items matching the current filter:

@@ -255,6 +255,7 @@ class CustomColorEditor ( SimpleColorEditor ):
         """ Disposes of the contents of an editor.
         """
         self.control._swatch_editor.dispose()
+        
         super( CustomColorEditor, self ).dispose()
 
     #---------------------------------------------------------------------------

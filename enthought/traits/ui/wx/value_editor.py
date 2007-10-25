@@ -145,5 +145,6 @@ class SimpleEditor ( Editor ):
         """ Disposes of the contents of an editor.
         """
         self._ui.dispose()
+        
         super( SimpleEditor, self ).dispose()
        

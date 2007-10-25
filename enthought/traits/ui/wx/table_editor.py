@@ -698,8 +698,12 @@ class TableEditor ( Editor ):
                  
         self.model.on_trait_change( self._model_sorted, 'sorted',
                                     remove = True )
+        
         self.grid.dispose()
         self.model.dispose()
+        
+        # Break any links needed to allow garbage collection:
+        self.grid = self.model = self.toolbar = None
         
         super( TableEditor, self ).dispose()
 

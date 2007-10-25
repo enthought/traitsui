@@ -284,6 +284,7 @@ class SimpleEditor ( Editor ):
         """
         self.context_object.on_trait_change( self.update_editor_item, 
                                  self.extended_name + '_items?', remove = True )
+                                 
         super( SimpleEditor, self ).dispose()
         
     #---------------------------------------------------------------------------
@@ -770,6 +771,7 @@ class NotebookEditor ( Editor ):
         self.context_object.on_trait_change( self.update_editor_item, 
                                 self.name + '_items?', remove = True )
         self.close_all()
+        
         super( NotebookEditor, self ).dispose()
 
     #---------------------------------------------------------------------------

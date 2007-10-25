@@ -95,12 +95,13 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
             return
 
         # Get the draw bounds:
-        x  = rect.GetX()
-        y  = rect.GetY()
-        dx = rect.GetWidth()
-        dy = rect.GetHeight()
+        x  = x0 = rect.GetX()
+        y  = y0 = rect.GetY()
+        dx =      rect.GetWidth()
+        dy =      rect.GetHeight()
         
         # Get the text size:
+        dc.SetFont( attr.GetFont() )
         tdx, tdy = dc.GetTextExtent( text )
         
         # Get the alignment and theme information:
@@ -109,28 +110,32 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         ox, oy         = theme.offset
 
         # Calculate the x-coordinate of the text:
+        left   = slice.xleft   + margins.left
+        top    = slice.xtop    + margins.top
+        right  = slice.xright  + margins.right
+        bottom = slice.xbottom + margins.bottom
         if halign == wx.ALIGN_LEFT:
-            x += slice.xleft + margins.left
+            x += left
         elif halign == wx.ALIGN_CENTRE:
-            x += slice.xleft + margins.left + ((dx - slice.xleft - slice.xright
-                             - margins.left - margins.right - tdx) / 2)
+            x += (left + ((dx - left - right - tdx) / 2))
         else:
-            x += dx - slice.xright - margins.right - tdx
+            x += (dx - right - tdx)
 
         # Calculate the y-coordinate of the text:
         if valign == wx.ALIGN_TOP:
-            y += slice.xtop + margins.top
+            y += top
         elif valign == wx.ALIGN_CENTRE:
-            y += slice.xtop + margins.top + ((dy - slice.xtop - slice.xbottom
-                            - margins.top - margins.bottom - tdy) / 2)
+            y += (top + ((dy - top - bottom - tdy) / 2))
         else:
-            y += dy - slice.xbottom - margins.bottom - tdy
+            y += (dy - bottom - tdy)
 
         # Finally, draw the text:
         dc.SetBackgroundMode( wx.TRANSPARENT )
         dc.SetTextForeground( slice.text_color )
-        dc.SetFont( grid.GetFont() )
+        dc.SetClippingRegion( x0 + left, y0 + top, 
+                              dx - left - right, dy - top - bottom ) 
         dc.DrawText( text, x + ox, y + oy )
+        dc.DestroyClippingRegion()
 
     def GetBestSize ( self, grid, attr, dc, row, col ):
         """ Determine best size for the cell. """
@@ -139,7 +144,7 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         text = grid.GetCellValue( row, col ) or 'My'
         
         # Now calculate and return the best size for the text:
-        dc.SetFont( grid.GetFont() )
+        dc.SetFont( attr.GetFont() )
         tdx, tdy = dc.GetTextExtent( text )
         theme    = self.column.cell_theme
         margins  = theme.margins
