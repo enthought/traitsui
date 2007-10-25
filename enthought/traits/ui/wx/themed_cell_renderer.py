@@ -129,7 +129,7 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         # Finally, draw the text:
         dc.SetBackgroundMode( wx.TRANSPARENT )
         dc.SetTextForeground( slice.text_color )
-        #dc.SetFont( self.control.GetFont() )
+        dc.SetFont( grid.GetFont() )
         dc.DrawText( text, x + ox, y + oy )
 
     def GetBestSize ( self, grid, attr, dc, row, col ):
@@ -139,6 +139,7 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         text = grid.GetCellValue( row, col ) or 'My'
         
         # Now calculate and return the best size for the text:
+        dc.SetFont( grid.GetFont() )
         tdx, tdy = dc.GetTextExtent( text )
         theme    = self.column.cell_theme
         margins  = theme.margins
