@@ -25,9 +25,8 @@
 import wx
 
 from enthought.traits.api \
-    import true, false, Int, Float, List, Instance, Str, Color, Font, Any, \
-           Button, Tuple, Dict, Enum, HasPrivateTraits, Trait, Bool, Callable, \
-           Range, Property
+    import Int, Float, List, Instance, Str, Color, Font, Any, Button, Tuple, \
+           Dict, Enum, HasPrivateTraits, Trait, Bool, Callable, Range, Property
 
 from enthought.traits.ui.api \
     import View, Item, UI, InstanceEditor, EnumEditor, Handler, SetEditor, \
@@ -130,7 +129,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     # returns True or False to indicate whether the specified object passes the
     # filter or not, or **None** to indicate that no filter is to be applied:
     filter_name = Str
-
+    
     # Initial filter that should be applied to the table
     filter = Instance( TableFilter )
 
@@ -148,26 +147,26 @@ class ToolkitEditorFactory ( EditorFactory ):
     deletable = BoolOrCallable( False )
 
     # Is the table editable?
-    editable = true
+    editable = Bool( True )
     
     # Should the editor become active after the first click
-    edit_on_first_click = true
+    edit_on_first_click = Bool( True )
 
     # Can the user reorder the items in the table?
-    reorderable = false
+    reorderable = Bool( False )
 
     # Can the user configure the table columns?
-    configurable = true
+    configurable = Bool( True )
 
     # Should the cells of the table automatically size to the optimal size?
-    auto_size = true
+    auto_size = Bool( True )
 
     # Should a new row automatically be added to the end of the table to allow
     # the user to create new entries? If True, **row_factory** must be set.
-    auto_add = false
+    auto_add = Bool( False )
 
     # Should the table items be presented in reverse order?
-    reverse = false
+    reverse = Bool( False )
     
     # The DockWindow graphical theme:
     dock_theme = Instance( DockWindowTheme )
@@ -191,13 +190,19 @@ class ToolkitEditorFactory ( EditorFactory ):
     orientation = Orientation
 
     # Is the table sortable by clicking on the column headers?
-    sortable = true
+    sortable = Bool( True )
 
     # Does sorting affect the model (vs. just the view)?
-    sort_model = false
+    sort_model = Bool( False )
 
     # Should grid lines be shown on the table?
-    show_lines = true
+    show_lines = Bool( True )
+    
+    # Should the toolbar be displayed? (Note that False will override settings
+    # such as 'configurable', etc., and is a quick way to prevent the toolbar
+    # from being displayed; but True will not cause a toolbar to appear if one 
+    # would not otherwise have been displayed)
+    show_toolbar = Bool( True )
 
     # The vertical scroll increment for the table:
     scroll_dy = Range( 1, 32 )
@@ -206,7 +211,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     line_color = Color( 0xC4C0A9 )
 
     # Show column labels?
-    show_column_labels = true
+    show_column_labels = Bool( True )
 
     # Font to use for text in cells
     cell_font = Font
@@ -460,7 +465,7 @@ class TableEditor ( Editor ):
 
     # Is 'auto_add' mode in effect? (I.e., new rows are automatically added to
     # the end of the table when the user modifies current last row.)
-    auto_add = false
+    auto_add = Bool( False )
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -653,6 +658,9 @@ class TableEditor ( Editor ):
         """ Creates the table editing toolbar.
         """
         factory = self.factory
+        if not factory.show_toolbar:
+            return
+            
         toolbar = TableEditorToolbar( parent = parent, editor = self )
         if (toolbar.control is not None) or (len( factory.filters ) > 0):
             tb_sizer = wx.BoxSizer( wx.HORIZONTAL )
