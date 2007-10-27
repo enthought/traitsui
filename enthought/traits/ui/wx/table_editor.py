@@ -1266,7 +1266,9 @@ class TableEditor ( Editor ):
     def _model_sorted ( self ):
         """ Handles the contents of the model being resorted.
         """
-        self.toolbar.no_sort.enabled = True
+        if self.toolbar is not None:
+            self.toolbar.no_sort.enabled = True
+            
         values = self.selected_values
         if len( values ) > 0:
             do_later( self.set_extended_selection, values )
