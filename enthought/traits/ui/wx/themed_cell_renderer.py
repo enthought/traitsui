@@ -26,6 +26,9 @@ import wx
 
 from wx.grid \
     import PyGridCellRenderer, GridCellStringRenderer
+    
+from enthought.traits.ui.ui_traits \
+    import convert_bitmap
 
 #-------------------------------------------------------------------------------
 #  'ThemedCellRenderer' class:
@@ -80,77 +83,147 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
     def Draw ( self, grid, attr, dc, rect, row, col, is_selected ):
         """ Draws the contents of the specified grid cell.
         """
-        # Draw the appropriate theme background:
-        theme = self.column.cell_theme
-        if is_selected:
-            theme = self.column.selected_theme or theme
-            
-        slice = theme.image_slice
-        slice.fill( dc, rect.GetX(),     rect.GetY(), 
-                        rect.GetWidth(), rect.GetHeight() )
-                  
-        # If no text to display, then we are done:
-        text = grid.GetCellValue( row, col )
-        if text == '':
-            return
-
+        # Get the model object this cell is being rendered for:
+        object = grid.grid.model.get_filtered_item( row )
+        
         # Get the draw bounds:
-        x  = x0 = rect.GetX()
-        y  = y0 = rect.GetY()
-        dx =      rect.GetWidth()
-        dy =      rect.GetHeight()
+        x0 = x = rect.x
+        y0 = y = rect.y
+        dx = rect.width
+        dy = rect.height
+        
+        # Draw the appropriate theme background:
+        column = self.column
+        if is_selected:
+            theme = (column.get_selected_theme( object ) or
+                     column.get_cell_theme(     object ))
+        else:
+            theme = column.get_cell_theme( object )
+                     
+        if theme is not None:
+            margins = theme.margins
+            slice   = theme.image_slice
+            slice.fill( dc, x, y, dx, dy )
+            
+            # Set up the correct text color to use:
+            dc.SetTextForeground( slice.text_color )
+            
+            # Calculate the margins for the draw area:
+            left   = slice.xleft   + margins.left
+            top    = slice.xtop    + margins.top
+            right  = slice.xright  + margins.right
+            bottom = slice.xbottom + margins.bottom
+            ox, oy = theme.offset
+        else:
+            if is_selected:
+                bg_color = grid.GetSelectionBackground()
+            else:
+                bg_color = attr.GetBackgroundColour()
+        
+            dc.SetBackgroundMode( wx.SOLID )
+            dc.SetBrush( wx.Brush( bg_color, wx.SOLID ) )
+            dc.SetPen( wx.TRANSPARENT_PEN )
+            dc.DrawRectangle( x, y, dx, dy )
+            
+            # Set up the correct text color to use:
+            dc.SetTextForeground( attr.GetTextColour() )
+            
+            # Calculate the margins for the draw area:
+            left = right  = 4
+            top  = bottom = 3
+            ox   = oy     = 0
+        
+        # Get the optional image bitmap and text:
+        bitmap = convert_bitmap( column.get_image( object ) )
+        text   = grid.GetCellValue( row, col )
+                  
+        # If no text or bitmap to display, then we are done:
+        if (bitmap is None) and (text == ''):
+            return
+            
+        # Get the bitmap size:
+        idx = idy = tdx = tdy = 0
+        if bitmap is not None:
+            idx = bitmap.GetWidth()
+            idy = bitmap.GetHeight()
         
         # Get the text size:
-        dc.SetFont( attr.GetFont() )
-        tdx, tdy = dc.GetTextExtent( text )
+        if text != '':
+            dc.SetFont( attr.GetFont() )
+            tdx, tdy = dc.GetTextExtent( text )
+            
+            # Get the spacing between text and image:
+            if bitmap is not None:
+                idx += 4
         
         # Get the alignment and theme information:
         halign, valign = attr.GetAlignment()
-        margins        = theme.margins
-        ox, oy         = theme.offset
 
-        # Calculate the x-coordinate of the text:
-        left   = slice.xleft   + margins.left
-        top    = slice.xtop    + margins.top
-        right  = slice.xright  + margins.right
-        bottom = slice.xbottom + margins.bottom
+        # Calculate the x-coordinate of the image/text:
         if halign == wx.ALIGN_LEFT:
             x += left
         elif halign == wx.ALIGN_CENTRE:
-            x += (left + ((dx - left - right - tdx) / 2))
+            x += (left + ((dx - left - right - tdx - idx) / 2))
         else:
-            x += (dx - right - tdx)
+            x += (dx - right - tdx - idx)
 
-        # Calculate the y-coordinate of the text:
+        # Calculate the y-coordinate of the image/text:
+        max_dy = max( tdy, idy )
         if valign == wx.ALIGN_TOP:
             y += top
         elif valign == wx.ALIGN_CENTRE:
-            y += (top + ((dy - top - bottom - tdy) / 2))
+            y += (top + ((dy - top - bottom - max_dy) / 2))
         else:
-            y += (dy - bottom - tdy)
+            y += (dy - bottom - max_dy)
 
-        # Finally, draw the text:
-        dc.SetBackgroundMode( wx.TRANSPARENT )
-        dc.SetTextForeground( slice.text_color )
+        # Set up the clipping region to prevent drawing outside the margins:
         dc.SetClippingRegion( x0 + left, y0 + top, 
                               dx - left - right, dy - top - bottom ) 
-        dc.DrawText( text, x + ox, y + oy )
+            
+        # Draw the image (if left or center aligned):
+        if (bitmap is not None) and (halign != wx.ALIGN_RIGHT):
+            dc.DrawBitmap( bitmap, x, y + ((max_dy - idy) / 2),  True )
+            x += idx
+            
+        # Finally, draw the text:
+        if text != '':
+            dc.SetBackgroundMode( wx.TRANSPARENT )
+            dc.DrawText( text, x + ox, y + oy )
+            x += tdx + 4
+            
+        # Draw the image (if right-aligned):
+        if (bitmap is not None) and (halign == wx.ALIGN_RIGHT):
+            dc.DrawBitmap( bitmap, x, y + ((max_dy - idy) / 2),  True )
+            
+        # Discard the clipping region:
         dc.DestroyClippingRegion()
 
     def GetBestSize ( self, grid, attr, dc, row, col ):
         """ Determine best size for the cell. """
+        # Get the model object this cell is being rendered for:
+        object = grid.grid.model.get_filtered_item( row )
 
         # Get the text for this cell:
         text = grid.GetCellValue( row, col ) or 'My'
         
-        # Now calculate and return the best size for the text:
+        # Now calculate and return the best size for the text and image:
         dc.SetFont( attr.GetFont() )
         tdx, tdy = dc.GetTextExtent( text )
-        theme    = self.column.cell_theme
-        margins  = theme.margins
-        tdx     += (margins.left + margins.right)
-        tdy     += (margins.top  + margins.bottom)
-        slice    = theme.image_slice
+        
+        column = self.column
+        bitmap = convert_bitmap( column.get_image( object ) )
+        if bitmap is not None:
+            tdx += (bitmap.GetWdth() + 4)
+            tdy  = max( tdy, bitmap.GetHeight() )
+            
+        theme = column.get_cell_theme( object )
+        if theme is None:
+            return wx.Size( tdx + 8, tdy + 6 )
+            
+        margins = theme.margins
+        tdx    += (margins.left + margins.right)
+        tdy    += (margins.top  + margins.bottom)
+        slice   = theme.image_slice
             
         return wx.Size( max( slice.left  + slice.right,
                              slice.xleft + slice.xright  + tdx ),
