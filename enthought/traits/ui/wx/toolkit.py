@@ -326,40 +326,42 @@ class GUIToolkit ( Toolkit ):
         return key_event_to_name.key_event_to_name( event )
 
     #---------------------------------------------------------------------------
-    #  Hooks all interesting events for all controls in a ui so that they can
-    #  be routed to the correct event handler:
+    #  Hooks all specified events for all controls in a ui so that they can be
+    #  routed to the correct event handler:
     #---------------------------------------------------------------------------
 
-    def hook_events ( self, ui, control, drop_target = None ):
-        """ Hooks all interesting mouse events for all controls in a UI so that
-        they can be routed to the correct event handler.
+    def hook_events ( self, ui, control, events = None, handler = None, 
+                      drop_target = None ):
+        """ Hooks all specified events for all controls in a UI so that they 
+            can be routed to the correct event handler.
         """
+        if events is None:
+            events = ( 
+               wx.wxEVT_LEFT_DOWN, wx.wxEVT_LEFT_DCLICK, wx.wxEVT_LEFT_UP,      
+               wx.wxEVT_MIDDLE_DOWN, wx.wxEVT_MIDDLE_DCLICK, wx.wxEVT_MIDDLE_UP,    
+               wx.wxEVT_RIGHT_DOWN, wx.wxEVT_RIGHT_DCLICK, wx.wxEVT_RIGHT_UP,     
+               wx.wxEVT_MOTION, wx.wxEVT_ENTER_WINDOW, wx.wxEVT_LEAVE_WINDOW, 
+               wx.wxEVT_MOUSEWHEEL, wx.wxEVT_PAINT
+            )
+            control.SetDropTarget( PythonDropTarget(
+                                   DragHandler( ui = ui, control = control ) ) )
+        elif events == 'keys':
+            events = ( wx.wxEVT_CHAR, )
+            
+        if handler is None:
+            handler = ui.route_event
+        
         id            = control.GetId()
         event_handler = wx.EvtHandler()
         connect       = event_handler.Connect
-        route_event   = ui.route_event
 
-        connect( id, id, wx.wxEVT_LEFT_DOWN,     route_event )
-        connect( id, id, wx.wxEVT_LEFT_DCLICK,   route_event )
-        connect( id, id, wx.wxEVT_LEFT_UP,       route_event )
-        connect( id, id, wx.wxEVT_MIDDLE_DOWN,   route_event )
-        connect( id, id, wx.wxEVT_MIDDLE_DCLICK, route_event )
-        connect( id, id, wx.wxEVT_MIDDLE_UP,     route_event )
-        connect( id, id, wx.wxEVT_RIGHT_DOWN,    route_event )
-        connect( id, id, wx.wxEVT_RIGHT_DCLICK,  route_event )
-        connect( id, id, wx.wxEVT_RIGHT_UP,      route_event )
-        connect( id, id, wx.wxEVT_MOTION,        route_event )
-        connect( id, id, wx.wxEVT_ENTER_WINDOW,  route_event )
-        connect( id, id, wx.wxEVT_LEAVE_WINDOW,  route_event )
-        connect( id, id, wx.wxEVT_MOUSEWHEEL,    route_event )
-        connect( id, id, wx.wxEVT_PAINT,         route_event )
+        for event in events:
+            connect( id, id, event, handler )
 
         control.PushEventHandler( event_handler )
-        control.SetDropTarget( PythonDropTarget(
-                                   DragHandler( ui = ui, control = control ) ) )
 
         for child in control.GetChildren():
-            self.hook_events( ui, child, drop_target )
+            self.hook_events( ui, child, events, handler, drop_target )
 
     #---------------------------------------------------------------------------
     #  Routes a 'hooked' event to the correct handler method:
@@ -381,10 +383,8 @@ class GUIToolkit ( Toolkit ):
         if method is None:
             method = getattr( handler, 'on_%s' % suffix, None )
 
-        if method is None:
+        if (method is None) or (method( ui.info, owner, event ) is False):
             event.Skip()
-        else:
-            method( ui.info, owner, event )
 
     #---------------------------------------------------------------------------
     #  Destroys a specified GUI toolkit control:  
