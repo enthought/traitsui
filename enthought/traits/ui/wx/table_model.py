@@ -292,6 +292,34 @@ class TableModel ( GridModel ):
         self._filtered_cache = None
         self.fire_structure_changed()
         self.editor.filter_modified()
+        
+    #---------------------------------------------------------------------------
+    #  Handles the grid firing a 'click' event:
+    #---------------------------------------------------------------------------
+    
+    def _click_changed ( self, event ):
+        """ Handles the grid firing a 'click' event.
+        """
+        row, col = event
+        
+        # Fire the same event on the editor after mapping it to a model object
+        # and column name:
+        self.editor.click = ( self.get_filtered_item( row ),
+                              self.__get_column( col ) )
+        
+    #---------------------------------------------------------------------------
+    #  Handles the grid firing a 'dclick' event:
+    #---------------------------------------------------------------------------
+    
+    def _dclick_changed ( self, event ):
+        """ Handles the grid firing a 'dclick' event.
+        """
+        row, col = event
+        
+        # Fire the same event on the editor after mapping it to a model object
+        # and column name:
+        self.editor.dclick = ( self.get_filtered_item( row ),
+                               self.__get_column( col ) )
 
     #---------------------------------------------------------------------------
     #  Handles the user modifying the current 'auto_add' mode row:

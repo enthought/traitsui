@@ -26,7 +26,8 @@ import wx
 
 from enthought.traits.api \
     import Int, Float, List, Instance, Str, Color, Font, Any, Button, Tuple, \
-           Dict, Enum, HasPrivateTraits, Trait, Bool, Callable, Range, Property
+           Dict, Enum, HasPrivateTraits, Trait, Bool, Callable, Range, Event, \
+           Property
 
 from enthought.traits.ui.api \
     import View, Item, UI, InstanceEditor, EnumEditor, Handler, SetEditor, \
@@ -285,6 +286,18 @@ class ToolkitEditorFactory ( EditorFactory ):
     # The optional extended trait name of the trait that the indices of the
     # current selection are synced with:
     selected_indices = Str
+    
+    # The optional extended trait name of the trait that should be assigned
+    # an ( object, column ) tuple when a table cell is clicked on (Note: If you
+    # want to receive repeated clicks on the same cell, make sure the trait is 
+    # defined as an Event):
+    click = Str
+    
+    # The optional extended trait name of the trait that should be assigned
+    # an ( object, column ) tuple when a table cell is double-clicked on
+    # (Note: if you want to receive repeated double-clicks on the same cell, 
+    # make sure the trait is defined as an Event):
+    dclick = Str
 
     # Called when a table item is selected
     on_select = Any
@@ -448,6 +461,12 @@ class TableEditor ( Editor ):
     # The indices of the table items currently passing the table filter:
     filtered_indices = List( Int )
     
+    # The event fired when a cell is clicked on:
+    click = Event
+    
+    # The event fired when a cell is double-clicked on:
+    dclick = Event
+    
     # Is the editor in row mode (i.e. not column or cell mode)?
     in_row_mode = Property
     
@@ -582,7 +601,9 @@ class TableEditor ( Editor ):
         # Set up the required externally synchronized traits (if any):                          
         sv      = self.sync_value
         is_list = (mode[-1] == 's')
-        sv( factory.filter_name, 'filter', 'from' )
+        sv( factory.click,  'click',  'to' )
+        sv( factory.dclick, 'dclick', 'to' )
+        sv( factory.filter_name,  'filter',  'from' )
         sv( factory.columns_name, 'columns', 'from', is_list = True )
         sv( factory.filtered_indices, 'filtered_indices', 'to' )
         sv( factory.selected, 'selected_%s' % mode, is_list = is_list )
