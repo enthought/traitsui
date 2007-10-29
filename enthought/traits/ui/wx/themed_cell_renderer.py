@@ -84,7 +84,8 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         """ Draws the contents of the specified grid cell.
         """
         # Get the model object this cell is being rendered for:
-        object = grid.grid.model.get_filtered_item( row )
+        model  = grid.grid.model
+        object = model.get_filtered_item( row )
         
         # Get the draw bounds:
         x0 = x = rect.x
@@ -99,7 +100,18 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                      column.get_cell_theme(     object ))
         else:
             theme = column.get_cell_theme( object )
-                     
+        
+        # If no column theme is specified, try to get the global theme from the
+        # model:
+        if theme is None:
+            if row & 1:
+                theme = model.alt_theme or model.cell_theme
+            else:
+                theme = model.cell_theme
+                
+            if is_selected:
+                theme = model.selected_theme or theme
+                
         if theme is not None:
             margins = theme.margins
             slice   = theme.image_slice
