@@ -151,7 +151,7 @@ class SimpleEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        label = self.factory.label or user_name_for( self.name )
+        label = self.factory.label or self.item.get_label( self.ui )
         self.control = wx.Button( parent, -1, label )
         self.sync_value( self.factory.label_value, 'label', 'from' )
         wx.EVT_BUTTON( parent, self.control.GetId(), self.update_object )
