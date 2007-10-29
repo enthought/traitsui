@@ -152,12 +152,36 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Called when a node is selected
     on_select = Any
 
+    # Called when a node is clicked
+    on_click = Any
+
     # Called when a node is double-clicked
     on_dclick = Any
 
-    # The name of the external object trait to synchronize with the editor's
-    # **selected** trait:
+    # The optional extended trait name of the trait to synchronize with the 
+    # editor's current selection:
     selected = Str
+    
+    # The optional extended trait name of the trait that should be assigned
+    # a node object when a tree node is clicked on (Note: If you want to 
+    # receive repeated clicks on the same node, make sure the trait is defined 
+    # as an Event):
+    click = Str
+    
+    # The optional extended trait name of the trait that should be assigned
+    # a node object when a tree node is double-clicked on (Note: if you want to
+    # receive repeated double-clicks on the same node, make sure the trait is
+    # defined as an Event):
+    dclick = Str
+    
+    # The optional extended trait name of the trait event that is fired
+    # whenever the application wishes to veto a tree action in progress (e.g.
+    # double-clicking a non-leaf tree node normally opens or closes the node,
+    # but if you are handling the double-click event in your program, you may
+    # wish to veto the open or close operation). Be sure to fire the veto event
+    # in the event handler triggered by the operation (e.g. the 'dclick' event
+    # handler.
+    veto = Str
 
     # Mode for lines connecting tree nodes 
     #
@@ -198,6 +222,15 @@ class SimpleEditor ( Editor ):
 
     # The currently selected object
     selected = Any
+    
+    # The event fired when a tree node is clicked on:
+    click = Event
+    
+    # The event fired when a tree node is double-clicked on:
+    dclick = Event
+    
+    # The event fired when the application wants to veto an operation:
+    veto = Event
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -316,8 +349,11 @@ class SimpleEditor ( Editor ):
         # Get the tree control id:
         tid = tree.GetId()
 
+        # Set up the mouse event handlers:
+        wx.EVT_LEFT_DOWN(  tree, self._on_left_down )
+        wx.EVT_RIGHT_DOWN( tree, self._on_right_down )
+        
         # Set up the tree event handlers:
-        wx.EVT_RIGHT_DOWN(            tree,      self._on_right_down )
         wx.EVT_TREE_ITEM_EXPANDING(   tree, tid, self._on_tree_item_expanding )
         wx.EVT_TREE_ITEM_EXPANDED(    tree, tid, self._on_tree_item_expanded )
         wx.EVT_TREE_ITEM_COLLAPSING(  tree, tid, self._on_tree_item_collapsing )
@@ -328,8 +364,12 @@ class SimpleEditor ( Editor ):
         wx.EVT_TREE_BEGIN_LABEL_EDIT( tree, tid, self._on_tree_begin_label_edit)
         wx.EVT_TREE_END_LABEL_EDIT(   tree, tid, self._on_tree_end_label_edit )
 
+
         # Synchronize external object traits with the editor:
         self.sync_value( factory.selected, 'selected' )
+        self.sync_value( factory.click,    'click',  'to' )
+        self.sync_value( factory.dclick,   'dclick', 'to' )
+        self.sync_value( factory.veto,     'veto',   'from' )
 
         # Set up the drag and drop target:
         if PythonDropTarget is not None:
@@ -356,6 +396,15 @@ class SimpleEditor ( Editor ):
         """
         if not self._no_update_selected:
             self._selection_changed( selected )
+            
+    #---------------------------------------------------------------------------
+    #  Handles the 'veto' event being fired:
+    #---------------------------------------------------------------------------
+    
+    def _veto_changed ( self ):
+        """ Handles the 'veto' event being fired.
+        """
+        self._veto = True
 
     #---------------------------------------------------------------------------
     #  Disposes of the contents of an editor:
@@ -1032,7 +1081,7 @@ class SimpleEditor ( Editor ):
             
         return None
 
-#----- Tree event handlers: ----------------------------------------------------
+    #-- Tree Event Handlers: ---------------------------------------------------
 
     #---------------------------------------------------------------------------
     #  Handles a tree node expanding:
@@ -1180,7 +1229,7 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
 
     def _on_tree_item_activated ( self, event ):
-        """ Handles a tree item being activated (i.e., double-clicked).
+        """ Handles a tree item being activated (i.e. double-clicked).
         """
         expanded, node, object = self._get_node_data( event.GetItem() )
         if node.dclick( object ) is True:
@@ -1189,6 +1238,9 @@ class SimpleEditor ( Editor ):
                 self._veto = True
         else:
             self._veto = True
+            
+        # Fire the 'dclick' event with the clicked on object as value:
+        self.dclick = object
 
     #---------------------------------------------------------------------------
     #  Handles the user starting to edit a tree node label:
@@ -1242,6 +1294,28 @@ class SimpleEditor ( Editor ):
                                       node.get_drag_object( object ) )
                 finally:
                     self._dragging = None
+
+    #---------------------------------------------------------------------------
+    #  Handles the user left clicking on a tree node:
+    #---------------------------------------------------------------------------
+
+    def _on_left_down ( self, event ):
+        """ Handles the user right clicking on a tree node.
+        """
+        # Determine what node (if any) was clicked on:
+        expanded, node, object, nid, point = self._unpack_event( event )
+        
+        # If the mouse is over a node, then process the click:
+        if node is not None:
+            if ((node.click( object ) is True) and
+                (self.factory.on_click is not None)):
+                self.ui.evaluate( self.factory.on_click, object )
+            
+            # Fire the 'click' event with the object as its value:
+            self.click = object
+            
+        # Allow normal mouse event processing to occur:
+        event.Skip()
 
     #---------------------------------------------------------------------------
     #  Handles the user right clicking on a tree node:
