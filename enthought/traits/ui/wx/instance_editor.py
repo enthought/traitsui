@@ -448,11 +448,10 @@ class CustomEditor ( Editor ):
                 self._ui = ui = view.ui( context, panel, 'subpanel',
                                          value.trait_view_elements(), handler,
                                          self.factory.id )
-                control  = ui.control
+                control         = ui.control
                 self.scrollable = ui._scrollable
+                ui.parent       = self.ui
                 
-                # Chain the sub-panel's undo history to ours:
-                ui.history = self.ui.history
                 if view.resizable or view.scrollable or ui._scrollable:
                     stretch = 1
                     

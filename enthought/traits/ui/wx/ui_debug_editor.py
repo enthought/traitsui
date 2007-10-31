@@ -86,6 +86,7 @@ class UIDebugEditor ( Editor ):
             if parent is None:
                 break
             control = parent
+            
         UIDebugger(root = WXWindow( window = control ) ).edit_traits()
         
     #---------------------------------------------------------------------------

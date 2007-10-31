@@ -12,14 +12,13 @@
 #  Author: David C. Morrill
 #
 #  Date:   01/10/2006
-#
-# 
-#   Symbols defined: ToolkitEditorFactory
 # 
 #------------------------------------------------------------------------------
+
 """ Defines array editors and the array editor factory for the wxPython
-user interface toolkit.
+    user interface toolkit.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -46,6 +45,7 @@ from enthought.traits.ui.wx.editor_factory \
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for array editors.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
@@ -81,6 +81,7 @@ class ToolkitEditorFactory ( EditorFactory ):
 class SimpleEditor ( Editor ):
     """ Simple style of editor for arrays.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
@@ -99,6 +100,7 @@ class SimpleEditor ( Editor ):
         """
         self._as     = _as = ArrayStructure( self )
         ui           = _as.view.ui( _as, parent, kind = 'subpanel' )
+        ui.parent    = self.ui
         self.control = ui.control
         
     #---------------------------------------------------------------------------
@@ -185,15 +187,14 @@ class ArrayStructure ( HasTraits ):
         else:
             raise TraitError("Only 1D or 2D arrays supported")
 
-
     #---------------------------------------------------------------------------
     #  1D view:
     #---------------------------------------------------------------------------
 
-    def _one_dim_view( self, object, style, width, trait ):
+    def _one_dim_view ( self, object, style, width, trait ):
         content = []
         shape   = object.shape
-        items = []
+        items   = []
         for i in range( shape[0] ):
             name = 'f%d' % i
             self.add_trait( name, trait( object[i], event = 'field' ) )
@@ -204,14 +205,14 @@ class ArrayStructure ( HasTraits ):
                        show_labels = False,
                        *items )
         content.append( group )
+        
         return View( Group( show_labels = False, *content ) )
-
 
     #---------------------------------------------------------------------------
     #  2D view:
     #---------------------------------------------------------------------------
 
-    def _two_dim_view( self, object, style, width, trait ):
+    def _two_dim_view ( self, object, style, width, trait ):
         content = []
         shape   = object.shape
         for i in range( shape[0] ):
@@ -226,8 +227,8 @@ class ArrayStructure ( HasTraits ):
                            show_labels = False,
                            *items )
             content.append( group )
+            
         return View( Group( show_labels = False, *content ) )
-        
 
     #---------------------------------------------------------------------------
     #  Updates the underlying tuple when any field changes value:

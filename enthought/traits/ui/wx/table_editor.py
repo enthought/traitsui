@@ -578,8 +578,8 @@ class TableEditor ( Editor ):
                                     resizable = True,
                                     handler   = factory.edit_view_handler ) )
 
-            # Link the ui history of the sub-view into the main view:
-            ui.history = self.ui.history
+            # Set the parent UI of the new UI to our own UI:
+            ui.parent = self.ui
 
             # Reset the object so that the sub-sub-view will pick up the
             # correct history also:
@@ -709,7 +709,8 @@ class TableEditor ( Editor ):
                 self.toolbar_ui = ui = view.ui(
                               context = { 'object': self, 'model': self.model },
                               parent  = parent,
-                              kind    = 'subpanel' )
+                              kind    = 'subpanel' ).set(
+                              parent  = self.ui )
                 tb_sizer.Add( ui.control, 0 )
 
             if toolbar.control is not None:

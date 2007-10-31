@@ -160,10 +160,8 @@ class _ThemedVerticalNotebookEditor ( Editor ):
         # Create the Traits UI for the object to put in the notebook page:
         ui = object.edit_traits( parent = page.parent,
                                  view   = self.factory.view,
-                                 kind   = 'subpanel' )
-
-        # Chain the sub-panel's undo history to ours:
-        ui.history = self.ui.history
+                                 kind   = 'subpanel' ).set(
+                                 parent = self.ui )
 
         # Get the name of the page being added to the notebook:
         name      = ''

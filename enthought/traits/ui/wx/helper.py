@@ -32,13 +32,17 @@ from constants \
     import standard_bitmap_width, screen_dx, screen_dy
     
 from enthought.traits.api \
-    import Enum, Trait, CTrait, Instance, Str, BaseTraitHandler, TraitError
+    import HasPrivateTraits, Enum, Trait, CTrait, Instance, Str, Any, Int, \
+           Event, BaseTraitHandler, TraitError
     
 from enthought.traits.ui.api \
     import View
     
 from enthought.traits.ui.ui_traits \
     import SequenceTypes
+
+from enthought.pyface.timer.api \
+    import do_later
     
 from editor \
     import Editor
@@ -256,4 +260,106 @@ class GroupEditor ( Editor ):
         """ Initializes the object.
         """
         self.set( **traits )
+        
+#-------------------------------------------------------------------------------
+#  PopupControl' class:
+#-------------------------------------------------------------------------------
 
+class PopupControl ( HasPrivateTraits ):
+
+    #-- Constructor Traits -----------------------------------------------------
+    
+    # The control the popup should be positioned relative to:
+    control = Instance( wx.Window )
+    
+    # The minimum width of the popup:
+    width = Int
+    
+    # The minimum height of the popup:
+    height = Int
+    
+    #-- Public Traits ----------------------------------------------------------
+    
+    # The value (if any) set by the popup control:
+    value = Any
+    
+    # Event fired when the popup control is closed:
+    closed = Event
+    
+    #-- Private Traits ---------------------------------------------------------
+    
+    # The popup control:
+    popup = Instance( wx.Window )
+    
+    #-- Public Methods ---------------------------------------------------------
+    
+    def __init__ ( self, **traits ):
+        super( PopupControl, self ).__init__( **traits )
+        self.popup = popup = wx.Frame( None, -1, '', style = wx.RESIZE_BORDER )
+        wx.EVT_ACTIVATE( popup, self._on_close_popup )
+        self.create_control( popup )
+        self._position_control()
+        popup.Show()
+
+    def create_control ( self ):
+        """ Creates the control. 
+        
+            Must be overridden by a subclass.
+        """
+        raise NotImplementedError
+
+    def dispose ( self ):
+        """ Called when the popup is being closed to allow any custom clean-up.
+            
+            Can be overridden by a subclass.
+        """
+        pass
+        
+    #-- Event Handlers ---------------------------------------------------------
+    
+    def _value_changed ( self, value ):
+        """ Handles the 'value' being changed.
+        """
+        do_later( self._close_popup )
+        
+    #-- Private Methods --------------------------------------------------------
+    
+    def _position_control ( self ):
+        """ Initializes the popup control's initial position and size.
+        """
+        # Calculate the desired size of the popup control:
+        px,  cy  = self.control.ClientToScreenXY( 0, 0 )
+        cdx, cdy = self.control.GetSizeTuple()
+        pdx, pdy = self.popup.GetSizeTuple()
+        pdx, pdy = max( pdx, cdx, self.width ), max( pdy, self.height )
+        
+        # Calculate the best position and size for the pop-up:
+        py = cy + cdy
+        if (py + pdy) > screen_dy:
+            if (cy - pdy) < 0:
+                bottom = screen_dy - py
+                if cy > bottom:
+                    py, pdy = 0, cy
+                else:
+                    pdy = bottom
+            else:
+                py = cy - pdy
+               
+        # Finally, position the popup control:
+        self.popup.SetDimensions( px, py, pdx, pdy )
+        
+    def _on_close_popup ( self, event ):
+        """ Closes the popup control when it is deactivated.
+        """
+        if not event.GetActive():
+            self._close_popup()
+ 
+    def _close_popup ( self ):
+        """ Closes the dialog.
+        """
+        wx.EVT_ACTIVATE( self.popup, None )
+        self.dispose()
+        self.closed = True
+        self.popup.Destroy()
+        self.popup = self.control = None
+                    

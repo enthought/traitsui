@@ -284,6 +284,7 @@ class SimpleEditor ( Editor ):
         """
         self.context_object.on_trait_change( self.update_editor_item, 
                                  self.extended_name + '_items?', remove = True )
+        self._dispose_items()                           
                                  
         super( SimpleEditor, self ).dispose()
         
@@ -295,16 +296,11 @@ class SimpleEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
-        list_pane = self.control
-        editor    = self._editor
-
-        # Disconnect the editor from any control about to be destroyed:        
-        for control in list_pane.GetChildren():
-            if hasattr( control, '_editor' ):
-                control._editor.dispose()
-                control._editor.control = None
+        # Disconnect the editor from any control about to be destroyed:
+        self._dispose_items()        
                 
         # Get rid of any previous contents:
+        list_pane = self.control
         list_pane.SetSizer( None )
         list_pane.DestroyChildren()
         
@@ -323,7 +319,8 @@ class SimpleEditor ( Editor ):
         if is_fake:
             values = [ item_trait.default_value()[1] ]
             
-        width = 0
+        width  = 0
+        editor = self._editor
         for value in values:
             width1 = height = 0
             if resizable:       
@@ -581,7 +578,17 @@ class SimpleEditor ( Editor ):
         """ Moves the current item to the bottom of the list.
         """
         list, index = self.get_info()
-        self.value  = list[:index] + list[index+1:] + [ list[index] ] 
+        self.value  = list[:index] + list[index+1:] + [ list[index] ]
+        
+    #-- Private Methods --------------------------------------------------------
+    
+    def _dispose_items ( self ):
+        """ Disposes of each current list item.
+        """
+        for control in self.control.GetChildren():
+            if hasattr( control, '_editor' ):
+                control._editor.dispose()
+                control._editor.control = None
                                       
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:
@@ -830,10 +837,8 @@ class NotebookEditor ( Editor ):
         # Create the view for the object:
         ui = object.edit_traits( parent = self.control,
                                  view   = self.factory.view,
-                                 kind   = 'subpanel' )
-
-        # Chain the sub-panel's undo history to ours:
-        ui.history = self.ui.history
+                                 kind   = 'subpanel' ).set(
+                                 parent = self.ui )
 
         # Get the name of the page being added to the notebook:
         name       = ''

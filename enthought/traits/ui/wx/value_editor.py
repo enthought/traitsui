@@ -122,8 +122,8 @@ class SimpleEditor ( Editor ):
                            kind = 'subpanel'
                        )
                    )
-        self.control = self._ui.control
-
+        self._ui.parent = self.ui
+        self.control    = self._ui.control
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

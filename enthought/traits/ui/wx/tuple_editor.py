@@ -96,7 +96,8 @@ class SimpleEditor ( Editor ):
             widget.
         """
         self._ts     = ts = TupleStructure( self )
-        ui           = ts.view.ui( ts, parent, kind = 'subpanel' )
+        ui           = ts.view.ui( ts, parent, kind = 'subpanel' ).set(
+                                   parent = self.ui )
         self.control = ui.control
         
     #---------------------------------------------------------------------------

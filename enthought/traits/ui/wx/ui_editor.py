@@ -58,7 +58,7 @@ class UIEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.editor_ui = self.init_ui( parent )
+        self.editor_ui = self.init_ui( parent ).set( parent = self.ui )
         self.control   = self.editor_ui.control
         
     #---------------------------------------------------------------------------

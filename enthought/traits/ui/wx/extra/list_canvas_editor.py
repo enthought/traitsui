@@ -1214,7 +1214,8 @@ class ListCanvasItem ( ListCanvasPanel ):
         self.ui    = ui = view_model.edit_traits(
                               parent = control, 
                               view   = adapter.get_view( object ), 
-                              kind   = 'subpanel' )
+                              kind   = 'subpanel' ).set(
+                              parent = canvas.editor.ui )
             
         control.GetSizer().Add( ui.control, 1, wx.EXPAND )
         

@@ -55,6 +55,9 @@ class KeyBindingEditor ( Editor ):
     
     # Keyboard event
     key = Event
+    
+    # Clear field event
+    clear = Event
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -120,6 +123,15 @@ class KeyBindingEditor ( Editor ):
                 return
                 
         self.value = key_name
+        
+    #---------------------------------------------------------------------------
+    #  Handles a clear field event:
+    #---------------------------------------------------------------------------
+    
+    def _clear_changed ( self ):
+        """ Handles a clear field event.
+        """
+        self.value = ''
 
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:
@@ -163,6 +175,7 @@ class KeyBindingCtrl ( wx.Window ):
         
         # Set up mouse event handlers:
         wx.EVT_LEFT_DOWN( self, self._set_focus )
+        wx.EVT_LEFT_DCLICK( self, self._clear_contents )
         
         # Handle key events:
         wx.EVT_CHAR( self, self._on_char )
@@ -198,7 +211,9 @@ class KeyBindingCtrl ( wx.Window ):
         else:
             wdc.SetPen( wx.Pen( wx.BLACK ) )
             wdc.DrawRectangle( 0, 0, dx, dy )
-        wdc.DrawText( self.editor.str_value, 5, 1 )
+            
+        wdc.SetFont( self.GetFont() )
+        wdc.DrawText( self.editor.str_value, 5, 3 )
             
     #---------------------------------------------------------------------------
     #  Sets the keyboard focus to this window:  
@@ -224,4 +239,13 @@ class KeyBindingCtrl ( wx.Window ):
         """
         self.editor.has_focus = False
         self.Refresh()
+        
+    #---------------------------------------------------------------------------
+    #  Handles the user double clicking the control to clear its contents:
+    #---------------------------------------------------------------------------
+    
+    def _clear_contents ( self, event ):
+        """ Handles the user double clicking the control to clear its contents.
+        """
+        self.editor.clear = True
 
