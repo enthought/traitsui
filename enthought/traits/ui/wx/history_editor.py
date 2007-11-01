@@ -23,7 +23,7 @@
 #-------------------------------------------------------------------------------
     
 from enthought.traits.api \
-    import Any, Int, on_trait_change
+    import Any, Int, Bool, on_trait_change
 
 from editor \
     import Editor
@@ -64,8 +64,9 @@ class _HistoryEditor ( Editor ):
             widget.
         """
         self.history = history = HistoryControl(
-                                     value   = self.value,
-                                     entries = self.factory.entries )
+                                     value    = self.value,
+                                     entries  = self.factory.entries,
+                                     auto_set = self.factory.auto_set )
         self.control = history.create_control( parent )
         
         self.set_tooltip()
@@ -150,4 +151,7 @@ class HistoryEditor ( BasicEditorFactory ):
     
     # The number of entries in the history:
     entries = Int( 10 )
+    
+    # Should each keystroke update the value (or only the enter key, tab, etc.)?
+    auto_set = Bool( False )
             

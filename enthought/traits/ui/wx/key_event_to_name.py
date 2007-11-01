@@ -123,6 +123,9 @@ def key_event_to_name ( event ):
     if key == ' ':
         key = 'Space'
     
+    if len( name ) > 0:
+        key = key.lower()
+        
     name += ('-' + key)
     
     if name[:1] == '-':

@@ -45,7 +45,10 @@ class HistoryControl ( HasPrivateTraits ):
     # The current value of the control:
     value = Str
     
-    # The currently history of the control:
+    # Should 'value' be updated on every keystroke?
+    auto_set = Bool( False )
+    
+    # The current history of the control:
     history = List( Str )
     
     # The maximum number of history entries allowed:
@@ -63,9 +66,11 @@ class HistoryControl ( HasPrivateTraits ):
                                           wx.Point( 0, 0 ), wx.Size( -1, -1 ), 
                                           self.history, style = wx.CB_DROPDOWN )
         wx.EVT_COMBOBOX( parent, control.GetId(), self._update_value )
+        wx.EVT_KILL_FOCUS( control, self._kill_focus )
         wx.EVT_TEXT_ENTER( parent, control.GetId(), 
                            self._update_text_value )
-        wx.EVT_KILL_FOCUS( control, self._kill_focus )
+        if self.auto_set:
+            wx.EVT_TEXT( parent, control.GetId(), self._update_value_only )
         
         return control
         
@@ -83,8 +88,11 @@ class HistoryControl ( HasPrivateTraits ):
     def _value_changed ( self, value ):
         """ Handles the 'value' trait being changed.
         """
-        if (not self._no_update) and (self.control is not None):
-            self._update( value, False )
+        if not self._no_update:
+            control = self.control
+            if control is not None:
+                control.SetValue( value )
+                control.SetMark( 0, len( value ) )
             
     def _history_changed ( self ):
         """ Handles the 'history' being changed.
@@ -115,6 +123,14 @@ class HistoryControl ( HasPrivateTraits ):
             combobox.
         """
         self._update( event.GetString() )
+    
+    def _update_value_only ( self, event ):
+        """ Handles the user typing into the text field in 'auto_set' mode.
+        """
+        self._no_update = True
+        self.value      = event.GetString()
+        self._no_update = False
+        self._do_update = True
         
     def _update_text_value ( self, event, select = True ):
         """ Handles the user typing something into the text field of the
@@ -122,7 +138,8 @@ class HistoryControl ( HasPrivateTraits ):
         """
         if not self._no_update:
             value = self.control.GetValue()
-            if value != self.value:
+            if self._do_update or (value != self.value):
+                self._do_update = False
                 self._update( value, select )
         
     def _kill_focus ( self, event ):
