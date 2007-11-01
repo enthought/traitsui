@@ -84,7 +84,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     multi_line = Bool( True )
     
     # Is user input unreadable? (e.g., for a password)
-    password = Bool( True )
+    password = Bool( False )
     
     # Function to evaluate textual user input
     evaluate = evaluate_trait
