@@ -30,7 +30,8 @@ from os.path \
 from file_editor \
     import ToolkitEditorFactory as EditorFactory,    \
            SimpleEditor         as SimpleFileEditor, \
-           CustomEditor         as CustomFileEditor
+           CustomEditor         as CustomFileEditor, \
+           PopupFile
 
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -70,16 +71,24 @@ class SimpleEditor ( SimpleFileEditor ):
     """
     
     #---------------------------------------------------------------------------
-    #  Creates the correct type of file dialog:
+    #  Creates the correct type of file dialog or popup:
     #---------------------------------------------------------------------------
            
     def create_file_dialog ( self ):
         """ Creates the correct type of file dialog.
         """
-        dlg =  wx.DirDialog( self.control, message = 'Select a Directory' )
+        dlg = wx.DirDialog( self.control, message = 'Select a Directory' )
         dlg.SetPath( self._filename.GetValue() )
         
         return dlg
+        
+    def _create_file_popup ( self ):
+        """ Creates the correct type of file popup.
+        """
+        return PopupDirectory( control   = self.control,
+                               file_name = self.str_value,
+                               filter    = self.factory.filter,
+                               height    = 300 )
         
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:
@@ -110,4 +119,20 @@ class CustomEditor ( CustomFileEditor ):
             path = self.control.GetPath()
             if isdir( path ):
                 self.value = path
+                
+#-------------------------------------------------------------------------------
+#  'PopupDirectory' class:
+#-------------------------------------------------------------------------------
+
+class PopupDirectory ( PopupFile ):
+    
+    def get_style ( self ):
+        """ Returns the basic style to use for the popup.
+        """
+        return (wx.DIRCTRL_DIR_ONLY | wx.DIRCTRL_EDIT_LABELS)
+        
+    def is_valid ( self, path ):
+        """ Returns whether or not the path is valid.
+        """
+        return isdir( path )
 

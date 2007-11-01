@@ -33,7 +33,7 @@ from constants \
     
 from enthought.traits.api \
     import HasPrivateTraits, Enum, Trait, CTrait, Instance, Str, Any, Int, \
-           Event, BaseTraitHandler, TraitError
+           Event, Bool, BaseTraitHandler, TraitError
     
 from enthought.traits.ui.api \
     import View
@@ -278,6 +278,9 @@ class PopupControl ( HasPrivateTraits ):
     # The minimum height of the popup:
     height = Int
     
+    # Should the popup be resizable?
+    resizable = Bool( False )
+    
     #-- Public Traits ----------------------------------------------------------
     
     # The value (if any) set by the popup control:
@@ -294,8 +297,15 @@ class PopupControl ( HasPrivateTraits ):
     #-- Public Methods ---------------------------------------------------------
     
     def __init__ ( self, **traits ):
+        """ Initializes the object.
+        """
         super( PopupControl, self ).__init__( **traits )
-        self.popup = popup = wx.Frame( None, -1, '', style = wx.RESIZE_BORDER )
+        
+        style = wx.SIMPLE_BORDER
+        if self.resizable:
+            style = wx.RESIZE_BORDER
+            
+        self.popup = popup = wx.Frame( None, -1, '', style = style )
         wx.EVT_ACTIVATE( popup, self._on_close_popup )
         self.create_control( popup )
         self._position_control()

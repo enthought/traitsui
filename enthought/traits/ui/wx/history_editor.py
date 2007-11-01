@@ -69,6 +69,14 @@ class _HistoryEditor ( Editor ):
         self.control = history.create_control( parent )
         
         self.set_tooltip()
+        
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        self.history.dispose()
+        self.history = None
+        
+        super( _HistoryEditor, self ).dispose()
 
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:

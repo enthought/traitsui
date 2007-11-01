@@ -68,20 +68,34 @@ class HistoryControl ( HasPrivateTraits ):
         wx.EVT_KILL_FOCUS( control, self._kill_focus )
         
         return control
+        
+    def dispose ( self ):
+        """ Disposes of the control at the end of its life cycle.
+        """
+        control, self.control = self.control, None
+        parent = control.GetParent()
+        wx.EVT_COMBOBOX(   parent, control.GetId(), None )
+        wx.EVT_TEXT_ENTER( parent, control.GetId(), None ) 
+        wx.EVT_KILL_FOCUS( control, None )
 
     #-- Traits Event Handlers --------------------------------------------------
     
     def _value_changed ( self, value ):
         """ Handles the 'value' trait being changed.
         """
-        if not self._no_update:
-            self._update( value )
-            #self.control.SetValue( value )
+        if (not self._no_update) and (self.control is not None):
+            self._update( value, False )
             
     def _history_changed ( self ):
         """ Handles the 'history' being changed.
         """
         if not self._no_update:
+            if self._first_time is None:
+                self._first_time = False
+                if (self.value == '') and (len( self.history ) > 0):
+                    self.value = self.history[0]
+                    return
+                
             self._load_history()
             
     def _error_changed ( self, error ):
@@ -154,10 +168,12 @@ class HistoryControl ( HasPrivateTraits ):
     def _thaw_value ( self, restore, select ):
         """ Restores the value of the combobox control.
         """
-        self.control.SetValue( restore )
-        
-        if select:
-            self.control.SetMark( 0, len( restore ) )
+        control = self.control
+        if control is not None:
+            control.SetValue( restore )
             
-        self.control.Thaw()
+            if select:
+                control.SetMark( 0, len( restore ) )
+                
+            control.Thaw()
         
