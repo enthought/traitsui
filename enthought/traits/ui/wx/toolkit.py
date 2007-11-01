@@ -141,6 +141,13 @@ class GUIToolkit ( Toolkit ):
         import ui_modal
         ui_modal.ui_nonmodal( ui, parent )
 
+    def ui_popup ( self, ui, parent ):
+        """ Creates a wxPython modal "live update" popup dialog user interface
+            using information from the specified UI object.
+        """
+        import ui_live
+        ui_live.ui_popup( ui, parent )
+
     def ui_wizard ( self, ui, parent ):
         """ Creates a wxPython wizard dialog user interface using information
             from the specified UI object.
