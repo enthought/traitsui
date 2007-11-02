@@ -146,7 +146,8 @@ class SimpleEditor ( SimpleTextEditor ):
         if factory.entries > 0:
             from history_control import HistoryControl
             
-            self.history = HistoryControl( entries = factory.entries )
+            self.history = HistoryControl( entries  = factory.entries,
+                                           auto_set = factory.auto_set )
             control      = self.history.create_control( panel )
             pad          = 3
             button       = wx.Button( panel, -1, '...', 
@@ -261,8 +262,10 @@ class SimpleEditor ( SimpleTextEditor ):
         if self.factory.truncate_ext:
             file_name = splitext( file_name )[0]
             
-        self.value = file_name
-        self.update_editor()
+        self.value      = file_name
+        self._no_update = True
+        self.history.set_value( self.str_value )
+        self._no_update = False
         
     @on_trait_change( 'popup:closed' )
     def _popup_closed_changed ( self ):

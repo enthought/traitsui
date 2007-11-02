@@ -82,6 +82,11 @@ class HistoryControl ( HasPrivateTraits ):
         wx.EVT_COMBOBOX(   parent, control.GetId(), None )
         wx.EVT_TEXT_ENTER( parent, control.GetId(), None ) 
         wx.EVT_KILL_FOCUS( control, None )
+        
+    def set_value ( self, value ):
+        """ Sets the specified value and adds it to the history.
+        """
+        self._update( value )
 
     #-- Traits Event Handlers --------------------------------------------------
     
@@ -92,7 +97,6 @@ class HistoryControl ( HasPrivateTraits ):
             control = self.control
             if control is not None:
                 control.SetValue( value )
-                control.SetMark( 0, len( value ) )
             
     def _history_changed ( self ):
         """ Handles the 'history' being changed.
@@ -102,9 +106,8 @@ class HistoryControl ( HasPrivateTraits ):
                 self._first_time = False
                 if (self.value == '') and (len( self.history ) > 0):
                     self.value = self.history[0]
-                    return
                 
-            self._load_history()
+            self._load_history( select = False )
             
     def _error_changed ( self, error ):
         """ Handles the 'error' trait being changed.
@@ -130,17 +133,13 @@ class HistoryControl ( HasPrivateTraits ):
         self._no_update = True
         self.value      = event.GetString()
         self._no_update = False
-        self._do_update = True
         
     def _update_text_value ( self, event, select = True ):
         """ Handles the user typing something into the text field of the
             combobox.
         """
         if not self._no_update:
-            value = self.control.GetValue()
-            if self._do_update or (value != self.value):
-                self._do_update = False
-                self._update( value, select )
+            self._update( self.control.GetValue(), select )
         
     def _kill_focus ( self, event ):
         """ Handles the combobox losing focus.
@@ -157,11 +156,12 @@ class HistoryControl ( HasPrivateTraits ):
         
         if value.strip() != '':
             history = self.history
-            if value in history:
-                history.remove( value )
-            history.insert( 0, value )
-            del history[ self.entries: ]
-            self._load_history( value, select )
+            if (len( history ) == 0) or (value != history[0]):
+                if value in history:
+                    history.remove( value )
+                history.insert( 0, value )
+                del history[ self.entries: ]
+                self._load_history( value, select )
           
         self.value = value
         
