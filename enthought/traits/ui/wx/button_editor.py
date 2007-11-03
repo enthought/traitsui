@@ -1,22 +1,23 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
 #
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-#
-# Author: David C. Morrill
-# Date: 10/21/2004
-#
-#  Symbols defined: ToolkitEditorFactory
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   10/21/2004
 #
 #------------------------------------------------------------------------------
+
 """ Defines the various button editors and the button editor factory for the
-wxPython user interface toolkit.
+    wxPython user interface toolkit.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -31,6 +32,9 @@ from enthought.traits.trait_base \
 
 from enthought.traits.ui.api \
     import View
+
+from enthought.traits.ui.ui_traits \
+    import AView
 
 from enthought.pyface.image_resource \
     import ImageResource
@@ -48,6 +52,7 @@ from editor \
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for buttons.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -75,6 +80,9 @@ class ToolkitEditorFactory ( EditorFactory ):
 
     # Orientation of the text relative to the image
     orientation = Enum( 'vertical', 'horizontal' )
+    
+    # The optional view to display when the button is clicked:
+    view = AView
 
     #---------------------------------------------------------------------------
     #  Traits view definition:
@@ -135,6 +143,7 @@ class ToolkitEditorFactory ( EditorFactory ):
 class SimpleEditor ( Editor ):
     """ Simple style editor for a button.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -173,6 +182,11 @@ class SimpleEditor ( Editor ):
             on the object.
         """
         self.value = self.factory.value
+        
+        # If there is an associated view, then display it:
+        if self.factory.view is not None:
+            self.object.edit_traits( view   = self.factory.view, 
+                                     parent = self.control )
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -191,6 +205,7 @@ class SimpleEditor ( Editor ):
 class CustomEditor ( SimpleEditor ):
     """ Custom style editor for a button, which can contain an image.
     """
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:

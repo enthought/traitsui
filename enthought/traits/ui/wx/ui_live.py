@@ -41,6 +41,15 @@ from enthought.traits.ui.undo \
     
 from enthought.traits.ui.menu \
     import UndoButton, RevertButton, OKButton, CancelButton, HelpButton
+    
+#-------------------------------------------------------------------------------
+#  Constants:
+#-------------------------------------------------------------------------------
+
+# Types of supported windows:
+NONMODAL = 0
+MODAL    = 1
+POPUP    = 2
 
 #-------------------------------------------------------------------------------
 #  Creates a 'live update' wxPython user interface for a specified UI object:
@@ -50,21 +59,29 @@ def ui_live ( ui, parent ):
     """ Creates a live, non-modal wxPython user interface for a specified UI
     object.
     """
-    ui_dialog( ui, parent, False )
+    ui_dialog( ui, parent, NONMODAL )
 
 def ui_livemodal ( ui, parent ):
     """ Creates a live, modal wxPython user interface for a specified UI object.
     """
-    ui_dialog( ui, parent, True )
+    ui_dialog( ui, parent, MODAL )
 
-def ui_dialog ( ui, parent, is_modal ):
+def ui_popup ( ui, parent ):
+    """ Creates a live, modal popup wxPython user interface for a specified UI 
+        object.
+    """
+    ui_dialog( ui, parent, POPUP )
+
+def ui_dialog ( ui, parent, style ):
     """ Creates a live wxPython user interface for a specified UI object.
     """
     if ui.owner is None:
         ui.owner = LiveWindow()
-    ui.owner.init( ui, parent, is_modal )
+        
+    ui.owner.init( ui, parent, style )
     ui.control = ui.owner.control
     ui.control._parent = parent
+    
     try:
         ui.prepare_ui()
     except:
@@ -74,9 +91,11 @@ def ui_dialog ( ui, parent, is_modal ):
         ui.owner      = None
         ui.result     = False
         raise
+        
     ui.handler.position( ui.info )
     restore_window( ui )
-    if is_modal:
+    
+    if style == MODAL:
         ui.control.ShowModal()
     else:
         ui.control.Show()
@@ -93,15 +112,17 @@ class LiveWindow ( BaseDialog ):
     #  Initializes the object:
     #---------------------------------------------------------------------------
     
-    def init ( self, ui, parent, is_modal ):
-        self.is_modal = is_modal
-        style         = 0
+    def init ( self, ui, parent, style ):
+        self.is_modal = (style == MODAL)
+        window_style  = 0
         view          = ui.view
         if view.resizable:
-            style |= wx.RESIZE_BORDER
+            window_style |= wx.RESIZE_BORDER
+            
         title = view.title
         if title == '':
             title = DefaultTitle
+            
         history = ui.history
         window  = ui.control
         if window is not None:
@@ -116,23 +137,32 @@ class LiveWindow ( BaseDialog ):
             ui.reset()
         else:
             self.ui = ui
-            if is_modal:
+            if style == MODAL:
                 if view.resizable:
-                    style |= (wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX)
+                    window_style |= (wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX)
                 window = wx.Dialog( parent, -1, title,
-                                    style = style | wx.DEFAULT_DIALOG_STYLE )
-            else:
+                                style = window_style | wx.DEFAULT_DIALOG_STYLE )
+            elif style == NONMODAL:
                 if parent is not None:
-                    style |= wx.FRAME_FLOAT_ON_PARENT | wx.FRAME_NO_TASKBAR 
-                window = wx.Frame(  parent, -1, title, style = style |
+                    window_style |= (wx.FRAME_FLOAT_ON_PARENT | 
+                                     wx.FRAME_NO_TASKBAR) 
+                window = wx.Frame(  parent, -1, title, style = window_style |
                                (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER) ) )
                 window.SetBackgroundColour( WindowColor )
+            else:
+                if window_style == 0:
+                    window_style = wx.SIMPLE_BORDER
+                window = wx.Frame( None, -1, '', style = window_style )
+                window.SetBackgroundColour( WindowColor )
+                wx.EVT_ACTIVATE( window, self._on_close_popup )
+                
             self.control = window
             self.set_icon( view.icon )
             wx.EVT_CLOSE( window, self._on_close_page )
             wx.EVT_CHAR(  window, self._on_key )
          
-        buttons = [ self.coerce_button( button ) for button in view.buttons ]
+        buttons     = [ self.coerce_button( button ) 
+                        for button in view.buttons ]
         nbuttons    = len( buttons )
         no_buttons  = ((nbuttons == 1) and self.is_button( buttons[0], '' ))
         has_buttons = ((not no_buttons) and ((nbuttons > 0) or view.undo or
@@ -175,12 +205,16 @@ class LiveWindow ( BaseDialog ):
             if nbuttons == 0:
                 if view.undo:
                     self.check_button( buttons, UndoButton )
+                    
                 if view.revert:
                     self.check_button( buttons, RevertButton )
+                    
                 if view.ok:
                     self.check_button( buttons, OKButton )
+                    
                 if view.cancel:
                     self.check_button( buttons, CancelButton )
+                    
                 if view.help:
                     self.check_button( buttons, HelpButton )
                 
@@ -198,8 +232,10 @@ class LiveWindow ( BaseDialog ):
                                              dispatch = 'ui' )
                     if history.can_undo:
                         self._on_undoable( True )
+                        
                     if history.can_redo:
                         self._on_redoable( True )
+                        
                 elif self.is_button( button, 'Revert' ): 
                     self.revert = self.add_button( button, b_sizer,
                                                    self._on_revert, False )
@@ -207,16 +243,21 @@ class LiveWindow ( BaseDialog ):
                                              dispatch = 'ui' )
                     if history.can_undo:
                         self._on_revertable( True )
+                        
                 elif self.is_button( button, 'OK' ): 
                     self.ok = self.add_button( button, b_sizer, self._on_ok )
                     ui.on_trait_change( self._on_error, 'errors', 
                                         dispatch = 'ui' )
+                                        
                 elif self.is_button( button, 'Cancel' ): 
                     self.add_button( button, b_sizer, self._on_cancel )
+                    
                 elif self.is_button( button, 'Help' ): 
                     self.add_button( button, b_sizer, self._on_help )
+                    
                 elif not self.is_button( button, '' ):
                     self.add_button( button, b_sizer )
+                    
             sw_sizer.Add( b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5 )
         
         # Add the menu bar and tool bar (if any):
@@ -252,6 +293,17 @@ class LiveWindow ( BaseDialog ):
             self._on_cancel( event )
         else:
             self._on_ok( event )
+            
+    #---------------------------------------------------------------------------
+    #  Handles the user giving focus to another window for a 'popup' view:
+    #---------------------------------------------------------------------------
+                            
+    def _on_close_popup ( self, event ):
+        """ Handles the user giving focus to another window for a 'popup' view.
+        """
+        if not event.GetActive():
+            wx.EVT_ACTIVATE( self.control, None )
+            self._on_ok()
 
     #---------------------------------------------------------------------------
     #  Handles the user clicking the 'OK' button:
