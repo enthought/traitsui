@@ -26,7 +26,7 @@ from enthought.traits.ui.api \
     import Theme
     
 from enthought.traits.ui.ui_traits \
-    import ATheme, Image, Margins, Position, Spacing
+    import ATheme, AView, Image, Margins, Position, Spacing
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -128,6 +128,11 @@ class _ThemedButtonEditor ( Editor ):
         if self.button.in_control( x, y ):
             self.value = True
             
+            # If there is an associated view, display it:
+            if self.factory.view is not None:
+                self.object.edit_traits( view   = self.factory.view,
+                                         parent = self.control )
+            
         self.button.set( state  = 'normal', 
                          offset = ( 0, 0 ), 
                          theme  = self.factory.theme )
@@ -173,4 +178,7 @@ class ThemedButtonEditor ( BasicEditorFactory ):
     
     # The amount of space between the image and the text:
     spacing = Spacing
+    
+    # The optional view to display when the button is clicked:
+    view = AView
                  
