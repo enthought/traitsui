@@ -465,6 +465,17 @@ class GUIToolkit ( Toolkit ):
         control.DestroyChildren()
         
     #---------------------------------------------------------------------------
+    #  Returns a ( width, height ) tuple containing the size of a specified
+    #  toolkit image:
+    #---------------------------------------------------------------------------
+    
+    def image_size ( self, image ):
+        """ Returns a ( width, height ) tuple containing the size of a 
+            specified toolkit image.
+        """
+        return ( image.GetWidth(), image.GetHeight() )
+        
+    #---------------------------------------------------------------------------
     #  Returns a renderer used to render 'themed' table cells for a specified 
     #  TableColumn object:
     #---------------------------------------------------------------------------
