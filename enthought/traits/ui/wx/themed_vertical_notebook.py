@@ -330,7 +330,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
         """ Creates a new **ThemedPage** object representing a notebook page and
             returns it as the result.
         """
-        return ThemedPage( notebook     = self,
+        return ThemedPage( notebook     = self ).set(
                            closed_theme = self.closed_theme,
                            open_theme   = self.open_theme )
     
