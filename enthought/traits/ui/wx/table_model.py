@@ -22,6 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import wx.grid as wxg
+
 from enthought.traits.api \
     import HasTraits, HasPrivateTraits, Any, Str, List, Instance, Event, Bool, \
            on_trait_change
@@ -304,8 +306,24 @@ class TableModel ( GridModel ):
         
         # Fire the same event on the editor after mapping it to a model object
         # and column name:
-        self.editor.click = ( self.get_filtered_item( row ),
-                              self.__get_column( col ) )
+        object = self.get_filtered_item( row )
+        column = self.__get_column( col )
+        self.editor.click = ( object, column )
+        
+        # Check to see if the column has a view to display:
+        view = column.get_view( object )
+        if view is not None:
+            # fixme: It would be better if we could get the grid to do this for
+            # us, so we don't have to dig around to find the grid control...
+            grid         = self.editor.grid
+            coords       = wxg.GridCellCoords( row, col )
+            x, y, dx, dy = grid._grid.BlockToDeviceRect( coords, coords )
+            x, y         = grid._grid_window.ClientToScreenXY( x, y )
+            column.get_object( object ).edit_traits( view   = view, 
+                                                     parent = ( x, y, dx, dy ) )
+                            
+        # Invoke the column's click handler:
+        column.on_click( object )
         
     #---------------------------------------------------------------------------
     #  Handles the grid firing a 'dclick' event:
@@ -318,8 +336,12 @@ class TableModel ( GridModel ):
         
         # Fire the same event on the editor after mapping it to a model object
         # and column name:
-        self.editor.dclick = ( self.get_filtered_item( row ),
-                               self.__get_column( col ) )
+        object = self.get_filtered_item( row )
+        column = self.__get_column( col )
+        self.editor.dclick = ( object, column )
+                            
+        # Invoke the column's double-click handler:
+        column.on_dclick( object )
 
     #---------------------------------------------------------------------------
     #  Handles the user modifying the current 'auto_add' mode row:
@@ -446,7 +468,7 @@ class TableModel ( GridModel ):
         editor = column.get_editor( object )
         if editor is None:
             return None
-            
+         
         return TraitGridCellAdapter( editor, column.get_object( object ),
                              column.name, '', context = self.editor.ui.context )
 

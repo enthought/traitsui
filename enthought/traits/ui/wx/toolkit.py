@@ -237,9 +237,15 @@ class GUIToolkit ( Toolkit ):
                 y = (screen_dy - height) / 2
             else:
                 # Calculate the desired size of the popup control:
-                x, y     = parent.ClientToScreenXY( 0, 0 )
-                cdx, cdy = parent.GetSizeTuple()
-                width    = max( cdx, width )
+                if isinstance( parent, wx.Window ):
+                    x, y     = parent.ClientToScreenXY( 0, 0 )
+                    cdx, cdy = parent.GetSizeTuple()
+                else:
+                    # Special case of parent being a screen position and size
+                    # tuple (used to pop-up a dialog for a table cell):
+                    x, y, cdx, cdy = parent
+                    
+                width = max( cdx, width )
             
                 # Calculate the best position and size for the pop-up:
                 
@@ -340,12 +346,15 @@ class GUIToolkit ( Toolkit ):
         """ Rebuilds a UI after a change to the content of the UI.
         """
         parent = size = None
+        
         if ui.control is not None:
             size   = ui.control.GetSize()
             parent = ui.control._parent
             ui.dispose( abort = True )
             ui.info.ui = ui
+            
         ui.rebuild( ui, parent )
+        
         if parent is not None:
             ui.control.SetSize( size )
             sizer = parent.GetSizer()
