@@ -47,11 +47,11 @@ class ArrayViewAdapter ( TabularAdapter ):
     def _get_index_text ( self ):
         return str( self.row )
      
-    def _get_text ( self ):
+    def _get_content ( self ):
         if self.is_2d:
-            return self.format % self.item[ self.column_id ]
+            return self.item[ self.column_id ]
             
-        return self.format % self.item
+        return self.item
         
     def get_item ( self, object, trait, row ):
         """ Returns the value of the *object.trait[row]* item.

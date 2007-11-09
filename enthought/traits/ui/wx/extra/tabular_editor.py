@@ -189,6 +189,9 @@ class TabularAdapter ( HasPrivateTraits ):
     # The text of a row/column item:
     text = Property
     
+    # The content of a row/column item (may be any Python value):
+    content = Property
+    
     # The tooltip information for a row/column item:
     tooltip = Str
     
@@ -323,6 +326,12 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         return self._result_for( 'get_text', object, trait, row, column )
      
+    def get_content ( self, object, trait, row, column ):
+        """ Returns the content to display for a specified 
+            *object.trait[row].column* item. 
+        """
+        return self._result_for( 'get_content', object, trait, row, column )
+     
     def set_text ( self, object, trait, row, text ):
         """ Sets the text for a specified *object.trait[row].column* item to
             *text*.
@@ -388,16 +397,21 @@ class TabularAdapter ( HasPrivateTraits ):
         return self.odd_bg_color or self.default_bg_color_
         
     def _get_text ( self ):
-        if isinstance( self.column_id, int ):
-            return self.item[ self.column_id ]
-            
-        return getattr( self.item, self.column_id )
+        return self.get_format(
+            self.object, self.name, self.row, self.column ) % self.get_content( 
+            self.object, self.name, self.row, self.column )
      
     def _set_text ( self ):
         if isinstance( self.column_id, int ):
             self.item[ self.column_id ] = self.value
         else:    
             setattr( self.item, self.column_id, self.value )
+        
+    def _get_content ( self ):
+        if isinstance( self.column_id, int ):
+            return self.item[ self.column_id ]
+            
+        return getattr( self.item, self.column_id )
         
     #-- Property Implementations -----------------------------------------------
     
@@ -599,11 +613,8 @@ class wxListCtrl ( wx.ListCtrl ):
         """ Returns the text to use for the specified list item.
         """
         editor = self._editor
-        format = editor.adapter.get_format( editor.object, editor.name, row, 
-                                            column )
-                                    
-        return format % editor.adapter.get_text( editor.object, editor.name, 
-                                                 row, column )
+        return editor.adapter.get_text( editor.object, editor.name,
+                                        row, column )
     
 #-------------------------------------------------------------------------------
 #  '_TabularEditor' class:
