@@ -262,7 +262,7 @@ class GroupEditor ( Editor ):
         self.set( **traits )
         
 #-------------------------------------------------------------------------------
-#  PopupControl' class:
+#  'PopupControl' class:
 #-------------------------------------------------------------------------------
 
 class PopupControl ( HasPrivateTraits ):

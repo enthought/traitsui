@@ -321,6 +321,9 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     # Can the current list canvas item be resized?
     can_resize = Bool( True )
     
+    # Can the current list canvas item be minimized/restored?
+    can_minimize = Bool( True )
+    
     # Can the current drag object be dropped on the current item (or on the 
     # canvas itself if the current item is an instance of ListCanvas)? 
     can_drop = Property # Bool
@@ -464,6 +467,12 @@ class ListCanvasAdapter ( HasPrivateTraits ):
             canvas.
         """
         return self._result_for( 'get_can_resize', item )
+                
+    def get_can_minimize ( self, item ):     
+        """ Returns whether or not the specified item can be minimized/restored
+            on the canvas.
+        """
+        return self._result_for( 'get_can_minimize', item )
                 
     def get_can_drop ( self, item, drop ):     
         """ Returns whether or not the specified droppable object can be
@@ -879,8 +888,9 @@ class ListCanvasPanel ( ImagePanel ):
                     dc.SetBackgroundMode( wx.TRANSPARENT )
                     dc.SetTextForeground( slice.text_color )
                     dc.SetFont( self.control.GetFont() )
-                    # fixme: Might need to set clipping region here...
+                    dc.SetClippingRegion( x, y, dx, dy )
                     dc.DrawText( text, x, y )
+                    dc.DestroyClippingRegion()
         
     def _size ( self, event ):
         """ Handles the control being resized.
@@ -1213,7 +1223,7 @@ class ListCanvasItem ( ListCanvasPanel ):
         view_model = adapter.get_view_model( object ) or object
         self.ui    = ui = view_model.edit_traits(
                               parent = control, 
-                              view   = adapter.get_view( object ), 
+                              view   = adapter.get_view( object ),
                               kind   = 'subpanel' ).set(
                               parent = canvas.editor.ui )
             
@@ -1565,10 +1575,11 @@ class ListCanvasItem ( ListCanvasPanel ):
         if adapter.get_can_delete( object ):
             xr = self._layout_button( 'close', xr, yc )
          
-        if self.minimized:
-            xr = self._layout_button( 'maximize', xr, yc )
-        else:
-            xr = self._layout_button( 'minimize', xr, yc )
+        if adapter.get_can_minimize( object ):
+            if self.minimized:
+                xr = self._layout_button( 'maximize', xr, yc )
+            else:
+                xr = self._layout_button( 'minimize', xr, yc )
         
         if adapter.get_can_drag( object ):
             xr = self._layout_button( 'drag', xr, yc )
@@ -1642,6 +1653,10 @@ class ListCanvas ( ListCanvasPanel ):
     
     # The current adapter status:
     status = Delegate( 'adapter' )
+    
+    # Can the canvas use the 'fast layout' algorithm (used when all canvas
+    # items are being replaced at once):
+    fast_layout = Bool( False )
     
     # The menu used to select an item to be added:
     add_menu = Property( depends_on = 'add' ) # Instance( Menu )
@@ -1742,6 +1757,26 @@ class ListCanvas ( ListCanvasPanel ):
         if (x > 0) or (y > 0):
             self.preferred_position = ( 0, 0 )
             return self.best_position_for( x, y, dx, dy )
+        
+        if self.fast_layout:
+            # Fast layout mode is used when the contents of the canvas are being
+            # completely replaced, and so all of the items need to be laid out.
+            # The 'fast_layout' takes advantage of that by simply laying out 
+            # each item just after the last item laid out, and then saving the
+            # new layout position for the next item:
+            x, y, max_dy = self._last_layout
+            cdx, cdy     = self.size
+            
+            if (x + dx) > cdx:
+                x      = 0
+                y     += max_dy
+                max_dy = dy
+            else:
+                max_dy = max( max_dy, dy )
+                
+            self._last_layout = ( x + dx, y, max_dy )
+                
+            return ( x, y )
             
         xmax = ymax = ynext = 0
         cdx, cdy = self.size
@@ -2157,6 +2192,11 @@ class ListCanvas ( ListCanvasPanel ):
         """
         do_later( self.refresh, 'status' )
         
+    def _fast_layout_changed ( self ):
+        """ Handles the 'fast_layout' mode being turned on or off.
+        """
+        self._last_layout = ( 9999999, 0, 0 )
+        
     #-- Mouse Event Handlers ---------------------------------------------------
     
     def dragging_motion ( self, x, y, event ):
@@ -2543,9 +2583,13 @@ class _ListCanvasEditor ( Editor ):
             do_later( self.update_editor )
             return
             
+        self.control.Freeze()
         canvas = self.canvas
+        canvas.fast_layout = True
         canvas.replace_items( [ canvas.create_object( object ) 
-                                for object in self.value ] ) 
+                                for object in self.value ] )
+        canvas.fast_layout = False
+        self.control.Thaw()                                
                 
     def dispose ( self ):
         """ Disposes of the contents of an editor.
@@ -2603,276 +2647,4 @@ class ListCanvasEditor ( BasicEditorFactory ):
     
     # Is the list canvas scrollable?
     scrollable = Bool( False )
-    
-#-- Test Case ------------------------------------------------------------------
 
-if __name__ == '__main__':
-    from enthought.traits.api \
-        import File, Constant, Int
-    
-    from enthought.traits.ui.api \
-        import ListEditor, ValueEditor
-        
-    from enthought.traits.ui.wx.extra.tabular_editor \
-        import TabularEditor, TabularAdapter
-    
-    snap_info  = SnapInfo( distance = 10 )
-    grid_info  = GridInfo( visible = 'always', snapping = False )
-    guide_info = GuideInfo()
-    
-    class CanvasItemsTabularAdapter ( TabularAdapter ):
-        
-        columns = [ ( 'Title', 'title' ) ]
-        
-        def _get_text ( self ):
-            return self.item
-   
-    class CanvasItems ( HasPrivateTraits ):
-        
-        implements( IListCanvasAware )
-        
-        #-- IListCanvasAware Implementation ------------------------------------
-        
-        # The list canvas item associated with this object:
-        list_canvas_item = Instance( 'ListCanvasItem' )
-        
-        #-- Private Traits -----------------------------------------------------
-        
-        # The titles of all list canvas items:
-        titles = Property( depends_on = 'list_canvas_item:canvas:items.title' )
-        
-        # The index of the currently selected title:
-        index = Int
-        
-        #-- Trait View Definitions ---------------------------------------------
-        
-        view = View(
-            Item( 'titles', 
-                  show_label = False,
-                  editor     = TabularEditor(
-                                   selected_row = 'index',
-                                   editable     = False,
-                                   adapter      = CanvasItemsTabularAdapter()
-                               )
-            )
-        )
-        
-        #-- Property Implementations -------------------------------------------
-        
-        @cached_property
-        def _get_titles ( self ):
-            if self.list_canvas_item is None:
-                return []
-                
-            return [ item.title for item in self.list_canvas_item.canvas.items ]
-            
-        #-- Trait Event Handlers -----------------------------------------------
-        
-        def _index_changed ( self, index ):
-            """ Handles the user selecting a title row.
-            """
-            self.list_canvas_item.canvas.items[ index ].activate()
-            
-    class ItemSnoop ( HasPrivateTraits ):
-        
-        #-- Private Traits -----------------------------------------------------
-        
-        # The list canvas item being snooped:
-        item = Instance( ListCanvasItem )
-        
-        # The item's title:
-        title = Property # ( Str )
-        
-        #-- Trait View Definitions ---------------------------------------------
-        
-        view = View(
-            Item( 'item',
-                  show_label = False,
-                  editor     = ValueEditor()
-            )
-        )
-        
-        #-- Property Implementations -------------------------------------------
-        
-        def _get_title ( self ):
-            return self.item.title
-            
-    class CanvasSnoop ( HasPrivateTraits ):
-        
-        implements( IListCanvasAware )
-        
-        #-- IListCanvasAware Implementation ------------------------------------
-        
-        # The list canvas item associated with this object:
-        list_canvas_item = Instance( 'ListCanvasItem' )
-        
-        #-- Private Traits -----------------------------------------------------
-        
-        # The titles of all list canvas items:
-        neighbors = List( ItemSnoop )
-        
-        #-- Trait View Definitions ---------------------------------------------
-        
-        view = View(
-            Item( 'neighbors',
-                  show_label = False,
-                  style      = 'custom',
-                  editor     = ListEditor( use_notebook = True,
-                                           dock_style   = 'tab',
-                                           export       = 'DockWindowShell',
-                                           page_name    = '.title' )
-            )
-        )
-        
-        #-- Trait Event Handlers -----------------------------------------------
-        
-        @on_trait_change( 'list_canvas_item:moved' )
-        def _update_neighbors ( self ):
-            if self.list_canvas_item is None:
-                self.neighbors = []
-            else:
-                self.neighbors = [ ItemSnoop( item = item )
-                                   for item in self.list_canvas_item.neighbors ]
-                                   
-    class ObjectTrait ( HasPrivateTraits ):
-        
-        # The object whose trait is being displayed:
-        object = Instance( HasTraits )
-        
-        # The name of the object trait being displayed:
-        name = Str
-        
-        # The value of the specified object trait:
-        value = Property
-        
-        #-- Property Implementations -------------------------------------------
-        
-        def _get_value ( self ):
-            return getattr( self.object, self.name )
-            
-        def _set_value ( self, value ):
-            old = getattr( self.object, self.name )
-            if value != old:
-                setattr( self.object, self.name, value )
-                self.trait_property_changed( 'value', old, value )
-        
-        #-- Method Overrides ---------------------------------------------------
-        
-        def trait_view ( self, *args, **traits ):
-            name = self.name
-            return View(
-                Item( 'value', 
-                      label  = name, 
-                      editor = self.object.trait( name ).get_editor()
-                )
-            )
-     
-    class PersonMonitor ( ListCanvasItemMonitor ):
-        
-        @on_trait_change( 'item:object:name' )
-        def _name_modified ( self, name ):
-            self.item.title = name
-            
-        @on_trait_change( 'item:moved' )
-        def _position_modified ( self ):
-            position = self.item.position
-            self.adapter.status = '%s moved to (%s,%s) [%s]' % (
-                   self.item.title, position[0], position[1],
-                   ', '.join( [ item.title for item in self.item.neighbors ] ) )
-    
-    class TestAdapter ( ListCanvasAdapter ):
-        
-        Person_theme_active   = ATheme( Theme( 'Person_active',   
-                                               offset = ( 0, -3 ) ) )
-        Person_theme_inactive = ATheme( Theme( 'Person_inactive',
-                                               offset = ( 0, -3 ) ) )
-        Person_theme_hover    = ATheme( Theme( 'Person_hover',
-                                               offset = ( 0, -3 ) ) )
-        ObjectTrait_theme_active   = ATheme( Theme( '@J08', margins = 3 ) )
-        ObjectTrait_theme_inactive = ATheme( Theme( '@J07', margins = 3 ) )
-        ObjectTrait_theme_hover    = ATheme( Theme( '@J0A', margins = 3 ) )
-        CanvasItems_size    = Tuple( ( 180, 250 ) )
-        CanvasSnoop_size    = Tuple( ( 250, 250 ) )
-        
-        Person_tooltip      = Property
-        Person_can_drag     = Bool( True )
-        Person_can_clone    = Bool( True )
-        Person_can_delete   = Bool( True )
-        # fixme: Why can't we use 'Constant' for this?...
-        Person_monitor      = Any( PersonMonitor )
-        Person_can_close    = Any( Modified )
-        Person_title        = Property
-        ListCanvas_can_receive_Person   = Bool( True )
-        ListCanvas_can_receive_NoneType = Bool( True )
-        File_view = Any( View( Item( 'path' ) ) )
-        
-        def _get_Person_title ( self ):
-            return (self.item.name or '<undefined>')
-            
-        def _get_Person_tooltip ( self ):
-            return ('A person named %s' % self.item.name)
-    
-    class Person ( HasTraits ):
-        name   = Str
-        age    = Range( 0, 100 )
-        gender = Enum( 'Male', 'Female' )
-        
-        view = View( 'name', 'age', 'gender' )
-        
-    class AFile ( HasTraits ):
-        file = File
-        
-        view = View( 
-            Item( 'file', style = 'custom', show_label = False )
-        )
-        
-    class People ( HasTraits ):
-        people = List
-        
-        view = View( 
-            Item( 'people',
-                  show_label = False,
-                  editor = ListCanvasEditor(
-                               scrollable = True,
-                               adapter    = TestAdapter(),
-                               operations = [ 'add', 'clear', 'load', 'save',
-                                              'status' ],
-                               add        = [ Person ],
-                               snap_info  = snap_info,
-                               grid_info  = grid_info,
-                               guide_info = guide_info )
-            ),
-            title     = 'List Canvas Test',
-            id        = 'enthought.traits.ui.wx.extra.list_canvas_editor',
-            width     = 0.75,
-            height    = 0.75,
-            resizable = True 
-        )
-
-    nick = Person( name   = 'Nick Adams', 
-                   age    = 37,
-                   gender = 'Male' )
-        
-    people = [ 
-        nick,
-        Person( name   = 'Joan Thomas',
-                age    = 42,
-                gender = 'Female' ),
-        Person( name   = 'John Jones',
-                age    = 27,
-                gender = 'Male' ),
-        Person( name   = 'Tina Gerlitz',
-                age    = 51,
-                gender = 'Female' ),
-        AFile(),
-        AFile(),
-        ObjectTrait( object = nick, name = 'name'   ), 
-        ObjectTrait( object = nick, name = 'age'    ), 
-        ObjectTrait( object = nick, name = 'gender' ), 
-        snap_info, grid_info, guide_info, CanvasItems(), CanvasSnoop()
-    ]
-        
-    People( people = people ).configure_traits()
-    
-    #from enthought.developer.develop import develop
-    #develop( People( people = people ) )

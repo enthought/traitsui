@@ -20,6 +20,9 @@
 from enthought.traits.api \
     import Instance
     
+from enthought.traits.ui.ui_traits \
+    import Image, convert_bitmap
+    
 from enthought.traits.ui.wx.editor \
     import Editor
     
@@ -53,8 +56,8 @@ class _ImageEditor ( Editor ):
         if image is None:
             image = self.value
             
-        self.control = ImageControl( parent, 
-                           image.create_image().ConvertToBitmap(), padding = 0 )
+        self.control = ImageControl( parent, convert_bitmap( image ), 
+                                     padding = 0 )
             
         self.set_tooltip()
                         
@@ -69,7 +72,7 @@ class _ImageEditor ( Editor ):
         if self.factory.image is None:
             value = self.value
             if isinstance( value, ImageResource ):
-                self.control.Bitmap( value.create_image().ConvertToBitmap() )
+                self.control.Bitmap( convert_bitmap( value ) )
                     
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:
@@ -84,5 +87,5 @@ class ImageEditor ( BasicEditorFactory ):
     # The optional image resource to be displayed by the editor (if not
     # specified, the editor's object value is used as the ImageResource to
     # display):
-    image = Instance( ImageResource )
+    image = Image
     
