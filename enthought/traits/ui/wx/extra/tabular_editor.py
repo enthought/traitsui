@@ -12,7 +12,7 @@
 #-------------------------------------------------------------------------------
 
 """ A traits UI editor for editing tabular data (arrays, list of tuples, lists 
-   of objects, etc).
+    of objects, etc).
 """
 
 #-------------------------------------------------------------------------------
