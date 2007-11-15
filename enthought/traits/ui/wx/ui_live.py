@@ -276,10 +276,11 @@ class LiveWindow ( BaseDialog ):
         """ Closes the dialog window.
         """
         ui = self.ui
+        ui.result = (rc == wx.ID_OK)
         save_window( ui )
         if self.is_modal:
             self.control.EndModal( rc )
-        ui.finish( rc == wx.ID_OK )
+        ui.finish()
         self.ui = self.undo = self.redo = self.revert = self.control = None
 
     #---------------------------------------------------------------------------

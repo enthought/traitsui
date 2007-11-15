@@ -138,6 +138,13 @@ class _HistoryEditor ( Editor ):
     def save_prefs ( self ):
         """ Returns any user preference information associated with the editor.
         """
+        # If the view closed successfully, try to update the history with the
+        # current value:
+        if self.ui.result:
+            self._no_update = True
+            self.history.set_value( self.value )
+            self._no_update = False
+            
         return { 'history': self.history.history[:] }
 
 #-------------------------------------------------------------------------------

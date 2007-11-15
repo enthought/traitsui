@@ -363,6 +363,8 @@ class CustomEditor ( SimpleTextEditor ):
             
         self.control = wx.GenericDirCtrl( parent, style = style )
         self._tree   = tree = self.control.GetTreeCtrl()
+        wx.EVT_TREE_SEL_CHANGED( tree, tree.GetId(), self.update_object )
+        
         
         self.filter = factory.filter
         self.sync_value( factory.filter_name, 'filter', 'from', is_list = True )
