@@ -60,7 +60,8 @@ class ArrayViewAdapter ( TabularAdapter ):
             if self.transpose:
                 return getattr( object, trait )[:,row]
                 
-            return super( ArrayViewAdapter, self ).get_item( object, trait, row )
+            return super( ArrayViewAdapter, self ).get_item( object, trait, 
+                                                             row )
             
         return getattr( object, trait )[ row ]
     
@@ -72,7 +73,7 @@ class ArrayViewAdapter ( TabularAdapter ):
             
         return super( ArrayViewAdapter, self ).len( object, trait )
 
-# Define the actual Traits UI string list editor:        
+# Define the actual Traits UI array view editor:        
 class _ArrayViewEditor ( UIEditor ):
     
     # Indicate that the editor is scrollable/resizable:
@@ -111,18 +112,17 @@ class _ArrayViewEditor ( UIEditor ):
             raise ValueError( "ArrayViewEditor can only display 1D or 2D "
                               "arrays" )
                               
-        factory = self.factory
-        cols    = 1
-        titles  = [ 'Data' ]
-        is_2d   = (len_shape == 2)
+        factory          = self.factory
+        cols             = 1
+        titles           = factory.titles
+        n                = len( titles )
+        self.show_titles = (n > 0)
+        is_2d            = (len_shape == 2)
         if is_2d:
             index = 1
             if factory.transpose:
                 index = 0
-            cols             = shape[ index ]
-            titles           = factory.titles
-            n                = len( titles )
-            self.show_titles = (n > 0)
+            cols = shape[ index ]
             if self.show_titles:
                 if n > cols:
                     titles = titles[:cols]
