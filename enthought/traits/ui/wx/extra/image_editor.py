@@ -42,7 +42,9 @@ from enthought.pyface.image_resource \
 class _ImageEditor ( Editor ):
     """ Traits UI 'display only' image editor.
     """
-        
+       
+    scrollable = True
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -55,7 +57,7 @@ class _ImageEditor ( Editor ):
         image = self.factory.image
         if image is None:
             image = self.value
-            
+         
         self.control = ImageControl( parent, convert_bitmap( image ), 
                                      padding = 0 )
             
