@@ -125,7 +125,7 @@ class TableModel ( GridModel ):
 
         # Set up listeners for any of the model data changing:
         object.on_trait_change( self._on_data_changed, name, dispatch = 'ui' )
-        object.on_trait_change( self.fire_content_changed, name + '.+', 
+        object.on_trait_change( self.fire_content_changed, name + '.-', 
                                 dispatch = 'ui' )
 
         # Call handler when the mouse_cell changes:
