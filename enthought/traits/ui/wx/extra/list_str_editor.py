@@ -98,6 +98,9 @@ class ListStrAdapter ( HasPrivateTraits ):
     # Specifies the default value for a new list item:
     default_value = Any( '' )
     
+    # Specifies the default text for a new list item:
+    default_text = Str
+    
     # The default text color for list items (even, odd, any rows):
     even_text_color = Color( None, update = True )
     odd_text_color  = Color( None, update = True )
@@ -216,6 +219,28 @@ class ListStrAdapter ( HasPrivateTraits ):
         """ Returns a new default value for the specified *object.trait* list.
         """
         return self.default_value
+    
+    def get_default_text ( self, object, trait ):
+        """ Returns the default text for the specified *object.trait* list.
+        """
+        return self.default_text
+    
+    def get_default_image ( self, object, trait ):
+        """ Returns the default image for the specified *object.trait* list.
+        """
+        return self.image
+    
+    def get_default_bg_color ( self, object, trait ):
+        """ Returns the default background color for the specified 
+            *object.trait* list.
+        """
+        return self._get_bg_color()
+    
+    def get_default_text_color ( self, object, trait ):
+        """ Returns the default text color for the specified *object.trait*
+            list.
+        """
+        return self._get_text_color()
      
     def set_text ( self, object, trait, index, text ):
         """ Sets the text for a specified *object.trait[index]* list item to
@@ -338,14 +363,20 @@ class wxListCtrl ( wx.ListCtrl ):
         # gc'ed before they finish using it. So we store an object reference to
         # it to prevent it from going away too soon...
         self._attr = attr = wx.ListItemAttr()
-        editor = self._editor
+        editor     = self._editor
+        adapter    = editor.adapter
         
-        color = editor.adapter.get_bg_color( editor.object, editor.name, index )
-        if color is not None:
-            attr.SetBackgroundColour( color )
+        if editor._is_auto_add( index ):
+            bg_color = adapter.get_default_bg_color( editor.object, 
+                                                     editor.name )
+            color = adapter.get_default_text_color( editor.object, editor.name )
+        else:
+            bg_color = adapter.get_bg_color( editor.object, editor.name, index )
+            color  = adapter.get_text_color( editor.object, editor.name, index )
+            
+        if bg_color is not None:
+            attr.SetBackgroundColour( bg_color )
                 
-        color = editor.adapter.get_text_color( editor.object, editor.name,
-                                               index ) 
         if color is not None:
             attr.SetTextColour( color )
             
@@ -355,8 +386,14 @@ class wxListCtrl ( wx.ListCtrl ):
         """ Returns the image index to use for the specified list item.
         """
         editor = self._editor
-        image  = editor._get_image( editor.adapter.get_image( editor.object, 
-                                                          editor.name, index ) )
+        if editor._is_auto_add( index ):
+            image = editor.adapter.get_default_image( editor.object, 
+                                                      editor.name )
+        else:
+            image = editor.adapter.get_image( editor.object, editor.name, 
+                                              index )
+            
+        image = editor._get_image( image )
         if image is not None:
             return image
             
@@ -366,7 +403,10 @@ class wxListCtrl ( wx.ListCtrl ):
         """ Returns the text to use for the specified list item.
         """
         editor = self._editor
-                                    
+        
+        if editor._is_auto_add( index ):
+            return editor.adapter.get_default_text( editor.object, editor.name )
+            
         return editor.adapter.get_text( editor.object, editor.name, index )
 
 #-------------------------------------------------------------------------------
@@ -449,7 +489,7 @@ class _ListStrEditor ( Editor ):
             style |= wx.LC_NO_HEADER
             
         # Create the list control and link it back to us:
-        self.control = control = wxListCtrl( parent, -1, style = style )
+        self.control    = control = wxListCtrl( parent, -1, style = style )
         control._editor = self
         
         # Create the list control column:
@@ -523,9 +563,11 @@ class _ListStrEditor ( Editor ):
             editor.
         """
         control = self.control
-        n       = self.adapter.len( self.object, self.name )
         top     = control.GetTopItem()
         pn      = control.GetCountPerPage()
+        n       = self.adapter.len( self.object, self.name )
+        if self.factory.auto_add:
+            n += 1
         
         control.DeleteAllItems()
         control.SetItemCount( n )
@@ -691,16 +733,23 @@ class _ListStrEditor ( Editor ):
     def _begin_label_edit ( self, event ):
         """ Handles the user starting to edit an item label.
         """
-        if not self.adapter.get_can_edit( self.object, self.name, 
-                                          event.GetIndex() ):
+        index = event.GetIndex()
+        
+        if ((not self._is_auto_add( index )) and 
+            (not self.adapter.get_can_edit( self.object, self.name, index ))): 
             event.Veto()
         
     def _end_label_edit ( self, event ):
         """ Handles the user finishing editing an item label.
         """
-        self.adapter.set_text( self.object, self.name, event.GetIndex(),
-                               event.GetText() )
-        self.index = event.GetIndex() + 1
+        object, name, adapter = self.object, self.name, self.adapter
+        index = event.GetIndex()
+        if self._is_auto_add( index ):
+            adapter.insert( object, name, index,
+                            adapter.get_default_value( object, name ) )
+            
+        adapter.set_text( object, name, index, event.GetText() )
+        self.index = index + 1
        
     def _item_selected ( self, event ):
         """ Handles an item being selected.
@@ -983,6 +1032,13 @@ class _ListStrEditor ( Editor ):
             selected = self._get_selected()
             if len( selected ) == 1:
                 self.control.EditLabel( selected[0] )
+    
+    def _is_auto_add ( self, index ):
+        """ Returns whether or not the index is the special 'auto add' item at
+            the end of the list.
+        """
+        return (self.factory.auto_add and 
+                (index >= self.adapter.len( self.object, self.name )))
                     
 #-------------------------------------------------------------------------------
 #  'ListStrEditor' editor factory class:
@@ -1035,6 +1091,10 @@ class ListStrEditor ( BasicEditorFactory ):
     
     # The optional extended name of the trait containing the editor title:
     title_name = Str
+
+    # Should a new item automatically be added to the end of the list to allow
+    # the user to create new entries?
+    auto_add = Bool( False )
            
     # The adapter from list items to editor values:                       
     adapter = Instance( ListStrAdapter, () )
