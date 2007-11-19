@@ -108,7 +108,12 @@ def key_event_to_name ( event ):
     else:
         key = key_map.get( key_code )
         if key is None:
-            key = chr( key_code )
+            try:
+                key = chr( key_code )
+            except:
+                # Handle the case of strange keyboard codes (such as the Apple
+                # keyboard 'apple' key):
+                key = 'unknown'
     
     name = ''
     if event.AltDown():

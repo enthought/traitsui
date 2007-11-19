@@ -21,7 +21,8 @@ import wx
 
 from enthought.traits.api \
     import HasPrivateTraits, Color, Str, Int, Enum, List, Bool, Instance, Any, \
-           Dict, Event, TraitListEvent, Interface, on_trait_change, implements
+           Dict, Event, TraitListEvent, Property, Interface, on_trait_change, \
+           implements
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -457,6 +458,9 @@ class _ListStrEditor ( Editor ):
     
     # Dictionary mapping ImageResource objects to wx.ImageList indices:
     image_resources = Any( {} )
+    
+    # The current number of item currently in the list:
+    item_count = Property
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -601,6 +605,11 @@ class _ListStrEditor ( Editor ):
         if edit:
             control.EditLabel( index )
         
+    #-- Property Implementations -----------------------------------------------
+    
+    def _get_item_count ( self ):
+        return (self.control.GetItemCount() - self.factory.auto_add)
+        
     #-- Trait Event Handlers ---------------------------------------------------
     
     def _title_changed ( self, title ):
@@ -743,12 +752,17 @@ class _ListStrEditor ( Editor ):
         """ Handles the user finishing editing an item label.
         """
         object, name, adapter = self.object, self.name, self.adapter
+        text = event.GetText()
+        if text.strip() == '':
+            return
+            
         index = event.GetIndex()
         if self._is_auto_add( index ):
             adapter.insert( object, name, index,
                             adapter.get_default_value( object, name ) )
+            self.edit = True
             
-        adapter.set_text( object, name, index, event.GetText() )
+        adapter.set_text( object, name, index, text )
         self.index = index + 1
        
     def _item_selected ( self, event ):
@@ -962,12 +976,17 @@ class _ListStrEditor ( Editor ):
         """ Append a new item to the end of the list control.
         """
         if 'append' in self.factory.operations:
-            adapter    = self.adapter
-            self.index = self.control.GetItemCount()
-            self.edit  = True
-            adapter.insert( self.object, self.name, self.index,
+            self.edit = True
+            adapter   = self.adapter
+            index     = self.control.GetItemCount()
+            if self.factory.auto_add:
+                self.index = index - 1
+                self.update_editor()
+            else:
+                self.index = index
+                adapter.insert( self.object, self.name, self.index,
                            adapter.get_default_value( self.object, self.name ) )
-        
+                
     def _insert_current ( self ):
         """ Inserts a new item after the currently selected list control item.
         """
@@ -988,10 +1007,12 @@ class _ListStrEditor ( Editor ):
             if len( selected ) == 0:
                 return
                 
+            n      = self.item_count
             delete = self.adapter.delete
             selected.reverse()
             for index in selected:
-                delete( self.object, self.name, index )
+                if index < n:
+                    delete( self.object, self.name, index )
                     
             self.index = index
         
@@ -1002,7 +1023,8 @@ class _ListStrEditor ( Editor ):
             selected = self._get_selected()
             if len( selected ) == 1:
                 index = selected[0]
-                if index > 0:
+                n     = self.item_count
+                if 0 < index < n:
                     adapter      = self.adapter
                     object, name = self.object, self.name
                     item         = adapter.get_item( object, name, index )
@@ -1017,7 +1039,8 @@ class _ListStrEditor ( Editor ):
             selected = self._get_selected()
             if len( selected ) == 1:
                 index = selected[0]
-                if index < (self.control.GetItemCount() - 1):
+                n     = self.item_count - 1
+                if index < n:
                     adapter      = self.adapter
                     object, name = self.object, self.name
                     item         = adapter.get_item( object, name, index )
