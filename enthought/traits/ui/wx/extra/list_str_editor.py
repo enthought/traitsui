@@ -506,10 +506,12 @@ class _ListStrEditor ( Editor ):
         wx.EVT_LIST_END_LABEL_EDIT(   parent, id, self._end_label_edit )
         wx.EVT_LIST_ITEM_SELECTED(    parent, id, self._item_selected )
         wx.EVT_LIST_ITEM_DESELECTED(  parent, id, self._item_selected )
-        wx.EVT_LIST_KEY_DOWN(         parent, id, self._key_down )
         wx.EVT_LIST_ITEM_RIGHT_CLICK( parent, id, self._right_clicked )
         wx.EVT_LIST_ITEM_ACTIVATED(   parent, id, self._item_activated )
         wx.EVT_SIZE(                  control, self._size_modified )
+        
+        # Handle key events:
+        wx.EVT_CHAR( control, self._key_pressed )
 
         # Set up the drag and drop target:
         if PythonDropTarget is not None:
@@ -751,19 +753,7 @@ class _ListStrEditor ( Editor ):
     def _end_label_edit ( self, event ):
         """ Handles the user finishing editing an item label.
         """
-        object, name, adapter = self.object, self.name, self.adapter
-        text = event.GetText()
-        if text.strip() == '':
-            return
-            
-        index = event.GetIndex()
-        if self._is_auto_add( index ):
-            adapter.insert( object, name, index,
-                            adapter.get_default_value( object, name ) )
-            self.edit = True
-            
-        adapter.set_text( object, name, index, text )
-        self.index = index + 1
+        self._set_text_current( event.GetIndex(), event.GetText() )
        
     def _item_selected ( self, event ):
         """ Handles an item being selected.
@@ -800,12 +790,10 @@ class _ListStrEditor ( Editor ):
         self.right_clicked_index = index = event.GetIndex()
         self.right_clicked = self.adapter.get_item( self.object, self.name,
                                                     index )
-            
-    def _key_down ( self, event ):
-        """ Handles the user pressing a key in the list control.
-        """
+
+    def _key_pressed ( self, event ):
         key = event.GetKeyCode()
-        if key == wx.WXK_PAGEDOWN:
+        if key == wx.WXK_END:
             self._append_new()
         elif key in ( wx.WXK_BACK, wx.WXK_DELETE ):
             self._delete_current()
@@ -815,8 +803,14 @@ class _ListStrEditor ( Editor ):
             self._move_up_current()
         elif key == wx.WXK_RIGHT:
             self._move_down_current()
-        elif key in ( wx.WXK_RETURN, wx.WXK_ESCAPE ):
+        elif key == wx.WXK_RETURN:
             self._edit_current()
+        elif key == 3:    # Ctrl-C
+            self._copy_current()
+        elif key == 22:   # Ctrl-V
+            self._paste_current()
+        elif key == 24:   # Ctrl-X
+            self._cut_current()
         else:
             event.Skip()
 
@@ -987,6 +981,62 @@ class _ListStrEditor ( Editor ):
                 adapter.insert( self.object, self.name, self.index,
                            adapter.get_default_value( self.object, self.name ) )
                 
+    def _copy_current ( self ):
+        """ Copies the currently selected list control item to the clipboard.
+        """
+        selected = self._get_selected()
+        if len( selected ) == 1:
+            index = selected[0]
+            if index < self.item_count:
+                try:
+                    from enthought.util.wx.clipboard import clipboard
+                
+                    clipboard.data = self.adapter.get_text( self.object,
+                                                            self.name, index )
+                except:
+                    # Handle the enthought.util package not being installed by
+                    # just ignoring the request:
+                    pass
+                
+    def _cut_current ( self ):
+        """ Cuts the currently selected list control item and places its value
+            in the clipboard.
+        """
+        ops = self.factory.operations
+        if ('insert' in ops) and ('delete' in ops):
+            selected = self._get_selected()
+            if len( selected ) == 1:
+                index = selected[0]
+                if index < self.item_count:
+                    try:
+                        from enthought.util.wx.clipboard import clipboard
+                    
+                        clipboard.data = self.adapter.get_text(
+                                             self.object, self.name, index )
+                        self.adapter.delete( self.object, self.name, index )
+                        self.index = index
+                    except:
+                        # Handle the enthought.util package not being installed by
+                        # just ignoring the request:
+                        pass
+                
+    def _paste_current ( self ):
+        """ Pastes the clipboard contents into the currently selected list
+            control item.
+        """
+        if 'insert' in self.factory.operations:
+            selected = self._get_selected()
+            if len( selected ) == 1:
+                try:
+                    from enthought.util.wx.clipboard import clipboard
+        
+                    self._set_text_current( selected[0], clipboard.text_data,
+                                            insert = True )
+                except:
+                    # Handle the enthought.util package not being installed by
+                    # just ignoring the request:
+                    pass
+                
     def _insert_current ( self ):
         """ Inserts a new item after the currently selected list control item.
         """
@@ -1062,7 +1112,20 @@ class _ListStrEditor ( Editor ):
         """
         return (self.factory.auto_add and 
                 (index >= self.adapter.len( self.object, self.name )))
-                    
+
+    def _set_text_current ( self, index, text, insert = False ):
+        """ Sets the text value of the specified list control item.
+        """
+        if text.strip() != '':
+            object, name, adapter = self.object, self.name, self.adapter
+            if insert or self._is_auto_add( index ):
+                adapter.insert( object, name, index,
+                                adapter.get_default_value( object, name ) )
+                self.edit = (not insert)
+                
+            adapter.set_text( object, name, index, text )
+            self.index = index + 1
+        
 #-------------------------------------------------------------------------------
 #  'ListStrEditor' editor factory class:
 #-------------------------------------------------------------------------------
