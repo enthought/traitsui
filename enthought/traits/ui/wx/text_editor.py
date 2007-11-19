@@ -22,6 +22,8 @@ wxPython user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import logging
+
 import wx
 
 from enthought.traits.api \
@@ -38,6 +40,13 @@ from editor_factory \
     
 from constants \
     import OKColor, ErrorColor
+
+
+#-------------------------------------------------------------------------------
+#  Start logging:
+#-------------------------------------------------------------------------------
+
+logger = logging.getLogger(__name__)
 
 #-------------------------------------------------------------------------------
 #  Define a simple identity mapping:
@@ -228,7 +237,13 @@ class SimpleEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        if self._get_user_value() != self.value:
+        user_value = self._get_user_value()
+        try:
+            unequal = bool( user_value != self.value )
+        except ValueError:
+            # This might be a numpy array.
+            unequal = True
+        if unequal:
             self._no_update = True
             self.control.SetValue( self.str_value )
             self._no_update = False
@@ -249,10 +264,16 @@ class SimpleEditor ( Editor ):
         value = self.control.GetValue()
         try:
             value = self.evaluate( value )
-        except:
-            pass
-            
-        return self.factory.mapping.get( value, value )
+        except Exception, e:
+            logger.exception( 'Could not evaluate %r in TextEditor' % (value,) )
+
+        try:
+            ret = self.factory.mapping.get( value, value )
+        except TypeError:
+            # The value is probably not hashable.
+            ret = value
+
+        return ret
         
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
