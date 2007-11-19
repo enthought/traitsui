@@ -513,6 +513,10 @@ class _ListStrEditor ( Editor ):
         # Handle key events:
         wx.EVT_CHAR( control, self._key_pressed )
 
+        # Handle mouse events:
+        if 'edit' in factory.operations:
+            wx.EVT_LEFT_DOWN( control, self._left_down )
+        
         # Set up the drag and drop target:
         if PythonDropTarget is not None:
             control.SetDropTarget( PythonDropTarget( self ) )
@@ -822,6 +826,17 @@ class _ListStrEditor ( Editor ):
         """
         dx, dy = self.control.GetClientSizeTuple()
         self.control.SetColumnWidth( 0, dx - 1 )
+        
+    def _left_down ( self, event ):
+        """ Handles the user pressing the left mouse button.
+        """
+        index, flags = self.control.HitTest( wx.Point( event.GetX(),
+                                                       event.GetY() ) )
+        selected     = self._get_selected()
+        if (len( selected ) == 1) and (index == selected[0]):
+            self._edit_current()
+        else:
+            event.Skip()
 
     #-- Drag and Drop Event Handlers -------------------------------------------
 
