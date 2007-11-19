@@ -781,8 +781,11 @@ class _ListStrEditor ( Editor ):
         """ Handles an item being activated (double-clicked or enter pressed).
         """
         self.activated_index = event.GetIndex()
-        self.activated       = self.adapter.get_item( self.object, self.name,
-                                                      self.activated_index )
+        if 'edit' in self.factory.operations:
+            self._edit_current()
+        else:
+            self.activated = self.adapter.get_item( self.object, self.name,
+                                                    self.activated_index )
             
     def _right_clicked ( self, event ):
         """ Handles an item being right clicked.
