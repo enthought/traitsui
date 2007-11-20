@@ -777,7 +777,7 @@ class _TabularEditor ( Editor ):
                               
         # Rebuild the editor columns and headers whenever the adapter's
         # 'columns' changes:
-        self.on_trait_change( self._rebuild_and_refresh, 'adapter.columns', 
+        self.on_trait_change( self._rebuild_all, 'adapter.columns', 
                               dispatch = 'ui' )
                               
         # Make sure the tabular view gets initialized:
@@ -813,7 +813,7 @@ class _TabularEditor ( Editor ):
         self.context_object.on_trait_change( self.update_editor,
                                   self.extended_name + '_items', remove = True )
         self.on_trait_change( self._refresh, 'adapter.+update',  remove = True ) 
-        self.on_trait_change( self._rebuild_and_refresh, 'adapter.columns', 
+        self.on_trait_change( self._rebuild_all, 'adapter.columns', 
                               remove = True )
         
         super( _TabularEditor, self ).dispose()
@@ -1263,12 +1263,12 @@ class _TabularEditor ( Editor ):
                                                          wx.LIST_FORMAT_LEFT ) )
         self._set_column_widths()
         
-    def _rebuild_and_refresh ( self ):
+    def _rebuild_all ( self ):
         """ Rebuilds the structure of the list control, then refreshes its 
             contents.
         """
         self._rebuild()
-        self._refresh()
+        self.update_editor()
                        
     def _set_column_widths ( self ):
         """ Set the column widths for the current set of columns.
