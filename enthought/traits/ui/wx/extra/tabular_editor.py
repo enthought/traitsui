@@ -137,7 +137,7 @@ class TabularAdapter ( HasPrivateTraits ):
     # adapter. Normally this value is either a trait name or an index, but it 
     # can be any value that the adapter wants. If only *string* is specified,
     # then *any* is the index of the *string* within *columns*.
-    columns = List( update = True )
+    columns = List()
     
     # Specifies the default value for a new row:
     default_value = Any( '' )
@@ -777,7 +777,7 @@ class _TabularEditor ( Editor ):
                               
         # Rebuild the editor columns and headers whenever the adapter's
         # 'columns' changes:
-        self.on_trait_change( self._rebuild, 'adapter.columns', 
+        self.on_trait_change( self._rebuild_and_refresh, 'adapter.columns', 
                               dispatch = 'ui' )
                               
         # Make sure the tabular view gets initialized:
@@ -813,7 +813,8 @@ class _TabularEditor ( Editor ):
         self.context_object.on_trait_change( self.update_editor,
                                   self.extended_name + '_items', remove = True )
         self.on_trait_change( self._refresh, 'adapter.+update',  remove = True ) 
-        self.on_trait_change( self._rebuild, 'adapter.columns',  remove = True )
+        self.on_trait_change( self._rebuild_and_refresh, 'adapter.columns', 
+                              remove = True )
         
         super( _TabularEditor, self ).dispose()
                         
@@ -1261,6 +1262,13 @@ class _TabularEditor ( Editor ):
                        alignment_map.get( get_alignment( object, name, i ), 
                                                          wx.LIST_FORMAT_LEFT ) )
         self._set_column_widths()
+        
+    def _rebuild_and_refresh ( self ):
+        """ Rebuilds the structure of the list control, then refreshes its 
+            contents.
+        """
+        self._rebuild()
+        self._refresh()
                        
     def _set_column_widths ( self ):
         """ Set the column widths for the current set of columns.
