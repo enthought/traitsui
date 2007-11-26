@@ -17,7 +17,7 @@
 import wx
 
 from enthought.traits.api \
-    import Str, Property, Instance, cached_property
+    import Str, Property, Instance, cached_property, on_trait_change
     
 from themed_window \
     import ThemedWindow
@@ -215,7 +215,28 @@ class ImagePanel ( ThemedWindow ):
                         dy + min( slice.top, slice.xtop )       +
                              min( slice.bottom, slice.xbottom ) +
                              sizer._top_padding + sizer._bottom_padding )
-            
+                             
+#-------------------------------------------------------------------------------
+#  'EditableImagePanel' class:
+#-------------------------------------------------------------------------------
+
+class EditableImagePanel ( ImagePanel ):
+    """ A verison of the the Image Panel that updates itself whenever any aspect
+        of its associated Theme changes. This is useful for creating a theme
+        editor, since it can be used to provide immediate user feedback as
+        changes are made to the theme.
+    """
+    
+    #-- Event Handlers ---------------------------------------------------------
+    
+    @on_trait_change( 'theme.[border.-,content.-,label.-,alignment,text_color,label_color]')
+    def _theme_modified ( self ):
+        """ Handles a change to the theme that requires the control to be 
+            updated.
+        """
+        if self.control is not None:
+            self.control.Refresh()
+    
 #-------------------------------------------------------------------------------
 #  'ImageSizer' class:
 #-------------------------------------------------------------------------------

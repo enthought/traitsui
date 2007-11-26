@@ -30,7 +30,7 @@ from numpy \
     import reshape, fromstring, uint8
 
 from enthought.traits.api \
-    import HasPrivateTraits, Instance, Int, List, Color, Enum
+    import HasPrivateTraits, Instance, Int, List, Color, Enum, Bool
 
 from enthought.pyface.image_resource \
     import ImageResource
@@ -102,6 +102,9 @@ class ImageSlice ( HasPrivateTraits ):
     # The background color of the image:
     bg_color = Color
     
+    # Should debugging slice lines be drawn?
+    debug = Bool( False )
+    
     #-- Private Traits ---------------------------------------------------------
     
     # The current image's opaque bitmap:
@@ -169,9 +172,9 @@ class ImageSlice ( HasPrivateTraits ):
         # Iterate over each cell, performing a stretch fill from the source 
         # image to the destination window:
         last_x, last_y = x + dx, y + dy
-        iy = 0
+        y0, iy0 = y, 0
         for idy, wdy in pdys:
-            if y >= last_y:
+            if y0 >= last_y:
                 break
                 
             if wdy != 0:
@@ -181,12 +184,21 @@ class ImageSlice ( HasPrivateTraits ):
                         break
                         
                     if wdx != 0:
-                        self._fill( idc, ix0, iy, idx, idy, 
-                                    dc,  x0,  y,  wdx, wdy )
+                        self._fill( idc, ix0, iy0, idx, idy, 
+                                    dc,  x0,  y0,  wdx, wdy )
                         x0 += wdx
                     ix0 += idx
-                y += wdy
-            iy += idy
+                y0 += wdy
+            iy0 += idy
+            
+        if self.debug:
+            dc.SetPen( wx.Pen( wx.RED ) )
+            dc.DrawLine( x, y + self.top, last_x, y + self.top )
+            dc.DrawLine( x, last_y - self.bottom - 1, 
+                         last_x, last_y - self.bottom - 1 )
+            dc.DrawLine( x + self.left, y, x + self.left, last_y )
+            dc.DrawLine( last_x - self.right - 1, y,
+                         last_x - self.right - 1, last_y )
     
     #-- Event Handlers ---------------------------------------------------------
     
