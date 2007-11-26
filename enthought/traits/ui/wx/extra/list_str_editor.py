@@ -594,7 +594,9 @@ class _ListStrEditor ( Editor ):
                     index = None
         
         if index is None:
-            control.EnsureVisible( top + pn - 2 )
+            visible = top + pn - 2
+            if visible >= 0 and visible < control.GetItemCount():
+                control.EnsureVisible( visible )
             return
          
         if 0 <= (index - top) < pn:
