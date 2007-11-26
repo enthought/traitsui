@@ -26,7 +26,7 @@ from enthought.traits.ui.api \
     import Theme
     
 from enthought.traits.ui.ui_traits \
-    import ATheme, AView, Image, Margins, Position, Spacing
+    import ATheme, AView, Image, Position, Spacing
     
 from enthought.traits.ui.wx.editor \
     import Editor

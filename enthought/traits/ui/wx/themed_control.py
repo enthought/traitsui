@@ -25,7 +25,7 @@ from enthought.traits.ui.api \
     import default_theme
     
 from enthought.traits.ui.ui_traits \
-    import Image, HasPadding, Padding, Position, Alignment, Spacing
+    import Image, Position, Alignment, Spacing
     
 from image_slice \
     import default_image_slice
@@ -198,7 +198,9 @@ class ThemedControl ( ThemedWindow ):
         dc, slice = super( ThemedControl, self )._paint( event )
         
         # Get the text and image offset to use:
-        ox, oy   = (self.theme or default_theme).offset
+        theme    = self.theme or default_theme
+        label    = theme.label
+        ox, oy   = label.left, label.top
         ox2, oy2 = self.offset
         ox      += ox2
         oy      += oy2
@@ -212,7 +214,7 @@ class ThemedControl ( ThemedWindow ):
         tx, ty, tdx, tdy = self.text_bounds
         if tdx != 0:
             dc.SetBackgroundMode( wx.TRANSPARENT )
-            dc.SetTextForeground( slice.text_color )
+            dc.SetTextForeground( theme.content_color )
             dc.SetFont( self.control.GetFont() )
             dc.DrawText( self.current_text, tx + ox, ty + oy )
         
@@ -244,7 +246,7 @@ class ThemedControl ( ThemedWindow ):
         spacing   = (tdx != 0) * (bdx != 0) * self.spacing
         theme     = self.theme or default_theme
         slice     = theme.image_slice or default_image_slice
-        margins   = theme.margins
+        content   = theme.content
         
         position = self.position
         if position in ( 'above', 'below' ):
@@ -255,8 +257,8 @@ class ThemedControl ( ThemedWindow ):
             cdy = max( tdy, bdy )
         
         if item == TheControl:
-            cdx += margins.left + margins.right
-            cdy += margins.top  + margins.bottom
+            cdx += content.left + content.right
+            cdy += content.top  + content.bottom
             
             return ( 0, 0, max( slice.left  + slice.right,
                                 slice.xleft + slice.xright  + cdx ),
@@ -267,12 +269,12 @@ class ThemedControl ( ThemedWindow ):
         if alignment == 'default':
             alignment = self.default_alignment
         if alignment == 'left':
-            x = slice.xleft + margins.left
+            x = slice.xleft + content.left
         elif alignment == 'center':
-            x = slice.xleft + margins.left + ((wdx - slice.xleft - slice.xright
-                            - margins.left - margins.right - cdx) / 2)
+            x = slice.xleft + content.left + ((wdx - slice.xleft - slice.xright
+                            - content.left - content.right - cdx) / 2)
         else:
-            x = wdx - slice.xright - margins.right - cdx
+            x = wdx - slice.xright - content.right - cdx
             
         if position == 'left':
             bx = x
@@ -285,8 +287,8 @@ class ThemedControl ( ThemedWindow ):
             tx = x - (tdx / 2 )
             bx = x - (bdx / 2 )
             
-        y = slice.xtop + margins.top + ((wdy - slice.xtop - slice.xbottom - 
-                         margins.top - margins.bottom - cdy) / 2)
+        y = slice.xtop + content.top + ((wdy - slice.xtop - slice.xbottom - 
+                         content.top - content.bottom - cdy) / 2)
         if position == 'above':
             by = y
             ty = by + bdy + spacing

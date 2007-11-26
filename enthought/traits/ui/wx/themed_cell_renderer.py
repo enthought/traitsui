@@ -113,19 +113,19 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                 theme = model.selected_theme or theme
                 
         if theme is not None:
-            margins = theme.margins
+            content = theme.content
             slice   = theme.image_slice
             slice.fill( dc, x, y, dx, dy )
             
             # Set up the correct text color to use:
-            dc.SetTextForeground( slice.text_color )
+            dc.SetTextForeground( theme.content_color )
             
             # Calculate the margins for the draw area:
-            left   = slice.xleft   + margins.left
-            top    = slice.xtop    + margins.top
-            right  = slice.xright  + margins.right
-            bottom = slice.xbottom + margins.bottom
-            ox, oy = theme.offset
+            left   = slice.xleft   + content.left
+            top    = slice.xtop    + content.top
+            right  = slice.xright  + content.right
+            bottom = slice.xbottom + content.bottom
+            ox, oy = theme.label.left, theme.label.top
         else:
             if is_selected:
                 bg_color = grid.GetSelectionBackground()
@@ -232,9 +232,9 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         if theme is None:
             return wx.Size( tdx + 8, tdy + 6 )
             
-        margins = theme.margins
-        tdx    += (margins.left + margins.right)
-        tdy    += (margins.top  + margins.bottom)
+        content = theme.content
+        tdx    += (content.left + content.right)
+        tdy    += (content.top  + content.bottom)
         slice   = theme.image_slice
             
         return wx.Size( max( slice.left  + slice.right,

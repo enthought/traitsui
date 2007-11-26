@@ -162,6 +162,10 @@ class CustomEditor ( Editor ):
         
     # List of InstanceChoiceItem objects used by the editor
     items = Property
+    
+    # The maximum extra padding that should be allowed around the editor:
+    # (Override of the Editor base class trait)
+    border_size = 0
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit

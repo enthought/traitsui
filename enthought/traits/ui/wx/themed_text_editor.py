@@ -397,7 +397,7 @@ class _ThemedTextEditor ( Editor ):
             slice2.fill( dc, 0, 0, wdx, wdy, True )
             slice = slice2
         dc.SetBackgroundMode( wx.TRANSPARENT )
-        dc.SetTextForeground( slice.text_color )
+        dc.SetTextForeground( slice.content_color )
         dc.SetFont( control.GetFont() )
         tx, ty, tdx, tdy = self._get_text_bounds()
         dc.DrawText( self._get_text(), tx, ty )

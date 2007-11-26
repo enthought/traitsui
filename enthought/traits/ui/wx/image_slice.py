@@ -93,8 +93,11 @@ class ImageSlice ( HasPrivateTraits ):
     xleft   = Int
     xright  = Int
     
-    # The color to use for overlaid text:
-    text_color = Instance( wx.Colour )
+    # The color to use for content text:
+    content_color = Instance( wx.Colour )
+    
+    # The color to use for label text:
+    label_color = Instance( wx.Colour )
     
     # The background color of the image:
     bg_color = Color
@@ -289,15 +292,20 @@ class ImageSlice ( HasPrivateTraits ):
         # Find the optimal size for the borders (i.e. xleft, xright, ... ):
         self._find_best_borders( data )
         
-        # Save the background color:            
-        r, g, b       = data[ dy / 2, dx / 2 ]
+        # Save the background color:
+        x, y          = (dx / 2), (dy / 2)
+        r, g, b       = data[ y, x ]
         self.bg_color = (0x10000 * r) + (0x100 * g) + b
         
         # Find the best contrasting text color (black or white):
-        h, l, s = rgb_to_hls( r / 255.0, g / 255.0, b / 255.0 )
-        self.text_color = wx.BLACK
-        if l < 0.50:
-            self.text_color = wx.WHITE
+        self.content_color = self._find_best_color( data, x, y )
+        
+        # Find the best contrasting label color:
+        if self.xtop >= self.xbottom:
+            self.label_color = self._find_best_color( data, x, self.xtop / 2 )
+        else:
+            self.label_color = self._find_best_color( 
+                                        data, x, dy - (self.xbottom / 2) - 1 )
     
     def _fill ( self, idc, ix, iy, idx, idy, dc, x, y, dx, dy ):
         """ Performs a stretch fill of a region of an image into a region of a
@@ -346,10 +354,7 @@ class ImageSlice ( HasPrivateTraits ):
         last_x = dx - 1
         
         # Mark which edges as 'scanning':
-        # Note, we currently only scan up and down because it seems to produce
-        # more eye-pleasing results with rounded corners.
-        t = b = True
-        l = r = False
+        t = b = l = r = True
         
         # Keep looping while at last one edge is still 'scanning':
         while l or r or t or b:
@@ -405,6 +410,18 @@ class ImageSlice ( HasPrivateTraits ):
         self.xright  = min( self.right,  dx - right - 1 )
         self.xtop    = min( self.top,    top )
         self.xbottom = min( self.bottom, dy - bottom - 1 )
+
+    def _find_best_color ( self, data, x, y ):
+        """ Find the best contrasting text color for a specified pixel
+            coordinate.
+        """
+        r, g, b = data[ y, x ]
+        h, l, s = rgb_to_hls( r / 255.0, g / 255.0, b / 255.0 )
+        text_color = wx.BLACK
+        if l < 0.50:
+            text_color = wx.WHITE
+            
+        return text_color
         
     def _is_equal ( self, data, x0, y0, x1, y1, dx, dy ):
         """ Determines if two identically sized regions of an image array are

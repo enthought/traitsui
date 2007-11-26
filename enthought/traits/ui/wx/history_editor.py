@@ -24,6 +24,9 @@
     
 from enthought.traits.api \
     import Any, Int, Bool, on_trait_change
+    
+from enthought.pyface.timer.api \
+    import do_later
 
 from editor \
     import Editor
@@ -87,13 +90,16 @@ class _HistoryEditor ( Editor ):
     def _value_changed ( self, value ):
         """ Handles the history object's 'value' trait being changed.
         """
-        if not self._no_update:
+        if not self._dont_update:
             history = self.history
             try:
-                self.value    = history.value
-                history.error = False
+                self._dont_update = True
+                self.value        = history.value
+                history.error     = False
             except:
                 history.error = True
+                
+            do_later( self.set, _dont_update = False )
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -103,10 +109,11 @@ class _HistoryEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        self._no_update    = True
-        self.history.value = self.value
-        self.history.error = False
-        self._no_update    = False
+        if not self._dont_update:
+            self._dont_update  = True
+            self.history.value = self.value
+            self.history.error = False
+            self._dont_update  = False
         
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
@@ -141,9 +148,9 @@ class _HistoryEditor ( Editor ):
         # If the view closed successfully, try to update the history with the
         # current value:
         if self.ui.result:
-            self._no_update = True
+            self._dont_update = True
             self.history.set_value( self.value )
-            self._no_update = False
+            self._dont_update = False
             
         return { 'history': self.history.history[:] }
 

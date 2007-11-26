@@ -304,7 +304,10 @@ class LiveWindow ( BaseDialog ):
         """
         if not event.GetActive():
             wx.EVT_ACTIVATE( self.control, None )
-            self._on_ok()
+            
+            # Close the window if it has not already been closed:
+            if self.ui.info.ui is not None:
+                self._on_ok()
 
     #---------------------------------------------------------------------------
     #  Handles the user clicking the 'OK' button:

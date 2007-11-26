@@ -160,21 +160,22 @@ class ImagePanel ( ThemedWindow ):
         # If we have text and have room to draw it, then do so:
         text = self.text
         if (text != '') and self.can_show_text:
+            theme = self.theme
             dc.SetBackgroundMode( wx.TRANSPARENT )
-            dc.SetTextForeground( slice.text_color )
+            dc.SetTextForeground( theme.label_color )
             dc.SetFont( self.control.GetFont() )
             
-            alignment = self.theme.alignment
+            alignment = theme.alignment
             wdx, wdy  = self.control.GetClientSizeTuple()
             tdx, tdy, descent, leading = self.text_size
             tx = None
-            if (tdy + 4) <= slice.xtop:
+            if ((tdy + 4) <= slice.xtop) and (slice.xtop >= slice.xbottom):
                 ty = (slice.xtop - tdy) / 2
             elif (tdy + 4) <= slice.xbottom:
                 ty = wdy - ((slice.xbottom + tdy) / 2)
             else:
                 ty = (wdy + slice.xtop - slice.xbottom - tdy) / 2
-                if slice.xleft >= 40:
+                if slice.xleft >= slice.xright:
                     if alignment == 'left':
                         tx = 4
                     elif alignment == 'right':
@@ -197,7 +198,7 @@ class ImagePanel ( ThemedWindow ):
                     tx = (wdx + slice.left - slice.right - tdx) / 2
                 
             # fixme: Might need to set clipping region here...
-            ox, oy = self.theme.offset
+            ox, oy = theme.label.left, theme.label.top
             dc.DrawText( text, tx + ox, ty + oy )
         
     #-- Private Methods --------------------------------------------------------
@@ -237,12 +238,12 @@ class ImageSizer ( wx.PySizer ):
         self._image_slice = theme.image_slice
         
         # Save the padding information:
-        margins = theme.margins
-        if margins is not None:
-            self._left_padding   = margins.left
-            self._right_padding  = margins.right
-            self._top_padding    = margins.top
-            self._bottom_padding = margins.bottom
+        content = theme.content
+        if content is not None:
+            self._left_padding   = content.left
+            self._right_padding  = content.right
+            self._top_padding    = content.top
+            self._bottom_padding = content.bottom
         else:
             self._left_padding   = self._right_padding = self._top_padding = \
             self._bottom_padding = 0

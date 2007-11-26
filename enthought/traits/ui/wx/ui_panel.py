@@ -832,8 +832,8 @@ class FillPanel ( object ):
                 cols    *= 2
                 col_incr = 2
             flags       = wx.TOP | wx.BOTTOM
-            border_size = 0
-            item_sizer  = wx.FlexGridSizer( 0, cols, 5, 5 )
+            border_size = 2
+            item_sizer  = wx.FlexGridSizer( 0, cols, 0, 5 )
             if show_left:
                 self.label_flags = wx.ALIGN_RIGHT
                 if show_labels:
@@ -995,6 +995,9 @@ class FillPanel ( object ):
             if item.has_focus:
                 editor.control.SetFocus()
                 
+            # Adjust the maximum border size based on the editor's settings:
+            border_size = min( border_size, editor.border_size )
+                
             # Set up the reference to the correct 'control' to use in the 
             # following section, depending upon whether we have wrapped an
             # ImagePanel around the editor control or not:
@@ -1110,7 +1113,8 @@ class FillPanel ( object ):
             growable = 0
             if self.resizable:
                 growable = 1
-            sizer.Add( item_sizer, growable, wx.EXPAND | wx.ALL, 4 )
+                
+            sizer.Add( item_sizer, growable, wx.EXPAND | wx.ALL, 2 )
 
     #---------------------------------------------------------------------------
     #  Creates an item label:

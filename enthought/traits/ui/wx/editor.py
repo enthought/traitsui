@@ -42,7 +42,10 @@ class Editor ( UIEditor ):
     #---------------------------------------------------------------------------
     
     # Style for embedding control in a sizer:
-    layout_style = Int( wx.EXPAND ) 
+    layout_style = Int( wx.EXPAND )
+    
+    # The maximum extra padding that should be allowed around the editor:
+    border_size = Int( 4 )
     
     #---------------------------------------------------------------------------
     #  Handles the 'control' trait being set:

@@ -73,7 +73,7 @@ class ImageText ( wx.PyWindow ):
         text       = self.GetLabel()
         self._image_slice.fill( dc, 0, 0, wdx, wdy, True )
         dc.SetBackgroundMode( wx.TRANSPARENT )
-        dc.SetTextForeground( self._image_slice.text_color )
+        dc.SetTextForeground( self._image_slice.content_color )
         dc.SetFont( self.GetFont() )
         tx, ty, tdx, tdy = self._get_text_bounds()
         dc.DrawText( text, tx, ty )
@@ -82,9 +82,9 @@ class ImageText ( wx.PyWindow ):
         """ Returns the minimum size for the window.
         """
         tdx, tdy, descent, leading = self._get_text_size()
-        margins = self._theme.margins
-        tdx    += (margins.left + margins.right)
-        tdy    += (margins.top  + margins.bottom)
+        content = self._theme.content
+        tdx    += (content.left + content.right)
+        tdy    += (content.top  + content.bottom)
         slice   = self._image_slice
         
         return wx.Size( max( slice.left  + slice.right,
@@ -141,19 +141,18 @@ class ImageText ( wx.PyWindow ):
         wdx, wdy  = self.GetClientSizeTuple()
         slice     = self._image_slice
         theme     = self._theme
-        margins   = theme.margins
+        content   = theme.content
         ady       = wdy - slice.xtop - slice.xbottom
-        ty        = (wdy + slice.xtop + margins.top - slice.xtop - 
+        ty        = (wdy + slice.xtop + content.top - slice.xtop - 
                            slice.xbottom - tdy) / 2
         alignment = theme.alignment
         if alignment == 'left':
-            tx = slice.xleft + margins.left
+            tx = slice.xleft + content.left
         elif alignment == 'center':
             adx = wdx - slice.xleft - slice.xright
-            tx  = slice.xleft + margins.left + 4 + ((adx - tdx) / 2)
+            tx  = slice.xleft + content.left + 4 + ((adx - tdx) / 2)
         else:
-            tx = wdx - tdx - slice.xright - margins.right
+            tx = wdx - tdx - slice.xright - content.right
           
-        ox, oy = theme.offset
-        return ( tx + ox, ty + oy, tdx, tdy )
+        return ( tx + theme.label.left, ty + theme.label.top, tdx, tdy )
 

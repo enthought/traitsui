@@ -278,10 +278,10 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
     #-- Public Traits ----------------------------------------------------------
     
     # The theme to use for 'closed' notebook pages:
-    closed_theme = ATheme( Theme( '@BH5', margins = 0 ) )
+    closed_theme = ATheme( Theme( '@BH5', content = 0 ) )
     
     # The theme to use for 'open' notebook pages:
-    open_theme = ATheme( Theme( 'nb_open', margins = 0 ) )
+    open_theme = ATheme( Theme( 'nb_open', content = 0 ) )
     
     # Allow multiple open pages at once?
     multiple_open = Bool( False )

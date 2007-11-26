@@ -32,7 +32,8 @@ if _app is None:
     _app = wx.PySimpleApp()
 
 from enthought.traits.api \
-    import HasPrivateTraits, Instance, Property, Category, cached_property
+    import HasPrivateTraits, Instance, Property, Delegate, Category, \
+           cached_property
 
 from enthought.traits.trait_notifiers \
     import set_ui_handler
@@ -763,6 +764,12 @@ class WXTheme ( Category, Theme ):
     """ Defines the extensions needed to make the generic Theme class specific
         to wxPython.
     """
+    
+    # The color to use for content text:
+    content_color = Delegate( 'image_slice' )
+    
+    # The color to use for label text:
+    label_color = Delegate( 'image_slice' )
     
     # The image slice used to draw the theme:
     image_slice = Property( depends_on = 'image' )

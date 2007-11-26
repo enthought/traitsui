@@ -25,7 +25,7 @@
 import wx
 
 from os.path \
-    import abspath, splitext, isfile
+    import abspath, splitext, isfile, exists
     
 from enthought.traits.api \
     import List, Str, Event, Bool, Int, Any, on_trait_change
@@ -68,6 +68,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Should file extension be truncated?
     truncate_ext = Bool( False )
     
+    # Can the user select directories as well as files?
+    allow_dir = Bool( False )
+    
     # Is user input set on every keystroke? (Overrides the default) ('simple' 
     # style only):
     auto_set = False      
@@ -82,6 +85,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Optional extended trait name used to notify the editor when the file 
     # system view should be reloaded ('custom' style only):
     reload_name = Str
+    
+    # Optional extended trait name used to notify when the user double-clicks
+    # an entry in the file tree view:
+    dclick_name = Str
     
     #---------------------------------------------------------------------------
     #  Traits view definition:  
@@ -347,6 +354,9 @@ class CustomEditor ( SimpleTextEditor ):
     # Event fired when the file system view should be rebuilt:
     reload = Event
     
+    # Event fired when the user double-clicks a file:
+    dclick = Event
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -363,12 +373,13 @@ class CustomEditor ( SimpleTextEditor ):
             
         self.control = wx.GenericDirCtrl( parent, style = style )
         self._tree   = tree = self.control.GetTreeCtrl()
-        wx.EVT_TREE_SEL_CHANGED( tree, tree.GetId(), self.update_object )
-        
+        wx.EVT_TREE_SEL_CHANGED(    tree, tree.GetId(), self.update_object )
+        wx.EVT_TREE_ITEM_ACTIVATED( tree, tree.GetId(), self._on_dclick )
         
         self.filter = factory.filter
         self.sync_value( factory.filter_name, 'filter', 'from', is_list = True )
         self.sync_value( factory.reload_name, 'reload', 'from' )
+        self.sync_value( factory.dclick_name, 'dclick', 'to' )
         
         self.set_tooltip()
         
@@ -389,7 +400,7 @@ class CustomEditor ( SimpleTextEditor ):
         """
         if self.control is not None:
             path = self.control.GetPath()
-            if isfile( path ):
+            if self.factory.allow_dir or isfile( path ):
                 if self.factory.truncate_ext:
                     path = splitext( path )[0]
                     
@@ -403,7 +414,8 @@ class CustomEditor ( SimpleTextEditor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
-        self.control.SetPath( self.str_value )
+        if exists( self.str_value ):
+            self.control.SetPath( self.str_value )
         
     #---------------------------------------------------------------------------
     #  Returns the basic style to use for the control:
@@ -422,6 +434,15 @@ class CustomEditor ( SimpleTextEditor ):
         """ Handles the 'filter' trait being changed.
         """
         self.control.SetFilter( '|'.join( self.filter[:] ) )
+        
+    #---------------------------------------------------------------------------
+    #  Handles the user double-clicking on a file name:
+    #---------------------------------------------------------------------------
+    
+    def _on_dclick ( self, event ):
+        """ Handles the user double-clicking on a file name.
+        """
+        self.dclick = True
         
     #---------------------------------------------------------------------------
     #  Handles the 'reload' trait being changed:

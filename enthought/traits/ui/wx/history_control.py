@@ -97,6 +97,7 @@ class HistoryControl ( HasPrivateTraits ):
             control = self.control
             if control is not None:
                 control.SetValue( value )
+                self._restore = False
             
     def _history_changed ( self ):
         """ Handles the 'history' being changed.
@@ -180,6 +181,7 @@ class HistoryControl ( HasPrivateTraits ):
         for value in self.history:
             control.Append( value )
            
+        self._restore = True
         do_later( self._thaw_value, restore, select )
         
     def _thaw_value ( self, restore, select ):
@@ -187,10 +189,11 @@ class HistoryControl ( HasPrivateTraits ):
         """
         control = self.control
         if control is not None:
-            control.SetValue( restore )
+           if self._restore:
+               control.SetValue( restore )
+                   
+               if select:
+                   control.SetMark( 0, len( restore ) )
             
-            if select:
-                control.SetMark( 0, len( restore ) )
-                
-            control.Thaw()
+           control.Thaw()
         

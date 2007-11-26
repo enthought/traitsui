@@ -296,18 +296,18 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     
     # The default theme to use for the current active list canvas item:
     theme_active = ATheme( Theme( 'default_active', 
-                                  offset = ( 0, 2 ), margins = ( -15, 2 ) ) )
+                                  label = ( 0, 2 ), content = ( -15, 2 ) ) )
     
     # The default theme to use for the current inactive list canvas item (if 
     # None is returned, the value of *theme_active* is used):
     theme_inactive = ATheme( Theme( 'default_inactive', 
-                                    offset = ( 0, 2 ), margins = ( -15, 2 ) ) )
+                                    label = ( 0, 2 ), content = ( -15, 2 ) ) )
     
     # The default theme to use while the pointer hovers over the current
     # inactive list canvas item (if None is returned, the value of 
     # *theme_inactive* is used):
     theme_hover = ATheme( Theme( 'default_hover', 
-                                 offset = ( 0, 2 ), margins = ( -15, 2 ) ) )
+                                 label = ( 0, 2 ), content = ( -15, 2 ) ) )
     
     # The title to use for the current list canvas item:
     title = Property # Str
@@ -886,7 +886,7 @@ class ListCanvasPanel ( ImagePanel ):
                 text = getattr( self, name ).strip()
                 if text != '':
                     dc.SetBackgroundMode( wx.TRANSPARENT )
-                    dc.SetTextForeground( slice.text_color )
+                    dc.SetTextForeground( slice.label_color )
                     dc.SetFont( self.control.GetFont() )
                     dc.SetClippingRegion( x, y, dx, dy )
                     dc.DrawText( text, x, y )
@@ -942,21 +942,25 @@ class ListCanvasPanel ( ImagePanel ):
         """
         self.layout = {}
         dxt, dyt, descent, leading = self.control.GetFullTextExtent( 'Myj' )
-        theme = self.theme
-        slice = theme.image_slice
-        dyt  += 4
-        if (dyt <= slice.xtop) or (dyt <= slice.xbottom):
+        theme   = self.theme
+        slice   = theme.image_slice
+        dyt    += 4
+        xtop    = slice.xtop
+        xbottom = slice.xbottom
+        if (dyt <= xtop) or (dyt <= xbottom):
             dxw, dyw = self.control.GetClientSizeTuple()
-            xo, yo   = theme.offset
-            if dyt <= slice.xtop:
-                yt = yo + ((slice.xtop - dyt + 4) / 2)
-                yc = (2 * yo) + slice.xtop
+            label    = theme.label
+            xo       = label.left
+            yo       = label.top
+            if (dyt <= xtop) and (xtop >= xbottom):
+                yt = yo + ((xtop - dyt + 4) / 2)
+                yc = (2 * yo) + xtop
             else:
-                yt = yo + dyw - ((slice.xbottom + dyt - 2) / 2)
-                yc = (2 * (yo + dyw)) - slice.xbottom
+                yt = yo + dyw - ((xbottom + dyt - 2) / 2)
+                yc = (2 * (yo + dyw)) - xbottom
             
-            xl = xo + slice.xleft
-            xr = xo + dxw - slice.xright
+            xl = xo  + slice.xleft
+            xr = dxw - slice.xright - label.right
               
             self._layout_items ( xl, xr, yc, yt, dyt - 4 )
             
@@ -1511,45 +1515,47 @@ class ListCanvasItem ( ListCanvasPanel ):
     def _set_cursor ( self, x, y ):
         """ Sets the correct mouse cursor for a specified mouse position.
         """
-        n      = 3
+        n      = 4
+        theme  = self.theme
+        border = theme.border
         cursor = wx.CURSOR_ARROW
         dx, dy = self.size
         mode   = 0
-        if (x >= 0) and (x < dx) and (y >= 0) and (y < dy):
+        if ((x >= border.left) and (x < (dx - border.right)) and 
+            (y >= border.top)  and (y < (dy - border.bottom))):
             adapter = self.canvas.adapter
             
             # Check if the pointer is in a valid 'resize' position:
             if adapter.get_can_resize( self.object ):
-                if x < n:
+                if x < (border.left + n):
                     cursor = wx.CURSOR_SIZEWE
                     mode   = 5
-                    if y < n:
+                    if y < (border.top + n):
                         cursor = wx.CURSOR_SIZENWSE
                         mode   = 15
-                    elif y >= (dy - n):
+                    elif y >= (dy - border.bottom - n):
                         cursor = wx.CURSOR_SIZENESW
                         mode   = 7
-                elif x >= (dx - n):
+                elif x >= (dx - border.right - n):
                     cursor = wx.CURSOR_SIZEWE
                     mode   = 1
-                    if y < n:
+                    if y < (border.top + n):
                         cursor = wx.CURSOR_SIZENESW
                         mode   = 11
-                    elif y >= (dy - n):
+                    elif y >= (dy - border.bottom - n):
                         cursor = wx.CURSOR_SIZENWSE
                         mode   = 3
-                elif (y < n) or (y >= (dy - n)):
+                elif (y < (border.top + n)) or (y >= (dy - border.bottom - n)):
                     cursor = wx.CURSOR_SIZENS
                     mode   = 2
-                    if y < n:
+                    if y < (border.top + n):
                         mode = 10
                  
             # If not, check if the pointer is in a valid 'move' position:
             if (mode == 0) and adapter.get_can_move( self.object ):
-                theme = self.theme
                 slice = theme.image_slice
-                if ((y < max( slice.xtop + theme.margins.top, 6)) or
-                    (y >= (dy - max( slice.xbottom - theme.margins.bottom, 
+                if ((y < max( slice.xtop + theme.content.top, 6)) or
+                    (y >= (dy - max( slice.xbottom - theme.content.bottom, 
                                      6 )))):
                     mode = MOVE_MODE
                 
@@ -2627,7 +2633,7 @@ class ListCanvasEditor ( BasicEditorFactory ):
     features = List
     
     # The theme to use for the list canvas:
-    theme = ATheme( Theme( 'default_canvas', offset = ( 0, 2 ) ) )
+    theme = ATheme( Theme( 'default_canvas', label = ( 0, 2 ) ) )
     
     # The snapping information to use for the list canvas:
     snap_info = Instance( SnapInfo, () )
