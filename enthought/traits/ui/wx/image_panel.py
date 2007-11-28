@@ -17,7 +17,7 @@
 import wx
 
 from enthought.traits.api \
-    import Str, Property, Instance, cached_property, on_trait_change
+    import Str, Property, Instance, Bool, cached_property, on_trait_change
     
 from themed_window \
     import ThemedWindow
@@ -40,6 +40,9 @@ class ImagePanel ( ThemedWindow ):
     
     # The optional text to display in the top or bottom of the image slice:
     text = Str( event = 'updated' )
+    
+    # Can the application change the theme contents?
+    mutable_theme = Bool( False )
     
     # Is the image panel capable of displaying text?
     can_show_text = Property
@@ -81,6 +84,12 @@ class ImagePanel ( ThemedWindow ):
         control.SetBackgroundColour( control._image_slice.bg_color )
         
         return control
+        
+    def layout ( self ):
+        """ Lays out the contents of the image panel.
+        """
+        self.control.Layout()
+        self.control.Refresh()
         
     #-- Property Implementations -----------------------------------------------
     
@@ -136,6 +145,17 @@ class ImagePanel ( ThemedWindow ):
         """
         if self.control is not None:
             self.control.Refresh()
+    
+    def _mutable_theme_changed ( self, state ):
+        """ Handles a change to the 'mutable_theme' trait.
+        """
+        self.on_trait_change( self._theme_modified,
+            'theme.[border.-,content.-,label.-,alignment,content_color,'
+            'label_color]', remove = not state )
+        
+    def _theme_modified ( self ):
+        if self.control is not None:
+            self.layout()
 
     def _theme_changed ( self, theme ):
         """ Handles the 'theme' trait being changed.
@@ -207,35 +227,15 @@ class ImagePanel ( ThemedWindow ):
         """ Returns the adjusted size of its children, taking into account the
             image slice border.
         """
-        slice = self.theme.image_slice
-        sizer = self.control.GetSizer()
+        slice   = self.theme.image_slice
+        content = self.theme.content
+        sizer   = self.control.GetSizer()
         return wx.Size( dx + min( slice.left, slice.xleft )   + 
                              min( slice.right, slice.xright ) + 
-                             sizer._left_padding + sizer._right_padding,
+                             content.left + content.right,
                         dy + min( slice.top, slice.xtop )       +
                              min( slice.bottom, slice.xbottom ) +
-                             sizer._top_padding + sizer._bottom_padding )
-                             
-#-------------------------------------------------------------------------------
-#  'EditableImagePanel' class:
-#-------------------------------------------------------------------------------
-
-class EditableImagePanel ( ImagePanel ):
-    """ A verison of the the Image Panel that updates itself whenever any aspect
-        of its associated Theme changes. This is useful for creating a theme
-        editor, since it can be used to provide immediate user feedback as
-        changes are made to the theme.
-    """
-    
-    #-- Event Handlers ---------------------------------------------------------
-    
-    @on_trait_change( 'theme.[border.-,content.-,label.-,alignment,text_color,label_color]')
-    def _theme_modified ( self ):
-        """ Handles a change to the theme that requires the control to be 
-            updated.
-        """
-        if self.control is not None:
-            self.control.Refresh()
+                             content.top + content.bottom )
     
 #-------------------------------------------------------------------------------
 #  'ImageSizer' class:
@@ -255,19 +255,11 @@ class ImageSizer ( wx.PySizer ):
         """
         super( ImageSizer, self ).__init__()
         
+        # Save a reference to the theme:
+        self._theme = theme
+        
         # Save the ImageSlice object which determines the inset border size:
         self._image_slice = theme.image_slice
-        
-        # Save the padding information:
-        content = theme.content
-        if content is not None:
-            self._left_padding   = content.left
-            self._right_padding  = content.right
-            self._top_padding    = content.top
-            self._bottom_padding = content.bottom
-        else:
-            self._left_padding   = self._right_padding = self._top_padding = \
-            self._bottom_padding = 0
 
     #---------------------------------------------------------------------------
     #  Calculates the minimum size needed by the sizer:
@@ -284,14 +276,15 @@ class ImageSizer ( wx.PySizer ):
             else:
                 dx, dy = item.GetWindow().GetBestSize()
                 
-        slice = self._image_slice
+        slice   = self._image_slice
+        content = self._theme.content
         
         return wx.Size( max( slice.left + slice.right,
                              slice.xleft + slice.xright + 
-                             self._left_padding + self._right_padding + dx ),
+                             content.left + content.right + dx ),
                         max( slice.top + slice.bottom,
                              slice.xtop + slice.xbottom + 
-                             self._top_padding + self._bottom_padding + dy ) )
+                             content.top + content.bottom + dy ) )
 
     #---------------------------------------------------------------------------
     #  Layout the contents of the sizer based on the sizer's current size and
@@ -302,15 +295,16 @@ class ImageSizer ( wx.PySizer ):
         """ Layout the contents of the sizer based on the sizer's current size
             and position.
         """
-        x,   y = self.GetPositionTuple()
-        dx, dy = self.GetSizeTuple()
-        slice  = self._image_slice
-        left   = slice.xleft + self._left_padding
-        top    = slice.xtop  + self._top_padding
+        x,   y  = self.GetPositionTuple()
+        dx, dy  = self.GetSizeTuple()
+        slice   = self._image_slice
+        content = self._theme.content
+        left    = slice.xleft + content.left
+        top     = slice.xtop  + content.top
         ix, iy, idx, idy = ( x + left, 
                              y + top,
-                             dx - left - slice.xright  - self._right_padding,
-                             dy - top  - slice.xbottom - self._bottom_padding )
+                             dx - left - slice.xright  - content.right,
+                             dy - top  - slice.xbottom - content.bottom )
                          
         for item in self.GetChildren():
             if item.IsSizer():

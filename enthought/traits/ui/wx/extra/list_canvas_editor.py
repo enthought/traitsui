@@ -387,8 +387,12 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     # > 1: Use int(value) as the actual x or y coordinate specified in pixels.
     position = Tuple( Float, Float )
     
-    # Specified the tooltip to display for the current list canvas item:
+    # Specifies the tooltip to display for the current list canvas item:
     tooltip = Str
+    
+    # Specifies whether the themes used by the list canvas item are mutable or
+    # not (i.e. whether the theme's contents are changeable or not):
+    mutable_theme = Bool( False )
     
     #-- Events fired by the editor ---------------------------------------------
     
@@ -569,6 +573,13 @@ class ListCanvasAdapter ( HasPrivateTraits ):
             mouse pointer is over its view on the canvas.
         """
         return self._result_for( 'get_tooltip', item )
+                
+    def get_mutable_theme ( self, item ):     
+        """ Returns whether or not the themes used by the list canvas item are
+            mutable or not (i.e. whether the theme's contents are changeable or
+            not).
+        """
+        return self._result_for( 'get_mutable_theme', item )
                 
     def set_closed ( self, item ):     
         """ Notifies that the specified item has been closed on the canvas.
@@ -846,7 +857,7 @@ class ListCanvasPanel ( ImagePanel ):
     #-- Private Traits ---------------------------------------------------------
     
     # The layout bounds dictionary:
-    layout = Any( {} )
+    layout_items = Any( {} )
  
     #-- ThemedWindow Method Overrides ------------------------------------------
     
@@ -857,8 +868,19 @@ class ListCanvasPanel ( ImagePanel ):
             if item is None:
                 self.control.Refresh()
             else:
-                self.control.RefreshRect( wx.Rect( *self.layout[ item ] ), 
-                                          False )
+                bounds = self.layout_items.get( item )
+                if bounds is not None:  
+                    self.control.RefreshRect( wx.Rect( *bounds ), False )
+                    
+    #-- ImagePanel Method Overrides --------------------------------------------
+    
+    def layout ( self ):
+        """ Lays out the contents of the control.
+        """
+        control = self.control
+        control.SetSize( control.GetSizer().CalcMin() ) 
+        self._layout()
+        super( ListCanvasPanel, self ).layout()
     
     #-- wx.Python Event Handlers -----------------------------------------------
            
@@ -873,7 +895,7 @@ class ListCanvasPanel ( ImagePanel ):
         dc, slice = super( ImagePanel, self )._paint( event )
         
         # Draw each item in the layout dictionary:
-        for name, bounds in self.layout.items():
+        for name, bounds in self.layout_items.items():
             x, y, dx, dy = bounds
             
             # Check if the item is defined by a bitmap:
@@ -885,10 +907,17 @@ class ListCanvasPanel ( ImagePanel ):
                 # Otherwise, it must be a text string:
                 text = getattr( self, name ).strip()
                 if text != '':
+                    dc.SetFont( self.control.GetFont() )
                     dc.SetBackgroundMode( wx.TRANSPARENT )
                     dc.SetTextForeground( slice.label_color )
-                    dc.SetFont( self.control.GetFont() )
                     dc.SetClippingRegion( x, y, dx, dy )
+                    alignment = self.theme.alignment
+                    if alignment != 'left':
+                       dxt, dyt, descent, leading = dc.GetFullTextExtent( text )
+                       if alignment == 'right':
+                           x += (dx - dxt)
+                       else:
+                           x += ((dx - dxt) / 2)
                     dc.DrawText( text, x, y )
                     dc.DestroyClippingRegion()
         
@@ -905,7 +934,7 @@ class ListCanvasPanel ( ImagePanel ):
         """ Handles the user pressing the left mouse button.
         """
         # Search for a layout item containing the (x,y) point:
-        for name, bounds in self.layout.items():
+        for name, bounds in self.layout_items.items():
             xb, yb, dxb, dyb = bounds
             if (xb <= x < (xb + dxb)) and (yb <= y < (yb + dyb)):
                 # See if we have a handler for it:
@@ -928,7 +957,7 @@ class ListCanvasPanel ( ImagePanel ):
         """ Handles the left mouse button being released.
         """
         name   = self._pending_button
-        bounds = self.layout.get( name )
+        bounds = self.layout_items.get( name )
         if bounds is not None:
             self._pending_button = None
             xb, yb, dxb, dyb     = bounds
@@ -940,7 +969,7 @@ class ListCanvasPanel ( ImagePanel ):
     def _layout ( self ):
         """ Lays out the contents of the control's title bar.
         """
-        self.layout = {}
+        self.layout_items = {}
         dxt, dyt, descent, leading = self.control.GetFullTextExtent( 'Myj' )
         theme   = self.theme
         slice   = theme.image_slice
@@ -962,7 +991,7 @@ class ListCanvasPanel ( ImagePanel ):
             xl = xo  + slice.xleft
             xr = dxw - slice.xright - label.right
               
-            self._layout_items ( xl, xr, yc, yt, dyt - 4 )
+            self._layout_items( xl, xr, yc, yt, dyt - 4 )
             
     def _layout_items ( self, xl, xr, yc, yt, dyt ):
         """ Must be overridden in sub-class.
@@ -987,7 +1016,7 @@ class ListCanvasPanel ( ImagePanel ):
         else:
             rx = x + dx + 2
             
-        self.layout[ name ] = ( x, (y - dy) / 2, dx, dy )
+        self.layout_items[ name ] = ( x, (y - dy) / 2, dx, dy )
         
         return rx
         
@@ -1252,7 +1281,8 @@ class ListCanvasItem ( ListCanvasPanel ):
         self.theme = getattr( self.canvas.adapter, 'get_theme_' + state )(
                               self.object )
                               
-        # If we have been activate, make sure we are on top of every other item:                              
+        # If we have been activated, make sure that we are on top of every 
+        # other item:                              
         if state == 'active':
             self.control.Raise()
                               
@@ -1595,7 +1625,7 @@ class ListCanvasItem ( ListCanvasPanel ):
         # fixme: Add support for the 'select' button...
         
         # Add the layout information for the title:
-        self.layout[ 'title' ] = ( xl, yt, xr - xl, dyt )
+        self.layout_items[ 'title' ] = ( xl, yt, xr - xl, dyt )
     
 #-------------------------------------------------------------------------------
 #  'ListCanvas' class:
@@ -1690,7 +1720,7 @@ class ListCanvas ( ListCanvasPanel ):
                                                    wx.CLIP_CHILDREN )
                                                    
         canvas.SetBackgroundColour( control.GetBackgroundColour() )
-                                                   
+                                                         
         # Initialize the wx event handlers for the canvas control:                                                   
         init_wx_handlers( self.canvas, self, 'canvas' )
         
@@ -1704,10 +1734,12 @@ class ListCanvas ( ListCanvasPanel ):
     def create_object ( self, object ):
         """ Creates a specified HasTraits object as a new list canvas item.
         """ 
-        result = ListCanvasItem( canvas  = self, 
-                                 hidden  = self.hidden ).set( 
-                                 object  = object,
-                                 monitor = self.adapter.get_monitor( object ) )
+        result = ListCanvasItem( 
+                     canvas        = self, 
+                     hidden        = self.hidden ).set( 
+                     object        = object,
+                     mutable_theme = self.adapter.get_mutable_theme( object ),
+                     monitor       = self.adapter.get_monitor( object ) )
                                          
         self.hidden = False
         
@@ -2407,7 +2439,7 @@ class ListCanvas ( ListCanvasPanel ):
         
         if 'status' in operations:
             # Add the layout information for the title:
-            self.layout[ 'status' ] = ( xl, yt, xr - xl, dyt )
+            self.layout_items[ 'status' ] = ( xl, yt, xr - xl, dyt )
 
     #-- Pyface Menu Interface Implementation -----------------------------------
             
@@ -2550,7 +2582,7 @@ class _ListCanvasEditor ( Editor ):
     #  Trait definitions:  
     #---------------------------------------------------------------------------
         
-    # Is the shell editor is scrollable? This value overrides the default.
+    # Indicate that the editor is resizable. This value overrides the default.
     scrollable = True
     
     #-- Editor Method Overrides ------------------------------------------------

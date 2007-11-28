@@ -62,13 +62,14 @@ class UIEditor ( Editor ):
         self.control   = self.editor_ui.control
         
     #---------------------------------------------------------------------------
-    #  Creates the traits UI for the editor (must be overridden by a subclass):  
+    #  Creates the traits UI for the editor (can be overridden by a subclass):  
     #---------------------------------------------------------------------------
                 
     def init_ui ( self, parent ):
         """ Creates the traits UI for the editor.
         """
-        raise NotImplementedError
+        return self.value.edit_traits( view   = self.trait_view(), 
+                                       parent = parent )
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
