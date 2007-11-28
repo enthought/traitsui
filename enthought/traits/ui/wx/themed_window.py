@@ -17,7 +17,7 @@
 import wx
 
 from enthought.traits.api \
-    import HasPrivateTraits, HasTraits, Instance, Str, Enum, Any
+    import HasPrivateTraits, HasTraits, Instance, Str, Enum, Any, Bool
 
 from enthought.traits.ui.ui_traits \
     import ATheme
@@ -44,6 +44,9 @@ class ThemedWindow ( HasPrivateTraits ):
     
     # Optional controller used for overriding event handling:
     controller = Instance( HasTraits )
+    
+    # Should debugging information be overlaid on the theme?
+    debug = Bool( False )
     
     #-- Public Methods ---------------------------------------------------------
     
@@ -96,6 +99,37 @@ class ThemedWindow ( HasPrivateTraits ):
             if slice2 is not None:
                 wdx, wdy = control.GetClientSizeTuple()
                 slice2.fill( dc, 0, 0, wdx, wdy, True )
+                
+                if self.debug:
+                    dc.SetPen( wx.Pen( wx.RED ) )
+                    dc.SetBrush( wx.TRANSPARENT_BRUSH )
+                    theme  = self.theme
+                    border = theme.border
+                    dc.DrawRectangle( border.left, border.top, 
+                                      wdx - border.right  - border.left, 
+                                      wdy - border.bottom - border.top )
+                    dc.DrawRectangle( border.left + 3, border.top + 3, 
+                                      wdx - border.right  - border.left - 6, 
+                                      wdy - border.bottom - border.top  - 6 )
+                    content = theme.content
+                    x = slice2.xleft + content.left - 1
+                    y = slice2.xtop  + content.top  - 1
+                    dc.DrawRectangle( x, y,
+                           wdx - slice2.xright  - content.right  - x + 1,
+                           wdy - slice2.xbottom - content.bottom - y + 1 )
+                           
+                    label = theme.label
+                    if slice2.xtop >= slice2.xbottom:
+                        top, bottom = 0, slice2.xtop
+                    else:
+                        top, bottom = wdy - slice2.xbottom, slice2.xbottom
+                        
+                    if bottom >= 13:
+                        x = slice2.xleft + label.left - 1
+                        y = top + label.top - 1
+                        dc.DrawRectangle( x, y,
+                            wdx - slice2.xright - label.right  - x + 1,
+                            bottom - label.bottom + 1 )
                 
                 return ( dc, slice2 )
     

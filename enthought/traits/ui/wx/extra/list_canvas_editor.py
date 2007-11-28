@@ -394,6 +394,11 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     # not (i.e. whether the theme's contents are changeable or not):
     mutable_theme = Bool( False )
     
+    # Specifies whether the list canvas item should be drawn in debug mode
+    # (lines showing the theme border, content and label regions are overdrawn
+    # on top of the theme):
+    debug = Bool( False )
+    
     #-- Events fired by the editor ---------------------------------------------
     
     # Event fired when the current list canvas item is closed:
@@ -580,6 +585,13 @@ class ListCanvasAdapter ( HasPrivateTraits ):
             not).
         """
         return self._result_for( 'get_mutable_theme', item )
+    
+    def get_debug ( self, item ):
+        """ Specifies whether the list canvas item should be drawn in debug mode
+            (lines showing the theme border, content and label regions are
+            overdrawn on top of the theme).
+        """
+        return self._result_for( 'get_debug', item )
                 
     def set_closed ( self, item ):     
         """ Notifies that the specified item has been closed on the canvas.
@@ -1734,12 +1746,14 @@ class ListCanvas ( ListCanvasPanel ):
     def create_object ( self, object ):
         """ Creates a specified HasTraits object as a new list canvas item.
         """ 
-        result = ListCanvasItem( 
-                     canvas        = self, 
-                     hidden        = self.hidden ).set( 
-                     object        = object,
-                     mutable_theme = self.adapter.get_mutable_theme( object ),
-                     monitor       = self.adapter.get_monitor( object ) )
+        adapter = self.adapter
+        result  = ListCanvasItem( 
+                      canvas        = self, 
+                      hidden        = self.hidden ).set( 
+                      object        = object,
+                      mutable_theme = adapter.get_mutable_theme( object ),
+                      debug         = adapter.get_debug( object ),
+                      monitor       = adapter.get_monitor( object ) )
                                          
         self.hidden = False
         
