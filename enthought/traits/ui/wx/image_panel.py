@@ -200,7 +200,7 @@ class ImagePanel ( ThemedWindow ):
             cl      = xleft + label.left
             cr      = wdx - xright - label.right
             if (tdyp <= xtop) and (xtop >= xbottom):
-                ty = ltop + ((xtop - lbottom - tdy) / 2)
+                ty = (ltop + xtop - lbottom - tdy) / 2
             elif tdy <= xbottom:
                 ty = wdy + ((ltop - xbottom - lbottom - tdy) / 2)
             else:

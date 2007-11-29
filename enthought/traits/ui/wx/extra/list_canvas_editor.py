@@ -994,7 +994,7 @@ class ListCanvasPanel ( ImagePanel ):
         if (dytp <= xtop) or (dytp <= xbottom):
             dxw, dyw = self.control.GetClientSizeTuple()
             if xtop >= xbottom:
-                yt = ltop + ((xtop - lbottom - dyt) / 2)
+                yt = (ltop + xtop - lbottom - dyt) / 2
             else:
                 yt = dyw + ((ltop - xbottom - lbottom - dyt) / 2)
             yc = yt + (dyt / 2)

@@ -175,7 +175,7 @@ class TabularAdapter ( HasPrivateTraits ):
     dropped = Enum( 'after', 'before' )
     
     # The font for a row item:
-    font = Font
+    font = Font( None )
     
     # The text color for a row item:
     text_color = Property
@@ -627,6 +627,9 @@ class _TabularEditor ( Editor ):
     
     #-- Trait Definitions ------------------------------------------------------
     
+    # The event fired when a table update is needed:
+    update = Event
+    
     # The current set of selected items (which one is used depends upon the 
     # initial state of the editor factory 'multi_select' trait):
     selected       = Any
@@ -748,6 +751,8 @@ class _TabularEditor ( Editor ):
             self.sync_value( factory.selected_row, 'selected_row', 'both' )
             
         # Synchronize other interesting traits as necessary:
+        self.sync_value( factory.update, 'update', 'from' )
+        
         self.sync_value( factory.activated,     'activated',     'to' )
         self.sync_value( factory.activated_row, 'activated_row', 'to' )
             
@@ -817,7 +822,8 @@ class _TabularEditor ( Editor ):
                               remove = True )
         
         super( _TabularEditor, self ).dispose()
-                        
+             
+    @on_trait_change( 'update' )
     def update_editor ( self ):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -1525,6 +1531,10 @@ class TabularEditor ( BasicEditorFactory ):
     
     # Should column headers (i.e. titles) be displayed?
     show_titles = Bool( True )
+    
+    # The optional extended name of the trait used to indicate that a complete
+    # table update is needed:
+    update = Str
     
     # The optional extended name of the trait to synchronize the selection 
     # values with:
