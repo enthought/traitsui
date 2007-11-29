@@ -186,40 +186,44 @@ class ImagePanel ( ThemedWindow ):
             dc.SetFont( self.control.GetFont() )
             
             alignment = theme.alignment
+            label     = theme.label
             wdx, wdy  = self.control.GetClientSizeTuple()
             tdx, tdy, descent, leading = self.text_size
-            tx = None
-            if ((tdy + 4) <= slice.xtop) and (slice.xtop >= slice.xbottom):
-                ty = (slice.xtop - tdy) / 2
-            elif (tdy + 4) <= slice.xbottom:
-                ty = wdy - ((slice.xbottom + tdy) / 2)
+            tx      = None
+            xleft   = slice.xleft
+            xright  = slice.xright
+            xtop    = slice.xtop
+            xbottom = slice.xbottom
+            ltop    = label.top
+            lbottom = label.bottom
+            tdyp    = tdy + ltop + lbottom
+            cl      = xleft + label.left
+            cr      = wdx - xright - label.right
+            if (tdyp <= xtop) and (xtop >= xbottom):
+                ty = ltop + ((xtop - lbottom - tdy) / 2)
+            elif tdy <= xbottom:
+                ty = wdy + ((ltop - xbottom - lbottom - tdy) / 2)
             else:
-                ty = (wdy + slice.xtop - slice.xbottom - tdy) / 2
-                if slice.xleft >= slice.xright:
-                    if alignment == 'left':
-                        tx = 4
-                    elif alignment == 'right':
-                        tx = slice.xleft - tdx - 4
-                    else:
-                        tx = (slice.xleft - tdx) / 2
-                elif alignment == 'left':
-                    tx = wdx - slice.xright + 4
-                elif alignment == 'right':
-                    tx = wdx - tdx - 4
+                ty = (wdy + xtop + label.top - xbottom - label.bottom - tdy) / 2
+                if xleft >= xright:
+                    cl = label.left
+                    cr = xleft - label.right
                 else:
-                    tx = wdx - ((slice.xright + tdx) / 2)
+                    cl = wdx - xright + label.left
+                    cr = wdx - label.right
                     
-            if tx is None:
-                if alignment == 'left':
-                    tx = slice.left + 4
-                elif alignment == 'right':
-                    tx = wdx - tdx - slice.right - 4
-                else:
-                    tx = (wdx + slice.left - slice.right - tdx) / 2
-                
-            # fixme: Might need to set clipping region here...
-            ox, oy = theme.label.left, theme.label.top
-            dc.DrawText( text, tx + ox, ty + oy )
+            # Calculate the x coordinate for the specified alignment type:
+            if alignment == 'left':
+                tx = cl
+            elif alignment == 'right':
+                tx = cr - tdx
+            else:
+                tx = (cl + cr - tdx) / 2
+            
+            # Draw the (clipped) text string:
+            dc.SetClippingRegion( cl, ty, cr - cl, tdy )
+            dc.DrawText( text, tx, ty )
+            dc.DestroyClippingRegion()
         
     #-- Private Methods --------------------------------------------------------
     

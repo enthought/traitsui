@@ -112,24 +112,24 @@ class ThemedWindow ( HasPrivateTraits ):
                                       wdx - border.right  - border.left - 6, 
                                       wdy - border.bottom - border.top  - 6 )
                     content = theme.content
-                    x = slice2.xleft + content.left - 1
-                    y = slice2.xtop  + content.top  - 1
-                    dc.DrawRectangle( x, y,
-                           wdx - slice2.xright  - content.right  - x + 1,
-                           wdy - slice2.xbottom - content.bottom - y + 1 )
+                    x = slice2.xleft + content.left
+                    y = slice2.xtop  + content.top
+                    dc.DrawRectangle( x - 1, y - 1,
+                           wdx - slice2.xright  - content.right  - x + 2,
+                           wdy - slice2.xbottom - content.bottom - y + 2 )
                            
                     label = theme.label
                     if slice2.xtop >= slice2.xbottom:
-                        top, bottom = 0, slice2.xtop
+                        y, dy = 0, slice2.xtop
                     else:
-                        top, bottom = wdy - slice2.xbottom, slice2.xbottom
+                        y, dy = wdy - slice2.xbottom, slice2.xbottom
                         
-                    if bottom >= 13:
-                        x = slice2.xleft + label.left - 1
-                        y = top + label.top - 1
-                        dc.DrawRectangle( x, y,
-                            wdx - slice2.xright - label.right  - x + 1,
-                            bottom - label.bottom + 1 )
+                    if dy >= 13:
+                        x  = slice2.xleft + label.left
+                        y += label.top
+                        dc.DrawRectangle( x - 1, y - 1,
+                            wdx - slice2.xright - label.right - x + 2,
+                            dy - label.bottom - label.top + 2 )
                 
                 return ( dc, slice2 )
     

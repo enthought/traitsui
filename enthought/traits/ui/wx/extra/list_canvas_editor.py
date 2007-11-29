@@ -984,26 +984,25 @@ class ListCanvasPanel ( ImagePanel ):
         self.layout_items = {}
         dxt, dyt, descent, leading = self.control.GetFullTextExtent( 'Myj' )
         theme   = self.theme
+        label   = theme.label
         slice   = theme.image_slice
-        dyt    += 4
         xtop    = slice.xtop
         xbottom = slice.xbottom
-        if (dyt <= xtop) or (dyt <= xbottom):
+        ltop    = label.top
+        lbottom = label.bottom
+        dytp    = dyt + ltop + lbottom
+        if (dytp <= xtop) or (dytp <= xbottom):
             dxw, dyw = self.control.GetClientSizeTuple()
-            label    = theme.label
-            xo       = label.left
-            yo       = label.top
-            if (dyt <= xtop) and (xtop >= xbottom):
-                yt = yo + ((xtop - dyt + 4) / 2)
-                yc = (2 * yo) + xtop
+            if xtop >= xbottom:
+                yt = ltop + ((xtop - lbottom - dyt) / 2)
             else:
-                yt = yo + dyw - ((xbottom + dyt - 2) / 2)
-                yc = (2 * (yo + dyw)) - xbottom
+                yt = dyw + ((ltop - xbottom - lbottom - dyt) / 2)
+            yc = yt + (dyt / 2)
             
-            xl = xo  + slice.xleft
+            xl = slice.xleft + label.left
             xr = dxw - slice.xright - label.right
               
-            self._layout_items( xl, xr, yc, yt, dyt - 4 )
+            self._layout_items( xl, xr, yc, yt, dyt )
             
     def _layout_items ( self, xl, xr, yc, yt, dyt ):
         """ Must be overridden in sub-class.
