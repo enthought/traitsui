@@ -2629,7 +2629,7 @@ class _ListCanvasEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        if self._inited is None:
+        if (self._inited is None) or (self.control is None):
             self._inited = True
             do_later( self.update_editor )
             return
