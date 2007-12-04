@@ -111,8 +111,10 @@ class Editor ( UIEditor ):
     def _enabled_changed ( self, enabled ):
         """ Handles the **enabled** state of the editor being changed.
         """
-        self.control.Enable( enabled )
-        self.control.Refresh()
+        control = self.control
+        if control is not None:
+            control.Enable( enabled )
+            control.Refresh()
             
     #---------------------------------------------------------------------------
     #  Handles the 'visible' state of the editor being changed:
