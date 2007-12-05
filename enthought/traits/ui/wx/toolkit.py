@@ -32,8 +32,7 @@ if _app is None:
     _app = wx.PySimpleApp()
 
 from enthought.traits.api \
-    import HasPrivateTraits, Instance, Property, Delegate, Category, \
-           cached_property
+    import HasPrivateTraits, Instance, Property, Category, cached_property
 
 from enthought.traits.trait_notifiers \
     import set_ui_handler
@@ -766,16 +765,44 @@ class WXTheme ( Category, Theme ):
     """
     
     # The color to use for content text:
-    content_color = Delegate( 'image_slice' )
+    content_color = Property
     
     # The color to use for label text:
-    label_color = Delegate( 'image_slice' )
+    label_color = Property
     
     # The image slice used to draw the theme:
     image_slice = Property( depends_on = 'image' )
     
     #-- Property Implementations -----------------------------------------------
     
+    def _get_content_color ( self ):
+        if self._content_color is None:
+            color  = wx.BLACK
+            islice = self.image_slice
+            if islice is not None:
+                color = islice.content_color
+                
+            self._content_color = color
+            
+        return self._content_color
+        
+    def _set_content_color ( self, color ):
+        self._content_color = color
+        
+    def _get_label_color ( self ):
+        if self._label_color is None:
+            color  = wx.BLACK
+            islice = self.image_slice
+            if islice is not None:
+                color = islice.label_color
+                
+            self._label_color = color
+            
+        return self._label_color
+        
+    def _set_label_color ( self, color ):
+        self._label_color = color
+        
     @cached_property
     def _get_image_slice ( self ):
         from image_slice import image_slice_for
