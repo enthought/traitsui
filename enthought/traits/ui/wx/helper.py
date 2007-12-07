@@ -245,7 +245,21 @@ def init_wx_handlers ( control, object, prefix = '' ):
         method = getattr( object, prefix + name, None )
         if method is not None:
             handler( control, method )
-    
+
+
+#-------------------------------------------------------------------------------
+#  Safely tries to pop up an FBI window if enthought.debug is installed
+#-------------------------------------------------------------------------------
+
+def open_fbi():
+    try:
+        from enthought.debug.fbi import if_fbi
+        if not if_fbi():
+            import traceback
+            traceback.print_exc()
+    except ImportError:
+        pass
+
 #-------------------------------------------------------------------------------
 #  'GroupEditor' class:
 #-------------------------------------------------------------------------------

@@ -39,14 +39,14 @@ from enthought.pyface.image_list \
     import ImageList
 
 from enthought.traits.api \
-    import HasTraits, HasStrictTraits, Trait, Any, Dict, true, false, Tuple, \
-           Int, List, Instance, Str, Event, Enum
+    import HasStrictTraits, Any, Dict, true, false, Tuple, \
+           Int, List, Instance, Str, Event, Enum, TraitError
 
 from enthought.traits.trait_base \
     import enumerate
 
 from enthought.traits.ui.api \
-    import View, Item, TreeNode, ObjectTreeNode, MultiTreeNode
+    import View, TreeNode, ObjectTreeNode, MultiTreeNode
     
 from enthought.traits.ui.dock_window_theme \
     import DockWindowTheme
@@ -60,6 +60,9 @@ from enthought.traits.ui.menu \
 from enthought.pyface.dock.core \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
+from constants \
+    import OKColor
+
 from editor \
     import Editor
 
@@ -67,7 +70,7 @@ from editor_factory \
     import EditorFactory
 
 from helper \
-    import Orientation, traits_ui_panel
+    import open_fbi, Orientation, traits_ui_panel
 
 #-------------------------------------------------------------------------------
 #  Global data:
@@ -1603,16 +1606,14 @@ class SimpleEditor ( Editor ):
                 if not eval( action.defined_when, globals(), self._context ):
                     return False
             except:
-                from enthought.debug.fbi import if_fbi
-                if_fbi()
+                open_fbi()
 
         if action.visible_when != '':
             try:
                 if not eval( action.visible_when, globals(), self._context ):
                     return False
             except:
-                from enthought.debug.fbi import if_fbi
-                if_fbi()
+                open_fbi()
 
         return True
 
@@ -1684,8 +1685,7 @@ class SimpleEditor ( Editor ):
                 if not eval( condition, globals(), self._context ):
                     value = False
             except:
-                from enthought.debug.fbi import if_fbi
-                if_fbi()
+                open_fbi()
             setattr( object, trait, value )
 
 #----- Menu event handlers: ----------------------------------------------------

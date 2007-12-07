@@ -73,7 +73,8 @@ from table_model \
     import TableModel, TraitGridSelection
 
 from helper \
-    import Orientation, traits_ui_panel
+    import open_fbi, Orientation, traits_ui_panel
+
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -834,7 +835,7 @@ class TableEditor ( Editor ):
             for index in indices:
                 object = self.create_new_row()
                 if object is None:
-                    if in_row_mode:
+                    if self.in_row_mode:
                         self.set_selection()
                     return
                     
@@ -1555,16 +1556,14 @@ class TableEditor ( Editor ):
                 if not eval( action.defined_when, globals(), self._context ):
                     return False
             except:
-                from enthought.debug.fbi import if_fbi
-                if_fbi()
+                open_fbi()
 
         if action.visible_when != '':
             try:
                 if not eval( action.visible_when, globals(), self._context ):
                     return False
             except:
-                from enthought.debug.fbi import if_fbi
-                if_fbi()
+                open_fbi()
 
         return True
 
@@ -1634,8 +1633,7 @@ class TableEditor ( Editor ):
                 if not eval( condition, globals(), self._menu_context ):
                     value = False
             except:
-                from enthought.debug.fbi import if_fbi
-                if_fbi()
+                open_fbi()
             setattr( object, trait, value )
 
 #-- Private Methods: -----------------------------------------------------------
