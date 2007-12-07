@@ -449,8 +449,9 @@ class GUIToolkit ( Toolkit ):
                               None )
 
         if method is None:
-            method = getattr( handler, 'on_%s' % suffix, None )
-
+            method = (getattr( handler, 'on_%s' % suffix, None ) or
+                      getattr( handler, 'on_any_event',   None ))
+            
         if (method is None) or (method( ui.info, owner, event ) is False):
             event.Skip()
 

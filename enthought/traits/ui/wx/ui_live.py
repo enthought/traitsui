@@ -260,9 +260,10 @@ class LiveWindow ( BaseDialog ):
                     
             sw_sizer.Add( b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5 )
         
-        # Add the menu bar and tool bar (if any):
+        # Add the menu bar, tool bar and status bar (if any):
         self.add_menubar()
         self.add_toolbar()
+        self.add_statusbar()
          
         # Lay all of the dialog contents out:
         window.SetSizer( sw_sizer )

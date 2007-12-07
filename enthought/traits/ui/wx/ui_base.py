@@ -132,7 +132,43 @@ class BaseDialog ( object ):
         if not isinstance( icon, ImageResource ):
             icon = ImageResource( 'frame.ico' )
         self.control.SetIcon( icon.create_icon() )
+        
+    #---------------------------------------------------------------------------
+    #  Adds a status bar to the dialog:
+    #---------------------------------------------------------------------------
 
+    def add_statusbar ( self ):
+        """ Adds a status bar to the dialog.
+        """
+        ui        = self.ui
+        statusbar = ui.view.statusbar
+        context   = ui.context
+        if statusbar is not None:
+            widths  = []
+            control = wx.StatusBar( self.control )
+            control.SetFieldsCount( len( statusbar ) )
+            for i, item in enumerate( statusbar ):
+                width = abs( item.width )
+                if width <= 1.0:
+                    widths.append( -max( 1, int( 1000 * width ) ) )
+                else:
+                    widths.append( int( width ) )
+                    
+                def set_status_text ( text ):
+                    control.SetStatusText( text, i )
+                    
+                name = item.name
+                set_status_text( ui.get_extended_value( name ) )  
+                col    = name.find( '.' )
+                object = 'object'
+                if col >= 0:
+                    object = name[ : col ]
+                    name   = name[ col + 1: ]
+                context[ object ].on_trait_change( set_status_text, name ) 
+                    
+            control.SetStatusWidths( widths )
+            self.control.SetStatusBar( control )
+        
     #---------------------------------------------------------------------------
     #  Adds a menu bar to the dialog:
     #---------------------------------------------------------------------------
