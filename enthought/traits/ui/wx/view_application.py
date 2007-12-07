@@ -102,8 +102,11 @@ class ViewApplication ( wx.PySimpleApp ):
         wx.InitAllImageHandlers()
 
         if os.environ.get( 'ENABLE_FBI' ) is not None:
-            from enthought.developer.helper.fbi import enable_fbi
-            enable_fbi()
+            try:
+                from enthought.developer.helper.fbi import enable_fbi
+                enable_fbi()
+            except:
+                pass
             
         if redirect_filename.strip() != '':
             super( ViewApplication, self ).__init__( 1, redirect_filename )
