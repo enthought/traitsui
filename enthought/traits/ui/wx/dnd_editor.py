@@ -40,11 +40,15 @@ from editor_factory \
 from enthought.util.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
     
-from enthought.io \
-    import File
+try:
+    from enthought.io import File
+except ImportError:
+    File = None
     
-from enthought.naming.api \
-    import Binding
+try:
+    from enthought.naming.api import Binding
+except ImportError:
+    Binding = None
            
 from enthought.pyface.image_resource \
     import ImageResource
@@ -214,10 +218,10 @@ class SimpleEditor ( Editor ):
         """
         if isinstance( data, list ):
             
-            if isinstance( data[0], Binding ):
+            if Binding is not None and if isinstance( data[0], Binding ):
                 data = [ item.obj for item in data ]
                 
-            if isinstance( data[0], File ):
+            if File is not None and isinstance( data[0], File ):
                 data = [ item.absolute_path for item in data ]
                 if not self._is_file:
                     result = []
@@ -228,10 +232,10 @@ class SimpleEditor ( Editor ):
                     data = result
                             
         else:
-            if isinstance( data, Binding ):
+            if Binding is not None and isinstance( data, Binding ):
                 data = data.obj
                 
-            if isinstance( data, File ):
+            if File is not None and isinstance( data, File ):
                 data = data.absolute_path
                 if not self._is_file:
                     object = self._unpickle( data )
