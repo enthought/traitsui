@@ -144,8 +144,9 @@ class BaseDialog ( object ):
         statusbar = ui.view.statusbar
         context   = ui.context
         if statusbar is not None:
-            widths  = []
-            control = wx.StatusBar( self.control )
+            widths    = []
+            listeners = []
+            control   = wx.StatusBar( self.control )
             control.SetFieldsCount( len( statusbar ) )
             for i, item in enumerate( statusbar ):
                 width = abs( item.width )
@@ -154,20 +155,27 @@ class BaseDialog ( object ):
                 else:
                     widths.append( int( width ) )
                     
-                def set_status_text ( text ):
-                    control.SetStatusText( text, i )
-                    
-                name = item.name
-                set_status_text( ui.get_extended_value( name ) )  
+                set_text = self._set_status_text( control, i )
+                name     = item.name
+                set_text( ui.get_extended_value( name ) )  
                 col    = name.find( '.' )
                 object = 'object'
                 if col >= 0:
                     object = name[ : col ]
                     name   = name[ col + 1: ]
-                context[ object ].on_trait_change( set_status_text, name ) 
+                object = context[ object ]
+                object.on_trait_change( set_text, name )
+                listeners.append( ( object, set_text, name ) )
                     
             control.SetStatusWidths( widths )
             self.control.SetStatusBar( control )
+            ui._statusbar = listeners
+            
+    def _set_status_text ( self, control, i ):
+        def set_status_text ( text ):
+            control.SetStatusText( text, i )
+            
+        return set_status_text
         
     #---------------------------------------------------------------------------
     #  Adds a menu bar to the dialog:
