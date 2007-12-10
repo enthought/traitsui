@@ -218,7 +218,7 @@ class SimpleEditor ( Editor ):
         """
         if isinstance( data, list ):
             
-            if Binding is not None and if isinstance( data[0], Binding ):
+            if Binding is not None and isinstance( data[0], Binding ):
                 data = [ item.obj for item in data ]
                 
             if File is not None and isinstance( data[0], File ):
