@@ -28,7 +28,7 @@ from os.path \
     import abspath, splitext, isfile, exists
     
 from enthought.traits.api \
-    import List, Str, Event, Bool, Int, Any, on_trait_change
+    import List, Str, Event, Bool, Int, Any, on_trait_change, TraitError
     
 from enthought.traits.ui.api \
     import View, Group
