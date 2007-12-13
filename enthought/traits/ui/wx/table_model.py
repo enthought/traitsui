@@ -665,7 +665,7 @@ class TableModel ( GridModel ):
         """
         row_count = self.get_rows_count()
         if (pos + num_rows) > row_count:
-            num_rows = rows_count - pos
+            num_rows = row_count - pos
 
         return self._delete_rows_from_model( pos, num_rows )
 
