@@ -29,19 +29,18 @@ from os \
     import popen4, environ
     
 from os.path \
-    import abspath, basename, splitext, split, join, exists, isdir
+    import abspath, splitext, split, join, exists, isdir
 
 from threading \
     import Thread
                          
 from enthought.traits.api \
-    import Trait, HasTraits, Category, HasStrictTraits, HasPrivateTraits, \
-           Category, Str, Range, List, Instance, Trait, Event, Bool, Any, \
-           true, false, Regex, Code
+    import HasTraits, HasStrictTraits, HasPrivateTraits, \
+           Str, List, Instance, Event, Any, true, false, Regex, Code
            
 from enthought.traits.ui.api \
-    import View, Group, Item, UIInfo, ViewSubElement, TreeEditor, TreeNode, \
-           EnumEditor, Handler, CodeEditor, EditorFactory, TextEditor, HSplit, \
+    import View, Group, Item, UIInfo, TreeEditor, TreeNode, \
+           EnumEditor, Handler, EditorFactory, TextEditor, HSplit, \
            VSplit, message
            
 from enthought.traits.ui.menu \
@@ -1588,7 +1587,7 @@ class EditHandler ( Handler ):
             rc = true
         except:
             wx.MessageDialog( self._frame, 
-                              'Could not save to file: ' + filename,
+                              'Could not save to file: ' + self._export_filename,
                               'Error', 
                               style = wx.OK | wx.ICON_ERROR ).ShowModal()
             rc = False

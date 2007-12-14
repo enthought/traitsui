@@ -36,7 +36,6 @@ class Person ( HasStrictTraits ):
     age        = Range( 0, 120 )
     weight     = Range( 0.0, 500.0 )
     eye_color  = Color( 'blue' )
-    rgb_color  = RGBColor( 'red' )
     rgba_color = RGBAColor( 'green' )
     sex        = Trait( 'male', 'female' )
     code       = Str( editor = CodeEditor )

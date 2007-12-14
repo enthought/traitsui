@@ -18,7 +18,7 @@
 #-------------------------------------------------------------------------------
 
 from enthought.traits.api \
-    import tdb, HasTraits, HasStrictTraits, Property, Instance, Str, CTrait, \
+    import tdb, HasTraits, HasStrictTraits, Instance, Str, CTrait, \
            List
            
 from enthought.traits.ui.api \
