@@ -17,17 +17,18 @@ def etsdep(p, min, max=None, literal=False):
 
 
 # Declare our ETS project dependencies.
-TRAITS = etsdep('enthought.traits', '3.0.0b1')
+ENTHOUGHTBASE = etsdep('EnthoughtBase', '3.0.0b1')
+TRAITS = etsdep('Traits', '3.0.0b1')
+TRAITSGUI = etsdep('TraitsGUI', '3.0.0b1')
 
 
 setup(
-    author = 'David C. Morrill',
-    author_email = 'dmorrill@enthought.com',
+    author = 'Enthought, Inc',
+    author_email = 'info@enthought.com',
     dependency_links = [
         'http://code.enthought.com/enstaller/eggs/source',
-        'http://code.enthought.com/enstaller/eggs/source/unstable',
         ],
-    description = 'WxPython backend for enthought.traits',
+    description = 'WxPython backend for Traits and Pyface.',
     extras_require = {
         # All non-ets dependencies should be in this extra to ensure users can
         # decide whether to require them or not.
@@ -37,21 +38,25 @@ setup(
         },
     include_package_data = True,
     install_requires = [
+        ENTHOUGHTBASE,
         TRAITS,
+        TRAITSGUI,
         ],
     license = 'BSD',
-    name = 'enthought.traits.ui.wx',
+    name = 'TraitsBackendWX',
     namespace_packages = [
-        "enthought",
-        "enthought.traits",
-        "enthought.traits.ui",
+        'enthought',
+        'enthought.pyface',
+        'enthought.pyface.ui',
+        'enthought.traits',
+        'enthought.traits.ui',
         ],
     packages = find_packages(),
     tests_require = [
         'nose >= 0.9',
         ],
     test_suite = 'nose.collector',
-    url = 'http://code.enthought.com/traits',
+    url = 'http://code.enthought.com/ets',
     version = '3.0.0b1',
     zip_safe = False,
     )
