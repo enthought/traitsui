@@ -17,9 +17,16 @@ def etsdep(p, min, max=None, literal=False):
 
 
 # Declare our ETS project dependencies.
-ENTHOUGHTBASE = etsdep('EnthoughtBase', '3.0.0b1')
-TRAITS = etsdep('Traits', '3.0.0b1')
-TRAITSGUI = etsdep('TraitsGUI', '3.0.0b1')
+ENTHOUGHTBASE_UI = etsdep('EnthoughtBase[ui]', '3.0.0b1')
+MAYAVI = etsdep('Mayavi', '2.0.3a1')
+TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.0.0b1')
+TRAITSGUI_TVTK = etsdep('TraitsGUI[tvtk]', '3.0.0b1')
+TRAITS_UI = etsdep('Traits[ui]', '3.0.0b1')
+
+# The following soft dependencies are handled with appropriate try...except
+# wrappers.
+# AppTools -- used in traits.ui.wx.dnd_editor.py
+# DevTools -- used in traits.ui.wx.helper.py and view_application.py
 
 
 setup(
@@ -30,6 +37,11 @@ setup(
         ],
     description = 'WxPython backend for Traits and Pyface.',
     extras_require = {
+        'tvtk': [
+            MAYAVI,
+            TRAITSGUI_TVTK,
+            ],
+
         # All non-ets dependencies should be in this extra to ensure users can
         # decide whether to require them or not.
         'nonets': [
@@ -38,9 +50,9 @@ setup(
         },
     include_package_data = True,
     install_requires = [
-        ENTHOUGHTBASE,
-        TRAITS,
-        TRAITSGUI,
+        ENTHOUGHTBASE_UI,
+        TRAITSGUI_DOCK,
+        TRAITS_UI,
         ],
     license = 'BSD',
     name = 'TraitsBackendWX',

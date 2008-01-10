@@ -1,0 +1,3 @@
+* Investigate whether we really need such a heavy dependence on TraitsGUI[dock].
+    It's imported in a number of places.
+
