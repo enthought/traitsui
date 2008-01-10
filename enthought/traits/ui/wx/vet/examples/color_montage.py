@@ -18,9 +18,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.enable2.traits.ui.wx.enable_rgba_color_editor import \
-    EnableRGBAColorEditor
-from enthought.traits.ui.api      import Handler, View, Group, Item
+from enthought.traits.ui.api import Handler, View, Group, Item, RGBColorEditor
 from enthought.traits.ui.menu import MenuBar, Menu, Action, Separator
 import enthought.traits.ui
 
@@ -53,13 +51,13 @@ class ColorMontage ( Handler ):
         Group(
             Group(
                 Item(
-                    editor  = EnableRGBAColorEditor(),
+                    editor  = RGBColorEditor(),
                     name    = 'rgba_color',
                     style   = 'custom',
                     padding = -8
                 ),
                 Item(
-                    editor  = EnableRGBAColorEditor( mode = 'hsv' ),
+                    editor  = RGBColorEditor( mode = 'hsv' ),
                     name    = 'rgba_color',
                     style   = 'custom',
                     padding = -8
@@ -69,13 +67,13 @@ class ColorMontage ( Handler ):
             ),
             Group(
                 Item(
-                    editor  = EnableRGBAColorEditor( mode = 'hsv2' ),
+                    editor  = RGBColorEditor( mode = 'hsv2' ),
                     name    = 'rgba_color',
                     style   = 'custom',
                     padding = -8
                 ),
                 Item(
-                    editor  = EnableRGBAColorEditor( mode = 'hsv3' ),
+                    editor  = RGBColorEditor( mode = 'hsv3' ),
                     name    = 'rgba_color',
                     style   = 'custom',
                     padding = -8

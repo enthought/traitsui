@@ -16,10 +16,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.kiva.traits.kiva_font_trait import KivaFont
-from enthought.enable2.traits.api import RGBAColor
 from enthought.traits.api import HasStrictTraits, Trait, Font, Color, \
-                                Str, Range, List, Instance
+                                Str, Range, List, Instance, RGBColor
 from enthought.traits.ui.api import CodeEditor, View
 
 #-------------------------------------------------------------------------------
@@ -36,11 +34,10 @@ class Person ( HasStrictTraits ):
     age        = Range( 0, 120 )
     weight     = Range( 0.0, 500.0 )
     eye_color  = Color( 'blue' )
-    rgba_color = RGBAColor( 'green' )
+    rgb_color = RGBColor( 'green' )
     sex        = Trait( 'male', 'female' )
     code       = Str( editor = CodeEditor )
     wx_font    = Font
-    kiva_font  = KivaFont
     children   = List( Instance( 'Person' ), use_notebook = True )
 
     #---------------------------------------------------------------------------

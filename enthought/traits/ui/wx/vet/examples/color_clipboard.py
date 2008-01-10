@@ -19,9 +19,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.enable2.traits.ui.wx.enable_rgba_color_editor import \
-    EnableRGBAColorEditor
-from enthought.traits.ui.api      import Handler, View, Group, Item
+from enthought.traits.ui.api import Handler, View, Group, Item, RGBColorEditor
 from enthought.traits.ui.menu import MenuBar, Menu, Action, Separator
 import enthought.traits.ui
 
@@ -71,7 +69,7 @@ class ViewHandler ( Handler ):
         Group(
             Group(
                 Item(
-                    editor = EnableRGBAColorEditor(),
+                    editor = RGBColorEditor(),
                     name   = 'color',
                     style  = 'custom'
                 ),
