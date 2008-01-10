@@ -18,7 +18,7 @@ def etsdep(p, min, max=None, literal=False):
 
 # Declare our ETS project dependencies.
 ENTHOUGHTBASE_UI = etsdep('EnthoughtBase[ui]', '3.0.0b1')
-MAYAVI = etsdep('Mayavi', '2.0.3a1')
+MAYAVI = etsdep('Mayavi', '3.0.0a1')
 TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.0.0b1')
 TRAITSGUI_TVTK = etsdep('TraitsGUI[tvtk]', '3.0.0b1')
 TRAITS_UI = etsdep('Traits[ui]', '3.0.0b1')
