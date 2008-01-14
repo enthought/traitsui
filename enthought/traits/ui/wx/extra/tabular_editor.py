@@ -771,6 +771,12 @@ class _TabularEditor ( Editor ):
                                 self.extended_name + '_items', dispatch = 'ui' )
         except:
             pass
+        
+        # If the user has requested automatic update, attempt to set up the
+        # appropriate listeners:
+        if factory.auto_update:
+            self.context_object.on_trait_change( self.update_editor,
+                                self.extended_name + '.+', dispatch = 'ui' )
                                 
         # Create the mapping from user supplied images to wx.ImageList indices:
         for image_resource in factory.images:
@@ -817,6 +823,11 @@ class _TabularEditor ( Editor ):
         
         self.context_object.on_trait_change( self.update_editor,
                                   self.extended_name + '_items', remove = True )
+        
+        if self.factory.auto_update:
+            self.context_object.on_trait_change( self.update_editor,
+                                self.extended_name + '.+', remove = True )
+            
         self.on_trait_change( self._refresh, 'adapter.+update',  remove = True ) 
         self.on_trait_change( self._rebuild_all, 'adapter.columns', 
                               remove = True )
@@ -1535,6 +1546,13 @@ class TabularEditor ( BasicEditorFactory ):
     # The optional extended name of the trait used to indicate that a complete
     # table update is needed:
     update = Str
+    
+    # Should the table update automatically when the table item's contents 
+    # change? Note that in order for this feature to work correctly, the editor
+    # trait should be a list of objects derived from HasTraits. Also, 
+    # performance can be affected when very long lists are used, since enabling
+    # this feature adds and removed Traits listeners to each item in the list.
+    auto_update = Bool( False )
     
     # The optional extended name of the trait to synchronize the selection 
     # values with:
