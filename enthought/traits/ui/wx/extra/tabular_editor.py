@@ -775,8 +775,8 @@ class _TabularEditor ( Editor ):
         # If the user has requested automatic update, attempt to set up the
         # appropriate listeners:
         if factory.auto_update:
-            self.context_object.on_trait_change( self.update_editor,
-                                self.extended_name + '.+', dispatch = 'ui' )
+            self.context_object.on_trait_change( self.refresh_editor,
+                                self.extended_name + '.-', dispatch = 'ui' )
                                 
         # Create the mapping from user supplied images to wx.ImageList indices:
         for image_resource in factory.images:
@@ -825,16 +825,49 @@ class _TabularEditor ( Editor ):
                                   self.extended_name + '_items', remove = True )
         
         if self.factory.auto_update:
-            self.context_object.on_trait_change( self.update_editor,
-                                self.extended_name + '.+', remove = True )
+            self.context_object.on_trait_change( self.refresh_editor,
+                                self.extended_name + '.-', remove = True )
             
         self.on_trait_change( self._refresh, 'adapter.+update',  remove = True ) 
         self.on_trait_change( self._rebuild_all, 'adapter.columns', 
                               remove = True )
         
         super( _TabularEditor, self ).dispose()
+        
+    def _update_changed ( self, event ):
+        """ Handles the 'update' event being fired.
+        """
+        if event is True:
+            self.update_editor()
+        elif isinstance( event, int ):
+            self._refresh_row( event )
+        else:
+            self._refresh_editor( event )
+        
+    def refresh_editor ( self, item, name, old, new ):
+        """ Handles a table item attribute being changed.
+        """
+        self._refresh_editor( item )
+        
+    def _refresh_editor ( self, item ):
+        """ Handles a table item being changed.
+        """
+        adapter      = self.adapter
+        object, name = self.object, self.name
+        agi          = adapter.get_item
+        for row in xrange( adapter.len( object, name ) ):
+            if item is agi( object, name, row ):
+                self._refresh_row( row )
+                return
+                
+        self.update_editor()
+        
+    def _refresh_row ( self, row ):
+        """ Updates the editor control when a specified table row changes.
+        """
+        self.control.RefreshRect(
+             self.control.GetItemRect( row, wx.LIST_RECT_BOUNDS ) )
              
-    @on_trait_change( 'update' )
     def update_editor ( self ):
         """ Updates the editor when the object trait changes externally to the
             editor.
