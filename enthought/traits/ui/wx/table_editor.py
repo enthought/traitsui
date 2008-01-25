@@ -1553,14 +1553,16 @@ class TableEditor ( Editor ):
         """
         if action.defined_when != '':
             try:
-                if not eval( action.defined_when, globals(), self._context ):
+                if not eval( action.defined_when, globals(), 
+                             self._menu_context ):
                     return False
             except:
                 open_fbi()
 
         if action.visible_when != '':
             try:
-                if not eval( action.visible_when, globals(), self._context ):
+                if not eval( action.visible_when, globals(), 
+                             self._menu_context ):
                     return False
             except:
                 open_fbi()
