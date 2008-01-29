@@ -15,7 +15,7 @@
 #------------------------------------------------------------------------------
 
 """ Defines the various text editors and the text editor factory, for the 
-wxPython user interface toolkit.
+    wxPython user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -41,12 +41,11 @@ from editor_factory \
 from constants \
     import OKColor, ErrorColor
 
-
 #-------------------------------------------------------------------------------
 #  Start logging:
 #-------------------------------------------------------------------------------
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger( __name__ )
 
 #-------------------------------------------------------------------------------
 #  Define a simple identity mapping:
@@ -264,13 +263,14 @@ class SimpleEditor ( Editor ):
         value = self.control.GetValue()
         try:
             value = self.evaluate( value )
-        except Exception, e:
-            logger.exception( 'Could not evaluate %r in TextEditor' % (value,) )
+        except:
+            logger.exception( 'Could not evaluate %r in TextEditor' %  
+                              ( value, ) )
 
         try:
             ret = self.factory.mapping.get( value, value )
         except TypeError:
-            # The value is probably not hashable.
+            # The value is probably not hashable:
             ret = value
 
         return ret
