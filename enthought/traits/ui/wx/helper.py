@@ -142,17 +142,6 @@ def choice_width ( values ):
     return max( [ len( x ) for x in values ] ) * 6
     
 #-------------------------------------------------------------------------------
-#  Restores the user preference items for a specified UI:
-#-------------------------------------------------------------------------------
-    
-def restore_window ( ui ):
-    """ Restores the user preference items for a specified UI.
-    """
-    prefs = ui.restore_prefs()
-    if prefs is not None:
-        ui.control.SetDimensions( *prefs )
-    
-#-------------------------------------------------------------------------------
 #  Saves the user preference items for a specified UI:
 #-------------------------------------------------------------------------------
     
@@ -161,7 +150,79 @@ def save_window ( ui ):
     """
     control = ui.control
     ui.save_prefs( control.GetPositionTuple() + control.GetSizeTuple() ) 
+    
+#-------------------------------------------------------------------------------
+#  Restores the user preference items for a specified UI:
+#-------------------------------------------------------------------------------
+    
+def restore_window ( ui, is_popup = False ):
+    """ Restores the user preference items for a specified UI.
+    """
+    prefs = ui.restore_prefs()
+    if prefs is not None:
+        x, y, dx, dy = prefs
+        if is_popup:
+            position_window( ui.control, dx, dy )
+        else:
+            ui.control.SetDimensions( x, y, dx, dy )
 
+#-------------------------------------------------------------------------------
+#  Positions a window on the screen with a specified width and height so that
+#  the window completely fits on the screen if possible:
+#-------------------------------------------------------------------------------
+
+def position_window ( window, width, height ):
+    """ Positions a window on the screen with a specified width and height so 
+        that the window completely fits on the screen if possible.
+    """
+    parent = window._parent
+    if parent is None:
+        # Center the popup on the screen:
+        window.SetDimensions( (screen_dx - width)  / 2, 
+                              (screen_dy - height) / 2, width, height )
+        return
+        
+    # Calculate the desired size of the popup control:
+    if isinstance( parent, wx.Window ):
+        x, y     = parent.ClientToScreenXY( 0, 0 )
+        cdx, cdy = parent.GetSizeTuple()
+    else:
+        # Special case of parent being a screen position and size tuple (used 
+        # to pop-up a dialog for a table cell):
+        x, y, cdx, cdy = parent
+        
+    width  = min( max( cdx, width ), screen_dx )
+    height = min( height, screen_dy )
+        
+    # Calculate the best position and size for the pop-up:
+    
+    # Note: This code tries to deal with the fact that the user may have 
+    # multiple monitors. wx does not report this information, so the screen_dx, 
+    # screen_dy values usually just provide the size of the primary monitor. To 
+    # get around this, the code assumes that the original (x,y) values are 
+    # valid, and that all monitors are the same size. If this assumption is not
+    # true, popups may appear in wierd positions on the secondary monitors.
+    nx     = x % screen_dx
+    xdelta = x - nx
+    rx     = nx + cdx
+    if (nx + width) > screen_dx:
+        if (rx - width) < 0:
+            nx = screen_dx - width
+        else:
+            nx = rx - width
+    
+    ny     = y % screen_dy
+    ydelta = y - ny
+    by     = ny + cdy
+    if (by + height) > screen_dy:
+        if (ny - height) < 0:
+            ny = screen_dy - height
+        else:
+            by = ny - height
+            
+    # Position and size the window as requested:
+    window.SetDimensions( nx + xdelta, by + ydelta, width, height )
+    
 #-------------------------------------------------------------------------------
 #  Recomputes the mappings for a new set of enumeration values:
 #-------------------------------------------------------------------------------

@@ -51,6 +51,9 @@ from enthought.util.wx.drag_and_drop \
 
 from constants \
     import screen_dx, screen_dy
+    
+from helper \
+    import position_window    
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -231,61 +234,7 @@ class GUIToolkit ( Toolkit ):
             height = int( height )
         
         if view.kind == 'popup':
-            parent = window._parent
-            if parent is None:
-                x = (screen_dx - width)  / 2
-                y = (screen_dy - height) / 2
-            else:
-                # Calculate the desired size of the popup control:
-                if isinstance( parent, wx.Window ):
-                    x, y     = parent.ClientToScreenXY( 0, 0 )
-                    cdx, cdy = parent.GetSizeTuple()
-                else:
-                    # Special case of parent being a screen position and size
-                    # tuple (used to pop-up a dialog for a table cell):
-                    x, y, cdx, cdy = parent
-                    
-                width = max( cdx, width )
-            
-                # Calculate the best position and size for the pop-up:
-                
-                # Note: This code tries to deal with the fact that the user may 
-                # have multiple monitors. wx does not report this information,
-                # so the screen_dx, screen_dy values usually just provide the
-                # size of the primary monitor. To get around this, the code
-                # assumes that the original (x,y) values are valid, and that
-                # all monitors are the same size. If this assumption is not
-                # true, popups may appear in wierd positions on the secondary
-                # monitors.
-                nx     = x % screen_dx
-                xdelta = x - nx
-                rx     = nx + cdx
-                if (nx + width) > screen_dx:
-                    if (rx - width) < 0:
-                        right = screen_dx - nx
-                        if rx > right:
-                            nx, width = 0, rx
-                        else:
-                            width = right
-                    else:
-                        nx = rx - width
-                
-                ny     = y % screen_dy
-                ydelta = y - ny
-                by     = ny + cdy
-                if (by + height) > screen_dy:
-                    if (ny - height) < 0:
-                        bottom = screen_dy - by
-                        if ny > bottom:
-                            by, height = 0, ny
-                        else:
-                            height = bottom
-                    else:
-                        by = ny - height
-                    
-            # Position and size the window as requested:
-            window.SetDimensions( nx + xdelta, by + ydelta, width, height )
-            
+            position_window( window, width, height )
             return
 
         # Calculate the correct position for the window:

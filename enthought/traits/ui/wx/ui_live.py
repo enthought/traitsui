@@ -93,7 +93,7 @@ def ui_dialog ( ui, parent, style ):
         raise
         
     ui.handler.position( ui.info )
-    restore_window( ui )
+    restore_window( ui, is_popup = (style == POPUP) )
     
     if style == MODAL:
         ui.control.ShowModal()
