@@ -110,8 +110,7 @@ class PythonShell(MPythonShell, Widget):
 
             # Make sure that the name is actually a valid Python identifier.
             try:
-                # fixme: Is there a built-in way to do this?
-                if eval(name, {name : True}):
+                if eval(py_name, {py_name : True}):
                     name = py_name
 
             except:
