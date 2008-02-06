@@ -303,10 +303,16 @@ class SimpleEditor ( SimpleTextEditor ):
     def _create_file_dialog ( self ):
         """ Creates the correct type of file dialog.
         """
-        dlg = wx.FileDialog( self.control, message = 'Select a File' )
-        dlg.SetFilename( self._get_value() )
         if len( self.factory.filter ) > 0:
-            dlg.SetWildcard( '|'.join( self.factory.filter[:] ) )
+            wildcard = '|'.join( self.factory.filter[:] )
+        else:
+            wildcard = 'All Files (*.*)|*.*'
+
+        dlg = wx.FileDialog( self.control,
+                             message  = 'Select a File',
+                             wildcard = wildcard )
+
+        dlg.SetFilename( self._get_value() )
             
         return dlg
         
