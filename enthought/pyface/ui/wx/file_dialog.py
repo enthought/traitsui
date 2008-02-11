@@ -106,5 +106,14 @@ class FileDialog(MFileDialog, Dialog):
         dialog.SetFilterIndex(self.wildcard_index)            
         
         return dialog
-        
+
+    ###########################################################################
+    # Trait handlers.
+    ###########################################################################
+
+    def _wildcard_default(self):
+        """ Return the default wildcard. """
+
+        return self.WILDCARD_ALL
+
 #### EOF ######################################################################

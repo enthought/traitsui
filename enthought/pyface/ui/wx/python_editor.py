@@ -139,7 +139,18 @@ class PythonEditor(MPythonEditor, Widget):
         self.control.SetSelection(start, end)
 
         return
-    
+
+    ###########################################################################
+    # Trait handlers.
+    ###########################################################################
+
+    def _path_changed(self):
+        """ Handle a change to path. """
+
+        self._changed_path()
+
+        return
+
     ###########################################################################
     # Private interface.
     ###########################################################################
