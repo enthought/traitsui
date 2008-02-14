@@ -26,7 +26,7 @@ import wx
 
 from enthought.traits.api \
     import HasTraits, Str, Trait, List, Instance, Undefined, Property, Enum, \
-           true
+           Type, Bool
     
 from enthought.traits.ui.view \
     import View, kind_trait
@@ -88,10 +88,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     name = Str
     
     # Is the current value of the object trait editable (vs. merely selectable)?
-    editable = true
+    editable = Bool( True )
     
     # Should factory-created objects be cached?
-    cachable = true
+    cachable = Bool( True )
     
     # Optional label for button
     label = Str
@@ -107,6 +107,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     
     # The orientation of the instance editor relative to the instance selector
     orientation = Enum( 'default', 'horizontal', 'vertical' )
+    
+    # The default adapter class used to create InstanceChoice compatible
+    # adapters for instance objects:
+    adapter = Type( InstanceChoice, allow_none = False )
     
     #---------------------------------------------------------------------------
     #  Traits view definitions:  
@@ -271,16 +275,19 @@ class CustomEditor ( Editor ):
         if self._items is not None:
             return self._items
         
+        factory = self.factory
         if self._value is not None:
-            values = self._value() + self.factory.values
+            values = self._value() + factory.values
         else:
-            values = self.factory.values
+            values = factory.values
         
-        items = []
+        items   = []
+        adapter = factory.adapter
         for value in values:
             if not isinstance( value, InstanceChoiceItem ):
-                value = InstanceChoice( object = value )
+                value = adapter( object = value )
             items.append( value )
+            
         self._items = items
         
         return items
