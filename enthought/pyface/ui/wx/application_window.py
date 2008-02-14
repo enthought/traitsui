@@ -92,20 +92,16 @@ class ApplicationWindow(MApplicationWindow, Window):
         return
     
     def _create_tool_bar(self, parent):
-        if self.tool_bar_manager is not None \
-           or len(self.tool_bar_managers) > 0:
+        tool_bar_managers = self._get_tool_bar_managers()
+        if len(tool_bar_managers) > 0:
             if AUI:
-                if len(self.tool_bar_managers) > 0:
-                    tool_bar_managers = self.tool_bar_managers
-
-                else:
-                    tool_bar_managers = [self.tool_bar_manager]
-                    
                 for tool_bar_manager in tool_bar_managers:
                     tool_bar = tool_bar_manager.create_tool_bar(parent)
-                    self._add_toolbar_to_aui_manager(tool_bar, tool_bar_manager.name)
+                    self._add_toolbar_to_aui_manager(
+                        tool_bar, tool_bar_manager.name
+                    )
             else:
-                tool_bar = self.tool_bar_manager.create_tool_bar(parent)
+                tool_bar = tool_bar_managers[0].create_tool_bar(parent)
                 self.control.SetToolBar(tool_bar)
 
     def _set_window_icon(self):
@@ -184,11 +180,11 @@ class ApplicationWindow(MApplicationWindow, Window):
     # Private interface.
     ###########################################################################
 
-    def _add_toolbar_to_aui_manager(self, tool_bar, name='default_tool_bar'):
+    def _add_toolbar_to_aui_manager(self, tool_bar, name='Tool Bar'):
         """ Add a toolbar to the AUI manager. """
 
         info = wx.aui.AuiPaneInfo()
-        info.Caption('Toolbar %s' % name)
+        info.Caption(name)
         info.LeftDockable(False)
         info.Name(name)
         info.RightDockable(False)
@@ -216,5 +212,17 @@ class ApplicationWindow(MApplicationWindow, Window):
         self._aui_manager.AddPane(panel, info)
 
         return panel
+
+    def _get_tool_bar_managers(self):
+        """ Return all tool bar managers specified for the window. """
+
+        # fixme: V3 remove the old-style single toolbar option!
+        if self.tool_bar_manager is not None:
+            tool_bar_managers = [self.tool_bar_manager]
+
+        else:
+            tool_bar_managers = self.tool_bar_managers
+
+        return tool_bar_managers
     
 #### EOF ######################################################################
