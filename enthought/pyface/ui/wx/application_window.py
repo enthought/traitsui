@@ -26,7 +26,7 @@ except:
 # Enthought library imports.
 from enthought.pyface.action.api import MenuBarManager, StatusBarManager
 from enthought.pyface.action.api import ToolBarManager
-from enthought.traits.api import implements, Instance, Unicode
+from enthought.traits.api import implements, Instance, List, Unicode
 
 # Local imports.
 from enthought.pyface.i_application_window import IApplicationWindow
@@ -51,6 +51,10 @@ class ApplicationWindow(MApplicationWindow, Window):
     status_bar_manager = Instance(StatusBarManager)
 
     tool_bar_manager = Instance(ToolBarManager)
+
+    # If the underlying toolkit supports multiple toolbars then you can use
+    # this list instead.
+    tool_bar_managers = List(ToolBarManager)
 
     #### 'IWindow' interface ##################################################
 
@@ -88,13 +92,20 @@ class ApplicationWindow(MApplicationWindow, Window):
         return
     
     def _create_tool_bar(self, parent):
-        if self.tool_bar_manager is not None:
-            tool_bar = self.tool_bar_manager.create_tool_bar(parent)
-
+        if self.tool_bar_manager is not None \
+           or len(self.tool_bar_managers) > 0:
             if AUI:
-                self._add_toolbar_to_aui_manager(tool_bar)
+                if len(self.tool_bar_managers) > 0:
+                    tool_bar_managers = self.tool_bar_managers
 
+                else:
+                    tool_bar_managers = [self.tool_bar_manager]
+                    
+                for tool_bar_manager in tool_bar_managers:
+                    tool_bar = tool_bar_manager.create_tool_bar(parent)
+                    self._add_toolbar_to_aui_manager(tool_bar, tool_bar_manager.name)
             else:
+                tool_bar = self.tool_bar_manager.create_tool_bar(parent)
                 self.control.SetToolBar(tool_bar)
 
     def _set_window_icon(self):
