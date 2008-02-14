@@ -160,6 +160,8 @@ class SimpleFontEditor ( SimpleEditor ):
         if dialog.ShowModal() == wx.ID_OK:
             self.value = self.factory.from_wx_font(
                               dialog.GetFontData().GetChosenFont() )
+            self.update_editor()
+            
         dialog.Destroy()
         
     #---------------------------------------------------------------------------

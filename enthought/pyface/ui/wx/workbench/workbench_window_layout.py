@@ -144,12 +144,12 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         return
 
-    def create_initial_layout(self):
+    def create_initial_layout(self, parent):
         """ Create the initial window layout. """
         
         # The view dock window is where all of the views live. It also contains
         # a nested dock window where all of the editors live.
-        self._wx_view_dock_window = WorkbenchDockWindow(self.window.control)
+        self._wx_view_dock_window = WorkbenchDockWindow(parent)
 
         # The editor dock window (which is nested inside the view dock window)
         # is where all of the editors live.
@@ -175,12 +175,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         self._wx_view_dock_window.control.SetSizer(view_dock_window_sizer)
 
-        # FIXME v3: The wx backend doesn't need this at the moment so we leave
-        # it until we work out what the proper thing to do is.  Maybe we should
-        # return view_dock_window_sizer and the call to SetSizer should be in
-        # ApplicationWindow._create() - depends on what other ApplicationWindow
-        # sub-classes do.
-        return None
+        return self._wx_view_dock_window.control
 
     def contains_view(self, view):
         """ Return True if the view exists in the window layout. """
