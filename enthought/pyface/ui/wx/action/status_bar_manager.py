@@ -60,22 +60,26 @@ class StatusBarManager(HasTraits):
     ###########################################################################
 
     def _get_message(self):
-
+        """ Property getter. """
+        
         if len(self.messages) > 0:
             message = self.messages[0]
+
         else:
             message = ''
 
         return message
 
     def _set_message(self, value):
-
+        """ Property setter. """
+        
         if len(self.messages) > 0:
             old = self.messages[0]
             self.messages[0] = value
+
         else:
             old = ''
-            self.messages.append(old)
+            self.messages.append(value)
 
         self.trait_property_changed('message', old, value)
 
@@ -88,22 +92,18 @@ class StatusBarManager(HasTraits):
     def _messages_changed(self):
         """ Sets the text displayed on the status bar. """
 
-        if self.status_bar is None:
-            return
-        
-        for i in range(len(self.messages)):
-            self.status_bar.SetStatusText(self.messages[i], i)
+        if self.status_bar is not None:
+            for i in range(len(self.messages)):
+                self.status_bar.SetStatusText(self.messages[i], i)
 
         return
 
     def _messages_items_changed(self):
         """ Sets the text displayed on the status bar. """
 
-        if self.status_bar is None:
-            return
-        
-        for i in range(len(self.messages)):
-            self.status_bar.SetStatusText(self.messages[i], i)
+        if self.status_bar is not None:
+            for i in range(len(self.messages)):
+                self.status_bar.SetStatusText(self.messages[i], i)
 
         return
     

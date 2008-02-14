@@ -40,7 +40,7 @@ class ToolBarManager(ActionManager):
     show_tool_names = Bool(True)
 
     # Should we display the horizontal divider?
-    show_divider = Bool(True)
+    show_divider = Bool(False)
 
     #### Private interface ####################################################
 
@@ -86,6 +86,7 @@ class ToolBarManager(ActionManager):
 
         if self.orientation == 'horizontal':
             style |= wx.TB_HORIZONTAL
+
         else:
             style |= wx.TB_VERTICAL
             
