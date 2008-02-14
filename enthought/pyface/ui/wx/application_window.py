@@ -16,13 +16,21 @@
 # Major package imports.
 import wx
 
+try:
+    import wx.aui
+    AUI = True
+    
+except:
+    AUI = False
+    
 # Enthought library imports.
 from enthought.pyface.action.api import MenuBarManager, StatusBarManager
 from enthought.pyface.action.api import ToolBarManager
 from enthought.traits.api import implements, Instance, Unicode
 
 # Local imports.
-from enthought.pyface.i_application_window import IApplicationWindow, MApplicationWindow
+from enthought.pyface.i_application_window import IApplicationWindow
+from enthought.pyface.i_application_window import MApplicationWindow
 from enthought.pyface.image_resource import ImageResource
 from window import Window
 
@@ -77,10 +85,17 @@ class ApplicationWindow(MApplicationWindow, Window):
             status_bar = self.status_bar_manager.create_status_bar(parent)
             self.control.SetStatusBar(status_bar)
 
+        return
+    
     def _create_tool_bar(self, parent):
         if self.tool_bar_manager is not None:
             tool_bar = self.tool_bar_manager.create_tool_bar(parent)
-            self.control.SetToolBar(tool_bar)
+
+            if AUI:
+                self._add_toolbar_to_aui_manager(tool_bar)
+
+            else:
+                self.control.SetToolBar(tool_bar)
 
     def _set_window_icon(self):
         if self.icon is None:
@@ -90,6 +105,8 @@ class ApplicationWindow(MApplicationWindow, Window):
 
         self.control.SetIcon(icon.create_icon())
 
+        return
+    
     ###########################################################################
     # 'Window' interface.
     ###########################################################################
@@ -104,20 +121,89 @@ class ApplicationWindow(MApplicationWindow, Window):
     ###########################################################################
 
     def _create(self):
+
+        if AUI:
+            # fixme: We have to capture the AUI manager as an attribute,
+            # otherwise it gets garbage collected and we get a core dump...
+            # Ahh, the sweet smell of open-source ;^()
+            self._aui_manager = wx.aui.AuiManager()
+        
         super(ApplicationWindow, self)._create()
 
-        self._create_contents(self.control)
+        if AUI:
+            body = self._create_body(self.control)
+            contents = self._create_contents(body)
+            body.GetSizer().Add(contents, 1, wx.EXPAND)
+            body.Fit()
 
+        else:
+            contents = self._create_contents(self.control)
+            
         self._create_trim_widgets(self.control)
 
+        if AUI:
+            # Updating the AUI manager actually commits all of the pane's added
+            # to it (this allows batch updates).
+            self._aui_manager.Update()
+
+        return
+    
     def _create_control(self, parent):
-        style = wx.DEFAULT_FRAME_STYLE | wx.FRAME_NO_WINDOW_MENU | wx.CLIP_CHILDREN
-        control =  wx.Frame(parent, -1, self.title, style=style, size=self.size,
-                            pos=self.position)
+
+        style = wx.DEFAULT_FRAME_STYLE \
+                | wx.FRAME_NO_WINDOW_MENU \
+                | wx.CLIP_CHILDREN
+        
+        control = wx.Frame(
+            parent, -1, self.title, style=style, size=self.size,
+            pos=self.position
+        )
 
         control.SetBackgroundColour(
-            wx.SystemSettings_GetColour( wx.SYS_COLOUR_BTNFACE ))
-            
+            wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE)
+        )
+        
+        if AUI:
+            # Let the AUI manager look after the frame.
+            self._aui_manager.SetManagedWindow(control)
+    
         return control
+
+    ###########################################################################
+    # Private interface.
+    ###########################################################################
+
+    def _add_toolbar_to_aui_manager(self, tool_bar, name='default_tool_bar'):
+        """ Add a toolbar to the AUI manager. """
+
+        info = wx.aui.AuiPaneInfo()
+        info.Caption('Toolbar %s' % name)
+        info.LeftDockable(False)
+        info.Name(name)
+        info.RightDockable(False)
+        info.ToolbarPane()
+        info.Top()
+
+        self._aui_manager.AddPane(tool_bar, info)
+        
+        return
+
+    def _create_body(self, parent):
+        """ Create the body of the frame. """
+
+        panel = wx.Panel(parent, -1)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        panel.SetSizer(sizer)
+
+        info = wx.aui.AuiPaneInfo()
+        info.Caption('Body')
+        info.Dockable(False)
+        info.Floatable(False)
+        info.Name('Body')
+        info.CentrePane()
+        
+        self._aui_manager.AddPane(panel, info)
+
+        return panel
     
 #### EOF ######################################################################
