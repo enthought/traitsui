@@ -1254,14 +1254,18 @@ class SimpleEditor ( Editor ):
     def _on_tree_begin_label_edit ( self, event ):
         """ Handles the user starting to edit a tree node label.
         """
-        item   = event.GetItem()
-        parent = self._tree.GetItemParent( item )
+        item       = event.GetItem()
+        parent     = self._tree.GetItemParent( item )
+        can_rename = True
         if parent.IsOk():
             expanded, node, object = self._get_node_data( parent )
-            if node.can_rename( object ):
-                expanded, node, object = self._get_node_data( item )
-                if node.can_rename_me( object ):
-                    return
+            can_rename = node.can_rename( object )
+            
+        if can_rename:
+            expanded, node, object = self._get_node_data( item )
+            if node.can_rename_me( object ):
+                return
+                
         event.Veto()
 
     #---------------------------------------------------------------------------
