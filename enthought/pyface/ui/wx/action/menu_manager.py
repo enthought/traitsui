@@ -61,9 +61,14 @@ class MenuManager(ActionManager, ActionManagerItem):
     def add_to_menu(self, parent, menu, controller):
         """ Adds the item to a menu. """
 
-        menu.AppendMenu(
-            wx.NewId(), self.name, self.create_menu(parent, controller)
-        )
+        id  = wx.NewId()
+        sub = self.create_menu(parent, controller)
+
+        # fixme: Nasty hack to allow enabling/disabling of menus.
+        sub._id = id
+        sub._menu = menu
+        
+        menu.AppendMenu(id, self.name, sub)
 
         return
 
@@ -94,12 +99,13 @@ class _Menu(wx.Menu):
 
         # The controller.
         self._controller = controller
-
+        
         # Create the menu structure.
         self.refresh()
 
         # Listen to the manager being updated.
         self._manager.on_trait_change(self.refresh, 'changed')
+        self._manager.on_trait_change(self._on_enabled_changed, 'enabled')
 
         return
 
@@ -147,6 +153,19 @@ class _Menu(wx.Menu):
     # Private interface.
     ###########################################################################
 
+    def _on_enabled_changed(self, obj, trait_name, old, new):
+        """ Dynamic trait change handler. """
+
+        # fixme: Nasty hack to allow enabling/disabling of menus.
+        #
+        # We cannot currently (AFAIK) disable menus on the menu bar. Hence
+        # we don't give them an '_id'...
+
+        if hasattr(self, '_id'):
+            self._menu.Enable(self._id, new)
+        
+        return
+    
     def _add_group(self, parent, group, previous_non_empty_group=None):
         """ Adds a group to a menu. """
 
