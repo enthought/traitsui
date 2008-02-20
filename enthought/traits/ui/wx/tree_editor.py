@@ -1832,8 +1832,8 @@ class SimpleEditor ( Editor ):
     def _children_updated ( self, object, name, event ):
         """ Handles the children of a node being changed.
         """
-        # Log the change that was made made (removing '_items' from the end of
-        # the name):
+        # Log the change that was made (removing '_items' from the end of the
+        # name):
         name = name[:-6]
         self.log_change( self._get_undo_item, object, name, event )
 
