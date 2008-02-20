@@ -30,6 +30,12 @@ class ToolBarManager(ActionManager):
 
     #### 'ToolBarManager' interface ###########################################
 
+    # Is the tool bar enabled?
+    enabled = Bool(True)
+
+    # Is the tool bar visible?
+    visible = Bool(True)
+    
     # The size of tool images (width, height).
     image_size = Tuple((16, 16))
 
@@ -70,6 +76,9 @@ class ToolBarManager(ActionManager):
     # 'ToolBarManager' interface.
     ###########################################################################
 
+    #### Trait change handlers ################################################
+    #### Methods ##############################################################
+    
     def create_tool_bar(self, parent, controller=None):
         """ Creates a tool bar. """
 
@@ -97,7 +106,7 @@ class ToolBarManager(ActionManager):
             style |= wx.TB_NODIVIDER
 
         # Create the control.
-        tool_bar = wx.ToolBar(parent, -1, style=style)
+        tool_bar = _ToolBar(self, parent, -1, style=style)
 
         # fixme: Setting the tool bitmap size seems to be the only way to
         # change the height of the toolbar in wx.
@@ -175,4 +184,49 @@ class ToolBarManager(ActionManager):
 
         return
 
+
+class _ToolBar(wx.ToolBar):
+    """ The toolkit-specific tool bar implementation. """
+
+    ###########################################################################
+    # 'object' interface.
+    ###########################################################################
+
+    def __init__(self, tool_bar_manager, parent, id, style):
+        """ Constructor. """
+
+        wx.ToolBar.__init__(self, parent, -1, style=style)
+
+        # Listen for changes to the tool bar manager's enablement and
+        # visibility.
+        self.tool_bar_manager = tool_bar_manager
+        
+        self.tool_bar_manager.on_trait_change(
+            self._on_tool_bar_manager_enabled_changed, 'enabled'
+        )
+
+        self.tool_bar_manager.on_trait_change(
+            self._on_tool_bar_manager_visible_changed, 'visible'
+        )
+
+        return
+
+    ###########################################################################
+    # Trait change handlers.
+    ###########################################################################
+
+    def _on_tool_bar_manager_enabled_changed(self, obj, trait_name, old, new):
+        """ Dynamic trait change handler. """
+
+        obj.window._wx_enable_tool_bar(self, new)
+
+        return
+
+    def _on_tool_bar_manager_visible_changed(self, obj, trait_name, old, new):
+        """ Dynamic trait change handler. """
+
+        obj.window._wx_show_tool_bar(self, new)
+        
+        return
+    
 #### EOF ######################################################################

@@ -126,7 +126,7 @@ class ApplicationWindow(MApplicationWindow, Window):
     ###########################################################################
     # Protected 'IWidget' interface.
     ###########################################################################
-
+    
     def _create(self):
 
         if AUI:
@@ -224,5 +224,36 @@ class ApplicationWindow(MApplicationWindow, Window):
             tool_bar_managers = self.tool_bar_managers
 
         return tool_bar_managers
+
+    def _wx_enable_tool_bar(self, tool_bar, enabled):
+        """ Enable/Disablea tool bar. """
+
+        if AUI:
+            # AUI toolbars cannot be enabled/disabled.
+            pass
+
+        else:
+            tool_bar.Enable(enabled)
+
+        return
+    
+    def _wx_show_tool_bar(self, tool_bar, visible):
+        """ Hide/Show a tool bar. """
+
+        if AUI:
+            pane = self._aui_manager.GetPane(tool_bar.tool_bar_manager.name)
+
+            if visible:
+                pane.Show()
+
+            else:
+                pane.Hide()
+
+            self._aui_manager.Update()
+
+        else:
+            tool_bar.Show(visible)
+            
+        return
     
 #### EOF ######################################################################
