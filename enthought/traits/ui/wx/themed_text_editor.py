@@ -396,6 +396,8 @@ class _ThemedTextEditor ( Editor ):
         if slice2 is not default_image_slice:
             slice2.fill( dc, 0, 0, wdx, wdy, True )
             slice = slice2
+        elif slice is None:
+            slice = slice2
         dc.SetBackgroundMode( wx.TRANSPARENT )
         dc.SetTextForeground( slice.content_color )
         dc.SetFont( control.GetFont() )
