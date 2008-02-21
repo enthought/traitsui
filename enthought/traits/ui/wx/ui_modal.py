@@ -68,6 +68,7 @@ def ui_dialog ( ui, parent, is_modal ):
     """
     if ui.owner is None:
         ui.owner = ModalDialog()
+        
     ui.owner.init( ui, parent, is_modal )
     ui.control = ui.owner.control
     ui.control._parent = parent
@@ -80,8 +81,10 @@ def ui_dialog ( ui, parent, is_modal ):
         ui.owner      = None
         ui.result     = False
         raise
+        
     ui.handler.position( ui.info )
     restore_window( ui )
+    
     if is_modal:
         ui.control.ShowModal()
     else:
@@ -104,6 +107,7 @@ class ModalDialog ( BaseDialog ):
         view          = ui.view
         if view.resizable:
             style |= wx.RESIZE_BORDER
+            
         title = view.title
         if title == '':
             title = DefaultTitle
@@ -171,10 +175,13 @@ class ModalDialog ( BaseDialog ):
                     self.check_button( buttons, ApplyButton )
                     if view.revert:
                         self.check_button( buttons, RevertButton )
+                        
                 if view.ok:
                     self.check_button( buttons, OKButton )
+                    
                 if view.cancel:
                     self.check_button( buttons, CancelButton )
+                    
                 if view.help:
                     self.check_button( buttons, HelpButton )
                     
@@ -184,17 +191,22 @@ class ModalDialog ( BaseDialog ):
                                                   self._on_apply, apply )
                     ui.on_trait_change( self._on_applyable, 'modified',
                                         dispatch = 'ui' )
+                    
                 elif self.is_button( button, 'Revert' ):
                     self.revert = self.add_button( button, b_sizer, 
                                                    self._on_revert, revert )
+                    
                 elif self.is_button( button, 'OK' ):
                     self.ok = self.add_button( button, b_sizer, self._on_ok )
                     ui.on_trait_change( self._on_error, 'errors',
                                         dispatch = 'ui' )
+                    
                 elif self.is_button( button, 'Cancel' ):
                     self.add_button( button, b_sizer, self._on_cancel )
+                    
                 elif self.is_button( button, 'Help' ):
                     self.add_button( button, b_sizer, self._on_help )
+                    
                 elif not self.is_button( button, '' ):
                     self.add_button( button, b_sizer )
                     
@@ -220,6 +232,7 @@ class ModalDialog ( BaseDialog ):
         save_window( ui )
         if self.is_modal:
             self.control.EndModal( rc )
+            
         ui.finish()
         self.ui = self.apply = self.revert = self.help = self.control = None
         
@@ -236,6 +249,7 @@ class ModalDialog ( BaseDialog ):
                 result[ name ] = value.clone_traits()
             else:
                 result[ name ] = None
+                
         return result
         
     #---------------------------------------------------------------------------
@@ -250,6 +264,7 @@ class ModalDialog ( BaseDialog ):
                 to_context[ name ].copy_traits( value )
             else:
                 to_context[ name ] = None
+                
         if to_context is self.ui._context:
             on_apply = self.ui.view.on_apply
             if on_apply is not None:
