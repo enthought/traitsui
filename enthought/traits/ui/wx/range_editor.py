@@ -539,11 +539,15 @@ class LargeRangeSliderEditor ( Editor ):
             widget.
         """        
         factory = self.factory
-        if not factory.low_name:
-            self.set( low = factory.low, trait_change_notify = False )
+        if factory.low_name:
+            self.trait_setq( low = factory.low )
             
         if not factory.high_name:
-            self.set( high = factory.high, trait_change_notify = False )
+            self.trait_setq( high = factory.high )
+
+        # Hook up the traits to listen to the object.
+        self.sync_value( factory.low_name,  'low',  'from' )
+        self.sync_value( factory.high_name, 'high', 'from' )
             
         self.init_range()
         low  = self.cur_low
@@ -555,11 +559,11 @@ class LargeRangeSliderEditor ( Editor ):
         fvalue = self.value
         try:
             fvalue_text = self._format % fvalue
-            1 / (factory.low <= fvalue <= factory.high)
+            1 / (low <= fvalue <= high)
         except:
             fvalue_text = ''
-            fvalue      = factory.low
-            
+            fvalue      = low
+         
         ivalue = int( (float( fvalue - low ) / (high - low)) * 10000 )
         
         # Lower limit label:
@@ -621,10 +625,6 @@ class LargeRangeSliderEditor ( Editor ):
         self.set_tooltip( label_lo )
         self.set_tooltip( label_hi )
         self.set_tooltip( text )
-
-        # Hook up the traits to listen to the object.
-        self.sync_value( factory.low_name,  'low',  'from' )
-        self.sync_value( factory.high_name, 'high', 'from' )
 
         # Update the ranges and button just in case.
         self.update_range_ui()
@@ -721,7 +721,7 @@ class LargeRangeSliderEditor ( Editor ):
         value     = self.value
         factory   = self.factory
         low, high = self.low, self.high
-        if high is None and low is not None:
+        if (high is None) and (low is not None):
             high = -low
             
         mag = abs( value )
@@ -799,8 +799,9 @@ class LargeRangeSliderEditor ( Editor ):
                 self.value = float( low )
             else:
                 self.value = int( low )
-                
-        self.update_editor()
+              
+        if self.control is not None:
+            self.update_editor()
             
     def _high_changed ( self, high ):
         if self.value > high:
@@ -809,7 +810,8 @@ class LargeRangeSliderEditor ( Editor ):
             else:
                 self.value = int( high )
 
-        self.update_editor()
+        if self.control is not None:
+            self.update_editor()
 
 #-------------------------------------------------------------------------------
 #  'SimpleSpinEditor' class:
