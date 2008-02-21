@@ -147,7 +147,7 @@ class LiveWindow ( BaseDialog ):
                     window_style |= (wx.FRAME_FLOAT_ON_PARENT | 
                                      wx.FRAME_NO_TASKBAR) 
                 window = wx.Frame(  parent, -1, title, style = window_style |
-                               (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER) ) )
+                               (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER)) )
                 window.SetBackgroundColour( WindowColor )
             else:
                 if window_style == 0:

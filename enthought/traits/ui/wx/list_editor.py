@@ -28,7 +28,7 @@ import wx.lib.scrolledpanel as wxsp
     
 from enthought.traits.api \
     import Trait, HasTraits, BaseTraitHandler, Range, Str, Any, Instance, \
-           Property, Bool
+           Property, Bool, cached_property
     
 from enthought.traits.trait_base \
     import user_name_for, enumerate
@@ -37,7 +37,7 @@ from enthought.traits.ui.api \
     import View, Item, EditorFactory as UIEditorFactory
     
 from enthought.traits.ui.ui_traits \
-    import style_trait, AView
+    import Image, AView, style_trait, convert_bitmap
     
 from enthought.traits.ui.dock_window_theme \
     import DockWindowTheme
@@ -57,9 +57,6 @@ from editor_factory \
     
 from editor \
     import Editor
-    
-from helper \
-    import bitmap_cache
     
 from menu \
     import MakeMenu
@@ -216,6 +213,12 @@ class SimpleEditor ( Editor ):
     # Is the list of items being edited mutable?
     mutable = Bool( True )
     
+    # The image used by the editor:
+    image = Image( 'list_editor' )
+    
+    # The bitmap used by the editor:
+    bitmap = Property
+    
     #---------------------------------------------------------------------------
     #  Class constants:  
     #---------------------------------------------------------------------------
@@ -328,9 +331,8 @@ class SimpleEditor ( Editor ):
         for value in values:
             width1 = height = 0
             if resizable:       
-                control = ImageControl( list_pane,
-                                        bitmap_cache( 'list_editor', False ),
-                                        -1, self.popup_menu )                                   
+                control = ImageControl( list_pane, self.bitmap, -1, 
+                                        self.popup_menu )                                   
                 width1, height = control.GetSize()
                 width1 += 4
                 
@@ -408,9 +410,8 @@ class SimpleEditor ( Editor ):
     def empty_list ( self ):
         """ Creates an empty list entry (so the user can add a new item).
         """
-        control = ImageControl( self.control,
-                                bitmap_cache( 'list_editor', False ),
-                                -1, self.popup_empty_menu )                                   
+        control = ImageControl( self.control, self.bitmap, -1, 
+                                self.popup_empty_menu )                                   
         control.is_empty = True
         proxy    = ListItemProxy( self.object, self.name, -1, None, None )
         pcontrol = wx.StaticText( self.control, -1, '   (Empty List)' )
@@ -583,6 +584,12 @@ class SimpleEditor ( Editor ):
         """
         list, index = self.get_info()
         self.value  = list[:index] + list[index+1:] + [ list[index] ]
+        
+    #-- Property Implementations -----------------------------------------------
+    
+    @cached_property
+    def _get_bitmap ( self ):
+        return convert_bitmap( self.image )
         
     #-- Private Methods --------------------------------------------------------
     
