@@ -60,7 +60,7 @@ from enthought.pyface.sizers.flow \
     import FlowSizer
     
 from helper \
-    import position_near, traits_ui_panel, GroupEditor
+    import position_window, traits_ui_panel, GroupEditor
     
 from constants \
     import screen_dx, screen_dy, WindowColor
@@ -1269,7 +1269,7 @@ class HTMLHelpWindow ( wx.Frame ):
                                int( scale_dy * screen_dy ) ) )
  
         # Position and show the dialog:
-        position_near( parent, self, align_y = -1 )
+        position_window( self, parent = parent )
         self.Show()
         
     #---------------------------------------------------------------------------

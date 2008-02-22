@@ -74,6 +74,7 @@ def bitmap_cache ( name, standard_size, path = None ):
     """ Converts an image file name to a cached bitmap.
     """
     global app_path, traits_path
+    
     if path is None:
         if traits_path is None:
            import  enthought.traits.ui.wx
@@ -84,12 +85,15 @@ def bitmap_cache ( name, standard_size, path = None ):
         if app_path is None:
             app_path = join( dirname( sys.argv[0] ), '..', 'images' )
         path = app_path
+        
     filename = abspath( join( path, name.replace( ' ', '_' ).lower() + '.gif' ))
     bitmap   = _bitmap_cache.get( filename + ('*'[ not standard_size: ]) )
     if bitmap is not None:
         return bitmap
+        
     std_bitmap = bitmap = wx.BitmapFromImage( wx.Image( filename ) )
     _bitmap_cache[ filename ] = bitmap
+    
     dx = bitmap.GetWidth()
     if dx < standard_bitmap_width:
         dy = bitmap.GetHeight()
@@ -102,33 +106,13 @@ def bitmap_cache ( name, standard_size, path = None ):
         dc1.SetBrush( wx.WHITE_BRUSH )
         dc1.DrawRectangle( 0, 0, standard_bitmap_width, dy )
         dc1.Blit( (standard_bitmap_width - dx) / 2, 0, dx, dy, dc2, 0, 0 ) 
+        
     _bitmap_cache[ filename + '*' ] = std_bitmap
+    
     if standard_size:
         return std_bitmap
+        
     return bitmap
-
-#-------------------------------------------------------------------------------
-#  Positions one window near another:
-#-------------------------------------------------------------------------------
-
-def position_near ( origin, target, offset_x = 0, offset_y = 0, 
-                                    align_x  = 1, align_y  = 1 ):
-    """ Positions one window near another.
-    """
-    # Calculate the target window position relative to the origin window:                                         
-    x, y     = origin.ClientToScreenXY( 0, 0 )
-    dx, dy   = target.GetSizeTuple()
-    odx, ody = origin.GetSizeTuple()
-    if align_x < 0:
-        x = x + odx - dx
-    if align_y < 0:
-        y = y + ody - dy
-    x += offset_x
-    y += offset_y
-    
-    # Position the target window (making sure it will fit on the screen):
-    target.SetPosition( wx.Point( max( 0, min( x, screen_dx - dx ) ),
-                                  max( 0, min( y, screen_dy - dy ) ) ) )
     
 #-------------------------------------------------------------------------------
 #  Returns an appropriate width for a wxChoice widget based upon the list of
