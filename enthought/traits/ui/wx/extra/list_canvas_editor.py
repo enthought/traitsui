@@ -296,18 +296,21 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     
     # The default theme to use for the current active list canvas item:
     theme_active = ATheme( Theme( 'default_active', 
-                                  label = ( 0, 2 ), content = ( -15, 2 ) ) )
+                                  label   = ( 13, 13, 10, 5 ), 
+                                  content = ( 0, 0 ) ) )
     
     # The default theme to use for the current inactive list canvas item (if 
     # None is returned, the value of *theme_active* is used):
     theme_inactive = ATheme( Theme( 'default_inactive', 
-                                    label = ( 0, 2 ), content = ( -15, 2 ) ) )
+                                    label   = ( 13, 13, 10, 5 ), 
+                                    content = ( 0, 0 ) ) )
     
     # The default theme to use while the pointer hovers over the current
     # inactive list canvas item (if None is returned, the value of 
     # *theme_inactive* is used):
     theme_hover = ATheme( Theme( 'default_hover', 
-                                 label = ( 0, 2 ), content = ( -15, 2 ) ) )
+                                 label   = ( 13, 13, 10, 5 ),
+                                 content = ( 0, 0 ) ) )
     
     # The title to use for the current list canvas item:
     title = Property # Str
@@ -1027,7 +1030,7 @@ class ListCanvasPanel ( ImagePanel ):
         else:
             rx = x + dx + 2
             
-        self.layout_items[ name ] = ( x, (y - dy) / 2, dx, dy )
+        self.layout_items[ name ] = ( x, y - (dy / 2), dx, dy )
         
         return rx
         
@@ -2418,7 +2421,7 @@ class ListCanvas ( ListCanvasPanel ):
             (len( self.items ) > 0)):
                 
             # Determine the set of guide lines to draw:
-            xs, ys = self._guide_lines( self_drag_set )
+            xs, ys = self._guide_lines( self._drag_set )
             
             # Set up the pen for drawing guide lines:
             dc.SetPen( wx.Pen( gi.color_, 1, pen_styles[ gi.style ] ) )
@@ -2678,7 +2681,7 @@ class ListCanvasEditor ( BasicEditorFactory ):
     features = List
     
     # The theme to use for the list canvas:
-    theme = ATheme( Theme( 'default_canvas', label = ( 0, 2 ) ) )
+    theme = ATheme( Theme( 'default_canvas', label = ( 13, 13, 10, 5 ) ) )
     
     # The snapping information to use for the list canvas:
     snap_info = Instance( SnapInfo, () )
