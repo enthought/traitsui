@@ -219,22 +219,20 @@ class CustomFontEditor ( Editor ):
         sizer2    = wx.BoxSizer( wx.HORIZONTAL )
         facenames = self.factory.all_facenames()
         control   = self._facename = wx.Choice( panel, -1, wx.Point( 0, 0 ), 
-                          wx.Size( choice_width( facenames ), 20 ), 
-                          facenames )
+                                                wx.Size( -1, -1 ), facenames )
                         
-        sizer2.Add( control, 2, wx.EXPAND )
+        sizer2.Add( control, 4, wx.EXPAND )
         wx.EVT_CHOICE( panel, control.GetId(), self.update_object_parts )
         
-        control = self._point_size = wx.Choice( panel, -1, 
-                                        wx.Point( 0, 0 ), wx.Size( 30, 20 ), 
-                                        PointSizes )
-        sizer2.Add( control, 1, wx.EXPAND | wx.RIGHT, 3 )
+        control = self._point_size = wx.Choice( panel, -1, wx.Point( 0, 0 ), 
+                                                wx.Size( -1, -1 ), PointSizes )
+        sizer2.Add( control, 1, wx.EXPAND | wx.LEFT, 3 )
         wx.EVT_CHOICE( panel, control.GetId(), self.update_object_parts ) 
            
         sizer.Add( sizer2, 0, wx.EXPAND )
         
         # Set-up the layout:
-        panel.SetSizerAndFit( sizer )
+        panel.SetSizer( sizer )
 
     #---------------------------------------------------------------------------
     #  Handles the user changing the contents of the font text control:
