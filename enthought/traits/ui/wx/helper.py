@@ -171,11 +171,17 @@ def restore_window ( ui, is_popup = False ):
 #  the window completely fits on the screen if possible:
 #-------------------------------------------------------------------------------
 
-def position_window ( window, width, height ):
+def position_window ( window, width = None, height = None, parent = None ):
     """ Positions a window on the screen with a specified width and height so 
         that the window completely fits on the screen if possible.
     """
-    parent = window._parent
+    dx, dy = window.GetSizeTuple()
+    width  = width or dx
+    height = height or dy
+    
+    if parent is None:
+        parent = window._parent
+    
     if parent is None:
         # Center the popup on the screen:
         window.SetDimensions( (screen_dx - width)  / 2, 

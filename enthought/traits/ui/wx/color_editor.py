@@ -15,7 +15,7 @@
 #------------------------------------------------------------------------------
 
 """ Defines the various color editors and the color editor factory, for the 
-wxPython user interface toolkit.
+    wxPython user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -37,7 +37,10 @@ from editor \
     import Editor
 
 from helper \
-    import position_near, traits_ui_panel
+    import traits_ui_panel, position_window
+    
+from constants \
+    import WindowColor
     
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
 try:
@@ -67,6 +70,7 @@ for r in color_choices:
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for color editors.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -159,8 +163,8 @@ class ToolkitEditorFactory ( EditorFactory ):
                                
 class SimpleColorEditor ( SimpleEditor ):
     """ Simple style of color editor, which displays a text field whose 
-    background color is the color value. Selecting the text field displays
-    a dialog box for selecting a new color value.
+        background color is the color value. Selecting the text field displays
+        a dialog box for selecting a new color value.
     """
     
     #---------------------------------------------------------------------------
@@ -184,7 +188,7 @@ class SimpleColorEditor ( SimpleEditor ):
             color_data.SetColour( self.factory.to_wx_color( self ) )
             color_data.SetChooseFull( True )
             dialog = wx.ColourDialog( self.control, color_data )
-            position_near( self.control, dialog )
+            position_window( dialog, parent = self.control )
             if dialog.ShowModal() == wx.ID_OK:
                 self.value = self.factory.from_wx_color( 
                                   dialog.GetColourData().GetColour() )
@@ -411,6 +415,7 @@ class ColorDialog ( wx.Frame ):
         """
         wx.Frame.__init__( self, editor.control, -1, '',
                            style = wx.SIMPLE_BORDER )
+        self.SetBackgroundColour( WindowColor )
         wx.EVT_ACTIVATE( self, self._on_close_dialog )
         self._closed    = False
         self._closeable = True
@@ -421,7 +426,7 @@ class ColorDialog ( wx.Frame ):
         sizer = wx.BoxSizer( wx.VERTICAL )
         sizer.Add( panel )
         self.SetSizerAndFit( sizer )
-        position_near( editor.control, self )
+        position_window( self, parent = editor.control )
         self.Show()
 
     #---------------------------------------------------------------------------

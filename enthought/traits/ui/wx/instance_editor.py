@@ -617,9 +617,7 @@ class SimpleEditor ( CustomEditor ):
                                      id = factory.id )
         
         # Position the window on the display:
-        control = ui.control
-        dx, dy  = control.GetSizeTuple() 
-        position_window( control, dx, dy ) 
+        position_window( ui.control )
         
         # Chain our undo history to the new user interface if it does not have
         # its own:
