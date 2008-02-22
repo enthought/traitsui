@@ -53,7 +53,7 @@ from constants \
     import scrollbar_dx, DropColor
   
 from helper \
-    import traits_ui_panel
+    import traits_ui_panel, position_window
 
 from enthought.util.wx.drag_and_drop \
     import PythonDropTarget
@@ -615,6 +615,11 @@ class SimpleEditor ( CustomEditor ):
                                                   self.name ) 
         ui = self.value.edit_traits( view, self.control, factory.kind,
                                      id = factory.id )
+        
+        # Position the window on the display:
+        control = ui.control
+        dx, dy  = control.GetSizeTuple() 
+        position_window( control, dx, dy ) 
         
         # Chain our undo history to the new user interface if it does not have
         # its own:
