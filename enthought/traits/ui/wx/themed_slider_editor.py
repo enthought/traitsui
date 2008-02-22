@@ -151,6 +151,8 @@ class _ThemedSliderEditor ( Editor ):
             self.value = value
         except TraitError:
             self.value = int( value )
+            
+        self.update_editor()
 
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
