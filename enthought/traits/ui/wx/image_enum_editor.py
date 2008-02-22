@@ -38,16 +38,16 @@ from editor \
     import Editor
     
 from helper \
-    import bitmap_cache, position_near
+    import bitmap_cache, position_window, traits_ui_panel
+    
+from constants \
+    import WindowColor
     
 from image_control \
     import ImageControl
     
 from enthought.traits.api \
     import Str, Type, Module, Any
-
-from helper \
-    import traits_ui_panel
     
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -311,6 +311,7 @@ class ImageEnumDialog ( wx.Frame ):
         """
         wx.Frame.__init__( self, editor.control, -1, '',
                            style = wx.SIMPLE_BORDER )
+        self.SetBackgroundColour( WindowColor )
         wx.EVT_ACTIVATE( self, self._on_close_dialog )
         self._closed = False
         
@@ -330,7 +331,7 @@ class ImageEnumDialog ( wx.Frame ):
         sizer.Fit( self )
  
         # Position the dialog:
-        position_near( editor.control, self )
+        position_window( self, parent = editor.control )
         self.Show()
         
     #---------------------------------------------------------------------------
