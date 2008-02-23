@@ -42,8 +42,6 @@ from enthought.pyface.image_resource \
 class _ImageEditor ( Editor ):
     """ Traits UI 'display only' image editor.
     """
-       
-    scrollable = True
     
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
