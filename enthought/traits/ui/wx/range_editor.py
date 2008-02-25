@@ -539,7 +539,7 @@ class LargeRangeSliderEditor ( Editor ):
             widget.
         """        
         factory = self.factory
-        if factory.low_name:
+        if not factory.low_name:
             self.trait_setq( low = factory.low )
             
         if not factory.high_name:
