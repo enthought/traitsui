@@ -1,0 +1,30 @@
+These are my best guesses at where each icon came from, this file should be updated whenever icons change.
+
+filename                     source            original name
+-------------------------------------------------------------
+cb_hover_off.png              ours
+cb_hover_on.png               ours
+cb_off.png                    ours
+cb_on.png                     ours
+file.png                      ?
+frame.ico                     IconExperience   businessmen
+group.png                     IconExperience   folder_closed
+item.png                      IconExperience   document
+list_editor.png               ?
+nb_open.png                   ours
+object.png                    ?
+open.png                      IconExperience   folder
+table_add.png                 IconExperience   table_add
+table_colors.png              IconExperience   colors
+table_delete.png              IconExperience   row_delete
+table_delete_synthentic.png   IconExperience   column_delete
+table_display.png             IconExperience   column_preferences
+table_move_down.png           IconExperience   arrow_down_blue
+table_move_up.png             IconExperience   arrow_up_blue
+table_no_sort.png             IconExperience*
+table_prefs.png               IconExperience   table_preferences
+table_search                  IconExperience   find
+table_synthentic              IconExperience   column_add
+table_undelete.png            IconExperience   row_add
+
+* derived
