@@ -255,6 +255,10 @@ class CustomFontEditor ( Editor ):
         font       = wx.Font( point_size, wx.DEFAULT, wx.NORMAL, wx.NORMAL,
                               faceName = facename )
         self.value = self.factory.from_wx_font( font )
+
+        font.SetPointSize( min( 10, font.GetPointSize() ) )
+        self._font.SetValue( self.str_value )
+        self._font.SetFont( font )
          
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -273,9 +277,6 @@ class CustomFontEditor ( Editor ):
            self._point_size.SetStringSelection( str( font.GetPointSize() ) )
         except:
            self._point_size.SetSelection( 0 )
-        font.SetPointSize( min( 10, font.GetPointSize() ) )
-        self._font.SetValue( self.str_value )
-        self._font.SetFont( font )
         
     #---------------------------------------------------------------------------
     #  Returns the text representation of a specified font value:
