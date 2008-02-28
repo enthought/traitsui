@@ -882,6 +882,11 @@ class _TabularEditor ( Editor ):
         if n > 0:
             control.RefreshItems( 0, n - 1 )
         
+        if len( self.multi_selected_rows ) > 0:
+            self._multi_selected_rows_changed( self.multi_selected_rows )
+        if len( self.multi_selected ) > 0:
+            self._multi_selected_changed( self.multi_selected )
+        
         edit, self.edit = self.edit, False
         row,  self.row  = self.row,  None
         
@@ -972,12 +977,12 @@ class _TabularEditor ( Editor ):
                 if row in selected:
                     selected.remove( row )
                 else:
-                    control.SetItemState( row, wx.LIST_STATE_SELECTED, 
+                    control.SetItemState( row, wx.LIST_STATE_SELECTED,
                                                wx.LIST_STATE_SELECTED )
                               
             # Unselect all remaining selected items that aren't selected now:
             for row in selected:
-                control.SetItemState( row, 0, wx.LIST_STATE_SELECTED ) 
+                control.SetItemState( row, 0, wx.LIST_STATE_SELECTED )
         
     def _multi_selected_rows_items_changed ( self, event ):
         """ Handles the editor's 'multi_selected_rows' trait being modified.
