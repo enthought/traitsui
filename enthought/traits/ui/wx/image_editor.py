@@ -16,6 +16,9 @@
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
+
+from enthought.pyface.image_resource \
+    import ImageResource
     
 from enthought.traits.api \
     import Instance
@@ -23,17 +26,14 @@ from enthought.traits.api \
 from enthought.traits.ui.ui_traits \
     import Image, convert_bitmap
     
-from enthought.traits.ui.wx.editor \
+from editor \
     import Editor
     
-from enthought.traits.ui.wx.basic_editor_factory \
+from basic_editor_factory \
     import BasicEditorFactory
     
-from enthought.traits.ui.wx.image_control \
+from image_control \
     import ImageControl
-
-from enthought.pyface.image_resource \
-    import ImageResource
 
 #-------------------------------------------------------------------------------
 #  '_ImageEditor' class:
