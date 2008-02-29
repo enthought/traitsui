@@ -612,6 +612,11 @@ class GUIToolkit ( Toolkit ):
         import table_editor as te
         return te.ToolkitEditorFactory( *args, **traits )
 
+    # Tabular:
+    def tabular_editor ( self, *args, **traits ):
+        import tabular_editor as te
+        return te.TabularEditor( *args, **traits )
+
     # Text:
     def text_editor ( self, *args, **traits ):
         import text_editor as te
