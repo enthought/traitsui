@@ -66,7 +66,7 @@ class ArrayViewAdapter ( TabularAdapter ):
         return getattr( object, trait )[ row ]
     
     def len ( self, object, trait ):
-        """ Returns the number of items in the specified *object.trait" list.
+        """ Returns the number of items in the specified *object.trait* list.
         """
         if self.transpose:
             return getattr( object, trait ).shape[1]

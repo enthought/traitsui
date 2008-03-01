@@ -245,19 +245,26 @@ class IListCanvasItem ( Interface ):
     # Specifies the initial size to make the canvas list item when it is added
     # to the canvas. The value is a tuple of the form: (width,height), where 
     # the width and height values have the following meaning:
-    # - <= 0: Use the default size.
-    # - 0 < value <= 1: Use the specified fraction of the corresponding width
-    #     or height dimension.
-    # > 1: Use int(value) as the actual width or height specified in pixels.
+    #
+    # value <= 0
+    #   Use the default size.
+    # 0 < value <= 1
+    #   Use the specified fraction of the corresponding width or height dimension.
+    # value > 1: 
+    #   Use int(value) as the actual width or height specified in pixels.
     list_canvas_item_size = Tuple( Float, Float )
     
     # Specifies the initial position of the canvas list item when it is added 
     # to the canvas. The value is a tuple of the form: (x,y), where x and y 
     # values have the following meaning:
-    # - <= 0: Use the default coordinate.
-    # - 0 < value <= 1: Use the specified fraction of the corresponding width
-    #     or height dimension as the coordinate value.
-    # > 1: Use int(value) as the actual x or y coordinate specified in pixels.
+    #
+    # value <= 0
+    #   Use the default coordinate.
+    # 0 < value <= 1
+    #   Use the specified fraction of the corresponding width or height 
+    #   dimension as the coordinate value.
+    # value > 1
+    #   Use int(value) as the actual x or y coordinate specified in pixels.
     list_canvas_item_position = Tuple( Float, Float )
     
     # Specifies the tooltip to display for the list canvas item:
@@ -341,10 +348,11 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     can_delete = Bool( False )
     
     # Can the current list canvas item be closed? The possible values are:
+    #
     # - True: Yes.
     # - False: No.
     # - Modified: The item has been modified. Prompt the user whether the item
-    #     should be closed before closing it.
+    #   should be closed before closing it.
     can_close = Enum( True, False, Modified )
     
     # Can the current list canvas item be dragged?
@@ -375,19 +383,26 @@ class ListCanvasAdapter ( HasPrivateTraits ):
     # Specifies the initial size to make the current canvas list item when it
     # is added to the canvas. The value is a tuple of the form: (width,height),
     # where the width and height values have the following meaning:
-    # - <= 0: Use the default size.
-    # - 0 < value <= 1: Use the specified fraction of the corresponding width
-    #     or height dimension.
-    # > 1: Use int(value) as the actual width or height specified in pixels.
+    # 
+    # value <= 0
+    #   Use the default size.
+    # 0 < value <= 1
+    #   Use the specified fraction of the corresponding width or height dimension.
+    # value > 1
+    #   Use int(value) as the actual width or height specified in pixels.
     size = Tuple( Float, Float )
     
     # Specifies the initial position of the current canvas list item when it
     # is added to the canvas. The value is a tuple of the form: (x,y), where
     # x and y values have the following meaning:
-    # - <= 0: Use the default coordinate.
-    # - 0 < value <= 1: Use the specified fraction of the corresponding width
-    #     or height dimension as the coordinate value.
-    # > 1: Use int(value) as the actual x or y coordinate specified in pixels.
+    #
+    # value <= 0
+    #   Use the default coordinate.
+    # 0 < value <= 1
+    #   Use the specified fraction of the corresponding width or height 
+    #   dimension as the coordinate value.
+    # value > 1
+    #   Use int(value) as the actual x or y coordinate specified in pixels.
     position = Tuple( Float, Float )
     
     # Specifies the tooltip to display for the current list canvas item:
