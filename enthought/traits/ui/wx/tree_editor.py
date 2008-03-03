@@ -39,8 +39,8 @@ from enthought.pyface.image_list \
     import ImageList
 
 from enthought.traits.api \
-    import HasStrictTraits, Any, Dict, true, false, Tuple, \
-           Int, List, Instance, Str, Event, Enum, TraitError
+    import HasStrictTraits, Any, Dict, true, false, Tuple, Int, List, \
+           Instance, Str, Event, Enum, TraitError
 
 from enthought.traits.trait_base \
     import enumerate
