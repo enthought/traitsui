@@ -19,10 +19,10 @@ from enthought.traits.api \
     import HasTraits, Instance, Property, List, Str, Bool
     
 from enthought.traits.ui.api \
-    import View, Item
+    import View, Item, TabularEditor
     
-from enthought.traits.ui.wx.extra.tabular_editor \
-    import TabularEditor, TabularAdapter
+from enthought.traits.ui.tabular_adapter \
+    import TabularAdapter
  
 from enthought.traits.ui.wx.ui_editor \
     import UIEditor
