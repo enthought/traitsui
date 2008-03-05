@@ -597,8 +597,8 @@ class SimpleEditor ( Editor ):
         """ Disposes of each current list item.
         """
         for control in self.control.GetChildren():
-            if hasattr( control, '_editor' ):
-                editor = control._editor
+            editor = getattr( control, '_editor', None )
+            if editor is not None:
                 editor.dispose()
                 editor.control = None
                                       
