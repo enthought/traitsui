@@ -598,8 +598,9 @@ class SimpleEditor ( Editor ):
         """
         for control in self.control.GetChildren():
             if hasattr( control, '_editor' ):
-                control._editor.dispose()
-                control._editor.control = None
+                editor = control._editor
+                editor.dispose()
+                editor.control = None
                                       
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:
