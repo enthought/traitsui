@@ -74,6 +74,10 @@ handler_trait = Instance( BaseTraitHandler )
 # The visible number of rows displayed
 rows_trait = Range( 1, 50, 5,
                     desc = 'the number of list rows to display' )
+
+# The visible number of columns displayed
+columns_trait = Range( 1, 10, 1,
+                       desc = 'the number of list columns to display' )
                     
 editor_trait = Instance( UIEditorFactory )                    
 
@@ -98,8 +102,11 @@ class ToolkitEditorFactory ( EditorFactory ):
     # The trait handler for each list item:
     trait_handler = handler_trait 
     
-    # Number of list rows to display:
+    # The number of list rows to display:
     rows = rows_trait 
+    
+    # The number of list columns to create:
+    columns = columns_trait
 
     # Use a notebook for a custom view?
     use_notebook = Bool( False )
@@ -316,8 +323,13 @@ class SimpleEditor ( Editor ):
         resizable     = ((trait_handler.minlen != trait_handler.maxlen) and
                          self.mutable)
         item_trait    = trait_handler.item_trait
-        list_sizer    = wx.FlexGridSizer( 0, 1 + resizable, 0, 0 )
-        list_sizer.AddGrowableCol( resizable )
+        factory       = self.factory
+        list_sizer    = wx.FlexGridSizer( 
+                            0, (1 + resizable) * factory.columns, 0, 0 )
+        j = resizable
+        for i in range( factory.columns ):
+            list_sizer.AddGrowableCol( j )
+            j += (1 + resizable)
         values        = self.value
         index         = 0
         width, height = 100, 18
