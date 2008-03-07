@@ -1,12 +1,22 @@
-"""A `SceneEditor` for the `SceneModel`.
+#------------------------------------------------------------------------------
+#
+#  Copyright (c) 2007, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Thanks for using Enthought open source!
+#  
+#  Authors: Prabhu Ramachandran <prabhu [at] aero.iitb.ac.in>
+#           Robert Kern <robert.kern [at] gmail.com>
+#
+#------------------------------------------------------------------------------
 
+""" A `SceneEditor` for the `SceneModel`.
 """
-
-# Authors: Prabhu Ramachandran <prabhu [at] aero.iitb.ac.in>
-#          Robert Kern <robert.kern [at] gmail.com>
-#           
-# Copyright (c) 2007, Enthought, Inc.
-# License: BSD Style.
 
 import wx
 
