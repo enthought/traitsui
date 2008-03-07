@@ -242,6 +242,7 @@ class SimpleEditor ( Editor ):
         except ValueError:
             # This might be a numpy array.
             unequal = True
+            
         if unequal:
             self._no_update = True
             self.control.SetValue( self.str_value )

@@ -1,22 +1,23 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 10/21/2004
 #
-#  Symbols defined: EditorFactory
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date: 10/21/2004
 #
 #------------------------------------------------------------------------------
+
 """ Defines the base wxPython EditorFactory class and classes the various 
-styles of editors used in a Traits-based user interface.
+    styles of editors used in a Traits-based user interface.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -42,6 +43,7 @@ from constants \
 class EditorFactory ( UIEditorFactory ):
     """ Base class for wxPython editor factories.
     """
+    
     #---------------------------------------------------------------------------
     #  'Editor' factory methods:
     #---------------------------------------------------------------------------
@@ -80,6 +82,7 @@ class EditorFactory ( UIEditorFactory ):
 class EditorWithListFactory ( EditorFactory ):
     """ Base class for factories of editors for objects that contain lists.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
@@ -99,10 +102,11 @@ class EditorWithListFactory ( EditorFactory ):
                         
 class SimpleEditor ( Editor ):
     """ Base class for simple style editors, which displays a text field
-    containing the text representation of the object trait value. Clicking in
-    the text field displays an editor-specific dialog box for changing the
-    value.
+        containing the text representation of the object trait value. Clicking
+        in the text field displays an editor-specific dialog box for changing
+        the value.
     """
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -134,8 +138,9 @@ class SimpleEditor ( Editor ):
 
 class TextEditor ( Editor ):
     """ Base class for text style editors, which displays an editable text 
-    field, containing a text representation of the object trait value.
+        field, containing a text representation of the object trait value.
     """
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -168,8 +173,9 @@ class TextEditor ( Editor ):
 
 class ReadonlyEditor ( Editor ):
     """ Base class for read-only style editors, which displays a read-only text
-    field, containing a text representation of the object trait value.
+        field, containing a text representation of the object trait value.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------

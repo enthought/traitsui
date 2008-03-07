@@ -62,6 +62,7 @@ class _ThemedButtonEditor ( Editor ):
         label   = factory.label
         if (label == '') and (factory.image is None):
             label = self.item.get_label( self.ui )
+        label = self.string_value( label )
             
         self.button = button = ThemedControl( **factory.get(
             'theme', 'image', 'position', 'spacing' ) ).set(

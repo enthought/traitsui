@@ -161,7 +161,7 @@ class SimpleEditor ( Editor ):
             widget.
         """
         label = self.factory.label or self.item.get_label( self.ui )
-        self.control = wx.Button( parent, -1, label )
+        self.control = wx.Button( parent, -1, self.string_value( label ) )
         self.sync_value( self.factory.label_value, 'label', 'from' )
         wx.EVT_BUTTON( parent, self.control.GetId(), self.update_object )
         self.set_tooltip()
@@ -171,7 +171,7 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
 
     def _label_changed ( self, label ):
-        self.control.SetLabel( label )
+        self.control.SetLabel( self.string_value( label ) )
 
     #---------------------------------------------------------------------------
     #  Handles the user clicking the button by setting the value on the object:
@@ -218,13 +218,15 @@ class CustomEditor ( SimpleEditor ):
         from enthought.pyface.image_button import ImageButton
 
         factory       = self.factory
-        self._control = ImageButton( parent,
-                                     label          = factory.label,
-                                     image          = factory.image,
-                                     style          = factory.style,
-                                     orientation    = factory.orientation,
-                                     width_padding  = factory.width_padding,
-                                     height_padding = factory.height_padding )
+        self._control = ImageButton(
+            parent,
+            label          = self.string_value( factory.label ),
+            image          = factory.image,
+            style          = factory.style,
+            orientation    = factory.orientation,
+            width_padding  = factory.width_padding,
+            height_padding = factory.height_padding
+        )
         self.control = self._control.control
         self._control.on_trait_change( self.update_object, 'clicked',
                                        dispatch = 'ui' )

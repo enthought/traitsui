@@ -1,25 +1,26 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 10/21/2004
 #
-#  Symbols defined: ToolkitEditorFactory
-#
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date: 10/21/2004
+# 
 #  fixme: Add undo/redo support
 #  fixme: Allow factory to handle a TraitListObject for the 'values' trait.
-#
+# 
 #------------------------------------------------------------------------------
+
 """ Defines the set editor and the set editor factory, for the wxPython user 
-interface toolkit.
+    interface toolkit.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -48,6 +49,7 @@ from enthought.traits.ui.ui_traits \
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for editors for sets.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -105,11 +107,11 @@ class ToolkitEditorFactory ( EditorFactory ):
 class SimpleEditor ( Editor ):
     """ Simple style of editor for sets.
     
-    The editor displays two list boxes, with buttons for moving the selected
-    items from left to right, or vice versa. If **can_move_all** on the factory
-    is True, then buttons are displayed for moving all the items to one box
-    or the other. If the set is ordered, buttons are displayed for moving the
-    selected item up or down in right-side list box.
+        The editor displays two list boxes, with buttons for moving the selected
+        items from left to right, or vice versa. If **can_move_all** on the 
+        factory is True, then buttons are displayed for moving all the items to
+        one box or the other. If the set is ordered, buttons are displayed for
+        moving the selected item up or down in right-side list box.
     """
     
     #---------------------------------------------------------------------------

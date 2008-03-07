@@ -26,6 +26,9 @@ import logging
 
 import wx
 
+from string \
+    import capitalize
+
 from enthought.traits.api \
     import Range, List, Str, TraitError
 
@@ -134,8 +137,9 @@ class SimpleEditor ( EditorWithList ):
     def list_updated ( self, values ):
         """ Handles updates to the list of legal checklist values.
         """
+        sv = self.string_value
         if (len( values ) > 0) and isinstance( values[0], basestring ):
-           values = [ ( x, x.capitalize() ) for x in values ]
+           values = [ ( x, sv( x, capitalize ) ) for x in values ]
         self.values = valid_values = [ x[0] for x in values ]
         self.names  =                [ x[1] for x in values ]
 
@@ -168,6 +172,7 @@ class SimpleEditor ( EditorWithList ):
         control.Clear()
         for name in self.names:
             control.Append( name )
+            
         self.update_editor()
 
     #----------------------------------------------------------------------------
@@ -180,6 +185,7 @@ class SimpleEditor ( EditorWithList ):
         value = self.values[ self.names.index( event.GetString() ) ]
         if type( self.value ) is not str:
            value = [ value ]
+           
         self.value = value
 
     #---------------------------------------------------------------------------
@@ -236,9 +242,11 @@ class CustomEditor ( SimpleEditor ):
         rows   = (n + cols - 1) / cols
         incr   = [ n / cols ] * cols
         rem    = n % cols
+        
         for i in range( cols ):
             incr[i] += (rem > i)
         incr[-1] = -(reduce( lambda x, y: x + y, incr[:-1], 0 ) - 1)
+        
         if cols > 1:
            sizer = wx.GridSizer( 0, cols, 2, 4 )
         else:
@@ -260,6 +268,7 @@ class CustomEditor ( SimpleEditor ):
                 else:
                    control = wx.CheckBox( panel, -1, '' )
                    control.Show( False )
+                   
                 sizer.Add( control, 0, wx.NORTH, 5 )
 
         # Lay out the controls:
@@ -331,7 +340,9 @@ def parse_value ( value ):
     """
     if value is None:
        return []
+       
     if type( value ) is not str:
        return value[:]
+       
     return [ x.strip() for x in value.split( ',' ) ]
 

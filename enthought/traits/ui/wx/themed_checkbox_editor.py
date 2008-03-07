@@ -57,7 +57,7 @@ class _ThemedCheckboxEditor ( Editor ):
         # Create the checkbox and its control:
         item      = self.item
         factory   = self.factory
-        label     = factory.label or item.label
+        label     = self.string_value( factory.label or item.label )
         min_size  = ( 0, 0 )
         if factory.theme is not None:
             min_size  = ( 80, 0 )
