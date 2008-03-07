@@ -25,7 +25,7 @@
 import wx
 
 from string \
-    import ascii_lowercase
+    import capitalize
     
 from editor \
     import Editor
@@ -427,8 +427,9 @@ class SimpleEditor ( BaseEditor ):
                                
 class RadioEditor ( BaseEditor ):
     """ Enumeration editor, used for the "custom" style, that displays radio
-    buttons.
+        buttons.
     """
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -507,9 +508,8 @@ class RadioEditor ( BaseEditor ):
         for i in range( rows ):
             for j in range( cols ):
                 if n > 0:
-                    name = label = names[ index ]
-                    if label[:1] in ascii_lowercase:
-                        label = label.capitalize()
+                    name    = label = names[ index ]
+                    label   = self.string_value( label, capitalize )
                     control = wx.RadioButton( panel, -1, label, style = style )
                     control.value = mapping[ name ]
                     style         = 0
@@ -534,8 +534,9 @@ class RadioEditor ( BaseEditor ):
                                
 class ListEditor ( BaseEditor ):
     """ Enumeration editor, used for the "custom" style, that displays a list
-    box.
+        box.
     """
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
