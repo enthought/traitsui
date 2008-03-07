@@ -1505,7 +1505,7 @@ class SimpleEditor ( Editor ):
                 else:
                     data = node._drop_object( object, data )
                     if data is not None:
-                        self._undoable_append( node, object, data )
+                        self._undoable_append( node, object, data, False )
 
                 return drag_result
 
