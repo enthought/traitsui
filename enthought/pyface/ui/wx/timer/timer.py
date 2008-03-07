@@ -1,9 +1,21 @@
-"""A `wx.Timer` subclass that invokes a specified callback
-periodically.
+#-------------------------------------------------------------------------------
+#  
+#  Copyright (c) 2006, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#  
+#  Thanks for using Enthought open source!
+#  
+#  Author: Prabhu Ramachandran <prabhu@aero.iitb.ac.in>
+#  
+#-------------------------------------------------------------------------------
+
+"""A `wx.Timer` subclass that invokes a specified callback periodically.
 """
-# Author: Prabhu Ramachandran <prabhu@aero.iitb.ac.in>
-# Copyright (c) 2006-2007,  Enthought, Inc.
-# License: BSD Style.
 
 # Standard library imports.
 import wx
