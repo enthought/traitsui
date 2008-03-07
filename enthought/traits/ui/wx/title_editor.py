@@ -1,14 +1,22 @@
 #-------------------------------------------------------------------------------
 #
-#  Define an editor that displays a string value as a title. 
+#  Copyright (c) 2006, Enthought, Inc.
+#  All rights reserved.
 #
-#  Written by: David C. Morrill
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Date: 07/06/2006
+#  Thanks for using Enthought open source!
 #
-#  (c) Copyright 2006 by David C. Morrill
+#  Author: David C. Morrill
+#  Date:   07/06/2006
 #
 #-------------------------------------------------------------------------------
+
+""" Define an editor that displays a string value as a title.
+"""
 
 #-------------------------------------------------------------------------------
 #  Imports:

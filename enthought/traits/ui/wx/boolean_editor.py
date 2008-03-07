@@ -1,34 +1,47 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 10/21/2004
 #
-#  Symbols defined: ToolkitEditorFactory
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   10/21/2004
 #
 #------------------------------------------------------------------------------
+
 """ Defines the various Boolean editors and the Boolean editor factory for the
-wxPython user interface toolkit.
+    wxPython user interface toolkit.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
 
 import wx
 
-from enthought.traits.api    import Dict, Str, Any, true
-from enthought.traits.ui.api import View
-from editor              import Editor
-from text_editor         import SimpleEditor         as TextEditor
-from text_editor         import ToolkitEditorFactory as EditorFactory
-from constants           import ReadonlyColor
+from enthought.traits.api \
+    import Dict, Str, Any, true
+    
+from enthought.traits.ui.api \
+    import View
+    
+from editor \
+    import Editor
+    
+from text_editor \
+    import SimpleEditor as TextEditor
+    
+from text_editor \
+    import ToolkitEditorFactory as EditorFactory
+    
+from constants \
+    import ReadonlyColor
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:

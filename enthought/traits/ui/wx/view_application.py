@@ -1,22 +1,24 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 11/10/2004
+#
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
 #  
-#  Symbols defined: view_application
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   11/10/2004
 #
 #------------------------------------------------------------------------------
+
 """ Creates a wxPython specific modal dialog user interface that runs as a 
-complete application, using information from the specified UI object.
+    complete application, using information from the specified UI object.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------

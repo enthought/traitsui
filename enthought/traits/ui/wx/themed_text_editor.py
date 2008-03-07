@@ -1,13 +1,17 @@
 #-------------------------------------------------------------------------------
 #
-#  Traits UI simple, read-only single line text editor with a themed (i.e.
-#  image) background.
+#  Copyright (c) 2007, Enthought, Inc.
+#  All rights reserved.
 #
-#  Written by: David C. Morrill
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Date: 06/13/2007
+#  Thanks for using Enthought open source!
 #
-#  (c) Copyright 2007 by Enthought, Inc.
+#  Author: David C. Morrill
+#  Date:   06/13/2007
 #
 #-------------------------------------------------------------------------------
 

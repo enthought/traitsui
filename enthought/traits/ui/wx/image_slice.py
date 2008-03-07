@@ -1,14 +1,17 @@
 #-------------------------------------------------------------------------------
 #  
-#  Class to aid in automatically computing the 'slice' points for a specified
-#  ImageResource and then drawing it that it can be 'stretched' to fit a larger
-#  region than the original image.
+#  Copyright (c) 2007, Enthought, Inc.
+#  All rights reserved.
+#
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Thanks for using Enthought open source!
 #  
-#  Written by: David C. Morrill
-#  
-#  Date: 06/06/2007
-#  
-#  Copyright 2007 by Enthought, Inc.
+#  Author: David C. Morrill
+#  Date:   06/06/2007
 #  
 #-------------------------------------------------------------------------------
 

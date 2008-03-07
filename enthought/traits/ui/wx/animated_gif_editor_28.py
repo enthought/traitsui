@@ -1,10 +1,17 @@
 #-------------------------------------------------------------------------------
 #
-#  Written by: David C. Morrill
+#  Copyright (c) 2007, Enthought, Inc.
+#  All rights reserved.
 #
-#  Date: 03/02/2007
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  (c) Copyright 2007 by Enthought, Inc.
+#  Thanks for using Enthought open source!
+#
+#  Author: David C. Morrill
+#  Date:   03/02/2007
 #
 #-------------------------------------------------------------------------------
 

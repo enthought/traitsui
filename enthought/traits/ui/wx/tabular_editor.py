@@ -1,13 +1,17 @@
 #-------------------------------------------------------------------------------
 #
-#  A traits UI editor for editing tabular data (arrays, list of tuples, lists of 
-#  objects, etc).
+#  Copyright (c) 2007, Enthought, Inc.
+#  All rights reserved.
 #
-#  Written by: David C. Morrill
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#  Date: 05/20/2007
+#  Thanks for using Enthought open source!
 #
-#  (c) Copyright 2007 by Enthought, Inc.
+#  Author: David C. Morrill
+#  Date:   05/20/2007
 #
 #-------------------------------------------------------------------------------
 

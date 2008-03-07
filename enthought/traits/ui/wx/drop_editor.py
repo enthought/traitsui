@@ -1,23 +1,25 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 04/13/2005
 #
-#  Symbols defined: ToolkitEditorFactory
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   04/13/2005
 #
 #------------------------------------------------------------------------------
+
 """ Defines a drop target editor and editor factory for the wxPython user 
-interface toolkit. A drop target editor handles drag and drop operations as a
-drop target.
+    interface toolkit. A drop target editor handles drag and drop operations as
+    a drop target.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -46,6 +48,7 @@ from enthought.util.wx.drag_and_drop \
 class ToolkitEditorFactory ( EditorFactory ):
     """ wxPython editor factory for drop editors.
     """
+    
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------

@@ -1,19 +1,24 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
 #
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+# 
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-# Author: David C. Morrill
-# Date: 12/18/2004
+#  Thanks for using Enthought open source!
+# 
+#  Author: David C. Morrill
+#  Date:   12/18/2004
+#
 #------------------------------------------------------------------------------
+
 """ Defines the base class for the wxPython-based Traits UI modal and non-modal
-dialogs.
+    dialogs.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------

@@ -1,24 +1,26 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2005, Enthought, Inc.
-# All rights reserved.
-# 
-# This software is provided without warranty under the terms of the BSD
-# license included in enthought/LICENSE.txt and may be redistributed only
-# under the conditions described in the aforementioned license.  The license
-# is also available online at http://www.enthought.com/licenses/BSD.txt
-# Thanks for using Enthought open source!
-# 
-# Author: David C. Morrill
-# Date: 11/01/2004
 #
-#  Symbols defined: ui_wizard
+#  Copyright (c) 2005, Enthought, Inc.
+#  All rights reserved.
+#  
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
+#  Thanks for using Enthought open source!
+#  
+#  Author: David C. Morrill
+#  Date:   11/01/2004
+#  
 #------------------------------------------------------------------------------
+
 """ Creates a wizard-based wxPython user interface for a specified UI object.
 
-A wizard is a dialog box that displays a series of pages, which the user can
-navigate with forward and back buttons.
+    A wizard is a dialog box that displays a series of pages, which the user 
+    can navigate with forward and back buttons.
 """
+
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
@@ -26,10 +28,17 @@ navigate with forward and back buttons.
 import wx
 import wx.wizard as wz
 
-from constants        import DefaultTitle
-from helper           import restore_window, save_window, GroupEditor
-from ui_panel         import fill_panel_for_group
-from enthought.traits.api import Trait, Str
+from constants \
+    import DefaultTitle
+    
+from helper \
+    import restore_window, save_window, GroupEditor
+
+from ui_panel \
+    import fill_panel_for_group
+    
+from enthought.traits.api \
+    import Trait, Str
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:
