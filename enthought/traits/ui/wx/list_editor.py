@@ -46,7 +46,7 @@ from enthought.traits.ui.dock_window_theme \
 from enthought.traits.ui.dockable_view_element \
     import DockableViewElement
     
-from enthought.pyface.dock.core \
+from enthought.pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl, \
            DockStyle
 

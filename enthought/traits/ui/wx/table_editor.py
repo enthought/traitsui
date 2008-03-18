@@ -52,7 +52,7 @@ from enthought.traits.ui.ui_traits \
 from enthought.pyface.grid.api \
     import Grid
 
-from enthought.pyface.dock.core \
+from enthought.pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
 from enthought.pyface.image_resource \

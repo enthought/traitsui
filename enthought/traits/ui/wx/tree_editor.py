@@ -58,7 +58,7 @@ from enthought.traits.ui.undo \
 from enthought.traits.ui.menu \
     import Menu, Action, Separator
 
-from enthought.pyface.dock.core \
+from enthought.pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
 from constants \

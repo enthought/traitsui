@@ -50,7 +50,7 @@ from enthought.traits.ui.help_template \
 from enthought.traits.ui.menu \
     import UndoButton, RevertButton, HelpButton
     
-from enthought.pyface.dock.core \
+from enthought.pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
     
 from enthought.pyface.sizers.flow \
