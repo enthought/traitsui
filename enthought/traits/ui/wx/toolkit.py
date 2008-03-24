@@ -463,6 +463,14 @@ class GUIToolkit ( Toolkit ):
         import font_trait as ft
         return ft.WxFont( *args, **traits )
 
+    #---------------------------------------------------------------------------
+    #  'Editor' class methods:
+    #---------------------------------------------------------------------------
+
+    # Generic UI-base editor:
+    def ui_editor ( self ):
+        import ui_editor
+        return ui_editor.UIEditor
 
     #---------------------------------------------------------------------------
     #  'EditorFactory' factory methods:
