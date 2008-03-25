@@ -464,6 +464,9 @@ class TableModel ( GridModel ):
         """ Returns the editor for the specified cell.
         """
 
+        if self.editor is None:
+            return None
+            
         column = self.__get_column( col )
         object = self.get_filtered_item( row )
         editor = column.get_editor( object )

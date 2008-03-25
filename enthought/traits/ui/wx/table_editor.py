@@ -782,6 +782,7 @@ class TableEditor ( Editor ):
         """
         if not isinstance( objects, SequenceTypes ):
             objects = [ objects ]
+            
         self.grid.set_selection( [ TraitGridSelection( obj = object )
                                    for object in objects ], notify = notify )
 
@@ -1051,7 +1052,7 @@ class TableEditor ( Editor ):
         # Save the new selection information:
         self.set( selected_row_index  = index,
                   trait_change_notify = False )
-        self.selected_row = row        
+        self.setx( selected_row = row )        
             
         # Update the toolbar status:
         self._update_toolbar( row is not None )
@@ -1084,7 +1085,8 @@ class TableEditor ( Editor ):
         # Save the new selection information:
         self.trait_set( selected_row_indices = [ v[0] for v in values ],
                         trait_change_notify  = False )
-        self.selected_rows = rows = [ v[1] for v in values ]
+        rows = [ v[1] for v in values ]
+        self.setx( selected_rows = rows )
             
         # Update the toolbar status:
         self._update_toolbar( len( values ) > 0 )
@@ -1116,7 +1118,7 @@ class TableEditor ( Editor ):
         # Save the new selection information:
         self.set( selected_column_index = index,
                   trait_change_notify   = False )      
-        self.selected_column = column        
+        self.setx( selected_column = column )        
 
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, column )
@@ -1141,7 +1143,8 @@ class TableEditor ( Editor ):
         # Save the new selection information:
         self.set( selected_column_indices = [ v[0] for v in values ],
                   trait_change_notify     = False )
-        self.selected_columns = columns = [ v[1] for v in values ]
+        columns = [ v[1] for v in values ]
+        self.setx( selected_columns = columns )
 
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, columns )
@@ -1149,10 +1152,13 @@ class TableEditor ( Editor ):
     def _selection_cell_updated ( self, event ):
         """ Handles single cell selection changes.
         """
+        tl = self.grid._grid.GetSelectionBlockTopLeft()
+        if len( tl ) == 0:
+            return
+            
         gfi  = self.model.get_filtered_item
         rio  = self.model.raw_index_of
         cols = self.columns
-        tl   = self.grid._grid.GetSelectionBlockTopLeft()
         br   = iter( self.grid._grid.GetSelectionBlockBottomRight() )
         
         # Get the column items and indices in the selection:
@@ -1175,7 +1181,7 @@ class TableEditor ( Editor ):
         # Save the new selection information:
         self.set( selected_cell_index = index,
                   trait_change_notify = False )
-        self.selected_cell = cell        
+        self.setx( selected_cell = cell )
 
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, cell )
@@ -1205,66 +1211,80 @@ class TableEditor ( Editor ):
         # Save the new selection information:
         self.set( selected_cell_indices = [ v[0] for v in values ],
                   trait_change_notify   = False )
-        self.selected_cells = cells = [ v[1] for v in values ]        
+        cells = [ v[1] for v in values ]        
+        self.setx( selected_cells = cells )
 
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, cells )
         
     def _selected_row_changed ( self, item ):
-        if item is None:
-            self.set_selection( notify = False )
-        else:
-            self.set_selection( item, notify = False )
+        if not self._no_notify:
+            if item is None:
+                self.set_selection( notify = False )
+            else:
+                self.set_selection( item, notify = False )
         
     def _selected_row_index_changed ( self, row ):
-        if row < 0:
-            self.set_selection( notify = False )
-        else:
-            self.set_selection( self.value[ row ], notify = False )
+        if not self._no_notify:
+            if row < 0:
+                self.set_selection( notify = False )
+            else:
+                self.set_selection( self.value[ row ], notify = False )
         
     def _selected_rows_changed ( self, items ):
-        self.set_selection( items, notify = False )
+        if not self._no_notify:
+            self.set_selection( items, notify = False )
         
     def _selected_row_indices_changed ( self, indices ):
-        value = self.value
-        self.set_selection( [ value[i] for i in indices ], notify = False )
+        if not self._no_notify:
+            value = self.value
+            self.set_selection( [ value[i] for i in indices ], notify = False )
         
     def _selected_column_changed ( self, name ):
-        self.set_extended_selection( ( None, name ) )
+        if not self._no_notify:
+            self.set_extended_selection( ( None, name ) )
         
     def _selected_column_index_changed ( self, index ):
-        if index < 0:
-            self.set_extended_selection()
-        else:
-            self.set_extended_selection(
-                ( None, self.model.get_column_name[ index ] ) )
+        if not self._no_notify:
+            if index < 0:
+                self.set_extended_selection()
+            else:
+                self.set_extended_selection(
+                    ( None, self.model.get_column_name[ index ] ) )
         
     def _selected_columns_changed ( self, names ):
-        self.set_extended_selection( [ ( None, name ) for name in names ] )
+        if not self._no_notify:
+            self.set_extended_selection( [ ( None, name ) for name in names ] )
         
     def _selected_column_indices_changed ( self, indices ):
-        gcn = self.model.get_column_name
-        self.set_extended_selection( [ ( None, gcn( i ) ) for i in indices ] )
+        if not self._no_notify:
+            gcn = self.model.get_column_name
+            self.set_extended_selection( [ ( None, gcn(i) ) for i in indices ] )
         
     def _selected_cell_changed ( self, cell ):
-        self.set_extended_selection( [ cell ] )
+        if not self._no_notify:
+            self.set_extended_selection( [ cell ] )
         
     def _selected_cell_index_changed ( self, pair ):
-        row, column = pair
-        if (row < 0) or (column < 0):
-            self.set_extended_selection()
-        else:
-            self.set_extended_selection( 
-                ( self.value[ row ], self.model.get_column_name[ column ] ) )
+        if not self._no_notify:
+            row, column = pair
+            if (row < 0) or (column < 0):
+                self.set_extended_selection()
+            else:
+                self.set_extended_selection( 
+                    ( self.value[ row ], 
+                      self.model.get_column_name[ column ] ) )
         
     def _selected_cells_changed ( self, cells ):
-        self.set_extended_selection( cells )
+        if not self._no_notify:
+            self.set_extended_selection( cells )
         
     def _selected_cell_indices_changed ( self, pairs ):
-        value = self.value
-        gcn   = self.model.get_column_name
-        self.set_extended_selection( [ ( value[ row ], gcn( column ) ) 
-                                       for row, column in pairs ] )
+        if not self._no_notify:
+            value = self.value
+            gcn   = self.model.get_column_name
+            self.set_extended_selection( [ ( value[ row ], gcn( column ) ) 
+                                           for row, column in pairs ] )
         
     def _update_toolbar ( self, has_selection ):
         """ Updates the toolbar after a selection change.
@@ -1619,6 +1639,20 @@ class TableEditor ( Editor ):
             return
 
         action.perform( selection )
+        
+    #---------------------------------------------------------------------------
+    #  Set one or more attributes without notifying the grid model:
+    #---------------------------------------------------------------------------
+    
+    def setx ( self, **keywords ):
+        """ Set one or more attributes without notifying the grid model.
+        """
+        self._no_notify = True
+        
+        for name, value in keywords.items():
+            setattr( self, name, value )
+            
+        self._no_notify = False
 
 #-- Menu support methods: ------------------------------------------------------
 
