@@ -600,10 +600,8 @@ class ListEditor ( BaseEditor ):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
         """
-        control = self.control
-        control.Clear()
-        for name in self.names:
-            control.Append( name )
+        self.control.Clear()
+        self.control.AppendItems( self.names )
             
         # fixme: Is this line necessary?
         self.update_editor()
