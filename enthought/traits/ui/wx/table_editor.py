@@ -672,14 +672,15 @@ class TableEditor ( Editor ):
         # Set the default size for each table row:
         height = factory.row_height
         if height <= 0:
-            height = _grid.GetTextExtent( 'My' )[1] + 6
+            height = _grid.GetTextExtent( 'My' )[1] + 9
         _grid.SetDefaultRowSize( height )
             
         dy = -1
         if factory.rows > 0: 
             self.scrollable = False 
-            dy = (_grid.GetColLabelSize() + 
-                 (factory.rows * _grid.GetRowSize( 0 ))) 
+            if len( self.model.get_filtered_items() ) > 0:
+                height = _grid.GetRowSize( 0 )
+            dy = (_grid.GetColLabelSize() + (factory.rows * height)) 
             
         _grid.SetSizeHints( -1, dy, -1, dy )
         
