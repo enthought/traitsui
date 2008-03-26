@@ -887,22 +887,44 @@ class TableEditor ( Editor ):
     #-- Property Implementations -----------------------------------------------
     
     def _get_selected_indices ( self ):
-        if self.factory.selection_mode == 'rows':
+        sm = self.factory.selection_mode
+        if sm == 'rows':
             return self.selected_row_indices
             
-        index = self.selected_row_index
-        if index >= 0:
-            return [ index ]
+        elif sm == 'row':
+            index = self.selected_row_index
+            if index >= 0:
+                return [ index ]
+                
+        elif sm == 'cells':
+            return list( set( [ row_col[0] for 
+                                row_col in self.selected_cell_indices ] ) )
+            
+        elif sm == 'cell':
+            index = self.selected_cell_index[0]
+            if index >= 0:
+                return [ index ]
             
         return []
         
     def _get_selected_items ( self ):
-        if self.factory.selection_mode == 'rows':
+        sm = self.factory.selection_mode
+        if sm == 'rows':
             return self.selected_rows
             
-        item = self.selected_row
-        if item is not None:
-            return [ item ]
+        elif sm == 'row':    
+            item = self.selected_row
+            if item is not None:
+                return [ item ]
+                
+        elif sm == 'cells':
+            return list( set( [ item_name[0] 
+                                for item_name in self.selected_cells ] ) )
+            
+        elif sm == 'cell':
+            item = self.selected_cell[0]
+            if item is not None:
+                return [ item ]
             
         return []
         
@@ -1183,6 +1205,9 @@ class TableEditor ( Editor ):
         self.set( selected_cell_index = index,
                   trait_change_notify = False )
         self.setx( selected_cell = cell )
+            
+        # Update the toolbar status:
+        self._update_toolbar( len( values ) > 0 )
 
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, cell )
@@ -1214,6 +1239,9 @@ class TableEditor ( Editor ):
                   trait_change_notify   = False )
         cells = [ v[1] for v in values ]        
         self.setx( selected_cells = cells )
+            
+        # Update the toolbar status:
+        self._update_toolbar( len( cells ) > 0 )
 
         # Invoke the user 'on_select' handler:
         self.ui.evaluate( self.factory.on_select, cells )
@@ -1416,7 +1444,10 @@ class TableEditor ( Editor ):
             model.delete_filtered_item_at( index )
             model.insert_filtered_item_after( index, object )
             
-        self.set_selection( objects )
+        if self.in_row_mode:
+            self.set_selection( objects )
+        else:
+            self.set_extended_selection( self.selected_values )
 
     #---------------------------------------------------------------------------
     #  Handles the user requesting to move the current item down one row:
@@ -1435,7 +1466,10 @@ class TableEditor ( Editor ):
             model.delete_filtered_item_at( index )
             model.insert_filtered_item_after( index, object )
             
-        self.set_selection( objects )
+        if self.in_row_mode:
+            self.set_selection( objects )
+        else:
+            self.set_extended_selection( self.selected_values )
 
     #---------------------------------------------------------------------------
     #  Handles the user requesting a table search:
@@ -1460,12 +1494,12 @@ class TableEditor ( Editor ):
         self.add_row()
 
     #---------------------------------------------------------------------------
-    #  Handles the user requesting to delete the currently selected rows of the
+    #  Handles the user requesting to delete the currently selected items of the
     #  table:
     #---------------------------------------------------------------------------
 
     def on_delete ( self ):
-        """ Handles the user requesting to delete the currently selected rows
+        """ Handles the user requesting to delete the currently selected items
             of the table.
         """
         # Get the selected row indices:
@@ -1480,7 +1514,7 @@ class TableEditor ( Editor ):
                                           index   = index,
                                           removed = [ object ] ) )
              
-        # Set compute the new selection and set it:
+        # Compute the new selection and set it:
         if not self.in_row_mode:
             indices = []
             
@@ -1495,7 +1529,10 @@ class TableEditor ( Editor ):
                 if indices[i] < 0:
                     del indices[i]
             
-        self.set_selection( [ items[i] for i in indices ] )
+        if len( indices ) > 0:
+            self.set_selection( [ items[i] for i in indices ] )
+        else:
+            self._update_toolbar( False )
 
     #---------------------------------------------------------------------------
     #  Handles the user requesting to set the user preference items for the
@@ -1922,6 +1959,7 @@ class TableEditorToolbar ( HasPrivateTraits ):
                        { 'name':    'Delete',
                          'tooltip': 'Delete current item',
                          'action':  'on_delete',
+                         'enabled': False,
                          'image':   ImageResource( 'table_delete.png' ) } )
 
     # Edit the user preferences:
@@ -1943,25 +1981,25 @@ class TableEditorToolbar ( HasPrivateTraits ):
 
     def __init__ ( self, parent = None, **traits ):
         super( TableEditorToolbar, self ).__init__( **traits )
-        factory = self.editor.factory
+        editor  = self.editor
+        factory = editor.factory
         actions = []
         
         if factory.sortable and (not factory.sort_model):
             actions.append( self.no_sort )
             
-        if self.editor.in_row_mode:
-            if factory.reorderable:
-                actions.append( self.move_up )
-                actions.append( self.move_down )
+        if (not editor.in_column_mode) and factory.reorderable:
+            actions.append( self.move_up )
+            actions.append( self.move_down )
                 
-            if factory.search is not None:
-                actions.append( self.search )
+        if editor.in_row_mode and (factory.search is not None):
+            actions.append( self.search )
             
         if factory.editable:
             if (factory.row_factory is not None) and (not factory.auto_add):
                 actions.append( self.add )
-            if ((factory.deletable != False) and 
-                (factory.selection_mode in ( 'row', 'rows' ))):
+                
+            if (factory.deletable != False) and (not editor.in_column_mode):
                 actions.append( self.delete )
                 
         if factory.configurable:
