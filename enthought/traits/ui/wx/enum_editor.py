@@ -411,8 +411,7 @@ class SimpleEditor ( BaseEditor ):
             
         if clear:
             control.Clear()
-            for name in self.names:
-                control.Append( name )
+            control.AppendItems( self.names )
         
         if cur_name is not None:
             self._no_enum_update += 1
