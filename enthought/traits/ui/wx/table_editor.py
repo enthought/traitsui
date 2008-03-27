@@ -1504,6 +1504,7 @@ class TableEditor ( Editor ):
         """
         # Get the selected row indices:
         indices = self.selected_indices[:]
+        values  = self.selected_values[:]
         indices.reverse()
             
         # Delete the selected rows:
@@ -1515,22 +1516,25 @@ class TableEditor ( Editor ):
                                           removed = [ object ] ) )
              
         # Compute the new selection and set it:
-        if not self.in_row_mode:
-            indices = []
-            
-        indices.reverse()                                          
-        for i in range( 0, len( indices ) ):
-            indices[i] -= i
-            
         items = self.model.get_filtered_items()
+        n     = len( items ) - 1
+        indices.reverse()
         for i in range( len( indices ) - 1, -1, -1 ):
-            if indices[i] >= len( items ):
-                indices[i] -= 1
+            if indices[i] > n:
+                indices[i] = n
                 if indices[i] < 0:
                     del indices[i]
+                    del values[i]
             
-        if len( indices ) > 0:
-            self.set_selection( [ items[i] for i in indices ] )
+        n = len( indices )
+        if n > 0:
+            if self.in_row_mode:
+                self.set_selection( 
+                    list( set( [ items[i] for i in indices ] ) ) )
+            else:
+                self.set_extended_selection( 
+                    list( set( [ ( items[ indices[i] ], values[i][1] )
+                                 for i in range( n ) ] ) ) )
         else:
             self._update_toolbar( False )
 
