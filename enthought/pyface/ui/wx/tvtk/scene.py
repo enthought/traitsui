@@ -34,8 +34,8 @@ from enthought.pyface.api import Widget, GUI, FileDialog, OK
 from enthought.pyface.tvtk import picker
 from enthought.pyface.tvtk import light_manager
 from enthought.pyface.tvtk.tvtk_scene import TVTKScene
-from enthought.pyface.tvtk.wxVTKRenderWindowInteractor \
-     import wxVTKRenderWindowInteractor
+
+from wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
 
 
 ######################################################################
