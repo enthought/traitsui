@@ -1,21 +1,5 @@
-#------------------------------------------------------------------------------
-#
-#  Copyright (c) 2002, Enthought, Inc.
-#  All rights reserved.
-#  
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
-#
-#  Thanks for using Enthought open source!
-#  
-#  Author: Prabhu Ramachandran
-#  Date:   4/2002
-#
-#------------------------------------------------------------------------------
-
 """
+
 A VTK RenderWindowInteractor widget for wxPython.
 
 Find wxPython info at http://wxPython.org
@@ -119,15 +103,10 @@ class wxVTKRenderWindowInteractor(baseClass):
     
     def __init__(self, parent, ID, *args, **kw):
         """Default class constructor.
-        
-        Parameters
-        ----------
-        parent
-            parent window
-        ID
-            window ID
-        kw : wxPython keywords 
-            (position, size, style) plus the 'stereo' keyword
+        @param parent: parent window
+        @param ID: window id
+        @param **kw: wxPython keywords (position, size, style) plus the
+        'stereo' keyword
         """
         # private attributes
         self.__RenderWhenDisabled = 0
@@ -205,6 +184,8 @@ class wxVTKRenderWindowInteractor(baseClass):
         self._Iren.SetRenderWindow( vtk.vtkRenderWindow() )
         self._Iren.AddObserver('CreateTimerEvent', self.CreateTimer)
         self._Iren.AddObserver('DestroyTimerEvent', self.DestroyTimer)
+        self._Iren.GetRenderWindow().AddObserver('CursorChangedEvent',
+                                                 self.CursorChangedEvent)
 
         try:
             self._Iren.GetRenderWindow().SetSize(size.width, size.height)
@@ -227,6 +208,20 @@ class wxVTKRenderWindowInteractor(baseClass):
 
         # set when we have captured the mouse.
         self._own_mouse = False
+
+        # A mapping for cursor changes.
+        self._cursor_map = {0: wx.CURSOR_ARROW, # VTK_CURSOR_DEFAULT
+                            1: wx.CURSOR_ARROW, # VTK_CURSOR_ARROW
+                            2: wx.CURSOR_SIZENESW, # VTK_CURSOR_SIZENE
+                            3: wx.CURSOR_SIZENWSE, # VTK_CURSOR_SIZENWSE
+                            4: wx.CURSOR_SIZENESW, # VTK_CURSOR_SIZESW
+                            5: wx.CURSOR_SIZENWSE, # VTK_CURSOR_SIZESE
+                            6: wx.CURSOR_SIZENS, # VTK_CURSOR_SIZENS
+                            7: wx.CURSOR_SIZEWE, # VTK_CURSOR_SIZEWE
+                            8: wx.CURSOR_SIZING, # VTK_CURSOR_SIZEALL
+                            9: wx.CURSOR_HAND, # VTK_CURSOR_HAND
+                            10: wx.CURSOR_CROSS, # VTK_CURSOR_CROSSHAIR
+                           }
         
     def BindEvents(self):
         """Binds all the necessary events for navigation, sizing,
@@ -258,7 +253,6 @@ class wxVTKRenderWindowInteractor(baseClass):
         
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
-
     def __getattr__(self, attr):        
         """Makes the object behave like a
         vtkGenericRenderWindowInteractor.
@@ -281,7 +275,35 @@ class wxVTKRenderWindowInteractor(baseClass):
         """The timer is a one shot timer so will expire automatically.
         """
         return 1
-    
+   
+    def _CursorChangedEvent(self, obj, evt):
+        """Change the wx cursor if the renderwindow's cursor was
+        changed. 
+        """
+        cur = self._cursor_map[obj.GetCurrentCursor()]
+        c = wx.StockCursor(cur)
+        self.SetCursor(c)
+
+    def CursorChangedEvent(self, obj, evt):
+        """Called when the CursorChangedEvent fires on the render
+        window."""
+        # This indirection is needed since when the event fires, the
+        # current cursor is not yet set so we defer this by which time
+        # the current cursor should have been set.
+        wx.CallAfter(self._CursorChangedEvent, obj, evt)
+
+    def HideCursor(self):
+        """Hides the cursor."""
+        c = wx.StockCursor(wx.CURSOR_BLANK)
+        self.SetCursor(c)
+
+    def ShowCursor(self):
+        """Shows the cursor."""
+        rw = self._Iren.GetRenderWindow()
+        cur = self._cursor_map[rw.GetCurrentCursor()]
+        c = wx.StockCursor(cur)
+        self.SetCursor(c)
+
     def GetDisplayId(self):
         """Function to get X11 Display ID from WX and return it in a format
         that can be used by VTK Python.

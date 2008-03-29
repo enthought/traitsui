@@ -1,22 +1,24 @@
 #------------------------------------------------------------------------------
+# Copyright (c) 2005, Enthought, Inc.
+# All rights reserved.
 #
-#  Copyright (c) 2004, Enthought, Inc.
-#  All rights reserved.
-#  
-#  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
-#  under the conditions described in the aforementioned license.  The license
-#  is also available online at http://www.enthought.com/licenses/BSD.txt
+# This software is provided without warranty under the terms of the BSD
+# license included in enthought/LICENSE.txt and may be redistributed only
+# under the conditions described in the aforementioned license.  The license
+# is also available online at http://www.enthought.com/licenses/BSD.txt
+# Thanks for using Enthought open source!
 #
-#  Thanks for using Enthought open source!
-#  
-#  Author: Prabhu Ramachandran <prabhu_r@users.sf.net>,
-#
+# Author: Enthought, Inc.
+# Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
+"""A VTK interactor scene widget for the PyFace wxPython backend.  See
+the class docs for more details.
 
-""" A VTK interactor scene widget for the PyFace wxPython backend. See the
-    class docs for more details.
 """
+# Author: Prabhu Ramachandran <prabhu_r@users.sf.net>
+# Copyright (c) 2004-2008, Enthought, Inc.
+# License: BSD Style.
+
 
 import sys
 import os
@@ -28,13 +30,36 @@ from enthought.tvtk import messenger
 from enthought.traits.api import Instance, Button, Any, Bool
 from enthought.traits.ui.api import View, Group, Item, InstanceEditor
 
-from enthought.pyface.api import Widget, GUI
+from enthought.pyface.api import Widget, GUI, FileDialog, OK
 from enthought.pyface.tvtk import picker
 from enthought.pyface.tvtk import light_manager
-from enthought.pyface.tvtk.tvtk_scene import TVTKScene, VTK_VER
+from enthought.pyface.tvtk.tvtk_scene import TVTKScene
+from enthought.pyface.tvtk.wxVTKRenderWindowInteractor \
+     import wxVTKRenderWindowInteractor
 
-from wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
 
+######################################################################
+# Utility functions.
+######################################################################
+def popup_save(parent=None):
+    """Popup a dialog asking for an image name to save the scene to. 
+    This is used mainly to save a scene in full screen mode. Returns a
+    filename, returns empty string if action was cancelled. `parent` is
+    the parent widget over which the dialog will be popped up.
+    """
+    extns = ['*.png', '*.jpg', '*.jpeg', '*.tiff', '*.bmp', '*.ps', '*.eps',
+             '*.tex', '*.rib', '*.wrl', '*.oogl', '*.pdf', '*.vrml', '*.obj',
+             '*.iv']
+    wildcard='|'.join(extns)
+
+    dialog = FileDialog(
+        parent = parent, title='Save scene to image',
+        action='save as', wildcard=wildcard
+    )
+    if dialog.open() == OK:
+        return dialog.path
+    else:
+        return ''
 
 
 ######################################################################
@@ -120,6 +145,28 @@ class PopupScene(object):
         f = self.frame = wx.Frame(None, -1)
         return f
 
+    def reparent_vtk(self, widget):
+        """Reparent VTK control to another widget.
+        """
+        scene = self.scene
+        vc = self.vtk_control
+        # We want to disable any rendering at this time so we override
+        # the original render with a dummy after saving it.
+        orig_disable_render = scene.disable_render
+        scene.disable_render = True
+        orig_render = vc.Render
+        vc.Render = lambda : None
+        rw = vc.GetRenderWindow()
+        if sys.platform != 'darwin' and wx.Platform != '__WXMSW__':
+            rw.SetNextWindowInfo(str(widget.GetHandle()))
+            rw.WindowRemap()
+        vc.Reparent(widget)
+        wx.Yield()
+        # Restore the original render.
+        vc.Render = orig_render
+        vc.Render()
+        scene.disable_render = orig_disable_render
+
     def popup(self, size=None):
         """Create a popup window of scene and set its default size.
         """
@@ -130,14 +177,14 @@ class PopupScene(object):
         else:
             f.SetSize(size)
         f.Show(True)
-        vc.Reparent(f)
+        self.reparent_vtk(f)
 
     def fullscreen(self):
         """Create a popup window of scene.
         """
         f = self._setup_frame()
         f.Show(True)
-        self.vtk_control.Reparent(f)
+        self.reparent_vtk(f)
         f.ShowFullScreen(True)
 
     def close(self):
@@ -148,7 +195,7 @@ class PopupScene(object):
             return
 
         vc = self.vtk_control
-        vc.Reparent(self.orig_parent)
+        self.reparent_vtk(self.orig_parent)
         vc.SetSize(self.orig_size)
         vc.SetPosition(self.orig_pos)
         f.ShowFullScreen(False)
@@ -283,6 +330,14 @@ class Scene(TVTKScene, Widget):
         """Set the size of the window."""
         self._vtk_control.SetSize(size)
 
+    def hide_cursor(self):
+        """Hide the cursor."""
+        self._vtk_control.HideCursor()
+
+    def show_cursor(self):
+        """Show the cursor."""
+        self._vtk_control.ShowCursor()
+
     ###########################################################################
     # 'TVTKScene' interface.
     ###########################################################################
@@ -320,9 +375,9 @@ class Scene(TVTKScene, Widget):
                 camera.zoom(1.25)
                 self.render()
                 return
-            if key.lower() in ['q', 'e']:
+            if key.lower() in ['q', 'e'] or keycode == wx.WXK_ESCAPE:
                 self._disable_fullscreen()
-            if key.lower() in ['s', 'w']:
+            if key.lower() in ['w']:
                 event.Skip()
                 return
             # Handle picking.
@@ -340,6 +395,12 @@ class Scene(TVTKScene, Widget):
             # Light configuration.
             if key.lower() in ['l'] and not modifiers:
                 self.light_manager.configure()
+                return
+            if key.lower() in ['s'] and not modifiers:
+                parent = self._vtk_control.GetParent()
+                fname = popup_save(parent)
+                if len(fname) != 0:
+                    self.save(fname)
                 return
                     
         shift = event.ShiftDown()
@@ -608,8 +669,16 @@ class Scene(TVTKScene, Widget):
             self._fullscreen = None
         elif fs is None:
             ver = tvtk.Version()
-            if (ver.vtk_major_version >= 5) and \
-               (ver.vtk_minor_version >= 1):
+            popup = False
+            if wx.Platform == '__WXMSW__':
+                popup = True
+            elif ver.vtk_major_version > 5:
+                popup = True
+            elif (ver.vtk_major_version == 5) and \
+                 ((ver.vtk_minor_version >= 1) or \
+                  (ver.vtk_build_version > 2)):
+                popup = True
+            if popup:
                 # There is a bug with earlier versions of VTK that
                 # breaks reparenting a window which is why we test for
                 # the version above.
