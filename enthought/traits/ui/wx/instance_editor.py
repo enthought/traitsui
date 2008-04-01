@@ -227,6 +227,8 @@ class CustomEditor ( Editor ):
             if factory.name != '':
                 self._object.on_trait_change( self.rebuild_items, 
                                               self._name, dispatch = 'ui' )
+                self._object.on_trait_change( self.rebuild_items, 
+                                 self._name + '_items', dispatch = 'ui' )
                                               
             factory.on_trait_change( self.rebuild_items, 'values',
                                      dispatch = 'ui' )
@@ -513,6 +515,8 @@ class CustomEditor ( Editor ):
             if self._object is not None:
                 self._object.on_trait_change( self.rebuild_items,
                                               self._name, remove = True )
+                self._object.on_trait_change( self.rebuild_items,
+                                 self._name + '_items', remove = True )
                                           
             self.factory.on_trait_change( self.rebuild_items, 'values',
                                           remove = True )
