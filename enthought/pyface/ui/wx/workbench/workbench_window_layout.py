@@ -773,15 +773,12 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
     def _wx_on_editor_closed(self, dock_control, force):
         """ Called when an editor is closed via the dock window control. """
 
-        print 'WxWorkbenchWindowLayout._wx_on_editor_closed'
         dock_control._editor = None
         editor = self.window.get_editor_by_id(dock_control.id)
 
-        import weakref
-        editor_ref = weakref.ref(editor)
-        control_ref = weakref.ref(editor.control)
+##         import weakref
+##         editor_ref = weakref.ref(editor)
 
-        #control = editor.control
         if editor is not None:
             logger.debug('workbench destroying editor control <%s>', editor)
             try:
@@ -789,34 +786,23 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 # just yet (we will need to modify the dock window package).
                 self.editor_closing = editor
                 editor.destroy_control()
-                editor.control = None
                 self.editor_closed = editor
 
             except:
                 logger.exception('error destroying editor control <%s>',editor)
 
-            
-        import gc
-        gc.collect()
-        print gc
+##         import gc
+##         gc.collect()
 
-        print 'Id of window dict', id(self.window.__dict__)
-        
-        print 'Editor references', len(gc.get_referrers(editor))
-        for r in gc.get_referrers(editor):
-            print '********************************************'
-            print type(r), id(r), r
-            
-##         print 'Control references', len(gc.get_referrers(control))
-##         for r in gc.get_referrers(control):
+##         print 'Editor references', len(gc.get_referrers(editor))
+##         for r in gc.get_referrers(editor):
 ##             print '********************************************'
-##             print type(r), id(r)
+##             print type(r), id(r), r
 
-        del editor
-        gc.collect()
-        
-        print 'Is editor gone?', editor_ref()
-        print 'Is control gone?', control_ref()
+##         del editor
+##         gc.collect()
+
+##         print 'Is editor gone?', editor_ref() is None, 'ref', editor_ref()
         
         return True
 
