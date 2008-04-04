@@ -446,9 +446,12 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             name      = editor.name,
             closeable = True,
             control   = editor.control,
-            style     = 'tab'
+            style     = 'tab',
+            # fixme: Create a subclass of dock control and give it a proper
+            # editor trait!
+            _editor   = editor
         )
-
+        
         # Hook up the 'on_close' and trait change handlers etc.
         self._wx_initialize_editor_dock_control(editor, editor_dock_control)
 
@@ -469,7 +472,10 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             # control! If we use a close handler can we change that?!?
             closeable = False,
             control   = control,
-            style     = 'tab'
+            style     = 'tab',
+            # fixme: Create a subclass of dock control and give it a proper
+            # view trait!
+            _view     = view
         )
 
         # Hook up the 'on_close' and trait change handlers etc.
@@ -511,7 +517,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             """ Called when the control gets the focus. """
 
             editor.has_focus = True
-
+            
             # Let the default wx event handling do its thang.
             event.Skip()
 
@@ -597,14 +603,16 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         # register event handlers.  The exception messages complain that
         # the passed control is a str object instead of a wx object.
         if on_set_focus is not None:
+            #control.Bind(wx.EVT_SET_FOCUS, on_set_focus)
             wx.EVT_SET_FOCUS(control, on_set_focus)
-
+            
         if on_kill_focus is not None:
+            #control.Bind(wx.EVT_KILL_FOCUS, on_kill_focus)
             wx.EVT_KILL_FOCUS(control, on_kill_focus)
-
+        
         for child in control.GetChildren():
             self._wx_add_focus_listeners(child, on_set_focus, on_kill_focus)
-
+            
         return
 
     def _wx_initialize_editor_dock_control(self, editor, editor_dock_control):
@@ -636,20 +644,20 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         editor_dock_control.on_close = self._wx_on_editor_closed
 
-        def on_id_changed():
+        def on_id_changed(editor, trait_name, old, new):
             editor_dock_control.id = editor.id
             return
 
         editor.on_trait_change(on_id_changed, 'id')
 
-        def on_name_changed():
+        def on_name_changed(editor, trait_name, old, new):
             editor_dock_control.set_name(editor.name)
             return
 
         editor.on_trait_change(on_name_changed, 'name')
 
-        def on_activated_changed():
-            editor.set_focus()
+        def on_activated_changed(editor_dock_control, trait_name, old, new):
+            editor_dock_control._editor.set_focus()
             return
 
         editor_dock_control.on_trait_change(on_activated_changed, 'activated')
@@ -685,20 +693,20 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         view_dock_control.on_close = self._wx_on_view_closed
 
-        def on_id_changed():
+        def on_id_changed(view, trait_name, old, new):
             view_dock_control.id = view.id
             return
 
         view.on_trait_change(on_id_changed, 'id')
 
-        def on_name_changed():
+        def on_name_changed(view, trait_name, old, new):
             view_dock_control.set_name(view.name)
             return
 
         view.on_trait_change(on_name_changed, 'name')
 
-        def on_activated_changed():
-            view.set_focus()
+        def on_activated_changed(view_dock_control, trait_name, old, new):
+            view_dock_control._view.set_focus()
             return
 
         view_dock_control.on_trait_change(on_activated_changed, 'activated')
@@ -765,7 +773,15 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
     def _wx_on_editor_closed(self, dock_control, force):
         """ Called when an editor is closed via the dock window control. """
 
+        print 'WxWorkbenchWindowLayout._wx_on_editor_closed'
+        dock_control._editor = None
         editor = self.window.get_editor_by_id(dock_control.id)
+
+        import weakref
+        editor_ref = weakref.ref(editor)
+        control_ref = weakref.ref(editor.control)
+
+        #control = editor.control
         if editor is not None:
             logger.debug('workbench destroying editor control <%s>', editor)
             try:
@@ -773,11 +789,35 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 # just yet (we will need to modify the dock window package).
                 self.editor_closing = editor
                 editor.destroy_control()
+                editor.control = None
                 self.editor_closed = editor
 
             except:
                 logger.exception('error destroying editor control <%s>',editor)
 
+            
+        import gc
+        gc.collect()
+        print gc
+
+        print 'Id of window dict', id(self.window.__dict__)
+        
+        print 'Editor references', len(gc.get_referrers(editor))
+        for r in gc.get_referrers(editor):
+            print '********************************************'
+            print type(r), id(r), r
+            
+##         print 'Control references', len(gc.get_referrers(control))
+##         for r in gc.get_referrers(control):
+##             print '********************************************'
+##             print type(r), id(r)
+
+        del editor
+        gc.collect()
+        
+        print 'Is editor gone?', editor_ref()
+        print 'Is control gone?', control_ref()
+        
         return True
 
 #### EOF ######################################################################
