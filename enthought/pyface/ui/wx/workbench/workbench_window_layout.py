@@ -104,7 +104,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         return editor
 
-    def add_view(self, view, position, relative_to=None, size=(-1, -1)):
+    def add_view(self, view, position=None, relative_to=None, size=(-1, -1)):
         """ Add a view. """
         
         try:
@@ -353,6 +353,11 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
     def _wx_add_view(self, view, position, relative_to, size):
         """ Adds a view. """
 
+        # If no specific position is specified then use the view's default
+        # position.
+        if position is None:
+            position = view.position
+            
         # Create a dock control that contains the view.
         dock_control = self._wx_create_view_dock_control(view)
 
