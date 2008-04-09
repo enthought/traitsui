@@ -287,6 +287,7 @@ class SimpleEditor ( BaseEditor ):
                 wx.EVT_TEXT( parent, control.GetId(), self.update_text_object )
                 
         self._no_enum_update = 0
+        self.set_tooltip()
 
     #---------------------------------------------------------------------------
     #  Handles the user selecting a new value from the combo box:
@@ -553,6 +554,7 @@ class ListEditor ( BaseEditor ):
                                    wx.Size( -1, -1 ), self.names,
                                    style = wx.LB_SINGLE | wx.LB_NEEDED_SB )
         wx.EVT_LISTBOX( parent, self.control.GetId(), self.update_object ) 
+        self.set_tooltip()
    
     #---------------------------------------------------------------------------
     #  Handles the user selecting a list box item:
