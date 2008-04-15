@@ -697,6 +697,8 @@ class NotebookEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        self._uis = []
+        
         # Create a DockWindow to hold each separate object's view:
         theme = self.factory.dock_theme or self.item.container.dock_theme
         dw    = DockWindow( parent, theme = theme )
@@ -782,12 +784,11 @@ class NotebookEditor ( Editor ):
         """ Closes all currently open notebook pages.
         """
         page_name = self.factory.page_name[1:]
-        if self._uis is not None:
-            for dock_control, object, monitoring in self._uis:
-                if monitoring:
-                    object.on_trait_change( self.update_page_name, 
-                                                     page_name, remove = True )
-                dock_control.close( layout = False, force = True )
+        for dock_control, object, monitoring in self._uis:
+            if monitoring:
+                object.on_trait_change( self.update_page_name, 
+                                                 page_name, remove = True )
+            dock_control.close( layout = False, force = True )
 
         # Reset the list of ui's and dictionary of page name counts:
         self._uis   = []
