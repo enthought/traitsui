@@ -244,6 +244,8 @@ class CustomFontEditor ( Editor ):
         """ Handles the user changing the contents of the font text control.
         """
         self.value = self._font.GetValue()
+        self._set_font( self.factory.to_wx_font( self ) )  
+        self.update_editor()  
            
     #---------------------------------------------------------------------------
     #  Handles the user modifying one of the font components:
@@ -257,10 +259,8 @@ class CustomFontEditor ( Editor ):
         font       = wx.Font( point_size, wx.DEFAULT, wx.NORMAL, wx.NORMAL,
                               faceName = facename )
         self.value = self.factory.from_wx_font( font )
-
-        font.SetPointSize( min( 10, font.GetPointSize() ) )
         self._font.SetValue( self.str_value )
-        self._font.SetFont( font )
+        self._set_font( font )
          
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -287,7 +287,15 @@ class CustomFontEditor ( Editor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        return self.factory.str_font( font ) 
+        return self.factory.str_font( font )
+
+    #-- Private Methods --------------------------------------------------------
+    
+    def _set_font ( self, font ):
+        """ Sets the font used by the text control to the specified font.
+        """
+        font.SetPointSize( min( 10, font.GetPointSize() ) )
+        self._font.SetFont( font )
         
 #-------------------------------------------------------------------------------
 #  'TextFontEditor' class:
