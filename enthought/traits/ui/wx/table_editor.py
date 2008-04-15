@@ -1393,10 +1393,10 @@ class TableEditor ( Editor ):
         """
         factory = self.factory
         filter_editor = TableFilterEditor( editor = self, filter = filter )
+        enum_editor   = EnumEditor( values = factory.filters[:], mode = 'list' )
         ui = filter_editor.edit_traits( parent = self.control, view = View(
-            [ [ Item( 'filter:filter<200>@',
-                      editor    = EnumEditor( values = factory.filters[:],
-                                              mode   = 'list' ),
+            [ [ Item( 'filter<200>@',
+                      editor    = enum_editor,
                       resizable = True ),
                 '|<>' ],
               [ 'edit:edit', 'new', 'apply', 'delete:delete',
@@ -1410,7 +1410,7 @@ class TableEditor ( Editor ):
         ) )
         
         if ui.result:
-            self._refresh_filters(  ui.info.filter.factory.values )
+            self._refresh_filters( enum_editor.values )
             self.filter = filter_editor.filter
         else:
             self.filter = filter
