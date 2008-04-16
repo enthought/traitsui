@@ -158,10 +158,10 @@ class LiveWindow ( BaseDialog ):
                 wx.EVT_ACTIVATE( window, self._on_close_popup )
                 
             self.control = window
-            self.set_icon( view.icon )
             wx.EVT_CLOSE( window, self._on_close_page )
             wx.EVT_CHAR(  window, self._on_key )
-         
+
+        self.set_icon( view.icon )
         buttons     = [ self.coerce_button( button ) 
                         for button in view.buttons ]
         nbuttons    = len( buttons )
