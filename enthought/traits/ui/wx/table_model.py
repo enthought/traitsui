@@ -473,6 +473,8 @@ class TableModel ( GridModel ):
         if editor is None:
             return None
          
+        editor._ui = self.editor.ui
+        
         return TraitGridCellAdapter( editor, column.get_object( object ),
                              column.name, '', context = self.editor.ui.context )
 
