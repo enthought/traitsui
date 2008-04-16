@@ -357,7 +357,8 @@ class LiveWindow ( BaseDialog ):
         """ Handles a request to revert all changes.
         """
         ui = self.ui
-        ui.history.revert()
+        if ui.history is not None:
+            ui.history.revert()
         ui.handler.revert( ui.info )
    
     #---------------------------------------------------------------------------
