@@ -99,6 +99,7 @@ def ui_dialog ( ui, parent, style ):
     if style == MODAL:
         ui.control.ShowModal()
     else:
+        ui.control.Layout()
         ui.control.Show()
     
 #-------------------------------------------------------------------------------
