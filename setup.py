@@ -17,11 +17,13 @@ def etsdep(p, min, max=None, literal=False):
 
 
 # Declare our ETS project dependencies.
-ENTHOUGHTBASE_UI = etsdep('EnthoughtBase[ui]', '3.0.0b1')
-MAYAVI = etsdep('Mayavi', '3.0.0a1')
-TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.0.0b1')
-TRAITSGUI_TVTK = etsdep('TraitsGUI[tvtk]', '3.0.0b1')
-TRAITS_UI = etsdep('Traits[ui]', '3.0.0b1')
+APPTOOLS           = etsdep( 'AppTools',            '3.0.0b1' )  
+DEVTOOLS_DEVELOPER = etsdep( 'DevTools[developer]', '3.0.0b1' )  
+ENTHOUGHTBASE_UI   = etsdep( 'EnthoughtBase[ui]',   '3.0.0b1' )
+MAYAVI             = etsdep( 'Mayavi',              '3.0.0a1' )
+TRAITS             = etsdep( 'Traits',              '3.0.0b1' )
+TRAITSGUI_DOCK     = etsdep( 'TraitsGUI[dock]',     '3.0.0b1' )
+TRAITSGUI_TVTK     = etsdep( 'TraitsGUI[tvtk]',     '3.0.0b1' )
 
 # The following soft dependencies are handled with appropriate try...except
 # wrappers.
@@ -30,45 +32,61 @@ TRAITS_UI = etsdep('Traits[ui]', '3.0.0b1')
 
 
 setup(
-    author = 'Enthought, Inc',
-    author_email = 'info@enthought.com',
-    dependency_links = [
-        'http://code.enthought.com/enstaller/eggs/source',
-        ],
-    description = 'WxPython backend for Traits and Pyface.',
+    author           = 'Enthought, Inc',
+    author_email     = 'info@enthought.com',
+    dependency_links = [ 'http://code.enthought.com/enstaller/eggs/source', ],
+    description      = 'WxPython backend for Traits and Pyface.',
+    
     extras_require = {
+    
+        # Extra denoting that complete drag and drop support for files and
+        # named bindings should be installed:
+        'dnd': [
+            APPTOOLS,
+        ],
+        
+        # Extra denoting that complete developer debug support for the ETS FBI
+        # debugger should be installed:
+        'debug': [
+            DEVTOOLS_DEVELOPER,
+        ],
+    
+        # Extra denoting that TVTK (i.e. Traits VTK) support should be 
+        # installed:
         'tvtk': [
             MAYAVI,
             TRAITSGUI_TVTK,
-            ],
+        ],
 
         # All non-ets dependencies should be in this extra to ensure users can
         # decide whether to require them or not.
         'nonets': [
             #'wx',  # fixme: not available as an egg on all platforms.
-            ],
-        },
-    include_package_data = True,
+        ],
+    },
+        
     install_requires = [
         ENTHOUGHTBASE_UI,
         TRAITSGUI_DOCK,
-        TRAITS_UI,
-        ],
-    license = 'BSD',
-    name = 'TraitsBackendWX',
-    namespace_packages = [
+        TRAITS,
+    ],
+        
+    include_package_data = True,
+    license              = 'BSD',
+    name                 = 'TraitsBackendWX',
+    namespace_packages   = [
         'enthought',
         'enthought.pyface',
         'enthought.pyface.ui',
         'enthought.traits',
         'enthought.traits.ui',
-        ],
-    packages = find_packages(),
+    ],
+    packages      = find_packages(),
     tests_require = [
         'nose >= 0.9',
-        ],
+    ],
     test_suite = 'nose.collector',
-    url = 'http://code.enthought.com/ets',
-    version = '3.0.0b1',
-    zip_safe = False,
-    )
+    url        = 'http://code.enthought.com/ets',
+    version    = '3.0.0b1',
+    zip_safe   = False,
+)
