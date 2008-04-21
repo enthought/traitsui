@@ -103,10 +103,15 @@ class wxVTKRenderWindowInteractor(baseClass):
     
     def __init__(self, parent, ID, *args, **kw):
         """Default class constructor.
-        @param parent: parent window
-        @param ID: window id
-        @param **kw: wxPython keywords (position, size, style) plus the
-        'stereo' keyword
+        
+        Parameters
+        ----------
+        parent
+            parent window
+        ID
+            window identifier
+        kw
+            wxPython keywords (position, size, style) plus the 'stereo' keyword
         """
         # private attributes
         self.__RenderWhenDisabled = 0
