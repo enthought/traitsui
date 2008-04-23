@@ -81,7 +81,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     enter_set = True
     
     # The number of history entries to maintain:
-    entries = Int( 10 )
+    entries = Int( 0 )
     
     # Optional extended trait name used to notify the editor when the file 
     # system view should be reloaded ('custom' style only):
