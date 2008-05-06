@@ -59,8 +59,8 @@ class GUI(MGUI, HasTraits):
         # platforms as on Linux they cause the application to hang when they
         # are supposed to close (allegedly, this is for applications that use
         # the workbench plugin).
-        if sys.platform != 'win32':
-            logger.warn("splash screen disabled on non-Windows platforms")
+        if sys.platform not in ('win32', 'darwin'):
+            logger.warn("splash screen disabled under Linux")
             self._splash_screen = None
 
         if self._splash_screen is not None:
