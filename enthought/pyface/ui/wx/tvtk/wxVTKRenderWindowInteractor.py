@@ -248,6 +248,11 @@ class wxVTKRenderWindowInteractor(baseClass):
         self.Bind(wx.EVT_MOUSEWHEEL, self.OnMouseWheel)
         self.Bind(wx.EVT_MOTION, self.OnMotion)
 
+        # Bind the double clicks as well.
+        self.Bind(wx.EVT_LEFT_DCLICK, self.OnButtonDown)
+        self.Bind(wx.EVT_MIDDLE_DCLICK, self.OnButtonDown)
+        self.Bind(wx.EVT_RIGHT_DCLICK, self.OnButtonDown)
+
         self.Bind(wx.EVT_ENTER_WINDOW, self.OnEnter)
         self.Bind(wx.EVT_LEAVE_WINDOW, self.OnLeave)
 
@@ -481,13 +486,13 @@ class wxVTKRenderWindowInteractor(baseClass):
                                             ctrl, shift, chr(0), 0, None)
                                             
         button = 0
-        if event.RightDown():
+        if event.RightIsDown():
             self._Iren.RightButtonPressEvent()
             button = 'Right'
-        elif event.LeftDown():
+        elif event.LeftIsDown():
             self._Iren.LeftButtonPressEvent()
             button = 'Left'
-        elif event.MiddleDown():
+        elif event.MiddleIsDown():
             self._Iren.MiddleButtonPressEvent()
             button = 'Middle'
 
