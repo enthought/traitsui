@@ -55,14 +55,6 @@ class GUI(MGUI, HasTraits):
         # Display the (optional) splash screen.
         self._splash_screen = splash_screen
 
-        # FIXME: For now, we have disabled splash screens on non-Windows
-        # platforms as on Linux they cause the application to hang when they
-        # are supposed to close (allegedly, this is for applications that use
-        # the workbench plugin).
-        if sys.platform not in ('win32', 'darwin'):
-            logger.warn("splash screen disabled under Linux")
-            self._splash_screen = None
-
         if self._splash_screen is not None:
             self._splash_screen.open()
 
