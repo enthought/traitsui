@@ -18,6 +18,7 @@
 """
 
 # Major package imports.
+import sys
 import wx
 
 # Enthought library imports.
@@ -140,9 +141,10 @@ class Dialog(MDialog, Window):
         return panel
 
     def _show_modal(self):
-        # Calling Show(False) is needed on the Mac for the modal dialog
-        # to show up at all.
-        self.control.Show(False)
+        if sys.platform == 'darwin':
+            # Calling Show(False) is needed on the Mac for the modal dialog
+            # to show up at all.
+            self.control.Show(False)
         return _RESULT_MAP[self.control.ShowModal()]
 
     ###########################################################################
