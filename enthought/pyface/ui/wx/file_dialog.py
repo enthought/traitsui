@@ -24,7 +24,7 @@ import os
 import wx
 
 # Enthought library imports.
-from enthought.traits.api import Enum, implements, Unicode, Int
+from enthought.traits.api import Enum, implements, Unicode, Int, List
 
 # Local imports.
 from enthought.pyface.i_file_dialog import IFileDialog, MFileDialog
@@ -40,7 +40,7 @@ class FileDialog(MFileDialog, Dialog):
 
     #### 'IFileDialog' interface ##############################################
 
-    action = Enum('open', 'save as')
+    action = Enum('open', 'open files', 'save as')
 
     default_directory = Unicode
 
@@ -53,6 +53,8 @@ class FileDialog(MFileDialog, Dialog):
     filename = Unicode
 
     path = Unicode
+
+    paths = List(Unicode)
 
     wildcard = Unicode
 
@@ -72,7 +74,8 @@ class FileDialog(MFileDialog, Dialog):
 
     def close(self):
         # Get the path of the chosen directory.
-        self.path = unicode(self.control.GetPath())
+        self.path  = unicode(self.control.GetPath())
+        self.paths = self.control.GetPaths()
 
         # Extract the directory and filename.
         self.directory, self.filename = os.path.split(self.path)
@@ -99,6 +102,8 @@ class FileDialog(MFileDialog, Dialog):
 
         if self.action == 'open':
             style = wx.OPEN | wx.HIDE_READONLY
+        elif self.action == 'open files':
+            style = wx.OPEN | wx.HIDE_READONLY | wx.MULTIPLE
         else:
             style = wx.SAVE | wx.OVERWRITE_PROMPT
 
