@@ -123,8 +123,7 @@ class wxListCtrl ( wx.ListCtrl ):
         """
         editor = self._editor
         return editor.adapter.get_text( editor.object, editor.name,
-                                        row, column )
-    
+                                        row, column )    
 #-------------------------------------------------------------------------------
 #  '_TabularEditor' class:
 #-------------------------------------------------------------------------------
@@ -925,6 +924,11 @@ class _TabularEditor ( Editor ):
         selected = []
         item     = -1
         control  = self.control
+        
+        # Handle case where the list is cleared
+        if len( self.value ) == 0:
+            return selected
+        
         while True:
             item = control.GetNextItem( item, wx.LIST_NEXT_ALL, 
                                               wx.LIST_STATE_SELECTED )
