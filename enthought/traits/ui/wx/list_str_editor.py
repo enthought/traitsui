@@ -521,11 +521,12 @@ class _ListStrEditor ( Editor ):
         else:
             event.Skip()
 
-    def _size_modified ( self, size ):
+    def _size_modified ( self, event ):
         """ Handles the size of the list control being changed.
         """
         dx, dy = self.control.GetClientSizeTuple()
         self.control.SetColumnWidth( 0, dx - 1 )
+        event.Skip()
         
     def _left_down ( self, event ):
         """ Handles the user pressing the left mouse button.
