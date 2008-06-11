@@ -169,7 +169,7 @@ class BaseDialog ( object ):
                     object = name[ : col ]
                     name   = name[ col + 1: ]
                 object = context[ object ]
-                object.on_trait_change( set_text, name )
+                object.on_trait_change( set_text, name, dispatch = 'ui' )
                 listeners.append( ( object, set_text, name ) )
                     
             control.SetStatusWidths( widths )
