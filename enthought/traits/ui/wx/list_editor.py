@@ -29,10 +29,10 @@ import wx.lib.scrolledpanel as wxsp
     
 from enthought.traits.api \
     import Trait, HasTraits, BaseTraitHandler, Range, Str, Any, Instance, \
-           Property, Bool, cached_property
+           Property, Bool, Callable, cached_property
     
 from enthought.traits.trait_base \
-    import user_name_for, enumerate
+    import user_name_for, enumerate, xgetattr
     
 from enthought.traits.ui.api \
     import View, Item, EditorFactory as UIEditorFactory
@@ -128,6 +128,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     
     # Name of the view to use in notebook mode:
     view = AView
+    
+    # A factory function that can be used to define that actual object to be
+    # edited (i.e. view_object = factory( object )):
+    factory = Callable
     
     # Extended name to use for each notebook page. It can be either the actual
     # name or the name of an attribute on the object in the form:
@@ -728,10 +732,10 @@ class NotebookEditor ( Editor ):
         uis           = self._uis
         dock_controls = []
         for object in self.value:
-            dock_control, monitoring = self._create_page( object )
+            dock_control, view_object, monitoring = self._create_page( object )
                                      
             # Remember the DockControl for later deletion processing:
-            uis.append( [ dock_control, object, monitoring ] )
+            uis.append( [ dock_control, object, view_object, monitoring ] )
 
             dock_controls.append( dock_control )
 
@@ -752,10 +756,11 @@ class NotebookEditor ( Editor ):
         # Delete the page corresponding to each removed item:
         layout = ((len( event.removed ) + len( event.added )) <= 1)
         for i in range( len( event.removed ) ):
-            dock_control, object, monitoring = self._uis[ index ]
+            dock_control, object, view_object, monitoring = self._uis[ index ]
             if monitoring:
-                object.on_trait_change( self.update_page_name, 
-                                     self.factory.page_name[1:], remove = True )
+                view_object.on_trait_change( self.update_page_name, 
+                                             self.factory.page_name[1:],
+                                             remove = True )
             dock_control.close( layout = layout, force = True )
             del self._uis[ index ]
 
@@ -763,8 +768,9 @@ class NotebookEditor ( Editor ):
         dock_controls = []
         first_control = None
         for object in event.added:
-            dock_control, monitoring  = self._create_page( object )
-            self._uis[ index: index ] = [ [ dock_control, object, monitoring ] ]
+            dock_control, view_object, monitoring  = self._create_page( object )
+            self._uis[ index: index ] = [ [ dock_control, object, view_object, 
+                                            monitoring ] ]
             dock_controls.append( dock_control )
             index += 1
             if first_control is None:
@@ -784,10 +790,10 @@ class NotebookEditor ( Editor ):
         """ Closes all currently open notebook pages.
         """
         page_name = self.factory.page_name[1:]
-        for dock_control, object, monitoring in self._uis:
+        for dock_control, object, view_object, monitoring in self._uis:
             if monitoring:
-                object.on_trait_change( self.update_page_name, 
-                                                 page_name, remove = True )
+                view_object.on_trait_change( self.update_page_name, page_name,
+                                             remove = True )
             dock_control.close( layout = False, force = True )
 
         # Reset the list of ui's and dictionary of page name counts:
@@ -840,19 +846,21 @@ class NotebookEditor ( Editor ):
         """ Handles the trait defining a particular page's name being changed.
         """
         for i, value in enumerate( self._uis ):
-            dock_control, ui_object, monitoring = value
-            if object is ui_object:
+            dock_control, user_object, view_object, monitoring = value
+            if object is user_object:
                 if dock_control.control is not None:
                     name    = None
                     handler = getattr( self.ui.handler, '%s_%s_page_name' % 
                                        ( self.object_name, self.name ), None )
                     if handler is not None:
                         name = handler( self.ui.info, object )
+                        
                     if name is None:
-                        name = str( getattr( object, 
+                        name = str( xgetattr( object, 
                                            self.factory.page_name[1:], '???' ) )
                     dock_control.name = name
                     self.update_layout()
+                    
                 break
 
     #---------------------------------------------------------------------------
@@ -861,10 +869,14 @@ class NotebookEditor ( Editor ):
 
     def _create_page ( self, object ):
         # Create the view for the object:
-        ui = object.edit_traits( parent = self.control,
-                                 view   = self.factory.view,
-                                 kind   = 'subpanel' ).set(
-                                 parent = self.ui )
+        view_object = object
+        factory     = self.factory
+        if factory.factory is not None:
+            view_object = factory.factory( object )
+        ui = view_object.edit_traits( parent = self.control,
+                                      view   = factory.view,
+                                      kind   = 'subpanel' ).set(
+                                      parent = self.ui )
 
         # Get the name of the page being added to the notebook:
         name       = ''
@@ -872,7 +884,7 @@ class NotebookEditor ( Editor ):
         prefix     = '%s_%s_page_' % ( self.object_name, self.name )
         page_name  = self.factory.page_name
         if page_name[0:1] == '.':
-            name       = getattr( object, page_name[1:], None )
+            name       = xgetattr( view_object, page_name[1:], None )
             monitoring = (name is not None)
             if monitoring:
                 handler_name = None
@@ -883,14 +895,15 @@ class NotebookEditor ( Editor ):
                     name = handler_name
                 else:
                     name = str( name ) or '???'
-                object.on_trait_change( self.update_page_name, 
-                                        page_name[1:], dispatch = 'ui' )
+                view_object.on_trait_change( self.update_page_name, 
+                                             page_name[1:], dispatch = 'ui' )
             else:
                 name = ''
         elif page_name != '':
             name = page_name
+            
         if name == '':
-            name = user_name_for( object.__class__.__name__ )
+            name = user_name_for( view_object.__class__.__name__ )
 
         # Make sure the name is not a duplicate:
         if not monitoring:
@@ -900,7 +913,6 @@ class NotebookEditor ( Editor ):
 
         # Return a new DockControl for the ui, and whether or not its name is
         # being monitored:
-        factory = self.factory
         image   = None
         method  = getattr( self.ui.handler, prefix + 'image', None )
         if method is not None:
@@ -916,7 +928,8 @@ class NotebookEditor ( Editor ):
                                                     ui     = ui,
                                                     editor = self ) )
         self.set_dock_control_listener( dock_control )
-        return ( dock_control, monitoring )
+        
+        return ( dock_control, view_object, monitoring )
         
     #---------------------------------------------------------------------------
     #  Sets/Resets the listener for a DockControl being activated:  
@@ -936,7 +949,7 @@ class NotebookEditor ( Editor ):
         """ Handles a notebook tab being "activated" (i.e. clicked on) by the 
             user.
         """
-        for a_dock_control, object, monitoring in self._uis:
+        for a_dock_control, object, view_object, monitoring in self._uis:
             if dock_control is a_dock_control:
                 self.selected = object
                 break
@@ -948,7 +961,7 @@ class NotebookEditor ( Editor ):
     def _selected_changed ( self, selected ):
         """ Handles the **selected** trait being changed.
         """
-        for dock_control, object, monitoring in self._uis:
+        for dock_control, object, view_object, monitoring in self._uis:
             if selected is object:
                 dock_control.activate( False )
                 break
@@ -988,9 +1001,9 @@ class DockableListElement ( DockableViewElement ):
             return super( DockableListElement, self ).close_dock_control(
                                                            dock_control, False )
 
-        object = self.ui.context[ 'object' ]
+        view_object = self.ui.context[ 'object' ]
         for i, value in enumerate( self.editor._uis ):
-            if object is value[1]:
+            if view_object is value[2]:
                 value[0] = dock_control
                 del self.editor.value[ i ]
                 break
