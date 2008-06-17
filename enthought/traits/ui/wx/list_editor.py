@@ -29,7 +29,7 @@ import wx.lib.scrolledpanel as wxsp
     
 from enthought.traits.api \
     import Trait, HasTraits, BaseTraitHandler, Range, Str, Any, Instance, \
-           Property, Bool, Callable, cached_property
+           Property, Bool, Callable, Enum, cached_property
     
 from enthought.traits.trait_base \
     import user_name_for, enumerate, xgetattr
@@ -130,7 +130,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     view = AView
 
     # The type of UI to construct ('panel', 'subpanel', etc)
-    ui_kind = Str('subpanel')
+    ui_kind = Enum('subpanel', 'panel')
     
     # A factory function that can be used to define that actual object to be
     # edited (i.e. view_object = factory( object )):
