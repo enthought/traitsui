@@ -682,7 +682,7 @@ class ListItemProxy ( HasTraits ):
 
 class NotebookEditor ( Editor ):
     """ An editor for lists that displays the list as a "notebook" of tabbed
-    pages.
+        pages.
     """
     
     #---------------------------------------------------------------------------
@@ -845,26 +845,28 @@ class NotebookEditor ( Editor ):
     #  Handles the trait defining a particular page's name being changed:
     #---------------------------------------------------------------------------
 
-    def update_page_name ( self, object, name, old, new ):
+    def update_page_name ( self ):
         """ Handles the trait defining a particular page's name being changed.
         """
+        changed = False
         for i, value in enumerate( self._uis ):
             dock_control, user_object, view_object, monitoring = value
-            if object is user_object:
-                if dock_control.control is not None:
-                    name    = None
-                    handler = getattr( self.ui.handler, '%s_%s_page_name' % 
-                                       ( self.object_name, self.name ), None )
-                    if handler is not None:
-                        name = handler( self.ui.info, object )
-                        
-                    if name is None:
-                        name = str( xgetattr( object, 
-                                           self.factory.page_name[1:], '???' ) )
-                    dock_control.name = name
-                    self.update_layout()
+            if dock_control.control is not None:
+                name    = None
+                handler = getattr( self.ui.handler, '%s_%s_page_name' % 
+                                   ( self.object_name, self.name ), None )
+                if handler is not None:
+                    name = handler( self.ui.info, user_object )
                     
-                break
+                if name is None:
+                    name = str( xgetattr( view_object, 
+                                          self.factory.page_name[1:], '???' ) )
+                    
+                changed |= (dock_control.name != name)
+                dock_control.name = name
+                    
+        if changed:    
+            self.update_layout()
 
     #---------------------------------------------------------------------------
     #  Creates a DockControl for a specified object:
