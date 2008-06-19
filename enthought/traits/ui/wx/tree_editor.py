@@ -367,7 +367,7 @@ class SimpleEditor ( Editor ):
         wx.EVT_TREE_BEGIN_DRAG(       tree, tid, self._on_tree_begin_drag )
         wx.EVT_TREE_BEGIN_LABEL_EDIT( tree, tid, self._on_tree_begin_label_edit)
         wx.EVT_TREE_END_LABEL_EDIT(   tree, tid, self._on_tree_end_label_edit )
-
+        wx.EVT_TREE_ITEM_GETTOOLTIP(  tree, tid, self._on_tree_item_gettooltip )
 
         # Synchronize external object traits with the editor:
         self.sync_value( factory.selected, 'selected' )
@@ -1304,6 +1304,19 @@ class SimpleEditor ( Editor ):
                                       node.get_drag_object( object ) )
                 finally:
                     self._dragging = None
+
+    #---------------------------------------------------------------------------
+    #  Handles a tooltip request on a tree node:
+    #---------------------------------------------------------------------------
+
+    def _on_tree_item_gettooltip ( self, event ):
+        """ Handles a tooltip request on a tree node.
+        """
+        expanded, node, object = self._get_node_data( event.GetItem() )
+        tooltip = node.get_tooltip( object )
+        if tooltip != '':
+            event.SetToolTip( tooltip )
+        event.Skip()
 
     #---------------------------------------------------------------------------
     #  Handles the user left clicking on a tree node:
