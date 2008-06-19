@@ -130,7 +130,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     view = AView
 
     # The type of UI to construct ('panel', 'subpanel', etc)
-    ui_kind = Enum('subpanel', 'panel')
+    ui_kind = Enum( 'subpanel', 'panel' )
     
     # A factory function that can be used to define that actual object to be
     # edited (i.e. view_object = factory( object )):
