@@ -26,7 +26,7 @@
 import wx
     
 from enthought.traits.api \
-    import TraitError, Any, Str
+    import TraitError, Any, Bool, Str
 
 from enthought.traits.ui.editor_factory \
     import EditorFactory as UIEditorFactory
@@ -108,6 +108,9 @@ class SimpleEditor ( Editor ):
         the value.
     """
     
+    # Has the left mouse button been pressed:
+    left_down = Bool( False )
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -119,7 +122,8 @@ class SimpleEditor ( Editor ):
         """
         self.control = wx.TextCtrl( parent, -1, self.str_value,
                                     style = wx.TE_READONLY )
-        wx.EVT_LEFT_UP( self.control, self.popup_editor )
+        wx.EVT_LEFT_DOWN( self.control, self._enable_popup_editor )
+        wx.EVT_LEFT_UP(   self.control, self._show_popup_editor  )
         self.set_tooltip()
        
     #---------------------------------------------------------------------------
@@ -132,6 +136,19 @@ class SimpleEditor ( Editor ):
         """ Invokes the pop-up editor for an object trait.
         """
         pass
+    
+    def _enable_popup_editor ( self, event ):
+        """ Mark the left mouse button as being pressed currently.
+        """
+        self.left_down = True
+        
+    def _show_popup_editor ( self, event ):
+        """ Display the popup editor if the left mouse button was pressed
+            previously.
+        """
+        if self.left_down:
+            self.left_down = False
+            self.popup_editor( event )
 
 #-------------------------------------------------------------------------------
 #  'TextEditor' class:

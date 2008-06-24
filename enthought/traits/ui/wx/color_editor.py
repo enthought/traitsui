@@ -26,7 +26,7 @@
 import wx
 
 from enthought.traits.api \
-    import true
+    import Bool
 
 from enthought.traits.ui.api \
     import View
@@ -77,7 +77,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     #---------------------------------------------------------------------------
     
     # Is the underlying color trait mapped?
-    mapped = true 
+    mapped = Bool( True )
     
     #---------------------------------------------------------------------------
     #  Traits view definition:  
@@ -152,9 +152,11 @@ class ToolkitEditorFactory ( EditorFactory ):
         if isinstance( color, ColorTypes ):
             alpha = color.Alpha()
             if alpha == 255:
-                return "(%d,%d,%d)" % ( color.Red(), color.Green(), color.Blue() )
+                return "(%d,%d,%d)" % (
+                        color.Red(), color.Green(), color.Blue() )
 
-            return "(%d,%d,%d,%d)" % ( color.Red(), color.Green(), color.Blue(), alpha )
+            return "(%d,%d,%d,%d)" % (
+                    color.Red(), color.Green(), color.Blue(), alpha )
             
         return color
                                       
@@ -279,7 +281,7 @@ class CustomColorEditor ( SimpleColorEditor ):
 
 class TextColorEditor ( TextEditor ):
     """ Text style of color editor, which displays a text field whose 
-    background color is the color value.
+        background color is the color value.
     """
     
     #---------------------------------------------------------------------------
@@ -368,7 +370,9 @@ def color_editor_for ( editor, parent, update_handler = None ):
     """ Creates a custom color editor panel for a specified editor.
     """
     # Create a panel to hold all of the buttons:
-    panel = traits_ui_panel( parent, -1 )
+    panel = traits_ui_panel( parent, -1, size = wx.Size( 0, 0 ) )
+    if update_handler is None:
+        panel.Show( False )
     sizer = wx.BoxSizer( wx.HORIZONTAL )
     panel._swatch_editor = swatch_editor = editor.factory.simple_editor( 
               editor.ui, editor.object, editor.name, editor.description, panel )
@@ -378,10 +382,10 @@ def color_editor_for ( editor, parent, update_handler = None ):
     control.update_handler = update_handler
     control.SetSize( wx.Size( 72, 72 ) )
     sizer.Add( control, 1, wx.EXPAND | wx.RIGHT, 4 )
-
+   
     # Add all of the color choice buttons:
     sizer2 = wx.GridSizer( 0, 12, 0, 0 )
-
+   
     for i in range( len( color_samples ) ):
         control = wx.Button( panel, -1, '', size = wx.Size( 18, 18 ) )
         control.SetBackgroundColour( color_samples[i] )
@@ -390,9 +394,9 @@ def color_editor_for ( editor, parent, update_handler = None ):
                        swatch_editor.update_object_from_swatch )
         sizer2.Add( control )
         editor.set_tooltip( control )
-
+   
     sizer.Add( sizer2 )
-
+   
     # Set-up the layout:
     panel.SetSizerAndFit( sizer )
 
@@ -429,6 +433,7 @@ class ColorDialog ( wx.Frame ):
         self.SetSizerAndFit( sizer )
         position_window( self, parent = editor.control )
         self.Show()
+        self.Raise()
 
     #---------------------------------------------------------------------------
     #  Closes the dialog:
@@ -450,6 +455,7 @@ class ColorDialog ( wx.Frame ):
         """
         if closeable is not None:
             self._closeable = closeable
+            
         if self._closeable and (not self._closed):
             self._closed = True
             self._swatch_editor.dispose()
