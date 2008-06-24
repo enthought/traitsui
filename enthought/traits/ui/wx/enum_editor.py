@@ -468,7 +468,10 @@ class RadioEditor ( BaseEditor ):
         """
         value = self.value
         for button in self.control.GetChildren():
-            button.SetValue( button.value == value )
+            state = (button.value == value)
+            button.SetValue( state )
+            if state:
+                button.SetFocus()
             
     #---------------------------------------------------------------------------
     #  Rebuilds the contents of the editor whenever the original factory 
