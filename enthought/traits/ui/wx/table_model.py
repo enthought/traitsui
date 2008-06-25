@@ -479,7 +479,8 @@ class TableModel ( GridModel ):
         
         return TraitGridCellAdapter( editor, target, name, '',
                    context = self.editor.ui.context, 
-                   style   = column.get_style( object ) )
+                   style   = column.get_style( object ),
+                   height  = column.get_height() )
 
     def get_cell_renderer ( self, row, col ):
         """ Returns the renderer for the specified cell.
