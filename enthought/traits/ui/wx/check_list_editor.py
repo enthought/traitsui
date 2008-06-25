@@ -119,6 +119,7 @@ class SimpleEditor ( EditorWithList ):
         """
         self.create_control( parent )
         super( SimpleEditor, self ).init( parent )
+        self.set_tooltip()
 
     #---------------------------------------------------------------------------
     #  Creates the initial editor control:

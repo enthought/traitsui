@@ -186,6 +186,7 @@ class SimpleEditor ( Editor ):
         
         self.context_object.on_trait_change( self.update_editor, 
                                self.extended_name + '_items?', dispatch = 'ui' )
+        self.set_tooltip()
     
     #---------------------------------------------------------------------------
     #  Gets the current set of enumeration names:  

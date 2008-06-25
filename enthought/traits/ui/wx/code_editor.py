@@ -242,6 +242,7 @@ class SourceEditor ( Editor ):
         if (factory.line != '') or (factory.column != ''):
             stc.EVT_STC_UPDATEUI( control, control.GetId(),
                                   self._position_changed )
+        self.set_tooltip()
             
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:

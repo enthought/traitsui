@@ -238,6 +238,8 @@ class CustomFontEditor ( Editor ):
         # Set-up the layout:
         panel.SetSizer( sizer )
 
+        self.set_tooltip()
+    
     #---------------------------------------------------------------------------
     #  Handles the user changing the contents of the font text control:
     #---------------------------------------------------------------------------

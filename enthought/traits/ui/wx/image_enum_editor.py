@@ -203,6 +203,7 @@ class SimpleEditor ( ReadonlyEditor ):
         super( SimpleEditor, self ).init( parent )
         self.control.Selected( True )
         self.control.Handler( self.popup_editor )
+        self.set_tooltip()
         
     #---------------------------------------------------------------------------
     #  Handles the user clicking the ImageControl to display the pop-up dialog:

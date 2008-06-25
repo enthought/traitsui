@@ -122,6 +122,8 @@ class CompoundEditor ( Editor ):
      
         # Set-up the layout:
         panel.SetSizerAndFit( sizer )
+
+        self.set_tooltip()
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

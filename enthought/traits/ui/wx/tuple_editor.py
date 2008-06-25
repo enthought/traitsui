@@ -100,6 +100,7 @@ class SimpleEditor ( Editor ):
         ui           = ts.view.ui( ts, parent, kind = 'subpanel' ).set(
                                    parent = self.ui )
         self.control = ui.control
+        self.set_tooltip()
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
