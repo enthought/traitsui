@@ -201,15 +201,20 @@ class SourceEditor ( Editor ):
         
         # Set up the events
         wx.EVT_KILL_FOCUS( control, self.wx_update_object )
-        stc.EVT_STC_CALLTIP_CLICK( control, control.GetId(), self._calltip_clicked )
+        stc.EVT_STC_CALLTIP_CLICK( control, control.GetId(), 
+                                   self._calltip_clicked )
+        
         if factory.auto_scroll and (factory.selected_line != ''):
             wx.EVT_SIZE( control, self._update_selected_line )
+            
         if factory.auto_set:
             editor.on_trait_change( self.update_object, 'changed', 
                                     dispatch = 'ui' )
+            
         if factory.key_bindings is not None:
             editor.on_trait_change( self.key_pressed, 'key_pressed', 
                                     dispatch = 'ui' )
+            
         if self.readonly:
             control.SetReadOnly( True )
             
@@ -281,14 +286,14 @@ class SourceEditor ( Editor ):
             control.SetReadOnly( readonly )
             self._mark_lines_changed()
             self._selected_line_changed()
+            
         self._locked = False
-        
     
     #---------------------------------------------------------------------------
     #  Handles the calltip being clicked:
     #---------------------------------------------------------------------------
     
-    def _calltip_clicked(self, event):
+    def _calltip_clicked ( self, event ):
         self.calltip_clicked = True
         
     #---------------------------------------------------------------------------
@@ -302,9 +307,11 @@ class SourceEditor ( Editor ):
         control = self.control
         lc      = control.GetLineCount()
         control.MarkerDeleteAll( MARK_MARKER )
+        
         for line in lines:
             if 0 < line <= lc:
                 control.MarkerAdd( line - 1, MARK_MARKER )
+                
         control.Refresh()
         
     def _mark_lines_items_changed ( self ):

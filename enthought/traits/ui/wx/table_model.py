@@ -475,8 +475,9 @@ class TableModel ( GridModel ):
          
         editor._ui = self.editor.ui
         
-        return TraitGridCellAdapter( 
-                   editor, column.get_object( object ), column.name, '', 
+        target, name = column.target_name( object )
+        
+        return TraitGridCellAdapter( editor, target, name, '',
                    context = self.editor.ui.context, 
                    style   = column.get_style( object ) )
 
