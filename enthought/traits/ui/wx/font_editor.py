@@ -146,9 +146,10 @@ class ToolkitEditorFactory ( EditorFactory ):
                                
 class SimpleFontEditor ( SimpleEditor ):
     """ Simple style of font editor, which displays a text field that contains
-    a text representation of the font value (using that font if possible). 
-    Clicking the field displays a font selection dialog box.
+        a text representation of the font value (using that font if possible). 
+        Clicking the field displays a font selection dialog box.
     """
+    
     #---------------------------------------------------------------------------
     #  Invokes the pop-up editor for an object trait:
     #---------------------------------------------------------------------------
@@ -198,6 +199,7 @@ class CustomFontEditor ( Editor ):
         * A combo box containing all available type face names.
         * A combo box containing the available type sizes.
     """
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -271,14 +273,18 @@ class CustomFontEditor ( Editor ):
             editor.
         """
         font = self.factory.to_wx_font( self )
+        
         try:
            self._facename.SetStringSelection( font.GetFaceName() )
         except:
            self._facename.SetSelection( 0 )
+           
         try:
            self._point_size.SetStringSelection( str( font.GetPointSize() ) )
         except:
            self._point_size.SetSelection( 0 )
+           
+        self._font.SetValue( self.str_value )
         
     #---------------------------------------------------------------------------
     #  Returns the text representation of a specified font value:
@@ -303,9 +309,10 @@ class CustomFontEditor ( Editor ):
                                
 class TextFontEditor ( TextEditor ):
     """ Text style of font editor, which displays an editable text field 
-    containing a text representation of the font value (using that font if
-    possible).
+        containing a text representation of the font value (using that font if
+        possible).
     """
+    
     #---------------------------------------------------------------------------
     #  Handles the user changing the contents of the edit control:
     #---------------------------------------------------------------------------
