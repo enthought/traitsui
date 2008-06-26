@@ -1312,10 +1312,12 @@ class SimpleEditor ( Editor ):
     def _on_tree_item_gettooltip ( self, event ):
         """ Handles a tooltip request on a tree node.
         """
-        expanded, node, object = self._get_node_data( event.GetItem() )
-        tooltip = node.get_tooltip( object )
-        if tooltip != '':
-            event.SetToolTip( tooltip )
+        nid = event.GetItem()
+        if nid.IsOk():
+            expanded, node, object = self._get_node_data( nid )
+            tooltip = node.get_tooltip( object )
+            if tooltip != '':
+                event.SetToolTip( tooltip )
         event.Skip()
 
     #---------------------------------------------------------------------------
