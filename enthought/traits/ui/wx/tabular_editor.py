@@ -1044,6 +1044,13 @@ class _TabularEditor ( Editor ):
                 self.selected = None
                 self.selected_row = -1
         else:
+            if self.factory.multi_select and event.ShiftDown():
+                # Handle shift-click multi-selections because the wx.ListCtrl
+                # does not (by design, apparently).
+                # We must append this to the event queue because the
+                # multi-selection will not be recorded until this event handler
+                # finishes and lets the widget actually handle the event.
+                wx.CallAfter(self._item_selected, None)
             setattr( self, trait, TabularEditorEvent(
                 editor = self,
                 row    = row, 
