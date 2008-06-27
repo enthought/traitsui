@@ -197,7 +197,7 @@ class SourceEditor ( Editor ):
         #    EVT_STC_DOUBLECLICK
         #    EVT_STC_MARGINCLICK
         
-        control.SetSize( ( 300, 124 ) )
+        control.SetSize( wx.Size( 300, 124 ) )
         
         # Set up the events
         wx.EVT_KILL_FOCUS( control, self.wx_update_object )
