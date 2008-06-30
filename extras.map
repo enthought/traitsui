@@ -4,5 +4,3 @@
 [dnd]
 
 
-[tvtk]
-enthought.pyface.ui.wx.tvtk = *

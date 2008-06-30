@@ -20,10 +20,8 @@ def etsdep(p, min, max=None, literal=False):
 APPTOOLS           = etsdep( 'AppTools',            '3.0.0b1' )  
 DEVTOOLS_DEVELOPER = etsdep( 'DevTools[developer]', '3.0.0b1' )  
 ENTHOUGHTBASE_UI   = etsdep( 'EnthoughtBase[ui]',   '3.0.0b1' )
-MAYAVI             = etsdep( 'Mayavi',              '3.0.0a1' )
 TRAITS             = etsdep( 'Traits',              '3.0.0b1' )
 TRAITSGUI_DOCK     = etsdep( 'TraitsGUI[dock]',     '3.0.0b1' )
-TRAITSGUI_TVTK     = etsdep( 'TraitsGUI[tvtk]',     '3.0.0b1' )
 
 # The following soft dependencies are handled with appropriate try...except
 # wrappers.
@@ -49,13 +47,6 @@ setup(
         # debugger should be installed:
         'debug': [
             DEVTOOLS_DEVELOPER,
-        ],
-    
-        # Extra denoting that TVTK (i.e. Traits VTK) support should be 
-        # installed:
-        'tvtk': [
-            MAYAVI,
-            TRAITSGUI_TVTK,
         ],
 
         # All non-ets dependencies should be in this extra to ensure users can
