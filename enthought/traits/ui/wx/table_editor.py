@@ -127,7 +127,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     
     # The optional extended name of the trait used to specify an external filter
     # for the table data. The value of the trait must either be an instance of
-    # TableEditor, a callable that accepts one argument (a table row) and 
+    # TableFilter, a callable that accepts one argument (a table row) and 
     # returns True or False to indicate whether the specified object passes the
     # filter or not, or **None** to indicate that no filter is to be applied:
     filter_name = Str
@@ -1371,8 +1371,11 @@ class TableEditor ( Editor ):
             do_later( self._customize_filters, old_filter )
             
         elif self.model is not None:
-             self.model.filter = new_filter
-             self.filter_modified()
+            if ((new_filter is not None) and 
+                (not isinstance( new_filter, TableFilter ))):
+                new_filter = TableFilter( allowed = new_filter )
+            self.model.filter = new_filter
+            self.filter_modified()
 
     #---------------------------------------------------------------------------
     #  Refresh the list of available filters:

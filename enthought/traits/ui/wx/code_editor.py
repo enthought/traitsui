@@ -29,6 +29,9 @@ import wx.stc as stc
 from enthought.traits.api \
     import Instance, Str, List, Int, Color, Enum, Event, Bool, TraitError
     
+from enthought.traits.trait_base \
+    import SequenceTypes
+    
 from enthought.traits.ui.key_bindings \
     import KeyBindings
     
@@ -259,7 +262,10 @@ class SourceEditor ( Editor ):
         """
         if not self._locked:
             try:
-                self.value = self.control.GetText()
+                value = self.control.GetText()
+                if isinstance( self.value, SequenceTypes ):
+                    value = value.split()
+                self.value = value
                 self.control.SetBackgroundColour( OKColor )
                 self.control.Refresh()
             except TraitError, excp:
@@ -274,8 +280,10 @@ class SourceEditor ( Editor ):
             editor.
         """
         self._locked = True
-        new_value    = self.str_value
-        control      = self.control
+        new_value    = self.value
+        if isinstance( new_value, SequenceTypes ):
+            new_value = '\n'.join( [ line.rstrip() for line in new_value ] )
+        control = self.control
         if control.GetText() != new_value:
             readonly = control.GetReadOnly()
             control.SetReadOnly( False )
