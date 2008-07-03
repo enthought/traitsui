@@ -1082,7 +1082,7 @@ class FillPanel ( object ):
             layout_style = editor.layout_style
             if not show_labels:
                 layout_style |= wx.EXPAND
-            if fixed_width:
+            if fixed_width and self.is_horizontal:
                 layout_style &= ~wx.EXPAND
                 
             item_sizer.Add( control, growable, 
