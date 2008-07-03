@@ -497,6 +497,16 @@ class CustomEditor ( Editor ):
             control.Thaw()
             self.control.Layout()
             self.control.GetParent().Layout()
+            
+            # It is possible that this instance editor is embedded at some level
+            # in a ScrolledWindow. If so, we need to inform the window that the
+            # size of the editor's contents have (potentially) changed.
+            control = self.control.GetParent()
+            while not (control is None or
+                       isinstance(control, wx.ScrolledWindow)):
+                control = control.GetParent()
+            if control is not None:
+                control.SendSizeEvent()
         
     #---------------------------------------------------------------------------
     #  Disposes of the contents of an editor:    
