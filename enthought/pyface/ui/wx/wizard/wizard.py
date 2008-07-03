@@ -97,7 +97,7 @@ class Wizard(MWizard, Dialog):
     ###########################################################################
 
     def _show_page(self, page):
-        """ Show the page at the specified index. """
+        """ Show the specified page. """
 
         panel = self._layered_panel
 

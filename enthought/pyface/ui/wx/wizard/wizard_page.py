@@ -40,6 +40,8 @@ class WizardPage(MWizardPage, HasTraits):
 
     heading = Unicode
 
+    subheading = Unicode
+
     ###########################################################################
     # 'IWizardPage' interface.
     ###########################################################################
@@ -56,6 +58,10 @@ class WizardPage(MWizardPage, HasTraits):
         if len(self.heading) > 0:
             title = HeadingText(panel, text=self.heading)
             sizer.Add(title.control, 0, wx.EXPAND | wx.BOTTOM, 5)
+
+        if len(self.subheading) > 0:
+            subtitle = wx.StaticText(panel, -1, self.subheading)
+            sizer.Add(subtitle, 0, wx.EXPAND | wx.BOTTOM, 5)
 
         # The page content.
         content = self._create_page_content(panel)
