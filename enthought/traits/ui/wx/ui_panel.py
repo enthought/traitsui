@@ -194,7 +194,6 @@ class Panel ( BaseDialog ):
             
             sw.SetSizerAndFit( sizer )
             sw.SetScrollRate( 16, 16 )
-            sw.SetMinSize( wx.Size( 0, 0 ) )
         else:
             sw = panel( ui, cpanel ) 
             
