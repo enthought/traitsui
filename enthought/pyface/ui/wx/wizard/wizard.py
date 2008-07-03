@@ -18,10 +18,12 @@
 import wx
 
 # Enthought library imports.
-from enthought.traits.api import Bool, implements, Instance, Unicode
+from enthought.traits.api import Bool, implements, Instance, List, Property, \
+        Unicode
 from enthought.pyface.api import Dialog, LayeredPanel
 from enthought.pyface.wizard.i_wizard import IWizard, MWizard
-from enthought.pyface.wizard.wizard_controller import WizardController
+from enthought.pyface.wizard.i_wizard_controller import IWizardController
+from enthought.pyface.wizard.i_wizard_page import IWizardPage
 
 
 class Wizard(MWizard, Dialog):
@@ -35,7 +37,9 @@ class Wizard(MWizard, Dialog):
 
     #### 'IWizard' interface ##################################################
 
-    controller = Instance(WizardController)
+    pages = Property(List(IWizardPage))
+
+    controller = Instance(IWizardController)
 
     show_cancel = Bool(True)
     
@@ -150,6 +154,25 @@ class Wizard(MWizard, Dialog):
                 self._next.SetDefault()
             
         return
+
+    #### Trait handlers #######################################################
+
+    def _controller_default(self):
+        """ Provide a default controller. """
+
+        from enthought.pyface.wizard.wizard_controller import WizardController
+
+        return WizardController()
+
+    def _get_pages(self):
+        """ Returns the pages in the wizard. """
+
+        return self.controller.pages
+
+    def _set_pages(self, pages):
+        """ Sets the pages in the wizard. """
+
+        self.controller.pages = pages
 
     #### wx event handlers ####################################################
 
