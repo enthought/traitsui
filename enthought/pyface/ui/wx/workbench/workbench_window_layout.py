@@ -464,7 +464,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def _wx_create_view_dock_control(self, view):
         """ Creates a dock control that contains the specified view. """
-
+        
         # Get the view's toolkit-specific control.
         control = self._wx_get_view_control(view)
 
@@ -711,7 +711,8 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         view.on_trait_change(on_name_changed, 'name')
 
         def on_activated_changed(view_dock_control, trait_name, old, new):
-            view_dock_control._view.set_focus()
+            if view_dock_control._view is not None:
+                 view_dock_control._view.set_focus()
             return
 
         view_dock_control.on_trait_change(on_activated_changed, 'activated')
