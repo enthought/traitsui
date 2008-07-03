@@ -28,8 +28,8 @@ import wx
 import wx.lib.scrolledpanel as wxsp
 
 from enthought.traits.api \
-    import Trait, HasTraits, BaseTraitHandler, Range, Str, Any, Instance, \
-           Property, Bool, Callable, Enum, cached_property
+    import Trait, HasTraits, BaseTraitHandler, Range, Str, Any, Int, Instance, \
+           Property, Bool, Callable, Enum, PrototypedFrom, cached_property
 
 from enthought.traits.trait_base \
     import user_name_for, enumerate, xgetattr
@@ -654,27 +654,40 @@ class CustomEditor ( SimpleEditor ):
 
 class ListItemProxy ( HasTraits ):
 
+    # The list proxy:
     list = Property
+    
+    # The item proxies index into the original list:
+    index = Int
+    
+    # Delegate all other traits to the original object:
+    _ = PrototypedFrom( '_zzz_object' )
+    
+    # Define all of the private internal use values (the funny names are an
+    # attempt to avoid name collisions with delegated trait names):
+    _zzz_inited = Any
+    _zzz_object = Any
+    _zzz_name   = Any
 
     def __init__ ( self, object, name, index, trait, value ):
         super( ListItemProxy, self ).__init__()
 
-        self.inited = False
-        self.object = object
-        self.name   = name
-        self.index  = index
+        self._zzz_inited = False
+        self._zzz_object = object
+        self._zzz_name   = name
+        self.index       = index
 
         if trait is not None:
             self.add_trait( 'value', trait )
             self.value = value
 
-        self.inited = (self.index < len( self.list ))
+        self._zzz_inited = (self.index < len( self.list ))
 
     def _get_list ( self ):
-        return getattr( self.object, self.name )
+        return getattr( self._zzz_object, self._zzz_name )
 
-    def _value_changed ( self, old_value, new_value ):
-        if self.inited:
+    def _value_changed ( self, new_value ):
+        if self._zzz_inited:
             self.list[ self.index ] = new_value
 
 #-------------------------------------------------------------------------------
