@@ -112,6 +112,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Optional instance view to use
     view = AView
     
+    # Extended name of the context object trait containing the view, or name of
+    # the view, to use
+    view_name = Str
+    
     # The ID to use with the view
     id = Str
     
@@ -183,6 +187,9 @@ class CustomEditor ( Editor ):
     # The maximum extra padding that should be allowed around the editor:
     # (Override of the Editor base class trait)
     border_size = 0
+    
+    # The view to use for displaying the instance:
+    view = AView
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -270,6 +277,10 @@ class CustomEditor ( Editor ):
             sizer = wx.BoxSizer( orientation )
             self.create_editor( parent, sizer )
             parent.SetSizer( sizer )
+            
+        # Synchronize the 'view' to use:
+        self.view = factory.view
+        self.sync_value( factory.view_name, 'view', 'from' )
 
     #---------------------------------------------------------------------------
     #  Creates the editor control:  
@@ -365,7 +376,7 @@ class CustomEditor ( Editor ):
             view = item.get_view()
             
         if view == '':
-            view = self.factory.view
+            view = self.view
             
         return self.ui.handler.trait_view_for( self.ui.info, view, object,
                                                self.object_name, self.name ) 
@@ -496,17 +507,18 @@ class CustomEditor ( Editor ):
             panel.SetSizer( sizer )
             control.Thaw()
             self.control.Layout()
-            self.control.GetParent().Layout()
+            parent = self.control.GetParent()
+            parent.Layout()
             
             # It is possible that this instance editor is embedded at some level
             # in a ScrolledWindow. If so, we need to inform the window that the
-            # size of the editor's contents have (potentially) changed.
-            control = self.control.GetParent()
-            while not (control is None or
-                       isinstance(control, wx.ScrolledWindow)):
-                control = control.GetParent()
-            if control is not None:
-                control.SendSizeEvent()
+            # size of the editor's contents have (potentially) changed:
+            while ((parent is not None) and 
+                   (not isinstance( parent, wx.ScrolledWindow ))):
+                parent = parent.GetParent()
+                
+            if parent is not None:
+                parent.SendSizeEvent()
         
     #---------------------------------------------------------------------------
     #  Disposes of the contents of an editor:    
@@ -544,7 +556,7 @@ class CustomEditor ( Editor ):
         """
         pass
 
-#-- UI preference save/restore interface ---------------------------------------
+    #-- UI preference save/restore interface -----------------------------------
 
     #---------------------------------------------------------------------------
     #  Restores any saved user preference information associated with the 
@@ -573,7 +585,7 @@ class CustomEditor ( Editor ):
             
         return None
 
-#----- Drag and drop event handlers: -------------------------------------------
+    #-- Drag and drop event handlers -------------------------------------------
 
     #---------------------------------------------------------------------------
     #  Handles a Python object being dropped on the control:    
@@ -603,6 +615,11 @@ class CustomEditor ( Editor ):
                 return drag_result
             
         return wx.DragNone
+        
+    #-- Traits event handlers --------------------------------------------------
+    
+    def _view_changed ( self ):
+        self.resynch_editor()
                                       
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
