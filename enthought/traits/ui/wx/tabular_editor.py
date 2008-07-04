@@ -1050,7 +1050,8 @@ class _TabularEditor ( Editor ):
                 # We must append this to the event queue because the
                 # multi-selection will not be recorded until this event handler
                 # finishes and lets the widget actually handle the event.
-                wx.CallAfter(self._item_selected, None)
+                do_later( self._item_selected )
+                
             setattr( self, trait, TabularEditorEvent(
                 editor = self,
                 row    = row, 
