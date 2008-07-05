@@ -23,6 +23,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import sys
+
 import wx
 
 #-------------------------------------------------------------------------------
@@ -48,7 +50,11 @@ DropColor = wx.Colour( 215, 242, 255 )
 EditableColor = wx.WHITE
 
 # Color for background of windows (like dialog background color)
-WindowColor = wx.SystemSettings_GetColour( wx.SYS_COLOUR_BTNFACE )
+if sys.platform == 'darwin':
+    # wx lies to us.
+    WindowColor = wx.Colour( 232, 232, 232 )
+else:
+    WindowColor = wx.SystemSettings_GetColour( wx.SYS_COLOUR_BTNFACE )
 
 # Standard width of an image bitmap
 standard_bitmap_width = 120

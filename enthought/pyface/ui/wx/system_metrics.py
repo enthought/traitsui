@@ -17,6 +17,9 @@
 """ Enthought pyface package component
 """
 
+# Standard library imports.
+import sys
+
 # Major package imports.
 import wx
 
@@ -53,7 +56,11 @@ class SystemMetrics(MSystemMetrics, HasTraits):
         return wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
 
     def _get_dialog_background_color(self):
-        color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE).Get()
+        if sys.platform == 'darwin':
+            # wx lies.
+            color = wx.Colour(232, 232, 232)
+        else:
+            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE).Get()
 
         return (color[0]/255., color[1]/255., color[2]/255.)
 

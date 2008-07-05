@@ -30,13 +30,13 @@ from cgi \
     import escape
     
 from enthought.traits.api \
-    import List, Instance
+    import Instance
     
 from enthought.traits.ui.api \
     import Group
     
 from enthought.traits.trait_base \
-    import user_name_for, enumerate
+    import enumerate
     
 from enthought.traits.ui.undo \
     import UndoHistory
@@ -183,6 +183,7 @@ class Panel ( BaseDialog ):
             cpanel.DestroyChildren()
         else:
             self.control = cpanel = traits_ui_panel( parent, -1 )
+            cpanel.SetBackgroundColour(WindowColor)
         
         # Create the actual trait sheet panel and imbed it in a scrollable 
         # window (if requested):

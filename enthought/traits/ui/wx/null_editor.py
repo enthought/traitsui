@@ -53,6 +53,7 @@ class NullEditor ( Editor ):
             widget.
         """
         self.control = control = wx.Window( parent, -1 )
+        self.control.SetBackgroundColour(WindowColor)
                             
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND( control, self._erase_background )

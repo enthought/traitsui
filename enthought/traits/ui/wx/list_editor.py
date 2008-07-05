@@ -28,7 +28,7 @@ import wx
 import wx.lib.scrolledpanel as wxsp
 
 from enthought.traits.api \
-    import Trait, HasTraits, BaseTraitHandler, Range, Str, Any, Int, Instance, \
+    import HasTraits, BaseTraitHandler, Range, Str, Any, Int, Instance, \
            Property, Bool, Callable, Enum, PrototypedFrom, cached_property
 
 from enthought.traits.trait_base \

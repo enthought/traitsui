@@ -25,13 +25,10 @@
 import wx
 
 from enthought.traits.api \
-    import Str, Property, Instance, Bool, cached_property, on_trait_change
+    import Str, Property, Instance, Bool, cached_property
     
 from themed_window \
     import ThemedWindow
-    
-from helper \
-    import traits_ui_panel
     
 #-------------------------------------------------------------------------------
 #  Constants:

@@ -17,6 +17,9 @@
 """ Enthought pyface package component
 """
 
+# Standard library imports.
+import sys
+
 # Major package imports.
 import wx
 
@@ -24,7 +27,7 @@ try:
     import wx.aui
     AUI = True
     
-except:
+except ImportError:
     AUI = False
     
 # Enthought library imports.
@@ -170,9 +173,12 @@ class ApplicationWindow(MApplicationWindow, Window):
             pos=self.position
         )
 
-        control.SetBackgroundColour(
-            wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE)
-        )
+        if sys.platform == 'darwin':
+            # wx lies.
+            color = wx.Colour(232, 232, 232)
+        else:
+            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE)
+        control.SetBackgroundColour(color)
         
         if AUI:
             # Let the AUI manager look after the frame.
