@@ -35,7 +35,7 @@ from editor \
     import Editor
     
 from editor_factory \
-    import EditorFactory
+    import EditorWithListFactory
     
 from enthought.traits.api \
     import Any, TraitError, Event, Str, Bool, TraitHandler, CTrait, Property
@@ -47,23 +47,13 @@ from enthought.traits.ui.ui_traits \
 #  'ToolkitEditorFactory' class:
 #-------------------------------------------------------------------------------
 
-class ToolkitEditorFactory ( EditorFactory ):
+class ToolkitEditorFactory ( EditorWithListFactory ):
     """ wxPython editor factory for editors for sets.
     """
     
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
-    
-    # Values enumerating the possible elements of the ordered set (can be a 
-    # list, tuple, dict, or a CTrait or TraitHandler than is mapped):
-    values = Any
-    
-    # Extended name of the trait on **object** containing the enumeration data:
-    name = Str 
-    
-    # Event fired when the **values** trait has been updated:
-    values_modified = Event 
     
     # Are the items in the set ordered (vs. unordered)?
     ordered = Bool( False )
@@ -76,18 +66,6 @@ class ToolkitEditorFactory ( EditorFactory ):
     
     # Title of right column:
     right_column_title = Str
-    
-    #---------------------------------------------------------------------------
-    #  Recomputes the mappings whenever the 'values' trait is changed:
-    #---------------------------------------------------------------------------
-     
-    def _values_changed ( self ):
-        """ Recomputes the mappings whenever the **values** trait is changed.
-        """
-        self._names, self._mapping, self._inverse_mapping = \
-            enum_values_changed( self.values )
-            
-        self.values_modified = True
     
     #---------------------------------------------------------------------------
     #  'Editor' factory methods:
