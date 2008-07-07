@@ -17,9 +17,14 @@
 """ The handler used to restore views.
 """
 
+# Standard library imports.
+import logging
+
 # Enthought library imports.
-from enthought.logger.api import logger
 from enthought.pyface.dock.api import SetStructureHandler
+
+
+logger = logging.getLogger(__name__)
 
 
 class ViewSetStructureHandler(SetStructureHandler):

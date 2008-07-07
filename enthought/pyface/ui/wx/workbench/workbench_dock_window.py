@@ -17,10 +17,14 @@
 """ Base class for workbench dock windows.
 """
 
+# Standard library imports.
+import logging
+
 # Enthought library imports.
-from enthought.logger.api import logger
 from enthought.pyface.dock.api import DockGroup, DockRegion, DockWindow
 
+
+logger = logging.getLogger(__name__)
 
 class WorkbenchDockWindow(DockWindow):
     """ Base class for workbench dock windows.

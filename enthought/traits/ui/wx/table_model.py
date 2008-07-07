@@ -23,10 +23,12 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import logging
+
 import wx.grid as wxg
 
 from enthought.traits.api \
-    import HasTraits, HasPrivateTraits, Any, Str, List, Instance, Event, Bool, \
+    import HasPrivateTraits, Any, Str, Instance, Event, Bool, \
            on_trait_change
 
 from enthought.traits.ui.api \
@@ -41,14 +43,14 @@ from enthought.traits.ui.ui_traits \
 from enthought.pyface.grid.api \
     import GridModel, GridSortEvent
 
-from enthought.pyface.grid.grid_cell_renderer \
-    import GridCellRenderer
-
 from enthought.pyface.grid.trait_grid_cell_adapter \
     import TraitGridCellAdapter
 
 from enthought.pyface.timer.api \
     import do_later
+
+
+logger = logging.getLogger(__name__)
 
 #-------------------------------------------------------------------------------
 #  'TraitGridSelection' class:
@@ -202,8 +204,6 @@ class TableModel ( GridModel ):
         try:
             return self.__filtered_items()[ index ]
         except:
-            from enthought.logger import logger
-
             logger.error( 'TableModel error: Request for invalid row %d out of '
                           '%d' % ( index, len( self.__filtered_items() ) ) )
             return None
@@ -488,20 +488,6 @@ class TableModel ( GridModel ):
         """
         return self.__get_column( col )._get_renderer(
                    self.get_filtered_item( row ), self.use_themes )
-
-    def get_cell_bg_color ( self, row, col ):
-        """ Returns a wxColour object specifying the background color
-            of the specified cell. 
-        """
-        obj = self.get_filtered_item( row )
-        return self.__get_column( col ).get_cell_color( obj )
-
-    def get_cell_text_color ( self, row, col ):
-        """ Returns a wxColour object specifying the text color
-            of the specified cell. """
-
-        obj = self.get_filtered_item( row )
-        return self.__get_column( col ).get_text_color( obj )
 
     def get_cell_drag_value ( self, row, col ):
         """ Returns the value to use when the specified cell is dragged or
