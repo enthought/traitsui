@@ -279,7 +279,9 @@ class CustomEditor ( Editor ):
             parent.SetSizer( sizer )
             
         # Synchronize the 'view' to use:
-        self.view = factory.view
+        # fixme: A normal assignment can cause a crash (for unknown reasons) in
+        # some cases, so we make sure that no notifications are generated:
+        self.trait_setq( view = factory.view )
         self.sync_value( factory.view_name, 'view', 'from' )
 
     #---------------------------------------------------------------------------
@@ -618,7 +620,7 @@ class CustomEditor ( Editor ):
         
     #-- Traits event handlers --------------------------------------------------
     
-    def _view_changed ( self ):
+    def _view_changed ( self, view ):
         self.resynch_editor()
                                       
 #-------------------------------------------------------------------------------
