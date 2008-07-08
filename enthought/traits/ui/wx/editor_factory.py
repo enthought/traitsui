@@ -38,7 +38,7 @@ from editor \
     import Editor
     
 from constants \
-    import ReadonlyColor, WindowColor
+    import WindowColor
 
 #-------------------------------------------------------------------------------
 #  'EditorFactory' base class:

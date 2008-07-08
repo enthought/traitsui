@@ -580,6 +580,15 @@ class SimpleEditor ( Editor ):
                 #self._restore_state( saved_state )
                 self.expand_levels( nid, self.factory.auto_open, False )
             # fixme: Clear the current editor (if any)...
+            
+    #---------------------------------------------------------------------------
+    #  Returns the editor's control for indicating error status:
+    #---------------------------------------------------------------------------
+    
+    def get_error_control ( self ):
+        """ Returns the editor's control for indicating error status.
+        """
+        return self._tree
 
     #---------------------------------------------------------------------------
     #  Appends a new node to the specified node:

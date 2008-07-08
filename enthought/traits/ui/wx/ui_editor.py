@@ -95,6 +95,15 @@ class UIEditor ( Editor ):
             self.editor_ui.dispose()
             
         super( UIEditor, self ).dispose()
+            
+    #---------------------------------------------------------------------------
+    #  Returns the editor's control for indicating error status:
+    #---------------------------------------------------------------------------
+    
+    def get_error_control ( self ):
+        """ Returns the editor's control for indicating error status.
+        """
+        return self.editor_ui.get_error_controls()
         
 #-- UI preference save/restore interface ---------------------------------------
 

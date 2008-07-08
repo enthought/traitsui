@@ -296,6 +296,15 @@ class CustomFontEditor ( Editor ):
         """ Returns the text representation of a specified font value.
         """
         return self.factory.str_font( font )
+            
+    #---------------------------------------------------------------------------
+    #  Returns the editor's control for indicating error status:
+    #---------------------------------------------------------------------------
+    
+    def get_error_control ( self ):
+        """ Returns the editor's control for indicating error status.
+        """
+        return [ self._font, self._facename, self._point_size ]
 
     #-- Private Methods --------------------------------------------------------
     
@@ -350,9 +359,10 @@ class TextFontEditor ( TextEditor ):
                                
 class ReadonlyFontEditor ( ReadonlyEditor ):
     """ Read-only style of font editor, which displays a read-only text field
-    containing a text representation of the font value (using that font if
-    possible).
+        containing a text representation of the font value (using that font if
+        possible).
     """
+    
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------

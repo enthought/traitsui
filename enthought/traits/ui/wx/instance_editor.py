@@ -557,6 +557,15 @@ class CustomEditor ( Editor ):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
+            
+    #---------------------------------------------------------------------------
+    #  Returns the editor's control for indicating error status:
+    #---------------------------------------------------------------------------
+    
+    def get_error_control ( self ):
+        """ Returns the editor's control for indicating error status.
+        """
+        return (self._choice or self.control)
 
     #-- UI preference save/restore interface -----------------------------------
 

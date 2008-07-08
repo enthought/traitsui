@@ -168,7 +168,6 @@ class SimpleEditor ( SimpleTextEditor ):
             else:
                 control = wx.TextCtrl( panel, -1, '' )
                 
-            self._file_name = control
             wx.EVT_KILL_FOCUS( control, self.update_object )
             
             if factory.auto_set:
@@ -177,6 +176,7 @@ class SimpleEditor ( SimpleTextEditor ):
             button = wx.Button( panel, -1, 'Browse...' )
             pad    = 8
             
+        self._file_name = control
         sizer.Add( control, 1, wx.EXPAND | wx.ALIGN_CENTER )
         sizer.Add( button,  0, wx.LEFT   | wx.ALIGN_CENTER, pad )
         wx.EVT_BUTTON( panel, button.GetId(), self.show_file_dialog )
@@ -260,6 +260,15 @@ class SimpleEditor ( SimpleTextEditor ):
                     
                 self.value = file_name
                 self.update_editor()
+            
+    #---------------------------------------------------------------------------
+    #  Returns the editor's control for indicating error status:
+    #---------------------------------------------------------------------------
+    
+    def get_error_control ( self ):
+        """ Returns the editor's control for indicating error status.
+        """
+        return self._file_name
         
     #-- Traits Event Handlers --------------------------------------------------
     
@@ -432,6 +441,15 @@ class CustomEditor ( SimpleTextEditor ):
         """ Returns the basic style to use for the control.
         """
         return wx.DIRCTRL_EDIT_LABELS
+            
+    #---------------------------------------------------------------------------
+    #  Returns the editor's control for indicating error status:
+    #---------------------------------------------------------------------------
+    
+    def get_error_control ( self ):
+        """ Returns the editor's control for indicating error status.
+        """
+        return self._tree
         
     #---------------------------------------------------------------------------
     #  Handles the 'filter' trait being changed:
