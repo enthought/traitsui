@@ -219,12 +219,12 @@ class SimpleEditor ( Editor ):
         if (not self._no_update) and (self.control is not None):
             try:
                 self.value = self._get_user_value()
-                self.control.SetBackgroundColour( self.ok_color )
-                self.control.Refresh()
                 
                 if self._error is not None:
                     self._error     = None
                     self.ui.errors -= 1
+                    
+                self.set_error_state( False )
                     
             except TraitError, excp:
                 pass
@@ -252,8 +252,7 @@ class SimpleEditor ( Editor ):
         if self._error is not None:
             self._error     = None
             self.ui.errors -= 1
-            self.control.SetBackgroundColour( self.ok_color )
-            self.control.Refresh()
+            self.set_error_state( False )
 
     #---------------------------------------------------------------------------
     #  Gets the actual value corresponding to what the user typed:
@@ -284,12 +283,34 @@ class SimpleEditor ( Editor ):
     def error ( self, excp ):
         """ Handles an error that occurs while setting the object's trait value.
         """
-        self.control.SetBackgroundColour( ErrorColor )
-        self.control.Refresh()
-        
         if self._error is None:
             self._error     = True
             self.ui.errors += 1
+            
+        self.set_error_state( True )
+        
+    #---------------------------------------------------------------------------
+    #  Sets the editors current visible error state:
+    #---------------------------------------------------------------------------
+    
+    def set_error_state ( self, state ):
+        """ Sets the editors current visible error state.
+        """
+        color = self.ok_color
+        if state or self.invalid or self._error:
+            color = ErrorColor
+            
+        self.control.SetBackgroundColour( color )
+        self.control.Refresh()
+            
+    #---------------------------------------------------------------------------
+    #  Handles the editor's invalid state changing:
+    #---------------------------------------------------------------------------
+    
+    def _invalid_changed ( self, state ):
+        """ Handles the editor's invalid state changing.
+        """
+        self.set_error_state( state )
         
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:

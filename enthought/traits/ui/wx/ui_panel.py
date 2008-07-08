@@ -954,7 +954,7 @@ class FillPanel ( object ):
                 if editor_factory is None:
                     from text_editor import ToolkitEditorFactory
                     editor_factory = ToolkitEditorFactory()
-
+    
                 # If the item has formatting traits set them in the editor
                 # factory:
                 if item.format_func is not None:
@@ -962,6 +962,11 @@ class FillPanel ( object ):
                     
                 if item.format_str != '':
                     editor_factory.format_str = item.format_str
+                    
+                # If the item has an invalid state extended trait name, set it  
+                # in the editor factory:
+                if item.invalid != '':
+                    editor_factory.invalid = item.invalid
 
             # Set up the background image (if used):
             item_panel = panel
