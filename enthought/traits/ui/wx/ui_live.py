@@ -148,7 +148,7 @@ class LiveWindow ( BaseDialog ):
                 if parent is not None:
                     window_style |= (wx.FRAME_FLOAT_ON_PARENT | 
                                      wx.FRAME_NO_TASKBAR) 
-                window = wx.Frame(  parent, -1, title, style = window_style |
+                window = wx.Frame( parent, -1, title, style = window_style |
                                (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER)) )
                 window.SetBackgroundColour( WindowColor )
             else:
@@ -157,7 +157,7 @@ class LiveWindow ( BaseDialog ):
                 window = wx.Frame( None, -1, '', style = window_style )
                 window.SetBackgroundColour( WindowColor )
                 wx.EVT_ACTIVATE( window, self._on_close_popup )
-                self._monitor = MouseMonitor( self )
+                self._monitor = MouseMonitor( self, parent )
                 
             self.control = window
             wx.EVT_CLOSE( window, self._on_close_page )
@@ -432,10 +432,11 @@ class MouseMonitor ( wx.Timer ):
         pointer leaves the window.
     """
     
-    def __init__ ( self, window ):
+    def __init__ ( self, window, parent ):
         super( MouseMonitor, self ).__init__()
         self.window          = window
-        window._is_activated = False
+        window._is_activated = (isinstance( parent, tuple ) and 
+                                (len( parent ) > 4))
         self.Start( 125 )
         
     def Notify ( self ):
