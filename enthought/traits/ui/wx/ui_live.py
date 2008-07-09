@@ -157,6 +157,7 @@ class LiveWindow ( BaseDialog ):
                 window = wx.Frame( None, -1, '', style = window_style )
                 window.SetBackgroundColour( WindowColor )
                 wx.EVT_ACTIVATE( window, self._on_close_popup )
+                self._monitor = MouseMonitor( self )
                 
             self.control = window
             wx.EVT_CLOSE( window, self._on_close_page )
@@ -283,6 +284,7 @@ class LiveWindow ( BaseDialog ):
         save_window( ui )
         if self.is_modal:
             self.control.EndModal( rc )
+            
         ui.finish()
         self.ui = self.undo = self.redo = self.revert = self.control = None
 
@@ -307,10 +309,13 @@ class LiveWindow ( BaseDialog ):
         """
         if not event.GetActive():
             wx.EVT_ACTIVATE( self.control, None )
+            self.close_popup()
             
-            # Close the window if it has not already been closed:
-            if self.ui.info.ui is not None:
-                self._on_ok()
+    def close_popup ( self ):
+        # Close the window if it has not already been closed:
+        if self.ui.info.ui is not None:
+            self._monitor.Stop()
+            self._on_ok()
 
     #---------------------------------------------------------------------------
     #  Handles the user clicking the 'OK' button:
@@ -418,3 +423,46 @@ class LiveWindow ( BaseDialog ):
         """
         self.revert.Enable( state )
            
+#-------------------------------------------------------------------------------
+#  'MouseMonitor' class:
+#-------------------------------------------------------------------------------
+
+class MouseMonitor ( wx.Timer ):
+    """ Monitors a specified window and closes it the first time the mouse
+        pointer leaves the window.
+    """
+    
+    def __init__ ( self, window ):
+        super( MouseMonitor, self ).__init__()
+        self.window          = window
+        window._is_activated = False
+        self.Start( 125 )
+        
+    def Notify ( self ):
+        window  = self.window
+        control = window.control
+        mp      = wx.GetMousePosition()
+        x, y    = control.ScreenToClient( mp )
+        dx, dy  = control.GetSizeTuple()
+        
+        if window._is_activated:
+            # Check for the special case of the mouse pointer having to be
+            # within the original bounds of the object the popup was created 
+            # for:
+            parent = control._parent
+            if (isinstance( parent, tuple ) and 
+               (len( parent ) >= 5 )        and 
+               (parent[4] == 'limit')):
+                xp, yp, dxp, dyp, type = parent
+                xm, ym = mp
+                if ((xm < xp) or (xm >= (xp + dxp)) or 
+                    (ym < yp) or (ym >= (yp + dyp))):
+                    window.close_popup()
+                    
+            # Allow a 10 pixel border around the window to allow for small motor
+            # control problems:
+            elif (x < -10) or (x >= (dx + 10)) or (y < -10) or (y >= (dy + 10)):
+                window.close_popup()
+        elif (x >= 0) and (x < dx) and (y >= 0) and (y < dy):
+            window._is_activated = True
+            

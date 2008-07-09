@@ -32,7 +32,7 @@ from enthought.traits.api \
            on_trait_change
 
 from enthought.traits.ui.api \
-    import Editor
+    import View, Item, Editor
 
 from enthought.traits.ui.table_filter \
     import TableFilter
@@ -130,9 +130,6 @@ class TableModel ( GridModel ):
         object.on_trait_change( self._on_data_changed, name, dispatch = 'ui' )
         object.on_trait_change( self.fire_content_changed, name + '.-', 
                                 dispatch = 'ui' )
-
-        # Call handler when the mouse_cell changes:
-        self.on_trait_change( self._on_mouse_cell_changed, "mouse_cell" )
         
         # Set up listeners for any column definitions changing:
         editor.on_trait_change( self.update_columns, 'columns',
@@ -314,14 +311,9 @@ class TableModel ( GridModel ):
         # Check to see if the column has a view to display:
         view = column.get_view( object )
         if view is not None:
-            # fixme: It would be better if we could get the grid to do this for
-            # us, so we don't have to dig around to find the grid control...
-            grid         = self.editor.grid
-            coords       = wxg.GridCellCoords( row, col )
-            x, y, dx, dy = grid._grid.BlockToDeviceRect( coords, coords )
-            x, y         = grid._grid_window.ClientToScreenXY( x, y )
-            column.get_object( object ).edit_traits( view   = view, 
-                                                     parent = ( x, y, dx, dy ) )
+            column.get_object( object ).edit_traits( 
+                view   = view, 
+                parent = self._bounds_for( row, col ) )
                             
         # Invoke the column's click handler:
         column.on_click( object )
@@ -746,20 +738,48 @@ class TableModel ( GridModel ):
 
         self.fire_structure_changed()
 
-    def _on_mouse_cell_changed ( self, object, name, old, new ):
-        """ Calls on_mouse_over() on the column object corresponding to the
-            new (row, col), indicating that the mouse moved in that cell.
+    def _mouse_cell_changed ( self, new ):
+        """ Handles the user mousing over a specified cell.
         """
-        (row, col) = new
-        col_obj = self.__get_column( col )
-        if hasattr( col_obj, 'on_mouse_over' ):
-            row_obj = self.get_filtered_item( row )
-            col_obj.on_mouse_over( row_obj )
+        row, col = new
+        column   = self.__get_column( col )
+        object   = self.get_filtered_item( row )
+        
+        if column.is_auto_editable( object ):
+            x, y, dx, dy = self._bounds_for( row, col )
+            if column.is_editable( object ):
+                view = View( Item( name       = column.name,
+                                   editor     = column.get_editor( object ),
+                                   style      = column.get_style(  object ),
+                                   show_label = False,
+                                   padding    = -4 ),
+                             kind   = 'popup',
+                             width  = dx,
+                             height = dy )
+            else:    
+                view = column.get_view( object )
+                if view is None:
+                    return
+                    
+            column.get_object( object ).edit_traits(
+                view   = view, 
+                parent = ( x, y, dx, dy, 'limit' ) )
 
     #---------------------------------------------------------------------------
     #  Private interface:
     #---------------------------------------------------------------------------
 
+    def _bounds_for ( self, row, col ):
+        """ Returns the coordinates and size of the specified cell in the form:
+            ( x, y, dx, dy ).
+        """
+        grid         = self.editor.grid
+        coords       = wxg.GridCellCoords( row, col )
+        x, y, dx, dy = grid._grid.BlockToDeviceRect( coords, coords )
+        x, y         = grid._grid_window.ClientToScreenXY( x, y )
+        
+        return ( x, y, dx, dy )
+        
     def _sort_model ( self ):
         """ Sorts the underlying model if that is what the user requested.
         """

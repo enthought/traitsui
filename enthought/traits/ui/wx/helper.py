@@ -177,10 +177,12 @@ def position_window ( window, width = None, height = None, parent = None ):
     if isinstance( parent, wx.Window ):
         x, y     = parent.ClientToScreenXY( 0, 0 )
         cdx, cdy = parent.GetSizeTuple()
+        adjacent = True
     else:
         # Special case of parent being a screen position and size tuple (used 
         # to pop-up a dialog for a table cell):
-        x, y, cdx, cdy = parent
+        adjacent       = ((len( parent ) <= 4) or (parent[4] == 'adjacent'))
+        x, y, cdx, cdy = parent[:4]
         
     width  = min( max( cdx, width ), screen_dx )
     height = min( height, screen_dy )
@@ -204,8 +206,12 @@ def position_window ( window, width = None, height = None, parent = None ):
     
     ny     = y % screen_dy
     ydelta = y - ny
-    by     = ny + cdy
+    by     = ny
+    if adjacent:
+        by += cdy
     if (by + height) > screen_dy:
+        if not adjacent:
+            ny += cdy
         if (ny - height) < 0:
             ny = screen_dy - height
         else:
