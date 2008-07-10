@@ -78,7 +78,7 @@ EventSuffix = {
 }
 
 # Types of popup views:
-Popups = set( ( 'popup', 'info' ) )
+Popups = set( ( 'popup', 'popover', 'info' ) )
 
 #-------------------------------------------------------------------------------
 #  Handles UI notification handler requests that occur on a thread other than
@@ -154,6 +154,13 @@ class GUIToolkit ( Toolkit ):
         """
         import ui_live
         ui_live.ui_popup( ui, parent )
+
+    def ui_popover ( self, ui, parent ):
+        """ Creates a wxPython temporary "live update" popup dialog user 
+            interface using information from the specified UI object.
+        """
+        import ui_live
+        ui_live.ui_popover( ui, parent )
 
     def ui_info ( self, ui, parent ):
         """ Creates a wxPython temporary "live update" popup dialog user 
@@ -610,6 +617,11 @@ class GUIToolkit ( Toolkit ):
     def plot_editor ( self, *args, **traits ):
         import plot_editor as pe
         return pe.ToolkitEditorFactory( *args, **traits )
+
+    # Popup:
+    def popup_editor ( self, *args, **traits ):
+        import popup_editor as pe
+        return pe.PopupEditor( *args, **traits )
 
     # Range:
     def range_editor ( self, *args, **traits ):

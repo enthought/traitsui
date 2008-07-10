@@ -51,10 +51,11 @@ from enthought.traits.ui.menu \
 NONMODAL = 0
 MODAL    = 1
 POPUP    = 2
-INFO     = 3
+POPOVER  = 3
+INFO     = 4
 
 # Types of 'popup' dialogs:
-Popups = set( ( POPUP, INFO ) )
+Popups = set( ( POPUP, POPOVER, INFO ) )
 
 #-------------------------------------------------------------------------------
 #  Creates a 'live update' wxPython user interface for a specified UI object:
@@ -76,6 +77,12 @@ def ui_popup ( ui, parent ):
         UI object.
     """
     ui_dialog( ui, parent, POPUP )
+
+def ui_popover ( ui, parent ):
+    """ Creates a live, temporary popup wxPython user interface for a specified 
+        UI object.
+    """
+    ui_dialog( ui, parent, POPOVER )
 
 def ui_info ( ui, parent ):
     """ Creates a live, temporary popup wxPython user interface for a specified
@@ -167,7 +174,8 @@ class LiveWindow ( BaseDialog ):
                 window = wx.Frame( None, -1, '', style = window_style )
                 window.SetBackgroundColour( WindowColor )
                 wx.EVT_ACTIVATE( window, self._on_close_popup )
-                self._monitor = MouseMonitor( self, parent )
+                window._kind  = ui.view.kind
+                self._monitor = MouseMonitor( self )
                 
             self.control = window
             wx.EVT_CLOSE( window, self._on_close_page )
@@ -442,38 +450,44 @@ class MouseMonitor ( wx.Timer ):
         pointer leaves the window.
     """
     
-    def __init__ ( self, window, parent ):
+    def __init__ ( self, window ):
         super( MouseMonitor, self ).__init__()
         self.window          = window
-        window._is_activated = (isinstance( parent, tuple ) and 
-                                (len( parent ) > 4) and (parent[4] == 'info'))
+        kind                 = window.ui.view.kind
+        window._is_activated = self.is_info = (kind == 'info')
+        self.border = 3
+        if kind == 'popup':
+            self.border = 10
         self.Start( 125 )
         
     def Notify ( self ):
-        window  = self.window
-        control = window.control
-        mp      = wx.GetMousePosition()
-        x, y    = control.ScreenToClient( mp )
-        dx, dy  = control.GetSizeTuple()
+        window   = self.window
+        control  = window.control
+        mx, my   = wx.GetMousePosition()
+        cx, cy   = control.ClientToScreenXY( 0, 0 )
+        cdx, cdy = control.GetSizeTuple()
         
         if window._is_activated:
             # Check for the special case of the mouse pointer having to be
             # within the original bounds of the object the popup was created 
             # for:
-            parent = control._parent
-            if (isinstance( parent, tuple ) and 
-               (len( parent ) >= 5 )        and 
-               (parent[4] == 'info')):
-                xp, yp, dxp, dyp, type = parent
-                xm, ym = mp
-                if ((xm < xp) or (xm >= (xp + dxp)) or 
-                    (ym < yp) or (ym >= (yp + dyp))):
+            if self.is_info:
+                parent = control._parent
+                if isinstance( parent, wx.Window ):
+                    px, py, pdx, pdy = parent.GetScreenRect()
+                else:
+                    px, py, pdx, pdy = parent
+                if ((mx < px) or (mx >= (px + pdx)) or 
+                    (my < py) or (my >= (py + pdy))):
                     window.close_popup()
                     
-            # Allow a 10 pixel border around the window to allow for small motor
-            # control problems:
-            elif (x < -10) or (x >= (dx + 10)) or (y < -10) or (y >= (dy + 10)):
-                window.close_popup()
-        elif (x >= 0) and (x < dx) and (y >= 0) and (y < dy):
+            else:
+                # Allow for a 'dead zone' border around the window to allow for
+                # small motor control problems:
+                border = self.border
+                if ((mx < (cx - border)) or (mx >= (cx + cdx + border)) or 
+                    (my < (cy - border)) or (my >= (cy + cdy + border))):
+                    window.close_popup()
+        elif (cx <= mx < (cx + cdx)) and (cy <= my < (cy + cdy)):
             window._is_activated = True
             

@@ -185,7 +185,7 @@ class SimpleEditor ( Editor ):
         self.value = self.factory.value
         
         # If there is an associated view, then display it:
-        if (self.factory is not None) and (self.factory.view is not None):
+        if self.factory.view is not None:
             self.object.edit_traits( view   = self.factory.view, 
                                      parent = self.control )
 
@@ -198,6 +198,17 @@ class SimpleEditor ( Editor ):
             editor.
         """
         pass
+
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:
+    #---------------------------------------------------------------------------
+
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        wx.EVT_BUTTON( self.control.GetParent(), self.control.GetId(), None )
+        
+        super( SimpleEditor, self ).dispose()
 
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:

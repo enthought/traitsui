@@ -32,6 +32,9 @@ from enthought.traits.api \
     
 from enthought.traits.ui.api \
     import View, Group
+
+from enthought.traits.ui.ui_traits \
+    import AView
     
 from editor \
     import Editor
@@ -100,6 +103,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     
     # The object trait containing the function used to evaluate user input
     evaluate_name = Str
+    
+    # The optional view to display when a read-only text editor is clicked:
+    view = AView
     
     #---------------------------------------------------------------------------
     #  Traits view definition:    
@@ -316,6 +322,20 @@ class CustomEditor ( SimpleEditor ):
 class ReadonlyTextEditor ( ReadonlyEditor ):
     """ Read-only style of text editor, which displays a read-only text field.
     """
+        
+    #---------------------------------------------------------------------------
+    #  Finishes initializing the editor by creating the underlying toolkit
+    #  widget:
+    #---------------------------------------------------------------------------
+        
+    def init ( self, parent ):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        super( ReadonlyTextEditor, self ).init( parent )
+        
+        if self.factory.view is not None:
+            wx.EVT_LEFT_UP( self.control, self._left_up )
     
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -338,4 +358,21 @@ class ReadonlyTextEditor ( ReadonlyEditor ):
                 
         elif control.GetLabel() != new_value:
             control.SetLabel( new_value )
+
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:
+    #---------------------------------------------------------------------------
+
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        wx.EVT_LEFT_UP( self.control, None )
+        
+        super( ReadonlyTextEditor, self ).dispose()
+        
+    #-- wxPython Event Handlers ------------------------------------------------
+    
+    def _left_up ( self, event ):
+        self.object.edit_traits( view   = self.factory.view, 
+                                 parent = self.control )
     

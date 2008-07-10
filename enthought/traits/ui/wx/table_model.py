@@ -763,7 +763,7 @@ class TableModel ( GridModel ):
                     
             column.get_object( object ).edit_traits(
                 view   = view, 
-                parent = ( x, y, dx, dy, view.kind ) )
+                parent = ( x, y, dx, dy ) )
 
     #---------------------------------------------------------------------------
     #  Private interface:

@@ -238,6 +238,7 @@ class ReadonlyEditor ( Editor ):
             self.control = wx.StaticText( parent, -1, self.str_value,
                                           style = wx.ALIGN_LEFT )
             self.layout_style = 0
+            
         self.set_tooltip()
         
     #---------------------------------------------------------------------------
