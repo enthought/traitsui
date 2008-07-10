@@ -181,7 +181,7 @@ def position_window ( window, width = None, height = None, parent = None ):
     else:
         # Special case of parent being a screen position and size tuple (used 
         # to pop-up a dialog for a table cell):
-        adjacent       = ((len( parent ) <= 4) or (parent[4] == 'adjacent'))
+        adjacent       = ((len( parent ) <= 4) or (parent[4] == 'popup'))
         x, y, cdx, cdy = parent[:4]
         
     width  = min( max( cdx, width ), screen_dx )

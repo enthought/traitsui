@@ -51,6 +51,10 @@ from enthought.traits.ui.menu \
 NONMODAL = 0
 MODAL    = 1
 POPUP    = 2
+INFO     = 3
+
+# Types of 'popup' dialogs:
+Popups = set( ( POPUP, INFO ) )
 
 #-------------------------------------------------------------------------------
 #  Creates a 'live update' wxPython user interface for a specified UI object:
@@ -68,10 +72,16 @@ def ui_livemodal ( ui, parent ):
     ui_dialog( ui, parent, MODAL )
 
 def ui_popup ( ui, parent ):
-    """ Creates a live, modal popup wxPython user interface for a specified UI 
-        object.
+    """ Creates a live, temporary popup wxPython user interface for a specified 
+        UI object.
     """
     ui_dialog( ui, parent, POPUP )
+
+def ui_info ( ui, parent ):
+    """ Creates a live, temporary popup wxPython user interface for a specified
+        UI object.
+    """
+    ui_dialog( ui, parent, INFO )
 
 def ui_dialog ( ui, parent, style ):
     """ Creates a live wxPython user interface for a specified UI object.
@@ -94,7 +104,7 @@ def ui_dialog ( ui, parent, style ):
         raise
         
     ui.handler.position( ui.info )
-    restore_window( ui, is_popup = (style == POPUP) )
+    restore_window( ui, is_popup = (style in Popups) )
     
     ui.control.Layout()
     if style == MODAL:
@@ -436,7 +446,7 @@ class MouseMonitor ( wx.Timer ):
         super( MouseMonitor, self ).__init__()
         self.window          = window
         window._is_activated = (isinstance( parent, tuple ) and 
-                                (len( parent ) > 4))
+                                (len( parent ) > 4) and (parent[4] == 'info'))
         self.Start( 125 )
         
     def Notify ( self ):
@@ -453,7 +463,7 @@ class MouseMonitor ( wx.Timer ):
             parent = control._parent
             if (isinstance( parent, tuple ) and 
                (len( parent ) >= 5 )        and 
-               (parent[4] == 'limit')):
+               (parent[4] == 'info')):
                 xp, yp, dxp, dyp, type = parent
                 xm, ym = mp
                 if ((xm < xp) or (xm >= (xp + dxp)) or 

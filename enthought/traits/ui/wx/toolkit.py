@@ -77,6 +77,9 @@ EventSuffix = {
     wx.wxEVT_PAINT:         'paint',
 }
 
+# Types of popup views:
+Popups = set( ( 'popup', 'info' ) )
+
 #-------------------------------------------------------------------------------
 #  Handles UI notification handler requests that occur on a thread other than
 #  the UI thread:
@@ -146,11 +149,18 @@ class GUIToolkit ( Toolkit ):
         ui_modal.ui_nonmodal( ui, parent )
 
     def ui_popup ( self, ui, parent ):
-        """ Creates a wxPython modal "live update" popup dialog user interface
-            using information from the specified UI object.
+        """ Creates a wxPython temporary "live update" popup dialog user 
+            interface using information from the specified UI object.
         """
         import ui_live
         ui_live.ui_popup( ui, parent )
+
+    def ui_info ( self, ui, parent ):
+        """ Creates a wxPython temporary "live update" popup dialog user 
+            interface using information from the specified UI object.
+        """
+        import ui_live
+        ui_live.ui_info( ui, parent )
 
     def ui_wizard ( self, ui, parent ):
         """ Creates a wxPython wizard dialog user interface using information
@@ -234,7 +244,7 @@ class GUIToolkit ( Toolkit ):
         else:
             height = int( height )
         
-        if view.kind == 'popup':
+        if view.kind in Popups:
             position_window( window, width, height )
             return
 

@@ -753,7 +753,7 @@ class TableModel ( GridModel ):
                                    style      = column.get_style(  object ),
                                    show_label = False,
                                    padding    = -4 ),
-                             kind   = 'popup',
+                             kind   = 'info',
                              width  = dx,
                              height = dy )
             else:    
@@ -763,7 +763,7 @@ class TableModel ( GridModel ):
                     
             column.get_object( object ).edit_traits(
                 view   = view, 
-                parent = ( x, y, dx, dy, 'limit' ) )
+                parent = ( x, y, dx, dy, view.kind ) )
 
     #---------------------------------------------------------------------------
     #  Private interface:
