@@ -411,6 +411,8 @@ class SourceEditor ( Editor ):
         if self.factory.key_bindings is not None:
             self._editor.on_trait_change( self.key_pressed, 'key_pressed',
                                           remove = True )
+            
+        wx.EVT_KILL_FOCUS( self.control, None )
                                           
         super( SourceEditor, self ).dispose()
                                           
