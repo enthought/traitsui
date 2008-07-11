@@ -43,13 +43,21 @@ from editor_factory \
     import EditorFactory, ReadonlyEditor
     
 from constants \
-    import OKColor, ErrorColor
+    import OKColor, ErrorColor, WindowColor
 
 #-------------------------------------------------------------------------------
 #  Start logging:
 #-------------------------------------------------------------------------------
 
 logger = logging.getLogger( __name__ )
+
+#-------------------------------------------------------------------------------
+#  Constants:
+#-------------------------------------------------------------------------------
+
+# Readonly text editor with view state colors:
+HoverColor = wx.LIGHT_GREY
+DownColor  = wx.WHITE
 
 #-------------------------------------------------------------------------------
 #  Define a simple identity mapping:
@@ -335,7 +343,11 @@ class ReadonlyTextEditor ( ReadonlyEditor ):
         super( ReadonlyTextEditor, self ).init( parent )
         
         if self.factory.view is not None:
-            wx.EVT_LEFT_UP( self.control, self._left_up )
+            control = self.control
+            wx.EVT_ENTER_WINDOW( control, self._enter_window )
+            wx.EVT_LEAVE_WINDOW( control, self._leave_window )
+            wx.EVT_LEFT_DOWN(    control, self._left_down )
+            wx.EVT_LEFT_UP(      control, self._left_up )
     
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -366,13 +378,48 @@ class ReadonlyTextEditor ( ReadonlyEditor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        wx.EVT_LEFT_UP( self.control, None )
+        control = self.control
+        wx.EVT_ENTER_WINDOW( control, None )
+        wx.EVT_LEAVE_WINDOW( control, None )
+        wx.EVT_LEFT_DOWN(    control, None )
+        wx.EVT_LEFT_UP(      control, None )
         
         super( ReadonlyTextEditor, self ).dispose()
         
+    #-- Private Methods --------------------------------------------------------
+    
+    def _set_color ( self ):
+        if not self._in_window:
+            color = WindowColor
+        elif self._down:
+            color = DownColor
+        else:
+            color = HoverColor
+        
+        self.control.SetBackgroundColour( color )
+        self.control.Refresh()
+        
     #-- wxPython Event Handlers ------------------------------------------------
     
+    def _enter_window ( self, event ):
+        self._in_window = True
+        self._set_color()
+        
+    def _leave_window ( self, event ):
+        self._in_window = False
+        self._set_color()
+        
+    def _left_down ( self, event ):
+        self.control.CaptureMouse()
+        self._down = True
+        self._set_color()
+        
     def _left_up ( self, event ):
-        self.object.edit_traits( view   = self.factory.view, 
-                                 parent = self.control )
+        self.control.ReleaseMouse()
+        self._down = False
+        self._set_color()
+        
+        if self._in_window:
+            self.object.edit_traits( view   = self.factory.view, 
+                                     parent = self.control )
     
