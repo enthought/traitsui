@@ -57,7 +57,8 @@ from enthought.pyface.sizers.flow \
     import FlowSizer
     
 from helper \
-    import position_window, traits_ui_panel, GroupEditor
+    import position_window, traits_ui_panel, traits_ui_scrolled_panel, \
+           GroupEditor
     
 from constants \
     import screen_dx, screen_dy, WindowColor
@@ -523,6 +524,7 @@ class FillPanel ( object ):
         self.group         = group
         self.is_horizontal = (group.orientation == 'horizontal')
         layout             = group.layout
+        is_scrolled_panel  = group.scrollable
         is_splitter        = (layout == 'split')
         is_tabbed          = (layout == 'tabbed')
         id                 = group.id
@@ -539,10 +541,11 @@ class FillPanel ( object ):
                                     panel, group, self.add_notebook_item, True )
                 self.resizable     = True
             return
-          
+        
         theme = group.group_theme
         if (is_dock_window             or 
             create_panel               or
+            is_scrolled_panel          or
             (id != '')                 or
             (theme is not None)        or
             (group.visible_when != '') or
@@ -551,8 +554,13 @@ class FillPanel ( object ):
                 image_panel, image_sizer = add_image_panel( panel, group )
                 new_panel       = image_panel.control
                 suppress_label |= image_panel.can_show_text
+            elif is_scrolled_panel:
+                new_panel = traits_ui_scrolled_panel( panel, -1 )
+                new_panel.SetMinSize( panel.GetMinSize() )
+                self.resizable = True
             else:
                 new_panel = traits_ui_panel( panel, -1 )
+                
             sizer = panel.GetSizer()
             if sizer is None:
                 sizer = wx.BoxSizer( wx.VERTICAL )
@@ -600,6 +608,13 @@ class FillPanel ( object ):
         if panel.GetSizer() is None:
             panel.SetSizer( self.sizer )
         
+        # Set up scrolling now that the sizer has been set:
+        if is_scrolled_panel:
+            if self.is_horizontal:
+                panel.SetupScrolling( scroll_y = False )
+            else:
+                panel.SetupScrolling( scroll_x = False )
+
         if is_splitter:
             dw = DockWindow( panel, handler      = ui.handler,
                                     handler_args = ( ui.info, ),

@@ -24,6 +24,8 @@
 #-------------------------------------------------------------------------------
 
 import wx
+import wx.lib.scrolledpanel
+
 import sys
 
 from os.path \
@@ -269,6 +271,74 @@ def traits_ui_panel ( parent, *args, **kw ):
     panel = wx.Panel( parent, *args, **kw )
     panel.SetBackgroundColour( parent.GetBackgroundColour() )
     
+    return panel
+
+#-------------------------------------------------------------------------------
+#  'ScrolledPanel' class:
+#-------------------------------------------------------------------------------
+
+class ScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
+    
+    def ScrollChildIntoView ( self, child ):
+        """ Scrolls the panel such that the specified child window is in view.
+            This method overrides the original in the base class so that
+            nested subpanels are handled correctly.
+        """        
+        sppux, sppuy = self.GetScrollPixelsPerUnit()
+        vsx, vsy     = self.GetViewStart()
+
+        subwindow = child.FindFocus()
+        crx, cry, crdx, crdy = subwindow.GetRect()
+        while subwindow is not child:
+            subwindow = subwindow.GetParent()
+            pwx,pwy   = subwindow.GetRect()[:2]
+            crx, cry  = crx + pwx, cry + pwy
+            
+        cr = wx.Rect( crx, cry, crdx, crdy )
+        
+        client_size      = self.GetClientSize()
+        new_vsx, new_vsy = -1, -1
+
+        # Is it before the left edge?
+        if (cr.x < 0) and (sppux > 0):
+            new_vsx = vsx + (cr.x / sppux)
+
+        # Is it above the top?
+        if (cr.y < 0) and (sppuy > 0):
+            new_vsy = vsy + (cr.y / sppuy)
+
+        # For the right and bottom edges, scroll enough to show the whole
+        # control if possible, but if not just scroll such that the top/left 
+        # edges are still visible:
+
+        # Is it past the right edge ?
+        if (cr.right > client_size.width) and (sppux > 0):
+            diff = (cr.right - client_size.width) / sppux
+            if (cr.x - (diff * sppux)) > 0:
+                new_vsx = vsx + diff + 1
+            else:
+                new_vsx = vsx + (cr.x / sppux)
+                
+        # Is it below the bottom ?
+        if (cr.bottom > client_size.height) and (sppuy > 0):
+            diff = (cr.bottom - client_size.height) / sppuy
+            if (cr.y - (diff * sppuy)) > 0:
+                new_vsy = vsy + diff + 1
+            else:
+                new_vsy = vsy + (cr.y / sppuy)
+
+        # Perform the scroll if any adjustments are needed:
+        if (new_vsx != -1) or (new_vsy != -1):
+            self.Scroll( new_vsx, new_vsy )
+
+
+def traits_ui_scrolled_panel ( parent, *args, **kw ):
+    """ Creates a wx.Panel that correctly sets its background color to be the
+        same as its parents.
+    """
+    panel = ScrolledPanel( parent, *args, **kw )
+    panel.SetBackgroundColour( parent.GetBackgroundColour() )
+
     return panel
 
 #-------------------------------------------------------------------------------
