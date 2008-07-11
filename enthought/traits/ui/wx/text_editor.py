@@ -378,11 +378,12 @@ class ReadonlyTextEditor ( ReadonlyEditor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        control = self.control
-        wx.EVT_ENTER_WINDOW( control, None )
-        wx.EVT_LEAVE_WINDOW( control, None )
-        wx.EVT_LEFT_DOWN(    control, None )
-        wx.EVT_LEFT_UP(      control, None )
+        if self.factory.view is not None:
+            control = self.control
+            wx.EVT_ENTER_WINDOW( control, None )
+            wx.EVT_LEAVE_WINDOW( control, None )
+            wx.EVT_LEFT_DOWN(    control, None )
+            wx.EVT_LEFT_UP(      control, None )
         
         super( ReadonlyTextEditor, self ).dispose()
         
