@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-#  
+#
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
 #
@@ -9,10 +9,10 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: David C. Morrill
 #  Date:   07/05/2007
-#  
+#
 #-------------------------------------------------------------------------------
 
 """ Defines a ThemedVerticalNotebook class for displaying a series of pages
@@ -31,87 +31,87 @@ from enthought.traits.api \
 
 from enthought.traits.ui.api \
     import UI, Theme
-    
+
 from enthought.traits.ui.ui_traits \
     import ATheme
-    
+
 from enthought.traits.ui.editor \
     import Editor
-    
+
 from constants \
     import WindowColor
-    
+
 from image_slice \
     import paint_parent
-    
+
 from image_panel \
     import ImagePanel
-    
+
 from themed_control \
     import ThemedControl
-    
+
 from helper \
     import traits_ui_panel
 
 #-------------------------------------------------------------------------------
-#  'ThemedPage' class:  
+#  'ThemedPage' class:
 #-------------------------------------------------------------------------------
-        
+
 class ThemedPage ( HasPrivateTraits ):
     """ A class representing a themed page within a notebook.
     """
-    
+
     #-- Public Traits ----------------------------------------------------------
-    
+
     # The name of the page (displayed on its 'tab') [Set by client]:
     name = Str
 
     # The optional Traits UI associated with this page [Set by client]:
     ui = Instance( UI )
-    
+
     # The wxPython window the page represents [Set by client]:
     control = Instance( wx.Window )
-    
+
     # Optional client data associated with the page [Set/Get by client]:
     data = Any
-    
+
     # The optional object defining the page name [Set by client]:
     object = Instance( HasTraits )
-    
-    # The name of the object trait that signals a page name change [Set by 
+
+    # The name of the object trait that signals a page name change [Set by
     # client]:
     trait_name = Str
-    
+
     # The parent window for the client page [Get by client]:
     parent = Property
 
     #-- Traits for use by the Notebook/Sizer -----------------------------------
-    
+
     # The current open status of the notebook page:
     is_open = Bool( False )
-    
+
     # The minimum size for the page:
     min_size = Property
-    
+
     #-- Private Traits ---------------------------------------------------------
-    
+
     # The notebook this page is associated with:
     notebook = Instance( 'ThemedVerticalNotebook' )
-    
+
     # The theme used to display a closed page:
     closed_theme = ATheme
-    
+
     # The theme use to display an open page:
     open_theme = ATheme
-    
+
     # The control representing the closed page:
     closed_page = Property( depends_on = 'closed_theme' )
-    
+
     # The control representing the open page:
     open_page = Property( depends_on = 'open_theme' )
-    
+
     #-- Public Methods ---------------------------------------------------------
-    
+
     def close ( self ):
         """ Closes the notebook page.
         """
@@ -119,16 +119,16 @@ class ThemedPage ( HasPrivateTraits ):
             self.object.on_trait_change( self._name_updated, self.trait_name,
                                          remove = True )
             self.object = None
-           
+
         if self.ui is not None:
             self.ui.dispose()
             self.ui = None
-            
+
         if self.closed_page is not None:
             self.closed_page.control.Destroy()
             self.open_page.control.Destroy()
             self.control = None
-    
+
     def set_size ( self, x, y, dx, dy ):
         """ Sets the size of the current active page.
         """
@@ -136,30 +136,30 @@ class ThemedPage ( HasPrivateTraits ):
             self.open_page.control.SetDimensions( x, y, dx, dy )
         else:
             self.closed_page.control.SetDimensions( x, y, dx, dy )
-            
+
     def register_name_listener ( self, object, trait_name ):
         """ Registers a listener on the specified object trait for a page name
             change.
         """
         # Save the information, so we can unregister it later:
         self.object, self.trait_name = object, trait_name
-        
+
         # Register the listener:
         object.on_trait_change( self._name_updated, trait_name )
-        
+
         # Make sure the name gets initialized:
         self._name_updated()
-            
+
     #-- Property Implementations -----------------------------------------------
-    
+
     def _get_min_size ( self ):
         """ Returns the minimum size for the page.
         """
         if self.is_open:
             return self.open_page.best_size
-            
+
         return self.closed_page.best_size
-        
+
     @cached_property
     def _get_closed_page ( self ):
         """ Returns the 'closed' form of the notebook page.
@@ -170,9 +170,9 @@ class ThemedPage ( HasPrivateTraits ):
                                 default_alignment = 'center',
                                 state             = 'closed' )
         result.create_control( self.notebook.control )
-        
+
         return result
-        
+
     @cached_property
     def _get_open_page ( self ):
         """ Returns the 'open' form of the notebook page.
@@ -183,14 +183,14 @@ class ThemedPage ( HasPrivateTraits ):
                              default_alignment = 'center',
                              state             = 'open' )
         result.create_control( self.notebook.control )
-        
+
         return result
-        
+
     def _get_parent ( self ):
         """ Returns the parent window for the client's window.
         """
         return self.open_page.control
-       
+
     #-- Trait Event Handlers ---------------------------------------------------
 
     def _ui_changed ( self, ui ):
@@ -198,14 +198,14 @@ class ThemedPage ( HasPrivateTraits ):
         """
         if ui is not None:
             self.control = ui.control
-            
+
     def _control_changed ( self, control ):
         """ Handles the control for the page being changed.
         """
         if control is not None:
             self.open_page.control.GetSizer().Add( control, 1, wx.EXPAND )
             self._is_open_changed( self.is_open )
-         
+
     def _is_open_changed ( self, is_open ):
         """ Handles the 'is_open' state of the page being changed.
         """
@@ -216,99 +216,99 @@ class ThemedPage ( HasPrivateTraits ):
             self.closed_page.control.SetSize( wx.Size( 0, 0 ) )
         else:
             self.open_page.control.SetSize( wx.Size( 0, 0 ) )
-            
+
     def _name_changed ( self, name ):
         """ Handles the name trait being changed.
         """
         self.closed_page.text = self.open_page.text = name
-        
+
     def _name_updated ( self ):
         """ Handles a signal that the associated object's page name has changed.
         """
         nb           = self.notebook
         handler_name = None
-        
+
         method = None
         editor = nb.editor
         if editor is not None:
-            method = getattr( editor.ui.handler, 
-                 '%s_%s_page_name' % ( editor.object_name, editor.name ), None ) 
+            method = getattr( editor.ui.handler,
+                 '%s_%s_page_name' % ( editor.object_name, editor.name ), None )
         if method is not None:
             handler_name = method( editor.ui.info, self.object )
-            
+
         if handler_name is not None:
             self.name = handler_name
         else:
             self.name = getattr( self.object, self.trait_name ) or '???'
-        
+
     #-- ThemedControl Mouse Event Handlers -------------------------------------
-    
+
     def open_left_down ( self, x, y, event ):
         """ Handles the user clicking on an open notebook page to close it.
         """
         if not self.notebook.double_click:
             self.notebook.close( self )
-    
+
     def open_left_dclick ( self, x, y, event ):
         """ Handles the user double clicking on an open notebook page to close
             it.
         """
         if self.notebook.double_click:
             self.notebook.close( self )
-    
+
     def closed_left_down ( self, x, y, event ):
         """ Handles the user clicking on a closed notebook page to open it.
         """
         if not self.notebook.double_click:
             self.notebook.open( self )
-    
+
     def closed_left_dclick ( self, x, y, event ):
         """ Handles the user double clicking on a closed notebook page to open
             it.
         """
         if self.notebook.double_click:
             self.notebook.open( self )
-        
+
 #-------------------------------------------------------------------------------
 #  'ThemedVerticalNotebook' class:
 #-------------------------------------------------------------------------------
 
 class ThemedVerticalNotebook ( HasPrivateTraits ):
     """ Defines a ThemedVerticalNotebook class for displaying a series of pages
-        organized vertically, as opposed to horizontally like a standard 
+        organized vertically, as opposed to horizontally like a standard
         notebook.
     """
-    
+
     #-- Public Traits ----------------------------------------------------------
-    
+
     # The theme to use for 'closed' notebook pages:
-    closed_theme = ATheme( Theme( '@BH5', content = 0 ) )
-    
+    closed_theme = ATheme( Theme( '@std:BH5', content = 0 ) )
+
     # The theme to use for 'open' notebook pages:
     open_theme = ATheme( Theme( 'nb_open', content = 0 ) )
-    
+
     # Allow multiple open pages at once?
     multiple_open = Bool( False )
-    
+
     # Should the notebook be scrollable?
     scrollable = Bool( False )
-    
+
     # Use double clicks (True) or single clicks (False) to open/close pages:
     double_click = Bool( False )
-    
+
     # The pages contained in the notebook:
     pages = List( ThemedPage )
-    
+
     # The traits UI editor this notebook is associated with (if any):
     editor = Instance( Editor )
-    
+
     #-- Private Traits ---------------------------------------------------------
-    
+
     # The wxPython control used to represent the notebook:
     control = Instance( wx.Window )
-    
+
     #-- Public Methods ---------------------------------------------------------
-    
+
     def create_control ( self, parent ):
         """ Creates the underlying wxPython window used for the notebook.
         """
@@ -320,16 +320,16 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
             control.SetMinSize( wx.Size( 0, 0 ) )
         else:
             self.control = control = traits_ui_panel( parent, -1 )
-        
+
         control._image_slice = getattr( parent, '_image_slice', None )
         control.SetSizer( ThemedVerticalNotebookSizer( self ) )
-        
+
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
         wx.EVT_PAINT( control, self._paint )
-        
+
         return control
-    
+
     def create_page ( self ):
         """ Creates a new **ThemedPage** object representing a notebook page and
             returns it as the result.
@@ -337,7 +337,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
         return ThemedPage( notebook     = self ).set(
                            closed_theme = self.closed_theme,
                            open_theme   = self.open_theme )
-    
+
     def open ( self, page ):
         """ Handles opening a specified **ThemedPage** notebook page.
         """
@@ -345,36 +345,36 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
             if not self.multiple_open:
                 for a_page in self.pages:
                     a_page.is_open = False
-                    
+
             page.is_open = True
-            
+
             self._refresh()
-        
+
     def close ( self, page ):
         """ Handles closing a specified **ThemedPage** notebook page.
         """
         if (page is not None) and page.is_open:
             page.is_open = False
             self._refresh()
-      
+
     #-- Trait Event Handlers ---------------------------------------------------
-    
+
     def _pages_changed ( self, old, new ):
         """ Handles the notebook's pages being changed.
         """
         for page in old:
             page.close()
-            
+
         self._refresh()
-        
+
     def _pages_items_changed ( self, event ):
         """ Handles some of the notebook's pages being changed.
         """
         for page in event.removed:
             page.close()
-            
+
         self._refresh()
-        
+
     def _multiple_open_changed ( self, multiple_open ):
         """ Handles the 'multiple_open' flag being changed.
         """
@@ -385,33 +385,33 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
                     first = False
                 else:
                     page.is_open = False
-                    
+
         self._refresh()
-    
+
     #-- wx.Python Event Handlers -----------------------------------------------
-    
+
     def _erase_background ( self, event ):
         """ Do not erase the background here (do it in the 'on_paint' handler).
         """
         pass
-           
+
     def _paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
         paint_parent( wx.PaintDC( self.control ), self.control )
-    
+
     #-- Private Methods --------------------------------------------------------
-    
+
     def _refresh ( self ):
         """ Refresh the layout and contents of the notebook.
         """
         control = self.control
         if control is not None:
             # Set the virtual size of the canvas (so scroll bars work right):
-            control.SetVirtualSize( control.GetSizer().CalcMin() ) 
+            control.SetVirtualSize( control.GetSizer().CalcMin() )
             control.Layout()
             control.Refresh()
-        
+
 #-------------------------------------------------------------------------------
 #  'ThemedVerticalNotebookSizer' class:
 #-------------------------------------------------------------------------------
@@ -425,7 +425,7 @@ class ThemedVerticalNotebookSizer ( wx.PySizer ):
         """ Initializes the object.
         """
         super( ThemedVerticalNotebookSizer, self ).__init__()
-        
+
         # Save the notebook reference:
         self._notebook = notebook
 
@@ -438,7 +438,7 @@ class ThemedVerticalNotebookSizer ( wx.PySizer ):
             dx, dy = page.min_size
             tdx    = max( tdx, dx )
             tdy   += dy
-        
+
         return wx.Size( tdx, tdy )
 
     def RecalcSizes ( self ):
@@ -454,9 +454,9 @@ class ThemedVerticalNotebookSizer ( wx.PySizer ):
                 ody += dy
             else:
                 cdy += dy
-                
+
         ady = max( 0, tdy - cdy )
-        
+
         for page in self._notebook.pages:
             dx, dy = page.min_size
             if page.is_open:
@@ -466,4 +466,4 @@ class ThemedVerticalNotebookSizer ( wx.PySizer ):
                 dy   = ndy
             page.set_size( x, y, tdx, dy )
             y += dy
-        
+
