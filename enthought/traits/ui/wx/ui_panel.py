@@ -631,8 +631,8 @@ class FillPanel ( object ):
                 dw = create_notebook_for_items( content, ui, panel, group,
                                                 self.add_notebook_item )
                 if editor is not None:
-                    editor.dock_window = dw
-                ###self.sizer.Add( dw, 1, wx.EXPAND | wx.ALL, 2 )
+                     editor.dock_window = dw
+                     
                 self.sizer.Add( dw, 1, wx.EXPAND )
             # Check if content is all Group objects:
             elif layout == 'fold':
@@ -988,8 +988,10 @@ class FillPanel ( object ):
             if theme is not None:
                 from image_panel import ImagePanel
                 
-                image_panel = ImagePanel( theme = theme,
-                                          text  = item.get_label( ui ) )
+                text = ''
+                if item.show_label:
+                    text = item.get_label( ui )
+                image_panel = ImagePanel( theme = theme, text = text )
                 item_panel  = image_panel.create_control( panel )
                     
             # Create the requested type of editor from the editor factory:

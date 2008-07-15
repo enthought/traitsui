@@ -90,14 +90,16 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Is the range for floating pointer numbers (vs. integers)?
     is_float = Bool( True )
 
+    # Display mode to use
+    mode = Enum( 'auto', 'slider', 'xslider', 'spinner', 'enum', 'text' )
+
+    #-- Private Traits ---------------------------------------------------------
+    
     # Low end of range
     low = Property
 
     # High end of range
     high = Property
-
-    # Display mode to use
-    mode = Enum( 'auto', 'slider', 'xslider', 'spinner', 'enum', 'text' )
 
     #---------------------------------------------------------------------------
     #  Traits view definition:

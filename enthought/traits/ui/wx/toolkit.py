@@ -633,6 +633,11 @@ class GUIToolkit ( Toolkit ):
         import rgb_color_editor as rgbce
         return rgbce.ToolkitEditorFactory( *args, **traits )
 
+    # Scrubber:
+    def scrubber_editor ( self, *args, **traits ):
+        import scrubber_editor as se
+        return se.ScrubberEditor( *args, **traits )
+
     # Set:
     def set_editor ( self, *args, **traits ):
         import set_editor as se
