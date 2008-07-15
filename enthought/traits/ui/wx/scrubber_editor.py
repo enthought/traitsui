@@ -373,13 +373,18 @@ class _ScrubberEditor ( Editor ):
         """
         self._hover = True
         self.control.SetCursor( wx.StockCursor( wx.CURSOR_HAND ) )
-        self.control.Refresh()
+        if self._x is not None:
+            if self.factory.active_color_ != self.factory.color_:
+                self.control.Refresh()
+        elif self.factory.hover_color_ != self.factory.color_:
+            self.control.Refresh()
 
     def _leave_window ( self, event ):
         """ Handles the mouse leaving the window.
         """
         self._hover = False
-        self.control.Refresh()
+        if self.factory.hover_color_ != self.factory.color_:
+            self.control.Refresh()
     
     def _left_down ( self, event ):
         """ Handles the left mouse being pressed.
@@ -404,7 +409,7 @@ class _ScrubberEditor ( Editor ):
             
         self._x = self._y = self._value = self._pending = None
         
-        if self._hover:
+        if self._hover or (self.factory.active_color_ != self.factory.color_):
             self.control.Refresh()
         
     def _motion ( self, event ):
