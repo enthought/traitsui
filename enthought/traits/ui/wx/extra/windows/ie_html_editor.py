@@ -175,7 +175,9 @@ class _IEHTMLEditor ( Editor ):
         self.trait_property_changed( 'html', '', self.html )
         
     def _new_window_modified ( self, event ):
-        event.Cancel = True        
+        # If the event is cancelled, new windows can be disabled. 
+        # At this point we've opted to allow new windows
+        pass        
                     
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:
