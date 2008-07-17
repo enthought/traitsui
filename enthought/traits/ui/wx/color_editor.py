@@ -419,7 +419,7 @@ class ColorDialog ( wx.Frame ):
         """ Initializes the object.
         """
         wx.Frame.__init__( self, editor.control, -1, '',
-                           style = wx.SIMPLE_BORDER )
+                           style = wx.FRAME_FLOAT_ON_PARENT )
         self.SetBackgroundColour( WindowColor )
         wx.EVT_ACTIVATE( self, self._on_close_dialog )
         self._closed    = False
