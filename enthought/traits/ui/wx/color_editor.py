@@ -407,7 +407,7 @@ def color_editor_for ( editor, parent, update_handler = None ):
 #  'ColorDialog' class:  
 #-------------------------------------------------------------------------------
 
-class ColorDialog ( wx.Frame ):
+class ColorDialog ( wx.Dialog ):
     """ Dialog box for selecting a color.
     """
     
@@ -418,8 +418,8 @@ class ColorDialog ( wx.Frame ):
     def __init__ ( self, editor ):
         """ Initializes the object.
         """
-        wx.Frame.__init__( self, editor.control, -1, '',
-                           style = wx.FRAME_FLOAT_ON_PARENT )
+        wx.Dialog.__init__( self, editor.control, -1, '',
+                           style = wx.SIMPLE_BORDER | wx.FRAME_FLOAT_ON_PARENT )
         self.SetBackgroundColour( WindowColor )
         wx.EVT_ACTIVATE( self, self._on_close_dialog )
         self._closed    = False
@@ -432,8 +432,7 @@ class ColorDialog ( wx.Frame ):
         sizer.Add( panel )
         self.SetSizerAndFit( sizer )
         position_window( self, parent = editor.control )
-        self.Show()
-        self.Raise()
+        self.ShowModal()
 
     #---------------------------------------------------------------------------
     #  Closes the dialog:
@@ -442,7 +441,6 @@ class ColorDialog ( wx.Frame ):
     def _on_close_dialog ( self, event, rc = False ):
         """ Called when the user closes the dialog.
         """
-        return
         if not event.GetActive():
             self._close_dialog()
 
