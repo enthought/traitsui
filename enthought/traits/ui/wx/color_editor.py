@@ -38,7 +38,7 @@ from editor \
     import Editor
 
 from helper \
-    import traits_ui_panel, position_window
+    import traits_ui_panel, position_window, top_level_window_for
     
 from constants \
     import WindowColor
@@ -418,7 +418,8 @@ class ColorDialog ( wx.Dialog ):
     def __init__ ( self, editor ):
         """ Initializes the object.
         """
-        wx.Dialog.__init__( self, editor.control, -1, '',
+        control = editor.control
+        wx.Dialog.__init__( self, control, -1, '',
                            style = wx.SIMPLE_BORDER | wx.FRAME_FLOAT_ON_PARENT )
         self.SetBackgroundColour( WindowColor )
         wx.EVT_ACTIVATE( self, self._on_close_dialog )
@@ -431,8 +432,13 @@ class ColorDialog ( wx.Dialog ):
         sizer = wx.BoxSizer( wx.VERTICAL )
         sizer.Add( panel )
         self.SetSizerAndFit( sizer )
-        position_window( self, parent = editor.control )
-        self.ShowModal()
+        position_window( self, parent = control )
+        
+        tlw = top_level_window_for( control )
+        if isinstance( tlw, wx.Dialog ) and tlw.IsModal():
+            self.ShowModal()
+        else:
+            self.Show()
 
     #---------------------------------------------------------------------------
     #  Closes the dialog:

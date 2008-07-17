@@ -222,6 +222,20 @@ def position_window ( window, width = None, height = None, parent = None ):
     window.SetDimensions( nx + xdelta, by + ydelta, width, height )
     
 #-------------------------------------------------------------------------------
+#  Returns the top-level window for a specified control:
+#-------------------------------------------------------------------------------
+
+def top_level_window_for ( control ):
+    """ Returns the top-level window for a specified control.
+    """
+    parent = control.GetParent()
+    while parent is not None:
+        control = parent
+        parent  = control.GetParent()
+        
+    return control
+    
+#-------------------------------------------------------------------------------
 #  Recomputes the mappings for a new set of enumeration values:
 #-------------------------------------------------------------------------------
  
