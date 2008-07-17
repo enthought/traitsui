@@ -25,6 +25,8 @@
 
 import logging
 
+import wx
+
 import wx.grid as wxg
 
 from enthought.traits.api \
@@ -165,7 +167,7 @@ class TableModel ( GridModel ):
 
         # Remove listeners for any of the model data changing:
         object.on_trait_change( self._on_data_changed, name, remove = True )
-        object.on_trait_change( self.fire_content_changed, name + '.+', 
+        object.on_trait_change( self.fire_content_changed, name + '.-', 
                                 remove = True )
 
         # Remove listeners for any column definitions changing:
@@ -744,6 +746,12 @@ class TableModel ( GridModel ):
         row, col = new
         column   = self.__get_column( col )
         object   = self.get_filtered_item( row )
+        
+        # Update the tooltip if necessary:
+        tooltip = column.get_tooltip( object ) 
+        if tooltip != self._tooltip:
+            self._tooltip = tooltip
+            self.editor.grid._grid_window.SetToolTip( wx.ToolTip( tooltip ) )
         
         if column.is_auto_editable( object ):
             x, y, dx, dy = self._bounds_for( row, col )
