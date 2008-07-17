@@ -544,18 +544,19 @@ class ListEditor ( BaseEditor ):
     def update_object ( self, event ):
         """ Handles the user selecting a list box item.
         """
-        value = self.control.GetStringSelection()
-        try:
-            value = self.mapping[ value ]
-        except:
+        if not self._ignore_update:
+            value = self.control.GetStringSelection()
             try:
-                value = self.factory.evaluate( value )
+                value = self.mapping[ value ]
+            except:
+                try:
+                    value = self.factory.evaluate( value )
+                except:
+                    pass
+            try:
+                self.value = value
             except:
                 pass
-        try:
-            self.value = value
-        except:
-            pass
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -582,8 +583,10 @@ class ListEditor ( BaseEditor ):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
         """
+        self._ignore_update = True
         self.control.Clear()
         self.control.AppendItems( self.names )
+        self._ignore_update = False
             
         # fixme: Is this line necessary?
         self.update_editor()
