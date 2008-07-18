@@ -536,9 +536,9 @@ class FillPanel ( object ):
                 self.dock_contents = self.add_dock_window_splitter_items( 
                                               panel, content, group )
             else:
+                self.resizable     = group.springy
                 self.dock_contents = create_notebook_for_items( content, ui,
                                     panel, group, self.add_notebook_item, True )
-                self.resizable     = True
             return
         
         theme = group.group_theme
@@ -589,6 +589,7 @@ class FillPanel ( object ):
         label = ''
         if not suppress_label:
             label = group.label
+            
         if group.show_border:
             box = wx.StaticBox( panel, -1, label )
             self._set_owner( box, group )
@@ -621,18 +622,19 @@ class FillPanel ( object ):
                                     theme        = group.dock_theme ).control
             if editor is not None:
                 editor.dock_window = dw
+                
             dw.SetSizer( DockSizer( contents = 
                    self.add_dock_window_splitter_items( dw, content, group ) ) )
             self.sizer.Add( dw, 1, wx.EXPAND )
         elif len( content ) > 0:
             if is_tabbed:
-                self.resizable = True
+                self.resizable = group.springy
                 dw = create_notebook_for_items( content, ui, panel, group,
                                                 self.add_notebook_item )
                 if editor is not None:
                      editor.dock_window = dw
                      
-                self.sizer.Add( dw, 1, wx.EXPAND )
+                self.sizer.Add( dw, self.resizable, wx.EXPAND )
             # Check if content is all Group objects:
             elif layout == 'fold':
                 self.resizable = True
