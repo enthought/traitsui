@@ -43,6 +43,7 @@ from image_slice \
 class NullEditor ( Editor ):
     """ A completely empty editor.
     """
+    
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -53,7 +54,7 @@ class NullEditor ( Editor ):
             widget.
         """
         self.control = control = wx.Window( parent, -1 )
-        self.control.SetBackgroundColour(WindowColor)
+        control.SetBackgroundColour( parent.GetBackgroundColour() )
                             
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
