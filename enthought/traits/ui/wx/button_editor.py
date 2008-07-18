@@ -182,11 +182,12 @@ class SimpleEditor ( Editor ):
         """ Handles the user clicking the button by setting the factory value
             on the object.
         """
-        self.value = self.factory.value
+        factory    = self.factory
+        self.value = factory.value
         
         # If there is an associated view, then display it:
-        if self.factory.view is not None:
-            self.object.edit_traits( view   = self.factory.view, 
+        if factory.view is not None:
+            self.object.edit_traits( view   = factory.view,
                                      parent = self.control )
 
     #---------------------------------------------------------------------------

@@ -173,7 +173,7 @@ class LiveWindow ( BaseDialog ):
                 window = wx.Frame( None, -1, '', style = window_style )
                 wx.EVT_ACTIVATE( window, self._on_close_popup )
                 window._kind  = ui.view.kind
-                self._monitor = MouseMonitor( self )
+                self._monitor = MouseMonitor( ui )
                 
             # Set the correct default window background color:
             window.SetBackgroundColour( WindowColor )
@@ -451,24 +451,29 @@ class MouseMonitor ( wx.Timer ):
         pointer leaves the window.
     """
     
-    def __init__ ( self, window ):
+    def __init__ ( self, ui ):
         super( MouseMonitor, self ).__init__()
-        self.window          = window
-        kind                 = window.ui.view.kind
-        window._is_activated = self.is_info = (kind == 'info')
+        self.ui           = ui
+        kind              = ui.view.kind
+        self.is_activated = self.is_info = (kind == 'info')
         self.border = 3
         if kind == 'popup':
             self.border = 10
         self.Start( 125 )
         
     def Notify ( self ):
-        window   = self.window
-        control  = window.control
+        ui       = self.ui
+        control  = ui.control
+        if ui.control is None:
+            # Looks like someone forgot to tell us that the ui has been closed:
+            self.Stop()
+            return
+            
         mx, my   = wx.GetMousePosition()
         cx, cy   = control.ClientToScreenXY( 0, 0 )
         cdx, cdy = control.GetSizeTuple()
         
-        if window._is_activated:
+        if self.is_activated:
             # Check for the special case of the mouse pointer having to be
             # within the original bounds of the object the popup was created 
             # for:
@@ -480,7 +485,7 @@ class MouseMonitor ( wx.Timer ):
                     px, py, pdx, pdy = parent
                 if ((mx < px) or (mx >= (px + pdx)) or 
                     (my < py) or (my >= (py + pdy))):
-                    window.close_popup()
+                    ui.owner.close_popup()
                     
             else:
                 # Allow for a 'dead zone' border around the window to allow for
@@ -488,7 +493,7 @@ class MouseMonitor ( wx.Timer ):
                 border = self.border
                 if ((mx < (cx - border)) or (mx >= (cx + cdx + border)) or 
                     (my < (cy - border)) or (my >= (cy + cdy + border))):
-                    window.close_popup()
+                    ui.owner.close_popup()
         elif (cx <= mx < (cx + cdx)) and (cy <= my < (cy + cdy)):
-            window._is_activated = True
+            self.is_activated = True
             
