@@ -462,8 +462,8 @@ class MouseMonitor ( wx.Timer ):
         self.Start( 125 )
         
     def Notify ( self ):
-        ui       = self.ui
-        control  = ui.control
+        ui      = self.ui
+        control = ui.control
         if ui.control is None:
             # Looks like someone forgot to tell us that the ui has been closed:
             self.Stop()

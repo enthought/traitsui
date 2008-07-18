@@ -286,6 +286,23 @@ def traits_ui_panel ( parent, *args, **kw ):
     panel.SetBackgroundColour( parent.GetBackgroundColour() )
     
     return panel
+    
+#-------------------------------------------------------------------------------
+#  Disconnects a wx event handle from its associated control:
+#-------------------------------------------------------------------------------
+
+def disconnect ( control, *events ):
+    """ Disconnects a wx event handle from its associated control.
+    """
+    id = control.GetId()
+    for event in events:
+        event( control, id, None )
+
+def disconnect_no_id ( control, *events ):
+    """ Disconnects a wx event handle from its associated control.
+    """
+    for event in events:
+        event( control, None )
 
 #-------------------------------------------------------------------------------
 #  'ScrolledPanel' class:

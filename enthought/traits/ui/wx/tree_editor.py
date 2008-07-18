@@ -380,6 +380,35 @@ class SimpleEditor ( Editor ):
             tree.SetDropTarget( PythonDropTarget( self ) )
 
     #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:
+    #---------------------------------------------------------------------------
+
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        tree = self._tree
+        if tree is not None:
+            id = tree.GetId()
+            wx.EVT_LEFT_DOWN(             tree,     None )
+            wx.EVT_RIGHT_DOWN(            tree,     None )
+            wx.EVT_TREE_ITEM_EXPANDING(   tree, id, None )
+            wx.EVT_TREE_ITEM_EXPANDED(    tree, id, None )
+            wx.EVT_TREE_ITEM_COLLAPSING(  tree, id, None )
+            wx.EVT_TREE_ITEM_COLLAPSED(   tree, id, None )
+            wx.EVT_TREE_ITEM_ACTIVATED(   tree, id, None )
+            wx.EVT_TREE_SEL_CHANGED(      tree, id, None )
+            wx.EVT_TREE_BEGIN_DRAG(       tree, id, None )
+            wx.EVT_TREE_BEGIN_LABEL_EDIT( tree, id, None )
+            wx.EVT_TREE_END_LABEL_EDIT(   tree, id, None )
+            wx.EVT_TREE_ITEM_GETTOOLTIP(  tree, id, None )
+            
+            nid = self._tree.GetRootItem()
+            if nid.IsOk():
+                self._delete_node( nid )
+                
+        super( SimpleEditor, self ).dispose()
+
+    #---------------------------------------------------------------------------
     #  Handles the 'selection' trait being changed:
     #---------------------------------------------------------------------------
 
@@ -409,20 +438,6 @@ class SimpleEditor ( Editor ):
         """ Handles the 'veto' event being fired.
         """
         self._veto = True
-
-    #---------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #---------------------------------------------------------------------------
-
-    def dispose ( self ):
-        """ Disposes of the contents of an editor.
-        """
-        if self._tree is not None:
-            nid = self._tree.GetRootItem()
-            if nid.IsOk():
-                self._delete_node( nid )
-                
-        super( SimpleEditor, self ).dispose()
 
     #---------------------------------------------------------------------------
     #  Returns the style settings used for displaying the wx tree:

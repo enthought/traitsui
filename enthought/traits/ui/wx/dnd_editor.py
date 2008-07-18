@@ -203,6 +203,21 @@ class SimpleEditor ( Editor ):
         wx.EVT_LEFT_UP(   control, self._left_up )
         wx.EVT_MOTION(    control, self._mouse_move )
         wx.EVT_PAINT(     control, self._on_paint )
+
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:
+    #---------------------------------------------------------------------------
+
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        control = self.control
+        wx.EVT_LEFT_DOWN( control, None )
+        wx.EVT_LEFT_UP(   control, None )
+        wx.EVT_MOTION(    control, None )
+        wx.EVT_PAINT(     control, None )
+        
+        super( SimpleEditor, self ).dispose()
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

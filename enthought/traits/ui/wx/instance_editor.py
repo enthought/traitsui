@@ -223,9 +223,9 @@ class CustomEditor ( Editor ):
             if item is not None:
                 self._object_cache[ id( item ) ] = self.value
             
-            self._choice = wx.Choice( parent, -1, wx.Point( 0, 0 ),
-                                      wx.Size( -1, -1 ), [] )
-            wx.EVT_CHOICE( parent, self._choice.GetId(), self.update_object )
+            self._choice = choice = wx.Choice( parent, -1, wx.Point( 0, 0 ),
+                                        wx.Size( -1, -1 ), [] )
+            wx.EVT_CHOICE( choice, choice.GetId(), self.update_object )
             if droppable:
                 self._choice.SetBackgroundColour( self.ok_color )
                 
@@ -268,10 +268,9 @@ class CustomEditor ( Editor ):
             parent.SetSizer( sizer )
         elif self.control is None:
             if self._choice is None:
-                self._choice = wx.Choice( parent, -1, wx.Point( 0, 0 ), 
-                                          wx.Size( -1, -1 ), [] )
-                wx.EVT_CHOICE( parent, self._choice.GetId(), 
-                               self.update_object )
+                self._choice = choice = wx.Choice( parent, -1, wx.Point( 0, 0 ), 
+                                            wx.Size( -1, -1 ), [] )
+                wx.EVT_CHOICE( choice, choice.GetId(), self.update_object )
             self.control = self._choice
         else:
             sizer = wx.BoxSizer( orientation )
@@ -283,6 +282,37 @@ class CustomEditor ( Editor ):
         # some cases, so we make sure that no notifications are generated:
         self.trait_setq( view = factory.view )
         self.sync_value( factory.view_name, 'view', 'from' )
+        
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:    
+    #---------------------------------------------------------------------------
+                
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        # Make sure we aren't hanging on to any object refs:
+        self._object_cache = None
+        
+        if self._ui is not None:
+            self._ui.dispose()
+            
+        choice = self._choice
+        if choice is not None:
+            if isinstance( choice, wx.Choice ):
+                wx.EVT_CHOICE( choice, choice.GetId(), None ) 
+                
+            if self._object is not None:
+                self._object.on_trait_change( self.rebuild_items,
+                                              self._name, remove = True )
+                self._object.on_trait_change( self.rebuild_items,
+                                 self._name + '_items', remove = True )
+                                          
+            self.factory.on_trait_change( self.rebuild_items, 'values',
+                                          remove = True )
+            self.factory.on_trait_change( self.rebuild_items, 
+                                          'values_items', remove = True )
+                                          
+        super( CustomEditor, self ).dispose()
 
     #---------------------------------------------------------------------------
     #  Creates the editor control:  
@@ -521,33 +551,6 @@ class CustomEditor ( Editor ):
                 
             if parent is not None:
                 parent.SendSizeEvent()
-        
-    #---------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:    
-    #---------------------------------------------------------------------------
-                
-    def dispose ( self ):
-        """ Disposes of the contents of an editor.
-        """
-        # Make sure we aren't hanging on to any object refs:
-        self._object_cache = None
-        
-        if self._ui is not None:
-            self._ui.dispose()
-            
-        if self._choice is not None:
-            if self._object is not None:
-                self._object.on_trait_change( self.rebuild_items,
-                                              self._name, remove = True )
-                self._object.on_trait_change( self.rebuild_items,
-                                 self._name + '_items', remove = True )
-                                          
-            self.factory.on_trait_change( self.rebuild_items, 'values',
-                                          remove = True )
-            self.factory.on_trait_change( self.rebuild_items, 
-                                          'values_items', remove = True )
-                                          
-        super( CustomEditor, self ).dispose()
 
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
@@ -652,9 +655,20 @@ class SimpleEditor ( CustomEditor ):
     def create_editor ( self, parent, sizer ):
         """ Creates the editor control (a button).
         """        
-        self._button = wx.Button( parent, -1, '' )
-        sizer.Add( self._button, 1, wx.EXPAND | wx.LEFT, 5 )
-        wx.EVT_BUTTON( parent, self._button.GetId(), self.edit_instance )
+        self._button = button = wx.Button( parent, -1, '' )
+        sizer.Add( button, 1, wx.EXPAND | wx.LEFT, 5 )
+        wx.EVT_BUTTON( button, button.GetId(), self.edit_instance )
+        
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:    
+    #---------------------------------------------------------------------------
+                
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        wx.EVT_BUTTON( self._button, self._button.GetId(), None )
+        
+        super( SimpleEditor, self ).dispose()
         
     #---------------------------------------------------------------------------
     #  Edit the contents of the object trait when the user clicks the button:

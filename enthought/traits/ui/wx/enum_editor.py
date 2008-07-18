@@ -35,7 +35,7 @@ from constants \
     import OKColor, ErrorColor
     
 from helper \
-    import enum_values_changed, traits_ui_panel
+    import enum_values_changed, traits_ui_panel, disconnect, disconnect_no_id
     
 from editor_factory \
     import EditorWithListFactory
@@ -266,6 +266,16 @@ class SimpleEditor ( BaseEditor ):
                 
         self._no_enum_update = 0
         self.set_tooltip()
+
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        disconnect( self.control, 
+                    wx.EVT_COMBOBOX, wx.EVT_TEXT_ENTER, wx.EVT_TEXT )
+        
+        disconnect_no_id( self.control, wx.EVT_KILL_FOCUS )
+        
+        super( SimpleEditor, self ).dispose()
 
     #---------------------------------------------------------------------------
     #  Handles the user selecting a new value from the combo box:
@@ -536,6 +546,13 @@ class ListEditor ( BaseEditor ):
                                    style = wx.LB_SINGLE | wx.LB_NEEDED_SB )
         wx.EVT_LISTBOX( parent, self.control.GetId(), self.update_object ) 
         self.set_tooltip()
+
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        disconnect( self.control, wx.EVT_LISTBOX )
+        
+        super( ListEditor, self ).dispose()
    
     #---------------------------------------------------------------------------
     #  Handles the user selecting a list box item:

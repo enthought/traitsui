@@ -39,6 +39,9 @@ from enthought.traits.ui.wx.editor \
 
 from enthought.pyface.image_resource \
     import ImageResource
+    
+from helper \
+    import disconnect, disconnect_no_id
 
 try:
     from enthought.util.wx.drag_and_drop \
@@ -260,6 +263,14 @@ class _ListStrEditor ( Editor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
+        disconnect( self.control, wx.EVT_LIST_BEGIN_DRAG,   
+            wx.EVT_LIST_BEGIN_LABEL_EDIT, wx.EVT_LIST_END_LABEL_EDIT,  
+            wx.EVT_LIST_ITEM_SELECTED,    wx.EVT_LIST_ITEM_DESELECTED, 
+            wx.EVT_LIST_ITEM_RIGHT_CLICK, wx.EVT_LIST_ITEM_ACTIVATED )
+        
+        disconnect_no_id( self.control,
+                          wx.EVT_SIZE, wx.EVT_CHAR, wx.EVT_LEFT_DOWN )
+        
         self.context_object.on_trait_change( self.update_editor,
                                   self.extended_name + '_items', remove = True )
         self.on_trait_change( self._refresh, 'adapter.+update', remove = True ) 

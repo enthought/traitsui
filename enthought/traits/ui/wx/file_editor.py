@@ -389,8 +389,9 @@ class CustomEditor ( SimpleTextEditor ):
             
         self.control = wx.GenericDirCtrl( parent, style = style )
         self._tree   = tree = self.control.GetTreeCtrl()
-        wx.EVT_TREE_SEL_CHANGED(    tree, tree.GetId(), self.update_object )
-        wx.EVT_TREE_ITEM_ACTIVATED( tree, tree.GetId(), self._on_dclick )
+        id           = tree.GetId()
+        wx.EVT_TREE_SEL_CHANGED(    tree, id, self.update_object )
+        wx.EVT_TREE_ITEM_ACTIVATED( tree, id, self._on_dclick )
         
         self.filter = factory.filter
         self.sync_value( factory.filter_name, 'filter', 'from', is_list = True )
@@ -402,8 +403,11 @@ class CustomEditor ( SimpleTextEditor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        wx.EVT_TREE_SEL_CHANGED( self._tree, self._tree.GetId(), None )
-        self._tree = None
+        tree, self._tree = self._tree, None
+        id = tree.GetId()
+        
+        wx.EVT_TREE_SEL_CHANGED(    tree, id, None )
+        wx.EVT_TREE_ITEM_ACTIVATED( tree, id, None )
         
         super( CustomEditor, self ).dispose()
 

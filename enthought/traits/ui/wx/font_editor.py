@@ -32,7 +32,7 @@ from editor \
     import Editor
     
 from helper \
-    import choice_width, traits_ui_panel
+    import choice_width, traits_ui_panel, disconnect
      
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -239,6 +239,21 @@ class CustomFontEditor ( Editor ):
         panel.SetSizer( sizer )
 
         self.set_tooltip()
+
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:
+    #---------------------------------------------------------------------------
+
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        wx.EVT_KILL_FOCUS( self._font, None )
+        
+        disconnect( self._font,       wx.EVT_TEXT_ENTER ) 
+        disconnect( self._facename,   wx.EVT_CHOICE )    
+        disconnect( self._point_size, wx.EVT_CHOICE )     
+        
+        super( CustomFontEditor, self ).dispose()
     
     #---------------------------------------------------------------------------
     #  Handles the user changing the contents of the font text control:
