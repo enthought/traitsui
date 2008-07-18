@@ -131,7 +131,8 @@ class ModalDialog ( BaseDialog ):
             else:
                 window = wx.Frame(  parent, -1, title, style = style |
                             (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER) ) )
-                window.SetBackgroundColour( WindowColor )
+                
+            window.SetBackgroundColour( WindowColor )
             self.control = window
             self.set_icon( view.icon )
             wx.EVT_CLOSE( window, self._on_close_page )

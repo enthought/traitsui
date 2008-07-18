@@ -184,9 +184,8 @@ class Panel ( BaseDialog ):
             cpanel.DestroyChildren()
         else:
             self.control = cpanel = traits_ui_panel( parent, -1 )
-            cpanel.SetBackgroundColour(WindowColor)
         
-        # Create the actual trait sheet panel and imbed it in a scrollable 
+        # Create the actual trait sheet panel and embed it in a scrollable 
         # window (if requested):
         sw_sizer = wx.BoxSizer( wx.VERTICAL )
         if ui.scrollable:

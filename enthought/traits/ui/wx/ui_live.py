@@ -167,15 +167,16 @@ class LiveWindow ( BaseDialog ):
                                      wx.FRAME_NO_TASKBAR) 
                 window = wx.Frame( parent, -1, title, style = window_style |
                                (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER)) )
-                window.SetBackgroundColour( WindowColor )
             else:
                 if window_style == 0:
                     window_style = wx.SIMPLE_BORDER
                 window = wx.Frame( None, -1, '', style = window_style )
-                window.SetBackgroundColour( WindowColor )
                 wx.EVT_ACTIVATE( window, self._on_close_popup )
                 window._kind  = ui.view.kind
                 self._monitor = MouseMonitor( self )
+                
+            # Set the correct default window background color:
+            window.SetBackgroundColour( WindowColor )
                 
             self.control = window
             wx.EVT_CLOSE( window, self._on_close_page )
