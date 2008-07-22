@@ -45,6 +45,9 @@ from enthought.pyface.image_resource \
     
 from enthought.pyface.timer.api \
     import do_later
+    
+from constants \
+    import is_mac, scrollbar_dx
 
 try:
     from enthought.util.wx.drag_and_drop \
@@ -842,6 +845,8 @@ class _TabularEditor ( Editor ):
             
         object, name = self.object, self.name
         dx, dy       = control.GetClientSizeTuple()
+        if is_mac:
+            dx -= scrollbar_dx
         n            = control.GetColumnCount()
         get_width    = self.adapter.get_width
         pdx          = 0
