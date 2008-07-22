@@ -58,7 +58,7 @@ from enthought.pyface.sizers.flow \
     
 from helper \
     import position_window, traits_ui_panel, traits_ui_scrolled_panel, \
-           GroupEditor
+           traits_ui_scrolled_window, GroupEditor
     
 from constants \
     import screen_dx, screen_dy, WindowColor
@@ -190,7 +190,7 @@ class Panel ( BaseDialog ):
         sw_sizer = wx.BoxSizer( wx.VERTICAL )
         if ui.scrollable:
             sizer = wx.BoxSizer( wx.VERTICAL )
-            sw    = wx.ScrolledWindow( cpanel )
+            sw    = traits_ui_scrolled_window( cpanel )
             sizer.Add( panel( ui, sw ), 1, wx.EXPAND )
             
             sw.SetSizerAndFit( sizer )

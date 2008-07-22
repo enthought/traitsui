@@ -71,7 +71,7 @@ from editor_factory \
     import EditorFactory
 
 from helper \
-    import open_fbi, Orientation, traits_ui_panel
+    import open_fbi, Orientation, traits_ui_panel, traits_ui_scrolled_window
 
 #-------------------------------------------------------------------------------
 #  Global data:
@@ -306,7 +306,7 @@ class SimpleEditor ( Editor ):
                                                       theme = theme ).control
                 self._tree   = tree     = wx.TreeCtrl( splitter, -1,
                                                        style = style )
-                self._editor = editor   = wx.ScrolledWindow( splitter )
+                self._editor = editor   = traits_ui_scrolled_window( splitter )
                 editor.SetSizer( wx.BoxSizer( wx.VERTICAL ) )
                 editor.SetScrollRate( 16, 16 )
                 editor.SetMinSize( wx.Size( 100, 100 ) )
@@ -575,7 +575,6 @@ class SimpleEditor ( Editor ):
         if tree is not None:
             nid = tree.GetRootItem()
             if nid.IsOk():
-                #saved_state = self._save_state()
                 self._delete_node( nid )
             object, node = self._node_for( self.value )
             if node is not None:
@@ -591,8 +590,8 @@ class SimpleEditor ( Editor ):
                     if not self.factory.hide_root:
                         tree.Expand( nid )
                         tree.SelectItem( nid )
+                        self._on_tree_sel_changed()
 
-                #self._restore_state( saved_state )
                 self.expand_levels( nid, self.factory.auto_open, False )
             # fixme: Clear the current editor (if any)...
             
@@ -1180,7 +1179,7 @@ class SimpleEditor ( Editor ):
     #  Handles a tree node being selected:
     #---------------------------------------------------------------------------
 
-    def _on_tree_sel_changed ( self, event ):
+    def _on_tree_sel_changed ( self, event = None ):
         """ Handles a tree node being selected.
         """
         if self._locked:
@@ -1192,7 +1191,7 @@ class SimpleEditor ( Editor ):
         nid         = self._tree.GetSelection()
         if nid.IsOk():
             # If there is a real selection, get the associated object:
-            expanded, node, object = self._get_node_data( event.GetItem() )
+            expanded, node, object = self._get_node_data( nid )
 
             # Try to inform the node specific handler of the selection:
             not_handled = node.select( object )

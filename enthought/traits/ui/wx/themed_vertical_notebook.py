@@ -51,7 +51,7 @@ from themed_control \
     import ThemedControl
 
 from helper \
-    import traits_ui_panel
+    import traits_ui_panel, traits_ui_scrolled_window
 
 #-------------------------------------------------------------------------------
 #  'ThemedPage' class:
@@ -315,7 +315,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
         # Create the correct type of window based on whether or not it should
         # be scrollable:
         if self.scrollable:
-            self.control = control = wx.ScrolledWindow( parent )
+            self.control = control = traits_ui_scrolled_window( parent )
             control.SetScrollRate( 6, 6 )
             control.SetMinSize( wx.Size( 0, 0 ) )
         else:

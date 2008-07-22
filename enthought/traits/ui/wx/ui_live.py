@@ -26,7 +26,7 @@
 import wx
 
 from helper \
-    import restore_window, save_window
+    import restore_window, save_window, traits_ui_scrolled_window
     
 from ui_base \
     import BaseDialog
@@ -201,7 +201,7 @@ class LiveWindow ( BaseDialog ):
         sw_sizer = wx.BoxSizer( wx.VERTICAL )
         if ui.scrollable:
             sizer       = wx.BoxSizer( wx.VERTICAL )
-            sw          = wx.ScrolledWindow( window )
+            sw          = traits_ui_scrolled_window( window )
             trait_sheet = panel( ui, sw )
             sizer.Add( trait_sheet, 1, wx.EXPAND | wx.ALL, 4 )
             tsdx, tsdy = trait_sheet.GetSizeTuple()

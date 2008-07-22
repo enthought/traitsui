@@ -63,7 +63,6 @@ standard_bitmap_width = 120
 scrollbar_dx = wx.SystemSettings_GetMetric( wx.SYS_VSCROLL_X )
 
 # Screen size values:
-
 screen_dx = wx.SystemSettings_GetMetric( wx.SYS_SCREEN_X )
 screen_dy = wx.SystemSettings_GetMetric( wx.SYS_SCREEN_Y )
 

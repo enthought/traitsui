@@ -31,9 +31,6 @@ import sys
 from os.path \
     import join, dirname, abspath
     
-from constants \
-    import standard_bitmap_width, screen_dx, screen_dy
-    
 from enthought.traits.api \
     import HasPrivateTraits, Enum, Trait, CTrait, Instance, Str, Any, Int, \
            Event, Bool, BaseTraitHandler, TraitError
@@ -46,6 +43,9 @@ from enthought.traits.ui.ui_traits \
 
 from enthought.pyface.timer.api \
     import do_later
+    
+from constants \
+    import standard_bitmap_width, screen_dx, screen_dy
     
 from editor \
     import Editor
@@ -284,8 +284,41 @@ def traits_ui_panel ( parent, *args, **kw ):
     """
     panel = wx.Panel( parent, *args, **kw )
     panel.SetBackgroundColour( parent.GetBackgroundColour() )
+                            
+    # Set up the painting event handlers:
+    wx.EVT_ERASE_BACKGROUND( panel, _erase_background )
+    wx.EVT_PAINT( panel, _on_paint )
     
     return panel
+    
+def _erase_background ( event ):
+    """ Do not erase the background here (do it in the 'on_paint' handler).
+    """
+    pass
+           
+def _on_paint ( event ):
+    """ Paint the background using the associated ImageSlice object.
+    """
+    from image_slice import paint_parent
+    
+    control = event.GetEventObject()
+    paint_parent( wx.PaintDC( control ), control )
+    
+    
+    
+#-------------------------------------------------------------------------------
+#  Creates a wx.ScrolledWindow that correctly sets its background color to be
+#  the same as its parents:
+#-------------------------------------------------------------------------------
+
+def traits_ui_scrolled_window ( parent ):
+    """ Creates a wx.ScrolledWindow that correctly sets its background color to 
+        be the same as its parents.
+    """
+    sw = wx.ScrolledWindow( parent )
+    sw.SetBackgroundColour( parent.GetBackgroundColour() )
+    
+    return sw
     
 #-------------------------------------------------------------------------------
 #  Disconnects a wx event handle from its associated control:
