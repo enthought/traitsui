@@ -272,10 +272,6 @@ class CustomEditor ( Editor ):
                                             wx.Size( -1, -1 ), [] )
                 wx.EVT_CHOICE( choice, choice.GetId(), self.update_object )
             self.control = self._choice
-        else:
-            sizer = wx.BoxSizer( orientation )
-            self.create_editor( parent, sizer )
-            parent.SetSizer( sizer )
             
         # Synchronize the 'view' to use:
         # fixme: A normal assignment can cause a crash (for unknown reasons) in
@@ -529,7 +525,7 @@ class CustomEditor ( Editor ):
             # Make sure the panel and its contents are correctly sized (This 
             # code is complicated by the various layout bugs present in wx.
             # Tamper with it at your own risk!):
-            control.Freeze()                    
+            control.Freeze()
             if stretch and (size != ( 20, 20 )):
                 control.SetSize( size )
                 panel.SetSize( size )

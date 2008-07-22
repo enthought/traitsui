@@ -50,8 +50,8 @@ DropColor = wx.Colour( 215, 242, 255 )
 EditableColor = wx.WHITE
 
 # Color for background of windows (like dialog background color)
-if sys.platform == 'darwin':
-    # wx lies to us.
+is_mac = (sys.platform == 'darwin')
+if is_mac:
     WindowColor = wx.Colour( 232, 232, 232 )
 else:
     WindowColor = wx.SystemSettings_GetColour( wx.SYS_COLOUR_BTNFACE )
