@@ -327,7 +327,9 @@ class _ThemedSliderEditor ( Editor ):
     def _left_up ( self, event ):
         """ Handles the left mouse button being released.
         """
-        self.control.ReleaseMouse()
+        if self._x is not None:
+            self.control.ReleaseMouse()
+            
         if self._pending:
             self._pop_up_text()
             

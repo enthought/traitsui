@@ -416,9 +416,12 @@ class ReadonlyTextEditor ( ReadonlyEditor ):
         self._set_color()
         
     def _left_up ( self, event ):
+        self._set_color()
+        if not self._down:
+            return
+            
         self.control.ReleaseMouse()
         self._down = False
-        self._set_color()
         
         if self._in_window:
             self.object.edit_traits( view   = self.factory.view, 
