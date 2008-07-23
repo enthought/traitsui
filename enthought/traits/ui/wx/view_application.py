@@ -24,13 +24,18 @@
 #-------------------------------------------------------------------------------
 
 import wx
-
 import sys
-
 import os
+
+#-------------------------------------------------------------------------------
+#  Constants:
+#-------------------------------------------------------------------------------
 
 # File to redirect output to. If '', output goes to stdout.
 redirect_filename = ''
+
+# The wx App object:
+app = None
 
 #-------------------------------------------------------------------------------
 #  Creates a 'stand-alone' wx Application to display a specified traits UI View:  
@@ -61,13 +66,15 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
         Indicates whether the dialog box should be scrollable. When set to 
         True, scroll bars appear on the dialog box if it is not large enough
         to display all of the items in the view at one time.
-        
-
     """
+    global app
+
     if (kind == 'panel') or ((kind is None) and (view.kind == 'panel')):
         kind = 'modal'
         
-    app = wx.GetApp()
+    if app is None:
+        app = wx.GetApp()
+        
     if (app is None) or (not app.IsMainLoopRunning()):
         return ViewApplication( context, view, kind, handler, id, 
                                 scrollable, args ).ui.result
