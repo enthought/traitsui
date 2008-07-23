@@ -662,7 +662,9 @@ class SimpleEditor ( CustomEditor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        wx.EVT_BUTTON( self._button, self._button.GetId(), None )
+        button = self._button
+        if button is not None:
+            wx.EVT_BUTTON( button, button.GetId(), None )
         
         super( SimpleEditor, self ).dispose()
         
