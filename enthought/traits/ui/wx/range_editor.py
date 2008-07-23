@@ -426,7 +426,10 @@ class SimpleSliderEditor ( Editor ):
         if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
             (self.factory.auto_set and
              (event_type == wx.wxEVT_SCROLL_THUMBTRACK))):
-            self.value = value
+            try:
+                self.value = value
+            except TraitError:
+                pass
 
     #---------------------------------------------------------------------------
     #  Handle the user pressing the 'Enter' key in the edit control:
@@ -451,7 +454,7 @@ class SimpleSliderEditor ( Editor ):
             self.control.slider.SetValue(
                 int( ((float( value ) - self.low) /
                      (self.high - self.low)) * 10000 ) )
-        except TraitError, excp:
+        except TraitError:
             pass
 
     #---------------------------------------------------------------------------
