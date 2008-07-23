@@ -390,15 +390,16 @@ class ReadonlyTextEditor ( ReadonlyEditor ):
     #-- Private Methods --------------------------------------------------------
     
     def _set_color ( self ):
+        control = self.control
         if not self._in_window:
-            color = WindowColor
+            color = control.GetParent().GetBackgroundColour()
         elif self._down:
             color = DownColor
         else:
             color = HoverColor
         
-        self.control.SetBackgroundColour( color )
-        self.control.Refresh()
+        control.SetBackgroundColour( color )
+        control.Refresh()
         
     #-- wxPython Event Handlers ------------------------------------------------
     
