@@ -474,6 +474,11 @@ class MouseMonitor ( wx.Timer ):
         cdx, cdy = control.GetSizeTuple()
         
         if self.is_activated:
+            # Don't close the popup if any mouse buttons are currently pressed:
+            ms = wx.GetMouseState()
+            if ms.LeftDown() or ms.MiddleDown() or ms.RightDown():
+                return
+                
             # Check for the special case of the mouse pointer having to be
             # within the original bounds of the object the popup was created 
             # for:
