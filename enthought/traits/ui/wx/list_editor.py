@@ -724,7 +724,8 @@ class NotebookEditor ( Editor ):
         theme = self.factory.dock_theme or self.item.container.dock_theme
         dw    = DockWindow( parent, theme = theme )
         self.control = dw.control
-        self.control.SetSizer( DockSizer( DockSection( dock_window = dw ) ) )
+        self._sizer  = DockSizer( DockSection( dock_window = dw ) )
+        self.control.SetSizer( self._sizer )
 
         # Set up the additional 'list items changed' event handler needed for
         # a list based trait:
@@ -742,6 +743,9 @@ class NotebookEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
+        # Make sure the DockWindow is in a correct state:
+        self._sizer.Reset( self. control )
+        
         # Destroy the views on each current notebook page:
         self.close_all()
 
@@ -768,6 +772,9 @@ class NotebookEditor ( Editor ):
     def update_editor_item ( self, event ):
         """ Handles an update to some subset of the trait's list.
         """
+        # Make sure the DockWindow is in a correct state:
+        self._sizer.Reset( self.control )
+        
         index = event.index
 
         # Delete the page corresponding to each removed item:
@@ -797,6 +804,7 @@ class NotebookEditor ( Editor ):
         self.add_controls( dock_controls )
         if first_control is not None:
             first_control.activate( layout = False )
+            
         self.update_layout()
 
     #---------------------------------------------------------------------------
@@ -887,11 +895,14 @@ class NotebookEditor ( Editor ):
     #---------------------------------------------------------------------------
 
     def _create_page ( self, object ):
+        """ Creates a DockControl for a specified object.
+        """
         # Create the view for the object:
         view_object = object
         factory     = self.factory
         if factory.factory is not None:
             view_object = factory.factory( object )
+            
         ui = view_object.edit_traits( parent = self.control,
                                       view   = factory.view,
                                       kind   = factory.ui_kind ).set(
