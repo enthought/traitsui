@@ -514,15 +514,8 @@ class SimpleEditor ( Editor ):
         list, index = self.get_info()
         index      += offset
         item_trait  = self._trait_handler.item_trait
-        dv          = item_trait.default_value()
-        if dv[0] == 7:
-            func, args, kw = dv[1]
-            if kw is None:
-                kw = {}
-            value = func( *args, **kw )
-        else:
-            value = dv[1]
-        self.value = list[:index] + [ value ] + list[index:]
+        value       = item_trait.default_value_for( self.object, self.name )
+        self.value  = list[:index] + [ value ] + list[index:]
         self.update_editor()
 
     #---------------------------------------------------------------------------
