@@ -43,6 +43,9 @@ from editor \
 from ui_editor \
     import UIEditor
 
+from constants \
+    import is_mac
+    
 from helper \
     import traits_ui_panel, position_window, init_wx_handlers
     
@@ -491,6 +494,9 @@ class ColorSample ( HasPrivateTraits ):
         """
         self.control = wx.Window( parent, -1 )
         init_wx_handlers( self.control, self )
+        
+        if is_mac:
+            self.control.SetSize( wx.Size( -1, 23 ) )
         
     #-- wxPython Event Handlers ------------------------------------------------
         
