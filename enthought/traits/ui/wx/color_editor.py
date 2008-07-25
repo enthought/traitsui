@@ -29,20 +29,22 @@ from enthought.traits.api \
     import HasPrivateTraits, Bool, Instance, Str, Color, Any, Event
 
 from enthought.traits.ui.api \
-    import View
+    import View, Item, Handler
 
 from editor_factory \
     import EditorFactory, SimpleEditor, TextEditor, ReadonlyEditor
+    
+from basic_editor_factory \
+    import BasicEditorFactory
 
 from editor \
     import Editor
+    
+from ui_editor \
+    import UIEditor
 
 from helper \
-    import traits_ui_panel, position_window, top_level_window_for, \
-           init_wx_handlers
-    
-from constants \
-    import WindowColor
+    import traits_ui_panel, position_window, init_wx_handlers
     
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
 try:
@@ -159,6 +161,9 @@ class SimpleColorEditor ( SimpleEditor ):
     # The color sample control used to display the current color:
     color_sample = Any
     
+    # Is the editor busy (which means any popups should not close right now)?
+    busy = Bool( False )
+    
     #---------------------------------------------------------------------------
     #  Invokes the pop-up editor for an object trait:
     #---------------------------------------------------------------------------
@@ -170,26 +175,30 @@ class SimpleColorEditor ( SimpleEditor ):
             # Fixes a problem with the edit field having the focus:
             if self.control.HasCapture():
                 self.control.ReleaseMouse()
-                
-            self._popup_dialog = ColorDialog( self )
-        else:    
-            update_handler = self.control.update_handler
-            if update_handler is not None:
-                update_handler( False )
+            
+            self.object.edit_traits( view = View( 
+                    Item( self.name, id         = 'color_editor',
+                                     show_label = False, 
+                                     padding    = -4,
+                                     editor     = PopupColorEditor() ),
+                    kind    = 'popup',
+                    handler = PopupColorHandler() ),
+                parent = self.control )
+        else:   
+            self.busy  = True
+            factory    = self.factory
             color_data = wx.ColourData()
             color_data.SetColour( self.factory.to_wx_color( self ) )
             color_data.SetChooseFull( True )
             dialog = wx.ColourDialog( self.control, color_data )
             position_window( dialog, parent = self.control )
             if dialog.ShowModal() == wx.ID_OK:
-                self.value = self.factory.from_wx_color( 
+                self.value = factory.from_wx_color( 
                                   dialog.GetColourData().GetColour() )
                 self.update_editor()
                 
             dialog.Destroy() 
-            
-            if update_handler is not None:
-                update_handler( True )
+            self.busy = False
                 
     #---------------------------------------------------------------------------
     #  Creates the control to use for the simple editor:
@@ -210,17 +219,6 @@ class SimpleColorEditor ( SimpleEditor ):
         """
         self.value = color
         self.update_editor()
-        
-    #---------------------------------------------------------------------------
-    #  Handles the user selecting a color:
-    #---------------------------------------------------------------------------
-        
-    def color_selected ( self, object, name, old, color ):
-        """ Handles the user selecting a color.
-        """
-        handler = object.control.update_handler
-        if handler is not None:
-            handler()
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -338,7 +336,7 @@ class ReadonlyColorEditor ( ReadonlyEditor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = traits_ui_panel( parent, -1, size = wx.Size( 50, 16 ) )
+        self.control = ColorSample( parent ).control
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -373,103 +371,35 @@ def set_color ( editor ):
 #  Creates a custom color editor panel for a specified editor:
 #----------------------------------------------------------------------------
 
-def color_editor_for ( editor, parent, update_handler = None ):
+def color_editor_for ( editor, parent ):
     """ Creates a custom color editor panel for a specified editor.
     """
     # Create a panel to hold all of the controls:
     panel = traits_ui_panel( parent, -1, size = wx.Size( 0, 0 ) )
-    if update_handler is None:
-        panel.Show( False )
         
     # Create the large color swatch:
     sizer = wx.BoxSizer( wx.HORIZONTAL )
-    panel._swatch_editor = swatch_editor = editor.factory.simple_editor( 
+    panel._swatch_editor = swatch_editor = editor.factory.simple_editor(
               editor.ui, editor.object, editor.name, editor.description, panel )
     swatch_editor.prepare( panel )
     control = swatch_editor.control
-    control.is_custom      = True
-    control.update_handler = update_handler
-    control.SetSize( wx.Size( 81, 61 ) )
-    sizer.Add( control )
+    control.is_custom = True
+    control.SetSize( wx.Size( 101, 61 ) )
+    sizer.Add( control, 0, wx.EXPAND )
     
     # Create the color chip (color swatches) control:
     panel._color_chip = ColorChip( panel )
     panel._color_chip.on_trait_change(
         swatch_editor.update_object_from_swatch, 'color' )
-    panel._color_chip.on_trait_change(
-        swatch_editor.color_selected, 'selected' )
     control = panel._color_chip.control
     sizer.Add( control )
     editor.set_tooltip( control )
-    control.update_handler = update_handler
    
     # Set-up the layout:
     panel.SetSizerAndFit( sizer )
 
     # Return the panel as the result:
     return panel
-
-#-------------------------------------------------------------------------------
-#  'ColorDialog' class:  
-#-------------------------------------------------------------------------------
-
-class ColorDialog ( wx.Dialog ):
-    """ Dialog box for selecting a color.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  Initializes the object:
-    #---------------------------------------------------------------------------
-
-    def __init__ ( self, editor ):
-        """ Initializes the object.
-        """
-        control = editor.control
-        wx.Dialog.__init__( self, control, -1, '',
-                           style = wx.SIMPLE_BORDER | wx.FRAME_FLOAT_ON_PARENT )
-        self.SetBackgroundColour( WindowColor )
-        wx.EVT_ACTIVATE( self, self._on_close_dialog )
-        self._closed    = False
-        self._closeable = True
-
-        panel = color_editor_for( editor, self, self._close_dialog )
-        self._swatch_editor = panel._swatch_editor
-
-        sizer = wx.BoxSizer( wx.VERTICAL )
-        sizer.Add( panel )
-        self.SetSizerAndFit( sizer )
-        position_window( self, parent = control )
-        
-        tlw = top_level_window_for( control )
-        if isinstance( tlw, wx.Dialog ) and tlw.IsModal():
-            self.ShowModal()
-        else:
-            self.Show()
-
-    #---------------------------------------------------------------------------
-    #  Closes the dialog:
-    #---------------------------------------------------------------------------
-
-    def _on_close_dialog ( self, event, rc = False ):
-        """ Called when the user closes the dialog.
-        """
-        if not event.GetActive():
-            self._close_dialog()
-
-    #---------------------------------------------------------------------------
-    #  Closes the dialog:
-    #---------------------------------------------------------------------------
-
-    def _close_dialog ( self, closeable = None ):
-        """ Closes the dialog.
-        """
-        if closeable is not None:
-            self._closeable = closeable
-            
-        if self._closeable and (not self._closed):
-            self._closed = True
-            self._swatch_editor.dispose()
-            self.Destroy()
 
 #-------------------------------------------------------------------------------
 #  'ColorChip' class:
@@ -493,15 +423,14 @@ class ColorChip ( HasPrivateTraits ):
     # The current color:
     color = Color
     
-    # The user has selected a color:
-    selected = Event
-    
     # The wx Window that implements the color chip:
     control = Instance( wx.Window )
     
-    def __init__ ( self, parent ):
+    def __init__ ( self, parent, **traits ):
         """ Creates the color chip window and initializes it.
         """
+        super( ColorChip, self ).__init__( **traits )
+        
         self.control = wx.Window( parent, -1, size = wx.Size( 361, 61 ) )
         init_wx_handlers( self.control, self )
         
@@ -540,10 +469,10 @@ class ColorChip ( HasPrivateTraits ):
         self._active = False
         self.control.ReleaseMouse()
         self._set_color( event )
-        self.selected = True
         
     def _motion ( self, event ):
-        self._set_color( event )
+        if self._active:
+            self._set_color( event )
 
 #-------------------------------------------------------------------------------
 #  'ColorSample' class:
@@ -577,4 +506,48 @@ class ColorSample ( HasPrivateTraits ):
         dc.DrawRectangle( 0, 0, dx, dy )
         dc.SetFont( control.GetFont() )
         dc.DrawText( self.text, 3, 3 )
+        
+#-------------------------------------------------------------------------------
+#  'PopupColorEditor' editor definition:
+#-------------------------------------------------------------------------------
+
+class _PopupColorEditor ( UIEditor ):
+    
+    view = View(
+        Item( 'value', style = 'custom', editor = ToolkitEditorFactory() )
+    )
+        
+    #---------------------------------------------------------------------------
+    #  Creates the traits UI for the editor (can be overridden by a subclass):  
+    #---------------------------------------------------------------------------
+                
+    def init_ui ( self, parent ):
+        """ Creates the traits UI for the editor.
+        """
+        return self.object.edit_traits( 
+            parent = parent,
+            view   = View(
+                         Item( self.name, id         = 'color_editor',
+                                          style      = 'custom',
+                                          show_label = False,
+                                          padding    = -4,
+                                          editor     = ToolkitEditorFactory() ),
+                         kind = 'subpanel' ) )
+
+class PopupColorEditor ( BasicEditorFactory ):
+
+    klass = _PopupColorEditor
+    
+#-------------------------------------------------------------------------------
+#  'PopupColorHandler' class:
+#-------------------------------------------------------------------------------
+
+class PopupColorHandler ( Handler ):
+    
+    def close ( self, info, result ):
+        """ Returns whether the view can be closed now or not.
+        """
+        # fixme: Hmmm...I would if there is a cleaner way to do this...
+        return (not info.color_editor.editor_ui.info.color_editor.control.
+                         _swatch_editor.busy)
         

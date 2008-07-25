@@ -333,8 +333,8 @@ class LiveWindow ( BaseDialog ):
     def close_popup ( self ):
         # Close the window if it has not already been closed:
         if self.ui.info.ui is not None:
-            self._monitor.Stop()
-            self._on_ok()
+            if self._on_ok():
+                self._monitor.Stop()
 
     #---------------------------------------------------------------------------
     #  Handles the user clicking the 'OK' button:
@@ -345,6 +345,9 @@ class LiveWindow ( BaseDialog ):
         """
         if self.ui.handler.close( self.ui.info, True ):
             self.close( wx.ID_OK )
+            return True
+            
+        return False
                
     #---------------------------------------------------------------------------
     #  Handles the user hitting the 'Esc'ape key:
@@ -491,6 +494,7 @@ class MouseMonitor ( wx.Timer ):
                 if ((mx < px) or (mx >= (px + pdx)) or 
                     (my < py) or (my >= (py + pdy))):
                     ui.owner.close_popup()
+                    self.is_activated = False
                     
             else:
                 # Allow for a 'dead zone' border around the window to allow for
@@ -499,6 +503,7 @@ class MouseMonitor ( wx.Timer ):
                 if ((mx < (cx - border)) or (mx >= (cx + cdx + border)) or 
                     (my < (cy - border)) or (my >= (cy + cdy + border))):
                     ui.owner.close_popup()
+                    self.is_activated = False
         elif (cx <= mx < (cx + cdx)) and (cy <= my < (cy + cdy)):
             self.is_activated = True
             
