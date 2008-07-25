@@ -26,7 +26,7 @@
 import wx
 
 from enthought.traits.api \
-    import Bool
+    import HasPrivateTraits, Bool, Instance, Str, Color, Any, Event
 
 from enthought.traits.ui.api \
     import View
@@ -38,7 +38,8 @@ from editor \
     import Editor
 
 from helper \
-    import traits_ui_panel, position_window, top_level_window_for
+    import traits_ui_panel, position_window, top_level_window_for, \
+           init_wx_handlers
     
 from constants \
     import WindowColor
@@ -48,21 +49,6 @@ try:
     ColorTypes = ( wx.Colour, wx.ColourPtr )    
 except:
     ColorTypes = wx.Colour
-
-#-------------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------------
-
-# Standard color samples:
-
-color_choices = ( 0, 128, 192, 255 )
-color_samples = [ None ] * 48
-i             = 0
-for r in color_choices:
-    for g in color_choices:
-        for b in ( 0, 128, 255 ):
-            color_samples[i] = wx.Colour( r, g, b )
-            i += 1  
 
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -170,6 +156,9 @@ class SimpleColorEditor ( SimpleEditor ):
         a dialog box for selecting a new color value.
     """
     
+    # The color sample control used to display the current color:
+    color_sample = Any
+    
     #---------------------------------------------------------------------------
     #  Invokes the pop-up editor for an object trait:
     #---------------------------------------------------------------------------
@@ -201,19 +190,37 @@ class SimpleColorEditor ( SimpleEditor ):
             
             if update_handler is not None:
                 update_handler( True )
+                
+    #---------------------------------------------------------------------------
+    #  Creates the control to use for the simple editor:
+    #---------------------------------------------------------------------------
+    
+    def create_control ( self, parent ):
+        """ Creates the control to use for the simple editor.
+        """
+        self.color_sample = ColorSample( parent )
+        return self.color_sample.control
 
     #---------------------------------------------------------------------------
     #  Updates the object trait when a color swatch is clicked:
     #---------------------------------------------------------------------------
 
-    def update_object_from_swatch ( self, event ):
+    def update_object_from_swatch ( self, color ):
         """ Updates the object trait when a color swatch is clicked.
         """
-        control    = event.GetEventObject()
-        self.value = self.factory.from_wx_color( control.GetBackgroundColour() )
+        self.value = color
         self.update_editor()
-        if control.update_handler is not None:
-            control.update_handler()
+        
+    #---------------------------------------------------------------------------
+    #  Handles the user selecting a color:
+    #---------------------------------------------------------------------------
+        
+    def color_selected ( self, object, name, old, color ):
+        """ Handles the user selecting a color.
+        """
+        handler = object.control.update_handler
+        if handler is not None:
+            handler()
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -223,7 +230,7 @@ class SimpleColorEditor ( SimpleEditor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
-        super( SimpleColorEditor, self ).update_editor()
+        self.color_sample.text = self.str_value
         set_color( self )
 
     #---------------------------------------------------------------------------
@@ -369,10 +376,12 @@ def set_color ( editor ):
 def color_editor_for ( editor, parent, update_handler = None ):
     """ Creates a custom color editor panel for a specified editor.
     """
-    # Create a panel to hold all of the buttons:
+    # Create a panel to hold all of the controls:
     panel = traits_ui_panel( parent, -1, size = wx.Size( 0, 0 ) )
     if update_handler is None:
         panel.Show( False )
+        
+    # Create the large color swatch:
     sizer = wx.BoxSizer( wx.HORIZONTAL )
     panel._swatch_editor = swatch_editor = editor.factory.simple_editor( 
               editor.ui, editor.object, editor.name, editor.description, panel )
@@ -380,22 +389,19 @@ def color_editor_for ( editor, parent, update_handler = None ):
     control = swatch_editor.control
     control.is_custom      = True
     control.update_handler = update_handler
-    control.SetSize( wx.Size( 72, 72 ) )
-    sizer.Add( control, 1, wx.EXPAND | wx.RIGHT, 4 )
-   
-    # Add all of the color choice buttons:
-    sizer2 = wx.GridSizer( 0, 12, 0, 0 )
-   
-    for i in range( len( color_samples ) ):
-        control = wx.Button( panel, -1, '', size = wx.Size( 18, 18 ) )
-        control.SetBackgroundColour( color_samples[i] )
-        control.update_handler = update_handler
-        wx.EVT_BUTTON( panel, control.GetId(), 
-                       swatch_editor.update_object_from_swatch )
-        sizer2.Add( control )
-        editor.set_tooltip( control )
-   
-    sizer.Add( sizer2 )
+    control.SetSize( wx.Size( 81, 61 ) )
+    sizer.Add( control )
+    
+    # Create the color chip (color swatches) control:
+    panel._color_chip = ColorChip( panel )
+    panel._color_chip.on_trait_change(
+        swatch_editor.update_object_from_swatch, 'color' )
+    panel._color_chip.on_trait_change(
+        swatch_editor.color_selected, 'selected' )
+    control = panel._color_chip.control
+    sizer.Add( control )
+    editor.set_tooltip( control )
+    control.update_handler = update_handler
    
     # Set-up the layout:
     panel.SetSizerAndFit( sizer )
@@ -465,3 +471,110 @@ class ColorDialog ( wx.Dialog ):
             self._swatch_editor.dispose()
             self.Destroy()
 
+#-------------------------------------------------------------------------------
+#  'ColorChip' class:
+#-------------------------------------------------------------------------------
+
+# Standard color samples:
+color_choices = ( 0, 51, 102, 153, 204, 255 )
+color_samples = [ None ] * 216
+i             = 0
+for r in color_choices:
+    for g in color_choices:
+        for b in color_choices:
+            color_samples[i] = wx.Colour( r, g, b )
+            i += 1  
+            
+# The color drawn around the edge of each sample:            
+EdgeColor = wx.Colour( 64, 64, 64 )             
+
+class ColorChip ( HasPrivateTraits ):
+    
+    # The current color:
+    color = Color
+    
+    # The user has selected a color:
+    selected = Event
+    
+    # The wx Window that implements the color chip:
+    control = Instance( wx.Window )
+    
+    def __init__ ( self, parent ):
+        """ Creates the color chip window and initializes it.
+        """
+        self.control = wx.Window( parent, -1, size = wx.Size( 361, 61 ) )
+        init_wx_handlers( self.control, self )
+        
+    #-- Private Methods --------------------------------------------------------
+    
+    def _set_color ( self, event ):
+        """ Sets the current color based upon the position of the pointer.
+        """
+        x,  y  = event.GetX(), event.GetY()
+        dx, dy = self.control.GetSizeTuple()
+        if (0 <= x < (dx - 1)) and (0 <= y < (dy - 1)):
+            color = color_samples[ (36 * (y / 10)) + (x / 10) ]
+            self.color = ( color.Red(), color.Green(), color.Blue() )
+        
+    #-- wxPython Event Handlers ------------------------------------------------
+        
+    def _erase_background ( self, event ):
+        pass
+    
+    def _paint ( self, event ):
+        dc = wx.PaintDC( self.control )
+        dc.SetPen( wx.Pen( EdgeColor ) )
+        i = 0
+        for y in xrange( 6 ):
+            for x in xrange( 36 ):
+                dc.SetBrush( wx.Brush( color_samples[i], wx.SOLID ) )
+                dc.DrawRectangle( 10 * x, 10 * y, 11, 11 )
+                i += 1
+        
+    def _left_down ( self, event ):
+        self._active = True
+        self.control.CaptureMouse()
+        self._set_color( event )
+        
+    def _left_up ( self, event ):
+        self._active = False
+        self.control.ReleaseMouse()
+        self._set_color( event )
+        self.selected = True
+        
+    def _motion ( self, event ):
+        self._set_color( event )
+
+#-------------------------------------------------------------------------------
+#  'ColorSample' class:
+#-------------------------------------------------------------------------------
+
+class ColorSample ( HasPrivateTraits ):
+    
+    # The wx Window that implements the color sample:
+    control = Instance( wx.Window )
+    
+    # The text to display in the control:
+    text = Str
+    
+    def __init__ ( self, parent ):
+        """ Creates the color chip window and initializes it.
+        """
+        self.control = wx.Window( parent, -1 )
+        init_wx_handlers( self.control, self )
+        
+    #-- wxPython Event Handlers ------------------------------------------------
+        
+    def _erase_background ( self, event ):
+        pass
+    
+    def _paint ( self, event ):
+        control = self.control
+        dx, dy  = control.GetSizeTuple()
+        dc      = wx.PaintDC( control )
+        dc.SetPen( wx.Pen( EdgeColor ) )
+        dc.SetBrush( wx.Brush( control.GetBackgroundColour(), wx.SOLID ) )
+        dc.DrawRectangle( 0, 0, dx, dy )
+        dc.SetFont( control.GetFont() )
+        dc.DrawText( self.text, 3, 3 )
+        

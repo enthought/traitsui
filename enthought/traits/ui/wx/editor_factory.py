@@ -139,11 +139,19 @@ class SimpleEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = wx.TextCtrl( parent, -1, self.str_value,
-                                    style = wx.TE_READONLY )
+        self.control = self.create_control( parent )
         wx.EVT_LEFT_DOWN( self.control, self._enable_popup_editor )
         wx.EVT_LEFT_UP(   self.control, self._show_popup_editor  )
         self.set_tooltip()
+        
+    #---------------------------------------------------------------------------
+    #  Creates the control to use for the simple editor:
+    #---------------------------------------------------------------------------
+    
+    def create_control ( self, parent ):
+        """ Creates the control to use for the simple editor. 
+        """
+        return wx.TextCtrl( parent, -1, self.str_value, style = wx.TE_READONLY )
        
     #---------------------------------------------------------------------------
     #  Invokes the pop-up editor for an object trait:
