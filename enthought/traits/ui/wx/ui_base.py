@@ -44,6 +44,9 @@ from editor \
 # List of all predefined system button names:
 SystemButtons = [ 'Undo', 'Redo', 'Apply', 'Revert', 'OK', 'Cancel', 'Help' ]
 
+# List of alternative context items that might handle an Action 'perform':
+PerformHandlers = ( 'object', 'model' )
+
 #-------------------------------------------------------------------------------
 #  'RadioGroup' class:
 #-------------------------------------------------------------------------------
@@ -283,7 +286,16 @@ class BaseDialog ( object ):
         if method is not None:
             method( self.ui.info )
         else:
-            action.perform()
+            context = self.ui.context
+            for item in PerformHandlers:
+                handler = context.get( item, None )
+                if handler is not None:
+                    method = getattr( handler, action.action, None )
+                    if method is not None:
+                        method()
+                        break
+            else:
+                action.perform()
 
     #---------------------------------------------------------------------------
     #  Check to see if a specified 'system' button is in the buttons list, and

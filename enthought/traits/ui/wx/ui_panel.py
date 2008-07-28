@@ -202,6 +202,9 @@ class Panel ( BaseDialog ):
             (not isinstance( getattr( parent, 'owner', None ), DockWindow ))):
             sw_sizer.Add( heading_text( cpanel, text = title ).control, 0, 
                           wx.EXPAND )
+            
+        self.add_toolbar( sw_sizer )
+            
         sw_sizer.Add( sw, 1, wx.EXPAND )
         
         if (allow_buttons and
@@ -297,6 +300,20 @@ class Panel ( BaseDialog ):
         """ Handles a change to the "revert" state.
         """
         self.revert.Enable( state )
+
+    #---------------------------------------------------------------------------
+    #  Adds an optional tool bar to the dialog (base class override):
+    #---------------------------------------------------------------------------
+
+    def add_toolbar ( self, sizer ):
+        """ Adds an optional toolbar to the dialog.
+        """
+        toolbar = self.ui.view.toolbar
+        if toolbar is not None:
+            self._last_group = self._last_parent = None
+            sizer.Add( toolbar.create_tool_bar( self.control, self ), 
+                       0, wx.EXPAND )
+            self._last_group = self._last_parent = None
     
 #-------------------------------------------------------------------------------
 #  Creates a panel-based wxPython user interface for a specified UI object:
