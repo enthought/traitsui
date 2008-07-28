@@ -272,7 +272,11 @@ class CustomEditor ( Editor ):
                                             wx.Size( -1, -1 ), [] )
                 wx.EVT_CHOICE( choice, choice.GetId(), self.update_object )
             self.control = self._choice
-            
+        else: 
+            sizer = wx.BoxSizer( orientation ) 
+            self.create_editor( parent, sizer ) 
+            parent.SetSizer( sizer )
+
         # Synchronize the 'view' to use:
         # fixme: A normal assignment can cause a crash (for unknown reasons) in
         # some cases, so we make sure that no notifications are generated:
