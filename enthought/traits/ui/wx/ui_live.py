@@ -169,7 +169,7 @@ class LiveWindow ( BaseDialog ):
                                (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER)) )
             else:
                 if window_style == 0:
-                    window_style = wx.SIMPLE_BORDER
+                    window_style = wx.BORDER_NONE
                 window = wx.Frame( None, -1, '', style = window_style )
                 wx.EVT_ACTIVATE( window, self._on_close_popup )
                 window._kind  = ui.view.kind
