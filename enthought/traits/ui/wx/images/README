@@ -1,4 +1,5 @@
-These are my best guesses at where each icon came from, this file should be updated whenever icons change.
+These are my best guesses at where each icon came from,
+this file should be updated whenever icons change.
 
 filename                     source            original name
 -------------------------------------------------------------
@@ -10,7 +11,7 @@ file.png                      ?
 frame.ico                     IconExperience   businessmen
 group.png                     IconExperience   folder_closed
 item.png                      IconExperience   document
-list_editor.png               ?
+list_editor.gif               ?
 nb_open.png                   ours
 object.png                    ?
 open.png                      IconExperience   folder
@@ -23,8 +24,8 @@ table_move_down.png           IconExperience   arrow_down_blue
 table_move_up.png             IconExperience   arrow_up_blue
 table_no_sort.png             IconExperience*
 table_prefs.png               IconExperience   table_preferences
-table_search                  IconExperience   find
-table_synthentic              IconExperience   column_add
+table_search.png              IconExperience   find
+table_synthentic.png          IconExperience   column_add
 table_undelete.png            IconExperience   row_add
 
 * derived
