@@ -103,6 +103,9 @@ class _Menu(wx.Menu):
         # The controller.
         self._controller = controller
         
+        # List of menu items
+        self.menu_items = []
+        
         # Create the menu structure.
         self.refresh()
 
@@ -120,7 +123,14 @@ class _Menu(wx.Menu):
         """ Clears the items from the menu. """
         
         for item in self.GetMenuItems():
+            if item.SubMenu is not None:
+                item.SubMenu.clear()
             self.Delete(item.GetId())
+            
+        for item in self.menu_items:
+            item.dispose()
+        
+        self.menu_items = []
 
         return
 

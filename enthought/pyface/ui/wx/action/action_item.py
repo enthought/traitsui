@@ -93,6 +93,7 @@ class _MenuItem(HasTraits):
             self.control.SetBitmap(action.image.create_bitmap())
             
         menu.AppendItem(self.control)
+        menu.menu_items.append(self)
 
         # Set the initial enabled/disabled state of the action.
         self.control.Enable(action.enabled and action.visible)
@@ -118,6 +119,17 @@ class _MenuItem(HasTraits):
             controller.add_to_menu(self)
 
         return
+    
+    def dispose(self):
+        action = self.item.action
+        action.on_trait_change(self._on_action_enabled_changed, 'enabled',
+            remove=True)
+        action.on_trait_change(self._on_action_visible_changed, 'visible',
+            remove=True)
+        action.on_trait_change(self._on_action_checked_changed, 'checked',
+            remove=True)
+        action.on_trait_change(self._on_action_name_changed, 'name',
+            remove=True)
 
     ###########################################################################
     # Private interface.
