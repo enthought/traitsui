@@ -180,10 +180,13 @@ class SimpleColorEditor ( SimpleEditor ):
                 self.control.ReleaseMouse()
             
             self.object.edit_traits( view = View( 
-                    Item( self.name, id         = 'color_editor',
-                                     show_label = False, 
-                                     padding    = -4,
-                                     editor     = PopupColorEditor() ),
+                    Item(
+                        self.name, 
+                        id         = 'color_editor',
+                        show_label = False, 
+                        padding    = -4,
+                        editor     = PopupColorEditor( factory = self.factory )
+                    ),
                     kind    = 'popup',
                     handler = PopupColorHandler() ),
                 parent = self.control )
@@ -220,7 +223,7 @@ class SimpleColorEditor ( SimpleEditor ):
     def update_object_from_swatch ( self, color ):
         """ Updates the object trait when a color swatch is clicked.
         """
-        self.value = color
+        self.value = self.factory.from_wx_color( color )
         self.update_editor()
 
     #---------------------------------------------------------------------------
@@ -518,10 +521,6 @@ class ColorSample ( HasPrivateTraits ):
 #-------------------------------------------------------------------------------
 
 class _PopupColorEditor ( UIEditor ):
-    
-    view = View(
-        Item( 'value', style = 'custom', editor = ToolkitEditorFactory() )
-    )
         
     #---------------------------------------------------------------------------
     #  Creates the traits UI for the editor (can be overridden by a subclass):  
@@ -537,12 +536,15 @@ class _PopupColorEditor ( UIEditor ):
                                           style      = 'custom',
                                           show_label = False,
                                           padding    = -4,
-                                          editor     = ToolkitEditorFactory() ),
+                                          editor     = self.factory.factory ),
                          kind = 'subpanel' ) )
 
 class PopupColorEditor ( BasicEditorFactory ):
 
-    klass = _PopupColorEditor
+    klass   = _PopupColorEditor
+    
+    # The factory to use for creating sub color editors:
+    factory = Instance( EditorFactory )
     
 #-------------------------------------------------------------------------------
 #  'PopupColorHandler' class:
