@@ -5,9 +5,11 @@
 #
 
 """
-WxPython backend for Traits and Pyface.
+WxPython backend for Traits and TraitsGUI (Pyface).
 
-<description text needed>
+The TraitsBackendWX project contains an implementation of TraitsGUI using 
+wxPython. It provides wx-based support for visualization and editing of 
+Traits-based objects.
 """
 
 
