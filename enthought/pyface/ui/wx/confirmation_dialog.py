@@ -106,7 +106,7 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
 
         # The image.
         if self.image is None:
-            image_rc = ImageResource('warning.png')
+            image_rc = ImageResource('warning')
         else:
             image_rc = self.image
 
