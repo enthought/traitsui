@@ -3,7 +3,7 @@ licensed accordingly to the original license:
 
 Project                 License                   File
 ----------------------------------------------------------------------------
-Eclipse                 Eclipse Public License    icon_eclipse_LICENSE.txt
+Eclipse                 Eclipse Public License    icon_Eclipse_LICENSE.txt
 Enthought               BSD 3-Clause              LICENSE.txt
 GV (Gael Varoquaux)     Public Domain             N/A
 Nuvola                  LGPL                      icon_Nuvola_LICENSE.txt
