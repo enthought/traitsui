@@ -3,11 +3,11 @@ licensed accordingly to the original license:
 
 Project                 License                   File
 ----------------------------------------------------------------------------
-Eclipse                 Eclipse Public License    icon_LICENSE_Eclipse.txt
+Eclipse                 Eclipse Public License    image_LICENSE_Eclipse.txt
 Enthought               BSD 3-Clause              LICENSE.txt
 GV (Gael Varoquaux)     Public Domain             N/A
-Nuvola                  LGPL                      icon_LICENSE_Nuvola.txt
-OOo                     LGPL                      icon_LICENSE_OOo.txt
+Nuvola                  LGPL                      image_LICENSE_Nuvola.txt
+OOo                     LGPL                      image_LICENSE_OOo.txt
 
 Unless stated in this file, icons are the work of Enthought, and are
 released under a 3 clause BSD license.
