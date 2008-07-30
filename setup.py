@@ -7,8 +7,8 @@
 """
 WxPython backend for Traits and TraitsGUI (Pyface).
 
-The TraitsBackendWX project contains an implementation of TraitsGUI using 
-wxPython. It provides wx-based support for visualization and editing of 
+The TraitsBackendWX project contains an implementation of TraitsGUI using
+wxPython. It provides wx-based support for visualization and editing of
 Traits-based objects.
 """
 
@@ -115,6 +115,6 @@ setup(
         ],
     # test_suite = 'nose.collector',
     url = 'http://code.enthought.com/ets',
-    version = '3.0.0b1',
+    version = '3.0.0',
     zip_safe = False,
     )
