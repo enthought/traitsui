@@ -171,6 +171,7 @@ class LiveWindow ( BaseDialog ):
                 if window_style == 0:
                     window_style = wx.BORDER_NONE
                 window = wx.Frame( None, -1, '', style = window_style )
+                wx.EVT_ACTIVATE( window, self._on_close_popup )
                 window._kind  = ui.view.kind
                 self._monitor = MouseMonitor( ui )
                 
@@ -305,17 +306,6 @@ class LiveWindow ( BaseDialog ):
             
         ui.finish()
         self.ui = self.undo = self.redo = self.revert = self.control = None
-            
-    #---------------------------------------------------------------------------
-    #  Closes the window if it has not already been closed:
-    #---------------------------------------------------------------------------
-            
-    def close_popup ( self ):
-        """ Closes the window if it has not already been closed.
-        """
-        if self.ui.info.ui is not None:
-            if self._on_ok():
-                self._monitor.Stop()
 
     #---------------------------------------------------------------------------
     #  Handles the user clicking the window/dialog 'close' button/icon:
@@ -328,6 +318,22 @@ class LiveWindow ( BaseDialog ):
             self._on_cancel( event )
         else:
             self._on_ok( event )
+            
+    #---------------------------------------------------------------------------
+    #  Handles the user giving focus to another window for a 'popup' view:
+    #---------------------------------------------------------------------------
+                            
+    def _on_close_popup ( self, event ):
+        """ Handles the user giving focus to another window for a 'popup' view.
+        """
+        if not event.GetActive():
+            self.close_popup()
+            
+    def close_popup ( self ):
+        # Close the window if it has not already been closed:
+        if self.ui.info.ui is not None:
+            if self._on_ok():
+                self._monitor.Stop()
 
     #---------------------------------------------------------------------------
     #  Handles the user clicking the 'OK' button:
@@ -337,6 +343,7 @@ class LiveWindow ( BaseDialog ):
         """ Handles the user clicking the **OK** button.
         """
         if self.ui.handler.close( self.ui.info, True ):
+            wx.EVT_ACTIVATE( self.control, None )
             self.close( wx.ID_OK )
             return True
             
