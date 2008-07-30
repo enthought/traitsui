@@ -31,6 +31,10 @@ import wx
 #  Constants:
 #-------------------------------------------------------------------------------
 
+# Define platform and wx version constants:
+is_mac  = (sys.platform == 'darwin')
+is_wx26 = (float( '.'.join( wx.__version__.split( '.' )[0:2] ) ) < 2.8) 
+
 # Default dialog title
 DefaultTitle = 'Edit properties'
 
@@ -50,7 +54,6 @@ DropColor = wx.Colour( 215, 242, 255 )
 EditableColor = wx.WHITE
 
 # Color for background of windows (like dialog background color)
-is_mac = (sys.platform == 'darwin')
 if is_mac:
     WindowColor = wx.Colour( 232, 232, 232 )
 else:

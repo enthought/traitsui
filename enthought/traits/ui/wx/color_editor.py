@@ -541,7 +541,7 @@ class _PopupColorEditor ( UIEditor ):
 
 class PopupColorEditor ( BasicEditorFactory ):
 
-    klass   = _PopupColorEditor
+    klass = _PopupColorEditor
     
     # The factory to use for creating sub color editors:
     factory = Instance( EditorFactory )
