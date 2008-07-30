@@ -438,6 +438,8 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def _wx_create_editor_dock_control(self, editor):
         """ Creates a dock control that contains the specified editor. """
+        
+        control = self._wx_get_editor_control(editor)
 
         # Wrap a dock control around it.
         editor_dock_control = DockControl(
