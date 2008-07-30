@@ -37,10 +37,7 @@ from enthought.pyface.workbench.i_workbench_window_layout import \
      MWorkbenchWindowLayout
 
 # Local imports.
-from view import View
-from editor import Editor
 from editor_set_structure_handler import EditorSetStructureHandler
-from view import View
 from view_set_structure_handler import ViewSetStructureHandler
 from workbench_dock_window import WorkbenchDockWindow
 
@@ -442,9 +439,6 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
     def _wx_create_editor_dock_control(self, editor):
         """ Creates a dock control that contains the specified editor. """
 
-        # Get the editor's toolkit-specific control.
-        control = self._wx_get_editor_control(editor)
-
         # Wrap a dock control around it.
         editor_dock_control = DockControl(
             id        = editor.id,
@@ -662,7 +656,8 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         editor.on_trait_change(on_name_changed, 'name')
 
         def on_activated_changed(editor_dock_control, trait_name, old, new):
-            editor_dock_control._editor.set_focus()
+            if editor_dock_control._editor is not None:
+                editor_dock_control._editor.set_focus()
             return
 
         editor_dock_control.on_trait_change(on_activated_changed, 'activated')
@@ -712,7 +707,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         def on_activated_changed(view_dock_control, trait_name, old, new):
             if view_dock_control._view is not None:
-                 view_dock_control._view.set_focus()
+                view_dock_control._view.set_focus()
             return
 
         view_dock_control.on_trait_change(on_activated_changed, 'activated')
