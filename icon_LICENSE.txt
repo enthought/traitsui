@@ -1,0 +1,45 @@
+The icons are mostly derived work from other icons. As such they are
+licensed accordingly to the original license:
+
+Project                 License                   File
+----------------------------------------------------------------------------
+Eclipse                 Eclipse Public License    icon_eclipse_LICENSE.txt
+Enthought               BSD 3-Clause              LICENSE.txt
+GV (Gael Varoquaux)     Public Domain             N/A
+Nuvola                  LGPL                      icon_Nuvola_LICENSE.txt
+OOo                     LGPL                      icon_OOo_LICENSE.txt
+
+Unless stated in this file, icons are the work of Enthought, and are
+released under a 3 clause BSD license.
+
+Files and orginal authors:
+----------------------------------------------------------------------------
+enthought/pyface/ui/wx/images:
+                    application.ico | Enthought
+                heading_level_1.png | Enthought
+                        warning.png | GV
+enthought/traits/ui/wx/images:
+                   cb_hover_off.png | Enthought
+                    cb_hover_on.png | Enthought
+                         cb_off.png | Enthought
+                          cb_on.png | Enthought
+                           file.png | Enthought
+                          frame.ico | Enthought
+                          group.png | Nuvola
+                           item.png | Eclipse
+                    list_editor.png | Enthought
+                        nb_open.png | Enthought
+                         object.png | Enthought
+                           open.png | Nuvola
+                      table_add.png | OOo
+                   table_colors.png | GV
+                   table_delete.png | OOo
+         table_delete_synthetic.png | OOo
+                  table_display.png | OOo
+                table_move_down.png | GV
+                  table_move_up.png | GV
+                  table_no_sort.png | OOo
+                    table_prefs.png | OOo
+                   table_search.png | OOo
+                table_synthetic.png | OOo
+                 table_undelete.png | OOo
