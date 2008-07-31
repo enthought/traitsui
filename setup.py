@@ -65,7 +65,7 @@ setup(
         Topic :: Scientific/Engineering
         Topic :: Software Development
         Topic :: Software Development :: Libraries
-        """.splitlines()],
+        """.splitlines() if len(c.split()) > 0],
     dependency_links = [
         'http://code.enthought.com/enstaller/eggs/source',
         ],
