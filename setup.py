@@ -101,7 +101,7 @@ setup(
         'nose >= 0.10.3',
         ],
     # test_suite = 'nose.collector',
-    url = 'http://code.enthought.com/ets',
+    url = 'http://code.enthought.com/projects/traits/',
     version = '3.0.1',
     zip_safe = False,
     )
