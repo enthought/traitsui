@@ -47,6 +47,9 @@ from constants \
     
 from image_slice \
     import paint_parent
+    
+from helper \
+    import disconnect, disconnect_no_id
 
 #-------------------------------------------------------------------------------
 #  '_ScrubberEditor' class:
@@ -119,6 +122,7 @@ class _ScrubberEditor ( Editor ):
         wx.EVT_LEFT_DOWN(    control, self._left_down )
         wx.EVT_LEFT_UP(      control, self._left_up )
         wx.EVT_MOTION(       control, self._motion )
+        wx.EVT_MOUSEWHEEL(   control, self._mouse_wheel )
         
         # Set up the control resize handler:
         wx.EVT_SIZE( control, self._resize )
@@ -143,16 +147,10 @@ class _ScrubberEditor ( Editor ):
         """ Disposes of the contents of an editor.
         """
         # Remove all of the wx event handlers:
-        control = self.control
-        wx.EVT_ERASE_BACKGROUND( control, None )
-        wx.EVT_PAINT(            control, None )
-        wx.EVT_SET_FOCUS(        control, None )
-        wx.EVT_LEAVE_WINDOW(     control, None )
-        wx.EVT_ENTER_WINDOW(     control, None )
-        wx.EVT_LEFT_DOWN(        control, None )
-        wx.EVT_LEFT_UP(          control, None )
-        wx.EVT_MOTION(           control, None )
-        wx.EVT_SIZE(             control, None )
+        disconnect_no_id( self.control, wx.EVT_ERASE_BACKGROUND, wx.EVT_PAINT,          
+            wx.EVT_SET_FOCUS, wx.EVT_LEAVE_WINDOW, wx.EVT_ENTER_WINDOW,   
+            wx.EVT_LEFT_DOWN, wx.EVT_LEFT_UP, wx.EVT_MOTION, wx.EVT_MOUSEWHEEL,
+            wx.EVT_SIZE )           
                         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -295,14 +293,22 @@ class _ScrubberEditor ( Editor ):
         text.SetSelection( -1, -1 )
         text.SetFocus()
         wx.EVT_TEXT_ENTER( control, text.GetId(), self._text_completed )
-        wx.EVT_KILL_FOCUS( text, self._text_completed )
+        wx.EVT_KILL_FOCUS(   text, self._text_completed )
+        wx.EVT_ENTER_WINDOW( text, self._enter_text )
+        wx.EVT_LEAVE_WINDOW( text, self._leave_text )
         wx.EVT_CHAR( text, self._key_entered )
 
     def _destroy_text ( self ):
         """ Destroys the current text control.
         """
+        self._ignore_focus = self._in_text_window
+        
+        disconnect( self._text, wx.EVT_TEXT_ENTER )
+        disconnect_no_id( self._text, wx.EVT_KILL_FOCUS, wx.EVT_ENTER_WINDOW,
+            wx.EVT_LEAVE_WINDOW, wx.EVT_CHAR )
+        
         self.control.DestroyChildren()
-        self.control.SetCursor( wx.StockCursor( wx.CURSOR_HAND ) )
+        
         self._text = None
         
     #--- wxPython Event Handlers -----------------------------------------------
@@ -335,7 +341,6 @@ class _ScrubberEditor ( Editor ):
         else:
             brush = wx.Brush( color )
             
-            
         color = factory.border_color_
         if color is not None:
             pen = wx.Pen( color )
@@ -363,7 +368,9 @@ class _ScrubberEditor ( Editor ):
     def _set_focus ( self, event ):
         """ Handle the control getting the keyboard focus.
         """
-        if (self._x is None) and (self._text is None):
+        if ((not self._ignore_focus) and 
+            (self._x is None)        and 
+            (self._text is None)):
             self._pop_up_text()
             
         event.Skip()
@@ -372,7 +379,15 @@ class _ScrubberEditor ( Editor ):
         """ Handles the mouse entering the window.
         """
         self._hover = True
+        
         self.control.SetCursor( wx.StockCursor( wx.CURSOR_HAND ) )
+            
+        if not self._ignore_focus:
+            self._ignore_focus = True
+            self.control.SetFocus()
+            
+        self._ignore_focus = False
+        
         if self._x is not None:
             if self.factory.active_color_ != self.factory.color_:
                 self.control.Refresh()
@@ -383,6 +398,7 @@ class _ScrubberEditor ( Editor ):
         """ Handles the mouse leaving the window.
         """
         self._hover = False
+        
         if self.factory.hover_color_ != self.factory.color_:
             self.control.Refresh()
     
@@ -393,7 +409,6 @@ class _ScrubberEditor ( Editor ):
         self._value      = self.value
         self._pending    = True
         self.control.CaptureMouse()
-        self.control.SetFocus()
         
         if self.factory.active_color_ != self.factory.hover_color_:
             self.control.Refresh()
@@ -433,6 +448,17 @@ class _ScrubberEditor ( Editor ):
                 
             self._set_scrubber_position( event, delta )
             
+    def _mouse_wheel ( self, event ):
+        """ Handles the mouse wheel moving.
+        """
+        if self._hover:
+            self._value = self.value
+            clicks = 3
+            if event.ShiftDown():
+                clicks = 7
+            delta = clicks * (event.GetWheelRotation() / event.GetWheelDelta())
+            self._set_scrubber_position( event, delta )
+            
     def _update_value ( self, event ):
         """ Updates the object value from the current text control value.
         """
@@ -447,6 +473,16 @@ class _ScrubberEditor ( Editor ):
             control.Refresh()
             
             return False
+            
+    def _enter_text ( self, event ):
+        """ Handles the mouse entering the pop-up text control.
+        """
+        self._in_text_window = True
+        
+    def _leave_text ( self, event ):
+        """ Handles the mouse leaving the pop-up text control.
+        """
+        self._in_text_window = False
             
     def _text_completed ( self, event ):
         """ Handles the user pressing the 'Enter' key in the text control.

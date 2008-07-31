@@ -122,12 +122,15 @@ class _ThemedSliderEditor ( Editor ):
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
         wx.EVT_PAINT( control, self._on_paint )
-        wx.EVT_SET_FOCUS( control, self._set_focus )
+        wx.EVT_SET_FOCUS(  control, self._set_focus )
         
         # Set up mouse event handlers:
-        wx.EVT_LEFT_DOWN( control, self._left_down )
-        wx.EVT_LEFT_UP(   control, self._left_up )
-        wx.EVT_MOTION(    control, self._motion )
+        wx.EVT_LEFT_DOWN(    control, self._left_down )
+        wx.EVT_LEFT_UP(      control, self._left_up )
+        wx.EVT_MOTION(       control, self._motion )
+        wx.EVT_MOUSEWHEEL(   control, self._mouse_wheel )
+        wx.EVT_ENTER_WINDOW( control, self._enter_window )
+        wx.EVT_LEAVE_WINDOW( control, self._leave_window )
         
         # Set up the control resize handler:
         wx.EVT_SIZE( control, self._resize )
@@ -144,12 +147,14 @@ class _ThemedSliderEditor ( Editor ):
         """ Disposes of the contents of an editor.
         """
         disconnect_no_id( self.control, wx.EVT_ERASE_BACKGROUND, wx.EVT_PAINT,
-            wx.EVT_SET_FOCUS, wx.EVT_LEFT_DOWN, wx.EVT_LEFT_UP, wx.EVT_MOTION,
+            wx.EVT_SET_FOCUS, wx.EVT_LEFT_DOWN, wx.EVT_LEFT_UP, wx.EVT_MOTION, 
+            wx.EVT_MOUSEWHEEL, wx.EVT_ENTER_WINDOW, wx.EVT_LEAVE_WINDOW,
             wx.EVT_SIZE )
         
         if self._text is not None:
             disconnect( self._text, wx.EVT_TEXT_ENTER )
-            disconnect_no_id( self._text, wx.EVT_KILL_FOCUS, wx.EVT_CHAR )
+            disconnect_no_id( self._text, wx.EVT_KILL_FOCUS,
+                wx.EVT_ENTER_WINDOW, wx.EVT_LEAVE_WINDOW, wx.EVT_CHAR )
         
         super( _ThemedSliderEditor, self ).dispose()
                         
@@ -164,6 +169,9 @@ class _ThemedSliderEditor ( Editor ):
         self.text       = '%g' % self.value
         self._text_size = None
         self._refresh()
+        
+        if self._text is not None:
+            self._text.SetValue( self.text )
                         
     #---------------------------------------------------------------------------
     #  Updates the object when the control slider value changes:
@@ -253,11 +261,17 @@ class _ThemedSliderEditor ( Editor ):
         text.SetFocus()
         wx.EVT_TEXT_ENTER( control, text.GetId(), self._text_completed )
         wx.EVT_KILL_FOCUS( text, self._text_completed )
+        wx.EVT_ENTER_WINDOW( text, self._enter_text )
+        wx.EVT_LEAVE_WINDOW( text, self._leave_text )
         wx.EVT_CHAR( text, self._key_entered )
 
     def _destroy_text ( self ):
         """ Destroys the current text control.
         """
+        self._ignore_focus = self._in_text_window
+        disconnect( self._text, wx.EVT_TEXT_ENTER )
+        disconnect_no_id( self._text, wx.EVT_KILL_FOCUS, wx.EVT_ENTER_WINDOW,
+            wx.EVT_LEAVE_WINDOW, wx.EVT_CHAR )
         self.control.DestroyChildren()
         self._text = None
         
@@ -310,7 +324,9 @@ class _ThemedSliderEditor ( Editor ):
     def _set_focus ( self, event ):
         """ Handle the control getting the keyboard focus.
         """
-        if (self._x is None) and (self._text is None):
+        if ((not self._ignore_focus) and 
+            (self._x is None)        and 
+            (self._text is None)):
             self._pop_up_text()
             
         event.Skip()
@@ -321,7 +337,6 @@ class _ThemedSliderEditor ( Editor ):
         self._x, self._y = event.GetX(), event.GetY()
         self._pending    = True
         self.control.CaptureMouse()
-        self.control.SetFocus()
         do_after( 150, self._delayed_click )
     
     def _left_up ( self, event ):
@@ -346,6 +361,34 @@ class _ThemedSliderEditor ( Editor ):
                 self._pending = False
             self._set_slider_position( x )
             
+    def _mouse_wheel ( self, event ):
+        """ Handles the mouse wheel rotating.
+        """
+        if self._in_window:
+            increment = event.GetWheelRotation() / event.GetWheelDelta()
+            delta     = (self.high - self.low) / 100.0
+            if isinstance( self.value, int ) and (abs( delta ) < 1):
+                delta = int( abs( delta ) / delta )
+                
+            self.update_object( min( max( self.value + increment * delta, 
+                                          self.low ), self.high ) )
+        
+    def _enter_window ( self, event ):
+        """ Handles the mouse pointer entering the control.
+        """
+        self._in_window = True
+        
+        if not self._ignore_focus:
+            self._ignore_focus = True
+            self.control.SetFocus()
+            
+        self._ignore_focus = False
+        
+    def _leave_window ( self, event ):
+        """ Handles the mouse pointer leaving the control.
+        """
+        self._in_window = False
+            
     def _update_value ( self, event ):
         """ Updates the object value from the current text control value.
         """
@@ -360,6 +403,16 @@ class _ThemedSliderEditor ( Editor ):
             control.Refresh()
             
             return False
+            
+    def _enter_text ( self, event ):
+        """ Handles the mouse entering the pop-up text control.
+        """
+        self._in_text_window = True
+        
+    def _leave_text ( self, event ):
+        """ Handles the mouse leaving the pop-up text control.
+        """
+        self._in_text_window = False
             
     def _text_completed ( self, event ):
         """ Handles the user pressing the 'Enter' key in the text control.

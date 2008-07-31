@@ -75,6 +75,20 @@ class ThemedWindow ( HasPrivateTraits ):
         """
         if self.control is not None:
             self.control.Refresh()
+            
+    def capture_mouse ( self ):
+        """ Grab control of the mouse and indicate that we are controlling it.
+        """
+        if not self._has_capture:
+            self._has_capture = True
+            self.control.CaptureMouse()
+            
+    def release_mouse ( self ):
+        """ Grab control of the mouse and indicate that we are controlling it.
+        """
+        if self._has_capture:
+            self._has_capture = False
+            self.control.ReleaseMouse()
         
     #-- Trait Event Handlers ---------------------------------------------------
     
@@ -155,8 +169,7 @@ class ThemedWindow ( HasPrivateTraits ):
         """ Handles a left mouse button down event.
         """
         self.control.SetFocus()
-        self.control.CaptureMouse()
-        self._has_capture = True
+        self.capture_mouse()
         self._mouse_event( 'left_down', event )
         
     def _left_up ( self, event ):
@@ -170,43 +183,43 @@ class ThemedWindow ( HasPrivateTraits ):
     def _left_dclick ( self, event ):
         """ Handles a left mouse button double click event.
         """
-        self.control.CaptureMouse()
+        self.capture_mouse()
         self._mouse_event( 'left_dclick', event )
     
     def _middle_down ( self, event ):
         """ Handles a middle mouse button down event.
         """
-        self.control.CaptureMouse()
+        self.capture_mouse()
         self._mouse_event( 'middle_down', event )
         
     def _middle_up ( self, event ):
         """ Handles a middle mouse button up event.
         """
-        self.control.ReleaseMouse()
+        self.release_mouse()
         self._mouse_event( 'middle_up', event )
     
     def _middle_dclick ( self, event ):
         """ Handles a middle mouse button double click event.
         """
-        self.control.CaptureMouse()
+        self.capture_mouse()
         self._mouse_event( 'middle_dclick', event )
     
     def _right_down ( self, event ):
         """ Handles a right mouse button down event.
         """
-        self.control.CaptureMouse()
+        self.capture_mouse()
         self._mouse_event( 'right_down', event )
         
     def _right_up ( self, event ):
         """ Handles a right mouse button up event.
         """
-        self.control.ReleaseMouse()
+        self.release_mouse()
         self._mouse_event( 'right_up', event )
     
     def _right_dclick ( self, event ):
         """ Handles a right mouse button double click event.
         """
-        self.control.CaptureMouse()
+        self.capture_mouse()
         self._mouse_event( 'right_dclick', event )
         
     def _motion ( self, event ):
