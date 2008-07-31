@@ -37,7 +37,7 @@ def etsdep(p, min, max=None, literal=False):
 
 # Declare our ETS project dependencies:
 ENTHOUGHTBASE = etsdep('EnthoughtBase', '3.0.0b1')
-DEVTOOLS_DEVELOPER = etsdep('DevTools[developer]', '3.0.0b1')
+ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.0b1')
 TRAITS = etsdep('Traits', '3.0.0b1')
 TRAITSGUI = etsdep('TraitsGUI', '3.0.0b1')
 
@@ -69,7 +69,7 @@ setup(
         # Extra denoting that complete developer debug support for the ETS FBI
         # debugger should be installed:
         'debug': [
-            DEVTOOLS_DEVELOPER,
+            ETSDEVTOOLS_DEVELOPER,
             ],
 
         # All non-ets dependencies should be in this extra to ensure users can
