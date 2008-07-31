@@ -37,15 +37,15 @@ def etsdep(p, min, max=None, literal=False):
 
 # Declare our ETS project dependencies.
 APPTOOLS = etsdep('AppTools', '3.0.0b1')
-DEVTOOLS_DEVELOPER = etsdep('DevTools[developer]', '3.0.0b1')
 ENTHOUGHTBASE_UI = etsdep('EnthoughtBase[ui]', '3.0.0b1')
+ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.0b1')
 TRAITS = etsdep('Traits', '3.0.0b1')
 TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.0.0b1')
 
 # The following soft dependencies are handled with appropriate try...except
 # wrappers.
 # AppTools -- used in traits.ui.wx.dnd_editor.py
-# DevTools -- used in traits.ui.wx.helper.py and view_application.py
+# ETSDevTools -- used in traits.ui.wx.helper.py and view_application.py
 
 
 setup(
@@ -81,7 +81,7 @@ setup(
         # Extra denoting that complete developer debug support for the ETS FBI
         # debugger should be installed:
         'debug': [
-            DEVTOOLS_DEVELOPER,
+            ETSDEVTOOLS_DEVELOPER,
             ],
 
         # All non-ets dependencies should be in this extra to ensure users can
