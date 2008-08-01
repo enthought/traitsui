@@ -812,7 +812,9 @@ class _TabularEditor ( Editor ):
     def _refresh ( self ):
         """ Refreshes the contents of the editor's list control.
         """
-        self.control.RefreshItems( 0, len( self.value ) - 1 )
+        n = self.adapter.len( self.object, self.name )
+        if n > 0:
+            self.control.RefreshItems( 0, n - 1)
     
     def _rebuild ( self ):
         """ Rebuilds the contents of the editor's list control.
