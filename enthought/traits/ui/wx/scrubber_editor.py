@@ -150,7 +150,12 @@ class _ScrubberEditor ( Editor ):
         disconnect_no_id( self.control, wx.EVT_ERASE_BACKGROUND, wx.EVT_PAINT,          
             wx.EVT_SET_FOCUS, wx.EVT_LEAVE_WINDOW, wx.EVT_ENTER_WINDOW,   
             wx.EVT_LEFT_DOWN, wx.EVT_LEFT_UP, wx.EVT_MOTION, wx.EVT_MOUSEWHEEL,
-            wx.EVT_SIZE )           
+            wx.EVT_SIZE )
+        
+        # Disconnect the pop-up text event handlers:
+        self._disconnect_text()
+        
+        super( _ScrubberEditor, self ).dispose()
                         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -303,13 +308,19 @@ class _ScrubberEditor ( Editor ):
         """
         self._ignore_focus = self._in_text_window
         
-        disconnect( self._text, wx.EVT_TEXT_ENTER )
-        disconnect_no_id( self._text, wx.EVT_KILL_FOCUS, wx.EVT_ENTER_WINDOW,
-            wx.EVT_LEAVE_WINDOW, wx.EVT_CHAR )
+        self._disconnect_text()
         
         self.control.DestroyChildren()
         
         self._text = None
+        
+    def _disconnect_text ( self ):
+        """ Disconnects the event handlers for the pop up text editor.
+        """
+        if self._text is not None:
+            disconnect( self._text, wx.EVT_TEXT_ENTER )
+            disconnect_no_id( self._text, wx.EVT_KILL_FOCUS, 
+                wx.EVT_ENTER_WINDOW, wx.EVT_LEAVE_WINDOW, wx.EVT_CHAR )
         
     #--- wxPython Event Handlers -----------------------------------------------
             
