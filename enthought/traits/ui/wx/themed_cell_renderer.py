@@ -146,6 +146,47 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
             top  = bottom = 3
             ox   = oy     = 0
         
+        # Get the alignment information:
+        halign, valign = attr.GetAlignment()
+            
+        # Draw the bar graph (if any):
+        maximum = column.get_maximum( object )
+        if (not is_selected) and (maximum > 0.0):
+            if theme is None:
+                left = right = top = bottom = 0
+            try:
+                ratio    = max( min( column.get_raw_value( object ) / maximum, 
+                                     1.0 ), -1.0 )
+                avail_dx = dx - left - right
+                bar_dx   = int( round( ratio * avail_dx ) )
+                if halign == wx.ALIGN_CENTRE:
+                    bar_dx /= 2
+                    bar_x   = x + left + (avail_dx / 2) + min( 0, bar_dx )
+                else:
+                    bar_dx = abs( bar_dx )
+                    if halign == wx.ALIGN_LEFT:
+                        bar_x = x + left
+                        left += 4
+                    else:
+                        bar_x  = x + avail_dx - bar_dx
+                        right += 4
+                    
+                if bar_dx > 0:
+                    dc.SetBackgroundMode( wx.SOLID )
+                    dc.SetBrush( wx.Brush( column.get_graph_color( object ),
+                                           wx.SOLID ) )
+                    dc.SetPen( wx.TRANSPARENT_PEN )
+                    dc.DrawRectangle( bar_x,  y + top, 
+                                      bar_dx, dy - top - bottom )
+            except:
+                import traceback
+                traceback.print_exc()
+                pass
+            
+            if theme is None:
+                left = right  = 4
+                top  = bottom = 3
+        
         # Get the optional image bitmap and text:
         bitmap = convert_bitmap( column.get_image( object ) )
         text   = grid.GetCellValue( row, col )
@@ -168,9 +209,6 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
             # Get the spacing between text and image:
             if bitmap is not None:
                 idx += 4
-        
-        # Get the alignment and theme information:
-        halign, valign = attr.GetAlignment()
 
         # Calculate the x-coordinate of the image/text:
         if halign == wx.ALIGN_LEFT:
