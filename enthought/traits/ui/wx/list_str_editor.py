@@ -162,6 +162,9 @@ class _ListStrEditor ( Editor ):
     
     # The current number of item currently in the list:
     item_count = Property
+    
+    # The current search string:
+    search = Str
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -510,9 +513,22 @@ class _ListStrEditor ( Editor ):
                                                     index )
 
     def _key_pressed ( self, event ):
-        key = event.GetKeyCode()
-        if key == wx.WXK_END:
+        key     = event.GetKeyCode()
+        control = event.ControlDown()
+        
+        if 32 <= key <= 126:
+            self.search += chr( key ).lower()
+            self._search_for_string()
+        elif key in ( wx.WXK_HOME, wx.WXK_PAGEUP, wx.WXK_PAGEDOWN ):
+            self.search = ''
+            event.Skip()
+        elif key == wx.WXK_END:
+            self.search = ''
             self._append_new()
+        elif (key == wx.WXK_UP) and control:
+            self._search_for_string( -1 )
+        elif (key == wx.WXK_DOWN) and control:
+            self._search_for_string( 1 )
         elif key in ( wx.WXK_BACK, wx.WXK_DELETE ):
             self._delete_current()
         elif key == wx.WXK_INSERT:
@@ -696,6 +712,33 @@ class _ListStrEditor ( Editor ):
             
         return selected
         
+    def _search_for_string ( self, increment = 0 ):
+        """ Searches for the next occurrence of the current search string.
+        """
+        selected = self._get_selected()
+        if len( selected ) > 1:
+            return
+            
+        start = 0
+        if len( selected ) == 1:
+            start = selected[0] + increment
+            
+        get_text = self.adapter.get_text
+        search   = self.search
+        object   = self.object
+        name     = self.name
+        
+        if increment >= 0:
+            items = xrange( start, self.item_count )
+        else:
+            items = xrange( start, -1, -1 )
+        
+        for index in items:
+            if search in get_text( object, name, index ).lower():
+                self.index = index
+                self.update_editor()
+                break
+                
     def _append_new ( self ):
         """ Append a new item to the end of the list control.
         """
@@ -743,11 +786,11 @@ class _ListStrEditor ( Editor ):
                     
                         clipboard.data = self.adapter.get_text(
                                              self.object, self.name, index )
-                        self.adapter.delete( self.object, self.name, index )
                         self.index = index
+                        self.adapter.delete( self.object, self.name, index )
                     except:
-                        # Handle the enthought.util package not being installed by
-                        # just ignoring the request:
+                        # Handle the enthought.util package not being installed 
+                        # by just ignoring the request:
                         pass
                 
     def _paste_current ( self ):
@@ -773,11 +816,11 @@ class _ListStrEditor ( Editor ):
         if 'insert' in self.factory.operations:
             selected = self._get_selected()
             if len( selected ) == 1:
-                adapter = self.adapter
-                adapter.insert( self.object, self.name, selected[0],
-                           adapter.get_default_value( self.object, self.name ) )
                 self.index = selected[0]
                 self.edit  = True
+                adapter    = self.adapter
+                adapter.insert( self.object, self.name, selected[0],
+                           adapter.get_default_value( self.object, self.name ) )
         
     def _delete_current ( self ):
         """ Deletes the currently selected items from the list control.
@@ -790,11 +833,10 @@ class _ListStrEditor ( Editor ):
             n      = self.item_count
             delete = self.adapter.delete
             selected.reverse()
+            self.index = selected[-1]
             for index in selected:
                 if index < n:
                     delete( self.object, self.name, index )
-                    
-            self.index = index
         
     def _move_up_current ( self ):
         """ Moves the currently selected item up one line in the list control.
@@ -809,8 +851,8 @@ class _ListStrEditor ( Editor ):
                     object, name = self.object, self.name
                     item         = adapter.get_item( object, name, index )
                     adapter.delete( object, name, index )
-                    adapter.insert( object, name, index - 1, item )
                     self.index = index - 1
+                    adapter.insert( object, name, index - 1, item )
         
     def _move_down_current ( self ):
         """ Moves the currently selected item down one line in the list control.
@@ -825,8 +867,8 @@ class _ListStrEditor ( Editor ):
                     object, name = self.object, self.name
                     item         = adapter.get_item( object, name, index )
                     adapter.delete( object, name, index )
-                    adapter.insert( object, name, index + 1, item )
                     self.index = index + 1
+                    adapter.insert( object, name, index + 1, item )
                     
     def _edit_current ( self ):
         """ Allows the user to edit the current item in the list control.
@@ -853,8 +895,8 @@ class _ListStrEditor ( Editor ):
                                 adapter.get_default_value( object, name ) )
                 self.edit = (not insert)
                 
-            adapter.set_text( object, name, index, text )
             self.index = index + 1
+            adapter.set_text( object, name, index, text )
         
 #-------------------------------------------------------------------------------
 #  'ListStrEditor' editor factory class:
