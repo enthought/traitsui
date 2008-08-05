@@ -28,7 +28,8 @@ from math \
    import log10, pow
 
 from enthought.traits.api \
-    import Any, Range, Str, Float, Color, TraitError, on_trait_change
+    import Any, BaseRange, BaseEnum, Str, Float, Color, TraitError, \
+           on_trait_change
     
 from enthought.traits.ui.ui_traits \
     import Alignment
@@ -71,6 +72,9 @@ class _ScrubberEditor ( Editor ):
     # The current text being displayed:
     text = Str
     
+    # The mapping to use (only for Enum's):
+    mapping = Any
+    
     #-- Class Variables --------------------------------------------------------
     
     text_styles = {
@@ -95,15 +99,23 @@ class _ScrubberEditor ( Editor ):
         low, high = factory.low, factory.high
         if high <= low:
             low = high = None
-            range      = self.object.trait( self.name ).handler
-            if isinstance( range, Range ):
-                low_name, high_name = range._low_name, range._high_name
+            handler    = self.object.trait( self.name ).handler
+            if isinstance( handler, BaseRange ):
+                low_name, high_name = handler._low_name, handler._high_name
                 
                 if low_name == '':
-                    low = range._low
+                    low = handler._low
                     
                 if high_name == '':
-                    high = range._high
+                    high = handler._high
+                    
+            elif isinstance( handler, BaseEnum ):
+                if handler.name == '':
+                    self.mapping = handler.values
+                else:
+                    self.sync_value( handler.name, 'mapping', 'from' )
+                    
+                low, high = 0, self.high
         
         # Create the control:
         self.control = control = wx.Window( parent, -1,
@@ -165,7 +177,7 @@ class _ScrubberEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        self.text       = '%g' % self.value
+        self.text       = '%s' % self.value
         self._text_size = None
         self._refresh()
                         
@@ -176,6 +188,9 @@ class _ScrubberEditor ( Editor ):
     def update_object ( self, value ):
         """ Updates the object when the scrubber value changes.
         """
+        if self.mapping is not None:
+            value = self.mapping[ int( value ) ]
+            
         if value != self.value:
             try:
                 self.value = value
@@ -194,6 +209,13 @@ class _ScrubberEditor ( Editor ):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
+    
+    #-- Trait Event Handlers ---------------------------------------------------
+    
+    def _mapping_changed ( self, mapping ):
+        """ Handles the Enum mapping being changed.
+        """
+        self.high = len( mapping ) - 1
         
     #-- Private Methods --------------------------------------------------------
 
@@ -203,7 +225,11 @@ class _ScrubberEditor ( Editor ):
         """
         low, high = self.low, self.high
         if self._can_set_tooltip:
-            if high is None:
+            if self.mapping is not None:
+                tooltip = '[%s]' % (', '.join( self.mapping ))
+                if len( tooltip ) > 80:
+                    tooltip = ''
+            elif high is None:
                 tooltip = ''
                 if low is not None:
                     tooltip = '[%g..]' % low
@@ -321,7 +347,19 @@ class _ScrubberEditor ( Editor ):
             disconnect( self._text, wx.EVT_TEXT_ENTER )
             disconnect_no_id( self._text, wx.EVT_KILL_FOCUS, 
                 wx.EVT_ENTER_WINDOW, wx.EVT_LEAVE_WINDOW, wx.EVT_CHAR )
-        
+
+    def _init_value ( self ):
+        """ Initializes the current value when the user begins a drag or moves
+            the mouse wheel.
+        """
+        if self.mapping is not None:
+            try:
+                self._value = list( self.mapping ).index( self.value )
+            except:
+                self._value = 0
+        else:
+            self._value = self.value
+            
     #--- wxPython Event Handlers -----------------------------------------------
             
     def _erase_background ( self, event ):
@@ -417,8 +455,10 @@ class _ScrubberEditor ( Editor ):
         """ Handles the left mouse being pressed.
         """
         self._x, self._y = event.GetX(), event.GetY()
-        self._value      = self.value
         self._pending    = True
+        
+        self._init_value()
+            
         self.control.CaptureMouse()
         
         if self.factory.active_color_ != self.factory.hover_color_:
@@ -463,7 +503,7 @@ class _ScrubberEditor ( Editor ):
         """ Handles the mouse wheel moving.
         """
         if self._hover:
-            self._value = self.value
+            self._init_value()
             clicks = 3
             if event.ShiftDown():
                 clicks = 7
