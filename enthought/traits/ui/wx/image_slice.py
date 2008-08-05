@@ -264,7 +264,7 @@ class ImageSlice ( HasPrivateTraits ):
            
         n = len( matches )
         if n == 0:
-            matches = [ ( dy / 2, 1 ) ]
+            matches = [ ( 0, dy ) ]
         elif n > self.stretch_rows:
             matches.sort( lambda l, r: cmp( r[1], l[1] ) )
             matches = matches[ : self.stretch_rows ]
@@ -290,7 +290,7 @@ class ImageSlice ( HasPrivateTraits ):
             
         n = len( matches )
         if n == 0:
-            matches = [ ( dx / 2, 1 ) ]
+            matches = [ ( 0, dx ) ]
         elif n > self.stretch_columns:
             matches.sort( lambda l, r: cmp( r[1], l[1] ) )
             matches = matches[ : self.stretch_columns ]
