@@ -45,10 +45,10 @@ def etsdep(p, min, max=None, literal=False):
 
 
 # Declare our ETS project dependencies:
-ENTHOUGHTBASE = etsdep('EnthoughtBase', '3.0.0b2')
-ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.0b2')
-TRAITS = etsdep('Traits', '3.0.1b1')
-TRAITSGUI = etsdep('TraitsGUI', '3.0.1b1')
+ENTHOUGHTBASE = etsdep('EnthoughtBase', '3.0.0')
+ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.0')
+TRAITS = etsdep('Traits', '3.0.1')
+TRAITSGUI = etsdep('TraitsGUI', '3.0.1')
 
 
 setup(
