@@ -31,6 +31,9 @@ from enthought.traits.api \
     import Any, BaseRange, BaseEnum, Str, Float, Color, TraitError, \
            on_trait_change
     
+from enthought.traits.ui.api \
+    import View, Item, EnumEditor
+    
 from enthought.traits.ui.ui_traits \
     import Alignment
     
@@ -180,6 +183,8 @@ class _ScrubberEditor ( Editor ):
         self.text       = '%s' % self.value
         self._text_size = None
         self._refresh()
+        
+        self._enum_completed()
                         
     #---------------------------------------------------------------------------
     #  Updates the object when the scrubber value changes:
@@ -311,12 +316,37 @@ class _ScrubberEditor ( Editor ):
         """
         self._pending = False
 
-    def _pop_up_text ( self ):
+    def _pop_up_editor ( self ):
         """ Pop-up a text control to allow the user to enter a value using
             the keyboard.
         """
+        self.control.SetCursor( wx.StockCursor( wx.CURSOR_ARROW ) )
+        
+        if self.mapping is not None:
+            self._pop_up_enum()
+        else:
+            self._pop_up_text()
+            
+    def _pop_up_enum ( self ):
+        self._ui = self.object.edit_traits(
+            view = View(
+                Item( self.name,
+                      id         = 'drop_down',
+                      show_label = False,
+                      padding    = -4,
+                      editor     = EnumEditor( name = 'editor.mapping' ) ),
+                kind = 'subpanel' ),
+            parent  = self.control,
+            context = { 'object': self.object, 'editor': self } )
+        
+        dx, dy    = self.control.GetSizeTuple()
+        drop_down = self._ui.info.drop_down.control
+        drop_down.SetDimensions(  0, 0, dx, dy )
+        drop_down.SetFocus()
+        wx.EVT_KILL_FOCUS( drop_down, self._enum_completed )
+            
+    def _pop_up_text ( self ):
         control = self.control
-        control.SetCursor( wx.StockCursor( wx.CURSOR_ARROW ) )
         self._text = text = wx.TextCtrl( control, -1, self.text,
                             size  = control.GetSize(),
                             style = self.text_styles[ self.factory.alignment ] |
@@ -420,7 +450,7 @@ class _ScrubberEditor ( Editor ):
         if ((not self._ignore_focus) and 
             (self._x is None)        and 
             (self._text is None)):
-            self._pop_up_text()
+            self._pop_up_editor()
             
         event.Skip()
         
@@ -464,14 +494,14 @@ class _ScrubberEditor ( Editor ):
         if self.factory.active_color_ != self.factory.hover_color_:
             self.control.Refresh()
             
-        do_after( 150, self._delayed_click )
+        do_after( 200, self._delayed_click )
     
     def _left_up ( self, event ):
         """ Handles the left mouse button being released.
         """
         self.control.ReleaseMouse()
         if self._pending:
-            self._pop_up_text()
+            self._pop_up_editor()
             
         self._x = self._y = self._value = self._pending = None
         
@@ -540,6 +570,16 @@ class _ScrubberEditor ( Editor ):
         """
         if self._update_value( event ):
             self._destroy_text()
+            
+    def _enum_completed ( self, event = None ):
+        """ Handles the Enum drop-down control losing focus.
+        """
+        if self._ui is not None:
+            self._ignore_focus = True
+            disconnect_no_id( self._ui.info.drop_down.control,
+                              wx.EVT_KILL_FOCUS )
+            self._ui.dispose()
+            del self._ui
         
     def _key_entered ( self, event ):
         """ Handles individual key strokes while the text control is active.
