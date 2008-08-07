@@ -10,6 +10,15 @@ PyQt backend for Traits and TraitsGUI (Pyface).
 The TraitsBackendQt project contains an implementation of TraitsGUI using PyQt.
 It provides Qt-based support for visualization and editing of Traits-based
 objects.
+
+Prerequisites
+-------------
+You must have the following libraries installed before building or installing
+TraitsBackendQt:
+    
+* `PyQt <http://pypi.python.org/pypi/PyQt/3.15>`_
+* `setuptools <http://pypi.python.org/pypi/setuptools/0.6c8>`_.
+
 """
 
 
