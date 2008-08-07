@@ -36,11 +36,11 @@ def etsdep(p, min, max=None, literal=False):
 
 
 # Declare our ETS project dependencies.
-APPTOOLS = etsdep('AppTools', '3.0.0b1')
-ENTHOUGHTBASE_UI = etsdep('EnthoughtBase[ui]', '3.0.0b1')
-ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.0b1')
-TRAITS = etsdep('Traits', '3.0.0b1')
-TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.0.0b1')
+APPTOOLS = etsdep('AppTools', '3.0.0b2')
+ENTHOUGHTBASE_UI = etsdep('EnthoughtBase[ui]', '3.0.0b2')
+ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.0b2')
+TRAITS = etsdep('Traits', '3.0.1b1')
+TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.0.1b1')
 
 # The following soft dependencies are handled with appropriate try...except
 # wrappers.
@@ -115,6 +115,6 @@ setup(
         ],
     # test_suite = 'nose.collector',
     url = 'http://code.enthought.com/projects/traits_gui',
-    version = '3.0.1',
+    version = '3.0.1b1',
     zip_safe = False,
     )
