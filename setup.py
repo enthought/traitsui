@@ -10,6 +10,15 @@ WxPython backend for Traits and TraitsGUI (Pyface).
 The TraitsBackendWX project contains an implementation of TraitsGUI using
 wxPython. It provides wx-based support for visualization and editing of
 Traits-based objects.
+
+Prerequisite
+------------
+You must have the following libraries installed before building or installing
+TraitsBackendWX:
+    
+* `wxPython <http://www.wxpython.org/>`_ version 2.8 or later
+* `setuptools <http://pypi.python.org/pypi/setuptools/0.6c8>`_.
+
 """
 
 
