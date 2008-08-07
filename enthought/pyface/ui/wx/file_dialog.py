@@ -110,7 +110,7 @@ class FileDialog(MFileDialog, Dialog):
         # Create the actual dialog.
         dialog = wx.FileDialog(parent, self.title, defaultDir=default_directory,
                     defaultFile=default_filename, style=style,
-                    wildcard=self.wildcard)
+                    wildcard=self.wildcard.rstrip('|'))
         
         dialog.SetFilterIndex(self.wildcard_index)            
         
