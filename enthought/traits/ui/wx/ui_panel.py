@@ -30,7 +30,7 @@ from cgi \
     import escape
     
 from enthought.traits.api \
-    import Instance
+    import Instance, Undefined
     
 from enthought.traits.ui.api \
     import Group
@@ -1066,9 +1066,9 @@ class FillPanel ( object ):
                 if (0.0 < item_height <= 1.0) and (not self.is_horizontal):
                     growable = int( 1000.0 * item_height )
 
+                item_height = int( item_height )
                 if item_height < -1:
                     item_height = -item_height
-                    scrollable  = False
                 else:
                     item_height = max( item_height, height )
                     
@@ -1108,7 +1108,9 @@ class FillPanel ( object ):
             # Add the created editor control to the sizer with the appropriate
             # layout flags and values:
             ui._scrollable |= scrollable
-            if item.resizable or scrollable:
+            item_resizable  = ((item.resizable is True) or
+                               ((item.resizable is Undefined) and scrollable))
+            if item_resizable:
                 growable = growable or 500 
                 self.resizable = True
             elif item.springy:    
@@ -1139,7 +1141,7 @@ class FillPanel ( object ):
                     label = self.dummy_label( panel, item_sizer )
                             
             # If the Item is resizable, and we are using a multi-column grid:                        
-            if (item.resizable or scrollable) and (cols > 1):
+            if item_resizable and (cols > 1):
                 # Mark the entire row as growable:
                 item_sizer.AddGrowableRow( col / cols )
                 
