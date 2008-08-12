@@ -23,7 +23,7 @@
 #-------------------------------------------------------------------------------
 
 from enthought.traits.api \
-    import Bool
+    import Bool, Str
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -103,6 +103,8 @@ class ShellEditor ( Editor ):
                         dic[ name ] = locals[ name ]
                     except:
                         pass
+        if self.factory.command_event:
+            setattr(self.object, self.factory.command_event, True)
                         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -195,4 +197,6 @@ class ToolkitEditorFactory ( BasicEditorFactory ):
     
     # Should the shell interpreter use the object value's dictionary?
     share = Bool( False )
-                 
+
+    # Name of the object trait which is fired when a command is executed
+    command_event = Str
