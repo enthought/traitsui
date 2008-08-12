@@ -61,6 +61,9 @@ class Wizard(MWizard, Dialog):
         control.setWindowTitle(self.title)
         control.setModal(self.style == 'modal')
 
+        if self.size != (-1, -1):
+            control.resize(*self.size)
+
         if not self.show_cancel:
             control.setOption(QtGui.QWizard.NoCancelButton)
 
