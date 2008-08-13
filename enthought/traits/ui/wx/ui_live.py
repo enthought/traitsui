@@ -114,10 +114,10 @@ def ui_dialog ( ui, parent, style ):
     restore_window( ui, is_popup = (style in Popups) )
     
     ui.control.Layout()
-    if style == MODAL:
-        ui.control.ShowModal()
-    else:
+    if style == NONMODAL:
         ui.control.Show()
+    else:
+        ui.control.ShowModal()
     
 #-------------------------------------------------------------------------------
 #  'LiveWindow' class:
@@ -169,8 +169,8 @@ class LiveWindow ( BaseDialog ):
                                (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER)) )
             else:
                 if window_style == 0:
-                    window_style = wx.BORDER_NONE
-                window = wx.Frame( None, -1, '', style = window_style )
+                    window_style = wx.SIMPLE_BORDER
+                window = wx.Dialog( None, -1, '', style = window_style )
                 wx.EVT_ACTIVATE( window, self._on_close_popup )
                 window._kind  = ui.view.kind
                 self._monitor = MouseMonitor( ui )
