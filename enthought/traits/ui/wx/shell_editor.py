@@ -23,7 +23,7 @@
 #-------------------------------------------------------------------------------
 
 from enthought.traits.api \
-    import Bool, Str
+    import Bool, Str, Event
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -45,6 +45,9 @@ class ShellEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
+    
+    # An event fired whenver the user executes a command in the shell:
+    command_executed = Event( Bool )
         
     # Is the shell editor is scrollable? This value overrides the default.
     scrollable = True 
@@ -76,6 +79,10 @@ class ShellEditor ( Editor ):
                 for name in self.control.interp.locals.keys():
                     locals[ name ] = None
                     
+        # Synchronize any editor events:
+        self.sync_value( self.factory.command_executed,
+                         'command_executed', 'to' )
+                    
         self.set_tooltip()
 
     #---------------------------------------------------------------------------
@@ -103,8 +110,8 @@ class ShellEditor ( Editor ):
                         dic[ name ] = locals[ name ]
                     except:
                         pass
-        if self.factory.command_event:
-            setattr(self.object, self.factory.command_event, True)
+         
+        self.command_executed = True
                         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -198,5 +205,6 @@ class ToolkitEditorFactory ( BasicEditorFactory ):
     # Should the shell interpreter use the object value's dictionary?
     share = Bool( False )
 
-    # Name of the object trait which is fired when a command is executed
-    command_event = Str
+    # Extended trait name of the object event trait which is fired when a 
+    # command is executed
+    command_executed = Str

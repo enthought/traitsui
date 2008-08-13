@@ -39,7 +39,7 @@ from enthought.traits.ui.api \
     import View
     
 from enthought.traits.ui.ui_traits \
-    import SequenceTypes
+    import convert_image, SequenceTypes
 
 from enthought.pyface.timer.api \
     import do_later
@@ -78,6 +78,11 @@ def bitmap_cache ( name, standard_size, path = None ):
     """
     global app_path, traits_path
     
+    if name[:1] == '@':
+        image = convert_image( name.replace( ' ', '_' ).lower() )
+        if image is not None:
+            return image.create_image().ConvertToBitmap()
+            
     if path is None:
         if traits_path is None:
            import  enthought.traits.ui.wx
@@ -163,7 +168,7 @@ def position_window ( window, width = None, height = None, parent = None ):
         that the window completely fits on the screen if possible.
     """
     dx, dy = window.GetSizeTuple()
-    width  = width or dx
+    width  = width  or dx
     height = height or dy
     
     if parent is None:

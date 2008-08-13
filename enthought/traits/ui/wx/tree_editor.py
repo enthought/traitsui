@@ -47,7 +47,7 @@ from enthought.traits.trait_base \
     import enumerate
 
 from enthought.traits.ui.api \
-    import View, TreeNode, ObjectTreeNode, MultiTreeNode
+    import View, TreeNode, ObjectTreeNode, MultiTreeNode, Image
     
 from enthought.traits.ui.dock_window_theme \
     import DockWindowTheme
@@ -57,6 +57,9 @@ from enthought.traits.ui.undo \
 
 from enthought.traits.ui.menu \
     import Menu, Action, Separator
+    
+from enthought.pyface.api \
+    import ImageResource
 
 from enthought.pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
@@ -235,6 +238,11 @@ class SimpleEditor ( Editor ):
     
     # The event fired when the application wants to veto an operation:
     veto = Event
+    
+    #-- Private Traits ---------------------------------------------------------
+    
+    # An icon used by a TreeNode:
+    _icon = Image
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -711,6 +719,7 @@ class SimpleEditor ( Editor ):
         for i, cnid in enumerate( self._nodes( pnid ) ):
             if cnid == nid:
                 ignore, pnode, pobject = self._get_node_data( pnid )
+                
                 return ( pnode, pobject, i )
 
     #---------------------------------------------------------------------------
@@ -725,21 +734,28 @@ class SimpleEditor ( Editor ):
 
         icon_name = node.get_icon( object, is_expanded )
         if isinstance( icon_name, basestring ):
-            if icon_name[:1] == '<':
-                icon_name = icon_name[1:-1]
-                path      = self
+            if icon_name[:1] == '@':
+                self._icon = icon_name
+                icon_name  = self._icon
             else:
-                path = node.get_icon_path( object )
-                if isinstance( path, basestring ):
-                    path = [ path, node ]
+                if icon_name[:1] == '<':
+                    icon_name = icon_name[1:-1]
+                    path      = self
                 else:
-                    path.append( node )
-            reference = resource_manager.locate_image( icon_name, path )
-            if reference is None:
-                return -1
-            file_name = reference.filename
-        else:
-            # Assume it is an ImageResource, and get its file name directly:
+                    path = node.get_icon_path( object )
+                    if isinstance( path, basestring ):
+                        path = [ path, node ]
+                    else:
+                        path.append( node )
+                        
+                reference = resource_manager.locate_image( icon_name, path )
+                if reference is None:
+                    return -1
+                    
+                file_name = reference.filename
+                
+        # If it is an ImageResource, get its file name directly:
+        if isinstance( icon_name, ImageResource ):
             file_name = icon_name.absolute_path
 
         return self._image_list.GetIndex( file_name )

@@ -48,7 +48,7 @@ from image_control \
     import ImageControl
     
 from enthought.traits.api \
-    import Str, Type, Module, Any
+    import Str, Type, Module, Any, on_trait_change
     
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -60,6 +60,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
+    
+    # Prefix to add to values to form image names:
+    prefix = Str
     
     # Suffix to add to values to form image names:
     suffix = Str
@@ -89,6 +92,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     #  Handles one of the items defining the path being updated:
     #---------------------------------------------------------------------------
         
+    @on_trait_change( 'path, klass, module' )
     def _update_path ( self ):
         """ Handles one of the items defining the path being updated.
         """
@@ -111,15 +115,6 @@ class ToolkitEditorFactory ( EditorFactory ):
                         break
         elif self.module is not None:
             self._image_path = join( dirname( self.module.__file__ ), 'images' )
-           
-    def _path_changed ( self ):            
-        self._update_path()
-        
-    def _klass_changed ( self ):        
-        self._update_path()
-        
-    def _module_changed ( self ):        
-        self._update_path()
     
     #---------------------------------------------------------------------------
     #  'Editor' factory methods:
@@ -166,9 +161,9 @@ class ReadonlyEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = ImageControl( parent,  
-                             bitmap_cache( self.str_value + self.factory.suffix, 
-                                           False, self.factory._image_path ) )                                   
+        self.control = ImageControl( parent, bitmap_cache( '%s%s%s' % 
+            ( self.factory.prefix, self.str_value, self.factory.suffix ), 
+            False, self.factory._image_path ) )                                   
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -178,8 +173,9 @@ class ReadonlyEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
-        self.control.Bitmap( bitmap_cache( self.str_value + self.factory.suffix, 
-                                           False, self.factory._image_path ) )
+        self.control.Bitmap( bitmap_cache( '%s%s%s' %
+            ( self.factory.prefix, self.str_value, self.factory.suffix ), 
+            False, self.factory._image_path ) )
                                       
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -258,13 +254,14 @@ class CustomEditor ( Editor ):
            sizer = wx.BoxSizer( wx.VERTICAL )
         
         # Add the set of all possible choices:
-        mapping   = self.factory._mapping
+        factory   = self.factory
+        mapping   = factory._mapping
         cur_value = self.value
         for name in self.factory._names:
             value   = mapping[ name ]
             control = ImageControl( panel, 
-                          bitmap_cache( name + self.factory.suffix, False, 
-                                        self.factory._image_path ),
+                          bitmap_cache( '%s%s%s' % ( factory.prefix, name,
+                              factory.suffix ), False, factory._image_path ),
                           value == cur_value, 
                           self.update_object )
             control.value = value

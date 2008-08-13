@@ -31,6 +31,9 @@ from enthought.traits.api \
            Property, TraitListEvent, Interface, on_trait_change, \
            cached_property, implements
            
+from enthought.traits.ui.ui_traits \
+    import Image
+           
 from enthought.traits.ui.tabular_adapter \
     import TabularAdapter
     
@@ -187,6 +190,9 @@ class _TabularEditor ( Editor ):
     
     # Dictionary mapping ImageResource objects to wx.ImageList indices:
     image_resources = Any( {} )
+    
+    # An image being converted:
+    image = Image
                 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -916,6 +922,10 @@ class _TabularEditor ( Editor ):
     def _get_image ( self, image ):
         """ Converts a user specified image to a wx.ListCtrl image index.
         """
+        if isinstance( image, basestring ):
+            self.image = image
+            image      = self.image
+            
         if isinstance( image, ImageResource ):
             result = self.image_resources.get( image )
             if result is not None:
@@ -1180,5 +1190,5 @@ class TabularEditor ( BasicEditorFactory ):
     drag_move = Bool( False )
                            
     # The set of images that can be used:                       
-    images = List( ImageResource )
+    images = List( Image )
 
