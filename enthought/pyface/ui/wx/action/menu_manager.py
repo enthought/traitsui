@@ -123,8 +123,8 @@ class _Menu(wx.Menu):
         """ Clears the items from the menu. """
         
         for item in self.GetMenuItems():
-            if item.SubMenu is not None:
-                item.SubMenu.clear()
+            if item.GetSubMenu() is not None:
+                item.GetSubMenu().clear()
             self.Delete(item.GetId())
             
         for item in self.menu_items:
