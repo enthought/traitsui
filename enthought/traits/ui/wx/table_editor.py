@@ -707,7 +707,7 @@ class TableEditor ( Editor ):
                 view = View( [ Item( 'filter<250>{View}',
                                      editor = factory._filter_editor ), '_',
                                Item( 'filter_summary<100>{Results}~',
-                                     object = 'model' ), '_',
+                                     object = 'model', resizable = False ), '_',
                                '-' ],
                              resizable = True )
                 self.toolbar_ui = ui = view.ui(
