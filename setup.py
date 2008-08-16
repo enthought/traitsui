@@ -111,7 +111,7 @@ setup(
         ],
     # test_suite = 'nose.collector',
     url = 'http://code.enthought.com/projects/traits_gui',
-    version = '3.0.1',
+    version = '3.0.2',
     zip_safe = False,
     )
 
