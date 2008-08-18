@@ -180,7 +180,7 @@ class _ScrubberEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        self.text       = '%s' % self.value
+        self.text       = self.string_value( self.value )
         self._text_size = None
         self._refresh()
         
@@ -266,11 +266,11 @@ class _ScrubberEditor ( Editor ):
         ty        = ((wdy - (tdy - descent)) / 2) - 1
         alignment = self.factory.alignment
         if alignment == 'left':
-            tx = 4
+            tx = 0
         elif alignment == 'center':
             tx = (wdx - tdx) / 2
         else:
-            tx = wdx - tdx - 4
+            tx = wdx - tdx
             
         return ( tx, ty, tdx, tdy )
         
@@ -347,7 +347,7 @@ class _ScrubberEditor ( Editor ):
             
     def _pop_up_text ( self ):
         control = self.control
-        self._text = text = wx.TextCtrl( control, -1, self.text,
+        self._text = text = wx.TextCtrl( control, -1, str( self.value ),
                             size  = control.GetSize(),
                             style = self.text_styles[ self.factory.alignment ] |
                                     wx.TE_PROCESS_ENTER )

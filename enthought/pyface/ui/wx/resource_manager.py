@@ -21,6 +21,8 @@
 import os
 import tempfile
 
+from cStringIO import StringIO
+
 # Major package imports.
 import wx
 
@@ -44,9 +46,14 @@ class PyfaceResourceFactory(ResourceFactory):
 
     def image_from_data(self, data):
         """ Creates an image from the specified data. """
+        try:
+            return wx.ImageFromStream(StringIO(data))
+        except:
+            # wx.ImageFromStream is only in wx 2.8 or later(?)
+            pass
 
-        # FIXME: There is currently no way in wx to create an image from data!
-        # We have write it out to a temporary file and then read it back in!
+        # If there is currently no way in wx to create an image from data,
+        # we have write it out to a temporary file and then read it back in:
         handle, filename = tempfile.mkstemp()
 
         # Write it out...
