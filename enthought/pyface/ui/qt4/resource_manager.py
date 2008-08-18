@@ -29,7 +29,7 @@ class PyfaceResourceFactory(ResourceFactory):
 
         return QtGui.QPixmap(filename)
 
-    def image_from_data(self, data):
+    def image_from_data(self, data, filename=None):
         """ Creates an image from the specified data. """
 
         image = QtGui.QPixmap()
