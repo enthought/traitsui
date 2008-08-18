@@ -29,6 +29,8 @@ import wx
 # Enthought library imports.
 from enthought.resource.api import ResourceFactory
 
+from enthought.traits.api import Undefined
+
 
 class PyfaceResourceFactory(ResourceFactory):
     """ The implementation of a shared resource manager. """
@@ -44,17 +46,20 @@ class PyfaceResourceFactory(ResourceFactory):
         # --- image format.
         return wx.Image(filename, wx.BITMAP_TYPE_ANY)
 
-    def image_from_data(self, data):
+    def image_from_data(self, data, filename=None):
         """ Creates an image from the specified data. """
         try:
             return wx.ImageFromStream(StringIO(data))
         except:
             # wx.ImageFromStream is only in wx 2.8 or later(?)
-            pass
+            if filename is Undefined:
+                return None
 
-        # If there is currently no way in wx to create an image from data,
-        # we have write it out to a temporary file and then read it back in:
-        handle, filename = tempfile.mkstemp()
+        handle = None
+        if filename is None:
+            # If there is currently no way in wx to create an image from data,
+            # we have write it out to a temporary file and then read it back in:
+            handle, filename = tempfile.mkstemp()
 
         # Write it out...
         tf = open(filename, 'wb')
@@ -65,8 +70,9 @@ class PyfaceResourceFactory(ResourceFactory):
         image = wx.Image(filename, wx.BITMAP_TYPE_ANY)
 
         # Remove the temporary file.
-        os.close(handle)
-        os.unlink(filename)
+        if handle is not None:
+            os.close(handle)
+            os.unlink(filename)
         
         return image
 
