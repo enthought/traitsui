@@ -309,7 +309,13 @@ class _ThemedTextEditor ( Editor ):
             style |= wx.TE_PASSWORD
             
         self._text = text = wx.TextCtrl( control, -1, self.str_value, 
-                                   size = control.GetSize(), style = style )
+                                         style = style )
+        slice    = self.image_slice
+        wdx, wdy = control.GetClientSize()
+        tdx, tdy = text.GetSize()
+        text.SetPosition( wx.Point( 
+            slice.xleft, ((wdy + slice.xtop - slice.xbottom - tdy) / 2) + 1 ) )
+        text.SetSize( wx.Size( wdx - slice.xleft - slice.xright, tdy ) )
         text.SetSelection( -1, -1 )
         text.SetFocus()
         
