@@ -1060,8 +1060,9 @@ class FillPanel ( object ):
                 if item_width < -1:
                     item_width  = -item_width
                     fixed_width = True
-                else:
-                    item_width = max( item_width, width )
+                elif item_width != -1:
+                    item_width  = max( item_width, width )
+                    fixed_width = True
                     
                 if (0.0 < item_height <= 1.0) and (not self.is_horizontal):
                     growable = int( 1000.0 * item_height )
@@ -1069,7 +1070,7 @@ class FillPanel ( object ):
                 item_height = int( item_height )
                 if item_height < -1:
                     item_height = -item_height
-                else:
+                elif item_height != -1:
                     item_height = max( item_height, height )
                     
                 control.SetMinSize( wx.Size( item_width, item_height ) )
