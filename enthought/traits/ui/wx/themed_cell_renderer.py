@@ -30,6 +30,9 @@ from wx.grid \
     
 from enthought.traits.ui.ui_traits \
     import convert_bitmap
+    
+from helper \
+    import BufferDC
 
 #-------------------------------------------------------------------------------
 #  'ThemedCellRenderer' class:
@@ -52,7 +55,7 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         # Save the reference to the TableColumn:
         self.column = column
 
-    #-- pyface grid GridCellRenderer Method Overrides --------------------------
+    #-- PyFace grid GridCellRenderer Method Overrides --------------------------
 
     # Invoked on left-button mouse clicks:
     def on_left_click ( self, grid, row, col ):
@@ -89,10 +92,13 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         object = model.get_filtered_item( row )
         
         # Get the draw bounds:
-        x0 = x = rect.x
-        y0 = y = rect.y
-        dx = rect.width
-        dy = rect.height
+        x0  = rect.x
+        y0  = rect.y
+        dx  = rect.width
+        dy  = rect.height
+        
+        # Do all drawing into an off-screen buffer:
+        bdc = BufferDC( dc, dx, dy )
         
         # Draw the appropriate theme background:
         column = self.column
@@ -116,10 +122,10 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         if theme is not None:
             content = theme.content
             slice   = theme.image_slice
-            slice.fill( dc, x, y, dx, dy )
+            slice.fill( bdc, 0, 0, dx, dy )
             
             # Set up the correct text color to use:
-            dc.SetTextForeground( theme.content_color )
+            bdc.SetTextForeground( theme.content_color )
             
             # Calculate the margins for the draw area:
             left   = slice.xleft   + content.left
@@ -133,13 +139,13 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
             else:
                 bg_color = attr.GetBackgroundColour()
         
-            dc.SetBackgroundMode( wx.SOLID )
-            dc.SetBrush( wx.Brush( bg_color, wx.SOLID ) )
-            dc.SetPen( wx.TRANSPARENT_PEN )
-            dc.DrawRectangle( x, y, dx, dy )
+            bdc.SetBackgroundMode( wx.SOLID )
+            bdc.SetBrush( wx.Brush( bg_color, wx.SOLID ) )
+            bdc.SetPen( wx.TRANSPARENT_PEN )
+            bdc.DrawRectangle( 0, 0, dx, dy )
             
             # Set up the correct text color to use:
-            dc.SetTextForeground( attr.GetTextColour() )
+            bdc.SetTextForeground( attr.GetTextColour() )
             
             # Calculate the margins for the draw area:
             left = right  = 4
@@ -161,26 +167,23 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                 bar_dx   = int( round( ratio * avail_dx ) )
                 if halign == wx.ALIGN_CENTRE:
                     bar_dx /= 2
-                    bar_x   = x + left + (avail_dx / 2) + min( 0, bar_dx )
+                    bar_x   = left + (avail_dx / 2) + min( 0, bar_dx )
                 else:
                     bar_dx = abs( bar_dx )
                     if halign == wx.ALIGN_LEFT:
-                        bar_x = x + left
+                        bar_x = left
                         left += 4
                     else:
-                        bar_x  = x + avail_dx - bar_dx
+                        bar_x  = avail_dx - bar_dx
                         right += 4
                     
                 if bar_dx > 0:
-                    dc.SetBackgroundMode( wx.SOLID )
-                    dc.SetBrush( wx.Brush( column.get_graph_color( object ),
-                                           wx.SOLID ) )
-                    dc.SetPen( wx.TRANSPARENT_PEN )
-                    dc.DrawRectangle( bar_x,  y + top, 
-                                      bar_dx, dy - top - bottom )
+                    bdc.SetBackgroundMode( wx.SOLID )
+                    bdc.SetBrush( wx.Brush( column.get_graph_color( object ),
+                                            wx.SOLID ) )
+                    bdc.SetPen( wx.TRANSPARENT_PEN )
+                    bdc.DrawRectangle( bar_x, top, bar_dx, dy - top - bottom )
             except:
-                import traceback
-                traceback.print_exc()
                 pass
             
             if theme is None:
@@ -193,6 +196,7 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                   
         # If no text or bitmap to display, then we are done:
         if (bitmap is None) and (text == ''):
+            bdc.copy( x0, y0 )
             return
             
         # Get the bitmap size:
@@ -203,8 +207,8 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         
         # Get the text size:
         if text != '':
-            dc.SetFont( attr.GetFont() )
-            tdx, tdy = dc.GetTextExtent( text )
+            bdc.SetFont( attr.GetFont() )
+            tdx, tdy = bdc.GetTextExtent( text )
             
             # Get the spacing between text and image:
             if bitmap is not None:
@@ -212,42 +216,44 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
 
         # Calculate the x-coordinate of the image/text:
         if halign == wx.ALIGN_LEFT:
-            x += left
+            x = left
         elif halign == wx.ALIGN_CENTRE:
-            x += (left + ((dx - left - right - tdx - idx) / 2))
+            x = (left + ((dx - left - right - tdx - idx) / 2))
         else:
-            x += (dx - right - tdx - idx)
+            x = (dx - right - tdx - idx)
 
         # Calculate the y-coordinate of the image/text:
         max_dy = max( tdy, idy )
         if valign == wx.ALIGN_TOP:
-            y += top
+            y = top
         elif valign == wx.ALIGN_CENTRE:
-            y += (top + ((dy - top - bottom - max_dy) / 2))
+            y = (top + ((dy - top - bottom - max_dy) / 2))
         else:
-            y += (dy - bottom - max_dy)
+            y = (dy - bottom - max_dy)
 
         # Set up the clipping region to prevent drawing outside the margins:
-        dc.SetClippingRegion( x0 + left, y0 + top, 
-                              dx - left - right, dy - top - bottom ) 
+        bdc.SetClippingRegion( left, top, dx - left - right, dy - top - bottom ) 
             
         # Draw the image (if left or center aligned):
         if (bitmap is not None) and (halign != wx.ALIGN_RIGHT):
-            dc.DrawBitmap( bitmap, x, y + ((max_dy - idy) / 2),  True )
+            bdc.DrawBitmap( bitmap, x, y + ((max_dy - idy) / 2),  True )
             x += idx
             
         # Finally, draw the text:
         if text != '':
-            dc.SetBackgroundMode( wx.TRANSPARENT )
-            dc.DrawText( text, x + ox, y + oy )
+            bdc.SetBackgroundMode( wx.TRANSPARENT )
+            bdc.DrawText( text, x + ox, y + oy )
             x += tdx + 4
             
         # Draw the image (if right-aligned):
         if (bitmap is not None) and (halign == wx.ALIGN_RIGHT):
-            dc.DrawBitmap( bitmap, x, y + ((max_dy - idy) / 2),  True )
+            bdc.DrawBitmap( bitmap, x, y + ((max_dy - idy) / 2),  True )
             
         # Discard the clipping region:
-        dc.DestroyClippingRegion()
+        bdc.DestroyClippingRegion()
+        
+        # Copy the buffer to the display:
+        bdc.copy( x0, y0 )
 
     def GetBestSize ( self, grid, attr, dc, row, col ):
         """ Determine best size for the cell. """

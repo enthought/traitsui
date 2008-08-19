@@ -100,9 +100,6 @@ class TableModel ( GridModel ):
     
     # The theme to use for selected cells:
     selected_theme = ATheme
-    
-    # Are we using themes?
-    use_themes = Bool( False )
 
     # Event fired when the table has been sorted
     sorted = Event
@@ -142,10 +139,6 @@ class TableModel ( GridModel ):
         # Initialize the current filter from the editor's default filter:
         self.filter = editor.filter
         
-        # Determine if we are using themes:
-        self.use_themes = ((self.cell_theme     is not None) or
-                           (self.selected_theme is not None))
-
         # If we are using 'auto_add' mode, create the first 'auto_add' row:
         if editor.auto_add:
             self.auto_add_row = row = editor.create_new_row()
@@ -480,8 +473,8 @@ class TableModel ( GridModel ):
     def get_cell_renderer ( self, row, col ):
         """ Returns the renderer for the specified cell.
         """
-        return self.__get_column( col )._get_renderer(
-                   self.get_filtered_item( row ), self.use_themes )
+        return self.__get_column( col ).get_renderer(
+                   self.get_filtered_item( row ) )
 
     def get_cell_drag_value ( self, row, col ):
         """ Returns the value to use when the specified cell is dragged or
