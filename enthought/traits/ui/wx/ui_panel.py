@@ -1284,7 +1284,7 @@ class HTMLHelpWindow ( wx.Frame ):
     def __init__ ( self, parent, html, scale_dx, scale_dy ):
         """ Initializes the object.
         """
-        wx.Frame.__init__( self, parent, -1, 'Help' )
+        wx.Frame.__init__( self, parent, -1, 'Help', style = wx.SIMPLE_BORDER )
         self.SetBackgroundColour( WindowColor )
         
         # Wrap the dialog around the image button panel:
