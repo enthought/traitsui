@@ -47,6 +47,9 @@ from image_slice \
 from constants \
     import OKColor, ErrorColor
     
+from helper \
+    import disconnect_no_id, BufferDC
+    
 from themed_control \
     import ThemedControl
 
@@ -190,7 +193,7 @@ class _ThemedTextEditor ( Editor ):
                             size  = wx.Size( padding_x + 70, padding_y + 20 ),
                             style = wx.FULL_REPAINT_ON_RESIZE | wx.WANTS_CHARS )
                                            
-        self._text_size = self._fill = None  
+        self._text_size = None  
         
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
@@ -205,6 +208,19 @@ class _ThemedTextEditor ( Editor ):
         wx.EVT_SIZE( control, self._resize )
            
         self.set_tooltip()
+        
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:    
+    #---------------------------------------------------------------------------
+                
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        # Remove all of the wx event listeners:
+        disconnect_no_id( self.control, wx.EVT_ERASE_BACKGROUND, wx.EVT_PAINT,          
+            wx.EVT_CHAR, wx.EVT_SET_FOCUS, wx.EVT_LEFT_UP, wx.EVT_SIZE )           
+
+        super( _ThemedTextEditor, self ).dispose()
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -313,9 +329,6 @@ class _ThemedTextEditor ( Editor ):
     def _refresh ( self ):
         """ Refreshes the contents of the control.
         """
-        if self._fill is True:
-            self._fill = (self.image_slice is default_image_slice)
-        
         if self._text_size is not None:
             self.control.RefreshRect( wx.Rect( *self._get_text_bounds() ), 
                                       False )
@@ -388,15 +401,11 @@ class _ThemedTextEditor ( Editor ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        control = self.control
-        dc      = wx.PaintDC( control )
-        slice   = None
-        if self._fill is not False:
-            slice = paint_parent( dc, control )
-            
-        self._fill = True
-        wdx, wdy   = control.GetClientSizeTuple()
-        slice2     = self.image_slice
+        control  = self.control
+        wdx, wdy = control.GetClientSizeTuple()
+        dc       = BufferDC( wx.PaintDC( control ), wdx, wdy )
+        slice    = paint_parent( dc, control )
+        slice2   = self.image_slice
         if slice2 is not default_image_slice:
             slice2.fill( dc, 0, 0, wdx, wdy, True )
             slice = slice2
@@ -407,6 +416,7 @@ class _ThemedTextEditor ( Editor ):
         dc.SetFont( control.GetFont() )
         tx, ty, tdx, tdy = self._get_text_bounds()
         dc.DrawText( self._get_text(), tx, ty )
+        dc.copy()
         
     def _resize ( self, event ):
         """ Handles the control being resized.
