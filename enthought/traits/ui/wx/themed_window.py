@@ -31,7 +31,7 @@ from enthought.traits.ui.ui_traits \
     import ATheme
     
 from helper \
-    import init_wx_handlers
+    import init_wx_handlers, BufferDC
     
 #-------------------------------------------------------------------------------
 #  'ThemedWindow' class:
@@ -107,19 +107,28 @@ class ThemedWindow ( HasPrivateTraits ):
     def _paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
+        control  = self.control
+        dc       = wx.PaintDC( control )
+        wdx, wdy = control.GetClientSize()
+        bdc      = BufferDC( dc, wdx, wdy )
+        self._do_paint( bdc )
+        bdc.copy()
+        
+    def _do_paint ( self, dc ):
+        """ Paints the background into an off-screen buffer using the associated 
+            ImageSlice object and returns the off-screen buffer and image slice
+            used.
+        """
         from image_slice import paint_parent
         
-        control = self.control
-        dc      = wx.PaintDC( control )
-        
         # Repaint the parent's theme (if necessary):
-        slice = paint_parent( dc, control )
+        slice = paint_parent( dc, self.control )
         
         # Draw the background theme (if any):
         if self.theme is not None:
             slice2 = self.theme.image_slice
             if slice2 is not None:
-                wdx, wdy = control.GetClientSizeTuple()
+                wdx, wdy = self.control.GetClientSize()
                 slice2.fill( dc, 0, 0, wdx, wdy, True )
                 
                 if self.debug:
@@ -152,10 +161,10 @@ class ThemedWindow ( HasPrivateTraits ):
                         dc.DrawRectangle( x - 1, y - 1,
                             wdx - slice2.xright - label.right - x + 2,
                             dy - label.bottom - label.top + 2 )
+                        
+                return slice2
                 
-                return ( dc, slice2 )
-    
-        return ( dc, slice )
+        return slice
         
     def _size ( self, event ):
         """ Handles the control being resized.

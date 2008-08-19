@@ -198,12 +198,12 @@ class ThemedControl ( ThemedWindow ):
         """
         pass
            
-    def _paint ( self, event ):
-        """ Paint the background using the associated ImageSlice object.
+    def _do_paint ( self, dc ):
+        """ Paints the background using the associated ImageSlice object.
         """
         self.enabled = self.control.IsEnabled()
         
-        dc, slice = super( ThemedControl, self )._paint( event )
+        slice = super( ThemedControl, self )._do_paint( dc )
         
         # Get the text and image offset to use:
         theme    = self.theme or default_theme
@@ -225,6 +225,8 @@ class ThemedControl ( ThemedWindow ):
             dc.SetTextForeground( theme.content_color )
             dc.SetFont( self.control.GetFont() )
             dc.DrawText( self.current_text, tx + ox, ty + oy )
+            
+        return slice
         
     def _size ( self, event ):
         """ Handles the control being resized.

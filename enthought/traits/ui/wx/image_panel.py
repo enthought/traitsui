@@ -177,10 +177,10 @@ class ImagePanel ( ThemedWindow ):
         
     #-- wx.Python Event Handlers -----------------------------------------------
            
-    def _paint ( self, event ):
+    def _do_paint ( self, dc ):
         """ Paint the background using the associated ImageSlice object.
         """
-        dc, slice = super( ImagePanel, self )._paint( event )
+        slice = super( ImagePanel, self )._do_paint( dc )
         
         # If we have text and have room to draw it, then do so:
         text = self.text
@@ -229,6 +229,8 @@ class ImagePanel ( ThemedWindow ):
             dc.SetClippingRegion( cl, ty, cr - cl, tdy )
             dc.DrawText( text, tx, ty )
             dc.DestroyClippingRegion()
+            
+        return slice
         
     #-- Private Methods --------------------------------------------------------
     

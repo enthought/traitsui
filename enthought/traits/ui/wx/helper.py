@@ -309,8 +309,6 @@ def _on_paint ( event ):
     control = event.GetEventObject()
     paint_parent( wx.PaintDC( control ), control )
     
-    
-    
 #-------------------------------------------------------------------------------
 #  Creates a wx.ScrolledWindow that correctly sets its background color to be
 #  the same as its parents:
