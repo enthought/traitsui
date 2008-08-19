@@ -47,7 +47,7 @@ from constants \
     import ErrorColor
     
 from helper \
-    import disconnect, disconnect_no_id
+    import disconnect, disconnect_no_id, BufferDC
 
 #-------------------------------------------------------------------------------
 #  '_ThemedSliderEditor' class:
@@ -285,11 +285,11 @@ class _ThemedSliderEditor ( Editor ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        control = self.control
-        dc      = wx.PaintDC( control )
+        control  = self.control
+        wdx, wdy = control.GetClientSize()
+        dc       = BufferDC( wx.PaintDC( control ), wdx, wdy )
             
         # Draw the slider bar:
-        wdx, wdy = control.GetClientSizeTuple()
         dx = max( 0, min( wdx - 2, 
                   int( round( ((wdx - 3) * (self.value - self.low)) / 
                                            (self.high - self.low) ) ) ) )
@@ -314,6 +314,9 @@ class _ThemedSliderEditor ( Editor ):
             dc.SetFont( control.GetFont() )
             tx, ty, tdx, tdy = self._get_text_bounds()
             dc.DrawText( self.text, tx, ty )
+            
+        # Copy the buffer to the display:
+        dc.copy()
         
     def _resize ( self, event ):
         """ Handles the control being resized.
