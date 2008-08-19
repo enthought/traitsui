@@ -1164,19 +1164,14 @@ class FillPanel ( object ):
                        pad_side = wx.LEFT ):    
         """ Creates an item label.
         """
+        from image_text import ImageText
+        
         label = item.get_label( ui )
         if (label == '') or (label[-1:] in '?=:;,.<>/\\"\'-+#|'):
             suffix = ''
 
-        theme = item.label_theme
-        if theme is not None:
-            from image_text import ImageText
-            
-            control = ImageText( parent, theme, label + suffix )
-        else:            
-            control = wx.StaticText( parent, -1, label + suffix, 
-                                     style = wx.ALIGN_RIGHT )
-                             
+        control = ImageText( parent, item.label_theme, label + suffix )
+        
         self._set_owner( control, item )
         
         if item.emphasized:

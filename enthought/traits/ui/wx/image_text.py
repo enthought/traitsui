@@ -27,6 +27,9 @@ import wx
 from image_slice \
     import paint_parent
     
+from helper \
+    import BufferDC
+    
 #-------------------------------------------------------------------------------
 #  Class 'ImageText'  
 #-------------------------------------------------------------------------------
@@ -40,13 +43,14 @@ class ImageText ( wx.PyWindow ):
     def __init__ ( self, parent, theme, text = '' ): 
         """ Initializes the object.
         """
-        self._theme       = theme
-        self._image_slice = theme.image_slice
+        self._theme = theme
+        if theme is not None:
+            self._image_slice = theme.image_slice
                                             
         super( ImageText, self ).__init__( parent, -1, 
                                            style = wx.FULL_REPAINT_ON_RESIZE )
                                            
-        self._text_size = self._fill = None  
+        self._text_size = None  
         self.SetLabel( text )
         
         # Set up the painting event handlers:
@@ -72,24 +76,28 @@ class ImageText ( wx.PyWindow ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        dc = wx.PaintDC( self )
-        if self._fill is not False:
-            paint_parent( dc, self )
+        wdx, wdy = self.GetClientSize()
+        dc       = BufferDC( wx.PaintDC( self ), wdx, wdy )
+        
+        paint_parent( dc, self )
             
-        self._fill = True
-        wdx, wdy   = self.GetClientSizeTuple()
-        text       = self.GetLabel()
-        self._image_slice.fill( dc, 0, 0, wdx, wdy, True )
+        text = self.GetLabel()
+        if self._theme is not None:
+            self._image_slice.fill( dc, 0, 0, wdx, wdy, True )
+            dc.SetTextForeground( self._image_slice.content_color )
         dc.SetBackgroundMode( wx.TRANSPARENT )
-        dc.SetTextForeground( self._image_slice.content_color )
         dc.SetFont( self.GetFont() )
         tx, ty, tdx, tdy = self._get_text_bounds()
         dc.DrawText( text, tx, ty )
+        dc.copy()
          
     def GetMinSize ( self ):
         """ Returns the minimum size for the window.
         """
         tdx, tdy, descent, leading = self._get_text_size()
+        if self._theme is None:
+            return wx.Size( tdx + 8, tdy + 4 )
+            
         content = self._theme.content
         tdx    += (content.left + content.right)
         tdy    += (content.top  + content.bottom)
@@ -117,9 +125,6 @@ class ImageText ( wx.PyWindow ):
     def _refresh ( self ):
         """ Refreshes the contents of the control.
         """
-        if self._fill is True:
-            self._fill = False
-        
         if self._text_size is not None:
             self.RefreshRect( wx.Rect( *self._get_text_bounds() ), False )
             self._text_size = None
@@ -146,13 +151,17 @@ class ImageText ( wx.PyWindow ):
             displayed.
         """
         tdx, tdy, descent, leading = self._get_text_size()
-        wdx, wdy  = self.GetClientSizeTuple()
-        slice     = self._image_slice
+        wdx, wdy  = self.GetClientSize()
         theme     = self._theme
-        content   = theme.content
-        ady       = wdy - slice.xtop - slice.xbottom
-        ty        = (wdy + slice.xtop + content.top - slice.xtop - 
-                           slice.xbottom - tdy) / 2
+        if theme is None:
+            return ( wdx - tdx, (wdy - tdy) / 2, tdx, tdy )
+            
+        slice   = self._image_slice
+        content = theme.content
+        ady     = wdy - slice.xtop - slice.xbottom
+        ty      = (wdy + slice.xtop + content.top - slice.xtop - 
+                         slice.xbottom - tdy) / 2
+        
         alignment = theme.alignment
         if alignment == 'left':
             tx = slice.xleft + content.left
@@ -161,6 +170,6 @@ class ImageText ( wx.PyWindow ):
             tx  = slice.xleft + content.left + 4 + ((adx - tdx) / 2)
         else:
             tx = wdx - tdx - slice.xright - content.right
-          
+      
         return ( tx + theme.label.left, ty + theme.label.top, tdx, tdy )
 
