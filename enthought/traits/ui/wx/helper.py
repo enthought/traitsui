@@ -582,4 +582,34 @@ class PopupControl ( HasPrivateTraits ):
         self.closed = True
         self.popup.Destroy()
         self.popup = self.control = None
+        
+#-------------------------------------------------------------------------------
+#  'BufferDC' class:
+#-------------------------------------------------------------------------------        
+
+class BufferDC ( wx.MemoryDC ):
+    """ An off-screen buffer class.
+
+        This class implements a off-screen output buffer. Data is meant to
+        be drawn in the buffer and then blitted directly to the output device
+        context.
+    """
+    
+    def __init__ ( self, dc, width, height ):
+        """Initializes the buffer."""
+        wx.MemoryDC.__init__( self )
+
+        self.dc     = dc
+        self.bitmap = wx.EmptyBitmap( width, height )
+        
+        self.SelectObject( self.bitmap )
+        
+        self.SetFont( dc.GetFont() )
+
+    def copy ( self, x = 0, y = 0 ):
+        """ Performs the blit of the buffer contents to the specified device 
+            context location.
+        """
+        self.dc.Blit( x, y, self.bitmap.GetWidth(), self.bitmap.GetHeight(), 
+                      self, 0, 0 )
                     
