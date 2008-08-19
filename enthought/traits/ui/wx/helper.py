@@ -610,4 +610,22 @@ class BufferDC ( wx.MemoryDC ):
         """
         self.dc.Blit( x, y, self.bitmap.GetWidth(), self.bitmap.GetHeight(), 
                       self, 0, 0 )
+    
+#-------------------------------------------------------------------------------
+#  'Slider' class:
+#-------------------------------------------------------------------------------
+
+class Slider ( wx.Slider ):
+    """ This is a 'fixed' version of the wx.Slider control which does not
+        erase its background, which can cause a lot of update flicker and is
+        completely unnecessary.
+    """
+
+    def __init__ ( self, *args, **kw ):
+        super( Slider, self ).__init__( *args, **kw )
+        
+        wx.EVT_ERASE_BACKGROUND( self, self._erase_background )
+
+    def _erase_background ( self, event ):
+        pass
                     

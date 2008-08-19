@@ -46,7 +46,7 @@ from constants \
     import OKColor, ErrorColor
 
 from helper \
-    import traits_ui_panel
+    import traits_ui_panel, Slider
 
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -366,7 +366,7 @@ class SimpleSliderEditor ( Editor ):
         self._label_lo = wx.StaticText( panel, -1, '999999', size = size,
                                 style = wx.ALIGN_RIGHT | wx.ST_NO_AUTORESIZE )
         sizer.Add( self._label_lo, 0, wx.ALIGN_CENTER )
-        panel.slider = slider = wx.Slider( panel, -1, ivalue, 0, 10000,
+        panel.slider = slider = Slider( panel, -1, ivalue, 0, 10000,
                                    size   = wx.Size( 80, 20 ),
                                    style  = wx.SL_HORIZONTAL | wx.SL_AUTOTICKS )
         slider.SetTickFreq( 1000, 1 )
@@ -603,7 +603,7 @@ class LargeRangeSliderEditor ( Editor ):
         sizer.Add( button_lo, 1, wx.ALIGN_CENTER )
 
         # Slider:
-        panel.slider = slider = wx.Slider( panel, -1, ivalue, 0, 10000,
+        panel.slider = slider = Slider( panel, -1, ivalue, 0, 10000,
                                    size   = wx.Size( 80, 20 ),
                                    style  = wx.SL_HORIZONTAL | wx.SL_AUTOTICKS )
         slider.SetTickFreq( 1000, 1 )
