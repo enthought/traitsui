@@ -593,10 +593,16 @@ class BufferDC ( wx.MemoryDC ):
         context.
     """
     
-    def __init__ ( self, dc, width, height ):
+    def __init__ ( self, dc, width = None, height = None ):
         """Initializes the buffer."""
         wx.MemoryDC.__init__( self )
 
+        # If only a single argument is passed, it is assumed to be a wx.Window
+        # and that we have been created within a 'paint' event for that window:
+        if width is None:
+            width, height = dc.GetClientSize()
+            dc = wx.PaintDC( dc )
+            
         self.dc     = dc
         self.bitmap = wx.EmptyBitmap( width, height )
         

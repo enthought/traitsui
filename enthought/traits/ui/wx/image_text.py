@@ -76,13 +76,13 @@ class ImageText ( wx.PyWindow ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        wdx, wdy = self.GetClientSize()
-        dc       = BufferDC( wx.PaintDC( self ), wdx, wdy )
+        dc = BufferDC( self )
         
         paint_parent( dc, self )
             
         text = self.GetLabel()
         if self._theme is not None:
+            wdx, wdy = self.GetClientSize()
             self._image_slice.fill( dc, 0, 0, wdx, wdy, True )
             dc.SetTextForeground( self._image_slice.content_color )
         dc.SetBackgroundMode( wx.TRANSPARENT )

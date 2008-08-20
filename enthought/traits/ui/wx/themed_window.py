@@ -107,12 +107,9 @@ class ThemedWindow ( HasPrivateTraits ):
     def _paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        control  = self.control
-        dc       = wx.PaintDC( control )
-        wdx, wdy = control.GetClientSize()
-        bdc      = BufferDC( dc, wdx, wdy )
-        self._do_paint( bdc )
-        bdc.copy()
+        dc = BufferDC( self.control )
+        self._do_paint( dc )
+        dc.copy()
         
     def _do_paint ( self, dc ):
         """ Paints the background into an off-screen buffer using the associated 

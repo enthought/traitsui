@@ -408,11 +408,11 @@ class _ThemedTextEditor ( Editor ):
         """ Paint the background using the associated ImageSlice object.
         """
         control  = self.control
-        wdx, wdy = control.GetClientSizeTuple()
-        dc       = BufferDC( wx.PaintDC( control ), wdx, wdy )
+        dc       = BufferDC( control )
         slice    = paint_parent( dc, control )
         slice2   = self.image_slice
         if slice2 is not default_image_slice:
+            wdx, wdy = control.GetClientSizeTuple()
             slice2.fill( dc, 0, 0, wdx, wdy, True )
             slice = slice2
         elif slice is None:

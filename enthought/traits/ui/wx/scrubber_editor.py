@@ -400,14 +400,12 @@ class _ScrubberEditor ( Editor ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        factory  = self.factory
-        control  = self.control
-        wdx, wdy = control.GetClientSizeTuple()
-        dc       = wx.PaintDC( control )
-        bdc      = BufferDC( dc, wdx, wdy )
+        control = self.control
+        dc      = BufferDC( control )
         
         # Draw the background:
-        color = factory.color_
+        factory  = self.factory
+        color    = factory.color_
         if self._x is not None:
             if factory.active_color_ is not None:
                 color = factory.active_color_
@@ -416,7 +414,7 @@ class _ScrubberEditor ( Editor ):
                 color = factory.hover_color_
                 
         if color is None:
-            paint_parent( bdc, control )
+            paint_parent( dc, control )
             brush = wx.TRANSPARENT_BRUSH
         else:
             brush = wx.Brush( color )
@@ -428,19 +426,20 @@ class _ScrubberEditor ( Editor ):
             pen = wx.TRANSPARENT_PEN
             
         if (pen != wx.TRANSPARENT_PEN) or (brush != wx.TRANSPARENT_BRUSH):
-            bdc.SetBrush( brush )
-            bdc.SetPen( pen )
-            bdc.DrawRectangle( 0, 0, wdx, wdy )
+            wdx, wdy = control.GetClientSizeTuple()
+            dc.SetBrush( brush )
+            dc.SetPen( pen )
+            dc.DrawRectangle( 0, 0, wdx, wdy )
         
         # Draw the current text value:
-        bdc.SetBackgroundMode( wx.TRANSPARENT )
-        bdc.SetTextForeground( factory.text_color_ )
-        bdc.SetFont( control.GetFont() )
+        dc.SetBackgroundMode( wx.TRANSPARENT )
+        dc.SetTextForeground( factory.text_color_ )
+        dc.SetFont( control.GetFont() )
         tx, ty, tdx, tdy = self._get_text_bounds()
-        bdc.DrawText( self.text, tx, ty )
+        dc.DrawText( self.text, tx, ty )
         
         # Copy the buffer contents to the display:
-        bdc.copy()
+        dc.copy()
         
     def _resize ( self, event ):
         """ Handles the control being resized.

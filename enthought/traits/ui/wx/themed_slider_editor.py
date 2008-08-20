@@ -285,14 +285,14 @@ class _ThemedSliderEditor ( Editor ):
     def _on_paint ( self, event ):
         """ Paint the background using the associated ImageSlice object.
         """
-        control  = self.control
-        wdx, wdy = control.GetClientSize()
-        dc       = BufferDC( wx.PaintDC( control ), wdx, wdy )
+        control = self.control
+        dc      = BufferDC( control )
             
         # Draw the slider bar:
-        dx = max( 0, min( wdx - 2, 
-                  int( round( ((wdx - 3) * (self.value - self.low)) / 
-                                           (self.high - self.low) ) ) ) )
+        wdx, wdy = control.GetClientSize()
+        dx       = max( 0, min( wdx - 2, 
+                        int( round( ((wdx - 3) * (self.value - self.low)) / 
+                                                 (self.high - self.low) ) ) ) )
         
         factory = self.factory
         dc.SetBrush( wx.Brush( factory.slider_color_ ) )
