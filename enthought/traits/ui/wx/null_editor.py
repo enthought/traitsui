@@ -53,7 +53,8 @@ class NullEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = control = wx.Window( parent, -1 )
+        self.control = control = wx.Window( parent, -1, 
+                                            size = wx.Size( 1, 1 ) )
         control.SetBackgroundColour( parent.GetBackgroundColour() )
                             
         # Set up the painting event handlers:
