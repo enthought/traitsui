@@ -256,7 +256,7 @@ class ReadonlyEditor ( Editor ):
             editor.
         """
         new_value = self.str_value
-        if self.item.resizable or (self.item.height!= -1.0):
+        if (self.item.resizable is True) or (self.item.height!= -1.0):
             if self.control.GetValue() != new_value:
                 self.control.SetValue( new_value )
         elif self.control.GetLabel() != new_value:
