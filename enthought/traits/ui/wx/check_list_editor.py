@@ -274,6 +274,12 @@ class CustomEditor ( SimpleEditor ):
 
         # Lay out the controls:
         panel.SetSizerAndFit( sizer )
+        
+        # FIXME: There are cases where one of the parent panel's of the check
+        # list editor has a fixed 'min size' which prevents the check list
+        # editor from expanding correctly, so we currently are making sure
+        # that all of the parent panels do not have a fixed min size before
+        # doing the layout/refresh:
         parent = panel.GetParent()
         while isinstance( parent, wx.Panel ):
             parent.SetMinSize( wx.Size( -1, -1 ) )
