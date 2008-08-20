@@ -230,9 +230,9 @@ class CustomEditor ( SimpleEditor ):
     def rebuild_editor ( self ):
         """ Rebuilds the editor after its definition is modified.
         """
-        control = self.control
-        control.SetSizer( None )
-        control.DestroyChildren()
+        panel = self.control
+        panel.SetSizer( None )
+        panel.DestroyChildren()
 
         cur_value = parse_value( self.value )
 
@@ -256,7 +256,6 @@ class CustomEditor ( SimpleEditor ):
 
         # Add the set of all possible choices:
         index = 0
-        panel = self.control
         for i in range( rows ):
             for j in range( cols ):
                 if n > 0:
@@ -268,13 +267,19 @@ class CustomEditor ( SimpleEditor ):
                     index += incr[j]
                     n     -= 1
                 else:
-                   control = wx.CheckBox( panel, -1, '' )
-                   control.Show( False )
-                   
+                    control = wx.CheckBox( panel, -1, '' )
+                    control.Show( False )
+                    
                 sizer.Add( control, 0, wx.NORTH, 5 )
 
         # Lay out the controls:
-        panel.SetSizer( sizer )
+        panel.SetSizerAndFit( sizer )
+        parent = panel.GetParent()
+        while isinstance( parent, wx.Panel ):
+            parent.SetMinSize( wx.Size( -1, -1 ) )
+            panel  = parent
+            parent = parent.GetParent()
+            
         panel.Layout()
         panel.Refresh()
 
