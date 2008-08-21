@@ -47,7 +47,7 @@ from constants \
     import is_mac
     
 from helper \
-    import traits_ui_panel, position_window, init_wx_handlers
+    import traits_ui_panel, position_window, init_wx_handlers, BufferDC
     
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
 try:
@@ -495,7 +495,8 @@ class ColorSample ( HasPrivateTraits ):
     def __init__ ( self, parent ):
         """ Creates the color chip window and initializes it.
         """
-        self.control = wx.Window( parent, -1 )
+        self.control = wx.Window( parent, -1, 
+                                  style = wx.FULL_REPAINT_ON_RESIZE )
         init_wx_handlers( self.control, self )
         
         if is_mac:
@@ -508,13 +509,17 @@ class ColorSample ( HasPrivateTraits ):
     
     def _paint ( self, event ):
         control = self.control
-        dx, dy  = control.GetSizeTuple()
-        dc      = wx.PaintDC( control )
+        dc      = BufferDC( control )
+        dx, dy  = control.GetClientSize()
         dc.SetPen( wx.Pen( EdgeColor ) )
         dc.SetBrush( wx.Brush( control.GetBackgroundColour(), wx.SOLID ) )
         dc.DrawRectangle( 0, 0, dx, dy )
-        dc.SetFont( control.GetFont() )
-        dc.DrawText( self.text, 3, 3 )
+        
+        if self.text != '':
+            dc.SetFont( control.GetFont() )
+            dc.DrawText( self.text, 3, 3 )
+            
+        dc.copy()
         
 #-------------------------------------------------------------------------------
 #  'PopupColorEditor' editor definition:
