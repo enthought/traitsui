@@ -25,8 +25,15 @@
 
 import wx
 
+from colorsys \
+    import rgb_to_hls, hls_to_rgb
+    
+from enthought.pyface.api \
+    import ImageResource
+
 from enthought.traits.api \
-    import HasPrivateTraits, Bool, Instance, Str, Color, Any, Event
+    import HasPrivateTraits, Bool, Instance, Str, Color, Tuple, Float, Any, \
+           Event, on_trait_change
 
 from enthought.traits.ui.api \
     import View, Item, Handler
@@ -44,7 +51,7 @@ from ui_editor \
     import UIEditor
 
 from constants \
-    import is_mac
+    import is_mac, WindowColor
     
 from helper \
     import traits_ui_panel, position_window, init_wx_handlers, BufferDC
@@ -54,6 +61,13 @@ try:
     ColorTypes = ( wx.Colour, wx.ColourPtr )    
 except:
     ColorTypes = wx.Colour
+
+#-------------------------------------------------------------------------------
+#  Constants:
+#-------------------------------------------------------------------------------
+
+# The color drawn around the edges of the HLSSelector:
+EdgeColor = wx.Colour( 64, 64, 64 )
 
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -174,37 +188,20 @@ class SimpleColorEditor ( SimpleEditor ):
     def popup_editor ( self, event ):
         """ Invokes the pop-up editor for an object trait.
         """
-        if not hasattr( self.control, 'is_custom' ):
-            # Fixes a problem with the edit field having the focus:
-            if self.control.HasCapture():
-                self.control.ReleaseMouse()
-            
-            self.object.edit_traits( view = View( 
-                    Item(
-                        self.name, 
-                        id         = 'color_editor',
-                        show_label = False, 
-                        padding    = -4,
-                        editor     = PopupColorEditor( factory = self.factory )
-                    ),
-                    kind    = 'popup',
-                    handler = PopupColorHandler() ),
-                parent = self.control )
-        else:   
-            self.busy  = True
-            factory    = self.factory
-            color_data = wx.ColourData()
-            color_data.SetColour( self.factory.to_wx_color( self ) )
-            color_data.SetChooseFull( True )
-            dialog = wx.ColourDialog( self.control, color_data )
-            position_window( dialog, parent = self.control )
-            if dialog.ShowModal() == wx.ID_OK:
-                self.value = factory.from_wx_color( 
-                                  dialog.GetColourData().GetColour() )
-                self.update_editor()
-                
-            dialog.Destroy() 
-            self.busy = False
+        # Fixes a problem with the edit field having the focus:
+        if self.control.HasCapture():
+            self.control.ReleaseMouse()
+        
+        self.object.edit_traits( view = View( 
+                Item(
+                    self.name, 
+                    id         = 'color_editor',
+                    show_label = False, 
+                    padding    = -4,
+                    editor     = PopupColorEditor( factory = self.factory )
+                ),
+                kind    = 'popup' ),
+            parent = self.control )
                 
     #---------------------------------------------------------------------------
     #  Creates the control to use for the simple editor:
@@ -250,41 +247,33 @@ class SimpleColorEditor ( SimpleEditor ):
 #  'CustomColorEditor' class:
 #-------------------------------------------------------------------------------
 
-class CustomColorEditor ( SimpleColorEditor ):
-    """ Custom style of color editor, which displays a color editor panel.
-    """
+class CustomColorEditor ( Editor ):
     
-    #---------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #---------------------------------------------------------------------------
+    # The HLSSelector control used by the editor:
+    selector = Instance( 'HLSSelector' )
 
+    #-- Editor Methods ---------------------------------------------------------
+    
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = color_editor_for( self, parent )
-
-    #---------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:    
-    #---------------------------------------------------------------------------
-
-    def dispose ( self ):
-        """ Disposes of the contents of an editor.
-        """
-        self.control._swatch_editor.dispose()
-        
-        super( CustomColorEditor, self ).dispose()
-
-    #---------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+        self.selector = HLSSelector( parent )
+        self.control  = self.selector.control
+        self.set_tooltip()
 
     def update_editor ( self ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
-        pass
+        if not self._no_update:
+            self.selector.color = self.factory.to_wx_color( self )
+        
+    @on_trait_change( 'selector:color' )
+    def _color_changed ( self, color ):
+        self._no_update = True
+        self.value      = self.factory.from_wx_color( color )
+        self._no_update = False
 
 #-------------------------------------------------------------------------------
 #  'TextColorEditor' class:
@@ -373,113 +362,6 @@ def set_color ( editor ):
         
     control.Refresh()
 
-#----------------------------------------------------------------------------
-#  Creates a custom color editor panel for a specified editor:
-#----------------------------------------------------------------------------
-
-def color_editor_for ( editor, parent ):
-    """ Creates a custom color editor panel for a specified editor.
-    """
-    # Create a panel to hold all of the controls:
-    panel = traits_ui_panel( parent, -1, size = wx.Size( 0, 0 ) )
-        
-    # Create the large color swatch:
-    sizer = wx.BoxSizer( wx.HORIZONTAL )
-    panel._swatch_editor = swatch_editor = editor.factory.simple_editor(
-              editor.ui, editor.object, editor.name, editor.description, panel )
-    swatch_editor.prepare( panel )
-    control = swatch_editor.control
-    control.is_custom = True
-    control.SetSize( wx.Size( 101, 61 ) )
-    sizer.Add( control, 0, wx.EXPAND )
-    
-    # Create the color chip (color swatches) control:
-    panel._color_chip = ColorChip( panel )
-    panel._color_chip.on_trait_change(
-        swatch_editor.update_object_from_swatch, 'color' )
-    control = panel._color_chip.control
-    sizer.Add( control )
-    editor.set_tooltip( control )
-   
-    # Set-up the layout:
-    panel.SetSizerAndFit( sizer )
-
-    # Return the panel as the result:
-    return panel
-
-#-------------------------------------------------------------------------------
-#  'ColorChip' class:
-#-------------------------------------------------------------------------------
-
-# Standard color samples:
-color_choices = ( 0, 51, 102, 153, 204, 255 )
-color_samples = [ None ] * 216
-i             = 0
-for r in color_choices:
-    for g in color_choices:
-        for b in color_choices:
-            color_samples[i] = wx.Colour( r, g, b )
-            i += 1  
-            
-# The color drawn around the edge of each sample:            
-EdgeColor = wx.Colour( 64, 64, 64 )             
-
-class ColorChip ( HasPrivateTraits ):
-    
-    # The current color:
-    color = Color
-    
-    # The wx Window that implements the color chip:
-    control = Instance( wx.Window )
-    
-    def __init__ ( self, parent, **traits ):
-        """ Creates the color chip window and initializes it.
-        """
-        super( ColorChip, self ).__init__( **traits )
-        
-        self.control = wx.Window( parent, -1, size = wx.Size( 361, 61 ) )
-        init_wx_handlers( self.control, self )
-        
-    #-- Private Methods --------------------------------------------------------
-    
-    def _set_color ( self, event ):
-        """ Sets the current color based upon the position of the pointer.
-        """
-        x,  y  = event.GetX(), event.GetY()
-        dx, dy = self.control.GetSizeTuple()
-        if (0 <= x < (dx - 1)) and (0 <= y < (dy - 1)):
-            color = color_samples[ (36 * (y / 10)) + (x / 10) ]
-            self.color = ( color.Red(), color.Green(), color.Blue() )
-        
-    #-- wxPython Event Handlers ------------------------------------------------
-        
-    def _erase_background ( self, event ):
-        pass
-    
-    def _paint ( self, event ):
-        dc = wx.PaintDC( self.control )
-        dc.SetPen( wx.Pen( EdgeColor ) )
-        i = 0
-        for y in xrange( 6 ):
-            for x in xrange( 36 ):
-                dc.SetBrush( wx.Brush( color_samples[i], wx.SOLID ) )
-                dc.DrawRectangle( 10 * x, 10 * y, 11, 11 )
-                i += 1
-        
-    def _left_down ( self, event ):
-        self._active = True
-        self.control.CaptureMouse()
-        self._set_color( event )
-        
-    def _left_up ( self, event ):
-        self._active = False
-        self.control.ReleaseMouse()
-        self._set_color( event )
-        
-    def _motion ( self, event ):
-        if self._active:
-            self._set_color( event )
-
 #-------------------------------------------------------------------------------
 #  'ColorSample' class:
 #-------------------------------------------------------------------------------
@@ -522,6 +404,156 @@ class ColorSample ( HasPrivateTraits ):
         dc.copy()
         
 #-------------------------------------------------------------------------------
+#   'HLSSelector' class:  
+#-------------------------------------------------------------------------------        
+    
+class HLSSelector ( HasPrivateTraits ):        
+
+    # The HS color map bitmap (class constant):
+    color_map_bitmap = \
+        ImageResource( 'hs_color_map' ).create_image().ConvertToBitmap()
+    
+    # The wx Window that implements the color sample:
+    control = Instance( wx.Window )
+    
+    # The current selected color:
+    color = Color( 0xFF0000 )
+    
+    # The HLS values corresponding to the current color:
+    hls = Tuple( Float, Float, Float )
+    
+    #-- Public Methods ---------------------------------------------------------
+    
+    def __init__ ( self, parent ):
+        """ Creates the HLSSelector window and initializes it.
+        """
+        self.control = wx.Window( parent, -1,
+                                  size  = wx.Size( 228, 102 ),
+                                  style = wx.FULL_REPAINT_ON_RESIZE )
+        
+        init_wx_handlers( self.control, self )
+        
+    #-- Trait Default Values ---------------------------------------------------
+    
+    def _hls_default ( self ):
+        return self._wx_to_hls( self.color_ ) 
+        
+    #-- Trait Event Handlers ---------------------------------------------------
+    
+    def _color_changed ( self ):
+        """ Updates the display when the current color changes.
+        """
+        self.hls = self._wx_to_hls( self.color_ ) 
+            
+        if self.control is not None:
+            self.control.Refresh()
+        
+    #-- wxPython Event Handlers ------------------------------------------------
+        
+    def _erase_background ( self, event ):
+        pass
+    
+    def _paint ( self, event ):
+        dc = BufferDC( self.control )
+        
+        # Draw the unpainted portions of the background:
+        wdx, wdy = self.control.GetClientSize()
+        dc.SetPen( wx.TRANSPARENT_PEN )
+        dc.SetBrush( wx.Brush( WindowColor ) )
+        dc.DrawRectangle( 0, 0, wdx, wdy )
+        
+        # Draw the current color sample (if there is room):
+        dc.SetPen( wx.Pen( EdgeColor ) )
+        if wdx >= 240:
+            dc.SetBrush( wx.Brush( self.color_ ) )
+            dc.DrawRectangle( 228, 0, wdx - 228, 102 )
+        
+        # Draw the 'HS' color map and frame:
+        dc.SetBrush( wx.TRANSPARENT_BRUSH )
+        dc.DrawRectangle( 0, 0, 202, 102 )
+        dc.DrawBitmap( self.color_map_bitmap, 1, 1, False )
+        
+        # Draw the 'L' selector frame:
+        dc.DrawRectangle( 206, 0, 18, 102 )
+        
+        # Draw the 'L' selector color range based upon the current color:
+        h, l, s = self.hls
+        lp      = 1.0
+        lstep   = 1.0 / 99
+        for y in xrange( 1, 101 ):
+            dc.SetPen( wx.Pen( self._hls_to_wx( h, lp, s ) ) )
+            dc.DrawLine( 207, y, 223, y )
+            lp -= lstep
+            
+        # Draw the current 'HS' selector:
+        dc.SetPen( wx.BLACK_PEN )
+        dc.SetBrush( wx.TRANSPARENT_BRUSH )
+        dc.DrawCircle( int( round( 199 * h ) ) + 1, 
+                       int( round(  99 * ( 1.0 - s ) ) ) + 1, 3 )
+        
+        # Draw the current 'L' selector:
+        y = int( round( 99 * (1.0 - l) ) ) + 1
+        dc.DrawLine( 203, y,     227, y )
+        dc.DrawLine( 204, y - 1, 204, y + 2 )
+        dc.DrawLine( 225, y - 1, 225, y + 2 )
+        dc.DrawLine( 205, y - 2, 205, y + 3 )
+        dc.DrawLine( 224, y - 2, 224, y + 3 )
+        
+        # Copy the buffer to the display:
+        dc.copy()
+        
+    def _left_down ( self, event ):
+        self._active = True
+        self.control.CaptureMouse()
+        self._set_color( event )
+        
+    def _left_up ( self, event ):
+        self._active = False
+        self.control.ReleaseMouse()
+        self._set_color( event )
+        
+    def _motion ( self, event ):
+        if self._active:
+            self._set_color( event )
+            
+    #-- Private Methods --------------------------------------------------------
+    
+    def _set_color ( self, event ):
+        """ Sets the color based on the current mouse position.
+        """
+        x, y = event.GetX(), event.GetY()
+        
+        if 1 <= y <= 100:
+            h, l, s = h0, l0, s0 = self.hls
+
+            if 1 <= x <= 200:
+                h = (x - 1) / 199.0
+                s = 1.0 - ((y - 1) / 99.0)
+            elif 206 <= x <= 223:
+                l = 1.0 - ((y - 1) / 99.0)
+            else:
+                return
+                
+            if (h != h0) or (l != l0) or (s != s0):
+                self.color = self._hls_to_wx( h, l, s )
+                self.hls   = ( h, l, s )
+                if ((l == 0.0) or (l == 1.0)) and (self.control is not None):
+                    self.control.Refresh()
+        
+    def _wx_to_hls ( self, color ):
+        """ Returns a wx.Colour converted to an HLS tuple.
+        """        
+        return rgb_to_hls( color.Red()   / 255.0, 
+                           color.Green() / 255.0,
+                           color.Blue()  / 255.0 )
+        
+    def _hls_to_wx ( self, h, l, s ):
+        """ Converts HLS values to a wx.Colour.
+        """
+        return wx.Colour( *[ int( round( c * 255.0 ) )
+                             for c in hls_to_rgb( h, l, s ) ] )
+    
+#-------------------------------------------------------------------------------
 #  'PopupColorEditor' editor definition:
 #-------------------------------------------------------------------------------
 
@@ -537,30 +569,17 @@ class _PopupColorEditor ( UIEditor ):
         return self.object.edit_traits( 
             parent = parent,
             view   = View(
-                         Item( self.name, id         = 'color_editor',
-                                          style      = 'custom',
-                                          show_label = False,
-                                          padding    = -4,
-                                          editor     = self.factory.factory ),
+                         Item( self.name, 
+                               id         = 'color_editor',
+                               style      = 'custom',
+                               show_label = False,
+                               editor     = self.factory.factory ),
                          kind = 'subpanel' ) )
 
 class PopupColorEditor ( BasicEditorFactory ):
 
     klass = _PopupColorEditor
     
-    # The factory to use for creating sub color editors:
+    # The editor factory to be used by the sub-editor:
     factory = Instance( EditorFactory )
-    
-#-------------------------------------------------------------------------------
-#  'PopupColorHandler' class:
-#-------------------------------------------------------------------------------
-
-class PopupColorHandler ( Handler ):
-    
-    def close ( self, info, result ):
-        """ Returns whether the view can be closed now or not.
-        """
-        # fixme: Hmmm...I would if there is a cleaner way to do this...
-        return (not info.color_editor.editor_ui.info.color_editor.control.
-                         _swatch_editor.busy)
         
