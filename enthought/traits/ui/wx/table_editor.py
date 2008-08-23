@@ -38,7 +38,7 @@ from enthought.traits.ui.menu \
     import Action, ToolBar, Menu
 
 from enthought.traits.ui.table_column \
-    import TableColumn
+    import TableColumn, ObjectColumn
 
 from enthought.traits.ui.table_filter \
     import TableFilter
@@ -161,7 +161,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     configurable = Bool( True )
 
     # Should the cells of the table automatically size to the optimal size?
-    auto_size = Bool( True )
+    auto_size = Bool( False )
 
     # Should a new row automatically be added to the end of the table to allow
     # the user to create new entries? If True, **row_factory** must be set.
@@ -204,7 +204,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     # such as 'configurable', etc., and is a quick way to prevent the toolbar
     # from being displayed; but True will not cause a toolbar to appear if one 
     # would not otherwise have been displayed)
-    show_toolbar = Bool( True )
+    show_toolbar = Bool( False )
 
     # The vertical scroll increment for the table:
     scroll_dy = Range( 1, 32 )
@@ -237,7 +237,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     label_bg_color = Color( 0xD7D2BF )
 
     # Background color of selected item
-    selection_bg_color = Color( 0x0D22DF, allow_none = True )
+    selection_bg_color = Color( 0xFBD391, allow_none = True )
     
     # The theme to use for normal cells:
     cell_theme = ATheme
@@ -511,13 +511,19 @@ class TableEditor ( Editor ):
         factory       = self.factory
         self.filter   = factory.filter
         self.auto_add = (factory.auto_add and (factory.row_factory is not None))
-        self.columns  = factory.columns[:]
-        self.model    = model = TableModel( 
-                            editor         = self,
-                            reverse        = factory.reverse,
-                            cell_theme     = factory.cell_theme,
-                            alt_theme      = factory.alt_theme,
-                            selected_theme = factory.selected_theme )
+            
+        columns = factory.columns[:]
+        if (len( columns ) == 0) and (len( self.value ) > 0):
+            columns = [ ObjectColumn( name = name ) 
+                        for name in self.value[0].editable_traits() ]
+        self.columns = columns
+        
+        self.model = model = TableModel( 
+                                editor         = self,
+                                reverse        = factory.reverse,
+                                cell_theme     = factory.cell_theme,
+                                alt_theme      = factory.alt_theme,
+                                selected_theme = factory.selected_theme )
         model.on_trait_change( self._model_sorted, 'sorted', dispatch = 'ui' )
         mode     = factory.selection_mode
         row_mode = mode in ( 'row', 'rows' )
@@ -667,6 +673,7 @@ class TableEditor ( Editor ):
             row_label_width              = factory.row_label_width 
         )
         _grid = grid._grid
+        _grid.SetSize( wx.Size( max( 150, 80 * len( self.columns ) ), 150 ) )
         _grid.SetScrollLineY( factory.scroll_dy )
      
         # Set the default size for each table row:

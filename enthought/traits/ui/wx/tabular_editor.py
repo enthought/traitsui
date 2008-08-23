@@ -852,7 +852,7 @@ class _TabularEditor ( Editor ):
             return
             
         object, name = self.object, self.name
-        dx, dy       = control.GetClientSizeTuple()
+        dx, dy       = control.GetClientSize()
         if is_mac:
             dx -= scrollbar_dx
         n            = control.GetColumnCount()
@@ -861,11 +861,11 @@ class _TabularEditor ( Editor ):
         wdx          = 0.0
         widths       = []
         cached       = self._cached_widths
-        current      = [ control.GetColumnWidth( i ) for i in range( n ) ]
+        current      = [ control.GetColumnWidth( i ) for i in xrange( n ) ]
         if (cached is None) or (len( cached ) != n):
             self._cached_widths = cached = [ None ] * n
             
-        for i in range( n ):
+        for i in xrange( n ):
             cw = cached[i]
             if (cw is None) or (-cw == current[i]):
                 width = float( get_width( object, name, i ) )
