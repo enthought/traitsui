@@ -32,14 +32,13 @@ from enthought.pyface.api \
     import ImageResource
 
 from enthought.traits.api \
-    import HasPrivateTraits, Bool, Instance, Str, Color, Tuple, Float, Any, \
-           Event, on_trait_change
+    import Bool, Instance, Str, Color, Tuple, Float, Any, on_trait_change
 
 from enthought.traits.ui.api \
-    import View, Item, Handler
+    import View, Item
 
 from editor_factory \
-    import EditorFactory, SimpleEditor, TextEditor, ReadonlyEditor
+    import EditorFactory, SimpleEditor, ReadonlyEditor
     
 from basic_editor_factory \
     import BasicEditorFactory
@@ -49,12 +48,12 @@ from editor \
     
 from ui_editor \
     import UIEditor
+    
+from ui_window \
+    import UIWindow
 
 from constants \
-    import is_mac, WindowColor
-    
-from helper \
-    import traits_ui_panel, position_window, init_wx_handlers, BufferDC
+    import is_mac
     
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
 try:
@@ -164,13 +163,61 @@ class ToolkitEditorFactory ( EditorFactory ):
                     color.Red(), color.Green(), color.Blue(), alpha )
             
         return color
-                                      
+
 #-------------------------------------------------------------------------------
 #  'SimpleColorEditor' class:
 #-------------------------------------------------------------------------------
+
+class SimpleColorEditor ( Editor ):
+    
+    # The HLSSelector control used by the editor:
+    selector = Instance( 'BaseHLSSelector' )
+
+    #-- Editor Methods ---------------------------------------------------------
+    
+    def init ( self, parent ):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        self.selector = self.create_selector( parent )
+        self.control  = self.selector.control
+        self.set_tooltip()
+        
+    def create_selector ( self, parent ):
+        """ Creates the HLS selector for this style of editor.
+        """
+        return SimpleHLSSelector( parent )
+
+    def update_editor ( self ):
+        """ Updates the editor when the object trait changes externally to the 
+            editor.
+        """
+        if not self._no_update:
+            self.selector.color = self.factory.to_wx_color( self )
+        
+    @on_trait_change( 'selector:color' )
+    def _color_changed ( self, color ):
+        self._no_update = True
+        self.value      = self.factory.from_wx_color( color )
+        self._no_update = False
+
+#-------------------------------------------------------------------------------
+#  'CustomColorEditor' class:
+#-------------------------------------------------------------------------------
+
+class CustomColorEditor ( SimpleColorEditor ):
+        
+    def create_selector ( self, parent ):
+        """ Creates the HLS selector for this style of editor.
+        """
+        return CustomHLSSelector( parent )
+                                      
+#-------------------------------------------------------------------------------
+#  'TextColorEditor' class:
+#-------------------------------------------------------------------------------
                                
-class SimpleColorEditor ( SimpleEditor ):
-    """ Simple style of color editor, which displays a text field whose 
+class TextColorEditor ( SimpleEditor ):
+    """ Text style of color editor, which displays a text field whose 
         background color is the color value. Selecting the text field displays
         a dialog box for selecting a new color value.
     """
@@ -244,76 +291,6 @@ class SimpleColorEditor ( SimpleEditor ):
         return self.factory.str_color( color ) 
 
 #-------------------------------------------------------------------------------
-#  'CustomColorEditor' class:
-#-------------------------------------------------------------------------------
-
-class CustomColorEditor ( Editor ):
-    
-    # The HLSSelector control used by the editor:
-    selector = Instance( 'HLSSelector' )
-
-    #-- Editor Methods ---------------------------------------------------------
-    
-    def init ( self, parent ):
-        """ Finishes initializing the editor by creating the underlying toolkit
-            widget.
-        """
-        self.selector = HLSSelector( parent )
-        self.control  = self.selector.control
-        self.set_tooltip()
-
-    def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
-            editor.
-        """
-        if not self._no_update:
-            self.selector.color = self.factory.to_wx_color( self )
-        
-    @on_trait_change( 'selector:color' )
-    def _color_changed ( self, color ):
-        self._no_update = True
-        self.value      = self.factory.from_wx_color( color )
-        self._no_update = False
-
-#-------------------------------------------------------------------------------
-#  'TextColorEditor' class:
-#-------------------------------------------------------------------------------
-
-class TextColorEditor ( TextEditor ):
-    """ Text style of color editor, which displays a text field whose 
-        background color is the color value.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #---------------------------------------------------------------------------
-
-    def update_object ( self, event ):
-        """ Handles the user changing the contents of the edit control.
-        """
-        self.value = self.control.GetValue()
-
-    #---------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
-
-    def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
-            editor.
-        """
-        super( TextColorEditor, self ).update_editor()
-        set_color( self )
-
-    #---------------------------------------------------------------------------
-    #  Returns the text representation of a specified color value:
-    #---------------------------------------------------------------------------
-
-    def string_value ( self, color ):
-        """ Returns the text representation of a specified color value.
-        """
-        return self.factory.str_color( color ) 
-
-#-------------------------------------------------------------------------------
 #  'ReadonlyColorEditor' class:
 #-------------------------------------------------------------------------------
 
@@ -366,10 +343,7 @@ def set_color ( editor ):
 #  'ColorSample' class:
 #-------------------------------------------------------------------------------
 
-class ColorSample ( HasPrivateTraits ):
-    
-    # The wx Window that implements the color sample:
-    control = Instance( wx.Window )
+class ColorSample ( UIWindow ):
     
     # The text to display in the control:
     text = Str
@@ -377,44 +351,30 @@ class ColorSample ( HasPrivateTraits ):
     def __init__ ( self, parent ):
         """ Creates the color chip window and initializes it.
         """
-        self.control = wx.Window( parent, -1, 
-                                  style = wx.FULL_REPAINT_ON_RESIZE )
-        init_wx_handlers( self.control, self )
+        super( ColorSample, self ).__init__( parent )
         
         if is_mac:
             self.control.SetSize( wx.Size( -1, 23 ) )
         
     #-- wxPython Event Handlers ------------------------------------------------
-        
-    def _erase_background ( self, event ):
-        pass
     
-    def _paint ( self, event ):
+    def _paint_dc ( self, dc ):
         control = self.control
-        dc      = BufferDC( control )
-        dx, dy  = control.GetClientSize()
         dc.SetPen( wx.Pen( EdgeColor ) )
         dc.SetBrush( wx.Brush( control.GetBackgroundColour(), wx.SOLID ) )
-        dc.DrawRectangle( 0, 0, dx, dy )
+        dc.DrawRectangle( 0, 0, self.width, self.height )
         
         if self.text != '':
             dc.SetFont( control.GetFont() )
             dc.DrawText( self.text, 3, 3 )
-            
-        dc.copy()
         
 #-------------------------------------------------------------------------------
-#   'HLSSelector' class:  
+#   'BaseHLSSelector' class:  
 #-------------------------------------------------------------------------------        
     
-class HLSSelector ( HasPrivateTraits ):        
-
-    # The HS color map bitmap (class constant):
-    color_map_bitmap = \
-        ImageResource( 'hs_color_map' ).create_image().ConvertToBitmap()
-    
-    # The wx Window that implements the color sample:
-    control = Instance( wx.Window )
+class BaseHLSSelector ( UIWindow ):
+    """ Abstract base class for creating HSL color space color selectors.
+    """
     
     # The current selected color:
     color = Color( 0xFF0000 )
@@ -422,17 +382,6 @@ class HLSSelector ( HasPrivateTraits ):
     # The HLS values corresponding to the current color:
     hls = Tuple( Float, Float, Float )
     
-    #-- Public Methods ---------------------------------------------------------
-    
-    def __init__ ( self, parent ):
-        """ Creates the HLSSelector window and initializes it.
-        """
-        self.control = wx.Window( parent, -1,
-                                  size  = wx.Size( 228, 102 ),
-                                  style = wx.FULL_REPAINT_ON_RESIZE )
-        
-        init_wx_handlers( self.control, self )
-        
     #-- Trait Default Values ---------------------------------------------------
     
     def _hls_default ( self ):
@@ -444,27 +393,166 @@ class HLSSelector ( HasPrivateTraits ):
         """ Updates the display when the current color changes.
         """
         self.hls = self._wx_to_hls( self.color_ ) 
+        self.refresh()
+
+    #-- wxPython Event Handlers ------------------------------------------------
+    
+    def _left_down ( self, event ):
+        self._active = True
+        self.capture()
+        self._set_color( event )
+        
+    def _left_up ( self, event ):
+        self._active = False
+        self.release()
+        self._set_color( event )
+        
+    def _motion ( self, event ):
+        if self._active:
+            self._set_color( event )
+        
+    #-- Private Methods --------------------------------------------------------
+        
+    def _wx_to_hls ( self, color ):
+        """ Returns a wx.Colour converted to an HLS tuple.
+        """        
+        return rgb_to_hls( color.Red()   / 255.0, 
+                           color.Green() / 255.0,
+                           color.Blue()  / 255.0 )
+        
+    def _hls_to_wx ( self, h, l, s ):
+        """ Converts HLS values to a wx.Colour.
+        """
+        return wx.Colour( *[ int( round( c * 255.0 ) )
+                             for c in hls_to_rgb( h, l, s ) ] )
+        
+#-------------------------------------------------------------------------------
+#   'SimpleHLSSelector' class:  
+#-------------------------------------------------------------------------------        
+    
+class SimpleHLSSelector ( BaseHLSSelector ):
+    """ Simple 'one line' multi-bar HSL color space color selector.
+    """
+    size = Instance( wx.Size, ( 200, -1 ) )
+    
+    #-- wxPython Event Handlers ------------------------------------------------
+    
+    def _paint_dc ( self, dc ):
+        """ Paints the HLS selector on the display.
+        """
+        # Calculate the size and position of each HLS selector:
+        wdx, wdy  = self.width, self.height
+        self._sdx = sdx = ((wdx - 12) / 4) - 2
+        self._hx0 = hx0 = 1
+        self._sx0 = sx0 = hx0 + sdx + 6
+        self._lx0 = lx0 = sx0 + sdx + 6
+        self._cx0 = cx0 = lx0 + sdx + 6
+        
+        # Draw the selector boundaries:
+        dc.SetPen( wx.Pen( EdgeColor ) )
+        dc.SetBrush( wx.TRANSPARENT_BRUSH )
+        dc.DrawRectangle( hx0 - 1, 0, sdx + 2, wdy )
+        dc.DrawRectangle( lx0 - 1, 0, sdx + 2, wdy )
+        dc.DrawRectangle( sx0 - 1, 0, sdx + 2, wdy )
+        
+        # Draw the current color sample:
+        dc.SetBrush( wx.Brush( self.color_ ) )
+        dc.DrawRectangle( cx0 - 1, 0, sdx + 2, wdy )
+        
+        # Now fill the contents of each of the HLS selectors:
+        h, l, s = self.hls
+        range   = sdx - 1
+        step    = 1.0 / range
+        ey      = wdy - 1
+        
+        # Draw the 'H' selector color range based upon the current color:
+        hp = 0.0
+        for x in xrange( hx0, hx0 + sdx ):
+            dc.SetPen( wx.Pen( self._hls_to_wx( hp, 0.5, 1.0 ) ) )
+            dc.DrawLine( x, 1, x, ey )
+            hp += step
+        
+        # Draw the 'S' selector color range based upon the current color:
+        sp = 1.0
+        for x in xrange( sx0, sx0 + sdx ):
+            dc.SetPen( wx.Pen( self._hls_to_wx( h, 0.5, sp ) ) )
+            dc.DrawLine( x, 1, x, ey )
+            sp -= step
+        
+        # Draw the 'L' selector color range based upon the current color:
+        lp = 1.0
+        for x in xrange( lx0, lx0 + sdx ):
+            dc.SetPen( wx.Pen( self._hls_to_wx( h, lp, 1.0 ) ) )
+            dc.DrawLine( x, 1, x, ey )
+            lp -= step
+        
+        # Draw the current HLS selectors:
+        dc.SetPen( wx.Pen( EdgeColor ) )
+        self._draw_selector( dc, wdy, hx0 + int( round( range * h ) ) )
+        self._draw_selector( dc, wdy, sx0 + int( round( range * (1.0 - s) ) ) )
+        self._draw_selector( dc, wdy, lx0 + int( round( range * (1.0 - l) ) ) )
             
-        if self.control is not None:
-            self.control.Refresh()
+    #-- Private Methods --------------------------------------------------------
+
+    def _draw_selector ( self, dc, dy, x ):
+        """ Draws the current position of one of the HLS selectors.
+        """
+        dc.DrawLine( x, 3, x, dy - 3 )
+        #dc.DrawLine( x - 3, 1, x + 4, 1 )
+        #dc.DrawLine( x - 3, dy - 2, x + 4, dy - 2 )
+        dc.DrawLine( x - 2, 1, x + 3, 1 )
+        dc.DrawLine( x - 2, dy - 2, x + 3, dy - 2 )
+        dc.DrawLine( x - 1, 2, x + 2, 2 )
+        dc.DrawLine( x - 1, dy - 3, x + 2, dy - 3 )
+        
+    def _set_color ( self, event ):
+        """ Sets the color based on the current mouse position.
+        """
+        x, y = event.GetX(), event.GetY()
+        
+        if 0 <= y < self.height:
+            h, l, s = h0, l0, s0 = self.hls
+            sdx     = float( self._sdx - 1 )
+
+            if self._hx0 <= x <= self._hx0 + sdx:
+                h = (x - self._hx0) / sdx
+            elif self._lx0 <= x <= self._lx0 + sdx:
+                l = 1.0 - ((x - self._lx0) / sdx)
+            elif self._sx0 <= x <= self._sx0 + sdx:
+                s = 1.0 - ((x - self._sx0) / sdx)
+            else:
+                return
+                
+            if (h != h0) or (l != l0) or (s != s0):
+                self.color = self._hls_to_wx( h, l, s )
+                self.hls   = ( h, l, s )
+                if ((l == 0.0) or (l == 1.0)):
+                    self.refresh()
+        
+#-------------------------------------------------------------------------------
+#   'CustomHLSSelector' class:  
+#-------------------------------------------------------------------------------        
+    
+class CustomHLSSelector ( BaseHLSSelector ):
+    """ A larger (i.e. custom) HSL color space color selector.
+    """
+
+    # The HS color map bitmap (class constant):
+    color_map_bitmap = \
+        ImageResource( 'hs_color_map' ).create_image().ConvertToBitmap()
+    
+    # Override the default size for the window:
+    size = Instance( wx.Size, ( 228, 102 ) )
         
     #-- wxPython Event Handlers ------------------------------------------------
-        
-    def _erase_background ( self, event ):
-        pass
     
-    def _paint ( self, event ):
-        dc = BufferDC( self.control )
-        
-        # Draw the unpainted portions of the background:
-        wdx, wdy = self.control.GetClientSize()
-        dc.SetPen( wx.TRANSPARENT_PEN )
-        dc.SetBrush( wx.Brush( WindowColor ) )
-        dc.DrawRectangle( 0, 0, wdx, wdy )
-        
+    def _paint_dc ( self, dc ):
+        """ Paints the HLS selector on the display.
+        """
         # Draw the current color sample (if there is room):
         dc.SetPen( wx.Pen( EdgeColor ) )
-        if wdx >= 240:
+        wdx = self.width
+        if wdx >= 230:
             dc.SetBrush( wx.Brush( self.color_ ) )
             dc.DrawRectangle( 228, 0, wdx - 228, 102 )
         
@@ -498,23 +586,6 @@ class HLSSelector ( HasPrivateTraits ):
         dc.DrawLine( 225, y - 1, 225, y + 2 )
         dc.DrawLine( 205, y - 2, 205, y + 3 )
         dc.DrawLine( 224, y - 2, 224, y + 3 )
-        
-        # Copy the buffer to the display:
-        dc.copy()
-        
-    def _left_down ( self, event ):
-        self._active = True
-        self.control.CaptureMouse()
-        self._set_color( event )
-        
-    def _left_up ( self, event ):
-        self._active = False
-        self.control.ReleaseMouse()
-        self._set_color( event )
-        
-    def _motion ( self, event ):
-        if self._active:
-            self._set_color( event )
             
     #-- Private Methods --------------------------------------------------------
     
@@ -538,20 +609,7 @@ class HLSSelector ( HasPrivateTraits ):
                 self.color = self._hls_to_wx( h, l, s )
                 self.hls   = ( h, l, s )
                 if ((l == 0.0) or (l == 1.0)) and (self.control is not None):
-                    self.control.Refresh()
-        
-    def _wx_to_hls ( self, color ):
-        """ Returns a wx.Colour converted to an HLS tuple.
-        """        
-        return rgb_to_hls( color.Red()   / 255.0, 
-                           color.Green() / 255.0,
-                           color.Blue()  / 255.0 )
-        
-    def _hls_to_wx ( self, h, l, s ):
-        """ Converts HLS values to a wx.Colour.
-        """
-        return wx.Colour( *[ int( round( c * 255.0 ) )
-                             for c in hls_to_rgb( h, l, s ) ] )
+                    self.refresh()
     
 #-------------------------------------------------------------------------------
 #  'PopupColorEditor' editor definition:

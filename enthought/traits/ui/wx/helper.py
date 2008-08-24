@@ -440,7 +440,6 @@ def init_wx_handlers ( control, object, prefix = '' ):
         if method is not None:
             handler( control, method )
 
-
 #-------------------------------------------------------------------------------
 #  Safely tries to pop up an FBI window if enthought.debug is installed
 #-------------------------------------------------------------------------------
@@ -616,7 +615,7 @@ class BufferDC ( wx.MemoryDC ):
         """
         self.dc.Blit( x, y, self.bitmap.GetWidth(), self.bitmap.GetHeight(), 
                       self, 0, 0 )
-    
+        
 #-------------------------------------------------------------------------------
 #  'Slider' class:
 #-------------------------------------------------------------------------------
