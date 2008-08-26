@@ -39,7 +39,7 @@ from enthought.traits.ui.editor \
     import Editor
 
 from constants \
-    import WindowColor
+    import WindowColor, screen_dy
 
 from image_slice \
     import paint_parent
@@ -92,6 +92,12 @@ class ThemedPage ( HasPrivateTraits ):
 
     # The minimum size for the page:
     min_size = Property
+    
+    # The open size property for the page:
+    open_size = Property
+    
+    # The closed size property for the page:
+    closed_size = Property
 
     #-- Private Traits ---------------------------------------------------------
 
@@ -155,9 +161,21 @@ class ThemedPage ( HasPrivateTraits ):
     def _get_min_size ( self ):
         """ Returns the minimum size for the page.
         """
+        dxo, dyo = self.open_page.best_size
+        dxc, dyc = self.closed_page.best_size
         if self.is_open:
-            return self.open_page.best_size
+            return wx.Size( max( dxo, dxc ), dyo )
 
+        return wx.Size( max( dxo, dxc ), dyc )
+
+    def _get_open_size ( self ):
+        """ Returns the open size for the page.
+        """
+        return self.open_page.best_size
+
+    def _get_closed_size ( self ):
+        """ Returns the closed size for the page.
+        """
         return self.closed_page.best_size
 
     @cached_property
@@ -317,7 +335,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
         if self.scrollable:
             self.control = control = traits_ui_scrolled_window( parent )
             control.SetScrollRate( 6, 6 )
-            control.SetMinSize( wx.Size( 0, 0 ) )
+            control.SetSize( wx.Size( 0, 0 ) )
         else:
             self.control = control = traits_ui_panel( parent, -1 )
 
@@ -408,7 +426,10 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
         control = self.control
         if control is not None:
             # Set the virtual size of the canvas (so scroll bars work right):
-            control.SetVirtualSize( control.GetSizer().CalcMin() )
+            sizer = control.GetSizer()
+            if control.GetSize()[0] == 0:
+                control.SetSize( sizer.CalcInit() )
+            control.SetVirtualSize( sizer.CalcMin() )
             control.Layout()
             control.Refresh()
 
@@ -440,6 +461,24 @@ class ThemedVerticalNotebookSizer ( wx.PySizer ):
             tdy   += dy
 
         return wx.Size( tdx, tdy )
+
+    def CalcInit ( self ):
+        """ Calculates a reasonable initial size of the control by aggregating
+            the sizes of the open and closed pages.
+        """
+        tdx, tdy = 0, 0
+        open_dy  = closed_dy = 0
+        for page in self._notebook.pages:
+            dxo, dyo = page.open_size
+            dxc, dyc = page.closed_size
+            tdx      = max( tdx, dxo, dxc )
+            if dyo > open_dy:
+                tdy += (dyo - open_dy + closed_dy)
+                open_dy, closed_dy = dyo, dyc
+            else:
+                tdy += dyc
+
+        return wx.Size( tdx, min( tdy, screen_dy / 2 ) )
 
     def RecalcSizes ( self ):
         """ Layout the contents of the sizer based on the sizer's current size
