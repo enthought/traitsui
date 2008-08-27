@@ -185,22 +185,29 @@ class ArrayStructure ( HasTraits ):
         elif len( object.shape ) == 2:
             self.view = self._two_dim_view( object, style, width, trait )
         else:
-            raise TraitError("Only 1D or 2D arrays supported")
+            raise TraitError( 'Only 1D or 2D arrays supported' )
 
     #---------------------------------------------------------------------------
     #  1D view:
     #---------------------------------------------------------------------------
 
     def _one_dim_view ( self, object, style, width, trait ):
-        content = []
-        shape   = object.shape
-        items   = []
+        content     = []
+        shape       = object.shape
+        items       = []
+        format_func = self.editor.factory.format_func
+        format_str  = self.editor.factory.format_str
+        
         for i in range( shape[0] ):
             name = 'f%d' % i
             self.add_trait( name, trait( object[i], event = 'field' ) )
-            items.append( Item( name  = name, 
-                                style = style,
-                                width = width ) )
+            items.append( Item( name        = name, 
+                                style       = style,
+                                width       = width,
+                                format_func = format_func,
+                                format_str  = format_str,
+                                padding     = -3 ) )
+            
         group = Group( orientation = 'horizontal', 
                        show_labels = False,
                        *items )
@@ -213,16 +220,23 @@ class ArrayStructure ( HasTraits ):
     #---------------------------------------------------------------------------
 
     def _two_dim_view ( self, object, style, width, trait ):
-        content = []
-        shape   = object.shape
+        content     = []
+        shape       = object.shape
+        format_func = self.editor.factory.format_func
+        format_str  = self.editor.factory.format_str
+        
         for i in range( shape[0] ):
             items = []
             for j in range( shape[1] ):
                 name = 'f%d_%d' % ( i, j )
                 self.add_trait( name, trait( object[i,j], event = 'field' ) )
-                items.append( Item( name  = name, 
-                                    style = style,
-                                    width = width ) )
+                items.append( Item( name        = name, 
+                                    style       = style,
+                                    width       = width,
+                                    format_func = format_func,
+                                    format_str  = format_str,
+                                    padding     = -3 ) )
+                
             group = Group( orientation = 'horizontal', 
                            show_labels = False,
                            *items )
