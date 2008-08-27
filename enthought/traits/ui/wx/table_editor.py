@@ -673,7 +673,6 @@ class TableEditor ( Editor ):
             row_label_width              = factory.row_label_width 
         )
         _grid = grid._grid
-        _grid.SetSize( wx.Size( max( 150, 80 * len( self.columns ) ), 150 ) )
         _grid.SetScrollLineY( factory.scroll_dy )
      
         # Set the default size for each table row:
@@ -682,14 +681,16 @@ class TableEditor ( Editor ):
             height = _grid.GetTextExtent( 'My' )[1] + 9
         _grid.SetDefaultRowSize( height )
             
-        dy = -1
-        if factory.rows > 0: 
-            self.scrollable = False 
-            if len( self.model.get_filtered_items() ) > 0:
-                height = _grid.GetRowSize( 0 )
-            dy = (_grid.GetColLabelSize() + (factory.rows * height)) 
-            
-        _grid.SetSizeHints( -1, dy, -1, dy )
+        # Allow the table to be resizable if the user did not explicitly 
+        # specify a number of rows to display:
+        self.scrollable = (factory.rows == 0)
+        
+        # Calculate a reasonable default size for the table:
+        if len( self.model.get_filtered_items() ) > 0:
+            height = _grid.GetRowSize( 0 )
+        dx = max( 150, 80 * len( self.columns ) )
+        dy = (_grid.GetColLabelSize() + ((factory.rows or 15) * height)) 
+        _grid.SetSizeHints( dx, dy, dx, dy )
         
         sizer.Add( grid.control, 1, wx.EXPAND ) 
         
