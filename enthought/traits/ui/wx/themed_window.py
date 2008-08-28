@@ -67,7 +67,7 @@ class ThemedWindow ( HasPrivateTraits ):
         """ Returns whether a specified (x,y) coordinate is inside the control
             or not.
         """
-        wdx, wdy = self.control.GetClientSizeTuple()
+        wdx, wdy = self.control.GetClientSize()
         return ((0 <= x < wdx) and (0 <= y < wdy))
         
     def refresh ( self ):
@@ -108,25 +108,26 @@ class ThemedWindow ( HasPrivateTraits ):
         """ Paint the background using the associated ImageSlice object.
         """
         dc = BufferDC( self.control )
-        self._do_paint( dc )
+        self._paint_bg( dc )
+        self._paint_fg( dc )
         dc.copy()
         
-    def _do_paint ( self, dc ):
-        """ Paints the background into an off-screen buffer using the associated 
-            ImageSlice object and returns the off-screen buffer and image slice
-            used.
+    def _paint_bg ( self, dc ):
+        """ Paints the background into the supplied device context using the 
+            associated ImageSlice object and returns the image slice used (if 
+            any).
         """
         from image_slice import paint_parent
         
         # Repaint the parent's theme (if necessary):
-        slice = paint_parent( dc, self.control )
+        paint_parent( dc, self.control )
         
         # Draw the background theme (if any):
         if self.theme is not None:
-            slice2 = self.theme.image_slice
-            if slice2 is not None:
+            slice = self.theme.image_slice
+            if slice is not None:
                 wdx, wdy = self.control.GetClientSize()
-                slice2.fill( dc, 0, 0, wdx, wdy, True )
+                slice.fill( dc, 0, 0, wdx, wdy, True )
                 
                 if self.debug:
                     dc.SetPen( wx.Pen( wx.RED ) )
@@ -140,28 +141,30 @@ class ThemedWindow ( HasPrivateTraits ):
                                       wdx - border.right  - border.left - 6, 
                                       wdy - border.bottom - border.top  - 6 )
                     content = theme.content
-                    x = slice2.xleft + content.left
-                    y = slice2.xtop  + content.top
+                    x = slice.xleft + content.left
+                    y = slice.xtop  + content.top
                     dc.DrawRectangle( x - 1, y - 1,
-                           wdx - slice2.xright  - content.right  - x + 2,
-                           wdy - slice2.xbottom - content.bottom - y + 2 )
+                           wdx - slice.xright  - content.right  - x + 2,
+                           wdy - slice.xbottom - content.bottom - y + 2 )
                            
                     label = theme.label
-                    if slice2.xtop >= slice2.xbottom:
-                        y, dy = 0, slice2.xtop
+                    if slice.xtop >= slice.xbottom:
+                        y, dy = 0, slice.xtop
                     else:
-                        y, dy = wdy - slice2.xbottom, slice2.xbottom
+                        y, dy = wdy - slice.xbottom, slice.xbottom
                         
                     if dy >= 13:
-                        x  = slice2.xleft + label.left
+                        x  = slice.xleft + label.left
                         y += label.top
                         dc.DrawRectangle( x - 1, y - 1,
-                            wdx - slice2.xright - label.right - x + 2,
+                            wdx - slice.xright - label.right - x + 2,
                             dy - label.bottom - label.top + 2 )
-                        
-                return slice2
-                
-        return slice
+        
+    def _paint_fg ( self, dc ):
+        """ Paints the foreground of the window into the supplied device 
+            context.
+        """
+        pass
         
     def _size ( self, event ):
         """ Handles the control being resized.

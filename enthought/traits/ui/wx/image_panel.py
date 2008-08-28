@@ -177,11 +177,9 @@ class ImagePanel ( ThemedWindow ):
         
     #-- wx.Python Event Handlers -----------------------------------------------
            
-    def _do_paint ( self, dc ):
-        """ Paint the background using the associated ImageSlice object.
+    def _paint_fg ( self, dc ):
+        """ Paints the foreground into the specified device context.
         """
-        slice = super( ImagePanel, self )._do_paint( dc )
-        
         # If we have text and have room to draw it, then do so:
         text = self.text
         if (text != '') and self.can_show_text:
@@ -195,6 +193,7 @@ class ImagePanel ( ThemedWindow ):
             wdx, wdy  = self.control.GetClientSizeTuple()
             tdx, tdy, descent, leading = self.text_size
             tx      = None
+            slice   = theme.image_slice
             xleft   = slice.xleft
             xright  = slice.xright
             xtop    = slice.xtop
@@ -229,8 +228,6 @@ class ImagePanel ( ThemedWindow ):
             dc.SetClippingRegion( cl, ty, cr - cl, tdy )
             dc.DrawText( text, tx, ty )
             dc.DestroyClippingRegion()
-            
-        return slice
         
     #-- Private Methods --------------------------------------------------------
     

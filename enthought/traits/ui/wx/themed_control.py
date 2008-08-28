@@ -123,6 +123,9 @@ class ThemedControl ( ThemedWindow ):
         # Initialize the control (set-up event handlers, ...):
         self.init_control()
         
+        # Make sure all internal state gets initialized:
+        self._image_changed( self.image )
+        
         # Make sure the control is sized correctly:
         size = self.best_size
         control.SetMinSize( size )
@@ -172,15 +175,12 @@ class ThemedControl ( ThemedWindow ):
     
     #-- Event Handlers ---------------------------------------------------------
     
+    @on_trait_change( 'theme.+, image' )
     def _updated_changed ( self ):
         """ Handles any update related trait being changed.
         """
         if self.control is not None:
             self.control.Refresh()
-        
-    @on_trait_change( 'theme.+' )
-    def _on_theme_changed ( self ):
-        self._updated_changed()
         
     def _image_changed ( self, image ):
         """ Handles the image being changed by updating the corresponding 
@@ -192,18 +192,11 @@ class ThemedControl ( ThemedWindow ):
             self._bitmap = image.create_image().ConvertToBitmap()
         
     #-- wxPython Event Handlers ------------------------------------------------
-    
-    def _erase_background ( self, event ):
-        """ Do not erase the background here (do it in the 'on_paint' handler).
-        """
-        pass
            
-    def _do_paint ( self, dc ):
-        """ Paints the background using the associated ImageSlice object.
+    def _paint_fg ( self, dc ):
+        """ Paints the foreground into the specified device context.
         """
         self.enabled = self.control.IsEnabled()
-        
-        slice = super( ThemedControl, self )._do_paint( dc )
         
         # Get the text and image offset to use:
         theme    = self.theme or default_theme
@@ -225,8 +218,6 @@ class ThemedControl ( ThemedWindow ):
             dc.SetTextForeground( theme.content_color )
             dc.SetFont( self.control.GetFont() )
             dc.DrawText( self.current_text, tx + ox, ty + oy )
-            
-        return slice
         
     def _size ( self, event ):
         """ Handles the control being resized.

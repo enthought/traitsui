@@ -37,9 +37,6 @@ from enthought.traits.ui.api \
 from enthought.traits.ui.ui_traits \
     import AView, Image
 
-from enthought.pyface.image_resource \
-    import ImageResource
-
 from editor_factory \
     import EditorFactory
 
