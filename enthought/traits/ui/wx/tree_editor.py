@@ -40,8 +40,8 @@ from enthought.pyface.image_list \
     import ImageList
 
 from enthought.traits.api \
-    import HasStrictTraits, Any, Dict, true, false, Tuple, Int, List, \
-           Instance, Str, Event, Enum, TraitError
+    import HasStrictTraits, Any, Dict, Bool, Tuple, Int, List, Instance, Str, \
+           Event, Enum, TraitError
 
 from enthought.traits.trait_base \
     import enumerate
@@ -54,6 +54,9 @@ from enthought.traits.ui.dock_window_theme \
 
 from enthought.traits.ui.undo \
     import ListUndoItem
+
+from enthought.traits.ui.tree_node \
+    import ITreeNodeAdapterBridge
 
 from enthought.traits.ui.menu \
     import Menu, Action, Separator
@@ -129,10 +132,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     multi_nodes = Dict
 
     # Are the individual nodes editable?
-    editable = true
+    editable = Bool( True )
 
     # Is the editor shared across trees?
-    shared_editor = false
+    shared_editor = Bool( False )
 
     # Reference to a shared object editor
     editor = Instance( EditorFactory )
@@ -141,10 +144,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     dock_theme = Instance( DockWindowTheme )
 
     # Show icons for tree nodes?
-    show_icons = true
+    show_icons = Bool( True )
 
     # Hide the tree root node?
-    hide_root = false
+    hide_root = Bool( False )
 
     # Layout orientation of the tree and the editor
     orientation = Orientation
@@ -538,7 +541,7 @@ class SimpleEditor ( Editor ):
 
         def _do_expand ( nid ):
             expanded, node, object = self._get_node_data( nid )
-            if node._has_children( object ):
+            if self._has_children( node, object ):
                 tree.SetItemHasChildren( nid, True )
                 self._expand_node( nid )
                 tree.Expand( nid )
@@ -562,7 +565,7 @@ class SimpleEditor ( Editor ):
         """
         if levels > 0:
             expanded, node, object = self._get_node_data( nid )
-            if node._has_children( object ):
+            if self._has_children( node, object ):
                 self._tree.SetItemHasChildren( nid, True )
                 self._expand_node( nid )
                 if expand:
@@ -589,10 +592,11 @@ class SimpleEditor ( Editor ):
                 icon = self._get_icon( node, object )
                 self._root_nid = nid = tree.AddRoot( node.get_label( object ),
                                                      icon, icon )
-                self._map[ id( object ) ] = [ ( node.children, nid ) ]
+                self._map[ id( object ) ] = [ ( node.get_children_id( object ),
+                                                nid ) ]
                 self._add_listeners( node, object )
                 self._set_node_data( nid, ( False, node, object) )
-                if self.factory.hide_root or node._has_children( object ):
+                if self.factory.hide_root or self._has_children( node, object ):
                     tree.SetItemHasChildren( nid, True )
                     self._expand_node( nid )
                     if not self.factory.hide_root:
@@ -622,11 +626,11 @@ class SimpleEditor ( Editor ):
         tree = self._tree
         icon = self._get_icon( node, object )
         cnid = tree.AppendItem( nid, node.get_label( object ), icon, icon )
-        has_children = node._has_children( object )
+        has_children = self._has_children( node, object )
         tree.SetItemHasChildren( cnid, has_children )
         self._set_node_data( cnid, ( False, node, object ) )
         self._map.setdefault( id( object ), [] ).append(
-            ( node.children, cnid ) )
+            ( node.get_children_id( object ), cnid ) )
         self._add_listeners( node, object )
 
         # Automatically expand the new node (if requested):
@@ -721,6 +725,40 @@ class SimpleEditor ( Editor ):
                 ignore, pnode, pobject = self._get_node_data( pnid )
                 
                 return ( pnode, pobject, i )
+                
+    #---------------------------------------------------------------------------
+    #  Returns whether a specified object has any children:
+    #---------------------------------------------------------------------------
+    
+    def _has_children ( self, node, object ):
+        """ Returns whether a specified object has any children.
+        """
+        return (node.allows_children( object ) and node.has_children( object )) 
+                
+    #---------------------------------------------------------------------------
+    #  Returns whether a given object is droppable on the node:    
+    #---------------------------------------------------------------------------
+                                
+    def _is_droppable ( self, node, object, add_object, for_insert ):
+        """ Returns whether a given object is droppable on the node.
+        """
+        if for_insert and (not node.can_insert( object )):
+            return False
+            
+        return node.can_add( object, add_object )
+                           
+    #---------------------------------------------------------------------------
+    #  Returns a droppable version of a specified object:    
+    #---------------------------------------------------------------------------
+                                                      
+    def _drop_object ( self, node, object, dropped_object, make_copy = True ):
+        """ Returns a droppable version of a specified object.
+        """
+        new_object = node.drop_object( object, dropped_object )
+        if (new_object is not dropped_object) or (not make_copy):
+            return new_object
+            
+        return copy.deepcopy( new_object )
 
     #---------------------------------------------------------------------------
     #  Returns the icon index for the specified object:
@@ -838,9 +876,9 @@ class SimpleEditor ( Editor ):
         if len( nodes ) == 1:
             return ( object, nodes[0] )
 
-        # If none found, give up:
+        # If none found, try to create an adapted node for the object:
         if len( nodes ) == 0:
-            return ( object, None )
+            return ( object, ITreeNodeAdapterBridge( adapter = object ) ) 
 
         # Use all selected nodes that have the same 'node_for' list as the
         # first selected node:
@@ -857,7 +895,7 @@ class SimpleEditor ( Editor ):
         # found, just use the first selected node as the 'root node':
         root_node = None
         for i, node in enumerate( nodes ):
-            if node.children == '':
+            if node.get_children_id( object ) == '':
                 root_node = node
                 del nodes[i]
                 break
@@ -886,6 +924,7 @@ class SimpleEditor ( Editor ):
         for node in self.factory.nodes:
             if issubclass( klass, tuple( node.node_for ) ):
                 return node
+                
         return None
 
     #---------------------------------------------------------------------------
@@ -899,6 +938,7 @@ class SimpleEditor ( Editor ):
             for klass in node.node_for:
                 if class_name == klass.__name__:
                     return ( node, klass )
+                    
         return ( None, None )
 
     #---------------------------------------------------------------------------
@@ -1544,11 +1584,11 @@ class SimpleEditor ( Editor ):
         expanded, node, object, nid, point = self._hit_test( wx.Point( x, y ) )
         if node is not None:
             if drag_result == wx.DragMove:
-                if not node._is_droppable( object, data, False ):
+                if not self._is_droppable( node, object, data, False ):
                     return wx.DragNone
 
                 if self._dragging is not None:
-                    data = node._drop_object( object, data, False )
+                    data = self._drop_object( node, object, data, False )
                     if data is not None:
                         try:
                             self._begin_undo()
@@ -1558,7 +1598,7 @@ class SimpleEditor ( Editor ):
                         finally:
                             self._end_undo()
                 else:
-                    data = node._drop_object( object, data )
+                    data = self._drop_object( node, object, data )
                     if data is not None:
                         self._undoable_append( node, object, data, False )
 
@@ -1567,7 +1607,7 @@ class SimpleEditor ( Editor ):
             to_node, to_object, to_index = self._node_index( nid )
             if to_node is not None:
                 if self._dragging is not None:
-                    data = node._drop_object( to_object, data, False )
+                    data = self._drop_object( node, to_object, data, False )
                     if data is not None:
                         from_node, from_object, from_index = \
                             self._node_index( self._dragging )
@@ -1583,7 +1623,7 @@ class SimpleEditor ( Editor ):
                         finally:
                             self._end_undo()
                 else:
-                    data = to_node._drop_object( to_object, data )
+                    data = self._drop_object( to_node, to_object, data )
                     if data is not None:
                         self._undoable_insert( to_node, to_object, to_index,
                                                data, False )
@@ -1610,7 +1650,8 @@ class SimpleEditor ( Editor ):
             (not self._is_drag_ok( self._dragging, data, object ))):
             return wx.DragNone
             
-        if (node is not None) and node._is_droppable( object, data, insert ):
+        if ((node is not None) and 
+            self._is_droppable( node, object, data, insert )):
             return drag_result
             
         return wx.DragNone
