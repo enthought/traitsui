@@ -236,6 +236,21 @@ class ThemedWindow ( HasPrivateTraits ):
         """
         self._mouse_event( 'motion', event )
         
+    def _enter ( self, event ):
+        """ Handles the mouse entering the window event.
+        """
+        self._mouse_event( 'enter', event )
+        
+    def _leave ( self, event ):
+        """ Handles the mouse leaving the window event.
+        """
+        self._mouse_event( 'leave', event )
+        
+    def _wheel ( self, event ):
+        """ Handles a mouse wheel event.
+        """
+        self._mouse_event( 'wheel', event )
+        
     #-- Private Methods --------------------------------------------------------
     
     def _mouse_event ( self, name, event ):

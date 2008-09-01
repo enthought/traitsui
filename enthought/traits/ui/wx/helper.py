@@ -426,7 +426,10 @@ handlers = (
     ( wx.EVT_RIGHT_DOWN,       '_right_down' ),
     ( wx.EVT_RIGHT_UP,         '_right_up' ),
     ( wx.EVT_RIGHT_DCLICK,     '_right_dclick' ),
-    ( wx.EVT_MOTION,           '_motion' )
+    ( wx.EVT_MOTION,           '_motion' ),
+    ( wx.EVT_ENTER_WINDOW,     '_enter' ),
+    ( wx.EVT_LEAVE_WINDOW,     '_leave' ),
+    ( wx.EVT_MOUSEWHEEL,       '_wheel' )
 )    
     
 def init_wx_handlers ( control, object, prefix = '' ):
