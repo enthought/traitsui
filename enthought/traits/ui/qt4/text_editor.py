@@ -320,6 +320,4 @@ class ReadonlyTextEditor ( ReadonlyEditor ):
         if self.factory.password:
             new_value = '*' * len(new_value)
 
-        if self.item.resizable or self.item.height != -1:
-            self.control.setTextFormat(QtCore.Qt.PlainText)
         self.control.setText(new_value)
