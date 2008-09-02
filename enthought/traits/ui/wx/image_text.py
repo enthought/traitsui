@@ -50,8 +50,8 @@ class ImageText ( wx.PyWindow ):
         super( ImageText, self ).__init__( parent, -1, 
                                            style = wx.FULL_REPAINT_ON_RESIZE )
                                            
-        self._text_size = None  
-        self.SetLabel( text )
+        self._text_size = None 
+        self._text      = text
         
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND( self, self._erase_background )
@@ -80,15 +80,15 @@ class ImageText ( wx.PyWindow ):
         
         paint_parent( dc, self )
             
-        text = self.GetLabel()
         if self._theme is not None:
             wdx, wdy = self.GetClientSize()
             self._image_slice.fill( dc, 0, 0, wdx, wdy, True )
             dc.SetTextForeground( self._image_slice.content_color )
+            
         dc.SetBackgroundMode( wx.TRANSPARENT )
         dc.SetFont( self.GetFont() )
         tx, ty, tdx, tdy = self._get_text_bounds()
-        dc.DrawText( text, tx, ty )
+        dc.DrawText( self._text, tx, ty )
         dc.copy()
          
     def GetMinSize ( self ):
@@ -118,8 +118,7 @@ class ImageText ( wx.PyWindow ):
     def SetLabel ( self, label ):
         """ Set the window label.
         """
-        super( ImageText, self ).SetLabel( label )
-        
+        self._text = label
         self._refresh()
 
     def _refresh ( self ):
@@ -137,7 +136,7 @@ class ImageText ( wx.PyWindow ):
         """
         if self._text_size is None:
             if text is None:
-                text = self.GetLabel()
+                text = self._text
                 
             if text.strip() == '':
                 text = 'M'
