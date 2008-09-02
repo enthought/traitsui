@@ -52,8 +52,8 @@ class ToolkitEditorFactory ( EditorFactory ):
     #  Trait definitions:
     #---------------------------------------------------------------------------
     
-    # Trait definitions for each tuple field:
-    traits = Any
+    # Trait type definitions for each tuple field:
+    types = Any
     
     # Labels for each of the tuple fields:
     labels = List( Str )
@@ -152,7 +152,7 @@ class TupleStructure ( HasTraits ):
         """ Initializes the object.
         """
         factory = editor.factory
-        traits  = factory.traits
+        types   = factory.types
         labels  = factory.labels
         editors = factory.editors
         cols    = factory.cols
@@ -170,21 +170,21 @@ class TupleStructure ( HasTraits ):
         len_labels  = len( labels )
         len_editors = len( editors )
         
-        if traits is None:
+        if types is None:
             type = editor.value_trait.handler
             if isinstance( type, Tuple ):
-                traits = type.traits
+                types = type.types
                 
-        if not isinstance( traits, SequenceTypes ):
-            traits = [ traits ]
+        if not isinstance( types, SequenceTypes ):
+            types = [ types ]
             
-        len_traits = len( traits )
-        if len_traits == 0:
-            traits     = [ Any ]
-            len_traits = 1
+        len_types = len( types )
+        if len_types == 0:
+            types     = [ Any ]
+            len_types = 1
             
         for i, value in enumerate( object ):
-            trait = traits[ i % len_traits ]
+            type = types[ i % len_types ]
             
             label = ''
             if i < len_labels:
@@ -195,7 +195,7 @@ class TupleStructure ( HasTraits ):
                 editor = editors[i]
                 
             name = 'f%d' % i
-            self.add_trait( name, trait( value, event = 'field' ) )
+            self.add_trait( name, type( value, event = 'field' ) )
             item = Item( name = name, label = label, editor = editor )
             if cols <= 1:
                 content.append( item )
