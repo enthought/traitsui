@@ -38,8 +38,11 @@ from enthought.traits.api \
 from enthought.traits.trait_notifiers \
     import set_ui_handler
 
-from enthought.traits.ui.api \
-    import UI, Theme
+from enthought.traits.ui.ui \
+    import UI
+
+from enthought.traits.ui.theme \
+    import Theme
     
 from enthought.traits.ui.dock_window_theme \
     import DockWindowTheme

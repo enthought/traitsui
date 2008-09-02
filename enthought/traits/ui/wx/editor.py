@@ -27,7 +27,7 @@ import wx
 from enthought.traits.api \
     import HasTraits, Int, Instance, Str, Callable
     
-from enthought.traits.ui.api \
+from enthought.traits.ui.editor \
     import Editor as UIEditor
     
 from constants \

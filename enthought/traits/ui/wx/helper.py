@@ -35,7 +35,7 @@ from enthought.traits.api \
     import HasPrivateTraits, Enum, Trait, CTrait, Instance, Str, Any, Int, \
            Event, Bool, BaseTraitHandler, TraitError
     
-from enthought.traits.ui.api \
+from enthought.traits.ui.view \
     import View
     
 from enthought.traits.ui.ui_traits \
