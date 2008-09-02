@@ -390,6 +390,24 @@ class GUIToolkit ( Toolkit ):
             specified toolkit image.
         """
         return ( image.width(), image.height() )
+        
+    #---------------------------------------------------------------------------
+    #  Returns a dictionary of useful constants:
+    #---------------------------------------------------------------------------
+    
+    def constants ( self ):
+        """ Returns a dictionary of useful constants.
+        
+            Currently, the dictionary should have the following key/value pairs:
+            - WindowColor': the standard window background color in the toolkit
+              specific color format.
+        """
+        return {
+            # fixme: This should be updated to have the Qt window background 
+            # color. This is just a placeholder to prevent traits.ui.api
+            # problems.
+            'WindowColor': 0xFFFFFF 
+        }
 
     #---------------------------------------------------------------------------
     #  GUI toolkit dependent trait definitions:
