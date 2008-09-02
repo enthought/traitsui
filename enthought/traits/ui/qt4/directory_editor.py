@@ -67,7 +67,7 @@ class SimpleEditor ( SimpleFileEditor ):
     def _create_file_dialog ( self ):
         """ Creates the correct type of file dialog.
         """
-        dlg = QtGui.QFileDialog(self.control)
+        dlg = QtGui.QFileDialog(self.control.parentWidget())
         dlg.selectFile(self._file_name.text())
         dlg.setFileMode(QtGui.QFileDialog.Directory)
 
