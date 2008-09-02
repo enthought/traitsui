@@ -51,7 +51,7 @@ from enthought.util.wx.drag_and_drop \
     import PythonDropTarget, clipboard
 
 from constants \
-    import screen_dx, screen_dy
+    import WindowColor, screen_dx, screen_dy
     
 from helper \
     import position_window    
@@ -451,6 +451,21 @@ class GUIToolkit ( Toolkit ):
             specified toolkit image.
         """
         return ( image.GetWidth(), image.GetHeight() )
+        
+    #---------------------------------------------------------------------------
+    #  Returns a dictionary of useful constants:
+    #---------------------------------------------------------------------------
+    
+    def constants ( self ):
+        """ Returns a dictionary of useful constants.
+        
+            Currently, the dictionary should have the following key/value pairs:
+            - WindowColor': the standard window background color in the toolkit
+              specific color format.
+        """
+        return {
+            'WindowColor': WindowColor
+        }
         
     #---------------------------------------------------------------------------
     #  Returns a renderer used to render 'themed' table cells for a specified 
