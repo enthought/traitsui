@@ -31,7 +31,7 @@ from math \
 
 from enthought.traits.api \
      import CTrait, TraitError, Property, Range, Enum, Str, Int, Float, Any, \
-            Bool
+            Bool, Undefined
 
 from enthought.traits.ui.api \
     import View
@@ -88,7 +88,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     format = Str( '%s' )
 
     # Is the range for floating pointer numbers (vs. integers)?
-    is_float = Bool( True )
+    is_float = Bool( Undefined )
 
     # Display mode to use
     mode = Enum( 'auto', 'slider', 'xslider', 'spinner', 'enum', 'text' )
@@ -152,7 +152,8 @@ class ToolkitEditorFactory ( EditorFactory ):
     def _set_low ( self, low ):
         old_low         = self._low
         self._low = low = self._cast( low )
-        self.is_float   = isinstance( low, float )
+        if self.is_float is Undefined:
+            self.is_float = isinstance( low, float )
 
         if (self.low_label == '') or (self.low_label == str( old_low )):
             self.low_label = str( low  )
@@ -163,7 +164,8 @@ class ToolkitEditorFactory ( EditorFactory ):
     def _set_high ( self, high ):
         old_high          = self._high
         self._high = high = self._cast( high )
-        self.is_float     = isinstance( high, float )
+        if self.is_float is Undefined:
+            self.is_float = isinstance( high, float )
 
         if (self.high_label == '') or (self.high_label == str( old_high )):
             self.high_label = str( high )
@@ -185,13 +187,18 @@ class ToolkitEditorFactory ( EditorFactory ):
         low, high = self.low, self.high
 
         if (low is None) and (self.low_name != ''):
-            low           = self.named_value( self.low_name, ui )
-            self.is_float = isinstance( low, float )
+            low = self.named_value( self.low_name, ui )
+            if self.is_float is Undefined:
+                self.is_float = isinstance( low, float )
 
         if (high is None) and (self.high_name != ''):
-            high          = self.named_value( self.high_name, ui )
-            self.is_float = isinstance( low, float )
+            high = self.named_value( self.high_name, ui )
+            if self.is_float is Undefined:
+                self.is_float = isinstance( high, float )
 
+        if self.is_float is Undefined:
+            self.is_float = True
+            
         return ( low, high, self.is_float )
 
     #---------------------------------------------------------------------------
