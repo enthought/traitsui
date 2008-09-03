@@ -339,15 +339,15 @@ class SimpleEditor ( Editor ):
         for i in range( factory.columns ):
             list_sizer.AddGrowableCol( j )
             j += (1 + resizable)
+            
         values        = self.value
         index         = 0
-        width, height = 100, 18
+        width, height = 0, 0
 
-        is_fake       = (resizable and (len( values ) == 0))
+        is_fake = (resizable and (len( values ) == 0))
         if is_fake:
             values = [ item_trait.default_value()[1] ]
 
-        width  = 0
         editor = self._editor
         for value in values:
             width1 = height = 0
@@ -370,6 +370,7 @@ class SimpleEditor ( Editor ):
             except:
                 if not is_fake:
                     raise
+                    
                 pcontrol = wx.Button( list_pane, -1, 'sample' )
 
             pcontrol.Fit()
@@ -395,8 +396,16 @@ class SimpleEditor ( Editor ):
         rows = 1
         if not self.single_row:
             rows = self.factory.rows
+        
+        # Make sure we have valid values set for width and height (in case there
+        # was no data to base them on):
+        if width == 0:
+            width = 100
+            
+        if height == 0:
+            height = 20
 
-        list_pane.SetSize( wx.Size(
+        list_pane.SetMinSize( wx.Size(
              width + ((trait_handler.maxlen > rows) * scrollbar_dx),
              height * rows ) )
         list_pane.SetupScrolling()
