@@ -688,9 +688,9 @@ class TableEditor ( Editor ):
         # Calculate a reasonable default size for the table:
         if len( self.model.get_filtered_items() ) > 0:
             height = _grid.GetRowSize( 0 )
-        dx = max( 150, 80 * len( self.columns ) )
-        dy = (_grid.GetColLabelSize() + ((factory.rows or 15) * height)) 
-        _grid.SetSizeHints( dx, dy, dx, dy )
+        _grid.SetMinSize( wx.Size(
+            max( 150, 80 * len( self.columns ) ), 
+            _grid.GetColLabelSize() + ((factory.rows or 15) * height) ) )
         
         sizer.Add( grid.control, 1, wx.EXPAND ) 
         

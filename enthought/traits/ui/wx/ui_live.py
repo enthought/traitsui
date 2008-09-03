@@ -203,10 +203,8 @@ class LiveWindow ( BaseDialog ):
             sizer       = wx.BoxSizer( wx.VERTICAL )
             sw          = traits_ui_scrolled_window( window )
             trait_sheet = panel( ui, sw )
-            sizer.Add( trait_sheet, 1, wx.EXPAND | wx.ALL, 4 )
-            tsdx, tsdy = trait_sheet.GetSizeTuple()
-            tsdx += 8
-            tsdy += 8
+            sizer.Add( trait_sheet, 1, wx.EXPAND )
+            tsdx, tsdy = trait_sheet.GetSize()
             sw.SetScrollRate( 16, 16 )
             max_dy = (2 * screen_dy) / 3
             sw.SetSizer( sizer )

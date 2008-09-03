@@ -30,7 +30,7 @@ from enthought.traits.api \
            Type, Bool
     
 from enthought.traits.ui.view \
-    import View, kind_trait
+    import View, AKind
     
 from enthought.traits.ui.ui_traits \
     import AView
@@ -120,7 +120,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     id = Str
     
     # Kind of pop-up editor (live, modal, nonmodal, wizard)
-    kind = kind_trait  
+    kind = AKind  
     
     # The orientation of the instance editor relative to the instance selector
     orientation = Enum( 'default', 'horizontal', 'vertical' )
