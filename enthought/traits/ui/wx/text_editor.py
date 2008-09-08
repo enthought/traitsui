@@ -198,7 +198,7 @@ class SimpleEditor ( Editor ):
         self.evaluate = factory.evaluate
         self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
             
-        if (not factory.multi_line) or factory.is_grid_cell or factory.password:
+        if (not factory.multi_line) or factory.password:
             style &= ~wx.TE_MULTILINE
         
         if factory.password:
@@ -217,7 +217,7 @@ class SimpleEditor ( Editor ):
             
         wx.EVT_KILL_FOCUS( control, self.update_object )
         
-        if factory.auto_set and (not factory.is_grid_cell):
+        if factory.auto_set:
            wx.EVT_TEXT( parent, control.GetId(), self.update_object )
            
         self.control = control

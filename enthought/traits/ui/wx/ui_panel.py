@@ -1054,7 +1054,8 @@ class FillPanel ( object ):
             growable    = 0
             if (item_width != -1.0) or (item_height != -1.0):
                 if (0.0 < item_width <= 1.0) and self.is_horizontal:
-                    growable = int( 1000.0 * item_width )
+                    growable   = int( 1000.0 * item_width )
+                    item_width = -1
                     
                 item_width = int( item_width )
                 if item_width < -1:
@@ -1065,7 +1066,8 @@ class FillPanel ( object ):
                     fixed_width = True
                     
                 if (0.0 < item_height <= 1.0) and (not self.is_horizontal):
-                    growable = int( 1000.0 * item_height )
+                    growable    = int( 1000.0 * item_height )
+                    item_height = -1
 
                 item_height = int( item_height )
                 if item_height < -1:
