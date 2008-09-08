@@ -623,9 +623,24 @@ class SimpleEditor ( Editor ):
     def _append_node ( self, nid, node, object ):
         """ Appends a new node to the specified node.
         """
-        tree = self._tree
-        icon = self._get_icon( node, object )
-        cnid = tree.AppendItem( nid, node.get_label( object ), icon, icon )
+        return self._insert_node( nid, None, node, object )
+
+    #---------------------------------------------------------------------------
+    #  Inserts a new node before a specified index into the children of the 
+    #  specified node:
+    #---------------------------------------------------------------------------
+
+    def _insert_node ( self, nid, index, node, object ):
+        """ Inserts a new node before a specified index into the children of the 
+            specified node.
+        """
+        tree  = self._tree
+        icon  = self._get_icon( node, object )
+        label = node.get_label( object )
+        if index is None:
+            cnid = tree.AppendItem( nid, label, icon, icon )
+        else:
+            cnid = tree.InsertItemBefore( nid, index, label, icon, icon )
         has_children = self._has_children( node, object )
         tree.SetItemHasChildren( cnid, has_children )
         self._set_node_data( cnid, ( False, node, object ) )
@@ -1393,10 +1408,13 @@ class SimpleEditor ( Editor ):
         """
         nid = event.GetItem()
         if nid.IsOk():
-            expanded, node, object = self._get_node_data( nid )
-            tooltip = node.get_tooltip( object )
-            if tooltip != '':
-                event.SetToolTip( tooltip )
+            node_data = self._get_node_data( nid )
+            if node_data is not None:
+                expanded, node, object = node_data
+                tooltip = node.get_tooltip( object )
+                if tooltip != '':
+                    event.SetToolTip( tooltip )
+                
         event.Skip()
 
     #---------------------------------------------------------------------------
@@ -1889,7 +1907,7 @@ class SimpleEditor ( Editor ):
             if self.factory.editable:
                 self._tree.SelectItem( self._tree.GetLastChild( nid ) )
 
-#----- Model event handlers: ---------------------------------------------------
+    #-- Model event handlers ---------------------------------------------------
 
     #---------------------------------------------------------------------------
     #  Handles the children of a node being completely replaced:
@@ -1934,17 +1952,11 @@ class SimpleEditor ( Editor ):
         self.log_change( self._get_undo_item, object, name, event )
 
         start = event.index
-        n     = len( event.added )
         end   = start + len( event.removed )
         tree  = self._tree
         
         for expanded, node, nid in self._object_info_for( object, name ):
-            children = node.get_children( object )
-            
-            # If the new children aren't all at the end, remove/add them all:
-            if (n > 0) and ((start + n) != len( children )):
-                self._children_replaced( object, name, event )
-                return
+            n = len( node.get_children( object ) )
     
             # Only add/remove the changes if the node has already been expanded:
             if expanded:
@@ -1953,13 +1965,19 @@ class SimpleEditor ( Editor ):
                     self._delete_node( cnid )
     
                 # Add all of the children that were added:
+                remaining = n - len( event.removed )
                 for child in event.added:
                     child, child_node = self._node_for( child )
                     if child_node is not None:
-                        self._append_node( nid, child_node, child )
+                        if start < remaining:
+                            self._insert_node( nid, start, child_node, child )
+                            start     += 1
+                            remaining += 1
+                        else:
+                            self._append_node( nid, child_node, child )
     
             # Indicate whether the node has any children now:
-            tree.SetItemHasChildren( nid, len( children ) > 0 )
+            tree.SetItemHasChildren( nid, n > 0 )
     
             # Try to expand the node (if requested):
             root = tree.GetRootItem()
