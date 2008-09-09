@@ -114,10 +114,10 @@ def ui_dialog ( ui, parent, style ):
     restore_window( ui, is_popup = (style in Popups) )
     
     ui.control.Layout()
-    if style == NONMODAL:
-        ui.control.Show()
-    else:
+    if style == MODAL:
         ui.control.ShowModal()
+    else:
+        ui.control.Show()
     
 #-------------------------------------------------------------------------------
 #  'LiveWindow' class:
