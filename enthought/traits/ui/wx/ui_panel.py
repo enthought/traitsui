@@ -963,11 +963,10 @@ class FillPanel ( object ):
                 continue
                
             # Otherwise, it must be a trait Item:
-            object      = eval( item.object_, globals(), ui.context )
-            trait       = object.base_trait( name )
-            desc        = trait.desc or ''
-            label       = None
-            fixed_width = False
+            object = eval( item.object_, globals(), ui.context )
+            trait  = object.base_trait( name )
+            desc   = trait.desc or ''
+            label  = None
             
             # If we are displaying labels on the left, add the label to the 
             # user interface:
@@ -1059,11 +1058,9 @@ class FillPanel ( object ):
                     
                 item_width = int( item_width )
                 if item_width < -1:
-                    item_width  = -item_width
-                    fixed_width = True
+                    item_width = -item_width
                 elif item_width != -1:
-                    item_width  = max( item_width, width )
-                    fixed_width = True
+                    item_width = max( item_width, width )
                     
                 if (0.0 < item_height <= 1.0) and (not self.is_horizontal):
                     growable    = int( 1000.0 * item_height )
@@ -1127,8 +1124,6 @@ class FillPanel ( object ):
             layout_style = editor.layout_style
             if not show_labels:
                 layout_style |= wx.EXPAND
-            if fixed_width and self.is_horizontal:
-                layout_style &= ~wx.EXPAND
                 
             item_sizer.Add( control, growable, 
                             flags | layout_style | wx.ALIGN_CENTER_VERTICAL,
