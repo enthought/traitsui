@@ -605,6 +605,11 @@ class SimpleEditor ( Editor ):
                         self._on_tree_sel_changed()
 
                 self.expand_levels( nid, self.factory.auto_open, False )
+                
+                # It seems like in some cases, an explicit Refresh is needed to
+                # trigger a screen update:
+                tree.Refresh()
+                
             # fixme: Clear the current editor (if any)...
             
     #---------------------------------------------------------------------------
