@@ -36,6 +36,10 @@ class WizardPage(MWizardPage, HasTraits):
 
     id = Str
 
+    next_id = Str
+
+    last_page = Bool(False)
+
     complete = Bool(False)
 
     heading = Unicode
