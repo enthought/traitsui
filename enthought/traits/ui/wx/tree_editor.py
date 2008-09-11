@@ -809,7 +809,7 @@ class SimpleEditor ( Editor ):
                 
         # If it is an ImageResource, get its file name directly:
         if isinstance( icon_name, ImageResource ):
-            file_name = icon_name.absolute_path
+            file_name = icon_name
 
         return self._image_list.GetIndex( file_name )
 
