@@ -62,7 +62,9 @@ class Wizard(MWizard, Dialog):
         control.setModal(self.style == 'modal')
 
         if self.size != (-1, -1):
-            control.resize(*self.size)
+            size = QtCore.QSize(*self.size)
+            control.setMaximumSize(size)
+            control.resize(size)
 
         if not self.show_cancel:
             control.setOption(QtGui.QWizard.NoCancelButton)
@@ -72,7 +74,7 @@ class Wizard(MWizard, Dialog):
             QtCore.QObject.connect(control, QtCore.SIGNAL('helpRequested()'),
                     self._help_requested)
 
-        # Add the pages.
+        # Add the initial pages.
         for page in self.pages:
             control.addWizardPage(page)
 
@@ -93,22 +95,43 @@ class Wizard(MWizard, Dialog):
 
     #### Trait handlers #######################################################
 
+    def _get_pages(self):
+        """ The pages getter. """
+
+        return self.controller.pages
+
+    def _set_pages(self, pages):
+        """ The pages setter. """
+
+        # Remove pages from the old list that appear in the new list.  The old
+        # list will now contain pages that are no longer in the wizard.
+        old_pages = self.pages
+        new_pages = []
+
+        for page in pages:
+            try:
+                old_pages.remove(page)
+            except ValueError:
+                new_pages.append(page)
+
+        # Dispose of the old pages.
+        for page in old_pages:
+            page.dispose_page()
+
+        # If we have created the control then we need to add the new pages,
+        # otherwise we leave it until the control is created.
+        if self.control:
+            for page in new_pages:
+                self.control.addWizardPage(page)
+
+        self.controller.pages = pages
+
     def _controller_default(self):
         """ Provide a default controller. """
 
         from enthought.pyface.wizard.wizard_controller import WizardController
 
         return WizardController()
-
-    def _get_pages(self):
-        """ Returns the pages in the wizard. """
-
-        return self.controller.pages
-
-    def _set_pages(self, pages):
-        """ Sets the pages in the wizard. """
-
-        self.controller.pages = pages
 
 
 class _Wizard(QtGui.QWizard):
@@ -166,6 +189,8 @@ class _Wizard(QtGui.QWizard):
     def nextId(self):
         """ Reimplemented to return the id of the next page to display. """
 
+        if self.currentId() < 0:
+            return self._page_to_id(self._controller.get_first_page())
         current = self._ids[self.currentId()]
         next = self._controller.get_next_page(current)
 
