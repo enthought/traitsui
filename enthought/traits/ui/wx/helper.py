@@ -310,15 +310,17 @@ def _on_paint ( event ):
     paint_parent( wx.PaintDC( control ), control )
     
 #-------------------------------------------------------------------------------
-#  Creates a wx.ScrolledWindow that correctly sets its background color to be
+#  Creates a ScrolledPanel that correctly sets its background color to be
 #  the same as its parents:
 #-------------------------------------------------------------------------------
 
 def traits_ui_scrolled_window ( parent ):
-    """ Creates a wx.ScrolledWindow that correctly sets its background color to 
+    """ Creates a ScrolledPanel that correctly sets its background color to 
         be the same as its parents.
     """
-    sw = wx.ScrolledWindow( parent )
+    # Always use our subclass of ScrolledWindow which correctly handles its
+    # children getting focus.
+    sw = ScrolledPanel( parent )
     sw.SetBackgroundColour( parent.GetBackgroundColour() )
     
     return sw
@@ -340,17 +342,71 @@ def disconnect_no_id ( control, *events ):
     for event in events:
         event( control, None )
 
+
+#-------------------------------------------------------------------------------
+#  'ChildFocusOverride' class:
+#-------------------------------------------------------------------------------
+
+class ChildFocusOverride ( wx.PyEvtHandler ):
+    """ Override the scroll-to-focus behaviour in wx 2.8.8's ScrolledWindow C++
+    implementation for ScrolledPanel.
+
+    Instantiating this class with the ScrolledPanel will register the new
+    instance as the event handler for the panel.
+    """
+
+    def __init__( self, window ):
+        self.window = window
+        wx.PyEvtHandler.__init__( self )
+
+        # Make self the event handler for the window.
+        window.PushEventHandler( self )
+
+    def ProcessEvent( self, event ):
+        if isinstance( event, wx.ChildFocusEvent ):
+            # Handle this one with our code and don't let the C++ event handler
+            # get it.
+            self.window.OnChildFocus( event )
+            # We return False because the event always gets Skipped.
+            return False
+        else:
+            # Otherwise, just pass this along in the event handler chain.
+            result = self.GetNextHandler().ProcessEvent( event )
+            return result
+
+
 #-------------------------------------------------------------------------------
 #  'ScrolledPanel' class:
 #-------------------------------------------------------------------------------
 
 class ScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
     
+    def __init__(self, parent, id=-1, pos = wx.DefaultPosition,
+                 size = wx.DefaultSize, style = wx.TAB_TRAVERSAL,
+                 name = "scrolledpanel"):
+
+        wx.PyScrolledWindow.__init__(self, parent, id,
+                                     pos=pos, size=size,
+                                     style=style, name=name)
+        self.SetInitialSize(size)
+        # Override the C++ ChildFocus event handler.
+        ChildFocusOverride(self)
+
+    def OnChildFocus(self, evt):
+        # If the child window that gets the focus is not visible,
+        # this handler will try to scroll enough to see it.
+        evt.Skip()
+        child = evt.GetWindow()
+        self.ScrollChildIntoView(child)
+
     def ScrollChildIntoView ( self, child ):
         """ Scrolls the panel such that the specified child window is in view.
             This method overrides the original in the base class so that
             nested subpanels are handled correctly.
-        """        
+        """
+        if type( child ) is wx.Panel:
+            # Ignore plain Panels but do handle other subclasses of Panel.
+            return
         sppux, sppuy = self.GetScrollPixelsPerUnit()
         vsx, vsy     = self.GetViewStart()
 
