@@ -412,7 +412,9 @@ class ScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
 
         subwindow = child.FindFocus()
         crx, cry, crdx, crdy = subwindow.GetRect()
-        while subwindow is not child:
+        while subwindow is not self:
+            # Make sure that the descendant's position information is relative
+            # to us, not its local parent.
             subwindow = subwindow.GetParent()
             pwx,pwy   = subwindow.GetRect()[:2]
             crx, cry  = crx + pwx, cry + pwy
