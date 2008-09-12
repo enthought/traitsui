@@ -347,32 +347,41 @@ def disconnect_no_id ( control, *events ):
 #  'ChildFocusOverride' class:
 #-------------------------------------------------------------------------------
 
-class ChildFocusOverride ( wx.PyEvtHandler ):
-    """ Override the scroll-to-focus behaviour in wx 2.8.8's ScrolledWindow C++
-    implementation for ScrolledPanel.
+# PyEvtHandler was only introduced in wxPython 2.8.8. Fortunately, it is only
+# necessary in wxPython 2.8.8.
+if wx.__version__ < '2.8.8':
+    class ChildFocusOverride ( object ):
+        def __init__( self, window ):
+            pass
 
-    Instantiating this class with the ScrolledPanel will register the new
-    instance as the event handler for the panel.
-    """
+else:
+    class ChildFocusOverride ( wx.PyEvtHandler ):
+        """ Override the scroll-to-focus behaviour in wx 2.8.8's ScrolledWindow C++
+        implementation for ScrolledPanel.
 
-    def __init__( self, window ):
-        self.window = window
-        wx.PyEvtHandler.__init__( self )
+        Instantiating this class with the ScrolledPanel will register the new
+        instance as the event handler for the panel.
+        """
 
-        # Make self the event handler for the window.
-        window.PushEventHandler( self )
+        def __init__( self, window ):
+            self.window = window
+            wx.PyEvtHandler.__init__( self )
 
-    def ProcessEvent( self, event ):
-        if isinstance( event, wx.ChildFocusEvent ):
-            # Handle this one with our code and don't let the C++ event handler
-            # get it.
-            self.window.OnChildFocus( event )
-            # We return False because the event always gets Skipped.
-            return False
-        else:
-            # Otherwise, just pass this along in the event handler chain.
-            result = self.GetNextHandler().ProcessEvent( event )
-            return result
+            # Make self the event handler for the window.
+            window.PushEventHandler( self )
+
+
+        def ProcessEvent( self, event ):
+            if isinstance( event, wx.ChildFocusEvent ):
+                # Handle this one with our code and don't let the C++ event handler
+                # get it.
+                self.window.OnChildFocus( event )
+                # We return False because the event always gets Skipped.
+                return False
+            else:
+                # Otherwise, just pass this along in the event handler chain.
+                result = self.GetNextHandler().ProcessEvent( event )
+                return result
 
 
 #-------------------------------------------------------------------------------
