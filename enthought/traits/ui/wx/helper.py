@@ -279,6 +279,31 @@ def enum_values_changed ( values ):
     return ( names, mapping, inverse_mapping )  
 
 #-------------------------------------------------------------------------------
+#  'PanelNoChildFocus' class:
+#-------------------------------------------------------------------------------
+
+class PanelNoChildFocus ( wx.Panel ):
+    """ Subclass wx.Panel to properly throw away incorrect ChildFocusEvents.
+    """
+
+    def __init__ ( self, *args, **kwds ):
+        wx.Panel.__init__( self, *args, **kwds)
+        self.Bind( wx.EVT_CHILD_FOCUS, self.OnChildFocus )
+
+    def OnChildFocus ( self, event ):
+        """ If the ChildFocusEvent contains one of the Panel's direct children,
+        then we will Skip it to let it pass up the widget hierarchy.
+
+        Otherwise, we consume the event to make sure it doesn't go any farther.
+        This works around a problem in wx 2.8.8.1 where each Panel in a nested
+        hierarchy generates many events that might consume too many resources.
+        We do, however, let one event bubble up to the top so that it may inform
+        a top-level ScrolledPanel know that a descendant has acquired focus.
+        """
+        if event.GetWindow() in self.GetChildren():
+            event.Skip()
+
+#-------------------------------------------------------------------------------
 #  Creates a wx.Panel that correctly sets its background color to be the same
 #  as its parents:
 #-------------------------------------------------------------------------------
@@ -287,7 +312,7 @@ def traits_ui_panel ( parent, *args, **kw ):
     """ Creates a wx.Panel that correctly sets its background color to be the 
         same as its parents.
     """
-    panel = wx.Panel( parent, *args, **kw )
+    panel = PanelNoChildFocus( parent, *args, **kw )
     panel.SetBackgroundColour( parent.GetBackgroundColour() )
                             
     # Set up the painting event handlers:
@@ -352,7 +377,8 @@ def disconnect_no_id ( control, *events ):
 if wx.__version__ < '2.8.8':
     class ChildFocusOverride ( object ):
         def __init__( self, window ):
-            pass
+            # Set up the event listener.
+            window.Bind(wx.EVT_CHILD_FOCUS, window.OnChildFocus)
 
 else:
     class ChildFocusOverride ( wx.PyEvtHandler ):
@@ -370,14 +396,11 @@ else:
             # Make self the event handler for the window.
             window.PushEventHandler( self )
 
-
         def ProcessEvent( self, event ):
             if isinstance( event, wx.ChildFocusEvent ):
                 # Handle this one with our code and don't let the C++ event handler
                 # get it.
-                self.window.OnChildFocus( event )
-                # We return False because the event always gets Skipped.
-                return False
+                return self.window.OnChildFocus( event )
             else:
                 # Otherwise, just pass this along in the event handler chain.
                 result = self.GetNextHandler().ProcessEvent( event )
@@ -401,32 +424,30 @@ class ScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
         # Override the C++ ChildFocus event handler.
         ChildFocusOverride(self)
 
-    def OnChildFocus(self, evt):
-        # If the child window that gets the focus is not visible,
-        # this handler will try to scroll enough to see it.
-        evt.Skip()
-        child = evt.GetWindow()
-        self.ScrollChildIntoView(child)
+    def OnChildFocus ( self, event ):
+        """ Handle a ChildFocusEvent.
+
+        Returns a boolean so it can be used as a library call, too.
+        """
+        self.ScrollChildIntoView( self.FindFocus() )
+        return True
 
     def ScrollChildIntoView ( self, child ):
         """ Scrolls the panel such that the specified child window is in view.
             This method overrides the original in the base class so that
             nested subpanels are handled correctly.
         """
-        if type( child ) is wx.Panel:
-            # Ignore plain Panels but do handle other subclasses of Panel.
-            return
         sppux, sppuy = self.GetScrollPixelsPerUnit()
         vsx, vsy     = self.GetViewStart()
 
-        subwindow = child.FindFocus()
-        crx, cry, crdx, crdy = subwindow.GetRect()
+        crx, cry, crdx, crdy = child.GetRect()
+        subwindow = child.GetParent()
         while subwindow is not self:
             # Make sure that the descendant's position information is relative
             # to us, not its local parent.
-            subwindow = subwindow.GetParent()
             pwx,pwy   = subwindow.GetRect()[:2]
             crx, cry  = crx + pwx, cry + pwy
+            subwindow = subwindow.GetParent()
             
         cr = wx.Rect( crx, cry, crdx, crdy )
         
