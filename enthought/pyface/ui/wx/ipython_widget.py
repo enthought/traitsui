@@ -34,15 +34,52 @@ from enthought.pyface.i_python_shell import IPythonShell
 from enthought.pyface.key_pressed_event import KeyPressedEvent
 from widget import Widget
 
-
+################################################################################
 class IPythonController(WxController):
-    """ Subclas the IPython WxController as it tries to set the title and
-        fails.
+    """ Subclass the IPython WxController
+
+        This class should probably be moved in the IPython codebase.
     """
+    # In the parent class, this is a property that expects the
+    # container to be a frame, thus it fails when modified.
     # The title of the IPython windows (not displayed in Envisage)
     title = Str
 
+    def execute_command(self, command, hidden=False):
+        """ Execute a command, not only in the model, but also in the
+            view.
+        """
+        # XXX: This needs to be moved to the IPython codebase.
+        if hidden:
+            return self.shell.execute(command)
+        else:
+            # XXX: we are not storing the input buffer previous to the
+            # execution, as this forces us to run the execution
+            # input_buffer a yield, which is not good.
+            ##current_buffer = self.shell.control.input_buffer
+            command = command.rstrip()
+            if len(command.split('\n')) > 1:
+                # The input command is several lines long, we need to
+                # force the execution to happen
+                command += '\n'
+            cleaned_command = self.prefilter_input(command)
+            self.input_buffer = command
+            # Do not use wx.Yield() (aka GUI.process_events()) to avoid
+            # recursive yields.
+            self.ProcessEvent(wx.PaintEvent())
+            self.write('\n')
+            if not self.is_complete(cleaned_command + '\n'):
+                self._colorize_input_buffer()
+                self.render_error('Incomplete or invalid input')
+                self.new_prompt(self.input_prompt_template.substitute(
+                                number=(self.last_result['number'] + 1)))
+                return False
+            self._on_enter()
+            return True
 
+
+
+################################################################################
 class IPythonWidget(Widget):
     """ The toolkit specific implementation of a PythonShell.  See the
     IPythonShell interface for the API documentation.
@@ -82,14 +119,8 @@ class IPythonWidget(Widget):
     def interpreter(self):
         return self.interp
 
-    def execute_command(self, command, hidden=True):
-        if hidden:
-            self.interp.execute_python(command)
-        else:
-            current_buffer = self.control.input_buffer
-            self.control.input_buffer = command + '\n'
-            self.control._on_enter()
-            self.control.input_buffer = current_buffer
+    def execute_command(self, command, hidden=False):
+        self.control.execute_command(command, hidden=hidden)
         self.command_executed = True
 
     ###########################################################################
