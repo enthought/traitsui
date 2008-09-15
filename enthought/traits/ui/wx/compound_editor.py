@@ -35,7 +35,7 @@ from editor \
     import Editor
     
 from helper \
-    import traits_ui_panel
+    import TraitsUIPanel
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:
@@ -107,7 +107,7 @@ class CompoundEditor ( Editor ):
             widget.
         """
         # Create a panel to hold all of the component trait editors:
-        self.control = panel = traits_ui_panel( parent, -1 )
+        self.control = panel = TraitsUIPanel( parent, -1 )
         sizer        = wx.BoxSizer( wx.VERTICAL )
         
         # Add all of the component trait editors:

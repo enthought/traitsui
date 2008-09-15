@@ -35,7 +35,7 @@ from constants \
     import OKColor, ErrorColor
     
 from helper \
-    import enum_values_changed, traits_ui_panel, disconnect, disconnect_no_id
+    import enum_values_changed, TraitsUIPanel, disconnect, disconnect_no_id
     
 from editor_factory \
     import EditorWithListFactory
@@ -431,7 +431,7 @@ class RadioEditor ( BaseEditor ):
         super( RadioEditor, self ).init( parent )
             
         # Create a panel to hold all of the radio buttons:
-        self.control = traits_ui_panel( parent, -1 )
+        self.control = TraitsUIPanel( parent, -1 )
         self.rebuild_editor()
    
     #---------------------------------------------------------------------------

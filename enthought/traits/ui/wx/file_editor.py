@@ -39,7 +39,7 @@ from text_editor \
            SimpleEditor         as SimpleTextEditor
            
 from helper \
-    import traits_ui_panel, PopupControl
+    import TraitsUIPanel, PopupControl
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:
@@ -147,7 +147,7 @@ class SimpleEditor ( SimpleTextEditor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = panel = traits_ui_panel( parent, -1 )
+        self.control = panel = TraitsUIPanel( parent, -1 )
         sizer        = wx.BoxSizer( wx.HORIZONTAL )
         factory      = self.factory
         

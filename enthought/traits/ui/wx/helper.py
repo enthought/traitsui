@@ -279,60 +279,49 @@ def enum_values_changed ( values ):
     return ( names, mapping, inverse_mapping )  
 
 #-------------------------------------------------------------------------------
-#  'PanelNoChildFocus' class:
-#-------------------------------------------------------------------------------
-
-class PanelNoChildFocus ( wx.Panel ):
-    """ Subclass wx.Panel to properly throw away incorrect ChildFocusEvents.
-    """
-
-    def __init__ ( self, *args, **kwds ):
-        wx.Panel.__init__( self, *args, **kwds)
-        self.Bind( wx.EVT_CHILD_FOCUS, self.OnChildFocus )
-
-    def OnChildFocus ( self, event ):
-        """ If the ChildFocusEvent contains one of the Panel's direct children,
-        then we will Skip it to let it pass up the widget hierarchy.
-
-        Otherwise, we consume the event to make sure it doesn't go any farther.
-        This works around a problem in wx 2.8.8.1 where each Panel in a nested
-        hierarchy generates many events that might consume too many resources.
-        We do, however, let one event bubble up to the top so that it may inform
-        a top-level ScrolledPanel know that a descendant has acquired focus.
-        """
-        if event.GetWindow() in self.GetChildren():
-            event.Skip()
-
-#-------------------------------------------------------------------------------
 #  Creates a wx.Panel that correctly sets its background color to be the same
 #  as its parents:
 #-------------------------------------------------------------------------------
-                
-def traits_ui_panel ( parent, *args, **kw ):
-    """ Creates a wx.Panel that correctly sets its background color to be the 
-        same as its parents.
-    """
-    panel = PanelNoChildFocus( parent, *args, **kw )
-    panel.SetBackgroundColour( parent.GetBackgroundColour() )
-                            
-    # Set up the painting event handlers:
-    wx.EVT_ERASE_BACKGROUND( panel, _erase_background )
-    wx.EVT_PAINT( panel, _on_paint )
+
+class TraitsUIPanel ( wx.Panel ):
     
-    return panel
-    
-def _erase_background ( event ):
-    """ Do not erase the background here (do it in the 'on_paint' handler).
-    """
-    pass
-           
-def _on_paint ( event ):
-    """ Paint the background using the associated ImageSlice object.
-    """
-    from image_slice import paint_parent
-    
-    control = event.GetEventObject()
-    paint_parent( wx.PaintDC( control ), control )
+    def __init__ ( self, parent, *args, **kw ):
+        """ Creates a wx.Panel that correctly sets its background color to be 
+            the same as its parents.
+        """
+        wx.Panel.__init__( self, parent, *args, **kw )
+        
+        wx.EVT_CHILD_FOCUS(      self, self.OnChildFocus )
+        wx.EVT_ERASE_BACKGROUND( self, self.OnEraseBackground )
+        wx.EVT_PAINT(            self, self.OnPaint )
+        
+        self.SetBackgroundColour( parent.GetBackgroundColour() )
+        
+    def OnEraseBackground ( self, event ):
+        """ Do not erase the background here (do it in the 'on_paint' handler).
+        """
+        pass
+               
+    def OnPaint ( self, event ):
+        """ Paint the background using the associated ImageSlice object.
+        """
+        from image_slice import paint_parent
+        
+        paint_parent( wx.PaintDC( self ), self )
+
+    def OnChildFocus ( self, event ):
+        """ If the ChildFocusEvent contains one of the Panel's direct children,
+            then we will Skip it to let it pass up the widget hierarchy.
+
+            Otherwise, we consume the event to make sure it doesn't go any 
+            farther. This works around a problem in wx 2.8.8.1 where each Panel
+            in a nested hierarchy generates many events that might consume too
+            many resources. We do, however, let one event bubble up to the top 
+            so that it may inform a top-level ScrolledPanel know that a 
+            descendant has acquired focus.
+        """
+        if event.GetWindow() in self.GetChildren():
+            event.Skip()   
     
 #-------------------------------------------------------------------------------
 #  Creates a ScrolledPanel that correctly sets its background color to be

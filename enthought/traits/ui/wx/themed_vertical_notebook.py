@@ -51,7 +51,7 @@ from themed_control \
     import ThemedControl
 
 from helper \
-    import traits_ui_panel, traits_ui_scrolled_window
+    import TraitsUIPanel, traits_ui_scrolled_window
 
 #-------------------------------------------------------------------------------
 #  'ThemedPage' class:
@@ -337,7 +337,7 @@ class ThemedVerticalNotebook ( HasPrivateTraits ):
             control.SetScrollRate( 6, 6 )
             control.SetSize( wx.Size( 0, 0 ) )
         else:
-            self.control = control = traits_ui_panel( parent, -1 )
+            self.control = control = TraitsUIPanel( parent, -1 )
 
         control._image_slice = getattr( parent, '_image_slice', None )
         control.SetSizer( ThemedVerticalNotebookSizer( self ) )

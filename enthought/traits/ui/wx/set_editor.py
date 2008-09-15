@@ -29,7 +29,7 @@
 import wx
 
 from helper \
-    import enum_values_changed, traits_ui_panel
+    import enum_values_changed, TraitsUIPanel
 
 from editor \
     import Editor
@@ -129,7 +129,7 @@ class SimpleEditor ( Editor ):
             factory.on_trait_change( self.update_editor, 'values_modified', 
                                      dispatch = 'ui' )
             
-        self.control = panel = traits_ui_panel( parent, -1 )
+        self.control = panel = TraitsUIPanel( parent, -1 )
         hsizer       = wx.BoxSizer( wx.HORIZONTAL )
         vsizer       = wx.BoxSizer( wx.VERTICAL )
         

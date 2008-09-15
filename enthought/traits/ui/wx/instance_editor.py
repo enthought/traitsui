@@ -54,7 +54,7 @@ from constants \
     import scrollbar_dx, DropColor, is_wx26
   
 from helper \
-    import traits_ui_panel, position_window
+    import TraitsUIPanel, position_window
 
 from enthought.util.wx.drag_and_drop \
     import PythonDropTarget
@@ -207,7 +207,7 @@ class CustomEditor ( Editor ):
             
         # Create a panel to hold the object trait's view:
         if factory.editable:
-            self.control = self._panel = parent = traits_ui_panel( parent, -1 )
+            self.control = self._panel = parent = TraitsUIPanel( parent, -1 )
         
         # Build the instance selector if needed:
         selectable = factory.selectable 
@@ -321,7 +321,7 @@ class CustomEditor ( Editor ):
     def create_editor ( self, parent, sizer ):
         """ Creates the editor control.
         """
-        self._panel = traits_ui_panel( parent, -1 )
+        self._panel = TraitsUIPanel( parent, -1 )
         sizer.Add( self._panel, 1, wx.EXPAND )
         
     #---------------------------------------------------------------------------

@@ -57,7 +57,7 @@ from enthought.pyface.sizers.flow \
     import FlowSizer
     
 from helper \
-    import position_window, traits_ui_panel, traits_ui_scrolled_panel, \
+    import position_window, TraitsUIPanel, traits_ui_scrolled_panel, \
            traits_ui_scrolled_window, GroupEditor
     
 from constants \
@@ -183,7 +183,7 @@ class Panel ( BaseDialog ):
             cpanel.SetSizer( None )
             cpanel.DestroyChildren()
         else:
-            self.control = cpanel = traits_ui_panel( parent, -1 )
+            self.control = cpanel = TraitsUIPanel( parent, -1 )
         
         # Create the actual trait sheet panel and embed it in a scrollable 
         # window (if requested):
@@ -334,7 +334,7 @@ def panel ( ui, parent ):
     
     # If there is 0 or 1 Groups in the content, create a single panel for it:
     if len( content ) <= 1:
-        panel = traits_ui_panel( parent, -1 )
+        panel = TraitsUIPanel( parent, -1 )
         if len( content ) == 1:
             # Fill the panel with the Group's content:
             sg_sizer, resizable, contents = fill_panel_for_group( panel, 
@@ -415,7 +415,7 @@ def create_notebook_for_items ( content, ui, parent, group,
                 panel = image_panel.control
                 image_sizer.Add( sizer, 1, wx.EXPAND )
             else:   
-                panel = traits_ui_panel( nb, -1 )
+                panel = TraitsUIPanel( nb, -1 )
                 panel.SetSizer( sizer )
                 
             pages.append( DockControl( name     = page_name,
@@ -575,7 +575,7 @@ class FillPanel ( object ):
                 new_panel.SetMinSize( panel.GetMinSize() )
                 self.resizable = True
             else:
-                new_panel = traits_ui_panel( panel, -1 )
+                new_panel = TraitsUIPanel( panel, -1 )
                 
             sizer = panel.GetSizer()
             if sizer is None:
@@ -726,7 +726,7 @@ class FillPanel ( object ):
             panel = image_panel.control
             image_sizer.Add( sizer, 1, wx.EXPAND )
         else:
-            panel = traits_ui_panel( window, -1 )
+            panel = TraitsUIPanel( window, -1 )
             panel.SetSizer( sizer )
             
         self.add_items( [ item ], panel, sizer )
@@ -777,7 +777,7 @@ class FillPanel ( object ):
             panel, resizable, contents = fill_panel_for_group( page.parent,
                 item, self.ui, suppress_label = True, create_panel = True )
         else:
-            panel = traits_ui_panel( page.parent, -1 )
+            panel = TraitsUIPanel( page.parent, -1 )
             sizer = wx.BoxSizer( wx.VERTICAL )
             panel.SetSizer( sizer )
             self.add_items( [ item ], panel, sizer )

@@ -77,7 +77,7 @@ from editor_factory \
     import EditorFactory
 
 from helper \
-    import open_fbi, Orientation, traits_ui_panel, traits_ui_scrolled_window
+    import open_fbi, Orientation, TraitsUIPanel, traits_ui_scrolled_window
 
 #-------------------------------------------------------------------------------
 #  Global data:
@@ -272,7 +272,7 @@ class SimpleEditor ( Editor ):
                     factory._editor = self
 
                     # Create the trait editor panel:
-                    self.control = traits_ui_panel( parent, -1 )
+                    self.control = TraitsUIPanel( parent, -1 )
                     self.control._node_ui = self.control._editor_nid = None
 
                     # Check to see if there are any existing editors that are

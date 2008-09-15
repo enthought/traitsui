@@ -39,7 +39,7 @@ from editor \
     import Editor
     
 from helper \
-    import bitmap_cache, position_window, traits_ui_panel
+    import bitmap_cache, position_window, TraitsUIPanel
     
 from constants \
     import WindowColor
@@ -245,7 +245,7 @@ class CustomEditor ( Editor ):
         """ Populates a specified window with a grid of image buttons.
         """
         # Create the panel to hold the ImageControl buttons:
-        self.control = panel = traits_ui_panel( parent, -1 )
+        self.control = panel = TraitsUIPanel( parent, -1 )
         
         # Create the main sizer:
         if self.factory.cols > 1:

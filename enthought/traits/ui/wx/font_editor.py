@@ -32,7 +32,7 @@ from editor \
     import Editor
     
 from helper \
-    import choice_width, traits_ui_panel, disconnect
+    import choice_width, TraitsUIPanel, disconnect
      
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -210,7 +210,7 @@ class CustomFontEditor ( Editor ):
             widget.
         """
         # Create a panel to hold all of the buttons:
-        self.control = panel = traits_ui_panel( parent, -1 )
+        self.control = panel = TraitsUIPanel( parent, -1 )
         sizer = wx.BoxSizer( wx.VERTICAL )
         
         # Add the standard font control:

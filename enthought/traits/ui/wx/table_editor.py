@@ -74,7 +74,7 @@ from table_model \
     import TableModel, TraitGridSelection
 
 from helper \
-    import open_fbi, Orientation, traits_ui_panel
+    import open_fbi, Orientation, TraitsUIPanel
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -533,7 +533,7 @@ class TableEditor ( Editor ):
             selected = items[0]
 
         if (factory.edit_view == ' ') or (not row_mode):
-            self.control = panel = traits_ui_panel( parent, -1 )
+            self.control = panel = TraitsUIPanel( parent, -1 )
             sizer        = wx.BoxSizer( wx.VERTICAL )
             self._create_toolbar( panel, sizer )
 
@@ -548,7 +548,7 @@ class TableEditor ( Editor ):
             name         = item.get_label( self.ui )
             theme        = factory.dock_theme or item.container.dock_theme
             self.control = dw = DockWindow( parent, theme = theme ).control
-            panel        = traits_ui_panel( dw, -1, size = ( 300, 300 ) )
+            panel        = TraitsUIPanel( dw, -1, size = ( 300, 300 ) )
             sizer        = wx.BoxSizer( wx.VERTICAL )
             dc           = DockControl( name    = name + ' Table',
                                         id      = 'table',
