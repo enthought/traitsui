@@ -45,11 +45,11 @@ def etsdep(p, min, max=None, literal=False):
 
 
 # Declare our ETS project dependencies.
-APPTOOLS = etsdep('AppTools', '3.0.0')
-ENTHOUGHTBASE_UI = etsdep('EnthoughtBase[ui]', '3.0.0')
-ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.0')
-TRAITS = etsdep('Traits', '3.0.2')
-TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.0.2')
+APPTOOLS = etsdep('AppTools', '3.0.1')
+ENTHOUGHTBASE_UI = etsdep('EnthoughtBase[ui]', '3.0.1')
+ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.1')
+TRAITS = etsdep('Traits', '3.0.3')
+TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.0.3')
 
 # The following soft dependencies are handled with appropriate try...except
 # wrappers.
