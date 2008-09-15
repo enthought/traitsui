@@ -77,7 +77,7 @@ from editor_factory \
     import EditorFactory
 
 from helper \
-    import open_fbi, Orientation, TraitsUIPanel, traits_ui_scrolled_window
+    import open_fbi, Orientation, TraitsUIPanel, TraitsUIScrolledPanel
 
 #-------------------------------------------------------------------------------
 #  Global data:
@@ -317,7 +317,7 @@ class SimpleEditor ( Editor ):
                                                       theme = theme ).control
                 self._tree   = tree     = wx.TreeCtrl( splitter, -1,
                                                        style = style )
-                self._editor = editor   = traits_ui_scrolled_window( splitter )
+                self._editor = editor   = TraitsUIScrolledPanel( splitter )
                 editor.SetSizer( wx.BoxSizer( wx.VERTICAL ) )
                 editor.SetScrollRate( 16, 16 )
                 editor.SetMinSize( wx.Size( 100, 100 ) )

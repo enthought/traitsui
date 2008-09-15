@@ -277,6 +277,23 @@ def enum_values_changed ( values ):
         inverse_mapping[ value ] = name
         
     return ( names, mapping, inverse_mapping )  
+    
+#-------------------------------------------------------------------------------
+#  Disconnects a wx event handle from its associated control:
+#-------------------------------------------------------------------------------
+
+def disconnect ( control, *events ):
+    """ Disconnects a wx event handle from its associated control.
+    """
+    id = control.GetId()
+    for event in events:
+        event( control, id, None )
+
+def disconnect_no_id ( control, *events ):
+    """ Disconnects a wx event handle from its associated control.
+    """
+    for event in events:
+        event( control, None )
 
 #-------------------------------------------------------------------------------
 #  Creates a wx.Panel that correctly sets its background color to be the same
@@ -322,40 +339,6 @@ class TraitsUIPanel ( wx.Panel ):
         """
         if event.GetWindow() in self.GetChildren():
             event.Skip()   
-    
-#-------------------------------------------------------------------------------
-#  Creates a ScrolledPanel that correctly sets its background color to be
-#  the same as its parents:
-#-------------------------------------------------------------------------------
-
-def traits_ui_scrolled_window ( parent ):
-    """ Creates a ScrolledPanel that correctly sets its background color to 
-        be the same as its parents.
-    """
-    # Always use our subclass of ScrolledWindow which correctly handles its
-    # children getting focus.
-    sw = ScrolledPanel( parent )
-    sw.SetBackgroundColour( parent.GetBackgroundColour() )
-    
-    return sw
-    
-#-------------------------------------------------------------------------------
-#  Disconnects a wx event handle from its associated control:
-#-------------------------------------------------------------------------------
-
-def disconnect ( control, *events ):
-    """ Disconnects a wx event handle from its associated control.
-    """
-    id = control.GetId()
-    for event in events:
-        event( control, id, None )
-
-def disconnect_no_id ( control, *events ):
-    """ Disconnects a wx event handle from its associated control.
-    """
-    for event in events:
-        event( control, None )
-
 
 #-------------------------------------------------------------------------------
 #  'ChildFocusOverride' class:
@@ -364,28 +347,30 @@ def disconnect_no_id ( control, *events ):
 # PyEvtHandler was only introduced in wxPython 2.8.8. Fortunately, it is only
 # necessary in wxPython 2.8.8.
 if wx.__version__ < '2.8.8':
+    
     class ChildFocusOverride ( object ):
-        def __init__( self, window ):
+        def __init__ ( self, window ):
             # Set up the event listener.
-            window.Bind(wx.EVT_CHILD_FOCUS, window.OnChildFocus)
+            window.Bind( wx.EVT_CHILD_FOCUS, window.OnChildFocus )
 
 else:
+    
     class ChildFocusOverride ( wx.PyEvtHandler ):
-        """ Override the scroll-to-focus behaviour in wx 2.8.8's ScrolledWindow C++
-        implementation for ScrolledPanel.
+        """ Override the scroll-to-focus behaviour in wx 2.8.8's ScrolledWindow
+            C++ implementation for ScrolledPanel.
 
-        Instantiating this class with the ScrolledPanel will register the new
-        instance as the event handler for the panel.
+            Instantiating this class with the ScrolledPanel will register the 
+            new instance as the event handler for the panel.
         """
 
-        def __init__( self, window ):
+        def __init__ ( self, window ):
             self.window = window
             wx.PyEvtHandler.__init__( self )
 
             # Make self the event handler for the window.
             window.PushEventHandler( self )
 
-        def ProcessEvent( self, event ):
+        def ProcessEvent ( self, event ):
             if isinstance( event, wx.ChildFocusEvent ):
                 # Handle this one with our code and don't let the C++ event handler
                 # get it.
@@ -395,23 +380,23 @@ else:
                 result = self.GetNextHandler().ProcessEvent( event )
                 return result
 
-
 #-------------------------------------------------------------------------------
-#  'ScrolledPanel' class:
+#  'TraitsUIScrolledPanel' class:
 #-------------------------------------------------------------------------------
 
-class ScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
+class TraitsUIScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
     
-    def __init__(self, parent, id=-1, pos = wx.DefaultPosition,
-                 size = wx.DefaultSize, style = wx.TAB_TRAVERSAL,
-                 name = "scrolledpanel"):
+    def __init__ ( self, parent, id = -1, pos = wx.DefaultPosition,
+                   size = wx.DefaultSize, style = wx.TAB_TRAVERSAL,
+                   name = "scrolledpanel" ):
 
-        wx.PyScrolledWindow.__init__(self, parent, id,
-                                     pos=pos, size=size,
-                                     style=style, name=name)
-        self.SetInitialSize(size)
-        # Override the C++ ChildFocus event handler.
-        ChildFocusOverride(self)
+        wx.PyScrolledWindow.__init__( self, parent, id, pos = pos, size = size,
+                                      style = style, name = name )
+        self.SetInitialSize( size )
+        self.SetBackgroundColour( parent.GetBackgroundColour() )
+        
+        # Override the C++ ChildFocus event handler:
+        ChildFocusOverride( self )
 
     def OnChildFocus ( self, event ):
         """ Handle a ChildFocusEvent.
@@ -419,6 +404,7 @@ class ScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
         Returns a boolean so it can be used as a library call, too.
         """
         self.ScrollChildIntoView( self.FindFocus() )
+        
         return True
 
     def ScrollChildIntoView ( self, child ):
@@ -474,16 +460,6 @@ class ScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
         # Perform the scroll if any adjustments are needed:
         if (new_vsx != -1) or (new_vsy != -1):
             self.Scroll( new_vsx, new_vsy )
-
-
-def traits_ui_scrolled_panel ( parent, *args, **kw ):
-    """ Creates a wx.Panel that correctly sets its background color to be the
-        same as its parents.
-    """
-    panel = ScrolledPanel( parent, *args, **kw )
-    panel.SetBackgroundColour( parent.GetBackgroundColour() )
-
-    return panel
 
 #-------------------------------------------------------------------------------
 #  Initializes standard wx event handlers for a specified control and object:
