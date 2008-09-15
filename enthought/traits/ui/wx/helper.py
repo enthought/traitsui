@@ -334,8 +334,8 @@ class TraitsUIPanel ( wx.Panel ):
             farther. This works around a problem in wx 2.8.8.1 where each Panel
             in a nested hierarchy generates many events that might consume too
             many resources. We do, however, let one event bubble up to the top 
-            so that it may inform a top-level ScrolledPanel know that a 
-            descendant has acquired focus.
+            so that it may inform a top-level ScrolledPanel that a descendant 
+            has acquired focus.
         """
         if event.GetWindow() in self.GetChildren():
             event.Skip()   
