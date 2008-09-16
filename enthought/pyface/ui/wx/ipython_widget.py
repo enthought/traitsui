@@ -28,6 +28,7 @@ from enthought.traits.api import Event, implements, Instance, Str
 # Private Enthought library imports.
 from enthought.util.clean_strings import python_name
 from enthought.util.wx.drag_and_drop import PythonDropTarget
+from enthought.io.file import File as EnthoughtFile
 
 # Local imports.
 from enthought.pyface.i_python_shell import IPythonShell
@@ -145,24 +146,34 @@ class IPythonWidget(Widget):
     def on_drop(self, x, y, obj, default_drag_result):
         """ Called when a drop occurs on the shell. """
 
-        # If we can't create a valid Python identifier for the name of an
-        # object we use this instead.
-        name = 'dragged'
+        # If this is a file, we'll just print the file name
+        if isinstance(obj, EnthoughtFile):
+            self.control.write(obj.absolute_path) 
+            
+        elif ( isinstance(obj, list) and len(obj) ==1 
+                        and isinstance(obj[0], EnthoughtFile)):
+            self.control.write(obj[0].absolute_path) 
+            
+        else:
+            # Not a file, we'll inject the object in the namespace
+            # If we can't create a valid Python identifier for the name of an
+            # object we use this instead.
+            name = 'dragged'
 
-        if hasattr(obj, 'name') \
-           and isinstance(obj.name, basestring) and len(obj.name) > 0:
-            py_name = python_name(obj.name)
+            if hasattr(obj, 'name') \
+                    and isinstance(obj.name, basestring) and len(obj.name) > 0:
+                py_name = python_name(obj.name)
 
-            # Make sure that the name is actually a valid Python identifier.
-            try:
-                if eval(py_name, {py_name : True}):
-                    name = py_name
+                # Make sure that the name is actually a valid Python identifier.
+                try:
+                    if eval(py_name, {py_name : True}):
+                        name = py_name
 
-            except:
-                pass
+                except:
+                    pass
 
-        self.interp.user_ns[name] = obj
-        self.execute_command(name, hidden=False)
+            self.interp.user_ns[name] = obj
+            self.execute_command(name, hidden=False)
         self.control.SetFocus()
 
         # We always copy into the shell since we don't want the data
