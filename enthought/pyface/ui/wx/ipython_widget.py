@@ -46,6 +46,27 @@ class IPythonController(WxController):
     # The title of the IPython windows (not displayed in Envisage)
     title = Str
 
+    def __init__(self, *args, **kwargs):
+        WxController.__init__(self, *args, **kwargs)
+
+        # Add a magic to clear the screen
+        def cls(args):
+            """ Clear the screen.
+            """
+            self.ClearAll()
+        self.ipython0.magic_cls = cls
+
+        # XXX: This is bugware for IPython bug:
+        # https://bugs.launchpad.net/ipython/+bug/270998
+        # Fix all the magics with no docstrings:
+        for funcname in dir(self.ipython0):
+            if not funcname.startswith('magic'):
+                continue
+            func = getattr(self.ipython0, funcname)
+            if func.__doc__ is None:
+                func.__doc__ = ''
+
+
     def execute_command(self, command, hidden=False):
         """ Execute a command, not only in the model, but also in the
             view.
@@ -78,6 +99,13 @@ class IPythonController(WxController):
             self._on_enter()
             return True
 
+
+    def clear_screen(self):
+        """ Empty completely the widget.
+        """
+        self.ClearAll()
+        self.new_prompt(self.input_prompt_template.substitute(
+                                number=(self.last_result['number'] + 1)))
 
 
 ################################################################################
