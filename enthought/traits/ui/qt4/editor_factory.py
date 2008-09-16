@@ -190,8 +190,6 @@ class ReadonlyEditor ( Editor ):
         """
         self.control = QtGui.QLabel(self.str_value)
         self.set_tooltip()
-        if self.item.resizable or self.item.height != -1:
-            self.control.setTextFormat(QtCore.Qt.PlainText)
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

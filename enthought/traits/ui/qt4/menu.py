@@ -135,13 +135,13 @@ class MakeMenu:
                         handler = self.indirect
                     else:
                         try:
-                            exec ('def handler(self=self.owner):\n %s\n' %
+                            exec ('def handler(event,self=self.owner):\n %s\n' %
                                   handler)
                         except:
                            handler = null_handler
                 else:
                     try:
-                        exec 'def handler(self=self.owner):\n%s\n' % (
+                        exec 'def handler(event,self=self.owner):\n%s\n' % (
                             self.get_body( indented ), ) in globals()
                     except:
                         handler = null_handler
