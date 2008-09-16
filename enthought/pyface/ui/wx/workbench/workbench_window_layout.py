@@ -45,7 +45,6 @@ from workbench_dock_window import WorkbenchDockWindow
 # Logging.
 logger = logging.getLogger(__name__)
 
-
 # Mapping from view position to the appropriate dock window constant.
 _POSITION_MAP = {
     'top'    : DOCK_TOP,
@@ -473,7 +472,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             # control! If we use a close handler can we change that?!?
             closeable = False,
             control   = control,
-            style     = 'tab',
+            style     = view.style_hint,
             # fixme: Create a subclass of dock control and give it a proper
             # view trait!
             _view     = view
