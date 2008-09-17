@@ -506,26 +506,9 @@ class _Monitor(QtCore.QObject):
         if isinstance(e, QtGui.QCloseEvent):
             for editor in self._layout.window.editors:
                 if editor.control is obj:
-##                     import weakref
-##                     editor_ref = weakref.ref(editor)
-
                     self._layout.editor_closing = editor
                     editor.destroy_control()
                     self._layout.editor_closed = editor
-
-##                     import gc
-##                     gc.collect()
-##                     print gc
-
-##                     print 'Editor references', len(gc.get_referrers(editor))
-##                     for r in gc.get_referrers(editor):
-##                         print '********************************************'
-##                         print type(r), id(r), r
-                        
-##                     del editor
-##                     gc.collect()
-        
-##                     print 'Is editor gone?', editor_ref() is None, editor_ref()
 
                     break
 

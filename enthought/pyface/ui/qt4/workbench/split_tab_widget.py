@@ -499,7 +499,6 @@ class SplitTabWidget(QtGui.QSplitter):
         text = tab_w.tabText(tab)
         w = tab_w.widget(tab)
         tab_w.removeTab(tab)
-        tab_w.still_needed()
 
         return (icon, text, w)
 
@@ -661,7 +660,7 @@ class _TabWidget(QtGui.QTabWidget):
 
         return _TabWidget._active_icon
 
-    def still_needed(self):
+    def _still_needed(self):
         """ Delete the tab widget (and any relevant parent splitters) if it is
         no longer needed.
         """
@@ -676,36 +675,22 @@ class _TabWidget(QtGui.QTabWidget):
                 prune = parent
                 parent = prune.parent()
 
-            # We want the object to be deleted immediately so that the parent's
-            # count is accurate.
-            prune.setParent(None)
+            prune.deleteLater()
 
     def tabRemoved(self, idx):
         """ Reimplemented to update the record of the current tab if it is
         removed.
         """
+
+        self._still_needed()
+
         if self._root._current_tab_w is self and self._root._current_tab_idx == idx:
             self._root._current_tab_w = None
 
     def _close_tab(self):
         """ Close the current tab. """
 
-        # Try and close the widget.  If it doesn't want to close then leave it
-        # in place.
-        w = self.currentWidget()
-
-        if w.close():
-            idx = self.currentIndex()
-
-            # See if we are removing the current (but not the only) tab.
-            is_current = (self.count() > 1 and self._root._current_tab_w is self and self._root._current_tab_idx == idx)
-
-            self.removeTab(idx)
-            self.still_needed()
-
-            # Update the current tab in case we have just removed it.
-            if is_current:
-                self._root._set_current_tab(self, idx)
+        self.currentWidget().close()
 
 
 class _TabCloseButton(QtGui.QAbstractButton):
