@@ -177,8 +177,8 @@ class Editor ( UIEditor ):
         state = state or self.in_error_state()
             
         if control is None:
-            control = self.get_error_control()
-            
+            control = self.get_error_control() or []
+                 
         if not isinstance( control, list ):
             control = [ control ]
             
