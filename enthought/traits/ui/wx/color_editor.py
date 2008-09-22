@@ -23,6 +23,7 @@
 #-------------------------------------------------------------------------------
 
 import wx
+import sys
 
 from colorsys \
     import rgb_to_hls, hls_to_rgb
@@ -138,13 +139,20 @@ class SimpleColorEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
+        # FIXME: I'm trying to get the locally defined to_wx_color function here
+        # (which could be overwritten in a subclass).Clearly, we need to find a 
+        # better implementation. 
+        to_wx_color_function = getattr(sys.modules[self.__class__.__module__], 
+                                       'to_wx_color', to_wx_color)
         if not self._no_update:
-            self.selector.color = to_wx_color( self )
+            self.selector.color = to_wx_color_function( self )
         
     @on_trait_change( 'selector:color' )
     def _color_changed ( self, color ):
+        from_wx_color_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'from_wx_color', from_wx_color)
         self._no_update = True
-        self.value      = from_wx_color( color )
+        self.value      = from_wx_color_function( color )
         self._no_update = False
 
 #-------------------------------------------------------------------------------
@@ -213,7 +221,9 @@ class TextColorEditor ( BaseSimpleEditor ):
     def update_object_from_swatch ( self, color ):
         """ Updates the object trait when a color swatch is clicked.
         """
-        self.value = from_wx_color( color )
+        from_wx_color_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'from_wx_color', from_wx_color)
+        self.value      = from_wx_color_function( color )
         self.update_editor()
 
     #---------------------------------------------------------------------------
@@ -234,7 +244,9 @@ class TextColorEditor ( BaseSimpleEditor ):
     def string_value ( self, color ):
         """ Returns the text representation of a specified color value.
         """
-        return str_color( color ) 
+        str_color_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'str_color', str_color)
+        return str_color_function( color ) 
 
 #-------------------------------------------------------------------------------
 #  'ReadonlyColorEditor' class:
@@ -273,7 +285,9 @@ class ReadonlyColorEditor ( BaseReadonlyEditor ):
 def set_color ( editor ):
     """  Sets the color of the specified color control.
     """
-    color   = to_wx_color( editor )
+    to_wx_color_function = getattr(sys.modules[self.__class__.__module__], 
+                                       'to_wx_color', to_wx_color)
+    color   = to_wx_color_function( editor )
     control = editor.control
     control.SetBackgroundColour( color )
     if ((color.Red()   > 192) or
