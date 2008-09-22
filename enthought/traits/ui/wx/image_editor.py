@@ -25,17 +25,11 @@
 from enthought.pyface.image_resource \
     import ImageResource
     
-from enthought.traits.api \
-    import Instance
-    
 from enthought.traits.ui.ui_traits \
-    import Image, convert_bitmap
+    import convert_bitmap
     
 from editor \
     import Editor
-    
-from basic_editor_factory \
-    import BasicEditorFactory
     
 from image_control \
     import ImageControl
@@ -78,19 +72,6 @@ class _ImageEditor ( Editor ):
             value = self.value
             if isinstance( value, ImageResource ):
                 self.control.Bitmap( convert_bitmap( value ) )
-                    
-#-------------------------------------------------------------------------------
-#  Create the editor factory object:
-#-------------------------------------------------------------------------------
 
-# wxPython editor factory for image editors:
-class ImageEditor ( BasicEditorFactory ):
-    
-    # The editor class to be created:
-    klass = _ImageEditor
-    
-    # The optional image resource to be displayed by the editor (if not
-    # specified, the editor's object value is used as the ImageResource to
-    # display):
-    image = Image
+### EOF #######################################################################
     

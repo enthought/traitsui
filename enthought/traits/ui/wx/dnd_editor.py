@@ -15,7 +15,7 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines the various editors and editor factory for a drag-and-drop editor,
+""" Defines the various editors for a drag-and-drop editor,
     for the wxPython user interface toolkit. A drag-and-drop editor represents 
     its value as a simple image which, depending upon the editor style, can be
     a drag source only, a drop target only, or both a drag source and a drop
@@ -33,16 +33,10 @@ from cPickle \
     import load
 
 from enthought.traits.api \
-    import Instance, Bool
-    
-from enthought.traits.ui.ui_traits \
-    import Image
+    import Bool
     
 from editor \
     import Editor
-    
-from editor_factory \
-    import EditorFactory
 
 from enthought.util.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
@@ -75,61 +69,7 @@ inactive_image = ImageResource( 'inactive' ).create_image()
 
 # String types:
 string_type = ( str, unicode )
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ wxPython editor factory for drag-and-drop editors.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # The image to use for the target:
-    image = Image
-    
-    # The image to use when the target is disabled:
-    disabled_image = Image
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def text_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return ReadOnlyEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-                                      
+                                  
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------
@@ -431,3 +371,4 @@ class FileDropSource ( wx.DropSource ):
         """ Called when the data has been dropped. """
         return
     
+## EOF ########################################################################

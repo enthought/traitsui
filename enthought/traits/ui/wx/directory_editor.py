@@ -15,8 +15,7 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines various directory editor and the directory editor factory for the 
-    wxPython user interface toolkit.
+""" Defines various directory editors for the wxPython user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -29,39 +28,10 @@ from os.path \
     import isdir
 
 from file_editor \
-    import ToolkitEditorFactory as EditorFactory,    \
-           SimpleEditor         as SimpleFileEditor, \
-           CustomEditor         as CustomFileEditor, \
+    import SimpleEditor as SimpleFileEditor, \
+           CustomEditor as CustomFileEditor, \
            PopupFile
 
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ wxPython editor factory for directory editors.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-                                      
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-        
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------
@@ -137,3 +107,4 @@ class PopupDirectory ( PopupFile ):
         """
         return isdir( path )
 
+### EOF ########################################################################

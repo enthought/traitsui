@@ -24,22 +24,16 @@
 #-------------------------------------------------------------------------------
     
 from enthought.traits.api \
-    import Any, Int, Bool, on_trait_change
+    import Any, on_trait_change
     
 from enthought.pyface.timer.api \
     import do_later
 
 from editor \
     import Editor
-    
-from basic_editor_factory \
-    import BasicEditorFactory
 
 from history_control \
     import HistoryControl
-    
-from constants \
-    import OKColor, ErrorColor
 
 #-------------------------------------------------------------------------------
 #  '_HistoryEditor' class:
@@ -154,19 +148,5 @@ class _HistoryEditor ( Editor ):
             self._dont_update = False
             
         return { 'history': self.history.history[:] }
-
-#-------------------------------------------------------------------------------
-#  'HistoryEditor' class:
-#-------------------------------------------------------------------------------
-
-class HistoryEditor ( BasicEditorFactory ):
     
-    # The class used to construct editor objects:
-    klass = _HistoryEditor
-    
-    # The number of entries in the history:
-    entries = Int( 10 )
-    
-    # Should each keystroke update the value (or only the enter key, tab, etc.)?
-    auto_set = Bool( False )
-            
+# EOF #########################################################################

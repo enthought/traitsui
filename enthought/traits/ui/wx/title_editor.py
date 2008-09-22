@@ -22,14 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
     
-from enthought.traits.api \
-    import Str
-    
-from enthought.traits.ui.wx.editor \
+from editor \
     import Editor
-    
-from enthought.traits.ui.wx.basic_editor_factory \
-    import BasicEditorFactory
     
 from enthought.pyface.heading_text \
     import HeadingText
@@ -38,7 +32,7 @@ from enthought.pyface.heading_text \
 #  '_TitleEditor' class:
 #-------------------------------------------------------------------------------
                                
-class _TitleEditor ( Editor ):
+class TitleEditor ( Editor ):
     
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -63,9 +57,4 @@ class _TitleEditor ( Editor ):
         """
         self._control.text = self.str_value
 
-#-------------------------------------------------------------------------------
-#  Create the editor factory object:
-#-------------------------------------------------------------------------------
-                
-TitleEditor = BasicEditorFactory( klass = _TitleEditor )
-                 
+#--EOF-------------------------------------------------------------------------

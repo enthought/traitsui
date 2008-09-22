@@ -15,26 +15,19 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines the HTML "editor" and the HTML editor factory, for the wxPython 
-    user interface toolkit. HTML editors interpret and display HTML-formatted 
-    text, but do not modify it.
+""" Defines the HTML "editor" for the wxPython user interface toolkit. 
+    HTML editors interpret and display HTML-formatted text, but do not 
+    modify it.
 """
 
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
 
-import wx
 import wx.html as wh
-    
-from enthought.traits.api \
-    import true
     
 from editor  \
     import Editor
-    
-from enthought.traits.ui.wx.basic_editor_factory \
-    import BasicEditorFactory
     
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -193,20 +186,4 @@ class SimpleEditor ( Editor ):
         """
         return len( line ) - len( (line + '.').strip() ) + 1
 
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( BasicEditorFactory ):
-    """ wxPython editor factory for HTML editors.
-    """
-    #---------------------------------------------------------------------------
-    #  Trait definitions:  
-    #---------------------------------------------------------------------------
-    
-    # Class used to create all editor styles. This value overrides the default.
-    klass = SimpleEditor
-        
-    # Should implicit text formatting be converted to HTML?
-    format_text = true
-    
+#--EOF-------------------------------------------------------------------------

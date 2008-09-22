@@ -15,8 +15,8 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines the various editors and the editor factory for single-selection 
-    enumerations, for the wxPython user interface toolkit.
+""" Defines the various editors for single-selection enumerations, for the 
+wxPython user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -36,75 +36,10 @@ from constants \
     
 from helper \
     import enum_values_changed, TraitsUIPanel, disconnect, disconnect_no_id
-    
-from editor_factory \
-    import EditorWithListFactory
-    
+
 from enthought.traits.api \
-    import Any, Range, Enum, Str, Trait, Event, Property, Bool
-           
-from enthought.traits.ui.ui_traits \
-    import SequenceTypes
-
-#-------------------------------------------------------------------------------
-#  Trait definitions:  
-#-------------------------------------------------------------------------------
-
-# Supported display modes for a custom style editor
-Mode = Enum( 'radio', 'list' )
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorWithListFactory ):
-    """ wxPython editor factory for enumeration editors.
-    """
+    import Property
     
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
- 
-    # (Optional) Function used to evaluate text input:
-    evaluate = Any 
-    
-    # Is user input set on every keystroke (when text input is allowed)?
-    auto_set = Bool( True )
-    
-    # Number of columns to use when displayed as a grid:
-    cols = Range( 1, 20 ) 
-    
-    # Display modes supported for a custom style editor:
-    mode = Mode           
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        if self.mode == 'radio':
-            return RadioEditor( parent,
-                                factory     = self, 
-                                ui          = ui, 
-                                object      = object, 
-                                name        = name, 
-                                description = description )
-        else:
-            return ListEditor( parent,
-                               factory     = self, 
-                               ui          = ui, 
-                               object      = object, 
-                               name        = name, 
-                               description = description ) 
-                                      
 #-------------------------------------------------------------------------------
 #  'BaseEditor' class:
 #-------------------------------------------------------------------------------
@@ -608,3 +543,4 @@ class ListEditor ( BaseEditor ):
         # fixme: Is this line necessary?
         self.update_editor()
 
+### EOF #######################################################################

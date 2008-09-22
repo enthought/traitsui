@@ -37,7 +37,7 @@ from enthought.traits.api \
 
 from enthought.traits.trait_notifiers \
     import set_ui_handler
-
+    
 from enthought.traits.ui.ui \
     import UI
 
@@ -51,7 +51,7 @@ from enthought.traits.ui.toolkit \
     import Toolkit
 
 from enthought.util.wx.drag_and_drop \
-    import PythonDropTarget, clipboard
+    import PythonDropTarget
 
 from constants \
     import WindowColor, screen_dx, screen_dy
@@ -320,8 +320,10 @@ class GUIToolkit ( Toolkit ):
         if ui.control is not None:
             size   = ui.control.GetSize()
             parent = ui.control._parent
+            info = ui.info
             ui.recycle()
-            ui.info.ui = ui
+            ui.info= info
+            info.ui = ui
             
         ui.rebuild( ui, parent )
         
@@ -506,200 +508,76 @@ class GUIToolkit ( Toolkit ):
     def ui_editor ( self ):
         import ui_editor
         return ui_editor.UIEditor
-
-    #---------------------------------------------------------------------------
-    #  'EditorFactory' factory methods:
-    #---------------------------------------------------------------------------
-
-    # Array:
-    def array_editor ( self, *args, **traits ):
-        import array_editor as ae
-        return ae.ToolkitEditorFactory( *args, **traits )
-
-    # Boolean:
-    def boolean_editor ( self, *args, **traits ):
-        import boolean_editor as be
-        return be.ToolkitEditorFactory( *args, **traits )
-
-    # Button:
-    def button_editor ( self, *args, **traits ):
-        import button_editor as be
-        return be.ToolkitEditorFactory( *args, **traits )
-
-    # Check list:
-    def check_list_editor ( self, *args, **traits ):
-        import check_list_editor as cle
-        return cle.ToolkitEditorFactory( *args, **traits )
-
-    # Code:
-    def code_editor ( self, *args, **traits ):
-        import code_editor as ce
-        return ce.ToolkitEditorFactory( *args, **traits )
-
-    # Color:
-    def color_editor ( self, *args, **traits ):
-        import color_editor as ce
-        return ce.ToolkitEditorFactory( *args, **traits )
-
-    # Compound:
-    def compound_editor ( self, *args, **traits ):
-        import compound_editor as ce
-        return ce.ToolkitEditorFactory( *args, **traits )
-
-    # Custom:
-    def custom_editor ( self, *args, **traits ):
-        import custom_editor as ce
-        return ce.ToolkitEditorFactory( *args, **traits )
-
-    # Directory:
-    def directory_editor ( self, *args, **traits ):
-        import directory_editor as de
-        return de.ToolkitEditorFactory( *args, **traits)
-
-    # Drop (drag and drop target):
-    def drop_editor ( self, *args, **traits ):
-        import drop_editor as de
-        return de.ToolkitEditorFactory( *args, **traits)
-
-    # Drag and drop:
-    def dnd_editor ( self, *args, **traits ):
-        import dnd_editor as dnd
-        return dnd.ToolkitEditorFactory( *args, **traits)
-
-    # Enum(eration):
-    def enum_editor ( self, *args, **traits ):
-        import enum_editor as ee
-        return ee.ToolkitEditorFactory( *args, **traits )
-
-    # File:
-    def file_editor ( self, *args, **traits ):
-        import file_editor as fe
-        return fe.ToolkitEditorFactory( *args, **traits )
-
-    # Font:
-    def font_editor ( self, *args, **traits ):
-        import font_editor as fe
-        return fe.ToolkitEditorFactory( *args, **traits )
-
-    # Key Binding:
-    def key_binding_editor ( self, *args, **traits ):
-        import key_binding_editor as kbe
-        return kbe.ToolkitEditorFactory( *args, **traits )
-
-    # History:
-    def history_editor ( self, *args, **traits ):
-        import history_editor as he
-        return he.HistoryEditor( *args, **traits )
-
-    # HTML:
-    def html_editor ( self, *args, **traits ):
-        import html_editor as he
-        return he.ToolkitEditorFactory( *args, **traits )
-
-    # Image:
-    def image_editor ( self, *args, **traits ):
-        import image_editor as ie
-        return ie.ImageEditor( *args, **traits )
-
-    # Image enum(eration):
-    def image_enum_editor ( self, *args, **traits ):
-        import image_enum_editor as iee
-        return iee.ToolkitEditorFactory( *args, **traits )
-
-    # Instance:
-    def instance_editor ( self, *args, **traits ):
-        import instance_editor as ie
-        return ie.ToolkitEditorFactory( *args, **traits )
-
-    # List:
-    def list_editor ( self, *args, **traits ):
-        import list_editor as le
-        return le.ToolkitEditorFactory( *args, **traits )
-
-    # ListStr:
-    def list_str_editor ( self, *args, **traits ):
-        import list_str_editor as lse
-        return lse.ListStrEditor( *args, **traits )
-
-    # Null:
-    def null_editor ( self, *args, **traits ):
-        import null_editor as ne
-        return ne.ToolkitEditorFactory( *args, **traits )
-
-    # Ordered set:
-    def ordered_set_editor ( self, *args, **traits ):
-        import ordered_set_editor as ose
-        return ose.ToolkitEditorFactory( *args, **traits )
-
-    # Plot:
-    def plot_editor ( self, *args, **traits ):
-        import plot_editor as pe
-        return pe.ToolkitEditorFactory( *args, **traits )
-
-    # Popup:
-    def popup_editor ( self, *args, **traits ):
-        import popup_editor as pe
-        return pe.PopupEditor( *args, **traits )
-
-    # Range:
-    def range_editor ( self, *args, **traits ):
-        import range_editor as re
-        return re.ToolkitEditorFactory( *args, **traits )
-
-    # RGB Color:
-    def rgb_color_editor ( self, *args, **traits ):
-        import rgb_color_editor as rgbce
-        return rgbce.ToolkitEditorFactory( *args, **traits )
-
-    # Scrubber:
-    def scrubber_editor ( self, *args, **traits ):
-        import scrubber_editor as se
-        return se.ScrubberEditor( *args, **traits )
-
-    # Set:
-    def set_editor ( self, *args, **traits ):
-        import set_editor as se
-        return se.ToolkitEditorFactory( *args, **traits )
-
-    # Shell:
+#
+#    # Drag and drop:
+#    def dnd_editor ( self, *args, **traits ):
+#        import dnd_editor as dnd
+#        return dnd.ToolkitEditorFactory( *args, **traits)
+#
+#    # Key Binding:
+#    def key_binding_editor ( self, *args, **traits ):
+#        import key_binding_editor as kbe
+#        return kbe.ToolkitEditorFactory( *args, **traits )
+#
+#    # History:
+#    def history_editor ( self, *args, **traits ):
+#        import history_editor as he
+#        return he.HistoryEditor( *args, **traits )
+#
+#    # HTML:
+#    def html_editor ( self, *args, **traits ):
+#        import html_editor as he
+#        return he.ToolkitEditorFactory( *args, **traits )
+#
+#    # Image:
+#    def image_editor ( self, *args, **traits ):
+#        import image_editor as ie
+#        return ie.ImageEditor( *args, **traits )
+#
+#    # ListStr:
+#    def list_str_editor ( self, *args, **traits ):
+#        import list_str_editor as lse
+#        return lse.ListStrEditor( *args, **traits )
+#
+#    # Ordered set:
+#    def ordered_set_editor ( self, *args, **traits ):
+#        import ordered_set_editor as ose
+#        return ose.ToolkitEditorFactory( *args, **traits )
+#
+#    # Plot:
+#    def plot_editor ( self, *args, **traits ):
+#        import plot_editor as pe
+#        return pe.ToolkitEditorFactory( *args, **traits )
+#
+#    # Popup:
+#    def popup_editor ( self, *args, **traits ):
+#        import popup_editor as pe
+#        return pe.PopupEditor( *args, **traits )
+#
+#    # RGB Color:
+#    def rgb_color_editor ( self, *args, **traits ):
+#        import rgb_color_editor as rgbce
+#        return rgbce.ToolkitEditorFactory( *args, **traits )
+#
+#    # Scrubber:
+#    def scrubber_editor ( self, *args, **traits ):
+#        import scrubber_editor as se
+#        return se.ScrubberEditor( *args, **traits )
+#
+#    # Shell:
     def shell_editor ( self, *args, **traits ):
         import shell_editor as se
         return se.ToolkitEditorFactory( *args, **traits )
-
-    # Table:
-    def table_editor ( self, *args, **traits ):
-        import table_editor as te
-        return te.ToolkitEditorFactory( *args, **traits )
-
-    # Tabular:
-    def tabular_editor ( self, *args, **traits ):
-        import tabular_editor as te
-        return te.TabularEditor( *args, **traits )
-
-    # Text:
-    def text_editor ( self, *args, **traits ):
-        import text_editor as te
-        return te.ToolkitEditorFactory( *args, **traits )
-
-    # Title:
-    def title_editor ( self, *args, **traits ):
-        import title_editor
-        return title_editor.TitleEditor( *args, **traits )
-
-    # Tree:
-    def tree_editor ( self, *args, **traits ):
-        import tree_editor as te
-        return te.ToolkitEditorFactory( *args, **traits )
-
-    # Tuple:
-    def tuple_editor ( self, *args, **traits ):
-        import tuple_editor as te
-        return te.ToolkitEditorFactory( *args, **traits )
-
-    # Value:
-    def value_editor ( self, *args, **traits ):
-        import value_editor as ve
-        return ve.ToolkitEditorFactory( *args, **traits )
+#
+#    # Tabular:
+#    def tabular_editor ( self, *args, **traits ):
+#        import tabular_editor as te
+#        return te.TabularEditor( *args, **traits )
+#
+#    # Value:
+#    def value_editor ( self, *args, **traits ):
+#        import value_editor as ve
+#        return ve.ToolkitEditorFactory( *args, **traits )
 
 #-------------------------------------------------------------------------------
 #  'DragHandler' class:

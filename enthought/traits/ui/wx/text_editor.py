@@ -15,36 +15,31 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines the various text editors and the text editor factory, for the 
-    wxPython user interface toolkit.
+""" Defines the various text editors for the wxPython user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 import logging
 
 import wx
 
 from enthought.traits.api \
-    import Dict, Str, Any, Bool, TraitError
-    
-from enthought.traits.ui.api \
-    import View, Group
+    import TraitError
 
-from enthought.traits.ui.ui_traits \
-    import AView
+from enthought.traits.ui.text_editor \
+    import evaluate_trait
     
 from editor \
     import Editor
     
 from editor_factory \
-    import EditorFactory, ReadonlyEditor
+    import ReadonlyEditor as BaseReadonlyEditor
     
 from constants \
-    import OKColor, ErrorColor, WindowColor
-
+    import OKColor
 #-------------------------------------------------------------------------------
 #  Start logging:
 #-------------------------------------------------------------------------------
@@ -59,110 +54,6 @@ logger = logging.getLogger( __name__ )
 HoverColor = wx.LIGHT_GREY
 DownColor  = wx.WHITE
 
-#-------------------------------------------------------------------------------
-#  Define a simple identity mapping:
-#-------------------------------------------------------------------------------
-
-class _Identity ( object ):
-    """ A simple indentity mapping.
-    """
-    def __call__ ( self, value ):    
-        return value
-
-#-------------------------------------------------------------------------------
-#  Trait definitions:
-#-------------------------------------------------------------------------------
-
-# Mapping from user input text to other value
-mapping_trait = Dict( Str, Any )
-
-# Function used to evaluate textual user input
-evaluate_trait = Any( _Identity() )
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ wxPython editor factory for text editors.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # Dictionary that maps user input to other values
-    mapping = mapping_trait
-    
-    # Is user input set on every keystroke?
-    auto_set = Bool( True )
-    
-    # Is user input set when the Enter key is pressed?
-    enter_set = Bool( False )
-    
-    # Is multi-line text allowed?
-    multi_line = Bool( True )
-    
-    # Is user input unreadable? (e.g., for a password)
-    password = Bool( False )
-    
-    # Function to evaluate textual user input
-    evaluate = evaluate_trait
-    
-    # The object trait containing the function used to evaluate user input
-    evaluate_name = Str
-    
-    # The optional view to display when a read-only text editor is clicked:
-    view = AView
-    
-    #---------------------------------------------------------------------------
-    #  Traits view definition:    
-    #---------------------------------------------------------------------------
-        
-    traits_view = View( [ 'auto_set{Set value when text is typed}',
-                          'enter_set{Set value when enter is pressed}',
-                          'multi_line{Allow multiple lines of text}',
-                          '<extras>',
-                          '|options:[Options]>' ] )
-    
-    extras = Group( 'password{Is this a password field?}' )
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description )
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def text_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return ReadonlyTextEditor( parent,
-                                   factory     = self, 
-                                   ui          = ui, 
-                                   object      = object, 
-                                   name        = name, 
-                                   description = description ) 
-                                      
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------
@@ -324,10 +215,10 @@ class CustomEditor ( SimpleEditor ):
     base_style = wx.TE_MULTILINE
                                      
 #-------------------------------------------------------------------------------
-#  'ReadonlyTextEditor' class:
+#  'ReadonlyEditor' class:
 #-------------------------------------------------------------------------------
 
-class ReadonlyTextEditor ( ReadonlyEditor ):
+class ReadonlyEditor ( BaseReadonlyEditor ):
     """ Read-only style of text editor, which displays a read-only text field.
     """
         
@@ -340,7 +231,7 @@ class ReadonlyTextEditor ( ReadonlyEditor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super( ReadonlyTextEditor, self ).init( parent )
+        super( ReadonlyEditor, self ).init( parent )
         
         if self.factory.view is not None:
             control = self.control
@@ -385,7 +276,7 @@ class ReadonlyTextEditor ( ReadonlyEditor ):
             wx.EVT_LEFT_DOWN(    control, None )
             wx.EVT_LEFT_UP(      control, None )
         
-        super( ReadonlyTextEditor, self ).dispose()
+        super( ReadonlyEditor, self ).dispose()
         
     #-- Private Methods --------------------------------------------------------
     

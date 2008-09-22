@@ -18,8 +18,7 @@
 # 
 #------------------------------------------------------------------------------
 
-""" Defines the set editor and the set editor factory, for the wxPython user 
-    interface toolkit.
+""" Defines the set editors for the wxPython user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -34,50 +33,8 @@ from helper \
 from editor \
     import Editor
     
-from editor_factory \
-    import EditorWithListFactory
-    
 from enthought.traits.api \
-    import Any, TraitError, Event, Str, Bool, TraitHandler, CTrait, Property
-    
-from enthought.traits.ui.ui_traits \
-    import SequenceTypes
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorWithListFactory ):
-    """ wxPython editor factory for editors for sets.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # Are the items in the set ordered (vs. unordered)?
-    ordered = Bool( False )
-    
-    # Can the user add and delete all items in the set at once?
-    can_move_all = Bool( True )
-    
-    # Title of left column:
-    left_column_title = Str
-    
-    # Title of right column:
-    right_column_title = Str
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
+    import Property
                                       
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -583,3 +540,4 @@ class SimpleEditor ( Editor ):
             
         return select_list[0]
         
+### EOF #######################################################################

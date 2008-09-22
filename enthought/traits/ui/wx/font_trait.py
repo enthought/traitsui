@@ -27,8 +27,14 @@ import wx
 from enthought.traits.api \
     import Trait, TraitHandler, TraitError
     
-from enthought.traits.ui.api \
-    import FontEditor
+# CIRCULAR IMPORT FIXME: 
+# We are importing from the source instead of from traits.ui.api in order to
+# avoid circular imports. Some editors declared in traits.ui declare 
+# traits of Font type, which causes this file to get imported, leading to 
+# circular imports.
+
+from enthought.traits.ui.editors.font_editor \
+    import ToolkitEditorFactory as FontEditor
 
 #-------------------------------------------------------------------------------
 #  Convert a string into a valid 'wxFont' object (if possible):
@@ -177,4 +183,3 @@ class TraitWXFont ( TraitHandler ):
 
 fh     = TraitWXFont()
 WxFont = Trait( create_traitsfont( 'Arial 10' ), fh, editor = FontEditor )
-    

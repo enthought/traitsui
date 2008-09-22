@@ -26,62 +26,14 @@
 import wx
     
 from enthought.traits.api \
-    import List, Str, true
-
-from editor_factory \
-    import EditorFactory
+    import Str
     
 from editor \
     import Editor
     
 from helper \
     import TraitsUIPanel
-
-#-------------------------------------------------------------------------------
-#  Trait definitions:
-#-------------------------------------------------------------------------------
-
-# List of component editor factories used to build a compound editor
-editors_trait = List( EditorFactory )
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ wxPython editor factory for compound editors.
-    """
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # Component editor factories used to build the editor
-    editors  = editors_trait 
-    # Is user input set on every keystroke?
-    auto_set = true          
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return CompoundEditor( parent,
-                               factory     = self, 
-                               ui          = ui, 
-                               object      = object, 
-                               name        = name, 
-                               description = description,
-                               kind        = 'simple_editor' )
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CompoundEditor( parent,
-                               factory     = self, 
-                               ui          = ui, 
-                               object      = object, 
-                               name        = name, 
-                               description = description,
-                               kind        = 'custom_editor' )
-                                      
+            
 #-------------------------------------------------------------------------------
 #  'CompoundEditor' class:
 #-------------------------------------------------------------------------------
@@ -147,3 +99,25 @@ class CompoundEditor ( Editor ):
             
         super( CompoundEditor, self ).dispose()
         
+#-------------------------------------------------------------------------------
+#  'SimpleEditor' class:
+#-------------------------------------------------------------------------------
+
+class SimpleEditor(CompoundEditor):
+    
+    # The kind of editor to create for each list item. This value overrides 
+    # the default.
+    kind = 'simple_editor'
+        
+#-------------------------------------------------------------------------------
+#  'CustomEditor' class:
+#-------------------------------------------------------------------------------
+    
+class CustomEditor(CompoundEditor):
+    
+    # The kind of editor to create for each list item. This value overrides 
+    # the default.
+    
+    kind = 'custom_editor'
+
+#-- EOF ----------------------------------------------------------------------

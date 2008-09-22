@@ -15,8 +15,8 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines the wxPython implementation of the editor and editor factory used
-    to wrap a non-Traits based custom control.
+""" Defines the wxPython implementation of the editor used to wrap a non-Traits
+based custom control.
 """
 
 #-------------------------------------------------------------------------------
@@ -25,81 +25,12 @@
 
 import wx
 
-from enthought.traits.api \
-    import Callable, Tuple
-    
 from editor \
     import Editor
     
-from editor_factory \
-    import EditorFactory
-
 from helper \
     import open_fbi
 
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ wxPython editor factory for custom editors.
-    """
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # Factory function used to create the custom control
-    factory = Callable
-    
-    # Arguments to be passed to the user's custom editor factory
-    args    = Tuple
-    
-    #---------------------------------------------------------------------------
-    #  Initializes the object:  
-    #---------------------------------------------------------------------------
-        
-    def __init__ ( self, *args, **traits ):
-        if len( args ) >= 1:
-            self.factory = args[0]
-            self.args    = args[1:]
-        super( ToolkitEditorFactory, self ).__init__( **traits )
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def text_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-              
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:
 #-------------------------------------------------------------------------------
@@ -140,3 +71,4 @@ class CustomEditor ( Editor ):
         """
         pass
     
+### EOF #######################################################################

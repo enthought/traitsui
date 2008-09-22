@@ -33,7 +33,7 @@ from enthought.traits.api \
 from enthought.traits.ui.wx.editor \
     import Editor
     
-from enthought.traits.ui.wx.basic_editor_factory \
+from enthought.traits.ui.basic_editor_factory \
     import BasicEditorFactory
 
 #-------------------------------------------------------------------------------

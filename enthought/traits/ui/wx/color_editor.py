@@ -15,8 +15,7 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines the various color editors and the color editor factory, for the 
-    wxPython user interface toolkit.
+""" Defines the various color editors for the wxPython user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -38,11 +37,15 @@ from enthought.traits.ui.api \
     import View, Item
 
 from editor_factory \
-    import EditorFactory, SimpleEditor, ReadonlyEditor
+    import SimpleEditor as BaseSimpleEditor, \
+    ReadonlyEditor as BaseReadonlyEditor
     
-from basic_editor_factory \
-    import BasicEditorFactory
-
+from enthought.traits.ui.basic_editor_factory import \
+    BasicEditorFactory
+    
+from enthought.traits.ui.editor_factory import \
+    EditorFactory
+    
 from editor \
     import Editor
     
@@ -68,101 +71,44 @@ except:
 # The color drawn around the edges of the HLSSelector:
 EdgeColor = wx.Colour( 64, 64, 64 )
 
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ wxPython editor factory for color editors.
+#---------------------------------------------------------------------------
+#  Gets the wxPython color equivalent of the object trait:
+#---------------------------------------------------------------------------
+    
+def to_wx_color ( editor ):
+    """ Gets the wxPython color equivalent of the object trait.
     """
-    
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # Is the underlying color trait mapped?
-    mapped = Bool( True )
-    
-    #---------------------------------------------------------------------------
-    #  Traits view definition:  
-    #---------------------------------------------------------------------------
-    
-    traits_view = View( [ 'mapped{Is value mapped?}', '|[]>' ] )    
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleColorEditor( parent,
-                                  factory     = self, 
-                                  ui          = ui, 
-                                  object      = object, 
-                                  name        = name, 
-                                  description = description ) 
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomColorEditor( parent,
-                                  factory     = self, 
-                                  ui          = ui, 
-                                  object      = object, 
-                                  name        = name, 
-                                  description = description ) 
-    
-    def text_editor ( self, ui, object, name, description, parent ):
-        return TextColorEditor( parent,
-                                factory     = self, 
-                                ui          = ui, 
-                                object      = object, 
-                                name        = name, 
-                                description = description ) 
-    
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return ReadonlyColorEditor( parent,
-                                    factory     = self, 
-                                    ui          = ui, 
-                                    object      = object, 
-                                    name        = name, 
-                                    description = description ) 
-       
-    #---------------------------------------------------------------------------
-    #  Gets the wxPython color equivalent of the object trait:
-    #---------------------------------------------------------------------------
-    
-    def to_wx_color ( self, editor ):
-        """ Gets the wxPython color equivalent of the object trait.
-        """
-        if self.mapped:
-            return getattr( editor.object, editor.name + '_' )
+    if editor.factory.mapped:
+        return getattr( editor.object, editor.name + '_' )
 
-        return getattr( editor.object, editor.name )
+    return getattr( editor.object, editor.name )
  
-    #---------------------------------------------------------------------------
-    #  Gets the application equivalent of a wxPython value:
-    #---------------------------------------------------------------------------
+#---------------------------------------------------------------------------
+#  Gets the application equivalent of a wxPython value:
+#---------------------------------------------------------------------------
     
-    def from_wx_color ( self, color ):
-        """ Gets the application equivalent of a wxPython value.
-        """
-        return color
+def from_wx_color ( color ):
+    """ Gets the application equivalent of a wxPython value.
+    """
+    return color
         
-    #---------------------------------------------------------------------------
-    #  Returns the text representation of a specified color value:
-    #---------------------------------------------------------------------------
+#---------------------------------------------------------------------------
+#  Returns the text representation of a specified color value:
+#---------------------------------------------------------------------------
   
-    def str_color ( self, color ):
-        """ Returns the text representation of a specified color value.
-        """
-        if isinstance( color, ColorTypes ):
-            alpha = color.Alpha()
-            if alpha == 255:
-                return "(%d,%d,%d)" % (
-                        color.Red(), color.Green(), color.Blue() )
+def str_color ( color ):
+    """ Returns the text representation of a specified color value.
+    """
+    if isinstance( color, ColorTypes ):
+        alpha = color.Alpha()
+        if alpha == 255:
+            return "(%d,%d,%d)" % (
+                    color.Red(), color.Green(), color.Blue() )
 
-            return "(%d,%d,%d,%d)" % (
-                    color.Red(), color.Green(), color.Blue(), alpha )
+        return "(%d,%d,%d,%d)" % (
+                color.Red(), color.Green(), color.Blue(), alpha )
             
-        return color
+    return color
 
 #-------------------------------------------------------------------------------
 #  'SimpleColorEditor' class:
@@ -193,12 +139,12 @@ class SimpleColorEditor ( Editor ):
             editor.
         """
         if not self._no_update:
-            self.selector.color = self.factory.to_wx_color( self )
+            self.selector.color = to_wx_color( self )
         
     @on_trait_change( 'selector:color' )
     def _color_changed ( self, color ):
         self._no_update = True
-        self.value      = self.factory.from_wx_color( color )
+        self.value      = from_wx_color( color )
         self._no_update = False
 
 #-------------------------------------------------------------------------------
@@ -216,7 +162,7 @@ class CustomColorEditor ( SimpleColorEditor ):
 #  'TextColorEditor' class:
 #-------------------------------------------------------------------------------
                                
-class TextColorEditor ( SimpleEditor ):
+class TextColorEditor ( BaseSimpleEditor ):
     """ Text style of color editor, which displays a text field whose 
         background color is the color value. Selecting the text field displays
         a dialog box for selecting a new color value.
@@ -267,7 +213,7 @@ class TextColorEditor ( SimpleEditor ):
     def update_object_from_swatch ( self, color ):
         """ Updates the object trait when a color swatch is clicked.
         """
-        self.value = self.factory.from_wx_color( color )
+        self.value = from_wx_color( color )
         self.update_editor()
 
     #---------------------------------------------------------------------------
@@ -288,13 +234,13 @@ class TextColorEditor ( SimpleEditor ):
     def string_value ( self, color ):
         """ Returns the text representation of a specified color value.
         """
-        return self.factory.str_color( color ) 
+        return str_color( color ) 
 
 #-------------------------------------------------------------------------------
 #  'ReadonlyColorEditor' class:
 #-------------------------------------------------------------------------------
 
-class ReadonlyColorEditor ( ReadonlyEditor ):
+class ReadonlyColorEditor ( BaseReadonlyEditor ):
     """ Read-only style of color editor, which displays a read-only text field
     whose background color is the color value.
     """
@@ -327,7 +273,7 @@ class ReadonlyColorEditor ( ReadonlyEditor ):
 def set_color ( editor ):
     """  Sets the color of the specified color control.
     """
-    color   = editor.factory.to_wx_color( editor )
+    color   = to_wx_color( editor )
     control = editor.control
     control.SetBackgroundColour( color )
     if ((color.Red()   > 192) or
@@ -641,3 +587,11 @@ class PopupColorEditor ( BasicEditorFactory ):
     # The editor factory to be used by the sub-editor:
     factory = Instance( EditorFactory )
         
+# Define the SimpleEditor, CustomEditor, etc. classes which are used by the
+# editor factory for the color editor.
+SimpleEditor   = SimpleColorEditor
+CustomEditor   = CustomColorEditor
+TextEditor     = TextColorEditor
+ReadonlyEditor = ReadonlyColorEditor
+
+### EOF #######################################################################

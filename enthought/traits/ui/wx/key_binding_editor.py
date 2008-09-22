@@ -27,17 +27,10 @@
 import wx
 
 from enthought.traits.api \
-    import Trait, TraitError, HasStrictTraits, Str, List, Any, Instance, \
-           Event, false
+    import Event, false
 
-from enthought.traits.ui.api \
-    import View, Item, ListEditor
-
-from enthought.traits.ui.wx.editor \
+from editor \
     import Editor
-    
-from enthought.traits.ui.wx.basic_editor_factory \
-    import BasicEditorFactory
     
 from enthought.util.wx.dialog \
     import confirmation
@@ -139,12 +132,6 @@ class KeyBindingEditor ( Editor ):
         """ Handles a clear field event.
         """
         self.value = ''
-
-#-------------------------------------------------------------------------------
-#  Create the editor factory object:
-#-------------------------------------------------------------------------------
-                
-ToolkitEditorFactory = BasicEditorFactory( klass = KeyBindingEditor )
         
 #-------------------------------------------------------------------------------
 #  'KeyBindingCtrl' class:
@@ -256,3 +243,4 @@ class KeyBindingCtrl ( wx.Window ):
         """
         self.editor.clear = True
 
+### EOF #######################################################################

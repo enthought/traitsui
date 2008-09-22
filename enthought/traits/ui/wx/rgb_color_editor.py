@@ -27,54 +27,57 @@
 import wx
 
 from color_editor \
-    import ToolkitEditorFactory as EditorFactory
-    
-from enthought.traits.trait_base \
-    import SequenceTypes
+    import SimpleColorEditor, CustomColorEditor, \
+    TextColorEditor, ReadonlyColorEditor 
 
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------
+#  Gets the wxPython color equivalent of the object:
+#---------------------------------------------------------------------------
 
-class ToolkitEditorFactory ( EditorFactory ):
-    """ wxPython factory for editors for RGB colors.
+def to_wx_color ( editor ):
+    """ Gets the wxPython color equivalent of the object trait.
     """
-    #---------------------------------------------------------------------------
-    #  Gets the wxPython color equivalent of the object trait:
-    #---------------------------------------------------------------------------
-    
-    def to_wx_color ( self, editor ):
-        """ Gets the wxPython color equivalent of the object trait.
-        """
-        try:
-            color = getattr( editor.object, editor.name + '_' )
-        except AttributeError:
-            color = getattr( editor.object, editor.name )
-        return wx.Colour( int( color[0] * 255.0 ), 
-                          int( color[1] * 255.0 ), 
-                          int( color[2] * 255.0 ) )
+    try:
+        color = getattr( editor.object, editor.name + '_' )
+    except AttributeError:
+        color = getattr( editor.object, editor.name )
+    return wx.Colour( int( color[0] * 255.0 ), 
+                      int( color[1] * 255.0 ), 
+                      int( color[2] * 255.0 ) )
  
-    #---------------------------------------------------------------------------
-    #  Gets the application equivalent of a wxPython value:
-    #---------------------------------------------------------------------------
+#---------------------------------------------------------------------------
+#  Gets the application equivalent of a wxPython value:
+#---------------------------------------------------------------------------
+
+def from_wx_color ( color ):
+    """ Gets the application equivalent of a wxPython value.
+    """
+    return ( color.Red()   / 255.0, 
+             color.Green() / 255.0,
+             color.Blue()  / 255.0 )
     
-    def from_wx_color ( self, color ):
-        """ Gets the application equivalent of a wxPython value.
-        """
-        return ( color.Red()   / 255.0, 
-                 color.Green() / 255.0,
-                 color.Blue()  / 255.0 )
-        
-    #---------------------------------------------------------------------------
-    #  Returns the text representation of a specified color value:
-    #---------------------------------------------------------------------------
+#---------------------------------------------------------------------------
+#  Returns the text representation of a specified color value:
+#---------------------------------------------------------------------------
   
-    def str_color ( self, color ):
-        """ Returns the text representation of a specified color value.
-        """
-        if type( color ) in SequenceTypes:
-            return "(%d,%d,%d)" % ( int( color[0] * 255.0 ),
-                                    int( color[1] * 255.0 ),
-                                    int( color[2] * 255.0 ) )
-        return color
+def str_color ( self, color ):
+    """ Returns the text representation of a specified color value.
+    """
+    if type( color ) in SequenceTypes:
+        return "(%d,%d,%d)" % ( int( color[0] * 255.0 ),
+                                int( color[1] * 255.0 ),
+                                int( color[2] * 255.0 ) )
+    return color
+
+class SimpleEditor( SimpleColorEditor ):
+    pass
+
+class CustomEditor( CustomColorEditor ):
+    pass
+
+class TextEditor( TextColorEditor ):
+    pass
+
+class ReadonlyEditor( ReadonlyColorEditor ):
+    pass
 

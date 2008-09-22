@@ -15,9 +15,8 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines a drop target editor and editor factory for the wxPython user 
-    interface toolkit. A drop target editor handles drag and drop operations as
-    a drop target.
+""" Defines a drop target editor for the wxPython user interface toolkit. A 
+    drop target editor handles drag and drop operations as a drop target.
 """
 
 #-------------------------------------------------------------------------------
@@ -25,78 +24,15 @@
 #-------------------------------------------------------------------------------
 
 import wx
-
-from enthought.traits.api \
-    import Any, true, false
     
 from text_editor \
     import SimpleEditor as Editor
-    
-from text_editor \
-    import ToolkitEditorFactory as EditorFactory
     
 from constants \
     import DropColor
 
 from enthought.util.wx.drag_and_drop \
-    import PythonDropSource, PythonDropTarget, clipboard
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ wxPython editor factory for drop editors.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # Allowable drop objects must be of this class (optional)
-    klass = Any
-    
-    # Must allowable drop objects be bindings?
-    binding = false 
-    
-    # Can the user type into the editor, or is it read only?
-    readonly = true 
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def text_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
+    import PythonDropTarget, clipboard
                                       
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -193,4 +129,8 @@ class SimpleEditor ( Editor ):
             return drag_result
         except:
             return wx.DragNone
-    
+
+# Define the Text and ReadonlyEditor for use by the editor factory.
+TextEditor = ReadonlyEditor = SimpleEditor
+
+### EOF ########################################################################    

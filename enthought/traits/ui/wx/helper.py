@@ -32,18 +32,15 @@ from os.path \
     import join, dirname, abspath
     
 from enthought.traits.api \
-    import HasPrivateTraits, Enum, Trait, CTrait, Instance, Str, Any, Int, \
+    import HasPrivateTraits, Enum, CTrait, Instance, Any, Int, \
            Event, Bool, BaseTraitHandler, TraitError
-    
-from enthought.traits.ui.view \
-    import View
-    
+
 from enthought.traits.ui.ui_traits \
     import convert_image, SequenceTypes
 
 from enthought.pyface.timer.api \
     import do_later
-    
+
 from constants \
     import standard_bitmap_width, screen_dx, screen_dy
     

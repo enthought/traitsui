@@ -15,25 +15,14 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines the various image enumeration editors and the image enumeration 
-    editor factory for the wxPython user interface toolkit.
+""" Defines the various image enumeration editors for the wxPython user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
 
-import sys
 import wx
-
-from os \
-    import getcwd
-    
-from os.path \
-    import join, dirname, exists
-    
-from enum_editor \
-    import ToolkitEditorFactory as EditorFactory
     
 from editor \
     import Editor
@@ -48,101 +37,7 @@ from image_control \
     import ImageControl
     
 from enthought.traits.api \
-    import Str, Type, Module, Any, on_trait_change
-    
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ wxPython editor factory for image enumeration editors.
-    """
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # Prefix to add to values to form image names:
-    prefix = Str
-    
-    # Suffix to add to values to form image names:
-    suffix = Str
-    
-    # Path to use to locate image files:
-    path = Str
-    
-    # Class used to derive the path to the image files:
-    klass = Type
-    
-    # Module used to derive the path to the image files:
-    module = Module 
-    
-    #---------------------------------------------------------------------------
-    #  Performs any initialization needed after all constructor traits have 
-    #  been set:
-    #---------------------------------------------------------------------------
-     
-    def init ( self ):
-        """ Performs any initialization needed after all constructor traits 
-            have been set.
-        """
-        super( ToolkitEditorFactory, self ).init()
-        self._update_path()
-        
-    #---------------------------------------------------------------------------
-    #  Handles one of the items defining the path being updated:
-    #---------------------------------------------------------------------------
-        
-    @on_trait_change( 'path, klass, module' )
-    def _update_path ( self ):
-        """ Handles one of the items defining the path being updated.
-        """
-        if self.path != '':
-            self._image_path = self.path
-        elif self.klass is not None:
-            module = self.klass.__module__
-            if module == '___main___':
-                module = '__main__'
-            try:
-                self._image_path = join( dirname( sys.modules[ module
-                                                        ].__file__ ), 'images' )
-            except:                    
-                self._image_path = self.path
-                dirs = [ join( dirname( sys.argv[0] ), 'images' ),
-                         join( getcwd(), 'images' ) ]
-                for d in dirs:
-                    if exists( d ):
-                        self._image_path = d
-                        break
-        elif self.module is not None:
-            self._image_path = join( dirname( self.module.__file__ ), 'images' )
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return ReadonlyEditor( parent,
-                               factory     = self, 
-                               ui          = ui, 
-                               object      = object, 
-                               name        = name, 
-                               description = description ) 
+    import Any
                                       
 #-------------------------------------------------------------------------------
 #  'ReadonlyEditor' class:
@@ -354,3 +249,4 @@ class ImageEnumDialog ( wx.Frame ):
             self._closed = True
             self.Destroy()
             
+### EOF #######################################################################

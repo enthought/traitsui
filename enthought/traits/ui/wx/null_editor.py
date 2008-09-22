@@ -24,14 +24,8 @@
 
 import wx
 
-from enthought.traits.ui.wx.editor \
+from editor \
     import Editor
-    
-from enthought.traits.ui.wx.basic_editor_factory \
-    import BasicEditorFactory
-    
-from constants \
-    import WindowColor
     
 from image_slice \
     import paint_parent
@@ -83,9 +77,4 @@ class NullEditor ( Editor ):
         """
         paint_parent( wx.PaintDC( self.control ), self.control )
 
-#-------------------------------------------------------------------------------
-#  Create the editor factory object:
-#-------------------------------------------------------------------------------
-                
-ToolkitEditorFactory = BasicEditorFactory( klass = NullEditor )
-                 
+#- EOF ------------------------------------------------------------------------
