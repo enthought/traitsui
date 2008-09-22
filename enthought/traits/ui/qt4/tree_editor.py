@@ -318,14 +318,14 @@ class SimpleEditor ( Editor ):
 
         # Automatically expand the new node (if requested):
         if has_children:
-            # Qt only draws the control that expands the tree if there is a
-            # child.  As the tree is being populated lazily we create a dummy
-            # that will be removed when the node is expanded for the first
-            # time.
-            cnid._dummy = QtGui.QTreeWidgetItem(cnid)
-
             if node.can_auto_open( object ):
                 cnid.setExpanded(True)
+            else:
+                # Qt only draws the control that expands the tree if there is a
+                # child.  As the tree is being populated lazily we create a
+                # dummy that will be removed when the node is expanded for the
+                # first time.
+                cnid._dummy = QtGui.QTreeWidgetItem(cnid)
 
         # Return the newly created node:
         return cnid
@@ -347,6 +347,7 @@ class SimpleEditor ( Editor ):
         pnid = nid.parent()
         if pnid is not None and getattr(pnid, '_dummy', None) is nid:
             pnid.removeChild(nid)
+            del pnid._dummy
             return
 
         expanded, node, object = self._get_node_data(nid)
@@ -506,7 +507,9 @@ class SimpleEditor ( Editor ):
                 break
         else:
             nid = info[0][1]
+
         expanded, node, ignore = self._get_node_data( nid )
+
         return ( expanded, node, nid )
 
     def _object_info_for ( self, object, name = '' ):
@@ -1301,25 +1304,25 @@ class SimpleEditor ( Editor ):
     def _children_replaced ( self, object, name = '', new = None ):
         """ Handles the children of a node being completely replaced.
         """
-        tree                = self._tree
-        expanded, node, nid = self._object_info( object, name )
-        children            = node.get_children( object )
+        tree = self._tree
+        for expanded, node, nid in self._object_info_for( object, name ):
+            children = node.get_children( object )
 
-        # Only add/remove the changes if the node has already been expanded:
-        if expanded:
-            # Delete all current child nodes:
-            for cnid in self._nodes_for( nid ):
-                self._delete_node( cnid )
+            # Only add/remove the changes if the node has already been expanded:
+            if expanded:
+                # Delete all current child nodes:
+                for cnid in self._nodes_for( nid ):
+                    self._delete_node( cnid )
 
-            # Add all of the children back in as new nodes:
-            for child in children:
-                child, child_node = self._node_for( child )
-                if child_node is not None:
-                    self._append_node( nid, child_node, child )
+                # Add all of the children back in as new nodes:
+                for child in children:
+                    child, child_node = self._node_for( child )
+                    if child_node is not None:
+                        self._append_node( nid, child_node, child )
 
-        # Try to expand the node (if requested):
-        if node.can_auto_open( object ):
-            nid.setExpanded(True)
+            # Try to expand the node (if requested):
+            if node.can_auto_open( object ):
+                nid.setExpanded(True)
 
     #---------------------------------------------------------------------------
     #  Handles the children of a node being changed:
