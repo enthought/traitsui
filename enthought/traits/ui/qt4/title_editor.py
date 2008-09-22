@@ -12,20 +12,17 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.traits.ui.qt4.editor \
+from editor \
     import Editor
-
-from enthought.traits.ui.basic_editor_factory \
-    import BasicEditorFactory
 
 from enthought.pyface.heading_text \
     import HeadingText
 
 #-------------------------------------------------------------------------------
-#  '_TitleEditor' class:
+#  'TitleEditor' class:
 #-------------------------------------------------------------------------------
 
-class _TitleEditor ( Editor ):
+class TitleEditor ( Editor ):
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -49,9 +46,3 @@ class _TitleEditor ( Editor ):
             editor.
         """
         self._control.text = self.str_value
-
-#-------------------------------------------------------------------------------
-#  Create the editor factory object:
-#-------------------------------------------------------------------------------
-
-TitleEditor = BasicEditorFactory( klass = _TitleEditor )

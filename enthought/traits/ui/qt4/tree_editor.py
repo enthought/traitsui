@@ -8,8 +8,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the tree editor and the tree editor factory, for the PyQt user 
-interface toolkit.
+""" Defines the tree editor for the PyQt user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -24,7 +23,7 @@ from enthought.pyface.resource_manager \
     import resource_manager
 
 from enthought.traits.api \
-    import Any, Dict, true, false, Int, List, Instance, Str, Event
+    import Any, Event
 
 from enthought.traits.trait_base \
     import enumerate
@@ -44,11 +43,8 @@ from clipboard \
 from editor \
     import Editor
 
-from editor_factory \
-    import EditorFactory
-
 from helper \
-    import open_fbi, pixmap_cache, Orientation
+    import pixmap_cache
 
 #-------------------------------------------------------------------------------
 #  The core tree node menu actions:
@@ -70,107 +66,6 @@ DeleteAction = Action( name         = 'Delete',
 RenameAction = Action( name         = 'Rename',
                        action       = 'editor._menu_rename_node',
                        enabled_when = 'editor._is_renameable(object)' )
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for tree editors.
-    """
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-
-    # Supported TreeNode objects
-    nodes = List( TreeNode )
-
-    # Mapping from TreeNode tuples to MultiTreeNodes
-    multi_nodes = Dict
-
-    # Are the individual nodes editable?
-    editable = true
-
-    # Is the editor shared across trees?
-    shared_editor = false
-
-    # Reference to a shared object editor
-    editor = Instance( EditorFactory )
-    
-    # The DockWindow graphical theme
-    # FIXME: Document as unimplemented or wx specific.
-    #dock_theme = Instance( DockWindowTheme )
-
-    # Show icons for tree nodes?
-    show_icons = true
-
-    # Hide the tree root node?
-    hide_root = false
-
-    # Layout orientation of the tree and the editor
-    orientation = Orientation
-
-    # Number of tree levels (down from the root) that should be automatically
-    # opened
-    auto_open = Int
-
-    # Size of the tree node icons
-    # FIXME: Document as unimplemented or wx specific.
-    #icon_size = IconSize
-
-    # Called when a node is selected
-    on_select = Any
-
-    # Called when a node is clicked
-    on_click = Any
-
-    # Called when a node is double-clicked
-    on_dclick = Any
-
-    # The optional extended trait name of the trait to synchronize with the
-    # editor's current selection:
-    selected = Str
-
-    # The optional extended trait name of the trait that should be assigned
-    # a node object when a tree node is clicked on (Note: If you want to
-    # receive repeated clicks on the same node, make sure the trait is defined
-    # as an Event):
-    click = Str
-
-    # The optional extended trait name of the trait that should be assigned
-    # a node object when a tree node is double-clicked on (Note: if you want to
-    # receive repeated double-clicks on the same node, make sure the trait is
-    # defined as an Event):
-    dclick = Str
-
-    # The optional extended trait name of the trait event that is fired
-    # whenever the application wishes to veto a tree action in progress (e.g.
-    # double-clicking a non-leaf tree node normally opens or closes the node,
-    # but if you are handling the double-click event in your program, you may
-    # wish to veto the open or close operation). Be sure to fire the veto event
-    # in the event handler triggered by the operation (e.g. the 'dclick' event
-    # handler.
-    veto = Str
-
-    # Mode for lines connecting tree nodes 
-    #
-    # * 'appearance': Show lines only when they look good.
-    # * 'on': Always show lines.
-    # * 'off': Don't show lines.
-    # FIXME: Document as unimplemented or wx specific.
-    #lines_mode = Enum ( 'appearance', 'on', 'off' )
-
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self,
-                             ui          = ui,
-                             object      = object,
-                             name        = name,
-                             description = description )
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:

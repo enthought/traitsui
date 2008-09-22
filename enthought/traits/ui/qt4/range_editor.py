@@ -22,14 +22,10 @@ from math \
 from PyQt4 import QtCore, QtGui
 
 from enthought.traits.api \
-     import CTrait, TraitError, Property, Range, Enum, Str, Int, Float, Any, \
-            Unicode, Bool
-
-from enthought.traits.ui.api \
-    import View
+     import TraitError, Str, Float, Any, Bool
 
 from editor_factory \
-    import EditorFactory, TextEditor
+    import TextEditor
 
 from editor \
     import Editor
@@ -39,253 +35,6 @@ from constants \
 
 from helper \
     import IconButton
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for range editors.
-    """
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-
-    # Number of columns when displayed as an enumeration
-    cols = Range( 1, 20 )
-
-    # Is user input set on every keystroke?
-    auto_set = Bool(True)
-
-    # Is user input set when the Enter key is pressed?
-    enter_set = Bool(False)
-
-    # Label for the low end of the range
-    low_label = Unicode
-
-    # Label for the high end of the range
-    high_label = Unicode
-
-    # FIXME: This is not yet supported.
-    # The width of the low and high labels
-    label_width = Int
-
-    # The name of an [object.]trait that defines the low value for the range
-    low_name = Str
-
-    # The name of an [object.]trait that defines the high value for the range
-    high_name = Str
-
-    # Formatting string used to format value and labels
-    format = Unicode( '%s' )
-
-    # Is the range for floating pointer numbers (vs. integers)?
-    is_float = Bool(True)
-
-    # Low end of range
-    low = Property
-
-    # High end of range
-    high = Property
-
-    # Display mode to use
-    mode = Enum( 'auto', 'slider', 'xslider', 'spinner', 'enum', 'text' )
-
-    #---------------------------------------------------------------------------
-    #  Traits view definition:
-    #---------------------------------------------------------------------------
-
-    traits_view = View( [ [ 'low', 'high',
-                            '|[Range]' ],
-                          [ 'low_label{Low}', 'high_label{High}',
-                            '|[Range Labels]' ],
-                          [ 'auto_set{Set automatically}',
-                            'enter_set{Set on enter key pressed}',
-                            'is_float{Is floating point range}',
-                            '-[Options]>' ],
-                          [ 'cols',
-                            '|[Number of columns for integer custom style]<>' ]
-                        ] )
-
-    #---------------------------------------------------------------------------
-    #  Performs any initialization needed after all constructor traits have
-    #  been set:
-    #---------------------------------------------------------------------------
-
-    def init ( self, handler = None ):
-        """ Performs any initialization needed after all constructor traits
-            have been set.
-        """
-        if handler is not None:
-            if isinstance( handler, CTrait ):
-                handler = handler.handler
-
-            if self.low_name == '':
-                self.low  = handler._low
-
-            if self.high_name == '':
-                self.high = handler._high
-        else:
-            if (self.low is None) and (self.low_name == ''):
-                self.low  = 0.0
-
-            if (self.high is None) and (self.high_name == ''):
-                self.high = 1.0
-
-    #---------------------------------------------------------------------------
-    #  Define the 'low' and 'high' traits:
-    #---------------------------------------------------------------------------
-
-    def _get_low ( self ):
-        return self._low
-
-    def _set_low ( self, low ):
-        old_low         = self._low
-        self._low = low = self._cast( low )
-        self.is_float   = isinstance(low, float)
-
-        if (self.low_label == '') or (self.low_label == unicode(old_low)):
-            self.low_label = unicode(low)
-
-    def _get_high ( self ):
-        return self._high
-
-    def _set_high ( self, high ):
-        old_high          = self._high
-        self._high = high = self._cast( high )
-        self.is_float     = isinstance(high, float)
-
-        if (self.high_label == '') or (self.high_label == unicode(old_high)):
-            self.high_label = unicode(high)
-
-    def _cast ( self, value ):
-        if type( value ) is not str:
-            return value
-
-        try:
-            return int( value )
-        except:
-            return float( value )
-
-    #-- Private Methods --------------------------------------------------------
-
-    def _get_low_high ( self, ui ):
-        """ Returns the low and high values used to determine the initial range.
-        """
-        low, high = self.low, self.high
-
-        if (low is None) and (self.low_name != ''):
-            low           = self.named_value( self.low_name, ui )
-            self.is_float = isinstance( low, float )
-
-        if (high is None) and (self.high_name != ''):
-            high          = self.named_value( self.high_name, ui )
-            self.is_float = isinstance( low, float )
-
-        return ( low, high, self.is_float )
-
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-
-    def simple_editor ( self, ui, object, name, description, parent ):
-        """ Creates a simple style of editor.
-
-        The type of editor depends on the type and extent of the range being
-        edited:
-
-        * One end of range is unspecified: RangeTextEditor
-        * **mode** is specified and not 'auto': editor corresponding to **mode**
-        * Floating point range with extent > 100: LargeRangeSliderEditor
-        * Integer range or floating point range with extent <= 100:
-          SimpleSliderEditor
-        * All other cases: SimpleSpinEditor
-        """
-        low, high, is_float = self._get_low_high(ui)
-
-        if (low is None) or (high is None):
-            return RangeTextEditor( parent,
-                                    factory     = self,
-                                    ui          = ui,
-                                    object      = object,
-                                    name        = name,
-                                    description = description )
-
-        if self.mode != 'auto':
-            return SimpleEditorMap[ self.mode ]( parent,
-                                                 factory     = self,
-                                                 ui          = ui,
-                                                 object      = object,
-                                                 name        = name,
-                                                 description = description )
-
-        if is_float and (abs(high - low) > 100):
-            return LargeRangeSliderEditor( parent,
-                                       factory     = self,
-                                       ui          = ui,
-                                       object      = object,
-                                       name        = name,
-                                       description = description )
-
-        if is_float or (abs(high - low) <= 100):
-            return SimpleSliderEditor( parent,
-                                       factory     = self,
-                                       ui          = ui,
-                                       object      = object,
-                                       name        = name,
-                                       description = description )
-        return SimpleSpinEditor( parent,
-                                 factory     = self,
-                                 ui          = ui,
-                                 object      = object,
-                                 name        = name,
-                                 description = description )
-
-    def custom_editor ( self, ui, object, name, description, parent ):
-        """ Creates a custom style of range editor
-
-        The type of editor depends on the type and extent of the range being
-        edited:
-
-        * One end of range is unspecified: RangeTextEditor
-        * **mode** is specified and not 'auto': editor corresponding to **mode**
-        * Floating point range: Same as "simple" style
-        * Integer range with extent > 15: Same as "simple" style
-        * Integer range with extent <= 15: CustomEnumEditor
-
-        """
-        low, high, is_float = self._get_low_high(ui)
-
-        if (low is None) or (high is None):
-            return RangeTextEditor( parent,
-                                    factory     = self,
-                                    ui          = ui,
-                                    object      = object,
-                                    name        = name,
-                                    description = description )
-
-        if self.mode != 'auto':
-            return CustomEditorMap[ self.mode ]( parent,
-                                                 factory     = self,
-                                                 ui          = ui,
-                                                 object      = object,
-                                                 name        = name,
-                                                 description = description )
-
-        if is_float or (abs(high - low) > 15):
-           return self.simple_editor( ui, object, name, description, parent )
-
-        return CustomEnumEditor( parent, self, ui, object, name, description )
-
-    def text_editor ( self, ui, object, name, description, parent ):
-        """ Creates a text style of range editor.
-        """
-        return RangeTextEditor( parent,
-                                factory     = self,
-                                ui          = ui,
-                                object      = object,
-                                name        = name,
-                                description = description )
 
 #-------------------------------------------------------------------------------
 #  'SimpleSliderEditor' class:
@@ -309,7 +58,7 @@ class SimpleSliderEditor ( Editor ):
     high = Any
 
     # Formatting string used to format value and labels
-    format = Unicode
+    format = Str
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -955,7 +704,7 @@ def CustomEnumEditor ( parent, factory, ui, object, name, description,
     style.
     """
     if factory._enum is None:
-        import enum_editor
+        import enthought.traits.ui.editors.enum_editor as enum_editor
         factory._enum = enum_editor.ToolkitEditorFactory(
                             values = range( factory.low, factory.high + 1 ),
                             cols   = factory.cols )

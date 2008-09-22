@@ -8,8 +8,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines various directory editor and the directory editor factory for the 
-PyQt user interface toolkit.
+""" Defines various directory editor for the PyQt user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -19,38 +18,9 @@ PyQt user interface toolkit.
 from PyQt4 import QtGui
 
 from file_editor \
-    import ToolkitEditorFactory as EditorFactory,    \
-           SimpleEditor         as SimpleFileEditor, \
-           CustomEditor         as CustomFileEditor
+    import SimpleEditor as SimpleFileEditor, \
+           CustomEditor as CustomFileEditor
 
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for directory editors.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-                                      
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-        
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------

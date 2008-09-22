@@ -8,8 +8,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the various button editors and the button editor factory for the
-PyQt user interface toolkit.
+""" Defines the various button editors for the PyQt user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -19,113 +18,10 @@ PyQt user interface toolkit.
 from PyQt4 import QtCore, QtGui
 
 from enthought.traits.api \
-    import Str, Range, Enum, Property, Unicode
-
-from enthought.traits.trait_base \
-    import user_name_for
-
-from enthought.traits.ui.api \
-    import View
-
-from enthought.traits.ui.ui_traits \
-    import AView, Image
-
-from editor_factory \
-    import EditorFactory
+    import Unicode
 
 from editor \
     import Editor
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for buttons.
-    """
-
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-
-    # Value to set when the button is clicked
-    value = Property
-
-    # Optional label for the button
-    label = Unicode
-
-    # The name of the external object trait that the button label is synced to
-    label_value = Str
-
-    # (Optional) Image to display on the button
-    image = Image
-
-    # Extra padding to add to both the left and the right sides
-    width_padding = Range( 0, 31, 7 )
-
-    # Extra padding to add to both the top and the bottom sides
-    height_padding = Range( 0, 31, 5 )
-
-    # Presentation style
-    style = Enum( 'button', 'radio', 'toolbar', 'checkbox' )
-
-    # Orientation of the text relative to the image
-    orientation = Enum( 'vertical', 'horizontal' )
-
-    # The optional view to display when the button is clicked:
-    view = AView
-
-    #---------------------------------------------------------------------------
-    #  Traits view definition:
-    #---------------------------------------------------------------------------
-
-    traits_view = View( [ 'label', 'value', '|[]' ] )
-
-    #---------------------------------------------------------------------------
-    #  Implementation of the 'value' property:
-    #---------------------------------------------------------------------------
-
-    def _get_value ( self ):
-        return self._value
-
-    def _set_value ( self, value ):
-        self._value = value
-        if isinstance(value, basestring):
-            try:
-                self._value = int( value )
-            except:
-                try:
-                    self._value = float( value )
-                except:
-                    pass
-
-    #---------------------------------------------------------------------------
-    #  Initializes the object:
-    #---------------------------------------------------------------------------
-
-    def __init__ ( self, **traits ):
-        self._value = 0
-        super( ToolkitEditorFactory, self ).__init__( **traits )
-
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self,
-                             ui          = ui,
-                             object      = object,
-                             name        = name,
-                             description = description )
-
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self,
-                             ui          = ui,
-                             object      = object,
-                             name        = name,
-                             description = description )
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:

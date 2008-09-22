@@ -8,39 +8,13 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the various image enumeration editors and the image enumeration
-editor factory for the PyQt user interface toolkit.
+""" Defines the various image enumeration editors for the PyQt user interface
+toolkit.
 """
 
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.traits.api \
-    import Module, Type, Unicode
-
 from enum_editor \
-    import ToolkitEditorFactory as EditorFactory
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for image enumeration editors.
-    """
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-
-    # Suffix to add to values to form image names:
-    suffix = Unicode
-
-    # Path to use to locate image files:
-    path = Unicode
-
-    # Class used to derive the path to the image files:
-    klass = Type
-
-    # Module used to derive the path to the image files:
-    module = Module
+    import SimpleEditor, RadioEditor, ListEditor

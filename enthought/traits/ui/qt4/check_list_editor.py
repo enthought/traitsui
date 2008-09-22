@@ -8,8 +8,8 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the various editors and the editor factory for multi-selection
-    enumerations, for the PyQt user interface toolkit.
+""" Defines the various editors for multi-selection enumerations, for the PyQt
+user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -22,10 +22,7 @@ from string import capitalize
 from PyQt4 import QtCore, QtGui
 
 from enthought.traits.api \
-    import Range, List, Unicode, TraitError
-
-from editor_factory \
-    import EditorWithListFactory
+    import List, Unicode, TraitError
 
 from editor_factory \
     import TextEditor as BaseTextEditor
@@ -34,49 +31,6 @@ from editor \
     import EditorWithList
     
 logger = logging.getLogger(__name__)
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorWithListFactory ):
-    """ PyQt editor factory for checklists.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-
-    # Number of columns to use when the editor is displayed as a grid
-    cols = Range( 1, 20 )
-
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self,
-                             ui          = ui,
-                             object      = object,
-                             name        = name,
-                             description = description )
-
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self,
-                             ui          = ui,
-                             object      = object,
-                             name        = name,
-                             description = description )
-
-    def text_editor ( self, ui, object, name, description, parent ):
-        return TextEditor( parent,
-                           factory     = self,
-                           ui          = ui,
-                           object      = object,
-                           name        = name,
-                           description = description )
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:

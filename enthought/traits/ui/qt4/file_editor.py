@@ -8,8 +8,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines file editors and the file editor factory for the PyQt user 
-    interface toolkit.
+""" Defines file editors for the PyQt user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -22,14 +21,10 @@ from os.path \
 from PyQt4 import QtCore, QtGui
 
 from enthought.traits.api \
-    import List, Str, Event, Bool, Int, Unicode, TraitError
-
-from enthought.traits.ui.api \
-    import View, Group
+    import List, Event, Unicode, TraitError
 
 from text_editor \
-    import ToolkitEditorFactory as EditorFactory, \
-           SimpleEditor         as SimpleTextEditor
+    import SimpleEditor as SimpleTextEditor
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:
@@ -37,81 +32,6 @@ from text_editor \
 
 # Wildcard filter:
 filter_trait = List(Unicode)
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for file editors.
-    """
-
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-
-    # Wildcard filter to apply to the file dialog:
-    filter = filter_trait
-
-    # Optional extended trait name of the trait containing the list of filters:
-    filter_name = Str
-
-    # Should file extension be truncated?
-    truncate_ext = Bool( False )
-
-    # Can the user select directories as well as files?
-    allow_dir = Bool( False )
-
-    # Is user input set on every keystroke? (Overrides the default) ('simple' 
-    # style only):
-    auto_set = False      
-
-    # Is user input set when the Enter key is pressed? (Overrides the default)
-    # ('simple' style only):
-    enter_set = True
-
-    # The number of history entries to maintain:
-    # FIXME: add support
-    entries = Int( 10 )
-
-    # Optional extended trait name used to notify the editor when the file 
-    # system view should be reloaded ('custom' style only):
-    reload_name = Str
-
-    # Optional extended trait name used to notify when the user double-clicks
-    # an entry in the file tree view:
-    dclick_name = Str
-
-    #---------------------------------------------------------------------------
-    #  Traits view definition:  
-    #---------------------------------------------------------------------------
-
-    traits_view = View( [ [ '<options>',
-                        'truncate_ext{Automatically truncate file extension?}',
-                        '|options:[Options]>' ],
-                          [ 'filter', '|[Wildcard filters]<>' ] ] )
-
-    extras = Group()
-
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:

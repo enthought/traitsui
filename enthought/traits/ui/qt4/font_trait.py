@@ -20,7 +20,13 @@ from PyQt4 import QtGui
 from enthought.traits.api \
     import Trait, TraitHandler, TraitError
     
-from enthought.traits.ui.api \
+# CIRCULAR IMPORT FIXME:
+# We are importing from the source instead of from traits.ui.api in order to
+# avoid circular imports. Some editors declared in traits.ui declare
+# traits of Font type, which causes this file to get imported, leading to
+# circular imports.
+
+from enthought.traits.ui.editors.font_editor \
     import FontEditor
 
 #-------------------------------------------------------------------------------

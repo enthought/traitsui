@@ -8,9 +8,8 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines a drop target editor and editor factory for the PyQt user interface
-    toolkit. A drop target editor handles drag and drop operations as a drop
-    target.
+""" Defines a drop target editor for the PyQt user interface toolkit. A drop
+target editor handles drag and drop operations as a drop target.
 """
 
 #-------------------------------------------------------------------------------
@@ -19,14 +18,8 @@
 
 from PyQt4 import QtGui
 
-from enthought.traits.api \
-    import Any, Bool
-    
 from text_editor \
     import SimpleEditor as Editor
-    
-from text_editor \
-    import ToolkitEditorFactory as EditorFactory
     
 from constants \
     import DropColor
@@ -34,63 +27,6 @@ from constants \
 from clipboard \
     import PyMimeData
 
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for drop editors.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # Allowable drop objects must be of this class (optional)
-    klass = Any
-    
-    # Must allowable drop objects be bindings?
-    binding = Bool(False)
-    
-    # Can the user type into the editor, or is it read only?
-    readonly = Bool(True)
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def text_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-                                      
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------
@@ -209,3 +145,7 @@ class _DropWidget(object):
             e.acceptProposedAction()
         except:
             pass
+
+
+# Define the Text and ReadonlyEditor for use by the editor factory.
+TextEditor = ReadonlyEditor = SimpleEditor

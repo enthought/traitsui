@@ -8,8 +8,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the various text editors and the text editor factory, for the 
-PyQt user interface toolkit.
+""" Defines the various text editors for the PyQt user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -19,120 +18,19 @@ PyQt user interface toolkit.
 from PyQt4 import QtCore, QtGui
 
 from enthought.traits.api \
-    import Dict, Str, Any, Bool, TraitError
+    import TraitError
 
-from enthought.traits.ui.api \
-    import View, Group
+from enthought.traits.ui.text_editor \
+    import evaluate_trait
 
 from editor \
     import Editor
 
 from editor_factory \
-    import EditorFactory, ReadonlyEditor
+    import ReadonlyEditor as BaseReadonlyEditor
 
 from constants \
-    import OKColor, ErrorColor
-
-#-------------------------------------------------------------------------------
-#  Define a simple identity mapping:
-#-------------------------------------------------------------------------------
-
-class _Identity ( object ):
-    """ A simple indentity mapping.
-    """
-    def __call__ ( self, value ):    
-        return value
-
-#-------------------------------------------------------------------------------
-#  Trait definitions:
-#-------------------------------------------------------------------------------
-
-# Mapping from user input text to other value
-mapping_trait = Dict( Str, Any )
-
-# Function used to evaluate textual user input
-evaluate_trait = Any( _Identity() )
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for text editors.
-    """
-
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-
-    # Dictionary that maps user input to other values
-    mapping = mapping_trait
-
-    # Is user input set on every keystroke?
-    auto_set = Bool( True )
-
-    # Is user input set when the Enter key is pressed?
-    enter_set = Bool( False )
-
-    # Is multi-line text allowed?
-    multi_line = Bool( True )
-
-    # Is user input unreadable? (e.g., for a password)
-    password = Bool( False )
-
-    # Function to evaluate textual user input
-    evaluate = evaluate_trait
-
-    # The object trait containing the function used to evaluate user input
-    evaluate_name = Str
-
-    #---------------------------------------------------------------------------
-    #  Traits view definition:    
-    #---------------------------------------------------------------------------
-
-    traits_view = View( [ 'auto_set{Set value when text is typed}',
-                          'enter_set{Set value when enter is pressed}',
-                          'multi_line{Allow multiple lines of text}',
-                          '<extras>',
-                          '|options:[Options]>' ] )
-
-    extras = Group( 'password{Is this a password field?}' )
-
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-
-    def text_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return ReadonlyTextEditor( parent,
-                                   factory     = self, 
-                                   ui          = ui, 
-                                   object      = object, 
-                                   name        = name, 
-                                   description = description ) 
+    import OKColor
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -300,10 +198,10 @@ class CustomEditor ( SimpleEditor ):
     base_style = QtGui.QTextEdit
 
 #-------------------------------------------------------------------------------
-#  'ReadonlyTextEditor' class:
+#  'ReadonlyEditor' class:
 #-------------------------------------------------------------------------------
 
-class ReadonlyTextEditor ( ReadonlyEditor ):
+class ReadonlyEditor ( BaseReadonlyEditor ):
     """ Read-only style of text editor, which displays a read-only text field.
     """
 

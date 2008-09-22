@@ -22,10 +22,6 @@ from PyQt4 import QtCore, QtGui
 from enthought.traits.api \
     import Bool, Event
 
-# FIXME: Import from the api.py file when it has been added.
-from enthought.traits.ui.basic_editor_factory \
-    import BasicEditorFactory
-    
 from editor \
     import Editor
     
@@ -128,12 +124,6 @@ class KeyBindingEditor ( Editor ):
         """
         self.value = ''
 
-#-------------------------------------------------------------------------------
-#  Create the editor factory object:
-#-------------------------------------------------------------------------------
-                
-ToolkitEditorFactory = BasicEditorFactory( klass = KeyBindingEditor )
-        
 #-------------------------------------------------------------------------------
 #  'KeyBindingCtrl' class:
 #-------------------------------------------------------------------------------

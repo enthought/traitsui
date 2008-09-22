@@ -9,7 +9,7 @@
 #------------------------------------------------------------------------------
 
 """ Defines a source code editor and code editor factory, for the PyQt user
-    interface toolkit, useful for tools such as debuggers.
+interface toolkit, useful for tools such as debuggers.
 """
 
 #-------------------------------------------------------------------------------
@@ -19,22 +19,16 @@
 from PyQt4 import QtCore, QtGui, Qsci
 
 from enthought.traits.api \
-    import Instance, Str, List, Int, Color, Enum, Event, Bool, TraitError
+    import Unicode, List, Int, Event, Bool, TraitError
 
 from enthought.traits.trait_base \
     import SequenceTypes
 
-from enthought.traits.ui.key_bindings \
-    import KeyBindings
-    
 from enthought.pyface.api \
     import PythonEditor
     
 from editor \
     import Editor
-    
-from editor_factory \
-    import EditorFactory
     
 from constants \
     import OKColor, ErrorColor
@@ -54,82 +48,6 @@ SEARCH_MARKER = 1
 # Marks the currently selected line
 SELECTED_MARKER = 2    
 
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for code editors.
-    """
-    
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # Object trait containing list of line numbers to mark (optional)
-    mark_lines = Str
-    
-    # Background color for marking lines
-    mark_color = Color( 0xECE9D8 )
-    
-    # Object trait containing the currently selected line (optional)
-    selected_line = Str
-    
-    # Object trait containing the currently selected text (optional)
-    selected_text = Str
-    
-    # Background color for selected lines
-    selected_color = Color( 0xA4FFFF )
-    
-    # Where should the search toolbar be placed?
-    search = Enum( 'top', 'bottom', 'none' )
-    
-    # Background color for lines that match the current search
-    search_color = Color( 0xFFFF94 )
-    
-    # Current line
-    line = Str
-    
-    # Current column
-    column = Str
-    
-    # Should code folding be enabled?
-    foldable = Bool( True )
-    
-    # Should line numbers be displayed in the margin?
-    show_line_numbers = Bool( True )
-    
-    # Is user input set on every change?
-    auto_set = Bool( True )
-    
-    # Should the editor auto-scroll when a new **selected_line** value is set?
-    auto_scroll = Bool( True )
-
-    # Optional key bindings associated with the editor    
-    key_bindings = Instance( KeyBindings )
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SourceEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description,
-                             readonly    = False )
-    
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return SourceEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description,
-                             readonly    = True )
-                                      
 #-------------------------------------------------------------------------------
 #  'SourceEditor' class:
 #-------------------------------------------------------------------------------
@@ -152,7 +70,7 @@ class SourceEditor ( Editor ):
     selected_line = Int
     
     # The currently selected text
-    selected_text = Str
+    selected_text = Unicode
     
     # The list of line numbers to mark
     mark_lines = List( Int )
@@ -385,3 +303,14 @@ class SourceEditor ( Editor ):
         """ Returns any user preference information associated with the editor.
         """
         return { 'key_bindings': self.factory.key_bindings }
+
+
+# Define the simple, custom, text and readonly editors, which will be accessed
+# by the editor factory for code editors.
+
+SimpleEditor = TextEditor = SourceEditor
+
+class ReadonlyEditor(SourceEditor):
+
+    # Set the value of the readonly trait.
+    readonly = True

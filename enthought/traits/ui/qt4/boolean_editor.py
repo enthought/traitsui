@@ -8,8 +8,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the various Boolean editors and the Boolean editor factory for the
-PyQt user interface toolkit.
+""" Defines the various Boolean editors for the PyQt user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -18,87 +17,18 @@ PyQt user interface toolkit.
 
 from PyQt4 import QtCore, QtGui
 
-from enthought.traits.api    import Dict, Str, Any, true
-from enthought.traits.ui.api import View
-from editor              import Editor
-from text_editor         import SimpleEditor         as TextEditor
-from text_editor         import ToolkitEditorFactory as EditorFactory
-from constants           import ReadonlyColor
+from editor \
+    import Editor
 
-#-------------------------------------------------------------------------------
-#  Trait definitions:
-#-------------------------------------------------------------------------------
+# This needs to be imported in here for use by the editor factory for boolean
+# editors (declared in enthought.traits.ui). The editor factory's text_editor
+# method will use the TextEditor in the ui.
+from text_editor \
+    import SimpleEditor as TextEditor
 
-# Mapping from user input text to Boolean values
-mapping_trait = Dict( Str, Any, { 'True':  True,
-                                  'true':  True,
-                                  't':     True,
-                                  'yes':   True,
-                                  'y':     True,
-                                  'False': False,
-                                  'false': False,
-                                  'f':     False,
-                                  'no':    False,
-                                  'n':     False,
-                    } )
+from constants \
+    import ReadonlyColor
 
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for Boolean editors.
-    """
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-    
-    # Dictionary mapping user input to other values. 
-    # These definitions override definitions in the 'text_editor' version
-    mapping = mapping_trait  
-    
-    #---------------------------------------------------------------------------
-    #  Traits view definition:  
-    #---------------------------------------------------------------------------
-    
-    traits_view = View()    
-    
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def text_editor ( self, ui, object, name, description, parent ):
-        return TextEditor( parent,
-                           factory     = self, 
-                           ui          = ui, 
-                           object      = object, 
-                           name        = name, 
-                           description = description ) 
-    
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return ReadonlyEditor( parent,
-                               factory     = self, 
-                               ui          = ui, 
-                               object      = object, 
-                               name        = name, 
-                               description = description ) 
-                                      
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------

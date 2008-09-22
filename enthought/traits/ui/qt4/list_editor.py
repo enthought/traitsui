@@ -8,8 +8,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the various list editors and the list editor factory for the
-    PyQt user interface toolkit..
+""" Defines the various list editors for the PyQt user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
@@ -19,172 +18,22 @@
 from PyQt4 import QtCore, QtGui
 
 from enthought.traits.api \
-    import Trait, HasTraits, BaseTraitHandler, Range, Str, Any, Int, Instance, \
-           Property, Bool, Callable, Enum, PrototypedFrom, cached_property
+    import Str, Any, Bool
 
 from enthought.traits.trait_base \
     import user_name_for, enumerate, xgetattr
 
-from enthought.traits.ui.api \
-    import View, Item, EditorFactory as UIEditorFactory
-
-from enthought.traits.ui.ui_traits \
-    import style_trait, AView
-
-from editor_factory \
-    import EditorFactory
+from enthought.traits.ui.editors.list_editor \
+    import ListItemProxy
 
 from editor \
     import Editor
 
 from helper \
-    import DockStyle, IconButton
+    import IconButton
 
 from menu \
     import MakeMenu
-
-#-------------------------------------------------------------------------------
-#  Trait definitions:
-#-------------------------------------------------------------------------------
-
-# Trait whose value is a BaseTraitHandler object
-handler_trait = Instance( BaseTraitHandler )
-
-# The visible number of rows displayed
-rows_trait = Range( 1, 50, 5,
-                    desc = 'the number of list rows to display' )
-
-# The visible number of columns displayed
-columns_trait = Range( 1, 10, 5,
-                    desc = 'the number of list columns to display' )
-
-editor_trait = Instance( UIEditorFactory )
-
-#-------------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-
-class ToolkitEditorFactory ( EditorFactory ):
-    """ PyQt editor factory for list editors.
-    """
-
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-
-    # The editor to use for each list item:
-    editor = editor_trait
-
-    # The style of editor to use for each item:
-    style = style_trait
-
-    # The trait handler for each list item:
-    trait_handler = handler_trait
-
-    # The number of list rows to display:
-    rows = rows_trait
-
-    # The number of list columns to create:
-    columns = columns_trait
-
-    # Use a notebook for a custom view?
-    use_notebook = Bool(False)
-
-    #-- Notebook Specific Traits -----------------------------------------------
-
-    # Are notebook items deletable?
-    deletable = Bool(False)
-
-    # The DockWindow graphical theme: ignored.
-    dock_theme = Any
-
-    # Dock page style to use for each DockControl:
-    dock_style = DockStyle
-
-    # Export class for each item in a notebook:
-    export = Str
-
-    # Name of the view to use in notebook mode:
-    view = AView
-
-    # The type of UI to construct ('panel', 'subpanel', etc)
-    ui_kind = Enum( 'subpanel', 'panel' )
-
-    # A factory function that can be used to define that actual object to be
-    # edited (i.e. view_object = factory( object )):
-    factory = Callable
-
-    # Extended name to use for each notebook page. It can be either the actual
-    # name or the name of an attribute on the object in the form:
-    # '.name[.name...]'
-    page_name = Str
-
-    # Name of the [object.]trait[.trait...] to synchronize notebook page
-    # selection with:
-    selected = Str
-
-    #---------------------------------------------------------------------------
-    #  Traits view definition:
-    #---------------------------------------------------------------------------
-
-    traits_view = View( [ [ 'use_notebook{Use a notebook in a custom view}',
-                            '|[Style]' ],
-                          [ Item( 'page_name',
-                                  enabled_when = 'object.use_notebook' ),
-                            Item( 'view',
-                                  enabled_when = 'object.use_notebook' ),
-                            '|[Notebook options]' ],
-                          [ Item( 'rows',
-                                  enabled_when = 'not object.use_notebook' ),
-                            '|[Number of list rows to display]<>' ] ] )
-
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self,
-                             ui          = ui,
-                             object      = object,
-                             name        = name,
-                             description = description,
-                             kind        = self.style + '_editor' )
-
-    def custom_editor ( self, ui, object, name, description, parent ):
-        if self.use_notebook:
-            return NotebookEditor( parent,
-                                   factory     = self,
-                                   ui          = ui,
-                                   object      = object,
-                                   name        = name,
-                                   description = description )
-        return CustomEditor( parent,
-                             factory     = self,
-                             ui          = ui,
-                             object      = object,
-                             name        = name,
-                             description = description,
-                             kind        = self.style + '_editor' )
-
-    def text_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self,
-                             ui          = ui,
-                             object      = object,
-                             name        = name,
-                             description = description,
-                             kind        = 'text_editor' )
-
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return CustomEditor( parent,
-                             factory     = self,
-                             ui          = ui,
-                             object      = object,
-                             name        = name,
-                             description = description,
-                             kind        = self.style + '_editor',
-                             mutable     = False )
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -586,6 +435,13 @@ class SimpleEditor ( Editor ):
 
         del control
 
+    #-- Trait initializers ----------------------------------------------------
+
+    def _kind_default(self):
+        """ Returns a default value for the 'kind' trait.
+        """
+        return self.factory.style + '_editor'
+
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:
 #-------------------------------------------------------------------------------
@@ -612,46 +468,24 @@ class CustomEditor ( SimpleEditor ):
     scrollable = True
 
 #-------------------------------------------------------------------------------
-#  'ListItemProxy' class:
+#  'TextEditor' class:
 #-------------------------------------------------------------------------------
 
-class ListItemProxy ( HasTraits ):
+class TextEditor(CustomEditor):
 
-    # The list proxy:
-    list = Property
+    # The kind of editor to create for each list item. This value overrides the
+    # default.
+    kind = 'text_editor'
 
-    # The item proxies index into the original list: 
-    index = Int 
+#-------------------------------------------------------------------------------
+#  'ReadonlyEditor' class:
+#-------------------------------------------------------------------------------
 
-    # Delegate all other traits to the original object: 
-    _ = PrototypedFrom( '_zzz_object' ) 
+class ReadonlyEditor(CustomEditor):
 
-    # Define all of the private internal use values (the funny names are an 
-    # attempt to avoid name collisions with delegated trait names): 
-    _zzz_inited = Any 
-    _zzz_object = Any 
-    _zzz_name   = Any 
-
-    def __init__ ( self, object, name, index, trait, value ):
-        super( ListItemProxy, self ).__init__()
-
-        self._zzz_inited = False
-        self._zzz_object = object
-        self._zzz_name   = name
-        self.index       = index
-
-        if trait is not None:
-            self.add_trait( 'value', trait )
-            self.value = value
-
-        self._zzz_inited = (self.index < len( self.list ))
-
-    def _get_list ( self ):
-        return getattr( self._zzz_object, self._zzz_name )
-
-    def _value_changed ( self, old_value, new_value ):
-        if self._zzz_inited:
-            self.list[ self.index ] = new_value
+    # Is the list of items being edited mutable? This value overrides the
+    # default.
+    mutable = False
 
 #-------------------------------------------------------------------------------
 #  'NotebookEditor' class:

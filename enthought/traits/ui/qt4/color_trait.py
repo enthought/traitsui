@@ -20,7 +20,13 @@ from PyQt4 import QtGui
 from enthought.traits.api \
     import Trait, TraitError
     
-from enthought.traits.ui.api \
+# CIRCULAR IMPORT FIXME:
+# We are importing from the source instead of from traits.ui.api in order to
+# avoid circular imports. The CodeEditor declared in traits.ui imports the
+# KeyBindings class which declares traits of Color type, which causes this
+# file to get imported, leading to circular imports.
+
+from enthought.traits.ui.editors.color_editor \
     import ColorEditor
     
 #-------------------------------------------------------------------------------

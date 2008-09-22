@@ -8,8 +8,8 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the base PyQt EditorFactory class and classes the various 
-styles of editors used in a Traits-based user interface.
+""" Defines the base PyQt classes the various styles of editors used in a
+Traits-based user interface.
 """
 
 #-------------------------------------------------------------------------------
@@ -19,91 +19,11 @@ styles of editors used in a Traits-based user interface.
 from PyQt4 import QtCore, QtGui
     
 from enthought.traits.api \
-    import TraitError, Any, Event, Str
-
-from enthought.traits.ui.editor_factory \
-    import EditorFactory as UIEditorFactory
-
-from helper \
-    import enum_values_changed
+    import TraitError
 
 from editor \
     import Editor
     
-#-------------------------------------------------------------------------------
-#  'EditorFactory' base class:
-#-------------------------------------------------------------------------------
-
-class EditorFactory ( UIEditorFactory ):
-    """ Base class for PyQt editor factories.
-    """
-    #---------------------------------------------------------------------------
-    #  'Editor' factory methods:
-    #---------------------------------------------------------------------------
-    
-    def simple_editor ( self, ui, object, name, description, parent ):
-        return SimpleEditor( parent,
-                             factory     = self, 
-                             ui          = ui, 
-                             object      = object, 
-                             name        = name, 
-                             description = description ) 
-    
-    def custom_editor ( self, ui, object, name, description, parent ):
-        return self.simple_editor( ui, object, name, description, parent )
-    
-    def text_editor ( self, ui, object, name, description, parent ):
-        return TextEditor( parent,
-                           factory     = self, 
-                           ui          = ui, 
-                           object      = object, 
-                           name        = name, 
-                           description = description ) 
-    
-    def readonly_editor ( self, ui, object, name, description, parent ):
-        return ReadonlyEditor( parent,
-                               factory     = self, 
-                               ui          = ui, 
-                               object      = object, 
-                               name        = name, 
-                               description = description )
-                               
-#-------------------------------------------------------------------------------
-#  'EditorWithListFactory' base class:
-#-------------------------------------------------------------------------------
-
-class EditorWithListFactory ( EditorFactory ):
-    """ Base class for factories of editors for objects that contain lists.
-    """
-    #---------------------------------------------------------------------------
-    #  Trait definitions:  
-    #---------------------------------------------------------------------------
-        
-    # Values to enumerate (can be a list, tuple, dict, or a CTrait or
-    # TraitHandler that is "mapped"):
-    values = Any 
-    
-    # Extended name of the trait on **object** containing the enumeration data:
-    object = Str( 'object' )
-
-    # Name of the trait on 'object' containing the enumeration data
-    name = Str  
-
-    # Fired when the **values** trait has been updated:
-    values_modified = Event
-
-    #---------------------------------------------------------------------------
-    #  Recomputes the mappings whenever the 'values' trait is changed:
-    #---------------------------------------------------------------------------
-
-    def _values_changed ( self ):
-        """ Recomputes the mappings whenever the **values** trait is changed.
-        """
-        self._names, self._mapping, self._inverse_mapping = \
-            enum_values_changed( self.values )
-
-        self.values_modified = True
-
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------
