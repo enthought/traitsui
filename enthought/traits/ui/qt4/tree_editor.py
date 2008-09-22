@@ -247,7 +247,7 @@ class SimpleEditor ( Editor ):
         """
         if levels > 0:
             expanded, node, object = self._get_node_data( nid )
-            if node._has_children( object ):
+            if self._has_children( node, object ):
                 self._expand_node( nid )
                 if expand:
                     nid.setExpanded(True)
@@ -280,7 +280,7 @@ class SimpleEditor ( Editor ):
             self._map[ id( object ) ] = [ ( node.children, nid ) ]
             self._add_listeners( node, object )
             self._set_node_data( nid, ( False, node, object) )
-            if self.factory.hide_root or node._has_children( object ):
+            if self.factory.hide_root or self._has_children( node, object ):
                 self._expand_node( nid )
                 if not self.factory.hide_root:
                     nid.setExpanded(True)
@@ -310,7 +310,7 @@ class SimpleEditor ( Editor ):
         cnid.setIcon(0, self._get_icon(node, object))
         cnid.setToolTip(0, node.get_tooltip(object))
 
-        has_children = node._has_children(object)
+        has_children = self._has_children(node, object)
         self._set_node_data( cnid, ( False, node, object ) )
         self._map.setdefault( id( object ), [] ).append(
             ( node.children, cnid ) )
@@ -417,6 +417,15 @@ class SimpleEditor ( Editor ):
             if pnid.child(i) is nid:
                 _, pnode, pobject = self._get_node_data( pnid )
                 return ( pnode, pobject, i )
+
+    #---------------------------------------------------------------------------
+    #  Returns whether a specified object has any children:
+    #---------------------------------------------------------------------------
+
+    def _has_children ( self, node, object ):
+        """ Returns whether a specified object has any children.
+        """
+        return (node.allows_children( object ) and node.has_children( object ))
 
     #---------------------------------------------------------------------------
     #  Returns the icon index for the specified object:
