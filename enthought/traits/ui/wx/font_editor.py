@@ -117,11 +117,15 @@ class SimpleFontEditor ( BaseSimpleEditor ):
     def popup_editor ( self, event ):
         """ Invokes the pop-up editor for an object trait.
         """
+        to_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'to_wx_font', to_wx_font)
+        from_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'from_wx_font', from_wx_font)
         font_data = wx.FontData()
-        font_data.SetInitialFont( to_wx_font( self ) )
+        font_data.SetInitialFont( to_wx_font_function( self ) )
         dialog = wx.FontDialog( self.control, font_data )
         if dialog.ShowModal() == wx.ID_OK:
-            self.value = from_wx_font(
+            self.value = from_wx_font_function(
                               dialog.GetFontData().GetChosenFont() )
             self.update_editor()
             
@@ -145,7 +149,9 @@ class SimpleFontEditor ( BaseSimpleEditor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        return str_font( font ) 
+        str_font_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'str_font', str_font)
+        return str_font_function( font ) 
                                       
 #-------------------------------------------------------------------------------
 #  'CustomFontEditor' class:
@@ -180,8 +186,10 @@ class CustomFontEditor ( Editor ):
         sizer.Add( font, 0, wx.EXPAND | wx.BOTTOM, 3 )
         
         # Add all of the font choice controls:
+        all_facenames_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'all_facenames', all_facenames)
         sizer2    = wx.BoxSizer( wx.HORIZONTAL )
-        facenames = all_facenames()
+        facenames = all_facenames_function()
         control   = self._facename = wx.Choice( panel, -1, wx.Point( 0, 0 ), 
                                                 wx.Size( -1, -1 ), facenames )
                         
@@ -222,8 +230,10 @@ class CustomFontEditor ( Editor ):
     def update_object ( self, event ):
         """ Handles the user changing the contents of the font text control.
         """
+        to_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'to_wx_font', to_wx_font)
         self.value = self._font.GetValue()
-        self._set_font( to_wx_font( self ) )  
+        self._set_font( to_wx_font_function( self ) )  
         self.update_editor()  
            
     #---------------------------------------------------------------------------
@@ -237,7 +247,9 @@ class CustomFontEditor ( Editor ):
         facename   = self._facename.GetStringSelection()
         font       = wx.Font( point_size, wx.DEFAULT, wx.NORMAL, wx.NORMAL,
                               faceName = facename )
-        self.value = from_wx_font( font )
+        from_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'from_wx_font', from_wx_font)
+        self.value = from_wx_font_function( font )
         self._font.SetValue( self.str_value )
         self._set_font( font )
          
@@ -249,7 +261,9 @@ class CustomFontEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
-        font = to_wx_font( self )
+        to_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'to_wx_font', to_wx_font)
+        font = to_wx_font_function( self )
         
         try:
            self._facename.SetStringSelection( font.GetFaceName() )
@@ -270,7 +284,9 @@ class CustomFontEditor ( Editor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        return str_font( font )
+        str_font_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'str_font', str_font)
+        return str_font_function( font ) 
             
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
@@ -326,7 +342,9 @@ class TextFontEditor ( BaseTextEditor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        return str_font( font ) 
+        str_font_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'str_font', str_font)
+        return str_font_function( font ) 
                                       
 #-------------------------------------------------------------------------------
 #  'ReadonlyFontEditor' class:
@@ -356,7 +374,9 @@ class ReadonlyFontEditor ( BaseReadonlyEditor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        return str_font( font ) 
+        str_font_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'str_font', str_font)
+        return str_font_function( font ) 
 
 #-------------------------------------------------------------------------------
 #  Set the editor control's font to match a specified font: 
@@ -365,7 +385,9 @@ class ReadonlyFontEditor ( BaseReadonlyEditor ):
 def set_font ( editor ):
     """ Sets the editor control's font to match a specified font.
     """
-    font = to_wx_font( editor )
+    to_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
+                                         'to_wx_font', to_wx_font)
+    font = to_wx_font_function( editor )
     font.SetPointSize( min( 10, font.GetPointSize() ) )
     editor.control.SetFont( font )
 
