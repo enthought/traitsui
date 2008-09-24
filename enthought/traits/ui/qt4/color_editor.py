@@ -19,6 +19,7 @@ from PyQt4 import QtCore, QtGui
 
 from editor_factory \
     import SimpleEditor as BaseSimpleEditor, \
+    TextEditor as BaseTextEditor, \
     ReadonlyEditor as BaseReadonlyEditor
 
 from editor \
@@ -29,7 +30,6 @@ from editor \
 #-------------------------------------------------------------------------------
 
 # Standard color samples:
-
 color_samples = []
 
 #-------------------------------------------------------------------------------
@@ -66,14 +66,13 @@ def str_color ( color ):
             return "(%d,%d,%d)" % (color.red(), color.green(), color.blue())
 
         return "(%d,%d,%d,%d)" % (color.red(), color.green(), color.blue(), alpha)
-
     return color
 
 #-------------------------------------------------------------------------------
 #  'SimpleColorEditor' class:
 #-------------------------------------------------------------------------------
                                
-class SimpleColorEditor ( Editor ):
+class SimpleColorEditor ( BaseSimpleEditor ):
     """ Simple style of color editor, which displays a text field whose 
     background color is the color value. Selecting the text field displays
     a dialog box for selecting a new color value.
@@ -86,11 +85,11 @@ class SimpleColorEditor ( Editor ):
     def popup_editor(self):
         """ Invokes the pop-up editor for an object trait.
         """
-        color = self.factory.to_qt4_color(self)
+        color = to_qt4_color(self)
         color = QtGui.QColorDialog.getColor(color, self.control)
 
         if color.isValid():
-            self.value = self.factory.from_qt4_color(color)
+            self.value = from_qt4_color(color)
             self.update_editor()
 
     #---------------------------------------------------------------------------
@@ -111,13 +110,13 @@ class SimpleColorEditor ( Editor ):
     def string_value ( self, color ):
         """ Returns the text representation of a specified color value.
         """
-        return self.factory.str_color( color ) 
+        return str_color( color ) 
 
 #-------------------------------------------------------------------------------
 #  'CustomColorEditor' class:
 #-------------------------------------------------------------------------------
 
-class CustomColorEditor ( SimpleColorEditor ):
+class CustomColorEditor ( Editor ):
     """ Custom style of color editor, which displays a color editor panel.
     """
     
@@ -150,14 +149,23 @@ class CustomColorEditor ( SimpleColorEditor ):
         """ Updates the object trait when a color swatch is clicked.
         """
         color = control.palette().color(QtGui.QPalette.Button)
-        self.value = self.factory.from_qt4_color(color)
+        self.value = from_qt4_color(color)
         self.update_editor()
+
+    #---------------------------------------------------------------------------
+    #  Returns the text representation of a specified color value:
+    #---------------------------------------------------------------------------
+
+    def string_value ( self, color ):
+        """ Returns the text representation of a specified color value.
+        """
+        return str_color( color ) 
 
 #-------------------------------------------------------------------------------
 #  'TextColorEditor' class:
 #-------------------------------------------------------------------------------
 
-class TextColorEditor ( BaseSimpleEditor ):
+class TextColorEditor ( BaseTextEditor ):
     """ Text style of color editor, which displays a text field whose 
     background color is the color value.
     """
@@ -189,7 +197,7 @@ class TextColorEditor ( BaseSimpleEditor ):
     def string_value ( self, color ):
         """ Returns the text representation of a specified color value.
         """
-        return self.factory.str_color( color ) 
+        return str_color( color ) 
 
 #-------------------------------------------------------------------------------
 #  'ReadonlyColorEditor' class:
@@ -220,7 +228,17 @@ class ReadonlyColorEditor ( BaseReadonlyEditor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
+        super( ReadonlyColorEditor, self ).update_editor()
         set_color( self )
+
+    #---------------------------------------------------------------------------
+    #  Returns the text representation of a specified color value:
+    #---------------------------------------------------------------------------
+
+    def string_value ( self, color ):
+        """ Returns the text representation of a specified color value.
+        """
+        return str_color( color ) 
 
 #-------------------------------------------------------------------------------
 #   Sets the color of the specified editor's color control: 
@@ -229,7 +247,7 @@ class ReadonlyColorEditor ( BaseReadonlyEditor ):
 def set_color ( editor ):
     """  Sets the color of the specified color control.
     """
-    color = editor.factory.to_qt4_color(editor)
+    color = to_qt4_color(editor)
     pal = QtGui.QPalette(editor.control.palette())
 
     pal.setColor(QtGui.QPalette.Base, color)

@@ -20,7 +20,7 @@ from PyQt4 import QtCore, QtGui
 from enthought.traits.api \
     import TraitError
 
-from enthought.traits.ui.text_editor \
+from enthought.traits.ui.editors.text_editor \
     import evaluate_trait
 
 from editor \
@@ -218,7 +218,8 @@ class ReadonlyEditor ( BaseReadonlyEditor ):
         if self.factory.password:
             new_value = '*' * len(new_value)
 
-        if self.item.resizable or self.item.height != -1:
+        #if self.item.resizable or self.item.height != -1:
+        if isinstance(self.control, QtGui.QTextEdit):
             self.control.setPlainText(new_value)
         else:
             self.control.setText(new_value)
