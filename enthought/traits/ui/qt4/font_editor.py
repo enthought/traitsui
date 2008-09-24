@@ -20,7 +20,7 @@ from PyQt4 import QtCore, QtGui
 
 from editor_factory \
     import SimpleEditor as BaseSimpleEditor, \
-    TextEditor as BaseTextEditor, 
+    TextEditor as BaseTextEditor, \
     ReadonlyEditor as BaseReadonlyEditor
 
 from editor \
