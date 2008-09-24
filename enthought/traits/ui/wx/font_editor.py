@@ -25,6 +25,9 @@
 
 import wx
 
+from enthought.traits.ui.editors.font_editor \
+    import ToolkitEditorFactory as BaseToolkitEditorFactory
+
 from editor_factory \
     import SimpleEditor as BaseSimpleEditor, \
     TextEditor as BaseTextEditor, \
@@ -49,56 +52,65 @@ PointSizes = [
 # All available font facenames
 facenames = None
 
-   
 #---------------------------------------------------------------------------
-#  Returns a wxFont object corresponding to a specified object's font trait:
+#  The wxPython ToolkitEditorFactory class.
 #---------------------------------------------------------------------------
-    
-def to_wx_font ( editor ):
-    """ Returns a wxFont object corresponding to a specified object's font 
-    trait.
-    """
-    font = editor.value
-    return wx.Font( font.GetPointSize(), font.GetFamily(), font.GetStyle(),
-                    font.GetWeight(),    font.GetUnderlined(), 
-                    font.GetFaceName() )	
- 
-#---------------------------------------------------------------------------
-#  Gets the application equivalent of a wxPython Font value:
-#---------------------------------------------------------------------------
-    
-def from_wx_font ( font ):
-    """ Gets the application equivalent of a wxPython Font value.
-    """
-    return font
+## We need to add wx-specific methods to the editor factory, and so we create
+## a subclass of the BaseToolkitEditorFactory.
 
-#---------------------------------------------------------------------------
-#  Returns the text representation of the specified object trait value:
-#---------------------------------------------------------------------------
-    
-def str_font ( font ):
-    """ Returns the text representation of the specified object trait value.
+class ToolkitEditorFactory(BaseToolkitEditorFactory):
+    """ wxPython editor factory for font editors.
     """
-    weight = { wx.LIGHT: ' Light',
-                wx.BOLD:  ' Bold'   }.get( font.GetWeight(), '' )
-    style  = { wx.SLANT: ' Slant',
-                wx.ITALIC:' Italic' }.get( font.GetStyle(), '' )
-    return '%s point %s%s%s' % (
-            font.GetPointSize(), font.GetFaceName(), style, weight )
+   
+    #---------------------------------------------------------------------------
+    #  Returns a wxFont object corresponding to a specified object's font trait:
+    #---------------------------------------------------------------------------
         
-#---------------------------------------------------------------------------
-#  Returns a list of all available font facenames:
-#---------------------------------------------------------------------------
+    def to_wx_font ( self, editor ):
+        """ Returns a wxFont object corresponding to a specified object's font 
+        trait.
+        """
+        font = editor.value
+        return wx.Font( font.GetPointSize(), font.GetFamily(), font.GetStyle(),
+                        font.GetWeight(),    font.GetUnderlined(), 
+                        font.GetFaceName() )	
+     
+    #---------------------------------------------------------------------------
+    #  Gets the application equivalent of a wxPython Font value:
+    #---------------------------------------------------------------------------
+        
+    def from_wx_font ( self, font ):
+        """ Gets the application equivalent of a wxPython Font value.
+        """
+        return font
     
-def all_facenames ( ):
-    """ Returns a list of all available font facenames.
-    """
-    global facenames
+    #---------------------------------------------------------------------------
+    #  Returns the text representation of the specified object trait value:
+    #---------------------------------------------------------------------------
         
-    if facenames is None:
-        facenames = FontEnumerator().facenames()
-        facenames.sort()
-    return facenames
+    def str_font ( self, font ):
+        """ Returns the text representation of the specified object trait value.
+        """
+        weight = { wx.LIGHT: ' Light',
+                    wx.BOLD:  ' Bold'   }.get( font.GetWeight(), '' )
+        style  = { wx.SLANT: ' Slant',
+                    wx.ITALIC:' Italic' }.get( font.GetStyle(), '' )
+        return '%s point %s%s%s' % (
+                font.GetPointSize(), font.GetFaceName(), style, weight )
+            
+    #---------------------------------------------------------------------------
+    #  Returns a list of all available font facenames:
+    #---------------------------------------------------------------------------
+        
+    def all_facenames ( self ):
+        """ Returns a list of all available font facenames.
+        """
+        global facenames
+            
+        if facenames is None:
+            facenames = FontEnumerator().facenames()
+            facenames.sort()
+        return facenames
                                       
 #-------------------------------------------------------------------------------
 #  'SimpleFontEditor' class:
@@ -117,12 +129,8 @@ class SimpleFontEditor ( BaseSimpleEditor ):
     def popup_editor ( self, event ):
         """ Invokes the pop-up editor for an object trait.
         """
-        to_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'to_wx_font', to_wx_font)
-        from_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'from_wx_font', from_wx_font)
         font_data = wx.FontData()
-        font_data.SetInitialFont( to_wx_font_function( self ) )
+        font_data.SetInitialFont( self.factory.to_wx_font( self ) )
         dialog = wx.FontDialog( self.control, font_data )
         if dialog.ShowModal() == wx.ID_OK:
             self.value = from_wx_font_function(
@@ -149,9 +157,7 @@ class SimpleFontEditor ( BaseSimpleEditor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        str_font_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'str_font', str_font)
-        return str_font_function( font ) 
+        return self.factory.str_font( font ) 
                                       
 #-------------------------------------------------------------------------------
 #  'CustomFontEditor' class:
@@ -230,10 +236,8 @@ class CustomFontEditor ( Editor ):
     def update_object ( self, event ):
         """ Handles the user changing the contents of the font text control.
         """
-        to_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'to_wx_font', to_wx_font)
         self.value = self._font.GetValue()
-        self._set_font( to_wx_font_function( self ) )  
+        self._set_font( self.factory.to_wx_font( self ) )  
         self.update_editor()  
            
     #---------------------------------------------------------------------------
@@ -247,9 +251,7 @@ class CustomFontEditor ( Editor ):
         facename   = self._facename.GetStringSelection()
         font       = wx.Font( point_size, wx.DEFAULT, wx.NORMAL, wx.NORMAL,
                               faceName = facename )
-        from_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'from_wx_font', from_wx_font)
-        self.value = from_wx_font_function( font )
+        self.value = self.factory.from_wx_font( font )
         self._font.SetValue( self.str_value )
         self._set_font( font )
          
@@ -261,9 +263,7 @@ class CustomFontEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
-        to_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'to_wx_font', to_wx_font)
-        font = to_wx_font_function( self )
+        font = self.factory.to_wx_font( self )
         
         try:
            self._facename.SetStringSelection( font.GetFaceName() )
@@ -284,9 +284,7 @@ class CustomFontEditor ( Editor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        str_font_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'str_font', str_font)
-        return str_font_function( font ) 
+        return self.factory.str_font( font ) 
             
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
@@ -342,9 +340,7 @@ class TextFontEditor ( BaseTextEditor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        str_font_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'str_font', str_font)
-        return str_font_function( font ) 
+        return self.factory.str_font( font ) 
                                       
 #-------------------------------------------------------------------------------
 #  'ReadonlyFontEditor' class:
@@ -374,9 +370,7 @@ class ReadonlyFontEditor ( BaseReadonlyEditor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        str_font_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'str_font', str_font)
-        return str_font_function( font ) 
+        return self.factory.str_font( font ) 
 
 #-------------------------------------------------------------------------------
 #  Set the editor control's font to match a specified font: 
@@ -385,9 +379,7 @@ class ReadonlyFontEditor ( BaseReadonlyEditor ):
 def set_font ( editor ):
     """ Sets the editor control's font to match a specified font.
     """
-    to_wx_font_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'to_wx_font', to_wx_font)
-    font = to_wx_font_function( editor )
+    font = editor.factory.to_wx_font( editor )
     font.SetPointSize( min( 10, font.GetPointSize() ) )
     editor.control.SetFont( font )
 

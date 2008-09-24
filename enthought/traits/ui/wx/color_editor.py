@@ -15,7 +15,8 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines the various color editors for the wxPython user interface toolkit.
+""" Defines the various color editors and the color editor factory for the 
+wxPython user interface toolkit.
 """
 
 #-------------------------------------------------------------------------------
