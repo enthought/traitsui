@@ -27,15 +27,6 @@ import wx
 from enthought.traits.api \
     import Trait, TraitError
     
-# CIRCULAR IMPORT FIXME: 
-# We are importing from the source instead of from traits.ui.api in order to
-# avoid circular imports. The CodeEditor declared in traits.ui imports the
-# KeyBindings class which declares traits of Color type, which causes this
-# file to get imported, leading to circular imports.
-
-from enthought.traits.ui.editors.color_editor \
-    import ColorEditor
-    
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
 try:
     ColourPtr = wx.ColourPtr
@@ -85,7 +76,7 @@ convert_to_color.info = ('a string of the form (r,g,b) or (r,g,b,a) where r, '
                          'instance, an integer which in hex is of the form '
                          '0xRRGGBB, where RR is red, GG is green, and BB is '
                          'blue')
-             
+
 #-------------------------------------------------------------------------------
 #  Standard colors:
 #-------------------------------------------------------------------------------
@@ -112,6 +103,19 @@ for name in [ 'aquamarine', 'black', 'blue', 'blue violet', 'brown',
                                                     wx.NamedColour( name ) )
     except:
         pass
+             
+#-------------------------------------------------------------------------------
+#  Callable that returns an instance of the wxToolkitEditorFactory for color 
+#  editors.
+#-------------------------------------------------------------------------------
+
+### FIXME: We have declared the 'editor' to be a function instead of  the
+# enthought.traits.ui.wx.color_editor.ToolkitEditorFactory class, since the
+# latter is leading to too many circular imports. In the future, try to see if 
+# there is a better way to do this.
+def get_color_editor(*args, **traits):
+    from enthought.traits.ui.wx.color_editor import ToolkitEditorFactory
+    return ToolkitEditorFactory(*args, **traits)
 
 #-------------------------------------------------------------------------------
 #  Define wxPython specific color traits:
@@ -123,7 +127,7 @@ def WxColor ( default = 'white', allow_none = False, **metadata ):
     
     if allow_none:
         return Trait( default, None, standard_colors, convert_to_color,
-                      editor = ColorEditor, **metadata )
+                      editor = get_color_editor, **metadata )
                  
     return Trait( default, standard_colors, convert_to_color,
-                  editor = ColorEditor, **metadata )
+                  editor = get_color_editor, **metadata )

@@ -30,9 +30,6 @@ from enthought.traits.api \
 from enthought.traits.trait_base \
     import SequenceTypes
     
-from enthought.traits.ui.api \
-    import RGBColorEditor
-    
 from enthought.traits.ui.wx.color_trait \
     import standard_colors
 
@@ -80,6 +77,18 @@ for name, color in standard_colors.items():
     rgb_standard_colors[ name ] = ( color.Red(  ) / 255.0, 
                                     color.Green() / 255.0,
                                     color.Blue()  / 255.0 )
+#-------------------------------------------------------------------------------
+#  Callable that returns an instance of the wxToolkitEditorFactory for RGB color 
+#  editors.
+#-------------------------------------------------------------------------------
+
+### FIXME: We have declared the 'editor' to be a function instead of  the
+# enthought.traits.ui.wx.rgb_color_editor.ToolkitEditorFactory class, since the
+# latter is leading to too many circular imports. In the future, try to see if 
+# there is a better way to do this.
+def get_rgb_color_editor(*args, **traits):
+    from enthought.traits.ui.wx.rgb_color_editor import ToolkitEditorFactory
+    return ToolkitEditorFactory(*args, **traits)
 
 #-------------------------------------------------------------------------------
 #  Define wxPython specific color traits:
@@ -87,5 +96,5 @@ for name, color in standard_colors.items():
     
 # Trait whose value must be an RGB color:
 RGBColor = Trait( 'white', convert_to_color, rgb_standard_colors, 
-                  editor = RGBColorEditor )
+                  editor = get_rgb_color_editor )
        
