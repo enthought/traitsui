@@ -27,12 +27,18 @@ from editor \
     
 from enthought.pyface.heading_text \
     import HeadingText
+    
+# FIXME: TitleEditor (the editor factory for title editors) is a proxy class 
+# defined here just for backward compatibility. The class has been moved to 
+# enthought.traits.ui.editors.title_editor.
+from enthought.traits.ui.editors.title_editor \
+    import TitleEditor
                                       
 #-------------------------------------------------------------------------------
 #  '_TitleEditor' class:
 #-------------------------------------------------------------------------------
                                
-class TitleEditor ( Editor ):
+class _TitleEditor ( Editor ):
     
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit

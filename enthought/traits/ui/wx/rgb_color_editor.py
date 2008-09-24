@@ -25,59 +25,65 @@
 #-------------------------------------------------------------------------------
 
 import wx
+    
+from enthought.traits.trait_base \
+    import SequenceTypes
 
+# Note: The ToolkitEditorFactory class imported from color_editor is the
+# abstract ToolkitEditorFactory class (in enthought.traits.ui.api) along with
+# wx-specific methods added via a category. We need to override the 
+# implementations of the wx-specific methods here.
+
+# The editor classes are imported here so that the editor factory for RGB
+# color editors can use these classes. In the future, the implementation on
+# editor_factory.py should be changed to look up the mro of the factory, and 
+# then try to import the editor classes from the base classes.
 from color_editor \
-    import SimpleColorEditor, CustomColorEditor, \
-    TextColorEditor, ReadonlyColorEditor 
-
-#---------------------------------------------------------------------------
-#  Gets the wxPython color equivalent of the object:
-#---------------------------------------------------------------------------
-
-def to_wx_color ( editor ):
-    """ Gets the wxPython color equivalent of the object trait.
-    """
-    try:
-        color = getattr( editor.object, editor.name + '_' )
-    except AttributeError:
-        color = getattr( editor.object, editor.name )
-    return wx.Colour( int( color[0] * 255.0 ), 
-                      int( color[1] * 255.0 ), 
-                      int( color[2] * 255.0 ) )
- 
-#---------------------------------------------------------------------------
-#  Gets the application equivalent of a wxPython value:
-#---------------------------------------------------------------------------
-
-def from_wx_color ( color ):
-    """ Gets the application equivalent of a wxPython value.
-    """
-    return ( color.Red()   / 255.0, 
-             color.Green() / 255.0,
-             color.Blue()  / 255.0 )
+    import ToolkitEditorFactory as BaseColorToolkitEditorFactory, \
+    SimpleEditor, CustomEditor, TextEditor, ReadonlyEditor
     
 #---------------------------------------------------------------------------
-#  Returns the text representation of a specified color value:
+#  The wxPython ToolkitEditorFactory class.
 #---------------------------------------------------------------------------
-  
-def str_color ( self, color ):
-    """ Returns the text representation of a specified color value.
+class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
+    """ wxPython editor factory for color editors.
     """
-    if type( color ) in SequenceTypes:
-        return "(%d,%d,%d)" % ( int( color[0] * 255.0 ),
-                                int( color[1] * 255.0 ),
-                                int( color[2] * 255.0 ) )
-    return color
-
-class SimpleEditor( SimpleColorEditor ):
-    pass
-
-class CustomEditor( CustomColorEditor ):
-    pass
-
-class TextEditor( TextColorEditor ):
-    pass
-
-class ReadonlyEditor( ReadonlyColorEditor ):
-    pass
-
+    #---------------------------------------------------------------------------
+    #  Gets the wxPython color equivalent of the object:
+    #---------------------------------------------------------------------------
+    
+    def to_wx_color ( self, editor ):
+        """ Gets the wxPython color equivalent of the object trait.
+        """
+        try:
+            color = getattr( editor.object, editor.name + '_' )
+        except AttributeError:
+            color = getattr( editor.object, editor.name )
+        return wx.Colour( int( color[0] * 255.0 ), 
+                          int( color[1] * 255.0 ), 
+                          int( color[2] * 255.0 ) )
+     
+    #---------------------------------------------------------------------------
+    #  Gets the application equivalent of a wxPython value:
+    #---------------------------------------------------------------------------
+    
+    def from_wx_color ( self, color ):
+        """ Gets the application equivalent of a wxPython value.
+        """
+        return ( color.Red()   / 255.0, 
+                 color.Green() / 255.0,
+                 color.Blue()  / 255.0 )
+        
+    #---------------------------------------------------------------------------
+    #  Returns the text representation of a specified color value:
+    #---------------------------------------------------------------------------
+      
+    def str_color ( self, color ):
+        """ Returns the text representation of a specified color value.
+        """
+        if type( color ) in SequenceTypes:
+            return "(%d,%d,%d)" % ( int( color[0] * 255.0 ),
+                                    int( color[1] * 255.0 ),
+                                    int( color[2] * 255.0 ) )
+        return color
+    

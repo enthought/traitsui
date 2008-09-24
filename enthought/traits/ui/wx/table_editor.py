@@ -31,6 +31,12 @@ from enthought.traits.api \
 from enthought.traits.ui.api \
     import View, Item, UI, InstanceEditor, EnumEditor, Handler, SetEditor, \
            ListUndoItem
+    
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.table_editor file.
+from enthought.traits.ui.editors.table_editor \
+    import ToolkitEditorFactory
 
 from enthought.traits.ui.menu \
     import Action, ToolBar

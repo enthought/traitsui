@@ -35,8 +35,11 @@ from cPickle \
 from enthought.traits.api \
     import Bool
     
-from editor \
-    import Editor
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.dnd_editor file.
+from enthought.traits.ui.editors.dnd_editor \
+    import ToolkitEditorFactory
 
 from enthought.util.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
@@ -53,6 +56,9 @@ except ImportError:
            
 from enthought.pyface.image_resource \
     import ImageResource
+    
+from editor \
+    import Editor
     
 #-------------------------------------------------------------------------------
 #  Constants:

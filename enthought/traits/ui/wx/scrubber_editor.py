@@ -34,6 +34,12 @@ from enthought.traits.api \
 from enthought.traits.ui.api \
     import View, Item, EnumEditor
     
+# FIXME: ScrubberEditor is a proxy class defined here just for backward
+# compatibility (represents the editor factory for scrubber editors). 
+# The class has been moved to enthought.traits.ui.editors.scrubber_editor
+from enthought.traits.ui.editors.scrubber_editor \
+    import ScrubberEditor
+    
 from enthought.traits.ui.wx.editor \
     import Editor
     

@@ -23,16 +23,35 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import warnings
+
 import wx
     
 from enthought.traits.api \
     import TraitError, Any, Bool, Event, Str
+
+from enthought.traits.ui.editor_factory \
+    import EditorFactory as BaseEditorFactory
            
 from editor \
     import Editor
     
 from constants \
     import WindowColor
+    
+#-------------------------------------------------------------------------------
+#  'EditorFactory' class 
+#   Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory
+#-------------------------------------------------------------------------------
+
+class EditorFactory(BaseEditorFactory):
+    """ Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory.
+    """
+
+    def __init__(self, *args, **kwds):
+        super(EditorFactory, self).__init__(*args, **kwds)
+        warnings.warn("DEPRECATED: Use enthought.traits.ui.editor_factory."
+            ".EditorFactory instead.", DeprecationWarning)
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:

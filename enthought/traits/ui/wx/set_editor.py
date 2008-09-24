@@ -26,15 +26,21 @@
 #-------------------------------------------------------------------------------
 
 import wx
-
-from helper \
-    import enum_values_changed, TraitsUIPanel
-
-from editor \
-    import Editor
     
 from enthought.traits.api \
     import Property
+    
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.set_editor file.
+from enthought.traits.ui.editors.set_editor \
+    import ToolkitEditorFactory
+
+from editor \
+    import Editor
+
+from helper \
+    import enum_values_changed, TraitsUIPanel
                                       
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:

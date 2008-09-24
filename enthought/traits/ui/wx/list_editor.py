@@ -36,7 +36,7 @@ from enthought.traits.ui.ui_traits \
     import Image, convert_bitmap
     
 from enthought.traits.ui.editors.list_editor \
-    import ListItemProxy
+    import ListItemProxy, ToolkitEditorFactory
 
 from enthought.traits.ui.dockable_view_element \
     import DockableViewElement

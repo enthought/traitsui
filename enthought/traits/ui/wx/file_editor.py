@@ -29,7 +29,13 @@ from os.path \
     
 from enthought.traits.api \
     import List, Str, Event, Any, on_trait_change, TraitError
-    
+
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.file_editor file.
+from enthought.traits.ui.editors.file_editor \
+    import ToolkitEditorFactory
+        
 from text_editor \
     import SimpleEditor as SimpleTextEditor
            

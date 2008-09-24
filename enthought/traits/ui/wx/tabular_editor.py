@@ -28,6 +28,12 @@ from enthought.traits.api \
     import HasStrictTraits, Int, \
            List, Bool, Instance, Any, Event, \
            Property, TraitListEvent
+    
+# FIXME: TabularEditor (the editor factory for tabular editors) is a proxy class
+# defined here just for backward compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.tabular_editor file.
+from enthought.traits.ui.editors.tabular_editor \
+    import TabularEditor
            
 from enthought.traits.ui.ui_traits \
     import Image

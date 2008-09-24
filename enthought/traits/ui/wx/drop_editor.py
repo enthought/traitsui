@@ -25,14 +25,20 @@
 
 import wx
     
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.drop_editor file.
+from enthought.traits.ui.editors.drop_editor \
+    import ToolkitEditorFactory
+
+from enthought.util.wx.drag_and_drop \
+    import PythonDropTarget, clipboard
+    
 from text_editor \
     import SimpleEditor as Editor
     
 from constants \
     import DropColor
-
-from enthought.util.wx.drag_and_drop \
-    import PythonDropTarget, clipboard
                                       
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:

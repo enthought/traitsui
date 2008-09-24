@@ -26,6 +26,12 @@
 
 import wx.html as wh
     
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.html_editor file.
+from enthought.traits.ui.editors.html_editor \
+    import ToolkitEditorFactory
+    
 from editor  \
     import Editor
     

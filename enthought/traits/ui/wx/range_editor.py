@@ -30,6 +30,12 @@ from math \
 
 from enthought.traits.api \
      import TraitError, Str, Float, Any, Bool
+    
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.range_editor file.
+from enthought.traits.ui.editors.range_editor \
+    import ToolkitEditorFactory
 
 from editor_factory \
     import TextEditor

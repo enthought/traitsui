@@ -21,9 +21,12 @@
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
-
+    
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.shell_editor file.
 from enthought.traits.ui.editors.shell_editor \
-    import _ShellEditor as BaseShellEditor
+    import _ShellEditor as BaseShellEditor, ToolkitEditorFactory
     
 from editor \
     import Editor

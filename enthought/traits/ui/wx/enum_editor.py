@@ -27,6 +27,15 @@ import wx
 
 from string \
     import capitalize
+
+from enthought.traits.api \
+    import Property    
+    
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.drop_editor file.
+from enthought.traits.ui.editors.enum_editor \
+    import ToolkitEditorFactory
     
 from editor \
     import Editor
@@ -36,9 +45,6 @@ from constants \
     
 from helper \
     import enum_values_changed, TraitsUIPanel, disconnect, disconnect_no_id
-
-from enthought.traits.api \
-    import Property
     
 #-------------------------------------------------------------------------------
 #  'BaseEditor' class:

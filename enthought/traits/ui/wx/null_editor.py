@@ -23,7 +23,13 @@
 #-------------------------------------------------------------------------------
 
 import wx
-
+    
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.null_editor file.
+from enthought.traits.ui.editors.null_editor \
+    import NullEditor as ToolkitEditorFactory
+    
 from editor \
     import Editor
     

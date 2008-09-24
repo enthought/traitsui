@@ -28,6 +28,12 @@ from enthought.traits.api \
     import Str, Int, List, Bool, Instance, Any, Event, TraitListEvent, \
            Property
     
+# FIXME: ListStrEditor is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.list_editor file.
+from enthought.traits.ui.editors.list_str_editor \
+    import ListStrEditor
+    
 from enthought.traits.ui.list_str_adapter \
     import ListStrAdapter
     

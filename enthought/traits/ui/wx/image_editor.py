@@ -28,6 +28,12 @@ from enthought.pyface.image_resource \
 from enthought.traits.ui.ui_traits \
     import convert_bitmap
     
+# FIXME: ImageEditor is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.image_editor file.
+from enthought.traits.ui.editors.image_editor \
+    import ImageEditor
+    
 from editor \
     import Editor
     

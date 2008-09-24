@@ -26,7 +26,13 @@ import wx
 
 from os.path \
     import isdir
-
+    
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.custom_editor file.
+from enthought.traits.ui.editors.directory_editor \
+    import ToolkitEditorFactory
+    
 from file_editor \
     import SimpleEditor as SimpleFileEditor, \
            CustomEditor as CustomFileEditor, \
