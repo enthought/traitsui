@@ -33,14 +33,8 @@ from enthought.traits.trait_base \
 # abstract ToolkitEditorFactory class (in enthought.traits.ui.api) along with
 # wx-specific methods added via a category. We need to override the 
 # implementations of the wx-specific methods here.
-
-# The editor classes are imported here so that the editor factory for RGB
-# color editors can use these classes. In the future, the implementation on
-# editor_factory.py should be changed to look up the mro of the factory, and 
-# then try to import the editor classes from the base classes.
 from color_editor \
-    import ToolkitEditorFactory as BaseColorToolkitEditorFactory, \
-    SimpleEditor, CustomEditor, TextEditor, ReadonlyEditor
+    import ToolkitEditorFactory as BaseColorToolkitEditorFactory
     
 #---------------------------------------------------------------------------
 #  The wxPython ToolkitEditorFactory class.

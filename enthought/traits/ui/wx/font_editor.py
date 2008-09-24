@@ -133,7 +133,7 @@ class SimpleFontEditor ( BaseSimpleEditor ):
         font_data.SetInitialFont( self.factory.to_wx_font( self ) )
         dialog = wx.FontDialog( self.control, font_data )
         if dialog.ShowModal() == wx.ID_OK:
-            self.value = from_wx_font_function(
+            self.value = self.factory.from_wx_font(
                               dialog.GetFontData().GetChosenFont() )
             self.update_editor()
             
@@ -192,10 +192,8 @@ class CustomFontEditor ( Editor ):
         sizer.Add( font, 0, wx.EXPAND | wx.BOTTOM, 3 )
         
         # Add all of the font choice controls:
-        all_facenames_function = getattr(sys.modules[self.__class__.__module__], 
-                                         'all_facenames', all_facenames)
         sizer2    = wx.BoxSizer( wx.HORIZONTAL )
-        facenames = all_facenames_function()
+        facenames = self.factory.all_facenames()
         control   = self._facename = wx.Choice( panel, -1, wx.Point( 0, 0 ), 
                                                 wx.Size( -1, -1 ), facenames )
                         
