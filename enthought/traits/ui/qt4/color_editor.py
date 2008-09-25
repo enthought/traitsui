@@ -17,6 +17,9 @@
 
 from PyQt4 import QtCore, QtGui
 
+from enthought.traits.ui.editors.color_editor \
+    import ToolkitEditorFactory as BaseToolkitEditorFactory
+
 from editor_factory \
     import SimpleEditor as BaseSimpleEditor, \
     TextEditor as BaseTextEditor, \
@@ -32,42 +35,56 @@ from editor \
 # Standard color samples:
 color_samples = []
 
-#-------------------------------------------------------------------------------
-#  Gets the PyQt color equivalent of the object trait:
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------
+#  The PyQt ToolkitEditorFactory class.
+#---------------------------------------------------------------------------
 
-def to_qt4_color ( editor ):
-    """ Gets the PyQt color equivalent of the object trait.
+## We need to add qt4-specific methods to the editor factory (since all editors 
+## will be accessing these functions. Making these functions global functions 
+## in this file does not work quite well, since we want custom editors to 
+## override these methods easily.
+
+class ToolkitEditorFactory(Category, BaseToolkitEditorFactory):
+    """ PyQt editor factory for color editors.
     """
-    if editor.factory.mapped:
-        return getattr( editor.object, editor.name + '_' )
-
-    return getattr( editor.object, editor.name )
- 
-#-------------------------------------------------------------------------------
-#  Gets the application equivalent of a PyQt value:
-#-------------------------------------------------------------------------------
-
-def from_qt4_color ( color ):
-    """ Gets the application equivalent of a PyQt value.
-    """
-    return color
-        
-#-------------------------------------------------------------------------------
-#  Returns the text representation of a specified color value:
-#-------------------------------------------------------------------------------
-  
-def str_color ( color ):
-    """ Returns the text representation of a specified color value.
-    """
-    if isinstance(color, QtGui.QColor):
-        alpha = color.alpha()
-        if alpha == 255:
-            return "(%d,%d,%d)" % (color.red(), color.green(), color.blue())
-
-        return "(%d,%d,%d,%d)" % (color.red(), color.green(), color.blue(), alpha)
-    return color
-
+    
+    #-------------------------------------------------------------------------------
+    #  Gets the PyQt color equivalent of the object trait:
+    #-------------------------------------------------------------------------------
+    
+    def to_qt4_color ( self, editor ):
+        """ Gets the PyQt color equivalent of the object trait.
+        """
+        if self.mapped:
+            return getattr( editor.object, editor.name + '_' )
+    
+        return getattr( editor.object, editor.name )
+     
+    #-------------------------------------------------------------------------------
+    #  Gets the application equivalent of a PyQt value:
+    #-------------------------------------------------------------------------------
+    
+    def from_qt4_color ( self, color ):
+        """ Gets the application equivalent of a PyQt value.
+        """
+        return color
+            
+    #-------------------------------------------------------------------------------
+    #  Returns the text representation of a specified color value:
+    #-------------------------------------------------------------------------------
+      
+    def str_color ( self, color ):
+        """ Returns the text representation of a specified color value.
+        """
+        if isinstance(color, QtGui.QColor):
+            alpha = color.alpha()
+            if alpha == 255:
+                return "(%d,%d,%d)" % (color.red(), color.green(), color.blue())
+    
+            return "(%d,%d,%d,%d)" % (color.red(), color.green(), color.blue(), alpha)
+    
+        return color
+    
 #-------------------------------------------------------------------------------
 #  'SimpleColorEditor' class:
 #-------------------------------------------------------------------------------
@@ -85,11 +102,11 @@ class SimpleColorEditor ( BaseSimpleEditor ):
     def popup_editor(self):
         """ Invokes the pop-up editor for an object trait.
         """
-        color = to_qt4_color(self)
+        color = self.factory.to_qt4_color(self)
         color = QtGui.QColorDialog.getColor(color, self.control)
 
         if color.isValid():
-            self.value = from_qt4_color(color)
+            self.value = self.factory.from_qt4_color(color)
             self.update_editor()
 
     #---------------------------------------------------------------------------
@@ -110,7 +127,7 @@ class SimpleColorEditor ( BaseSimpleEditor ):
     def string_value ( self, color ):
         """ Returns the text representation of a specified color value.
         """
-        return str_color( color ) 
+        return self.factory.str_color( color ) 
 
 #-------------------------------------------------------------------------------
 #  'CustomColorEditor' class:
@@ -149,7 +166,7 @@ class CustomColorEditor ( Editor ):
         """ Updates the object trait when a color swatch is clicked.
         """
         color = control.palette().color(QtGui.QPalette.Button)
-        self.value = from_qt4_color(color)
+        self.value = self.factory.from_qt4_color(color)
         self.update_editor()
 
     #---------------------------------------------------------------------------
@@ -197,7 +214,7 @@ class TextColorEditor ( BaseTextEditor ):
     def string_value ( self, color ):
         """ Returns the text representation of a specified color value.
         """
-        return str_color( color ) 
+        return self.factory.str_color( color ) 
 
 #-------------------------------------------------------------------------------
 #  'ReadonlyColorEditor' class:
@@ -238,7 +255,7 @@ class ReadonlyColorEditor ( BaseReadonlyEditor ):
     def string_value ( self, color ):
         """ Returns the text representation of a specified color value.
         """
-        return str_color( color ) 
+        return self.factory.str_color( color ) 
 
 #-------------------------------------------------------------------------------
 #   Sets the color of the specified editor's color control: 
@@ -247,7 +264,7 @@ class ReadonlyColorEditor ( BaseReadonlyEditor ):
 def set_color ( editor ):
     """  Sets the color of the specified color control.
     """
-    color = to_qt4_color(editor)
+    color = editor.factory.to_qt4_color(editor)
     pal = QtGui.QPalette(editor.control.palette())
 
     pal.setColor(QtGui.QPalette.Base, color)

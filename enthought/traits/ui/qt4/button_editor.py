@@ -16,9 +16,15 @@
 #-------------------------------------------------------------------------------
 
 from PyQt4 import QtCore, QtGui
-
+    
 from enthought.traits.api \
     import Unicode
+
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.button_editor file.
+from enthought.traits.ui.editors.button_editor \
+    import ToolkitEditorFactory
 
 from editor \
     import Editor

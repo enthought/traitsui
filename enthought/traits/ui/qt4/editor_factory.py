@@ -21,8 +21,25 @@ from PyQt4 import QtCore, QtGui
 from enthought.traits.api \
     import TraitError
 
+from enthought.traits.ui.editor_factory \
+    import EditorFactory as BaseEditorFactory
+
 from editor \
     import Editor
+
+#-------------------------------------------------------------------------------
+#  'EditorFactory' class 
+#   Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory
+#-------------------------------------------------------------------------------
+
+class EditorFactory(BaseEditorFactory):
+    """ Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory.
+    """
+
+    def __init__(self, *args, **kwds):
+        super(EditorFactory, self).__init__(*args, **kwds)
+        warnings.warn("DEPRECATED: Use enthought.traits.ui.editor_factory."
+            ".EditorFactory instead.", DeprecationWarning)
     
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:

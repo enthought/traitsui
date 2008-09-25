@@ -20,15 +20,6 @@ from PyQt4 import QtGui
 from enthought.traits.api \
     import Trait, TraitError
     
-# CIRCULAR IMPORT FIXME:
-# We are importing from the source instead of from traits.ui.api in order to
-# avoid circular imports. The CodeEditor declared in traits.ui imports the
-# KeyBindings class which declares traits of Color type, which causes this
-# file to get imported, leading to circular imports.
-
-from enthought.traits.ui.editors.color_editor \
-    import ColorEditor
-    
 #-------------------------------------------------------------------------------
 #  Convert a number into a QColor object:
 #-------------------------------------------------------------------------------
@@ -82,6 +73,19 @@ convert_to_color.info = ('a string of the form (r,g,b) or (r,g,b,a) where r, '
 standard_colors = {}
 for name in QtGui.QColor.colorNames():
     standard_colors[str(name)] = QtGui.QColor(name)
+             
+#-------------------------------------------------------------------------------
+#  Callable that returns an instance of the PyQtToolkitEditorFactory for color 
+#  editors.
+#-------------------------------------------------------------------------------
+
+### FIXME: We have declared the 'editor' to be a function instead of  the
+# enthought.traits.ui.qt4.color_editor.ToolkitEditorFactory class, since the
+# latter is leading to too many circular imports. In the future, try to see if 
+# there is a better way to do this.
+def get_color_editor(*args, **traits):
+    from enthought.traits.ui.qt4.color_editor import ToolkitEditorFactory
+    return ToolkitEditorFactory(*args, **traits)
 
 #-------------------------------------------------------------------------------
 #  Define PyQt specific color traits:
@@ -92,7 +96,7 @@ def PyQtColor ( default = 'white', allow_none = False, **metadata ):
     """
     if allow_none:
         return Trait( default, None, standard_colors, convert_to_color,
-                      editor = ColorEditor, **metadata )
+                      editor = get_color_editor, **metadata )
                  
     return Trait( default, standard_colors, convert_to_color,
-                  editor = ColorEditor, **metadata )
+                  editor = get_color_editor, **metadata )

@@ -20,8 +20,11 @@ from PyQt4 import QtCore, QtGui
 from enthought.traits.api \
     import TraitError
 
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.text_editor file.
 from enthought.traits.ui.editors.text_editor \
-    import evaluate_trait
+    import evaluate_trait, ToolkitEditorFactory
 
 from editor \
     import Editor

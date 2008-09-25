@@ -18,6 +18,12 @@ target editor handles drag and drop operations as a drop target.
 
 from PyQt4 import QtGui
 
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.drop_editor file.
+from enthought.traits.ui.editors.drop_editor \
+    import ToolkitEditorFactory
+
 from text_editor \
     import SimpleEditor as Editor
     

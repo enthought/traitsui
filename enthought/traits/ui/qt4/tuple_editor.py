@@ -15,8 +15,12 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+     
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.tuple_editor file.
 from enthought.traits.ui.editors.tuple_editor \
-    import SimpleEditor as BaseSimpleEditor
+    import SimpleEditor as BaseSimpleEditor, ToolkitEditorFactory
     
 from editor \
     import Editor

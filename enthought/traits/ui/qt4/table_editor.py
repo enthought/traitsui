@@ -19,6 +19,12 @@ from PyQt4 import QtCore, QtGui
 
 from enthought.traits.api \
     import List, Instance, Any
+     
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.table_editor file.
+from enthought.traits.ui.editors.table_editor \
+    import ToolkitEditorFactory
 
 from enthought.traits.ui.table_column \
     import TableColumn

@@ -17,12 +17,18 @@ from editor \
 
 from enthought.pyface.heading_text \
     import HeadingText
+     
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.title_editor file.
+from enthought.traits.ui.editors.title_editor \
+    import TitleEditor
 
 #-------------------------------------------------------------------------------
-#  'TitleEditor' class:
+#  '_TitleEditor' class:
 #-------------------------------------------------------------------------------
 
-class TitleEditor ( Editor ):
+class _TitleEditor ( Editor ):
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit

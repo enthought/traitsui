@@ -11,10 +11,11 @@
 """ Defines the various image enumeration editors for the PyQt user interface
 toolkit.
 """
-
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
-
-from enum_editor \
-    import SimpleEditor, RadioEditor, ListEditor
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.image_enum_editor file.
+from enthought.traits.ui.editors.image_enum_editor \
+    import ToolkitEditorFactory

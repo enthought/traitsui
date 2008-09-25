@@ -22,9 +22,12 @@ from enthought.traits.api \
 
 from enthought.traits.trait_base \
     import user_name_for, enumerate, xgetattr
-
+    
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.list_editor file.
 from enthought.traits.ui.editors.list_editor \
-    import ListItemProxy
+    import ListItemProxy, ToolkitEditorFactory
 
 from editor \
     import Editor

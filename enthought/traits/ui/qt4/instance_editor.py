@@ -20,6 +20,12 @@ from PyQt4 import QtCore, QtGui
 
 from enthought.traits.api \
     import HasTraits, Property
+    
+# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
+# compatibility. The class has been moved to the 
+# enthought.traits.ui.editors.instance_editor file.
+from enthought.traits.ui.editors.instance_editor \
+    import ToolkitEditorFactory
 
 from enthought.traits.ui.ui_traits \
     import AView
