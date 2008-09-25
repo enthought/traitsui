@@ -24,8 +24,8 @@ from color_editor \
 
 # Note: The ToolkitEditorFactory class imported from color_editor is a
 # subclass of the abstract ToolkitEditorFactory class 
-# (in enthought.traits.ui.api) with wx-specific methods defined.
-# We need to override the implementations of the wx-specific methods here.
+# (in enthought.traits.ui.api) with qt4-specific methods defined.
+# We need to override the implementations of the qt4-specific methods here.
 from color_editor \
     import ToolkitEditorFactory as BaseColorToolkitEditorFactory
     
