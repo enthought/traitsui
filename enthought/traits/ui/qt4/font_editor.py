@@ -18,6 +18,9 @@
 
 from PyQt4 import QtCore, QtGui
 
+from enthought.traits.ui.editors.font_editor \
+    import ToolkitEditorFactory as BaseToolkitEditorFactory
+
 from editor_factory \
     import SimpleEditor as BaseSimpleEditor, \
     TextEditor as BaseTextEditor, \
@@ -45,9 +48,9 @@ PointSizes = [
 class ToolkitEditorFactory(BaseToolkitEditorFactory):
     """ PyQt editor factory for font editors.
     """
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     #  Returns a QFont object corresponding to a specified object's font trait:
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     
     def to_qt4_font ( self, editor ):
         """ Returns a QFont object corresponding to a specified object's font
@@ -55,18 +58,18 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
         """
         return QtGui.QFont(editor.value)
     
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     #  Gets the application equivalent of a QFont value:
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     
     def from_qt4_font ( self, font ):
         """ Gets the application equivalent of a QFont value.
         """
         return font
     
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     #  Returns the text representation of the specified object trait value:
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     
     def str_font ( self, font ):
         """ Returns the text representation of the specified object trait value.

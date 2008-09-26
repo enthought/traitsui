@@ -44,13 +44,13 @@ color_samples = []
 ## in this file does not work quite well, since we want custom editors to 
 ## override these methods easily.
 
-class ToolkitEditorFactory(Category, BaseToolkitEditorFactory):
+class ToolkitEditorFactory(BaseToolkitEditorFactory):
     """ PyQt editor factory for color editors.
     """
     
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     #  Gets the PyQt color equivalent of the object trait:
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     
     def to_qt4_color ( self, editor ):
         """ Gets the PyQt color equivalent of the object trait.
@@ -60,18 +60,18 @@ class ToolkitEditorFactory(Category, BaseToolkitEditorFactory):
     
         return getattr( editor.object, editor.name )
      
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     #  Gets the application equivalent of a PyQt value:
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     
     def from_qt4_color ( self, color ):
         """ Gets the application equivalent of a PyQt value.
         """
         return color
             
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     #  Returns the text representation of a specified color value:
-    #-------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
       
     def str_color ( self, color ):
         """ Returns the text representation of a specified color value.
