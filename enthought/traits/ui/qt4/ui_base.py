@@ -274,6 +274,7 @@ class _StickyDialog(QtGui.QDialog):
             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
 
         self._ui = ui
+        self._result = None
 
     def closeEvent(self, e):
         """Reimplemented to check when the clicks the window close button.
@@ -297,13 +298,32 @@ class _StickyDialog(QtGui.QDialog):
         """Reimplemented to ignore calls to accept() or reject() if
         appropriate."""
 
-        if self._ok_to_close(bool(r)):
+        # If we already have a result then we already know that we are done.
+        if self._result is not None:
+            QtGui.QDialog.done(self, self._result)
+        elif self._ok_to_close(bool(r)):
             QtGui.QDialog.done(self, r)
 
-    def _ok_to_close(self, is_ok=False):
+    def _ok_to_close(self, is_ok=None):
         """Let the handler decide if the dialog should be closed."""
 
-        return self._ui.handler.close(self._ui.info, is_ok)
+        # The is_ok flag is also the dialog result.  If we don't know it then
+        # the the user closed the dialog other than by an 'Ok' or 'Cancel'
+        # button.
+        if is_ok is None:
+            # Use the view's default, if there is one.
+            is_ok = self._ui.view.close_result
+            if is_ok is None:
+                # There is no default, so use False for a modal dialog and True
+                # for a non-modal one.
+                is_ok = not self.isModal()
+
+        ok_to_close = self._ui.handler.close(self._ui.info, is_ok)
+        if ok_to_close:
+            # Save the result now.
+            self._result = is_ok
+
+        return ok_to_close
 
 
 class BaseDialog(BasePanel):
