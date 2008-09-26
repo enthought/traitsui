@@ -321,4 +321,5 @@ class ReadonlyEditor ( BaseReadonlyEditor ):
         if self._in_window:
             self.object.edit_traits( view   = self.factory.view, 
                                      parent = self.control )
-    
+
+TextEditor = SimpleEditor
