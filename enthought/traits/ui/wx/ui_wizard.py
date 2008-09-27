@@ -82,7 +82,23 @@ def ui_wizard ( ui, parent ):
     info         = ui.info
     shadow_group = ui.view.content.get_shadow( ui )
     min_dx = min_dy = 0
+    # Create a dictionary mapping each contained group in shadow_group to
+    # its id and enabled_when fields.
+    group_fields_mapping = {}
     for group in shadow_group.get_content():
+        # FIXME: When the group's id or enabled_when or visible_when is
+        # set, the "fill_panel_for_group" will create a new Panel to hold the
+        # contents of the group (instead of adding them to the page itself).
+        # This leads to an incorrect sizing of the panel(not sure why 
+        # actually): example would be 'test_ui2.py' in 
+        # Traits/integrationtests/ui. In addition,
+        # it leads to incorrect bindings (of the id) on the UIInfo object:
+        # the id is bound to the GroupEditor created in "fill_panel.." 
+        # instead of the PageGroupEditor created here.
+        # A simple solution is to clear out these fields before calling
+        # "fill_panel_for_group", and then reset these traits.
+        group_fields_mapping[group] = (group.id, group.enabled_when)
+        (group.id, group.enabled_when) = ('', '')
         page = UIWizardPage( wizard, editor_pages )
         pages.append( page )
         fill_panel_for_group( page, group, ui )
@@ -96,13 +112,13 @@ def ui_wizard ( ui, parent ):
         
         # If necessary, create a PageGroupEditor and attach it to the right 
         # places:
-        id = group.id
-        if id or group.enabled_when:
+        (group.id, group.enabled_when) = group_fields_mapping[group]
+        if group.id or group.enabled_when:
             page.editor = editor = PageGroupEditor( control = page )
-            if id:
-                page.id = id
+            if group.id:
+                page.id = group.id
                 editor_pages.append( page )
-                info.bind( id, editor )
+                info.bind( page.id, editor )
             if group.enabled_when:
                 ui.add_enabled( group.enabled_when, editor )
                 
