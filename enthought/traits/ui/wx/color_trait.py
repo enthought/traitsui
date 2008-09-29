@@ -21,11 +21,16 @@
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
-
 import wx
 
 from enthought.traits.api \
     import Trait, TraitError
+    
+### Note: Import from the source rather than the api to avoid circular imports 
+# since some classes declared in the traits UI api define Color traits which
+# will end up importing this file.
+from enthought.traits.ui.editors.color_editor \
+    import ColorEditor
     
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
 try:
@@ -103,19 +108,6 @@ for name in [ 'aquamarine', 'black', 'blue', 'blue violet', 'brown',
                                                     wx.NamedColour( name ) )
     except:
         pass
-             
-#-------------------------------------------------------------------------------
-#  Callable that returns an instance of the wxToolkitEditorFactory for color 
-#  editors.
-#-------------------------------------------------------------------------------
-
-### FIXME: We have declared the 'editor' to be a function instead of  the
-# enthought.traits.ui.wx.color_editor.ToolkitEditorFactory class, since the
-# latter is leading to too many circular imports. In the future, try to see if 
-# there is a better way to do this.
-def get_color_editor(*args, **traits):
-    from enthought.traits.ui.wx.color_editor import ToolkitEditorFactory
-    return ToolkitEditorFactory(*args, **traits)
 
 #-------------------------------------------------------------------------------
 #  Define wxPython specific color traits:
@@ -124,10 +116,9 @@ def get_color_editor(*args, **traits):
 def WxColor ( default = 'white', allow_none = False, **metadata ):
     """ Defines wxPython-specific color traits.
     """
-    
     if allow_none:
         return Trait( default, None, standard_colors, convert_to_color,
-                      editor = get_color_editor, **metadata )
+                      editor = ColorEditor, **metadata )
                  
     return Trait( default, standard_colors, convert_to_color,
-                  editor = get_color_editor, **metadata )
+                  editor = ColorEditor, **metadata )
