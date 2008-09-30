@@ -26,6 +26,9 @@ import wx
 
 from enthought.traits.api \
     import Trait, TraitHandler, TraitError
+    
+from enthought.traits.ui.editors.font_editor \
+    import FontEditor
 
 #-------------------------------------------------------------------------------
 #  Convert a string into a valid 'wxFont' object (if possible):
@@ -169,21 +172,8 @@ class TraitWXFont ( TraitHandler ):
                  "swiss family Arial' or 'default 12')" )
 
 #-------------------------------------------------------------------------------
-#  Callable that returns an instance of the wxToolkitEditorFactory for font 
-#  editors.
-#-------------------------------------------------------------------------------
-
-### FIXME: We have declared the 'editor' to be a function instead of  the
-# enthought.traits.ui.wx.font_editor.ToolkitEditorFactory class, since the
-# latter is leading to too many circular imports. In the future, try to see if 
-# there is a better way to do this.
-def get_font_editor(*args, **traits):
-    from enthought.traits.ui.wx.font_editor import ToolkitEditorFactory
-    return ToolkitEditorFactory(*args, **traits)
-
-#-------------------------------------------------------------------------------
 #  Define a wxPython specific font trait:
 #-------------------------------------------------------------------------------
 
 fh     = TraitWXFont()
-WxFont = Trait( create_traitsfont( 'Arial 10' ), fh, editor = get_font_editor )
+WxFont = Trait( create_traitsfont( 'Arial 10' ), fh, editor = FontEditor )
