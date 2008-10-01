@@ -632,14 +632,10 @@ class NotebookEditor ( Editor ):
                                             monitoring ] ]
             dock_controls.append( dock_control )
             index += 1
-            if first_control is None:
-                first_control = dock_control
 
         # Add the new items to the DockWindow:
         self.add_controls( dock_controls )
-        if first_control is not None:
-            first_control.activate( layout = False )
-            
+
         self.update_layout()
 
     #---------------------------------------------------------------------------
@@ -686,7 +682,9 @@ class NotebookEditor ( Editor ):
                 (not isinstance( section.contents[-1], DockRegion ))):
                 section.contents.append( DockRegion( contents = controls ) )
             else:
-                section.contents[-1].contents.extend( controls )
+                for control in controls:
+                    section.contents[-1].add(control, activate = 
+                                             self.selected is None)
 
     #---------------------------------------------------------------------------
     #  Updates the layout of the DockWindow:
@@ -724,7 +722,7 @@ class NotebookEditor ( Editor ):
 
         if changed:
             self.update_layout()
-
+             
     #---------------------------------------------------------------------------
     #  Creates a DockControl for a specified object:
     #---------------------------------------------------------------------------
@@ -792,44 +790,8 @@ class NotebookEditor ( Editor ):
                                     dockable  = DockableListElement(
                                                     ui     = ui,
                                                     editor = self ) )
-        self.set_dock_control_listener( dock_control )
 
         return ( dock_control, view_object, monitoring )
-
-    #---------------------------------------------------------------------------
-    #  Sets/Resets the listener for a DockControl being activated:
-    #---------------------------------------------------------------------------
-
-    def set_dock_control_listener ( self, dock_control, remove = False ):
-        """ Sets or removes the listener for a DockControl being activated.
-        """
-        dock_control.on_trait_change( self._tab_activated, 'activated',
-                                      remove = remove, dispatch = 'ui' )
-
-    #---------------------------------------------------------------------------
-    #  Handles a notebook tab being 'activated' (i.e. clicked on) by the user:
-    #---------------------------------------------------------------------------
-
-    def _tab_activated ( self, dock_control, name, old, new ):
-        """ Handles a notebook tab being "activated" (i.e. clicked on) by the
-            user.
-        """
-        for a_dock_control, object, view_object, monitoring in self._uis:
-            if dock_control is a_dock_control:
-                self.selected = object
-                break
-
-    #---------------------------------------------------------------------------
-    #  Handles the 'selected' trait being changed:
-    #---------------------------------------------------------------------------
-
-    def _selected_changed ( self, selected ):
-        """ Handles the **selected** trait being changed.
-        """
-        for dock_control, object, view_object, monitoring in self._uis:
-            if selected is object:
-                dock_control.activate( False )
-                break
 
 #-------------------------------------------------------------------------------
 #  'DockableListElement' class:
@@ -862,17 +824,29 @@ class DockableListElement ( DockableViewElement ):
         """ Closes a DockControl.
         """
         if abort:
-            self.editor.set_dock_control_listener( dock_control, remove = True )
             return super( DockableListElement, self ).close_dock_control(
                                                            dock_control, False )
 
         view_object = self.ui.context[ 'object' ]
         for i, value in enumerate( self.editor._uis ):
             if view_object is value[2]:
-                value[0] = dock_control
                 del self.editor.value[ i ]
-                break
 
         return False
+
+    #---------------------------------------------------------------------------
+    #  Handles a notebook tab being activated or deactivated.
+    #---------------------------------------------------------------------------
+
+    def dockable_tab_activated ( self, dock_control, activated ):
+        """ Handles a notebook tab being activated or deactivated.
+        Sets the value of the editor's selected trait to the activated
+        dock_control's object.
+        
+        """
+        for i, value in enumerate( self.editor._uis ):
+            if dock_control is value[0] and activated:
+                self.editor.selected = value[1]
+                break
 
 ### EOF #######################################################################
