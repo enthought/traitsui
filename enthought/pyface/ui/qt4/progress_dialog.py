@@ -58,6 +58,9 @@ class ProgressDialog(MProgressDialog, Window):
         self.progress_bar = None
         
         super(ProgressDialog, self).close()
+
+    def change_message(self, message):
+        self.message = message
     
     def update(self, value):
         """ 
