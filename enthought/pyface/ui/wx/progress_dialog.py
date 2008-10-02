@@ -21,7 +21,7 @@ import wx
 import time
 
 # Enthought library imports
-from enthought.traits.api import Instance, Enum, Int, Bool, Str, implements
+from enthought.traits.api import Instance, Enum, Int, Bool, Str, implements, Property
 
 # Local imports
 from widget import Widget
@@ -75,7 +75,7 @@ class ProgressDialog(MProgressDialog, Window):
     
     progress_bar = Instance(ProgressBar)
     title = Str
-    message = Str
+    message = Property()
     min = Int
     min = Int
     max = Int
@@ -84,12 +84,17 @@ class ProgressDialog(MProgressDialog, Window):
     show_time = Bool(False)
     show_percent = Bool(False)
     _user_cancelled = Bool(False)
+    _message_text = Str()
 
     dialog_size = Instance(wx.Size)
 
     # Label for the 'cancel' button
     cancel_button_label = Str('Cancel')
-    
+
+    def __init__(self, *args, **kw):
+        if 'message' in kw:
+            self._message_text = kw.pop('message')
+
     def open(self):
         super(ProgressDialog, self).open()
         self._start_time = time.time()
@@ -99,8 +104,18 @@ class ProgressDialog(MProgressDialog, Window):
         if self.progress_bar is not None:
             self.progress_bar.destroy()
             self.progress_bar = None
+
+        if self._message_control is not None:
+            self._message_control = None
         
         super(ProgressDialog, self).close()
+
+    def change_message(self, value):
+        self._message_text = value
+        if self._message_control is not None:
+            self._message_control.SetLabel(value)
+            self._message_control.Update() 
+            self.control.GetSizer().Layout()
     
     def update(self, value):
         """ 
@@ -113,7 +128,7 @@ class ProgressDialog(MProgressDialog, Window):
         if self.progress_bar is None:
             # the developer is trying to update a progress bar which is already
             # done. Allow it, but do nothing
-            return
+            return (False, False)
             
         self.progress_bar.update(value)
 
@@ -162,6 +177,9 @@ class ProgressDialog(MProgressDialog, Window):
         
         control.SetLabel(control.GetLabel()[:-7] + label)
 
+    def _get_message(self):
+        return self._message_text
+
     def _create_buttons(self, dialog, parent_sizer):
         """ Creates the buttons. """
 
@@ -207,10 +225,10 @@ class ProgressDialog(MProgressDialog, Window):
         return
         
     def _create_message(self, dialog, parent_sizer):
-        msg_control = wx.StaticText(dialog, -1, self.message)
-        parent_sizer.Add(msg_control, 0, wx.LEFT | wx.TOP, self.margin)
+        self._message_control = wx.StaticText(dialog, -1, self.message)
+        parent_sizer.Add(self._message_control, 0, wx.LEFT | wx.TOP, self.margin)
 
-        msg_control_size = msg_control.GetSize()
+        msg_control_size = self._message_control.GetSize()
         self.dialog_size.x = max(self.dialog_size.x, msg_control_size.x + 2*self.margin)
         self.dialog_size.y += msg_control_size.y + 2*self.margin
 
