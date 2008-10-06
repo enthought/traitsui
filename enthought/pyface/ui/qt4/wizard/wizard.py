@@ -154,26 +154,6 @@ class _Wizard(QtGui.QWizard):
 
         # We must pass a parent otherwise TraitsUI does the wrong thing.
         qpage = page.create_page(self)
-
-        # We allow some flexibility with the sort of control we are given.
-        if not isinstance(qpage, QtGui.QWizardPage):
-            wp = _WizardPage(page)
-
-            if isinstance(qpage, QtGui.QLayout):
-                wp.setLayout(qpage)
-            else:
-                assert isinstance(qpage, QtGui.QWidget)
-
-                lay = QtGui.QVBoxLayout()
-                lay.addWidget(qpage)
-
-                wp.setLayout(lay)
-
-            qpage = wp
-
-        qpage.setTitle(page.heading)
-        qpage.setSubTitle(page.subheading)
-
         id = self.addPage(qpage)
         self._ids[id] = page
 
@@ -215,29 +195,5 @@ class _Wizard(QtGui.QWizard):
                 id = -1
 
         return id
-
-
-class _WizardPage(QtGui.QWizardPage):
-    """ A QWizardPage sub-class that hooks into the IWizardPage's 'complete'
-    trait. """
-
-    def __init__(self, page):
-        """ Initialise the object. """
-
-        QtGui.QWizardPage.__init__(self)
-
-        page.on_trait_change(self._on_complete_changed, 'complete')
-
-        self._page = page
-
-    def isComplete(self):
-        """ Reimplemented to return the state of the 'complete' trait. """
-
-        return self._page.complete
-
-    def _on_complete_changed(self):
-        """ The trait handler for when the page's completion state changes. """
-
-        self.emit(QtCore.SIGNAL('completeChanged()'))
 
 #### EOF ######################################################################

@@ -12,10 +12,11 @@
 
 
 # Major package imports.
-from PyQt4 import QtGui
+from PyQt4 import QtCore, QtGui
 
 # Enthought library imports.
-from enthought.traits.api import Bool, implements, HasTraits, Str, Unicode
+from enthought.traits.api import Bool, implements, HasTraits, Str, Tuple, \
+        Unicode
 from enthought.pyface.wizard.i_wizard_page import IWizardPage, MWizardPage
 
 
@@ -42,6 +43,8 @@ class WizardPage(MWizardPage, HasTraits):
 
     subheading = Unicode
 
+    size = Tuple
+
     ###########################################################################
     # 'IWizardPage' interface.
     ###########################################################################
@@ -49,8 +52,38 @@ class WizardPage(MWizardPage, HasTraits):
     def create_page(self, parent):
         """ Creates the wizard page. """
 
-        # This indirection is to maintain compatibility with the wx version.
-        return self._create_page_content(parent)
+        content = self._create_page_content(parent)
+
+        # We allow some flexibility with the sort of control we are given.
+        if not isinstance(content, QtGui.QWizardPage):
+            wp = _WizardPage(self)
+
+            if isinstance(content, QtGui.QLayout):
+                wp.setLayout(content)
+            else:
+                assert isinstance(content, QtGui.QWidget)
+
+                lay = QtGui.QVBoxLayout()
+                lay.addWidget(content)
+
+                wp.setLayout(lay)
+
+            content = wp
+
+        # Honour any requested page size.
+        if self.size:
+            width, height = self.size
+
+            if width > 0:
+                content.setMinimumWidth(width)
+
+            if height > 0:
+                content.setMinimumHeight(height)
+
+        content.setTitle(self.heading)
+        content.setSubTitle(self.subheading)
+
+        return content
 
     ###########################################################################
     # Protected 'IWizardPage' interface.
@@ -68,5 +101,29 @@ class WizardPage(MWizardPage, HasTraits):
         control.setAutoFillBackground(True)
 
         return control
+
+
+class _WizardPage(QtGui.QWizardPage):
+    """ A QWizardPage sub-class that hooks into the IWizardPage's 'complete'
+    trait. """
+
+    def __init__(self, page):
+        """ Initialise the object. """
+
+        QtGui.QWizardPage.__init__(self)
+
+        page.on_trait_change(self._on_complete_changed, 'complete')
+
+        self._page = page
+
+    def isComplete(self):
+        """ Reimplemented to return the state of the 'complete' trait. """
+
+        return self._page.complete
+
+    def _on_complete_changed(self):
+        """ The trait handler for when the page's completion state changes. """
+
+        self.emit(QtCore.SIGNAL('completeChanged()'))
 
 #### EOF ######################################################################
