@@ -18,7 +18,8 @@
 import wx
 
 # Enthought library imports.
-from enthought.traits.api import Bool, implements, HasTraits, Str, Unicode
+from enthought.traits.api import Bool, implements, HasTraits, Str, Tuple, \
+        Unicode
 from enthought.pyface.api import HeadingText
 from enthought.pyface.wizard.i_wizard_page import IWizardPage, MWizardPage
 
@@ -46,12 +47,16 @@ class WizardPage(MWizardPage, HasTraits):
 
     subheading = Unicode
 
+    size = Tuple
+
     ###########################################################################
     # 'IWizardPage' interface.
     ###########################################################################
 
     def create_page(self, parent):
         """ Creates the wizard page. """
+
+        # FIXME: implement support for the size trait.
 
         panel = wx.Panel(parent, -1, style=wx.CLIP_CHILDREN)
         sizer = wx.BoxSizer(wx.VERTICAL)
