@@ -42,10 +42,11 @@ class _DateEditor (Editor):
         Finishes initializing the editor by creating the underlying widget.
         """
         # MS-Win's DatePickerCtrl comes with a check-box we don't want.
-        if 'wxMSW' in wx.PlatformInfo:
+        # GenericDatePickerCtrl was exposed in wxPython version 2.8.8 only.
+        if 'wxMSW' in wx.PlatformInfo and wx.__version__ > '2.8.8':
             date_widget = wx.GenericDatePickerCtrl
         else:
-            # Linux / OS-X
+            # Linux / OS-X / windows 
             date_widget = wx.DatePickerCtrl
             
         self.control = date_widget(parent, 
