@@ -19,8 +19,8 @@ that are represented as tuples of the form ( *red*, *green*, *blue* ), where
 
 from PyQt4 import QtGui
 
-from color_editor \
-    import ToolkitEditorFactory as BaseColorToolkitEditorFactory
+from enthought.traits.trait_base \
+    import SequenceTypes
 
 # Note: The ToolkitEditorFactory class imported from color_editor is a
 # subclass of the abstract ToolkitEditorFactory class 
