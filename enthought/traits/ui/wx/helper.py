@@ -389,7 +389,11 @@ class TraitsUIScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
 
         wx.PyScrolledWindow.__init__( self, parent, id, pos = pos, size = size,
                                       style = style, name = name )
-        self.SetInitialSize( size )
+        # FIXME: The ScrolledPanel class calls SetInitialSize in its __init__
+        # method, but for some reason, that leads to very a small window size.
+        # Calling SetSize seems to work okay, but its not clear why 
+        # SetInitialSize does not work.
+        self.SetSize( size )
         self.SetBackgroundColour( parent.GetBackgroundColour() )
         
         # Override the C++ ChildFocus event handler:
