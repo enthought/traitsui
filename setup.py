@@ -117,6 +117,9 @@ setup(
         'enthought.traits',
         'enthought.traits.ui',
         ],
+    package_data = {
+        '': ['images/*'],
+        },
     packages = find_packages(),
     platforms = ["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
     tests_require = [
