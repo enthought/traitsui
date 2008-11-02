@@ -1899,15 +1899,16 @@ class SimpleEditor ( Editor ):
     
                 # Add all of the children that were added:
                 remaining = n - len( event.removed )
+                child_index = 0
                 for child in event.added:
                     child, child_node = self._node_for( child )
                     if child_node is not None:
-                        if start < remaining:
-                            self._insert_node( nid, start, child_node, child )
-                            start     += 1
-                            remaining += 1
-                        else:
-                            self._append_node( nid, child_node, child )
+                        insert_index = (start + child_index) if \
+                                        (start < remaining) else None
+                        self._insert_node( nid, insert_index, child_node, 
+                                           child )
+                        child_index += 1
+                        
     
             # Indicate whether the node has any children now:
             tree.SetItemHasChildren( nid, n > 0 )
