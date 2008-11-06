@@ -322,10 +322,10 @@ class CustomEditor ( SimpleEditor ):
     drag_source = False
     
 #-------------------------------------------------------------------------------
-#  'ReadOnlyEditor' class:
+#  'ReadonlyEditor' class:
 #-------------------------------------------------------------------------------
 
-class ReadOnlyEditor ( SimpleEditor ):
+class ReadonlyEditor ( SimpleEditor ):
     """ Read-only style of drag-and-drop editor, which is not a drop target.
     """
     #---------------------------------------------------------------------------
