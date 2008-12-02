@@ -77,7 +77,6 @@ class ProgressDialog(MProgressDialog, Window):
     title = Str
     message = Property()
     min = Int
-    min = Int
     max = Int
     margin = Int(5)
     can_cancel = Bool(False)
@@ -94,6 +93,8 @@ class ProgressDialog(MProgressDialog, Window):
     def __init__(self, *args, **kw):
         if 'message' in kw:
             self._message_text = kw.pop('message')
+            
+        super(ProgressDialog, self).__init__( *args, **kw)
 
     def open(self):
         super(ProgressDialog, self).open()
