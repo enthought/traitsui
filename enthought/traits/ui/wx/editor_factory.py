@@ -132,7 +132,8 @@ class TextEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = wx.TextCtrl( parent, -1, self.str_value )
+        self.control = wx.TextCtrl( parent, -1, self.str_value, 
+                                    style = wx.TE_PROCESS_ENTER )
         wx.EVT_KILL_FOCUS( self.control, self.update_object )
         wx.EVT_TEXT_ENTER( parent, self.control.GetId(), self.update_object )
         self.set_tooltip()
