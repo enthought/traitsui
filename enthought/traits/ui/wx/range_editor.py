@@ -201,13 +201,30 @@ class SimpleSliderEditor ( Editor ):
 
             if not self.factory.is_float:
                 value = int( value )
-
             self.value = value
             self.control.slider.SetValue(
                 int( ((float( value ) - self.low) /
                      (self.high - self.low)) * 10000 ) )
+            self.control.text.SetBackgroundColour(OKColor)
+            self.control.text.Refresh()
+            if self._error is not None:
+                self._error     = None
+                self.ui.errors -= 1
         except TraitError:
             pass
+
+    #---------------------------------------------------------------------------
+    #  Handles an error that occurs while setting the object's trait value:
+    #---------------------------------------------------------------------------
+
+    def error ( self, excp ):
+        """ Handles an error that occurs while setting the object's trait value.
+        """
+        if self._error is None:
+            self._error     = True
+            self.ui.errors += 1
+            super(SimpleSliderEditor, self).error(excp)            
+        self.set_error_state( True )
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -435,12 +452,32 @@ class LargeRangeSliderEditor ( Editor ):
     def update_object_on_enter ( self, event ):
         """ Handles the user pressing the Enter key in the text field.
         """
-        low  = self.cur_low
-        high = self.cur_high
         try:
             self.value = value = eval( self.control.text.GetValue().strip() )
+            self.control.text.SetBackgroundColour(OKColor)
+            self.control.text.Refresh()
+            # Update the slider range.
+            if not self.ui_changing:
+                self.init_range()
+                self.update_range_ui()
+            if self._error is not None:
+                self._error     = None
+                self.ui.errors -= 1
         except TraitError, excp:
             pass
+
+    #---------------------------------------------------------------------------
+    #  Handles an error that occurs while setting the object's trait value:
+    #---------------------------------------------------------------------------
+
+    def error ( self, excp ):
+        """ Handles an error that occurs while setting the object's trait value.
+        """
+        if self._error is None:
+            self._error     = True
+            self.ui.errors += 1
+            super(LargeRangeSliderEditor, self).error(excp)            
+        self.set_error_state( True )
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -706,6 +743,31 @@ class RangeTextEditor ( TextEditor ):
         value that is outside the allowed range, the background of the field
         changes color to indicate an error.
     """
+    
+    #---------------------------------------------------------------------------
+    #  Finishes initializing the editor by creating the underlying toolkit
+    #  widget:
+    #---------------------------------------------------------------------------
+        
+    def init ( self, parent ):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+ 
+        if self.factory.enter_set:
+            control = wx.TextCtrl( parent, -1, self.str_value,
+                                   style = wx.TE_PROCESS_ENTER )
+            wx.EVT_TEXT_ENTER( parent, control.GetId(), self.update_object )
+        else:
+            control = wx.TextCtrl( parent, -1, self.str_value )
+            
+        wx.EVT_KILL_FOCUS( control, self.update_object )
+        
+        if self.factory.auto_set:
+           wx.EVT_TEXT( parent, control.GetId(), self.update_object )
+           
+        self.control = control
+        self.set_tooltip()
 
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
