@@ -632,7 +632,7 @@ class SimpleSpinEditor ( Editor ):
 
         if not factory.high_name:
             self.high = factory.high
-
+        
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
         low  = self.low
@@ -683,7 +683,6 @@ class SimpleSpinEditor ( Editor ):
                 self.value = float( low )
             else:
                 self.value = int( low )
-
         if self.control:
             self.control.SetRange( self.low, self.high )
             self.control.SetValue( int( self.value ) )
@@ -694,7 +693,6 @@ class SimpleSpinEditor ( Editor ):
                 self.value = float( high )
             else:
                 self.value = int( high )
-
         if self.control:
             self.control.SetRange( self.low, self.high )
             self.control.SetValue( int( self.value ) )
@@ -717,12 +715,27 @@ class RangeTextEditor ( TextEditor ):
         """ Handles the user entering input data in the edit control.
         """
         try:
-            self.value = eval( self.control.GetValue() )
-            self.control.SetBackgroundColour( OKColor )
-        except:
-            self.control.SetBackgroundColour( ErrorColor )
+            self.value = eval(self.control.GetValue())
+            self.control.SetBackgroundColour(OKColor)
+            self.control.Refresh()
+            if self._error is not None:
+                self._error     = None
+                self.ui.errors -= 1
+        except TraitError, excp:
+            pass
 
-        self.control.Refresh()
+    #---------------------------------------------------------------------------
+    #  Handles an error that occurs while setting the object's trait value:
+    #---------------------------------------------------------------------------
+        
+    def error ( self, excp ):
+        """ Handles an error that occurs while setting the object's trait value.
+        """
+        if self._error is None:
+            self._error     = True
+            self.ui.errors += 1
+                        
+        self.set_error_state( True )
 
 #-------------------------------------------------------------------------------
 #  'SimpleEnumEditor' factory adaptor:
