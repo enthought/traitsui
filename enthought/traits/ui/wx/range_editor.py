@@ -734,7 +734,7 @@ class RangeTextEditor ( TextEditor ):
         if self._error is None:
             self._error     = True
             self.ui.errors += 1
-                        
+            super(RangeTextEditor, self).error(excp)            
         self.set_error_state( True )
 
 #-------------------------------------------------------------------------------
