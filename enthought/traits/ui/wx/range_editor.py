@@ -73,6 +73,9 @@ class SimpleSliderEditor ( Editor ):
     # Formatting string used to format value and labels
     format = Str
 
+    # Flag indicating that the UI is in the process of being updated
+    ui_changing = Bool( False )
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -140,6 +143,10 @@ class SimpleSliderEditor ( Editor ):
                                              size  = wx.Size( 56, 20 ) )
 
         wx.EVT_KILL_FOCUS( text, self.update_object_on_enter )
+        
+        if factory.auto_set:
+           wx.EVT_TEXT( panel, text.GetId(), self.update_object_on_enter )
+
         sizer.Add( text, 0, wx.LEFT | wx.EXPAND, 4 )
 
         low_label = factory.low_label
@@ -171,17 +178,18 @@ class SimpleSliderEditor ( Editor ):
                             (self.high - self.low))
         if not self.factory.is_float:
             value = int( value )
-
-        self.control.text.SetValue( self.format % value )
         event_type = event.GetEventType()
-
         if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
             (self.factory.auto_set and
              (event_type == wx.wxEVT_SCROLL_THUMBTRACK))):
             try:
+                self.ui_changing = True
+                self.control.text.SetValue( self.format % value )
                 self.value = value
             except TraitError:
                 pass
+            finally:
+                self.ui_changing = False
 
     #---------------------------------------------------------------------------
     #  Handle the user pressing the 'Enter' key in the edit control:
@@ -202,9 +210,10 @@ class SimpleSliderEditor ( Editor ):
             if not self.factory.is_float:
                 value = int( value )
             self.value = value
-            self.control.slider.SetValue(
-                int( ((float( value ) - self.low) /
-                     (self.high - self.low)) * 10000 ) )
+            if not self.ui_changing:
+                self.control.slider.SetValue(
+                    int( ((float( value ) - self.low) /
+                         (self.high - self.low)) * 10000 ) )
             self.control.text.SetBackgroundColour(OKColor)
             self.control.text.Refresh()
             if self._error is not None:
@@ -405,7 +414,12 @@ class LargeRangeSliderEditor ( Editor ):
         else:
             panel.text = text = wx.TextCtrl( panel, -1, fvalue_text,
                                              size  = wx.Size( 56, 20 ) )
+
         wx.EVT_KILL_FOCUS( text, self.update_object_on_enter )
+        
+        if factory.auto_set:
+           wx.EVT_TEXT( panel, text.GetId(), self.update_object_on_enter )
+
         sizer.Add( text, 0, wx.LEFT | wx.EXPAND, 4 )
 
         # Set-up the layout:
@@ -457,15 +471,20 @@ class LargeRangeSliderEditor ( Editor ):
             self.control.text.SetBackgroundColour(OKColor)
             self.control.text.Refresh()
             # Update the slider range.
+            # Set ui_changing to True to avoid recursion: 
+            # the update_range_ui method will try to set the value in the text 
+            # box, which will again fire this method if auto_set is True.
             if not self.ui_changing:
+                self.ui_changing = True
                 self.init_range()
                 self.update_range_ui()
+                self.ui_changing = False
             if self._error is not None:
                 self._error     = None
                 self.ui.errors -= 1
         except TraitError, excp:
             pass
-
+         
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
     #---------------------------------------------------------------------------
