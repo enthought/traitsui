@@ -163,32 +163,36 @@ class _Panel(BasePanel):
 
             self.control = w
 
-            # Add any buttons.
-            if has_buttons:
-                # Add the special function buttons:
-                layout.Add( wx.StaticLine( cpanel, -1 ), 0, wx.EXPAND )
-                b_sizer = wx.BoxSizer( wx.HORIZONTAL )
-                for button in buttons:
-                    if self.is_button( button, 'Undo' ):
-                        self.undo = self.add_button( button, b_sizer, 
-                                                 self._on_undo, False )
-                        self.redo = self.add_button( button, b_sizer, 
-                                                 self._on_redo, False, 'Redo' )
-                        history.on_trait_change( self._on_undoable, 'undoable',
-                                             dispatch = 'ui' )
-                        history.on_trait_change( self._on_redoable, 'redoable',
-                                             dispatch = 'ui' )
-                    elif self.is_button( button, 'Revert' ):
-                        self.revert = self.add_button( button, b_sizer, 
-                                                   self._on_revert, False )
-                        history.on_trait_change( self._on_revertable, 'undoable',
-                                             dispatch = 'ui' )
-                    elif self.is_button( button, 'Help' ):
-                        self.add_button( button, b_sizer, self._on_help )
-                    elif not self.is_button( button, '' ):
-                        self.add_button( button, b_sizer )
+            # FIXME: I do not know how to fix the following code for Qt.
+            # It is preferable to fail gracefully rather than to raise a
+            # useless exception.
 
-                layout.Add( b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5 )
+            # Add any buttons.
+#            if has_buttons:
+#                # Add the special function buttons:
+#                layout.Add( wx.StaticLine( cpanel, -1 ), 0, wx.EXPAND )
+#                b_sizer = wx.BoxSizer( wx.HORIZONTAL )
+#                for button in buttons:
+#                    if self.is_button( button, 'Undo' ):
+#                        self.undo = self.add_button( button, b_sizer, 
+#                                                 self._on_undo, False )
+#                        self.redo = self.add_button( button, b_sizer, 
+#                                                 self._on_redo, False, 'Redo' )
+#                        history.on_trait_change( self._on_undoable, 'undoable',
+#                                             dispatch = 'ui' )
+#                        history.on_trait_change( self._on_redoable, 'redoable',
+#                                             dispatch = 'ui' )
+#                    elif self.is_button( button, 'Revert' ):
+#                        self.revert = self.add_button( button, b_sizer, 
+#                                                   self._on_revert, False )
+#                        history.on_trait_change( self._on_revertable, 'undoable',
+#                                             dispatch = 'ui' )
+#                    elif self.is_button( button, 'Help' ):
+#                        self.add_button( button, b_sizer, self._on_help )
+#                    elif not self.is_button( button, '' ):
+#                        self.add_button( button, b_sizer )
+#
+#                layout.Add( b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5 )
 
 
 def panel(ui):
@@ -269,24 +273,27 @@ def _fill_panel(panel, content, ui, item_handler=None):
             else:
                 panel.addItem(new, page_name)
 
-        else:
+        # FIXME: GV: I have commented out the following (wx) code. Has a
+        # result the dialog display under Qt, thought with a wrong
+        # layout. It is better than nothing.
+        #else:
             # FIXME: Don't yet have an example that exercises this code.
             # Create the new page as a simple DockControl containing the
             # specified set of controls:
-            sizer = wx.BoxSizer( wx.VERTICAL )
-            panel = QtGui.QWidget(nb)
-            panel.SetSizer( sizer )
-
-            pages.append( DockControl( name     = page_name,
-                                       image    = item.image,
-                                       id       = item.get_id(),
-                                       style    = item.dock,
-                                       dockable = DockableViewElement(
-                                                      ui = ui, element = item ),
-                                       export   = item.export,
-                                       control  = panel ) )
-            item_handler( item, panel, sizer )
-            panel.GetSizer().Fit( panel )
+            #sizer = wx.BoxSizer( wx.VERTICAL )
+            #panel = QtGui.QWidget(nb)
+            #panel.SetSizer( sizer )
+            #
+            #pages.append( DockControl( name     = page_name,
+            #                           image    = item.image,
+            #                           id       = item.get_id(),
+            #                           style    = item.dock,
+            #                           dockable = DockableViewElement(
+            #                                          ui = ui, element = item ),
+            #                           export   = item.export,
+            #                           control  = panel ) )
+            #item_handler( item, panel, sizer )
+            #panel.GetSizer().Fit( panel )
 
     panel.setCurrentIndex(active)
 
