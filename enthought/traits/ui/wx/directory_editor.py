@@ -51,12 +51,11 @@ class SimpleEditor ( SimpleFileEditor ):
     #  Creates the correct type of file dialog or popup:
     #---------------------------------------------------------------------------
            
-    def create_file_dialog ( self ):
+    def _create_file_dialog ( self ):
         """ Creates the correct type of file dialog.
         """
         dlg = wx.DirDialog( self.control, message = 'Select a Directory' )
-        dlg.SetPath( self._filename.GetValue() )
-        
+        dlg.SetPath( self._file_name.GetValue() )
         return dlg
         
     def _create_file_popup ( self ):
