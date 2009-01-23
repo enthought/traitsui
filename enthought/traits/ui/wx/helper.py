@@ -418,7 +418,7 @@ class TraitsUIScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
 
         crx, cry, crdx, crdy = child.GetRect()
         subwindow = child.GetParent()
-        while subwindow is not self:
+        while subwindow not in [self, None]:
             # Make sure that the descendant's position information is relative
             # to us, not its local parent.
             pwx,pwy   = subwindow.GetRect()[:2]
