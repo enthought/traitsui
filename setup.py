@@ -58,7 +58,7 @@ setup(
         Development Status :: 5 - Production/Stable
         Intended Audience :: Developers
         Intended Audience :: Science/Research
-        License :: OSI Approved :: BSD License
+        License :: OSI Approved :: GPLv2 License
         Operating System :: MacOS
         Operating System :: Microsoft :: Windows
         Operating System :: OS Independent
@@ -92,7 +92,7 @@ setup(
         TRAITS,
         TRAITSGUI,
         ],
-    license = 'BSD',
+    license = 'GPLv2',
     long_description = '\n'.join(DOCLINES[3:]),
     maintainer = 'ETS Developers',
     maintainer_email = 'enthought-dev@enthought.com',
