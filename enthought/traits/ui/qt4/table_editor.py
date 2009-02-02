@@ -252,3 +252,6 @@ class _TableView(QtGui.QTableView):
 
 # Define the SimpleEditor class.
 SimpleEditor = TableEditor
+
+# Define the ReadonlyEditor class.
+ReadonlyEditor = TableEditor
