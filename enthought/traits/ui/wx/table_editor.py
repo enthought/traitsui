@@ -1890,5 +1890,8 @@ class TableSearchHandler ( Handler ):
 # Define the SimpleEditor class.
 SimpleEditor = TableEditor
 
+# Define the ReadonlyEditor class.
+ReadonlyEditor = TableEditor
+
 ### EOF #######################################################################
 
