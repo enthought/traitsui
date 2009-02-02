@@ -793,6 +793,25 @@ class NotebookEditor ( Editor ):
 
         return ( dock_control, view_object, monitoring )
 
+    #---------------------------------------------------------------------------
+    #  Activates the corresponding dock window when the 'selected' trait of
+    #  the editor is changed.
+    #---------------------------------------------------------------------------
+    def _selected_changed(self, old, new):
+        """ Activates the corresponding dock window when the 'selected' trait 
+        of the editor is changed.
+        """
+        dock_regions = self.control.GetSizer().GetContents().contents
+        for region in dock_regions:
+            for dock_control in region.contents:
+                if dock_control.dockable is not None and new is not None:
+                        for i, value in enumerate(dock_control.
+                                              dockable.editor._uis):
+                            if new == value[1]:
+                                value[0].activate()
+                                break
+        return
+                        
 #-------------------------------------------------------------------------------
 #  'DockableListElement' class:
 #-------------------------------------------------------------------------------
