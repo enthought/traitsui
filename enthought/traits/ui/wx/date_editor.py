@@ -63,12 +63,18 @@ class _DateEditor (Editor):
         Event for when calendar is selected, update/create date string.
         """
         date = event.GetDate()
-        if date.IsValid():
+        # WX sometimes has year == 0 temporarily when doing state changes.
+        if date.IsValid() and date.GetYear() != 0:
             year = date.GetYear()
             # wx 2.8.8 has 0-indexed months.
             month = date.GetMonth() + 1  
             day = date.GetDay()
-            self.value = datetime.date(year, month, day)
+            try:
+                self.value = datetime.date(year, month, day)
+            except ValueError:
+                print 'Invalid date:', year, month, day
+                raise
+                
         return
 
 
