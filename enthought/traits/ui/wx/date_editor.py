@@ -93,6 +93,7 @@ class _DateEditor (Editor):
                 date.SetMonth(self.value.month - 1) 
                 date.SetDay(self.value.day)
                 self.control.SetValue(date)
+                self.control.Refresh()
         return
 #-- end _DateEditor definition ------------------------------------------------ 
 
