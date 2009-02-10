@@ -587,16 +587,24 @@ class NotebookEditor ( Editor ):
         # Create a DockControl for each object in the trait's value:
         uis           = self._uis
         dock_controls = []
+        selected_dock_control = None
         for object in self.value:
             dock_control, view_object, monitoring = self._create_page( object )
-
             # Remember the DockControl for later deletion processing:
             uis.append( [ dock_control, object, view_object, monitoring ] )
-
+            # Save a reference to the selected dock control, so it can be 
+            # activated after it gets added to the parent dock window.
+            if self.selected is object:
+                selected_dock_control = dock_control
             dock_controls.append( dock_control )
 
         # Add the new items to the DockWindow:
         self.add_controls( dock_controls )
+
+        # Activate the selected dock control, if any.
+        if selected_dock_control:
+            selected_dock_control.activate()
+
         if self.ui.info.initialized:
             self.update_layout()
 
@@ -626,15 +634,24 @@ class NotebookEditor ( Editor ):
         # Add a page for each added object:
         dock_controls = []
         first_control = None
+        selected_dock_control = None
         for object in event.added:
             dock_control, view_object, monitoring  = self._create_page( object )
             self._uis[ index: index ] = [ [ dock_control, object, view_object,
                                             monitoring ] ]
+            # Save a reference to the selected dock control, so it can be 
+            # activated after it gets added to the parent dock window.
+            if self.selected is object:
+                selected_dock_control = dock_control
             dock_controls.append( dock_control )
             index += 1
 
         # Add the new items to the DockWindow:
         self.add_controls( dock_controls )
+
+        # Activate the selected dock control, if any.
+        if selected_dock_control:
+            selected_dock_control.activate()
 
         self.update_layout()
 
@@ -790,7 +807,6 @@ class NotebookEditor ( Editor ):
                                     dockable  = DockableListElement(
                                                     ui     = ui,
                                                     editor = self ) )
-
         return ( dock_control, view_object, monitoring )
 
     #---------------------------------------------------------------------------
