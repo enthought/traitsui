@@ -27,14 +27,13 @@ import datetime
 import wx
 
 from enthought.traits.ui.wx.editor import Editor
-from enthought.traits.ui.wx.basic_editor_factory import BasicEditorFactory
 
 
 
-#-- _DateEditor definition ---------------------------------------------------- 
-class _DateEditor (Editor):
+#-- SimpleEditor definition --------------------------------------------------- 
+class SimpleEditor (Editor):
     """ 
-    Traits UI date editor.
+    Simple Traits UI date editor.  Shows a text box, and a date-picker widget.
     """
     
     def init ( self, parent ):
@@ -95,6 +94,23 @@ class _DateEditor (Editor):
                 self.control.SetValue(date)
                 self.control.Refresh()
         return
-#-- end _DateEditor definition ------------------------------------------------ 
+#-- end SimpleEditor definition ----------------------------------------------- 
+
+class CustomEditor (SimpleEditor):
+    # TODO: Write me.
+    pass
+#-- end CustomEditor definition ----------------------------------------------- 
+
+class TextEditor (SimpleEditor):
+    # TODO: Write me.  Possibly use TextEditor as a model to show a string
+    # representation of the date, and have enter-set do a date evaluation.
+    pass
+#-- end TextEditor definition ------------------------------------------------- 
+
+class ReadonlyEditor (SimpleEditor):
+    # TODO: Write me.  Possibly use TextEditor as a model to show a string
+    # representation of the date that cannot be changed.
+    pass
+#-- end ReadonlyEditor definition --------------------------------------------- 
 
 #-- eof ----------------------------------------------------------------------- 
