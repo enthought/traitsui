@@ -236,10 +236,10 @@ class SimpleEditor ( Editor ):
         list_pane.SetSizer( list_sizer )
 
         if is_fake:
-           self._cur_control = control
-           self.empty_list()
-           control.Destroy()
-           pcontrol.Destroy()
+            self._cur_control = control
+            self.empty_list()
+            control.Destroy()
+            pcontrol.Destroy()
 
         rows = 1
         if not self.single_row:
@@ -624,7 +624,6 @@ class NotebookEditor ( Editor ):
 
         # Add a page for each added object:
         dock_controls = []
-        first_control = None
         for object in event.added:
             dock_control, view_object, monitoring  = self._create_page( object )
             self._uis[ index: index ] = [ [ dock_control, object, view_object,
