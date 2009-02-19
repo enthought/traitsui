@@ -46,6 +46,32 @@ class IPythonController(WxController):
     # The title of the IPython windows (not displayed in Envisage)
     title = Str
 
+    # Cached value of the banner for the IPython shell.
+    # NOTE: The WxController object (declared in wx_frontend module) contains
+    # a 'banner' attribute. If this is None, WxController sets the
+    # banner = IPython banner + an additional string ("This is the wx 
+    # frontend, by Gael Varoquaux. This is EXPERIMENTAL code."). We want to 
+    # set banner = the IPython banner. This means 'banner' needs to be
+    # a property, since in the __init__ method of WxController, the IPython 
+    # shell object is created AND started (meaning the banner is written to
+    # stdout). 
+    _banner = None
+
+    def _get_banner(self):
+        """ Returns the IPython banner.
+        """
+        if self._banner is None:
+            # 'ipython0' gets set in the __init__ method of the base class.
+            if getattr(self, 'ipython0', None):
+                self._banner = self.ipython0.BANNER
+        return self._banner
+
+    def _set_banner(self, value):
+        self._banner = value
+        return
+
+    banner = property(_get_banner, _set_banner)
+
     def __init__(self, *args, **kwargs):
         WxController.__init__(self, *args, **kwargs)
 
@@ -65,7 +91,6 @@ class IPythonController(WxController):
             func = getattr(self.ipython0, funcname)
             if func.__doc__ is None:
                 func.__doc__ = ''
-
 
     def execute_command(self, command, hidden=False):
         """ Execute a command, not only in the model, but also in the
