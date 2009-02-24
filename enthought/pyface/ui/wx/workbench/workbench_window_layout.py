@@ -688,6 +688,12 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         if hasattr(view, 'ui') and view.ui is not None:
             # This makes the control draggable outside of the main window.
             #view_dock_control.export = 'enthought.pyface.workbench.view'
+            
+            # If the ui's 'view' trait has an 'export' field set, pass that on 
+            # to the dock control. This makes the control detachable from the 
+            # main window (if 'export' is not an empty string).
+            if view.ui.view is not None:
+                view_dock_control.export = view.ui.view.export
             view_dock_control.dockable = DockableViewElement(
                 should_close=True, ui=view.ui
             )
