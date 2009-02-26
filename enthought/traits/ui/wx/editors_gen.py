@@ -26,7 +26,7 @@ def gen_editor_definitions(target_filename):
     # Find all the files which define a TraitsUIEditor
     editor_files = []
     for (root, dirs, files) in os.walk(dirpath):
-    	if '.svn' in dirs:
+        if '.svn' in dirs:
             dirs.remove('.svn')
         editor_files.extend(glob.glob(os.path.join(root, '*_editor.py')))
     
@@ -42,28 +42,28 @@ def gen_editor_definitions(target_filename):
         for name in dir(module):
             try:
                 if issubclass(getattr(module, name), EditorFactory) and \
-                     name not in ['EditorFactory', 'BasicEditorFactory']: 
-                     class_names.append(name)
+                    name not in ['EditorFactory', 'BasicEditorFactory']: 
+                    class_names.append(name)
                 elif issubclass(getattr(module, name), Editor) and \
                      name != 'Editor':
-                     class_names.append(name)
+                    class_names.append(name)
             except:
                 try:
-                   if isinstance(getattr(module, name), EditorFactory) or \
-                      isinstance(getattr(module, name), Editor):
-                      class_names.insert(0, name)
+                    if isinstance(getattr(module, name), EditorFactory) or \
+                        isinstance(getattr(module, name), Editor):
+                        class_names.insert(0, name)
                 except:
-                   pass
+                    pass
 
         if len(class_names) > 0:
             # FIXME: Is there a better way to sort these names?
             if 'ToolkitEditorFactory' in class_names:
-               class_name = 'ToolkitEditorFactory'
+                class_name = 'ToolkitEditorFactory'
             else:
-               class_name = ''.join([name.capitalize() for name in 
+                class_name = ''.join([name.capitalize() for name in 
                                      filename.split('_')])
-               if class_name not in class_names:
-                   class_name = class_names[0]        
+                if class_name not in class_names:
+                    class_name = class_names[0]        
             function = "def %(filename)s(*args, **traits):"%locals()
             target_file.write(function)
             target_file.write('\n')
@@ -74,7 +74,3 @@ def gen_editor_definitions(target_filename):
             target_file.write('\n\n')
     
     target_file.close()
-    
-
-
- 
