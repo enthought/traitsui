@@ -103,15 +103,10 @@ class IPythonController(WxController):
         """
           
         completion_text = self._get_completion_text(line)
-        completions = self.ipython0.complete(completion_text)
-        # FIXME: The proper sort should be done in the complete method.
-        key = lambda x: x.replace('_', '')
-        completions.sort(key=key)
-        if completions:
-            from IPython.frontend.linefrontendbase import common_prefix
-            prefix = common_prefix(completions) 
-            line = line[:-len(completion_text)] + prefix
-        return line, completions
+        suggestion, completions = super(IPythonController, self).complete(
+                                                            completion_text)
+        new_line = line[:-completion_text] + suggestion
+        return new_line, completions
         
 
     def execute_command(self, command, hidden=False):
