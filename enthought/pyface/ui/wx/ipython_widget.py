@@ -21,6 +21,8 @@
 from IPython.frontend.wx.wx_frontend import WxController
 from IPython.kernel.core.interpreter import Interpreter
 import wx
+import re
+import sys
 
 # Enthought library imports.
 from enthought.traits.api import Event, implements, Instance, Str
@@ -92,6 +94,26 @@ class IPythonController(WxController):
             if func.__doc__ is None:
                 func.__doc__ = ''
 
+
+    def complete(self, line):
+        """ Returns a list of possible completions for line.
+        Overridden from the base class implementation to fix bugs in retrieving
+        the completion text from line.
+        
+        """
+          
+        completion_text = self._get_completion_text(line)
+        completions = self.ipython0.complete(completion_text)
+        # FIXME: The proper sort should be done in the complete method.
+        key = lambda x: x.replace('_', '')
+        completions.sort(key=key)
+        if completions:
+            from IPython.frontend.linefrontendbase import common_prefix
+            prefix = common_prefix(completions) 
+            line = line[:-len(completion_text)] + prefix
+        return line, completions
+        
+
     def execute_command(self, command, hidden=False):
         """ Execute a command, not only in the model, but also in the
             view.
@@ -131,6 +153,52 @@ class IPythonController(WxController):
         self.ClearAll()
         self.new_prompt(self.input_prompt_template.substitute(
                                 number=(self.last_result['number'] + 1)))
+
+
+    def _popup_completion(self, create=False):
+        """ Updates the popup completion menu if it exists. If create is 
+            true, open the menu.
+            Overridden from the base class implementation to filter out
+            delimiters from the input buffer.
+        """
+        
+        # FIXME: The implementation in the base class (wx_frontend.py in
+        # IPython/wx/frontend) is faulty in that it doesn't filter out 
+        # special characters (such as parentheses, '=') in the input buffer 
+        # correctly. 
+        # For example, (a): typing 's=re.' does not pop up the menu.  
+        # (b): typing 'x[0].' brings up a menu for x[0] but the offset is
+        # incorrect and so, upon selection from the menu, the text is pasted 
+        # incorrectly.
+        # I am patching this here instead of in the IPython module, but at some
+        # point, this needs to be merged in.
+        if self.debug:
+            print >>sys.__stdout__, "_popup_completion" , self.input_buffer
+        
+        line = self.input_buffer        
+        if (self.AutoCompActive() and line and not line[-1] == '.') \
+                    or create==True:
+            suggestion, completions = self.complete(line)
+            if completions:
+                offset = len(self._get_completion_text(line))
+                self.pop_completion(completions, offset=offset)
+                if self.debug:
+                    print >>sys.__stdout__, completions
+    
+ 
+    def _get_completion_text(self, line):
+        """ Returns the text to be completed by breaking the line at specified
+        delimiters.
+        """
+        # Break at: spaces, '=', all parentheses (except if balanced).
+        # FIXME2: In the future, we need to make the implementation similar to
+        # that in the 'pyreadline' module (modes/basemode.py) where we break at
+        # each delimiter and try to complete the residual line, until we get a
+        # successful list of completions.
+        expression = '\s|=|,|:|\((?!.*\))|\[(?!.*\])|\{(?!.*\})' 
+        complete_sep = re.compile(expression)
+        text = complete_sep.split(line)[-1]
+        return text
 
 
 ################################################################################
