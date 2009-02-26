@@ -112,7 +112,7 @@ class SimpleEditor ( Editor ):
         wx.EVT_KILL_FOCUS( control, self.update_object )
         
         if factory.auto_set:
-           wx.EVT_TEXT( parent, control.GetId(), self.update_object )
+            wx.EVT_TEXT( parent, control.GetId(), self.update_object )
            
         self.control = control
         self.set_tooltip()
