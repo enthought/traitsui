@@ -105,7 +105,7 @@ class IPythonController(WxController):
         completion_text = self._get_completion_text(line)
         suggestion, completions = super(IPythonController, self).complete(
                                                             completion_text)
-        new_line = line[:-completion_text] + suggestion
+        new_line = line[:-len(completion_text)] + suggestion
         return new_line, completions
         
 
