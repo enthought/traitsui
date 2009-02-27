@@ -29,6 +29,7 @@ import wx.calendar
 
 from enthought.traits.api import Int, Bool, List, on_trait_change
 from enthought.traits.ui.wx.editor import Editor
+from enthought.traits.ui.wx.constants import WindowColor
 
 
 #------------------------------------------------------------------------------
@@ -116,6 +117,8 @@ class CalendarCtrl(wx.Panel):
                  left_padding, top_padding, right_padding,
                  *args, **kwargs):
         wx.Panel.__init__(self, parent, ID, *args, **kwargs)
+
+        self.SetBackgroundColour(WindowColor)
 
         self.date = wx.DateTime_Now()
         self.multi_select = multi_select
