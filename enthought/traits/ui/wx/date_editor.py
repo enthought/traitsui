@@ -154,6 +154,8 @@ class CalendarCtrl(wx.Panel):
         self.cal_ctrls.insert(0, cal)
 
         self.selected_list_changed()
+        for cal in self.cal_ctrls:
+            self.highlight_changed(None, cal)
         return
 
 
@@ -265,6 +267,10 @@ class CalendarCtrl(wx.Panel):
 
     #--------------------------------------------------------------------------
     # Event handlers
+    #--------------------------------------------------------------------------
+
+    #--------------------------------------------------------------------------
+    # Panel interface
     #--------------------------------------------------------------------------
 
     def month_changed(self, evt=None):
