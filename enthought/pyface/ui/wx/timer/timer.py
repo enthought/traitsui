@@ -50,6 +50,7 @@ class Timer(wx.Timer):
         """
         try:
             self.callable(*self.args, **self.kw_args)
+            wx.Yield()
         except StopIteration:
             self.Stop()
         except:
