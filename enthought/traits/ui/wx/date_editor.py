@@ -27,9 +27,14 @@ import datetime
 import wx
 import wx.calendar
 
+from enthought.traits.api import Int, Bool, List, on_trait_change
 from enthought.traits.ui.wx.editor import Editor
 
-#-- SimpleEditor definition --------------------------------------------------- 
+
+#------------------------------------------------------------------------------ 
+#--  Simple Editor
+#------------------------------------------------------------------------------ 
+
 class SimpleEditor (Editor):
     """ 
     Simple Traits UI date editor.  Shows a text box, and a date-picker widget.
@@ -72,7 +77,6 @@ class SimpleEditor (Editor):
             except ValueError:
                 print 'Invalid date:', year, month, day
                 raise
-                
         return
 
 
@@ -96,51 +100,67 @@ class SimpleEditor (Editor):
 #-- end SimpleEditor definition ----------------------------------------------- 
 
 
+#------------------------------------------------------------------------------ 
+#--  Custom Editor
+#------------------------------------------------------------------------------ 
+
 CALENDAR_WIDTH = 208
-LEFT_PADDING = 5
-TOP_PADDING = 5
-MONTH_PADDING = 5
 SELECTED_FG = wx.Colour(255, 0, 0, 255)
 INVISIBLE_HIGHLIGHT_FG = wx.Colour(0, 0, 0, 0)
 INVISIBLE_HIGHLIGHT_BG = wx.Colour(0, 0, 0, 0)
-#----------------------------------------------------------------------
 
 class CalendarCtrl(wx.Panel):
-    """
-    WX panel for use by the CustomEditor.
-    """
+    """ WX panel for use by the CustomEditor. """
     
-    def __init__(self, parent, ID):
-        wx.Panel.__init__(self, parent, ID)
+    def __init__(self, parent, ID, selected, multi_select, 
+                 left_padding, top_padding, right_padding,
+                 *args, **kwargs):
+        wx.Panel.__init__(self, parent, ID, *args, **kwargs)
         
         self.date = wx.DateTime_Now()
+        self.multi_select = multi_select
+        self.selected_days = selected
+        if not self.multi_select and not self.selected_days:
+            self.selected_days = self.date_from_datetime(self.date)
         self.cal_ctrls = []
-        self.selected_days = set([(2009,1,1), (2009,10,31), (2009,12,25)])
-
+        self.left_padding = left_padding
+        self.top_padding = top_padding
+        self.month_padding = right_padding
+        
         #--------------------------------------------------------------
         # Left (oldest) month.
         #--------------------------------------------------------------
-        pos = (LEFT_PADDING, TOP_PADDING)
+        pos = (self.left_padding, self.top_padding)
         cal = self._make_calendar_widget(-2, pos)
         self.cal_ctrls.insert(0, cal)
                 
         #--------------------------------------------------------------
         # Center (last) month.
         #--------------------------------------------------------------
-        pos = (LEFT_PADDING + CALENDAR_WIDTH + MONTH_PADDING, TOP_PADDING)
+        pos = (self.left_padding + CALENDAR_WIDTH + self.month_padding, 
+               self.top_padding)
         cal = self._make_calendar_widget(-1, pos)
         self.cal_ctrls.insert(0, cal)
         
         #--------------------------------------------------------------
         # Right (current) month.
         #--------------------------------------------------------------
-        pos = (LEFT_PADDING + 2*CALENDAR_WIDTH + 2*MONTH_PADDING, TOP_PADDING)
+        pos = (self.left_padding + 2*CALENDAR_WIDTH + 2*self.month_padding, 
+               self.top_padding)
         cal = self._make_calendar_widget(0, pos) 
         self.cal_ctrls.insert(0, cal)
 
         self.selected_list_changed()
         return
         
+        
+    def date_from_datetime(self, dt):
+        """
+        Convert a wx DateTime object to a Python Date object.
+        """
+        new_date = datetime.date(dt.GetYear(), dt.GetMonth()+1, dt.GetDay())
+        return new_date
+     
 
     def _make_calendar_widget(self, month_offset, position):
         """
@@ -208,8 +228,6 @@ class CalendarCtrl(wx.Panel):
             new_month -= 12
             new_year += 1
                         
-        # Should we always use 1 for the day in case of Feb?  Hidden highlight
-        # can cause apparent unresponsiveness.
         new_date.Set(old_date.GetDay(), new_month, new_year)
         return new_date
 
@@ -221,7 +239,14 @@ class CalendarCtrl(wx.Panel):
         for cal in self.cal_ctrls:
             cur_month = cal.GetDate().GetMonth() + 1
             cur_year = cal.GetDate().GetYear()
-            for year, month, day in self.selected_days:
+            selected_days = self.selected_days
+            
+            # Wrap a singleton if necessary, to pass the for-loop.
+            if not self.multi_select:
+                selected_days = [selected_days] 
+            
+            for date_obj in selected_days:
+                year, month, day = date_obj.timetuple()[:3]
                 if month == cur_month and year == cur_year:
                     attr = wx.calendar.CalendarDateAttr(
                         colText=SELECTED_FG,
@@ -262,8 +287,14 @@ class CalendarCtrl(wx.Panel):
         if cal == None:
             cal = evt.GetEventObject()
         date = cal.GetDate()
-        highlight = (date.GetYear(), date.GetMonth()+1, date.GetDay())
-        if highlight in self.selected_days: 
+        highlight = self.date_from_datetime(date)
+        selected_days = self.selected_days
+        
+        # Wrap a singleton if necessary for the multi_select containment test.
+        if not self.multi_select:
+            selected_days = [selected_days] 
+            
+        if highlight in selected_days: 
             self.show_highlight(cal)
         else:
             self.hide_highlight(cal)
@@ -276,85 +307,113 @@ class CalendarCtrl(wx.Panel):
         """
         cal = evt.GetEventObject()
         date = cal.GetDate()
-        selection = (date.GetYear(), date.GetMonth()+1, date.GetDay())
-        if selection in self.selected_days:
-            self.selected_days.remove(selection)
+        selection = self.date_from_datetime(date)
+        if self.multi_select:
+            if selection in self.selected_days:
+                self.selected_days.remove(selection)
+            else:
+                self.selected_days.append(selection)
         else:
-            self.selected_days.add(selection)
+            self.selected_days = selection
 
         # Update all the selected calendar days.  Slightly inefficient.
         self.selected_list_changed()
         self.highlight_changed(evt)
-#-- end CalendarCtrl --------------------------------------------------
+#-- end CalendarCtrl ----------------------------------------------------------
 
 
-class CustomEditor (SimpleEditor):
+class CustomEditor(Editor):
     """
-    Show multiple months, and allow multi-select into a list.
+    Show multiple months using CalendarCtrl. Allow multi-select into a list.
+    
+    Trait Listeners
+    ---------------
+    The wx editor directly modifies the *value* trait of the Editor, which 
+    is the named trait of the corresponding Item in your View.  Therefore 
+    you can listen for changes to the user's selection by directly listening 
+    to the item changed event.
+    
+    Additional Work
+    ---------------
+    Written to support a specific need so not all features have been finished,
+    
+        1.  The custom editor has not been tested or used much with 
+            single-select, which should be the default for a normal Date.
+        2.  The DateEditor Factory multi-select flag is not being propagated
+            to this class.  (Or the padding flags for that matter.)  It has
+            to be, for #1 to work.
+        3.  More events could be generated.
+        
+    Sample
+    ------
+    Example usage::
+        
+        class DateListPicker(HasTraits):
+            calendar = List
+            traits_view = View(Item('calendar', editor=DateEditor(),
+                                    style='custom', show_label=False))
     """
     
-    def init ( self, parent ):
+    # How much padding should be on the left of the editor.
+    left_padding = Int(5)
+    
+    # How much padding should be on the top of the editor.
+    top_padding = Int(5)
+    
+    # How much padding should be between the months.
+    month_padding = Int(5)
+
+    # Should the editor operate on a single Date, or a list of Dates?
+    # FIXME: multi_select == False has not been heavily tested.
+    multi_select = Bool(True)
+    
+    
+    #-- Editor interface ------------------------------------------------------
+    
+    def init (self, parent):
         """ 
         Finishes initializing the editor by creating the underlying widget.
         """
-        calendar_ctrl = CalendarCtrl(parent, -1)
-            
+        if self.multi_select and not isinstance(self.value, list):
+            raise ValueError('Multi-select is True, but editing a non-list.')
+        
+        calendar_ctrl = CalendarCtrl(parent, 
+                                     -1,
+                                     self.value,
+                                     self.multi_select,
+                                     self.left_padding,
+                                     self.top_padding,
+                                     self.month_padding)
         self.control = calendar_ctrl
-        self.control.Bind(wx.EVT_DATE_CHANGED, self.day_selected)
         return
 
-
-    def day_selected(self, event):
-        """
-        Event for when calendar is selected, update/create date string.
-        """
-        date = event.GetDate()
-        # WX sometimes has year == 0 temporarily when doing state changes.
-        if date.IsValid() and date.GetYear() != 0:
-            year = date.GetYear()
-            # wx 2.8.8 has 0-indexed months.
-            month = date.GetMonth() + 1  
-            day = date.GetDay()
-            try:
-                self.value = datetime.date(year, month, day)
-            except ValueError:
-                print 'Invalid date:', year, month, day
-                raise
-                
-        return
-
-
+    
     def update_editor ( self ):
         """
         Updates the editor when the object trait changes externally to the
         editor.
         """
-        if self.value:
-            date = self.control.GetValue()
-            # FIXME: A Trait assignment should support fixing an invalid 
-            # date in the widget.
-            if date.IsValid():
-                date.SetYear(self.value.year)
-                # wx 2.8.8 has 0-indexed months.
-                date.SetMonth(self.value.month - 1) 
-                date.SetDay(self.value.day)
-                self.control.SetValue(date)
-                self.control.Refresh()
+        self.control.selected_list_changed()
         return
-    pass
 #-- end CustomEditor definition ----------------------------------------------- 
 
 
+#------------------------------------------------------------------------------ 
+#--  Text Editor
+#------------------------------------------------------------------------------ 
+# TODO: Write me.  Possibly use TextEditor as a model to show a string
+# representation of the date, and have enter-set do a date evaluation.
 class TextEditor (SimpleEditor):
-    # TODO: Write me.  Possibly use TextEditor as a model to show a string
-    # representation of the date, and have enter-set do a date evaluation.
     pass
 #-- end TextEditor definition ------------------------------------------------- 
 
 
+#------------------------------------------------------------------------------ 
+#--  Readonly Editor
+#------------------------------------------------------------------------------ 
+# TODO: Write me.  Possibly use TextEditor as a model to show a string
+# representation of the date that cannot be changed.
 class ReadonlyEditor (SimpleEditor):
-    # TODO: Write me.  Possibly use TextEditor as a model to show a string
-    # representation of the date that cannot be changed.
     pass
 #-- end ReadonlyEditor definition --------------------------------------------- 
 
