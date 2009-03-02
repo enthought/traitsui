@@ -23,6 +23,7 @@ from IPython.kernel.core.interpreter import Interpreter
 import wx
 import re
 import sys
+import __builtin__
 import codeop
 
 # Enthought library imports.
@@ -77,7 +78,13 @@ class IPythonController(WxController):
     banner = property(_get_banner, _set_banner)
 
     def __init__(self, *args, **kwargs):
+        # Suppress all key input, to avoid waiting
+        def my_rawinput(x=None):
+            return '\n'
+        old_rawinput = __builtin__.raw_input
+        __builtin__.raw_input = my_rawinput
         WxController.__init__(self, *args, **kwargs)
+        __builtin__.raw_input = old_rawinput
 
         # Add a magic to clear the screen
         def cls(args):
@@ -93,8 +100,15 @@ class IPythonController(WxController):
             if not funcname.startswith('magic'):
                 continue
             func = getattr(self.ipython0, funcname)
-            if func.__doc__ is None:
-                func.__doc__ = ''
+            try:
+                if func.__doc__ is None:
+                    func.__doc__ = ''
+            except AttributeError:
+                """ Avoid "attribute '__doc__' of 'instancemethod'
+                    objects is not writable".
+                """
+
+
 
 
     def complete(self, line):
