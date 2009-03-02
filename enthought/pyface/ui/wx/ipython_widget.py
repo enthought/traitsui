@@ -23,6 +23,7 @@ from IPython.kernel.core.interpreter import Interpreter
 import wx
 import re
 import sys
+import codeop
 
 # Enthought library imports.
 from enthought.traits.api import Event, implements, Instance, Str
@@ -59,6 +60,7 @@ class IPythonController(WxController):
     # stdout). 
     _banner = None
 
+    
     def _get_banner(self):
         """ Returns the IPython banner.
         """
@@ -107,6 +109,49 @@ class IPythonController(WxController):
                                                             completion_text)
         new_line = line[:-len(completion_text)] + suggestion
         return new_line, completions
+
+
+    def is_complete(self, string):
+        """ Check if a string forms a complete, executable set of
+        commands.
+
+        For the line-oriented frontend, multi-line code is not executed
+        as soon as it is complete: the users has to enter two line
+        returns.
+        
+        Overridden from the base class (linefrontendbase.py in IPython\frontend
+        to handle a bug with using the '\' symbol in multi-line inputs.
+        """
+        
+        # FIXME: There has to be a nicer way to do this. Th code is
+        # identical to the base class implementation, except for the if ..
+        # statement on line 146.
+        if string in ('', '\n'):
+            # Prefiltering, eg through ipython0, may return an empty
+            # string although some operations have been accomplished. We
+            # thus want to consider an empty string as a complete
+            # statement.
+            return True
+        elif ( len(self.input_buffer.split('\n'))>2 
+                        and not re.findall(r"\n[\t ]*\n[\t ]*$", string)):
+            return False
+        else:
+            self.capture_output()
+            try:
+                # Add line returns here, to make sure that the statement is
+                # complete (except if '\' was used).
+                # This should probably be done in a different place (like
+                # maybe 'prefilter_input' method? For now, this works.
+                clean_string = string.rstrip('\n')
+                if not clean_string.endswith('\\'): clean_string +='\n\n' 
+                is_complete = codeop.compile_command(clean_string,
+                            "<string>", "exec")
+                self.release_output()
+            except Exception, e:
+                # XXX: Hack: return True so that the
+                # code gets executed and the error captured.
+                is_complete = True
+            return is_complete
         
 
     def execute_command(self, command, hidden=False):
@@ -150,6 +195,17 @@ class IPythonController(WxController):
                                 number=(self.last_result['number'] + 1)))
 
 
+    def continuation_prompt(self):
+        """Returns the current continuation prompt.
+        Overridden to generate a continuation prompt matching the length of the
+        current prompt."""
+        
+        # FIXME: This is a bad hack.. I need to find a way to use the 'Prompt2'
+        # class in IPython/kernel/prompts.py. Basically, I am trying to get the
+        # length of the current prompt ("In ['number']").
+        return ("."*(6+self.last_result['number']/10) + ':')
+    
+    
     def _popup_completion(self, create=False):
         """ Updates the popup completion menu if it exists. If create is 
             true, open the menu.
@@ -195,6 +251,29 @@ class IPythonController(WxController):
         text = complete_sep.split(line)[-1]
         return text
 
+    def _on_enter(self):
+        """ Called when the return key is pressed in a line editing
+            buffer.
+            Overridden from the base class implementation (in 
+            IPython/frontend/linefrontendbase.py) to include a continuation
+            prompt.
+        """
+        current_buffer = self.input_buffer
+        cleaned_buffer = self.prefilter_input(current_buffer.replace(
+                                            self.continuation_prompt(),
+                                            ''))
+        if self.is_complete(cleaned_buffer):
+            self.execute(cleaned_buffer, raw_string=current_buffer)
+        else:
+            self.input_buffer = current_buffer + \
+                                self.continuation_prompt() + \
+                                self._get_indent_string(current_buffer.replace(
+                                            self.continuation_prompt(),
+                                            '')[:-1])
+            if len(current_buffer.split('\n')) == 2:
+                self.input_buffer += '\t\t'
+            if current_buffer[:-1].split('\n')[-1].rstrip().endswith(':'):
+                self.input_buffer += '\t'
 
 ################################################################################
 class IPythonWidget(Widget):
