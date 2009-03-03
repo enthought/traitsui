@@ -111,7 +111,15 @@ INVISIBLE_HIGHLIGHT_FG = wx.Colour(0, 0, 0, 0)
 INVISIBLE_HIGHLIGHT_BG = wx.Colour(255, 255, 255, 0)
 
 class CalendarCtrl(wx.Panel):
-    """ WX panel for use by the CustomEditor. """
+    """ 
+    WX panel for use by the CustomEditor. 
+    
+    Description
+    -----------
+    Handles multi-select dates by special handling of the normal CalendarCtrl
+    wx widget.  Doing single-select across multiple calendar widgets is also
+    supported.
+    """
 
     def __init__(self, parent, ID, selected, multi_select,
                  left_padding, top_padding, right_padding,
@@ -320,7 +328,12 @@ class CalendarCtrl(wx.Panel):
             else:
                 self.selected_days.append(selection)
         else:
+            old_date = self.selected_days
             self.selected_days = selection
+            for cal in self.cal_ctrls:
+                if cal.GetDate().GetMonth()+1 == old_date.month:
+                    cal.ResetAttr(old_date.day)
+                    self.highlight_changed(evt, cal)
 
         # Update all the selected calendar days.  Slightly inefficient.
         self.selected_list_changed()
@@ -370,19 +383,16 @@ class CustomEditor(Editor):
     # How much padding should be between the months.
     month_padding = Int(5)
 
-    # Should the editor operate on a single Date, or a list of Dates?
-    # TODO: multi_select == False has not been heavily tested.
-    multi_select = Bool(True)
-
-
     #-- Editor interface ------------------------------------------------------
 
     def init (self, parent):
         """
         Finishes initializing the editor by creating the underlying widget.
         """
-        if self.multi_select and not isinstance(self.value, list):
+        if self.factory.multi_select and not isinstance(self.value, list):
             raise ValueError('Multi-select is True, but editing a non-list.')
+        elif not self.factory.multi_select and isinstance(self.value, list):
+            raise ValueError('Multi-select is False, but editing a list.')
         
         calendar_ctrl = CalendarCtrl(parent,
                                      -1,
