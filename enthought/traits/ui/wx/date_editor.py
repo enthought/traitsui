@@ -107,6 +107,7 @@ class SimpleEditor (Editor):
 
 CALENDAR_WIDTH = 208
 SELECTED_FG = wx.Colour(255, 0, 0, 255)
+UNAVAILABLE_FG = wx.Colour(192, 192, 192, 255)
 INVISIBLE_HIGHLIGHT_FG = wx.Colour(0, 0, 0, 0)
 INVISIBLE_HIGHLIGHT_BG = wx.Colour(255, 255, 255, 0)
 
@@ -122,6 +123,7 @@ class CalendarCtrl(wx.Panel):
     """
 
     def __init__(self, parent, ID, selected, multi_select,
+                 allow_future,
                  left_padding, top_padding, right_padding,
                  *args, **kwargs):
         wx.Panel.__init__(self, parent, ID, *args, **kwargs)
@@ -129,10 +131,12 @@ class CalendarCtrl(wx.Panel):
         self.SetBackgroundColour(WindowColor)
 
         self.date = wx.DateTime_Now()
+        self.today = self.date_from_datetime(self.date)
         self.multi_select = multi_select
+        self.allow_future = allow_future
         self.selected_days = selected
         if not self.multi_select and not self.selected_days:
-            self.selected_days = self.date_from_datetime(self.date)
+            self.selected_days = self.today
         self.cal_ctrls = []
         self.left_padding = left_padding
         self.top_padding = top_padding
@@ -205,6 +209,12 @@ class CalendarCtrl(wx.Panel):
         """
         When the app changes the selected day, hide the highlight.
         """
+        if not self.allow_future:
+            cal_date = self.date_from_datetime(calendar.GetDate())
+            if cal_date > self.today:
+                calendar.SetHighlightColours(UNAVAILABLE_FG,
+                                             INVISIBLE_HIGHLIGHT_BG)
+                return
         calendar.SetHighlightColours(INVISIBLE_HIGHLIGHT_FG,
                                      INVISIBLE_HIGHLIGHT_BG)
         return
@@ -254,6 +264,16 @@ class CalendarCtrl(wx.Panel):
             cur_year = cal.GetDate().GetYear()
             selected_days = self.selected_days
 
+            # Gray out future days if they're unselectable.
+            if not self.allow_future:                
+                for day in range(1,32):
+                    if (cur_year, cur_month, day) > \
+                       (self.today.year, self.today.month, self.today.day):
+                        attr = wx.calendar.CalendarDateAttr(colText=UNAVAILABLE_FG)
+                        cal.SetAttr(day, attr)
+                    else:
+                        cal.ResetAttr(day)
+
             # Wrap a singleton if necessary, to pass the for-loop.
             if not isinstance(selected_days, list):
                 selected_days = [selected_days]
@@ -270,8 +290,13 @@ class CalendarCtrl(wx.Panel):
                         )
                     cal.SetAttr(day, attr)
                 else:
-                    cal.ResetAttr(day)
-
+                    if (not self.allow_future and 
+                       ((cur_year, cur_month, day) > 
+                       (self.today.year, self.today.month, self.today.day))):
+                        attr = wx.calendar.CalendarDateAttr(colText=UNAVAILABLE_FG)
+                        cal.SetAttr(day, attr)
+                    else:
+                        cal.ResetAttr(day)
 
     #--------------------------------------------------------------------------
     # Event handlers
@@ -279,7 +304,7 @@ class CalendarCtrl(wx.Panel):
 
     def month_changed(self, evt=None):
         """
-        Link the calendars together so if one changes, the all change.
+        Link the calendars together so if one changes, they all change.
         """
         cal_index = self.cal_ctrls.index(evt.GetEventObject())
         # Current month is already updated, just need to shift the others
@@ -288,6 +313,21 @@ class CalendarCtrl(wx.Panel):
             if i != cal_index:
                 new_date = self.shift_datetime(current_date, cal_index - i)
                 cal.SetDate(new_date)
+        
+        if not self.allow_future:
+            month = self.cal_ctrls[0].GetDate().GetMonth()+1
+            year = self.cal_ctrls[0].GetDate().GetYear()
+            
+            import pdb
+            #pdb.set_trace()
+
+            if (year, month) > (self.today.year, self.today.month):
+                
+                for i, cal in enumerate(self.cal_ctrls):
+                    new_date = self.shift_datetime(wx.DateTime_Now(), -i)
+                    cal.SetDate(new_date)
+            
+        for cal in self.cal_ctrls:
             self.highlight_changed(None, cal)
         # Redraw the selected days.
         self.selected_list_changed()
@@ -296,6 +336,14 @@ class CalendarCtrl(wx.Panel):
     def highlight_changed(self, evt, cal=None):
         """
         We're hiding the default highlight to take on the selected date attr.
+        
+        Description
+        -----------
+        A feature of the wx CalendarCtrl is that there are selected days,
+        that always are shown and the user can move around with left-click.  
+        But it's confusing and misleading when there are multiple CalendarCtrl 
+        objects linked in this editor.  So we hide the highlights in each 
+        CalendarCtrl by making it mimic the selected day attribute.
         """
         if cal == None:
             cal = evt.GetEventObject()
@@ -321,6 +369,10 @@ class CalendarCtrl(wx.Panel):
         cal = evt.GetEventObject()
         date = cal.GetDate()
         selection = self.date_from_datetime(date)
+        # If selecting future dates is disabled, then short-circuit a toggle.
+        if not self.allow_future and selection > self.today:
+            return
+        
         if self.multi_select:
             if selection in self.selected_days:
                 self.selected_days.remove(selection)
@@ -398,6 +450,7 @@ class CustomEditor(Editor):
                                      -1,
                                      self.value,
                                      self.factory.multi_select,
+                                     self.factory.allow_future,
                                      self.left_padding,
                                      self.top_padding,
                                      self.month_padding)
