@@ -165,6 +165,9 @@ class CalendarCtrl(wx.Panel):
         cal = self._make_calendar_widget(0, pos)
         self.cal_ctrls.insert(0, cal)
 
+        #--------------------------------------------------------------
+        # Initial painting
+        #--------------------------------------------------------------
         self.selected_list_changed()
         for cal in self.cal_ctrls:
             self.highlight_changed(None, cal)
@@ -194,14 +197,20 @@ class CalendarCtrl(wx.Panel):
         )
         self.hide_highlight(cal)
 
+        #--------------------------------------------------------------
+        # Event handlers
+        #--------------------------------------------------------------
+
+        # Set up control to sync the other calendar widgets:
         self.Bind(wx.calendar.EVT_CALENDAR, self.day_toggled, id=cal.GetId())
+        self.Bind(wx.calendar.EVT_CALENDAR_MONTH, self.month_changed, cal)
+        self.Bind(wx.calendar.EVT_CALENDAR_YEAR, self.month_changed, cal)
         self.Bind(wx.calendar.EVT_CALENDAR_SEL_CHANGED,
                   self.highlight_changed,
                   id=cal.GetId())
 
-        # Set up control to sync the other calendar widgets:
-        self.Bind(wx.calendar.EVT_CALENDAR_MONTH, self.month_changed, cal)
-        self.Bind(wx.calendar.EVT_CALENDAR_YEAR, self.month_changed, cal)
+        # Direct mouse events not handled by the wx CalendarCtrl.
+        wx.EVT_LEFT_DOWN(cal, self._left_down)
         return cal
 
 
@@ -215,6 +224,7 @@ class CalendarCtrl(wx.Panel):
                 calendar.SetHighlightColours(UNAVAILABLE_FG,
                                              INVISIBLE_HIGHLIGHT_BG)
                 return
+
         calendar.SetHighlightColours(INVISIBLE_HIGHLIGHT_FG,
                                      INVISIBLE_HIGHLIGHT_BG)
         return
@@ -224,8 +234,7 @@ class CalendarCtrl(wx.Panel):
         """
         Turn on the highlighting for when the user changes the selected day.
         """
-        calendar.SetHighlightColours(SELECTED_FG,
-                                     INVISIBLE_HIGHLIGHT_BG)
+        calendar.SetHighlightColours(SELECTED_FG, INVISIBLE_HIGHLIGHT_BG)
         return
 
 
@@ -302,10 +311,26 @@ class CalendarCtrl(wx.Panel):
     # Event handlers
     #--------------------------------------------------------------------------
 
+    def _left_down(self, event):
+        """ Handle user selection of days. """
+        event.Skip()
+        cal = event.GetEventObject()
+        result, date, weekday = cal.HitTest(event.GetPosition())
+        print result, date, weekday
+        if result == wx.calendar.CAL_HITTEST_DAY and event.CmdDown():
+            self.day_toggled(event, date)
+        return
+        
+
     def month_changed(self, evt=None):
         """
         Link the calendars together so if one changes, they all change.
+        
+        TODO: Maybe wx.calendar.CAL_HITTEST_INCMONTH could be checked and
+        the event skipped, rather than now where we have to undo the shift
+        after the event has gone through.
         """
+         
         cal_index = self.cal_ctrls.index(evt.GetEventObject())
         # Current month is already updated, just need to shift the others
         current_date = self.cal_ctrls[cal_index].GetDate()
@@ -317,12 +342,7 @@ class CalendarCtrl(wx.Panel):
         if not self.allow_future:
             month = self.cal_ctrls[0].GetDate().GetMonth()+1
             year = self.cal_ctrls[0].GetDate().GetYear()
-            
-            import pdb
-            #pdb.set_trace()
-
             if (year, month) > (self.today.year, self.today.month):
-                
                 for i, cal in enumerate(self.cal_ctrls):
                     new_date = self.shift_datetime(wx.DateTime_Now(), -i)
                     cal.SetDate(new_date)
@@ -362,12 +382,13 @@ class CalendarCtrl(wx.Panel):
         cal.Refresh()
 
 
-    def day_toggled(self, evt):
+    def day_toggled(self, evt, date=None):
         """
         When the user double-clicks on a date, toggle selection of that date.
         """
         cal = evt.GetEventObject()
-        date = cal.GetDate()
+        if date == None:
+            date = cal.GetDate()
         selection = self.date_from_datetime(date)
         # If selecting future dates is disabled, then short-circuit a toggle.
         if not self.allow_future and selection > self.today:
