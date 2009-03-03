@@ -247,7 +247,7 @@ class CalendarCtrl(wx.Panel):
             selected_days = self.selected_days
 
             # Wrap a singleton if necessary, to pass the for-loop.
-            if not self.multi_select:
+            if not isinstance(selected_days, list):
                 selected_days = [selected_days]
 
             for date_obj in selected_days:
@@ -267,10 +267,6 @@ class CalendarCtrl(wx.Panel):
 
     #--------------------------------------------------------------------------
     # Event handlers
-    #--------------------------------------------------------------------------
-
-    #--------------------------------------------------------------------------
-    # Panel interface
     #--------------------------------------------------------------------------
 
     def month_changed(self, evt=None):
@@ -320,6 +316,7 @@ class CalendarCtrl(wx.Panel):
         if self.multi_select:
             if selection in self.selected_days:
                 self.selected_days.remove(selection)
+                cal.ResetAttr(date.GetDay())
             else:
                 self.selected_days.append(selection)
         else:
@@ -363,6 +360,7 @@ class CustomEditor(Editor):
                                     style='custom', show_label=False))
     """
 
+    # FIXME: The padding should be moved to the factory so it can be changed.
     # How much padding should be on the left of the editor.
     left_padding = Int(5)
 
@@ -373,7 +371,7 @@ class CustomEditor(Editor):
     month_padding = Int(5)
 
     # Should the editor operate on a single Date, or a list of Dates?
-    # FIXME: multi_select == False has not been heavily tested.
+    # TODO: multi_select == False has not been heavily tested.
     multi_select = Bool(True)
 
 
@@ -385,11 +383,11 @@ class CustomEditor(Editor):
         """
         if self.multi_select and not isinstance(self.value, list):
             raise ValueError('Multi-select is True, but editing a non-list.')
-
+        
         calendar_ctrl = CalendarCtrl(parent,
                                      -1,
                                      self.value,
-                                     self.multi_select,
+                                     self.factory.multi_select,
                                      self.left_padding,
                                      self.top_padding,
                                      self.month_padding)
