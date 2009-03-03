@@ -18,6 +18,7 @@
 """
 
 # Enthought library imports.
+from enthought.traits.api import Bool
 from enthought.pyface.workbench.i_view import MView
 
 
@@ -28,6 +29,11 @@ class View(MView):
     
     """
 
+    # Trait to indicate if the dock window containing the view should be
+    # closeable. See FIXME comment in the _wx_create_view_dock_control method
+    # in workbench_window_layout.py.
+    closeable = Bool(False)
+    
     ###########################################################################
     # 'IWorkbenchPart' interface.
     ###########################################################################

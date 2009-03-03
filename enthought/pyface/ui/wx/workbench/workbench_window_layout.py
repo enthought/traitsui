@@ -167,7 +167,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             width   = self.window.editor_area_size[0],
             height  = self.window.editor_area_size[1],
         )
-
+        
         view_dock_window_sizer = DockSizer(
             contents=[editor_dock_window_control]
         )
@@ -318,7 +318,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         # Create a dock control that contains the editor.
         editor_dock_control = self._wx_create_editor_dock_control(editor)
-
+            
         # If there are no other editors open (i.e., this is the first one!),
         # then create a new region to put the editor in.
         controls = self._wx_editor_dock_window.get_controls()
@@ -463,6 +463,15 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         # Get the view's toolkit-specific control.
         control = self._wx_get_view_control(view)
 
+        # Check if the dock control should be 'closeable'.
+        # FIXME: The 'fixme' comment below suggests some issue with closing a
+        # view by clicking 'X' rather than just hiding the view. The two actions
+        # appear to do the same thing however, so I'm not sure if the comment
+        # below is an out-of-date comment. This needs more investigation.
+        # For the time being, I am making a view closeable if it has a 
+        # 'closeable' trait set to True.
+        closeable = view.closeable
+            
         # Wrap a dock control around it.
         view_dock_control = DockControl(
             id        = view.id,
@@ -470,7 +479,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             # fixme: We would like to make views closeable, but closing via the
             # tab is different than calling show(False, layout=True) on the
             # control! If we use a close handler can we change that?!?
-            closeable = False,
+            closeable = closeable,
             control   = control,
             style     = view.style_hint,
             # fixme: Create a subclass of dock control and give it a proper
@@ -744,7 +753,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def _wx_on_editor_area_size_changed(self, new):
         """ Dynamic trait change handler. """
-
+        
         window_width, window_height = self.window.control.GetSize()
 
         # Get the dock control that contains the editor dock window.
@@ -754,7 +763,6 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         region = control.parent
         region.width  = int(new[0] * window_width)
         region.height = int(new[1] * window_height)
-
         return
 
     #### Dock window handlers #################################################
