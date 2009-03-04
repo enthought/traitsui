@@ -779,6 +779,9 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
                 self.view_closing = view
                 view.destroy_control()
+                # Break reference to the control, so the view is created afresh
+                # next time.
+                view.control = None
                 self.view_closed = view
                 
             except:
