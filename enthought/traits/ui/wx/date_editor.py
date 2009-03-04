@@ -294,6 +294,8 @@ class CalendarCtrl(wx.Panel):
         self.Bind(wx.calendar.EVT_CALENDAR, self.day_toggled, id=cal.GetId())
         self.Bind(wx.calendar.EVT_CALENDAR_MONTH, self.month_changed, cal)
         self.Bind(wx.calendar.EVT_CALENDAR_YEAR, self.month_changed, cal)
+        self.Bind(wx.calendar.EVT_CALENDAR_WEEKDAY_CLICKED, 
+                  self._weekday_clicked, cal)
         self.Bind(wx.calendar.EVT_CALENDAR_SEL_CHANGED,
                   self.highlight_changed,
                   id=cal.GetId())
@@ -304,11 +306,48 @@ class CalendarCtrl(wx.Panel):
         wx.EVT_MOTION(cal, self._mouse_drag)
         return cal
 
-
+    def _month_start_weekday(self, date):
+        """ Return the dayofweek (in WX format, sun=0) of a dt """
+        pass
 
     #------------------------------------------------------------------------
     # Event handlers
     #------------------------------------------------------------------------
+
+    def _weekday_clicked(self, evt):
+        """ A day on the weekday bar has been clicked.  Select all days. """
+        weekday = evt.GetWeekDay()
+        cal = evt.GetEventObject()
+        month = cal.GetDate().GetMonth()+1
+        year = cal.GetDate().GetYear()
+
+        days = []
+        # Messy math to compute the dates of each weekday in the month.
+        # Python uses Monday=0, while wx uses Sunday=0. 
+        month_start_weekday = (datetime.date(year, month, 1).weekday()+1) %7
+        weekday_offset = (weekday - month_start_weekday) % 7
+        for day in range(weekday_offset, 31, 7):
+            try:
+                day = datetime.date(year, month, day+1)
+                if self.allow_future or day <= self.today:
+                    days.append(day)
+            except ValueError:
+                pass
+        
+        # Try to be clever and toggle the most days all the same way.
+        selected = len([day for day in days if day in self.selected_days])
+        add_items = selected <= (len(days) / 2.0)
+        for day in days:
+            if self.allow_future or day <= self.today:
+                if add_items and day not in self.selected_days:
+                    self.selected_days.append(day)
+                elif not add_items and day in self.selected_days:
+                    self.selected_days.remove(day)
+
+        self.selected_list_changed()
+        self.highlight_changed()
+        return
+    
 
     def _left_down(self, event):
         """ Handle user selection of days. """
