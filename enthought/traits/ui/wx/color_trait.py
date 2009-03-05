@@ -106,25 +106,24 @@ for name in [ 'aquamarine', 'black', 'blue', 'blue violet', 'brown',
 #-------------------------------------------------------------------------------
 #  Define wxPython specific color traits:
 #-------------------------------------------------------------------------------
-    
+
+### Note: Declare the editor to be a function which returns the ColorEditor 
+# class from traits ui to avoid circular import issues. For backwards 
+# compatibility with previous Traits versions, the 'editors' folder in Traits 
+# project declares 'from api import *' in its __init__.py. The 'api' in turn 
+# can contain classes that have a Color trait which lead to this file getting 
+# imported. This leads to a circular import when declaring a Color trait.
+def get_color_editor(*args, **traits):
+    from enthought.traits.ui.api import ColorEditor
+    return ColorEditor(*args, **traits)
+  
 def WxColor ( default = 'white', allow_none = False, **metadata ):
     """ Defines wxPython-specific color traits.
     """
-    
-    ### Note: Move the ColorEditor import inside this function to avoid 
-    # circular import issues. For backwards compatibility with previous
-    # Traits versions, the 'editors' folder in Traits project declares
-    # 'from api import *' in its __init__.py. The 'api' in turn contains
-    # classes that have a Color trait which lead to this file getting 
-    # imported. This leads to a circular import when declaring a Color trait.
-    # Note 2: The Qt backend declares a function get_color_editor which will
-    # return the 'ColorEditor' class. This works too.
-
-    from enthought.traits.ui.editors.color_editor import ColorEditor
 
     if allow_none:
         return Trait( default, None, standard_colors, convert_to_color,
-                      editor = ColorEditor, **metadata )
+                      editor = get_color_editor, **metadata )
                  
     return Trait( default, standard_colors, convert_to_color,
-                  editor = ColorEditor, **metadata )
+                  editor = get_color_editor, **metadata )
