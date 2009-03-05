@@ -10,7 +10,7 @@
 #
 #  Thanks for using Enthought open source!
 #
-#  Author: Judah De Paula
+#  Author: Judah De Paula <judah@enthought.com>
 #  Date:   2/26/2009
 #
 #------------------------------------------------------------------------------
@@ -277,8 +277,8 @@ class MultiCalendarCtrl(wx.Panel):
     calendar widgets is also supported.
     """
 
-    def __init__(self, parent, ID, selected, multi_select, allow_future,
-                 months, padding, *args, **kwargs):
+    def __init__(self, parent, ID, selected, multi_select, shift_to_select,
+                 allow_future, months, padding, *args, **kwargs):
         wx.Panel.__init__(self, parent, ID, *args, **kwargs)
 
         self.sizer = wx.BoxSizer()
@@ -289,6 +289,7 @@ class MultiCalendarCtrl(wx.Panel):
         
         # Object attributes
         self.multi_select = multi_select
+        self.shift_to_select = shift_to_select
         self.allow_future = allow_future
         self.selected_days = selected
         if not self.multi_select and not self.selected_days:
@@ -561,7 +562,7 @@ class MultiCalendarCtrl(wx.Panel):
             
         # Inter-month-drag selection
         if (result == wx.calendar.CAL_HITTEST_DAY 
-            and event.ShiftDown()
+            and (not self.shift_to_select or event.ShiftDown())
             and not cal.selecting):
             # Remember that the user started a multiselect.
             self._first_date = self.date_from_datetime(dt)
@@ -578,7 +579,8 @@ class MultiCalendarCtrl(wx.Panel):
         result, dt, weekday = cal.HitTest(event.GetPosition())
         
         # Complete a drag-select operation.
-        if (result == wx.calendar.CAL_HITTEST_DAY and event.ShiftDown()
+        if (result == wx.calendar.CAL_HITTEST_DAY 
+            and (not self.shift_to_select or event.ShiftDown())
             and self._first_date):
             
             last_date = self.date_from_datetime(dt)
@@ -591,7 +593,8 @@ class MultiCalendarCtrl(wx.Panel):
             while first <= last:
                 newly_selected.append(first)
                 first = first + datetime.timedelta(1)
-            self.add_days_to_selection(newly_selected)
+            if len(newly_selected) > 1:
+                self.add_days_to_selection(newly_selected)
         
         # Reset a drag-select operation, even if it wasn't completed.    
         self._first_date = None
@@ -610,7 +613,9 @@ class MultiCalendarCtrl(wx.Panel):
 
         self._drag_select = [] 
         # Prepare for an abort, don't highlight new selections.
-        if not event.ShiftDown() or result != wx.calendar.CAL_HITTEST_DAY:
+        if ((self.shift_to_select and not event.ShiftDown())
+            or result != wx.calendar.CAL_HITTEST_DAY):
+            
             cal.highlight_changed()
             for cal in self.cal_ctrls:
                 cal.Refresh()
@@ -751,6 +756,7 @@ class CustomEditor(Editor):
                                           -1,
                                           self.value,
                                           self.factory.multi_select,
+                                          self.factory.shift_to_select,
                                           self.factory.allow_future,
                                           self.factory.months,
                                           self.factory.padding)
