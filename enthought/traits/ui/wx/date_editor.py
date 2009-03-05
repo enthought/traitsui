@@ -142,6 +142,7 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
         event.Skip()
         self.selecting = True
         self.sel_start = (event.m_x, event.m_y)
+        self.sel_end = self.sel_start
        
     def end_select(self, event):
         event.Skip()
@@ -186,22 +187,23 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
 #-- end wxMouseBoxCalendarCtrl ------------------------------------------------ 
 
 
-class CalendarCtrl(wx.Panel):
+class MultiCalendarCtrl(wx.Panel):
     """ 
     WX panel containing calendar widgets for use by the CustomEditor. 
     
     Description
     -----------
-    Handles multi-select dates by special handling of the normal CalendarCtrl
-    wx widget.  Doing single-select across multiple calendar widgets is also
-    supported.
+    Handles multi-select dates by special handling of the 
+    wxMouseBoxCalendarCtrl widget.  Doing single-select across multiple 
+    calendar widgets is also supported.
     """
 
     def __init__(self, parent, ID, selected, multi_select, allow_future,
-                 left_padding, top_padding, right_padding,
-                 *args, **kwargs):
+                 months, padding, *args, **kwargs):
         wx.Panel.__init__(self, parent, ID, *args, **kwargs)
 
+        self.sizer = wx.BoxSizer()
+        self.SetSizer(self.sizer)
         self.SetBackgroundColour(WindowColor)
         self.date = wx.DateTime_Now()
         self.today = self.date_from_datetime(self.date)
@@ -212,44 +214,19 @@ class CalendarCtrl(wx.Panel):
         self.selected_days = selected
         if not self.multi_select and not self.selected_days:
             self.selected_days = self.today
+        self.months = months
+        self.padding = padding
         self.cal_ctrls = []
         
         # State to remember when a user is doing a shift-click selection.
         self._first_date = None
         self._drag_select = []
 
-        # Layout
-        self.left_padding = left_padding
-        self.top_padding = top_padding
-        self.month_padding = right_padding
-
-        # TODO: Hard-coded three-month window, but all the update functions
-        #       loop over self.cal_ctrls so it should be straightforward
-        #       to make the number of months a parameter in the constructor. 
-        #       Perhaps start using spacers at the same time.
-        
-        #--------------------------------------------------------------
-        # Left (oldest) month.
-        #--------------------------------------------------------------
-        pos = (self.left_padding, self.top_padding)
-        cal = self._make_calendar_widget(-2, pos)
-        self.cal_ctrls.insert(0, cal)
-
-        #--------------------------------------------------------------
-        # Center (last) month.
-        #--------------------------------------------------------------
-        pos = (self.left_padding + CALENDAR_WIDTH + self.month_padding,
-               self.top_padding)
-        cal = self._make_calendar_widget(-1, pos)
-        self.cal_ctrls.insert(0, cal)
-
-        #--------------------------------------------------------------
-        # Right (current) month.
-        #--------------------------------------------------------------
-        pos = (self.left_padding + 2*CALENDAR_WIDTH + 2*self.month_padding,
-               self.top_padding)
-        cal = self._make_calendar_widget(0, pos)
-        self.cal_ctrls.insert(0, cal)
+        for i in range(-(self.months-1), 1):
+            cal = self._make_calendar_widget(i)
+            self.cal_ctrls.insert(0, cal)
+            if i != 0:
+                self.sizer.AddSpacer(wx.Size(padding, padding))
 
         #--------------------------------------------------------------
         # Initial painting
@@ -348,19 +325,20 @@ class CalendarCtrl(wx.Panel):
                         cal.ResetAttr(day)
 
     
-    def _make_calendar_widget(self, month_offset, position):
+    def _make_calendar_widget(self, month_offset):
         """
         Add a calendar widget to the screen and hook up callbacks.
         """
         date = self.shift_datetime(self.date, month_offset)
-        cal = wxMouseBoxCalendarCtrl(self,
+        panel = wx.Panel(self, -1)
+        cal = wxMouseBoxCalendarCtrl(panel,
             -1,
             date,
-            pos = position,
             style = wx.calendar.CAL_SUNDAY_FIRST
                   | wx.calendar.CAL_SEQUENTIAL_MONTH_SELECTION
                   #| wx.calendar.CAL_SHOW_HOLIDAYS
         )
+        self.sizer.Add(panel)
         self.highlight_changed(cal=cal)
         
         # Set up control to sync the other calendar widgets and coloring:
@@ -373,15 +351,12 @@ class CalendarCtrl(wx.Panel):
                   self.highlight_changed,
                   id=cal.GetId())
 
-        # Direct mouse events not handled by the wx CalendarCtrl.
+        # Mouse events not handled by the wx CalendarCtrl.
         wx.EVT_LEFT_DOWN(cal, self._left_down)
         wx.EVT_LEFT_UP(cal, self._left_up)
         wx.EVT_MOTION(cal, self._mouse_drag)
         return cal
 
-    def _month_start_weekday(self, date):
-        """ Return the dayofweek (in WX format, sun=0) of a dt """
-        pass
 
     #------------------------------------------------------------------------
     # Event handlers
@@ -649,7 +624,7 @@ class CalendarCtrl(wx.Panel):
 
 class CustomEditor(Editor):
     """
-    Show multiple months using CalendarCtrl. Allow multi-select into a list.
+    Show multiple months with MultiCalendarCtrl. Allow multi-select.
 
     Trait Listeners
     ---------------
@@ -676,16 +651,6 @@ class CustomEditor(Editor):
                                     style='custom', show_label=False))
     """
 
-    # FIXME: The padding should be moved to the factory so it can be changed.
-    # How much padding should be on the left of the editor.
-    left_padding = Int(5)
-
-    # How much padding should be on the top of the editor.
-    top_padding = Int(5)
-
-    # How much padding should be between the months.
-    month_padding = Int(5)
-
     #-- Editor interface ------------------------------------------------------
 
     def init (self, parent):
@@ -697,14 +662,13 @@ class CustomEditor(Editor):
         elif not self.factory.multi_select and isinstance(self.value, list):
             raise ValueError('Multi-select is False, but editing a list.')
         
-        calendar_ctrl = CalendarCtrl(parent,
-                                     -1,
-                                     self.value,
-                                     self.factory.multi_select,
-                                     self.factory.allow_future,
-                                     self.left_padding,
-                                     self.top_padding,
-                                     self.month_padding)
+        calendar_ctrl = MultiCalendarCtrl(parent,
+                                          -1,
+                                          self.value,
+                                          self.factory.multi_select,
+                                          self.factory.allow_future,
+                                          self.factory.months,
+                                          self.factory.padding)
         self.control = calendar_ctrl
         return
 
