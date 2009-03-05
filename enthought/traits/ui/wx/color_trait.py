@@ -26,12 +26,6 @@ import wx
 from enthought.traits.api \
     import Trait, TraitError
     
-### Note: Import from the source rather than the api to avoid circular imports 
-# since some classes declared in the traits UI api define Color traits which
-# will end up importing this file.
-from enthought.traits.ui.editors.color_editor \
-    import ColorEditor
-    
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
 try:
     ColourPtr = wx.ColourPtr
@@ -116,6 +110,18 @@ for name in [ 'aquamarine', 'black', 'blue', 'blue violet', 'brown',
 def WxColor ( default = 'white', allow_none = False, **metadata ):
     """ Defines wxPython-specific color traits.
     """
+    
+    ### Note: Move the ColorEditor import inside this function to avoid 
+    # circular import issues. For backwards compatibility with previous
+    # Traits versions, the 'editors' folder in Traits project declares
+    # 'from api import *' in its __init__.py. The 'api' in turn contains
+    # classes that have a Color trait which lead to this file getting 
+    # imported. This leads to a circular import when declaring a Color trait.
+    # Note 2: The Qt backend declares a function get_color_editor which will
+    # return the 'ColorEditor' class. This works too.
+
+    from enthought.traits.ui.editors.color_editor import ColorEditor
+
     if allow_none:
         return Trait( default, None, standard_colors, convert_to_color,
                       editor = ColorEditor, **metadata )
