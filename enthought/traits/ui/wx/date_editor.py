@@ -105,6 +105,8 @@ class SimpleEditor (Editor):
 #--  Custom Editor
 #------------------------------------------------------------------------------
 
+MOUSE_BOX_FILL = wx.Colour(0, 0, 255, 32)
+
 CALENDAR_WIDTH = 208
 SELECTED_FG = wx.Colour(255, 0, 0, 255)
 UNAVAILABLE_FG = wx.Colour(192, 192, 192, 255)
@@ -113,9 +115,80 @@ DRAG_HIGHLIGHT_BG = wx.Colour(128, 128, 255, 255)
 NORMAL_HIGHLIGHT_FG = wx.Colour(0, 0, 0, 0)
 NORMAL_HIGHLIGHT_BG = wx.Colour(255, 255, 255, 0)
 
+class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
+    """
+    Subclass to add a mouse-over box-selection tool.
+    
+    Description
+    -----------
+    Add a Mouse drag-box highlight feature that can be used by the 
+    CustomEditor to detect user selections.  CalendarCtrl must be subclassed 
+    to get a device context to draw on top of the Calendar.  Otherwise, the 
+    calendar widgets are always painted on top of the box during repaints.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(wxMouseBoxCalendarCtrl, self).__init__(*args, **kwargs)
+
+        self.dc = None
+        self.gc = None
+        self.selecting = False
+        self.Bind(wx.EVT_LEFT_DOWN, self.start_select)
+        self.Bind(wx.EVT_LEFT_UP, self.end_select)
+        self.Bind(wx.EVT_MOTION, self.on_select)
+        self.Bind(wx.EVT_PAINT, self.on_paint)
+ 
+    def start_select(self, event):
+        event.Skip()
+        self.selecting = True
+        self.sel_start = (event.m_x, event.m_y)
+       
+    def end_select(self, event):
+        event.Skip()
+        self.selecting = False
+ 
+        if self.dc is not None:
+            self.dc.Clear()
+            self.Refresh()
+ 
+    def on_select(self, event):
+        event.Skip()
+        if not self.selecting:
+            return
+ 
+        self.sel_end = (event.m_x, event.m_y)
+        self.Refresh()
+ 
+    def on_paint(self, event):
+        event.Skip()
+        if self.dc is None:
+            self.dc = wx.PaintDC(self)
+ 
+        if not self.selecting:
+            return
+ 
+        x = self.sel_start[0]
+        y = self.sel_start[1]
+        w = self.sel_end[0] - x
+        h = self.sel_end[1] - y
+ 
+        gc = wx.GraphicsContext.Create(self.dc)
+        pen = gc.CreatePen(wx.BLACK_PEN)
+        gc.SetPen(pen)
+ 
+        points = [(x,y), (x+w, y), (x+w,y+h), (x,y+h), (x,y)]
+ 
+        gc.DrawLines(points)
+ 
+        brush = gc.CreateBrush(wx.Brush(MOUSE_BOX_FILL))
+        gc.SetBrush(brush)
+        gc.DrawRectangle(x, y, w, h)
+#-- end wxMouseBoxCalendarCtrl ------------------------------------------------ 
+
+
 class CalendarCtrl(wx.Panel):
     """ 
-    WX panel for use by the CustomEditor. 
+    WX panel containing calendar widgets for use by the CustomEditor. 
     
     Description
     -----------
@@ -280,7 +353,7 @@ class CalendarCtrl(wx.Panel):
         Add a calendar widget to the screen and hook up callbacks.
         """
         date = self.shift_datetime(self.date, month_offset)
-        cal = wx.calendar.CalendarCtrl(self,
+        cal = wxMouseBoxCalendarCtrl(self,
             -1,
             date,
             pos = position,
