@@ -278,7 +278,8 @@ class MultiCalendarCtrl(wx.Panel):
     """
 
     def __init__(self, parent, ID, selected, multi_select, shift_to_select,
-                 allow_future, months, padding, *args, **kwargs):
+                 on_mixed_select, allow_future, months, padding, 
+                 *args, **kwargs):
         wx.Panel.__init__(self, parent, ID, *args, **kwargs)
 
         self.sizer = wx.BoxSizer()
@@ -290,6 +291,7 @@ class MultiCalendarCtrl(wx.Panel):
         # Object attributes
         self.multi_select = multi_select
         self.shift_to_select = shift_to_select
+        self.on_mixed_select = on_mixed_select
         self.allow_future = allow_future
         self.selected_days = selected
         if not self.multi_select and not self.selected_days:
@@ -423,20 +425,19 @@ class MultiCalendarCtrl(wx.Panel):
         cal.highlight_changed()
         
         # Set up control to sync the other calendar widgets and coloring:
-        self.Bind(wx.calendar.EVT_CALENDAR, self.day_toggled, id=cal.GetId())
         self.Bind(wx.calendar.EVT_CALENDAR_MONTH, self.month_changed, cal)
         self.Bind(wx.calendar.EVT_CALENDAR_YEAR, self.month_changed, cal)
-        self.Bind(wx.calendar.EVT_CALENDAR_WEEKDAY_CLICKED, 
-                  self._weekday_clicked, cal)
 
-        # Events not handled by the wx CalendarCtrl.
         wx.EVT_LEFT_DOWN(cal, self._left_down)
-        wx.EVT_LEFT_UP(cal, self._left_up)
-        wx.EVT_RIGHT_UP(cal, self._process_box_select)
-        wx.EVT_LEAVE_WINDOW(cal, self._process_box_select)
-        wx.EVT_MOTION(cal, self._mouse_drag)
-        return cal
 
+        if self.multi_select:
+            wx.EVT_LEFT_UP(cal, self._left_up)
+            wx.EVT_RIGHT_UP(cal, self._process_box_select)
+            wx.EVT_LEAVE_WINDOW(cal, self._process_box_select)
+            wx.EVT_MOTION(cal, self._mouse_drag)
+            self.Bind(wx.calendar.EVT_CALENDAR_WEEKDAY_CLICKED, 
+                      self._weekday_clicked, cal)
+        return cal
 
         
     def unhighlight_days(self, days):
@@ -484,11 +485,41 @@ class MultiCalendarCtrl(wx.Panel):
 
     def add_days_to_selection(self, days):
         """
-        Add a list of days to the selection, using various rules.
+        Add a list of days to the selection, using a specified style.
         """
-        if days:
-            # Do we want to add or remove them? 
-            add_items = days[0] not in self.selected_days
+        if not days:
+            return
+        style = self.on_mixed_select
+
+        if style == 'toggle':
+            for day in days:
+                if self.allow_future or day <= self.today:
+                    if day in self.selected_days:
+                        self.selected_days.remove(day)
+                    else:
+                        self.selected_days.append(day)
+        
+        else:              
+            already_selected = len([day for day in days 
+                                    if day in self.selected_days])
+    
+            if style == 'on' or already_selected == 0:
+                add_items = True
+                
+            elif style == 'off' or already_selected == len(days):
+                add_items = False
+    
+            elif (self.on_mixed_select == 'max_change' and 
+                  already_selected <= (len(days) / 2.0)):
+                add_items = True
+            
+            elif (self.on_mixed_select == 'min_change' and
+                  already_selected > (len(days) / 2.0)):
+                add_items = True
+            
+            else:
+                # Cases where max_change is off or min_change off.
+                add_items = False
     
             for day in days:
                 # Skip if we don't allow future, and it's a future day.
@@ -535,17 +566,8 @@ class MultiCalendarCtrl(wx.Panel):
                     days.append(day)
             except ValueError:
                 pass
+        self.add_days_to_selection(days)
         
-        # Try to be clever and toggle the most days all the same way.
-        selected = len([day for day in days if day in self.selected_days])
-        add_items = selected <= (len(days) / 2.0)
-        for day in days:
-            if self.allow_future or day <= self.today:
-                if add_items and day not in self.selected_days:
-                    self.selected_days.append(day)
-                elif not add_items and day in self.selected_days:
-                    self.selected_days.remove(day)
-
         self.selected_list_changed()
         return
     
@@ -556,19 +578,21 @@ class MultiCalendarCtrl(wx.Panel):
         cal = event.GetEventObject()
         result, dt, weekday = cal.HitTest(event.GetPosition())
         
-        # Ctrl-click selection
-        if result == wx.calendar.CAL_HITTEST_DAY and event.CmdDown():
-            self.day_toggled(event, dt)
-            
-        # Inter-month-drag selection
+        if not self.multi_select:
+            self.day_toggled(event)
+            return
+           
+        # Inter-month-drag selection.  A quick no-movement mouse-click is 
+        # equivalent to a multi-select of a single day.
         if (result == wx.calendar.CAL_HITTEST_DAY 
             and (not self.shift_to_select or event.ShiftDown())
             and not cal.selecting):
-            # Remember that the user started a multiselect.
+
             self._first_date = self.date_from_datetime(dt)
             self._drag_select = [self._first_date]
             # Start showing the highlight colors with a mouse_drag event.
             self._mouse_drag(event)
+        
         return
     
     
@@ -593,10 +617,10 @@ class MultiCalendarCtrl(wx.Panel):
             while first <= last:
                 newly_selected.append(first)
                 first = first + datetime.timedelta(1)
-            if len(newly_selected) > 1:
-                self.add_days_to_selection(newly_selected)
+            self.add_days_to_selection(newly_selected)
         
-        # Reset a drag-select operation, even if it wasn't completed.    
+        # Reset a drag-select operation, even if it wasn't completed because
+        # of a loss of focus or the Shift key prematurely released.    
         self._first_date = None
         self._drag_select = []
 
@@ -610,8 +634,8 @@ class MultiCalendarCtrl(wx.Panel):
         result, dt, weekday = cal.HitTest(event.GetPosition())
 
         self.unhighlight_days(self._drag_select)
+        self._drag_select = []
 
-        self._drag_select = [] 
         # Prepare for an abort, don't highlight new selections.
         if ((self.shift_to_select and not event.ShiftDown())
             or result != wx.calendar.CAL_HITTEST_DAY):
@@ -621,7 +645,7 @@ class MultiCalendarCtrl(wx.Panel):
                 cal.Refresh()
             return
             
-        # Make a list of selections.
+        # Construct the list of selections.
         last_date = self.date_from_datetime(dt)
         if last_date <= self._first_date:
             first, last = last_date, self._first_date
@@ -636,7 +660,7 @@ class MultiCalendarCtrl(wx.Panel):
 
 
     def _mouse_drag(self, event):
-        """ Called when the mouse in being dragged within the calendars. """
+        """ Called when the mouse in being dragged within the main panel. """
         event.Skip()
         cal = event.GetEventObject()
         if not cal.selecting and self._first_date:
@@ -683,7 +707,7 @@ class MultiCalendarCtrl(wx.Panel):
 
     def day_toggled(self, evt, dt=None):
         """
-        When the user double-clicks on a date, toggle selection of that date.
+        When the user clicks on a date toggle selection of that date.
         """
         cal = evt.GetEventObject()
         if dt == None:
@@ -757,6 +781,7 @@ class CustomEditor(Editor):
                                           self.value,
                                           self.factory.multi_select,
                                           self.factory.shift_to_select,
+                                          self.factory.on_mixed_select,
                                           self.factory.allow_future,
                                           self.factory.months,
                                           self.factory.padding)
