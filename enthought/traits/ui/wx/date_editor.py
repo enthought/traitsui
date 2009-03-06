@@ -127,8 +127,6 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
     def __init__(self, *args, **kwargs):
         super(wxMouseBoxCalendarCtrl, self).__init__(*args, **kwargs)
 
-        self.dc = None
-        self.gc = None
         self.selecting = False
         self.box_selected = []
         self.sel_start = (0,0)
@@ -220,10 +218,8 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
     def end_select(self, event):
         event.Skip()
         self.selecting = False
-        
-        if self.dc is not None:
-            self.dc.Clear()
-            self.Refresh()
+        self.Refresh()
+
             
     def on_select(self, event):
         event.Skip()
@@ -237,8 +233,7 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
  
     def on_paint(self, event):
         event.Skip()
-        if self.dc is None:
-            self.dc = wx.PaintDC(self)
+        dc = wx.PaintDC(self)
  
         if not self.selecting:
             return
@@ -248,7 +243,7 @@ class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
         w = self.sel_end[0] - x
         h = self.sel_end[1] - y
  
-        gc = wx.GraphicsContext.Create(self.dc)
+        gc = wx.GraphicsContext.Create(dc)
         pen = gc.CreatePen(wx.BLACK_PEN)
         gc.SetPen(pen)
  
