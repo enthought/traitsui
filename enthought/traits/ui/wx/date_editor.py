@@ -27,6 +27,7 @@ import datetime
 import wx
 import wx.calendar
 
+from enthought.traits.api import HasTraits
 from enthought.traits.ui.wx.editor import Editor
 from enthought.traits.ui.wx.constants import WindowColor
 
@@ -269,7 +270,7 @@ class MultiCalendarCtrl(wx.Panel):
     functionality is then unused.
     """
 
-    def __init__(self, parent, ID, selected, multi_select, shift_to_select,
+    def __init__(self, parent, ID, editor, multi_select, shift_to_select,
                  on_mixed_select, allow_future, months, padding, 
                  *args, **kwargs):
         super(MultiCalendarCtrl, self).__init__(parent, ID, *args, **kwargs)
@@ -285,9 +286,8 @@ class MultiCalendarCtrl(wx.Panel):
         self.shift_to_select = shift_to_select
         self.on_mixed_select = on_mixed_select
         self.allow_future = allow_future
-        self.selected_days = selected
-        if not self.multi_select and not self.selected_days:
-            self.selected_days = self.today
+        self.editor = editor
+        self.selected_days = editor.value
         self.months = months
         self.padding = padding
         self.cal_ctrls = []
@@ -373,36 +373,29 @@ class MultiCalendarCtrl(wx.Panel):
             cur_year = cal.GetDate().GetYear()
             selected_days = self.selected_days
 
-            # Gray out future days if they're unselectable.
-            if not self.allow_future:                
-                for day in range(1,32):
-                    if (cur_year, cur_month, day) > \
-                       (self.today.year, self.today.month, self.today.day):
-                        attr = wx.calendar.CalendarDateAttr(colText=UNAVAILABLE_FG)
-                        cal.SetAttr(day, attr)
-                    else:
-                        cal.ResetAttr(day)
-
-            # When not multi_select, wrap the singleton to pass the for-loop.
-            if not isinstance(selected_days, list):
-                selected_days = [selected_days]
-
-            for date_obj in selected_days:
-                year, month, day = date_obj.timetuple()[:3]
-                if month == cur_month and year == cur_year:
-                    attr = wx.calendar.CalendarDateAttr(
-                        colText=SELECTED_FG)
-                    cal.SetAttr(day, attr)
+            # When multi_select is False wrap in a list to pass the for-loop.
+            if self.multi_select == False:
+                if selected_days == None:
+                    selected_days = []
                 else:
-                    # Unselected days either need to revert to the 
-                    # unavailable color, or the default attribute color.
-                    if (not self.allow_future and 
-                       ((cur_year, cur_month, day) > 
-                       (self.today.year, self.today.month, self.today.day))):
+                    selected_days = [selected_days]
+
+            # Reset all the days to the correct colors.
+            for day in range(1,32):
+                try:
+                    paint_day = datetime.date(cur_year, cur_month, day)
+                    if not self.allow_future and paint_day > self.today:
                         attr = wx.calendar.CalendarDateAttr(colText=UNAVAILABLE_FG)
+                        cal.SetAttr(day, attr)
+                    elif paint_day in selected_days:
+                        attr = wx.calendar.CalendarDateAttr(colText=SELECTED_FG)
                         cal.SetAttr(day, attr)
                     else:
                         cal.ResetAttr(day)
+                except ValueError:
+                    # Blindly creating Date objects sometimes produces invalid.
+                    pass
+                    
             cal.highlight_changed()
         return
 
@@ -566,6 +559,32 @@ class MultiCalendarCtrl(wx.Panel):
                         self.selected_days.remove(day)
     
     
+    def single_select_day(self, dt):
+        """
+        In non-multiselect switch the selection to a new date.
+        
+        Parameters
+        ----------
+        dt : wx.DateTime
+            The newly selected date that should become the new calendar
+            selection.
+        
+        Description
+        -----------
+        Only called when we're using  the single-select mode of the 
+        calendar widget, so we can assume that the selected_dates is
+        a None or a Date singleton.
+        """
+        selection = self.date_from_datetime(dt)
+
+        if dt.IsValid() and (self.allow_future or selection <= self.today):
+            self.selected_days = selection
+            self.selected_list_changed()
+            # Modify the trait on the editor so that the events propagate.
+            self.editor.value = self.selected_days 
+            return
+            
+
     def _shift_drag_update(self, event):
         """ Shift-drag in progress. """
         cal = event.GetEventObject()
@@ -595,6 +614,7 @@ class MultiCalendarCtrl(wx.Panel):
             first = first + datetime.timedelta(1)
 
         self.highlight_days(self._drag_select)
+        return
 
 
     #------------------------------------------------------------------------
@@ -647,8 +667,8 @@ class MultiCalendarCtrl(wx.Panel):
         cal = event.GetEventObject()
         result, dt, weekday = cal.HitTest(event.GetPosition())
         
-        if not self.multi_select:
-            self.day_toggled(event)
+        if result == wx.calendar.CAL_HITTEST_DAY and not self.multi_select:
+            self.single_select_day(dt)
             return
            
         # Inter-month-drag selection.  A quick no-movement mouse-click is 
@@ -722,9 +742,9 @@ class MultiCalendarCtrl(wx.Panel):
         """
         evt.Skip()
         cal_index = self.cal_ctrls.index(evt.GetEventObject())
-        # Current month is already updated, just need to shift the others
         current_date = self.cal_ctrls[cal_index].GetDate()
         for i, cal in enumerate(self.cal_ctrls):
+            # Current month is already updated, just need to shift the others
             if i != cal_index:
                 new_date = self.shift_datetime(current_date, cal_index - i)
                 cal.SetDate(new_date)
@@ -744,35 +764,6 @@ class MultiCalendarCtrl(wx.Panel):
         self.selected_list_changed()
 
 
-    def day_toggled(self, evt, dt=None):
-        """
-        When the user clicks on a date toggle selection of that date.
-        """
-        evt.Skip()
-        cal = evt.GetEventObject()
-        if dt == None:
-            dt = cal.GetDate()
-        selection = self.date_from_datetime(dt)
-        # If selecting future dates is disabled, then short-circuit a toggle.
-        if not self.allow_future and selection > self.today:
-            return
-
-        if self.multi_select:
-            if selection in self.selected_days:
-                self.selected_days.remove(selection)
-                cal.ResetAttr(selection.day)
-            else:
-                self.selected_days.append(selection)
-        else:
-            old_date = self.selected_days
-            self.selected_days = selection
-            for cal in self.cal_ctrls:
-                if cal.GetDate().GetMonth()+1 == old_date.month:
-                    cal.ResetAttr(old_date.day)
-                    cal.highlight_changed()
-
-        # Update all the selected calendar days.  Slightly inefficient.
-        self.selected_list_changed()
 #-- end CalendarCtrl ----------------------------------------------------------
 
 
@@ -787,13 +778,12 @@ class CustomEditor(Editor):
     you can listen for changes to the user's selection by directly listening
     to the item changed event.
 
-    Additional Work
-    ---------------
-    Written to support a specific need so not all features have been finished,
-
-        1.  The custom editor has not been tested or used much with
-            single-select, which should be the default for a normal Date.
-        2.  More events could be generated.
+    TODO
+    ----
+    Some more listeners need to be hooked up.  For example, in single-select
+    mode, changing the value does not cause the calendar to update.  Also,
+    the selection-add and remove is noisy, triggering an event for each
+    addition rather than waiting until everything has been added and removed.
 
     Sample
     ------
@@ -818,7 +808,7 @@ class CustomEditor(Editor):
         
         calendar_ctrl = MultiCalendarCtrl(parent,
                                           -1,
-                                          self.value,
+                                          self,
                                           self.factory.multi_select,
                                           self.factory.shift_to_select,
                                           self.factory.on_mixed_select,
