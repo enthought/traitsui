@@ -254,7 +254,7 @@ class ReadonlyEditor ( BaseReadonlyEditor ):
         control   = self.control
         new_value = self.str_value
         
-        if self.factory.password:
+        if hasattr(self.factory, 'password') and self.factory.password:
             new_value = '*' * len( new_value )
             
         if (self.item.resizable is True) or (self.item.height != -1.0):
