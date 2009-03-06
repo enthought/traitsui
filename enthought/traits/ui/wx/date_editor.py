@@ -27,9 +27,11 @@ import datetime
 import wx
 import wx.calendar
 
-from enthought.traits.api import HasTraits
+from enthought.traits.api import Bool
 from enthought.traits.ui.wx.editor import Editor
 from enthought.traits.ui.wx.constants import WindowColor
+from enthought.traits.ui.wx.text_editor \
+    import ReadonlyEditor as TextReadonlyEditor
 
 
 #------------------------------------------------------------------------------
@@ -842,10 +844,17 @@ class TextEditor (SimpleEditor):
 #------------------------------------------------------------------------------
 #--  Readonly Editor
 #------------------------------------------------------------------------------
-# TODO: Write me.  Possibly use TextEditor as a model to show a string
-# representation of the date that cannot be changed.
-class ReadonlyEditor (SimpleEditor):
-    pass
+
+class ReadonlyEditor (TextReadonlyEditor):
+    """ Use a TextEditor for the view. """
+ 
+    def _get_str_value(self):
+        """ Replace the default string value with our own date verision. """
+        if not self.value:
+            return self.factory.message
+        else:
+            return self.value.strftime(self.factory.strftime)
+    
 #-- end ReadonlyEditor definition ---------------------------------------------
 
 #-- eof -----------------------------------------------------------------------
