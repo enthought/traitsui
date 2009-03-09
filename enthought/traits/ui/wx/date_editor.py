@@ -521,18 +521,19 @@ class MultiCalendarCtrl(wx.Panel):
         if not days:
             return
         style = self.on_mixed_select
+        new_list = list(self.selected_days)
 
         if style == 'toggle':
             for day in days:
                 if self.allow_future or day <= self.today:
-                    if day in self.selected_days:
-                        self.selected_days.remove(day)
+                    if day in new_list:
+                        new_list.remove(day)
                     else:
-                        self.selected_days.append(day)
+                        new_list.append(day)
         
         else:              
             already_selected = len([day for day in days 
-                                    if day in self.selected_days])
+                                    if day in new_list])
     
             if style == 'on' or already_selected == 0:
                 add_items = True
@@ -555,10 +556,15 @@ class MultiCalendarCtrl(wx.Panel):
             for day in days:
                 # Skip if we don't allow future, and it's a future day.
                 if self.allow_future or day <= self.today:
-                    if add_items and day not in self.selected_days:
-                        self.selected_days.append(day)
-                    elif not add_items and day in self.selected_days:
-                        self.selected_days.remove(day)
+                    if add_items and day not in new_list:
+                        new_list.append(day)
+                    elif not add_items and day in new_list:
+                        new_list.remove(day)
+        
+        self.selected_days = new_list
+        # Link the list back to the model to make a Traits List change event. 
+        self.editor.value = new_list            
+        return
     
     
     def single_select_day(self, dt):
