@@ -22,18 +22,18 @@ Future Work
 The only editor provided is an editable and constrained "XX:XX:XX XM" field.
 At the minimum, a spinner should be provided so the time can be changed 
 without the need for a keyboard.  In addition we need to extend to provide 
-the four basic editor types, Simple, Custom, Text, and ReadOnly.
+all four of the basic editor types, Simple, Custom, Text, and Readonly.
 """
 import datetime
 
 import wx.lib.masked as masked
 
 from enthought.traits.ui.wx.editor import Editor
-from enthought.traits.ui.wx.basic_editor_factory import BasicEditorFactory
+from enthought.traits.ui.wx.text_editor \
+    import ReadonlyEditor as TextReadonlyEditor
 
 
-#-- _TimeEditor definition ---------------------------------------------------- 
-class _TimeEditor (Editor):
+class SimpleEditor (Editor):
     """ 
     Traits UI time editor.
     """
@@ -73,6 +73,43 @@ class _TimeEditor (Editor):
             time.SetSecond(self.value.second)
             self.control.SetValue(time)
         return
-#-- end _TimeEditor definition ------------------------------------------------ 
+#-- end SimpleEditor definition ------------------------------------------------ 
+
+
+#------------------------------------------------------------------------------
+#--  Text Editor
+#------------------------------------------------------------------------------
+# TODO: Write me.  Possibly use TextEditor as a model to show a string
+# representation of the time, and have enter-set do a time evaluation.
+class TextEditor (SimpleEditor):
+    pass
+#-- end TextEditor definition -------------------------------------------------
+
+
+#------------------------------------------------------------------------------
+#--  Custom Editor
+#------------------------------------------------------------------------------
+# TODO: Write me.
+class CustomEditor (SimpleEditor):
+    pass
+#-- end TextEditor definition -------------------------------------------------
+
+
+#------------------------------------------------------------------------------
+#--  Readonly Editor
+#------------------------------------------------------------------------------
+
+class ReadonlyEditor (TextReadonlyEditor):
+    """ Use a TextEditor for the view. """
+ 
+    def _get_str_value(self):
+        """ Replace the default string value with our own time version. """
+        if self.value is None:
+            return self.factory.message
+        else:
+            return self.value.strftime(self.factory.strftime)
+    
+#-- end ReadonlyEditor definition ---------------------------------------------
+
 
 #-- eof ----------------------------------------------------------------------- 
