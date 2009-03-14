@@ -303,6 +303,8 @@ class IPythonWidget(Widget):
 
     key_pressed = Event(KeyPressedEvent)
 
+    banner = Str
+
     #### 'IPythonWidget' interface ############################################
 
     interp = Instance(Interpreter, ())
@@ -338,7 +340,14 @@ class IPythonWidget(Widget):
     ###########################################################################
 
     def _create_control(self, parent):
-        shell = IPythonController(parent, -1, shell=self.interp)
+        # XXX: We subclass IPythonController just to change the banner.
+        # This smells.
+        class MyIPythonController(IPythonController):
+            pass
+        if self.banner:          
+            class MyIPythonController(IPythonController):
+                _banner = self.banner
+        shell = MyIPythonController(parent, -1, shell=self.interp)
 
         # Listen for key press events.
         wx.EVT_CHAR(shell, self._wx_on_char)
