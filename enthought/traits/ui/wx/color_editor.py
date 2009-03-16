@@ -199,7 +199,7 @@ class TextColorEditor ( BaseSimpleEditor ):
         if self.control.HasCapture():
             self.control.ReleaseMouse()
         
-        self.object.edit_traits( view = View( 
+        ui = self.object.edit_traits( view = View( 
                 Item(
                     self.name, 
                     id         = 'color_editor',
@@ -209,7 +209,14 @@ class TextColorEditor ( BaseSimpleEditor ):
                 ),
                 kind    = 'popup' ),
             parent = self.control )
-                
+
+        # PopupColorEditor's editor klass is a UIEditor, and we need to link
+        # its contained ui's history to the main history to get 'Revert' and 
+        # 'Cancel' actions to work right.
+        # FIXME: Is something like this needed in the UIEditor class itself?
+        if ui._editors[0].editor_ui.history is None:
+            ui._editors[0].editor_ui.history = self.ui.history
+
     #---------------------------------------------------------------------------
     #  Creates the control to use for the simple editor:
     #---------------------------------------------------------------------------
