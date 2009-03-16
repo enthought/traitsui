@@ -114,8 +114,8 @@ for name in [ 'aquamarine', 'black', 'blue', 'blue violet', 'brown',
 # can contain classes that have a Color trait which lead to this file getting 
 # imported. This leads to a circular import when declaring a Color trait.
 def get_color_editor(*args, **traits):
-    from enthought.traits.ui.api import ColorEditor
-    return ColorEditor(*args, **traits)
+    from color_editor import ToolkitEditorFactory
+    return ToolkitEditorFactory(*args, **traits)
   
 def WxColor ( default = 'white', allow_none = False, **metadata ):
     """ Defines wxPython-specific color traits.

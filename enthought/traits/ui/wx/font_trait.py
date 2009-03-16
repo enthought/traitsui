@@ -179,8 +179,8 @@ class TraitWXFont ( TraitHandler ):
 # can contain classes that have a Font trait which lead to this file getting 
 # imported. This leads to a circular import when declaring a Font trait.
 def get_font_editor(*args, **traits):
-    from enthought.traits.ui.api import FontEditor
-    return FontEditor(*args, **traits)
+    from font_editor import ToolkitEditorFactory
+    return ToolkitEditorFactory(*args, **traits)
 
 fh     = TraitWXFont()
 WxFont = Trait( create_traitsfont( 'Arial 10' ), fh, editor = get_font_editor )

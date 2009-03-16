@@ -95,8 +95,8 @@ for name, color in standard_colors.items():
 # can contain classes that have a RGBColor trait which lead to this file getting 
 # imported. This will lead to a circular import when declaring a RGBColor trait.
 def get_rgb_color_editor(*args, **traits):
-    from enthought.traits.ui.api import RGBColorEditor
-    return RGBColorEditor(*args, **traits)
+    from rgb_color_editor import ToolkitEditorFactory
+    return ToolkitEditorFactory(*args, **traits)
 
 # Trait whose value must be an RGB color:
 RGBColor = Trait( 'white', convert_to_color, rgb_standard_colors, 
