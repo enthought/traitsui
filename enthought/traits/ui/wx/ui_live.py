@@ -114,7 +114,13 @@ def ui_dialog ( ui, parent, style ):
     restore_window( ui, is_popup = (style in Popups) )
     
     ui.control.Layout()
-    if style == MODAL:
+    # Check if the control is already being displayed modally. This would be
+    # the case if after the window was displayed, some event caused the ui to
+    # get rebuilt (typically when the user fires the 'updated' event on the ui
+    # ). In this case, calling ShowModal again leads to the parent window
+    # hanging even after the control has been closed by clicking OK or Cancel 
+    # (maybe the modal mode isn't ending?)
+    if style == MODAL and not ui.control.IsModal():
         ui.control.ShowModal()
     else:
         ui.control.Show()
