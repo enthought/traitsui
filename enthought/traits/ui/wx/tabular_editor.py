@@ -24,6 +24,8 @@
 #-------------------------------------------------------------------------------
 
 import wx
+import wx.lib.mixins.listctrl as listmix 
+
 from enthought.traits.api \
     import HasStrictTraits, Int, \
            List, Bool, Instance, Any, Event, \
@@ -74,9 +76,24 @@ alignment_map = {
 #  'wxListCtrl' class:  
 #-------------------------------------------------------------------------------
     
-class wxListCtrl ( wx.ListCtrl ):
+class wxListCtrl ( wx.ListCtrl, listmix.TextEditMixin ):
     """ Subclass of wx.ListCtrl to provide correct virtual list behavior.
     """
+
+    def __init__(self, parent, ID, pos=wx.DefaultPosition, size=wx.DefaultSize, style=0):
+    
+        wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
+        listmix.TextEditMixin.__init__(self) 
+
+    def SetVirtualData(self, row, col, text):
+        # this method is called but the job is already done by 
+        # the _end_label_edit method. Commmented code is availabed 
+        # if needed
+        pass
+        #edit = self._editor
+        #return editor.adapter.set_text( editor.object, editor.name,
+        #                                row, col, text )    
+
     
     def OnGetItemAttr ( self, row ):
         """ Returns the display attributes to use for the specified list item.
@@ -594,7 +611,7 @@ class _TabularEditor ( Editor ):
         """ Handles the user finishing editing an item label.
         """
         self.adapter.set_text( self.object, self.name, event.GetIndex(),
-                               event.GetText() )
+                               event.GetColumn(), event.GetText() )
         self.row = event.GetIndex() + 1
        
     def _item_selected ( self, event ):
