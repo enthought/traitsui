@@ -90,8 +90,6 @@ class SimpleSliderEditor ( Editor ):
 
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
-        low  = self.low
-        high = self.high
 
         # The control is a horizontal layout.
         self.control = panel = QtGui.QHBoxLayout()
@@ -100,18 +98,12 @@ class SimpleSliderEditor ( Editor ):
 
         try:
             fvalue_text = self.format % fvalue
-            1 / (low <= fvalue <= high)
+            1 / (self.low <= fvalue <= self.high)
         except:
             fvalue_text = ''
             fvalue      = low
 
-        if high > low:
-            ivalue = int( (float( fvalue - low ) / (high - low)) * 10000 )
-        else:
-            ivalue = low
-
-            if ivalue is None:
-                ivalue = 0
+        ivalue = self._convert_to_slider(fvalue)
 
         self._label_lo = QtGui.QLabel()
         self._label_lo.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
@@ -165,11 +157,7 @@ class SimpleSliderEditor ( Editor ):
     def update_object_on_scroll(self, pos):
         """ Handles the user changing the current slider value.
         """
-        value = self.low + ((float(pos) / 10000.0) * (self.high - self.low))
-
-        if not self.factory.is_float:
-            value = int(value)
-
+        value = self._convert_from_slider(pos)
         self.control.text.setText(self.format % value)
         self.value = value
 
@@ -193,9 +181,7 @@ class SimpleSliderEditor ( Editor ):
                 value = int(value)
 
             self.value = value
-            self.control.slider.setValue(
-                int( ((float( value ) - self.low) /
-                     (self.high - self.low)) * 10000 ) )
+            self.control.slider.setValue(self._convert_to_slider(self.value))
         except TraitError, excp:
             pass
 
@@ -217,13 +203,7 @@ class SimpleSliderEditor ( Editor ):
             text  = ''
             value = low
 
-        if high > low:
-            ivalue = int( (float( value - low ) / (high - low)) * 10000.0 )
-        else:
-            ivalue = low
-
-            if ivalue is None:
-                ivalue = 0
+        ivalue = self._convert_to_slider(value)
 
         self.control.text.setText(text)
 
@@ -265,6 +245,56 @@ class SimpleSliderEditor ( Editor ):
         if self._label_hi is not None:
             self._label_hi.setText(self.format % high)
             self.update_editor()
+
+    def _convert_to_slider(self, value):
+        """ Returns the slider setting corresponding to the user-supplied value.
+        """
+        if self.high > self.low:
+            ivalue = int( (float( value - self.low ) / 
+                           (self.high - self.low)) * 10000.0 )
+        else:
+            ivalue = self.low
+
+            if ivalue is None:
+                ivalue = 0
+        return ivalue
+
+    def _convert_from_slider(self, ivalue):
+        """ Returns the float or integer value corresponding to the slider 
+        setting.
+        """
+        value = self.low + ((float( ivalue ) / 10000.0) *
+                            (self.high - self.low))
+        if not self.factory.is_float:
+            value = int(round(value))
+        return value
+    
+
+#-------------------------------------------------------------------------------
+class LogRangeSliderEditor ( SimpleSliderEditor ):
+#-------------------------------------------------------------------------------
+    """ A slider editor for log-spaced values 
+    """
+
+    def _convert_to_slider(self, value):
+        """ Returns the slider setting corresponding to the user-supplied value.
+        """
+        value = max(value, self.low)
+        ivalue = int( (log10(value) - log10(self.low)) /
+                      (log10(self.high) - log10(self.low)) * 10000.0)
+        return ivalue
+
+    def _convert_from_slider(self, ivalue):
+        """ Returns the float or integer value corresponding to the slider 
+        setting.
+        """
+        value = float( ivalue ) / 10000.0 * (log10(self.high) -log10(self.low))
+        # Do this to handle floating point errors, where fvalue may exceed 
+        # self.high.
+        fvalue = min(self.low*10**(value), self.high)
+        if not self.factory.is_float:
+            fvalue = int(round(fvalue))
+        return fvalue
 
 #-------------------------------------------------------------------------------
 #  'LargeRangeSliderEditor' class:
@@ -732,7 +762,8 @@ SimpleEditorMap = {
     'xslider': LargeRangeSliderEditor,
     'spinner': SimpleSpinEditor,
     'enum':    SimpleEnumEditor,
-    'text':    RangeTextEditor
+    'text':    RangeTextEditor,
+    'low':     LogRangeSliderEditor
 }
 # Mapping between editor factory modes and custom editor classes
 CustomEditorMap = {
@@ -740,5 +771,6 @@ CustomEditorMap = {
     'xslider': LargeRangeSliderEditor,
     'spinner': SimpleSpinEditor,
     'enum':    CustomEnumEditor,
-    'text':    RangeTextEditor
+    'text':    RangeTextEditor,
+    'low':     LogRangeSliderEditor
 }
