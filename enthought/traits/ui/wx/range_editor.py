@@ -100,23 +100,20 @@ class SimpleSliderEditor ( Editor ):
 
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
-        low  = self.low
-        high = self.high
+        #low  = self.low
+        #high = self.high
         self.control = panel = TraitsUIPanel( parent, -1 )
         sizer  = wx.BoxSizer( wx.HORIZONTAL )
         fvalue = self.value
 
         try:
             fvalue_text = self.format % fvalue
-            1 / (low <= fvalue <= high)
+            1 / (self.low <= fvalue <= self.high)
         except:
             fvalue_text = ''
             fvalue      = low
 
-        if high > low:
-            ivalue = int( (float( fvalue - low ) / (high - low)) * 10000 )
-        else:
-            ivalue = low
+        ivalue = self._convert_to_slider(fvalue)
 
         self._label_lo = wx.StaticText( panel, -1, '999999', size = size,
                                 style = wx.ALIGN_RIGHT | wx.ST_NO_AUTORESIZE )
@@ -174,10 +171,7 @@ class SimpleSliderEditor ( Editor ):
     def update_object_on_scroll ( self, event ):
         """ Handles the user changing the current slider value.
         """
-        value = self.low + ((float( event.GetPosition() ) / 10000.0) *
-                            (self.high - self.low))
-        if not self.factory.is_float:
-            value = int( value )
+        value = self._convert_from_slider(event.GetPosition())
         event_type = event.GetEventType()
         if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
             (self.factory.auto_set and
@@ -201,19 +195,15 @@ class SimpleSliderEditor ( Editor ):
         try:
             try:
                 value = eval( self.control.text.GetValue().strip() )
+                self.value = value
             except Exception, ex:
                 # The entered something that didn't eval as a number, (e.g., 'foo')
-                # pretend it didn't happen
-                value = self.value
-                self.control.text.SetValue( str( value ) )
+                # pretend it didn't happen (i.e. do not change self.value)
+                self.control.text.SetValue( str( self.value ) )
 
-            if not self.factory.is_float:
-                value = int( value )
-            self.value = value
             if not self.ui_changing:
                 self.control.slider.SetValue(
-                    int( ((float( value ) - self.low) /
-                         (self.high - self.low)) * 10000 ) )
+                     self._convert_to_slider(self.value) )
             self.control.text.SetBackgroundColour(OKColor)
             self.control.text.Refresh()
             if self._error is not None:
@@ -244,22 +234,36 @@ class SimpleSliderEditor ( Editor ):
             editor.
         """
         value = self.value
-        low   = self.low
-        high  = self.high
         try:
             text = self.format % value
-            1 / (low <= value <= high)
+            1 / (self.low <= value <= self.high)
         except:
             text  = ''
-            value = low
-
-        if high > low:
-            ivalue = int( (float( value - low ) / (high - low)) * 10000.0 )
-        else:
-            ivalue = low
-
+            value = self.low
+        
+        ivalue = self._convert_to_slider( value )
         self.control.text.SetValue( text )
         self.control.slider.SetValue( ivalue )
+
+    def _convert_to_slider(self, value):
+        """ Returns the slider setting corresponding to the user-supplied value.
+        """
+        if self.high > self.low:
+            ivalue = int( (float( value - self.low ) / 
+                           (self.high - self.low)) * 10000.0 )
+        else:
+            ivalue = self.low
+        return ivalue
+
+    def _convert_from_slider(self, ivalue):
+        """ Returns the float or integer value corresponding to the slider 
+        setting.
+        """
+        value = self.low + ((float( ivalue ) / 10000.0) *
+                            (self.high - self.low))
+        if not self.factory.is_float:
+            value = int(round(value))
+        return value
             
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
@@ -295,6 +299,33 @@ class SimpleSliderEditor ( Editor ):
         if self._label_hi is not None:
             self._label_hi.SetLabel( self.format % high  )
             self.update_editor()
+
+
+#-------------------------------------------------------------------------------
+class LogRangeSliderEditor ( SimpleSliderEditor ):
+#-------------------------------------------------------------------------------
+    """ A slider editor for log-spaced values 
+    """
+
+    def _convert_to_slider(self, value):
+        """ Returns the slider setting corresponding to the user-supplied value.
+        """
+        value = max(value, self.low)
+        ivalue = int( (log10(value) - log10(self.low)) /
+                      (log10(self.high) - log10(self.low)) * 10000.0)
+        return ivalue
+
+    def _convert_from_slider(self, ivalue):
+        """ Returns the float or integer value corresponding to the slider 
+        setting.
+        """
+        value = float( ivalue ) / 10000.0 * (log10(self.high) -log10(self.low))
+        # Do this to handle floating point errors, where fvalue may exceed 
+        # self.high.
+        fvalue = min(self.low*10**(value), self.high)
+        if not self.factory.is_float:
+            fvalue = int(round(fvalue))
+        return fvalue
 
 #-------------------------------------------------------------------------------
 #  'LargeRangeSliderEditor' class:
@@ -857,7 +888,8 @@ SimpleEditorMap = {
     'xslider': LargeRangeSliderEditor,
     'spinner': SimpleSpinEditor,
     'enum':    SimpleEnumEditor,
-    'text':    RangeTextEditor
+    'text':    RangeTextEditor,
+    'logslider':     LogRangeSliderEditor
 }
 # Mapping between editor factory modes and custom editor classes
 CustomEditorMap = {
@@ -865,7 +897,8 @@ CustomEditorMap = {
     'xslider': LargeRangeSliderEditor,
     'spinner': SimpleSpinEditor,
     'enum':    CustomEnumEditor,
-    'text':    RangeTextEditor
+    'text':    RangeTextEditor,
+    'logslider':     LogRangeSliderEditor
 }
 
 ### EOF #######################################################################
