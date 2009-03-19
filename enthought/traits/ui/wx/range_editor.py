@@ -195,12 +195,13 @@ class SimpleSliderEditor ( Editor ):
         try:
             try:
                 value = eval( self.control.text.GetValue().strip() )
-                self.value = value
             except Exception, ex:
                 # The entered something that didn't eval as a number, (e.g., 'foo')
                 # pretend it didn't happen (i.e. do not change self.value)
-                self.control.text.SetValue( str( self.value ) )
+                value = self.value
+                self.control.text.SetValue( str( value ) )
 
+            self.value = value
             if not self.ui_changing:
                 self.control.slider.SetValue(
                      self._convert_to_slider(self.value) )
