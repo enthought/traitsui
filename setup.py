@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2008 by Enthought, Inc.
+# Copyright (c) 2008-2009 by Enthought, Inc.
 # All rights reserved.
-#
+
 
 """
 WxPython backend for Traits and TraitsGUI (Pyface).
@@ -51,8 +51,9 @@ ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.2')
 TRAITS = etsdep('Traits', '3.0.4')
 TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.0.4')
 
+
 # The following soft dependencies are handled with appropriate try...except
-# wrappers.
+# wrappers in the code:
 # AppTools -- used in traits.ui.wx.dnd_editor.py
 # ETSDevTools -- used in traits.ui.wx.helper.py and view_application.py
 
@@ -75,9 +76,6 @@ setup(
         Topic :: Software Development
         Topic :: Software Development :: Libraries
         """.splitlines() if len(c.split()) > 0],
-    dependency_links = [
-        'http://code.enthought.com/enstaller/eggs/source',
-        ],
     description = DOCLINES[1],
     extras_require = {
 
@@ -130,3 +128,4 @@ setup(
     version = '3.0.4',
     zip_safe = False,
     )
+
