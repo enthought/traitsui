@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2008 by Enthought, Inc.
+# Copyright (c) 2008-2009 by Enthought, Inc.
 # All rights reserved.
-#
+
 
 """
 PyQt backend for Traits and TraitsGUI (Pyface).
@@ -69,9 +69,6 @@ setup(
         Topic :: Software Development
         Topic :: Software Development :: Libraries
         """.splitlines() if len(c.split()) > 0],
-    dependency_links = [
-         'http://code.enthought.com/enstaller/eggs/source',
-         ],
     description = DOCLINES[1],
     extras_require = {
 
