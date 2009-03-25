@@ -264,7 +264,7 @@ class SimpleEditor ( Editor ):
     #  the editor:
     #---------------------------------------------------------------------------
 
-    def update_editor_item ( self, event ):
+    def update_editor_item ( self, obj, trait, event ):
         """ Updates the editor when an item in the object trait changes
         externally to the editor.
         """
