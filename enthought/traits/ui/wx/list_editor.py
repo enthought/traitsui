@@ -74,7 +74,7 @@ class SimpleEditor ( Editor ):
     kind = Str
 
     # Is the list of items being edited mutable?
-    mutable = Bool( True )
+    mutable = Bool
 
     # The image used by the editor:
     image = Image( 'list_editor' )
@@ -479,7 +479,11 @@ class SimpleEditor ( Editor ):
         """ Returns a default value for the 'kind' trait.
         """
         return self.factory.style + '_editor'
-    
+        
+    def _mutable_default(self):
+        """ Trait handler to set the mutable trait from the factory. """
+        return self.factory.mutable
+
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:
 #-------------------------------------------------------------------------------
@@ -504,6 +508,7 @@ class CustomEditor ( SimpleEditor ):
 
     # Is the list editor is scrollable? This values overrides the default.
     scrollable = True
+
 
 #-------------------------------------------------------------------------------
 #  'TextEditor' class:
