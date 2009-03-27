@@ -274,7 +274,7 @@ class GUIToolkit ( Toolkit ):
             x = int( x )
 
         if y < -99999.0:
-            y = py + ((pdy - height) / 2)
+            y = py + pdy
         elif y <= -1.0:
             y = py + pdy - height + int( y ) + 1
         elif x < 0.0:
