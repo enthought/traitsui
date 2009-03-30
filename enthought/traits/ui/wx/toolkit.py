@@ -263,7 +263,12 @@ class GUIToolkit ( Toolkit ):
         y = view.y
 
         if x < -99999.0:
-            x = px + ((pdx - width) / 2)
+            # BH- I think this is the case when there is a parent
+            # so this logic tries to place it in the middle of the parent
+            # if possible, otherwise tries an offset from the parent
+            x = px + (pdx - width)/2
+            if x < 0:
+                 x = px + 20
         elif x <= -1.0:
             x = px + pdx - width + int( x ) + 1
         elif x < 0.0:
@@ -274,7 +279,12 @@ class GUIToolkit ( Toolkit ):
             x = int( x )
 
         if y < -99999.0:
-            y = py + pdy
+            # BH- I think this is the case when there is a parent
+            # so this logic tries to place it in the middle of the parent
+            # if possible, otherwise tries an offset from the parent
+            y = py + (pdy - height)/2
+            if y < 0:
+                y = py + 20
         elif y <= -1.0:
             y = py + pdy - height + int( y ) + 1
         elif x < 0.0:
@@ -283,6 +293,11 @@ class GUIToolkit ( Toolkit ):
             y = py + int( y * pdy )
         else:
             y = int( y )
+
+        # make sure the position is on the visible screen, maybe
+        # the desktop had been resized?
+        x = min(x, wx.DisplaySize()[0])
+        y = min(y, wx.DisplaySize()[1])
 
         # Position and size the window as requested:
         window.SetDimensions( max( 0, x ), max( 0, y ), width, height )
