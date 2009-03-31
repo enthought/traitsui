@@ -1,0 +1,9 @@
+Traits 3.1.1
+--------------
+ * Fixed bug in DateEditor which would not display Feb correctly if the current date was visible and greater than the number of days in Feb
+ * Reduced border_size from 1 to 4 for Group instances
+ * Fixed layout issues:
+   * Windows are now resized if they are larger than the desktop
+   * Windows are now put in a valid location if they were opened off-screen
+   * Windows with smaller parent are no longer opened at invalid positions with negative y values
+
