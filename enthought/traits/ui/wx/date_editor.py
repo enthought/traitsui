@@ -344,7 +344,7 @@ class MultiCalendarCtrl(wx.Panel):
 
     def shift_datetime(self, old_date, months):
         """
-        Create a new DateTime from *old_date* with an *offset* number of months.
+        Create a new DateTime from *old_date* with an offset number of *months*.
 
         Parameters
         ----------
