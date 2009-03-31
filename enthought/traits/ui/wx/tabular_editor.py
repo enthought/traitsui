@@ -72,22 +72,35 @@ alignment_map = {
     'right':  wx.LIST_FORMAT_RIGHT
 }
 
+class TextEditMixin(listmix.TextEditMixin):
+    def __init__(self, edit_labels):
+        """ edit_labels controls whether the first column is editable
+        """
+        self.edit_labels = edit_labels
+        listmix.TextEditMixin.__init__(self)
+
+    def OpenEditor(self, col, row):
+        if col == 0 and not self.edit_labels:
+            return
+        else:
+            return listmix.TextEditMixin.OpenEditor(self, col, row)
+
 #-------------------------------------------------------------------------------
 #  'wxListCtrl' class:
 #-------------------------------------------------------------------------------
 
-class wxListCtrl ( wx.ListCtrl, listmix.TextEditMixin ):
+class wxListCtrl ( wx.ListCtrl, TextEditMixin ):
     """ Subclass of wx.ListCtrl to provide correct virtual list behavior.
     """
 
     def __init__(self, parent, ID, pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=0, can_edit = False):
+                 style=0, can_edit = False, edit_labels=False):
 
         wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
 
         # if the selected is editable, then we have to init the mixin
         if can_edit:
-            listmix.TextEditMixin.__init__(self)
+            TextEditMixin.__init__(self, edit_labels)
 
     def SetVirtualData(self, row, col, text):
         # this method is called but the job is already done by
@@ -250,7 +263,8 @@ class _TabularEditor ( Editor ):
 
         # Create the list control and link it back to us:
         self.control = control = wxListCtrl( parent, -1, style = style,
-                                             can_edit = factory.editable)
+                                             can_edit = factory.editable,
+                                             edit_labels = factory.editable_labels)
         control._editor = self
 
         # Create the list control column:
