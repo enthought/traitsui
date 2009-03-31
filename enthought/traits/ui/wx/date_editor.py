@@ -364,7 +364,8 @@ class MultiCalendarCtrl(wx.Panel):
             new_month -= 12
             new_year += 1
 
-        new_date.Set(old_date.GetDay(), new_month, new_year)
+        new_day = min(old_date.GetDay(), 28)
+        new_date.Set(new_day, new_month, new_year)
         return new_date
 
 
