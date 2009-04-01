@@ -99,7 +99,7 @@ def ui_dialog ( ui, parent, style ):
     ui.owner.init( ui, parent, style )
     ui.control = ui.owner.control
     ui.control._parent = parent
-    
+
     try:
         ui.prepare_ui()
     except:
@@ -112,7 +112,7 @@ def ui_dialog ( ui, parent, style ):
         
     ui.handler.position( ui.info )
     restore_window( ui, is_popup = (style in Popups) )
-    
+
     ui.control.Layout()
     # Check if the control is already being displayed modally. This would be
     # the case if after the window was displayed, some event caused the ui to
@@ -176,7 +176,7 @@ class LiveWindow ( BaseDialog ):
             else:
                 if window_style == 0:
                     window_style = wx.SIMPLE_BORDER
-                window = wx.Dialog( None, -1, '', style = window_style )
+                window = wx.Dialog( parent, -1, '', style = window_style )
                 wx.EVT_ACTIVATE( window, self._on_close_popup )
                 window._kind  = ui.view.kind
                 self._monitor = MouseMonitor( ui )
