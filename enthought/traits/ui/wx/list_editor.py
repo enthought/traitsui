@@ -141,9 +141,13 @@ class SimpleEditor ( Editor ):
         self._editor = getattr( editor, self.kind )
 
         # Set up the additional 'list items changed' event handler needed for
-        # a list based trait:
+        # a list based trait. Note that we want to fire the update_editor_item
+        # only when the items in the list change and not when intermediate 
+        # traits change. Therefore, replace "." by ":" in the extended_name
+        # when setting up the listener.
+        extended_name = self.extended_name.replace('.', ':')
         self.context_object.on_trait_change( self.update_editor_item,
-                               self.extended_name + '_items?', dispatch = 'ui' )
+                               extended_name + '_items?', dispatch = 'ui' )
         self.set_tooltip()
 
     #---------------------------------------------------------------------------
@@ -153,8 +157,9 @@ class SimpleEditor ( Editor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
+        extended_name = self.extended_name.replace('.', ':')
         self.context_object.on_trait_change( self.update_editor_item,
-                                 self.extended_name + '_items?', remove = True )
+                                 extended_name + '_items?', remove = True )
         self._dispose_items()
 
         super( SimpleEditor, self ).dispose()
@@ -264,7 +269,7 @@ class SimpleEditor ( Editor ):
     #  the editor:
     #---------------------------------------------------------------------------
 
-    def update_editor_item ( self, obj, trait, event ):
+    def update_editor_item ( self, obj, name, event ):
         """ Updates the editor when an item in the object trait changes
         externally to the editor.
         """
