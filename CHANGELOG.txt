@@ -7,4 +7,4 @@ Traits 3.1.1
    * Windows are now put in a valid location if they were opened off-screen
    * Windows with smaller parent are no longer opened at invalid positions with negative y values
  * Implemented editable_labels attribute in the TabularEditor for enabling editing of the labels (i.e. the first column)
-
+ * Fix bug in ListEditor where a trait change listener would be fired when intermediate traits changed (when extended_name was of the type item1.item2.item3..) leading to a traceback.
