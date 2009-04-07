@@ -151,16 +151,35 @@ def restore_window ( ui, is_popup = False ):
     if prefs is not None:
         x, y, dx, dy = prefs
 
-        # Adjust the size & location to fit in the display. This is important
-        # to handle the case where the display changes between application
-        # runs, which is often the case with notebook users.
-        max_dx, max_dy = wx.GetDisplaySize().Get()
-        if (x + dx > max_dx):
-            x = 0
-            dx = min(dx, max_dx)
-        if (y + dy > max_dy):
-            y = 0
-            dy = min(dy, max_dy)
+        # Check to see if the window's position is within a display.
+        # If it is not entirely within 1 display, move it and/or
+        # resize it to the closest window
+
+        closest = None
+        for display_num in range(wx.Display.GetCount()):
+            display = wx.Display(display_num)
+            if closest is None:
+                closest = display
+            else:
+                def _distance(x, y, display):
+                    dis_x, dis_y, dis_w, dis_h = display.GetGeometry()
+                    dis_mid_x = (dis_x+dis_w)/2
+                    dis_mid_y = (dis_y+dis_h)/2
+
+                    return (x-dis_mid_x)**2 + (y-dis_mid_y)**2
+
+                if _distance(x, y, display) < _distance(x, y, closest):
+                    closest = display
+
+        # put in the closest display, resizing as necessary
+        dis_x, dis_y, dis_w, dis_h = closest.GetGeometry()
+        dx = min(dx, dis_w)
+        dy = min(dy, dis_h)
+        if (x + dx) > (dis_x + dis_w):
+            x = dis_x
+        if (y + dy) > (dis_y + dis_h):
+            y = dis_y
+
 
         if is_popup:
             position_window( ui.control, dx, dy )
