@@ -157,10 +157,10 @@ def restore_window ( ui, is_popup = False ):
         max_dx, max_dy = wx.GetDisplaySize().Get()
         if (x + dx > max_dx):
             x = 0
-            dx = max_dx
+            dx = min(dx, max_dx)
         if (y + dy > max_dy):
             y = 0
-            dy = max_dy
+            dy = min(dy, max_dy)
 
         if is_popup:
             position_window( ui.control, dx, dy )
