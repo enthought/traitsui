@@ -155,36 +155,53 @@ def restore_window ( ui, is_popup = False ):
         # If it is not entirely within 1 display, move it and/or
         # resize it to the closest window
 
-        closest = None
-        for display_num in range(wx.Display.GetCount()):
-            display = wx.Display(display_num)
-            if closest is None:
-                closest = display
-            else:
-                def _distance(x, y, display):
-                    dis_x, dis_y, dis_w, dis_h = display.GetGeometry()
-                    dis_mid_x = (dis_x+dis_w)/2
-                    dis_mid_y = (dis_y+dis_h)/2
-
-                    return (x-dis_mid_x)**2 + (y-dis_mid_y)**2
-
-                if _distance(x, y, display) < _distance(x, y, closest):
-                    closest = display
-
-        # put in the closest display, resizing as necessary
-        dis_x, dis_y, dis_w, dis_h = closest.GetGeometry()
-        dx = min(dx, dis_w)
-        dy = min(dy, dis_h)
-        if (x + dx) > (dis_x + dis_w):
-            x = dis_x
-        if (y + dy) > (dis_y + dis_h):
-            y = dis_y
-
+        closest = find_closest_display(x,y)
+        x, y, dx, dy = get_position_for_display(x, y, dx, dy, closest)
 
         if is_popup:
             position_window( ui.control, dx, dy )
         else:
             ui.control.SetDimensions( x, y, dx, dy )
+
+
+def find_closest_display(x, y):
+    """ For a virtual screen position, find the closest display.
+        There are a few reasons to use this function:
+            * the number of displays changed
+            * the size of the displays changed
+            * the orientation of one or more displays changed.
+    """
+    closest = None
+    for display_num in range(wx.Display.GetCount()):
+        display = wx.Display(display_num)
+        if closest is None:
+            closest = display
+        else:
+            def _distance(x, y, display):
+                dis_x, dis_y, dis_w, dis_h = display.GetGeometry()
+                dis_mid_x = (dis_x+dis_w)/2
+                dis_mid_y = (dis_y+dis_h)/2
+
+                return (x-dis_mid_x)**2 + (y-dis_mid_y)**2
+
+            if _distance(x, y, display) < _distance(x, y, closest):
+                closest = display
+
+    return closest
+
+def get_position_for_display(x, y, dx, dy, display):
+    """ calculates a valid position and size for a window to fit
+        inside a display
+    """
+    dis_x, dis_y, dis_w, dis_h = display.GetGeometry()
+    dx = min(dx, dis_w)
+    dy = min(dy, dis_h)
+    if ((x + dx) > (dis_x + dis_w)) or (x < dis_x):
+        x = dis_x
+    if ((y + dy) > (dis_y + dis_h)) or (y < dis_y):
+        y = dis_y
+
+    return x, y, dx, dy
 
 #-------------------------------------------------------------------------------
 #  Positions a window on the screen with a specified width and height so that
@@ -211,48 +228,24 @@ def position_window ( window, width = None, height = None, parent = None ):
     # Calculate the desired size of the popup control:
     if isinstance( parent, wx.Window ):
         x, y     = parent.ClientToScreenXY( 0, 0 )
-        cdx, cdy = parent.GetSizeTuple()
+        parent_dx, parent_dy = parent.GetSizeTuple()
     else:
         # Special case of parent being a screen position and size tuple (used
         # to pop-up a dialog for a table cell):
-        x, y, cdx, cdy = parent
+        x, y, parent_dx, parent_dy = parent
 
     adjacent = (getattr( window, '_kind', 'popup' ) == 'popup')
-    width    = min( max( cdx, width ), screen_dx )
+    width    = min( max( parent_dx, width ), screen_dx )
     height   = min( height, screen_dy )
 
-    # Calculate the best position and size for the pop-up:
+    closest = find_closest_display(x,y)
 
-    # Note: This code tries to deal with the fact that the user may have
-    # multiple monitors. wx does not report this information, so the screen_dx,
-    # screen_dy values usually just provide the size of the primary monitor. To
-    # get around this, the code assumes that the original (x,y) values are
-    # valid, and that all monitors are the same size. If this assumption is not
-    # true, popups may appear in wierd positions on the secondary monitors.
-    nx     = x % screen_dx
-    xdelta = x - nx
-    rx     = nx + cdx
-    if (nx + width) > screen_dx:
-        if (rx - width) < 0:
-            nx = screen_dx - width
-        else:
-            nx = rx - width
-
-    ny     = y % screen_dy
-    ydelta = y - ny
-    by     = ny
     if adjacent:
-        by += cdy
-    if (by + height) > screen_dy:
-        if not adjacent:
-            ny += cdy
-        if (ny - height) < 0:
-            ny = screen_dy - height
-        else:
-            by = ny - height
+        y += parent_dy
 
-    # Position and size the window as requested:
-    window.SetDimensions( nx + xdelta, by + ydelta, width, height )
+    x, y, dx, dy = get_position_for_display(x, y, width, height, closest)
+
+    window.SetDimensions(x, y, dx, dy)
 
 #-------------------------------------------------------------------------------
 #  Returns the top-level window for a specified control:
