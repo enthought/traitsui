@@ -176,8 +176,11 @@ class LiveWindow ( BaseDialog ):
             else:
                 if window_style == 0:
                     window_style = wx.SIMPLE_BORDER
-                window = wx.Dialog( parent, -1, '', style = window_style )
-                wx.EVT_ACTIVATE( window, self._on_close_popup )
+                if parent is not None:
+                    window_style |= (wx.FRAME_FLOAT_ON_PARENT |
+                                     wx.FRAME_NO_TASKBAR)
+
+                window = wx.Frame( parent, -1, '', style = window_style )
                 window._kind  = ui.view.kind
                 self._monitor = MouseMonitor( ui )
 
