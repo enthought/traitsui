@@ -85,6 +85,8 @@ EdgeColor = wx.Colour( 64, 64, 64 )
 class ToolkitEditorFactory(BaseToolkitEditorFactory):
     """ wxPython editor factory for color editors.
     """
+    show_text = Bool ( True )
+    
     #---------------------------------------------------------------------------
     #  Gets the wxPython color equivalent of the object trait:
     #---------------------------------------------------------------------------
@@ -93,9 +95,15 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
         """ Gets the wxPython color equivalent of the object trait.
         """
         if self.mapped:
-            return getattr( editor.object, editor.name + '_' )
-    
-        return getattr( editor.object, editor.name )
+            attr = getattr( editor.object, editor.name + '_' )
+        else:
+            attr = getattr( editor.object, editor.name )
+            
+        if isinstance(attr, tuple):
+            attr = wx.Colour( *[ int( round( c * 255.0 ) )
+                             for c in attr ] )
+        return attr
+        
      
     #---------------------------------------------------------------------------
     #  Gets the application equivalent of a wxPython value:
@@ -153,7 +161,10 @@ class SimpleColorEditor ( Editor ):
             editor.
         """
         if not self._no_update:
-            self.selector.color = self.factory.to_wx_color( self )
+            color = self.factory.to_wx_color( self )
+            self.selector.color = color 
+            
+            
         
     @on_trait_change( 'selector:color' )
     def _color_changed ( self, color ):
@@ -245,7 +256,7 @@ class TextColorEditor ( BaseSimpleEditor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
-        self.color_sample.text = self.str_value
+        self.color_sample.text = str(self.str_value)
         set_color( self )
 
     #---------------------------------------------------------------------------
@@ -255,7 +266,11 @@ class TextColorEditor ( BaseSimpleEditor ):
     def string_value ( self, color ):
         """ Returns the text representation of a specified color value.
         """
-        return self.factory.str_color( color ) 
+        if self.factory.show_text:
+            str = self.factory.str_color( color )
+        else:
+            str = ''
+        return str 
 
 #-------------------------------------------------------------------------------
 #  'ReadonlyColorEditor' class:
