@@ -85,6 +85,12 @@ EdgeColor = wx.Colour( 64, 64, 64 )
 class ToolkitEditorFactory(BaseToolkitEditorFactory):
     """ wxPython editor factory for color editors.
     """
+    
+    # Should the text editor show the text of the color in the text box? 
+    # The background is already showing the color so the text may be
+    # distracting or cut off.  To use this trait, a custom editor must
+    # be created with this trait set, and the style='text'.  
+    # TODO: Think about easier ways to expose this, or changing the default.
     show_text = Bool ( True )
     
     #---------------------------------------------------------------------------
