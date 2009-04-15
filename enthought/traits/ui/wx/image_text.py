@@ -40,10 +40,11 @@ class ImageText ( wx.PyWindow ):
     
     #-- wx.PyWindow Method Overrides -------------------------------------------
     
-    def __init__ ( self, parent, theme, text = '' ): 
+    def __init__ ( self, parent, theme, text = '', border=False ): 
         """ Initializes the object.
         """
         self._theme = theme
+        self._border = border
         if theme is not None:
             self._image_slice = theme.image_slice
                                             

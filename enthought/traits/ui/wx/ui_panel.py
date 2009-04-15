@@ -648,7 +648,7 @@ class FillPanel ( object ):
                 dw = create_notebook_for_items( content, ui, panel, group,
                                                 self.add_notebook_item )
                 if editor is not None:
-                     editor.dock_window = dw
+                    editor.dock_window = dw
 
                 self.sizer.Add( dw, self.resizable, wx.EXPAND )
             # Check if content is all Group objects:
@@ -660,7 +660,7 @@ class FillPanel ( object ):
                 # If so, add them to the panel and exit:
                 self.add_groups( content, panel )
             else:
-                self.add_items( content, panel, self.sizer )
+                self.add_items(content, panel, self.sizer)
 
         # If the caller is a DockWindow, we need to define the content we are
         # adding to it:
@@ -972,7 +972,8 @@ class FillPanel ( object ):
             if show_left:
                 if item.show_label:
                     label = self.create_label( item, ui, desc, panel,
-                                               item_sizer )
+                                               item_sizer, 
+                                               border=group.show_border )
                 elif (cols > 1) and show_labels:
                     label = self.dummy_label( panel, item_sizer )
 
@@ -1158,7 +1159,7 @@ class FillPanel ( object ):
     #---------------------------------------------------------------------------
 
     def create_label ( self, item, ui, desc, parent, sizer, suffix = ':',
-                       pad_side = wx.LEFT ):
+                       pad_side = wx.LEFT, border=False ):
         """ Creates an item label.
         """
         from image_text import ImageText
@@ -1166,9 +1167,10 @@ class FillPanel ( object ):
         label = item.get_label( ui )
         if (label == '') or (label[-1:] in '?=:;,.<>/\\"\'-+#|'):
             suffix = ''
-
-        control = ImageText( parent, item.label_theme, label + suffix )
-
+        
+        control = ImageText( parent, item.label_theme, label + suffix,
+                             border=border )
+        
         self._set_owner( control, item )
 
         if item.emphasized:

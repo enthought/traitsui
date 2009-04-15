@@ -40,7 +40,10 @@ from enthought.pyface.image_resource \
     
 from constants \
     import WindowColor
-    
+
+from constants import is_mac
+import enthought.traits.ui.wx.constants
+
 #-------------------------------------------------------------------------------
 #  Recursively paint the parent's background if they have an associated image 
 #  slice.
@@ -59,7 +62,11 @@ def paint_parent ( dc, window ):
     else:
         # Otherwise, just paint the normal window background color:
         dx, dy = window.GetClientSizeTuple()
-        dc.SetBrush( wx.Brush( parent.GetBackgroundColour() ) )
+        if is_mac and hasattr(window, '_border') and window._border:
+            dc.SetBackgroundMode(wx.TRANSPARENT)
+            dc.SetBrush( wx.Brush( wx.Colour(0, 0, 0, 0)))    
+        else:
+            dc.SetBrush( wx.Brush( parent.GetBackgroundColour() ) )
         dc.SetPen( wx.TRANSPARENT_PEN )
         dc.DrawRectangle( 0, 0, dx, dy )
 
