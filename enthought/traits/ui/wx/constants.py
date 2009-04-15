@@ -2,17 +2,17 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: David C. Morrill
 #  Date:   10/22/2004
-#  
+#
 #------------------------------------------------------------------------------
 
 """ Defines constants used by the wxPython implementation of the various text
@@ -33,7 +33,7 @@ import wx
 
 # Define platform and wx version constants:
 is_mac  = (sys.platform == 'darwin')
-is_wx26 = (float( '.'.join( wx.__version__.split( '.' )[0:2] ) ) < 2.8) 
+is_wx26 = (float( '.'.join( wx.__version__.split( '.' )[0:2] ) ) < 2.8)
 
 # Default dialog title
 DefaultTitle = 'Edit properties'
@@ -57,7 +57,7 @@ EditableColor = wx.WHITE
 if is_mac:
     WindowColor = wx.Colour( 232, 232, 232 )
 else:
-    WindowColor = wx.SystemSettings_GetColour( wx.SYS_COLOUR_BTNFACE )
+    WindowColor = wx.SystemSettings_GetColour( wx.SYS_COLOUR_MENUBAR )
 
 # Standard width of an image bitmap
 standard_bitmap_width = 120
