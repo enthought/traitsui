@@ -327,14 +327,19 @@ class TraitsUIPanel ( wx.Panel ):
         """ Creates a wx.Panel that correctly sets its background color to be
             the same as its parents.
         """
+        bg_color = kw.pop('bg_color', None)
         wx.Panel.__init__( self, parent, *args, **kw )
 
         wx.EVT_CHILD_FOCUS(      self, self.OnChildFocus )
         wx.EVT_ERASE_BACKGROUND( self, self.OnEraseBackground )
         wx.EVT_PAINT(            self, self.OnPaint )
 
-        self.SetBackgroundColour( parent.GetBackgroundColour() )
-
+        if bg_color:
+            self.SetBackgroundColour(bg_color)
+        else:
+            self.SetBackgroundColour( parent.GetBackgroundColour() )
+        
+        
     def OnEraseBackground ( self, event ):
         """ Do not erase the background here (do it in the 'on_paint' handler).
         """
