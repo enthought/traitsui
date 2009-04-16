@@ -175,7 +175,9 @@ class SimpleSliderEditor ( Editor ):
         event_type = event.GetEventType()
         if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
             (self.factory.auto_set and
-             (event_type == wx.wxEVT_SCROLL_THUMBTRACK))):
+             (event_type == wx.wxEVT_SCROLL_THUMBTRACK)) or
+            (self.factory.enter_set and 
+             (event_type == wx.wxEVT_SCROLL_THUMBRELEASE))):
             try:
                 self.ui_changing = True
                 self.control.text.SetValue( self.format % value )
@@ -483,7 +485,9 @@ class LargeRangeSliderEditor ( Editor ):
             self.ui_changing = True
             if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
                 (self.factory.auto_set and
-                 (event_type == wx.wxEVT_SCROLL_THUMBTRACK))):
+                 (event_type == wx.wxEVT_SCROLL_THUMBTRACK)) or
+                (self.factory.enter_set and 
+                 (event_type == wx.wxEVT_SCROLL_THUMBRELEASE))):
                 if self.factory.is_float:
                     self.value = value
                 else:
