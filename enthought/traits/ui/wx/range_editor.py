@@ -142,7 +142,7 @@ class SimpleSliderEditor ( Editor ):
         wx.EVT_KILL_FOCUS( text, self.update_object_on_enter )
         
         if factory.auto_set:
-           wx.EVT_TEXT( panel, text.GetId(), self.update_object_on_enter )
+            wx.EVT_TEXT( panel, text.GetId(), self.update_object_on_enter )
 
         sizer.Add( text, 0, wx.LEFT | wx.EXPAND, 4 )
 
@@ -394,7 +394,7 @@ class LargeRangeSliderEditor ( Editor ):
             fvalue      = low
 
         if high > low:
-           ivalue = int( (float( fvalue - low ) / (high - low)) * 10000 )
+            ivalue = int( (float( fvalue - low ) / (high - low)) * 10000 )
         else:
             ivalue = low
 
@@ -450,7 +450,7 @@ class LargeRangeSliderEditor ( Editor ):
         wx.EVT_KILL_FOCUS( text, self.update_object_on_enter )
         
         if factory.auto_set:
-           wx.EVT_TEXT( panel, text.GetId(), self.update_object_on_enter )
+            wx.EVT_TEXT( panel, text.GetId(), self.update_object_on_enter )
 
         sizer.Add( text, 0, wx.LEFT | wx.EXPAND, 4 )
 
@@ -815,7 +815,7 @@ class RangeTextEditor ( TextEditor ):
         wx.EVT_KILL_FOCUS( control, self.update_object )
         
         if self.factory.auto_set:
-           wx.EVT_TEXT( parent, control.GetId(), self.update_object )
+            wx.EVT_TEXT( parent, control.GetId(), self.update_object )
            
         self.control = control
         self.set_tooltip()
