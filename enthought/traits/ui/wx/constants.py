@@ -56,6 +56,7 @@ EditableColor = wx.WHITE
 # Color for background of windows (like dialog background color)
 if is_mac:
     WindowColor = wx.Colour( 232, 232, 232 )
+    BorderedGroupColor = wx.Colour( 224, 224, 224 )
 else:
     WindowColor = wx.SystemSettings_GetColour( wx.SYS_COLOUR_MENUBAR )
 
