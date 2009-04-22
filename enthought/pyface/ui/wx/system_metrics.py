@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ class SystemMetrics(MSystemMetrics, HasTraits):
             # wx lies.
             color = wx.Colour(232, 232, 232)
         else:
-            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE).Get()
+            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_MENUBAR).Get()
 
         return (color[0]/255., color[1]/255., color[2]/255.)
 
