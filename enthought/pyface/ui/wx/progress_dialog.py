@@ -174,9 +174,9 @@ class ProgressDialog(MProgressDialog, Window):
         hours = value / 3600
         minutes = (value % 3600) / 60
         seconds = value % 60
-        label = "%1u:%02u:%02u" % (hours, minutes, seconds)
+        label = "%u:%02u:%02u" % (hours, minutes, seconds)
 
-        control.SetLabel(control.GetLabel()[:-7] + label)
+        control.SetLabel(label)
 
     def _get_message(self):
         return self._message_text
