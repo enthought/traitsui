@@ -107,7 +107,7 @@ class SplashScreen(MSplashScreen, Window):
         # Passing 'False' to 'Refresh' means "do not erase the background".
         self.control.Refresh(False)
         self.control.Update()
-        wx.Yield()
+        wx.GetApp().Yield(True)
 
     def _on_paint(self, event):
         """ Called when the splash window is being repainted. """

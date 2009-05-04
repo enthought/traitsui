@@ -99,7 +99,7 @@ class ProgressDialog(MProgressDialog, Window):
     def open(self):
         super(ProgressDialog, self).open()
         self._start_time = time.time()
-        wx.Yield()
+        wx.GetApp().Yield(True)
 
     def close(self):
         if self.progress_bar is not None:
@@ -158,7 +158,7 @@ class ProgressDialog(MProgressDialog, Window):
             if self._user_cancelled:
                 self.close()
 
-        wx.Yield()
+        wx.GetApp().Yield(True)
 
         return (not self._user_cancelled, False)
 
@@ -294,3 +294,4 @@ class ProgressDialog(MProgressDialog, Window):
         dialog.CentreOnParent()
 
         return dialog
+

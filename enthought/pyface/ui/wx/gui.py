@@ -94,7 +94,7 @@ class GUI(MGUI, HasTraits):
 
     def process_events(allow_user_events=True):
         if allow_user_events:
-            wx.Yield()
+            wx.GetApp().Yield(True)
         else:
             wx.SafeYield()
 
