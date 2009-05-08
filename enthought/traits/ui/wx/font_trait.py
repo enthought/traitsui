@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: David C. Morrill
 #  Date:   12/22/2004
 #
@@ -57,7 +57,7 @@ font_weights = {
 font_noise = [ 'pt', 'point', 'family' ]
 
 #-------------------------------------------------------------------------------
-#  Converts a wx.Font into a string description of itself:  
+#  Converts a wx.Font into a string description of itself:
 #-------------------------------------------------------------------------------
 
 def font_to_str ( font ):
@@ -72,7 +72,7 @@ def font_to_str ( font ):
         underline = ' underline'
     return '%s point %s%s%s%s' % (
            font.GetPointSize(), font.GetFaceName(), style, weight, underline )
-    
+
 #-------------------------------------------------------------------------------
 #  Create a TraitFont object from a string description:
 #-------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ def create_traitsfont ( value ):
     """
     if isinstance( value, wx.Font ):
         value = font_to_str( value )
-        
+
     point_size = None
     family     = wx.DEFAULT
     style      = wx.NORMAL
@@ -111,60 +111,60 @@ def create_traitsfont ( value ):
                     ' '.join( facename ) )
 
 #-------------------------------------------------------------------------------
-#  'TraitsFont' class:  
+#  'TraitsFont' class:
 #-------------------------------------------------------------------------------
-    
+
 class TraitsFont ( wx.Font ):
     """ A Traits-specific wx.Font.
     """
     #---------------------------------------------------------------------------
     #  Returns the pickleable form of a TraitsFont object:
     #---------------------------------------------------------------------------
-    
+
     def __reduce_ex__ ( self, protocol ):
         """ Returns the pickleable form of a TraitsFont object.
         """
         return ( create_traitsfont, ( font_to_str( self ), ) )
 
     #---------------------------------------------------------------------------
-    #  Returns a printable form of the font:  
+    #  Returns a printable form of the font:
     #---------------------------------------------------------------------------
-                
+
     def __str__ ( self ):
         """ Returns a printable form of the font.
         """
         return font_to_str( self )
-        
+
 #-------------------------------------------------------------------------------
 #  'TraitWXFont' class'
 #-------------------------------------------------------------------------------
 
 class TraitWXFont ( TraitHandler ):
     """ Ensures that values assigned to a trait attribute are valid font
-    descriptor strings; the value actually assigned is the corresponding 
+    descriptor strings; the value actually assigned is the corresponding
     TraitsFont.
     """
     #---------------------------------------------------------------------------
     #  Validates that the value is a valid font:
     #---------------------------------------------------------------------------
-    
+
     def validate ( self, object, name, value ):
-        """ Validates that the value is a valid font descriptor string. If so, 
-        it returns the corresponding TraitsFont; otherwise, it raises a 
+        """ Validates that the value is a valid font descriptor string. If so,
+        it returns the corresponding TraitsFont; otherwise, it raises a
         TraitError.
         """
         if value is None:
             return None
-            
+
         try:
             return create_traitsfont( value )
         except:
             pass
-            
+
         raise TraitError, ( object, name, 'a font descriptor string',
                             repr( value ) )
 
-    def info ( self ):                              
+    def info ( self ):
         return ( "a string describing a font (e.g. '12 pt bold italic "
                  "swiss family Arial' or 'default 12')" )
 
@@ -172,15 +172,15 @@ class TraitWXFont ( TraitHandler ):
 #  Define a wxPython specific font trait:
 #-------------------------------------------------------------------------------
 
-### Note: Declare the editor to be a function which returns the FontEditor 
-# class from traits ui to avoid circular import issues. For backwards 
-# compatibility with previous Traits versions, the 'editors' folder in Traits 
-# project declares 'from api import *' in its __init__.py. The 'api' in turn 
-# can contain classes that have a Font trait which lead to this file getting 
+### Note: Declare the editor to be a function which returns the FontEditor
+# class from traits ui to avoid circular import issues. For backwards
+# compatibility with previous Traits versions, the 'editors' folder in Traits
+# project declares 'from api import *' in its __init__.py. The 'api' in turn
+# can contain classes that have a Font trait which lead to this file getting
 # imported. This leads to a circular import when declaring a Font trait.
 def get_font_editor(*args, **traits):
     from font_editor import ToolkitEditorFactory
     return ToolkitEditorFactory(*args, **traits)
 
 fh     = TraitWXFont()
-WxFont = Trait( create_traitsfont( 'Arial 10' ), fh, editor = get_font_editor )
+WxFont = Trait( wx.SystemSettings_GetFont( wx.SYS_DEFAULT_GUI_FONT ), fh, editor = get_font_editor )
