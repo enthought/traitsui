@@ -665,7 +665,7 @@ class _TabularEditor ( Editor ):
         """ Handles the user pressing a key in the list control.
         """
         key = event.GetKeyCode()
-        if key == wx.WXK_PAGEDOWN:
+        if key == wx.WXK_NEXT:
             self._append_new()
         elif key in ( wx.WXK_BACK, wx.WXK_DELETE ):
             self._delete_current()
