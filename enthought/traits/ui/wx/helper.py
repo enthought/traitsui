@@ -442,6 +442,9 @@ class TraitsUIScrolledPanel ( wx.lib.scrolledpanel.ScrolledPanel ):
             This method overrides the original in the base class so that
             nested subpanels are handled correctly.
         """
+        if child is None:
+            return
+
         sppux, sppuy = self.GetScrollPixelsPerUnit()
         vsx, vsy     = self.GetViewStart()
 
