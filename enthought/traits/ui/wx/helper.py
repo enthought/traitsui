@@ -161,7 +161,11 @@ def restore_window ( ui, is_popup = False ):
         if is_popup:
             position_window( ui.control, dx, dy )
         else:
-            ui.control.SetDimensions( x, y, dx, dy )
+            if (dx, dy) == (0,0):
+                # The window was saved minimized
+                ui.control.SetDimensions( x, y, -1, -1 )
+            else:
+                ui.control.SetDimensions( x, y, dx, dy )
 
 
 def find_closest_display(x, y):
@@ -338,8 +342,8 @@ class TraitsUIPanel ( wx.Panel ):
             self.SetBackgroundColour(bg_color)
         else:
             self.SetBackgroundColour( parent.GetBackgroundColour() )
-        
-        
+
+
     def OnEraseBackground ( self, event ):
         """ Do not erase the background here (do it in the 'on_paint' handler).
         """
