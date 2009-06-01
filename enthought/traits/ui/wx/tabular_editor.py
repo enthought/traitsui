@@ -1112,7 +1112,12 @@ class _TabularEditor ( Editor ):
                 column = self._get_column( x, translate = True )
             ) )
 
-        event.Skip()
+        # wx should additional event handlers. Skip(False) actually means to
+        # skip looking, skip(True) means to keep looking. This seems backwards
+        # to me... In any case, if wx continues trying to process this event, if
+        # the click event handler tries to open a new window or change focus in
+        # any way, wx will set the focus back to this control.
+        event.Skip(False)
 
 #-------------------------------------------------------------------------------
 #  'TabularEditorEvent' class:
