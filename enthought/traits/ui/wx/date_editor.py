@@ -107,13 +107,19 @@ class SimpleEditor (Editor):
 #--  Custom Editor
 #------------------------------------------------------------------------------
 
-SELECTED_FG = wx.Colour(255, 0, 0, 255)
-MOUSE_BOX_FILL = wx.Colour(0, 0, 255, 32)
-UNAVAILABLE_FG = wx.Colour(192, 192, 192, 255)
-DRAG_HIGHLIGHT_FG = wx.Colour(255, 255, 255, 255)
-DRAG_HIGHLIGHT_BG = wx.Colour(128, 128, 255, 255)
-NORMAL_HIGHLIGHT_FG = wx.Colour(0, 0, 0, 0)
-NORMAL_HIGHLIGHT_BG = wx.Colour(255, 255, 255, 0)
+SELECTED_FG = wx.Colour(255, 0, 0)
+UNAVAILABLE_FG = wx.Colour(192, 192, 192)
+DRAG_HIGHLIGHT_FG = wx.Colour(255, 255, 255)
+DRAG_HIGHLIGHT_BG = wx.Colour(128, 128, 255)
+try:
+    MOUSE_BOX_FILL = wx.Colour(0, 0, 255, 32)
+    NORMAL_HIGHLIGHT_FG = wx.Colour(0, 0, 0, 0)
+    NORMAL_HIGHLIGHT_BG = wx.Colour(255, 255, 255, 0)
+# Alpha channel in wx.Colour does not exist prior to version 2.7.1.1
+except TypeError: 
+    MOUSE_BOX_FILL = wx.Colour(0, 0, 255)
+    NORMAL_HIGHLIGHT_FG = wx.Colour(0, 0, 0)
+    NORMAL_HIGHLIGHT_BG = wx.Colour(255, 255, 255)
 
 class wxMouseBoxCalendarCtrl(wx.calendar.CalendarCtrl):
     """
