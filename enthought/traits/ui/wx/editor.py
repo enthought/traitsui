@@ -154,7 +154,9 @@ class Editor ( UIEditor ):
             sizer = self.control.GetContainingSizer()
             
         if sizer is not None:
-            sizer.Layout()
+            # If only sizer.Layout() is called there are certain cases where
+            # the newly visible items are sized incorrectly (see ticket 1797)
+            sizer.GetContainingWindow().Layout()
             
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
