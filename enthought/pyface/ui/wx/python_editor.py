@@ -250,6 +250,13 @@ class PythonEditor(MPythonEditor, Widget):
         ##########################################
         # Events.
         ##########################################
+        
+        # By default, the will fire EVT_STC_CHANGE evented for all mask values
+        # (STC_MODEVENTMASKALL). This generates too many events.
+        stc.SetModEventMask(wx.stc.STC_MOD_INSERTTEXT |
+                            wx.stc.STC_MOD_DELETETEXT |
+                            wx.stc.STC_PERFORMED_UNDO |
+                            wx.stc.STC_PERFORMED_REDO)
 
         # Listen for changes to the file.
         wx.stc.EVT_STC_CHANGE(stc, stc.GetId(), self._on_stc_changed)
