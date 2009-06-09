@@ -431,7 +431,7 @@ class BaseDialog(BasePanel):
         menubar = self.ui.view.menubar
         if menubar is not None:
             self._last_group = self._last_parent = None
-            self.control.SetMenuBar(
+            self.control.layout().setMenuBar(
                 menubar.create_menu_bar( self.control, self ) )
             self._last_group = self._last_parent = None
 
@@ -445,7 +445,7 @@ class BaseDialog(BasePanel):
         toolbar = self.ui.view.toolbar
         if toolbar is not None:
             self._last_group = self._last_parent = None
-            # FIXME: A QDialog has no toolbar. This should e fixed, but right 
+            # FIXME: A QDialog has no toolbar. This should be fixed, but right 
             # now we are passing rather than creating a traceback.
             return 
             self.control.SetToolBar(
@@ -459,6 +459,9 @@ class BaseDialog(BasePanel):
     def _add_statusbar ( self ):
         """ Adds a statusbar to the dialog.
         """
+        # FIXME: We should implement this, but right now we are passing rather
+        # than creating a traceback.
+        return
         statusbar = self.ui.view.statusbar
         if statusbar is not None:
             raise NotImplementedError
