@@ -454,16 +454,15 @@ class _GroupPanel(object):
         """
         use_widths = (splitter.orientation() == QtCore.Qt.Horizontal)
         sizes = []
-
         for item in content:
-            if use_widths:
-                sizes.append(item.width)
-            else:
-                sizes.append(item.height)
 
             if isinstance(item, Group):
                 panel = _GroupPanel(item, self.ui, suppress_label=True).control
             else:
+                if use_widths:
+                    sizes.append(item.width)
+                else:
+                    sizes.append(item.height)
                 panel = self._add_items([item])
 
             # Add the panel to the splitter.
@@ -475,7 +474,9 @@ class _GroupPanel(object):
                     w.setLayout(panel)
                     panel = w
 
-                panel.layout().setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+                layout = panel.layout()
+                if layout is not None:
+                    layout.setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
                 splitter.addWidget(panel)
 
         # Find out how much space is available.
