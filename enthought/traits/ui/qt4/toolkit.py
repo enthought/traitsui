@@ -42,6 +42,8 @@ from constants import screen_dx, screen_dy
 #  the UI thread:
 #-------------------------------------------------------------------------------
 
+_QT_TRAITS_EVENT = QtCore.QEvent.registerEventType()
+
 class _CallAfter(QtCore.QObject):
     """ This class dispatches a handler so that it executes in the main GUI
         thread (similar to the wx function).
@@ -68,19 +70,34 @@ class _CallAfter(QtCore.QObject):
 
         # Move to the main GUI thread.
         self.moveToThread(QtGui.QApplication.instance().thread())
+        
+        # Post an event to be dispatched on the main GUI thread. Note that 
+        # we do not call QTimer.singleShot, which would be simpler, because
+        # that only works on QThreads. We want regular Python threads to work.
+        event = QtCore.QEvent(_QT_TRAITS_EVENT)
+        QtGui.QApplication.instance().postEvent(self, event)
 
-        # Dispatch next time round the event loop.
-        QtCore.QTimer.singleShot(0, self._dispatch)
+    def event(self, event):
+        """ QObject event handler. """
+        if event.type() == _QT_TRAITS_EVENT:
+            # Invoke the handler
+            self._handler(*self._args)
 
-    def _dispatch(self):
-        """ Invoke the handler. """
-        # Remove from the list.
+            # We cannot remove from self._calls here. QObjects don't like being 
+            # garbage collected during event handlers (there are tracebacks,
+            # plus maybe a memory leak, I think).
+            QtCore.QTimer.singleShot(0, self._finished)
+
+            return True
+        else:
+            return QtCore.QObject.event(self, event)
+
+    def _finished(self):
+        """ Remove the call from the list, so it can be garbage collected.
+        """
         self._calls_mutex.lock()
         del self._calls[self._calls.index(self)]
         self._calls_mutex.unlock()
-
-        self._handler(*self._args)
-
 
 def ui_handler ( handler, *args ):
     """ Handles UI notification handler requests that occur on a thread other
