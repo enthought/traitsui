@@ -21,7 +21,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtWebKit
+from PyQt4 import QtGui, QtWebKit
     
 from editor import Editor
 
@@ -50,6 +50,8 @@ class SimpleEditor ( Editor ):
             widget.
         """
         self.control = QtWebKit.QWebView()
+        self.control.setSizePolicy(QtGui.QSizePolicy.Expanding, 
+                                   QtGui.QSizePolicy.Expanding)
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
