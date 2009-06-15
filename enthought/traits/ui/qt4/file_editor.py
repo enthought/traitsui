@@ -192,6 +192,13 @@ class CustomEditor ( SimpleTextEditor ):
         self._model = model = QtGui.QDirModel()
         self.control.setModel(model)
 
+        # Don't apply filters to directories and don't show "." and ".."
+        model.setFilter(QtCore.QDir.AllDirs | QtCore.QDir.Files |
+                        QtCore.QDir.Drives | QtCore.QDir.NoDotAndDotDot)
+
+        # Show directories before files
+        model.setSorting(QtCore.QDir.Name | QtCore.QDir.DirsFirst)
+
         # Hide the labels at the top and only show the column for the file name
         self.control.header().hide()
         for column in xrange(1, model.columnCount()):
@@ -230,7 +237,9 @@ class CustomEditor ( SimpleTextEditor ):
             editor.
         """
         if exists(self.str_value):
-            self.control.setCurrentIndex(self._model.index(self.str_value))
+            index = self._model.index(self.str_value)
+            self.control.expand(index)
+            self.control.setCurrentIndex(index)
 
     #---------------------------------------------------------------------------
     #  Handles the 'filter' trait being changed:
