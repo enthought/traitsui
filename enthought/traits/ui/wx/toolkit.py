@@ -443,6 +443,16 @@ class GUIToolkit ( Toolkit ):
             event.Skip()
 
     #---------------------------------------------------------------------------
+    #  Indicates that an event should continue to be processed by the toolkit
+    #---------------------------------------------------------------------------
+
+    def skip_event ( self, event ):
+        """ Indicates that an event should continue to be processed by the 
+            toolkit.
+        """
+        event.Skip()
+
+    #---------------------------------------------------------------------------
     #  Destroys a specified GUI toolkit control:  
     #---------------------------------------------------------------------------
     
