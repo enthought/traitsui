@@ -403,7 +403,8 @@ class _GroupPanel(object):
 
             # Create an editor.
             self._setup_editor(group,
-                    SplitterGroupEditor(control=outer, splitter=splitter))
+                    SplitterGroupEditor(control=outer, splitter=splitter,
+                                        ui=ui))
 
             self._add_splitter_items(content, splitter)
 

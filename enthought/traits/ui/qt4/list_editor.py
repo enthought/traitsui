@@ -547,10 +547,10 @@ class NotebookEditor ( Editor ):
 
         # Create a tab page for each object in the trait's value:
         for object in self.value:
-            page, view_object, monitoring = self._create_page(object)
+            ui, view_object, monitoring = self._create_page(object)
 
             # Remember the page for later deletion processing:
-            self._uis.append([page, object, view_object, monitoring])
+            self._uis.append([ui.control, ui, view_object, monitoring])
 
     #---------------------------------------------------------------------------
     #  Handles some subset of the trait's list being updated:
@@ -565,11 +565,11 @@ class NotebookEditor ( Editor ):
         page_name = self.factory.page_name[1:]
 
         for i in event.removed:
-            page, _, view_object, monitoring = self._uis[index]
+            page, ui, view_object, monitoring = self._uis[index]
             if monitoring:
                 view_object.on_trait_change(self.update_page_name, page_name,
                         remove=True)
-
+            ui.dispose()
             self.control.removeTab(self.control.indexOf(page))
 
             del self._uis[index]
@@ -577,12 +577,12 @@ class NotebookEditor ( Editor ):
         # Add a page for each added object:
         first_page = None
         for object in event.added:
-            page, view_object, monitoring  = self._create_page(object)
-            self._uis[index:index] = [[page, object, view_object, monitoring]]
+            ui, view_object, monitoring  = self._create_page(object)
+            self._uis[index:index] = [[ui.control, ui, view_object, monitoring]]
             index += 1
 
             if first_page is None:
-                first_page = page
+                first_page = ui.control
 
         if first_page is not None:
             self.control.setCurrentWidget(first_page)
@@ -596,10 +596,11 @@ class NotebookEditor ( Editor ):
         """
         page_name = self.factory.page_name[1:]
 
-        for _, _, view_object, monitoring in self._uis:
+        for _, ui, view_object, monitoring in self._uis:
             if monitoring:
                 view_object.on_trait_change(self.update_page_name, page_name,
                         remove=True)
+            ui.dispose()
 
         # Reset the list of ui's and dictionary of page name counts:
         self._uis = []
@@ -628,8 +629,8 @@ class NotebookEditor ( Editor ):
         """ Handles the trait defining a particular page's name being changed.
         """
         for i, value in enumerate(self._uis):
-            page, user_object, _, _ = value
-            if object is user_object:
+            page, ui, _, _ = value
+            if object is ui.info.object:
                 name = None
                 handler = getattr(self.ui.handler,
                         '%s_%s_page_name' % (self.object_name, self.name),
@@ -703,7 +704,7 @@ class NotebookEditor ( Editor ):
         else:
             self.control.addTab(ui.control, image, name)
 
-        return (ui.control, view_object, monitoring)
+        return (ui, view_object, monitoring)
 
     #---------------------------------------------------------------------------
     #  Handles a notebook tab being 'activated' (i.e. clicked on) by the user:
@@ -715,9 +716,9 @@ class NotebookEditor ( Editor ):
         """
         w = self.control.widget(idx)
 
-        for page, object, _, _ in self._uis:
+        for page, ui, _, _ in self._uis:
             if page is w:
-                self.selected = object
+                self.selected = ui.info.object
                 break
 
     #---------------------------------------------------------------------------
@@ -727,7 +728,7 @@ class NotebookEditor ( Editor ):
     def _selected_changed(self, selected):
         """ Handles the **selected** trait being changed.
         """
-        for page, object, _, _ in self._uis:
-            if selected is object:
+        for page, ui, _, _ in self._uis:
+            if selected is ui.info.object:
                 self.control.setCurrentWidget(page)
                 break
