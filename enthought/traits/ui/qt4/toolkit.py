@@ -361,7 +361,28 @@ class GUIToolkit ( Toolkit ):
         """ Hooks all specified events for all controls in a UI so that they
             can be routed to the correct event handler.
         """
-        pass
+        if events is None:
+            # fixme: Implement drag and drop events ala toolkit.py for wx
+            return
+
+        elif events == 'keys':
+            class KeyEventCatcher(QtCore.QObject):
+                def eventFilter(self, object, event):
+                    if (event.type() == QtCore.QEvent.KeyPress):
+                        return handler(event)
+                    else:
+                        return QtCore.QObject.eventFilter(self, object, event)
+            control.installEventFilter(KeyEventCatcher(control))
+
+    #---------------------------------------------------------------------------
+    #  Indicates that an event should continue to be processed by the toolkit
+    #---------------------------------------------------------------------------
+
+    def skip_event ( self, event ):
+        """ Indicates that an event should continue to be processed by the 
+            toolkit.
+        """
+        event.ignore()
 
     #---------------------------------------------------------------------------
     #  Destroys a specified GUI toolkit control:  
