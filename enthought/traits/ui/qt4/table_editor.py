@@ -19,7 +19,7 @@
 from PyQt4 import QtCore, QtGui
 
 from enthought.traits.api \
-    import List, Instance, Any
+    import List, Instance, Any, Event
      
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the 
@@ -60,7 +60,14 @@ class TableEditor(Editor):
     # The table model associated with the editor:
     model = Instance(TableModel)
 
+    # The currently selected row(s), column(s), or cell(s).
     selected = Any
+
+    # The event fired when a cell is clicked on:
+    click = Event
+    
+    # The event fired when a cell is double-clicked on:
+    dclick = Event
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -78,17 +85,26 @@ class TableEditor(Editor):
         self.control = _TableView(editor=self)
         smodel = self.control.selectionModel()
 
-        # Connect to the mode specific handler.
+        # Connect to the mode specific selection handler.
         mode = factory.selection_mode
         mode_slot = getattr(self, '_on_%s_selection' % mode)
-
-        QtCore.QObject.connect(smodel, QtCore.SIGNAL('selectionChanged(QItemSelection, QItemSelection)'), mode_slot)
+        signal = QtCore.SIGNAL('selectionChanged(QItemSelection, QItemSelection)')
+        QtCore.QObject.connect(smodel, signal, mode_slot)
 
         is_list = (mode in ('rows', 'columns', 'cells'))
         self.sync_value(factory.selected, 'selected', is_list=is_list)
 
         # Select the first row/column/cell.
         self.control.setCurrentIndex(self.model.createIndex(0, 0))
+
+        # Connect to the click and double click handlers
+        signal = QtCore.SIGNAL('clicked(QModelIndex)')
+        QtCore.QObject.connect(self.control, signal, self._on_click)
+        self.sync_value(factory.click, 'click', 'to')
+
+        signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
+        QtCore.QObject.connect(self.control, signal, self._on_dclick)
+        self.sync_value(factory.dclick, 'dclick', 'to')
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -183,6 +199,33 @@ class TableEditor(Editor):
         self.selected = [self.columns[mi.row()].get_value(items[mi.row()]) for mi in indexes]
 
         self.ui.evaluate(self.factory.on_select, self.selected)
+
+    def _on_click(self, index):
+        """Handle a cell being clicked."""
+        
+        column = self.columns[index.column()]
+        object = self.items()[index.row()]
+        
+        # Fire the same event on the editor after mapping it to a model object
+        # and column name:
+        self.click = (object, column)
+
+        # Invoke the column's click handler:
+        column.on_click(object)
+
+    def _on_dclick(self, index):
+        """Handle a cell being double clicked."""
+        
+        column = self.columns[index.column()]
+        object = self.items()[index.row()]
+        
+        # Fire the same event on the editor after mapping it to a model object
+        # and column name:
+        self.dclick = (object, column)
+
+        # Invoke the column's double-click handler:
+        column.on_dclick(object)
+
 
 #-------------------------------------------------------------------------------
 #  '_TableView' class:
