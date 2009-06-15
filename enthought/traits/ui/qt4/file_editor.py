@@ -192,6 +192,11 @@ class CustomEditor ( SimpleTextEditor ):
         self._model = model = QtGui.QDirModel()
         self.control.setModel(model)
 
+        # Hide the labels at the top and only show the column for the file name
+        self.control.header().hide()
+        for column in xrange(1, model.columnCount()):
+            self.control.hideColumn(column)
+
         factory = self.factory
         self.filter = factory.filter
         self.sync_value(factory.filter_name, 'filter', 'from', is_list=True)
