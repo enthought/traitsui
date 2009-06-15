@@ -98,7 +98,7 @@ class TableEditor(Editor):
         """Updates the editor when the object trait changes externally to the
         editor."""
 
-        pass
+        self.model.reset()
 
     #---------------------------------------------------------------------------
     #  Helper methods for TableModel:
