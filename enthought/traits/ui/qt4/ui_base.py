@@ -271,7 +271,10 @@ class _StickyDialog(QtGui.QDialog):
         layout.addWidget(self._mw)
         self.setLayout(layout)
 
-        if not ui.view.resizable:
+        if ui.view.resizable:
+            self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint |
+                                QtCore.Qt.WindowMaximizeButtonHint)
+        else:
             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
 
         self._ui = ui
