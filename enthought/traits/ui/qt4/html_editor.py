@@ -21,6 +21,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import webbrowser
+
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 from enthought.traits.api import Str
@@ -57,6 +59,12 @@ class SimpleEditor ( Editor ):
         self.control = QtWebKit.QWebView()
         self.control.setSizePolicy( QtGui.QSizePolicy.Expanding, 
                                     QtGui.QSizePolicy.Expanding )
+
+        if self.factory.open_externally:
+            self.control.page().setLinkDelegationPolicy( 
+                QtWebKit.QWebPage.DelegateAllLinks )
+            signal = QtCore.SIGNAL( 'linkClicked(QUrl)' )
+            QtCore.QObject.connect( self.control, signal, self._link_clicked )
                                    
         self.base_url = self.factory.base_url
         self.sync_value( self.factory.base_url_name, 'base_url', 'from' )
@@ -78,11 +86,12 @@ class SimpleEditor ( Editor ):
         else:
             self.control.setHtml( text )
 
-    #---------------------------------------------------------------------------
-    #  Updates the base URL on the underlying toolkit widget:
-    #---------------------------------------------------------------------------
+    #-- Event Handlers ---------------------------------------------------------
 
     def _base_url_changed(self):
         self.update_editor()
+
+    def _link_clicked(self, url):
+        webbrowser.open_new( url.toString() )
 
 #-EOF--------------------------------------------------------------------------
