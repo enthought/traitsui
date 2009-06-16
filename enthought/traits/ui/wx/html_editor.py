@@ -24,7 +24,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-import os.path
+import os.path, webbrowser
 import wx.html as wh
 
 from enthought.traits.api import Str
@@ -87,6 +87,9 @@ class SimpleEditor ( Editor ):
         
         self.control = URLResolvingHtmlWindow( parent , self.base_url )
         self.control.SetBorders( 2 )
+
+        wh.EVT_HTML_LINK_CLICKED( self.control, self.control.GetId(), 
+                                  self._link_clicked )
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -100,14 +103,19 @@ class SimpleEditor ( Editor ):
         if self.factory.format_text:
             text = self.factory.parse_text( text )
         self.control.SetPage( text )
-
-    #---------------------------------------------------------------------------
-    #  Updates the base URL on the underlying toolkit widget:
-    #---------------------------------------------------------------------------
+        
+    #-- Event Handlers ---------------------------------------------------------
 
     def _base_url_changed(self):
         if self.control:
             self.control.base_url = self.base_url
             self.update_editor()
+
+    def _link_clicked(self, event):
+        if self.factory.open_externally:
+            url = event.GetLinkInfo().GetHref()
+            webbrowser.open_new( url )
+        else:
+            event.Skip()
 
 #--EOF-------------------------------------------------------------------------
