@@ -25,7 +25,13 @@
 import wx
 
 if wx.Platform == '__WXMSW__':
-    import  wx.lib.iewin as iewin
+    # The new version of IEHTMLWindow (wx 2.8.8.0) is mostly compatible with
+    # the old one, but it has changed the API for handling COM events, so we
+    # cannot use it.
+    try:
+        import wx.lib.iewin_old as iewin
+    except ImportError:
+        import wx.lib.iewin as iewin
 
 from enthought.traits.api \
     import Str, Event, Property
@@ -108,7 +114,7 @@ class _IEHTMLEditor ( Editor ):
         
         parent.Bind( iewin.EVT_StatusTextChange, self._status_modified,     ie )
         parent.Bind( iewin.EVT_TitleChange,      self._title_modified,      ie )
-        parent.Bind( iewin.EVT_DocumentComplete, self._page_loaded_modified,ie ) 
+        parent.Bind( iewin.EVT_DocumentComplete, self._page_loaded_modified,ie )
         parent.Bind( iewin.EVT_NewWindow2,       self._new_window_modified, ie )
                         
     #---------------------------------------------------------------------------
@@ -120,21 +126,23 @@ class _IEHTMLEditor ( Editor ):
             editor.
         """
         value = self.str_value.strip()
+
+        if value == '':
+            self.control.LoadString( '<html><body></body></html>' )
         
-        if value[:1] == '<':
+        elif value[:1] == '<':
             self.control.LoadString( value )
-            return
             
-        if (value[:4] != 'http') or (value.find( '://' ) < 0):
+        elif (value[:4] != 'http') or (value.find( '://' ) < 0):
             try:
                 file = open( value, 'rb' )
                 self.control.LoadStream( file )
                 file.close()
-                return
             except:
                 pass
-            
-        self.control.Navigate( value )
+        
+        else:
+            self.control.Navigate( value )
         
     #-- Property Implementations -----------------------------------------------
     
