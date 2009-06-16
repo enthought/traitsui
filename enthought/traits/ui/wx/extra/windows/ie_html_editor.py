@@ -22,6 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import webbrowser
+
 import wx
 
 if wx.Platform == '__WXMSW__':
@@ -34,7 +36,7 @@ if wx.Platform == '__WXMSW__':
         import wx.lib.iewin as iewin
 
 from enthought.traits.api \
-    import Str, Event, Property
+    import Bool, Event, Property, Str
     
 from enthought.traits.ui.wx.editor \
     import Editor
@@ -116,6 +118,7 @@ class _IEHTMLEditor ( Editor ):
         parent.Bind( iewin.EVT_TitleChange,      self._title_modified,      ie )
         parent.Bind( iewin.EVT_DocumentComplete, self._page_loaded_modified,ie )
         parent.Bind( iewin.EVT_NewWindow2,       self._new_window_modified, ie )
+        parent.Bind( iewin.EVT_BeforeNavigate2,  self._navigate_requested,  ie )
                         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -185,7 +188,12 @@ class _IEHTMLEditor ( Editor ):
     def _new_window_modified ( self, event ):
         # If the event is cancelled, new windows can be disabled. 
         # At this point we've opted to allow new windows
-        pass        
+        pass
+
+    def _navigate_requested ( self, event ):
+        if self.factory.open_externally:
+            event.Cancel = True
+            webbrowser.open_new ( event.URL )
                     
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:
@@ -196,6 +204,9 @@ class IEHTMLEditor ( BasicEditorFactory ):
     
     # The editor class to be created:
     klass = _IEHTMLEditor
+
+    # Should links be opened in an external browser?
+    open_externally = Bool(False)
     
     # Optional name of trait used to tell browser to show Home page:
     home = Str
