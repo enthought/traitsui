@@ -24,29 +24,37 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import os.path
 import wx.html as wh
+
+from enthought.traits.api import Str
     
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the 
 # enthought.traits.ui.editors.html_editor file.
-from enthought.traits.ui.editors.html_editor \
-    import ToolkitEditorFactory
+from enthought.traits.ui.editors.html_editor import ToolkitEditorFactory
     
-from editor  \
-    import Editor
-    
+from editor import Editor
+
 #-------------------------------------------------------------------------------
-#  Constants:
+#  URLResolvingHtmlWindow class:
 #-------------------------------------------------------------------------------
 
-# Template used to create code blocks embedded in the module comment
-block_template = """<center><table width="95%%"><tr><td bgcolor="#ECECEC"><tt>
-%s</tt></td></tr></table></center>"""
+class URLResolvingHtmlWindow( wh.HtmlWindow ):
+    """ Overrides OnOpeningURL method of HtmlWindow to append the base URL
+        local links.
+    """
 
-# Template used to create lists embedded in the module comment
-list_template = """<%s>
-%s
-</%s>"""
+    def __init__( self, parent, base_url ):
+        wh.HtmlWindow.__init__( self, parent )
+        self.base_url = base_url
+
+    def OnOpeningURL( self, url_type, url ):
+        if (not self.base_url or
+            url.startswith( ( 'http://', 'https://', self.base_url ) )):
+            return wh.HTML_OPEN
+        else:
+            return os.path.join( self.base_url, url )
                                       
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -60,7 +68,10 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
         
     # Is the HTML editor scrollable? This values override the default.
-    scrollable = True 
+    scrollable = True
+
+    # External objects referenced in the HTML are relative to this URL
+    base_url = Str
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -71,7 +82,10 @@ class SimpleEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = wh.HtmlWindow( parent )
+        self.base_url = self.factory.base_url
+        self.sync_value( self.factory.base_url_name, 'base_url', 'from' )
+        
+        self.control = URLResolvingHtmlWindow( parent , self.base_url )
         self.control.SetBorders( 2 )
         
     #---------------------------------------------------------------------------
@@ -86,5 +100,14 @@ class SimpleEditor ( Editor ):
         if self.factory.format_text:
             text = self.factory.parse_text( text )
         self.control.SetPage( text )
+
+    #---------------------------------------------------------------------------
+    #  Updates the base URL on the underlying toolkit widget:
+    #---------------------------------------------------------------------------
+
+    def _base_url_changed(self):
+        if self.control:
+            self.control.base_url = self.base_url
+            self.update_editor()
 
 #--EOF-------------------------------------------------------------------------
