@@ -21,7 +21,9 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtGui, QtWebKit
+from PyQt4 import QtCore, QtGui, QtWebKit
+
+from enthought.traits.api import Str
     
 from editor import Editor
 
@@ -38,7 +40,10 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
 
     # Is the HTML editor scrollable? This values override the default.
-    scrollable = True 
+    scrollable = True
+
+    # External objects referenced in the HTML are relative to this URL
+    base_url = Str
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -50,8 +55,11 @@ class SimpleEditor ( Editor ):
             widget.
         """
         self.control = QtWebKit.QWebView()
-        self.control.setSizePolicy(QtGui.QSizePolicy.Expanding, 
-                                   QtGui.QSizePolicy.Expanding)
+        self.control.setSizePolicy( QtGui.QSizePolicy.Expanding, 
+                                    QtGui.QSizePolicy.Expanding )
+                                   
+        self.base_url = self.factory.base_url
+        self.sync_value( self.factory.base_url_name, 'base_url', 'from' )
         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -64,6 +72,17 @@ class SimpleEditor ( Editor ):
         text = self.str_value
         if self.factory.format_text:
             text = self.factory.parse_text( text )
-        self.control.setHtml( text )
+        if self.base_url:
+            url = QtCore.QUrl.fromLocalFile ( self.base_url )
+            self.control.setHtml( text , url )
+        else:
+            self.control.setHtml( text )
+
+    #---------------------------------------------------------------------------
+    #  Updates the base URL on the underlying toolkit widget:
+    #---------------------------------------------------------------------------
+
+    def _base_url_changed(self):
+        self.update_editor()
 
 #-EOF--------------------------------------------------------------------------
