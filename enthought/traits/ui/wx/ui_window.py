@@ -30,9 +30,6 @@ from enthought.traits.api \
 from helper \
     import init_wx_handlers, BufferDC
     
-from image_slice \
-    import paint_parent
-    
 #-------------------------------------------------------------------------------
 #  'UIWindow' class:
 #-------------------------------------------------------------------------------
@@ -94,7 +91,6 @@ class UIWindow ( HasPrivateTraits ):
         """ Paints the contents of the window.
         """
         dc = BufferDC( self.control )
-        paint_parent( dc, self.control )
         self._paint_dc( dc )
         dc.copy()
         

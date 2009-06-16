@@ -33,9 +33,6 @@ from enthought.traits.ui.editors.null_editor \
 from editor \
     import Editor
     
-from image_slice \
-    import paint_parent
-                                      
 #-------------------------------------------------------------------------------
 #  'NullEditor' class:
 #-------------------------------------------------------------------------------
@@ -59,7 +56,6 @@ class NullEditor ( Editor ):
                             
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
-        wx.EVT_PAINT( control, self._on_paint )
                         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -78,9 +74,4 @@ class NullEditor ( Editor ):
         """
         pass
            
-    def _on_paint ( self, event ):
-        """ Paint the background using the associated ImageSlice object.
-        """
-        paint_parent( wx.PaintDC( self.control ), self.control )
-
 #- EOF ------------------------------------------------------------------------

@@ -136,7 +136,7 @@ class ImageSlice ( HasPrivateTraits ):
     fdy = Int
     
     #-- Public Methods ---------------------------------------------------------
-    
+
     def fill ( self, dc, x, y, dx, dy, transparent = False ):
         """ 'Stretch fill' the specified region of a device context with the
             sliced image.
@@ -459,7 +459,7 @@ class ImageSlice ( HasPrivateTraits ):
                      data[ y1: y1 + dy, x1: x1 + dx ] ).sum() < 0.10 * dx * dy)
                      
 # Define a reusable, default ImageSlice object:
-default_image_slice = ImageSlice()
+#default_image_slice = ImageSlice()
 
 #-------------------------------------------------------------------------------
 #  Returns a (possibly cached) ImageSlice:

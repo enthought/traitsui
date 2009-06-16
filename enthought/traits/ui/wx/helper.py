@@ -336,25 +336,16 @@ class TraitsUIPanel ( wx.Panel ):
 
         wx.EVT_CHILD_FOCUS(      self, self.OnChildFocus )
         wx.EVT_ERASE_BACKGROUND( self, self.OnEraseBackground )
-        wx.EVT_PAINT(            self, self.OnPaint )
 
         if bg_color:
             self.SetBackgroundColour(bg_color)
         else:
             self.SetBackgroundColour( parent.GetBackgroundColour() )
 
-
     def OnEraseBackground ( self, event ):
         """ Do not erase the background here (do it in the 'on_paint' handler).
         """
         pass
-
-    def OnPaint ( self, event ):
-        """ Paint the background using the associated ImageSlice object.
-        """
-        from image_slice import paint_parent
-
-        paint_parent( wx.PaintDC( self ), self )
 
     def OnChildFocus ( self, event ):
         """ If the ChildFocusEvent contains one of the Panel's direct children,
