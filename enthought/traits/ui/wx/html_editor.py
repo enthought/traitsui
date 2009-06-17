@@ -24,7 +24,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-import os.path, webbrowser
+import webbrowser
+
 import wx.html as wh
 
 from enthought.traits.api import Str
@@ -54,7 +55,7 @@ class URLResolvingHtmlWindow( wh.HtmlWindow ):
             url.startswith( ( 'http://', 'https://', self.base_url ) )):
             return wh.HTML_OPEN
         else:
-            return os.path.join( self.base_url, url )
+            return self.base_url + url 
                                       
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:

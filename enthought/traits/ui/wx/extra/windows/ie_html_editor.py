@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import re
 import webbrowser
 
 import wx
@@ -45,6 +46,13 @@ from enthought.traits.ui.basic_editor_factory \
     import BasicEditorFactory
 
 #-------------------------------------------------------------------------------
+#  Constants
+#-------------------------------------------------------------------------------
+
+RELATIVE_OBJECTS_PATTERN = re.compile(r'src=["\'](?!https?:)([\s\w/\.]+?)["\']',
+                                      re.IGNORECASE)
+
+#-------------------------------------------------------------------------------
 #  '_IEHTMLEditor' class:
 #-------------------------------------------------------------------------------
                                
@@ -58,6 +66,9 @@ class _IEHTMLEditor ( Editor ):
 
     # Is the table editor is scrollable? This value overrides the default.
     scrollable = True
+
+    # External objects referenced in the HTML are relative to this url
+    base_url = Str
     
     # Event fired when the browser home page should be displayed:
     home = Event
@@ -103,16 +114,18 @@ class _IEHTMLEditor ( Editor ):
         self.set_tooltip()
         
         factory = self.factory
-        self.sync_value( factory.home,        'home',        'from' )
-        self.sync_value( factory.back,        'back',        'from' )
-        self.sync_value( factory.forward,     'forward',     'from' )
-        self.sync_value( factory.stop,        'stop',        'from' )
-        self.sync_value( factory.refresh,     'refresh',     'from' )
-        self.sync_value( factory.search,      'search',      'from' )
-        self.sync_value( factory.status,      'status',      'to' )
-        self.sync_value( factory.title,       'title',       'to' )
-        self.sync_value( factory.page_loaded, 'page_loaded', 'to' )
-        self.sync_value( factory.html,        'html',        'to' )
+        self.base_url = factory.base_url
+        self.sync_value( factory.home,          'home',        'from' )
+        self.sync_value( factory.back,          'back',        'from' )
+        self.sync_value( factory.forward,       'forward',     'from' )
+        self.sync_value( factory.stop,          'stop',        'from' )
+        self.sync_value( factory.refresh,       'refresh',     'from' )
+        self.sync_value( factory.search,        'search',      'from' )
+        self.sync_value( factory.status,        'status',      'to' )
+        self.sync_value( factory.title,         'title',       'to' )
+        self.sync_value( factory.page_loaded,   'page_loaded', 'to' )
+        self.sync_value( factory.html,          'html',        'to' )
+        self.sync_value( factory.base_url_name, 'base_url',    'from' )
         
         parent.Bind( iewin.EVT_StatusTextChange, self._status_modified,     ie )
         parent.Bind( iewin.EVT_TitleChange,      self._title_modified,      ie )
@@ -129,6 +142,13 @@ class _IEHTMLEditor ( Editor ):
             editor.
         """
         value = self.str_value.strip()
+
+        # We can correct URLs via the BeforeNavigate Event, but the COM 
+        # interface provides no such option for images. Sadly, we are forced
+        # to take a more brute force approach.
+        if self.base_url:
+            rep = lambda m: r'src="%s%s"' % ( self.base_url, m.group( 1 ) ) 
+            value = re.sub( RELATIVE_OBJECTS_PATTERN, rep, value )
 
         if value == '':
             self.control.LoadString( '<html><body></body></html>' )
@@ -191,6 +211,12 @@ class _IEHTMLEditor ( Editor ):
         pass
 
     def _navigate_requested ( self, event ):
+        # The way NavigateToString works is to navigate to about:blank then
+        # load the supplied HTML into the document property. This borks 
+        # relative URLs. 
+        if event.URL.startswith ( 'about:' ):
+            event.URL = self.base_url + event.URL[6:]
+            
         if self.factory.open_externally:
             event.Cancel = True
             webbrowser.open_new ( event.URL )
@@ -204,6 +230,12 @@ class IEHTMLEditor ( BasicEditorFactory ):
     
     # The editor class to be created:
     klass = _IEHTMLEditor
+    
+    # External objects referenced in the HTML are relative to this url
+    base_url = Str
+
+    # The object trait containing the base URL
+    base_url_name = Str
 
     # Should links be opened in an external browser?
     open_externally = Bool(False)
