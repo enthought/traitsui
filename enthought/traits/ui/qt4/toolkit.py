@@ -42,7 +42,7 @@ from constants import screen_dx, screen_dy
 #  the UI thread:
 #-------------------------------------------------------------------------------
 
-_QT_TRAITS_EVENT = QtCore.QEvent.registerEventType()
+_QT_TRAITS_EVENT = QtCore.QEvent.Type(QtCore.QEvent.registerEventType())
 
 class _CallAfter(QtCore.QObject):
     """ This class dispatches a handler so that it executes in the main GUI
