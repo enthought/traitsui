@@ -54,10 +54,6 @@ class NullEditor ( Editor ):
                                             size = wx.Size( 1, 1 ) )
         control.SetBackgroundColour( parent.GetBackgroundColour() )
                             
-        # Set up the painting event handlers:
-        wx.EVT_ERASE_BACKGROUND( control, self._erase_background )
-                        
-    #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
 
@@ -67,11 +63,4 @@ class NullEditor ( Editor ):
         """
         pass
         
-    #-- wxPython Event Handlers ------------------------------------------------
-    
-    def _erase_background ( self, event ):
-        """ Do not erase the background here (do it in the 'on_paint' handler).
-        """
-        pass
-           
 #- EOF ------------------------------------------------------------------------
