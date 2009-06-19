@@ -15,7 +15,8 @@
 #
 #------------------------------------------------------------------------------
 
-""" Defines a source code editor for the wxPython user interface toolkit, useful for tools such as debuggers.
+""" Defines a source code editor for the wxPython user interface toolkit, 
+    useful for tools such as debuggers.
 """
 
 #-------------------------------------------------------------------------------
@@ -26,7 +27,7 @@ import wx
 import wx.stc as stc
 
 from enthought.traits.api \
-    import Str, List, Int, Event, Bool, TraitError
+    import Str, List, Int, Event, Bool, TraitError, on_trait_change
     
 from enthought.traits.trait_base \
     import SequenceTypes
@@ -39,6 +40,9 @@ from enthought.traits.ui.editors.code_editor \
     
 from enthought.pyface.api \
     import PythonEditor
+
+from enthought.pyface.util.python_stc \
+    import faces
     
 from editor \
     import Editor
@@ -96,6 +100,18 @@ class SourceEditor ( Editor ):
     
     # calltip clicked event
     calltip_clicked = Event
+
+    # The STC lexer use
+    lexer = Int
+
+    # The lines to be dimmed
+    dim_lines = List(Int)
+    dim_color = Str
+    _dim_style_number = Int(16) # 0-15 are reserved for the python lexer
+    
+    # The lines to have squiggles drawn under them
+    squiggle_lines = List(Int)
+    squiggle_color = Str
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -121,6 +137,10 @@ class SourceEditor ( Editor ):
         #    EVT_STC_MARGINCLICK
         
         control.SetSize( wx.Size( 300, 124 ) )
+
+        # Clear out the goofy hotkeys for zooming text
+        control.CmdKeyClear(ord('B'), stc.STC_SCMOD_CTRL)
+        control.CmdKeyClear(ord('N'), stc.STC_SCMOD_CTRL)
         
         # Set up the events
         wx.EVT_KILL_FOCUS( control, self.wx_update_object )
@@ -140,6 +160,14 @@ class SourceEditor ( Editor ):
             
         if self.readonly:
             control.SetReadOnly( True )
+
+        # Set up the lexer
+        control.SetLexer(stc.STC_LEX_CONTAINER)
+        control.Bind(stc.EVT_STC_STYLENEEDED, self._style_needed)
+        try:
+            self.lexer = getattr(stc, 'STC_LEX_' + self.factory.lexer.upper())
+        except AttributeError:
+            self.lexer = stc.STC_LEX_NULL
             
         # Define the markers we use:
         control.MarkerDefine( MARK_MARKER, stc.STC_MARK_BACKGROUND, 
@@ -160,6 +188,19 @@ class SourceEditor ( Editor ):
         self.sync_value( factory.line, 'line' )
         self.sync_value( factory.column, 'column' )
         self.sync_value( factory.calltip_clicked, 'calltip_clicked')
+
+        self.sync_value(factory.dim_lines, 'dim_lines', 'from', is_list=True)
+        if self.factory.dim_color == '':
+            self.dim_color = 'dark grey'
+        else:
+            self.sync_value(factory.dim_color, 'dim_color', 'from')
+
+        self.sync_value(factory.squiggle_lines, 'squiggle_lines', 'from',
+                        is_list=True)
+        if factory.squiggle_color == '':
+            self.squiggle_color = 'red'
+        else:
+            self.sync_value(factory.squiggle_color, 'squiggle_color', 'from')
             
         # Check if we need to monitor the line or column position being changed:
         if (factory.line != '') or (factory.column != ''):
@@ -215,6 +256,7 @@ class SourceEditor ( Editor ):
             control.SetReadOnly( readonly )
             self._mark_lines_changed()
             self._selected_line_changed()
+            self._style_document()
             
         self._locked = False
     
@@ -307,6 +349,71 @@ class SourceEditor ( Editor ):
         """
         self.factory.key_bindings.do( event.event, self.ui.handler, 
                                       self.ui.info )
+
+    #---------------------------------------------------------------------------
+    #  Handles the styling of the editor:
+    #---------------------------------------------------------------------------
+
+    def _dim_color_changed(self):
+        self.control.StyleSetForeground(self._dim_style_number, self.dim_color)
+        self.control.StyleSetFaceName(self._dim_style_number, "courier new")
+        self.control.StyleSetSize(self._dim_style_number, faces['size'])
+        self.control.Refresh()
+
+    def _squiggle_color_changed(self):
+        self.control.IndicatorSetStyle(2, stc.STC_INDIC_SQUIGGLE)
+        self.control.IndicatorSetForeground(2, self.squiggle_color)
+        self.control.Refresh()
+
+    @on_trait_change('dim_lines, squiggle_lines')
+    def _style_document(self):
+        """ Force the STC to fire a STC_STYLENEEDED event for the entire 
+            document.
+        """
+        self.control.ClearDocumentStyle()
+        self.control.Colourise(0, -1)
+        self.control.Refresh()
+
+    def _style_needed(self, event):
+        """ Handles an STC request for styling for some area.
+        """
+        position = self.control.GetEndStyled()
+        start_line = self.control.LineFromPosition(position)
+        end = event.GetPosition()
+        end_line = self.control.LineFromPosition(end)
+
+        # Fixes a strange a bug with the STC widget where creating a new line
+        # after a dimmed line causes it to mysteriously lose its styling
+        if start_line in self.dim_lines:
+            start_line -= 1
+        
+        # Trying to Colourise only the lines that we want does not seem to work
+        # so we do the whole area and then override the styling on certain lines
+        if self.lexer != stc.STC_LEX_NULL:
+            self.control.SetLexer(self.lexer)
+            self.control.Colourise(position, end)
+            self.control.SetLexer(stc.STC_LEX_CONTAINER)
+
+        for line in xrange(start_line, end_line+1):
+            # We don't use LineLength here because it includes newline 
+            # characters. Styling these leads to strange behavior.
+            position = self.control.PositionFromLine(line)
+            style_length = self.control.GetLineEndPosition(line) - position
+
+            if line+1 in self.dim_lines:
+                # Set styling mask to only style text bits, not indicator bits
+                self.control.StartStyling(position, 0x1f)
+                self.control.SetStyling(style_length, self._dim_style_number)
+            elif self.lexer == stc.STC_LEX_NULL:
+                self.control.StartStyling(position, 0x1f)
+                self.control.SetStyling(style_length, stc.STC_STYLE_DEFAULT)
+                
+            if line+1 in self.squiggle_lines:
+                self.control.StartStyling(position, stc.STC_INDIC2_MASK)
+                self.control.SetStyling(style_length, stc.STC_INDIC2_MASK)
+            else:
+                self.control.StartStyling(position, stc.STC_INDIC2_MASK)
+                self.control.SetStyling(style_length, stc.STC_STYLE_DEFAULT)
         
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
@@ -364,7 +471,7 @@ class SourceEditor ( Editor ):
 # Define the simple, custom, text and readonly editors, which will be accessed
 # by the editor factory for code editors.
 
-SimpleEditor = TextEditor = SourceEditor
+CustomEditor = SimpleEditor = TextEditor = SourceEditor
 
 class ReadonlyEditor(SourceEditor):
     
