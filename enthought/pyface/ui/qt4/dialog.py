@@ -12,7 +12,7 @@
 
 
 # Major package imports.
-from PyQt4 import QtGui
+from PyQt4 import QtCore, QtGui
 
 # Enthought library imports.
 from enthought.traits.api import Bool, Enum, implements, Int, Str, Unicode
@@ -118,6 +118,7 @@ class Dialog(MDialog, Window):
         return panel
 
     def _show_modal(self):
+        self.control.setWindowModality(QtCore.Qt.ApplicationModal)
         return _RESULT_MAP[self.control.exec_()]
 
     ###########################################################################
