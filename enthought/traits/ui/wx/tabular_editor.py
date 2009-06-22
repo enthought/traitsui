@@ -166,10 +166,10 @@ class wxListCtrl ( wx.ListCtrl, TextEditMixin ):
         return editor.adapter.get_text( editor.object, editor.name,
                                         row, column )
 #-------------------------------------------------------------------------------
-#  '_TabularEditor' class:
+#  'TabularEditor' class:
 #-------------------------------------------------------------------------------
 
-class _TabularEditor ( Editor ):
+class TabularEditor ( Editor ):
     """ A traits UI editor for editing tabular data (arrays, list of tuples,
         lists of objects, etc).
     """
@@ -386,7 +386,7 @@ class _TabularEditor ( Editor ):
         self.on_trait_change( self._rebuild_all, 'adapter.columns',
                               remove = True )
 
-        super( _TabularEditor, self ).dispose()
+        super( TabularEditor, self ).dispose()
 
     def _update_changed ( self, event ):
         """ Handles the 'update' event being fired.
@@ -1112,9 +1112,9 @@ class _TabularEditor ( Editor ):
                 column = self._get_column( x, translate = True )
             ) )
 
-        # wx should continue with additional event handlers. Skip(False) actually
-        # means to skip looking, skip(True) means to keep looking. This seems backwards
-        # to me... 
+        # wx should continue with additional event handlers. Skip(False) 
+        # actually means to skip looking, skip(True) means to keep looking. 
+        # This seems backwards to me...
         event.Skip(True)
 
 #-------------------------------------------------------------------------------
@@ -1135,7 +1135,7 @@ class TabularEditorEvent ( HasStrictTraits ):
     #-- Private Traits ---------------------------------------------------------
 
     # The editor the event is associated with:
-    editor = Instance( _TabularEditor )
+    editor = Instance( TabularEditor )
 
     #-- Property Implementations -----------------------------------------------
 
