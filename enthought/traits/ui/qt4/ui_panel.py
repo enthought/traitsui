@@ -141,9 +141,10 @@ class _Panel(BasePanel):
         # of an "outer" widget (eg. a dock widget).  These tests are extremely
         # flakey.
         title = view.title
-        if title != "":
-            if isinstance(parent, QtGui.QMainWindow) and not isinstance(parent.parent(), QtGui.QDialog):
-                title = ""
+        if ((isinstance(parent, QtGui.QMainWindow) and 
+             not isinstance(parent.parent(), QtGui.QDialog)) or
+            isinstance(parent, QtGui.QTabWidget)):
+            title = ""
 
         # Panels must be widgets as it is only the TraitsUI PyQt code that can
         # handle them being layouts as well.  Therefore create a widget if the
