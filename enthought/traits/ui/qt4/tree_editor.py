@@ -51,7 +51,7 @@ from editor \
     import Editor
 
 from helper \
-    import pixmap_cache
+    import open_fbi, pixmap_cache
 
 #-------------------------------------------------------------------------------
 #  The core tree node menu actions:
@@ -1112,14 +1112,14 @@ class SimpleEditor ( Editor ):
                 if not eval( action.defined_when, globals(), self._context ):
                     return False
             except:
-                of_fbi()
+                open_fbi()
 
         if action.visible_when != '':
             try:
                 if not eval( action.visible_when, globals(), self._context ):
                     return False
             except:
-                of_fbi()
+                open_fbi()
 
         return True
 
@@ -1190,7 +1190,7 @@ class SimpleEditor ( Editor ):
                 if not eval( condition, globals(), self._context ):
                     value = False
             except:
-                of_fbi()
+                open_fbi()
             setattr( object, trait, value )
 
 #----- Menu event handlers: ----------------------------------------------------
