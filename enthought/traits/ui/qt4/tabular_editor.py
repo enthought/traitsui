@@ -428,9 +428,7 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
         QtGui.QStyledItemDelegate.paint(self, painter, option, index)
         painter.save()
 
-        # fixme: This is returning bogus (negative) values. QRgb is a typedef
-        # for unsigned integers. Is it being transfered to Python as if it was
-        # signed?
+        # FIXME: 'styleHint' is returning bogus (negative) values. Why?
         #style = self._table_view.style()
         #color = style.styleHint(QtGui.QStyle.SH_Table_GridLineColor, option,
         #                        self._table_view)

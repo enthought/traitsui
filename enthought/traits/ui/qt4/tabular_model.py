@@ -37,15 +37,15 @@ alignment_map = {
 }
 
 #-------------------------------------------------------------------------------
-#  'TabularModel' class
+#  'TabularModel' class:
 #-------------------------------------------------------------------------------
 
 class TabularModel(QtCore.QAbstractTableModel):
-    """The model for tabular data."""
+    """ The model for tabular data."""
 
     def __init__(self, editor, parent=None):
-        """Initialise the object."""
-
+        """ Initialise the object.
+        """
         QtCore.QAbstractTableModel.__init__(self, parent)
 
         self._editor = editor

@@ -368,7 +368,7 @@ class GUIToolkit ( Toolkit ):
         elif events == 'keys':
             class KeyEventCatcher(QtCore.QObject):
                 def eventFilter(self, object, event):
-                    if (event.type() == QtCore.QEvent.KeyPress):
+                    if event.type() == QtCore.QEvent.KeyPress:
                         return handler(event)
                     else:
                         return QtCore.QObject.eventFilter(self, object, event)
