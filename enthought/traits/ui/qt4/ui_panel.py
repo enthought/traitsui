@@ -446,6 +446,7 @@ class _GroupPanel(object):
                 layout = self._add_groups(content, inner)
             else:
                 layout = self._add_items(content, inner)
+            layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
 
             if outer is None:
                 outer = layout
