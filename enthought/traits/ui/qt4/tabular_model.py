@@ -58,7 +58,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         obj, name = editor.object, editor.name
         row, column = mi.row(), mi.column()
 
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
             return QtCore.QVariant(adapter.get_text(obj, name, row, column))
 
         elif role == QtCore.Qt.DecorationRole:
@@ -75,9 +75,9 @@ class TabularModel(QtCore.QAbstractTableModel):
                 return QtCore.QVariant(QtGui.QFont(font))
 
         elif role == QtCore.Qt.TextAlignmentRole:
-            alignment = adapter.get_alignment(obj, name, column)
-            return QtCore.QVariant(alignment_map.get(alignment, 
-                                                     QtCore.Qt.AlignLeft))
+            string = adapter.get_alignment(obj, name, column)
+            alignment = alignment_map.get(string, QtCore.Qt.AlignLeft)
+            return QtCore.QVariant(alignment | QtCore.Qt.AlignVCenter)
 
         elif role == QtCore.Qt.BackgroundRole:
             color = adapter.get_bg_color(obj, name, row)
@@ -98,7 +98,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         obj, name = editor.object, editor.name
         row, column = mi.row(), mi.column()
 
-        editor.adapter.set_text(obj, name, row, column, value.toString())
+        editor.adapter.set_text(obj, name, row, column, str(value.toString()))
         signal = QtCore.SIGNAL('dataChanged(QModelIndex,QModelIndex)')
         self.emit(signal, mi, mi)
         return True

@@ -23,7 +23,7 @@
 # currently implemented:
 #     * right_clicked and right_dclicked events
 #     * drag and drop support
-#     * column width specification and saving
+#     * editable labels (column headers)
 
 #-------------------------------------------------------------------------------
 #  Imports:
@@ -119,12 +119,11 @@ class TabularEditor(Editor):
             widget.
         """
         factory = self.factory
-        self.adapter = factory.adapter
+        adapter = self.adapter = factory.adapter
         self.model = TabularModel(editor=self)
 
         # Create the control
         control = self.control = _TableView(self)
-        smodel = self.control.selectionModel()
 
         # Set up the selection listener
         if factory.multi_select:
@@ -142,7 +141,8 @@ class TabularEditor(Editor):
         else:
             slot = self._on_row_selection
         signal = 'selectionChanged(QItemSelection,QItemSelection)'
-        QtCore.QObject.connect(smodel, QtCore.SIGNAL(signal), slot)
+        QtCore.QObject.connect(self.control.selectionModel(), 
+                               QtCore.SIGNAL(signal), slot)
 
         # Synchronize other interesting traits as necessary:
         self.sync_value(factory.update, 'update', 'from')
@@ -221,6 +221,27 @@ class TabularEditor(Editor):
             editor.
         """
         self.model.reset()
+
+    #---------------------------------------------------------------------------
+    #  UI preference save/restore interface:
+    #---------------------------------------------------------------------------
+
+    def restore_prefs(self, prefs):
+        """ Restores any saved user preference information associated with the
+            editor.
+        """
+        cws = prefs.get('cached_widths')
+        num_columns = len(self.adapter.columns)
+        if cws is not None and num_columns == len(cws):
+            for column in xrange(num_columns):
+                self.control.setColumnWidth(column, cws[column])
+
+    def save_prefs(self):
+        """ Returns any user preference information associated with the editor.
+        """
+        widths = [ self.control.columnWidth(column) for column
+                   in xrange(len(self.adapter.columns)) ]
+        return { 'cached_widths': widths }
 
     #---------------------------------------------------------------------------
     #  Private methods:
@@ -384,8 +405,44 @@ class TabularEditorEvent(HasStrictTraits):
         return editor.adapter.get_item(editor.object, editor.name, self.row)
 
 #-------------------------------------------------------------------------------
-#  '_TableView' class:
+#  Qt widgets that have been configured to behave as expected by Traits UI:
 #-------------------------------------------------------------------------------
+
+class _ItemDelegate(QtGui.QStyledItemDelegate):
+    """ A QStyledItemDelegate which draws its owns gridlines so that we can 
+        choose to draw only the horizontal or only the vertical gridlines if 
+        necessary.
+    """
+
+    def __init__(self, table_view):
+        """ Store which grid lines to draw.
+        """
+        QtGui.QStyledItemDelegate.__init__(self)
+        self._table_view = table_view
+        self._horizontal_lines = table_view._editor.factory.horizontal_lines
+        self._vertical_lines = table_view._editor.factory.vertical_lines
+
+    def paint(self, painter, option, index):
+        """ Overrident to draw gridlines.
+        """
+        QtGui.QStyledItemDelegate.paint(self, painter, option, index)
+        painter.save()
+
+        # fixme: This is returning bogus (negative) values. QRgb is a typedef
+        # for unsigned integers. Is it being transfered to Python as if it was
+        # signed?
+        #style = self._table_view.style()
+        #color = style.styleHint(QtGui.QStyle.SH_Table_GridLineColor, option,
+        #                        self._table_view)
+        #painter.setPen(QtGui.QColor(color))
+        painter.setPen(option.palette.color(QtGui.QPalette.Dark))
+
+        if self._horizontal_lines:
+            painter.drawLine(option.rect.topLeft(), option.rect.topRight())
+        if self._vertical_lines:
+            painter.drawLine(option.rect.topLeft(), option.rect.bottomLeft())
+
+        painter.restore()
 
 class _TableView(QtGui.QTableView):
     """ A QTableView configured to behave as expected by TraitsUI.
@@ -412,17 +469,9 @@ class _TableView(QtGui.QTableView):
             hheader.hide()
         self.resizeColumnsToContents()
 
-        # Configure the grid lines
-        if factory.horizontal_lines:
-            if not factory.vertical_lines:
-                self.setStyleSheet("QTableView { border-top-color: transparent;"
-                                   " border-bottom-color: transparent; }")
-        else:
-            if factory.vertical_lines:
-                self.setStyleSheet("QTableView { border-left-color: transparent;"
-                                   " border-right-color: transparent; }")
-            else:
-                self.setShowGrid(False)            
+        # Configure the grid lines--we'll draw our own
+        self.setShowGrid(False)
+        self.setItemDelegate(_ItemDelegate(self))
 
         # Configure the selection behaviour.
         behav = QtGui.QAbstractItemView.SelectRows
@@ -432,3 +481,21 @@ class _TableView(QtGui.QTableView):
             mode = QtGui.QAbstractItemView.SingleSelection
         self.setSelectionBehavior(behav)
         self.setSelectionMode(mode)
+
+        # Set column widths according to the adapter's requested width
+        for column in xrange(len(editor.adapter.columns)):
+            width = editor.adapter.get_width(editor.object, editor.name, column)
+            if width != -1:
+                self.setColumnWidth(column, width)
+
+    def sizeHint(self):
+        """ Reimplemented to define an appropriate size hint.
+        """
+        sh = QtGui.QTableView.sizeHint(self)
+        
+        w = 0
+        for column in range(len(self._editor.adapter.columns)):
+            w += self.sizeHintForColumn(column)
+        sh.setWidth(w)
+
+        return sh
