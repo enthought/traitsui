@@ -16,8 +16,29 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
 
+#-------------------------------------------------------------------------------
+#  Constants:
+#-------------------------------------------------------------------------------
+
+# Mapping for trait alignment values to qt4 horizontal alignment constants
+h_alignment_map = {
+    'left':   QtCore.Qt.AlignLeft,
+    'center': QtCore.Qt.AlignHCenter,
+    'right':  QtCore.Qt.AlignRight,
+}
+
+# Mapping for trait alignment values to qt4 horizontal alignment constants
+v_alignment_map = {
+    'top':    QtCore.Qt.AlignTop,
+    'center': QtCore.Qt.AlignVCenter,
+    'bottom': QtCore.Qt.AlignRight,
+}
+
+#-------------------------------------------------------------------------------
+#  'TableModel' class:
+#-------------------------------------------------------------------------------
 
 class TableModel(QtCore.QAbstractTableModel):
     """The model for table data."""
@@ -32,21 +53,45 @@ class TableModel(QtCore.QAbstractTableModel):
     def data(self, mi, role):
         """Reimplemented to return the data."""
 
-        if role != QtCore.Qt.DisplayRole:
-            return QtCore.QVariant()
-
-        row = self._editor.items()[mi.row()]
+        obj = self._editor.items()[mi.row()]
         column = self._editor.columns[mi.column()]
-        cell = column.get_value(row)
 
-        if cell is None:
-            return QtCore.QVariant()
+        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+            text = column.get_value(obj)
+            if text is not None:
+                return QtCore.QVariant(text)
 
-        return QtCore.QVariant(cell)
+        elif role == QtCore.Qt.ToolTipRole:
+            tooltip = column.get_tooltip(obj)
+            if tooltip:
+                return QtCore.QVariant(tooltip)
+
+        elif role == QtCore.Qt.FontRole:
+            font = column.get_text_font(obj)
+            if font is not None:
+                return QtCore.QVariant(QtGui.QFont(font))
+
+        elif role == QtCore.Qt.TextAlignmentRole:
+            string = column.get_horizontal_alignment(obj)
+            h_alignment = h_alignment_map.get(string, QtCore.Qt.AlignLeft)
+            string = column.get_vertical_alignment(obj)
+            v_alignment = v_alignment_map.get(string, QtCore.Qt.AlignVCenter)
+            return QtCore.QVariant(h_alignment | v_alignment)
+
+        elif role == QtCore.Qt.BackgroundRole:
+            color = column.get_cell_color(obj)
+            if color is not None:
+                return QtCore.QVariant(QtGui.QBrush(QtGui.QColor(color)))
+
+        elif role == QtCore.Qt.ForegroundRole:
+            color = column.get_text_color(obj)
+            if color is not None:
+                return QtCore.QVariant(QtGui.QBrush(QtGui.QColor(color)))
+
+        return QtCore.QVariant()
 
     def headerData(self, section, orientation, role):
         """Reimplemented to return the header data."""
-
         if orientation != QtCore.Qt.Horizontal or role != QtCore.Qt.DisplayRole:
             return QtCore.QVariant()
 

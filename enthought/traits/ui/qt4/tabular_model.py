@@ -67,7 +67,9 @@ class TabularModel(QtCore.QAbstractTableModel):
                 return QtCore.QVariant(image)
 
         elif role == QtCore.Qt.ToolTipRole:
-            return QtCore.QVariant(adapter.get_tooltip(obj, name, row, column))
+            tooltip = adapter.get_tooltip(obj, name, row, column)
+            if tooltip:
+                return QtCore.QVariant(tooltip)
 
         elif role == QtCore.Qt.FontRole:
             font = adapter.get_font(obj, name, row)
