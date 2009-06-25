@@ -67,7 +67,7 @@ class ImageResource(MImageResource, HasTraits):
     ###########################################################################
 
     def _get_absolute_path(self):
-        # FIXME: This doesn't quite wotk the new notion of image size. We
+        # FIXME: This doesn't quite work the new notion of image size. We
         # should find out who is actually using this trait, and for what!
         # (AboutDialog uses it to include the path name in some HTML.)
         ref = self._get_ref()
