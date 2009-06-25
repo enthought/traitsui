@@ -645,7 +645,10 @@ class _GroupPanel(object):
                     else:
                         label = heading_text(None, text=label).control
 
-                    inner.addWidget(label, row, col)
+                    if row < 0:
+                        inner.addWidget(label)
+                    else:
+                        inner.addWidget(label, row, col)
 
                     if item.emphasized:
                         self._add_emphasis(label)
