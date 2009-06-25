@@ -3,8 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
-
+# However, when used with the GPL version of PyQt the additional terms described
+# in the PyQt GPL exception also apply.
 #
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
@@ -81,12 +81,23 @@ class TableModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.BackgroundRole:
             color = column.get_cell_color(obj)
             if color is not None:
-                return QtCore.QVariant(QtGui.QBrush(QtGui.QColor(color)))
+                if isinstance(color, (tuple, list)):
+                    q_color = QtGui.QColor(*color)
+                else:
+                    q_color = QtGui.QColor(color)
+                return QtCore.QVariant(QtGui.QBrush(q_color))
 
         elif role == QtCore.Qt.ForegroundRole:
             color = column.get_text_color(obj)
             if color is not None:
-                return QtCore.QVariant(QtGui.QBrush(QtGui.QColor(color)))
+                if isinstance(color, (tuple, list)):
+                    q_color = QtGui.QColor(*color)
+                else:
+                    q_color = QtGui.QColor(color)
+                return QtCore.QVariant(QtGui.QBrush(q_color))
+
+        elif role == QtCore.Qt.UserRole:
+            return QtCore.QVariant(obj)
 
         return QtCore.QVariant()
 

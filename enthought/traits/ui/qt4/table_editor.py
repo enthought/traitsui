@@ -226,7 +226,6 @@ class TableEditor(Editor):
         # Invoke the column's double-click handler:
         column.on_dclick(object)
 
-
 #-------------------------------------------------------------------------------
 #  '_TableView' class:
 #-------------------------------------------------------------------------------
@@ -255,27 +254,32 @@ class _TableView(QtGui.QTableView):
         QtGui.QTableView.__init__(self)
 
         self._editor = editor
-
         factory = editor.factory
-
         self.setModel(editor.model)
+
+        # Configure the row headings.
         self.verticalHeader().hide()
 
         # Configure the column headings.
         hheader = self.horizontalHeader()
-
+        hheader.setStretchLastSection(True)
         if factory.show_column_labels:
             hheader.setHighlightSections(False)
-            hheader.setStretchLastSection(True)
         else:
             hheader.hide()
-
-        self.resizeColumnsToContents()
 
         # Configure the selection behaviour.
         behav, mode = self._SELECTION_MAP[factory.selection_mode]
         self.setSelectionBehavior(behav)
         self.setSelectionMode(mode)
+
+        # Configure custom item delegates, if necessary.
+        for i, column in enumerate(self._editor.columns):
+            if column.renderer:
+                self.setItemDelegateForColumn(i, column.renderer)
+
+        # Initialize the column widths
+        self.resizeColumnsToContents()
 
     def sizeHint(self):
         """Reimplemented to support auto_size."""
@@ -284,14 +288,11 @@ class _TableView(QtGui.QTableView):
 
         if self._editor.factory.auto_size:
             w = 0
-
             for colnr in range(len(self._editor.columns)):
                 w += self.sizeHintForColumn(colnr)
-
             sh.setWidth(w)
 
         return sh
-
 
 # Define the SimpleEditor class.
 SimpleEditor = TableEditor
