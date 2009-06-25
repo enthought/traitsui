@@ -344,7 +344,7 @@ class TabularEditor(Editor):
     #-- Table Control Event Handlers -------------------------------------------
 
     def _on_activate(self, index):
-        """ Handle a cell being clicked.
+        """ Handle a cell being activated.
         """
         self._mouse_click(index, 'activated')
 
@@ -362,29 +362,37 @@ class TabularEditor(Editor):
         event = TabularEditorEvent(editor=self, row=0, column=column)
         setattr(self, 'column_clicked', event)
 
-    def _on_row_selection(self, new, old):
+    def _on_row_selection(self, added, removed):
         """ Handle the row selection being changed.
         """
         self._no_update = True
         try:
-            indexes = new.indexes()
-            self.selected_row = rownr = indexes[0].row()
-            self.selected = self.adapter.get_item(self.object, self.name, rownr)
+            indexes = self.control.selectionModel().selectedRows()
+            if len(indexes):
+                self.selected_row = indexes[0].row()
+                self.selected = self.adapter.get_item(self.object, self.name,
+                                                      self.selected_row)
+            else:
+                self.selected_row = -1
+                self.selected = None
         finally:
             self._no_update = False
 
-    def _on_rows_selection(self, new, old):
+    def _on_rows_selection(self, added, removed):
         """ Handle the rows selection being changed.
         """
         self._no_update = True
         try:
-            indexes = new.indexes()
-            rownr_first = indexes[0].row()
-            rownr_last = indexes[-1].row()
-            self.multi_selected_rows = range(rownr_first, rownr_last + 1)
-            self.multi_selected = [ self.adapter.get_item(self.object,
-                                                          self.name, row)
-                                    for row in self.multi_selected_rows ]
+            indexes = self.control.selectionModel().selectedRows()
+            selected_rows = []
+            selected = []
+            for index in indexes:
+                row = index.row()
+                selected_rows.append(row)
+                selected.append(self.adapter.get_item(self.object, self.name, 
+                                                      row))
+            self.multi_selected_rows = selected_rows
+            self.multi_selected = selected
         finally:
             self._no_update = False
 
@@ -447,6 +455,9 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
 
         if self._horizontal_lines:
             painter.drawLine(option.rect.topLeft(), option.rect.topRight())
+            if index.row() == index.model().rowCount(index)-1:
+                painter.drawLine(option.rect.bottomLeft(), 
+                                 option.rect.bottomRight())
         if self._vertical_lines:
             painter.drawLine(option.rect.topLeft(), option.rect.bottomLeft())
 
@@ -470,24 +481,23 @@ class _TableView(QtGui.QTableView):
 
         # Configure the column headings.
         hheader = self.horizontalHeader()
+        hheader.setStretchLastSection(True)
         if factory.show_titles:
             hheader.setHighlightSections(False)
-            hheader.setStretchLastSection(True)
         else:
             hheader.hide()
         self.resizeColumnsToContents()
 
-        # Configure the grid lines--we'll draw our own
+        # Turn off the grid lines--we'll draw our own
         self.setShowGrid(False)
         self.setItemDelegate(_ItemDelegate(self))
 
         # Configure the selection behaviour.
-        behav = QtGui.QAbstractItemView.SelectRows
+        self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         if factory.multi_select:
             mode = QtGui.QAbstractItemView.ExtendedSelection
         else:
             mode = QtGui.QAbstractItemView.SingleSelection
-        self.setSelectionBehavior(behav)
         self.setSelectionMode(mode)
 
         # Set column widths according to the adapter's requested width
@@ -502,7 +512,7 @@ class _TableView(QtGui.QTableView):
         sh = QtGui.QTableView.sizeHint(self)
         
         w = 0
-        for column in range(len(self._editor.adapter.columns)):
+        for column in xrange(len(self._editor.adapter.columns)):
             w += self.sizeHintForColumn(column)
         sh.setWidth(w)
 
