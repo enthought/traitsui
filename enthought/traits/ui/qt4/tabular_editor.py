@@ -287,7 +287,10 @@ class TabularEditor(Editor):
 
     def _selected_changed(self, new):
         if not self._no_update:
-            self._selected_row_changed(self, self.value.index(new))
+            try:
+                self._selected_row_changed(self, self.value.index(new))
+            except:
+                pass
 
     def _selected_row_changed(self, selected_row):
         if not self._no_update:
@@ -302,14 +305,21 @@ class TabularEditor(Editor):
     def _multi_selected_changed(self, new):
         if not self._no_update:
             values = self.value
-            self._multi_selected_rows_changed([ values.index(i) for i in new])
+            try:
+                rows = [ values.index(i) for i in new]
+                self._multi_selected_rows_changed(row)
+            except:
+                pass
 
     def _multi_selected_items_changed(self, event):
         values = self.values
-        added = [ values.index(item) for item in event.added ]
-        removed = [ values.index(item) for item in event.removed ]
-        new_event = TraitListEvent(0, added, removed)
-        self._multi_selected_rows_items_changed(new_event)
+        try:
+            added = [ values.index(item) for item in event.added ]
+            removed = [ values.index(item) for item in event.removed ]
+            new_event = TraitListEvent(0, added, removed)
+            self._multi_selected_rows_items_changed(new_event)
+        except:
+            pass
 
     def _multi_selected_rows_changed(self, selected_rows):
         if not self._no_update:
