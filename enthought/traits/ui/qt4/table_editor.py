@@ -270,6 +270,10 @@ class TableDelegate(QtGui.QStyledItemDelegate):
         # paints its own background
         control.setAutoFillBackground(True)
 
+        # Make sure that editors are disposed up correctly
+        QtCore.QObject.connect(control, QtCore.SIGNAL('destroyed()'),
+                               lambda: editor.dispose())
+
         return control
 
 class TableView(QtGui.QTableView):
