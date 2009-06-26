@@ -18,27 +18,19 @@
 
 from PyQt4 import QtCore, QtGui
 
-from enthought.traits.api \
-    import List, Instance, Any, Event
+from enthought.traits.api import List, Instance, Any, Event
+from enthought.traits.ui.api import UI, default_handler
      
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the 
 # enthought.traits.ui.editors.table_editor file.
-from enthought.traits.ui.editors.table_editor \
-    import ToolkitEditorFactory
+from enthought.traits.ui.editors.table_editor import ToolkitEditorFactory
 
-from enthought.traits.ui.table_column \
-    import TableColumn
+from enthought.traits.ui.table_column import TableColumn
+from enthought.traits.ui.ui_traits import SequenceTypes
 
-from enthought.traits.ui.ui_traits \
-    import SequenceTypes
-
-from editor \
-    import Editor
-
-from table_model \
-    import TableModel
-
+from editor import Editor
+from table_model import TableModel
 
 #-------------------------------------------------------------------------------
 #  'TableEditor' class:
@@ -82,7 +74,7 @@ class TableEditor(Editor):
         self.columns = factory.columns[:]
         self.model = TableModel(editor=self)
 
-        self.control = _TableView(editor=self)
+        self.control = TableView(editor=self)
         smodel = self.control.selectionModel()
 
         # Connect to the mode specific selection handler.
@@ -126,77 +118,85 @@ class TableEditor(Editor):
         items = self.value
         if not isinstance(items, SequenceTypes):
             items = [items]
-
         return items
 
     #---------------------------------------------------------------------------
     #  Private methods:
     #---------------------------------------------------------------------------
 
-    def _on_row_selection(self, new, old):
+    def _on_row_selection(self, added, removed):
         """Handle the row selection being changed."""
 
         items = self.items()
-        indexes = new.indexes()
+        indexes = self.control.selectionModel().selectedRows()
 
-        rownr = indexes[0].row()
-        self.selected = items[rownr]
+        if len(indexes):
+            self.selected = items[index[0].row()]
+        else:
+            self.selected = None
 
         self.ui.evaluate(self.factory.on_select, self.selected)
 
-    def _on_rows_selection(self, new, old):
+    def _on_rows_selection(self, added, removed):
         """Handle the rows selection being changed."""
 
         items = self.items()
-        indexes = new.indexes()
+        indexes = self.control.selectionModel().selectedRows()
 
-        rownr_first = indexes[0].row()
-        rownr_last = indexes[-1].row()
-        self.selected = items[rownr_first:rownr_last + 1]
+        self.selected = [ items[index.row()] for index in indexes ]
 
         self.ui.evaluate(self.factory.on_select, self.selected)
 
-    def _on_column_selection(self, new, old):
+    def _on_column_selection(self, added, removed):
         """Handle the column selection being changed."""
 
-        indexes = new.indexes()
+        indexes = self.control.selectionModel().selectedColumns()
 
-        colnr = indexes[0].column()
-        self.selected = self.columns[colnr].get_label()
+        if len(indexes):
+            self.selected = self.columns[indexes[0].column()].name
+        else:
+            self.selected = ''
 
         self.ui.evaluate(self.factory.on_select, self.selected)
 
-    def _on_columns_selection(self, new, old):
+    def _on_columns_selection(self, added, removed):
         """Handle the columns selection being changed."""
 
-        indexes = new.indexes()
+        indexes = self.control.selectionModel().selectedColumns()
 
-        colnr_first = indexes[0].column()
-        colnr_last = indexes[-1].column()
-        col_range = self.columns[colnr_first:colnr_last + 1]
-        self.selected = [col.get_label() for col in col_range]
+        self.selected = [ self.columns[index.column()].name 
+                          for index in indexes ]
 
         self.ui.evaluate(self.factory.on_select, self.selected)
 
-    def _on_cell_selection(self, new, old):
+    def _on_cell_selection(self, added, removed):
         """Handle the cell selection being changed."""
 
         items = self.items()
-        indexes = new.indexes()
+        indexes = self.control.selectionModel().selectedIndexes()
 
-        rownr = indexes[0].row()
-        colnr = indexes[0].column()
-        self.selected = self.columns[colnr].get_value(items[rownr])
+        if len(indexes):
+            obj = items[indexes[0].row()]
+            column_name = self.columns[indexes[0].column()].name
+        else:
+            obj = None
+            column_name = ''
+        self.selected = (obj, column_name)
 
         self.ui.evaluate(self.factory.on_select, self.selected)
 
-    def _on_cells_selection(self, new, old):
+    def _on_cells_selection(self, added, removed):
         """Handle the cells selection being changed."""
 
         items = self.items()
-        indexes = new.indexes()
+        indexes = self.control.selectionModel().selectedIndexes()
 
-        self.selected = [self.columns[mi.row()].get_value(items[mi.row()]) for mi in indexes]
+        selected = []
+        for index in indexes:
+            obj = items[index.row()]
+            column_name = self.columns[index.column()].name
+            selected.append((obj, column_name))
+        self.selected = selected
 
         self.ui.evaluate(self.factory.on_select, self.selected)
 
@@ -204,33 +204,75 @@ class TableEditor(Editor):
         """Handle a cell being clicked."""
         
         column = self.columns[index.column()]
-        object = self.items()[index.row()]
+        obj = self.items()[index.row()]
         
         # Fire the same event on the editor after mapping it to a model object
         # and column name:
-        self.click = (object, column)
+        self.click = (obj, column)
 
         # Invoke the column's click handler:
-        column.on_click(object)
+        column.on_click(obj)
 
     def _on_dclick(self, index):
         """Handle a cell being double clicked."""
         
         column = self.columns[index.column()]
-        object = self.items()[index.row()]
+        obj = self.items()[index.row()]
         
         # Fire the same event on the editor after mapping it to a model object
         # and column name:
-        self.dclick = (object, column)
+        self.dclick = (obj, column)
 
         # Invoke the column's double-click handler:
-        column.on_dclick(object)
+        column.on_dclick(obj)
 
 #-------------------------------------------------------------------------------
-#  '_TableView' class:
+#  Qt widgets that have been configured to behave as expected by Traits UI:
 #-------------------------------------------------------------------------------
 
-class _TableView(QtGui.QTableView):
+class TableDelegate(QtGui.QStyledItemDelegate):
+    """ A QStyledItemDelegate which fetches Traits UI editors.
+    """
+
+    def createEditor(self, parent, option, index):
+        """ Return the editor for a given index."""
+
+        table_editor = index.model()._editor
+        column = table_editor.columns[index.column()]
+        obj = table_editor.items()[index.row()]
+
+        factory = column.get_editor(obj)
+        style = column.get_style(obj)
+        if factory is None:
+            return None
+
+        target, name = column.target_name(obj)
+        handler = default_handler()
+        if table_editor.ui.context is None:
+            ui = UI(handler=handler)
+        else:
+            context = table_editor.ui.context.copy()
+            context['table_editor_object'] = context['object']
+            context['object'] = target
+            ui = UI(handler=handler, context=context)
+
+        factory_method = getattr(factory, style+'_editor')
+        editor = factory_method(ui, target, name, '', parent)
+        editor.prepare(parent)
+
+        control = editor.control
+        control.setParent(parent)
+        
+        # Required for QMouseEvents to propagate to the widget
+        control.setFocusPolicy(QtCore.Qt.StrongFocus)
+
+        # The table view's background will shine through unless the editor
+        # paints its own background
+        control.setAutoFillBackground(True)
+
+        return control
+
+class TableView(QtGui.QTableView):
     """A QTableView configured to behave as expected by TraitsUI."""
 
     _SELECTION_MAP = {

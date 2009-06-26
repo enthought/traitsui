@@ -18,6 +18,8 @@
 
 from PyQt4 import QtCore, QtGui
 
+from enthought.traits.ui.ui_traits import SequenceTypes
+
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------
@@ -29,7 +31,7 @@ h_alignment_map = {
     'right':  QtCore.Qt.AlignRight,
 }
 
-# Mapping for trait alignment values to qt4 horizontal alignment constants
+# Mapping for trait alignment values to qt4 vertical alignment constants
 v_alignment_map = {
     'top':    QtCore.Qt.AlignTop,
     'center': QtCore.Qt.AlignVCenter,
@@ -81,7 +83,7 @@ class TableModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.BackgroundRole:
             color = column.get_cell_color(obj)
             if color is not None:
-                if isinstance(color, (tuple, list)):
+                if isinstance(color, SequenceTypes):
                     q_color = QtGui.QColor(*color)
                 else:
                     q_color = QtGui.QColor(color)
@@ -90,7 +92,7 @@ class TableModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.ForegroundRole:
             color = column.get_text_color(obj)
             if color is not None:
-                if isinstance(color, (tuple, list)):
+                if isinstance(color, SequenceTypes):
                     q_color = QtGui.QColor(*color)
                 else:
                     q_color = QtGui.QColor(color)
@@ -101,8 +103,23 @@ class TableModel(QtCore.QAbstractTableModel):
 
         return QtCore.QVariant()
 
+    def flags(self, mi):
+        """Reimplemented to set editable status."""
+
+        editor = self._editor
+        obj = editor.items()[mi.row()]
+        column = editor.columns[mi.column()]
+
+        flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
+
+        if editor.factory.editable and column.is_editable(obj):
+            flags |= QtCore.Qt.ItemIsEditable
+
+        return flags
+
     def headerData(self, section, orientation, role):
         """Reimplemented to return the header data."""
+
         if orientation != QtCore.Qt.Horizontal or role != QtCore.Qt.DisplayRole:
             return QtCore.QVariant()
 

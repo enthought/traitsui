@@ -19,8 +19,11 @@
 # System library imports
 from PyQt4 import QtCore, QtGui
 
+# ETS imports
+from enthought.traits.ui.qt4.table_editor import TableDelegate
 
-class TableImageRenderer(QtGui.QStyledItemDelegate):
+
+class TableImageRenderer(TableDelegate):
     """ A renderer which will display a cell-specific image in addition to some
         text displayed in the same way the default renderer would.
     """
@@ -43,7 +46,7 @@ class TableImageRenderer(QtGui.QStyledItemDelegate):
         """ Overriden to draw images.
         """
         # First draw any text/backgroudn by delegating to our superclass
-        QtGui.QStyledItemDelegate.paint(self, painter, option, index)
+        super(TableImageRenderer, self).paint(painter, option, index)
 
         # Now draw the image, if possible
         value = index.data(QtCore.Qt.UserRole).toPyObject()
@@ -59,7 +62,7 @@ class TableImageRenderer(QtGui.QStyledItemDelegate):
         """ Overriden to take image size into account when providing a size 
             hint.
         """
-        size = QtGui.QStyledItemDelegate.sizeHint(self, option, index)
+        size = super(TableImageRenderer, self).sizeHint(option, index)
 
         value = index.data(QtCore.Qt.UserRole).toPyObject()
         image = self.get_image_for_obj(value, index.row(), index.column())
