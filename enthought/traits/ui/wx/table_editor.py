@@ -50,7 +50,7 @@ from enthought.traits.ui.table_filter \
 from enthought.traits.ui.ui_traits \
     import SequenceTypes
 
-from enthought.pyface.grid.api \
+from enthought.pyface.ui.wx.grid.api \
     import Grid
 
 from enthought.pyface.dock.api \

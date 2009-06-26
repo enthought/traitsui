@@ -1,0 +1,19 @@
+The icons are mostly derived work from other icons. As such they are
+licensed accordingly to the original license:
+
+Project                 License                   File
+----------------------------------------------------------------------------
+GV (Gael Varoquaux)     Public Domain             N/A
+Nuvola                  LGPL                      image_LICENSE_Nuvola.txt
+OOo                     LGPL                      image_LICENSE_OOo.txt
+
+Unless stated in this file, icons are the work of Enthought, and are
+released under a 3 clause BSD license.
+
+Files and orginal authors:
+----------------------------------------------------------------------------
+enthought/pyface/grid/images:
+                        checked.png | GV
+                image_not_found.png | Nuvola
+                     table_edit.png | OOo
+                      unchecked.png | GV
