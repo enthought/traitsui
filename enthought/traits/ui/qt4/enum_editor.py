@@ -248,12 +248,12 @@ class SimpleEditor ( BaseEditor ):
                     idx = self.control.findText(self.inverse_mapping[self.value])
                     self.control.setCurrentIndex(idx)
                 except:
-                    pass
+                    self.control.setCurrentIndex(-1)
             else:
                 try:
                     self.control.setEditText(self.str_value)
                 except:
-                    pass
+                    self.control.setEditText('')
         
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
