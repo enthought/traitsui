@@ -107,6 +107,8 @@ class TableEditor(Editor):
         editor."""
 
         self.model.reset()
+        if self.factory.auto_size:
+            self.control.resizeColumnsToContents()
 
     #---------------------------------------------------------------------------
     #  Helper methods for TableModel:
@@ -131,7 +133,7 @@ class TableEditor(Editor):
         indexes = self.control.selectionModel().selectedRows()
 
         if len(indexes):
-            self.selected = items[index[0].row()]
+            self.selected = items[indexes[0].row()]
         else:
             self.selected = None
 
@@ -312,12 +314,18 @@ class TableView(QtGui.QTableView):
         if factory.show_column_labels:
             hheader.setHighlightSections(False)
         else:
+            # FIXME: Right now, there is no way to resize a table when there are
+            #        no column headers, so we have to auto resize in this case.
+            hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
             hheader.hide()
 
         # Configure the selection behaviour.
         behav, mode = self._SELECTION_MAP[factory.selection_mode]
         self.setSelectionBehavior(behav)
         self.setSelectionMode(mode)
+
+        # Set the primary item delegate
+        self.setItemDelegate(TableDelegate())
 
         # Configure custom item delegates, if necessary.
         for i, column in enumerate(self._editor.columns):

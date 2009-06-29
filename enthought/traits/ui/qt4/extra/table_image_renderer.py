@@ -45,7 +45,7 @@ class TableImageRenderer(TableDelegate):
     def paint(self, painter, option, index):
         """ Overriden to draw images.
         """
-        # First draw any text/backgroudn by delegating to our superclass
+        # First draw any text/background by delegating to our superclass
         super(TableImageRenderer, self).paint(painter, option, index)
 
         # Now draw the image, if possible

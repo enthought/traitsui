@@ -105,13 +105,17 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def flags(self, mi):
         """Reimplemented to set editable status."""
-
-        editor = self._editor
-        obj = editor.items()[mi.row()]
-        column = editor.columns[mi.column()]
-
+        
         flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
 
+        editor = self._editor
+        items = editor.items()
+        row = mi.row()
+        if row >= len(items):
+            return flags
+
+        obj = items[row]
+        column = editor.columns[mi.column()]
         if editor.factory.editable and column.is_editable(obj):
             flags |= QtCore.Qt.ItemIsEditable
 
@@ -120,10 +124,18 @@ class TableModel(QtCore.QAbstractTableModel):
     def headerData(self, section, orientation, role):
         """Reimplemented to return the header data."""
 
-        if orientation != QtCore.Qt.Horizontal or role != QtCore.Qt.DisplayRole:
-            return QtCore.QVariant()
+        if orientation == QtCore.Qt.Horizontal:
 
-        return QtCore.QVariant(self._editor.columns[section].get_label())
+            if role == QtCore.Qt.DisplayRole:
+                label = self._editor.columns[section].get_label()
+                return QtCore.QVariant(label)
+
+            # This is overridden because we want column sizing to be entirely
+            # up to the column delegates. This gives us more flexibility.
+            elif role == QtCore.Qt.SizeHintRole:
+                return QtCore.QVariant(QtCore.QSize(0, 0))
+
+        return QtCore.QVariant()
 
     def rowCount(self, mi):
         """Reimplemented to return the number of rows."""
