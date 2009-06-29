@@ -500,29 +500,37 @@ class _GroupPanel(object):
         avail = total
         remain = 0
 
-        for i, sz in enumerate(sizes):
-            if avail <= 0:
-                break
-
-            if sz >= 0:
-                if sz >= 1:
-                    sz = min(sz, avail)
-                else:
-                    sz *= total
-
-                sz = int(sz)
-                sizes[i] = sz
-                avail -= sz
-            else:
-                remain += 1
-
-        # Allocate the remainder to those parts that didn't request a width.
-        if remain > 0:
-            remain = int(avail / remain)
-
+        # Case one: everything is an item.
+        if len(sizes) == len(content):
             for i, sz in enumerate(sizes):
-                if sz < 0:
-                    sizes[i] = remain
+                if avail <= 0:
+                    break
+
+                if sz >= 0:
+                    if sz >= 1:
+                        sz = min(sz, avail)
+                    else:
+                        sz *= total
+
+                    sz = int(sz)
+                    sizes[i] = sz
+                    avail -= sz
+                else:
+                    remain += 1
+
+            # Allocate the remainder to those parts that didn't request a width.
+            if remain > 0:
+                remain = int(avail / remain)
+
+                for i, sz in enumerate(sizes):
+                    if sz < 0:
+                        sizes[i] = remain
+
+        # Case two: there is at least one Group. 
+        # FIXME: Punting like this is not very good. We should examine the 
+        #        Group(s)' items to try to position the splitter.
+        else:
+            sizes = [ total / len(content) ] * len(content)
 
         splitter.setSizes(sizes)
 
