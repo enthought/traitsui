@@ -263,7 +263,6 @@ def _fill_panel(panel, content, ui, item_handler=None):
             # down into just the page.
             if type(sub_page) is type(panel) and sub_page.count() == 1:
                 new = sub_page.widget(0)
-
                 if isinstance(panel, QtGui.QTabWidget):
                     sub_page.removeTab(0)
                 else:
@@ -274,7 +273,9 @@ def _fill_panel(panel, content, ui, item_handler=None):
                 new = QtGui.QWidget()
                 new.setLayout(page)
 
-            new.layout().setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+            layout = new.layout()
+            if layout is not None:
+                layout.setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
 
             # Add the content.
             if isinstance(panel, QtGui.QTabWidget):
@@ -401,6 +402,13 @@ class _GroupPanel(object):
             # Create the splitter.
             splitter = QtGui.QSplitter()
 
+            size_policy = splitter.sizePolicy()
+            if group.orientation == 'horizontal':
+                size_policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+            else:
+                size_policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+            splitter.setSizePolicy(size_policy)
+
             if self.direction == QtGui.QBoxLayout.TopToBottom:
                 splitter.setOrientation(QtCore.Qt.Vertical)
 
@@ -487,6 +495,7 @@ class _GroupPanel(object):
                 layout = panel.layout()
                 if layout is not None:
                     layout.setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+
                 splitter.addWidget(panel)
 
         # Find out how much space is available.
