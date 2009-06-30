@@ -56,6 +56,7 @@ class SimpleEditor ( Editor ):
         """
         label = self.factory.label or self.item.get_label( self.ui )
         self.control = QtGui.QPushButton(self.string_value(label))
+        self.control.setAutoDefault(False)
         self.sync_value( self.factory.label_value, 'label', 'from' )
         QtCore.QObject.connect(self.control, QtCore.SIGNAL('clicked()'),
                 self.update_object )
