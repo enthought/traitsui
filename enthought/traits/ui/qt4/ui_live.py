@@ -173,7 +173,7 @@ class _LiveWindow(BaseDialog):
 
         self.add_contents(panel(ui), bbox)
 
-    def close(self, rc):            
+    def close(self, rc=True):         
         """Close the dialog and set the given return code.
         """
         super(_LiveWindow, self).close(rc)

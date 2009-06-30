@@ -377,7 +377,7 @@ class BaseDialog(BasePanel):
         self._add_toolbar()
         self._add_statusbar()
 
-    def close(self, rc):
+    def close(self, rc=True):
         """Close the dialog and set the given return code."""
 
         self.ui.dispose(rc)
