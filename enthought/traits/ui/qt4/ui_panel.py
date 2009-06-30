@@ -3,8 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
-
+# However, when used with the GPL version of PyQt the additional terms described
+# in the PyQt GPL exception also apply.
 #
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
@@ -899,6 +899,10 @@ class _GroupPanel(object):
                 layout.addLayout(w)
 
         else:
+            if self.direction == QtGui.QBoxLayout.LeftToRight:
+                # Flip the row and column.
+                row, column = column, row
+
             if show_labels:
                 # Convert the "logical" column to a "physical" one.
                 column *= 2
@@ -906,10 +910,6 @@ class _GroupPanel(object):
                 if (label_alignment != 0 and not self.group.show_left) or \
                    (label_alignment == 0 and self.group.show_left):
                     column += 1
-
-            if self.direction == QtGui.QBoxLayout.LeftToRight:
-                # Flip the row and column.
-                row, column = column, row
 
             if isinstance(w, QtGui.QWidget):
                 layout.addWidget(w, row, column, label_alignment)
