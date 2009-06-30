@@ -183,6 +183,7 @@ class SimpleEditor ( BaseEditor ):
         super( SimpleEditor, self ).init( parent )
         
         self.control = control = QtGui.QComboBox()
+        control.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         control.addItems(self.names)
         QtCore.QObject.connect(control,
                 QtCore.SIGNAL('currentIndexChanged(QString)'),
