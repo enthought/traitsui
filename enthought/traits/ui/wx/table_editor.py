@@ -923,9 +923,8 @@ class TableEditor ( Editor ):
         values.sort( lambda l, r: cmp( l[0], r[0] ) )                
          
         # Save the new selection information:
-        self.set( selected_cell_indices = [ v[0] for v in values ],
-                  trait_change_notify   = False )
-        cells = [ v[1] for v in values ]        
+        self.setx( selected_cell_indices = [ v[0] for v in values ])
+        cells = [ v[1] for v in values ]  
         self.setx( selected_cells = cells )
             
         # Update the toolbar status:
