@@ -471,7 +471,7 @@ class TableEditor ( Editor ):
         """
         if not isinstance( objects, SequenceTypes ):
             objects = [ objects ]
-            
+
         self.grid.set_selection( [ TraitGridSelection( obj = object )
                                    for object in objects ], notify = notify )
 
@@ -485,10 +485,11 @@ class TableEditor ( Editor ):
         """
         if (len( pairs ) == 1) and isinstance( pairs[0], list ):
             pairs = pairs[0]
-            
-        self.grid.set_selection(
-            [ TraitGridSelection( obj = object, name = name )
-              for object, name in pairs ] )
+
+        grid_selections = [TraitGridSelection(obj = object, name = name)
+                           for object, name in pairs] 
+           
+        self.grid.set_selection(grid_selections)
 
     #---------------------------------------------------------------------------
     #  Creates a new row object using the provided factory:
@@ -999,8 +1000,8 @@ class TableEditor ( Editor ):
         if not self._no_notify:
             value = self.value
             gcn   = self.model.get_column_name
-            self.set_extended_selection( [ ( value[ row ], gcn( column ) ) 
-                                           for row, column in pairs ] )
+            new_selection = [(value[row], gcn(col)) for row, col in pairs] 
+            self.set_extended_selection(new_selection)
         
     def _update_toolbar ( self, has_selection ):
         """ Updates the toolbar after a selection change.
