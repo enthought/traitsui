@@ -314,9 +314,6 @@ class TableView(QtGui.QTableView):
         if factory.show_column_labels:
             hheader.setHighlightSections(False)
         else:
-            # FIXME: Right now, there is no way to resize a table when there are
-            #        no column headers, so we have to auto resize in this case.
-            hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
             hheader.hide()
 
         # Configure the selection behaviour.

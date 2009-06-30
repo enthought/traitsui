@@ -126,14 +126,28 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if orientation == QtCore.Qt.Horizontal:
 
-            if role == QtCore.Qt.DisplayRole:
-                label = self._editor.columns[section].get_label()
-                return QtCore.QVariant(label)
+            editor = self._editor
+            column = editor.columns[section]
 
-            # This is overridden because we want column sizing to be entirely
-            # up to the column delegates. This gives us more flexibility.
-            elif role == QtCore.Qt.SizeHintRole:
-                return QtCore.QVariant(QtCore.QSize(0, 0))
+            if role == QtCore.Qt.DisplayRole:
+                return QtCore.QVariant(column.get_label())
+
+            if role == QtCore.Qt.SizeHintRole and editor.factory:
+                width = column.get_width()
+                if width < 0:
+                    if not editor.factory.show_column_labels:
+                        return QtCore.QVariant(QtCore.QSize(0, 0))
+                else:
+                    if editor.factory.show_column_labels:
+                        style = QtGui.QApplication.instance().style()
+                        header = QtGui.QStyle.CT_HeaderSection
+                        option = QtGui.QStyleOptionHeader()
+                        size = style.sizeFromContents(header, option, 
+                                                      QtCore.QSize(0, 0))
+                        height = size.height()
+                    else:
+                        height = 0
+                    return QtCore.QVariant(QtCore.QSize(width, height))
 
         return QtCore.QVariant()
 
