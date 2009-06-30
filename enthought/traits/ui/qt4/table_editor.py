@@ -321,7 +321,14 @@ class TableView(QtGui.QTableView):
         self.setSelectionBehavior(behav)
         self.setSelectionMode(mode)
 
-        # Set the primary item delegate
+        # Configure the editing behavior.
+        triggers = (QtGui.QAbstractItemView.DoubleClicked |
+                    QtGui.QAbstractItemView.SelectedClicked)
+        if factory.edit_on_first_click:
+            triggers |= QtGui.QAbstractItemView.CurrentChanged
+        self.setEditTriggers(triggers)
+
+        # Set the primary item delegate.
         self.setItemDelegate(TableDelegate())
 
         # Configure custom item delegates, if necessary.
@@ -329,7 +336,7 @@ class TableView(QtGui.QTableView):
             if column.renderer:
                 self.setItemDelegateForColumn(i, column.renderer)
 
-        # Initialize the column widths
+        # Initialize the column widths.
         self.resizeColumnsToContents()
 
     def sizeHint(self):
