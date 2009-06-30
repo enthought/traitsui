@@ -75,28 +75,47 @@ class TableEditor(Editor):
         self.model = TableModel(editor=self)
 
         self.control = TableView(editor=self)
-        smodel = self.control.selectionModel()
 
-        # Connect to the mode specific selection handler.
+        # Connect to the mode specific selection handler
         mode = factory.selection_mode
         mode_slot = getattr(self, '_on_%s_selection' % mode)
         signal = QtCore.SIGNAL('selectionChanged(QItemSelection, QItemSelection)')
-        QtCore.QObject.connect(smodel, signal, mode_slot)
+        QtCore.QObject.connect(self.control.selectionModel(), signal, mode_slot)
 
-        is_list = (mode in ('rows', 'columns', 'cells'))
-        self.sync_value(factory.selected, 'selected', is_list=is_list)
-
-        # Select the first row/column/cell.
+        # Select the first row/column/cell
         self.control.setCurrentIndex(self.model.createIndex(0, 0))
 
         # Connect to the click and double click handlers
         signal = QtCore.SIGNAL('clicked(QModelIndex)')
         QtCore.QObject.connect(self.control, signal, self._on_click)
-        self.sync_value(factory.click, 'click', 'to')
-
         signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
         QtCore.QObject.connect(self.control, signal, self._on_dclick)
+
+        # Set up listeners for any column definitions changing
+        self.on_trait_change(self._update_columns, 'columns', dispatch='ui')
+        self.on_trait_change(self._update_columns, 'columns_items', 
+                             dispatch='ui')
+
+        # Set up the required externally synchronized traits
+        is_list = (mode in ('rows', 'columns', 'cells'))
+        self.sync_value(factory.click, 'click', 'to')
         self.sync_value(factory.dclick, 'dclick', 'to')
+        self.sync_value(factory.columns_name, 'columns', 'from', is_list=True)
+        self.sync_value(factory.selected, 'selected', is_list=is_list)
+
+        # Initialize the ItemDelegates for each column
+        self._update_columns()
+
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:
+    #---------------------------------------------------------------------------
+
+    def dispose(self):
+        """ Disposes of the contents of an editor."""
+
+        # Remove listeners for any column definitions changing
+        self.on_trait_change(self._update_columns, 'columns', remove=True )
+        self.on_trait_change(self._update_columns, 'columns_items', remove=True)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -126,6 +145,17 @@ class TableEditor(Editor):
     #  Private methods:
     #---------------------------------------------------------------------------
 
+    def _update_columns(self):
+        """ Handle the column list being changed."""
+
+        self.control.setItemDelegate(TableDelegate())
+        for i, column in enumerate(self.columns):
+            if column.renderer:
+                self.control.setItemDelegateForColumn(i, column.renderer)
+
+        self.model.reset()
+        self.control.resizeColumnsToContents()
+        
     def _on_row_selection(self, added, removed):
         """Handle the row selection being changed."""
 
@@ -327,17 +357,6 @@ class TableView(QtGui.QTableView):
         if factory.edit_on_first_click:
             triggers |= QtGui.QAbstractItemView.CurrentChanged
         self.setEditTriggers(triggers)
-
-        # Set the primary item delegate.
-        self.setItemDelegate(TableDelegate())
-
-        # Configure custom item delegates, if necessary.
-        for i, column in enumerate(self._editor.columns):
-            if column.renderer:
-                self.setItemDelegateForColumn(i, column.renderer)
-
-        # Initialize the column widths.
-        self.resizeColumnsToContents()
 
     def sizeHint(self):
         """Reimplemented to support auto_size."""

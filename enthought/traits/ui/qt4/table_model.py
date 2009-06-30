@@ -110,12 +110,12 @@ class TableModel(QtCore.QAbstractTableModel):
 
         editor = self._editor
         items = editor.items()
-        row = mi.row()
-        if row >= len(items):
+        row, column = mi.row(), mi.column()
+        if row >= len(items) or column >= len(editor.columns):
             return flags
 
         obj = items[row]
-        column = editor.columns[mi.column()]
+        column = editor.columns[column]
         if editor.factory.editable and column.is_editable(obj):
             flags |= QtCore.Qt.ItemIsEditable
 
