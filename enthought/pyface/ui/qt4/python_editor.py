@@ -124,18 +124,13 @@ class PythonEditor(MPythonEditor, Widget):
         lexer = Qsci.QsciLexerPython(stc)
         stc.setLexer(lexer)
 
-        # Set a monspaced font.  Use the (supposedly) same font and size as the
+        # Set a monspaced font. Use the (supposedly) same font and size as the
         # wx version.
-        if sys.platform == 'win32':
-            fsize = 10
-        else:
-            fsize = 12
-
         for sty in range(128):
             if not lexer.description(sty).isEmpty():
                 f = lexer.font(sty)
                 f.setFamily('courier new')
-                f.setPointSize(fsize)
+                f.setPointSize(10)
                 lexer.setFont(f, sty)
 
         # Mark the maximum line size.
