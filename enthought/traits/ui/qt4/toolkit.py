@@ -391,20 +391,16 @@ class GUIToolkit ( Toolkit ):
     def destroy_control ( self, control ):
         """ Destroys a specified GUI toolkit control.
         """
-        # Treating dialogs differently seems to be necessary on Windows to
-        # prevent a crash.  I think the problem is that this is being called
-        # from within the finished() signal handler so we need to do the
-        # delete after the handler has returned.
-        if isinstance(control, QtGui.QDialog):
-            control.deleteLater()
+        # This may be called from within the finished() signal handler 
+        # so we need to do the delete after the handler has returned.
+        
+        control.deleteLater()
 
-            # PyQt v4.3.1 and earlier deleteLater() didn't transfer ownership
-            # to C++ which turns out to be important.
-            if QtCore.PYQT_VERSION < 0x040302:
-                import sip
-                sip.transferto(control, None)
-        else:
-            control.setParent(None)
+        # PyQt v4.3.1 and earlier deleteLater() didn't transfer ownership
+        # to C++ which turns out to be important.
+        if QtCore.PYQT_VERSION < 0x040302:
+            import sip
+            sip.transferto(control, None)
 
     #---------------------------------------------------------------------------
     #  Destroys all of the child controls of a specified GUI toolkit control:
