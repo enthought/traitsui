@@ -73,6 +73,9 @@ class SimpleSliderEditor ( Editor ):
     # Formatting string used to format value and labels
     format = Str
 
+    # Function to evaluate textual user input
+    evaluate = Any
+
     # Flag indicating that the UI is in the process of being updated
     ui_changing = Bool( False )
 
@@ -93,8 +96,11 @@ class SimpleSliderEditor ( Editor ):
             self.high = factory.high
 
         self.format = factory.format
-        size        = wx.DefaultSize
 
+        self.evaluate = factory.evaluate
+        self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
+
+        size        = wx.DefaultSize
         if factory.label_width > 0:
             size = wx.Size( factory.label_width, 20 )
 
@@ -129,21 +135,12 @@ class SimpleSliderEditor ( Editor ):
         self._label_hi = wx.StaticText( panel, -1, '999999', size = size )
         sizer.Add( self._label_hi, 0, wx.ALIGN_CENTER )
 
-        if factory.enter_set:
-            panel.text = text = wx.TextCtrl( panel, -1, fvalue_text,
-                                             size  = wx.Size( 56, 20 ),
-                                             style = wx.TE_PROCESS_ENTER )
-            wx.EVT_TEXT_ENTER( panel, text.GetId(),
-                               self.update_object_on_enter )
-        else:
-            panel.text = text = wx.TextCtrl( panel, -1, fvalue_text,
-                                             size  = wx.Size( 56, 20 ) )
-
+        panel.text = text = wx.TextCtrl( panel, -1, fvalue_text,
+                                         size  = wx.Size( 56, 20 ),
+                                         style = wx.TE_PROCESS_ENTER )
+        wx.EVT_TEXT_ENTER( panel, text.GetId(), self.update_object_on_enter )
         wx.EVT_KILL_FOCUS( text, self.update_object_on_enter )
         
-        if factory.auto_set:
-            wx.EVT_TEXT( panel, text.GetId(), self.update_object_on_enter )
-
         sizer.Add( text, 0, wx.LEFT | wx.EXPAND, 4 )
 
         low_label = factory.low_label
@@ -196,7 +193,7 @@ class SimpleSliderEditor ( Editor ):
         """
         try:
             try:
-                value = eval( self.control.text.GetValue().strip() )
+                value = self.evaluate( self.control.text.GetValue().strip() )
             except Exception, ex:
                 # The entered something that didn't eval as a number, (e.g., 'foo')
                 # pretend it didn't happen (i.e. do not change self.value)
@@ -358,6 +355,9 @@ class LargeRangeSliderEditor ( Editor ):
     # High end of displayed range
     cur_high = Float
 
+    # Function to evaluate textual user input
+    evaluate = Any
+
     # Flag indicating that the UI is in the process of being updated
     ui_changing = Bool( False )
 
@@ -375,10 +375,12 @@ class LargeRangeSliderEditor ( Editor ):
         # Initialize using the factory range defaults:
         self.low = factory.low
         self.high = factory.high
+        self.evaluate = factory.evaluate
 
         # Hook up the traits to listen to the object.
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
+        self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
 
         self.init_range()
         low  = self.cur_low
@@ -439,20 +441,11 @@ class LargeRangeSliderEditor ( Editor ):
         sizer.Add( label_hi, 2, wx.ALIGN_CENTER )
 
         # Text entry:
-        if factory.enter_set:
-            panel.text = text = wx.TextCtrl( panel, -1, fvalue_text,
-                                             size  = wx.Size( 56, 20 ),
-                                             style = wx.TE_PROCESS_ENTER )
-            wx.EVT_TEXT_ENTER( panel, text.GetId(),
-                               self.update_object_on_enter )
-        else:
-            panel.text = text = wx.TextCtrl( panel, -1, fvalue_text,
-                                             size  = wx.Size( 56, 20 ) )
-
+        panel.text = text = wx.TextCtrl( panel, -1, fvalue_text,
+                                         size  = wx.Size( 56, 20 ),
+                                         style = wx.TE_PROCESS_ENTER )
+        wx.EVT_TEXT_ENTER( panel, text.GetId(), self.update_object_on_enter )
         wx.EVT_KILL_FOCUS( text, self.update_object_on_enter )
-        
-        if factory.auto_set:
-            wx.EVT_TEXT( panel, text.GetId(), self.update_object_on_enter )
 
         sizer.Add( text, 0, wx.LEFT | wx.EXPAND, 4 )
 
@@ -503,7 +496,7 @@ class LargeRangeSliderEditor ( Editor ):
         """ Handles the user pressing the Enter key in the text field.
         """
         try:
-            self.value = value = eval( self.control.text.GetValue().strip() )
+            self.value = value = self.evaluate( self.control.text.GetValue().strip() )
             self.control.text.SetBackgroundColour(OKColor)
             self.control.text.Refresh()
             # Update the slider range.
