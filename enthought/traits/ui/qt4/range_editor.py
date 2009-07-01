@@ -67,6 +67,9 @@ class SimpleSliderEditor ( Editor ):
     # Formatting string used to format value and labels
     format = Str
 
+    # Function to evaluate textual user input
+    evaluate = Any
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -84,6 +87,9 @@ class SimpleSliderEditor ( Editor ):
             self.high = factory.high
 
         self.format = factory.format
+
+        self.evaluate = factory.evaluate
+        self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
 
         if factory.label_width > 0:
             size = wx.Size( factory.label_width, 20 )
@@ -170,7 +176,7 @@ class SimpleSliderEditor ( Editor ):
         """
         try:
             try:
-                value = eval(unicode(self.control.text.text()).strip())
+                value = self.evaluate(unicode(self.control.text.text()).strip())
             except Exception, ex:
                 # The entered something that didn't eval as a number, (e.g.,
                 # 'foo') pretend it didn't happen
@@ -323,6 +329,9 @@ class LargeRangeSliderEditor ( Editor ):
     # High end of displayed range
     cur_high = Float
 
+    # Function to evaluate textual user input
+    evaluate = Any
+
     # Flag indicating that the UI is in the process of being updated
     ui_changing = Bool(False)
 
@@ -340,10 +349,12 @@ class LargeRangeSliderEditor ( Editor ):
         # Initialize using the factory range defaults:
         self.low = factory.low
         self.high = factory.high
+        self.evaluate = factory.evaluate
 
         # Hook up the traits to listen to the object.
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
+        self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
 
         self.init_range()
         low  = self.cur_low
@@ -445,7 +456,7 @@ class LargeRangeSliderEditor ( Editor ):
         """ Handles the user pressing the Enter key in the text field.
         """
         try:
-            self.value = eval(unicode(self.control.text.text()).strip())
+            self.value = self.evaluate(unicode(self.control.text.text()).strip())
         except TraitError, excp:
             pass
 
