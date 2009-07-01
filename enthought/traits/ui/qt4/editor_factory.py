@@ -127,6 +127,7 @@ class ReadonlyEditor ( Editor ):
             widget.
         """
         self.control = QtGui.QLabel(self.str_value)
+        self.control.setWordWrap(True)
         self.set_tooltip()
         
     #---------------------------------------------------------------------------

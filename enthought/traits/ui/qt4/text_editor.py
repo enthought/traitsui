@@ -227,8 +227,4 @@ class ReadonlyEditor ( BaseReadonlyEditor ):
         if self.factory.password:
             new_value = '*' * len(new_value)
 
-        #if self.item.resizable or self.item.height != -1:
-        if isinstance(self.control, QtGui.QTextEdit):
-            self.control.setPlainText(new_value)
-        else:
-            self.control.setText(new_value)
+        self.control.setText(new_value)
