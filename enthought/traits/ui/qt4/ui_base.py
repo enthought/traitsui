@@ -191,6 +191,7 @@ class BasePanel(object):
             name = action.name
         id     = action.id
         button = bbox.addButton(name, role)
+        button.setAutoDefault(False)
         button.setEnabled(enabled)
         if (method is None) or (action.enabled_when != '') or (id != ''):
             editor = ButtonEditor( ui      = ui,
@@ -292,11 +293,14 @@ class _StickyDialog(QtGui.QDialog):
             e.ignore()
 
     def keyPressEvent(self, e):
-        """Reimplemented to ignore the Escape key if appropriate."""
+        """Reimplemented to ignore the Escape key if appropriate, and always
+        ignore the Enter key because it will trigger a button if any are
+        present in the dialog."""
 
-        if (e.modifiers() != QtCore.Qt.NoModifier or
-                e.key() != QtCore.Qt.Key_Escape or self._ok_to_close()):
-            QtGui.QDialog.keyPressEvent(self, e)
+        if (e.key() == QtCore.Qt.Key_Enter or e.key() == QtCore.Qt.Key_Return or
+                (e.key() == QtCore.Qt.Key_Escape and not self._ok_to_close())):
+            return
+        QtGui.QDialog.keyPressEvent(self, e)
 
     def done(self, r):
         """Reimplemented to ignore calls to accept() or reject() if
