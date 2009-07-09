@@ -54,6 +54,24 @@ class FileDialog(MFileDialog, Dialog):
 
     wildcard_index = Int(0)
 
+
+    ###########################################################################
+    # 'MFileDialog' *CLASS* interface.
+    ###########################################################################
+
+    @classmethod
+    def create_wildcard(cls, description, extension):
+        """ Creates a wildcard for a given extension. """
+
+        if isinstance(extension, basestring):
+            pattern = extension
+
+        else:
+            pattern = ' '.join(extension)
+
+        return "%s (%s)|%s|" % (description, pattern, pattern)
+
+
     ###########################################################################
     # Protected 'IDialog' interface.
     ###########################################################################
@@ -102,14 +120,11 @@ class FileDialog(MFileDialog, Dialog):
             default_filename = self.default_filename
 
         # Convert the filter.
-        keep = True
         filters = QtCore.QStringList()
 
-        for f in self.wildcard.split('|'):
-            if keep and f:
+        for f in self.wildcard.split('|')[::2]:
+            if f:
                 filters << f
-
-            keep = not keep
 
         # Set the default directory.
         if not default_directory:
@@ -119,6 +134,7 @@ class FileDialog(MFileDialog, Dialog):
 
         dlg.setViewMode(QtGui.QFileDialog.Detail)
         dlg.selectFile(default_filename)
+        # FIXME: This is an obsolete Qt3 API.
         dlg.setFilters(filters)
 
         if self.wildcard_index < filters.count():
