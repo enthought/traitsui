@@ -215,11 +215,14 @@ class _IEHTMLEditor ( Editor ):
         # load the supplied HTML into the document property. This borks 
         # relative URLs. 
         if event.URL.startswith ( 'about:' ):
-            event.URL = self.base_url + event.URL[6:]
+            base = self.base_url
+            if not base.endswith( '/' ):
+                base += '/'
+            event.URL = base + event.URL[6:]
             
         if self.factory.open_externally:
             event.Cancel = True
-            webbrowser.open_new ( event.URL )
+            webbrowser.get( 'windows-default' ).open_new( event.URL )
                     
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:
