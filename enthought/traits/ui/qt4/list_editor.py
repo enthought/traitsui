@@ -109,10 +109,14 @@ class SimpleEditor ( Editor ):
         # Create a scrolled window to hold all of the list item controls:
         self.control = QtGui.QScrollArea()
         self.control.setFrameShape(QtGui.QFrame.NoFrame)
+        self.control.setWidgetResizable(True)
 
         # Create a widget with a grid layout as the container.
         self._list_pane = QtGui.QWidget()
+        self._list_pane.setSizePolicy(QtGui.QSizePolicy.Expanding,
+                                      QtGui.QSizePolicy.Expanding)
         layout = QtGui.QGridLayout(self._list_pane)
+        layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         layout.setMargin(0)
 
         # Remember the editor to use for each individual list item:
@@ -203,10 +207,6 @@ class SimpleEditor ( Editor ):
             rows = 1
         else:
             rows = self.factory.rows
-
-        #list_pane.SetSize( wx.Size(
-        #     width + ((trait_handler.maxlen > rows) * scrollbar_dx),
-        #     height * rows ) )
 
         # QScrollArea can have problems if the widget being scrolled is set too
         # early (ie. before it contains something).
