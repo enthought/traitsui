@@ -24,14 +24,15 @@ if QtCore.QT_VERSION < 0x040200:
     raise RuntimeError, "Need Qt v4.2 or higher, but got v%s" % QtCore.QT_VERSION_STR
 
 # Make sure a QApplication object is created early:
+import sys
 if QtGui.QApplication.startingUp():
-    import sys
     _app = QtGui.QApplication(sys.argv)
 
 # Make sure that SIGINTs actually stop the application event loop:
 import signal
 def _handler(signum, frame):
-    QtGui.QApplication.instance().exit(signum)
+    QtGui.QApplication.instance().quit()
+    sys.exit(signum)
 signal.signal(signal.SIGINT, _handler)
 
 from enthought.traits.trait_notifiers import set_ui_handler
