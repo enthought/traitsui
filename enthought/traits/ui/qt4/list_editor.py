@@ -18,26 +18,20 @@
 
 from PyQt4 import QtCore, QtGui
 
-from enthought.traits.api \
-    import Str, Any, Bool
+from enthought.pyface.api import ImageResource
 
-from enthought.traits.trait_base \
-    import user_name_for, enumerate, xgetattr
+from enthought.traits.api import Str, Any, Bool
+from enthought.traits.trait_base import user_name_for, enumerate, xgetattr
     
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the 
 # enthought.traits.ui.editors.list_editor file.
-from enthought.traits.ui.editors.list_editor \
-    import ListItemProxy, ToolkitEditorFactory
+from enthought.traits.ui.editors.list_editor import ListItemProxy, \
+    ToolkitEditorFactory
 
-from editor \
-    import Editor
-
-from helper \
-    import IconButton
-
-from menu \
-    import MakeMenu
+from editor import Editor
+from helper import IconButton
+from menu import MakeMenu
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -523,8 +517,19 @@ class NotebookEditor ( Editor ):
 
         # Create a tab widget to hold each separate object's view:
         self.control = QtGui.QTabWidget()
-        QtCore.QObject.connect(self.control,
-                QtCore.SIGNAL('currentChanged(int)'), self._tab_activated)
+        signal = QtCore.SIGNAL( 'currentChanged(int)' )
+        QtCore.QObject.connect( self.control, signal, self._tab_activated )
+
+        # Create the button to close tabs, if necessary:
+        if self.factory.deletable:
+            button = QtGui.QToolButton()
+            button.setAutoRaise( True )
+            button.setToolTip( 'Remove current tab ')
+            button.setIcon ( ImageResource( 'closetab' ).create_icon() )
+
+            self.control.setCornerWidget( button, QtCore.Qt.TopRightCorner )
+            signal = QtCore.SIGNAL( 'clicked()' )
+            QtCore.QObject.connect( button, signal, self.close_current )
 
         # Set up the additional 'list items changed' event handler needed for
         # a list based trait:
@@ -586,6 +591,21 @@ class NotebookEditor ( Editor ):
 
         if first_page is not None:
             self.control.setCurrentWidget(first_page)
+
+    #---------------------------------------------------------------------------
+    #  Closes the currently selected tab:
+    #---------------------------------------------------------------------------
+                                    
+    def close_current ( self, force=False ):
+        """ Closes the currently selected tab:
+        """
+        widget = self.control.currentWidget()
+        for i in xrange( len( self._uis ) ):
+            page, ui, _, _ = self._uis[i]
+            if page is widget:
+                if force or ui.handler.close( ui.info, True ):
+                    del self.value[i]
+                break
 
     #---------------------------------------------------------------------------
     #  Closes all currently open notebook pages:
@@ -704,7 +724,7 @@ class NotebookEditor ( Editor ):
         else:
             self.control.addTab(ui.control, image, name)
 
-        return (ui, view_object, monitoring)
+        return (ui, view_object, monitoring)                        
 
     #---------------------------------------------------------------------------
     #  Handles a notebook tab being 'activated' (i.e. clicked on) by the user:
@@ -714,10 +734,9 @@ class NotebookEditor ( Editor ):
         """ Handles a notebook tab being "activated" (i.e. clicked on) by the
             user.
         """
-        w = self.control.widget(idx)
-
+        widget = self.control.widget(idx)
         for page, ui, _, _ in self._uis:
-            if page is w:
+            if page is widget:
                 self.selected = ui.info.object
                 break
 
