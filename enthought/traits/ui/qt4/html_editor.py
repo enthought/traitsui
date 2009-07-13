@@ -61,10 +61,10 @@ class SimpleEditor ( Editor ):
                                     QtGui.QSizePolicy.Expanding )
 
         if self.factory.open_externally:
-            self.control.page().setLinkDelegationPolicy( 
-                QtWebKit.QWebPage.DelegateAllLinks )
+            page = self.control.page()
+            page.setLinkDelegationPolicy( QtWebKit.QWebPage.DelegateAllLinks )
             signal = QtCore.SIGNAL( 'linkClicked(QUrl)' )
-            QtCore.QObject.connect( self.control, signal, self._link_clicked )
+            QtCore.QObject.connect( page, signal, self._link_clicked )
                                    
         self.base_url = self.factory.base_url
         self.sync_value( self.factory.base_url_name, 'base_url', 'from' )
@@ -81,17 +81,19 @@ class SimpleEditor ( Editor ):
         if self.factory.format_text:
             text = self.factory.parse_text( text )
         if self.base_url:
-            url = QtCore.QUrl.fromLocalFile ( self.base_url )
-            self.control.setHtml( text , url )
+            url = self.base_url
+            if not url.endswith("/"):
+                url += "/"
+            self.control.setHtml( text , QtCore.QUrl.fromLocalFile ( url ) )
         else:
             self.control.setHtml( text )
 
     #-- Event Handlers ---------------------------------------------------------
 
-    def _base_url_changed(self):
+    def _base_url_changed ( self ):
         self.update_editor()
 
-    def _link_clicked(self, url):
+    def _link_clicked ( self, url ):
         webbrowser.open_new( url.toString() )
 
 #-EOF--------------------------------------------------------------------------
