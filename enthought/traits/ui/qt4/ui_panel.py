@@ -474,14 +474,26 @@ class _GroupPanel(object):
         sizes = []
         for item in content:
 
+            # Get a size for the Item or Group
             if isinstance(item, Group):
                 panel = _GroupPanel(item, self.ui, suppress_label=True).control
+
+                def max_child_size(item):
+                    if isinstance(item, Group):
+                        return max(map(max_child_size, item.content))
+                    else:
+                        if use_widths:
+                            return item.width
+                        else:
+                            return item.height
+
+                sizes.append(max_child_size(item))
             else:
+                panel = self._add_items([item])
                 if use_widths:
                     sizes.append(item.width)
                 else:
                     sizes.append(item.height)
-                panel = self._add_items([item])
 
             # Add the panel to the splitter.
             if panel is not None:
@@ -508,38 +520,29 @@ class _GroupPanel(object):
         # Allocate requested space.
         avail = total
         remain = 0
+        for i, sz in enumerate(sizes):
+            if avail <= 0:
+                break
 
-        # Case one: everything is an item.
-        if len(sizes) == len(content):
-            for i, sz in enumerate(sizes):
-                if avail <= 0:
-                    break
-
-                if sz >= 0:
-                    if sz >= 1:
-                        sz = min(sz, avail)
-                    else:
-                        sz *= total
-
-                    sz = int(sz)
-                    sizes[i] = sz
-                    avail -= sz
+            if sz >= 0:
+                if sz >= 1:
+                    sz = min(sz, avail)
                 else:
-                    remain += 1
+                    sz *= total
 
-            # Allocate the remainder to those parts that didn't request a width.
-            if remain > 0:
-                remain = int(avail / remain)
+                sz = int(sz)
+                sizes[i] = sz
+                avail -= sz
+            else:
+                remain += 1
 
-                for i, sz in enumerate(sizes):
-                    if sz < 0:
-                        sizes[i] = remain
+        # Allocate the remainder to those parts that didn't request a width.
+        if remain > 0:
+            remain = int(avail / remain)
 
-        # Case two: there is at least one Group. 
-        # FIXME: Punting like this is not very good. We should examine the 
-        #        Group(s)' items to try to position the splitter.
-        else:
-            sizes = [ total / len(content) ] * len(content)
+            for i, sz in enumerate(sizes):
+                if sz < 0:
+                    sizes[i] = remain
 
         splitter.setSizes(sizes)
 
