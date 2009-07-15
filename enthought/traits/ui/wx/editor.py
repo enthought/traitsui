@@ -156,7 +156,12 @@ class Editor ( UIEditor ):
         if sizer is not None:
             # If only sizer.Layout() is called there are certain cases where
             # the newly visible items are sized incorrectly (see ticket 1797)
-            sizer.GetContainingWindow().Layout()
+            containing_window = sizer.GetContainingWindow()
+            
+            # it is possible, due to visible_when use that the containing window
+            # is None
+            if containing_window is not None:
+                containing_window.Layout()
             
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
