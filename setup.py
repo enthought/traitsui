@@ -45,7 +45,7 @@ def etsdep(p, min, max=None, literal=False):
 
 
 # Declare our ETS project dependencies.
-APPTOOLS = etsdep('AppTools', '3.2.1')
+APPTOOLS = etsdep('AppTools', '3.3.0')
 ENTHOUGHTBASE_UI = etsdep('EnthoughtBase[ui]', '3.0.3')
 ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.3')
 TRAITS = etsdep('Traits', '3.1.1')
@@ -125,7 +125,7 @@ setup(
         ],
     # test_suite = 'nose.collector',
     url = 'http://code.enthought.com/projects/traits_gui',
-    version = '3.1.1',
+    version = '3.2.0',
     zip_safe = False,
     )
 
