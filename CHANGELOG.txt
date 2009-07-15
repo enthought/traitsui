@@ -8,3 +8,16 @@ Traits 3.1.1
    * Windows with smaller parent are no longer opened at invalid positions with negative y values
  * Implemented editable_labels attribute in the TabularEditor for enabling editing of the labels (i.e. the first column)
  * Fix bug in ListEditor where a trait change listener would be fired when intermediate traits changed (when extended_name was of the type item1.item2.item3..) leading to a traceback.
+ * Saving/restoring windows now works with multiple displays of different sizes
+ * New ProgressDialog
+ * Improved window colors to match desktop colors more closely
+ * Replaced calls of wx.Yield() with wx.GetApp().Yield(True)
+ * Changed default font to use system font
+ * Fixed TabularEditor compatibility problem with wx 2.6 regarding the page-down key
+ * Fixed bug in propagating click events in the TabularEditor to parent windows
+ * DateEditor wx 2.6 compatability fixed
+ * TableEditor scrollbar fixed
+ * Improved support for opening links in external browser from HTMLEditor
+ * Reduced the number of update events the PythonEditor fired
+ * moved grid package from TraitsGui egg into enthought.pyface.ui.wx
+ * moved clipboard from enthought.util.wx into pyface
