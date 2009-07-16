@@ -34,12 +34,13 @@ except ImportError:
 from enthought.pyface.action.api import MenuBarManager, StatusBarManager
 from enthought.pyface.action.api import ToolBarManager
 from enthought.traits.api import implements, Instance, List, Unicode
-
-# Local imports.
 from enthought.pyface.i_application_window import IApplicationWindow
 from enthought.pyface.i_application_window import MApplicationWindow
 from enthought.pyface.image_resource import ImageResource
+
+# Local imports.
 from window import Window
+from system_metrics import SystemMetrics 
 
 
 class ApplicationWindow(MApplicationWindow, Window):
@@ -173,12 +174,7 @@ class ApplicationWindow(MApplicationWindow, Window):
             pos=self.position
         )
 
-        if sys.platform == 'darwin':
-            # wx lies.
-            color = wx.Colour(232, 232, 232)
-        else:
-            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE)
-        control.SetBackgroundColour(color)
+        control.SetBackgroundColour(SystemMetrics().dialog_background_color)
         
         if AUI:
             # Let the AUI manager look after the frame.
