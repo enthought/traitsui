@@ -349,6 +349,80 @@ def show_help_popup ( event ):
         HTMLHelpWindow( control, html, .25, .13 )
 
 
+class _GroupSplitter(QtGui.QSplitter):
+    """ A splitter for a Traits UI Group with layout='split'.
+    """
+
+    def __init__(self, group):
+        """ Store the group.
+        """
+        QtGui.QSplitter.__init__(self)
+        self._group = group
+        self._resized = False        
+
+    def resizeEvent(self, event):
+        """ Overridden to position the splitter based on the Group when the 
+            application is initializing.
+        """
+        if not self._resized and self.parent() and self.isVisible():
+            self._resized = True
+            self._resize_items()
+        QtGui.QSplitter.resizeEvent(self, event)
+
+    def _resize_items(self):
+        """ Size the splitter based on the 'width' or 'height' attributes
+            of the Traits UI view elements.
+        """
+        use_widths = (self.orientation() == QtCore.Qt.Horizontal)
+                
+        # Get the requested size for the items.
+        sizes = []
+        for item in self._group.content:
+            if use_widths:
+                sizes.append(item.width)
+            else:
+                sizes.append(item.height)
+
+        # Find out how much space is available.
+        if use_widths:
+            total = self.width()
+        else:
+            total = self.height()
+
+        # Allocate requested space.
+        avail = total
+        remain = 0
+        for i, sz in enumerate(sizes):
+            if avail <= 0:
+                break
+
+            if sz >= 0:
+                if sz >= 1:
+                    sz = min(sz, avail)
+                else:
+                    sz *= total
+
+                sz = int(sz)
+                sizes[i] = sz
+                avail -= sz
+            else:
+                remain += 1
+
+        # Allocate the remainder to those parts that didn't request a width.
+        if remain > 0:
+            remain = int(avail / remain)
+
+            for i, sz in enumerate(sizes):
+                if sz < 0:
+                    sizes[i] = remain
+
+        # If all requested a width, allocate the remainder to the last item.
+        else:
+            sizes[-1] += avail
+
+        self.setSizes(sizes)
+
+
 class _GroupPanel(object):
     """A sub-panel for a single group of items.  It may be either a layout or a
        widget.
@@ -400,7 +474,7 @@ class _GroupPanel(object):
 
         elif group.layout == 'split':
             # Create the splitter.
-            splitter = QtGui.QSplitter()
+            splitter = _GroupSplitter(group)
 
             size_policy = splitter.sizePolicy()
             if group.orientation == 'horizontal':
@@ -470,30 +544,13 @@ class _GroupPanel(object):
     def _add_splitter_items(self, content, splitter):
         """Adds a set of groups or items separated by splitter bars.
         """
-        use_widths = (splitter.orientation() == QtCore.Qt.Horizontal)
-        sizes = []
         for item in content:
 
-            # Get a size for the Item or Group
+            # Get a panel for the Item or Group.
             if isinstance(item, Group):
                 panel = _GroupPanel(item, self.ui, suppress_label=True).control
-
-                def max_child_size(item):
-                    if isinstance(item, Group):
-                        return max(map(max_child_size, item.content))
-                    else:
-                        if use_widths:
-                            return item.width
-                        else:
-                            return item.height
-
-                sizes.append(max_child_size(item))
             else:
                 panel = self._add_items([item])
-                if use_widths:
-                    sizes.append(item.width)
-                else:
-                    sizes.append(item.height)
 
             # Add the panel to the splitter.
             if panel is not None:
@@ -509,42 +566,6 @@ class _GroupPanel(object):
                     layout.setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
 
                 splitter.addWidget(panel)
-
-        # Find out how much space is available.
-        sh = splitter.sizeHint()
-        if use_widths:
-            total = sh.width()
-        else:
-            total = sh.height()
-
-        # Allocate requested space.
-        avail = total
-        remain = 0
-        for i, sz in enumerate(sizes):
-            if avail <= 0:
-                break
-
-            if sz >= 0:
-                if sz >= 1:
-                    sz = min(sz, avail)
-                else:
-                    sz *= total
-
-                sz = int(sz)
-                sizes[i] = sz
-                avail -= sz
-            else:
-                remain += 1
-
-        # Allocate the remainder to those parts that didn't request a width.
-        if remain > 0:
-            remain = int(avail / remain)
-
-            for i, sz in enumerate(sizes):
-                if sz < 0:
-                    sizes[i] = remain
-
-        splitter.setSizes(sizes)
 
     def _setup_editor(self, group, editor):
         """Setup the editor for a group.
@@ -976,7 +997,7 @@ class SplitterGroupEditor(GroupEditor):
     #---------------------------------------------------------------------------
 
     # The QSplitter for the group.
-    splitter = Instance(QtGui.QSplitter)
+    splitter = Instance(_GroupSplitter)
 
     #-- UI preference save/restore interface -----------------------------------
 
@@ -989,6 +1010,7 @@ class SplitterGroupEditor(GroupEditor):
         else:
             structure = prefs
 
+        self.splitter._resized = True
         self.splitter.restoreState(structure)
 
 
