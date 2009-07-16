@@ -18,9 +18,10 @@ interface toolkit, useful for tools such as debuggers.
 #-------------------------------------------------------------------------------
 
 from PyQt4 import QtCore, QtGui, Qsci
+from PyQt4.Qsci import QsciScintillaBase as QsciBase
 
 from enthought.traits.api \
-    import Unicode, List, Int, Event, Bool, TraitError
+    import Str, Unicode, List, Int, Event, Bool, TraitError, on_trait_change
 
 from enthought.traits.trait_base \
     import SequenceTypes
@@ -45,15 +46,96 @@ from constants \
 #-------------------------------------------------------------------------------
         
 # Marker line constants:
+MARK_MARKER = 0 # Marks a marked line
+SEARCH_MARKER = 1 # Marks a line matching the current search
+SELECTED_MARKER = 2 # Marks the currently selected line
 
-# Marks a marked line
-MARK_MARKER = 0 
+# A map from Qt lexer constants to the corresponding concrete lexer:
+LEXER_MAP = { QsciBase.SCLEX_BASH: Qsci.QsciLexerBash, 
+              QsciBase.SCLEX_BATCH: Qsci.QsciLexerBatch, 
+              QsciBase.SCLEX_CMAKE: Qsci.QsciLexerCMake, 
+              QsciBase.SCLEX_CPP: Qsci.QsciLexerCPP, 
+              QsciBase.SCLEX_CSS: Qsci.QsciLexerCSS, 
+              QsciBase.SCLEX_D: Qsci.QsciLexerD, 
+              QsciBase.SCLEX_DIFF: Qsci.QsciLexerDiff, 
+              QsciBase.SCLEX_FORTRAN: Qsci.QsciLexerFortran, 
+              QsciBase.SCLEX_HTML: Qsci.QsciLexerHTML, 
+              QsciBase.SCLEX_LUA: Qsci.QsciLexerLua, 
+              QsciBase.SCLEX_MAKEFILE: Qsci.QsciLexerMakefile, 
+              QsciBase.SCLEX_PASCAL: Qsci.QsciLexerPascal, 
+              QsciBase.SCLEX_PERL: Qsci.QsciLexerPerl, 
+              QsciBase.SCLEX_POV: Qsci.QsciLexerPOV, 
+              QsciBase.SCLEX_PROPERTIES: Qsci.QsciLexerProperties, 
+              QsciBase.SCLEX_PYTHON: Qsci.QsciLexerPython, 
+              QsciBase.SCLEX_RUBY: Qsci.QsciLexerRuby, 
+              QsciBase.SCLEX_SQL: Qsci.QsciLexerSQL, 
+              QsciBase.SCLEX_TCL: Qsci.QsciLexerTCL, 
+              QsciBase.SCLEX_TEX: Qsci.QsciLexerTeX, 
+              QsciBase.SCLEX_VHDL: Qsci.QsciLexerVHDL, 
+              QsciBase.SCLEX_XML: Qsci.QsciLexerXML, 
+              QsciBase.SCLEX_YAML: Qsci.QsciLexerYAML }
 
-# Marks a line matching the current search
-SEARCH_MARKER = 1  
+#-------------------------------------------------------------------------------
+#  'SourceLexer' class:
+#-------------------------------------------------------------------------------
 
-# Marks the currently selected line
-SELECTED_MARKER = 2    
+class SourceLexer ( Qsci.QsciLexerCustom ):
+    """ A custom lexer that first lexes according to an existing lexer (by 
+        default the Python lexer), then dim and underlines lines as appropriate.
+    """
+    
+    def __init__(self, editor):
+        """ Store the editor.
+        """
+        Qsci.QsciLexerCustom.__init__(self, editor.control)
+        self._editor = editor
+    
+    def description(self, style):
+        """ Overriden because Qt balks if it is not. This is indended to be used
+            to store style preferences, but we don't care about that.
+        """
+        return QtCore.QString()
+
+    def styleText(self, start, end):
+        """ Overriden to perform custom styling.
+        """
+        control = self._editor.control
+        start_line = control.lineIndexFromPosition(start)[0]
+        end_line = control.lineIndexFromPosition(end)[0]
+
+        # Fixes a strange a bug with the STC widget where creating a new line
+        # after a dimmed line causes it to mysteriously lose its styling
+        if start_line in self._editor.dim_lines:
+            start_line -= 1
+
+        # Trying to Colourise only the lines that we want does not seem to work
+        # so we do the whole area and then override the styling on certain lines
+        if self._editor.lexer != QsciBase.SCLEX_NULL:
+            control.SendScintilla(QsciBase.SCI_SETLEXER, self._editor.lexer)
+            control.SendScintilla(QsciBase.SCI_COLOURISE, start, end)
+            control.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_CONTAINER)
+
+        for line in xrange(start_line, end_line+1):
+            # We don't use lineLength here because it includes newline 
+            # characters. Styling these leads to strange behavior.
+            position = control.positionFromLineIndex(line, 0)
+            style_length = control.SendScintilla(QsciBase.SCI_GETLINEENDPOSITION,
+                                                 line) - position
+
+            if line+1 in self._editor.dim_lines:
+                # Set styling mask to only style text bits, not indicator bits
+                self.startStyling(position, 0x1f)
+                self.setStyling(style_length, self._editor.dim_style_number)
+            elif self._editor.lexer == QsciBase.SCLEX_NULL:
+                self.startStyling(position, 0x1f)
+                self.setStyling(style_length, QsciBase.STYLE_DEFAULT)
+                
+            if line+1 in self._editor.squiggle_lines:
+                self.startStyling(position, QsciBase.INDIC2_MASK)
+                self.setStyling(style_length, QsciBase.INDIC2_MASK)
+            else:
+                self.startStyling(position, QsciBase.INDIC2_MASK)
+                self.setStyling(style_length, QsciBase.STYLE_DEFAULT)
 
 #-------------------------------------------------------------------------------
 #  'SourceEditor' class:
@@ -87,6 +169,18 @@ class SourceEditor ( Editor ):
     
     # The current column
     column = Event
+
+    # The Scintilla lexer use
+    lexer = Int
+
+    # The lines to be dimmed
+    dim_lines = List(Int)
+    dim_color = Str
+    dim_style_number = Int(16) # 0-15 are reserved for the python lexer
+    
+    # The lines to have squiggles drawn under them
+    squiggle_lines = List(Int)
+    squiggle_color = Str
         
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -112,7 +206,36 @@ class SourceEditor ( Editor ):
                                     dispatch = 'ui' )
         if self.readonly:
             control.setReadOnly(True)
-            
+
+        # Set up the lexer. Before we set our custom lexer, we call setLexer
+        # with the QSciLexer that will set the keywords and styles for our
+        # basic syntax lexing. We save and then restore these keywords/styles 
+        # because they get nuked when call setLexer again.
+        self.lexer = getattr(QsciBase, 'SCLEX_' + self.factory.lexer.upper(),
+                             QsciBase.SCLEX_NULL)
+        lexer_class = LEXER_MAP.get(self.lexer)
+        if lexer_class:
+            control.setLexer(lexer_class(control))
+            keywords = control.lexer().keywords(1)
+            styles = []
+            # FIXME: Ideally we want to use 'FONT' too, but this is causing
+            #        segfaults. Why?
+            attr_names = [ 'FORE', 'BACK', 'BOLD', 'ITALIC', 'SIZE', 
+                           'EOLFILLED', 'UNDERLINE' ]
+            for style in xrange(128):
+                attrs = [ control.SendScintilla(getattr(QsciBase,'SCI_STYLEGET'+a), 
+                                                style)
+                          for a in attr_names ]
+                styles.append(attrs)
+        control.setLexer(SourceLexer(self))
+        if lexer_class:
+            if keywords:
+                control.SendScintilla(QsciBase.SCI_SETKEYWORDS, 0, keywords)
+            for style, attrs in enumerate(styles):
+                for attr_num, attr in enumerate(attrs):
+                    msg = getattr(QsciBase, 'SCI_STYLESET' + attr_names[attr_num])
+                    control.SendScintilla(msg, style, attr)
+                                      
         # Define the markers we use:
         control.markerDefine(Qsci.QsciScintilla.Background, MARK_MARKER)
         control.setMarkerBackgroundColor(factory.mark_color_, MARK_MARKER)
@@ -133,6 +256,19 @@ class SourceEditor ( Editor ):
         self.sync_value( factory.selected_text, 'selected_text', 'to' )
         self.sync_value( factory.line, 'line' )
         self.sync_value( factory.column, 'column' )
+
+        self.sync_value(factory.dim_lines, 'dim_lines', 'from', is_list=True)
+        if self.factory.dim_color == '':
+            self.dim_color = 'grey'
+        else:
+            self.sync_value(factory.dim_color, 'dim_color', 'from')
+
+        self.sync_value(factory.squiggle_lines, 'squiggle_lines', 'from',
+                        is_list=True)
+        if factory.squiggle_color == '':
+            self.squiggle_color = 'red'
+        else:
+            self.sync_value(factory.squiggle_color, 'squiggle_color', 'from')
 
         # Check if we need to monitor the line or column position being changed:
         if (factory.line != '') or (factory.column != ''):
@@ -260,6 +396,25 @@ class SourceEditor ( Editor ):
         """
         self.factory.key_bindings.do( event.event, self.ui.handler, 
                                       self.ui.info )
+
+    #---------------------------------------------------------------------------
+    #  Handles the styling of the editor:
+    #---------------------------------------------------------------------------
+
+    def _dim_color_changed(self):
+        self.control.SendScintilla(QsciBase.SCI_STYLESETFORE, 
+                                   self.dim_style_number,
+                                   QtGui.QColor(self.dim_color))
+
+    def _squiggle_color_changed(self):
+        self.control.SendScintilla(QsciBase.SCI_INDICSETSTYLE, 2,
+                                   QsciBase.INDIC_SQUIGGLE)
+        self.control.SendScintilla(QsciBase.SCI_INDICSETFORE, 2,
+                                   QtGui.QColor(self.squiggle_color))
+
+    @on_trait_change('dim_lines, squiggle_lines')
+    def _style_document(self):
+        self.control.recolor()
         
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
@@ -315,7 +470,7 @@ class SourceEditor ( Editor ):
 # Define the simple, custom, text and readonly editors, which will be accessed
 # by the editor factory for code editors.
 
-SimpleEditor = TextEditor = SourceEditor
+CustomEditor = SimpleEditor = TextEditor = SourceEditor
 
 class ReadonlyEditor(SourceEditor):
 
