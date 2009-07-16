@@ -1,0 +1,50 @@
+TraitsBackendQt 3.2.1 (not yet released)
+========================================
+
+Enhancements
+------------
+
+
+Fixes
+-----
+
+ 
+TraitsBackendQt 3.2.0 (July 15, 2009)
+=====================================
+
+Enhancements
+------------
+
+ * Implemented RGBColor trait
+
+ * Improved the method by which the QT backend dispatches trait handlers when dispatch='ui'.  Before, the code only worked when on the main application thread or a QThread. Now it works for regular Python threads too
+
+ * Added support or 'click' and 'dclick' factory attributes to the TableEditor
+
+ * Improved FileEditor to look and act like the WX editor
+
+ * Fixed missing minimize/maximize buttons for resizable dialogs
+
+ * New HTMLEditor using QtWebKit
+
+ * New TabularEditor
+
+ * Added support for panel buttons
+
+ * New SearchEditor
+
+ * Added support for clipboard
+
+
+Fixes
+-----
+
+ * Fixed a plethora of layout bugs
+
+ * Fixed events not fired for 'custom' TextEditor
+
+ * Fixed events not being fired correctly in TableEditor
+
+ * TableEditor instances now editable
+
+ * Now responds to SIGINT correctly rather than raising KeyboardInterrupt
