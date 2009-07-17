@@ -270,6 +270,7 @@ class _StickyDialog(QtGui.QDialog):
         layout = QtGui.QVBoxLayout()
         self._mw = QtGui.QMainWindow()
         layout.addWidget(self._mw)
+        layout.setMargin(0)
         self.setLayout(layout)
 
         if ui.view.resizable:
