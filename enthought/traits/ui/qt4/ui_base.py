@@ -452,11 +452,9 @@ class BaseDialog(BasePanel):
         toolbar = self.ui.view.toolbar
         if toolbar is not None:
             self._last_group = self._last_parent = None
-            # FIXME: A QDialog has no toolbar. This should be fixed, but right 
-            # now we are passing rather than creating a traceback.
-            return 
-            self.control.SetToolBar(
-                toolbar.create_tool_bar( self.control, self ) )
+            qt_toolbar = toolbar.create_tool_bar( self.control, self )
+            qt_toolbar.setMovable( False )
+            self.control._mw.addToolBar( qt_toolbar )
             self._last_group = self._last_parent = None
 
     #---------------------------------------------------------------------------
