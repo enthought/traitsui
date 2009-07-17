@@ -91,9 +91,6 @@ class SimpleSliderEditor ( Editor ):
         self.evaluate = factory.evaluate
         self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
 
-        if factory.label_width > 0:
-            size = wx.Size( factory.label_width, 20 )
-
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
 
@@ -112,7 +109,10 @@ class SimpleSliderEditor ( Editor ):
         ivalue = self._convert_to_slider(fvalue)
 
         self._label_lo = QtGui.QLabel()
-        self._label_lo.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self._label_lo.setAlignment(QtCore.Qt.AlignRight | 
+                                    QtCore.Qt.AlignVCenter)
+        if factory.label_width > 0:
+            self._label_lo.setMiniumWidth(factory.label_width)
         panel.addWidget(self._label_lo)
 
         panel.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
@@ -128,6 +128,8 @@ class SimpleSliderEditor ( Editor ):
 
         self._label_hi = QtGui.QLabel()
         panel.addWidget(self._label_hi)
+        if factory.label_width > 0:
+            self._label_hi.setMiniumWidth(factory.label_width)
 
         panel.text = text = QtGui.QLineEdit(fvalue_text)
         QtCore.QObject.connect(text, QtCore.SIGNAL('editingFinished()'),

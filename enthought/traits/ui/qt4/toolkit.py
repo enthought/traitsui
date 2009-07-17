@@ -312,18 +312,10 @@ class GUIToolkit ( Toolkit ):
     def rebuild_ui ( self, ui ):
         """ Rebuilds a UI after a change to the content of the UI.
         """
-        parent = size = None
         if ui.control is not None:
-            size   = ui.control.GetSize()
-            parent = ui.control._parent
             ui.recycle()
             ui.info.ui = ui
         ui.rebuild( ui, parent )
-        if parent is not None:
-            ui.control.SetSize( size )
-            sizer = parent.GetSizer()
-            if sizer is not None:
-                sizer.Add( ui.control, 1, wx.EXPAND )
 
     #---------------------------------------------------------------------------
     #  Sets the title for the UI window:

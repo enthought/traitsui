@@ -16,7 +16,7 @@
 import cgi
 import re
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore, QtGui, QtWebKit
 
 from enthought.traits.api \
     import Instance
@@ -1026,7 +1026,7 @@ class SplitterGroupEditor(GroupEditor):
 #  'HTMLHelpWindow' class:
 #-------------------------------------------------------------------------------
 
-class HTMLHelpWindow ( QtGui.QLabel ):
+class HTMLHelpWindow ( QtGui.QDialog ):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 
@@ -1037,38 +1037,31 @@ class HTMLHelpWindow ( QtGui.QLabel ):
     def __init__ ( self, parent, html, scale_dx, scale_dy ):
         """ Initializes the object.
         """
-        wx.Frame.__init__( self, parent, -1, 'Help' )
-        self.SetBackgroundColour( WindowColor )
+        QtGui.QDialog.__init__(self, parent)
+        layout = QtGui.QVBoxLayout(self)
+        layout.setMargin(0)
 
-        # Wrap the dialog around the image button panel:
-        sizer        = wx.BoxSizer( wx.VERTICAL )
-        html_control = wh.HtmlWindow( self )
-        html_control.SetBorders( 2 )
-        html_control.SetPage( html )
-        sizer.Add( html_control, 1, wx.EXPAND )
-        sizer.Add( wx.StaticLine( self, -1 ), 0, wx.EXPAND )
-        b_sizer = wx.BoxSizer( wx.HORIZONTAL )
-        button  = wx.Button( self, -1, 'OK' )
-        wx.EVT_BUTTON( self, button.GetId(), self._on_ok )
-        b_sizer.Add( button, 0 )
-        sizer.Add( b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5 )
-        self.SetSizer( sizer )
-        self.SetSize( wx.Size( int( scale_dx * screen_dx ), 
-                               int( scale_dy * screen_dy ) ) )
+        # Create the html control
+        html_control = QtWebKit.QWebView()
+        html_control.setSizePolicy(QtGui.QSizePolicy.Expanding, 
+                                   QtGui.QSizePolicy.Expanding)
+        html_control.setHtml(html)
+        layout.addWidget(html_control)
 
-        # Position and show the dialog:
-        position_window( self, parent = parent )
-        self.Show()
+        # Create the OK button
+        bbox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok,
+                                      QtCore.Qt.Horizontal)
+        QtCore.QObject.connect(bbox, QtCore.SIGNAL('accepted()'),
+                               self, QtCore.SLOT('accept()'))
+        layout.addWidget(bbox)
 
-    #---------------------------------------------------------------------------
-    #  Handles the window being closed:
-    #---------------------------------------------------------------------------
+        # Position and show the dialog
+        position_window(self, parent=parent)
+        self.show()
 
-    def _on_ok ( self, event ):
-        """ Handles the window being closed.
-        """
-        self.Destroy()
-
+#-------------------------------------------------------------------------------
+#  Creates a PyFace HeadingText control:
+#-------------------------------------------------------------------------------
 
 HeadingText = None
 

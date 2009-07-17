@@ -82,9 +82,9 @@ class MakeMenu:
             self.menu = menu = QtGui.QMenu()
             self.parse( menu, -1 )
         else:
-            self.menu = menu = wx.MenuBar()
+            self.menu = menu = QtGui.QMenuBar()
             self.parse( menu, -1 )
-            window.SetMenuBar( menu )
+            window.setMenuBar( menu )
 
     #---------------------------------------------------------------------------
     #  Recursively parses menu items from the description:

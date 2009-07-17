@@ -179,7 +179,7 @@ class TabularEditor(Editor):
             self.context_object.on_trait_change(self.update_editor,
                                 self.extended_name + '.-', dispatch='ui')
 
-        # Create the mapping from user supplied images to wx.ImageList indices:
+        # Create the mapping from user supplied images to QImages:
         for image_resource in factory.images:
             self._add_image(image_resource)
 

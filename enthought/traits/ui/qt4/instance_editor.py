@@ -125,9 +125,6 @@ class CustomEditor ( Editor ):
             QtCore.QObject.connect(self._choice,
                     QtCore.SIGNAL('activated(QString)'), self.update_object)
 
-            if droppable:
-                self._choice.SetBackgroundColour( self.ok_color )
-
             self.set_tooltip( self._choice )
 
             if factory.name != '':
@@ -144,9 +141,8 @@ class CustomEditor ( Editor ):
             self.rebuild_items()
 
         elif droppable:
-            self._choice = wx.TextCtrl( parent, -1, '', 
-                                        style = wx.TE_READONLY )
-            self._choice.SetBackgroundColour( self.ok_color )
+            self._choice = QtGui.QLineEdit()
+            self._choice.setReadOnly(True)
             self.set_tooltip( self._choice )
 
         if droppable:
@@ -465,37 +461,6 @@ class CustomEditor ( Editor ):
                      'prefs': ui.get_prefs() }
 
         return None
-
-#----- Drag and drop event handlers: -------------------------------------------
-
-    #---------------------------------------------------------------------------
-    #  Handles a Python object being dropped on the control:    
-    #---------------------------------------------------------------------------
-
-    def wx_dropped_on ( self, x, y, data, drag_result ):
-        """ Handles a Python object being dropped on the tree.
-        """
-        for item in self.items:
-            if item.is_droppable() and item.is_compatible( data ):
-                if self._object_cache is not None:
-                    self.rebuild_items()
-                self.value = data
-                return drag_result
-
-        return wx.DragNone
-
-    #---------------------------------------------------------------------------
-    #  Handles a Python object being dragged over the control:    
-    #---------------------------------------------------------------------------
-
-    def wx_drag_over ( self, x, y, data, drag_result ):
-        """ Handles a Python object being dragged over the tree.
-        """
-        for item in self.items:
-            if item.is_droppable() and item.is_compatible( data ):
-                return drag_result
-
-        return wx.DragNone
         
     #-- Traits event handlers --------------------------------------------------
     
