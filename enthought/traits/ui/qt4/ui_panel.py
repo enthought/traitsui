@@ -733,13 +733,17 @@ class _GroupPanel(object):
 
                 # If so, add the appropriate amount of space to the sizer:
                 n = int( name )
-                if self.direction == QtGui.QBoxLayout.LeftToRight:
-                    inner.Add( ( n, 1 ) )
+                if row < 0:
+                    inner.addSpacing(n)
                 else:
-                    spacer = ( 1, n )
-                    inner.Add( spacer )
-                    if show_labels:
-                        inner.Add( spacer )
+                    if self.direction == QtGui.QBoxLayout.LeftToRight:
+                        spacer = QtGui.QSpacerItem(n, 1)
+                        inner.addItem(spacer, row, i)
+                    else:
+                        spacer = QtGui.QSpacerItem(1, n)
+                        inner.addItem(spacer, row, i)
+                        if show_labels:
+                            inner.addItem(spacer, row, i)
 
                 # Continue on to the next Item in the list:
                 continue
