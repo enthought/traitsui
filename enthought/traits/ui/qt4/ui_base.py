@@ -260,13 +260,7 @@ class _StickyDialog(QtGui.QDialog):
     def __init__(self, ui, parent):
         """Initialise the dialog."""
 
-        flags = QtCore.Qt.WindowSystemMenuHint
-        if QtCore.QT_VERSION >= 0x040500:
-            flags |= QtCore.Qt.WindowCloseButtonHint
-        if ui.view.resizable:
-            flags |= QtCore.Qt.WindowMinMaxButtonsHint
-
-        QtGui.QDialog.__init__(self, parent, flags)
+        QtGui.QDialog.__init__(self, parent)
 
         # Create the main window so we can add toolbars etc.
         layout = QtGui.QVBoxLayout()
@@ -275,11 +269,15 @@ class _StickyDialog(QtGui.QDialog):
         layout.setMargin(0)
         self.setLayout(layout)
 
+        flags = QtCore.Qt.WindowSystemMenuHint
+        if QtCore.QT_VERSION >= 0x040500:
+            flags |= QtCore.Qt.WindowCloseButtonHint
         if ui.view.resizable:
-            self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint |
-                                QtCore.Qt.WindowMaximizeButtonHint)
+            flags |= (QtCore.Qt.WindowMinimizeButtonHint |
+                      QtCore.Qt.WindowMaximizeButtonHint)
         else:
             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+        self.setWindowFlags(flags)
 
         self._ui = ui
         self._result = None
