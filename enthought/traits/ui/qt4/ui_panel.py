@@ -277,33 +277,17 @@ def _fill_panel(panel, content, ui, item_handler=None):
             if layout is not None:
                 layout.setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
 
-            # Add the content.
-            if isinstance(panel, QtGui.QTabWidget):
-                panel.addTab(new, page_name)
-            else:
-                panel.addItem(new, page_name)
+        else:
+            new = QtGui.QWidget()
+            layout = QtGui.QVBoxLayout(new)
+            layout.setMargin(0)
+            item_handler(item, layout)
 
-        # FIXME: GV: I have commented out the following (wx) code. Has a
-        # result the dialog display under Qt, thought with a wrong
-        # layout. It is better than nothing.
-        #else:
-            # FIXME: Don't yet have an example that exercises this code.
-            # Create the new page as a simple DockControl containing the
-            # specified set of controls:
-            #sizer = wx.BoxSizer( wx.VERTICAL )
-            #panel = QtGui.QWidget(nb)
-            #panel.SetSizer( sizer )
-            #
-            #pages.append( DockControl( name     = page_name,
-            #                           image    = item.image,
-            #                           id       = item.get_id(),
-            #                           style    = item.dock,
-            #                           dockable = DockableViewElement(
-            #                                          ui = ui, element = item ),
-            #                           export   = item.export,
-            #                           control  = panel ) )
-            #item_handler( item, panel, sizer )
-            #panel.GetSizer().Fit( panel )
+        # Add the content.
+        if isinstance(panel, QtGui.QTabWidget):
+            panel.addTab(new, page_name)
+        else:
+            panel.addItem(new, page_name)
 
     panel.setCurrentIndex(active)
 
