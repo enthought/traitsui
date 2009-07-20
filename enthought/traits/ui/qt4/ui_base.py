@@ -349,6 +349,10 @@ class BaseDialog(BasePanel):
     def create_dialog(self, parent, style):
         """Create the dialog control."""
 
+        # The QMainWindow is actually embedded in a dialog (see _StickyDialog)
+        if isinstance(parent, QtGui.QMainWindow):
+            parent = parent.parent()
+
         self.control = control = _StickyDialog(self.ui, parent)
 
         view = self.ui.view
