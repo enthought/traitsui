@@ -261,6 +261,8 @@ class _StickyDialog(QtGui.QDialog):
         """Initialise the dialog."""
 
         flags = QtCore.Qt.WindowSystemMenuHint
+        if QtCore.QT_VERSION >= 0x040500:
+            flags |= QtCore.Qt.WindowCloseButtonHint
         if ui.view.resizable:
             flags |= QtCore.Qt.WindowMinMaxButtonsHint
 
