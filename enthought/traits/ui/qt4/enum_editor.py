@@ -284,8 +284,10 @@ class SimpleEditor ( BaseEditor ):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
         """
+        self.control.blockSignals(True)
         self.control.clear()
         self.control.addItems(self.names)
+        self.control.blockSignals(False)
 
         self.update_editor()
                                       
