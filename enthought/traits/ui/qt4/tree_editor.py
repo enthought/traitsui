@@ -179,6 +179,8 @@ class SimpleEditor ( Editor ):
                     orient = QtCore.Qt.Vertical
 
                 self.control = splitter = QtGui.QSplitter(orient)
+                splitter.setSizePolicy(QtGui.QSizePolicy.Expanding,
+                                       QtGui.QSizePolicy.Expanding)
                 splitter.addWidget(self._tree)
                 splitter.addWidget(sa)
         else:
