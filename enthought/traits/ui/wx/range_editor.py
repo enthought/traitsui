@@ -128,18 +128,18 @@ class SimpleSliderEditor ( BaseRangeEditor ):
 
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
-        #low  = self.low
-        #high = self.high
         self.control = panel = TraitsUIPanel( parent, -1 )
         sizer  = wx.BoxSizer( wx.HORIZONTAL )
         fvalue = self.value
 
-        try:
-            fvalue_text = self.format % fvalue
-            1 / (self.low <= fvalue <= self.high)
-        except:
+        if not (self.low <= fvalue <= self.high):
             fvalue_text = ''
-            fvalue      = low
+            fvalue = self.low
+        else:
+            try:
+                fvalue_text = self.format % fvalue
+            except (ValueError, TypeError), e:
+                fvalue_text = ''
 
         ivalue = self._convert_to_slider(fvalue)
 
