@@ -50,10 +50,35 @@ from helper \
     import TraitsUIPanel, Slider
 
 #-------------------------------------------------------------------------------
+#  'BaseRangeEditor' class:
+#-------------------------------------------------------------------------------
+
+class BaseRangeEditor ( Editor ):
+    """ The base class for Range editors. Using an evaluate trait, if specified,
+        when assigning numbers the object trait.
+    """
+    
+    #---------------------------------------------------------------------------
+    #  Trait definitions:
+    #---------------------------------------------------------------------------
+
+    # Function to evaluate floats/ints
+    evaluate = Any
+
+    #---------------------------------------------------------------------------
+    #  Sets the associated object trait's value:
+    #---------------------------------------------------------------------------
+    
+    def _set_value ( self, value ):
+        if self.evaluate is not None:
+            value = self.evaluate( value )
+        Editor._set_value( self, value )
+
+#-------------------------------------------------------------------------------
 #  'SimpleSliderEditor' class:
 #-------------------------------------------------------------------------------
 
-class SimpleSliderEditor ( Editor ):
+class SimpleSliderEditor ( BaseRangeEditor ):
     """ Simple style of range editor that displays a slider and a text field.
 
     The user can set a value either by moving the slider or by typing a value
@@ -72,10 +97,7 @@ class SimpleSliderEditor ( Editor ):
 
     # Formatting string used to format value and labels
     format = Str
-
-    # Function to evaluate textual user input
-    evaluate = Any
-
+    
     # Flag indicating that the UI is in the process of being updated
     ui_changing = Bool( False )
 
@@ -193,7 +215,7 @@ class SimpleSliderEditor ( Editor ):
         """
         try:
             try:
-                value = self.evaluate( self.control.text.GetValue().strip() )
+                value = eval( self.control.text.GetValue().strip() )
             except Exception, ex:
                 # The entered something that didn't eval as a number, (e.g., 'foo')
                 # pretend it didn't happen (i.e. do not change self.value)
@@ -331,7 +353,7 @@ class LogRangeSliderEditor ( SimpleSliderEditor ):
 #  'LargeRangeSliderEditor' class:
 #-------------------------------------------------------------------------------
 
-class LargeRangeSliderEditor ( Editor ):
+class LargeRangeSliderEditor ( BaseRangeEditor ):
     """ A slider editor for large ranges.
 
        The editor displays a slider and a text field. A subset of the total
@@ -354,9 +376,6 @@ class LargeRangeSliderEditor ( Editor ):
 
     # High end of displayed range
     cur_high = Float
-
-    # Function to evaluate textual user input
-    evaluate = Any
 
     # Flag indicating that the UI is in the process of being updated
     ui_changing = Bool( False )
@@ -496,7 +515,7 @@ class LargeRangeSliderEditor ( Editor ):
         """ Handles the user pressing the Enter key in the text field.
         """
         try:
-            self.value = value = self.evaluate( self.control.text.GetValue().strip() )
+            self.value = value = eval( self.control.text.GetValue().strip() )
             self.control.text.SetBackgroundColour(OKColor)
             self.control.text.Refresh()
             # Update the slider range.
@@ -688,7 +707,7 @@ class LargeRangeSliderEditor ( Editor ):
 #  'SimpleSpinEditor' class:
 #-------------------------------------------------------------------------------
 
-class SimpleSpinEditor ( Editor ):
+class SimpleSpinEditor ( BaseRangeEditor ):
     """ A simple style of range editor that displays a spin box control.
     """
 
@@ -791,6 +810,13 @@ class RangeTextEditor ( TextEditor ):
         value that is outside the allowed range, the background of the field
         changes color to indicate an error.
     """
+
+    #---------------------------------------------------------------------------
+    #  Trait definitions:
+    #---------------------------------------------------------------------------
+
+    # Function to evaluate floats/ints
+    evaluate = Any
     
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -813,6 +839,9 @@ class RangeTextEditor ( TextEditor ):
         
         if self.factory.auto_set:
             wx.EVT_TEXT( parent, control.GetId(), self.update_object )
+
+        self.evaluate = factory.evaluate
+        self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
            
         self.control = control
         self.set_tooltip()
@@ -825,7 +854,10 @@ class RangeTextEditor ( TextEditor ):
         """ Handles the user entering input data in the edit control.
         """
         try:
-            self.value = eval(self.control.GetValue())
+            value = eval( self.control.GetValue() )
+            if self.evaluate is not None:
+                value = self.evaluate( value )
+            self.value = value
             self.control.SetBackgroundColour(OKColor)
             self.control.Refresh()
             if self._error is not None:
