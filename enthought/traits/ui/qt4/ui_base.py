@@ -469,12 +469,36 @@ class BaseDialog(BasePanel):
     def _add_statusbar ( self ):
         """ Adds a statusbar to the dialog.
         """
-        # FIXME: We should implement this, but right now we are passing rather
-        # than creating a traceback.
-        return
-        statusbar = self.ui.view.statusbar
-        if statusbar is not None:
-            raise NotImplementedError
+        if self.ui.view.statusbar is not None:
+            control = QtGui.QStatusBar()
+            control.setSizeGripEnabled(self.ui.view.resizable)
+            listeners = []
+            for item in self.ui.view.statusbar:
+                name = item.name
+                item_control = QtGui.QLabel()
+                item_control.setText(self.ui.get_extended_value(name))
+                control.addWidget(item_control)
+                
+                col = name.find('.')
+                obj = 'object'
+                if col >= 0:
+                    obj = name[:col]
+                    name = name[col+1:]
+                obj = self.ui.context[obj]
+                set_text = self._set_status_text(item_control)
+                obj.on_trait_change(set_text, name, dispatch='ui')
+                listeners.append((obj, set_text, name))
+
+            self.control._mw.setStatusBar(control)
+            self.ui._statusbar = listeners
+
+    def _set_status_text(self, control):
+        """ Helper function for _add_statusbar.
+        """
+        def set_status_text(text):
+            control.setText(text)
+
+        return set_status_text
 
     #---------------------------------------------------------------------------
     #  Adds a menu item to the menu bar being constructed:
