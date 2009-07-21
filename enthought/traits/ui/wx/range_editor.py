@@ -840,8 +840,8 @@ class RangeTextEditor ( TextEditor ):
         if self.factory.auto_set:
             wx.EVT_TEXT( parent, control.GetId(), self.update_object )
 
-        self.evaluate = factory.evaluate
-        self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
+        self.evaluate = self.factory.evaluate
+        self.sync_value( self.factory.evaluate_name, 'evaluate', 'from' )
            
         self.control = control
         self.set_tooltip()
