@@ -44,10 +44,35 @@ from helper \
     import IconButton
 
 #-------------------------------------------------------------------------------
+#  'BaseRangeEditor' class:
+#-------------------------------------------------------------------------------
+
+class BaseRangeEditor ( Editor ):
+    """ The base class for Range editors. Using an evaluate trait, if specified,
+        when assigning numbers the object trait.
+    """
+    
+    #---------------------------------------------------------------------------
+    #  Trait definitions:
+    #---------------------------------------------------------------------------
+
+    # Function to evaluate floats/ints
+    evaluate = Any
+
+    #---------------------------------------------------------------------------
+    #  Sets the associated object trait's value:
+    #---------------------------------------------------------------------------
+    
+    def _set_value ( self, value ):
+        if self.evaluate is not None:
+            value = self.evaluate( value )
+        Editor._set_value( self, value )
+
+#-------------------------------------------------------------------------------
 #  'SimpleSliderEditor' class:
 #-------------------------------------------------------------------------------
 
-class SimpleSliderEditor ( Editor ):
+class SimpleSliderEditor ( BaseRangeEditor ):
     """ Simple style of range editor that displays a slider and a text field.
 
     The user can set a value either by moving the slider or by typing a value
@@ -66,9 +91,6 @@ class SimpleSliderEditor ( Editor ):
 
     # Formatting string used to format value and labels
     format = Str
-
-    # Function to evaluate textual user input
-    evaluate = Any
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -178,7 +200,7 @@ class SimpleSliderEditor ( Editor ):
         """
         try:
             try:
-                value = self.evaluate(unicode(self.control.text.text()).strip())
+                value = eval(unicode(self.control.text.text()).strip())
             except Exception, ex:
                 # The entered something that didn't eval as a number, (e.g.,
                 # 'foo') pretend it didn't happen
@@ -308,7 +330,7 @@ class LogRangeSliderEditor ( SimpleSliderEditor ):
 #  'LargeRangeSliderEditor' class:
 #-------------------------------------------------------------------------------
 
-class LargeRangeSliderEditor ( Editor ):
+class LargeRangeSliderEditor ( BaseRangeEditor ):
     """ A slider editor for large ranges.
 
     The editor displays a slider and a text field. A subset of the total range
@@ -330,9 +352,6 @@ class LargeRangeSliderEditor ( Editor ):
 
     # High end of displayed range
     cur_high = Float
-
-    # Function to evaluate textual user input
-    evaluate = Any
 
     # Flag indicating that the UI is in the process of being updated
     ui_changing = Bool(False)
@@ -458,7 +477,7 @@ class LargeRangeSliderEditor ( Editor ):
         """ Handles the user pressing the Enter key in the text field.
         """
         try:
-            self.value = self.evaluate(unicode(self.control.text.text()).strip())
+            self.value = eval(unicode(self.control.text.text()).strip())
         except TraitError, excp:
             pass
 
@@ -615,7 +634,7 @@ class LargeRangeSliderEditor ( Editor ):
 #  'SimpleSpinEditor' class:
 #-------------------------------------------------------------------------------
 
-class SimpleSpinEditor ( Editor ):
+class SimpleSpinEditor ( BaseRangeEditor ):
     """ A simple style of range editor that displays a spin box control.
     """
     #---------------------------------------------------------------------------
@@ -719,6 +738,27 @@ class RangeTextEditor ( TextEditor ):
     value that is outside the allowed range, the background of the field
     changes color to indicate an error.
     """
+
+    #---------------------------------------------------------------------------
+    #  Trait definitions:
+    #---------------------------------------------------------------------------
+
+    # Function to evaluate floats/ints
+    evaluate = Any
+
+    #---------------------------------------------------------------------------
+    #  Finishes initializing the editor by creating the underlying toolkit
+    #  widget:
+    #---------------------------------------------------------------------------
+        
+    def init ( self, parent ):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        TextEditor.init( self, parent )
+        self.evaluate = factory.evaluate
+        self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
+    
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
     #---------------------------------------------------------------------------
@@ -727,7 +767,10 @@ class RangeTextEditor ( TextEditor ):
         """ Handles the user entering input data in the edit control.
         """
         try:
-            self.value = eval(unicode(self.control.text()))
+            value = eval(unicode(self.control.text()))
+            if self.evaluate is not None:
+                value = self.evaluate(value)
+            self.value = value
             col = OKColor
         except:
             col = ErrorColor
