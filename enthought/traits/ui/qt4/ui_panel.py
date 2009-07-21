@@ -459,16 +459,17 @@ class _GroupPanel(object):
         elif group.layout == 'split':
             # Create the splitter.
             splitter = _GroupSplitter(group)
+            splitter.setOpaqueResize(False) # Mimic wx backend resize behavior
+            if self.direction == QtGui.QBoxLayout.TopToBottom:
+                splitter.setOrientation(QtCore.Qt.Vertical)
 
+            # Make sure the splitter will expand to fill available space
             size_policy = splitter.sizePolicy()
             if group.orientation == 'horizontal':
                 size_policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
             else:
                 size_policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
             splitter.setSizePolicy(size_policy)
-
-            if self.direction == QtGui.QBoxLayout.TopToBottom:
-                splitter.setOrientation(QtCore.Qt.Vertical)
 
             if outer is None:
                 outer = splitter
