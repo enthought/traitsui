@@ -30,3 +30,11 @@ import toolkit
 # Reference to the GUIToolkit object for wxPython
 toolkit = toolkit.GUIToolkit()
        
+
+# For py2app / py2exe support
+try:
+    import modulefinder
+    for p in __path__:
+        modulefinder.AddPackagePath(__name__, p)
+except:
+    pass
