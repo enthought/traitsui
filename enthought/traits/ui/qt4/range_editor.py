@@ -756,8 +756,8 @@ class RangeTextEditor ( TextEditor ):
             widget.
         """
         TextEditor.init( self, parent )
-        self.evaluate = factory.evaluate
-        self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
+        self.evaluate = self.factory.evaluate
+        self.sync_value( self.factory.evaluate_name, 'evaluate', 'from' )
     
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
