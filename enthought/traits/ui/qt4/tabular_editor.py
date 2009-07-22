@@ -435,8 +435,7 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
     def __init__(self, table_view):
         """ Store which grid lines to draw.
         """
-        QtGui.QStyledItemDelegate.__init__(self)
-        self._table_view = table_view
+        QtGui.QStyledItemDelegate.__init__(self, table_view)
         self._horizontal_lines = table_view._editor.factory.horizontal_lines
         self._vertical_lines = table_view._editor.factory.vertical_lines
 
@@ -447,9 +446,8 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
         painter.save()
 
         # FIXME: 'styleHint' is returning bogus (negative) values. Why?
-        #style = self._table_view.style()
-        #color = style.styleHint(QtGui.QStyle.SH_Table_GridLineColor, option,
-        #                        self._table_view)
+        #style = QtGui.QApplication.instance().style()
+        #color = style.styleHint(QtGui.QStyle.SH_Table_GridLineColor, option)
         #painter.setPen(QtGui.QColor(color))
         painter.setPen(option.palette.color(QtGui.QPalette.Dark))
 

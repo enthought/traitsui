@@ -33,7 +33,7 @@ class CheckboxRenderer(TableDelegate):
     #---------------------------------------------------------------------------
 
     def editorEvent(self, event, model, option, index):
-        """ Reimplemented to handle mouse button clicks
+        """ Reimplemented to handle mouse button clicks.
         """
         if event.type() == QtCore.QEvent.MouseButtonRelease and \
                 event.button() == QtCore.Qt.LeftButton:
@@ -46,7 +46,7 @@ class CheckboxRenderer(TableDelegate):
             return False
 
     def paint(self, painter, option, index):
-        """ Reimplemented to paint the checkbox us
+        """ Reimplemented to paint the checkbox.
         """
         # Determine whether the checkbox is check or unchecked
         column = index.model()._editor.columns[index.column()]
@@ -59,6 +59,8 @@ class CheckboxRenderer(TableDelegate):
             bg_brush = option.palette.highlight()
         else:
             bg_brush = index.data(QtCore.Qt.BackgroundRole).toPyObject()
+            if bg_brush == NotImplemented:
+                bg_brush = option.palette.light()
         painter.fillRect(option.rect, bg_brush)
 
         # Then draw the checkbox

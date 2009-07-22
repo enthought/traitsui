@@ -148,9 +148,10 @@ class TableEditor(Editor):
     def _update_columns(self):
         """ Handle the column list being changed."""
 
-        self.control.setItemDelegate(TableDelegate())
+        self.control.setItemDelegate(TableDelegate(self.control))
         for i, column in enumerate(self.columns):
             if column.renderer:
+                column.renderer.setParent(self.control)
                 self.control.setItemDelegateForColumn(i, column.renderer)
 
         self.model.reset()
