@@ -19,7 +19,7 @@ import re
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 from enthought.traits.api \
-    import Instance
+    import Instance, Undefined
 
 from enthought.traits.ui.api \
     import Group
@@ -878,14 +878,19 @@ class _GroupPanel(object):
             # Add the created editor control to the sizer with the appropriate
             # layout flags and values:
             ui._scrollable |= scrollable
-            if item.resizable or scrollable:
-                growable = growable or 500
+            item_resizable  = ((item.resizable is True) or
+                               ((item.resizable is Undefined) and scrollable))
+            if item_resizable:
                 self.resizable = True
-            elif item.springy:    
-                growable = growable or 500
+            elif item.springy:
+                size_policy = control.sizePolicy()
+                if self.direction == QtGui.QBoxLayout.LeftToRight:
+                    size_policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+                else:
+                    size_policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+                control.setSizePolicy(size_policy)
 
-            # FIXME: Need to decide what to do about springy, border_size,
-            # padding, item.padding and growable.
+            # FIXME: Need to decide what to do about border_size and padding
             self._add_widget(inner, control, row, col, show_labels)
 
             # Save the reference to the label control (if any) in the editor:

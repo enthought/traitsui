@@ -50,11 +50,6 @@ class NullEditor ( Editor ):
             widget.
         """
         self.control = QtGui.QWidget()
-
-        # Since NullEditors are used exclusively for the purpose of layout
-        # adjustment, make them fill available space:
-        self.control.setSizePolicy( QtGui.QSizePolicy.Expanding,
-                                    QtGui.QSizePolicy.Expanding )
                         
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
