@@ -20,6 +20,10 @@ interface toolkit, useful for tools such as debuggers.
 from PyQt4 import QtCore, QtGui, Qsci
 from PyQt4.Qsci import QsciScintillaBase as QsciBase
 
+# Only QScintilla version 2.3+ has support for custom lexing
+if Qsci.QSCINTILLA_VERSION < 0x20300:
+    raise RuntimeError, "QScintilla version 2.3 or higher needed for CodeEditor"
+
 from enthought.traits.api \
     import Str, Unicode, List, Int, Event, Bool, TraitError, on_trait_change
 
