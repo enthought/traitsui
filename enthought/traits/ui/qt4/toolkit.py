@@ -283,7 +283,13 @@ class GUIToolkit ( Toolkit ):
             y = int( y )
 
         # Position and size the window as requested:
-        window.setGeometry( max( 0, x ), max( 0, y ), width, height )
+        layout = window.layout()
+        if layout.sizeConstraint() == QtGui.QLayout.SetFixedSize:
+            layout.setSizeConstraint( QtGui.QLayout.SetDefaultConstraint )
+            window.move( max( 0, x ), max( 0, y ) )
+            window.setFixedSize( QtCore.QSize ( width, height ) )
+        else:
+            window.setGeometry( max( 0, x ), max( 0, y ), width, height )
 
     #---------------------------------------------------------------------------
     #  Shows a 'Help' window for a specified UI and control:
