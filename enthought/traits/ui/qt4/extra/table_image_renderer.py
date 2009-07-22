@@ -46,7 +46,7 @@ class TableImageRenderer(TableDelegate):
         """ Overriden to draw images.
         """
         # First draw any text/background by delegating to our superclass
-        super(TableImageRenderer, self).paint(painter, option, index)
+        QtGui.QStyledItemDelegate.paint(self, painter, option, index)
 
         # Now draw the image, if possible
         value = index.data(QtCore.Qt.UserRole).toPyObject()
@@ -62,7 +62,7 @@ class TableImageRenderer(TableDelegate):
         """ Overriden to take image size into account when providing a size 
             hint.
         """
-        size = super(TableImageRenderer, self).sizeHint(option, index)
+        size = QtGui.QStyledItemDelegate.sizeHint(self, option, index)
 
         value = index.data(QtCore.Qt.UserRole).toPyObject()
         image = self.get_image_for_obj(value, index.row(), index.column())
