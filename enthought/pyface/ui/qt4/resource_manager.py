@@ -12,7 +12,7 @@
 
 
 # Major package imports.
-from PyQt4 import QtGui
+from PyQt4 import QtCore, QtGui, QtSvg
 
 # Enthought library imports.
 from enthought.resource.api import ResourceFactory
@@ -28,7 +28,19 @@ class PyfaceResourceFactory(ResourceFactory):
     def image_from_file(self, filename):
         """ Creates an image from the data in the specified filename. """
 
-        return QtGui.QPixmap(filename)
+        # Although QPixmap can load SVG directly, it does not respect the
+        # default size, so we use a QSvgRenderer to get the default size.
+        if filename.endswith(('.svg', '.SVG')):
+            renderer = QtSvg.QSvgRenderer(filename)
+            pixmap = QtGui.QPixmap(renderer.defaultSize())
+            pixmap.fill(QtCore.Qt.transparent)
+            painter = QtGui.QPainter(pixmap)
+            renderer.render(painter)
+
+        else:
+            pixmap = QtGui.QPixmap(filename)
+
+        return pixmap
 
     def image_from_data(self, data, filename=None):
         """ Creates an image from the specified data. """
