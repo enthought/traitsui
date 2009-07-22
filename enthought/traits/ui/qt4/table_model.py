@@ -35,7 +35,7 @@ h_alignment_map = {
 v_alignment_map = {
     'top':    QtCore.Qt.AlignTop,
     'center': QtCore.Qt.AlignVCenter,
-    'bottom': QtCore.Qt.AlignRight,
+    'bottom': QtCore.Qt.AlignBottom,
 }
 
 #-------------------------------------------------------------------------------
