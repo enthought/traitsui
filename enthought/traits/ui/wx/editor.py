@@ -136,32 +136,31 @@ class Editor ( UIEditor ):
     def _visible_changed ( self, visible ):
         """ Handles the **visible** state of the editor being changed.
         """
-        
+        control = self.control
+        parent = control.GetParent() 
+
         # Handle the case where the item whose visibility has changed is a 
         # notebook page:
-        page = self.control.GetParent() 
-        sizer = page.GetSizer()
+        sizer = parent.GetSizer()
         from enthought.pyface.dock.api import DockSizer
         if isinstance(sizer, DockSizer):
             dock_controls = sizer.GetContents().get_controls(False)
             for dock_control in dock_controls:
-                if dock_control.control is self.control:
+                if dock_control.control is control:
                     dock_control.visible = visible
+            sizer.Layout()
+
+        # Handle a normal item:
         else:	
             if self.label_control is not None:
                 self.label_control.Show( visible )
-            self.control.Show( visible )
-            sizer = self.control.GetContainingSizer()
-            
-        if sizer is not None:
-            # If only sizer.Layout() is called there are certain cases where
+            control.Show( visible )
+            # If only control.Layout() is called there are certain cases where
             # the newly visible items are sized incorrectly (see ticket 1797)
-            containing_window = sizer.GetContainingWindow()
-            
-            # it is possible, due to visible_when use that the containing window
-            # is None
-            if containing_window is not None:
-                containing_window.Layout()
+            if parent is None:
+                control.Layout()
+            else:
+                parent.Layout()
             
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
