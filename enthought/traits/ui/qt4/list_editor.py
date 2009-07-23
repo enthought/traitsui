@@ -120,9 +120,13 @@ class SimpleEditor ( Editor ):
         self._editor = getattr( editor, self.kind )
 
         # Set up the additional 'list items changed' event handler needed for
-        # a list based trait:
+        # a list based trait. Note that we want to fire the update_editor_item
+        # only when the items in the list change and not when intermediate 
+        # traits change. Therefore, replace "." by ":" in the extended_name
+        # when setting up the listener.
+        extended_name = self.extended_name.replace('.', ':')
         self.context_object.on_trait_change( self.update_editor_item,
-                               self.extended_name + '_items?', dispatch = 'ui' )
+                               extended_name + '_items?', dispatch = 'ui' )
         self.set_tooltip()
 
     #---------------------------------------------------------------------------
@@ -132,8 +136,11 @@ class SimpleEditor ( Editor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
+        self._dispose_items()
+
+        extended_name = self.extended_name.replace('.', ':')
         self.context_object.on_trait_change( self.update_editor_item,
-                                 self.extended_name + '_items?', remove = True )
+                                 extended_name + '_items?', remove = True )
 
         super( SimpleEditor, self ).dispose()
 
@@ -159,9 +166,9 @@ class SimpleEditor ( Editor ):
         values        = self.value
         index         = 0
 
-        is_fake       = (resizable and (len( values ) == 0))
+        is_fake = (resizable and (len( values ) == 0))
         if is_fake:
-            values = [ item_trait.default_value()[1] ]
+           self.empty_list()
 
         editor = self._editor
         # FIXME: Add support for more than one column.
@@ -170,20 +177,15 @@ class SimpleEditor ( Editor ):
                 control = IconButton('list_editor.png', self.popup_menu)
                 layout.addWidget(control, index, 0)
 
-            try:
-                proxy = ListItemProxy( self.object, self.name, index,
-                                       item_trait, value )
-                if resizable:
-                    control.proxy = proxy
-                peditor = editor( self.ui, proxy, 'value', self.description,
-                                  list_pane ).set( object_name = '' )
-                peditor.prepare( list_pane )
-                pcontrol = peditor.control
-                pcontrol.proxy = proxy
-            except:
-                if not is_fake:
-                    raise
-                pcontrol = QtGui.QPushButton('sample', list_pane)
+            proxy = ListItemProxy( self.object, self.name, index, item_trait, 
+                                   value )
+            if resizable:
+                control.proxy = proxy
+            peditor = editor( self.ui, proxy, 'value', self.description,
+                              list_pane ).set( object_name = '' )
+            peditor.prepare( list_pane )
+            pcontrol = peditor.control
+            pcontrol.proxy = proxy
 
             if isinstance(pcontrol, QtGui.QWidget):
                 layout.addWidget(pcontrol, index, 1)
@@ -191,16 +193,6 @@ class SimpleEditor ( Editor ):
                 layout.addLayout(pcontrol, index, 1)
 
             index += 1
-
-        if is_fake:
-           self._cur_control = control
-           self.empty_list()
-           control.setParent(None)
-
-        if self.single_row:
-            rows = 1
-        else:
-            rows = self.factory.rows
 
         # QScrollArea can have problems if the widget being scrolled is set too
         # early (ie. before it contains something).
@@ -239,36 +231,17 @@ class SimpleEditor ( Editor ):
     def empty_list ( self ):
         """ Creates an empty list entry (so the user can add a new item).
         """
-        control = IconButton('list_editor.png', self.popup_menu)
+        control = IconButton('list_editor.png', self.popup_empty_menu)
         control.is_empty = True
+        self._cur_control = control
+
         proxy    = ListItemProxy( self.object, self.name, -1, None, None )
         pcontrol = QtGui.QLabel('   (Empty List)')
         pcontrol.proxy = control.proxy = proxy
-        self.reload_sizer( [ ( control, pcontrol ) ] )
 
-    #---------------------------------------------------------------------------
-    #  Reloads the layout from the specified list of ( button, proxy ) pairs:
-    #---------------------------------------------------------------------------
-
-    def reload_sizer ( self, controls, extra = 0 ):
-        """ Reloads the layout from the specified list of ( button, proxy )
-            pairs.
-        """
         layout = self._list_pane.layout()
-
-        child = layout.takeAt(0)
-        while child is not None:
-            child = layout.takeAt(0)
-
-        del child
-
-        index = 0
-        for control, pcontrol in controls:
-            layout.addWidget(control)
-            layout.addWidget(pcontrol)
-
-            control.proxy.index = index
-            index += 1
+        layout.addWidget(control, 0, 0)
+        layout.addWidget(pcontrol, 0, 1)
 
     #---------------------------------------------------------------------------
     #  Returns the associated object list and current item index:
@@ -284,18 +257,18 @@ class SimpleEditor ( Editor ):
     #  Displays the empty list editor popup menu:
     #---------------------------------------------------------------------------
 
-    def popup_empty_menu ( self, control ):
+    def popup_empty_menu ( self ):
         """ Displays the empty list editor popup menu.
         """
-        self._cur_control = control
-        control.PopupMenuXY( MakeMenu( self.empty_list_menu, self, True,
-                                       control ).menu, 0, 0 )
+        self._cur_control = control = self.control.sender()
+        menu = MakeMenu( self.empty_list_menu, self, True, control ).menu
+        menu.exec_(control.mapToGlobal(QtCore.QPoint(0, 0)))
 
     #---------------------------------------------------------------------------
     #  Displays the list editor popup menu:
     #---------------------------------------------------------------------------
 
-    def popup_menu (self):
+    def popup_menu ( self ):
         """ Displays the list editor popup menu.
         """
         self._cur_control = control = self.control.sender()
@@ -323,14 +296,7 @@ class SimpleEditor ( Editor ):
         list, index = self.get_info()
         index      += offset
         item_trait  = self._trait_handler.item_trait
-        dv          = item_trait.default_value()
-        if dv[0] == 7:
-            func, args, kw = dv[1]
-            if kw is None:
-                kw = {}
-            value = func( *args, **kw )
-        else:
-            value = dv[1]
+        value       = item_trait.default_value_for( self.object, self.name )
         self.value = list[:index] + [ value ] + list[index:]
         self.update_editor()
 
@@ -420,18 +386,18 @@ class SimpleEditor ( Editor ):
     def _dispose_items ( self ):
         """ Disposes of each current list item.
         """
-        list_pane = self._list_pane
-        layout = list_pane.layout()
-
-        for control in list_pane.children():
-            editor = getattr( control, '_editor', None )
-            if editor is not None:
-                editor.dispose()
-                editor.control = None
-            elif control is not layout:
-                control.setParent(None)
-
-        del control
+        layout = self._list_pane.layout()
+        child = layout.takeAt(0)
+        while child is not None:
+            control = child.widget()
+            if control is not None:
+                editor = getattr( control, '_editor', None )
+                if editor is not None:
+                    editor.dispose()
+                    editor.control = None
+                control.deleteLater()
+            child = layout.takeAt(0)
+        del child
 
     #-- Trait initializers ----------------------------------------------------
 
@@ -439,6 +405,11 @@ class SimpleEditor ( Editor ):
         """ Returns a default value for the 'kind' trait.
         """
         return self.factory.style + '_editor'
+
+    def _mutable_default(self):
+        """ Trait handler to set the mutable trait from the factory.
+        """
+        return self.factory.mutable
 
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:
