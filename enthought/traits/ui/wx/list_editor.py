@@ -339,8 +339,9 @@ class SimpleEditor ( Editor ):
         """ Displays the empty list editor popup menu.
         """
         self._cur_control = control
-        control.PopupMenuXY( MakeMenu( self.empty_list_menu, self, True,
-                                       control ).menu, 0, 0 )
+        menu = MakeMenu( self.empty_list_menu, self, True, self.control ).menu
+        self.control.PopupMenuXY( menu, control.GetPosition() )
+        menu.Destroy()
 
     #---------------------------------------------------------------------------
     #  Displays the list editor popup menu:
@@ -354,7 +355,7 @@ class SimpleEditor ( Editor ):
         control.SetFocus()
         proxy    = control.proxy
         index    = proxy.index
-        menu     = MakeMenu( self.list_menu, self, True, control ).menu
+        menu     = MakeMenu( self.list_menu, self, True, self.control ).menu
         len_list = len( proxy.list )
         not_full = (len_list < self._trait_handler.maxlen)
         self._menu_before.enabled( not_full )
@@ -364,7 +365,8 @@ class SimpleEditor ( Editor ):
         self._menu_top.enabled( index > 0 )
         self._menu_down.enabled(   index < (len_list - 1) )
         self._menu_bottom.enabled( index < (len_list - 1) )
-        control.PopupMenuXY( menu, 0, 0 )
+        self.control.PopupMenu( menu, control.GetPosition() )
+        menu.Destroy()
 
     #---------------------------------------------------------------------------
     #  Adds a new value at the specified list index:
