@@ -112,7 +112,6 @@ class ReadonlyEditor ( Editor ):
             editor.
         """
         if self.value:
-            self.control.SetLabel( 'True' )
+            self.control.SetValue( 'True' )
         else:
-            self.control.SetLabel( 'False' )
-
+            self.control.SetValue( 'False' )
