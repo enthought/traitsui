@@ -132,7 +132,7 @@ class TableModel(QtCore.QAbstractTableModel):
             if role == QtCore.Qt.DisplayRole:
                 return QtCore.QVariant(column.get_label())
 
-            if role == QtCore.Qt.SizeHintRole and editor.factory:
+            elif role == QtCore.Qt.SizeHintRole and editor.factory:
                 width = column.get_width()
                 if width < 0:
                     if not editor.factory.show_column_labels:

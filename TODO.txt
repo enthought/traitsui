@@ -13,9 +13,6 @@ Bugs
 * Tabbed group layout does not remember the select tab when it is reloaded (this
   can be observed by running the Traits UI Demo application)
 
-* TabularEditor does handle tuple style color specifications (easy to fix, see
-  TableEditor)
-
 * Readonly style TextEditor has wrapping problems (observe status text in
   "Invalid state handling" Advanced Demo)
 

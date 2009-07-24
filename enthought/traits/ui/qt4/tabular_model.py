@@ -24,6 +24,8 @@
 
 from PyQt4 import QtCore, QtGui
 
+from enthought.traits.ui.ui_traits import SequenceTypes
+
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------
@@ -84,12 +86,20 @@ class TabularModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.BackgroundRole:
             color = adapter.get_bg_color(obj, name, row)
             if color is not None:
-                return QtCore.QVariant(QtGui.QBrush(QtGui.QColor(color)))
+                if isinstance(color, SequenceTypes):
+                    q_color = QtGui.QColor(*color)
+                else:
+                    q_color = QtGui.QColor(color)
+                return QtCore.QVariant(QtGui.QBrush(q_color))
 
         elif role == QtCore.Qt.ForegroundRole:
             color = adapter.get_text_color(obj, name, row)
             if color is not None:
-                return QtCore.QVariant(QtGui.QBrush(QtGui.QColor(color)))
+                if isinstance(color, SequenceTypes):
+                    q_color = QtGui.QColor(*color)
+                else:
+                    q_color = QtGui.QColor(color)
+                return QtCore.QVariant(QtGui.QBrush(q_color))
 
         return QtCore.QVariant()
 

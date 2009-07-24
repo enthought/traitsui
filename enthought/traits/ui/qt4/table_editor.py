@@ -372,6 +372,34 @@ class TableView(QtGui.QTableView):
 
         return sh
 
+    def sizeHintForColumn(self, column):
+        """ Reimplemented to include column labels in the calculation.
+        """
+        base_width = QtGui.QTableView.sizeHintForColumn(self, column)
+
+        # Determine what font to use in the calculation
+        variant = self.model().headerData(column, QtCore.Qt.Horizontal,
+                                          QtCore.Qt.FontRole)
+        if variant.isValid():
+            font = variant.toPyObject()
+        else:
+            font = self.font()
+        font.setBold(True)
+
+        # Determine the width of the column label
+        text = self.model().headerData(column, QtCore.Qt.Horizontal,
+                                       QtCore.Qt.DisplayRole).toString()
+        width = QtGui.QFontMetrics(font).width(text)
+        
+        # Add a margin to the calculated width
+        option = QtGui.QStyleOptionHeader()
+        option.section = column
+        margin = self.style().pixelMetric(QtGui.QStyle.PM_HeaderMargin,
+                                          option, self)
+        width += margin * 2
+                                          
+        return max(base_width, width)
+
 # Define the SimpleEditor class.
 SimpleEditor = TableEditor
 
