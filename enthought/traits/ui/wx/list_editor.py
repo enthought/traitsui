@@ -340,7 +340,7 @@ class SimpleEditor ( Editor ):
         """
         self._cur_control = control
         menu = MakeMenu( self.empty_list_menu, self, True, self.control ).menu
-        self.control.PopupMenuXY( menu, control.GetPosition() )
+        self.control.PopupMenu( menu, control.GetPosition() )
         menu.Destroy()
 
     #---------------------------------------------------------------------------
