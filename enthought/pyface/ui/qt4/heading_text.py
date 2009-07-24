@@ -12,14 +12,13 @@
 
 
 # Major package imports.
-from PyQt4 import QtGui
+from PyQt4 import QtCore, QtGui
 
 # Enthought library imports.
-from enthought.traits.api import implements, Instance, Int, Unicode
+from enthought.traits.api import implements, Int, Unicode
 
 # Local imports.
 from enthought.pyface.i_heading_text import IHeadingText, MHeadingText
-from enthought.pyface.image_resource import ImageResource
 from widget import Widget
 
 
@@ -36,8 +35,6 @@ class HeadingText(MHeadingText, Widget):
 
     text = Unicode('Default')
     
-    image = Instance(ImageResource, ImageResource('heading_level_1'))
-
     ###########################################################################
     # 'object' interface.
     ###########################################################################
@@ -49,7 +46,7 @@ class HeadingText(MHeadingText, Widget):
         super(HeadingText, self).__init__(**traits)
 
         # Create the toolkit-specific control that represents the widget.
-        self.control = self._create_control(parent)
+        self._create_control(parent)
 
     ###########################################################################
     # Private interface.
@@ -58,18 +55,21 @@ class HeadingText(MHeadingText, Widget):
     def _create_control(self, parent):
         """ Create the toolkit-specific control that represents the widget. """
 
-        label = QtGui.QLabel(self.text, parent)
+        self.control = QtGui.QLabel(parent)
+        self._set_text(self.text)
 
-        label.setFrameShape(QtGui.QFrame.Box)
-        label.setFrameShadow(QtGui.QFrame.Plain)
+        self.control.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.control.setFrameShadow(QtGui.QFrame.Raised)
+        self.control.setSizePolicy(QtGui.QSizePolicy.Preferred, 
+                                   QtGui.QSizePolicy.Fixed)
 
-        brush = QtGui.QBrush(self.image.create_image())
-        pal = QtGui.QPalette(label.palette())
-        pal.setBrush(QtGui.QPalette.Window, brush)
-        label.setPalette(pal)
-        label.setAutoFillBackground(True)
+    def _set_text(self, text):
+        """ Set the text on the toolkit specific widget. """
 
-        return label
+        # Bold the text. Qt supports a limited subset of HTML for rich text.
+        text = "<b>" + text + "</b>"
+        
+        self.control.setText(text)
 
     #### Trait event handlers #################################################
 
@@ -77,6 +77,6 @@ class HeadingText(MHeadingText, Widget):
         """ Called when the text is changed. """
 
         if self.control is not None:
-            self.control.setText(new)
+            self._set_text(new)
 
 #### EOF ######################################################################
