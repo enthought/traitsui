@@ -134,7 +134,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         self._label_lo.setAlignment(QtCore.Qt.AlignRight | 
                                     QtCore.Qt.AlignVCenter)
         if factory.label_width > 0:
-            self._label_lo.setMiniumWidth(factory.label_width)
+            self._label_lo.setMinimumWidth(factory.label_width)
         panel.addWidget(self._label_lo)
 
         panel.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
@@ -151,7 +151,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         self._label_hi = QtGui.QLabel()
         panel.addWidget(self._label_hi)
         if factory.label_width > 0:
-            self._label_hi.setMiniumWidth(factory.label_width)
+            self._label_hi.setMinimumWidth(factory.label_width)
 
         panel.text = text = QtGui.QLineEdit(fvalue_text)
         QtCore.QObject.connect(text, QtCore.SIGNAL('editingFinished()'),
