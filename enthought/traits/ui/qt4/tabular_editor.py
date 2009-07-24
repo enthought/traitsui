@@ -19,12 +19,6 @@
     of objects, etc).
 """
 
-# FIXME: The following features present in the wx implementation are not 
-# currently implemented:
-#     * right_clicked and right_dclicked events
-#     * drag and drop support
-#     * editable labels (column headers)
-
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------

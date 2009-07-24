@@ -1,0 +1,70 @@
+====
+Bugs
+====
+
+* Custom style of CheckListEditor does not update correctly when the object
+  trait changes
+
+* Text style of ColorEditor does not update correctly when edited (object trait
+  updates, editor color does not)
+
+* Simple style InstanceEditor is broken--pressing button does nothing.
+
+* Tabbed group layout does not remember the select tab when it is reloaded (this
+  can be observed by running the Traits UI Demo application)
+
+* TabularEditor does handle tuple style color specifications (easy to fix, see
+  TableEditor)
+
+* Readonly style TextEditor has wrapping problems (observe status text in
+  "Invalid state handling" Advanced Demo)
+
+================
+Missing features
+================
+
+Implemented in the wx backend, and must be implemented for compatibility:
+
+* ArrayViewEditor is not implemented. Trivial: see wx version of the editor.
+
+* DateEditor is not implemented. Use QDateEdit.
+
+* HistoryEditor is not implemented.
+
+* ImageEnumEditor is not implemented. A standard enum editor get used instead.
+
+* ListStrEditor is not implemented. Use QListWidget.
+
+* PopupEditor is not implemented. It is questionable whether this even worth
+  implementing, as it makes for very unconventional, and therefore confusing,
+  user interfaces.
+
+* ScrubberEditor is not implemented. Again, may not be worth implementing.
+
+* Features missing from the TableEditor:
+  * Searching and filtering, both model level support and UI
+  * Adding new items
+  * Deleting items items
+  * Reordering items (both manually and by sorting)
+
+* Features missing from the TabularEditor:
+  * right_clicked and right_dclicked events
+  * Drag and drop
+  * Editable labels (column headers)
+  * Adding new items
+  * Deleting existing items
+  * Reordering items (manually)
+  * Lazy loading of data (compare performance of "NumPy array tabular editor
+    demo" with wx backend)
+
+* TimeEditor not implemented. Use QTimeEdit.
+
+============
+Enhancements
+============
+
+Not implemented in the wx backend, but would be nice to have anyway:
+
+* Create option for ColorEditor that does not show the RGB value of the
+  color. This would allow for much more compact widgets, which is preferable in
+  some cases.
