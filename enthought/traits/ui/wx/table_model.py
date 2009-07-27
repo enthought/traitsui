@@ -36,6 +36,9 @@ from enthought.traits.api \
 from enthought.traits.ui.api \
     import View, Item, Editor
 
+from enthought.traits.ui.editors.table_editor \
+    import ReversedList
+
 from enthought.traits.ui.table_filter \
     import TableFilter
 
@@ -865,94 +868,3 @@ class TableModel ( GridModel ):
         for i, col in enumerate( self.__get_columns() ):
             if name == col.name:
                 return i
-
-#-------------------------------------------------------------------------------
-#  'ReversedList' class:
-#-------------------------------------------------------------------------------
-
-class ReversedList ( object ):
-    """ A list whose order is the reverse of its input.
-    """
-    #---------------------------------------------------------------------------
-    #  Initializes the object:
-    #---------------------------------------------------------------------------
-
-    def __init__ ( self, list ):
-        self.list = list
-
-    #---------------------------------------------------------------------------
-    #  Inserts a value at a specified index in the list:
-    #---------------------------------------------------------------------------
-
-    def insert ( self, index, value ):
-        """ Inserts a value at a specified index in the list.
-        """
-        return self.list.insert( self._index( index - 1 ), value )
-
-    #---------------------------------------------------------------------------
-    #  Returns the index of the first occurence of the specified value in the
-    #  list:
-    #---------------------------------------------------------------------------
-
-    def index ( self, value ):
-        """ Returns the index of the first occurence of the specified value in
-            the list.
-        """
-        list = self.list[:]
-        list.reverse()
-        
-        return list.index( value )
-
-    #---------------------------------------------------------------------------
-    #  Returns the length of the list:
-    #---------------------------------------------------------------------------
-
-    def __len__ ( self ):
-        """ Returns the length of the list.
-        """
-        return len( self.list )
-
-    #---------------------------------------------------------------------------
-    #  Returns the value at a specified index in the list:
-    #---------------------------------------------------------------------------
-
-    def __getitem__ ( self, index ):
-        """ Returns the value at a specified index in the list.
-        """
-        return self.list[ self._index( index ) ]
-
-    #---------------------------------------------------------------------------
-    #  Sets a slice of a list to the contents of a specified sequence:
-    #---------------------------------------------------------------------------
-
-    def __setslice__ ( self, i, j, values ):
-        """ Sets a slice of a list to the contents of a specified sequence.
-        """
-        return self.list.__setslice__( self._index( i ), self._index( j ),
-                                       values )
-
-    #---------------------------------------------------------------------------
-    #  Deletes the item at a specified index:
-    #---------------------------------------------------------------------------
-
-    def __delitem__ ( self, index ):
-        """ Deletes the item at a specified index.
-        """
-        return self.list.__delitem__( self._index( index ) )
-
-    #---------------------------------------------------------------------------
-    #  Returns the 'reversed' value for a specified index:
-    #---------------------------------------------------------------------------
-
-    def _index ( self, index ):
-        """ Returns the "reversed" value for a specified index.
-        """
-        if index < 0:
-            return (-1 - index)
-            
-        result = (len( self.list ) - index - 1)
-        if result >= 0:
-            return result
-            
-        return index
-

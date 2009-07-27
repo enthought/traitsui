@@ -26,17 +26,14 @@ import wx
 
 from enthought.traits.api \
     import Int, List, Instance, Str, Any, Button, Tuple, \
-           HasPrivateTraits, Bool, Event, Property, on_trait_change
+           HasPrivateTraits, Bool, Event, Property
 
 from enthought.traits.ui.api \
     import View, Item, UI, InstanceEditor, EnumEditor, Handler, SetEditor, \
            ListUndoItem
     
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
-# enthought.traits.ui.editors.table_editor file.
 from enthought.traits.ui.editors.table_editor \
-    import ToolkitEditorFactory
+    import ToolkitEditorFactory, customize_filter
 
 from enthought.traits.ui.menu \
     import Action, ToolBar
@@ -74,10 +71,6 @@ from helper \
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------
-
-# The filter used to indicate that the user wants to customize the current
-# filter
-customize_filter = TableFilter( name = 'Customize...' )
 
 # Mapping from TableEditor selection modes to Grid selection modes:
 GridModes = {
@@ -1066,42 +1059,6 @@ class TableEditor ( Editor ):
             self.filter_modified()
         
     #---------------------------------------------------------------------------
-    #  Event handlers:
-    #---------------------------------------------------------------------------
-
-    #---------------------------------------------------------------------------
-    #  Handles the set of filters associated with the editor being changed:
-    #---------------------------------------------------------------------------
-    
-    ### FIXME: This method was part of the EditorFactory originally (which is
-    # now part of Traits UI). The method was shifted here solely to avoid
-    # declaring the 'customize_filter' constant in the factory file, 
-    # which would importing the TableFilter in the factory file (importing
-    # the TableFilter in the factory file would require changing traits-ui 
-    # imports in TableFilter and in pyface to their source rather than the 
-    # ui.api). As such, this method is toolkit-independent and should be part
-    # of the factory.
-    @on_trait_change('factory.filters[]')
-    def _filters_changed_for_factory ( self, object, name, old, new ):
-        """ Handles the set of filters associated with the editor's factory 
-        being changed.
-        """
-        
-        if self.factory is not None:
-            values = { None: '000:No filter' }
-            i      = 0
-            for filter in self.factory.filters:
-                if not filter.template:
-                    i += 1
-                    values[ filter ] = '%03d:%s' % ( i, filter.name )
-            values[ customize_filter ] = '%03d:%s' % ( (i + 1),
-                                                       customize_filter.name )
-            if self.factory._filter_editor is None:
-                self.factory._filter_editor = EnumEditor( values = values )
-            else:
-                self.factory._filter_editor.values = values
-
-    #---------------------------------------------------------------------------
     #  Refresh the list of available filters:
     #---------------------------------------------------------------------------
 
@@ -1132,9 +1089,7 @@ class TableEditor ( Editor ):
             title   = 'Customize Filters',
             kind    = 'livemodal',
             height  = .25,
-            buttons = [ 'OK', 'Cancel' ],
-            #help_id = "enlib|HID_Customize_Filters_Dlg",
-        ) )
+            buttons = [ 'OK', 'Cancel' ] ) )
         
         if ui.result:
             self._refresh_filters( enum_editor.values )
@@ -1488,10 +1443,6 @@ class TableFilterEditor ( Handler ):
     #  'Handler' interface:
     #---------------------------------------------------------------------------
 
-    #---------------------------------------------------------------------------
-    #  Initializes the controls of a user interface:
-    #---------------------------------------------------------------------------
-
     def init ( self, info ):
         """ Initializes the controls of a user interface.
         """
@@ -1500,10 +1451,6 @@ class TableFilterEditor ( Handler ):
             self.filter = info.filter.factory.values[0]
         self._filter = self.filter
         self._filter_copy = self.filter.clone_traits()
-
-    #---------------------------------------------------------------------------
-    #  Handles a dialog-based user interface being closed by the user:
-    #---------------------------------------------------------------------------
 
     def closed ( self, info, is_ok ):
         """ Handles a dialog-based user interface being closed by the user.
@@ -1516,10 +1463,6 @@ class TableFilterEditor ( Handler ):
     #  Event handlers:
     #---------------------------------------------------------------------------
 
-    #---------------------------------------------------------------------------
-    #  Handles a new filter being selected:
-    #---------------------------------------------------------------------------
-
     def object_filter_changed ( self, info ):
         """ Handles a new filter being selected.
         """
@@ -1528,10 +1471,6 @@ class TableFilterEditor ( Handler ):
         info.delete.enabled = ((not filter.template) and
                                (len( info.filter.factory.values ) > 1))
 
-    #---------------------------------------------------------------------------
-    #  Handles the user clicking the 'Edit' button:
-    #---------------------------------------------------------------------------
-
     def object_edit_changed ( self, info ):
         """ Handles the user clicking the **Edit** button.
         """
@@ -1539,10 +1478,6 @@ class TableFilterEditor ( Handler ):
             ui = self.filter.edit( self.editor.model.get_filtered_item( 0 ) )
             if ui.result:
                 self._refresh_filters( info )
-
-    #---------------------------------------------------------------------------
-    #  Handles the user clicking the 'New' button:
-    #---------------------------------------------------------------------------
 
     def object_new_changed ( self, info ):
         """ Handles the user clicking the **New** button.
@@ -1570,10 +1505,6 @@ class TableFilterEditor ( Handler ):
             self.filter = new_filter
             do_later( self._delayed_edit, info )
 
-    #---------------------------------------------------------------------------
-    #  Handles the user clicking the 'Apply' button:
-    #---------------------------------------------------------------------------
-
     def object_apply_changed ( self, info ):
         """ Handles the user clicking the **Apply** button.
         """
@@ -1581,10 +1512,6 @@ class TableFilterEditor ( Handler ):
             self.init( info )
             self.editor._refresh_filters( info.filter.factory.values )
             self.editor.filter = self.filter
-
-    #---------------------------------------------------------------------------
-    #  Handles the user clicking the 'Delete' button:
-    #---------------------------------------------------------------------------
 
     def object_delete_changed ( self, info ):
         """ Handles the user clicking the **Delete** button.
@@ -1607,20 +1534,12 @@ class TableFilterEditor ( Handler ):
     #  Private methods:
     #---------------------------------------------------------------------------
 
-    #---------------------------------------------------------------------------
-    #  Refresh the filter editor's list of filters:
-    #---------------------------------------------------------------------------
-
     def _refresh_filters ( self, info ):
         """ Refresh the filter editor's list of filters.
         """
         factory = info.filter.factory
         values, factory.values = factory.values, []
         factory.values = values
-
-    #---------------------------------------------------------------------------
-    #  Edits the current filter, and deletes it if the user cancels the edit:
-    #---------------------------------------------------------------------------
 
     def _delayed_edit ( self, info ):
         """ Edits the current filter, and deletes it if the user cancels the edit.
@@ -1753,47 +1672,26 @@ class TableEditorToolbar ( HasPrivateTraits ):
     #  PyFace/Traits menu/toolbar controller interface:
     #---------------------------------------------------------------------------
 
-    #---------------------------------------------------------------------------
-    #  Adds a menu item to the menu bar being constructed:
-    #---------------------------------------------------------------------------
-
     def add_to_menu ( self, menu_item ):
         """ Adds a menu item to the menu bar being constructed.
         """
         pass
-
-    #---------------------------------------------------------------------------
-    #  Adds a tool bar item to the tool bar being constructed:
-    #---------------------------------------------------------------------------
 
     def add_to_toolbar ( self, toolbar_item ):
         """ Adds a toolbar item to the too bar being constructed.
         """
         pass
 
-    #---------------------------------------------------------------------------
-    #  Returns whether the menu action should be defined in the user interface:
-    #---------------------------------------------------------------------------
-
     def can_add_to_menu ( self, action ):
         """ Returns whether the action should be defined in the user interface.
         """
         return True
-
-    #---------------------------------------------------------------------------
-    #  Returns whether the toolbar action should be defined in the user
-    #  interface:
-    #---------------------------------------------------------------------------
 
     def can_add_to_toolbar ( self, action ):
         """ Returns whether the toolbar action should be defined in the user
             interface.
         """
         return True
-
-    #---------------------------------------------------------------------------
-    #  Performs the action described by a specified Action object:
-    #---------------------------------------------------------------------------
 
     def perform ( self, action, action_event = None ):
         """ Performs the action described by a specified Action object.
@@ -1904,6 +1802,3 @@ SimpleEditor = TableEditor
 
 # Define the ReadonlyEditor class.
 ReadonlyEditor = TableEditor
-
-### EOF #######################################################################
-
