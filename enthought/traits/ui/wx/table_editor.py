@@ -1542,7 +1542,8 @@ class TableFilterEditor ( Handler ):
         factory.values = values
 
     def _delayed_edit ( self, info ):
-        """ Edits the current filter, and deletes it if the user cancels the edit.
+        """ Edits the current filter, and deletes it if the user cancels the 
+            edit.
         """
         ui = self.filter.edit( self.editor.model.get_filtered_item( 0 ) )
         if not ui.result:
@@ -1551,7 +1552,7 @@ class TableFilterEditor ( Handler ):
             self._refresh_filters( info )
 
         # Allow deletion as long as there is more than 1 filter:
-        if len( info.filter.factory.values ) > 1:
+        if (not self.filter.template) and len( info.filter.factory.values ) > 1:
             info.delete.enabled = True
 
 #-------------------------------------------------------------------------------
