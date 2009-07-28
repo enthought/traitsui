@@ -8,10 +8,8 @@ Bugs
 * Text style of ColorEditor does not update correctly when edited (object trait
   updates, editor color does not)
 
-* Simple style InstanceEditor is broken--pressing button does nothing.
-
-* Tabbed group layout does not remember the select tab when it is reloaded (this
-  can be observed by running the Traits UI Demo application)
+* Tabbed group layout does not remember the selected tab when it is reloaded
+  (this can be observed by running the Traits UI Demo application)
 
 * Readonly style TextEditor has wrapping problems (observe status text in
   "Invalid state handling" Advanced Demo)
@@ -43,6 +41,7 @@ Implemented in the wx backend, and must be implemented for compatibility:
   * Adding new items
   * Deleting items items
   * Reordering items (both manually and by sorting)
+  * Storing table state (custom filters and column widths)
 
 * Features missing from the TabularEditor:
   * right_clicked and right_dclicked events
