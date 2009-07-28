@@ -52,6 +52,16 @@ class TableModel(QtCore.QAbstractTableModel):
 
         self._editor = editor
 
+    def rowCount(self, mi):
+        """Reimplemented to return the number of rows."""
+
+        return len(self._editor.items())
+
+    def columnCount(self, mi):
+        """Reimplemented to return the number of columns."""
+
+        return len(self._editor.columns)
+
     def data(self, mi, role):
         """Reimplemented to return the data."""
 
@@ -149,14 +159,43 @@ class TableModel(QtCore.QAbstractTableModel):
                         height = 0
                     return QtCore.QVariant(QtCore.QSize(width, height))
 
+        elif orientation == QtCore.Qt.Vertical:
+            
+            if role == QtCore.Qt.DisplayRole:
+                return QtCore.QVariant(QtCore.QString.number(section + 1))
+
         return QtCore.QVariant()
 
-    def rowCount(self, mi):
-        """Reimplemented to return the number of rows."""
+#-------------------------------------------------------------------------------
+#  'SortFilterTableModel' class:
+#-------------------------------------------------------------------------------
 
-        return len(self._editor.items())
+class SortFilterTableModel(QtGui.QSortFilterProxyModel):
+    """A wrapper for the TableModel which provides sorting and filtering 
+    capability."""
 
-    def columnCount(self, mi):
-        """Reimplemented to return the number of columns."""
+    def __init__(self, editor, parent=None):
+        """Initialise the object."""
 
-        return len(self._editor.columns)
+        QtGui.QSortFilterProxyModel.__init__(self, parent)
+
+        self._editor = editor
+
+    def filterAcceptsRow(self, source_row, source_parent):
+        """"Reimplemented to use a TableFilter for filtering rows."""
+
+        if self._editor._filtered_cache is None:
+            return True # Editor is initializing
+        else:
+            return self._editor._filtered_cache[source_row]
+
+    def lessThan(self, left_mi, right_mi):
+        """Reimplemented to sort according to the 'cmp' method defined for 
+        TableColumn."""
+        
+        editor = self._editor
+        column = editor.columns[left_mi.column()]
+        items = editor.items()
+        left, right = items[left_mi.row()], items[right_mi.row()]
+
+        return column.cmp(left, right) < 0

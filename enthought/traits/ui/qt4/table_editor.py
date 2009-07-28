@@ -18,19 +18,19 @@
 
 from PyQt4 import QtCore, QtGui
 
-from enthought.traits.api import List, Instance, Any, Event
-from enthought.traits.ui.api import UI, default_handler
-     
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
-# enthought.traits.ui.editors.table_editor file.
-from enthought.traits.ui.editors.table_editor import ToolkitEditorFactory
+from enthought.pyface.timer.api import do_later
 
-from enthought.traits.ui.table_column import TableColumn
+from enthought.traits.api import Any, Button, Event, List, HasTraits, \
+    Instance, Int, Property, Str, cached_property
+
+from enthought.traits.ui.api import EnumEditor, InstanceEditor, Group, \
+    Handler, Item, Label, TableColumn, TableFilter, UI, View, default_handler
+from enthought.traits.ui.editors.table_editor import ToolkitEditorFactory, \
+    ReversedList, customize_filter
 from enthought.traits.ui.ui_traits import SequenceTypes
 
 from editor import Editor
-from table_model import TableModel
+from table_model import TableModel, SortFilterTableModel
 
 #-------------------------------------------------------------------------------
 #  'TableEditor' class:
@@ -46,20 +46,38 @@ class TableEditor(Editor):
     #  Trait definitions:
     #---------------------------------------------------------------------------
 
+    # The table view control associated with the editor:
+    table_view = Any
+
+    # A wrapper around the source model which provides filtering and sorting:
+    model = Instance(SortFilterTableModel)
+
+    # The table model associated with the editor:
+    source_model = Instance(TableModel)
+
     # The set of columns currently defined on the editor:
     columns = List(TableColumn)
 
-    # The table model associated with the editor:
-    model = Instance(TableModel)
-
     # The currently selected row(s), column(s), or cell(s).
     selected = Any
+
+    # Current filter object (should be a TableFilter or callable or None):
+    filter = Any
+
+    # The indices of the table items currently passing the table filter:
+    filtered_indices = List(Int)
+
+    # Current filter summary message
+    filter_summary = Str('All items')
 
     # The event fired when a cell is clicked on:
     click = Event
     
     # The event fired when a cell is double-clicked on:
     dclick = Event
+
+    # The Traits UI associated with the table editor toolbar:
+    toolbar_ui = Instance(UI)
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -72,24 +90,91 @@ class TableEditor(Editor):
 
         factory = self.factory
         self.columns = factory.columns[:]
-        self.model = TableModel(editor=self)
 
-        self.control = TableView(editor=self)
+        # Create the table view and model
+        self.table_view = TableView(editor=self)
+        self.source_model = TableModel(editor=self)
+        self.model = SortFilterTableModel(editor=self)
+        self.model.setDynamicSortFilter(True)
+        self.model.setSourceModel(self.source_model)
+        self.table_view.setModel(self.model)
 
-        # Connect to the mode specific selection handler
+        # Create the toolbar if necessary
+        if factory.show_toolbar and len(factory.filters) > 0:
+            main_view = QtGui.QWidget()
+            layout = QtGui.QVBoxLayout(main_view)
+            layout.setMargin(0)
+            self.toolbar_ui = self.edit_traits(
+                parent = parent, 
+                kind = 'subpanel',
+                view = View(Group(Item('filter{View}',
+                                       editor = factory._filter_editor ),
+                                  Item('filter_summary{Results}',
+                                       style = 'readonly'),
+                                  orientation='horizontal'),
+                            resizable = True))
+            self.toolbar_ui.parent = self.ui
+            layout.addWidget(self.toolbar_ui.control)
+            layout.addWidget(self.table_view)
+        else:
+            main_view = self.table_view
+
+        # Create auxillary editor and encompassing splitter if necessary
         mode = factory.selection_mode
-        mode_slot = getattr(self, '_on_%s_selection' % mode)
-        signal = QtCore.SIGNAL('selectionChanged(QItemSelection, QItemSelection)')
-        QtCore.QObject.connect(self.control.selectionModel(), signal, mode_slot)
+        if (factory.edit_view == ' ') or not mode in ('row', 'rows'):
+            self.control = main_view
+        else:
+            self.control = QtGui.QSplitter(QtCore.Qt.Vertical)
+            self.control.setSizePolicy(QtGui.QSizePolicy.Expanding, 
+                                       QtGui.QSizePolicy.Expanding)
+            self.control.addWidget(main_view)
+            self.control.setStretchFactor(0, 2)
+
+            # Assign the initial object here, so a valid editor will be built
+            # when the 'edit_traits' call is made:
+            items = self.items()
+            selected = None
+            if factory.editable and len(items) > 0:
+                selected = items[0]
+            self.selected = selected
+
+            # Create the row editor below the table view
+            editor = InstanceEditor(view=factory.edit_view, kind='subpanel')
+            self._ui = self.edit_traits(
+                parent = self.control,
+                kind = 'subpanel',
+                view = View(Item('selected',
+                                 style = 'custom',
+                                 editor = editor,
+                                 show_label = False,
+                                 resizable = True,
+                                 width = factory.edit_view_width,
+                                 height = factory.edit_view_height),
+                            resizable = True,
+                            handler = factory.edit_view_handler))
+            self._ui.parent = self.ui
+            self.control.addWidget(self._ui.control)
+            self.control.setStretchFactor(1, 1)
+
+            # Reset the object so that the sub-sub-view will pick up the
+            # correct history also:
+            self.selected = None
+            self.selected = selected
 
         # Select the first row/column/cell
-        self.control.setCurrentIndex(self.model.createIndex(0, 0))
+        self.table_view.setCurrentIndex(self.model.index(0, 0))
+
+        # Connect to the mode specific selection handler
+        smodel = self.table_view.selectionModel()
+        signal = QtCore.SIGNAL('selectionChanged(QItemSelection, QItemSelection)')
+        mode_slot = getattr(self, '_on_%s_selection' % factory.selection_mode)
+        QtCore.QObject.connect(smodel, signal, mode_slot)
 
         # Connect to the click and double click handlers
         signal = QtCore.SIGNAL('clicked(QModelIndex)')
-        QtCore.QObject.connect(self.control, signal, self._on_click)
+        QtCore.QObject.connect(self.table_view, signal, self._on_click)
         signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
-        QtCore.QObject.connect(self.control, signal, self._on_dclick)
+        QtCore.QObject.connect(self.table_view, signal, self._on_dclick)
 
         # Set up listeners for any column definitions changing
         self.on_trait_change(self._update_columns, 'columns', dispatch='ui')
@@ -102,6 +187,8 @@ class TableEditor(Editor):
         self.sync_value(factory.dclick, 'dclick', 'to')
         self.sync_value(factory.columns_name, 'columns', 'from', is_list=True)
         self.sync_value(factory.selected, 'selected', is_list=is_list)
+        self.sync_value(factory.filter_name, 'filter', 'from')
+        self.sync_value(factory.filtered_indices, 'filtered_indices', 'to')
 
         # Initialize the ItemDelegates for each column
         self._update_columns()
@@ -113,8 +200,14 @@ class TableEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor."""
 
+        # Make sure that the auxillary UIs are properly disposed
+        if self.toolbar_ui is not None:
+            self.toolbar_ui.dispose()
+        if self._ui is not None:
+            self._ui.dispose()
+
         # Remove listeners for any column definitions changing
-        self.on_trait_change(self._update_columns, 'columns', remove=True )
+        self.on_trait_change(self._update_columns, 'columns', remove=True)
         self.on_trait_change(self._update_columns, 'columns_items', remove=True)
 
     #---------------------------------------------------------------------------
@@ -126,42 +219,95 @@ class TableEditor(Editor):
         editor."""
 
         self.model.reset()
+        self._update_model_filtering()
+
         if self.factory.auto_size:
-            self.control.resizeColumnsToContents()
+            self.table_view.resizeColumnsToContents()
 
     #---------------------------------------------------------------------------
-    #  Helper methods for TableModel:
+    #  Returns the raw list of model objects:
     #---------------------------------------------------------------------------
-
-    def items(self):
-        """Returns the raw sequence of model objects."""
+    
+    def items(self, ordered=True):
+        """ Returns the raw list of model objects."""
 
         items = self.value
         if not isinstance(items, SequenceTypes):
-            items = [items]
+            items = [ items ]
+            
+        if ordered and self.factory.reverse:
+            return ReversedList(items)
+            
         return items
 
     #---------------------------------------------------------------------------
     #  Private methods:
     #---------------------------------------------------------------------------
 
+    def _customize_filters(self, filter):
+        """ Allows the user to customize the current set of table filters.
+        """
+        filter_editor = TableFilterEditor(editor=self)
+        ui = filter_editor.edit_traits()
+        if ui.result:
+            self.factory.filters = filter_editor.templates
+            self.filter = filter_editor.selected_filter
+        else:
+            self._customize_cancel = True
+            self.filter = filter
+            self._customize_cancel = False
+
+    def _update_model_filtering(self):
+        """ Update the filter summary and the filtered indices. 
+        """
+        items = self.items()
+        num_items = len(items)
+
+        f = self.filter
+        if f is None:
+            self._filtered_cache = [ True ] * num_items
+            self.filtered_indices = range(num_items)
+            self.filter_summary = 'All %i items' % num_items
+        else:
+            if not callable(f):
+                f = f.filter
+            self._filtered_cache = fc = [ f(item) for item in items ]
+            self.filtered_indices = fi = [ i for i, ok in enumerate(fc) if ok ]
+            self.filter_summary = '%i of %i items' % (len(fi), num_items)
+
+        self.model.invalidate()
+
+    #-- Trait Change Handlers --------------------------------------------------
+
+    def _filter_changed(self, old_filter, new_filter):
+        """ Handles the current filter being changed."""
+
+        if new_filter is customize_filter:
+            # Delay so that update_object for the EnumEditor returns.
+            do_later(self._customize_filters, old_filter)
+
+        elif not self._customize_cancel:
+            self._update_model_filtering() 
+
     def _update_columns(self):
         """ Handle the column list being changed."""
 
-        self.control.setItemDelegate(TableDelegate(self.control))
+        self.table_view.setItemDelegate(TableDelegate(self.table_view))
         for i, column in enumerate(self.columns):
             if column.renderer:
-                column.renderer.setParent(self.control)
-                self.control.setItemDelegateForColumn(i, column.renderer)
+                column.renderer.setParent(self.table_view)
+                self.table_view.setItemDelegateForColumn(i, column.renderer)
 
         self.model.reset()
-        self.control.resizeColumnsToContents()
+        self.table_view.resizeColumnsToContents()
+
+    #-- Event Handlers ---------------------------------------------------------
         
     def _on_row_selection(self, added, removed):
         """Handle the row selection being changed."""
 
         items = self.items()
-        indexes = self.control.selectionModel().selectedRows()
+        indexes = self.table_view.selectionModel().selectedRows()
 
         if len(indexes):
             self.selected = items[indexes[0].row()]
@@ -174,7 +320,7 @@ class TableEditor(Editor):
         """Handle the rows selection being changed."""
 
         items = self.items()
-        indexes = self.control.selectionModel().selectedRows()
+        indexes = self.table_view.selectionModel().selectedRows()
 
         self.selected = [ items[index.row()] for index in indexes ]
 
@@ -183,7 +329,7 @@ class TableEditor(Editor):
     def _on_column_selection(self, added, removed):
         """Handle the column selection being changed."""
 
-        indexes = self.control.selectionModel().selectedColumns()
+        indexes = self.table_view.selectionModel().selectedColumns()
 
         if len(indexes):
             self.selected = self.columns[indexes[0].column()].name
@@ -195,7 +341,7 @@ class TableEditor(Editor):
     def _on_columns_selection(self, added, removed):
         """Handle the columns selection being changed."""
 
-        indexes = self.control.selectionModel().selectedColumns()
+        indexes = self.table_view.selectionModel().selectedColumns()
 
         self.selected = [ self.columns[index.column()].name 
                           for index in indexes ]
@@ -206,7 +352,7 @@ class TableEditor(Editor):
         """Handle the cell selection being changed."""
 
         items = self.items()
-        indexes = self.control.selectionModel().selectedIndexes()
+        indexes = self.table_view.selectionModel().selectedIndexes()
 
         if len(indexes):
             obj = items[indexes[0].row()]
@@ -222,7 +368,7 @@ class TableEditor(Editor):
         """Handle the cells selection being changed."""
 
         items = self.items()
-        indexes = self.control.selectionModel().selectedIndexes()
+        indexes = self.table_view.selectionModel().selectedIndexes()
 
         selected = []
         for index in indexes:
@@ -259,6 +405,12 @@ class TableEditor(Editor):
         # Invoke the column's double-click handler:
         column.on_dclick(obj)
 
+# Define the SimpleEditor class.
+SimpleEditor = TableEditor
+
+# Define the ReadonlyEditor class.
+ReadonlyEditor = TableEditor
+
 #-------------------------------------------------------------------------------
 #  Qt widgets that have been configured to behave as expected by Traits UI:
 #-------------------------------------------------------------------------------
@@ -268,7 +420,7 @@ class TableDelegate(QtGui.QStyledItemDelegate):
     """
 
     def createEditor(self, parent, option, index):
-        """ Return the editor for a given index."""
+        """ Reimplemented to return the editor for a given index."""
 
         table_editor = index.model()._editor
         column = table_editor.columns[index.column()]
@@ -289,10 +441,10 @@ class TableDelegate(QtGui.QStyledItemDelegate):
             context['object'] = target
             ui = UI(handler=handler, context=context)
 
+        # Create and initialize the editor 
         factory_method = getattr(factory, style+'_editor')
         editor = factory_method(ui, target, name, '', parent)
         editor.prepare(parent)
-
         control = editor.control
         control.setParent(parent)
         
@@ -303,7 +455,7 @@ class TableDelegate(QtGui.QStyledItemDelegate):
         # paints its own background
         control.setAutoFillBackground(True)
 
-        # Make sure that editors are disposed up correctly
+        # Make sure that editors are disposed of correctly
         QtCore.QObject.connect(control, QtCore.SIGNAL('destroyed()'),
                                lambda: editor.dispose())
 
@@ -334,10 +486,11 @@ class TableView(QtGui.QTableView):
 
         self._editor = editor
         factory = editor.factory
-        self.setModel(editor.model)
 
         # Configure the row headings.
-        self.verticalHeader().hide()
+        vheader = self.verticalHeader()
+        vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        vheader.hide()
 
         # Configure the column headings.
         hheader = self.horizontalHeader()
@@ -347,7 +500,11 @@ class TableView(QtGui.QTableView):
         else:
             hheader.hide()
 
+        # Configure the grid lines.
+        self.setShowGrid(factory.show_lines)
+
         # Configure the selection behaviour.
+        self.setCornerButtonEnabled(False)
         behav, mode = self._SELECTION_MAP[factory.selection_mode]
         self.setSelectionBehavior(behav)
         self.setSelectionMode(mode)
@@ -373,8 +530,8 @@ class TableView(QtGui.QTableView):
         return sh
 
     def sizeHintForColumn(self, column):
-        """ Reimplemented to include column labels in the calculation.
-        """
+        """Reimplemented to include column labels in the calculation."""
+
         base_width = QtGui.QTableView.sizeHintForColumn(self, column)
 
         # Determine what font to use in the calculation
@@ -400,8 +557,114 @@ class TableView(QtGui.QTableView):
                                           
         return max(base_width, width)
 
-# Define the SimpleEditor class.
-SimpleEditor = TableEditor
+#-------------------------------------------------------------------------------
+#  Editor for configuring the filters available to a TableEditor:
+#-------------------------------------------------------------------------------
 
-# Define the ReadonlyEditor class.
-ReadonlyEditor = TableEditor
+class TableFilterEditor(HasTraits):
+    """ An editor that manages table filters.
+    """
+
+    #---------------------------------------------------------------------------
+    #  Trait definitions:
+    #---------------------------------------------------------------------------
+
+    # TableEditor this editor is associated with
+    editor = Instance(TableEditor)
+
+    # The list of filters
+    filters = List(TableFilter)
+
+    # The list of available templates from which filters can be created
+    templates = Property(List(TableFilter), depends_on='filters')
+
+    # The currently selected filter template
+    selected_template = Instance(TableFilter)
+
+    # The currently selected filter
+    selected_filter = Instance(TableFilter)
+
+    # The view to use for the current filter
+    selected_filter_view = Property(depends_on='selected_filter')
+
+    # Buttons for add/removing filters
+    add_button = Button('New')
+    remove_button = Button('Delete')
+
+    # The default view for this editor
+    view = View(Group(Group(Group(Item('add_button',
+                                       enabled_when='selected_template'),
+                                  Item('remove_button',
+                                       enabled_when='len(templates) and selected_filter'),
+                                  orientation='horizontal',
+                                  show_labels=False),
+                            Label('Base filter for new filters:'),
+                            Item('selected_template',
+                                 editor=EnumEditor(name='templates')),
+                            Item('selected_filter',
+                                 style='custom',
+                                 editor=EnumEditor(name='filters', 
+                                                   mode='list')),
+                            show_labels=False),
+                      Item('selected_filter',
+                           width=0.75,
+                           style='custom',
+                           editor=InstanceEditor(view_name='selected_filter_view')),
+                      id='TableFilterEditorSplit',
+                      show_labels=False,
+                      layout='split',
+                      orientation='horizontal'),
+                id='enthought.traits.ui.qt4.table_editor.TableFilterEditor',
+                buttons=[ 'OK', 'Cancel' ],
+                kind='livemodal',
+                resizable=True, width=800, height=400,
+                title='Customize filters')     
+        
+    #---------------------------------------------------------------------------
+    #  Private methods:
+    #---------------------------------------------------------------------------
+
+    #-- Trait Property getter/setters ------------------------------------------
+
+    @cached_property
+    def _get_selected_filter_view(self):
+        view = None
+        if self.selected_filter:
+            model = self.editor.model
+            index = model.mapToSource(model.index(0, 0))
+            obj = self.editor.items()[index.row()]
+            view = self.selected_filter.edit_view(obj)
+        return view
+
+    @cached_property
+    def _get_templates(self):
+        templates = [ f for f in self.editor.factory.filters if f.template ] 
+        templates.extend(self.filters)
+        return templates
+
+    #-- Trait Change Handlers --------------------------------------------------
+
+    def _editor_changed(self):
+        self.filters = [ f.clone_traits() for f in self.editor.factory.filters 
+                         if not f.template ]
+        self.selected_template = self.templates[0]
+
+    def _add_button_fired(self):
+        """ Create a new filter based on the selected template and select it.
+        """
+        new_filter = self.selected_template.clone_traits()
+        new_filter.template = False
+        new_filter.name = new_filter._name = 'New filter'
+        self.filters.append(new_filter)
+        self.selected_filter = new_filter
+    
+    def _remove_button_fired(self):
+        """ Delete the currently selected filter.
+        """
+        index = self.filters.index(self.selected_filter)        
+        del self.filters[index]
+        index += 1
+        if False:
+            self.selected_filter = self.filters[index]
+        else:
+            self.selected_filter = None
