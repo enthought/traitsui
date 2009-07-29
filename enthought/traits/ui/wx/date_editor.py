@@ -49,7 +49,7 @@ class SimpleEditor (Editor):
         """
         # MS-Win's DatePickerCtrl comes with a check-box we don't want.
         # GenericDatePickerCtrl was exposed in wxPython version 2.8.8 only.
-        if 'wxMSW' in wx.PlatformInfo and wx.__version__ > '2.8.8':
+	if 'wxMSW' in wx.PlatformInfo and wx.VERSION > (2,8,8):
             date_widget = wx.GenericDatePickerCtrl
         else:
             # Linux / OS-X / windows
