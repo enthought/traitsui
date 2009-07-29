@@ -184,16 +184,19 @@ class SimpleEditor ( BaseEditor ):
         
         self.control = control = QtGui.QComboBox()
         control.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
+        control.setSizePolicy(QtGui.QSizePolicy.Maximum,
+                              QtGui.QSizePolicy.Fixed)
         control.addItems(self.names)
+
         QtCore.QObject.connect(control,
-                QtCore.SIGNAL('currentIndexChanged(QString)'),
-                self.update_object)
+                               QtCore.SIGNAL('currentIndexChanged(QString)'),
+                               self.update_object)
 
         if self.factory.evaluate is not None:
             control.setEditable(True)
             QtCore.QObject.connect(control,
-                    QtCore.SIGNAL('editTextChanged(QString)'),
-                    self.update_text_object)
+                                   QtCore.SIGNAL('editTextChanged(QString)'),
+                                   self.update_text_object)
 
         self._no_enum_update = 0
         self.set_tooltip()
@@ -472,7 +475,11 @@ class ListEditor ( BaseEditor ):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
         """
+        
+        self.control.blockSignals(True)
         self.control.clear()
-
         for name in self.names:
             self.control.addItem(name)
+        self.control.blockSignals(False)
+        
+        self.update_editor()
