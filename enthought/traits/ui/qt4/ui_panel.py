@@ -64,21 +64,21 @@ all_digits = re.compile(r'\d+')
 def ui_panel(ui, parent):
     """Creates a panel-based PyQt user interface for a specified UI object.
     """
-    _ui_panel_for(ui, parent, True)
+    _ui_panel_for(ui, parent, False)
 
 
 def ui_subpanel(ui, parent):
     """Creates a subpanel-based PyQt user interface for a specified UI object.
        A subpanel does not allow control buttons (other than those specified in
-       the UI object).
+       the UI object) and does not show headers for view titles.
     """
-    _ui_panel_for(ui, parent, False)
+    _ui_panel_for(ui, parent, True)
 
 
-def _ui_panel_for(ui, parent, buttons):
+def _ui_panel_for(ui, parent, is_subpanel):
     """Creates a panel-based PyQt user interface for a specified UI object.
     """
-    ui.control = control = _Panel(ui, parent, buttons).control
+    ui.control = control = _Panel(ui, parent, is_subpanel).control
 
     control._parent = parent
     control._object = ui.context.get('object')
@@ -101,7 +101,7 @@ class _Panel(BasePanel):
     """PyQt user interface panel for Traits-based user interfaces.
     """
 
-    def __init__(self, ui, parent, allow_buttons):
+    def __init__(self, ui, parent, is_subpanel):
         """Initialise the object.
         """
         self.ui = ui
@@ -118,7 +118,8 @@ class _Panel(BasePanel):
         # Determine if we need any buttons or an 'undo' history.
         buttons = [self.coerce_button(button) for button in view.buttons]
         nr_buttons = len(buttons)
-        has_buttons = (allow_buttons and ((nr_buttons != 1) or (not self.is_button(buttons[0], ''))))
+        has_buttons = (not is_subpanel and (nr_buttons != 1 or
+                                            not self.is_button(buttons[0], '')))
 
         if nr_buttons == 0:
             if view.undo:
@@ -128,7 +129,7 @@ class _Panel(BasePanel):
             if view.help:
                 self.check_button(buttons, HelpButton)
 
-        if allow_buttons and history is None:
+        if not is_subpanel and history is None:
             for button in buttons:
                 if self.is_button(button, 'Undo') or self.is_button(button, 'Revert'):
                     history = ui.history = UndoHistory()
@@ -137,12 +138,11 @@ class _Panel(BasePanel):
         # Create the panel.
         self.control = panel(ui)
 
-        # Suppress the title if we think it should be superceded by the title
-        # of an "outer" widget (eg. a dock widget).  These tests are extremely
-        # flakey.
+        # Suppress the title if this is a subpanel or if we think it should be
+        # superceded by the title of an "outer" widget (eg. a dock widget).
         title = view.title
-        if ((isinstance(parent, QtGui.QMainWindow) and 
-             not isinstance(parent.parent(), QtGui.QDialog)) or
+        if (is_subpanel or (isinstance(parent, QtGui.QMainWindow) and 
+                            not isinstance(parent.parent(), QtGui.QDialog)) or
             isinstance(parent, QtGui.QTabWidget)):
             title = ""
 

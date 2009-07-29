@@ -375,7 +375,6 @@ class CustomEditor ( Editor ):
                     handler = value
                 context.setdefault( 'context', self.object )
                 context.setdefault( 'context_handler', self.ui.handler )
-                view.title = ''
                 self._ui = ui = view.ui( context, panel, 'subpanel', 
                                          value.trait_view_elements(), handler,
                                          self.factory.id )
@@ -509,8 +508,8 @@ class SimpleEditor ( CustomEditor ):
         ui = self.value.edit_traits( view, kind=factory.kind, id=factory.id )
         
         # Make sure the editor is properly disposed
-        QtCore.QObject.connect(self._button, QtCore.SIGNAL('destroyed()'),
-                               lambda: ui.dispose())
+        QtCore.QObject.connect( self._button, QtCore.SIGNAL( 'destroyed()' ),
+                                lambda: ui.dispose() )
 
         # Check to see if the view was 'modal', in which case it will already
         # have been closed (i.e. is None) by the time we get control back:
