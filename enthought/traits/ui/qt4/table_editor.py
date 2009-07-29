@@ -21,10 +21,11 @@ from PyQt4 import QtCore, QtGui
 from enthought.pyface.timer.api import do_later
 
 from enthought.traits.api import Any, Button, Event, List, HasTraits, \
-    Instance, Int, Property, Str, cached_property
+    Instance, Int, Property, Str, cached_property, on_trait_change
 
 from enthought.traits.ui.api import EnumEditor, InstanceEditor, Group, \
-    Handler, Item, Label, TableColumn, TableFilter, UI, View, default_handler
+    Handler, Item, Label, TableColumn, TableFilter, UI, View, default_handler, \
+    spring
 from enthought.traits.ui.editors.table_editor import ToolkitEditorFactory, \
     ReversedList, customize_filter
 from enthought.traits.ui.ui_traits import SequenceTypes
@@ -111,6 +112,7 @@ class TableEditor(Editor):
                                        editor = factory._filter_editor ),
                                   Item('filter_summary{Results}',
                                        style = 'readonly'),
+                                  spring,
                                   orientation='horizontal'),
                             resizable = True))
             self.toolbar_ui.parent = self.ui
@@ -160,15 +162,15 @@ class TableEditor(Editor):
             # correct history also:
             self.selected = None
             self.selected = selected
-
-        # Select the first row/column/cell
-        self.table_view.setCurrentIndex(self.model.index(0, 0))
-
+        
         # Connect to the mode specific selection handler
         smodel = self.table_view.selectionModel()
         signal = QtCore.SIGNAL('selectionChanged(QItemSelection, QItemSelection)')
         mode_slot = getattr(self, '_on_%s_selection' % factory.selection_mode)
         QtCore.QObject.connect(smodel, signal, mode_slot)
+
+        # Select the first row/column/cell
+        self.table_view.setCurrentIndex(self.model.index(0, 0))
 
         # Connect to the click and double click handlers
         signal = QtCore.SIGNAL('clicked(QModelIndex)')
@@ -219,53 +221,143 @@ class TableEditor(Editor):
         editor."""
 
         self.model.reset()
-        self._update_model_filtering()
+
+        if len(self.factory.filters) > 0:
+            self._update_model_filtering()
 
         if self.factory.auto_size:
             self.table_view.resizeColumnsToContents()
+
+        self.set_selection(self.selected)
 
     #---------------------------------------------------------------------------
     #  Returns the raw list of model objects:
     #---------------------------------------------------------------------------
     
-    def items(self, ordered=True):
-        """ Returns the raw list of model objects."""
+    def items(self):
+        """Returns the raw list of model objects."""
 
         items = self.value
         if not isinstance(items, SequenceTypes):
             items = [ items ]
-            
-        if ordered and self.factory.reverse:
-            return ReversedList(items)
+
+        if self.factory.reverse:
+            items = ReversedList(items)
             
         return items
+
+    #---------------------------------------------------------------------------
+    #  Set one or more attributes without notifying the table view:
+    #---------------------------------------------------------------------------
+    
+    def setx(self, **keywords):
+        """Set one or more attributes without notifying the table view."""
+
+        self._no_notify = True
+        try:
+            for name, value in keywords.items():
+                setattr(self, name, value)
+        finally:
+            self._no_notify = False
+
+    #---------------------------------------------------------------------------
+    #  Sets the current selection to a set of specified objects:
+    #---------------------------------------------------------------------------
+
+    def set_selection(self, objects=[], notify=True):
+        """Sets the current selection to a set of specified objects."""
+
+        if not isinstance(objects, SequenceTypes):
+            objects = [ objects ]
+
+        mode = self.factory.selection_mode
+        indexes = []
+        flags = QtGui.QItemSelectionModel.ClearAndSelect
+
+        # In the case of row or column selection, we need a dummy value for the
+        # other dimension that has not been filtered.
+        source_index = self.model.mapToSource(self.model.index(0, 0))
+        source_row, source_column = source_index.row(), source_index.column()
+
+        # Selection mode is 'row' or 'rows'
+        if mode.startswith('row'):
+            flags |= QtGui.QItemSelectionModel.Rows
+            items = self.items()
+            for obj in objects:
+                try:
+                    row = items.index(obj)
+                except ValueError:
+                    continue
+                indexes.append(self.source_model.index(row, source_column))
+
+        # Selection mode is 'column' or 'columns'
+        elif mode.startswith('column'):
+            flags |= QtGui.QItemSelectionModel.Columns
+            for name in objects:
+                column = self._column_index_from_name(name)
+                if column != -1:
+                    indexes.append(self.source_model.index(source_row, column))
+
+        # Selection mode is 'cell' or 'cells'
+        else:
+            items = self.items()
+            for obj, name in objects:
+                try:
+                    row = items.index(obj)
+                except ValueError:
+                    continue
+                column = self._column_index_from_name(name)
+                if column != -1:
+                    indexes.append(self.source_model.index(row, column))
+
+        # Perform the selection so that only one signal is emitted
+        selection = QtGui.QItemSelection()
+        for index in indexes:
+            index = self.model.mapFromSource(index)
+            if index.isValid():
+                selection.select(index, index)
+        smodel = self.table_view.selectionModel()
+        smodel.blockSignals(not notify)
+        if len(selection.indexes()):
+            smodel.select(selection, flags)
+        else:
+            smodel.clear()
+        smodel.blockSignals(False)
 
     #---------------------------------------------------------------------------
     #  Private methods:
     #---------------------------------------------------------------------------
 
+    def _column_index_from_name(self, name):
+        """Returns the index of the column with the given name or -1."""
+
+        for i, column in enumerate(self.columns):
+            if name == column.name:
+                return i
+
+        return -1
+
     def _customize_filters(self, filter):
-        """ Allows the user to customize the current set of table filters.
-        """
+        """Allows the user to customize the current set of table filters."""
+
         filter_editor = TableFilterEditor(editor=self)
         ui = filter_editor.edit_traits()
         if ui.result:
             self.factory.filters = filter_editor.templates
             self.filter = filter_editor.selected_filter
         else:
-            self._customize_cancel = True
-            self.filter = filter
-            self._customize_cancel = False
+            self.setx(filter = filter)
 
     def _update_model_filtering(self):
-        """ Update the filter summary and the filtered indices. 
-        """
+        """Update the filter summary and the filtered indices and inform the
+        model that its old filtering information is now invalid."""
+
         items = self.items()
         num_items = len(items)
 
         f = self.filter
         if f is None:
-            self._filtered_cache = [ True ] * num_items
+            self._filtered_cache = None
             self.filtered_indices = range(num_items)
             self.filter_summary = 'All %i items' % num_items
         else:
@@ -280,17 +372,17 @@ class TableEditor(Editor):
     #-- Trait Change Handlers --------------------------------------------------
 
     def _filter_changed(self, old_filter, new_filter):
-        """ Handles the current filter being changed."""
+        """Handles the current filter being changed."""
 
-        if new_filter is customize_filter:
-            # Delay so that update_object for the EnumEditor returns.
-            do_later(self._customize_filters, old_filter)
-
-        elif not self._customize_cancel:
-            self._update_model_filtering() 
+        if not self._no_notify:
+            if new_filter is customize_filter:
+                do_later(self._customize_filters, old_filter)
+            else:
+                self._update_model_filtering()
+                self.set_selection(self.selected)
 
     def _update_columns(self):
-        """ Handle the column list being changed."""
+        """Handle the column list being changed."""
 
         self.table_view.setItemDelegate(TableDelegate(self.table_view))
         for i, column in enumerate(self.columns):
@@ -301,6 +393,12 @@ class TableEditor(Editor):
         self.model.reset()
         self.table_view.resizeColumnsToContents()
 
+    def _selected_changed(self):
+        """Handle the selected row/column/cell being changed externally."""
+        
+        if not self._no_notify:
+            self.set_selection(self.selected, notify=False)
+
     #-- Event Handlers ---------------------------------------------------------
         
     def _on_row_selection(self, added, removed):
@@ -308,12 +406,13 @@ class TableEditor(Editor):
 
         items = self.items()
         indexes = self.table_view.selectionModel().selectedRows()
-
         if len(indexes):
-            self.selected = items[indexes[0].row()]
+            index = self.model.mapToSource(indexes[0])
+            selected = items[index.row()]
         else:
-            self.selected = None
+            selected = None
 
+        self.setx(selected = selected)
         self.ui.evaluate(self.factory.on_select, self.selected)
 
     def _on_rows_selection(self, added, removed):
@@ -321,31 +420,33 @@ class TableEditor(Editor):
 
         items = self.items()
         indexes = self.table_view.selectionModel().selectedRows()
+        selected = [ items[self.model.mapToSource(index).row()] 
+                     for index in indexes ]
 
-        self.selected = [ items[index.row()] for index in indexes ]
-
+        self.setx(selected = selected)
         self.ui.evaluate(self.factory.on_select, self.selected)
 
     def _on_column_selection(self, added, removed):
         """Handle the column selection being changed."""
 
         indexes = self.table_view.selectionModel().selectedColumns()
-
         if len(indexes):
-            self.selected = self.columns[indexes[0].column()].name
+            index = self.model.mapToSource(indexes[0])
+            selected = self.columns[index.column()].name
         else:
-            self.selected = ''
+            selected = ''
 
+        self.setx(selected = selected)
         self.ui.evaluate(self.factory.on_select, self.selected)
 
     def _on_columns_selection(self, added, removed):
         """Handle the columns selection being changed."""
 
         indexes = self.table_view.selectionModel().selectedColumns()
+        selected = [ self.columns[self.model.mapToSource(index).column()].name 
+                     for index in indexes ]
 
-        self.selected = [ self.columns[index.column()].name 
-                          for index in indexes ]
-
+        self.setx(selected = selected)
         self.ui.evaluate(self.factory.on_select, self.selected)
 
     def _on_cell_selection(self, added, removed):
@@ -353,15 +454,16 @@ class TableEditor(Editor):
 
         items = self.items()
         indexes = self.table_view.selectionModel().selectedIndexes()
-
         if len(indexes):
-            obj = items[indexes[0].row()]
-            column_name = self.columns[indexes[0].column()].name
+            index = self.model.mapToSource(indexes[0])
+            obj = items[index.row()]
+            column_name = self.columns[index.column()].name
         else:
             obj = None
             column_name = ''
-        self.selected = (obj, column_name)
-
+        selected = (obj, column_name)
+        
+        self.setx(selected = selected)
         self.ui.evaluate(self.factory.on_select, self.selected)
 
     def _on_cells_selection(self, added, removed):
@@ -369,19 +471,20 @@ class TableEditor(Editor):
 
         items = self.items()
         indexes = self.table_view.selectionModel().selectedIndexes()
-
         selected = []
         for index in indexes:
+            index = self.model.mapToSource(index)
             obj = items[index.row()]
             column_name = self.columns[index.column()].name
             selected.append((obj, column_name))
-        self.selected = selected
 
+        self.setx(selected = selected)
         self.ui.evaluate(self.factory.on_select, self.selected)
 
     def _on_click(self, index):
         """Handle a cell being clicked."""
         
+        index = self.model.mapToSource(index)
         column = self.columns[index.column()]
         obj = self.items()[index.row()]
         
@@ -395,6 +498,7 @@ class TableEditor(Editor):
     def _on_dclick(self, index):
         """Handle a cell being double clicked."""
         
+        index = self.model.mapToSource(index)
         column = self.columns[index.column()]
         obj = self.items()[index.row()]
         
@@ -489,12 +593,10 @@ class TableView(QtGui.QTableView):
 
         # Configure the row headings.
         vheader = self.verticalHeader()
-        vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
         vheader.hide()
 
         # Configure the column headings.
         hheader = self.horizontalHeader()
-        hheader.setStretchLastSection(True)
         if factory.show_column_labels:
             hheader.setHighlightSections(False)
         else:
@@ -516,46 +618,54 @@ class TableView(QtGui.QTableView):
             triggers |= QtGui.QAbstractItemView.CurrentChanged
         self.setEditTriggers(triggers)
 
-    def sizeHint(self):
-        """Reimplemented to support auto_size."""
+    def resizeEvent(self, event):
+        """Reimplemented to autoresize columns when the size of the TableEditor
+        changes."""
 
-        sh = QtGui.QTableView.sizeHint(self)
+        QtGui.QTableView.resizeEvent(self, event)
 
-        if self._editor.factory.auto_size:
-            w = 0
-            for colnr in range(len(self._editor.columns)):
-                w += self.sizeHintForColumn(colnr)
-            sh.setWidth(w)
+        self.resizeColumnsToContents()
 
-        return sh
+    def sizeHintForColumn(self, column_index):
+        """Reimplemented to support width specification via TableColumns."""
 
-    def sizeHintForColumn(self, column):
-        """Reimplemented to include column labels in the calculation."""
+        editor = self._editor
+        column = editor.columns[column_index]
+        requested_width = column.get_width()
 
-        base_width = QtGui.QTableView.sizeHintForColumn(self, column)
+        # Autosize based on column contents and label. Qt's default
+        # implementation of this function does content, we handle the label.
+        if editor.factory.auto_size or requested_width < 0:
+            base_width = QtGui.QTableView.sizeHintForColumn(self, column_index)
 
-        # Determine what font to use in the calculation
-        variant = self.model().headerData(column, QtCore.Qt.Horizontal,
-                                          QtCore.Qt.FontRole)
-        if variant.isValid():
-            font = variant.toPyObject()
-        else:
-            font = self.font()
-        font.setBold(True)
+            # Determine what font to use in the calculation
+            font = column.get_text_font(None)
+            if font is None:
+                font = self.font()
+                font.setBold(True)
+            else:
+                font = QtGui.QFont(font)
 
-        # Determine the width of the column label
-        text = self.model().headerData(column, QtCore.Qt.Horizontal,
-                                       QtCore.Qt.DisplayRole).toString()
-        width = QtGui.QFontMetrics(font).width(text)
+            # Determine the width of the column label
+            text = column.get_label()
+            width = QtGui.QFontMetrics(font).width(text)
         
-        # Add a margin to the calculated width
-        option = QtGui.QStyleOptionHeader()
-        option.section = column
-        margin = self.style().pixelMetric(QtGui.QStyle.PM_HeaderMargin,
-                                          option, self)
-        width += margin * 2
-                                          
-        return max(base_width, width)
+            # Add a margin to the calculated width
+            option = QtGui.QStyleOptionHeader()
+            option.section = column_index
+            margin = self.style().pixelMetric(QtGui.QStyle.PM_HeaderMargin,
+                                              option, self)
+            width += margin * 2
+            
+            return max(base_width, width)
+
+        # Set width proportionally
+        elif requested_width < 1:
+            return int(requested_width * self.viewport().width())
+        
+        # Set width absolutely
+        else:
+            return requested_width
 
 #-------------------------------------------------------------------------------
 #  Editor for configuring the filters available to a TableEditor:
@@ -582,7 +692,7 @@ class TableFilterEditor(HasTraits):
     selected_template = Instance(TableFilter)
 
     # The currently selected filter
-    selected_filter = Instance(TableFilter)
+    selected_filter = Instance(TableFilter, allow_none=True)
 
     # The view to use for the current filter
     selected_filter_view = Property(depends_on='selected_filter')
@@ -661,10 +771,21 @@ class TableFilterEditor(HasTraits):
     def _remove_button_fired(self):
         """ Delete the currently selected filter.
         """
+        if self.selected_template == self.selected_filter:
+            self.selected_template = self.templates[0]
+
         index = self.filters.index(self.selected_filter)        
         del self.filters[index]
-        index += 1
-        if False:
+        if index < len(self.filters):
             self.selected_filter = self.filters[index]
         else:
             self.selected_filter = None
+
+    @on_trait_change('selected_filter:name')
+    def _update_filter_list(self):
+        """ A hack to make the EnumEditor watching the list of filters refresh
+            their text when the name of the selected filter changes.
+        """
+        filters = self.filters
+        self.filters = []
+        self.filters = filters

@@ -142,23 +142,6 @@ class TableModel(QtCore.QAbstractTableModel):
             if role == QtCore.Qt.DisplayRole:
                 return QtCore.QVariant(column.get_label())
 
-            elif role == QtCore.Qt.SizeHintRole and editor.factory:
-                width = column.get_width()
-                if width < 0:
-                    if not editor.factory.show_column_labels:
-                        return QtCore.QVariant(QtCore.QSize(0, 0))
-                else:
-                    if editor.factory.show_column_labels:
-                        style = QtGui.QApplication.instance().style()
-                        header = QtGui.QStyle.CT_HeaderSection
-                        option = QtGui.QStyleOptionHeader()
-                        size = style.sizeFromContents(header, option, 
-                                                      QtCore.QSize(0, 0))
-                        height = size.height()
-                    else:
-                        height = 0
-                    return QtCore.QVariant(QtCore.QSize(width, height))
-
         elif orientation == QtCore.Qt.Vertical:
             
             if role == QtCore.Qt.DisplayRole:
@@ -185,9 +168,14 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
         """"Reimplemented to use a TableFilter for filtering rows."""
 
         if self._editor._filtered_cache is None:
-            return True # Editor is initializing
+            return True
         else:
             return self._editor._filtered_cache[source_row]
+
+    def filterAcceptsColumn(self, source_column, source_parent):
+        """Reimplemented to save time, because we always return True."""
+
+        return True
 
     def lessThan(self, left_mi, right_mi):
         """Reimplemented to sort according to the 'cmp' method defined for 
