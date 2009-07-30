@@ -342,16 +342,23 @@ class _GroupSplitter(QtGui.QSplitter):
         """
         QtGui.QSplitter.__init__(self)
         self._group = group
-        self._resized = False        
+        self._initialized = False
 
     def resizeEvent(self, event):
         """ Overridden to position the splitter based on the Group when the 
             application is initializing.
+
+            Because the splitter layout algorithm requires that the available
+            space be known, we have to wait until the UI that contains this
+            splitter gives it its initial size.
         """
-        if not self._resized and self.parent() and self.isVisible():
-            self._resized = True
-            self._resize_items()
         QtGui.QSplitter.resizeEvent(self, event)
+
+        parent = self.parent()
+        if (not self._initialized and parent and
+            (self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
+            self._initialized = True
+            self._resize_items()
 
     def _resize_items(self):
         """ Size the splitter based on the 'width' or 'height' attributes
