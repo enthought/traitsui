@@ -100,6 +100,12 @@ class TableEditor(Editor):
         self.model.setSourceModel(self.source_model)
         self.table_view.setModel(self.model)
 
+        # When sorting is enabled, the first column is initially displayed with
+        # the triangle indicating it is the sort index, even though no sorting
+        # has actually been done. Sort here for UI/model consistency.
+        if self.factory.sortable:
+            self.model.sort(0, QtCore.Qt.AscendingOrder)
+
         # Create the toolbar if necessary
         if factory.show_toolbar and len(factory.filters) > 0:
             main_view = QtGui.QWidget()
@@ -222,8 +228,11 @@ class TableEditor(Editor):
 
         self.model.reset()
 
-        if len(self.factory.filters) > 0:
-            self._update_model_filtering()
+        filtering = len(self.factory.filters) > 0
+        if filtering:
+            self.update_filtering()
+        if filtering or self.factory.sortable:
+            self.model.invalidate()
 
         if self.factory.auto_size:
             self.table_view.resizeColumnsToContents()
@@ -348,9 +357,8 @@ class TableEditor(Editor):
         else:
             self.setx(filter = filter)
 
-    def _update_model_filtering(self):
-        """Update the filter summary and the filtered indices and inform the
-        model that its old filtering information is now invalid."""
+    def update_filtering(self):
+        """Update the filter summary and the filtered indices."""
 
         items = self.items()
         num_items = len(items)
@@ -367,8 +375,6 @@ class TableEditor(Editor):
             self.filtered_indices = fi = [ i for i, ok in enumerate(fc) if ok ]
             self.filter_summary = '%i of %i items' % (len(fi), num_items)
 
-        self.model.invalidate()
-
     #-- Trait Change Handlers --------------------------------------------------
 
     def _filter_changed(self, old_filter, new_filter):
@@ -378,7 +384,8 @@ class TableEditor(Editor):
             if new_filter is customize_filter:
                 do_later(self._customize_filters, old_filter)
             else:
-                self._update_model_filtering()
+                self.update_filtering()
+                self.model.invalidate()
                 self.set_selection(self.selected)
 
     def _update_columns(self):
@@ -617,6 +624,10 @@ class TableView(QtGui.QTableView):
         if factory.edit_on_first_click:
             triggers |= QtGui.QAbstractItemView.CurrentChanged
         self.setEditTriggers(triggers)
+
+        # Configure the sorting behavior.
+        if factory.sortable:
+            self.setSortingEnabled(True)
 
     def resizeEvent(self, event):
         """Reimplemented to autoresize columns when the size of the TableEditor
