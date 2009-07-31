@@ -197,7 +197,7 @@ class SimpleEditor ( Editor ):
         index         = 0
         width, height = 0, 0
 
-        is_fake = (resizable and (len( values ) == 0))
+        is_fake = (resizable and (values is None or len( values ) == 0))
         if is_fake:
             values = [ item_trait.default_value()[1] ]
 
