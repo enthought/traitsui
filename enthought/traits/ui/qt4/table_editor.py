@@ -776,7 +776,9 @@ class TableView(QtGui.QTableView):
             editor = self._editor
             row = vheader.logicalIndexAt(event.pos().y())
             if row == -1:
-                editor.empty_menu.exec_(event.globalPos())
+                factory = editor.factory
+                if factory.row_factory is not None and not factory.auto_add:
+                    editor.empty_menu.exec_(event.globalPos())
             else:
                 editor.header_row = row
                 editor.header_menu_up.setVisible(row > 0)
