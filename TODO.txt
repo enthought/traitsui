@@ -40,7 +40,6 @@ Implemented in the wx backend, and must be implemented for compatibility:
 * Features missing from the TableEditor:
   * Searching
   * Storing table state (custom filters and column widths)
-  * Context menus for cells
   * 'sort_model' option for sorting
   * 'selected_indices' option for item selection
   * Factory options for cell color, font, etc. These options are currently only

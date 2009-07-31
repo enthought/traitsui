@@ -26,8 +26,8 @@ from enthought.traits.api import Any, Button, Event, List, HasTraits, \
 from enthought.traits.ui.api import EnumEditor, InstanceEditor, Group, \
     Handler, Item, Label, TableColumn, TableFilter, UI, View, default_handler, \
     spring
-from enthought.traits.ui.editors.table_editor import ToolkitEditorFactory, \
-    ReversedList, customize_filter
+from enthought.traits.ui.editors.table_editor import BaseTableEditor, \
+    ReversedList, ToolkitEditorFactory, customize_filter
 from enthought.traits.ui.ui_traits import SequenceTypes
 
 from editor import Editor
@@ -37,7 +37,7 @@ from table_model import TableModel, SortFilterTableModel
 #  'TableEditor' class:
 #-------------------------------------------------------------------------------
 
-class TableEditor(Editor):
+class TableEditor(Editor, BaseTableEditor):
     """ Editor that presents data in a table. Optionally, tables can have
         a set of filters that reduce the set of data displayed, according to 
         their criteria.
@@ -83,6 +83,9 @@ class TableEditor(Editor):
     # The Traits UI associated with the table editor toolbar:
     toolbar_ui = Instance(UI)
 
+    # The context menu associated with empty space in the table
+    empty_menu = Instance(QtGui.QMenu)
+
     # The context menu associated with the vertical header
     header_menu = Instance(QtGui.QMenu)
 
@@ -113,7 +116,7 @@ class TableEditor(Editor):
         self.model.setSourceModel(self.source_model)
         self.table_view.setModel(self.model)
 
-        # Create the context menu and connect to its signals
+        # Create the vertical header context menu and connect to its signals
         self.header_menu = QtGui.QMenu(self.table_view)
         signal = QtCore.SIGNAL('triggered()')
         insertable = factory.row_factory is not None and not factory.auto_add
@@ -133,6 +136,11 @@ class TableEditor(Editor):
             self.header_menu_down = self.header_menu.addAction('Move item down')
             QtCore.QObject.connect(self.header_menu_down, signal, 
                                    self._on_context_move_down)
+
+        # Create the empty space context menu and connect its signals
+        self.empty_menu = QtGui.QMenu(self.table_view)
+        action = self.empty_menu.addAction('Add new item')
+        QtCore.QObject.connect(action, signal, self._on_context_append)
 
         # When sorting is enabled, the first column is initially displayed with
         # the triangle indicating it is the sort index, even though no sorting
@@ -374,12 +382,12 @@ class TableEditor(Editor):
     #---------------------------------------------------------------------------
 
     def _column_index_from_name(self, name):
-        """Returns the index of the column with the given name or -1."""
+        """Returns the index of the column with the given name or -1 if no 
+        column exists with that name."""
 
         for i, column in enumerate(self.columns):
             if name == column.name:
                 return i
-
         return -1
 
     def _customize_filters(self, filter):
@@ -581,6 +589,12 @@ class TableEditor(Editor):
 
         self.model.insertRow(self.header_row)
 
+    def _on_context_append(self):
+        """Handle 'add item' being selected from the empty space context 
+        menu."""
+
+        self.model.insertRow(self.model.rowCount())
+
     def _on_context_remove(self):
         """Handle 'remove item' being selected from the header context menu."""
 
@@ -718,6 +732,41 @@ class TableView(QtGui.QTableView):
         elif factory.sortable:
             self.setSortingEnabled(True)
 
+    def contextMenuEvent(self, event):
+        """Reimplemented to create context menus for cells and empty space."""
+        
+        # Determine the logical indices of the cell where click occured
+        hheader, vheader = self.horizontalHeader(), self.verticalHeader()
+        position = event.globalPos()
+        row = vheader.logicalIndexAt(vheader.mapFromGlobal(position))
+        column = hheader.logicalIndexAt(hheader.mapFromGlobal(position))
+        
+        # Map the logical row index to a real index for the source model
+        model = self.model()
+        row = model.mapToSource(model.index(row, 0)).row()
+        
+        # Show a context menu for empty space at bottom of table...
+        editor = self._editor
+        if row == -1:
+            factory = editor.factory
+            if (factory.editable and factory.row_factory is not None and
+                not factory.auto_add):
+                event.accept()
+                editor.empty_menu.exec_(position)
+
+        # ...or show a context menu for a cell.
+        elif column != -1:
+            obj = editor.items()[row]
+            column = editor.columns[column]
+            menu_manager = column.get_menu(obj)
+            if menu_manager is None:
+                menu_manager = editor.factory.menu
+            if menu_manager is not None:
+                event.accept()
+                editor.set_menu_context(editor.selected, obj, column)
+                menu = menu_manager.create_menu(self, controller=editor)
+                menu.exec_(position)
+
     def eventFilter(self, obj, event):
         """Reimplemented to create context menu for the vertical header."""
         
@@ -725,10 +774,14 @@ class TableView(QtGui.QTableView):
         if (obj is vheader and event.type() == QtCore.QEvent.ContextMenu):
             event.accept()
             editor = self._editor
-            editor.header_row = row = vheader.logicalIndexAt(event.pos().y())
-            editor.header_menu_up.setVisible(row > 0)
-            editor.header_menu_down.setVisible(row < editor.model.rowCount()-1)
-            self._editor.header_menu.exec_(event.globalPos())
+            row = vheader.logicalIndexAt(event.pos().y())
+            if row == -1:
+                editor.empty_menu.exec_(event.globalPos())
+            else:
+                editor.header_row = row
+                editor.header_menu_up.setVisible(row > 0)
+                editor.header_menu_down.setVisible(row < editor.model.rowCount()-1)
+                self._editor.header_menu.exec_(event.globalPos())
             return True
 
         else:
@@ -757,7 +810,8 @@ class TableView(QtGui.QTableView):
         return size_hint 
 
     def sizeHintForColumn(self, column_index, allow_proportional=True):
-        """Reimplemented to support width specification via TableColumns."""
+        """Reimplemented to support width specification via TableColumns. Added
+        keyword argument for use in 'sizeHint' reimplementation."""
 
         editor = self._editor
         column = editor.columns[column_index]
