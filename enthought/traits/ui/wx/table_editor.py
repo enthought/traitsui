@@ -33,7 +33,7 @@ from enthought.traits.ui.api \
            ListUndoItem
     
 from enthought.traits.ui.editors.table_editor \
-    import ToolkitEditorFactory, customize_filter
+    import BaseTableEditor, ToolkitEditorFactory, customize_filter
 
 from enthought.traits.ui.menu \
     import Action, ToolBar
@@ -86,7 +86,7 @@ GridModes = {
 #  'TableEditor' class:
 #-------------------------------------------------------------------------------
 
-class TableEditor ( Editor ):
+class TableEditor ( Editor, BaseTableEditor ):
     """ Editor that presents data in a table. Optionally, tables can have
         a set of filters that reduce the set of data displayed, according to 
         their criteria.
@@ -1246,7 +1246,6 @@ class TableEditor ( Editor ):
                          height    = 0.3,
                          resizable = True,
                          buttons   = [ 'Undo', 'OK', 'Cancel' ],
-                         #help_id  = "enlib|HID_Select_and_Order_Columns_Dlg",
                          kind      = 'livemodal' ) )
 
     #---------------------------------------------------------------------------
@@ -1261,108 +1260,7 @@ class TableEditor ( Editor ):
         if object not in selection:
             self.set_selection( object )
             selection = [ object ]
-        self._menu_context = { 'selection': selection,
-                               'object':    object,
-                               'column':    column,
-                               'editor':    self,
-                               'info':      self.ui.info,
-                               'handler':   self.ui.handler }
-
-#----- pyface.action 'controller' interface implementation: --------------------
-
-    #---------------------------------------------------------------------------
-    #  Adds a menu item to the menu being constructed:
-    #---------------------------------------------------------------------------
-
-    def add_to_menu ( self, menu_item ):
-        """ Adds a menu item to the menu bar being constructed.
-        """
-        action = menu_item.item.action
-        self.eval_when( action.enabled_when, menu_item, 'enabled' )
-        self.eval_when( action.checked_when, menu_item, 'checked' )
-
-    #---------------------------------------------------------------------------
-    #  Adds a tool bar item to the tool bar being constructed:
-    #---------------------------------------------------------------------------
-
-    def add_to_toolbar ( self, toolbar_item ):
-        """ Adds a toolbar item to the toolbar being constructed.
-        """
-        self.add_to_menu( toolbar_item )
-
-    #---------------------------------------------------------------------------
-    #  Returns whether the menu action should be defined in the user interface:
-    #---------------------------------------------------------------------------
-
-    def can_add_to_menu ( self, action ):
-        """ Returns whether the action should be defined in the user interface.
-        """
-        if action.defined_when != '':
-            try:
-                if not eval( action.defined_when, globals(), 
-                             self._menu_context ):
-                    return False
-            except:
-                open_fbi()
-
-        if action.visible_when != '':
-            try:
-                if not eval( action.visible_when, globals(), 
-                             self._menu_context ):
-                    return False
-            except:
-                open_fbi()
-
-        return True
-
-    #---------------------------------------------------------------------------
-    #  Returns whether the toolbar action should be defined in the user
-    #  interface:
-    #---------------------------------------------------------------------------
-
-    def can_add_to_toolbar ( self, action ):
-        """ Returns whether the toolbar action should be defined in the user
-            interface.
-        """
-        return self.can_add_to_menu( action )
-
-    #---------------------------------------------------------------------------
-    #  Performs the action described by a specified Action object:
-    #---------------------------------------------------------------------------
-
-    def perform ( self, action, action_event = None ):
-        """ Performs the action described by a specified Action object.
-        """
-        self.ui.do_undoable( self._perform, action )
-
-    def _perform ( self, action ):
-        method_name        = action.action
-        info               = self.ui.info
-        handler            = self.ui.handler
-        context            = self._menu_context
-        self._menu_context = None
-        selection          = context[ 'selection' ]
-
-        if method_name.find( '.' ) >= 0:
-            if method_name.find( '(' ) < 0:
-                method_name += '()'
-            try:
-                eval( method_name, globals(), context )
-            except:
-                # fixme: Should the exception be logged somewhere?
-                pass
-            return
-
-        method = getattr( handler, method_name, None )
-        if method is not None:
-            method( info, selection )
-            return
-
-        if action.on_perform is not None:
-            action.on_perform( selection )
-            return
-
-        action.perform( selection )
+        self.set_menu_context( selection, object, column )
         
     #---------------------------------------------------------------------------
     #  Set one or more attributes without notifying the grid model:
@@ -1377,26 +1275,6 @@ class TableEditor ( Editor ):
             setattr( self, name, value )
             
         self._no_notify = False
-
-#-- Menu support methods: ------------------------------------------------------
-
-    #---------------------------------------------------------------------------
-    #  Evaluates a condition within a defined context and sets a specified
-    #  object trait based on the (assumed) boolean result:
-    #---------------------------------------------------------------------------
-
-    def eval_when ( self, condition, object, trait ):
-        """ Evaluates a condition within a defined context and sets a specified
-        object trait based on the result, which is iassumed to be a Boolean.
-        """
-        if condition != '':
-            value = True
-            try:
-                if not eval( condition, globals(), self._menu_context ):
-                    value = False
-            except:
-                open_fbi()
-            setattr( object, trait, value )
 
 #-- Private Methods: -----------------------------------------------------------
 
