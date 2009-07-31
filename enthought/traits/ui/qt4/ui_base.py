@@ -268,9 +268,13 @@ class _StickyDialog(QtGui.QDialog):
         layout.addWidget(self._mw)
         self.setLayout(layout)
 
+        # Set the dialog's window flags and properties.
         flags = QtCore.Qt.WindowSystemMenuHint
-        if QtCore.QT_VERSION >= 0x040500:
+        try:
             flags |= QtCore.Qt.WindowCloseButtonHint
+        except AttributeError:
+            # Either PyQt or Qt is too old.
+            pass
         if ui.view.resizable:
             flags |= (QtCore.Qt.WindowMinimizeButtonHint |
                       QtCore.Qt.WindowMaximizeButtonHint)
