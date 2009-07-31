@@ -386,7 +386,7 @@ class TableEditor(Editor):
         """Allows the user to customize the current set of table filters."""
 
         filter_editor = TableFilterEditor(editor=self)
-        ui = filter_editor.edit_traits()
+        ui = filter_editor.edit_traits(parent=self.control)
         if ui.result:
             self.factory.filters = filter_editor.templates
             self.filter = filter_editor.selected_filter
@@ -859,7 +859,10 @@ class TableFilterEditor(HasTraits):
         if self.selected_filter:
             model = self.editor.model
             index = model.mapToSource(model.index(0, 0))
-            obj = self.editor.items()[index.row()]
+            if index.isValid():
+                obj = self.editor.items()[index.row()]
+            else:
+                obj = None
             view = self.selected_filter.edit_view(obj)
         return view
 
