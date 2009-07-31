@@ -269,7 +269,7 @@ class _StickyDialog(QtGui.QDialog):
         self.setLayout(layout)
 
         # Set the dialog's window flags and properties.
-        flags = QtCore.Qt.WindowSystemMenuHint
+        flags = QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint
         try:
             flags |= QtCore.Qt.WindowCloseButtonHint
         except AttributeError:
@@ -351,10 +351,6 @@ class BaseDialog(BasePanel):
 
     def create_dialog(self, parent, style):
         """Create the dialog control."""
-
-        # The QMainWindow is actually embedded in a dialog (see _StickyDialog)
-        if isinstance(parent, QtGui.QMainWindow):
-            parent = parent.parent()
 
         self.control = control = _StickyDialog(self.ui, parent)
 
