@@ -742,7 +742,21 @@ class TableView(QtGui.QTableView):
 
         self.resizeColumnsToContents()
 
-    def sizeHintForColumn(self, column_index):
+    def sizeHint(self): 
+        """Reimplemented to define a better size hint for the width of the
+        TableEditor.""" 
+ 	 
+        size_hint = QtGui.QTableView.sizeHint(self) 
+        
+        width = self.style().pixelMetric(QtGui.QStyle.PM_ScrollBarExtent,
+                                         QtGui.QStyleOptionHeader(), self)
+        for column in range(len(self._editor.columns)):
+            width += self.sizeHintForColumn(column, allow_proportional=False)
+        size_hint.setWidth(width)
+	 	 
+        return size_hint 
+
+    def sizeHintForColumn(self, column_index, allow_proportional=True):
         """Reimplemented to support width specification via TableColumns."""
 
         editor = self._editor
@@ -766,17 +780,23 @@ class TableView(QtGui.QTableView):
             text = column.get_label()
             width = QtGui.QFontMetrics(font).width(text)
         
-            # Add a margin to the calculated width
+            # Add margin to the calculated width as appropriate
+            style = self.style()
             option = QtGui.QStyleOptionHeader()
-            option.section = column_index
-            margin = self.style().pixelMetric(QtGui.QStyle.PM_HeaderMargin,
-                                              option, self)
-            width += margin * 2
+            width += style.pixelMetric(QtGui.QStyle.PM_HeaderGripMargin,
+                                       option, self) * 2
+            if editor.factory.sortable and not editor.factory.reorderable:
+                # Add size of sort indicator
+                width += style.pixelMetric(QtGui.QStyle.PM_HeaderMarkSize,
+                                           option, self)
+                # Add distance between sort indicator and text
+                width += style.pixelMetric(QtGui.QStyle.PM_HeaderMargin, option,
+                                           self)
             
             return max(base_width, width)
 
         # Set width proportionally
-        elif requested_width < 1:
+        elif requested_width < 1 and allow_proportional:
             return int(requested_width * self.viewport().width())
         
         # Set width absolutely
