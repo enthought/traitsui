@@ -681,7 +681,7 @@ class TableView(QtGui.QTableView):
         # Configure the row headings.
         vheader = self.verticalHeader()
         insertable = factory.row_factory is not None and not factory.auto_add
-        if ((factory.editable and (insertable or factory.deleteable)) or
+        if ((factory.editable and (insertable or factory.deletable)) or
              factory.reorderable):
             vheader.installEventFilter(self)
         else:
