@@ -158,7 +158,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
         return QtCore.QVariant()
 
-    def insertRow(self, row, parent, obj=None):
+    def insertRow(self, row, parent=QtCore.QModelIndex(), obj=None):
         """Reimplemented to allow creation of new rows. Added an optional 
         arg to allow the insertion of an existing row object."""
         
@@ -171,7 +171,7 @@ class TableModel(QtCore.QAbstractTableModel):
         self.endInsertRows()
         return True
 
-    def insertRows(self, row, count, parent):
+    def insertRows(self, row, count, parent=QtCore.QModelIndex()):
         """Reimplemented to allow creation of new rows."""
 
         editor = self._editor
@@ -182,7 +182,7 @@ class TableModel(QtCore.QAbstractTableModel):
         self.endInsertRows()
         return True
 
-    def removeRows(self, row, count, parent):
+    def removeRows(self, row, count, parent=QtCore.QModelIndex()):
         """Reimplemented to allow row deletion, as well as reordering via drag
         and drop."""
 
@@ -224,7 +224,7 @@ class TableModel(QtCore.QAbstractTableModel):
             return False
 
         current_rows = map(int, str(data).split(' '))
-        self.moveRows(current_rows, parent.row(), parent)
+        self.moveRows(current_rows, parent.row())
         return True
 
     def supportedDropActions(self):
@@ -236,12 +236,12 @@ class TableModel(QtCore.QAbstractTableModel):
     #  TableModel interface:
     #---------------------------------------------------------------------------
 
-    def moveRow(self, old_row, new_row, parent):
+    def moveRow(self, old_row, new_row):
         """Convenience method to move a single row."""
         
-        return self.moveRows([old_row], new_row, parent)
+        return self.moveRows([old_row], new_row)
 
-    def moveRows(self, current_rows, new_row, parent):
+    def moveRows(self, current_rows, new_row):
         """Moves a sequence of rows (provided as a list of row indexes) to a new
         row."""
 
@@ -262,11 +262,11 @@ class TableModel(QtCore.QAbstractTableModel):
             if row <= new_row:
                 new_row -= 1
             objects.insert(0, items[row])
-            self.removeRow(row, parent)
+            self.removeRow(row)
         
         # ...and add them at the new location.
         for i, obj in enumerate(objects):
-            self.insertRow(new_row + i, parent, obj)
+            self.insertRow(new_row + i, obj=obj)
 
         # Update the selection for the new location.
         self._editor.set_selection(objects)
@@ -313,3 +313,21 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
         left, right = items[left_mi.row()], items[right_mi.row()]
 
         return column.cmp(left, right) < 0
+
+    #---------------------------------------------------------------------------
+    #  SortFilterTableModel interface:
+    #---------------------------------------------------------------------------
+    
+    def moveRow(self, old_row, new_row):
+        """Convenience method to move a single row."""
+        
+        return self.moveRows([old_row], new_row)
+
+    def moveRows(self, current_rows, new_row):
+        """Delegate to source model with mapped rows."""
+        
+        source = self.sourceModel()
+        current_rows = [ self.mapToSource(self.index(row, 0)).row() 
+                         for row in current_rows ]
+        new_row = self.mapToSource(self.index(new_row, 0)).row()
+        source.moveRows(current_rows, new_row)

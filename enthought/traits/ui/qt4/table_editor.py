@@ -83,6 +83,16 @@ class TableEditor(Editor):
     # The Traits UI associated with the table editor toolbar:
     toolbar_ui = Instance(UI)
 
+    # The context menu associated with the vertical header
+    header_menu = Instance(QtGui.QMenu)
+
+    # The context menu actions for moving rows up and down
+    header_menu_up = Instance(QtGui.QAction)
+    header_menu_down = Instance(QtGui.QAction)
+
+    # The index of the row that was last right clicked on its vertical header
+    header_row = Int
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -103,10 +113,31 @@ class TableEditor(Editor):
         self.model.setSourceModel(self.source_model)
         self.table_view.setModel(self.model)
 
+        # Create the context menu and connect to its signals
+        self.header_menu = QtGui.QMenu(self.table_view)
+        signal = QtCore.SIGNAL('triggered()')
+        insertable = factory.row_factory is not None and not factory.auto_add
+        if factory.editable:
+            if insertable:
+                action = self.header_menu.addAction('Insert new item')
+                QtCore.QObject.connect(action, signal, self._on_context_insert)
+            if factory.deletable:
+                action = self.header_menu.addAction('Delete item')
+                QtCore.QObject.connect(action, signal, self._on_context_remove)
+        if factory.reorderable:
+            if factory.editable and (insertable or factory.deletable):
+                self.header_menu.addSeparator()
+            self.header_menu_up = self.header_menu.addAction('Move item up')
+            QtCore.QObject.connect(self.header_menu_up, signal, 
+                                   self._on_context_move_up)
+            self.header_menu_down = self.header_menu.addAction('Move item down')
+            QtCore.QObject.connect(self.header_menu_down, signal, 
+                                   self._on_context_move_down)
+
         # When sorting is enabled, the first column is initially displayed with
         # the triangle indicating it is the sort index, even though no sorting
         # has actually been done. Sort here for UI/model consistency.
-        if self.factory.sortable:
+        if self.factory.sortable and not self.factory.reorderable:
             self.model.sort(0, QtCore.Qt.AscendingOrder)
 
         # Connect to the mode specific selection handler and select the first
@@ -545,6 +576,26 @@ class TableEditor(Editor):
         # Invoke the column's double-click handler:
         column.on_dclick(obj)
 
+    def _on_context_insert(self):
+        """Handle 'insert item' being selected from the header context menu."""
+
+        self.model.insertRow(self.header_row)
+
+    def _on_context_remove(self):
+        """Handle 'remove item' being selected from the header context menu."""
+
+        self.model.removeRow(self.header_row)
+
+    def _on_context_move_up(self):
+        """Handle 'move up' being selected from the header context menu."""
+
+        self.model.moveRow(self.header_row, self.header_row - 1)
+
+    def _on_context_move_down(self):
+        """Handle 'move down' being selected from the header context menu."""
+
+        self.model.moveRow(self.header_row, self.header_row + 1)
+
 # Define the SimpleEditor class.
 SimpleEditor = TableEditor
 
@@ -629,7 +680,12 @@ class TableView(QtGui.QTableView):
 
         # Configure the row headings.
         vheader = self.verticalHeader()
-        vheader.hide()
+        insertable = factory.row_factory is not None and not factory.auto_add
+        if ((factory.editable and (insertable or factory.deleteable)) or
+             factory.reorderable):
+            vheader.installEventFilter(self)
+        else:
+            vheader.hide()
 
         # Configure the column headings.
         hheader = self.horizontalHeader()
@@ -662,8 +718,24 @@ class TableView(QtGui.QTableView):
         elif factory.sortable:
             self.setSortingEnabled(True)
 
+    def eventFilter(self, obj, event):
+        """Reimplemented to create context menu for the vertical header."""
+        
+        vheader = self.verticalHeader()
+        if (obj is vheader and event.type() == QtCore.QEvent.ContextMenu):
+            event.accept()
+            editor = self._editor
+            editor.header_row = row = vheader.logicalIndexAt(event.pos().y())
+            editor.header_menu_up.setVisible(row > 0)
+            editor.header_menu_down.setVisible(row < editor.model.rowCount()-1)
+            self._editor.header_menu.exec_(event.globalPos())
+            return True
+
+        else:
+            return QtGui.QTableView.eventFilter(self, obj, event)
+
     def resizeEvent(self, event):
-        """Reimplemented to autoresize columns when the size of the TableEditor
+        """Reimplemented to resize columns when the size of the TableEditor
         changes."""
 
         QtGui.QTableView.resizeEvent(self, event)
@@ -677,7 +749,7 @@ class TableView(QtGui.QTableView):
         column = editor.columns[column_index]
         requested_width = column.get_width()
 
-        # Autosize based on column contents and label. Qt's default
+        # Autosize based on column contents and label width. Qt's default
         # implementation of this function does content, we handle the label.
         if editor.factory.auto_size or requested_width < 0:
             base_width = QtGui.QTableView.sizeHintForColumn(self, column_index)

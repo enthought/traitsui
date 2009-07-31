@@ -9,7 +9,8 @@ Bugs
   updates, editor color does not)
 
 * Tabbed group layout does not remember the selected tab when it is reloaded
-  (this can be observed by running the Traits UI Demo application)
+  (this can be observed by running the Traits UI Demo application, selecting the
+  demo view tab for a demo, and then clicking on a new demo in the tree).
 
 * Readonly style TextEditor has wrapping problems (observe status text in
   "Invalid state handling" Advanced Demo)
@@ -28,7 +29,7 @@ Implemented in the wx backend, and must be implemented for compatibility:
 
 * ImageEnumEditor is not implemented. A standard enum editor get used instead.
 
-* ListStrEditor is not implemented. Use QListWidget.
+* ListStrEditor is not implemented. Use QListView.
 
 * PopupEditor is not implemented. It is questionable whether this even worth
   implementing, as it makes for very unconventional, and therefore confusing,
@@ -37,19 +38,21 @@ Implemented in the wx backend, and must be implemented for compatibility:
 * ScrubberEditor is not implemented. Again, may not be worth implementing.
 
 * Features missing from the TableEditor:
-  * Searching and filtering, both model level support and UI
-  * Adding new items
-  * Deleting items items
-  * Reordering items (both manually and by sorting)
+  * Searching
   * Storing table state (custom filters and column widths)
+  * Context menus for cells
+  * 'sort_model' option for sorting
+  * 'selected_indices' option for item selection
+  * Factory options for cell color, font, etc. These options are currently only
+    supported through TableColumns.
 
 * Features missing from the TabularEditor:
-  * right_clicked and right_dclicked events
+  * 'right_clicked' and 'right_dclicked' events
   * Drag and drop
   * Editable labels (column headers)
   * Adding new items
   * Deleting existing items
-  * Reordering items (manually)
+  * Reordering items
   * Lazy loading of data (compare performance of "NumPy array tabular editor
     demo" with wx backend)
 
@@ -59,8 +62,18 @@ Implemented in the wx backend, and must be implemented for compatibility:
 Enhancements
 ============
 
-Not implemented in the wx backend, but would be nice to have anyway:
+Low priority items. Not implemented in the wx backend, but would be nice to have
+anyway:
 
 * Create option for ColorEditor that does not show the RGB value of the
   color. This would allow for much more compact widgets, which is preferable in
   some cases.
+
+* TableEditor:
+
+  * The filter dialog is better than the wx one, but there is still room for
+    improvement. In particular, the add/remove buttons should be replaced with
+    toolbar icons, and the add button should have a drop-down menu when pressed
+    for selecting which template to use. This is better than the always-present
+    EnumEditor for tempate selection because templates are clearly associated 
+    with the creation of new filters.
