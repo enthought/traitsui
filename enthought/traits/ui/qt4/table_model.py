@@ -38,6 +38,9 @@ v_alignment_map = {
     'bottom': QtCore.Qt.AlignBottom,
 }
 
+# MIME type for internal table drag/drop operations
+mime_type = 'enthought/traits-ui-table-editor'
+
 #-------------------------------------------------------------------------------
 #  'TableModel' class:
 #-------------------------------------------------------------------------------
@@ -51,6 +54,10 @@ class TableModel(QtCore.QAbstractTableModel):
         QtCore.QAbstractTableModel.__init__(self, parent)
 
         self._editor = editor
+
+    #---------------------------------------------------------------------------
+    #  QAbstractTableModel interface:
+    #---------------------------------------------------------------------------
 
     def rowCount(self, mi):
         """Reimplemented to return the number of rows."""
@@ -114,21 +121,23 @@ class TableModel(QtCore.QAbstractTableModel):
         return QtCore.QVariant()
 
     def flags(self, mi):
-        """Reimplemented to set editable status."""
+        """Reimplemented to set editable and movable status."""
         
         flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
 
-        editor = self._editor
-        items = editor.items()
-        row, column = mi.row(), mi.column()
-        if row >= len(items) or column >= len(editor.columns):
+        if not mi.isValid():
             return flags
 
-        obj = items[row]
-        column = editor.columns[column]
+        editor = self._editor
+        obj = editor.items()[mi.row()]
+        column = editor.columns[mi.column()]
+
         if editor.factory.editable and column.is_editable(obj):
             flags |= QtCore.Qt.ItemIsEditable
 
+        if editor.factory.reorderable:
+            flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
+            
         return flags
 
     def headerData(self, section, orientation, role):
@@ -149,6 +158,119 @@ class TableModel(QtCore.QAbstractTableModel):
 
         return QtCore.QVariant()
 
+    def insertRow(self, row, parent, obj=None):
+        """Reimplemented to allow creation of new rows. Added an optional 
+        arg to allow the insertion of an existing row object."""
+        
+        editor = self._editor
+        if obj is None:
+            obj = editor.create_new_row()
+        
+        self.beginInsertRows(parent, row, row)
+        editor.items().insert(row, obj)
+        self.endInsertRows()
+        return True
+
+    def insertRows(self, row, count, parent):
+        """Reimplemented to allow creation of new rows."""
+
+        editor = self._editor
+        items = editor.items()
+        self.beginInsertRows(parent, row, row + count - 1)
+        for i in xrange(count):
+            items.insert(row + i, editor.create_new_row())
+        self.endInsertRows()
+        return True
+
+    def removeRows(self, row, count, parent):
+        """Reimplemented to allow row deletion, as well as reordering via drag
+        and drop."""
+
+        items = self._editor.items()
+        self.beginRemoveRows(parent, row, row + count - 1)
+        for i in xrange(count):
+            del items[row]
+        self.endRemoveRows()
+        return True
+
+    def mimeTypes(self):
+        """Reimplemented to expose our internal MIME type for drag and drop 
+        operations."""
+
+        types = QtCore.QStringList()
+        types.append(mime_type)
+        return types
+
+    def mimeData(self, indexes):
+        """Reimplemented to generate MIME data containing the rows of the
+        current selection."""
+
+        mime_data = QtCore.QMimeData()
+        rows = list(set([ index.row() for index in indexes ]))
+        data = QtCore.QByteArray(str(rows[0]))
+        for row in rows[1:]:
+            data.append(' %i' % row)
+        mime_data.setData(mime_type, data)
+        return mime_data
+
+    def dropMimeData(self, mime_data, action, row, column, parent):
+        """Reimplemented to allow items to be moved."""
+
+        if action == QtCore.Qt.IgnoreAction:
+            return False
+        
+        data = mime_data.data(mime_type)
+        if data.isNull():
+            return False
+
+        current_rows = map(int, str(data).split(' '))
+        self.moveRows(current_rows, parent.row(), parent)
+        return True
+
+    def supportedDropActions(self):
+        """Reimplemented to allow items to be moved."""
+        
+        return QtCore.Qt.MoveAction
+
+    #---------------------------------------------------------------------------
+    #  TableModel interface:
+    #---------------------------------------------------------------------------
+
+    def moveRow(self, old_row, new_row, parent):
+        """Convenience method to move a single row."""
+        
+        return self.moveRows([old_row], new_row, parent)
+
+    def moveRows(self, current_rows, new_row, parent):
+        """Moves a sequence of rows (provided as a list of row indexes) to a new
+        row."""
+
+        # Sort rows in descending order so they can be removed without
+        # invalidating the indices.
+        current_rows.sort()
+        current_rows.reverse()
+        
+        # If the the highest selected row is lower than the destination, do an 
+        # insertion before rather than after the destination.
+        if current_rows[-1] < new_row:
+            new_row += 1
+
+        # Remove selected rows...
+        items = self._editor.items()
+        objects = []
+        for row in current_rows:
+            if row <= new_row:
+                new_row -= 1
+            objects.insert(0, items[row])
+            self.removeRow(row, parent)
+        
+        # ...and add them at the new location.
+        for i, obj in enumerate(objects):
+            self.insertRow(new_row + i, parent, obj)
+
+        # Update the selection for the new location.
+        self._editor.set_selection(objects)
+
 #-------------------------------------------------------------------------------
 #  'SortFilterTableModel' class:
 #-------------------------------------------------------------------------------
@@ -163,6 +285,10 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
         QtGui.QSortFilterProxyModel.__init__(self, parent)
 
         self._editor = editor
+
+    #---------------------------------------------------------------------------
+    #  QSortFilterProxyModel interface:
+    #---------------------------------------------------------------------------
 
     def filterAcceptsRow(self, source_row, source_parent):
         """"Reimplemented to use a TableFilter for filtering rows."""

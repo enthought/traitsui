@@ -62,6 +62,9 @@ class TableEditor(Editor):
     # The currently selected row(s), column(s), or cell(s).
     selected = Any
 
+    # The current selected row
+    selected_row = Property(Any, depends_on='selected')
+
     # Current filter object (should be a TableFilter or callable or None):
     filter = Any
 
@@ -106,6 +109,15 @@ class TableEditor(Editor):
         if self.factory.sortable:
             self.model.sort(0, QtCore.Qt.AscendingOrder)
 
+        # Connect to the mode specific selection handler and select the first
+        # row/column/cell. Do this before creating the edit_view to make sure
+        # that it has a valid item to use when constructing its view.
+        smodel = self.table_view.selectionModel()
+        signal = QtCore.SIGNAL('selectionChanged(QItemSelection, QItemSelection)')
+        mode_slot = getattr(self, '_on_%s_selection' % factory.selection_mode)
+        QtCore.QObject.connect(smodel, signal, mode_slot)
+        self.table_view.setCurrentIndex(self.model.index(0, 0))
+
         # Create the toolbar if necessary
         if factory.show_toolbar and len(factory.filters) > 0:
             main_view = QtGui.QWidget()
@@ -138,20 +150,12 @@ class TableEditor(Editor):
             self.control.addWidget(main_view)
             self.control.setStretchFactor(0, 2)
 
-            # Assign the initial object here, so a valid editor will be built
-            # when the 'edit_traits' call is made:
-            items = self.items()
-            selected = None
-            if factory.editable and len(items) > 0:
-                selected = items[0]
-            self.selected = selected
-
             # Create the row editor below the table view
             editor = InstanceEditor(view=factory.edit_view, kind='subpanel')
             self._ui = self.edit_traits(
                 parent = self.control,
                 kind = 'subpanel',
-                view = View(Item('selected',
+                view = View(Item('selected_row',
                                  style = 'custom',
                                  editor = editor,
                                  show_label = False,
@@ -163,20 +167,6 @@ class TableEditor(Editor):
             self._ui.parent = self.ui
             self.control.addWidget(self._ui.control)
             self.control.setStretchFactor(1, 1)
-
-            # Reset the object so that the sub-sub-view will pick up the
-            # correct history also:
-            self.selected = None
-            self.selected = selected
-        
-        # Connect to the mode specific selection handler
-        smodel = self.table_view.selectionModel()
-        signal = QtCore.SIGNAL('selectionChanged(QItemSelection, QItemSelection)')
-        mode_slot = getattr(self, '_on_%s_selection' % factory.selection_mode)
-        QtCore.QObject.connect(smodel, signal, mode_slot)
-
-        # Select the first row/column/cell
-        self.table_view.setCurrentIndex(self.model.index(0, 0))
 
         # Connect to the click and double click handlers
         signal = QtCore.SIGNAL('clicked(QModelIndex)')
@@ -238,6 +228,21 @@ class TableEditor(Editor):
             self.table_view.resizeColumnsToContents()
 
         self.set_selection(self.selected)
+
+    #---------------------------------------------------------------------------
+    #  Creates a new row object using the provided factory:
+    #---------------------------------------------------------------------------
+
+    def create_new_row(self):
+        """Creates a new row object using the provided factory."""
+
+        factory = self.factory
+        kw = factory.row_factory_kw.copy()
+        if '__table_editor__' in kw:
+            kw[ '__table_editor__' ] = self
+
+        return self.ui.evaluate(factory.row_factory,
+                                *factory.row_factory_args, **kw)
 
     #---------------------------------------------------------------------------
     #  Returns the raw list of model objects:
@@ -374,6 +379,30 @@ class TableEditor(Editor):
             self._filtered_cache = fc = [ f(item) for item in items ]
             self.filtered_indices = fi = [ i for i, ok in enumerate(fc) if ok ]
             self.filter_summary = '%i of %i items' % (len(fi), num_items)
+    
+    #-- Trait Property getters/setters -----------------------------------------
+
+    @cached_property
+    def _get_selected_row(self):
+        """Gets the selected row, or the first row if multiple rows are 
+        selected."""
+
+        mode = self.factory.selection_mode
+
+        if mode.startswith('column'):
+            return None
+        elif mode == 'row':
+            return self.selected
+    
+        try:
+            if mode == 'rows':
+                return self.selected[0]
+            elif mode == 'cell':
+                return self.selected[0]
+            elif mode == 'cells':
+                return self.selected[0][0]
+        except IndexError:
+            return None
 
     #-- Trait Change Handlers --------------------------------------------------
 
@@ -621,12 +650,16 @@ class TableView(QtGui.QTableView):
         # Configure the editing behavior.
         triggers = (QtGui.QAbstractItemView.DoubleClicked |
                     QtGui.QAbstractItemView.SelectedClicked)
-        if factory.edit_on_first_click:
+        if factory.edit_on_first_click and not factory.reorderable:
             triggers |= QtGui.QAbstractItemView.CurrentChanged
         self.setEditTriggers(triggers)
 
-        # Configure the sorting behavior.
-        if factory.sortable:
+        # Configure the reordering and sorting behavior.
+        if factory.reorderable:
+            self.setDragEnabled(True)
+            self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+            self.setDropIndicatorShown(True)
+        elif factory.sortable:
             self.setSortingEnabled(True)
 
     def resizeEvent(self, event):
@@ -716,7 +749,8 @@ class TableFilterEditor(HasTraits):
     view = View(Group(Group(Group(Item('add_button',
                                        enabled_when='selected_template'),
                                   Item('remove_button',
-                                       enabled_when='len(templates) and selected_filter'),
+                                       enabled_when='len(templates) > 1 and ' \
+                                           'selected_filter is not None'),
                                   orientation='horizontal',
                                   show_labels=False),
                             Label('Base filter for new filters:'),
