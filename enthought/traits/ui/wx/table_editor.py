@@ -1353,7 +1353,14 @@ class TableFilterEditor ( Handler ):
         """ Handles the user clicking the **Edit** button.
         """
         if info.initialized:
-            ui = self.filter.edit( self.editor.model.get_filtered_item( 0 ) )
+            items = self.editor.model.get_filtered_items()
+            if len(items) > 0:
+                item = items[0]
+            else:
+                item = None
+            # `item` is now either the first item in the table, or None if
+            # the table is empty.
+            ui = self.filter.edit(item)
             if ui.result:
                 self._refresh_filters( info )
 
