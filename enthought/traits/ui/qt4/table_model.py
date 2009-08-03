@@ -167,7 +167,7 @@ class TableModel(QtCore.QAbstractTableModel):
             obj = editor.create_new_row()
         
         self.beginInsertRows(parent, row, row)
-        editor.items().insert(row, obj)
+        editor.callx(editor.items().insert, row, obj)
         self.endInsertRows()
         return True
 
@@ -178,7 +178,7 @@ class TableModel(QtCore.QAbstractTableModel):
         items = editor.items()
         self.beginInsertRows(parent, row, row + count - 1)
         for i in xrange(count):
-            items.insert(row + i, editor.create_new_row())
+            editor.callx(items.insert, row + i, editor.create_new_row())
         self.endInsertRows()
         return True
 
@@ -186,10 +186,11 @@ class TableModel(QtCore.QAbstractTableModel):
         """Reimplemented to allow row deletion, as well as reordering via drag
         and drop."""
 
-        items = self._editor.items()
+        editor = self._editor
+        items = editor.items()
         self.beginRemoveRows(parent, row, row + count - 1)
         for i in xrange(count):
-            del items[row]
+            editor.callx(items.pop, row + i)
         self.endRemoveRows()
         return True
 

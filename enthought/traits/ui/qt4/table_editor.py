@@ -272,6 +272,9 @@ class TableEditor(Editor, BaseTableEditor):
         """Updates the editor when the object trait changes externally to the
         editor."""
 
+        if self._no_notify:
+            return
+
         self.model.reset()
 
         filtering = len(self.factory.filters) > 0
@@ -326,18 +329,31 @@ class TableEditor(Editor, BaseTableEditor):
         return items
 
     #---------------------------------------------------------------------------
-    #  Set one or more attributes without notifying the table view:
+    #  Perform actions without notifying the underlying table view or model:
     #---------------------------------------------------------------------------
+
+    def callx(self, func, *args, **kw):
+        """Call a function without notifying the underlying table view or 
+        model."""
+
+        old = self._no_notify
+        self._no_notify = True
+        try:
+            func(*args, **kw)
+        finally:
+            self._no_notify = old
     
     def setx(self, **keywords):
-        """Set one or more attributes without notifying the table view."""
+        """Set one or more attributes without notifying the underlying table
+        view or model."""
 
+        old = self._no_notify
         self._no_notify = True
         try:
             for name, value in keywords.items():
                 setattr(self, name, value)
         finally:
-            self._no_notify = False
+            self._no_notify = old
 
     #---------------------------------------------------------------------------
     #  Sets the current selection to a set of specified objects:
@@ -807,8 +823,11 @@ class TableView(QtGui.QTableView):
                     editor.empty_menu.exec_(event.globalPos())
             else:
                 editor.header_row = row
-                editor.header_menu_up.setVisible(row > 0)
-                editor.header_menu_down.setVisible(row < editor.model.rowCount()-1)
+                if editor.factory.reorderable:
+                    show_up = row > 0
+                    show_down = row < editor.model.rowCount() - 1
+                    editor.header_menu_up.setVisible(show_up)
+                    editor.header_menu_down.setVisible(show_down)
                 self._editor.header_menu.exec_(event.globalPos())
             return True
 
