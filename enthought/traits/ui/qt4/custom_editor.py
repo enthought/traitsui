@@ -19,7 +19,6 @@ based custom control.
 
 from PyQt4 import QtGui
 
-    
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the 
 # enthought.traits.ui.editors.custom_editor file.
@@ -57,7 +56,7 @@ class CustomEditor ( Editor ):
         if self.control is None:
             self.control = QtGui.QLabel(
                 'An error occurred creating a custom editor.\n'
-                'Please contact the developer.', parent)
+                'Please contact the developer.')
             self.control.setStyleSheet("background-color: red; color: white")
         self.set_tooltip()
         
