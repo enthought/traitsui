@@ -356,7 +356,7 @@ class GUIToolkit ( Toolkit ):
 
     #---------------------------------------------------------------------------
     #  Hooks all specified events for all controls in a ui so that they can be
-    #  routed to the corrent event handler:
+    #  routed to the correct event handler:
     #---------------------------------------------------------------------------
 
     def hook_events ( self, ui, control, events = None, handler = None ):
@@ -364,7 +364,7 @@ class GUIToolkit ( Toolkit ):
             can be routed to the correct event handler.
         """
         if events is None:
-            # fixme: Implement drag and drop events ala toolkit.py for wx
+            # FIXME: Implement drag and drop events ala toolkit.py for wx
             return
 
         elif events == 'keys':

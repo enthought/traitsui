@@ -832,14 +832,14 @@ class TableView(QtGui.QTableView):
         width = self.style().pixelMetric(QtGui.QStyle.PM_ScrollBarExtent,
                                          QtGui.QStyleOptionHeader(), self)
         for column in range(len(self._editor.columns)):
-            width += self.sizeHintForColumn(column, allow_proportional=False)
+            width += self.sizeHintForColumn(column)
         size_hint.setWidth(width)
 	 	 
         return size_hint
 
-    def sizeHintForColumn(self, column_index, allow_proportional=True):
-        """Reimplemented to support width specification via TableColumns. Added
-        keyword argument for use in 'sizeHint' reimplementation."""
+    def sizeHintForColumn(self, column_index):
+        """Reimplemented to support absolute width specification via 
+        TableColumns and to improve the metric for autosizing columns."""
 
         editor = self._editor
         column = editor.columns[column_index]
@@ -847,7 +847,7 @@ class TableView(QtGui.QTableView):
 
         # Autosize based on column contents and label width. Qt's default
         # implementation of this function does content, we handle the label.
-        if requested_width < 0:
+        if requested_width < 1:
             base_width = QtGui.QTableView.sizeHintForColumn(self, column_index)
 
             # Determine what font to use in the calculation
@@ -876,14 +876,36 @@ class TableView(QtGui.QTableView):
                                            self)
             
             return max(base_width, width)
-
-        # Set width proportionally
-        elif requested_width < 1 and allow_proportional:
-            return int(requested_width * self.viewport().width())
         
-        # Set width absolutely
+        # Or else set width absolutely
         else:
             return requested_width
+
+    def resizeColumnsToContents(self):
+        """Reimplemented to support proportional column width specifications."""
+        
+        editor = self._editor
+        available_space = self.viewport().width()
+        hheader = self.horizontalHeader()
+        
+        # Compute sizes for columns with absolute or no size requests
+        proportional = []
+        for column_index in xrange(len(editor.columns)):
+            requested_width = editor.columns[column_index].get_width()
+            if 0 < requested_width < 1:
+                proportional.append((column_index, requested_width))
+            else:
+                base_width = hheader.sectionSizeHint(column_index)
+                width = max(base_width, self.sizeHintForColumn(column_index))
+                hheader.resizeSection(column_index, width)
+                available_space -= width
+
+        # Now use the remaining space for columns with proportional width
+        # requests
+        for column_index, percent in proportional:
+            base_width = hheader.sectionSizeHint(column_index)
+            width = max(base_width, int(percent * available_space))
+            hheader.resizeSection(column_index, width)
 
 #-------------------------------------------------------------------------------
 #  Editor for configuring the filters available to a TableEditor:
