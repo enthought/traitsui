@@ -220,11 +220,10 @@ class IPythonController(WxController):
         Overridden to generate a continuation prompt matching the length of the
         current prompt."""
         
-        # FIXME: This is a bad hack.. I need to find a way to use the 'Prompt2'
-        # class in IPython/kernel/prompts.py. Basically, I am trying to get the
-        # length of the current prompt ("In ['number']").
-        return ("."*(6+self.last_result['number']/10) + ':')
-    
+        # This assumes that the prompt is always of the form 'In [#]'.
+        n = self.last_result['number']
+        promptstr = "In [%d]" % n
+        return ("."*len(promptstr) + ':')    
     
     def _popup_completion(self, create=False):
         """ Updates the popup completion menu if it exists. If create is 
