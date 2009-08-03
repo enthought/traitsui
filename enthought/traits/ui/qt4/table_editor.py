@@ -213,7 +213,16 @@ class TableEditor(Editor, BaseTableEditor):
         signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
         QtCore.QObject.connect(self.table_view, signal, self._on_dclick)
 
-        # Set up listeners for any column definitions changing
+        # Make sure we listen for 'items' changes as well as complete list
+        # replacements
+        self.context_object.on_trait_change(
+            self.update_editor, self.extended_name + '_items', dispatch='ui')
+
+        # Listen for changes to traits on the objects in the list
+        self.context_object.on_trait_change( 
+            self.refresh_editor, self.extended_name + '.-', dispatch='ui')
+
+        # Listen for changes on column definitions
         self.on_trait_change(self._update_columns, 'columns', dispatch='ui')
         self.on_trait_change(self._update_columns, 'columns_items', 
                              dispatch='ui')
@@ -243,7 +252,15 @@ class TableEditor(Editor, BaseTableEditor):
         if self._ui is not None:
             self._ui.dispose()
 
-        # Remove listeners for any column definitions changing
+        # Remove listener for 'items' changes on object trait
+        self.context_object.on_trait_change(
+            self.update_editor, self.extended_name + '_items', remove=True)
+
+        # Remove listener for changes to traits on the objects in the list
+        self.context_object.on_trait_change( 
+            self.refresh_editor, self.extended_name + '.-', remove=True)
+
+        # Remove listeners for column definition changes
         self.on_trait_change(self._update_columns, 'columns', remove=True)
         self.on_trait_change(self._update_columns, 'columns_items', remove=True)
 
@@ -259,7 +276,7 @@ class TableEditor(Editor, BaseTableEditor):
 
         filtering = len(self.factory.filters) > 0
         if filtering:
-            self.update_filtering()
+            self._update_filtering()
         if filtering or self.factory.sortable:
             self.model.invalidate()
 
@@ -267,6 +284,15 @@ class TableEditor(Editor, BaseTableEditor):
             self.table_view.resizeColumnsToContents()
 
         self.set_selection(self.selected)
+
+    #---------------------------------------------------------------------------
+    #  Requests that the underlying table widget to redraw itself:
+    #---------------------------------------------------------------------------
+
+    def refresh_editor(self):
+        """Requests that the underlying table widget to redraw itself."""
+
+        self.table_view.viewport().update()
 
     #---------------------------------------------------------------------------
     #  Creates a new row object using the provided factory:
@@ -401,7 +427,7 @@ class TableEditor(Editor, BaseTableEditor):
         else:
             self.setx(filter = filter)
 
-    def update_filtering(self):
+    def _update_filtering(self):
         """Update the filter summary and the filtered indices."""
 
         items = self.items()
@@ -452,7 +478,7 @@ class TableEditor(Editor, BaseTableEditor):
             if new_filter is customize_filter:
                 do_later(self._customize_filters, old_filter)
             else:
-                self.update_filtering()
+                self._update_filtering()
                 self.model.invalidate()
                 self.set_selection(self.selected)
 
@@ -809,7 +835,7 @@ class TableView(QtGui.QTableView):
             width += self.sizeHintForColumn(column, allow_proportional=False)
         size_hint.setWidth(width)
 	 	 
-        return size_hint 
+        return size_hint
 
     def sizeHintForColumn(self, column_index, allow_proportional=True):
         """Reimplemented to support width specification via TableColumns. Added
@@ -821,7 +847,7 @@ class TableView(QtGui.QTableView):
 
         # Autosize based on column contents and label width. Qt's default
         # implementation of this function does content, we handle the label.
-        if editor.factory.auto_size or requested_width < 0:
+        if requested_width < 0:
             base_width = QtGui.QTableView.sizeHintForColumn(self, column_index)
 
             # Determine what font to use in the calculation
