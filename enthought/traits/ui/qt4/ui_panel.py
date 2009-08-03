@@ -823,31 +823,31 @@ class _GroupPanel(object):
             scrollable  = editor.scrollable
             item_width  = item.width
             item_height = item.height
-            growable    = 0
-            # FIXME: For the moment ignore any item size until we understand
-            # what the visual effect is supposed to be (ie. we have an example).
-            item_width = item_height = -1
             if (item_width != -1) or (item_height != -1):
                 is_horizontal = (self.direction == QtGui.QBoxLayout.LeftToRight)
-                width = control.width()
-                height = control.height()
+                
+                min_size = control.minimumSizeHint()
+                width = min_size.width()
+                height = min_size.height()
 
                 if (0.0 < item_width <= 1.0) and is_horizontal:
-                    growable = int( 1000.0 * item_width )
+                    policy = control.sizePolicy()
+                    policy.setHorizontalStretch( int( 100 * item_width ) )
+                    control.setSizePolicy( policy )
 
                 item_width = int( item_width )
                 if item_width < -1:
                     item_width  = -item_width
-                    fixed_width = True
                 else:
                     item_width = max( item_width, width )
 
                 if (0.0 < item_height <= 1.0) and (not is_horizontal):
-                    growable = int( 1000.0 * item_height )
+                    policy = control.sizePolicy()
+                    policy.setVerticalStretch( int( 100 * item_height ) )
+                    control.setSizePolicy( policy )
 
                 if item_height < -1:
                     item_height = -item_height
-                    scrollable  = False
                 else:
                     item_height = max( item_height, height )
 
