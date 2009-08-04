@@ -103,7 +103,7 @@ class ApplicationWindow(MApplicationWindow, Window):
         tool_bar_managers = self._get_tool_bar_managers()
         if len(tool_bar_managers) > 0:
             if AUI:
-                for tool_bar_manager in tool_bar_managers:
+                for tool_bar_manager in reversed(tool_bar_managers):
                     tool_bar = tool_bar_manager.create_tool_bar(parent)
                     self._add_toolbar_to_aui_manager(
                         tool_bar, tool_bar_manager.name
