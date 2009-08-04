@@ -99,6 +99,9 @@ class CustomEditor(Editor):
         """
         self.control = QtGui.QCalendarWidget()
 
+        if not self.factory.allow_future:
+            self.control.setMaximumDate(QtCore.QDate.currentDate())
+
         signal = QtCore.SIGNAL('clicked(QDate)')
         QtCore.QObject.connect(self.control, signal, self.update_object)
         
@@ -136,7 +139,7 @@ class CustomEditor(Editor):
 #------------------------------------------------------------------------------
 
 class ReadonlyEditor(BaseReadonlyEditor):
-    """ Readonly Traits UI date editor that uses a TextEditor for the view.
+    """ Readonly Traits UI date editor that uses a QLabel for the view.
     """
  
     def _get_str_value(self):
