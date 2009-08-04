@@ -166,8 +166,9 @@ class CustomEditor ( SimpleEditor ):
     def create_control ( self, parent ):
         """ Creates the initial editor control.
         """
-        # The control is a grid layout.
-        self.control = QtGui.QGridLayout()
+        self.control = QtGui.QWidget()
+        layout = QtGui.QGridLayout(self.control)
+        layout.setMargin(0)
 
         self._mapper = QtCore.QSignalMapper()
         QtCore.QObject.connect(self._mapper,
@@ -198,8 +199,8 @@ class CustomEditor ( SimpleEditor ):
         incr[-1] = -(reduce( lambda x, y: x + y, incr[:-1], 0 ) - 1)
 
         # Add the set of all possible choices:
+        layout = self.control.layout()
         index = 0
-
         for i in range( rows ):
             for j in range( cols ):
                 if n > 0:
@@ -215,7 +216,7 @@ class CustomEditor ( SimpleEditor ):
                             self._mapper, QtCore.SLOT('map()'))
                     self._mapper.setMapping(cb, cb)
 
-                    self.control.addWidget(cb, i, j)
+                    layout.addWidget(cb, i, j)
 
                     index += incr[j]
                     n -= 1
@@ -265,7 +266,7 @@ class TextEditor ( BaseTextEditor ):
     #  Handles the user changing the contents of the edit control:
     #---------------------------------------------------------------------------
 
-    def update_object ( self, event ):
+    def update_object ( self, event=None ):
         """ Handles the user changing the contents of the edit control.
         """
         try:

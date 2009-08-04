@@ -2,9 +2,6 @@
 Bugs
 ====
 
-* Custom style of CheckListEditor does not update correctly when the object
-  trait changes
-
 * Text style of ColorEditor does not update correctly when edited (object trait
   updates, editor color does not)
 

@@ -313,8 +313,9 @@ class RadioEditor ( BaseEditor ):
         """
         super( RadioEditor, self ).init( parent )
 
-        # The control is a grid layout.
-        self.control = QtGui.QGridLayout()
+        self.control = QtGui.QWidget()
+        layout = QtGui.QGridLayout(self.control)
+        layout.setMargin(0)
 
         self._mapper = QtCore.QSignalMapper()
         QtCore.QObject.connect(self._mapper,
@@ -342,9 +343,10 @@ class RadioEditor ( BaseEditor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
+        layout = self.control.layout()
         value = self.value
-        for i in range(self.control.count()):
-            rb = self.control.itemAt(i).widget()
+        for i in range(layout.count()):
+            rb = layout.itemAt(i).widget()
             rb.setChecked(rb.value == value)
 
     #---------------------------------------------------------------------------
@@ -375,8 +377,8 @@ class RadioEditor ( BaseEditor ):
         incr[-1] = -(reduce( lambda x, y: x + y, incr[:-1], 0 ) - 1)
 
         # Add the set of all possible choices:
+        layout = self.control.layout()
         index = 0
-
         for i in range( rows ):
             for j in range( cols ):
                 if n > 0:
@@ -392,7 +394,7 @@ class RadioEditor ( BaseEditor ):
                     self._mapper.setMapping(rb, rb)
 
                     self.set_tooltip(rb)
-                    self.control.addWidget(rb, i, j)
+                    layout.addWidget(rb, i, j)
 
                     index += incr[j]
                     n -= 1

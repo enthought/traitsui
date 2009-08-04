@@ -146,14 +146,15 @@ class CustomFontEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        # The control is a vertical layout.
-        self.control = QtGui.QVBoxLayout()
+        self.control = QtGui.QWidget()
+        layout = QtGui.QVBoxLayout(self.control)
+        layout.setMargin(0)
 
         # Add the standard font control:
         self._font = font = QtGui.QLineEdit(self.str_value)
         QtCore.QObject.connect(font, QtCore.SIGNAL('editingFinished()'),
                 self.update_object)
-        self.control.addWidget(font)
+        layout.addWidget(font)
 
         # Add all of the font choice controls:
         layout2 = QtGui.QHBoxLayout()
@@ -175,7 +176,7 @@ class CustomFontEditor ( Editor ):
         # These don't have explicit controls.
         self._bold = self._italic = False
 
-        self.control.addLayout(layout2)
+        layout.addLayout(layout2)
 
     #---------------------------------------------------------------------------
     #  Handles the user changing the contents of the font text control:

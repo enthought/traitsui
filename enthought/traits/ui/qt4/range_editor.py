@@ -116,8 +116,9 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
 
-        # The control is a horizontal layout.
-        self.control = panel = QtGui.QHBoxLayout()
+        self.control = QtGui.QWidget()
+        panel = QtGui.QHBoxLayout(self.control)
+        panel.setMargin(0)
 
         fvalue = self.value
 
@@ -137,7 +138,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
             self._label_lo.setMinimumWidth(factory.label_width)
         panel.addWidget(self._label_lo)
 
-        panel.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.control.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
         slider.setTracking(factory.auto_set)
         slider.setMinimum(0)
         slider.setMaximum(10000)
@@ -153,7 +154,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         if factory.label_width > 0:
             self._label_hi.setMinimumWidth(factory.label_width)
 
-        panel.text = text = QtGui.QLineEdit(fvalue_text)
+        self.control.text = text = QtGui.QLineEdit(fvalue_text)
         QtCore.QObject.connect(text, QtCore.SIGNAL('editingFinished()'),
                 self.update_object_on_enter)
 
@@ -383,8 +384,9 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
 
         self._set_format()
 
-        # The control is a horizontal layout.
-        self.control = panel = QtGui.QHBoxLayout()
+        self.control = QtGui.QWidget()
+        panel = QtGui.QHBoxLayout(self.control)
+        panel.setMargin(0)
 
         fvalue = self.value
 
@@ -401,17 +403,17 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
             ivalue = low
 
         # Lower limit label:
-        panel.label_lo = label_lo = QtGui.QLabel()
+        self.control.label_lo = label_lo = QtGui.QLabel()
         label_lo.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         panel.addWidget(label_lo)
 
         # Lower limit button:
-        panel.button_lo = IconButton(QtGui.QStyle.SP_ArrowLeft,
+        self.control.button_lo = IconButton(QtGui.QStyle.SP_ArrowLeft,
                 self.reduce_range)
-        panel.addWidget(panel.button_lo)
+        panel.addWidget(self.control.button_lo)
 
         # Slider:
-        panel.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.control.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
         slider.setTracking(factory.auto_set)
         slider.setMinimum(0)
         slider.setMaximum(10000)
@@ -423,16 +425,16 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
         panel.addWidget(slider)
 
         # Upper limit button:
-        panel.button_hi = IconButton(QtGui.QStyle.SP_ArrowRight,
+        self.control.button_hi = IconButton(QtGui.QStyle.SP_ArrowRight,
                 self.increase_range)
-        panel.addWidget(panel.button_hi)
+        panel.addWidget(self.control.button_hi)
 
         # Upper limit label:
-        panel.label_hi = label_hi = QtGui.QLabel()
+        self.control.label_hi = label_hi = QtGui.QLabel()
         panel.addWidget(label_hi)
 
         # Text entry:
-        panel.text = text = QtGui.QLineEdit(fvalue_text)
+        self.control.text = text = QtGui.QLineEdit(fvalue_text)
         QtCore.QObject.connect(text, QtCore.SIGNAL('editingFinished()'),
                 self.update_object_on_enter)
 

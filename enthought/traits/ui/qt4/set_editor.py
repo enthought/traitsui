@@ -31,7 +31,7 @@ from editor \
     import Editor
     
 from enthought.traits.api \
-    import Property
+    import Instance, Property
     
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -50,6 +50,9 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Trait definitions:  
     #---------------------------------------------------------------------------
+
+    # The top level QLayout for the editor:
+    root_layout = Instance(QtGui.QLayout)
         
     # Current set of enumeration names:
     names = Property
@@ -72,6 +75,10 @@ class SimpleEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        self.control = QtGui.QWidget()
+        self.root_layout = QtGui.QGridLayout(self.control)
+        self.root_layout.setMargin(0)
+
         factory = self.factory
         if factory.name != '':
             self._object, self._name, self._value = \
@@ -82,9 +89,7 @@ class SimpleEditor ( Editor ):
         else:
             factory.on_trait_change( self.update_editor, 'values_modified', 
                                      dispatch = 'ui' )
-            
-        # The control is a grid layout.
-        self.control = QtGui.QGridLayout()
+
         blayout = QtGui.QVBoxLayout()
 
         self._unused = self._create_listbox(0, self._on_unused, self._on_use,
@@ -108,7 +113,7 @@ class SimpleEditor ( Editor ):
             self._down = self._create_button('Move Down', blayout,
                     self._on_down)
             
-        self.control.addLayout(blayout, 1, 1, QtCore.Qt.AlignCenter)
+        self.root_layout.addLayout(blayout, 1, 1, QtCore.Qt.AlignCenter)
 
         self._used = self._create_listbox(2, self._on_value, self._on_unuse,
                 factory.right_column_title)
@@ -165,12 +170,12 @@ class SimpleEditor ( Editor ):
         font.setBold(True)
         font.setPointSize(font.pointSize() + 1)
         title_widget.setFont(font)
-        self.control.addWidget(title_widget, 0, col, QtCore.Qt.AlignLeft)
+        self.root_layout.addWidget(title_widget, 0, col, QtCore.Qt.AlignLeft)
 
         # Create the list box and add it to the column:
         list = QtGui.QListWidget()
         list.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        self.control.addWidget(list, 1, col)
+        self.root_layout.addWidget(list, 1, col)
 
         list.connect(list,
                 QtCore.SIGNAL('itemClicked(QListWidgetItem *)'), handler1)

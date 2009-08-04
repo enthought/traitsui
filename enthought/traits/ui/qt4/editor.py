@@ -36,10 +36,11 @@ class Editor ( UIEditor ):
     """
 
     def clear_layout(self):
-        """Delete the contents of the control when it is a layout.
+        """ Delete the contents of a control's layout.
         """
+        layout = self.control.layout()
         while True:
-            itm = self.control.takeAt(0)
+            itm = layout.takeAt(0)
             if itm is None:
                 break
 
