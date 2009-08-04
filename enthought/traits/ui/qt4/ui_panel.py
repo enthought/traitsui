@@ -12,6 +12,9 @@
 """Creates a panel-based PyQt user interface for a specified UI object.
 """
 
+#-------------------------------------------------------------------------------
+#  Imports:
+#-------------------------------------------------------------------------------
 
 import cgi
 import re
@@ -668,11 +671,8 @@ class _GroupPanel(object):
             if name == '':
                 label = item.label
                 if label != "":
-                    # If we are building a multi-column layout with labels, 
-                    # just add space in the next column:
-                    if columns > 1 and show_labels:
-                        col += 1
 
+                    # Create the label widget.
                     if item.style == 'simple':
                         label = QtGui.QLabel(label)
                     else:
@@ -681,7 +681,13 @@ class _GroupPanel(object):
                     if row < 0:
                         inner.addWidget(label)
                     else:
-                        inner.addWidget(label, row, col)
+                        # Skip the row we are about to do.
+                        row += 1 
+                        
+                        if self.direction == QtGui.QBoxLayout.LeftToRight:
+                            inner.addWidget(label, col, row)
+                        else:
+                            inner.addWidget(label, row, col)
 
                     if item.emphasized:
                         self._add_emphasis(label)
@@ -713,7 +719,6 @@ class _GroupPanel(object):
                     if self.direction == QtGui.QBoxLayout.LeftToRight:
                         # Add a vertical separator:
                         line.setFrameShape(QtGui.QFrame.VLine)
-
                         if row < 0:
                             inner.addWidget(line)
                         else:
@@ -721,7 +726,6 @@ class _GroupPanel(object):
                     else:
                         # Add a horizontal separator:
                         line.setFrameShape(QtGui.QFrame.HLine)
-
                         if row < 0:
                             inner.addWidget(line)
                         else:
@@ -744,14 +748,17 @@ class _GroupPanel(object):
                 if row < 0:
                     inner.addSpacing(n)
                 else:
+                    # Skip the row we are about to use.
+                    row += 1
+
                     if self.direction == QtGui.QBoxLayout.LeftToRight:
+                        # Add a horizontal spacer:
                         spacer = QtGui.QSpacerItem(n, 1)
-                        inner.addItem(spacer, row, i)
+                        inner.addItem(spacer, col, row)
                     else:
+                        # Add a vertical spacer:
                         spacer = QtGui.QSpacerItem(1, n)
-                        inner.addItem(spacer, row, i)
-                        if show_labels:
-                            inner.addItem(spacer, row, i)
+                        inner.addItem(spacer, row, col)
 
                 # Continue on to the next Item in the list:
                 continue
