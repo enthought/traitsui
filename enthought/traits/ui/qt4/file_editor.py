@@ -59,26 +59,25 @@ class SimpleEditor ( SimpleTextEditor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        # The control is a horizontal layout.
-        self.control = QtGui.QHBoxLayout()
+        self.control = QtGui.QWidget()
+        layout = QtGui.QHBoxLayout(self.control)
+        layout.setMargin(0)
 
         self._file_name = control = QtGui.QLineEdit()
+        layout.addWidget(control)
 
         if self.factory.auto_set:
-            QtCore.QObject.connect(control,
-                    QtCore.SIGNAL('textEdited(QString)'), self.update_object)
+            signal = QtCore.SIGNAL('textEdited(QString)')
         else:
-            # Assume enter_set is set, otherwise the value will never get
-            # updated.
-            QtCore.QObject.connect(control, QtCore.SIGNAL('editingFinished()'),
-                    self.update_object)
-
-        self.control.addWidget(control)
+            # Assume enter_set is set, or else the value will never get updated.
+            signal = QtCore.SIGNAL('editingFinished()')
+        QtCore.QObject.connect(control, signal, self.update_object)
 
         button = QtGui.QPushButton("Browse...")
-        QtCore.QObject.connect(button, QtCore.SIGNAL('clicked()'),
-                self.show_file_dialog)
-        self.control.addWidget(button)
+        layout.addWidget(button)
+
+        QtCore.QObject.connect(button, QtCore.SIGNAL('clicked()'), 
+                               self.show_file_dialog)
 
         self.set_tooltip(control)
 
