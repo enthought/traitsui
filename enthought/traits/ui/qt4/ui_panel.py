@@ -631,17 +631,11 @@ class _GroupPanel(object):
                 outer.addLayout(inner)
 
             row = 0
-
             if show_left:
                 label_alignment = QtCore.Qt.AlignRight
-                if show_labels:
-                    for i in range(1, group.columns * 2, 2):
-                        inner.setColumnStretch(i, 1)
             else:
                 label_alignment = QtCore.Qt.AlignLeft
-                if show_labels:
-                    for i in range(0, group.columns * 2, 2):
-                        inner.setColumnStretch(i, 1)
+                
         else:
             # Use the existing layout if there is one.
             if outer is None:
@@ -654,12 +648,11 @@ class _GroupPanel(object):
 
         # Process each Item in the list:
         col = -1
-
         for item in content:
+
             # Keep a track of the current logical row and column unless the
             # layout is not a grid.
             col += 1
-
             if row >= 0 and col >= columns:
                 col = 0
                 row += 1
@@ -678,16 +671,7 @@ class _GroupPanel(object):
                     else:
                         label = heading_text(None, text=label).control
 
-                    if row < 0:
-                        inner.addWidget(label)
-                    else:
-                        # Skip the row we are about to do.
-                        row += 1 
-                        
-                        if self.direction == QtGui.QBoxLayout.LeftToRight:
-                            inner.addWidget(label, col, row)
-                        else:
-                            inner.addWidget(label, row, col)
+                    self._add_widget(inner, label, row, col, show_labels)
 
                     if item.emphasized:
                         self._add_emphasis(label)
@@ -743,22 +727,16 @@ class _GroupPanel(object):
             # Check if it is a spacer:
             if all_digits.match( name ):
 
-                # If so, add the appropriate amount of space to the sizer:
+                # If so, add the appropriate amount of space to the layout:
                 n = int( name )
-                if row < 0:
-                    inner.addSpacing(n)
+                if self.direction == QtGui.QBoxLayout.LeftToRight:
+                    # Add a horizontal spacer:
+                    spacer = QtGui.QSpacerItem(n, 1)
                 else:
-                    # Skip the row we are about to use.
-                    row += 1
+                    # Add a vertical spacer:
+                    spacer = QtGui.QSpacerItem(1, n)
 
-                    if self.direction == QtGui.QBoxLayout.LeftToRight:
-                        # Add a horizontal spacer:
-                        spacer = QtGui.QSpacerItem(n, 1)
-                        inner.addItem(spacer, col, row)
-                    else:
-                        # Add a vertical spacer:
-                        spacer = QtGui.QSpacerItem(1, n)
-                        inner.addItem(spacer, row, col)
+                self._add_widget(inner, spacer, row, col, show_labels)
 
                 # Continue on to the next Item in the list:
                 continue
@@ -773,7 +751,7 @@ class _GroupPanel(object):
             if item.show_label:
                 label = self._create_label(item, ui, desc)
                 self._add_widget(inner, label, row, col, show_labels,
-                        label_alignment)
+                                 label_alignment)
             else:
                 label = None
 
@@ -912,7 +890,8 @@ class _GroupPanel(object):
 
         return outer
 
-    def _add_widget(self, layout, w, row, column, show_labels, label_alignment=QtCore.Qt.AlignmentFlag(0)):
+    def _add_widget(self, layout, w, row, column, show_labels, 
+                    label_alignment=QtCore.Qt.AlignmentFlag(0)):
         """Adds a widget to a layout taking into account the orientation and
            the position of any labels.
         """
@@ -923,12 +902,14 @@ class _GroupPanel(object):
             if wl is not None:
                 wl.setMargin(0)
 
+        # See if the layout is a grid.
         if row < 0:
-            # It's not a grid layout.
             if isinstance(w, QtGui.QWidget):
                 layout.addWidget(w)
-            else:
+            elif isinstance(w, QtGui.QLayout):
                 layout.addLayout(w)
+            else:
+                layout.addItem(w)
 
         else:
             if self.direction == QtGui.QBoxLayout.LeftToRight:
@@ -938,15 +919,19 @@ class _GroupPanel(object):
             if show_labels:
                 # Convert the "logical" column to a "physical" one.
                 column *= 2
-
+                    
+                # Determine whether to place widget on left or right of 
+                # "logical" column.
                 if (label_alignment != 0 and not self.group.show_left) or \
                    (label_alignment == 0 and self.group.show_left):
                     column += 1
 
             if isinstance(w, QtGui.QWidget):
                 layout.addWidget(w, row, column, label_alignment)
-            else:
+            elif isinstance(w, QtGui.QLayout):
                 layout.addLayout(w, row, column, label_alignment)
+            else:
+                layout.addItem(w, row, column, 1, 1, label_alignment)
 
     def _create_label(self, item, ui, desc, suffix = ':'):
         """Creates an item label.
