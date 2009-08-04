@@ -127,7 +127,12 @@ class ReadonlyEditor ( Editor ):
             widget.
         """
         self.control = QtGui.QLabel(self.str_value)
-        self.control.setWordWrap(True)
+
+        if self.item.resizable is True or self.item.height != -1.0:
+            self.control.setSizePolicy(QtGui.QSizePolicy.Expanding,
+                                       QtGui.QSizePolicy.Expanding)
+            self.control.setWordWrap(True)
+
         self.set_tooltip()
         
     #---------------------------------------------------------------------------

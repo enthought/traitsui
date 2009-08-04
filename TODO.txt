@@ -9,9 +9,6 @@ Bugs
   (this can be observed by running the Traits UI Demo application, selecting the
   demo view tab for a demo, and then clicking on a new demo in the tree).
 
-* Readonly style TextEditor has wrapping problems (observe status text in
-  "Invalid state handling" Advanced Demo)
-
 ================
 Missing features
 ================
