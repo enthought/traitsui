@@ -15,3 +15,5 @@ enthought/traits/ui/qt4/images:
                        closetab.png | Qt
                           frame.png | Enthought
                     list_editor.png | Enthought
+                           next.png | Qt
+                       previous.png | Qt

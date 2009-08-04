@@ -24,26 +24,20 @@ from PyQt4.Qsci import QsciScintillaBase as QsciBase
 if Qsci.QSCINTILLA_VERSION < 0x20300:
     raise RuntimeError, "QScintilla version 2.3 or higher needed for CodeEditor"
 
-from enthought.traits.api \
-    import Str, Unicode, List, Int, Event, Bool, TraitError, on_trait_change
-
-from enthought.traits.trait_base \
-    import SequenceTypes
+from enthought.traits.api import Str, Unicode, List, Int, Event, Bool, \
+    TraitError, on_trait_change
+from enthought.traits.trait_base import SequenceTypes
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the 
 # enthought.traits.ui.editors.code_editor file.
-from enthought.traits.ui.editors.code_editor \
-    import ToolkitEditorFactory
+from enthought.traits.ui.editors.code_editor import ToolkitEditorFactory
 
-from enthought.pyface.api \
-    import PythonEditor
-    
-from editor \
-    import Editor
-    
-from constants \
-    import OKColor, ErrorColor
+from enthought.pyface.api import PythonEditor
+
+from constants import OKColor, ErrorColor    
+from editor import Editor
+from helper import pixmap_cache
 
 #-------------------------------------------------------------------------------
 #  Constants:  
@@ -80,6 +74,112 @@ LEXER_MAP = { QsciBase.SCLEX_BASH: Qsci.QsciLexerBash,
               QsciBase.SCLEX_YAML: Qsci.QsciLexerYAML }
 
 #-------------------------------------------------------------------------------
+#  'FindWidget' class:
+#-------------------------------------------------------------------------------
+
+class FindWidget ( QtGui.QWidget ):
+    """ A find widget a la the find bar in Firefox.
+    """
+
+    def __init__(self, callback, parent=None):
+        """ Creates a FindWidget. 'callback' should be function of signature: 
+            (string text, bool forward, bool match_case).
+        """
+        QtGui.QWidget.__init__(self, parent)
+        self._callback = callback
+        
+        layout = QtGui.QHBoxLayout(self)
+        layout.setSpacing(5)
+        layout.setMargin(0)
+
+        self.close_button = QtGui.QToolButton(self)
+        self.close_button.setAutoRaise(True)
+        self.close_button.setIcon(QtGui.QIcon(pixmap_cache('closetab.png')))
+        QtCore.QObject.connect(self.close_button, QtCore.SIGNAL('clicked()'),
+                               self, QtCore.SLOT('hide()'))
+        layout.addWidget(self.close_button)
+
+        self.find_edit = QtGui.QLineEdit(self)
+        self.find_edit.setMinimumSize(QtCore.QSize(100, 0))
+        signal = QtCore.SIGNAL('textChanged(QString)')
+        QtCore.QObject.connect(self.find_edit, signal, self.update_buttons)
+        signal = QtCore.SIGNAL('returnPressed()')
+        QtCore.QObject.connect(self.find_edit, signal, self._next_clicked)
+        layout.addWidget(self.find_edit)
+
+        self.previous_button = QtGui.QToolButton(self)
+        self.previous_button.setAutoRaise(True)
+        self.previous_button.setIcon(QtGui.QIcon(pixmap_cache('previous.png')))
+        self.previous_button.setText('Previous')
+        self.previous_button.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+        signal = QtCore.SIGNAL('clicked()')
+        QtCore.QObject.connect(self.previous_button, signal, self._previous_clicked)
+        layout.addWidget(self.previous_button)
+
+        self.next_button = QtGui.QToolButton(self)
+        self.next_button.setAutoRaise(True)
+        self.next_button.setIcon(QtGui.QIcon(pixmap_cache('next.png')))
+        self.next_button.setText('Next')
+        self.next_button.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+        signal = QtCore.SIGNAL('clicked()')
+        QtCore.QObject.connect(self.next_button, signal, self._next_clicked)
+        layout.addWidget(self.next_button)
+
+        self.case_box = QtGui.QCheckBox('Match case', self)
+        layout.addWidget(self.case_box)
+
+        # Align items to left and prevent text field from growing too large
+        layout.addItem(QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Expanding,
+                                         QtGui.QSizePolicy.Minimum))
+
+        self.update_buttons()
+    
+    #---------------------------------------------------------------------------
+    #  QWidget interface:  
+    #---------------------------------------------------------------------------
+
+    def keyPressEvent(self, event):
+        """ Reimplemented to process Escape key.
+        """
+        if event.key() == QtCore.Qt.Key_Escape:
+            event.accept()
+            self.hide()
+        else:
+            QtGui.QWidget.keyPressEvent(self, event)
+
+    def showEvent(self, event):
+        """ Reimplemented to select all in text field and grab focus.
+        """
+        QtGui.QWidget.showEvent(self, event)
+
+        self.find_edit.selectAll()
+        self.find_edit.setFocus()
+
+    #---------------------------------------------------------------------------
+    #  FindWidget interface:
+    #---------------------------------------------------------------------------
+
+    def update_buttons(self, event=None):
+        """ Enable or disable buttons depending on state of text field.
+        """
+        if self.find_edit.text() == '':
+            self.previous_button.setEnabled(False)
+            self.next_button.setEnabled(False)
+        else:
+            self.previous_button.setEnabled(True)
+            self.next_button.setEnabled(True)
+
+    def _previous_clicked(self):
+        """ Handle the previous button being clicked.
+        """
+        self._callback(self.find_edit.text(), False, self.case_box.isChecked())
+
+    def _next_clicked(self):
+        """ Handle the previous button being clicked.
+        """
+        self._callback(self.find_edit.text(), True, self.case_box.isChecked())
+
+#-------------------------------------------------------------------------------
 #  'SourceLexer' class:
 #-------------------------------------------------------------------------------
 
@@ -103,7 +203,7 @@ class SourceLexer ( Qsci.QsciLexerCustom ):
     def styleText(self, start, end):
         """ Overriden to perform custom styling.
         """
-        control = self._editor.control
+        control = self._editor._scintilla
         start_line = control.lineIndexFromPosition(start)[0]
         end_line = control.lineIndexFromPosition(end)[0]
 
@@ -174,7 +274,7 @@ class SourceEditor ( Editor ):
     # The current column
     column = Event
 
-    # The Scintilla lexer use
+    # The Scintilla lexer to use
     lexer = Int
 
     # The lines to be dimmed
@@ -195,26 +295,32 @@ class SourceEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        self.control = QtGui.QWidget()
+        self.control.setMinimumWidth(640)
+        layout = QtGui.QVBoxLayout(self.control)
+        layout.setMargin(0)
+
+        # Create the QScintilla widget
         factory = self.factory
         self._editor = editor = PythonEditor(None,
                 show_line_numbers = factory.show_line_numbers)
-        self.control = control = editor.control
+        self._scintilla = control = editor.control
+        QtCore.QObject.connect(control, QtCore.SIGNAL('lostFocus'), 
+                               self.update_object)
+        layout.addWidget(control)
 
-        control.connect(control, QtCore.SIGNAL('lostFocus'), self.update_object)
-
-        if factory.auto_set:
-            editor.on_trait_change( self.update_object, 'changed', 
-                                    dispatch = 'ui' )
-        if factory.key_bindings is not None:
-            editor.on_trait_change( self.key_pressed, 'key_pressed', 
-                                    dispatch = 'ui' )
         if self.readonly:
             control.setReadOnly(True)
 
+        # Create the find bar
+        self._find_widget = FindWidget(self.find, self.control)
+        self._find_widget.hide()
+        layout.addWidget(self._find_widget)
+        
         # Set up the lexer. Before we set our custom lexer, we call setLexer
-        # with the QSciLexer that will set the keywords and styles for our
+        # with the QSciLexer that will set the keywords and styles for the
         # basic syntax lexing. We save and then restore these keywords/styles 
-        # because they get nuked when call setLexer again.
+        # because they get nuked when we call setLexer again.
         self.lexer = getattr(QsciBase, 'SCLEX_' + self.factory.lexer.upper(),
                              QsciBase.SCLEX_NULL)
         lexer_class = LEXER_MAP.get(self.lexer)
@@ -254,6 +360,11 @@ class SourceEditor ( Editor ):
         self.update_editor()
         
         # Set up any event listeners:
+        if factory.auto_set:
+            editor.on_trait_change(self.update_object, 'changed', dispatch='ui')
+
+        editor.on_trait_change(self._key_pressed, 'key_pressed', dispatch='ui')
+
         self.sync_value( factory.mark_lines, 'mark_lines', 'from',
                          is_list = True )
         self.sync_value( factory.selected_line, 'selected_line', 'from' )
@@ -279,7 +390,24 @@ class SourceEditor ( Editor ):
             control.connect(control,
                     QtCore.SIGNAL('cursorPositionChanged(int, int)'),
                     self._position_changed)
+
         self.set_tooltip()
+
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:    
+    #---------------------------------------------------------------------------
+                
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        editor = self._editor
+
+        if self.factory.auto_set:
+            editor.on_trait_change(self.update_object, 'changed', remove=True)
+                                         
+        editor.on_trait_change(self._key_pressed, 'key_pressed', remove=True)
+
+        super( SourceEditor, self ).dispose()
     
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
@@ -290,11 +418,11 @@ class SourceEditor ( Editor ):
         """
         if not self._locked:
             try:
-                value = unicode(self.control.text())
+                value = unicode(self._scintilla.text())
                 if isinstance( self.value, SequenceTypes ):
                     value = value.split()
                 self.value = value
-                self.control.lexer().setPaper(OKColor)
+                self._scintilla.lexer().setPaper(OKColor)
             except TraitError, excp:
                 pass
         
@@ -310,7 +438,7 @@ class SourceEditor ( Editor ):
         new_value = self.value
         if isinstance( new_value, SequenceTypes ):
             new_value = '\n'.join( [ line.rstrip() for line in new_value ] )
-        control = self.control
+        control = self._scintilla
         if control.text() != new_value:
             readonly = control.isReadOnly()
             control.setReadOnly(False)
@@ -324,102 +452,7 @@ class SourceEditor ( Editor ):
             self._mark_lines_changed()
             self._selected_line_changed()
         self._locked = False
-        
-    #---------------------------------------------------------------------------
-    #  Handles the set of 'marked lines' being changed:  
-    #---------------------------------------------------------------------------
-                
-    def _mark_lines_changed ( self ):
-        """ Handles the set of marked lines being changed.
-        """
-        lines   = self.mark_lines
-        control = self.control
-        lc      = control.lines()
-        control.markerDeleteAll(MARK_MARKER)
-        for line in lines:
-            if 0 < line <= lc:
-                control.markerAdd(line - 1, MARK_MARKER)
 
-    def _mark_lines_items_changed ( self ):
-        self._mark_lines_changed()
-        
-    #---------------------------------------------------------------------------
-    #  Handles the currently 'selected line' being changed:  
-    #---------------------------------------------------------------------------
-                
-    def _selected_line_changed ( self ):
-        """ Handles a change in which line is currently selected.
-        """
-        line    = self.selected_line
-        control = self.control
-        line    = max(1, min(control.lines(), line)) - 1
-        control.markerDeleteAll(SELECTED_MARKER)
-        control.markerAdd(line, SELECTED_MARKER)
-        _, column = control.getCursorPosition()
-        control.setCursorPosition(line, column)
-        if self.factory.auto_scroll:
-            control.ensureLineVisible(line)
-
-    #---------------------------------------------------------------------------
-    #  Handles the 'line' trait being changed:  
-    #---------------------------------------------------------------------------
-                                              
-    def _line_changed ( self, line ):
-        if not self._locked:
-            _, column = control.getCursorPosition()
-            self.control.setCursorPosition(line - 1, column)
-                                  
-    #---------------------------------------------------------------------------
-    #  Handles the 'column' trait being changed:  
-    #---------------------------------------------------------------------------
-                                              
-    def _column_changed ( self, column ):
-        if not self._locked:
-            line, _ = control.getCursorPosition()
-            self.control.setCursorPosition(line, column - 1)
-
-    #---------------------------------------------------------------------------
-    #  Handles the cursor position being changed:  
-    #---------------------------------------------------------------------------
-                        
-    def _position_changed(self, line, column):
-        """ Handles the cursor position being changed.
-        """
-        self._locked = True
-        self.line = line
-        self.column = column
-        self._locked = False
-        self.selected_text = unicode(control.selectedText())
-        
-    #---------------------------------------------------------------------------
-    #  Handles a key being pressed within the editor:    
-    #---------------------------------------------------------------------------
-                
-    def key_pressed ( self, event ):
-        """ Handles a key being pressed within the editor.
-        """
-        self.factory.key_bindings.do( event.event, self.ui.handler, 
-                                      self.ui.info )
-
-    #---------------------------------------------------------------------------
-    #  Handles the styling of the editor:
-    #---------------------------------------------------------------------------
-
-    def _dim_color_changed(self):
-        self.control.SendScintilla(QsciBase.SCI_STYLESETFORE, 
-                                   self.dim_style_number,
-                                   QtGui.QColor(self.dim_color))
-
-    def _squiggle_color_changed(self):
-        self.control.SendScintilla(QsciBase.SCI_INDICSETSTYLE, 2,
-                                   QsciBase.INDIC_SQUIGGLE)
-        self.control.SendScintilla(QsciBase.SCI_INDICSETFORE, 2,
-                                   QtGui.QColor(self.squiggle_color))
-
-    @on_trait_change('dim_lines, squiggle_lines')
-    def _style_document(self):
-        self.control.recolor()
-        
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
     #---------------------------------------------------------------------------
@@ -427,24 +460,24 @@ class SourceEditor ( Editor ):
     def error ( self, excp ):
         """ Handles an error that occurs while setting the object's trait value.
         """
-        self.control.lexer().setPaper(ErrorColor)
+        self._scintilla.lexer().setPaper(ErrorColor)
 
     #---------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:    
+    #  Finds and selects the next or previous match of text:
     #---------------------------------------------------------------------------
-                
-    def dispose ( self ):
-        """ Disposes of the contents of an editor.
+        
+    def find ( self, text, forward, match_case ):
+        """ Finds and selects the next or previous match of text.
         """
-        if self.factory.auto_set:
-            self._editor.on_trait_change( self.update_object, 'changed',
-                                          remove = True )
-        if self.factory.key_bindings is not None:
-            self._editor.on_trait_change( self.key_pressed, 'key_pressed',
-                                          remove = True )
+        line, index = self._scintilla.getCursorPosition()
+        if not forward:
+            index -= len(self._scintilla.selectedText())
 
-        super( SourceEditor, self ).dispose()
-                                          
+        # Arguments: expr, is regex, case_sensitive, whole words only, wrap
+        #            around, is forward, line, index in line
+        self._scintilla.findFirst(text, False, match_case, False, True, forward,
+                                  line, index)
+
     #-- UI preference save/restore interface -----------------------------------
 
     #---------------------------------------------------------------------------
@@ -469,6 +502,107 @@ class SourceEditor ( Editor ):
         """ Returns any user preference information associated with the editor.
         """
         return { 'key_bindings': self.factory.key_bindings }
+        
+    #---------------------------------------------------------------------------
+    #  Handles the set of 'marked lines' being changed:  
+    #---------------------------------------------------------------------------
+                
+    def _mark_lines_changed ( self ):
+        """ Handles the set of marked lines being changed.
+        """
+        lines   = self.mark_lines
+        control = self._scintilla
+        lc      = control.lines()
+        control.markerDeleteAll(MARK_MARKER)
+        for line in lines:
+            if 0 < line <= lc:
+                control.markerAdd(line - 1, MARK_MARKER)
+
+    def _mark_lines_items_changed ( self ):
+        self._mark_lines_changed()
+        
+    #---------------------------------------------------------------------------
+    #  Handles the currently 'selected line' being changed:  
+    #---------------------------------------------------------------------------
+                
+    def _selected_line_changed ( self ):
+        """ Handles a change in which line is currently selected.
+        """
+        line    = self.selected_line
+        control = self._scintilla
+        line    = max(1, min(control.lines(), line)) - 1
+        control.markerDeleteAll(SELECTED_MARKER)
+        control.markerAdd(line, SELECTED_MARKER)
+        _, column = control.getCursorPosition()
+        control.setCursorPosition(line, column)
+        if self.factory.auto_scroll:
+            control.ensureLineVisible(line)
+
+    #---------------------------------------------------------------------------
+    #  Handles the 'line' trait being changed:  
+    #---------------------------------------------------------------------------
+                                              
+    def _line_changed ( self, line ):
+        if not self._locked:
+            _, column = control.getCursorPosition()
+            self._scintilla.setCursorPosition(line - 1, column)
+                                  
+    #---------------------------------------------------------------------------
+    #  Handles the 'column' trait being changed:  
+    #---------------------------------------------------------------------------
+                                              
+    def _column_changed ( self, column ):
+        if not self._locked:
+            line, _ = control.getCursorPosition()
+            self._scintilla.setCursorPosition(line, column - 1)
+
+    #---------------------------------------------------------------------------
+    #  Handles the cursor position being changed:  
+    #---------------------------------------------------------------------------
+                        
+    def _position_changed(self, line, column):
+        """ Handles the cursor position being changed.
+        """
+        self._locked = True
+        self.line = line
+        self.column = column
+        self._locked = False
+        self.selected_text = unicode(control.selectedText())
+        
+    #---------------------------------------------------------------------------
+    #  Handles a key being pressed within the editor:    
+    #---------------------------------------------------------------------------
+                
+    def _key_pressed ( self, event ):
+        """ Handles a key being pressed within the editor.
+        """
+        key_bindings = self.factory.key_bindings
+        if key_bindings:
+            processed = key_bindings.do(event.event, self.ui.handler, 
+                                        self.ui.info)
+        else:
+            processed = False
+        if not processed and event.event.matches(QtGui.QKeySequence.Find):
+            self._find_widget.show()
+
+    #---------------------------------------------------------------------------
+    #  Handles the styling of the editor:
+    #---------------------------------------------------------------------------
+
+    def _dim_color_changed(self):
+        self._scintilla.SendScintilla(QsciBase.SCI_STYLESETFORE, 
+                                      self.dim_style_number,
+                                      QtGui.QColor(self.dim_color))
+
+    def _squiggle_color_changed(self):
+        self._scintilla.SendScintilla(QsciBase.SCI_INDICSETSTYLE, 2,
+                                      QsciBase.INDIC_SQUIGGLE)
+        self._scintilla.SendScintilla(QsciBase.SCI_INDICSETFORE, 2,
+                                      QtGui.QColor(self.squiggle_color))
+
+    @on_trait_change('dim_lines, squiggle_lines')
+    def _style_document(self):
+        self._scintilla.recolor()
 
 
 # Define the simple, custom, text and readonly editors, which will be accessed
