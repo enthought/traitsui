@@ -1,0 +1,471 @@
+#-------------------------------------------------------------------------------
+#
+#  Copyright (c) 2009, Enthought, Inc.
+#  All rights reserved.
+#
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Thanks for using Enthought open source!
+#
+#  Author: Evan Patterson
+#  Date:   08/05/2009
+#
+#-------------------------------------------------------------------------------
+
+""" Traits UI editor for editing lists of strings.
+"""
+
+#-------------------------------------------------------------------------------
+#  Imports:
+#-------------------------------------------------------------------------------
+
+from PyQt4 import QtCore, QtGui
+
+from enthought.pyface.image_resource import ImageResource
+from enthought.traits.api import Any, Bool, Event, Int, Instance, List, \
+    Property, Str, TraitListEvent
+from enthought.traits.ui.list_str_adapter import ListStrAdapter
+
+from editor import Editor
+from list_str_model import ListStrModel
+
+#-------------------------------------------------------------------------------
+#  '_ListStrEditor' class:
+#-------------------------------------------------------------------------------
+                               
+class _ListStrEditor(Editor):
+    """ Traits UI editor for editing lists of strings.
+    """
+
+    #---------------------------------------------------------------------------
+    #  Trait definitions:
+    #---------------------------------------------------------------------------
+
+    # The list view control associated with the editor:
+    list_view = Any
+
+    # The list model associated the editor:
+    model = Instance(ListStrModel)
+    
+    # The title of the editor:
+    title = Str
+    
+    # The current set of selected items (which one is used depends upon the 
+    # initial state of the editor factory 'multi_select' trait):
+    selected = Any
+    multi_selected = List
+
+    # The current set of selected item indices (which one is used depends upon 
+    # the initial state of the editor factory 'multi_select' trait):
+    selected_index = Int(-1)
+    multi_selected_indices = List(Int)
+
+    # The most recently actived item and its index:
+    activated = Any
+    activated_index = Int
+    
+    # The most recently right_clicked item and its index:
+    right_clicked = Event
+    right_clicked_index = Event
+    
+    # Is the list editor scrollable? This value overrides the default.
+    scrollable = True
+
+    # Index of item to select after rebuilding editor list:
+    index = Any
+    
+    # Should the selected item be edited after rebuilding the editor list:
+    edit = Bool(False)
+           
+    # The adapter from list items to editor values:                       
+    adapter = Instance( ListStrAdapter )
+
+    # Dictionary mapping image names to QIcons
+    images = Any({})
+
+    # Dictionary mapping ImageResource objects to QIcons
+    image_resources = Any({})
+    
+    # The current number of item currently in the list:
+    item_count = Property
+    
+    # The current search string:
+    search = Str
+
+    #---------------------------------------------------------------------------
+    #  Editor interface:
+    #---------------------------------------------------------------------------
+        
+    def init ( self, parent ):
+        """ Finishes initializing the editor by creating the underlying toolkit
+            widget.
+        """
+        factory = self.factory
+
+        # Set up the adapter to use:
+        self.adapter = factory.adapter
+        self.sync_value(factory.adapter_name, 'adapter', 'from')
+
+        # Create the list model and accompanying controls:
+        self.model = ListStrModel(editor=self)
+
+        self.control = QtGui.QWidget()
+        layout = QtGui.QVBoxLayout(self.control)
+        layout.setMargin(0)
+        layout.setSpacing(0)
+
+        header_view = QtGui.QHeaderView(QtCore.Qt.Horizontal, self.control)
+        header_view.setModel(self.model)
+        header_view.setMaximumHeight(header_view.sizeHint().height())
+        header_view.setResizeMode(QtGui.QHeaderView.Stretch)
+        layout.addWidget(header_view)
+
+        self.list_view = _ListView(self)
+        layout.addWidget(self.list_view)
+
+        # Set up the list control's event handlers:
+        if factory.multi_select:
+            slot = self._on_rows_selection
+        else:
+            slot = self._on_row_selection
+        signal = 'selectionChanged(QItemSelection,QItemSelection)'
+        QtCore.QObject.connect(self.list_view.selectionModel(), 
+                               QtCore.SIGNAL(signal), slot)
+
+        signal = QtCore.SIGNAL('activated(QModelIndex)')
+        QtCore.QObject.connect(self.list_view, signal, self._on_activate)
+
+        # Initialize the editor title:
+        self.title = factory.title
+        self.sync_value(factory.title_name, 'title', 'from')
+
+        # Set up the selection listener
+        if factory.multi_select:
+            self.sync_value(factory.selected, 'multi_selected', 'both',
+                            is_list=True)
+            self.sync_value(factory.selected_index, 'multi_selected_indices', 
+                            'both', is_list=True)
+        else:
+            self.sync_value(factory.selected, 'selected', 'both')
+            self.sync_value(factory.selected_index, 'selected_index', 'both')
+
+        # Synchronize other interesting traits as necessary:
+        self.sync_value(factory.activated, 'activated', 'to')
+        self.sync_value(factory.activated_index, 'activated_index', 'to')
+        
+        self.sync_value(factory.right_clicked, 'right_clicked', 'to')
+        self.sync_value(factory.right_clicked_index, 'right_clicked_index', 'to')
+
+        # Make sure we listen for 'items' changes as well as complete list
+        # replacements:
+        self.context_object.on_trait_change(
+            self.refresh_editor, self.extended_name + '_items', dispatch='ui')
+            
+        # Create the mapping from user supplied images to QIcons:
+        for image_resource in factory.images:
+            self._add_image(image_resource)
+
+        # Refresh the editor whenever the adapter changes:
+        self.on_trait_change(
+            self.refresh_editor, 'adapter.+update', dispatch='ui')
+
+        # Set the list control's tooltip:
+        self.set_tooltip()
+
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        self.context_object.on_trait_change(
+            self.refresh_editor, self.extended_name + '_items', remove=True)
+
+        self.on_trait_change(
+            self.refresh_editor, 'adapter.+update', remove=True) 
+
+    def update_editor(self):
+        """ Updates the editor when the object trait changes externally to the
+            editor.
+        """
+        if not self._no_update:
+            self.model.reset()
+
+    #---------------------------------------------------------------------------
+    #  ListStrEditor interface:
+    #---------------------------------------------------------------------------
+
+    def refresh_editor(self):
+        """ Requests that the underlying list widget to redraw itself.
+        """
+        self.list_view.viewport().update()
+
+    def callx(self, func, *args, **kw):
+        """ Call a function without allowing the editor to update.
+        """
+        old = self._no_update
+        self._no_update = True
+        try:
+            func(*args, **kw)
+        finally:
+            self._no_update = old
+
+    def setx(self, **keywords):
+        """ Set one or more attributes without allowing the editor to update.
+        """
+        old = self._no_notify
+        self._no_notify = True
+        try:
+            for name, value in keywords.items():
+                setattr(self, name, value)
+        finally:
+            self._no_notify = old
+        
+    def get_image(self, image):
+        """ Converts a user specified image to a QIcon.
+        """
+        if isinstance(image, ImageResource):
+            result = self.image_resources.get(image)
+            if result is not None:
+                return result
+
+            return self._add_image(image)
+
+        return self.images.get(image)
+
+    def is_auto_add(self, index):
+        """ Returns whether or not the index is the special 'auto add' item at
+            the end of the list.
+        """
+        return (self.factory.auto_add and 
+                (index >= self.adapter.len(self.object, self.name)))
+    
+    #---------------------------------------------------------------------------
+    #  Private interface:
+    #---------------------------------------------------------------------------
+
+    def _add_image(self, image_resource):
+        """ Adds a new image to the image map.
+        """
+        image = image_resource.create_icon()
+
+        self.image_resources[image_resource] = image
+        self.images[image_resource.name] = image
+
+        return image
+
+    #-- Property Implementations -----------------------------------------------
+    
+    def _get_item_count ( self ):
+        return (self.model.rowCount(None) - self.factory.auto_add)
+
+    #-- Trait Event Handlers ---------------------------------------------------
+
+    def _selected_changed(self, selected):
+        """ Handles the editor's 'selected' trait being changed.
+        """
+        if not self._no_update:
+            try:
+                selected_index = self.value.index(selected)
+            except ValueError:
+                pass
+            else:
+                self._selected_index_changed(selected_index)
+
+    def _selected_index_changed(self, selected_index):
+        """ Handles the editor's 'selected_index' trait being changed.
+        """
+        if not self._no_update:
+            smodel = self.list_view.selectionModel()
+            if selected_index == -1:
+                smodel.clearSelection()
+            else:
+                smodel.select(self.model.index(selected_index, 0),
+                              QtGui.QItemSelectionModel.ClearAndSelect)
+
+    def _multi_selected_changed(self, selected):
+        """ Handles the editor's 'multi_selected' trait being changed.
+        """
+        if not self._no_update:
+            try:
+                indices = [ self.value.index(item) for item in selected ]
+            except ValueError:
+                pass
+            else:
+                self._multi_selected_indices_changed(indices)
+        
+    def _multi_selected_items_changed(self, event):
+        """ Handles the editor's 'multi_selected' trait being modified.
+        """
+        if not self._no_update:
+            try:
+                added = [ values.index(item) for item in event.added ]
+                removed = [ values.index(item) for item in event.removed ]
+            except ValueError:
+                pass
+            else:
+                event = TraitListEvent(0, added, removed)
+                self._multi_selected_indices_items_changed(event)
+    
+    def _multi_selected_indices_changed(self, selected_indices):
+        """ Handles the editor's 'multi_selected_indices' trait being changed.
+        """
+        if not self._no_update:
+            smodel = self.list_view.selectionModel()
+            smodel.clearSelection()
+            for selected_index in selected_indices:
+                smodel.select(self.model.index(selected_index, 0),
+                              QtGui.QItemSelectionModel.Select)
+
+    def _multi_selected_indices_items_changed(self, event):
+        """ Handles the editor's 'multi_selected_indices' trait being modified.
+        """
+        if not self._no_update:
+            smodel = self.list_view.selectionModel()
+            for selected_index in event.removed:
+                smodel.select(self.model.index(selected_index, 0),
+                              QtGui.QItemSelectionModel.Deselect)
+            for selected_index in event.added:
+                smodel.select(self.model.index(selected_index, 0),
+                              QtGui.QItemSelectionModel.Select)
+
+    #-- List Control Event Handlers --------------------------------------------
+
+    def _on_activate(self, mi):
+        """ Handle a cell being activated.
+        """
+        self.activated_index = index = mi.row()
+        self.activated = self.adapter.get_item(self.object, self.name, index)
+        
+    def _on_row_selection(self, added, removed):
+        """ Handle the row selection being changed.
+        """
+        self._no_update = True
+        try:
+            indices = self.list_view.selectionModel().selectedRows()
+            if len(indices):
+                self.selected_index = indices[0].row()
+                self.selected = self.adapter.get_item(self.object, self.name,
+                                                      self.selected_index)
+            else:
+                self.selected_index = -1
+                self.selected = None
+        finally:
+            self._no_update = False
+
+    def _on_rows_selection(self, added, removed):
+        """ Handle the rows selection being changed.
+        """
+        self._no_update = True
+        try:
+            indices = self.list_view.selectionModel().selectedRows()
+            self.multi_selected_indices = indices = [ i.row() for i in indices ]
+            self.multi_selected = [ self.adapter.get_item(self.object, self.name, i)
+                                    for i in self.multi_selected_indices ]
+        finally:
+            self._no_update = False
+
+#-------------------------------------------------------------------------------
+#  Qt widgets that have been configured to behave as expected by Traits UI:
+#-------------------------------------------------------------------------------
+
+class _ItemDelegate(QtGui.QStyledItemDelegate):
+    """ A QStyledItemDelegate which optionally draws horizontal gridlines.
+        (QListView does not support gridlines).
+    """
+
+    def __init__(self, editor, parent=None):
+        """ Save the editor
+        """
+        QtGui.QStyledItemDelegate.__init__(self, parent)
+        self._editor = editor
+
+    def paint(self, painter, option, index):
+        """ Overrident to draw gridlines.
+        """
+        QtGui.QStyledItemDelegate.paint(self, painter, option, index)
+
+        if self._editor.factory.horizontal_lines:
+            painter.save()
+            painter.setPen(option.palette.color(QtGui.QPalette.Dark))
+            painter.drawLine(option.rect.bottomLeft(),option.rect.bottomRight())
+            painter.restore()
+
+class _ListView(QtGui.QListView):
+    """ A QListView configured to behave as expected by TraitsUI.
+    """
+    
+    def __init__(self, editor):
+        """ Initialise the object.
+        """
+        QtGui.QListView.__init__(self)
+
+        self._editor = editor
+        self.setItemDelegate(_ItemDelegate(editor, self))
+        self.setModel(editor.model)
+        factory = editor.factory
+
+        # Configure the grid.
+        if factory.horizontal_lines:
+            pass
+
+        # Configure the selection behavior
+        if factory.multi_select:
+            mode = QtGui.QAbstractItemView.ExtendedSelection
+        else:
+            mode = QtGui.QAbstractItemView.SingleSelection
+        self.setSelectionMode(mode)
+
+        # Configure drag and drop behavior
+        if 'move' in factory.operations:
+            self.setDragEnabled(True)
+            self.setDragDropOverwriteMode(True)
+            self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+            self.setDropIndicatorShown(True)
+
+    def keyPressEvent(self, event):
+        """ Reimplemented to support edit, insert, and delete by keyboard.
+        """
+        editor = self._editor
+
+        # Note that setting 'EditKeyPressed' as an edit trigger does not work on
+        # most platforms, which is why we do this here.
+        if (event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return)
+            and self.state() != QtGui.QAbstractItemView.EditingState):
+            if editor.factory.multi_select:
+                indices = editor.multi_selected_indices
+                row = indices[0] if len(indices) == 1 else -1
+            else:
+                row = editor.selected_index
+            
+            if row != -1:
+                event.accept()
+                self.edit(editor.model.index(row, 0))
+
+        elif (event.key() in (QtCore.Qt.Key_Backspace, QtCore.Qt.Key_Delete) and
+            'delete' in editor.factory.operations):
+            event.accept()
+
+            if editor.factory.multi_select:
+                for row in reversed(sorted(editor.multi_selected_indices)):
+                    editor.model.removeRow(row)
+            elif editor.selected_index != -1:
+                editor.model.removeRow(editor.selected_index)
+
+        elif (event.key() == QtCore.Qt.Key_Insert 
+              and 'insert' in editor.factory.operations):
+            event.accept()
+
+            if editor.factory.multi_select:
+                indices = sorted(editor.multi_selected_indices)
+                row = indices[0] if len(indices) else -1
+            else:
+                row = editor.selected_index
+            if row == -1:
+                row = editor.adapter.len(editor.object, editor.name)
+            editor.model.insertRow(row)
+            self.setCurrentIndex(editor.model.index(row, 0))
+
+        else:
+            QtGui.QListView.keyPressEvent(self, event)
+        

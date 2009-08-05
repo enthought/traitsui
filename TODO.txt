@@ -24,7 +24,9 @@ Implemented in the wx backend, and must be implemented for compatibility:
 
 * ImageEnumEditor is not implemented. A standard enum editor get used instead.
 
-* ListStrEditor is not implemented. Use QListView.
+* Features missing from the ListStrEditor:
+  * 'auto_add' factory option
+  * 'right_clicked' and 'right_clicked_index' factory options
 
 * PopupEditor is not implemented. It is questionable whether this even worth
   implementing, as it makes for very unconventional, and therefore confusing,
