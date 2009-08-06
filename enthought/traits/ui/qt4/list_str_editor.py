@@ -162,7 +162,7 @@ class _ListStrEditor(Editor):
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
         self.context_object.on_trait_change(
-            self.refresh_editor, self.extended_name + '_items', dispatch='ui')
+            self.update_editor, self.extended_name + '_items', dispatch='ui')
             
         # Create the mapping from user supplied images to QIcons:
         for image_resource in factory.images:
@@ -179,7 +179,7 @@ class _ListStrEditor(Editor):
         """ Disposes of the contents of an editor.
         """
         self.context_object.on_trait_change(
-            self.refresh_editor, self.extended_name + '_items', remove=True)
+            self.update_editor, self.extended_name + '_items', remove=True)
 
         self.on_trait_change(
             self.refresh_editor, 'adapter.+update', remove=True) 
