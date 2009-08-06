@@ -143,6 +143,7 @@ class FindWidget ( QtGui.QWidget ):
         """
         if event.key() == QtCore.Qt.Key_Escape:
             event.accept()
+            self.emit(QtCore.SIGNAL('hidden()'))
             self.hide()
         else:
             QtGui.QWidget.keyPressEvent(self, event)
@@ -315,8 +316,14 @@ class SourceEditor ( Editor ):
         self._find_widget = FindWidget(self.find, self.control)
         self._find_widget.hide()
         layout.addWidget(self._find_widget)
+        
+        # Make sure that the find bar will fit in the editor
         min_width = self._find_widget.minimumSizeHint().width()
         self.control.setMinimumWidth(min_width)
+
+        # Grab keyboard focus whenever the find bar is closed
+        QtCore.QObject.connect(self._find_widget, QtCore.SIGNAL('hidden()'),
+                               self._scintilla, QtCore.SLOT('setFocus()'))
         
         # Set up the lexer. Before we set our custom lexer, we call setLexer
         # with the QSciLexer that will set the keywords and styles for the
