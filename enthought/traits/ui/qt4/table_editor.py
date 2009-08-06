@@ -805,7 +805,12 @@ class TableView(QtGui.QTableView):
                 menu_manager = editor.factory.menu
             if menu_manager is not None:
                 event.accept()
-                editor.set_menu_context(editor.selected, obj, column)
+                selected = editor.selected
+                if not isinstance(selected, SequenceTypes):
+                    selected = [ selected ]
+                if obj not in selected:
+                    selected = [ obj ]
+                editor.set_menu_context(selected, obj, column)
                 menu = menu_manager.create_menu(self, controller=editor)
                 menu.exec_(position)
 
