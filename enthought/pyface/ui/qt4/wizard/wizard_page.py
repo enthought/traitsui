@@ -113,9 +113,22 @@ class _WizardPage(QtGui.QWizardPage):
 
         QtGui.QWizardPage.__init__(self)
 
-        page.on_trait_change(self._on_complete_changed, 'complete')
+        self.pyface_wizard = None
 
+        page.on_trait_change(self._on_complete_changed, 'complete')
         self._page = page
+
+    def initializePage(self):
+        """ Reimplemented to call the IWizard's 'next'. """
+        
+        if self.pyface_wizard is not None:
+            self.pyface_wizard.next()
+
+    def cleanupPage(self):
+        """ Reimplemented to call the IWizard's 'previous'. """
+        
+        if self.pyface_wizard is not None:
+            self.pyface_wizard.previous()
 
     def isComplete(self):
         """ Reimplemented to return the state of the 'complete' trait. """

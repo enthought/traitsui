@@ -46,6 +46,20 @@ class Wizard(MWizard, Dialog):
     title = Unicode('Wizard')
 
     ###########################################################################
+    # 'IWizard' interface.
+    ###########################################################################
+
+    # Override MWizard implementation to do nothing. We still call these methods
+    # because it expected by IWizard, and users may wish to hook in custom code
+    # before changing a page.
+
+    def next(self):
+        pass
+
+    def previous(self):
+        pass
+
+    ###########################################################################
     # Protected 'IDialog' interface.
     ###########################################################################
 
@@ -57,7 +71,7 @@ class Wizard(MWizard, Dialog):
     ###########################################################################
 
     def _create_control(self, parent):
-        control = _Wizard(parent, self.controller)
+        control = _Wizard(parent, self)
         control.setOptions(QtGui.QWizard.NoDefaultButton |
                            QtGui.QWizard.NoBackButtonOnStartPage)
         control.setModal(self.style == 'modal')
@@ -78,6 +92,7 @@ class Wizard(MWizard, Dialog):
 
         # Add the initial pages.
         for page in self.pages:
+            page.pyface_wizard = self
             control.addWizardPage(page)
 
         # Set the start page.
@@ -140,12 +155,13 @@ class _Wizard(QtGui.QWizard):
     """ A QWizard sub-class that hooks into the controller to determine the
     next page to show. """
 
-    def __init__(self, parent, controller):
+    def __init__(self, parent, pyface_wizard):
         """ Initialise the object. """
 
         QtGui.QWizard.__init__(self, parent)
 
-        self._controller = controller
+        self._pyface_wizard = pyface_wizard
+        self._controller = pyface_wizard.controller
         self._ids = {}
 
         QtCore.QObject.connect(self, QtCore.SIGNAL('currentIdChanged(int)'),
@@ -156,6 +172,7 @@ class _Wizard(QtGui.QWizard):
 
         # We must pass a parent otherwise TraitsUI does the wrong thing.
         qpage = page.create_page(self)
+        qpage.pyface_wizard = self._pyface_wizard
         id = self.addPage(qpage)
         self._ids[id] = page
 
