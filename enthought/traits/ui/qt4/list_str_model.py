@@ -147,7 +147,8 @@ class ListStrModel(QtCore.QAbstractListModel):
             editor.adapter.get_can_edit(editor.object, editor.name, index)):
             flags |= QtCore.Qt.ItemIsEditable
 
-        if editor.adapter.get_drag(editor.object, editor.name, index) is not None:
+        if (editor.factory.editable and 
+            editor.adapter.get_drag(editor.object, editor.name, index)):
             flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
 
         return flags

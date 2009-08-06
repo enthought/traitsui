@@ -427,12 +427,14 @@ class _ListView(QtGui.QListView):
         """ Reimplemented to support edit, insert, and delete by keyboard.
         """
         editor = self._editor
+        factory = editor.factory
 
         # Note that setting 'EditKeyPressed' as an edit trigger does not work on
         # most platforms, which is why we do this here.
-        if (event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return)
-            and self.state() != QtGui.QAbstractItemView.EditingState):
-            if editor.factory.multi_select:
+        if (event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and
+            self.state() != QtGui.QAbstractItemView.EditingState and 
+            factory.editable and 'edit' in factory.operations):
+            if factory.multi_select:
                 indices = editor.multi_selected_indices
                 row = indices[0] if len(indices) == 1 else -1
             else:
@@ -443,20 +445,20 @@ class _ListView(QtGui.QListView):
                 self.edit(editor.model.index(row, 0))
 
         elif (event.key() in (QtCore.Qt.Key_Backspace, QtCore.Qt.Key_Delete) and
-            'delete' in editor.factory.operations):
+              factory.editable and 'delete' in factory.operations):
             event.accept()
 
-            if editor.factory.multi_select:
+            if factory.multi_select:
                 for row in reversed(sorted(editor.multi_selected_indices)):
                     editor.model.removeRow(row)
             elif editor.selected_index != -1:
                 editor.model.removeRow(editor.selected_index)
 
-        elif (event.key() == QtCore.Qt.Key_Insert 
-              and 'insert' in editor.factory.operations):
+        elif (event.key() == QtCore.Qt.Key_Insert and 
+              factory.editable and 'insert' in factory.operations):
             event.accept()
 
-            if editor.factory.multi_select:
+            if factory.multi_select:
                 indices = sorted(editor.multi_selected_indices)
                 row = indices[0] if len(indices) else -1
             else:
