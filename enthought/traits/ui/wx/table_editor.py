@@ -1188,6 +1188,9 @@ class TableEditor ( Editor, BaseTableEditor ):
         indices = self.selected_indices[:]
         values  = self.selected_values[:]
         indices.reverse()
+
+        # Make sure that we don't delete any rows while an editor is open in it
+        self.grid.stop_editing_indices(indices)
             
         # Delete the selected rows:
         for i in indices:

@@ -674,6 +674,12 @@ class Grid(Widget):
 
         self._notify_select = True
 
+    def stop_editing_indices(self, indices):
+        """ If editing is occuring in a row in 'indices', stop editing. """
+
+        if self._grid.GetGridCursorRow() in indices:
+            self._grid.DisableCellEditControl()
+
     ###########################################################################
     # wx event handlers.
     ###########################################################################
