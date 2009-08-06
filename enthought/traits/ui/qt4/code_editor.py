@@ -296,7 +296,6 @@ class SourceEditor ( Editor ):
             widget.
         """
         self.control = QtGui.QWidget()
-        self.control.setMinimumWidth(640)
         layout = QtGui.QVBoxLayout(self.control)
         layout.setMargin(0)
 
@@ -316,6 +315,8 @@ class SourceEditor ( Editor ):
         self._find_widget = FindWidget(self.find, self.control)
         self._find_widget.hide()
         layout.addWidget(self._find_widget)
+        min_width = self._find_widget.minimumSizeHint().width()
+        self.control.setMinimumWidth(min_width)
         
         # Set up the lexer. Before we set our custom lexer, we call setLexer
         # with the QSciLexer that will set the keywords and styles for the

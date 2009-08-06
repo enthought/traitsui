@@ -58,9 +58,10 @@ class Wizard(MWizard, Dialog):
 
     def _create_control(self, parent):
         control = _Wizard(parent, self.controller)
-
-        control.setWindowTitle(self.title)
+        control.setOptions(QtGui.QWizard.NoDefaultButton |
+                           QtGui.QWizard.NoBackButtonOnStartPage)
         control.setModal(self.style == 'modal')
+        control.setWindowTitle(self.title)
 
         if self.size != (-1, -1):
             size = QtCore.QSize(*self.size)
