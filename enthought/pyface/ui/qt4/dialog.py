@@ -69,8 +69,6 @@ class Dialog(MDialog, Window):
         buttons = QtGui.QDialogButtonBox()
 
         # 'OK' button.
-        # FIXME v3: Review how this is supposed to work for non-modal dialogs
-        # (ie. how does anything act on a button click?)
         if self.ok_label:
             btn = buttons.addButton(self.ok_label, 
                                     QtGui.QDialogButtonBox.AcceptRole)
@@ -82,8 +80,6 @@ class Dialog(MDialog, Window):
                                self.control, QtCore.SLOT('accept()'))
 
         # 'Cancel' button.
-        # FIXME v3: Review how this is supposed to work for non-modal dialogs
-        # (ie. how does anything act on a button click?)
         if self.cancel_label:
             btn = buttons.addButton(self.cancel_label, 
                                     QtGui.QDialogButtonBox.RejectRole)
@@ -139,11 +135,27 @@ class Dialog(MDialog, Window):
     def _create_control(self, parent):
         dlg = QtGui.QDialog(parent)
 
+        # Setting return code and firing close events is handled for 'modal' in 
+        # MDialog's open method. For 'nonmodal', we do it here.
+        if self.style == 'nonmodal':
+            QtCore.QObject.connect(dlg, QtCore.SIGNAL('finished(int)'),
+                                   self._finished_fired)
+
         if self.size != (-1, -1):
             dlg.resize(*self.size)
 
         dlg.setWindowTitle(self.title)
 
         return dlg
+
+    ###########################################################################
+    # Private interface.
+    ###########################################################################
+
+    def _finished_fired(self, result):
+        """ Called when the dialog is closed (and nonmodal). """
+
+        self.return_code = _RESULT_MAP[result]
+        self.close()
 
 #### EOF ######################################################################
