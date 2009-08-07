@@ -838,6 +838,7 @@ class _GroupPanel(object):
                 if (0.0 < item_height <= 1.0) and (not is_horizontal):
                     stretch = int(100 * item_height)
 
+                item_height = int(item_height)
                 if item_height < -1:
                     item_height = -item_height
                 else:
