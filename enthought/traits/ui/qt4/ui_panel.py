@@ -474,12 +474,14 @@ class _GroupPanel(object):
                 splitter.setOrientation(QtCore.Qt.Vertical)
 
             # Make sure the splitter will expand to fill available space
-            size_policy = splitter.sizePolicy()
+            policy = splitter.sizePolicy()
+            policy.setHorizontalStretch(50)
+            policy.setVerticalStretch(50)
             if group.orientation == 'horizontal':
-                size_policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
             else:
-                size_policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
-            splitter.setSizePolicy(size_policy)
+                policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+            splitter.setSizePolicy(policy)
 
             if outer is None:
                 outer = splitter
@@ -494,10 +496,18 @@ class _GroupPanel(object):
             self._add_splitter_items(content, splitter)
 
         elif group.layout in ('tabbed', 'fold'):
+            # Create the TabWidget or ToolBox.
             if group.layout == 'tabbed':
                 sub = QtGui.QTabWidget()
             else:
                 sub = QtGui.QToolBox()
+
+            # Give tab/tool widget stretch factor equivalent to default stretch
+            # factory for a resizeable item. See end of '_add_items'.
+            policy = sub.sizePolicy()
+            policy.setHorizontalStretch(50)
+            policy.setVerticalStretch(50)
+            sub.setSizePolicy(policy)
 
             _fill_panel(sub, content, self.ui, self._add_page_item)
 
@@ -805,8 +815,9 @@ class _GroupPanel(object):
                 control.setFocus()
 
             # Set the correct size on the control, as specified by the user:
-            scrollable  = editor.scrollable
-            item_width  = item.width
+            stretch = 0
+            scrollable = editor.scrollable
+            item_width = item.width
             item_height = item.height
             if (item_width != -1) or (item_height != -1):
                 is_horizontal = (self.direction == QtGui.QBoxLayout.LeftToRight)
@@ -816,25 +827,21 @@ class _GroupPanel(object):
                 height = min_size.height()
 
                 if (0.0 < item_width <= 1.0) and is_horizontal:
-                    policy = control.sizePolicy()
-                    policy.setHorizontalStretch( int( 100 * item_width ) )
-                    control.setSizePolicy( policy )
+                    stretch = int(100 * item_width)
 
-                item_width = int( item_width )
+                item_width = int(item_width)
                 if item_width < -1:
                     item_width  = -item_width
                 else:
-                    item_width = max( item_width, width )
+                    item_width = max(item_width, width)
 
                 if (0.0 < item_height <= 1.0) and (not is_horizontal):
-                    policy = control.sizePolicy()
-                    policy.setVerticalStretch( int( 100 * item_height ) )
-                    control.setSizePolicy( policy )
+                    stretch = int(100 * item_height)
 
                 if item_height < -1:
                     item_height = -item_height
                 else:
-                    item_height = max( item_height, height )
+                    item_height = max(item_height, height)
 
                 control.setMinimumWidth(item_width)
                 control.setMinimumHeight(item_height)
@@ -867,20 +874,26 @@ class _GroupPanel(object):
             if item.enabled_when != '':
                 ui.add_enabled( item.enabled_when, editor )
 
-            # Add the created editor control to the sizer with the appropriate
-            # layout flags and values:
+            # Add the created editor control to the layout with the appropriate
+            # size and stretch policies:
             ui._scrollable |= scrollable
             item_resizable  = ((item.resizable is True) or
                                ((item.resizable is Undefined) and scrollable))
             if item_resizable:
+                stretch = stretch or 50
                 self.resizable = True
             elif item.springy:
-                size_policy = control.sizePolicy()
-                if self.direction == QtGui.QBoxLayout.LeftToRight:
-                    size_policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
-                else:
-                    size_policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
-                control.setSizePolicy(size_policy)
+                stretch = stretch or 50
+            policy = control.sizePolicy()
+            if self.direction == QtGui.QBoxLayout.LeftToRight:
+                policy.setHorizontalStretch(stretch)
+                if item_resizable or item.springy:
+                    policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+            else:
+                policy.setVerticalStretch(stretch)
+                if item_resizable or item.springy:
+                    policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+            control.setSizePolicy(policy)
 
             # FIXME: Need to decide what to do about border_size and padding
             self._add_widget(inner, control, row, col, show_labels)
