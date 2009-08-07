@@ -58,7 +58,8 @@ class _CallAfter(QtCore.QObject):
     _calls_mutex = QtCore.QMutex()
 
     def __init__(self, handler, *args):
-        """ Initialise the call. """
+        """ Initialise the call.
+        """
         QtCore.QObject.__init__(self)
 
         # Save the details of the call.
@@ -80,7 +81,8 @@ class _CallAfter(QtCore.QObject):
         QtGui.QApplication.instance().postEvent(self, event)
 
     def event(self, event):
-        """ QObject event handler. """
+        """ QObject event handler.
+        """
         if event.type() == _QT_TRAITS_EVENT:
             # Invoke the handler
             self._handler(*self._args)
@@ -421,7 +423,9 @@ class GUIToolkit ( Toolkit ):
         for w in control.children():
             # Only destroy widgets.
             if isinstance(w, QtGui.QWidget):
-                w.setParent(None)
+                # This may be called from within the finished() signal handler
+                # so we need to do the delete after the handler has returned.
+                w.deleteLater()
 
     #---------------------------------------------------------------------------
     #  Returns a ( width, height ) tuple containing the size of a specified

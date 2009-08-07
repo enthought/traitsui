@@ -37,7 +37,7 @@ class Widget(MWidget, HasTraits):
 
     def destroy(self):
         if self.control is not None:
-            self.control.setParent(None)
+            self.control.deleteLater()
             self.control = None
 
 #### EOF ######################################################################

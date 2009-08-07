@@ -428,7 +428,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             except:
                 # Tidy up if the view couldn't be created.
                 delattr(view, '_qt4_dock')
-                dw.setParent(None)
+                dw.deleteLater()
                 del dw
                 raise
 
@@ -444,12 +444,13 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         # Disassociate the view from the dock.
         if view.control is not None:
-            view.control.setParent(None)
+            view.control.deleteLater()
+            view.control = None
 
         delattr(view, '_qt4_dock')
 
         # Delete the dock (and the view container).
-        dw.setParent(None)
+        dw.deleteLater()
 
     def _qt4_handle_dock_visibility(self, checked):
         """ Handle the visibility of a dock window changing. """

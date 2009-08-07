@@ -41,7 +41,7 @@ class SplitTabWidget(QtGui.QSplitter):
         """ Restore the widget to its pristine state. """
 
         for i in range(self.count()):
-            self.widget(i).setParent(None)
+            self.widget(i).deleteLater()
 
         self._repeat_focus_changes = True
         self._rband = None

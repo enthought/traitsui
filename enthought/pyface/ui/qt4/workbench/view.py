@@ -44,7 +44,7 @@ class View(MView):
         """ Destroy the toolkit-specific control that represents the part. """
 
         if self.control is not None:
-            self.control.setParent(None)
+            self.control.deleteLater()
             self.control = None
 
         return
