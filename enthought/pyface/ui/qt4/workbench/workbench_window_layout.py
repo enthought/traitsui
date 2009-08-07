@@ -445,6 +445,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         # Disassociate the view from the dock.
         if view.control is not None:
+            view.control.hide()
             view.control.deleteLater()
             view.control = None
 
