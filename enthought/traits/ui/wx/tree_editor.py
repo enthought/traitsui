@@ -137,7 +137,7 @@ class SimpleEditor ( Editor ):
     
     # The event fired when the application wants to veto an operation:
     veto = Event
-    
+
     #-- Private Traits ---------------------------------------------------------
     
     # An icon used by a TreeNode:
@@ -363,6 +363,10 @@ class SimpleEditor ( Editor ):
 
         if factory.hide_root:
             style |= (wx.TR_HIDE_ROOT | wx.TR_LINES_AT_ROOT)
+
+        if factory.selection_mode != 'single':
+            style |= wx.TR_MULTIPLE | wx.TR_EXTENDED
+
 
         return style
 
@@ -1192,18 +1196,31 @@ class SimpleEditor ( Editor ):
         # Get the new selection:
         object      = None
         not_handled = True
-        nid         = self._tree.GetSelection()
-        if nid.IsOk():
-            # If there is a real selection, get the associated object:
-            expanded, node, object = self._get_node_data( nid )
+        nids        = self._tree.GetSelections()
 
-            # Try to inform the node specific handler of the selection:
-            not_handled = node.select( object )
+	selected = []
+	for nid in nids:
+            if nid.IsOk():
+                # If there is a real selection, get the associated object:
+                expanded, node, sel_object = self._get_node_data( nid )
+		selected.append(sel_object)
+
+                # Try to inform the node specific handler of the selection,
+                # if there are multiple selections, we only care about the
+                # first (or maybe the last makes more sense?)
+		if nid == nids[0]:
+		    object = sel_object
+                    not_handled = node.select( object )
 
         # Set the value of the new selection:
-        self._no_update_selected = True
-        self.selected            = object
-        self._no_update_selected = False
+	if self.factory.selection_mode == 'single':
+            self._no_update_selected = True
+            self.selected = object
+            self._no_update_selected = False
+	else:
+            self._no_update_selected = True
+	    self.selected = selected
+            self._no_update_selected = False
 
         # If no one has been notified of the selection yet, inform the editor's
         # select handler (if any) of the new selection:
