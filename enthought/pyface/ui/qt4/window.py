@@ -168,16 +168,19 @@ class _EventFilter(QtCore.QObject):
                 window.activated = window
             else:
                 window.deactivated = window
+
         elif e.type() == QtCore.QEvent.Resize:
             # Get the new size and set the shadow trait without performing
             # notification.
             size = e.size()
             window._size = (size.width(), size.height())
+
         elif e.type() == QtCore.QEvent.Move:
             # Get the real position and set the trait without performing
             # notification.
             pos = e.pos()
             window._position = (pos.x(), pos.y())
+
         elif e.type() == QtCore.QEvent.KeyPress:
             # Pyface doesn't seem to be Unicode aware.  Only keep the key code
             # if it corresponds to a single Latin1 character.

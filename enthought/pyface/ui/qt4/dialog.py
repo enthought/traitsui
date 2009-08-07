@@ -72,19 +72,26 @@ class Dialog(MDialog, Window):
         # FIXME v3: Review how this is supposed to work for non-modal dialogs
         # (ie. how does anything act on a button click?)
         if self.ok_label:
-            btn = buttons.addButton(self.ok_label, QtGui.QDialogButtonBox.AcceptRole)
+            btn = buttons.addButton(self.ok_label, 
+                                    QtGui.QDialogButtonBox.AcceptRole)
         else:
             btn = buttons.addButton(QtGui.QDialogButtonBox.Ok)
 
         btn.setDefault(True)
+        QtCore.QObject.connect(btn, QtCore.SIGNAL('clicked()'), 
+                               self.control, QtCore.SLOT('accept()'))
 
         # 'Cancel' button.
         # FIXME v3: Review how this is supposed to work for non-modal dialogs
         # (ie. how does anything act on a button click?)
         if self.cancel_label:
-            buttons.addButton(self.cancel_label, QtGui.QDialogButtonBox.RejectRole)
+            btn = buttons.addButton(self.cancel_label, 
+                                    QtGui.QDialogButtonBox.RejectRole)
         else:
-            buttons.addButton(QtGui.QDialogButtonBox.Cancel)
+            btn = buttons.addButton(QtGui.QDialogButtonBox.Cancel)
+
+        QtCore.QObject.connect(btn, QtCore.SIGNAL('clicked()'), 
+                               self.control, QtCore.SLOT('reject()'))
 
         # 'Help' button.
         # FIXME v3: In the original code the only possible hook into the help
@@ -100,15 +107,19 @@ class Dialog(MDialog, Window):
         return buttons
 
     def _create_contents(self, parent):
-        lay = QtGui.QVBoxLayout()
+        layout = QtGui.QVBoxLayout()
 
-        lay.addWidget(self._create_dialog_area(parent))
-        lay.addWidget(self._create_buttons(parent))
+        if not self.resizeable:
+            layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
 
-        parent.setLayout(lay)
+        layout.addWidget(self._create_dialog_area(parent))
+        layout.addWidget(self._create_buttons(parent))
+
+        parent.setLayout(layout)
 
     def _create_dialog_area(self, parent):
         panel = QtGui.QWidget(parent)
+        panel.setMinimumSize(QtCore.QSize(100, 200))
 
         palette = panel.palette()
         palette.setColor(QtGui.QPalette.Window, QtGui.QColor('red'))
@@ -131,8 +142,6 @@ class Dialog(MDialog, Window):
         if self.size != (-1, -1):
             dlg.resize(*self.size)
 
-        # FIXME v3: Decide what to do with the resizable trait (ie. set the
-        # size policy).
         dlg.setWindowTitle(self.title)
 
         return dlg

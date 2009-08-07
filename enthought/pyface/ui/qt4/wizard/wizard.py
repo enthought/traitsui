@@ -23,6 +23,9 @@ from enthought.pyface.wizard.i_wizard import IWizard, MWizard
 from enthought.pyface.wizard.i_wizard_controller import IWizardController
 from enthought.pyface.wizard.i_wizard_page import IWizardPage
 
+# Local imports.
+from enthought.pyface.ui.qt4.dialog import _RESULT_MAP
+
 
 class Wizard(MWizard, Dialog):
     """ The base class for all pyface wizards.
@@ -77,6 +80,12 @@ class Wizard(MWizard, Dialog):
         control.setModal(self.style == 'modal')
         control.setWindowTitle(self.title)
 
+        # Setting return code and firing close events is handled for 'modal' in 
+        # MDialog's open method. For 'nonmodal', we do it here.
+        if self.style == 'nonmodal':
+            QtCore.QObject.connect(control, QtCore.SIGNAL('finished(int)'),
+                                   self._finished_fired)
+
         if self.size != (-1, -1):
             size = QtCore.QSize(*self.size)
             control.setMaximumSize(size)
@@ -109,6 +118,12 @@ class Wizard(MWizard, Dialog):
 
         # FIXME: Hook into a help system.
         print "Show help for", self.help_id
+
+    def _finished_fired(self, result):
+        """ Called when the wizard dialog is closed (and nonmodal). """
+
+        self.return_code = _RESULT_MAP[result]
+        self.close()
 
     #### Trait handlers #######################################################
 
