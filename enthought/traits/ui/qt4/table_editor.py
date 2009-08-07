@@ -731,6 +731,7 @@ class TableView(QtGui.QTableView):
 
         QtGui.QTableView.__init__(self)
 
+        self._initial_size = False
         self._editor = editor
         factory = editor.factory
 
@@ -840,12 +841,22 @@ class TableView(QtGui.QTableView):
             return QtGui.QTableView.eventFilter(self, obj, event)
 
     def resizeEvent(self, event):
-        """Reimplemented to resize columns when the size of the TableEditor
-        changes."""
+        """Reimplemented to size the table columns when the size of the table
+        changes. Because the layout algorithm requires that the available space
+        be known, we have to wait until the UI that contains this table gives it
+        its initial size."""
 
         QtGui.QTableView.resizeEvent(self, event)
 
-        self.resizeColumnsToContents()
+        if self._editor.factory.auto_size:
+            self.resizeColumnsToContents()
+
+        else:
+            parent = self.parent()
+            if (not self._initial_size and parent and
+                (self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
+                self._initial_size = True
+                self.resizeColumnsToContents()
 
     def sizeHint(self): 
         """Reimplemented to define a better size hint for the width of the
