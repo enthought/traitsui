@@ -415,6 +415,9 @@ class SourceEditor ( Editor ):
                                          
         editor.on_trait_change(self._key_pressed, 'key_pressed', remove=True)
 
+        QtCore.QObject.disconnect(self._scintilla, QtCore.SIGNAL('lostFocus'),
+                                  self.update_object)
+
         super( SourceEditor, self ).dispose()
     
     #---------------------------------------------------------------------------
