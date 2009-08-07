@@ -264,6 +264,8 @@ class TableEditor(Editor, BaseTableEditor):
         self.on_trait_change(self._update_columns, 'columns', remove=True)
         self.on_trait_change(self._update_columns, 'columns_items', remove=True)
 
+        super(TableEditor, self).dispose()
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
@@ -504,7 +506,6 @@ class TableEditor(Editor, BaseTableEditor):
         self.table_view.setItemDelegate(TableDelegate(self.table_view))
         for i, column in enumerate(self.columns):
             if column.renderer:
-                column.renderer.setParent(self.table_view)
                 self.table_view.setItemDelegateForColumn(i, column.renderer)
 
         self.model.reset()
@@ -746,6 +747,7 @@ class TableView(QtGui.QTableView):
 
         # Configure the column headings.
         hheader = self.horizontalHeader()
+        hheader.setStretchLastSection(True)
         if factory.show_column_labels:
             hheader.setHighlightSections(False)
         else:
