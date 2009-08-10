@@ -860,25 +860,36 @@ class SimpleEditor ( Editor ):
         """ Handles a tree node being selected.
         """
         # Get the new selection:
-        sel = self._tree.selectedItems()
+        nids = self._tree.selectedItems()
 
-        if len(sel) > 0:
-            nid = sel[0]
+        selected = []
+        if len(nids) > 0:
+            for n in nids:
+                # If there is a real selection, get the associated object:
+                expanded, node, sel_object = self._get_node_data(n)
+                selected.append(sel_object)
 
-            # If there is a real selection, get the associated object:
-            expanded, node, object = self._get_node_data(nid)
-
-            # Try to inform the node specific handler of the selection:
-            not_handled = node.select(object)
+                # Try to inform the node specific handler of the selection, if
+                # there are multiple selections, we only care about the first
+                # (or maybe the last makes more sense?)
+                if n == nids[0]:
+                    nid = n
+                    object = sel_object
+                    not_handled = node.select(sel_object)
         else:
             nid = None
             object = None
             not_handled = True
 
         # Set the value of the new selection:
-        self._no_update_selected = True
-        self.selected            = object
-        self._no_update_selected = False
+        if self.factory.selection_mode == 'single': 
+            self._no_update_selected = True 
+            self.selected = object 
+            self._no_update_selected = False 
+        else: 
+            self._no_update_selected = True 
+            self.selected = selected 
+            self._no_update_selected = False 
 
         # If no one has been notified of the selection yet, inform the editor's
         # select handler (if any) of the new selection:
@@ -1446,6 +1457,9 @@ class _TreeWidget(QtGui.QTreeWidget):
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.setDragEnabled(True)
         self.setAcceptDrops(True)
+
+        if editor.factory.selection_mode == 'extended':
+            self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
 
         self.connect(self, QtCore.SIGNAL('itemExpanded(QTreeWidgetItem *)'),
                 editor._on_item_expanded)
