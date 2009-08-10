@@ -84,7 +84,7 @@ class Wizard(MWizard, Dialog):
 
         if self.size != (-1, -1):
             size = QtCore.QSize(*self.size)
-            control.setMaximumSize(size)
+            control.setMinimumSize(size)
             control.resize(size)
 
         if not self.show_cancel:
