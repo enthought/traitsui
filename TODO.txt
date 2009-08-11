@@ -49,9 +49,6 @@ Implemented in the wx backend, and must be implemented for compatibility:
   * Adding new items
   * Deleting existing items
   * Reordering items
-  * Proportional column sizing. See TableEditor for implementation example.
-  * Lazy loading of data (compare performance of "NumPy array tabular editor
-    demo" with wx backend)
 
 ============
 Enhancements
@@ -60,9 +57,9 @@ Enhancements
 Low priority items. Not implemented in the wx backend, but would be nice to have
 anyway:
 
-* Create option for ColorEditor that does not show the RGB value of the
-  color. This would allow for much more compact widgets, which is preferable in
-  some cases.
+* Create option for ColorEditor that does not show the RGB value of the color.
+  This would allow for much more compact widgets, which is preferable in some
+  cases.
 
 * TableEditor:
 

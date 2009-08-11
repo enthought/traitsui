@@ -461,7 +461,8 @@ class _TableView(QtGui.QTableView):
         """ Initialise the object.
         """
         QtGui.QTableView.__init__(self)
-
+        
+        self._initial_size = False
         self._editor = editor
         self.setModel(editor.model)
         factory = editor.factory
@@ -476,7 +477,6 @@ class _TableView(QtGui.QTableView):
             hheader.setHighlightSections(False)
         else:
             hheader.hide()
-        self.resizeColumnsToContents()
 
         # Turn off the grid lines--we'll draw our own
         self.setShowGrid(False)
@@ -490,14 +490,8 @@ class _TableView(QtGui.QTableView):
             mode = QtGui.QAbstractItemView.SingleSelection
         self.setSelectionMode(mode)
 
-        # Set column widths according to the adapter's requested width
-        for column in xrange(len(editor.adapter.columns)):
-            width = editor.adapter.get_width(editor.object, editor.name, column)
-            if width != -1:
-                self.setColumnWidth(column, width)
-
     def sizeHint(self):
-        """ Reimplemented to define an appropriate size hint.
+        """ Reimplemented to define a reasonable size hint.
         """
         sh = QtGui.QTableView.sizeHint(self)
         
@@ -507,3 +501,62 @@ class _TableView(QtGui.QTableView):
         sh.setWidth(w)
 
         return sh
+
+    def resizeEvent(self, event):
+        """ Reimplemented to size the table columns when the size of the table
+            changes. Because the layout algorithm requires that the available
+            space be known, we have to wait until the UI that contains this
+            table gives it its initial size.
+        """
+        QtGui.QTableView.resizeEvent(self, event)
+
+        parent = self.parent()
+        if (not self._initial_size and parent and
+            (self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
+            self._initial_size = True
+            self.resizeColumnsToContents()
+
+    def sizeHintForColumn(self, column):
+        """ Reimplemented to support absolute width specification via
+            TabularAdapters and to avoid scanning all data to determine the size
+            hint. (TabularEditor, unlike TableEditor, is expected to handle very
+            large data sets.)
+        """
+        editor = self._editor
+
+        width = editor.adapter.get_width(editor.object, editor.name, column)
+        if width > 1:
+            return width
+        else:
+            return self.horizontalHeader().sectionSizeHint(column)
+
+    def resizeColumnsToContents(self):
+        """ Reimplemented to support proportional column width specifications.
+            For information about the layout algorithm, see
+            https://svn.enthought.com/enthought/wiki/Traits_3_0_tabular_editor.
+        """
+        editor = self._editor
+        available_space = self.viewport().width()
+        hheader = self.horizontalHeader()
+        
+        # Assign sizes for columns with absolute size requests
+        percent_vals, percent_cols = [], []
+        for column in xrange(len(editor.adapter.columns)):
+            width = editor.adapter.get_width(editor.object, editor.name, column)
+            if width > 1:
+                available_space -= width
+                hheader.resizeSection(column, width)
+            else:
+                if width <= 0:
+                    width = 0.1
+                percent_vals.append(width)
+                percent_cols.append(column)
+
+        # Now use the remaining space for columns with proportional or no width
+        # requests.
+        percent_total = sum(percent_vals)
+        for i, column in enumerate(percent_cols):
+            percent = percent_vals[i] / percent_total
+            width = max(30, int(percent * available_space))
+            hheader.resizeSection(column, width)
+            
