@@ -33,7 +33,8 @@ from enthought.traits.trait_base import SequenceTypes
 # enthought.traits.ui.editors.code_editor file.
 from enthought.traits.ui.editors.code_editor import ToolkitEditorFactory
 
-from enthought.pyface.api import PythonEditor
+from enthought.pyface.key_pressed_event import KeyPressedEvent
+from enthought.pyface.ui.qt4.python_editor import _Scintilla
 
 from constants import OKColor, ErrorColor    
 from editor import Editor
@@ -247,15 +248,26 @@ class SourceLexer ( Qsci.QsciLexerCustom ):
 #-------------------------------------------------------------------------------
                                
 class SourceEditor ( Editor ):
-    """ Editor for source code, which displays a PyFace PythonEditor.
+    """ Editor for source code which uses the QScintilla widget.
     """
-    
+
     #---------------------------------------------------------------------------
-    #  Trait definitions:  
+    #  PyFace PythonEditor interface:
     #---------------------------------------------------------------------------
-        
+
+    # Event that is fired on keypresses:
+    key_pressed = Event(KeyPressedEvent)
+
+    #---------------------------------------------------------------------------
+    #  Editor interface:
+    #---------------------------------------------------------------------------
+
     # The code editor is scrollable. This value overrides the default.
     scrollable = True
+    
+    #---------------------------------------------------------------------------
+    #  SoureEditor interface:
+    #---------------------------------------------------------------------------
     
     # Is the editor read only?
     readonly = Bool( False )
@@ -302,15 +314,21 @@ class SourceEditor ( Editor ):
 
         # Create the QScintilla widget
         factory = self.factory
-        self._editor = editor = PythonEditor(None,
-                show_line_numbers = factory.show_line_numbers)
-        self._scintilla = control = editor.control
-        QtCore.QObject.connect(control, QtCore.SIGNAL('lostFocus'), 
-                               self.update_object)
+        self._scintilla = control = _Scintilla(self, None)
         layout.addWidget(control)
 
-        if self.readonly:
-            control.setReadOnly(True)
+        # Connect to the QScintilla signals that we care about
+        if not self.readonly:
+            QtCore.QObject.connect(control, QtCore.SIGNAL('lostFocus'), 
+                                   self.update_object)
+            if factory.auto_set:
+                control.connect(control, QtCore.SIGNAL('textChanged()'),
+                                self.update_object)
+        if (factory.line != '') or (factory.column != ''):
+            # We need to monitor the line or column position being changed
+            control.connect(control,
+                    QtCore.SIGNAL('cursorPositionChanged(int, int)'),
+                    self._position_changed)
 
         # Create the find bar
         self._find_widget = FindWidget(self.find, self.control)
@@ -331,28 +349,56 @@ class SourceEditor ( Editor ):
         # because they get nuked when we call setLexer again.
         self.lexer = getattr(QsciBase, 'SCLEX_' + self.factory.lexer.upper(),
                              QsciBase.SCLEX_NULL)
-        lexer_class = LEXER_MAP.get(self.lexer)
-        if lexer_class:
-            control.setLexer(lexer_class(control))
-            keywords = control.lexer().keywords(1)
+        base_lexer_class = LEXER_MAP.get(self.lexer)
+        if base_lexer_class:
+            lexer = base_lexer_class(control)
+            control.setLexer(lexer)
+            keywords = lexer.keywords(1)
             styles = []
-            # FIXME: Ideally we want to use 'FONT' too, but this is causing
-            #        segfaults. Why?
-            attr_names = [ 'FORE', 'BACK', 'BOLD', 'ITALIC', 'SIZE', 
-                           'EOLFILLED', 'UNDERLINE' ]
+            attr_names = ['FORE', 'BACK', 'BOLD', 'ITALIC', 'SIZE', 'UNDERLINE']
             for style in xrange(128):
-                attrs = [ control.SendScintilla(getattr(QsciBase,'SCI_STYLEGET'+a), 
-                                                style)
+                attrs = [ control.SendScintilla(getattr(QsciBase,'SCI_STYLEGET'+a), style)
                           for a in attr_names ]
                 styles.append(attrs)
-        control.setLexer(SourceLexer(self))
-        if lexer_class:
+        lexer = SourceLexer(self)
+        control.setLexer(lexer)
+        if base_lexer_class:
             if keywords:
                 control.SendScintilla(QsciBase.SCI_SETKEYWORDS, 0, keywords)
             for style, attrs in enumerate(styles):
                 for attr_num, attr in enumerate(attrs):
                     msg = getattr(QsciBase, 'SCI_STYLESET' + attr_names[attr_num])
                     control.SendScintilla(msg, style, attr)
+
+        # Set a monspaced font. Use the (supposedly) same font and size as the
+        # wx version.
+        for style in xrange(128):
+            f = lexer.font(style)
+            f.setFamily('courier new')
+            f.setPointSize(10)
+            lexer.setFont(f, style)
+
+        # Mark the maximum line size.
+        control.setEdgeMode(Qsci.QsciScintilla.EdgeLine)
+        control.setEdgeColumn(79)
+
+        # Display line numbers in the margin.
+        if factory.show_line_numbers:
+            control.setMarginLineNumbers(1, True)
+            control.setMarginWidth(1, 45)
+        else:
+            control.setMarginWidth(1, 4)
+            control.setMarginsBackgroundColor(QtCore.Qt.white)
+
+        # Configure indentation and tabs.
+        control.setIndentationsUseTabs(False)
+        control.setTabWidth(4)
+
+        # Configure miscellaneous control settings:
+        control.setEolMode(Qsci.QsciScintilla.EolUnix)
+
+        if self.readonly:
+            control.setReadOnly(True)
                                       
         # Define the markers we use:
         control.markerDefine(Qsci.QsciScintilla.Background, MARK_MARKER)
@@ -368,11 +414,6 @@ class SourceEditor ( Editor ):
         self.update_editor()
         
         # Set up any event listeners:
-        if factory.auto_set:
-            editor.on_trait_change(self.update_object, 'changed', dispatch='ui')
-
-        editor.on_trait_change(self._key_pressed, 'key_pressed', dispatch='ui')
-
         self.sync_value( factory.mark_lines, 'mark_lines', 'from',
                          is_list = True )
         self.sync_value( factory.selected_line, 'selected_line', 'from' )
@@ -393,12 +434,7 @@ class SourceEditor ( Editor ):
         else:
             self.sync_value(factory.squiggle_color, 'squiggle_color', 'from')
 
-        # Check if we need to monitor the line or column position being changed:
-        if (factory.line != '') or (factory.column != ''):
-            control.connect(control,
-                    QtCore.SIGNAL('cursorPositionChanged(int, int)'),
-                    self._position_changed)
-
+        # Set the control tooltip:
         self.set_tooltip()
 
     #---------------------------------------------------------------------------
@@ -408,13 +444,8 @@ class SourceEditor ( Editor ):
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
-        editor = self._editor
-
-        if self.factory.auto_set:
-            editor.on_trait_change(self.update_object, 'changed', remove=True)
-                                         
-        editor.on_trait_change(self._key_pressed, 'key_pressed', remove=True)
-
+        # Make sure that the editor does not try to update as the control is
+        # being destroyed:
         QtCore.QObject.disconnect(self._scintilla, QtCore.SIGNAL('lostFocus'),
                                   self.update_object)
 
@@ -461,7 +492,8 @@ class SourceEditor ( Editor ):
             vsb.setValue(l1)
             control.setReadOnly(readonly)
             self._mark_lines_changed()
-            self._selected_line_changed()
+            if self.factory.selected_line:
+                self._selected_line_changed()
         self._locked = False
 
     #---------------------------------------------------------------------------
@@ -584,7 +616,7 @@ class SourceEditor ( Editor ):
     #  Handles a key being pressed within the editor:    
     #---------------------------------------------------------------------------
                 
-    def _key_pressed ( self, event ):
+    def _key_pressed_changed ( self, event ):
         """ Handles a key being pressed within the editor.
         """
         key_bindings = self.factory.key_bindings
