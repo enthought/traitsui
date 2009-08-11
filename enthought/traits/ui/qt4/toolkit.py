@@ -393,21 +393,17 @@ class GUIToolkit ( Toolkit ):
     def destroy_control ( self, control ):
         """ Destroys a specified GUI toolkit control.
         """
-        # Make sure that any dialogs started with 'exec' are terminated,
-        # otherwise their local event loops will continue to run.
-        if isinstance(control, QtGui.QDialog):
-            # Block signals to prevent any 'finished()' signals being emitted.
-            # At this point, all cleanup is assumed to be done.
-            control.blockSignals(True)
-            QtGui.QDialog.done(control, 0)
-            control.blockSignals(False)
+        # Block signals to prevent any editors from being updated (the control
+        # will not be deleted immediately).
+        control.blockSignals(True)
 
-        # This may be called from within the finished() signal handler
-        # so we need to do the delete after the handler has returned.
+        # This may be called from within the finished() signal handler so we
+        # need to do the delete after the handler has returned.
+        control.hide()
         control.deleteLater()
 
-        # PyQt v4.3.1 and earlier deleteLater() didn't transfer ownership
-        # to C++ which turns out to be important.
+        # PyQt v4.3.1 and earlier deleteLater() didn't transfer ownership to
+        # C++, which is necessary for the QObject system to garbage collect it.
         if QtCore.PYQT_VERSION < 0x040302:
             import sip
             sip.transferto(control, None)

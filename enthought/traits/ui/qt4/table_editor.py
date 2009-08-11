@@ -246,6 +246,10 @@ class TableEditor(Editor, BaseTableEditor):
     def dispose(self):
         """ Disposes of the contents of an editor."""
 
+        # Disconnect the table view from its model to ensure that they do not
+        # continue to interact (the control won't be deleted until later).
+        self.table_view.setModel(None)
+
         # Make sure that the auxillary UIs are properly disposed
         if self.toolbar_ui is not None:
             self.toolbar_ui.dispose()
@@ -864,14 +868,18 @@ class TableView(QtGui.QTableView):
         """Reimplemented to define a better size hint for the width of the
         TableEditor.""" 
  	 
-        size_hint = QtGui.QTableView.sizeHint(self) 
+        size_hint = QtGui.QTableView.sizeHint(self)
+
+        # This method is sometimes called by Qt after the editor has been
+        # disposed but before this control has been deleted:
+        if self._editor.factory is None:
+            return size_hint
         
         width = self.style().pixelMetric(QtGui.QStyle.PM_ScrollBarExtent,
                                          QtGui.QStyleOptionHeader(), self)
         for column in range(len(self._editor.columns)):
             width += self.sizeHintForColumn(column)
         size_hint.setWidth(width)
-	 	 
         return size_hint
 
     def sizeHintForColumn(self, column_index):
