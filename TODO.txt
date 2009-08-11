@@ -49,6 +49,7 @@ Implemented in the wx backend, and must be implemented for compatibility:
   * Adding new items
   * Deleting existing items
   * Reordering items
+  * Proportional column sizing. See TableEditor for implementation example.
   * Lazy loading of data (compare performance of "NumPy array tabular editor
     demo" with wx backend)
 

@@ -162,16 +162,16 @@ class TabularEditor(Editor):
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
         try:
-            self.context_object.on_trait_change(self.update_editor,
-                                self.extended_name + '_items', dispatch = 'ui')
+            self.context_object.on_trait_change(
+                self.update_editor, self.extended_name+'_items', dispatch='ui')
         except:
             pass
 
         # If the user has requested automatic update, attempt to set up the
         # appropriate listeners:
         if factory.auto_update:
-            self.context_object.on_trait_change(self.update_editor,
-                                self.extended_name + '.-', dispatch='ui')
+            self.context_object.on_trait_change(
+                self.update_editor, self.extended_name + '.-', dispatch='ui')
 
         # Create the mapping from user supplied images to QImages:
         for image_resource in factory.images:
@@ -193,12 +193,12 @@ class TabularEditor(Editor):
     def dispose (self):
         """ Disposes of the contents of an editor.
         """
-        self.context_object.on_trait_change(self.update_editor,
-                                  self.extended_name + '_items', remove=True)
+        self.context_object.on_trait_change(
+            self.update_editor, self.extended_name + '_items', remove=True)
 
         if self.factory.auto_update:
-            self.context_object.on_trait_change(self.update_editor,
-                                self.extended_name + '.-', remove=True)
+            self.context_object.on_trait_change(
+                self.update_editor, self.extended_name + '.-', remove=True)
 
         self.on_trait_change(self.update_editor, 'adapter.+update', remove=True)
         self.on_trait_change(self.update_editor, 'adapter.columns',
@@ -233,8 +233,8 @@ class TabularEditor(Editor):
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
-        widths = [ self.control.columnWidth(column) for column
-                   in xrange(len(self.adapter.columns)) ]
+        widths = [ self.control.columnWidth(column) 
+                   for column in xrange(len(self.adapter.columns)) ]
         return { 'cached_widths': widths }
 
     #---------------------------------------------------------------------------
@@ -340,7 +340,8 @@ class TabularEditor(Editor):
     def _on_activate(self, index):
         """ Handle a cell being activated.
         """
-        self._mouse_click(index, 'activated')
+        self.activated_row = row = index.row()
+        self.activated = self.adapter.get_item(self.object, self.name, row)
 
     def _on_click(self, index):
         """ Handle a cell being clicked.
@@ -423,7 +424,7 @@ class TabularEditorEvent(HasStrictTraits):
 class _ItemDelegate(QtGui.QStyledItemDelegate):
     """ A QStyledItemDelegate which draws its owns gridlines so that we can 
         choose to draw only the horizontal or only the vertical gridlines if 
-        necessary.
+        appropriate.
     """
 
     def __init__(self, table_view):
@@ -446,12 +447,9 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
         painter.setPen(option.palette.color(QtGui.QPalette.Dark))
 
         if self._horizontal_lines:
-            painter.drawLine(option.rect.topLeft(), option.rect.topRight())
-            if index.row() == index.model().rowCount(index)-1:
-                painter.drawLine(option.rect.bottomLeft(), 
-                                 option.rect.bottomRight())
+            painter.drawLine(option.rect.bottomLeft(),option.rect.bottomRight())
         if self._vertical_lines:
-            painter.drawLine(option.rect.topLeft(), option.rect.bottomLeft())
+            painter.drawLine(option.rect.topRight(), option.rect.bottomRight())
 
         painter.restore()
 
