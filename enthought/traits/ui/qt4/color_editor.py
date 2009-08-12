@@ -196,6 +196,7 @@ class TextColorEditor ( BaseTextEditor ):
         """ Handles the user changing the contents of the edit control.
         """
         self.value = unicode(self.control.text())
+        set_color( self )
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -292,8 +293,9 @@ def color_editor_for(editor, parent):
                 for b in (0, 128, 255):
                     color_samples.append(QtGui.QColor(r, g, b))
 
-    # The lanel is a horizontal layout.
-    panel = QtGui.QHBoxLayout()
+    root = QtGui.QWidget()
+    panel = QtGui.QHBoxLayout(root)
+    panel.setMargin(0)
 
     swatch_editor = editor.factory.simple_editor(editor.ui, editor.object,
             editor.name, editor.description, None)
@@ -333,8 +335,7 @@ def color_editor_for(editor, parent):
 
     panel.addLayout(grid)
 
-    # Return the panel as the result:
-    return panel
+    return root
 
 
 # Define the SimpleEditor, CustomEditor, etc. classes which are used by the

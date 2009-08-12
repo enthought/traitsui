@@ -22,8 +22,6 @@ Implemented in the wx backend, and must be implemented for compatibility:
 
 * HistoryEditor is not implemented.
 
-* ImageEnumEditor is not implemented. A standard enum editor get used instead.
-
 * Features missing from the ListStrEditor:
   * 'auto_add' factory option
   * 'right_clicked' and 'right_clicked_index' factory options
