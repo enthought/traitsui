@@ -382,9 +382,8 @@ class RadioEditor ( BaseEditor ):
         for i in range( rows ):
             for j in range( cols ):
                 if n > 0:
-                    name = label = names[ index ]
-                    label = self.string_value( label, capitalize )
-                    rb = QtGui.QRadioButton(label)
+                    name = names[index]
+                    rb = self.create_button(name)
                     rb.value = mapping[name]
 
                     rb.setChecked(name == cur_name)
@@ -398,6 +397,16 @@ class RadioEditor ( BaseEditor ):
 
                     index += incr[j]
                     n -= 1
+
+    #---------------------------------------------------------------------------
+    #  Returns the QAbstractButton used for the radio button:
+    #---------------------------------------------------------------------------
+
+    def create_button(self, name):
+        """ Returns the QAbstractButton used for the radio button.
+        """
+        label = self.string_value(name, capitalize)
+        return QtGui.QRadioButton(label)
 
 #-------------------------------------------------------------------------------
 #  'ListEditor' class:

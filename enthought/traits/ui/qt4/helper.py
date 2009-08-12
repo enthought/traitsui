@@ -25,7 +25,7 @@ from enthought.traits.api \
     import Enum, CTrait, BaseTraitHandler, TraitError
     
 from enthought.traits.ui.ui_traits \
-    import SequenceTypes
+    import convert_image, SequenceTypes
     
 #-------------------------------------------------------------------------------
 #  Trait definitions:  
@@ -38,20 +38,27 @@ Orientation = Enum( 'horizontal', 'vertical' )
 #  Convert an image file name to a cached QPixmap:
 #-------------------------------------------------------------------------------
 
-def pixmap_cache(name):
-    """ Return the QPixmap corresponding to a filename.  If the filename does
-        not contain a path component then the local 'images' directory is used.
+def pixmap_cache(name, path=None):
+    """ Return the QPixmap corresponding to a filename. If the filename does not
+        contain a path component, 'path' is used (or if 'path' is not specified,
+        the local 'images' directory is used).
     """
-    path, _ = os.path.split(name)
-    if not path:
-        name = os.path.join(os.path.dirname(__file__), 'images', name)
+    if name[:1] == '@':
+        image = convert_image(name.replace(' ', '_').lower())
+        if image is not None:
+            return image.create_image()
+
+    name_path, _ = os.path.split(name)
+    if not name_path:
+        if path is None:
+            name = os.path.join(os.path.dirname(__file__), 'images', name)
+        else:
+            name = os.path.join(path, name)
 
     pm = QtGui.QPixmap()
-
     if not QtGui.QPixmapCache.find(name, pm):
         pm.load(name)
         QtGui.QPixmapCache.insert(name, pm)
-
     return pm
 
 #-------------------------------------------------------------------------------
