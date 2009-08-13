@@ -22,7 +22,7 @@ import re
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 from enthought.traits.api \
-    import Instance, Undefined
+    import Any, Instance, Undefined
 
 from enthought.traits.ui.api \
     import Group
@@ -489,10 +489,9 @@ class _GroupPanel(object):
                 inner.addWidget(splitter)
 
             # Create an editor.
-            self._setup_editor(group,
-                    SplitterGroupEditor(control=outer, splitter=splitter,
-                                        ui=ui))
-
+            editor = SplitterGroupEditor(control=outer, splitter=splitter,ui=ui)
+            self._setup_editor(group, editor)
+                   
             self._add_splitter_items(content, splitter)
 
         elif group.layout in ('tabbed', 'fold'):
@@ -517,7 +516,8 @@ class _GroupPanel(object):
                 inner.addWidget(sub)
 
             # Create an editor.
-            self._setup_editor(group, GroupEditor(control=outer))
+            editor = TabbedFoldGroupEditor(container=sub, control=outer, ui=ui)
+            self._setup_editor(group, editor)
 
         else:
             # See if we need to control the visual appearence of the group.
@@ -985,32 +985,27 @@ class _GroupPanel(object):
 
 
 class GroupEditor(Editor):
-    """A pseudo-editor that allows a group to be managed.
+    """ A pseudo-editor that allows a group to be managed.
     """
 
     def __init__(self, **traits):
-        """Initialise the object.
+        """ Initialise the object.
         """
-
         self.set(**traits)
 
 
 class SplitterGroupEditor(GroupEditor):
-    """A pseudo-editor that allows a group with a 'split' layout to be managed.
+    """ A pseudo-editor that allows a group with a 'split' layout to be managed.
     """
 
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-
-    # The QSplitter for the group.
+    # The QSplitter for the group
     splitter = Instance(_GroupSplitter)
 
     #-- UI preference save/restore interface -----------------------------------
 
-    def restore_prefs ( self, prefs ):
-        """Restores any saved user preference information associated with the 
-           editor.
+    def restore_prefs(self, prefs):
+        """ Restores any saved user preference information associated with the 
+            editor.
         """
         if isinstance(prefs, dict):
             structure = prefs.get('structure')
@@ -1020,13 +1015,37 @@ class SplitterGroupEditor(GroupEditor):
         self.splitter._resized = True
         self.splitter.restoreState(structure)
 
-
-    def save_prefs ( self ):
-        """Returns any user preference information associated with the editor.
+    def save_prefs(self):
+        """ Returns any user preference information associated with the editor.
         """
-        return {'structure': str(self.splitter.saveState())}
+        return { 'structure': str(self.splitter.saveState()) }
 
-    #-- End UI preference save/restore interface -------------------------------
+
+class TabbedFoldGroupEditor(GroupEditor):
+    """ A pseudo-editor that allows a group with a 'tabbed' or 'fold' layout to
+        be managed.
+    """
+    
+    # The QTabWidget or QToolBox for the group
+    container = Any
+
+    #-- UI preference save/restore interface -----------------------------------
+
+    def restore_prefs(self, prefs):
+        """ Restores any saved user preference information associated with the 
+            editor.
+        """
+        if isinstance(prefs, dict):
+            current_index = prefs.get('current_index')
+        else:
+            current_index = prefs
+        
+        self.container.setCurrentIndex(int(current_index))
+
+    def save_prefs(self):
+        """ Returns any user preference information associated with the editor.
+        """
+        return { 'current_index': str(self.container.currentIndex()) }
 
 
 #-------------------------------------------------------------------------------

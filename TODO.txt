@@ -1,14 +1,3 @@
-====
-Bugs
-====
-
-* Text style of ColorEditor does not update correctly when edited (object trait
-  updates, editor color does not)
-
-* Tabbed group layout does not remember the selected tab when it is reloaded
-  (this can be observed by running the Traits UI Demo application, selecting the
-  demo view tab for a demo, and then clicking on a new demo in the tree).
-
 ================
 Missing features
 ================
