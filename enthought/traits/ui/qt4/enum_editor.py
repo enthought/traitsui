@@ -21,6 +21,9 @@ from string import capitalize
     
 from PyQt4 import QtCore, QtGui
 
+from enthought.traits.api \
+    import Bool, Property
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the 
 # enthought.traits.ui.editors.enum_editor file.
@@ -35,9 +38,6 @@ from constants \
     
 from helper \
     import enum_values_changed
-    
-from enthought.traits.api \
-    import Property
            
 #-------------------------------------------------------------------------------
 #  'BaseEditor' class:
@@ -182,10 +182,7 @@ class SimpleEditor ( BaseEditor ):
         """
         super( SimpleEditor, self ).init( parent )
         
-        self.control = control = QtGui.QComboBox()
-        control.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
-        control.setSizePolicy(QtGui.QSizePolicy.Maximum,
-                              QtGui.QSizePolicy.Fixed)
+        self.control = control = self.create_combo_box()
         control.addItems(self.names)
 
         QtCore.QObject.connect(control,
@@ -202,18 +199,32 @@ class SimpleEditor ( BaseEditor ):
         self.set_tooltip()
 
     #---------------------------------------------------------------------------
+    #  Returns the QComboBox used for the editor control:
+    #---------------------------------------------------------------------------
+
+    def create_combo_box(self):
+        """ Returns the QComboBox used for the editor control.
+        """
+        control = QtGui.QComboBox()
+        control.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
+        control.setSizePolicy(QtGui.QSizePolicy.Maximum,
+                              QtGui.QSizePolicy.Fixed)
+        return control
+
+    #---------------------------------------------------------------------------
     #  Handles the user selecting a new value from the combo box:
     #---------------------------------------------------------------------------
   
     def update_object (self, text):
         """ Handles the user selecting a new value from the combo box.
         """
-        self._no_enum_update += 1
-        try:
-            self.value = self.mapping[unicode(text)]
-        except:
-            pass
-        self._no_enum_update -= 1
+        if self._no_enum_update == 0:
+            self._no_enum_update += 1
+            try:
+                self.value = self.mapping[unicode(text)]
+            except:
+                pass
+            self._no_enum_update -= 1
 
     #---------------------------------------------------------------------------
     #  Handles the user typing text into the combo box text entry field:
@@ -247,10 +258,11 @@ class SimpleEditor ( BaseEditor ):
             editor.
         """
         if self._no_enum_update == 0:
+            self._no_enum_update += 1
             if self.factory.evaluate is None:
                 try:
-                    idx = self.control.findText(self.inverse_mapping[self.value])
-                    self.control.setCurrentIndex(idx)
+                    index = self.names.index(self.inverse_mapping[self.value])
+                    self.control.setCurrentIndex(index)
                 except:
                     self.control.setCurrentIndex(-1)
             else:
@@ -258,6 +270,7 @@ class SimpleEditor ( BaseEditor ):
                     self.control.setEditText(self.str_value)
                 except:
                     self.control.setEditText('')
+            self._no_enum_update -= 1
         
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
@@ -293,7 +306,7 @@ class SimpleEditor ( BaseEditor ):
         self.control.blockSignals(False)
 
         self.update_editor()
-                                      
+
 #-------------------------------------------------------------------------------
 #  'RadioEditor' class:
 #-------------------------------------------------------------------------------
@@ -302,6 +315,10 @@ class RadioEditor ( BaseEditor ):
     """ Enumeration editor, used for the "custom" style, that displays radio
         buttons.
     """
+
+    # Is the button layout row-major or column-major?
+    row_major = Bool( False )
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -318,8 +335,8 @@ class RadioEditor ( BaseEditor ):
         layout.setMargin(0)
 
         self._mapper = QtCore.QSignalMapper()
-        QtCore.QObject.connect(self._mapper,
-                QtCore.SIGNAL('mapped(QWidget *)'), self.update_object)
+        QtCore.QObject.connect(self._mapper, QtCore.SIGNAL('mapped(int)'),
+                               self.update_object)
 
         self.rebuild_editor()
    
@@ -327,11 +344,11 @@ class RadioEditor ( BaseEditor ):
     #  Handles the user clicking one of the 'custom' radio buttons:
     #---------------------------------------------------------------------------
     
-    def update_object(self, rb):
+    def update_object ( self, index ):
         """ Handles the user clicking one of the custom radio buttons.
         """
         try:
-            self.value = rb.value
+            self.value = self.mapping[self.names[index]]
         except:
             pass
         
@@ -370,11 +387,14 @@ class RadioEditor ( BaseEditor ):
         n       = len( names )
         cols    = self.factory.cols
         rows    = (n + cols - 1) / cols
-        incr    = [ n / cols ] * cols
-        rem     = n % cols
-        for i in range( cols ):
-            incr[i] += (rem > i)
-        incr[-1] = -(reduce( lambda x, y: x + y, incr[:-1], 0 ) - 1)
+        if self.row_major:
+            incr = [ 1 ] * cols
+        else:
+            incr = [ n / cols ] * cols
+            rem  = n % cols
+            for i in range( cols ):
+                incr[i] += (rem > i)
+            incr[-1] = -(reduce( lambda x, y: x + y, incr[:-1], 0 ) - 1)
 
         # Add the set of all possible choices:
         layout = self.control.layout()
@@ -389,8 +409,8 @@ class RadioEditor ( BaseEditor ):
                     rb.setChecked(name == cur_name)
 
                     QtCore.QObject.connect(rb, QtCore.SIGNAL('clicked()'),
-                            self._mapper, QtCore.SLOT('map()'))
-                    self._mapper.setMapping(rb, rb)
+                                           self._mapper, QtCore.SLOT('map()'))
+                    self._mapper.setMapping(rb, index)
 
                     self.set_tooltip(rb)
                     layout.addWidget(rb, i, j)
