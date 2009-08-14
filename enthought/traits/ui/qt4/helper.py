@@ -48,17 +48,21 @@ def pixmap_cache(name, path=None):
         if image is not None:
             return image.create_image()
 
-    name_path, _ = os.path.split(name)
-    if not name_path:
+    name_path, name = os.path.split(name)
+    name = name.replace(' ', '_').lower()
+    if name_path:
+        filename = os.path.join(name_path, name)
+    else:
         if path is None:
-            name = os.path.join(os.path.dirname(__file__), 'images', name)
+            filename = os.path.join(os.path.dirname(__file__), 'images', name)
         else:
-            name = os.path.join(path, name)
+            filename = os.path.join(path, name)
+    filename = os.path.abspath(filename)
 
     pm = QtGui.QPixmap()
-    if not QtGui.QPixmapCache.find(name, pm):
-        pm.load(name)
-        QtGui.QPixmapCache.insert(name, pm)
+    if not QtGui.QPixmapCache.find(filename, pm):
+        pm.load(filename)
+        QtGui.QPixmapCache.insert(filename, pm)
     return pm
 
 #-------------------------------------------------------------------------------

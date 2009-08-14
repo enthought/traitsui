@@ -41,7 +41,7 @@ Implemented in the wx backend, and must be implemented for compatibility:
 Enhancements
 ============
 
-Low priority items. Not implemented in the wx backend, but would be nice to have
+Low priority items. Not provided by the wx backend, but would be nice to have
 anyway:
 
 * Create option for ColorEditor that does not show the RGB value of the color.
@@ -56,3 +56,8 @@ anyway:
     for selecting which template to use. This is better than the always-present
     EnumEditor for tempate selection because templates are clearly associated 
     with the creation of new filters.
+
+* ImageEnumEditor usability enhancement: when there are multiple columns, the
+  'simple' style editor only aligns the popup vertically (because popup boxes
+  normally only have one column). The 'showPopup' method of QComboBox should be
+  overridden to align the popup horizontally as well.

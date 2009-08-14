@@ -99,21 +99,8 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         """ Returns the QComboBox used for the editor control.
         """
         control = ImageEnumComboBox(self)
-
-        # Compute the size of the largest image
-        size = QtCore.QSize()
-        for name in self.names:
-            size = size.expandedTo(self.get_pixmap(name).size())
-        
-        # Use this to set the optimal size of the combo box
-        option = QtGui.QStyleOptionComboBox()
-        control.initStyleOption(option)
-        size = control.style().sizeFromContents(QtGui.QStyle.CT_ComboBox,
-                                                option, size, control)
-        control.setMaximumSize(size)
-        control.setSizePolicy(QtGui.QSizePolicy.Expanding, 
-                              QtGui.QSizePolicy.Expanding)
-
+        control.setSizePolicy(QtGui.QSizePolicy.Maximum,
+                              QtGui.QSizePolicy.Maximum)
         return control
 
     #---------------------------------------------------------------------------
@@ -199,22 +186,15 @@ class ImageEnumComboBox(QtGui.QComboBox):
 
         delegate = ImageEnumItemDelegate(editor, self)
         if editor.factory.cols > 1:
-            view = QtGui.QTableView(self)
+            view = ImageEnumTablePopupView(self)
             view.setItemDelegate(delegate)
-            hheader = view.horizontalHeader()
-            hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
-            hheader.hide()
-            view.verticalHeader().hide()
-            view.setShowGrid(False)
             self.setView(view)
-
             # Unless we force it, the popup for a combo box will not be wider
             # than the box itself, so we set a high minimum width.
             width = 0
             for col in xrange(self._editor.factory.cols):
                 width += view.sizeHintForColumn(col)
             view.setMinimumWidth(width)
-
         else:
             self.setItemDelegate(delegate)
     
@@ -229,7 +209,8 @@ class ImageEnumComboBox(QtGui.QComboBox):
         self.initStyleOption(option)
         painter.drawComplexControl(QtGui.QStyle.CC_ComboBox, option)
 
-        pixmap = self._editor.get_pixmap(self._editor.str_value)
+        editor = self._editor
+        pixmap = editor.get_pixmap(editor.inverse_mapping[editor.value])
         arrow = self.style().subControlRect(QtGui.QStyle.CC_ComboBox, option,
                                             QtGui.QStyle.SC_ComboBoxArrow)
         option.rect.setWidth(option.rect.width() - arrow.width())
@@ -237,6 +218,45 @@ class ImageEnumComboBox(QtGui.QComboBox):
                                           QtCore.Qt.AlignCenter,
                                           pixmap.size(), option.rect)
         painter.drawPixmap(target, pixmap)
+
+    def sizeHint(self):
+        """ Reimplemented to set a size hint based on the size of the larget
+            image.
+        """
+        size = QtCore.QSize()
+        for name in self._editor.names:
+            size = size.expandedTo(self._editor.get_pixmap(name).size())
+        
+        option = QtGui.QStyleOptionComboBox()
+        self.initStyleOption(option)
+        size = self.style().sizeFromContents(QtGui.QStyle.CT_ComboBox, option, 
+                                             size, self)
+        return size
+
+class ImageEnumTablePopupView(QtGui.QTableView):
+
+    def __init__(self, parent):
+        """ Configure the appearence of the table view.
+        """
+        QtGui.QTableView.__init__(self, parent)
+        hheader = self.horizontalHeader()
+        hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        hheader.hide()
+        vheader = self.verticalHeader()
+        vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        vheader.hide()
+        self.setShowGrid(False)
+
+    def indexAt(self, point):
+        """ Reimplemented because our table may have cells in the last row which
+            have no data in them. By returning an invalid model index in this
+            case, we ensure that they cannot be selected in the popup menu.
+        """
+        index = QtGui.QTableView.indexAt(self, point)
+        if index.data(QtCore.Qt.DisplayRole).isValid():
+            return index
+        else:
+            return QtCore.QModelIndex()
       
 class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
     """ An item delegate which draws only images.
@@ -260,19 +280,23 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
         QtGui.QStyledItemDelegate.paint(self, painter, option, mi)
         
         # Now draw the pixmap
-        index = mi.row() * self._editor.factory.cols + mi.column()
-        pixmap = self._editor.get_pixmap(self._editor.names[index])
-        target = QtGui.QStyle.alignedRect(QtCore.Qt.LeftToRight, 
-                                          QtCore.Qt.AlignCenter,
-                                          pixmap.size(), option.rect)
-        painter.drawPixmap(target, pixmap)
+        name = mi.data(QtCore.Qt.DisplayRole)
+        if name.isValid():
+            pixmap = self._editor.get_pixmap(str(name.toString()))
+            target = QtGui.QStyle.alignedRect(QtCore.Qt.LeftToRight, 
+                                              QtCore.Qt.AlignCenter,
+                                              pixmap.size(), option.rect)
+            painter.drawPixmap(target, pixmap)
 
     def sizeHint(self, option, mi):
         """ Reimplemented to define a size hint based on the size of the pixmap.
         """
-        index = mi.row() * self._editor.factory.cols + mi.column()
-        pixmap = self._editor.get_pixmap(self._editor.names[index])
-        return pixmap.size()
+        name = mi.data(QtCore.Qt.DisplayRole)
+        if name.isValid():
+            pixmap = self._editor.get_pixmap(str(name.toString()))
+            return pixmap.size()
+        else:
+            return QtCore.QSize()
 
 class ImageEnumModel(QtCore.QAbstractTableModel):
     """ A table model for use with the 'simple' style ImageEnumEditor.
@@ -297,12 +321,11 @@ class ImageEnumModel(QtCore.QAbstractTableModel):
         return self._editor.factory.cols
     
     def data(self, mi, role):
-        """ Reimplemented to return the data. Although we don't care about the
-            text, this needs to be implemented for the view on this model to
-            function properly.
+        """ Reimplemented to return the data.
         """
         if role == QtCore.Qt.DisplayRole:
             index = mi.row() * self._editor.factory.cols + mi.column()
-            return QtCore.QVariant(self._editor.names[index])
+            if index < len(self._editor.names):
+                return QtCore.QVariant(self._editor.names[index])
 
         return QtCore.QVariant()
