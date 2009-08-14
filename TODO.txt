@@ -30,12 +30,9 @@ Implemented in the wx backend, and must be implemented for compatibility:
     supported through TableColumns.
 
 * Features missing from the TabularEditor:
-  * 'right_clicked' and 'right_dclicked' events
-  * Drag and drop
+  * 'auto_add' factory option
+  * 'right_clicked' and 'right_dclicked' factory options
   * Editable labels (column headers)
-  * Adding new items
-  * Deleting existing items
-  * Reordering items
 
 ============
 Enhancements

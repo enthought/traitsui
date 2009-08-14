@@ -49,7 +49,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         self._editor = editor
 
     #---------------------------------------------------------------------------
-    #  QListStrModel interface:
+    #  QAbstractItemModel interface:
     #---------------------------------------------------------------------------
 
     def rowCount(self, mi):
@@ -147,8 +147,8 @@ class ListStrModel(QtCore.QAbstractListModel):
             editor.adapter.get_can_edit(editor.object, editor.name, index)):
             flags |= QtCore.Qt.ItemIsEditable
 
-        if (editor.factory.editable and 
-            editor.adapter.get_drag(editor.object, editor.name, index)):
+        if (editor.factory.editable and 'move' in editor.factory.operations and
+            editor.adapter.get_drag(editor.object, editor.name, index) is not None):
             flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
 
         return flags

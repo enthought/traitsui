@@ -417,11 +417,10 @@ class _ListView(QtGui.QListView):
         self.setSelectionMode(mode)
 
         # Configure drag and drop behavior
-        if 'move' in factory.operations:
-            self.setDragEnabled(True)
-            self.setDragDropOverwriteMode(True)
-            self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
-            self.setDropIndicatorShown(True)
+        self.setDragEnabled(True)
+        self.setDragDropOverwriteMode(True)
+        self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+        self.setDropIndicatorShown(True)
 
     def keyPressEvent(self, event):
         """ Reimplemented to support edit, insert, and delete by keyboard.

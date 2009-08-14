@@ -104,10 +104,9 @@ class TabularEditor(Editor):
     image = Image
 
     #---------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
+    #  Editor interface:
     #---------------------------------------------------------------------------
-
+        
     def init (self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -171,24 +170,20 @@ class TabularEditor(Editor):
         # appropriate listeners:
         if factory.auto_update:
             self.context_object.on_trait_change(
-                self.update_editor, self.extended_name + '.-', dispatch='ui')
+                self.refresh_editor, self.extended_name + '.-', dispatch='ui')
 
         # Create the mapping from user supplied images to QImages:
         for image_resource in factory.images:
             self._add_image(image_resource)
 
         # Refresh the editor whenever the adapter changes:
-        self.on_trait_change(self.update_editor, 'adapter.+update',
+        self.on_trait_change(self.refresh_editor, 'adapter.+update',
                              dispatch='ui')
 
         # Rebuild the editor columns and headers whenever the adapter's
         # 'columns' changes:
         self.on_trait_change(self.update_editor, 'adapter.columns', 
                              dispatch='ui')
-
-    #---------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #---------------------------------------------------------------------------
 
     def dispose (self):
         """ Disposes of the contents of an editor.
@@ -198,23 +193,51 @@ class TabularEditor(Editor):
 
         if self.factory.auto_update:
             self.context_object.on_trait_change(
-                self.update_editor, self.extended_name + '.-', remove=True)
+                self.refresh_editor, self.extended_name + '.-', remove=True)
 
-        self.on_trait_change(self.update_editor, 'adapter.+update', remove=True)
+        self.on_trait_change(self.refresh_editor, 'adapter.+update', 
+                             remove=True)
         self.on_trait_change(self.update_editor, 'adapter.columns',
                              remove=True)
 
         super(TabularEditor, self).dispose()
 
-    #---------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        self.model.reset()
+        if not self._no_update:
+            self.model.reset()
+
+    #---------------------------------------------------------------------------
+    #  TabularEditor interface:
+    #---------------------------------------------------------------------------
+
+    def refresh_editor(self):
+        """ Requests the table view to redraw itself.
+        """
+        self.control.viewport().update()
+
+    def callx(self, func, *args, **kw):
+        """ Call a function without allowing the editor to update.
+        """
+        old = self._no_update
+        self._no_update = True
+        try:
+            func(*args, **kw)
+        finally:
+            self._no_update = old
+
+    def setx(self, **keywords):
+        """ Set one or more attributes without allowing the editor to update.
+        """
+        old = self._no_notify
+        self._no_notify = True
+        try:
+            for name, value in keywords.items():
+                setattr(self, name, value)
+        finally:
+            self._no_notify = old
 
     #---------------------------------------------------------------------------
     #  UI preference save/restore interface:
@@ -282,17 +305,19 @@ class TabularEditor(Editor):
     def _selected_changed(self, new):
         if not self._no_update:
             try:
-                self._selected_row_changed(self, self.value.index(new))
+                selected_row = self.value.index(new)
             except:
                 pass
+            else:
+                self._selected_row_changed(selected_row)
 
     def _selected_row_changed(self, selected_row):
         if not self._no_update:
             smodel = self.control.selectionModel()
-            if selected is None:
+            if selected_row == -1:
                 smodel.clearSelection()
             else:
-                smodel.select(self.model.index(row, 0), 
+                smodel.select(self.model.index(selected_row, 0), 
                               QtGui.QItemSelectionModel.ClearAndSelect |
                               QtGui.QItemSelectionModel.Rows)
 
@@ -301,19 +326,21 @@ class TabularEditor(Editor):
             values = self.value
             try:
                 rows = [ values.index(i) for i in new]
-                self._multi_selected_rows_changed(row)
             except:
                 pass
+            else:
+                self._multi_selected_rows_changed(rows)
 
     def _multi_selected_items_changed(self, event):
         values = self.values
         try:
             added = [ values.index(item) for item in event.added ]
             removed = [ values.index(item) for item in event.removed ]
-            new_event = TraitListEvent(0, added, removed)
-            self._multi_selected_rows_items_changed(new_event)
         except:
             pass
+        else:
+            list_event = TraitListEvent(0, added, removed)
+            self._multi_selected_rows_items_changed(list_event)
 
     def _multi_selected_rows_changed(self, selected_rows):
         if not self._no_update:
@@ -489,6 +516,59 @@ class _TableView(QtGui.QTableView):
         else:
             mode = QtGui.QAbstractItemView.SingleSelection
         self.setSelectionMode(mode)
+
+        # Configure drag and drop behavior
+        self.setDragEnabled(True)
+        self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+        self.setDropIndicatorShown(True)
+
+    def keyPressEvent(self, event):
+        """ Reimplemented to support edit, insert, and delete by keyboard.
+        """
+        editor = self._editor
+        factory = editor.factory
+
+        # Note that setting 'EditKeyPressed' as an edit trigger does not work on
+        # most platforms, which is why we do this here.
+        if (event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and
+            self.state() != QtGui.QAbstractItemView.EditingState and 
+            factory.editable and 'edit' in factory.operations):
+            if factory.multi_select:
+                rows = editor.multi_selected_rows
+                row = rows[0] if len(rows) == 1 else -1
+            else:
+                row = editor.selected_row
+            
+            if row != -1:
+                event.accept()
+                self.edit(editor.model.index(row, 0))
+
+        elif (event.key() in (QtCore.Qt.Key_Backspace, QtCore.Qt.Key_Delete) and
+              factory.editable and 'delete' in factory.operations):
+            event.accept()
+
+            if factory.multi_select:
+                for row in reversed(sorted(editor.multi_selected_rows)):
+                    editor.model.removeRow(row)
+            elif editor.selected_row != -1:
+                editor.model.removeRow(editor.selected_row)
+
+        elif (event.key() == QtCore.Qt.Key_Insert and 
+              factory.editable and 'insert' in factory.operations):
+            event.accept()
+
+            if factory.multi_select:
+                rows = sorted(editor.multi_selected_rows)
+                row = rows[0] if len(rows) else -1
+            else:
+                row = editor.selected_row
+            if row == -1:
+                row = editor.adapter.len(editor.object, editor.name)
+            editor.model.insertRow(row)
+            self.setCurrentIndex(editor.model.index(row, 0))
+
+        else:
+            QtGui.QTableView.keyPressEvent(self, event)
 
     def sizeHint(self):
         """ Reimplemented to define a reasonable size hint.
