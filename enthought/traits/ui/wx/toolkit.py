@@ -23,11 +23,13 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-# Make sure that wxPython is installed
+# Make sure that importimg from this backend is OK:
+from enthought.traits.ui.toolkit import assert_toolkit_import
+assert_toolkit_import('wx')
+
 import wx
 
-# hack: Make sure a wx.App object is created early:
-
+# Make sure a wx.App object is created early:
 _app = wx.GetApp()
 if _app is None:
     _app = wx.PySimpleApp()

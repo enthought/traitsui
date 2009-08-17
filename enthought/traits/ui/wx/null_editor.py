@@ -53,7 +53,8 @@ class NullEditor ( Editor ):
         self.control = control = wx.Window( parent, -1, 
                                             size = wx.Size( 1, 1 ) )
         control.SetBackgroundColour( parent.GetBackgroundColour() )
-                            
+        
+    #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
 
@@ -62,5 +63,3 @@ class NullEditor ( Editor ):
             editor.
         """
         pass
-        
-#- EOF ------------------------------------------------------------------------
