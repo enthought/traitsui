@@ -17,6 +17,10 @@ the PyQt user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------------
 
+# Make sure that importing from this backend is OK:
+from enthought.traits.ui.toolkit import assert_toolkit_import
+assert_toolkit_import('qt4')
+
 from PyQt4 import QtCore, QtGui
 
 # Check the version numbers are late enough:
