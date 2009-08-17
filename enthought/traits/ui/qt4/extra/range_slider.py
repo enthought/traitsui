@@ -21,7 +21,7 @@ class RangeSlider(QtGui.QSlider):
         self.hover_control = QtGui.QStyle.SC_None
         self.click_offset = 0
         
-        # 0 for the low, 1 for the high
+        # 0 for the low, 1 for the high, -1 for both
         self.active_slider = 0
         
         
@@ -62,13 +62,15 @@ class RangeSlider(QtGui.QSlider):
         
         # In a normal slider control, when the user clicks on a point in the 
         # slider's total range, but not on the slider part of the control the
-        # control would jump the slider value to where the user clicked. Since 
-        # we have 2 sliders, we can't know which the user means, so we don't 
-        # support it
+        # control would jump the slider value to where the user clicked.
+        # For this control, clicks which are not direct hits will slide both
+        # slider parts
                 
         if button:
             opt = QtGui.QStyleOptionSlider()
             self.initStyleOption(opt)
+
+            self.active_slider = -1
             
             for i, value in enumerate([self.low, self.high]):
                 opt.sliderPosition = value                
@@ -79,6 +81,13 @@ class RangeSlider(QtGui.QSlider):
                     
                     self.triggerAction(self.SliderMove)
                     self.setRepeatAction(self.SliderNoAction)
+                    break
+
+            if self.active_slider < 0:
+                self.pressed_control = QtGui.QStyle.SC_SliderHandle
+                self.click_offset = self.__pixelPosToRangeValue(self.__pick(event.pos()))
+                self.triggerAction(self.SliderMove)
+                self.setRepeatAction(self.SliderNoAction)
         else:
             event.ignore()
                                 
@@ -88,11 +97,23 @@ class RangeSlider(QtGui.QSlider):
             return
         
         event.accept()
-        new_pos = self.__pixelPosToRangeValue(self.__pick(event.pos()) - self.click_offset)
+        new_pos = self.__pixelPosToRangeValue(self.__pick(event.pos()))
         opt = QtGui.QStyleOptionSlider()
         self.initStyleOption(opt)
         
-        if self.active_slider == 0:
+        if self.active_slider < 0:
+            offset = new_pos - self.click_offset
+            self.high += offset
+            self.low += offset
+            if self.low < self.minimum():
+                diff = self.minimum() - self.low
+                self.low += diff
+                self.high += diff
+            if self.high > self.maximum():
+                diff = self.maximum() - self.high
+                self.low += diff
+                self.high += diff            
+        elif self.active_slider == 0:
             if new_pos >= self.high:
                 new_pos = self.high - 1
             self.low = new_pos
@@ -100,6 +121,8 @@ class RangeSlider(QtGui.QSlider):
             if new_pos <= self.low:
                 new_pos = self.low + 1
             self.high = new_pos
+
+        self.click_offset = new_pos
                         
         self.update()
         
