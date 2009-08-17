@@ -14,37 +14,53 @@
 #
 #------------------------------------------------------------------------------
 
-""" Enthought pyface package component
+""" The wx-backend Pyface widget for an embedded IPython shell.
 """
 
-# Major package imports.
+# Standard library imports.
+import __builtin__
+import codeop
+import re
+import sys
+
+# System library imports
+import IPython
 from IPython.frontend.wx.wx_frontend import WxController
 from IPython.kernel.core.interpreter import Interpreter
 import wx
-import re
-import sys
-import __builtin__
-import codeop
 
 # Enthought library imports.
-from enthought.traits.api import Event, implements, Instance, Str
-
-# Private Enthought library imports.
-from enthought.util.clean_strings import python_name
-from enthought.util.wx.drag_and_drop import PythonDropTarget
 from enthought.io.file import File as EnthoughtFile
-
-# Local imports.
 from enthought.pyface.i_python_shell import IPythonShell
 from enthought.pyface.key_pressed_event import KeyPressedEvent
+from enthought.traits.api import Event, implements, Instance, Str
+from enthought.util.clean_strings import python_name
+from enthought.util.wx.drag_and_drop import PythonDropTarget
+
+# Local imports.
 from widget import Widget
 
-################################################################################
-class IPythonController(WxController):
-    """ Subclass the IPython WxController
+# Constants.
+IPYTHON_VERSION = tuple(map(int, IPython.Release.version_base.split('.')))
 
-        This class should probably be moved in the IPython codebase.
+
+class IPythonController(WxController):
+    """ An WxController for IPython version >= 0.9. Adds a few extras.
     """
+
+    def __init__(self, *args, **kwargs):
+        WxController.__init__(self, *args, **kwargs)
+        
+        # Add a magic to clear the screen
+        def cls(args):
+            self.ClearAll()
+        self.ipython0.magic_cls = cls
+
+
+class IPython09Controller(IPythonController):
+    """ A WxController hacked/patched specifically for the 0.9 branch.
+    """
+
     # In the parent class, this is a property that expects the
     # container to be a frame, thus it fails when modified.
     # The title of the IPython windows (not displayed in Envisage)
@@ -61,26 +77,25 @@ class IPythonController(WxController):
     # stdout). 
     _banner = None
 
-    
     def _get_banner(self):
         """ Returns the IPython banner.
         """
         if self._banner is None:
             # 'ipython0' gets set in the __init__ method of the base class.
-            if getattr(self, 'ipython0', None):
+            if hasattr(self, 'ipython0'):
                 self._banner = self.ipython0.BANNER
         return self._banner
 
     def _set_banner(self, value):
         self._banner = value
-        return
 
     banner = property(_get_banner, _set_banner)
+
 
     def __init__(self, *args, **kwargs):
         # This is a hack to avoid the IPython exception hook to trigger
         # on exceptions (https://bugs.launchpad.net/bugs/337105)
-        # XXX: This is horrible: module-leve monkey patching -> side
+        # XXX: This is horrible: module-level monkey patching -> side
         # effects.
         from IPython import iplib
         iplib.InteractiveShell.isthreaded = True
@@ -90,15 +105,8 @@ class IPythonController(WxController):
             return '\n'
         old_rawinput = __builtin__.raw_input
         __builtin__.raw_input = my_rawinput
-        WxController.__init__(self, *args, **kwargs)
+        IPythonController.__init__(self, *args, **kwargs)
         __builtin__.raw_input = old_rawinput
-
-        # Add a magic to clear the screen
-        def cls(args):
-            """ Clear the screen.
-            """
-            self.ClearAll()
-        self.ipython0.magic_cls = cls
 
         # XXX: This is bugware for IPython bug:
         # https://bugs.launchpad.net/ipython/+bug/270998
@@ -115,8 +123,6 @@ class IPythonController(WxController):
                     objects is not writable".
                 """
 
-
-
     def complete(self, line):
         """ Returns a list of possible completions for line.
         Overridden from the base class implementation to fix bugs in retrieving
@@ -125,11 +131,10 @@ class IPythonController(WxController):
         """
           
         completion_text = self._get_completion_text(line)
-        suggestion, completions = super(IPythonController, self).complete(
-                                                            completion_text)
+        suggestion, completions = super(IPython09Controller, self).complete( \
+            completion_text)
         new_line = line[:-len(completion_text)] + suggestion
         return new_line, completions
-
 
     def is_complete(self, string):
         """ Check if a string forms a complete, executable set of
@@ -173,7 +178,6 @@ class IPythonController(WxController):
                 is_complete = True
             return is_complete
         
-
     def execute_command(self, command, hidden=False):
         """ Execute a command, not only in the model, but also in the
             view.
@@ -206,14 +210,12 @@ class IPythonController(WxController):
             self._on_enter()
             return True
 
-
     def clear_screen(self):
         """ Empty completely the widget.
         """
         self.ClearAll()
         self.new_prompt(self.input_prompt_template.substitute(
                                 number=(self.last_result['number'] + 1)))
-
 
     def continuation_prompt(self):
         """Returns the current continuation prompt.
@@ -255,7 +257,6 @@ class IPythonController(WxController):
                 if self.debug:
                     print >>sys.__stdout__, completions
     
- 
     def _get_completion_text(self, line):
         """ Returns the text to be completed by breaking the line at specified
         delimiters.
@@ -294,7 +295,7 @@ class IPythonController(WxController):
             if current_buffer[:-1].split('\n')[-1].rstrip().endswith(':'):
                 self.input_buffer += '\t'
 
-################################################################################
+
 class IPythonWidget(Widget):
     """ The toolkit specific implementation of a PythonShell.  See the
     IPythonShell interface for the API documentation.
@@ -307,8 +308,6 @@ class IPythonWidget(Widget):
     command_executed = Event
 
     key_pressed = Event(KeyPressedEvent)
-
-    banner = Str
 
     #### 'IPythonWidget' interface ############################################
 
@@ -345,14 +344,11 @@ class IPythonWidget(Widget):
     ###########################################################################
 
     def _create_control(self, parent):
-        # XXX: We subclass IPythonController just to change the banner.
-        # This smells.
-        class MyIPythonController(IPythonController):
-            pass
-        if self.banner:          
-            class MyIPythonController(IPythonController):
-                _banner = self.banner
-        shell = MyIPythonController(parent, -1, shell=self.interp)
+        # Create the controller based on the version of the installed IPython
+        klass = IPythonController
+        if IPYTHON_VERSION[0] == 0 and IPYTHON_VERSION[1] == 9:
+            klass = IPython09Controller
+        shell = klass(parent, -1, shell=self.interp)
 
         # Listen for key press events.
         wx.EVT_CHAR(shell, self._wx_on_char)
@@ -405,6 +401,7 @@ class IPythonWidget(Widget):
 
     def on_drag_over(self, x, y, obj, default_drag_result):
         """ Always returns wx.DragCopy to indicate we will be doing a copy."""
+
         return wx.DragCopy
 
     ###########################################################################
@@ -424,7 +421,3 @@ class IPythonWidget(Widget):
 
         # Give other event handlers a chance.
         event.Skip()
-
-        return
-
-#### EOF ######################################################################
