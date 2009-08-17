@@ -7,15 +7,14 @@ class RangeSlider(QtGui.QSlider):
         maximum and minimum, as is a normal slider, but instead of having a
         single slider value, there are 2 slider values.
         
-        This class emits the same signals as the QSlider base class
+        This class emits the same signals as the QSlider base class, with the 
+        exception of valueChanged
     """
-    def __init__(self, min, max, low, high):
-        super(RangeSlider, self).__init__()
-        self.setMinimum(min)
-        self.setMaximum(max)
+    def __init__(self, *args):
+        super(RangeSlider, self).__init__(*args)
         
-        self.low = low
-        self.high = high
+        self.low = self.minimum()
+        self.high = self.maximum()
         
         self.pressed_control = QtGui.QStyle.SC_None
         self.hover_control = QtGui.QStyle.SC_None
@@ -23,6 +22,22 @@ class RangeSlider(QtGui.QSlider):
         
         # 0 for the low, 1 for the high, -1 for both
         self.active_slider = 0
+
+    def low(self):
+        return self.low
+
+    def setLow(self, low):
+        self.low = low
+        print "set low", self.low
+        self.update()
+
+    def high(self):
+        return self.high
+
+    def setHigh(self, high):
+        self.high = high
+        print "set high", self.high
+        self.update()
         
         
     def paintEvent(self, event):
@@ -156,11 +171,3 @@ class RangeSlider(QtGui.QSlider):
         return style.sliderValueFromPosition(self.minimum(), self.maximum(),
                                              pos-slider_min, slider_max-slider_min,
                                              opt.upsideDown)
-            
-            
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    slider = RangeSlider(1, 100, 30, 70)
-    slider.show()
-    app.exec_()
