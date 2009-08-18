@@ -219,14 +219,15 @@ class SourceLexer ( Qsci.QsciLexerCustom ):
         if self._editor.lexer != QsciBase.SCLEX_NULL:
             control.SendScintilla(QsciBase.SCI_SETLEXER, self._editor.lexer)
             control.SendScintilla(QsciBase.SCI_COLOURISE, start, end)
-            control.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_CONTAINER)
+            control.SendScintilla(QsciBase.SCI_SETLEXER, 
+                                  QsciBase.SCLEX_CONTAINER)
 
         for line in xrange(start_line, end_line+1):
-            # We don't use lineLength here because it includes newline 
+            # We don't use lineLength here because it includes newline
             # characters. Styling these leads to strange behavior.
             position = control.positionFromLineIndex(line, 0)
-            style_length = control.SendScintilla(QsciBase.SCI_GETLINEENDPOSITION,
-                                                 line) - position
+            style_length = control.SendScintilla(
+                QsciBase.SCI_GETLINEENDPOSITION, line) - position
 
             if line+1 in self._editor.dim_lines:
                 # Set styling mask to only style text bits, not indicator bits

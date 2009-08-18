@@ -101,6 +101,11 @@ class GUI(MGUI, HasTraits):
     ###########################################################################
 
     def start_event_loop(self):
+        # Make sure that SIGINTs actually stop the application event loop (Qt
+        # sometimes swallows KeyboardInterrupt exceptions):
+        import signal
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+
         if self._splash_screen is not None:
             self._splash_screen.close()
 
