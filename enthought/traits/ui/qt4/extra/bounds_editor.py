@@ -114,12 +114,18 @@ class _BoundsEditor(SimpleSliderEditor):
             pass
 
     def update_object_on_scroll(self, pos):
-        self.low = self._convert_from_slider(self.control.slider.low())
-        self.high = self._convert_from_slider(self.control.slider.high())
+        low = self._convert_from_slider(self.control.slider.low())
+        high = self._convert_from_slider(self.control.slider.high())
+
+        if self.factory.is_float:
+            self.low = low
+            self.high = high
+        else:
+            self.low = int(low)
+            self.high = int(high)
 
     def update_editor(self):
-        self.control.slider.setLow(self._convert_to_slider(self.low))
-        self.control.slider.setHigh(self._convert_to_slider(self.high))
+        return
 
     def _step_size(self):
         slider_delta = self.control.slider.maximum() - self.control.slider.minimum()
@@ -142,6 +148,8 @@ class _BoundsEditor(SimpleSliderEditor):
             self._label_lo.setText(self.format % low)
             self.update_editor()
 
+        self.control.slider.setLow(self._convert_to_slider(self.low))
+
     def _high_changed(self, high):
         if self.max == -999:
             self.max = high
@@ -152,6 +160,8 @@ class _BoundsEditor(SimpleSliderEditor):
         if self._label_hi is not None:
             self._label_hi.setText(self.format % high)
             self.update_editor()
+
+        self.control.slider.setHigh(self._convert_to_slider(self.high))
 
 class BoundsEditor(RangeEditor):
     def _get_simple_editor_class(self):
