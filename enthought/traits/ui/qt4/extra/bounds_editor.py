@@ -130,9 +130,13 @@ class _BoundsEditor(Editor):
             self.low = low
             self.high = high
         else:
-            print "changing range from %f,%f to %f,%f" % (self.low, int(low), self.high, int(high))
             self.low = int(low)
             self.high = int(high)
+
+            # update the sliders to the int values or the sliders
+            # will jiggle
+            self.control.slider.setLow(self._convert_to_slider(low))
+            self.control.slider.setHigh(self._convert_to_slider(high))
 
 
     def update_editor(self):
