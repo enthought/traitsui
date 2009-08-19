@@ -1,14 +1,19 @@
 from PyQt4 import QtGui, QtCore
 
-from enthought.traits.api import Float
+from enthought.traits.api import Float, Any, Str
 from enthought.traits.ui.editors.api import RangeEditor
-from enthought.traits.ui.qt4.range_editor import SimpleSliderEditor
+from enthought.traits.ui.qt4.editor import Editor
 from enthought.traits.ui.qt4.extra.range_slider import RangeSlider
 
-class _BoundsEditor(SimpleSliderEditor):
+class _BoundsEditor(Editor):
 
-    min = Float(-999)
-    max = Float(-999)
+    evaluate = Any
+
+    min = Any
+    max = Any
+    low = Any
+    high = Any
+    format = Str
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -77,6 +82,8 @@ class _BoundsEditor(SimpleSliderEditor):
         try:
             try:
                 low = eval(unicode(self._label_lo.text()).strip())
+                if self.evaluate is not None:
+                    low = self.evaluate(low)
             except Exception, ex:
                 low = self.low
                 self._label_lo.setText(self.format % self.low)
@@ -97,6 +104,8 @@ class _BoundsEditor(SimpleSliderEditor):
         try:
             try:
                 high = eval(unicode(self._label_hi.text()).strip())
+                if self.evaluate is not None:
+                    high = self.evaluate(high)
             except:
                 high = self.high
                 self._label_hi.setText(self.format % self.high)
@@ -127,39 +136,40 @@ class _BoundsEditor(SimpleSliderEditor):
     def update_editor(self):
         return
 
+    def _check_max_and_min(self):
+        # check if max & min have been defined:
+        if self.max is None:
+            self.max = self.high
+        if self.min is None:
+            self.min = self.low
+
     def _step_size(self):
         slider_delta = self.control.slider.maximum() - self.control.slider.minimum()
         range_delta = self.max - self.min
 
         return float(range_delta)/slider_delta
 
-    def _convert_from_slider(self, slider_val):        
+    def _convert_from_slider(self, slider_val):
+        self._check_max_and_min()
         return self.min + slider_val * self._step_size()
 
     def _convert_to_slider(self, value):
+        self._check_max_and_min()
         return self.control.slider.minimum() + (value-self.min) / self._step_size()
 
     def _low_changed(self, low):
-        if self.min == -999:
-            self.min = low
         if self.control is None:
             return
         if self._label_lo is not None:
             self._label_lo.setText(self.format % low)
-            self.update_editor()
 
-        self.control.slider.setLow(self._convert_to_slider(self.low))
+        self.control.slider.setLow(self._convert_to_slider(low))
 
     def _high_changed(self, high):
-        if self.max == -999:
-            self.max = high
-        if self.max is None:
-            self.max = high
         if self.control is None:
             return
         if self._label_hi is not None:
             self._label_hi.setText(self.format % high)
-            self.update_editor()
 
         self.control.slider.setHigh(self._convert_to_slider(self.high))
 
