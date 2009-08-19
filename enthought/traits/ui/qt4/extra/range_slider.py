@@ -41,8 +41,7 @@ class RangeSlider(QtGui.QSlider):
     def paintEvent(self, event):
         # based on http://qt.gitorious.org/qt/qt/blobs/master/src/gui/widgets/qslider.cpp
 
-        painter = QtGui.QPainter()
-        painter.begin(self)
+        painter = QtGui.QPainter(self)
 
         opt = QtGui.QStyleOptionSlider()
         self.initStyleOption(opt)
@@ -60,12 +59,10 @@ class RangeSlider(QtGui.QSlider):
         style = QtGui.QApplication.style() 
         
         for value in [self._low, self._high]:
-            painter.save()
-            opt.sliderPosition = value                                  
+            opt.sliderPosition = value
+            opt.sliderValue = value                                  
             style.drawComplexControl(QtGui.QStyle.CC_Slider, opt, painter, self)
-            painter.restore()
             
-        painter.end()
         
     def mousePressEvent(self, event):
         event.accept()
