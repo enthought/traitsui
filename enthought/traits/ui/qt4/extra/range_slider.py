@@ -13,8 +13,8 @@ class RangeSlider(QtGui.QSlider):
     def __init__(self, *args):
         super(RangeSlider, self).__init__(*args)
         
-        self.low = self.minimum()
-        self.high = self.maximum()
+        self._low = self.minimum()
+        self._high = self.maximum()
         
         self.pressed_control = QtGui.QStyle.SC_None
         self.hover_control = QtGui.QStyle.SC_None
@@ -24,19 +24,17 @@ class RangeSlider(QtGui.QSlider):
         self.active_slider = 0
 
     def low(self):
-        return self.low
+        return self._low
 
     def setLow(self, low):
-        self.low = low
-        print "set low", self.low
+        self._low = low
         self.update()
 
     def high(self):
-        return self.high
+        return self._high
 
     def setHigh(self, high):
-        self.high = high
-        print "set high", self.high
+        self._high = high
         self.update()
         
         
@@ -61,7 +59,7 @@ class RangeSlider(QtGui.QSlider):
 
         style = QtGui.QApplication.style() 
         
-        for value in [self.low, self.high]:
+        for value in [self._low, self._high]:
             painter.save()
             opt.sliderPosition = value                                  
             style.drawComplexControl(QtGui.QStyle.CC_Slider, opt, painter, self)
@@ -87,7 +85,7 @@ class RangeSlider(QtGui.QSlider):
 
             self.active_slider = -1
             
-            for i, value in enumerate([self.low, self.high]):
+            for i, value in enumerate([self._low, self._high]):
                 opt.sliderPosition = value                
                 hit = style.hitTestComplexControl(style.CC_Slider, opt, event.pos(), self)
                 if hit == style.SC_SliderHandle:
@@ -96,6 +94,7 @@ class RangeSlider(QtGui.QSlider):
                     
                     self.triggerAction(self.SliderMove)
                     self.setRepeatAction(self.SliderNoAction)
+                    self.setSliderDown(True)
                     break
 
             if self.active_slider < 0:
@@ -118,31 +117,30 @@ class RangeSlider(QtGui.QSlider):
         
         if self.active_slider < 0:
             offset = new_pos - self.click_offset
-            self.high += offset
-            self.low += offset
-            if self.low < self.minimum():
-                diff = self.minimum() - self.low
-                self.low += diff
-                self.high += diff
-            if self.high > self.maximum():
-                diff = self.maximum() - self.high
-                self.low += diff
-                self.high += diff            
+            self._high += offset
+            self._low += offset
+            if self._low < self.minimum():
+                diff = self.minimum() - self._low
+                self._low += diff
+                self._high += diff
+            if self._high > self.maximum():
+                diff = self.maximum() - self._high
+                self._low += diff
+                self._high += diff            
         elif self.active_slider == 0:
-            if new_pos >= self.high:
-                new_pos = self.high - 1
-            self.low = new_pos
+            if new_pos >= self._high:
+                new_pos = self._high - 1
+            self._low = new_pos
         else:
-            if new_pos <= self.low:
-                new_pos = self.low + 1
-            self.high = new_pos
+            if new_pos <= self._low:
+                new_pos = self._low + 1
+            self._high = new_pos
 
         self.click_offset = new_pos
-                        
+
         self.update()
-        
-            
-            
+
+        self.emit(QtCore.SIGNAL('sliderMoved(int)'), new_pos)
             
     def __pick(self, pt):
         if self.orientation() == QtCore.Qt.Horizontal:
@@ -171,3 +169,17 @@ class RangeSlider(QtGui.QSlider):
         return style.sliderValueFromPosition(self.minimum(), self.maximum(),
                                              pos-slider_min, slider_max-slider_min,
                                              opt.upsideDown)
+
+if __name__ == "__main__":
+    import sys
+    def echo(value):
+        print value
+    app = QtGui.QApplication(sys.argv)
+    slider = RangeSlider()
+    slider.setMinimum(0)
+    slider.setMaximum(10000)
+    slider.setLow(0)
+    slider.setHigh(10000)
+    QtCore.QObject.connect(slider, QtCore.SIGNAL('sliderMoved(int)'), echo)
+    slider.show()
+    app.exec_()

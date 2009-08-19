@@ -1,10 +1,14 @@
 from PyQt4 import QtGui, QtCore
 
+from enthought.traits.api import Float
 from enthought.traits.ui.editors.api import RangeEditor
 from enthought.traits.ui.qt4.range_editor import SimpleSliderEditor
 from enthought.traits.ui.qt4.extra.range_slider import RangeSlider
 
 class _BoundsEditor(SimpleSliderEditor):
+
+    min = Float(-999)
+    max = Float(-999)
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -13,17 +17,20 @@ class _BoundsEditor(SimpleSliderEditor):
         factory = self.factory
         if not factory.low_name:
             self.low = factory.low
+            self.min = self.low
 
         if not factory.high_name:
             self.high = factory.high
+            self.max = self.high
+
 
         self.format = factory.format
 
         self.evaluate = factory.evaluate
         self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
 
-        self.sync_value( factory.low_name,  'low',  'from' )
-        self.sync_value( factory.high_name, 'high', 'from' )
+        self.sync_value( factory.low_name,  'low',  'both' )
+        self.sync_value( factory.high_name, 'high', 'both' )
 
         self.control = QtGui.QWidget()
         panel = QtGui.QHBoxLayout(self.control)
@@ -31,7 +38,7 @@ class _BoundsEditor(SimpleSliderEditor):
 
         self._label_lo = QtGui.QLineEdit(self.format % self.low)
         QtCore.QObject.connect(self._label_lo, QtCore.SIGNAL('editingFinished()'),
-                self.update_object_on_enter)
+                self.update_low_on_enter)
         panel.addWidget(self._label_lo)
 
         # The default size is a bit too big and probably doesn't need to grow.
@@ -54,7 +61,7 @@ class _BoundsEditor(SimpleSliderEditor):
 
         self._label_hi = QtGui.QLineEdit(self.format % self.high)
         QtCore.QObject.connect(self._label_hi, QtCore.SIGNAL('editingFinished()'),
-                self.update_object_on_enter)
+                self.update_high_on_enter)
         panel.addWidget(self._label_hi)
 
         # The default size is a bit too big and probably doesn't need to grow.
@@ -66,54 +73,84 @@ class _BoundsEditor(SimpleSliderEditor):
         self.set_tooltip(self._label_lo)
         self.set_tooltip(self._label_hi)
 
-    def update_object_on_enter(self):
+    def update_low_on_enter(self):
         try:
             try:
                 low = eval(unicode(self._label_lo.text()).strip())
             except Exception, ex:
                 low = self.low
-                self._label_lo.setText(self.low)
+                self._label_lo.setText(self.format % self.low)
 
+            if not self.factory.is_float:
+                low = int(low)
+
+            if low > self.high:
+                low = self.high - self._step_size()
+                self._label_lo.setText(self.format % low)
+
+            self.control.slider.setLow(self._convert_to_slider(low))
+            self.low = low
+        except:
+            pass
+
+    def update_high_on_enter(self):
+        try:
             try:
                 high = eval(unicode(self._label_hi.text()).strip())
             except:
                 high = self.high
-                self._label_hi.setText(self.high)
+                self._label_hi.setText(self.format % self.high)
 
             if not self.factory.is_float:
-                low = int(low)
                 high = int(high)
 
-            self.control.slider.setLow(self._convert_to_slider(low))
+            if high < self.low:
+                high = self.low + self._step_size()
+                self._label_hi.setText(self.format % high)
+
             self.control.slider.setHigh(self._convert_to_slider(high))
+            self.high = high
         except:
             pass
 
     def update_object_on_scroll(self, pos):
-        print "update on scroll"
         self.low = self._convert_from_slider(self.control.slider.low())
         self.high = self._convert_from_slider(self.control.slider.high())
 
     def update_editor(self):
-        blocked = self.control.slider.blockSignals(True)
         self.control.slider.setLow(self._convert_to_slider(self.low))
         self.control.slider.setHigh(self._convert_to_slider(self.high))
-        self.control.slider.blockSignals(blocked)
+
+    def _step_size(self):
+        slider_delta = self.control.slider.maximum() - self.control.slider.minimum()
+        range_delta = self.max - self.min
+
+        return float(range_delta)/slider_delta
+
+    def _convert_from_slider(self, slider_val):        
+        return self.min + slider_val * self._step_size()
+
+    def _convert_to_slider(self, value):
+        return self.control.slider.minimum() + (value-self.min) / self._step_size()
 
     def _low_changed(self, low):
+        if self.min == -999:
+            self.min = low
         if self.control is None:
             return
-        self.control.slider.setLow(low)
         if self._label_lo is not None:
-            self._label_lo.SetText(self.format % low)
+            self._label_lo.setText(self.format % low)
             self.update_editor()
 
     def _high_changed(self, high):
+        if self.max == -999:
+            self.max = high
+        if self.max is None:
+            self.max = high
         if self.control is None:
             return
-        self.control.slider.setHigh(high)
         if self._label_hi is not None:
-            self._label_hi.SetText(self.format % hi)
+            self._label_hi.setText(self.format % high)
             self.update_editor()
 
 class BoundsEditor(RangeEditor):
