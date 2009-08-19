@@ -42,23 +42,28 @@ class RangeSlider(QtGui.QSlider):
         # based on http://qt.gitorious.org/qt/qt/blobs/master/src/gui/widgets/qslider.cpp
 
         painter = QtGui.QPainter(self)
-
-        opt = QtGui.QStyleOptionSlider()
-        self.initStyleOption(opt)
-
-        opt.subControls = QtGui.QStyle.SC_SliderGroove | QtGui.QStyle.SC_SliderHandle
-        if self.tickPosition() != self.NoTicks:
-            opt.subControls |= QtGui.QStyle.SC_SliderTickmarks
-
-        if self.pressed_control:
-            opt.activeSubControls = self.pressed_control
-            opt.state |= QtGui.QStyle.State_Sunken
-        else:
-            opt.activeSubControls = self.hover_control
-
         style = QtGui.QApplication.style() 
         
-        for value in [self._low, self._high]:
+        for i, value in enumerate([self._low, self._high]):
+            opt = QtGui.QStyleOptionSlider()
+            self.initStyleOption(opt)
+
+            # Only draw the groove for the first slider so it doesn't get drawn
+            # on top of the existing ones every time
+            if i == 0:
+                opt.subControls = QtGui.QStyle.SC_SliderGroove | QtGui.QStyle.SC_SliderHandle
+	    else:
+                opt.subControls = QtGui.QStyle.SC_SliderHandle
+
+            if self.tickPosition() != self.NoTicks:
+                opt.subControls |= QtGui.QStyle.SC_SliderTickmarks
+
+            if self.pressed_control:
+                opt.activeSubControls = self.pressed_control
+                opt.state |= QtGui.QStyle.State_Sunken
+            else:
+                opt.activeSubControls = self.hover_control
+
             opt.sliderPosition = value
             opt.sliderValue = value                                  
             style.drawComplexControl(QtGui.QStyle.CC_Slider, opt, painter, self)
