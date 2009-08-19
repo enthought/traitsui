@@ -13,9 +13,11 @@
 #------------------------------------------------------------------------------
 
 # Standard library imports.
-import os, sys
 import code
-import re, string
+import os
+import re
+import string
+import sys
 
 # Major package imports.
 from PyQt4 import QtCore, QtGui
@@ -100,11 +102,15 @@ _STDERR_STYLE = 16
 _TRACE_STYLE  = 17
 
 _DEFAULT_STYLES = {
+    # Default style
+    QsciBase.STYLE_DEFAULT : '',
+
     # Braces
     QsciBase.STYLE_BRACELIGHT : 'fore:#00AA00,back:#000000,bold',
     QsciBase.STYLE_BRACEBAD   : 'fore:#FF0000,back:#000000,bold',
 
     # Python lexer styles
+    QsciLexerPython.Default                  : '',
     QsciLexerPython.Comment                  : 'fore:#007F00',
     QsciLexerPython.Number                   : 'fore:#007F7F',
     QsciLexerPython.DoubleQuotedString       : 'fore:#7F007F,italic',
@@ -177,6 +183,15 @@ class QConsoleWidget(QsciScintilla):
     # Matches XTerm title specification of form: ESC]0;(%title%)BEL
     title_pattern = re.compile('\x1b]0;(.*)\x07')
 
+    # When ctrl is pressed, map certain keys to other keys (without the ctrl):
+    _ctrl_down_remap = { QtCore.Qt.Key_B : QtCore.Qt.Key_Left,
+                         QtCore.Qt.Key_F : QtCore.Qt.Key_Right,
+                         QtCore.Qt.Key_A : QtCore.Qt.Key_Home,
+                         QtCore.Qt.Key_E : QtCore.Qt.Key_End,
+                         QtCore.Qt.Key_P : QtCore.Qt.Key_Up,
+                         QtCore.Qt.Key_N : QtCore.Qt.Key_Down,
+                         QtCore.Qt.Key_D : QtCore.Qt.Key_Delete, }
+
     #--------------------------------------------------------------------------
     # 'object' interface
     #--------------------------------------------------------------------------
@@ -193,23 +208,50 @@ class QConsoleWidget(QsciScintilla):
         self._enter_processing = False
         self._prompt_line, self._prompt_index = 0, 0
 
+        # Define our custom context menu
+        self._context_menu = QtGui.QMenu(self)
+
+        self._undo_action = QtGui.QAction('Undo', self)
+        QtCore.QObject.connect(self._undo_action, QtCore.SIGNAL('triggered()'),
+                               self, QtCore.SLOT('undo()'))
+        self._context_menu.addAction(self._undo_action)
+
+        self._redo_action = QtGui.QAction('Redo', self._context_menu)
+        QtCore.QObject.connect(self._redo_action, QtCore.SIGNAL('triggered()'),
+                               self, QtCore.SLOT('redo()'))
+        self._context_menu.addAction(self._redo_action)
+        self._context_menu.addSeparator()
+
+        copy_action = QtGui.QAction('Copy', self)
+        QtCore.QObject.connect(copy_action, QtCore.SIGNAL('triggered()'),
+                               self, QtCore.SLOT('copy()'))
+        QtCore.QObject.connect(self, QtCore.SIGNAL('copyAvailable(bool)'),
+                               copy_action, QtCore.SLOT('setEnabled(bool)'))
+        self._context_menu.addAction(copy_action)
+
+        self._paste_action = QtGui.QAction('Paste', self)
+        QtCore.QObject.connect(self._paste_action, QtCore.SIGNAL('triggered()'),
+                               self, QtCore.SLOT('paste()'))
+        self._context_menu.addAction(self._paste_action)
+        self._context_menu.addSeparator()
+
+        select_all_action = QtGui.QAction('Select All', self)
+        QtCore.QObject.connect(select_all_action, QtCore.SIGNAL('triggered()'),
+                               self, QtCore.SLOT('selectAll()'))
+        self._context_menu.addAction(select_all_action)
+
         # Define our custom markers
         self.markerDefine(QsciScintilla.Background, _COMPLETE_BUFFER_MARKER)
         self.markerDefine(QsciScintilla.Background, _INPUT_MARKER)
         self.markerDefine(QsciScintilla.Background, _ERROR_MARKER)
 
-        # Indentation configuration
+        # Configure indentation
         self.setIndentationWidth(4)
         self.setIndentationsUseTabs(True)
         self.setTabWidth(4)
 
-        # Hide margins
-        self.setMarginWidth(0, 0)
+        # Configure misc. options
         self.setMarginWidth(1, 0)
-        self.setMarginWidth(2, 0)
-
-        # Misc. options
-        #self.setEolMode(QsciScintilla.EolWindows)
         self.setWrapMode(QsciScintilla.WrapCharacter)
 
         # Define Scintilla text and marker styles
@@ -221,44 +263,100 @@ class QConsoleWidget(QsciScintilla):
     # 'QWidget' interface
     #--------------------------------------------------------------------------
 
+    def contextMenuEvent(self, event):
+        """ Reimplemented to create a menu without destructive actions like
+            'Cut' and 'Delete'.
+        """
+        self._undo_action.setEnabled(self.isUndoAvailable())
+        self._redo_action.setEnabled(self.isRedoAvailable())
+
+        can_paste = bool(self.SendScintilla(QsciBase.SCI_CANPASTE))
+        self._paste_action.setEnabled(can_paste)
+        
+        self._context_menu.exec_(event.globalPos())
+
     def keyPressEvent(self, event):
         """ Reimplemented to create a console-like interface.
         """
-        #line, index = self.getCursorPosition()
+        intercepted = False
+        line, index = self.getCursorPosition()
         key = event.key()
         ctrl_down = event.modifiers() & QtCore.Qt.ControlModifier
 
-        intercepted = True
-        if (key == QtCore.Qt.Key_L and ctrl_down):
-            vb = self.verticalScrollBar()
-            vb.setValue(vb.maximum())
-        elif (key == QtCore.Qt.Key_K and ctrl_down):
-            line, index = self.getCursorPosition()
-            index -= len(self._last_prompt)
-            self.input_buffer = self.input_buffer[:index]
-        elif (key == QtCore.Qt.Key_A and ctrl_down):
-            self.setCursorPosition(0, 0)
-        elif (key == QtCore.Qt.Key_E and ctrl_down):
-            self.setCursorPosition(*self._end_position())
-        else:
-            intercepted = False
+        if ctrl_down:
+            if key in self._ctrl_down_remap:
+                ctrl_down = False
+                key = self._ctrl_down_remap[key]
+                event = QtGui.QKeyEvent(QtCore.QEvent.KeyPress, key, 
+                                        QtCore.Qt.NoModifier)
+
+            elif key == QtCore.Qt.Key_L:
+                vb = self.verticalScrollBar()
+                vb.setValue(vb.maximum())
+                intercepted = True
+
+            elif key == QtCore.Qt.Key_K:
+                self.input_buffer = ''
+                intercepted = True
         
         if not self.isListActive():
-            if (key in (QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter)):
-                intercepted = True
+            if key in (QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter):
                 if not self._enter_processing:
                     self._enter_processing = True
                     try:
                         self.enter_pressed()
                     finally:
                         self._enter_processing = False
+                intercepted = True
+
+            elif key == QtCore.Qt.Key_Up:
+                if self._in_buffer(line, index):
+                    intercepted = not self.up_pressed()
+                else:
+                    intercepted = True
+
+            elif key == QtCore.Qt.Key_Down:
+                if self._in_buffer(line, index):
+                    intercepted = not self.down_pressed()
+                else:
+                    intercepted = True
+
+            elif key == QtCore.Qt.Key_Left:
+                intercepted = not self._in_buffer(line, index - 1)
+
+            elif key == QtCore.Qt.Key_Home:
+                if (self._in_buffer(line, index) and 
+                    event.modifiers() & QtCore.Qt.ShiftModifier):
+                    self.setSelection(line, index, line, self._prompt_index)
+                else:
+                    self.setCursorPosition(0, 0)
+                intercepted = True
+
+            elif key == QtCore.Qt.Key_Backspace:
+                sel_line, sel_index, _, _ = self.getSelection()
+                if sel_line == -1:
+                    intercepted = not self._in_buffer(line, index - 1)
+                else:
+                    intercepted = not self._in_buffer(sel_line, sel_index)
+                if event.modifiers() & QtCore.Qt.AltModifier:
+                    # Alt-backspace is mapped to Undo by default? 
+                    # FIXME: Do a backwards word chomp.
+                    intercepted = True
+
+            elif key == QtCore.Qt.Key_Delete:
+                sel_line, sel_index, _, _ = self.getSelection()
+                if sel_line == -1:
+                    intercepted = not self._in_buffer(line, index)
+                else:
+                    intercepted = not self._in_buffer(sel_line, sel_index)
+
+            self._keep_cursor_in_buffer()
 
         if not intercepted:
             QsciScintilla.keyPressEvent(self, event)
-        self._keep_cursor_in_buffer()
 
     #--------------------------------------------------------------------------
-    # 'QConsoleWidget' interface
+    # 'QConsoleWidget' concrete interface
     #--------------------------------------------------------------------------
 
     # The buffer being edited:
@@ -270,12 +368,13 @@ class QConsoleWidget(QsciScintilla):
         self.setCursorPosition(*self._end_position())
 
     def _get_input_buffer(self):
-        input_buffer = str(self.text(self._prompt_line))[self._prompt_index:]
-        return input_buffer.replace(os.linesep, '\n')
+        lines = [ str(self.text(line))[self._prompt_index:]
+                  for line in xrange(self._prompt_line, self.lines() - 1) ]
+        return ''.join(lines)
 
     input_buffer = property(_get_input_buffer, _set_input_buffer)
 
-    def write(self, text, refresh=True):
+    def write(self, text):
         """ Write given text to buffer, translating ANSI escape sequences as
             appropriate.
         """
@@ -289,11 +388,9 @@ class QConsoleWidget(QsciScintilla):
         text = self.title_pattern.sub('', text)
         segments = self.color_pattern.split(text)
         segment = segments.pop(0)
-        #self.setCursorPosition(*self._end_position())
-        self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.text().length(), 
-                           0xff)
+        self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.text().length())
         try:
-            self.append(text)
+            self.append(segment)
         except UnicodeDecodeError:
             # FIXME: Do I really want to skip the exception?
             pass
@@ -310,26 +407,18 @@ class QConsoleWidget(QsciScintilla):
                 style = self._ansi_colors[ansi_tag][0] + _ANSI_STYLE_START
             else:
                 style = 0
-            self.SendScintilla(QSciBase.SCI_SETSTYLING, len(text), style)
+            self.SendScintilla(QsciBase.SCI_SETSTYLING, len(text), style)
                 
         self.setCursorPosition(*self._end_position())
-        if refresh:
-            self.update()
 
     def new_prompt(self, prompt):
         """ Prints a prompt at start of line, and move the start of the current
             block there.
         """
-        self.write(prompt, refresh=False)
+        self.write(prompt)
         self._prompt_line, self._prompt_index = self._end_position()
         self.ensureCursorVisible()
         self._last_prompt = prompt
-
-    def enter_pressed(self):
-        """ Called when the enter key is pressed. Must be implemented by
-            subclasses.
-        """
-        raise NotImplementedError
 
     def set_ansi_colors(self, ansi_colors):
         """ Sets the styles of the underlying Scintilla widget that we will use
@@ -381,17 +470,44 @@ class QConsoleWidget(QsciScintilla):
                                       _ERROR_MARKER)
 
     #--------------------------------------------------------------------------
-    # Protected interface
+    # 'QConsoleWidget' abstract interface
     #--------------------------------------------------------------------------
 
+    def enter_pressed(self):
+        """ Called when the enter key is pressed. Must be implemented by
+            subclasses.
+        """
+        raise NotImplementedError
+
+    def up_pressed(self):
+        """ Called when the up key is pressed. Returns whether to continue
+            processing the event.
+        """
+        return True
+
+    def down_pressed(self):
+        """ Called when the down key is pressed. Returns whether to continue
+            processing the event.
+        """
+        return True
+
+    #--------------------------------------------------------------------------
+    # Protected interface
+    #--------------------------------------------------------------------------
+                                      
+    def _in_buffer(self, line, index):
+        """ Returns whether the given position is inside the editing region.
+        """
+        return line >= self._prompt_line and index >= self._prompt_index
+
     def _keep_cursor_in_buffer(self):
-        """ Ensures that the cursor is inside the editing region. Returns 
+        """ Ensures that the cursor is inside the editing region. Returns
             whether the cursor was moved.
         """
         adjusted = False
         line, index = self.getCursorPosition()
 
-        if line != self._prompt_line:
+        if line < self._prompt_line:
             line = self._prompt_line
             adjusted = True
 
@@ -422,92 +538,142 @@ class QPythonShellWidget(QConsoleWidget):
     #--------------------------------------------------------------------------
 
     def __init__(self, parent=None):
-        """ Initialise the instance.
+        """ Set up internal variables and display the Python banner and initial
+            prompt.
         """
         QConsoleWidget.__init__(self, parent)
+
+        # Get the list of Python keywords from the QScintilla Python lexer
+        keywords = QsciLexerPython().keywords(1)
+        self.SendScintilla(QsciBase.SCI_SETKEYWORDS, 0, keywords)
 
         self.interpreter = code.InteractiveInterpreter()
         self.exec_callback = None
 
+        self._indent = 0
         self._hidden = False
         self._more = False
-        self._lines = []
         self._history = []
+        self._history_index = 0
 
-        # Interpreter banner.
+        # Interpreter banner and first prompt
         self.write('Python %s on %s.\n' % (sys.version, sys.platform))
-        self.write('Type "copyright", "credits" or "license" for more information.\n')
+        self.write('Type "copyright", "credits" or "license" for more ' \
+                       'information.\n\n')
         self.new_prompt()
+
+        # Turn on Python lexing
+        self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
 
     #--------------------------------------------------------------------------
     # file-like object interface
     #--------------------------------------------------------------------------    
 
     def flush(self):
-        """ Emulate a file.
-        """
         pass
 
-    def write(self, text, refresh=True):
-        """ Emulate a file. Write only if hidden is False.
-        """
+    def write(self, text):
         if not self._hidden:
-            QConsoleWidget.write(self, text, refresh)
+            QConsoleWidget.write(self, text)
 
     #---------------------------------------------------------------------------
     # 'QConsoleWidget' interface
     #---------------------------------------------------------------------------
 
     def enter_pressed(self):
-        self.write(os.linesep, refresh=False)
-        text = self.input_buffer.rstrip()
-        if text:
-            self.execute(text)
-        else:
-            self.new_prompt()
+        self.write('\n')
+        self.execute(self.input_buffer)
+
+    def up_pressed(self):
+        line, _ = self.getCursorPosition()
+        if line == self._prompt_line:
+            if self._history_index > 0:
+                self._history_index -= 1
+                self.input_buffer = self._history[self._history_index]
+                # Go to first line for seamless history up scrolling.
+                end_line, _ = self._end_position()
+                if line != end_line:
+                    i = self.text(self._prompt_line).length() - len(os.linesep)
+                    self.setCursorPosition(self._prompt_line, i)
+            return False
+        return True
+
+    def down_pressed(self):
+        line, _ = self.getCursorPosition()
+        end_line, _ = self._end_position()
+        if line == end_line:
+            if self._history_index < len(self._history):
+                self._history_index += 1
+                if self._history_index < len(self._history):
+                    self.input_buffer = self._history[self._history_index]
+                else:
+                    self.input_buffer = ''
+            return False
+        return True
 
     #--------------------------------------------------------------------------
     # 'QPythonShellWidget' interface
     #--------------------------------------------------------------------------
 
     def new_prompt(self, prompt='>>> '):
-        """ Convenience method because regular prompt is always the same.
+        """ Convenience method because the normal prompt is always the same.
         """
         QConsoleWidget.new_prompt(self, prompt)
-
-    def execute(self, command, hidden=False):
-        """ Execute a (possibly partial) Python string.
+        
+    def execute(self, source, hidden=False):
+        """ Execute a Python string.
         """
-        self._lines.append(command)
-        source = os.linesep.join(self._lines)
+        lines = source.splitlines()
+        last_stripped = lines[-1].strip()
 
-        # Save the current std* and point them here.
-        old_stdin, old_stdout, old_stderr = sys.stdin, sys.stdout, sys.stderr
-        sys.stdin = sys.stdout = sys.stderr = self
+        # Only execute multiline code if it ends with a blank line
+        if (len(lines) == 1) ^ (last_stripped == ''):
 
-        # Run the source code in the interpeter
-        self._hidden = hidden
-        try:
-            self._more = self.interpreter.runsource(source)
-        finally:
-            self._hidden = False
-            # Restore std* unless the executed changed them.
-            if sys.stdin is self:
-                sys.stdin = old_stdin
-            if sys.stdout is self:
-                sys.stdout = old_stdout
-            if sys.stderr is self:
-                sys.stderr = old_stderr
+            # Save the current std* and point them here
+            old_stdin = sys.stdin
+            old_stdout = sys.stdout
+            old_stderr = sys.stderr
+            sys.stdin = sys.stdout = sys.stderr = self
+            
+            # Do not syntax highlight output
+            if not hidden:
+                self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_NULL)
 
-        if not self._more:
-            self._lines = []
-            if self.exec_callback:
-                self.exec_callback()
+            # Run the source code in the interpeter
+            self._hidden = hidden
+            try:
+                self._more = self.interpreter.runsource(source)
+            finally:
+                self._hidden = False
+                # Restore std* unless the executed changed them
+                if sys.stdin is self:
+                    sys.stdin = old_stdin
+                if sys.stdout is self:
+                    sys.stdout = old_stdout
+                if sys.stderr is self:
+                    sys.stderr = old_stderr
+
+            if not self._more:
+                self._indent = 0
+                if self.exec_callback:
+                    self.exec_callback()
+                if not hidden:
+                    if len(lines) == 1:
+                        source = source.strip()
+                    else:
+                        source = lines[0].strip()
+                        for line in lines[1:]:
+                            source += os.linesep + '... ' + line
+                    self._history.append(source)
+                    self._history_index = len(self._history)
 
         if not hidden:
-            self._history.append(QtCore.QString(command))
             if self._more:
-                prompt = '.' * (len(self._last_prompt) - 1) + ' '
-                self.new_prompt(prompt)
+                self.write('... ')
+                if last_stripped.endswith(':'):
+                    self._indent += 1
+                self.write('\t' * self._indent)
             else:
+                self.write('\n')
                 self.new_prompt()
+            self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
