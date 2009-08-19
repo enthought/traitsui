@@ -130,8 +130,10 @@ class _BoundsEditor(Editor):
             self.low = low
             self.high = high
         else:
+            print "changing range from %f,%f to %f,%f" % (self.low, int(low), self.high, int(high))
             self.low = int(low)
             self.high = int(high)
+
 
     def update_editor(self):
         return
