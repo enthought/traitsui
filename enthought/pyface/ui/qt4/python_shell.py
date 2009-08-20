@@ -14,10 +14,9 @@
 
 # Standard library imports.
 import code
-import os
+from math import ceil, floor
+import os, sys
 import re
-import string
-import sys
 
 # Major package imports.
 from PyQt4 import QtCore, QtGui
@@ -146,26 +145,14 @@ _ANSI_STYLE_START = 64
 
 # Platform specific fonts
 if sys.platform == 'win32':
-    _FACES = { 'times': 'Times New Roman',
-               'mono' : 'Courier New',
-               'helv' : 'Arial',
-               'other': 'Comic Sans MS',
-               'size' : 10,
-               'size2': 8 }
+    _FONT = 'Courier New'
+    _FONT_SIZE = 10
 elif sys.platform == 'darwin':
-    _FACES = { 'times': 'Times New Roman',
-               'mono' : 'Monaco',
-               'helv' : 'Arial',
-               'other': 'Comic Sans MS',
-               'size' : 12,
-               'size2': 10 }
+    _FONT = 'Monaco'
+    _FONT_SIZE = 12
 else:
-    _FACES = { 'times': 'Times',
-               'mono' : 'Courier',
-               'helv' : 'Helvetica',
-               'other': 'new century schoolbook',
-               'size' : 10,
-               'size2': 8 }
+    _FONT = 'Courier'
+    _FONT_SIZE = 10
 
 class QConsoleWidget(QsciScintilla):
     """ Specialized styled text control view for console-like workflow.
@@ -205,6 +192,7 @@ class QConsoleWidget(QsciScintilla):
 
         # Initialize internal variables
         self.title = 'Console' # captured from ANSI escape sequences
+        self._console_inited = False
         self._enter_processing = False
         self._prompt_line, self._prompt_index = 0, 0
 
@@ -251,13 +239,14 @@ class QConsoleWidget(QsciScintilla):
         self.setTabWidth(4)
 
         # Configure misc. options
+        self.SendScintilla(QsciBase.SCI_SETLAYOUTCACHE, QsciBase.SC_CACHE_PAGE)
         self.setMarginWidth(1, 0)
         self.setWrapMode(QsciScintilla.WrapCharacter)
 
         # Define Scintilla text and marker styles
         self.set_styles(styles)
         self.set_marker_colors(marker_colors)
-        self.set_ansi_colors(ansi_colors)        
+        self.set_ansi_colors(ansi_colors)
 
     #--------------------------------------------------------------------------
     # 'QWidget' interface
@@ -355,6 +344,54 @@ class QConsoleWidget(QsciScintilla):
         if not intercepted:
             QsciScintilla.keyPressEvent(self, event)
 
+    def resizeEvent(self, event):
+        """ Reimplemented to recalculate line width.
+        """
+        self._calc_line_width()
+        QsciScintilla.resizeEvent(self, event)
+
+    def showEvent(self, event):
+        """ Reimplemented to call 'console_init' when the widget is first shown.
+            We call console_init here (rather than in __init__) to ensure that
+            the line width used for splitting the first lines reflects the
+            final, post-layout width of widget. See 'append' for more info.
+        """
+        if not self._console_inited and not event.spontaneous():
+            self.console_init()
+            self._console_inited = True
+        QsciScintilla.showEvent(self, event)
+
+    #--------------------------------------------------------------------------
+    # 'QScintilla' interface
+    #--------------------------------------------------------------------------
+
+    def append(self, string):
+        """ Reimplemented to improve performance. We split long lines into
+            shorter ones because QScintilla's line wrapping performs *very*
+            badly for long lines (QFontMetric.width appears to get called at
+            least twice for every character). We can do this much faster than
+            QScintilla because we can guarantee a monospaced font.
+        """
+        # Code based on default implementation in 'qsciscintilla.cpp'
+        sep_len, sep = len(os.linesep), os.linesep
+        for i, line in enumerate(string.splitlines()):
+            if i:
+                self.SendScintilla(QsciBase.SCI_APPENDTEXT, sep_len, sep)
+
+            # If line == '', it was previously a newline
+            if not line:
+                self.SendScintilla(QsciBase.SCI_APPENDTEXT, sep_len, sep)
+                continue
+
+            for j in xrange(int(ceil(len(line) / float(self._line_width)))):
+                if j:
+                    self.SendScintilla(QsciBase.SCI_APPENDTEXT, sep_len, sep)
+                start = j * self._line_width
+                sub = line[start : start + self._line_width]
+                self.SendScintilla(QsciBase.SCI_APPENDTEXT, len(sub), sub)
+
+        self.SendScintilla(QsciBase.SCI_EMPTYUNDOBUFFER)
+
     #--------------------------------------------------------------------------
     # 'QConsoleWidget' concrete interface
     #--------------------------------------------------------------------------
@@ -429,7 +466,7 @@ class QConsoleWidget(QsciScintilla):
             style_num = color_num + _ANSI_STYLE_START
             style = QsciStyle(style_num)
             style.setColor(QtGui.QColor(color_name))
-            font = QtGui.QFont(_FACES['mono'], _FACES['size'])
+            font = QtGui.QFont(_FONT, _FONT_SIZE)
             font.setBold(True)
             style.setFont(font)
 
@@ -439,7 +476,7 @@ class QConsoleWidget(QsciScintilla):
         """
         for style_num, style_string in style_dict.items():
             style = QsciStyle(style_num)
-            font = QtGui.QFont(_FACES['mono'], _FACES['size'])
+            font = QtGui.QFont(_FONT, _FONT_SIZE)
             for attr in style_string.split(','):
                 attr = attr.strip().split(':')
                 name = attr[0].strip()
@@ -447,10 +484,6 @@ class QConsoleWidget(QsciScintilla):
                     style.setColor(QtGui.QColor(attr[1]))
                 elif name == 'back':
                     style.setPaper(QtGui.QColor(attr[1]))
-                elif name == 'face':
-                    font.setFamily(attr[1])
-                elif name == 'size':
-                    font.setPointSize(int(attr[1]))
                 elif name == 'bold':
                     font.setBold(True)
                 elif name == 'italic':
@@ -473,11 +506,16 @@ class QConsoleWidget(QsciScintilla):
     # 'QConsoleWidget' abstract interface
     #--------------------------------------------------------------------------
 
-    def enter_pressed(self):
-        """ Called when the enter key is pressed. Must be implemented by
-            subclasses.
+    def console_init(self):
+        """ Called when the console is ready to have its first messages/prompt
+            displayed. All initial writing should be done in this function.
         """
-        raise NotImplementedError
+        pass
+
+    def enter_pressed(self):
+        """ Called when the enter key is pressed.
+        """
+        pass
 
     def up_pressed(self):
         """ Called when the up key is pressed. Returns whether to continue
@@ -494,6 +532,13 @@ class QConsoleWidget(QsciScintilla):
     #--------------------------------------------------------------------------
     # Protected interface
     #--------------------------------------------------------------------------
+
+    def _calc_line_width(self):
+        """
+        """
+        font_metrics = QtGui.QFontMetrics(QtGui.QFont(_FONT, _FONT_SIZE))
+        char_width = float(font_metrics.width(' '))
+        self._line_width = int(floor(self.viewport().width() / char_width))
                                       
     def _in_buffer(self, line, index):
         """ Returns whether the given position is inside the editing region.
@@ -538,14 +583,9 @@ class QPythonShellWidget(QConsoleWidget):
     #--------------------------------------------------------------------------
 
     def __init__(self, parent=None):
-        """ Set up internal variables and display the Python banner and initial
-            prompt.
+        """ Set up internal variables.
         """
         QConsoleWidget.__init__(self, parent)
-
-        # Get the list of Python keywords from the QScintilla Python lexer
-        keywords = QsciLexerPython().keywords(1)
-        self.SendScintilla(QsciBase.SCI_SETKEYWORDS, 0, keywords)
 
         self.interpreter = code.InteractiveInterpreter()
         self.exec_callback = None
@@ -556,14 +596,9 @@ class QPythonShellWidget(QConsoleWidget):
         self._history = []
         self._history_index = 0
 
-        # Interpreter banner and first prompt
-        self.write('Python %s on %s.\n' % (sys.version, sys.platform))
-        self.write('Type "copyright", "credits" or "license" for more ' \
-                       'information.\n\n')
-        self.new_prompt()
-
-        # Turn on Python lexing
-        self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
+        # Get the list of Python keywords from the QScintilla Python lexer
+        keywords = QsciLexerPython().keywords(1)
+        self.SendScintilla(QsciBase.SCI_SETKEYWORDS, 0, keywords)
 
     #--------------------------------------------------------------------------
     # file-like object interface
@@ -579,6 +614,14 @@ class QPythonShellWidget(QConsoleWidget):
     #---------------------------------------------------------------------------
     # 'QConsoleWidget' interface
     #---------------------------------------------------------------------------
+
+    def console_init(self):
+        self.write('Python %s on %s.\n' % (sys.version, sys.platform))
+        self.write('Type "copyright", "credits" or "license" for more ' \
+                       'information.\n\n')
+        self.new_prompt()
+
+        self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
 
     def enter_pressed(self):
         self.write('\n')
@@ -645,6 +688,7 @@ class QPythonShellWidget(QConsoleWidget):
                 self._more = self.interpreter.runsource(source)
             finally:
                 self._hidden = False
+
                 # Restore std* unless the executed changed them
                 if sys.stdin is self:
                     sys.stdin = old_stdin
@@ -676,4 +720,6 @@ class QPythonShellWidget(QConsoleWidget):
             else:
                 self.write('\n')
                 self.new_prompt()
+            
+            # Turn Python syntax highlighting back on
             self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
