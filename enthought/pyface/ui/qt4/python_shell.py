@@ -534,7 +534,8 @@ class QConsoleWidget(QsciScintilla):
     #--------------------------------------------------------------------------
 
     def _calc_line_width(self):
-        """
+        """ Calculate how many characters (assuming a monospaced font) will fit
+            in a line.
         """
         font_metrics = QtGui.QFontMetrics(QtGui.QFont(_FONT, _FONT_SIZE))
         char_width = float(font_metrics.width(' '))
