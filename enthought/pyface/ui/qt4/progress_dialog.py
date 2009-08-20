@@ -96,6 +96,8 @@ class ProgressDialog(MProgressDialog, Window):
         if value >= self.max or self._user_cancelled:
             self.close()
             
+        QtGui.QApplication.processEvents()
+            
         return (not self._user_cancelled, False)
         
     def reject(self, event):
@@ -154,6 +156,12 @@ class ProgressDialog(MProgressDialog, Window):
         self.progress_bar.setRange(self.min, self.max)
         layout.addWidget(self.progress_bar)
         
+        if self.show_percent:
+            self.progress_bar.setFormat("%p")
+        else:
+            self.progress_bar.setFormat("")
+            
+        
         return
         
     def _create_message(self, dialog, layout):
@@ -196,3 +204,11 @@ class ProgressDialog(MProgressDialog, Window):
         self._create_buttons(dialog, layout)
 
         parent.setLayout(layout)
+        
+    def _max_changed(self, new):
+        if self.progress_bar is not None:
+            self.progress_bar.setMaximum(new)
+
+    def _min_changed(self, new):
+        if self.progress_bar is not None:
+            self.progress_bar.setMinimum(new)
