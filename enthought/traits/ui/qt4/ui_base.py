@@ -473,11 +473,21 @@ class BaseDialog(BasePanel):
             control.setSizeGripEnabled(self.ui.view.resizable)
             listeners = []
             for item in self.ui.view.statusbar:
+                # Create the status widget with initial text
                 name = item.name
                 item_control = QtGui.QLabel()
                 item_control.setText(self.ui.get_extended_value(name))
-                control.addWidget(item_control)
                 
+                # Add the widget to the control with correct size
+                width = abs(item.width)
+                stretch = 0
+                if width <= 1.0:
+                    stretch = int(100 * width)
+                else:
+                    item_control.setMinimumWidth(width)
+                control.addWidget(item_control, stretch)
+                
+                # Set up event listener for updating the status text
                 col = name.find('.')
                 obj = 'object'
                 if col >= 0:

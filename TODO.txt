@@ -4,8 +4,6 @@ Missing features
 
 Implemented in the wx backend, and must be implemented for compatibility:
 
-* Widths for StatusItems are not respected.
-
 * Features missing from DateEditor:
   * 'multi_select' and its associated options. See
     http://www.qtsoftware.com/developer/faqs/faq.2007-11-06.6144759363 for info.
