@@ -14,6 +14,7 @@
 
 # Standard library imports.
 from code import InteractiveInterpreter
+import keyword
 import os
 from math import ceil, floor
 import re
@@ -163,13 +164,11 @@ class QConsoleWidget(QsciScintilla):
         the cursor inside the editing line.
     """
 
-    # 
-
     # Matches ANSI color specification of form:
-    # (Possible SOH)ESC[(%color%)m(Possible STX)
+    # (Possible SOH)ESC[%color%m(Possible STX)
     color_pattern = re.compile('\x01?\x1b\[(.*)m\x02?')
 
-    # Matches XTerm title specification of form: ESC]0;(%title%)BEL
+    # Matches XTerm title specification of form: ESC]0;%title%BEL
     title_pattern = re.compile('\x1b]0;(.*)\x07')
 
     # When ctrl is pressed, map certain keys to other keys (without the ctrl):
@@ -292,6 +291,11 @@ class QConsoleWidget(QsciScintilla):
 
             elif key == QtCore.Qt.Key_K:
                 self.input_buffer = ''
+                intercepted = True
+
+            elif key == QtCore.Qt.Key_T:
+                # Transposing lines is not appropriate for a console.
+                # FIXME: Transpose characters instead.
                 intercepted = True
         
         if not self.isListActive():
@@ -609,8 +613,8 @@ class QPythonShellWidget(QConsoleWidget):
         self._history = []
         self._history_index = 0
 
-        # Get the list of Python keywords from the QScintilla Python lexer
-        keywords = QsciLexerPython().keywords(1)
+        # Send the list of Python keywords to the Scintilla control
+        keywords = ' '.join(keyword.kwlist)
         self.SendScintilla(QsciBase.SCI_SETKEYWORDS, 0, keywords)
 
     #--------------------------------------------------------------------------
