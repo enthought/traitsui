@@ -13,10 +13,12 @@
 #------------------------------------------------------------------------------
 
 # Standard library imports.
-import code
+from code import InteractiveInterpreter
+import os
 from math import ceil, floor
-import os, sys
 import re
+import sys
+from time import time
 
 # Major package imports.
 from PyQt4 import QtCore, QtGui
@@ -194,6 +196,7 @@ class QConsoleWidget(QsciScintilla):
         self.title = 'Console' # captured from ANSI escape sequences
         self._console_inited = False
         self._enter_processing = False
+        self._last_refresh_time = 0
         self._prompt_line, self._prompt_index = 0, 0
 
         # Define our custom context menu
@@ -414,7 +417,7 @@ class QConsoleWidget(QsciScintilla):
 
     input_buffer = property(_get_input_buffer, _set_input_buffer)
 
-    def write(self, text):
+    def write(self, text, refresh=True):
         """ Write given text to buffer, translating ANSI escape sequences as
             appropriate.
         """
@@ -451,11 +454,17 @@ class QConsoleWidget(QsciScintilla):
                 
         self.setCursorPosition(*self._end_position())
 
+        if refresh:
+            current_time = time()
+            if current_time - self._last_refresh_time > 0.03:
+                self.repaint()
+                self._last_refresh_time = current_time 
+
     def new_prompt(self, prompt):
         """ Prints a prompt at start of line, and move the start of the current
             block there.
         """
-        self.write(prompt)
+        self.write(prompt, refresh=False)
         self._prompt_line, self._prompt_index = self._end_position()
         self.ensureCursorVisible()
         self._last_prompt = prompt
@@ -591,7 +600,7 @@ class QPythonShellWidget(QConsoleWidget):
         """
         QConsoleWidget.__init__(self, parent)
 
-        self.interpreter = code.InteractiveInterpreter()
+        self.interpreter = InteractiveInterpreter()
         self.exec_callback = None
 
         self._indent = 0
@@ -611,24 +620,25 @@ class QPythonShellWidget(QConsoleWidget):
     def flush(self):
         pass
 
-    def write(self, text):
+    def write(self, text, refresh=True):
         if not self._hidden:
-            QConsoleWidget.write(self, text)
+            QConsoleWidget.write(self, text, refresh)
 
     #---------------------------------------------------------------------------
     # 'QConsoleWidget' interface
     #---------------------------------------------------------------------------
 
     def console_init(self):
-        self.write('Python %s on %s.\n' % (sys.version, sys.platform))
+        self.write('Python %s on %s.\n' % (sys.version, sys.platform), 
+                   refresh=False)
         self.write('Type "copyright", "credits" or "license" for more ' \
-                       'information.\n\n')
+                       'information.\n\n', refresh=False)
         self.new_prompt()
 
         self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
 
     def enter_pressed(self):
-        self.write('\n')
+        self.write('\n', refresh=False)
         self.execute(self.input_buffer)
 
     def up_pressed(self):
@@ -717,12 +727,12 @@ class QPythonShellWidget(QConsoleWidget):
 
         if not hidden:
             if self._more:
-                self.write('... ')
+                self.write('... ', refresh=False)
                 if last_stripped.endswith(':'):
                     self._indent += 1
-                self.write('\t' * self._indent)
+                self.write('\t' * self._indent, refresh=False)
             else:
-                self.write('\n')
+                self.write('\n', refresh=False)
                 self.new_prompt()
             
             # Turn Python syntax highlighting back on
