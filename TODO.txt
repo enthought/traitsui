@@ -9,8 +9,6 @@ Implemented in the wx backend, and must be implemented for compatibility:
     http://www.qtsoftware.com/developer/faqs/faq.2007-11-06.6144759363 for info.
   * 'padding', although this probably shouldn't be supported.
 
-* HistoryEditor is not implemented.
-
 * Features missing from the ListStrEditor:
   * 'auto_add' factory option
   * 'right_clicked' and 'right_clicked_index' factory options
