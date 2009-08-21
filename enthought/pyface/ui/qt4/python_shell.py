@@ -238,10 +238,13 @@ class QConsoleWidget(QsciScintilla):
         self.setIndentationsUseTabs(True)
         self.setTabWidth(4)
 
+        # Do not wrap text--we will do it ourselves.
+        self.setWrapMode(QsciScintilla.WrapNone)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+
         # Configure misc. options
         self.SendScintilla(QsciBase.SCI_SETLAYOUTCACHE, QsciBase.SC_CACHE_PAGE)
         self.setMarginWidth(1, 0)
-        self.setWrapMode(QsciScintilla.WrapCharacter)
 
         # Define Scintilla text and marker styles
         self.set_styles(styles)
@@ -374,16 +377,10 @@ class QConsoleWidget(QsciScintilla):
         """
         # Code based on default implementation in 'qsciscintilla.cpp'
         sep_len, sep = len(os.linesep), os.linesep
-        for i, line in enumerate(string.splitlines()):
-            if i:
-                self.SendScintilla(QsciBase.SCI_APPENDTEXT, sep_len, sep)
-
-            # If line == '', it was previously a newline
-            if not line:
-                self.SendScintilla(QsciBase.SCI_APPENDTEXT, sep_len, sep)
-                continue
-
-            for j in xrange(int(ceil(len(line) / float(self._line_width)))):
+        for i, line in enumerate(string.splitlines(True)):
+            stripped = line.rstrip('\n\r')
+            num_lines = int(ceil(len(stripped) / float(self._line_width)))
+            for j in xrange(max(1, num_lines)):
                 if j:
                     self.SendScintilla(QsciBase.SCI_APPENDTEXT, sep_len, sep)
                 start = j * self._line_width
@@ -391,6 +388,12 @@ class QConsoleWidget(QsciScintilla):
                 self.SendScintilla(QsciBase.SCI_APPENDTEXT, len(sub), sub)
 
         self.SendScintilla(QsciBase.SCI_EMPTYUNDOBUFFER)
+
+    def paste(self):
+        """ Reimplemented to ensure that text is pasted in editing region.
+        """
+        self._keep_cursor_in_buffer()
+        QsciScintilla.paste(self)
 
     #--------------------------------------------------------------------------
     # 'QConsoleWidget' concrete interface
