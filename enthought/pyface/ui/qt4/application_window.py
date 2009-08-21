@@ -115,6 +115,7 @@ class ApplicationWindow(MApplicationWindow, Window):
 
     def _create_control(self, parent):
         control = QtGui.QMainWindow(parent)
+        control.setObjectName('ApplicationWindow')
 
         if self.position != (-1, -1):
             control.move(*self.position)

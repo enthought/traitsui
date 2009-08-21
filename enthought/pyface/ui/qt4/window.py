@@ -21,6 +21,7 @@ from enthought.traits.api import Tuple
 # Local imports.
 from enthought.pyface.i_window import IWindow, MWindow
 from enthought.pyface.key_pressed_event import KeyPressedEvent
+from gui import GUI
 from widget import Widget
 
 
@@ -156,7 +157,8 @@ class _EventFilter(QtCore.QObject):
             return False
 
         if e.type() == QtCore.QEvent.Close:
-            window.close()
+            # Do not destroy the window during its event handler.
+            GUI.invoke_later(window.close)
 
             if window.control is not None:
                 e.ignore()
