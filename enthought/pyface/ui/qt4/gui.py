@@ -154,10 +154,14 @@ class _FutureCall(QtCore.QObject):
     # Manage access to the list of instances.
     _calls_mutex = QtCore.QMutex()
 
+    # A new Qt event type for _FutureCalls
+    _pyface_event = QtCore.QEvent.Type(QtCore.QEvent.registerEventType())
+
     def __init__(self, ms, callable, *args, **kw):
         QtCore.QObject.__init__(self)
 
         # Save the arguments.
+        self._ms = ms
         self._callable = callable
         self._args = args
         self._kw = kw
@@ -167,36 +171,45 @@ class _FutureCall(QtCore.QObject):
         self._calls.append(self)
         self._calls_mutex.unlock()
 
-        # Connect to the dispatcher.
-        self.connect(self, QtCore.SIGNAL('dispatch'), _dispatcher.dispatch)
+        # Move to the main GUI thread.
+        self.moveToThread(QtGui.QApplication.instance().thread())
+        
+        # Post an event to be dispatched on the main GUI thread. Note that 
+        # we do not call QTimer.singleShot here, which would be simpler, because
+        # that only works on QThreads. We want regular Python threads to work.
+        event = QtCore.QEvent(self._pyface_event)
+        QtGui.QApplication.postEvent(self, event)
+        QtGui.QApplication.sendPostedEvents()
 
-        # Start the timer.
-        QtCore.QTimer.singleShot(ms, self._fire)
+    def event(self, event):
+        """ QObject event handler.
+        """
+        if event.type() == self._pyface_event:
+            # Invoke the callable
+            if self._ms:
+                QtCore.QTimer.singleShot(self._ms, self._dispatch)
+            else:
+                self._callable(*self._args, **self._kw)
 
-    def _fire(self):
-        # Remove the instance from the global list.
+                # We cannot remove from self._calls here. QObjects don't like
+                # being garbage collected during event handlers.
+                QtCore.QTimer.singleShot(0, self._finished)
+
+            return True
+        else:
+            return QtCore.QObject.event(self, event)
+
+    def _dispatch(self):
+        """ Invoke the callable.
+        """
+        self._callable(*self._args, **self._kw)
+        self._finished()
+
+    def _finished(self):
+        """ Remove the call from the list, so it can be garbage collected.
+        """
         self._calls_mutex.lock()
         del self._calls[self._calls.index(self)]
         self._calls_mutex.unlock()
-
-        # Pass the arguments to the dispatcher so that the callable executes in
-        # the right thread.
-        self.emit(QtCore.SIGNAL('dispatch'), self._callable, self._args, self._kw)
-
-
-class _Dispatcher(QtCore.QObject):
-    """ This singleton class simply invokes a callable.  The single instance
-    must be created in the GUI thread, ie. this module must be first imported
-    in the GUI thread.  The class must be derived from QObject to ensure that
-    the right thread is used.
-    """
-
-    def dispatch(self, callable, args, kw):
-        """ Invoke a callable. """
-        callable(*args, **kw)
-
-
-# Create the single instance.
-_dispatcher = _Dispatcher()
 
 #### EOF ######################################################################
