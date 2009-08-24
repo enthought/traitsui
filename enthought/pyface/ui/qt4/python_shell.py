@@ -77,6 +77,8 @@ class PythonShell(MPythonShell, Widget):
         return self.control.interpreter
 
     def execute_command(self, command, hidden=True):
+        if not hidden:
+            self.control.input_buffer = command
         self.control.execute(command, hidden=hidden)
 
     #--------------------------------------------------------------------------
@@ -309,16 +311,10 @@ class QConsoleWidget(QsciScintilla):
                 intercepted = True
 
             elif key == QtCore.Qt.Key_Up:
-                if self._in_buffer(line, index):
-                    intercepted = not self.up_pressed()
-                else:
-                    intercepted = True
+                intercepted = not self.up_pressed()
 
             elif key == QtCore.Qt.Key_Down:
-                if self._in_buffer(line, index):
-                    intercepted = not self.down_pressed()
-                else:
-                    intercepted = True
+                intercepted = not self.down_pressed()
 
             elif key == QtCore.Qt.Key_Left:
                 intercepted = not self._in_buffer(line, index - 1)
@@ -406,19 +402,33 @@ class QConsoleWidget(QsciScintilla):
     # 'QConsoleWidget' concrete interface
     #--------------------------------------------------------------------------
 
-    # The buffer being edited:
     def _set_input_buffer(self, string):
+        # Remove old text
         self.setSelection(self._prompt_line, self._prompt_index, 
                           *self._end_position())
         self.removeSelectedText()
+        
+        # Add continuation prompts where necessary
+        lines = string.splitlines()
+        cont_prompt = self.continuation_prompt()
+        for i in xrange(1, len(lines)):
+            lines[i] = cont_prompt + lines[i]
+        string = os.linesep.join(lines)
+
+        # Insert string and move cursor to end of buffer
         self.insertAt(string, self._prompt_line, self._prompt_index)
+        self.recolor(self.positionFromLineIndex(self._prompt_line, 
+                                                self._prompt_index), -1)
         self.setCursorPosition(*self._end_position())
 
     def _get_input_buffer(self):
-        lines = [ str(self.text(line))[self._prompt_index:]
-                  for line in xrange(self._prompt_line, self.lines() - 1) ]
+        lines = [ str(self.text(self._prompt_line))[self._prompt_index:] ]
+        cont_prompt_index = len(self.continuation_prompt())
+        for i in xrange(self._prompt_line + 1, self.lines()):
+            lines.append(str(self.text(i))[cont_prompt_index:])
         return ''.join(lines)
 
+    # The buffer being edited:
     input_buffer = property(_get_input_buffer, _set_input_buffer)
 
     def write(self, text, refresh=True):
@@ -519,7 +529,7 @@ class QConsoleWidget(QsciScintilla):
                                       _ERROR_MARKER)
 
     #--------------------------------------------------------------------------
-    # 'QConsoleWidget' abstract interface
+    # 'QConsoleWidget' virtual interface
     #--------------------------------------------------------------------------
 
     def console_init(self):
@@ -527,6 +537,11 @@ class QConsoleWidget(QsciScintilla):
             displayed. All initial writing should be done in this function.
         """
         pass
+
+    def continuation_prompt(self):
+        """ The string that prefixes lines for multi-line commands.
+        """
+        return '> '
 
     def enter_pressed(self):
         """ Called when the enter key is pressed.
@@ -640,14 +655,16 @@ class QPythonShellWidget(QConsoleWidget):
         self.new_prompt()
 
         self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
+    
+    def continuation_prompt(self):
+        return '... '
 
     def enter_pressed(self):
-        self.write('\n', refresh=False)
         self.execute(self.input_buffer)
 
     def up_pressed(self):
         line, _ = self.getCursorPosition()
-        if line == self._prompt_line:
+        if line <= self._prompt_line:
             if self._history_index > 0:
                 self._history_index -= 1
                 self.input_buffer = self._history[self._history_index]
@@ -662,7 +679,7 @@ class QPythonShellWidget(QConsoleWidget):
     def down_pressed(self):
         line, _ = self.getCursorPosition()
         end_line, _ = self._end_position()
-        if line == end_line:
+        if line < self._prompt_line or line == end_line:
             if self._history_index < len(self._history):
                 self._history_index += 1
                 if self._history_index < len(self._history):
@@ -684,12 +701,14 @@ class QPythonShellWidget(QConsoleWidget):
     def execute(self, source, hidden=False):
         """ Execute a Python string.
         """
-        lines = source.splitlines()
-        last_stripped = lines[-1].strip()
+        source += os.linesep
+        if not hidden:
+            self.write(os.linesep, refresh=False)
 
-        # Only execute multiline code if it ends with a blank line
-        if (len(lines) == 1) ^ (last_stripped == ''):
-
+        # Only execute interactive multiline input if it ends with a blank line
+        stripped = source.strip()
+        if stripped and (not self._more or 
+                         source.splitlines()[-1].strip() == ''):
             # Save the current std* and point them here
             old_stdin = sys.stdin
             old_stdout = sys.stdout
@@ -720,23 +739,18 @@ class QPythonShellWidget(QConsoleWidget):
                 if self.exec_callback:
                     self.exec_callback()
                 if not hidden:
-                    if len(lines) == 1:
-                        source = source.strip()
-                    else:
-                        source = lines[0].strip()
-                        for line in lines[1:]:
-                            source += os.linesep + '... ' + line
-                    self._history.append(source)
-                    self._history_index = len(self._history)
+                    if len(self._history) == 0 or self._history[-1] != stripped:
+                        self._history.append(stripped)
+                    self._history_index = len(self._history)    
 
         if not hidden:
             if self._more:
                 self.write('... ', refresh=False)
-                if last_stripped.endswith(':'):
+                if stripped.endswith(':'):
                     self._indent += 1
                 self.write('\t' * self._indent, refresh=False)
             else:
-                self.write('\n', refresh=False)
+                self.write(os.linesep, refresh=False)
                 self.new_prompt()
             
             # Turn Python syntax highlighting back on
