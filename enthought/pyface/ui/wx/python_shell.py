@@ -80,7 +80,8 @@ class PythonShell(MPythonShell, Widget):
         if hidden:
             self.control.hidden_push(command)
         else:
-            self.control.push(command)
+            # Replace the edit area text with command, then run it:
+            self.control.Execute(command)
 
     ###########################################################################
     # Protected 'IWidget' interface.
@@ -161,8 +162,6 @@ class PythonShell(MPythonShell, Widget):
 
         # Give other event handlers a chance.
         event.Skip()
-
-        return
 
 
 class PyShell(PyShellBase):
