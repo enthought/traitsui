@@ -674,7 +674,9 @@ class TableDelegate(QtGui.QStyledItemDelegate):
     def createEditor(self, parent, option, index):
         """ Reimplemented to return the editor for a given index."""
 
-        table_editor = index.model()._editor
+        model = index.model()
+        index = model.mapToSource(index)
+        table_editor = model._editor
         column = table_editor.columns[index.column()]
         obj = table_editor.items()[index.row()]
 

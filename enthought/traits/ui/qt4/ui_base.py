@@ -263,8 +263,9 @@ class _StickyDialog(QtGui.QDialog):
         QtGui.QDialog.__init__(self, parent)
 
         # Create the main window so we can add toolbars etc.
-        layout = QtGui.QVBoxLayout()
         self._mw = QtGui.QMainWindow()
+        layout = QtGui.QVBoxLayout()
+        layout.setMargin(0)
         layout.addWidget(self._mw)
         self.setLayout(layout)
 
