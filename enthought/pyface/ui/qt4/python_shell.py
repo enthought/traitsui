@@ -86,7 +86,7 @@ class PythonShell(MPythonShell, Widget):
     #--------------------------------------------------------------------------
 
     def _create_control(self, parent):
-        return QPythonShellWidget(parent)
+        return QPyfacePythonShellWidget(self, parent)
 
 #-------------------------------------------------------------------------------
 # 'QConsoleWidget' class and associated constants:
@@ -755,3 +755,48 @@ class QPythonShellWidget(QConsoleWidget):
             
             # Turn Python syntax highlighting back on
             self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
+
+#-------------------------------------------------------------------------------
+# 'QPyfacePythonShellWidget' class:
+#-------------------------------------------------------------------------------
+
+class QPyfacePythonShellWidget(QPythonShellWidget):
+    """ A QPythonShellWidget customized to support the IPythonShell interface.
+    """
+
+    #--------------------------------------------------------------------------
+    # 'object' interface
+    #--------------------------------------------------------------------------
+
+    def __init__(self, pyface_widget, *args, **kw):
+        """ Reimplemented to store a reference to the Pyface widget which
+            contains this control.
+        """
+        self._pyface_widget = pyface_widget
+
+        QPythonShellWidget.__init__(self, *args, **kw)
+    
+    #---------------------------------------------------------------------------
+    # 'QWidget' interface
+    #---------------------------------------------------------------------------
+
+    def keyPressEvent(self, event):
+        """ Reimplemented to generate Pyface key press events.
+        """
+        # Pyface doesn't seem to be Unicode aware.  Only keep the key code if it
+        # corresponds to a single Latin1 character.
+        kstr = event.text().toLatin1()
+        if kstr.length() == 1:
+            kcode = ord(kstr.at(0))
+        else:
+            kcode = 0
+
+        mods = event.modifiers()
+        self._pyface_widget.key_pressed = KeyPressedEvent(
+            alt_down     = ((mods & QtCore.Qt.AltModifier) == QtCore.Qt.AltModifier),
+            control_down = ((mods & QtCore.Qt.ControlModifier) == QtCore.Qt.ControlModifier),
+            shift_down   = ((mods & QtCore.Qt.ShiftModifier) == QtCore.Qt.ShiftModifier),
+            key_code     = kcode,
+            event        = QtGui.QKeyEvent(event))
+
+        QPythonShellWidget.keyPressEvent(self, event)
