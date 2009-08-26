@@ -75,26 +75,30 @@ class ProgressDialog(MProgressDialog, Window):
         
         self.progress_bar.setValue(value)
 
-        percent = (float(value) - self.min)/(self.max - self.min)
+        if self.max > 0:
+            percent = (float(value) - self.min)/(self.max - self.min)
             
-        if self.show_time and (percent != 0):
-            current_time = time.time()
-            elapsed = current_time - self._start_time
-            estimated = elapsed/percent
-            remaining = estimated - elapsed
+            if self.show_time and (percent != 0):
+                current_time = time.time()
+                elapsed = current_time - self._start_time
+                estimated = elapsed/percent
+                remaining = estimated - elapsed
 
-            self._set_time_label(elapsed, 
-                                 self._elapsed_control)
-            self._set_time_label(estimated, 
-                                 self._estimated_control)
-            self._set_time_label(remaining, 
-                                 self._remaining_control)
-            
-        if self.show_percent:
-            self._percent_control = "%3f" % ((percent * 100) % 1)
-            
-        if value >= self.max or self._user_cancelled:
-            self.close()
+                self._set_time_label(elapsed, 
+                                    self._elapsed_control)
+                self._set_time_label(estimated, 
+                                    self._estimated_control)
+                self._set_time_label(remaining, 
+                                    self._remaining_control)
+                
+            if self.show_percent:
+                self._percent_control = "%3f" % ((percent * 100) % 1)
+                
+            if value >= self.max or self._user_cancelled:
+                self.close()
+        else:
+            if self._user_cancelled:
+                self.close()
             
         QtGui.QApplication.processEvents()
             
