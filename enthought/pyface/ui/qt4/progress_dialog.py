@@ -73,9 +73,9 @@ class ProgressDialog(MProgressDialog, Window):
         if self.progress_bar is None:
             return None, None
         
-        self.progress_bar.setValue(value)
-
         if self.max > 0:
+            self.progress_bar.setValue(value)
+
             percent = (float(value) - self.min)/(self.max - self.min)
             
             if self.show_time and (percent != 0):
@@ -97,6 +97,8 @@ class ProgressDialog(MProgressDialog, Window):
             if value >= self.max or self._user_cancelled:
                 self.close()
         else:
+            self.progress_bar.setValue(self.progress_bar.value() + value)
+
             if self._user_cancelled:
                 self.close()
             
