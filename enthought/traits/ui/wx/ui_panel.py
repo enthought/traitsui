@@ -1185,7 +1185,9 @@ class FillPanel ( object ):
         if item.emphasized:
             self._add_emphasis( control )
 
-        wx.EVT_LEFT_UP( control, show_help_popup )
+        # XXX: Turning off help popups for now
+        #wx.EVT_LEFT_UP( control, show_help_popup )
+
         control.help = item.get_help( ui )
         sizer.Add( control, 0, self.label_flags | wx.ALIGN_CENTER_VERTICAL |
                                pad_side, self.label_pad )
