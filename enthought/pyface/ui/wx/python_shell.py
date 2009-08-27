@@ -84,7 +84,18 @@ class PythonShell(MPythonShell, Widget):
             self.control.Execute(command)
 
     ###########################################################################
-    # Protected 'IWidget' interface.
+    # 'MPythonShell' interface.
+    ###########################################################################
+
+    def _new_prompt(self):
+        self.control.prompt()
+
+    def _set_input_buffer(self, command):
+        self.control.clearCommand()
+        self.control.write(command)
+
+    ###########################################################################
+    # 'IWidget' interface.
     ###########################################################################
 
     def _create_control(self, parent):

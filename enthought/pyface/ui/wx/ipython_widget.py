@@ -335,8 +335,12 @@ class IPythonWidget(Widget):
     def interpreter(self):
         return self.interp
 
-    def execute_command(self, command, hidden=False):
+    def execute_command(self, command, hidden=True):
         self.control.execute_command(command, hidden=hidden)
+        self.command_executed = True
+
+    def execute_file(self, path, hidden=True):
+        self.control.execute_command('%run ' + '"%s"' % path, hidden=hidden)
         self.command_executed = True
 
     ###########################################################################
