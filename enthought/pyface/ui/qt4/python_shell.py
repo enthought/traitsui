@@ -82,7 +82,18 @@ class PythonShell(MPythonShell, Widget):
         self.control.execute(command, hidden=hidden)
 
     #--------------------------------------------------------------------------
-    # Protected 'IWidget' interface.
+    # 'MPythonShell' interface
+    #--------------------------------------------------------------------------
+
+    def _new_prompt(self):
+        self.control.write(os.linesep)
+        self.control.new_prompt()
+
+    def _set_input_buffer(self, command):
+        self.control.input_buffer = command
+
+    #--------------------------------------------------------------------------
+    # 'IWidget' interface.
     #--------------------------------------------------------------------------
 
     def _create_control(self, parent):
@@ -198,6 +209,7 @@ class QConsoleWidget(QsciScintilla):
         self._console_inited = False
         self._enter_processing = False
         self._last_refresh_time = 0
+        self._line_width = 80 # initialize just to be safe
         self._prompt_line, self._prompt_index = 0, 0
 
         # Define our custom context menu
