@@ -211,6 +211,7 @@ class QConsoleWidget(QsciScintilla):
         self._last_refresh_time = 0
         self._line_width = 80 # initialize just to be safe
         self._prompt_line, self._prompt_index = 0, 0
+        self._reading = False
 
         # Define our custom context menu
         self._context_menu = QtGui.QMenu(self)
@@ -268,6 +269,83 @@ class QConsoleWidget(QsciScintilla):
         self.set_ansi_colors(ansi_colors)
 
     #--------------------------------------------------------------------------
+    # file-like object interface
+    #--------------------------------------------------------------------------    
+
+    def flush(self):
+        """ This buffer does not need to be flushed.
+        """
+        pass
+
+    def isatty(self):
+        """ This buffer is interactive.
+        """
+        return True
+
+    def readline(self):
+        """ Read and return one line from the buffer.
+        """
+        self.new_prompt('')
+
+        self._reading = True
+        while self._reading:
+            QtCore.QCoreApplication.processEvents()
+
+        result = self.input_buffer + '\n'
+        self.write(os.linesep, refresh=False)
+        return result
+
+    def write(self, text, refresh=True):
+        """ Write given text to buffer, translating ANSI escape sequences as
+            appropriate.
+        """
+        # WARNING: Do not put print statements to sys.stdout/sys.stderr in this
+        # method, as print will call this method, creating an infinite loop.
+        
+        title = self.title_pattern.split(text)
+        if len(title) > 1:
+            self.title = title[-2]
+
+        text = self.title_pattern.sub('', text)
+        segments = self.color_pattern.split(text)
+        segment = segments.pop(0)
+        self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.text().length())
+        try:
+            self.append(segment)
+        except UnicodeDecodeError:
+            # FIXME: Do I really want to skip the exception?
+            pass
+        
+        for ansi_tag, text in zip(segments[::2], segments[1::2]):
+            self.SendScintilla(QsciBase.SCI_STARTSTYLING, 
+                               self.text().length(), 0xff)
+            try:
+                self.append(text)
+            except UnicodeDecodeError:
+                # FIXME: Do I really want to skip the exception?
+                pass
+            if ansi_tag in self._ansi_colors:
+                style = self._ansi_colors[ansi_tag][0] + _ANSI_STYLE_START
+            else:
+                style = 0
+            self.SendScintilla(QsciBase.SCI_SETSTYLING, len(text), style)
+                
+        self.setCursorPosition(*self._end_position())
+
+        if refresh:
+            current_time = time()
+            if current_time - self._last_refresh_time > 0.03:
+                self.repaint()
+                self._last_refresh_time = current_time 
+
+    def writelines(self, lines, refresh=True):
+        """ Write a list of lines to the buffer.
+        """
+        for line in lines:
+            self.write(line, refresh=False)
+            self.write(os.linesep, refresh=refresh)
+
+    #--------------------------------------------------------------------------
     # 'QWidget' interface
     #--------------------------------------------------------------------------
 
@@ -314,7 +392,9 @@ class QConsoleWidget(QsciScintilla):
         
         if not self.isListActive():
             if key in (QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter):
-                if not self._enter_processing:
+                if self._reading:
+                    self._reading = False
+                elif not self._enter_processing:
                     self._enter_processing = True
                     try:
                         self.enter_pressed()
@@ -323,10 +403,10 @@ class QConsoleWidget(QsciScintilla):
                 intercepted = True
 
             elif key == QtCore.Qt.Key_Up:
-                intercepted = not self.up_pressed()
+                intercepted = self._reading or not self.up_pressed()
 
             elif key == QtCore.Qt.Key_Down:
-                intercepted = not self.down_pressed()
+                intercepted = self._reading or not self.down_pressed()
 
             elif key == QtCore.Qt.Key_Left:
                 intercepted = not self._in_buffer(line, index - 1)
@@ -442,49 +522,6 @@ class QConsoleWidget(QsciScintilla):
 
     # The buffer being edited:
     input_buffer = property(_get_input_buffer, _set_input_buffer)
-
-    def write(self, text, refresh=True):
-        """ Write given text to buffer, translating ANSI escape sequences as
-            appropriate.
-        """
-        # WARNING: Do not put print statements to sys.stdout/sys.stderr in this
-        # method, as print will call this method, creating an infinite loop.
-        
-        title = self.title_pattern.split(text)
-        if len(title) > 1:
-            self.title = title[-2]
-
-        text = self.title_pattern.sub('', text)
-        segments = self.color_pattern.split(text)
-        segment = segments.pop(0)
-        self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.text().length())
-        try:
-            self.append(segment)
-        except UnicodeDecodeError:
-            # FIXME: Do I really want to skip the exception?
-            pass
-        
-        for ansi_tag, text in zip(segments[::2], segments[1::2]):
-            self.SendScintilla(QsciBase.SCI_STARTSTYLING, 
-                               self.text().length(), 0xff)
-            try:
-                self.append(text)
-            except UnicodeDecodeError:
-                # FIXME: Do I really want to skip the exception?
-                pass
-            if ansi_tag in self._ansi_colors:
-                style = self._ansi_colors[ansi_tag][0] + _ANSI_STYLE_START
-            else:
-                style = 0
-            self.SendScintilla(QsciBase.SCI_SETSTYLING, len(text), style)
-                
-        self.setCursorPosition(*self._end_position())
-
-        if refresh:
-            current_time = time()
-            if current_time - self._last_refresh_time > 0.03:
-                self.repaint()
-                self._last_refresh_time = current_time 
 
     def new_prompt(self, prompt):
         """ Prints a prompt at start of line, and move the start of the current
@@ -646,10 +683,7 @@ class QPythonShellWidget(QConsoleWidget):
 
     #--------------------------------------------------------------------------
     # file-like object interface
-    #--------------------------------------------------------------------------    
-
-    def flush(self):
-        pass
+    #--------------------------------------------------------------------------
 
     def write(self, text, refresh=True):
         if not self._hidden:
