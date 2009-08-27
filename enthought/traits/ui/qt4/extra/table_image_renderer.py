@@ -20,6 +20,7 @@
 from PyQt4 import QtCore, QtGui
 
 # ETS imports
+from enthought.traits.api import Bool
 from enthought.traits.ui.qt4.table_editor import TableDelegate
 
 
@@ -27,6 +28,9 @@ class TableImageRenderer(TableDelegate):
     """ A renderer which will display a cell-specific image in addition to some
         text displayed in the same way the default renderer would.
     """
+
+    # Should the image be scaled to the size of the cell
+    scale_to_cell = Bool(True)
 
     #---------------------------------------------------------------------------
     #  TableImageRenderer interface
@@ -53,8 +57,12 @@ class TableImageRenderer(TableDelegate):
         image = self.get_image_for_obj(value, index.row(), index.column())
         if image:
             image = image.create_bitmap()
-            w = min(image.width(), option.rect.width())
-            h = min(image.height(), option.rect.height())
+            if self.scale_to_cell:
+                w = min(image.width(), option.rect.width())
+                h = min(image.height(), option.rect.height())
+            else:
+                w = image.width()
+                h = image.height()
             target = QtCore.QRect(option.rect.x(), option.rect.y(), w, h)
             painter.drawPixmap(target, image)
 
@@ -68,7 +76,7 @@ class TableImageRenderer(TableDelegate):
         image = self.get_image_for_obj(value, index.row(), index.column())
         if image:
             image = image.create_bitmap()
-            size.setWidth(max(image.width(), size.width()))
+            size.setWidth(max(image.width(), size.width()))           
             size.setHeight(max(image.height(), size.height()))
 
         return size
