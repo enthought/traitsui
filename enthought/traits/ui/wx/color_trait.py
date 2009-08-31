@@ -49,13 +49,7 @@ def tuple_to_wxcolor(tup):
 def convert_to_color ( object, name, value ):
     """ Converts a number into a wxColour object.
     """
-    # Try the toolkit agnostic format.
-    try:
-        tup = eval(value)
-    except:
-        tup = value
-
-    if isinstance(tup, tuple):
+    if isinstance( value, tuple ):
         return tuple_to_wxcolor(tup)
 
     elif isinstance( value, ColourPtr ):
