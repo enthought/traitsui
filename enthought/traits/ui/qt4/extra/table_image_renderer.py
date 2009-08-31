@@ -63,7 +63,11 @@ class TableImageRenderer(TableDelegate):
             else:
                 w = image.width()
                 h = image.height()
-            target = QtCore.QRect(option.rect.x(), option.rect.y(), w, h)
+                
+            x = option.rect.x()
+            y = option.rect.y() + (option.rect.height()-h)/2
+                
+            target = QtCore.QRect(x, y, w, h)
             painter.drawPixmap(target, image)
 
     def sizeHint(self, option, index):
