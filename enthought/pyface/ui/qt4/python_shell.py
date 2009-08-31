@@ -13,6 +13,7 @@
 #------------------------------------------------------------------------------
 
 # Standard library imports.
+import __builtin__
 from code import InteractiveInterpreter
 import keyword
 from math import ceil, floor
@@ -23,7 +24,7 @@ from time import time
 # Major package imports.
 from PyQt4 import QtCore, QtGui
 from PyQt4.Qsci import QsciScintilla, QsciScintillaBase as QsciBase, \
-    QsciStyle, QsciLexerPython
+    QsciAbstractAPIs, QsciLexerPython, QsciStyle
 
 # Enthought library imports.
 from enthought.traits.api import Event, implements
@@ -116,15 +117,11 @@ _STDERR_STYLE = 16
 _TRACE_STYLE  = 17
 
 _DEFAULT_STYLES = {
-    # Default style
-    QsciBase.STYLE_DEFAULT : '',
-
     # Braces
     QsciBase.STYLE_BRACELIGHT : 'fore:#00AA00,back:#000000,bold',
     QsciBase.STYLE_BRACEBAD   : 'fore:#FF0000,back:#000000,bold',
 
     # Python lexer styles
-    QsciLexerPython.Default                  : '',
     QsciLexerPython.Comment                  : 'fore:#007F00',
     QsciLexerPython.Number                   : 'fore:#007F7F',
     QsciLexerPython.DoubleQuotedString       : 'fore:#7F007F,italic',
@@ -197,11 +194,14 @@ class QConsoleWidget(QsciScintilla):
     #--------------------------------------------------------------------------
 
     def __init__(self, parent, styles=_DEFAULT_STYLES, 
-                 marker_colors=_DEFAULT_MARKER_COLORS, ansi_colors=ANSI_COLORS):
+                 marker_colors=_DEFAULT_MARKER_COLORS, ansi_colors=ANSI_COLORS,
+                 _base_init=True):
         """ Initialize internal variables and up all the styling options for the
             console.
         """
-        QsciScintilla.__init__(self, parent)
+        # Hack for QPythonShellWidget subclass (see __init__ for info)
+        if _base_init:
+            QsciScintilla.__init__(self, parent)
 
         # Initialize internal variables
         self.title = 'Console' # captured from ANSI escape sequences
@@ -547,22 +547,24 @@ class QConsoleWidget(QsciScintilla):
         """ Sets the styles of the underlying Scintilla widget by parsing a
             style specification a la wx's SetStyleSpec.
         """
-        for style_num, style_string in style_dict.items():
+        for style_num in xrange(128):
             style = QsciStyle(style_num)
             font = QtGui.QFont(_FONT, _FONT_SIZE)
-            for attr in style_string.split(','):
-                attr = attr.strip().split(':')
-                name = attr[0].strip()
-                if name == 'fore':
-                    style.setColor(QtGui.QColor(attr[1]))
-                elif name == 'back':
-                    style.setPaper(QtGui.QColor(attr[1]))
-                elif name == 'bold':
-                    font.setBold(True)
-                elif name == 'italic':
-                    font.setItalic(True)
-                elif name == 'underline':
-                    font.setUnderline(True)
+            if style_num in style_dict:
+                style_string = style_dict[style_num]
+                for attr in style_string.split(','):
+                    attr = attr.strip().split(':')
+                    name = attr[0].strip()
+                    if name == 'fore':
+                        style.setColor(QtGui.QColor(attr[1]))
+                    elif name == 'back':
+                        style.setPaper(QtGui.QColor(attr[1]))
+                    elif name == 'bold':
+                        font.setBold(True)
+                    elif name == 'italic':
+                        font.setItalic(True)
+                    elif name == 'underline':
+                        font.setUnderline(True)
             style.setFont(font)
 
     def set_marker_colors(self, colors):
@@ -650,8 +652,18 @@ class QConsoleWidget(QsciScintilla):
         return line, self.text(line).length()
 
 #-------------------------------------------------------------------------------
-# 'QPythonShellWidget' class:
+# 'QPythonShellWidget' class and associated constants:
 #-------------------------------------------------------------------------------
+
+# Horrible hack to determine if the window manager is Metacity. See
+# 'keyPressEvent' for more info.
+if sys.platform == 'linux2':
+    from subprocess import Popen, PIPE
+    METACITY = 'metacity' in Popen(['grep', 'metacity'], 
+                                   stdin=Popen(['ps','-A'], stdout=PIPE).stdout,
+                                   stdout=PIPE).communicate()[0]
+else:
+    METACITY = False
 
 class QPythonShellWidget(QConsoleWidget):
     """ An embeddable Python shell.
@@ -662,22 +674,30 @@ class QPythonShellWidget(QConsoleWidget):
     #--------------------------------------------------------------------------
 
     def __init__(self, parent=None):
-        """ Set up internal variables.
+        """ Set up lexer and internal variables
         """
-        QConsoleWidget.__init__(self, parent)
-
         self.interpreter = InteractiveInterpreter()
         self.exec_callback = None
 
+        # Set the lexer 
+        QsciScintilla.__init__(self, parent)
+        lexer = QsciLexerPython(self)
+        apis = QPythonShellAPIs(lexer, self.interpreter)
+        self.setLexer(lexer)
+        self.setAutoCompletionSource(QsciScintilla.AcsAPIs)
+
+        # Initialize QConsoleWidget. Replace the styles previously set by
+        # QsciPythonLexer with the defaults of QConsoleWidget.
+        self.SendScintilla(QsciBase.SCI_STYLERESETDEFAULT)
+        self.SendScintilla(QsciBase.SCI_STYLECLEARALL)
+        QConsoleWidget.__init__(self, parent, _base_init=False)
+
+        # Set up internal variables
         self._indent = 0
         self._hidden = False
         self._more = False
         self._history = []
         self._history_index = 0
-
-        # Send the list of Python keywords to the Scintilla control
-        keywords = ' '.join(keyword.kwlist)
-        self.SendScintilla(QsciBase.SCI_SETKEYWORDS, 0, keywords)
 
     #--------------------------------------------------------------------------
     # file-like object interface
@@ -688,10 +708,33 @@ class QPythonShellWidget(QConsoleWidget):
             QConsoleWidget.write(self, text, refresh)
 
     #---------------------------------------------------------------------------
+    # 'QWidget' interface
+    #---------------------------------------------------------------------------
+    
+    def keyPressEvent(self, event):
+        """ Reimplemented to hack around a bug in QScintilla where creating
+            an autocompletion prompt causes the window to lose focus if the 
+            application is running under Gnome.
+        """
+        if METACITY:
+            was_active = self.isListActive()
+            QConsoleWidget.keyPressEvent(self, event)
+            if not was_active and self.isListActive():
+                for child in self.children():
+                    if isinstance(child, QtGui.QListWidget):
+                        child.setWindowFlags(QtCore.Qt.ToolTip |
+                                             QtCore.Qt.WindowStaysOnTopHint)
+                        child.show()
+        else:
+            QConsoleWidget.keyPressEvent(self, event)
+
+    #---------------------------------------------------------------------------
     # 'QConsoleWidget' interface
     #---------------------------------------------------------------------------
 
     def console_init(self):
+        self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_NULL)
+
         self.write('Python %s on %s.\n' % (sys.version, sys.platform), 
                    refresh=False)
         self.write('Type "copyright", "credits" or "license" for more ' \
@@ -800,6 +843,70 @@ class QPythonShellWidget(QConsoleWidget):
             # Turn Python syntax highlighting back on
             self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
 
+#-------------------------------------------------------------------------------
+# 'QPythonShellAPIs' class:
+#-------------------------------------------------------------------------------
+
+class QPythonShellAPIs(QsciAbstractAPIs):
+    """ An implementation of QsciAbstractAPIs that uses the namespace of an
+        InteractiveInterpreter to look up symbols.
+    """
+
+    #--------------------------------------------------------------------------
+    # 'object' interface
+    #--------------------------------------------------------------------------
+    
+    def __init__(self, lexer, interpreter):
+        """ Store the interpreter.
+        """
+        QsciAbstractAPIs.__init__(self, lexer)
+        self.interpreter = interpreter
+
+    #--------------------------------------------------------------------------
+    # 'QsciAbstractAPIs' interface
+    #--------------------------------------------------------------------------
+
+    def callTips(self, context, commas, style, shifts):
+        """ Return the call tips valid for the context. (Note that the last word
+            of the context will always be empty.) 'commas' is the number of
+            commas the user has typed after the context and before the cursor
+            position.
+        """
+        symbol = self._symbol_from_context(context)
+        doc = getattr(symbol, '__doc__', None)
+        return [] if doc is None else [ doc ]
+
+    def updateAutoCompletionList(self, context, auto_list):
+        """ Update the auto completion list with API entries derived from
+            context. context is the list of words in the text preceding the
+            cursor position. The last word is a partial word and may be empty if
+            the user has just entered a word separator.
+        """
+        symbol = self._symbol_from_context(context)
+        for name in getattr(symbol, '__dict__', {}).keys():
+            auto_list.append(QtCore.QString(name))
+
+    #--------------------------------------------------------------------------
+    # Protected interface
+    #--------------------------------------------------------------------------
+
+    def _symbol_from_context(self, context):
+        """ Find a python object in the interpeter namespace from a QStringList
+            context object (see QsciAbstractAPIs interface above).
+        """
+        context = map(str, context)
+        base_symbol_string = context[0]
+        symbol = self.interpreter.locals.get(base_symbol_string, None)
+        if symbol is None:
+            symbol = __builtin__.__dict__.get(base_symbol_string, None)
+
+        for name in context[1:-1]:
+            if symbol is None:
+                break
+            symbol = getattr(symbol, name, None)
+
+        return symbol
+        
 #-------------------------------------------------------------------------------
 # 'QPyfacePythonShellWidget' class:
 #-------------------------------------------------------------------------------
