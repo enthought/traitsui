@@ -15,7 +15,6 @@
 # Standard library imports.
 from code import InteractiveInterpreter
 import keyword
-import os
 from math import ceil, floor
 import re
 import sys
@@ -86,7 +85,7 @@ class PythonShell(MPythonShell, Widget):
     #--------------------------------------------------------------------------
 
     def _new_prompt(self):
-        self.control.write(os.linesep)
+        self.control.write('\n')
         self.control.new_prompt()
 
     def _set_input_buffer(self, command):
@@ -292,7 +291,7 @@ class QConsoleWidget(QsciScintilla):
             QtCore.QCoreApplication.processEvents()
 
         result = self.input_buffer + '\n'
-        self.write(os.linesep, refresh=False)
+        self.write('\n', refresh=False)
         return result
 
     def write(self, text, refresh=True):
@@ -343,7 +342,7 @@ class QConsoleWidget(QsciScintilla):
         """
         for line in lines:
             self.write(line, refresh=False)
-            self.write(os.linesep, refresh=refresh)
+            self.write('\n', refresh=refresh)
 
     #--------------------------------------------------------------------------
     # 'QWidget' interface
@@ -471,13 +470,12 @@ class QConsoleWidget(QsciScintilla):
             QScintilla because we can guarantee a monospaced font.
         """
         # Code based on default implementation in 'qsciscintilla.cpp'
-        sep_len, sep = len(os.linesep), os.linesep
         for i, line in enumerate(string.splitlines(True)):
             stripped = line.rstrip('\n\r')
             num_lines = int(ceil(len(stripped) / float(self._line_width)))
             for j in xrange(max(1, num_lines)):
                 if j:
-                    self.SendScintilla(QsciBase.SCI_APPENDTEXT, sep_len, sep)
+                    self.SendScintilla(QsciBase.SCI_APPENDTEXT, 1, '\n')
                 start = j * self._line_width
                 sub = line[start : start + self._line_width]
                 self.SendScintilla(QsciBase.SCI_APPENDTEXT, len(sub), sub)
@@ -505,7 +503,7 @@ class QConsoleWidget(QsciScintilla):
         cont_prompt = self.continuation_prompt()
         for i in xrange(1, len(lines)):
             lines[i] = cont_prompt + lines[i]
-        string = os.linesep.join(lines)
+        string = '\n'.join(lines)
 
         # Insert string and move cursor to end of buffer
         self.insertAt(string, self._prompt_line, self._prompt_index)
@@ -717,7 +715,7 @@ class QPythonShellWidget(QConsoleWidget):
                 # Go to first line for seamless history up scrolling.
                 end_line, _ = self._end_position()
                 if line != end_line:
-                    i = self.text(self._prompt_line).length() - len(os.linesep)
+                    i = len(str(self.text(self._prompt_line)).rstrip())
                     self.setCursorPosition(self._prompt_line, i)
             return False
         return True
@@ -747,9 +745,9 @@ class QPythonShellWidget(QConsoleWidget):
     def execute(self, source, hidden=False):
         """ Execute a Python string.
         """
-        source += os.linesep
+        source += '\n'
         if not hidden:
-            self.write(os.linesep, refresh=False)
+            self.write('\n', refresh=False)
 
         # Only execute interactive multiline input if it ends with a blank line
         stripped = source.strip()
@@ -796,7 +794,7 @@ class QPythonShellWidget(QConsoleWidget):
                     self._indent += 1
                 self.write('\t' * self._indent, refresh=False)
             else:
-                self.write(os.linesep, refresh=False)
+                self.write('\n', refresh=False)
                 self.new_prompt()
             
             # Turn Python syntax highlighting back on
