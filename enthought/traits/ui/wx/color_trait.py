@@ -36,6 +36,16 @@ except:
 #  Convert a number into a wxColour object:
 #-------------------------------------------------------------------------------
 
+def tuple_to_wxcolor(tup):
+    if 3 <= len(tup) <= 4:
+        for c in tup:
+            if not isinstance(c, int):
+                raise TraitError
+
+        return wx.Colour(*tup)
+    else:
+        raise TraitError
+
 def convert_to_color ( object, name, value ):
     """ Converts a number into a wxColour object.
     """
@@ -46,24 +56,25 @@ def convert_to_color ( object, name, value ):
         tup = value
 
     if isinstance(tup, tuple):
-        if 3 <= len(tup) <= 4:
-            for c in tup:
-                if not isinstance(c, int):
-                    raise TraitError
+        return tuple_to_wxcolor(tup)
 
-            return wx.Colour(*tup)
-        else:
-            raise TraitError
-
-    if isinstance( value, ColourPtr ):
+    elif isinstance( value, ColourPtr ):
         return wx.Colour( value.Red(), value.Green(), value.Blue() )
         
     elif isinstance( value, wx.Colour ):
         return value
         
-    elif isinstance( value, str ) and value in standard_colors:
-        return wx.NamedColour(value)
+    elif isinstance( value, str ):
         
+        if value in standard_colors:
+            return wx.NamedColour(value)
+        
+        # Check for tuple-ness
+        tmp = value.strip()
+        if tmp.startswith("(") and tmp.endswith(")") and tmp.count(",") in (2,3):
+            tup = eval(tmp)
+            return tuple_to_wxcolor(tup)
+
     elif isinstance( value, int ):
         num = int( value )
         return wx.Colour( num / 0x10000, (num / 0x100) & 0xFF, num & 0xFF )
