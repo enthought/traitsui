@@ -293,8 +293,15 @@ class TableEditor ( Editor, BaseTableEditor ):
         else:
             self.set_selection()
 
+
+        # Set the min height of the grid panel to 0, this will provide
+        # a scrollbar if the window is resized such that only the first row
+        # is visible
+        panel.SetMinSize((-1, 0))
+        
         # Finish the panel layout setup:
         panel.SetSizer( sizer )
+        
 
     #---------------------------------------------------------------------------
     #  Creates the associated grid control used to implement the table:
@@ -348,10 +355,11 @@ class TableEditor ( Editor, BaseTableEditor ):
         # Calculate a reasonable default size for the table:
         if len( self.model.get_filtered_items() ) > 0:
             height = _grid.GetRowSize( 0 )
+            
         _grid.SetMinSize( wx.Size(
             max( 150, 80 * len( self.columns ) ), 
             _grid.GetColLabelSize() + ((factory.rows or 15) * height) ) )
-
+        
         # On Linux, there is what appears to be a bug in wx in which the
         # vertical scrollbar will not be sized properly if the TableEditor is 
         # sized to be shorter than the minimum height specified above. Since
