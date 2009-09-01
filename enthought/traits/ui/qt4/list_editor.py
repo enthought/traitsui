@@ -105,14 +105,6 @@ class SimpleEditor ( Editor ):
         self.control.setFrameShape(QtGui.QFrame.NoFrame)
         self.control.setWidgetResizable(True)
 
-        # Set the bg color to be transparent. Some Qt themes will have gradients
-        # filling the window, and a constant color frame makes it stick out
-        palette = self.control.palette()
-        bgcolor = palette.color(QtGui.QPalette.Window)
-        bgcolor.setAlpha(0)
-        palette.setColor(QtGui.QPalette.Window, bgcolor)
-        self.control.setPalette(palette)
-
         # Create a widget with a grid layout as the container.
         self._list_pane = QtGui.QWidget()
         self._list_pane.setSizePolicy(QtGui.QSizePolicy.Expanding,
