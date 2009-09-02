@@ -15,13 +15,17 @@
 # Standard library imports.
 import __builtin__
 from code import InteractiveInterpreter
+from glob import glob
 import keyword
 from math import ceil, floor
 import os
 import re
 from subprocess import Popen, PIPE
+from string import whitespace
 import sys
+from textwrap import dedent
 from time import time
+import types
 
 # Major package imports.
 from PyQt4 import QtCore, QtGui
@@ -83,16 +87,8 @@ class PythonShell(MPythonShell, Widget):
             self.control.input_buffer = command
         self.control.execute(command, hidden=hidden)
 
-    #--------------------------------------------------------------------------
-    # 'MPythonShell' interface
-    #--------------------------------------------------------------------------
-
-    def _new_prompt(self):
-        self.control.write('\n')
-        self.control.new_prompt()
-
-    def _set_input_buffer(self, command):
-        self.control.input_buffer = command
+    def execute_file(self, path, hidden=True):
+        self.execute_command('run %s' % path, hidden=hidden)
 
     #--------------------------------------------------------------------------
     # 'IWidget' interface.
@@ -393,13 +389,14 @@ class QConsoleWidget(QsciScintilla):
 
             elif key == QtCore.Qt.Key_K:
                 self.input_buffer = ''
+                self.callTip() # Clear any call tip that is being displayed
                 intercepted = True
 
             elif key == QtCore.Qt.Key_T:
                 # Transposing lines is not appropriate for a console.
                 # FIXME: Transpose characters instead.
                 intercepted = True
-        
+
         list_active = self.isListActive()
         if not list_active:
             if key in (QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter):
@@ -418,6 +415,9 @@ class QConsoleWidget(QsciScintilla):
 
             elif key == QtCore.Qt.Key_Down:
                 intercepted = self._reading or not self.down_pressed()
+
+            elif key == QtCore.Qt.Key_Tab:
+                intercepted = not (self._reading or self.tab_pressed())
 
             elif key == QtCore.Qt.Key_Left:
                 intercepted = not self._in_buffer(line, index - 1)
@@ -451,19 +451,17 @@ class QConsoleWidget(QsciScintilla):
             self._keep_cursor_in_buffer()
 
         if not intercepted:
-            if METACITY:
-                # Hack around a bug in QScintilla where creating an
-                # autocompletion prompt causes the window to lose focus if the
-                # application is running under Gnome.
-                QsciScintilla.keyPressEvent(self, event)
-                if not list_active and self.isListActive():
-                    for child in self.children():
-                        if isinstance(child, QtGui.QListWidget):
-                            child.setWindowFlags(QtCore.Qt.ToolTip |
-                                                 QtCore.Qt.WindowStaysOnTopHint)
-                            child.show()
-            else:
-                QsciScintilla.keyPressEvent(self, event)
+            QsciScintilla.keyPressEvent(self, event)
+
+        # Hack around a bug in QScintilla where creating an autocompletion
+        # prompt causes the window to lose focus if the application is running
+        # under Gnome.
+        if METACITY and not list_active and self.isListActive():
+            for child in self.children():
+                if isinstance(child, QtGui.QListWidget):
+                    child.setWindowFlags(QtCore.Qt.ToolTip |
+                                         QtCore.Qt.WindowStaysOnTopHint)
+                    child.show()
 
     def resizeEvent(self, event):
         """ Reimplemented to recalculate line width.
@@ -619,7 +617,7 @@ class QConsoleWidget(QsciScintilla):
     def enter_pressed(self):
         """ Called when the enter key is pressed.
         """
-        pass
+        raise NotImplementedError
 
     def up_pressed(self):
         """ Called when the up key is pressed. Returns whether to continue
@@ -629,6 +627,12 @@ class QConsoleWidget(QsciScintilla):
 
     def down_pressed(self):
         """ Called when the down key is pressed. Returns whether to continue
+            processing the event.
+        """
+        return True
+
+    def tab_pressed(self):
+        """ Called when the tab key is pressed. Returns whether to continue
             processing the event.
         """
         return True
@@ -696,15 +700,26 @@ class QPythonShellWidget(QConsoleWidget):
         # Set the lexer and its autocompletion API
         QsciScintilla.__init__(self, parent)
         lexer = QsciLexerPython(self)
-        apis = QPythonShellAPIs(lexer, self.interpreter)
+        apis = QsciPythonAPIs(lexer, self.interpreter)
         self.setLexer(lexer)
-        self.setAutoCompletionSource(QsciScintilla.AcsAPIs)
+
+        # If there is only a single autocompletion entry, just use it. Only
+        # relevant when autocompletion explicity requested (eg Tab completion)
+        self.setAutoCompletionShowSingle(True)
+
+        # Uncomment for autocompletion to occur when the user types a '.' char.
+        # (Autocompletion is configured to occur on Tab key press regardless.)
+        #self.setAutoCompletionSource(QsciScintilla.AcsAPIs)
 
         # Initialize QConsoleWidget. Replace the styles previously set by
         # QsciPythonLexer with the defaults of QConsoleWidget.
         self.SendScintilla(QsciBase.SCI_STYLERESETDEFAULT)
         self.SendScintilla(QsciBase.SCI_STYLECLEARALL)
         QConsoleWidget.__init__(self, parent, _base_init=False)
+
+        # Set up signal handlers
+        signal = QtCore.SIGNAL('userListActivated(int, const QString &)')
+        QtCore.QObject.connect(self, signal, self._on_user_list_activated)
 
         # Set up internal variables
         self._indent = 0
@@ -769,6 +784,53 @@ class QPythonShellWidget(QConsoleWidget):
             return False
         return True
 
+    def tab_pressed(self):
+        line, index = self.getCursorPosition()
+        text = self.input_buffer
+
+        # Case 1: a 'magic' command that operates on files needs completion
+        magic = self._is_magic(text, 'ls', 'cd', 'run')
+        if magic and len(text) > len(magic):
+            self._tab_start = len(magic) + 1
+
+            # Determine which files match from the current text
+            path = self._parse_path(text[self._tab_start:])
+            if magic == 'run':
+                matches = self._path_matches(path, '/')
+                matches.extend(self._path_matches(path, '.py'))
+            else:
+                matches = self._path_matches(path, '/')
+
+            # If there is a single match, just use it
+            if len(matches) == 1:
+                self.input_buffer = text[:self._tab_start] + matches[0]
+
+            # Otherwise, display them in an autocomplete-popup. Build a mapping
+            # from the UI display value and the actual match so that the
+            # replacement can be done in '_on_user_list_activated'.
+            elif len(matches) > 1:
+                self._tab_dict = {}
+                display_matches = []
+                for match in matches:
+                    dirname = os.path.dirname(match)
+                    if dirname:
+                        display_match = os.path.basename(dirname) + '/'
+                    else:
+                        display_match = os.path.basename(match)
+                    display_matches.append(display_match)
+                    self._tab_dict[display_match] = match
+                self.showUserList(1, display_matches)
+
+            return False
+
+        # Case 2: autocompletion on a Python symbol
+        elif text and text[0] not in whitespace:
+            self.autoCompleteFromAPIs()
+            return False
+
+        # Case 3: allow a '\t' to be inserted
+        return True
+
     #--------------------------------------------------------------------------
     # 'QPythonShellWidget' interface
     #--------------------------------------------------------------------------
@@ -793,11 +855,11 @@ class QPythonShellWidget(QConsoleWidget):
         # Process 'magic' commands
         if not self._more and self._is_magic(stripped, 'cd'):
             if len(stripped) == 2:
-                path = os.path.expanduser('~')
+                path = '~'
             else:
                 path = self._parse_path(stripped[2:])
             try:
-                os.chdir(path)
+                os.chdir(os.path.expanduser(path))
             except OSError:
                 self.write(str(sys.exc_info()[1]) + '\n', refresh=False)
             self.write(os.path.abspath(os.getcwd()) + '\n', refresh=False)
@@ -806,21 +868,36 @@ class QPythonShellWidget(QConsoleWidget):
             if len(stripped) == 2:
                 path = os.getcwd()
             else:
-                path = self._parse_path(stripped[2:])
+                path = os.path.expanduser(self._parse_path(stripped[2:]))
             if sys.platform == 'win32':
                 # FIXME: Check for availability of 'ls' on Windows in __init__
                 args = [ 'dir', path ]
             else:
                 # Use columns, a tab width of 4, and our computed line width
-                args = [ 'ls', '-C', '-T 4', '-w', str(self._line_width), path ]
+                args = [ 'ls', '-CF', '-T 4', '-w %i' % self._line_width, path ]
             out, err = self._subprocess_out_err(args)
             self.write(out, refresh=False)
             self.write(err, refresh=False)
 
+        elif not self._more and self._is_magic(stripped, 'run'):
+            if len(stripped) == 3:
+                self.write('A filename must be provided!\n', refresh=False)
+            else:
+                path = os.path.expanduser(self._parse_path(stripped[4:]))
+                if not path.endswith('.py'):
+                    path += '.py'
+                if os.path.exists(path):
+                    self.execute_file(path, hidden)
+                else:
+                    self.write('File `%s` not found.\n' % path, refresh=False)
+
         # Process special '?' help syntax
-        elif not self._more and stripped.endswith('?'):
+        elif not self._more and (stripped.startswith('?') or 
+                                 stripped.endswith('?')):
             line = self._prompt_line
-            index = self.text(line).length() - 2 # last chars are ? and \n
+            index = self.text(line).length() - 1 # before newline
+            if stripped.endswith('?'):
+                index -= 1
             name, obj = self.lexer().apis().get_symbol(line, index)
             if obj is None:
                 self.write('Object `%s` not found.\n' % name, refresh=False)
@@ -873,15 +950,71 @@ class QPythonShellWidget(QConsoleWidget):
             # Turn Python syntax highlighting back on
             self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
 
+    def execute_file(self, path, hidden=False):
+        """ Execute a file in the interpeter. If 'hidden', no output is shown.
+        """
+        # Note: The code in this function is largely ripped from IPython's
+        #       Magic.py, FakeModule.py, and iplib.py.
+
+        filename = os.path.basename(path)
+
+        # Run in a fresh, empty namespace
+        main_mod = types.ModuleType('__main__')
+        prog_ns = main_mod.__dict__
+        prog_ns['__file__'] = filename
+        prog_ns['__nonzero__'] = lambda: True
+
+        # Make sure that the running script gets a proper sys.argv as if it
+        # were run from a system shell.
+        save_argv = sys.argv
+        sys.argv = [ filename ]
+
+        # Make sure that the running script thinks it is the main module
+        save_main = sys.modules['__main__']
+        sys.modules['__main__'] = main_mod
+
+        # Redirect sys.std* to control
+        old_stdin = sys.stdin
+        old_stdout = sys.stdout
+        old_stderr = sys.stderr
+        sys.stdin = sys.stdout = sys.stderr = self
+
+        # Execute the file
+        self._hidden = hidden
+        try:
+            if sys.platform == 'win32' and sys.version_info < (2,5,1):
+                # Work around a bug in Python for Windows. For details, see:
+                # http://projects.scipy.org/ipython/ipython/ticket/123
+                exec file(path) in prog_ns, prog_ns
+            else:
+                execfile(path, prog_ns, prog_ns)
+        finally:
+            # Ensure key global stuctures are restored
+            sys.argv = save_argv
+            sys.modules['__main__'] = save_main
+            sys.stdin = old_stdin
+            sys.stdout = old_stderr
+            sys.stderr = old_stdout
+            self._hidden = False
+
+        # Update the interpreter with the new namespace
+        del prog_ns['__name__']
+        del prog_ns['__file__']
+        del prog_ns['__nonzero__']
+        self.interpreter.locals.update(prog_ns)
+
     #--------------------------------------------------------------------------
     # Protected interface
     #--------------------------------------------------------------------------
 
-    def _is_magic(self, string, magic):
-        """ Returns whether a given string matches a magic command.
+    def _is_magic(self, string, *magics):
+        """ Returns whether a given command string matches a magic command.
         """
-        return (string.startswith(magic) and 
-                (len(string) == len(magic) or string[len(magic)] == ' '))
+        for magic in magics:
+            if (string.startswith(magic) and 
+                (len(string) == len(magic) or string[len(magic)] == ' ')):
+                return magic
+        return False
 
     def _parse_path(self, string):
         """ Given a path string as specified by a user for a magic command,
@@ -893,7 +1026,15 @@ class QPythonShellWidget(QConsoleWidget):
         # Convert all non-space-escaping backslashes to slashes (eg C:\blah)
         string = re.sub(r'\\(?! )', '/', string)
     
-        return os.path.expanduser(string)
+        return string
+
+    def _path_matches(self, string, ext=''):
+        """ Returns a list of matching file/directory names.
+        """
+        pattern = string + '*' + ext
+        matches = glob(pattern)
+        matches.sort()
+        return matches
 
     def _subprocess_out_err(self, cmd):
         """ Given a command suitable for use with subprocess.Popen, execute
@@ -902,11 +1043,19 @@ class QPythonShellWidget(QConsoleWidget):
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
         return proc.communicate()
 
+    #-- Event Handlers ---------------------------------------------------------
+    
+    def _on_user_list_activated(self, id, q_string):
+        """ Handles the userListActivated signal being emitted.
+        """
+        self.input_buffer = self.input_buffer[:self._tab_start] + \
+            self._tab_dict[str(q_string)]
+
 #-------------------------------------------------------------------------------
-# 'QPythonShellAPIs' class:
+# 'QsciPythonAPIs' class:
 #-------------------------------------------------------------------------------
 
-class QPythonShellAPIs(QsciAbstractAPIs):
+class QsciPythonAPIs(QsciAbstractAPIs):
     """ An implementation of QsciAbstractAPIs that uses the namespace of an
         InteractiveInterpreter to look up symbols.
     """
@@ -922,7 +1071,7 @@ class QPythonShellAPIs(QsciAbstractAPIs):
         self.interpreter = interpreter
 
     #--------------------------------------------------------------------------
-    # 'QPythonShellAPIs' interface
+    # 'QsciPythonAPIs' interface
     #--------------------------------------------------------------------------
 
     def get_symbol(self, line, index):
@@ -933,7 +1082,9 @@ class QPythonShellAPIs(QsciAbstractAPIs):
         editor = self.lexer().editor()
         position = editor.positionFromLineIndex(line, index)
         context, context_start, last_word_start = editor.apiContext(position)
-        symbol = self._symbol_from_context(context)
+        symbol, leftover = self._symbol_from_context(context)
+        if len(leftover):
+            symbol = None
         return '.'.join(map(str, context)), symbol
 
     #--------------------------------------------------------------------------
@@ -946,9 +1097,15 @@ class QPythonShellAPIs(QsciAbstractAPIs):
             commas the user has typed after the context and before the cursor
             position.
         """
-        symbol = self._symbol_from_context(context, skip_last=True)
+        symbol, leftover = self._symbol_from_context(context)
         doc = getattr(symbol, '__doc__', None)
-        return [] if doc is None else [ doc ]
+        if doc is not None and len(leftover) == 1 and leftover[0] == '':
+            doc = dedent(doc.rstrip()).lstrip()
+            match = re.match("(?:[^\n]*\n){20}", doc)
+            if match:
+                doc = doc[:match.end()] + '\n[Documentation continues...]'
+            return [ doc ]
+        return []
 
     def updateAutoCompletionList(self, context, auto_list):
         """ Update the auto completion list with API entries derived from
@@ -956,36 +1113,47 @@ class QPythonShellAPIs(QsciAbstractAPIs):
             cursor position. The last word is a partial word and may be empty if
             the user has just entered a word separator.
         """
-        symbol = self._symbol_from_context(context, skip_last=True)
-        for name in getattr(symbol, '__dict__', {}).keys():
-            auto_list.append(QtCore.QString(name))
+        symbol, leftover = self._symbol_from_context(context)
+        if len(leftover) == 1:
+            leftover = leftover[0]
+            if symbol is None:
+                names = self.interpreter.locals.keys()
+                names += __builtin__.__dict__.keys()
+            else:
+                names = dir(symbol)
+            for name in names:
+                if name.startswith(leftover):
+                    auto_list.append(QtCore.QString(name))
 
     #--------------------------------------------------------------------------
     # Protected interface
     #--------------------------------------------------------------------------
 
-    def _symbol_from_context(self, context, skip_last=False):
+    def _symbol_from_context(self, context):
         """ Find a python object in the interpeter namespace from a QStringList
             context object (see QsciAbstractAPIs interface above).
         """
         context = map(str, context)
-        if skip_last:
-            context = context[:-1]
         if len(context) == 0:
-            return None
+            return None, context
 
         base_symbol_string = context[0]
         symbol = self.interpreter.locals.get(base_symbol_string, None)
         if symbol is None:
             symbol = __builtin__.__dict__.get(base_symbol_string, None)
+        if symbol is None:
+            return None, context
 
-        for name in context[1:]:
-            if symbol is None:
-                break
-            symbol = getattr(symbol, name, None)
+        context = context[1:]
+        for i, name in enumerate(context):
+            new_symbol = getattr(symbol, name, None)
+            if new_symbol is None:
+                return symbol, context[i:]
+            else:
+                symbol = new_symbol
 
-        return symbol
-        
+        return symbol, []
+
 #-------------------------------------------------------------------------------
 # 'QPyfacePythonShellWidget' class:
 #-------------------------------------------------------------------------------
