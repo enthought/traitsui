@@ -869,13 +869,15 @@ class QPythonShellWidget(QConsoleWidget):
                 path = os.getcwd()
             else:
                 path = os.path.expanduser(self._parse_path(stripped[2:]))
+            # FIXME: Check for availability of 'ls' on Windows in __init__
             if sys.platform == 'win32':
-                # FIXME: Check for availability of 'ls' on Windows in __init__
-                args = [ 'dir', path ]
+                # Use columns, sort by name
+                args = [ 'dir', '/w', '/on', path ]
+                out, err = self._subprocess_out_err(args, shell=True)
             else:
                 # Use columns, a tab width of 4, and our computed line width
                 args = [ 'ls', '-CF', '-T 4', '-w %i' % self._line_width, path ]
-            out, err = self._subprocess_out_err(args)
+                out, err = self._subprocess_out_err(args)
             self.write(out, refresh=False)
             self.write(err, refresh=False)
 
@@ -1036,11 +1038,11 @@ class QPythonShellWidget(QConsoleWidget):
         matches.sort()
         return matches
 
-    def _subprocess_out_err(self, cmd):
+    def _subprocess_out_err(self, cmd, **kw):
         """ Given a command suitable for use with subprocess.Popen, execute
             the command and returns its output and error streams as strings.
         """
-        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        proc = Popen(cmd, stdout=PIPE, stderr=PIPE, **kw)
         return proc.communicate()
 
     #-- Event Handlers ---------------------------------------------------------
