@@ -215,10 +215,14 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         """
         try:
             try:
-                value = eval( self.control.text.GetValue().strip() )
+                value = self.control.text.GetValue().strip()
+                if self.factory.is_float:
+                    value = float(value)
+                else:
+                    value = int(value)
             except Exception, ex:
-                # The entered something that didn't eval as a number, (e.g., 'foo')
-                # pretend it didn't happen (i.e. do not change self.value)
+                # The user entered something that didn't eval as a number (e.g., 'foo').
+                # Pretend it didn't happen (i.e. do not change self.value).
                 value = self.value
                 self.control.text.SetValue( str( value ) )
 
@@ -515,7 +519,19 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
         """ Handles the user pressing the Enter key in the text field.
         """
         try:
-            self.value = value = eval( self.control.text.GetValue().strip() )
+            value = self.control.text.GetValue().strip()
+            try:
+                if self.factory.is_float:
+                    value = float(value)
+                else:
+                    value = int(value)
+            except Exception, ex:
+                # The user entered something that didn't eval as a number (e.g., 'foo').
+                # Pretend it didn't happen (i.e. do not change self.value).
+                value = self.value
+                self.control.text.SetValue( str( value ) )
+
+            self.value = value
             self.control.text.SetBackgroundColour(OKColor)
             self.control.text.Refresh()
             # Update the slider range.
