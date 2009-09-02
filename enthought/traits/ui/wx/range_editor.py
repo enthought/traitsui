@@ -854,6 +854,10 @@ class RangeTextEditor ( TextEditor ):
         """ Handles the user entering input data in the edit control.
         """
 
+        # There are cases where this method is called with self.control == None.
+        if self.control is None:
+            return
+
         value = self.control.GetValue()
 
         # Try to convert the string value entered by the user to a numerical value.
