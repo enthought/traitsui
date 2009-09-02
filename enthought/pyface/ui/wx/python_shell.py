@@ -18,8 +18,10 @@
 """
 
 # Standard library imports.
-import os
 import __builtin__
+import os
+import sys
+import types
 
 # Major package imports.
 from wx.py.shell import Shell as PyShellBase
@@ -83,16 +85,64 @@ class PythonShell(MPythonShell, Widget):
             # Replace the edit area text with command, then run it:
             self.control.Execute(command)
 
-    ###########################################################################
-    # 'MPythonShell' interface.
-    ###########################################################################
+    def execute_file(self, path, hidden=True):
+        # Note: The code in this function is largely ripped from IPython's
+        #       Magic.py, FakeModule.py, and iplib.py.
 
-    def _new_prompt(self):
-        self.control.prompt()
+        filename = os.path.basename(path)
 
-    def _set_input_buffer(self, command):
-        self.control.clearCommand()
-        self.control.write(command)
+        # Run in a fresh, empty namespace
+        main_mod = types.ModuleType('__main__')
+        prog_ns = main_mod.__dict__
+        prog_ns['__file__'] = filename
+        prog_ns['__nonzero__'] = lambda: True
+
+        # Make sure that the running script gets a proper sys.argv as if it
+        # were run from a system shell.
+        save_argv = sys.argv
+        sys.argv = [ filename ]
+
+        # Make sure that the running script thinks it is the main module
+        save_main = sys.modules['__main__']
+        sys.modules['__main__'] = main_mod
+
+        # Redirect sys.std* to control or null
+        old_stdin = sys.stdin
+        old_stdout = sys.stdout
+        old_stderr = sys.stderr
+        if hidden:
+            sys.stdin = sys.stdout = sys.stderr = _NullIO()
+        else:
+            sys.stdin = sys.stdout = sys.stderr = self.control
+
+        # Execute the file
+        try:
+            if not hidden:
+                self.control.clearCommand()
+                self.control.write('# Executing "%s"\n' % path)
+
+            if sys.platform == 'win32' and sys.version_info < (2,5,1):
+                # Work around a bug in Python for Windows. For details, see:
+                # http://projects.scipy.org/ipython/ipython/ticket/123
+                exec file(path) in prog_ns, prog_ns
+            else:
+                execfile(path, prog_ns, prog_ns)
+
+            if not hidden:
+                self.control.prompt()
+        finally:
+            # Ensure key global stuctures are restored
+            sys.argv = save_argv
+            sys.modules['__main__'] = save_main
+            sys.stdin = old_stdin
+            sys.stdout = old_stderr
+            sys.stderr = old_stdout
+
+        # Update the interpreter with the new namespace
+        del prog_ns['__name__']
+        del prog_ns['__file__']
+        del prog_ns['__nonzero__']
+        self.interpreter().locals.update(prog_ns)
 
     ###########################################################################
     # 'IWidget' interface.
@@ -223,5 +273,20 @@ class PyShell(PyShellBase):
         __builtin__.raw_input = self.raw_input
         self.destroy()
         super(PyShellBase, self).Destroy()
+
+
+class _NullIO:
+    """ A portable /dev/null for use with PythonShell.execute_file.
+    """
+    def tell(self): return 0
+    def read(self, n = -1): return ""
+    def readline(self, length = None): return ""
+    def readlines(self): return []
+    def write(self, s): pass
+    def writelines(self, list): pass
+    def isatty(self): return 0
+    def flush(self): pass
+    def close(self): pass
+    def seek(self, pos, mode = 0): pass
 
 #### EOF ######################################################################
