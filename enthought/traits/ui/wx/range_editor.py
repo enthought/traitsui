@@ -853,10 +853,26 @@ class RangeTextEditor ( TextEditor ):
     def update_object ( self, event ):
         """ Handles the user entering input data in the edit control.
         """
+
+        value = self.control.GetValue()
+
+        # Try to convert the string value entered by the user to a numerical value.
         try:
-            value = eval( self.control.GetValue() )
             if self.evaluate is not None:
-                value = self.evaluate( value )
+                value = self.evaluate(value)
+            else:
+                if self.factory.is_float:
+                    value = float(value)
+                else:
+                    value = int(value)
+        except Exception, excp:
+            # The conversion failed.
+            self.error(excp)
+            return
+
+        # Try to assign the numerical value to the trait.
+        # This may fail because of constraints on the trait.
+        try:
             self.value = value
             self.control.SetBackgroundColour(OKColor)
             self.control.Refresh()
