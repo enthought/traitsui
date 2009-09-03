@@ -65,6 +65,8 @@ class TableEditor(Editor, BaseTableEditor):
     # The current selected row
     selected_row = Property(Any, depends_on='selected')
 
+    selected_indices = Property(Any, depends_on='selected')
+
     # Current filter object (should be a TableFilter or callable or None):
     filter = Any
 
@@ -233,8 +235,10 @@ class TableEditor(Editor, BaseTableEditor):
         self.sync_value(factory.dclick, 'dclick', 'to')
         self.sync_value(factory.columns_name, 'columns', 'from', is_list=True)
         self.sync_value(factory.selected, 'selected', is_list=is_list)
+        self.sync_value(factory.selected_indices, 'selected_indices', is_list=is_list)
         self.sync_value(factory.filter_name, 'filter', 'from')
         self.sync_value(factory.filtered_indices, 'filtered_indices', 'to')
+            
 
         # Initialize the ItemDelegates for each column
         self._update_columns()
@@ -280,19 +284,18 @@ class TableEditor(Editor, BaseTableEditor):
 
         if self._no_notify:
             return
-
-        self.model.reset()
-
+        
         filtering = len(self.factory.filters) > 0
         if filtering:
             self._update_filtering()
-        if filtering or self.factory.sortable:
-            self.model.invalidate()
+
+        # invalidate the model, but do not reset it. Resetting the model
+        # may cause problems if the selection sync'ed traits are being used
+        # externally to manage the selections
+        self.model.invalidate()
 
         if self.factory.auto_size:
             self.table_view.resizeColumnsToContents()
-
-        self.set_selection(self.selected)
 
     #---------------------------------------------------------------------------
     #  Requests that the underlying table widget to redraw itself:
@@ -367,7 +370,7 @@ class TableEditor(Editor, BaseTableEditor):
 
     def set_selection(self, objects=[], notify=True):
         """Sets the current selection to a set of specified objects."""
-
+        
         if not isinstance(objects, SequenceTypes):
             objects = [ objects ]
 
@@ -410,7 +413,7 @@ class TableEditor(Editor, BaseTableEditor):
                 column = self._column_index_from_name(name)
                 if column != -1:
                     indexes.append(self.source_model.index(row, column))
-
+                    
         # Perform the selection so that only one signal is emitted
         selection = QtGui.QItemSelection()
         for index in indexes:
@@ -490,6 +493,27 @@ class TableEditor(Editor, BaseTableEditor):
                 return self.selected[0][0]
         except IndexError:
             return None
+        
+    @cached_property
+    def _get_selected_indices(self):
+        """Gets the row,column indices which match the selected trait"""
+
+        if len(self.selected) == 0:
+            return []
+        
+        selection_items = self.table_view.selectionModel().selection()
+        indices = self.model.mapSelectionFromSource(selection_items).indexes()
+        return [(index.row(), index.column()) for index in indices]
+        
+
+    def _set_selected_indices(self, indices):        
+        selected = []
+        for row, col in indices:
+            selected.append((self.value[row], self.columns[col].name))
+            
+        self.selected = selected
+        self.set_selection(self.selected, False)
+        return
 
     #-- Trait Change Handlers --------------------------------------------------
 
@@ -515,9 +539,8 @@ class TableEditor(Editor, BaseTableEditor):
         self.model.reset()
         self.table_view.resizeColumnsToContents()
 
-    def _selected_changed(self):
+    def _selected_changed(self, new):
         """Handle the selected row/column/cell being changed externally."""
-        
         if not self._no_notify:
             self.set_selection(self.selected, notify=False)
 
