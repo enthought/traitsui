@@ -723,6 +723,6 @@ class NotebookEditor ( Editor ):
         """ Handles the **selected** trait being changed.
         """
         for page, ui, _, _ in self._uis:
-            if selected is ui.info.object:
+            if ui.info and selected is ui.info.object:
                 self.control.setCurrentWidget(page)
                 break

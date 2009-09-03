@@ -54,7 +54,6 @@ class FileDialog(MFileDialog, Dialog):
 
     wildcard_index = Int(0)
 
-
     ###########################################################################
     # 'MFileDialog' *CLASS* interface.
     ###########################################################################
@@ -70,7 +69,6 @@ class FileDialog(MFileDialog, Dialog):
             pattern = ' '.join(extension)
 
         return "%s (%s)|%s|" % (description, pattern, pattern)
-
 
     ###########################################################################
     # Protected 'IDialog' interface.
@@ -99,7 +97,8 @@ class FileDialog(MFileDialog, Dialog):
         self.directory, self.filename = os.path.split(self.path)
 
         # Get the index of the selected filter.
-        self.wildcard_index = self.control.filters().indexOf(self.control.selectedFilter())
+        self.wildcard_index = self.control.nameFilters().indexOf(
+            self.control.selectedNameFilter())
 
         # Let the window close as normal.
         super(FileDialog, self).close()
@@ -121,24 +120,22 @@ class FileDialog(MFileDialog, Dialog):
 
         # Convert the filter.
         filters = QtCore.QStringList()
-
-        for f in self.wildcard.split('|')[::2]:
-            if f:
-                filters << f
+        for filter_list in self.wildcard.split('|')[::2]:
+            # Qt uses spaces instead of semicolons for extension separators
+            filter_list = filter_list.replace(';', ' ')
+            filters << filter_list
 
         # Set the default directory.
         if not default_directory:
             default_directory = QtCore.QDir.currentPath()
 
         dlg = QtGui.QFileDialog(parent, self.title, default_directory)
-
         dlg.setViewMode(QtGui.QFileDialog.Detail)
         dlg.selectFile(default_filename)
-        # FIXME: This is an obsolete Qt3 API.
-        dlg.setFilters(filters)
+        dlg.setNameFilters(filters)
 
         if self.wildcard_index < filters.count():
-            dlg.selectFilter(filters[self.wildcard_index])
+            dlg.selectNameFilter(filters[self.wildcard_index])
 
         if self.action == 'open':
             dlg.setAcceptMode(QtGui.QFileDialog.AcceptOpen)
