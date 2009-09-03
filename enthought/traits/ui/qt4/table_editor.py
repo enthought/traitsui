@@ -285,17 +285,22 @@ class TableEditor(Editor, BaseTableEditor):
         if self._no_notify:
             return
         
-        filtering = len(self.factory.filters) > 0
-        if filtering:
-            self._update_filtering()
-
-        # invalidate the model, but do not reset it. Resetting the model
-        # may cause problems if the selection sync'ed traits are being used
-        # externally to manage the selections
-        self.model.invalidate()
-
-        if self.factory.auto_size:
-            self.table_view.resizeColumnsToContents()
+        self.table_view.setUpdatesEnabled(False)
+        try:
+            filtering = len(self.factory.filters) > 0
+            if filtering:
+                self._update_filtering()
+            
+            # invalidate the model, but do not reset it. Resetting the model
+            # may cause problems if the selection sync'ed traits are being used
+            # externally to manage the selections
+            self.model.invalidate()
+            
+            if self.factory.auto_size:
+                self.table_view.resizeColumnsToContents()
+                
+        finally:
+            self.table_view.setUpdatesEnabled(True)
 
     #---------------------------------------------------------------------------
     #  Requests that the underlying table widget to redraw itself:
@@ -419,14 +424,17 @@ class TableEditor(Editor, BaseTableEditor):
         for index in indexes:
             index = self.model.mapFromSource(index)
             if index.isValid():
+                self.table_view.setCurrentIndex(index)
                 selection.select(index, index)
         smodel = self.table_view.selectionModel()
-        smodel.blockSignals(not notify)
-        if len(selection.indexes()):
-            smodel.select(selection, flags)
-        else:
-            smodel.clear()
-        smodel.blockSignals(False)
+        try:
+            smodel.blockSignals(not notify)
+            if len(selection.indexes()):
+                smodel.select(selection, flags)
+            else:
+                smodel.clear()
+        finally:
+            smodel.blockSignals(False)
 
     #---------------------------------------------------------------------------
     #  Private methods:
@@ -502,7 +510,7 @@ class TableEditor(Editor, BaseTableEditor):
             return []
         
         selection_items = self.table_view.selectionModel().selection()
-        indices = self.model.mapSelectionFromSource(selection_items).indexes()
+        indices = self.model.mapSelectionFromSource(selection_items).indexes()        
         return [(index.row(), index.column()) for index in indices]
         
 
