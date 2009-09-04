@@ -376,6 +376,8 @@ class QConsoleWidget(QsciScintilla):
         line, index = self.getCursorPosition()
         key = event.key()
         ctrl_down = event.modifiers() & QtCore.Qt.ControlModifier
+        alt_down = event.modifiers() & QtCore.Qt.AltModifier
+        shift_down = event.modifiers() & QtCore.Qt.ShiftModifier
 
         if ctrl_down:
             if key in self._ctrl_down_remap:
@@ -385,18 +387,52 @@ class QConsoleWidget(QsciScintilla):
                                         QtCore.Qt.NoModifier)
 
             elif key == QtCore.Qt.Key_L:
-                vb = self.verticalScrollBar()
-                vb.setValue(vb.maximum())
+                # FIXME: The current prompt line should become the top line of
+                # the console.
                 intercepted = True
 
             elif key == QtCore.Qt.Key_K:
-                self.input_buffer = ''
-                self.callTip() # Clear any call tip that is being displayed
+                if self._in_buffer(line, index):
+                    end_index = len(self.continuation_prompt())
+                    self.setSelection(line, index, line + 1, end_index)
+                    self.removeSelectedText()
+                else:
+                    # Won't be called because ctrl is down
+                    self._keep_cursor_in_buffer()
                 intercepted = True
 
             elif key == QtCore.Qt.Key_T:
                 # Transposing lines is not appropriate for a console.
                 # FIXME: Transpose characters instead.
+                intercepted = True
+
+            elif key == QtCore.Qt.Key_Y:
+                self.paste()
+                intercepted = True
+
+            elif key == QtCore.Qt.Key_Underscore:
+                self.undo()
+                intercepted = True
+
+        elif alt_down:
+            if key == QtCore.Qt.Key_B:
+                self.setCursorPosition(*self._get_word_start(line, index))
+                intercepted = True
+                
+            elif key == QtCore.Qt.Key_F:
+                self.setCursorPosition(*self._get_word_end(line, index))
+                intercepted = True
+
+            elif key == QtCore.Qt.Key_Backspace:
+                start_line, start_index = self._get_word_start(line, index)
+                self.setSelection(start_line, start_index, line, index)
+                self.removeSelectedText()
+                intercepted = True
+
+            elif key == QtCore.Qt.Key_D:
+                end_line, end_index = self._get_word_end(line, index)
+                self.setSelection(line, index, end_line, end_index + 1)
+                self.removeSelectedText()
                 intercepted = True
 
         list_active = self.isListActive()
@@ -428,14 +464,14 @@ class QConsoleWidget(QsciScintilla):
                 intercepted = not self._in_buffer(line, index - 1)
 
             elif key == QtCore.Qt.Key_Home:
-                if (self._in_buffer(line, index) and 
-                    event.modifiers() & QtCore.Qt.ShiftModifier):
+                if shift_down and self._in_buffer(line, index):
                     self.setSelection(line, index, line, self._prompt_index)
                 else:
-                    self.setCursorPosition(0, 0)
+                    self.setCursorPosition(line, self._prompt_index)
                 intercepted = True
 
-            elif key == QtCore.Qt.Key_Backspace:
+            elif key == QtCore.Qt.Key_Backspace and not alt_down:
+
                 # Handle case where a line needs to be removed
                 len_prompt = len(self.continuation_prompt())
                 if line != self._prompt_line and index == len_prompt:
@@ -443,27 +479,6 @@ class QConsoleWidget(QsciScintilla):
                         line-1, self.text(line-1).length()-1, line, index)
                     self.removeSelectedText()
                     intercepted = True
-                        
-                # Do a backwards work chomp
-                elif event.modifiers() & QtCore.Qt.AltModifier:
-                    intercepted = True
-                    pos = self.positionFromLineIndex(line, index)
-
-                    # Find the start of the word. If a sequence of non-word
-                    # characters precedes the first word, chomp those too.
-                    # (This emulates the behavior of bash, emacs, etc).
-                    start = self.SendScintilla(
-                        QsciBase.SCI_WORDSTARTPOSITION, pos, False)
-                    if not self.isWordCharacter(chr(self.SendScintilla(
-                                QsciBase.SCI_GETCHARAT, start))):
-                        start = self.SendScintilla(
-                            QsciBase.SCI_WORDSTARTPOSITION, start - 1, True)
-
-                    start_line, start_index = self.lineIndexFromPosition(start)
-                    start_line = max(start_line, self._prompt_line)
-                    start_index = max(start_index, self._prompt_index)
-                    self.setSelection(start_line, start_index, line, index)
-                    self.removeSelectedText()
 
                 # Regular backwards deletion
                 else:
@@ -483,7 +498,12 @@ class QConsoleWidget(QsciScintilla):
             if not ctrl_down:
                 self._keep_cursor_in_buffer()
 
-        if not intercepted:
+        if intercepted:
+            if key != QtCore.Qt.Key_Tab:
+                # Cancel any call tips or autocompletion lists which are active
+                self.callTip() 
+                self.cancelList()
+        else:
             QsciScintilla.keyPressEvent(self, event)
 
         # Hack around a bug in QScintilla where creating an autocompletion
@@ -681,6 +701,41 @@ class QConsoleWidget(QsciScintilla):
         font_metrics = QtGui.QFontMetrics(QtGui.QFont(_FONT, _FONT_SIZE))
         char_width = float(font_metrics.width(' '))
         self._line_width = int(floor(self.viewport().width() / char_width))
+
+    def _get_word_start(self, line, index):
+        """ Find the start of the word to the left the given position. If a
+            sequence of non-word characters precedes the first word, skip over
+            them. (This emulates the behavior of bash, emacs, etc.)
+        """
+        if index == self._prompt_index:
+            # Don't let Scintilla get confused by a continuation promot
+            line -= 1
+            index = self.text(line).length() - 1
+
+        pos = self.positionFromLineIndex(line, index)
+        start = self.SendScintilla(QsciBase.SCI_WORDSTARTPOSITION, pos, False)
+        if not self.isWordCharacter(chr(self.SendScintilla(
+                    QsciBase.SCI_GETCHARAT, start))):
+            start = self.SendScintilla(QsciBase.SCI_WORDSTARTPOSITION, 
+                                       start - 1, True)
+        start_line, start_index = self.lineIndexFromPosition(start)
+
+        start_line = max(start_line, self._prompt_line)
+        start_index = max(start_index, self._prompt_index)
+        return start_line, start_index
+
+    def _get_word_end(self, line, index):
+        """ Find the end of the word to the right the given position. If a
+            sequence of non-word characters precedes the first word, skip over
+            them. (This emulates the behavior of bash, emacs, etc.)
+        """
+        pos = self.positionFromLineIndex(line, index)
+        end = self.SendScintilla(QsciBase.SCI_WORDENDPOSITION, pos, False)
+        if not self.isWordCharacter(chr(self.SendScintilla(
+                    QsciBase.SCI_GETCHARAT, end - 1))):
+            end = self.SendScintilla(QsciBase.SCI_WORDENDPOSITION, 
+                                       end, False)
+        return self.lineIndexFromPosition(end)
                                       
     def _in_buffer(self, line, index):
         """ Returns whether the given position is inside the editing region.
@@ -729,6 +784,9 @@ class QPythonShellWidget(QConsoleWidget):
         """
         self.interpreter = InteractiveInterpreter()
         self.exec_callback = None
+        self._hidden = False
+        self._history = []
+        self._history_index = 0
 
         # Set the lexer and its autocompletion API
         QsciScintilla.__init__(self, parent)
@@ -749,12 +807,6 @@ class QPythonShellWidget(QConsoleWidget):
         self.SendScintilla(QsciBase.SCI_STYLERESETDEFAULT)
         self.SendScintilla(QsciBase.SCI_STYLECLEARALL)
         QConsoleWidget.__init__(self, parent, _base_init=False)
-
-        # Set up internal variables
-        self._hidden = False
-        self._more = False
-        self._history = []
-        self._history_index = 0
 
     #--------------------------------------------------------------------------
     # file-like object interface
@@ -783,7 +835,7 @@ class QPythonShellWidget(QConsoleWidget):
         return '... '
 
     def enter_pressed(self):
-        self.execute(self.input_buffer)
+        self.execute(self.input_buffer, interactive=True)
 
     def up_pressed(self):
         line, _ = self.getCursorPosition()
@@ -875,7 +927,7 @@ class QPythonShellWidget(QConsoleWidget):
         """
         QConsoleWidget.new_prompt(self, prompt)
         
-    def execute(self, source, hidden=False):
+    def execute(self, source, hidden=False, interactive=False):
         """ Execute a Python string. If 'hidden', no output is shown.
         """
         source += '\n'
@@ -883,12 +935,22 @@ class QPythonShellWidget(QConsoleWidget):
             self.write('\n', refresh=False)
         stripped = source.strip()
 
+        # Only execute interactive multiline input if it ends with a blank line
+        if interactive:
+            lines = source.splitlines()
+            if len(lines) == 1:
+                more = False
+            else:
+                more = not lines[-1].strip() == ''
+        else:
+            more = False
+
         # Do not syntax highlight output
         if not hidden:
             self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_NULL)
 
         # Process 'magic' commands
-        if not self._more and self._is_magic(stripped, 'cd'):
+        if self._is_magic(stripped, 'cd'):
             if len(stripped) == 2:
                 path = '~'
             else:
@@ -899,7 +961,7 @@ class QPythonShellWidget(QConsoleWidget):
                 self.write(str(sys.exc_info()[1]) + '\n', refresh=False)
             self.write(os.path.abspath(os.getcwd()) + '\n', refresh=False)
 
-        elif not self._more and self._is_magic(stripped, 'ls'):
+        elif self._is_magic(stripped, 'ls'):
             if len(stripped) == 2:
                 path = os.getcwd()
             else:
@@ -915,7 +977,7 @@ class QPythonShellWidget(QConsoleWidget):
             self.write(out, refresh=False)
             self.write(err, refresh=False)
 
-        elif not self._more and self._is_magic(stripped, 'run'):
+        elif self._is_magic(stripped, 'run'):
             if len(stripped) == 3:
                 self.write('A filename must be provided!\n', refresh=False)
             else:
@@ -928,8 +990,7 @@ class QPythonShellWidget(QConsoleWidget):
                     self.write('File `%s` not found.\n' % path, refresh=False)
 
         # Process special '?' help syntax
-        elif not self._more and (stripped.startswith('?') or 
-                                 stripped.endswith('?')):
+        elif not more and (stripped.startswith('?') or stripped.endswith('?')):
             line = self._prompt_line
             index = self.text(line).length() - 1 # before newline
             if stripped.endswith('?'):
@@ -940,9 +1001,8 @@ class QPythonShellWidget(QConsoleWidget):
             else:
                 self.write(obj.__doc__.rstrip() + '\n', refresh=False)
 
-        # Only execute interactive multiline input if it ends with a blank line
-        elif stripped and (not self._more or 
-                           source.splitlines()[-1].strip() == ''):
+        # Process a regular python command
+        elif stripped and not more:
             # Save the current std* and point them here
             old_stdin = sys.stdin
             old_stdout = sys.stdout
@@ -952,7 +1012,7 @@ class QPythonShellWidget(QConsoleWidget):
             # Run the source code in the interpeter
             self._hidden = hidden
             try:
-                self._more = self.interpreter.runsource(source)
+                more = self.interpreter.runsource(source)
             finally:
                 self._hidden = False
                 # Restore std* unless the executed changed them
@@ -963,7 +1023,7 @@ class QPythonShellWidget(QConsoleWidget):
                 if sys.stderr is self:
                     sys.stderr = old_stderr
 
-        if not self._more and stripped:
+        if stripped and not more:
             if self.exec_callback:
                 self.exec_callback()
             if not hidden:
@@ -972,7 +1032,7 @@ class QPythonShellWidget(QConsoleWidget):
                 self._history_index = len(self._history)
 
         if not hidden:
-            if self._more:
+            if more:
                 self.write('... ', refresh=False)
                 space = 0
                 for c in source.splitlines()[-1]:
