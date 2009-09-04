@@ -21,7 +21,6 @@ from math import ceil, floor
 import os
 import re
 from subprocess import Popen, PIPE
-from string import whitespace
 import sys
 from textwrap import dedent
 from time import time
@@ -265,8 +264,10 @@ class QConsoleWidget(QsciScintilla):
         self.setWrapMode(QsciScintilla.WrapNone)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
-        # Configure misc. options
+        # Cache layout for improved performance
         self.SendScintilla(QsciBase.SCI_SETLAYOUTCACHE, QsciBase.SC_CACHE_PAGE)
+
+        # Do not show a margin
         self.setMarginWidth(1, 0)
 
         # Define Scintilla text and marker styles
@@ -417,7 +418,10 @@ class QConsoleWidget(QsciScintilla):
                 intercepted = self._reading or not self.down_pressed()
 
             elif key == QtCore.Qt.Key_Tab:
-                intercepted = not (self._reading or self.tab_pressed())
+                if self._reading:
+                    intercepted = False
+                else:
+                    intercepted = not self.tab_pressed()
 
             elif key == QtCore.Qt.Key_Left:
                 intercepted = not self._in_buffer(line, index - 1)
@@ -431,15 +435,23 @@ class QConsoleWidget(QsciScintilla):
                 intercepted = True
 
             elif key == QtCore.Qt.Key_Backspace:
-                sel_line, sel_index, _, _ = self.getSelection()
-                if sel_line == -1:
-                    intercepted = not self._in_buffer(line, index - 1)
-                else:
-                    intercepted = not self._in_buffer(sel_line, sel_index)
                 if event.modifiers() & QtCore.Qt.AltModifier:
                     # Alt-backspace is mapped to Undo by default? 
                     # FIXME: Do a backwards word chomp.
                     intercepted = True
+                else:
+                    sel_line, sel_index, _, _ = self.getSelection()
+                    if sel_line == -1:
+                        len_prompt = len(self.continuation_prompt())
+                        if line != self._prompt_line and index == len_prompt:
+                            # Handle case where a line needs to be removed:
+                            self.setSelection(
+                                line-1, self.text(line-1).length(), line, index)
+                            self.removeSelectedText()
+                        else:
+                            intercepted = not self._in_buffer(line, index - 1)
+                    else:
+                        intercepted = not self._in_buffer(sel_line, sel_index)
 
             elif key == QtCore.Qt.Key_Delete:
                 sel_line, sel_index, _, _ = self.getSelection()
@@ -717,12 +729,7 @@ class QPythonShellWidget(QConsoleWidget):
         self.SendScintilla(QsciBase.SCI_STYLECLEARALL)
         QConsoleWidget.__init__(self, parent, _base_init=False)
 
-        # Set up signal handlers
-        signal = QtCore.SIGNAL('userListActivated(int, const QString &)')
-        QtCore.QObject.connect(self, signal, self._on_user_list_activated)
-
         # Set up internal variables
-        self._indent = 0
         self._hidden = False
         self._more = False
         self._history = []
@@ -786,9 +793,9 @@ class QPythonShellWidget(QConsoleWidget):
 
     def tab_pressed(self):
         line, index = self.getCursorPosition()
-        text = self.input_buffer
 
         # Case 1: a 'magic' command that operates on files needs completion
+        text = self.input_buffer
         magic = self._is_magic(text, 'ls', 'cd', 'run')
         if magic and len(text) > len(magic):
 
@@ -829,7 +836,9 @@ class QPythonShellWidget(QConsoleWidget):
             return False
 
         # Case 2: autocompletion on a Python symbol
-        elif text and text[0] not in whitespace:
+        elif self.isWordCharacter(chr(self.SendScintilla(
+                    QsciBase.SCI_GETCHARAT, 
+                    self.positionFromLineIndex(line, index - 1)))):
             self.autoCompleteFromAPIs()
             return False
 
@@ -933,22 +942,29 @@ class QPythonShellWidget(QConsoleWidget):
                 if sys.stderr is self:
                     sys.stderr = old_stderr
 
-        if not self._more:
-            self._indent = 0
-            if stripped:
-                if self.exec_callback:
-                    self.exec_callback()
-                if not hidden:
-                    if len(self._history) == 0 or self._history[-1] != stripped:
-                        self._history.append(stripped)
-                    self._history_index = len(self._history)
+        if not self._more and stripped:
+            if self.exec_callback:
+                self.exec_callback()
+            if not hidden:
+                if len(self._history) == 0 or self._history[-1] != stripped:
+                    self._history.append(stripped)
+                self._history_index = len(self._history)
 
         if not hidden:
             if self._more:
                 self.write('... ', refresh=False)
+                space = 0
+                for c in source.splitlines()[-1]:
+                    if c == '\t':
+                        space += 4
+                    elif c == ' ':
+                        space += 1
+                    else:
+                        break
+                indent = space / 4
                 if stripped.endswith(':'):
-                    self._indent += 1
-                self.write('\t' * self._indent, refresh=False)
+                    indent += 1
+                self.write('\t' * indent, refresh=False)
             else:
                 self.write('\n', refresh=False)
                 self.new_prompt()
@@ -1051,14 +1067,6 @@ class QPythonShellWidget(QConsoleWidget):
         """
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE, **kw)
         return proc.communicate()
-
-    #-- Event Handlers ---------------------------------------------------------
-    
-    def _on_user_list_activated(self, id, q_string):
-        """ Handles the userListActivated signal being emitted.
-        """
-        self.input_buffer = self.input_buffer[:self._tab_start] + \
-            self._tab_dict[str(q_string)]
 
 #-------------------------------------------------------------------------------
 # 'QsciPythonAPIs' class:
