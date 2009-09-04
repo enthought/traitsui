@@ -276,7 +276,7 @@ class QConsoleWidget(QsciScintilla):
 
     #--------------------------------------------------------------------------
     # file-like object interface
-    #--------------------------------------------------------------------------    
+    #-------------------------------------------------------------------------- 
 
     def flush(self):
         """ This buffer does not need to be flushed.
@@ -791,36 +791,41 @@ class QPythonShellWidget(QConsoleWidget):
         # Case 1: a 'magic' command that operates on files needs completion
         magic = self._is_magic(text, 'ls', 'cd', 'run')
         if magic and len(text) > len(magic):
-            self._tab_start = len(magic) + 1
 
-            # Determine which files match from the current text
-            path = self._parse_path(text[self._tab_start:])
+            # Get the components of the path that is currently entered
+            start_index = self._prompt_index + len(magic) + 1
+            line, end_index = self.getCursorPosition()
+            path = str(self.text(line))[start_index:end_index]
+            context = re.split(r'[\\/]', path)
+            
+            # Decide which file extensions to match
+            extensions = [ '/' ]
             if magic == 'run':
-                matches = self._path_matches(path, '/')
-                matches.extend(self._path_matches(path, '.py'))
-            else:
-                matches = self._path_matches(path, '/')
+                extensions.append('.py')
 
-            # If there is a single match, just use it
-            if len(matches) == 1:
-                self.input_buffer = text[:self._tab_start] + matches[0]
+            # Build the list of files and directories
+            auto_list = []
+            for match in self._path_matches(path, extensions):
+                dirname = os.path.dirname(match)
+                if dirname:
+                    display_match = os.path.basename(dirname) + '/'
+                else:
+                    display_match = os.path.basename(match)
+                auto_list.append(display_match)
+            if not len(auto_list):
+                return False
 
-            # Otherwise, display them in an autocomplete-popup. Build a mapping
-            # from the UI display value and the actual match so that the
-            # replacement can be done in '_on_user_list_activated'.
-            elif len(matches) > 1:
-                self._tab_dict = {}
-                display_matches = []
-                for match in matches:
-                    dirname = os.path.dirname(match)
-                    if dirname:
-                        display_match = os.path.basename(dirname) + '/'
-                    else:
-                        display_match = os.path.basename(match)
-                    display_matches.append(display_match)
-                    self._tab_dict[display_match] = match
-                self.showUserList(1, display_matches)
-
+            # Have the underlying Scintilla widget start autocompletion. The
+            # choice of separator symbol is significant. When autocompletion is
+            # peformed via QScintilla's higher-level API, the ETX character is
+            # used. QScintilla defines a non-overridable special behavior for
+            # this character (stopping the autocompletion on spaces), so we use
+            # EOT instead.
+            self.SendScintilla(QsciBase.SCI_AUTOCSETCHOOSESINGLE, True);
+            self.SendScintilla(QsciBase.SCI_AUTOCSETSEPARATOR, 4);
+            last_len = len(context[-1])
+            packed_list = chr(4).join(auto_list)
+            self.SendScintilla(QsciBase.SCI_AUTOCSHOW, last_len, packed_list)
             return False
 
         # Case 2: autocompletion on a Python symbol
@@ -871,8 +876,7 @@ class QPythonShellWidget(QConsoleWidget):
                 path = os.path.expanduser(self._parse_path(stripped[2:]))
             # FIXME: Check for availability of 'ls' on Windows in __init__
             if sys.platform == 'win32':
-                # Use columns, sort by name
-                args = [ 'dir', '/w', '/on', path ]
+                args = [ 'dir', path.rstrip('/') ]
                 out, err = self._subprocess_out_err(args, shell=True)
             else:
                 # Use columns, a tab width of 4, and our computed line width
@@ -886,7 +890,7 @@ class QPythonShellWidget(QConsoleWidget):
                 self.write('A filename must be provided!\n', refresh=False)
             else:
                 path = os.path.expanduser(self._parse_path(stripped[4:]))
-                if not path.endswith('.py'):
+                if not os.path.isfile(path) and not path.endswith('.py'):
                     path += '.py'
                 if os.path.exists(path):
                     self.execute_file(path, hidden)
@@ -1030,13 +1034,16 @@ class QPythonShellWidget(QConsoleWidget):
     
         return string
 
-    def _path_matches(self, string, ext=''):
+    def _path_matches(self, string, extensions=['']):
         """ Returns a list of matching file/directory names.
         """
-        pattern = string + '*' + ext
-        matches = glob(pattern)
-        matches.sort()
-        return matches
+        result = []
+        for ext in extensions:
+            pattern = string + '*' + ext
+            matches = glob(pattern)
+            result.extend(matches)
+        result.sort(key=str.lower)
+        return result
 
     def _subprocess_out_err(self, cmd, **kw):
         """ Given a command suitable for use with subprocess.Popen, execute
