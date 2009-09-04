@@ -21,6 +21,7 @@ from math import ceil, floor
 import os
 import re
 from subprocess import Popen, PIPE
+from string import whitespace
 import sys
 from textwrap import dedent
 from time import time
@@ -435,21 +436,40 @@ class QConsoleWidget(QsciScintilla):
                 intercepted = True
 
             elif key == QtCore.Qt.Key_Backspace:
-                if event.modifiers() & QtCore.Qt.AltModifier:
-                    # Alt-backspace is mapped to Undo by default? 
-                    # FIXME: Do a backwards word chomp.
+                # Handle case where a line needs to be removed
+                len_prompt = len(self.continuation_prompt())
+                if line != self._prompt_line and index == len_prompt:
+                    self.setSelection(
+                        line-1, self.text(line-1).length()-1, line, index)
+                    self.removeSelectedText()
                     intercepted = True
+                        
+                # Do a backwards work chomp
+                elif event.modifiers() & QtCore.Qt.AltModifier:
+                    intercepted = True
+                    pos = self.positionFromLineIndex(line, index)
+
+                    # Find the start of the word. If a sequence of non-word
+                    # characters precedes the first word, chomp those too.
+                    # (This emulates the behavior of bash, emacs, etc).
+                    start = self.SendScintilla(
+                        QsciBase.SCI_WORDSTARTPOSITION, pos, False)
+                    if not self.isWordCharacter(chr(self.SendScintilla(
+                                QsciBase.SCI_GETCHARAT, start))):
+                        start = self.SendScintilla(
+                            QsciBase.SCI_WORDSTARTPOSITION, start - 1, True)
+
+                    start_line, start_index = self.lineIndexFromPosition(start)
+                    start_line = max(start_line, self._prompt_line)
+                    start_index = max(start_index, self._prompt_index)
+                    self.setSelection(start_line, start_index, line, index)
+                    self.removeSelectedText()
+
+                # Regular backwards deletion
                 else:
                     sel_line, sel_index, _, _ = self.getSelection()
                     if sel_line == -1:
-                        len_prompt = len(self.continuation_prompt())
-                        if line != self._prompt_line and index == len_prompt:
-                            # Handle case where a line needs to be removed:
-                            self.setSelection(
-                                line-1, self.text(line-1).length(), line, index)
-                            self.removeSelectedText()
-                        else:
-                            intercepted = not self._in_buffer(line, index - 1)
+                        intercepted = not self._in_buffer(line, index - 1)
                     else:
                         intercepted = not self._in_buffer(sel_line, sel_index)
 
@@ -460,7 +480,8 @@ class QConsoleWidget(QsciScintilla):
                 else:
                     intercepted = not self._in_buffer(sel_line, sel_index)
 
-            self._keep_cursor_in_buffer()
+            if not ctrl_down:
+                self._keep_cursor_in_buffer()
 
         if not intercepted:
             QsciScintilla.keyPressEvent(self, event)
@@ -836,9 +857,9 @@ class QPythonShellWidget(QConsoleWidget):
             return False
 
         # Case 2: autocompletion on a Python symbol
-        elif self.isWordCharacter(chr(self.SendScintilla(
-                    QsciBase.SCI_GETCHARAT, 
-                    self.positionFromLineIndex(line, index - 1)))):
+        elif chr(self.SendScintilla(
+                QsciBase.SCI_GETCHARAT,
+                self.positionFromLineIndex(line, index - 1))) not in whitespace:
             self.autoCompleteFromAPIs()
             return False
 
