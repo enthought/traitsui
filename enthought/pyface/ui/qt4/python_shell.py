@@ -83,12 +83,18 @@ class PythonShell(MPythonShell, Widget):
         return self.control.interpreter
 
     def execute_command(self, command, hidden=True):
-        if not hidden:
+        if hidden:
+            self.control.execute_source(command, hidden=True)
+        else:
             self.control.input_buffer = command
-        self.control.execute(command, hidden=hidden)
+            self.control.execute()
 
     def execute_file(self, path, hidden=True):
-        self.execute_command('run %s' % path, hidden=hidden)
+        if hidden:
+            self.control.execute_file(path, hidden=True)
+        else:
+            self.control.input_buffer = 'run %s' % path
+            self.control.execute()
 
     #--------------------------------------------------------------------------
     # 'IWidget' interface.
@@ -101,17 +107,12 @@ class PythonShell(MPythonShell, Widget):
 # 'QConsoleWidget' class and associated constants:
 #-------------------------------------------------------------------------------
 
-# Note: This code was adapted from the wx ConsoleWidget in IPython, and should
-# at some point be cleaned up and moved upstream.
-
-# New marker definitions
-_INPUT_MARKER = 29
-_ERROR_MARKER = 30
-_COMPLETE_BUFFER_MARKER = 31
+# Note: This code was adapted from the wx ConsoleWidget in IPython, although
+#       it is now quite different and certainly not interchangeable.
 
 # New style numbers
-_STDOUT_STYLE = 15
-_STDERR_STYLE = 16
+_INPUT_STYLE = 15
+_ERROR_STYLE = 16
 _TRACE_STYLE  = 17
 
 _DEFAULT_STYLES = {
@@ -133,9 +134,9 @@ _DEFAULT_STYLES = {
     }
 
 _DEFAULT_MARKER_COLORS = {
-    _TRACE_STYLE  : '#FAFAF1', # Nice green
-    _STDOUT_STYLE : '#FDFFD3', # Nice yellow
-    _STDERR_STYLE : '#FFF1F1', # Nice red 
+    _INPUT_STYLE : '#EDFDFF', # Nice blue
+    _ERROR_STYLE : '#FFF1F1', # Nice red 
+    _TRACE_STYLE : '#F5F5F5', # Nice grey
     }
 
 # Translation table from ANSI escape sequences to logical ANSI color index and
@@ -210,7 +211,8 @@ class QConsoleWidget(QsciScintilla):
         if _base_init:
             QsciScintilla.__init__(self, parent)
 
-        # Initialize internal variables
+        # Initialize public and protected variables
+        self.colorize_regions = True
         self.title = 'Console' # captured from ANSI escape sequences
         self._console_inited = False
         self._enter_processing = False
@@ -252,9 +254,9 @@ class QConsoleWidget(QsciScintilla):
         self._context_menu.addAction(select_all_action)
 
         # Define our custom markers
-        self.markerDefine(QsciScintilla.Background, _COMPLETE_BUFFER_MARKER)
-        self.markerDefine(QsciScintilla.Background, _INPUT_MARKER)
-        self.markerDefine(QsciScintilla.Background, _ERROR_MARKER)
+        self._finished_input_mkr = self.markerDefine(QsciScintilla.Background)
+        self._input_mkr = self.markerDefine(QsciScintilla.Background)
+        self._error_mkr = self.markerDefine(QsciScintilla.Background)
 
         # Configure indentation
         self.setIndentationWidth(4)
@@ -293,9 +295,8 @@ class QConsoleWidget(QsciScintilla):
     def readline(self):
         """ Read and return one line from the buffer.
         """
-        self.new_prompt('')
-
         self._reading = True
+        self.new_prompt('')
         while self._reading:
             QtCore.QCoreApplication.processEvents()
 
@@ -325,8 +326,7 @@ class QConsoleWidget(QsciScintilla):
             pass
         
         for ansi_tag, text in zip(segments[::2], segments[1::2]):
-            self.SendScintilla(QsciBase.SCI_STARTSTYLING, 
-                               self.text().length(), 0xff)
+            self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.text().length())
             try:
                 self.append(text)
             except UnicodeDecodeError:
@@ -443,22 +443,22 @@ class QConsoleWidget(QsciScintilla):
                 elif not self._enter_processing:
                     self._enter_processing = True
                     try:
-                        self.enter_pressed()
+                        self.execute(interactive=True)
                     finally:
                         self._enter_processing = False
                 intercepted = True
 
             elif key == QtCore.Qt.Key_Up:
-                intercepted = self._reading or not self.up_pressed()
+                intercepted = self._reading or not self._up_pressed()
 
             elif key == QtCore.Qt.Key_Down:
-                intercepted = self._reading or not self.down_pressed()
+                intercepted = self._reading or not self._down_pressed()
 
             elif key == QtCore.Qt.Key_Tab:
                 if self._reading:
                     intercepted = False
                 else:
-                    intercepted = not self.tab_pressed()
+                    intercepted = not self._tab_pressed()
 
             elif key == QtCore.Qt.Key_Left:
                 intercepted = not self._in_buffer(line, index - 1)
@@ -529,7 +529,7 @@ class QConsoleWidget(QsciScintilla):
             final, post-layout width of widget. See 'append' for more info.
         """
         if not self._console_inited and not event.spontaneous():
-            self.console_init()
+            self._console_init()
             self._console_inited = True
         QsciScintilla.showEvent(self, event)
 
@@ -586,6 +586,12 @@ class QConsoleWidget(QsciScintilla):
                                                 self._prompt_index), -1)
         self.setCursorPosition(*self._end_position())
 
+        # Reset the input buffer region background, if necessary
+        if self.colorize_regions:
+            self.markerDeleteAll(self._input_mkr)
+            for i in xrange(self._prompt_line, self.lines()):
+                self.markerAdd(i, self._input_mkr)
+
     def _get_input_buffer(self):
         lines = [ str(self.text(self._prompt_line))[self._prompt_index:] ]
         cont_prompt_index = len(self.continuation_prompt())
@@ -597,13 +603,31 @@ class QConsoleWidget(QsciScintilla):
     input_buffer = property(_get_input_buffer, _set_input_buffer)
 
     def new_prompt(self, prompt):
-        """ Prints a prompt at start of line, and move the start of the current
-            block there.
+        """ Prints a new prompt at the end of the buffer.
         """
+        self.write('\n', refresh=False)
         self.write(prompt, refresh=False)
+        self._prompt = prompt
         self._prompt_line, self._prompt_index = self._end_position()
+        if self.colorize_regions and not self._reading:
+            self.markerDeleteAll(self._input_mkr)
+            self.markerAdd(self._prompt_line, self._input_mkr)
         self.ensureCursorVisible()
-        self._last_prompt = prompt
+
+    def execute(self, interactive=False):
+        """ Execute the text in the input buffer. Returns whether the input
+            buffer was completely processed and a new prompt created.
+        """
+        self.write('\n')
+        current, end = self._prompt_line, self.lines() - 1
+        done = self._execute(interactive=interactive)
+        if self.colorize_regions:
+            if done:
+                for i in xrange(current, end):
+                    self.markerAdd(i, self._finished_input_mkr)
+            else:
+                self.markerAdd(end, self._input_mkr)
+        return done
 
     def set_ansi_colors(self, ansi_colors):
         """ Sets the styles of the underlying Scintilla widget that we will use
@@ -646,45 +670,48 @@ class QConsoleWidget(QsciScintilla):
         """ Sets the background color of the console region markers.
         """
         self.setMarkerBackgroundColor(QtGui.QColor(colors[_TRACE_STYLE]),
-                                      _COMPLETE_BUFFER_MARKER)
-        self.setMarkerBackgroundColor(QtGui.QColor(colors[_STDOUT_STYLE]),
-                                      _INPUT_MARKER)
-        self.setMarkerBackgroundColor(QtGui.QColor(colors[_STDERR_STYLE]),
-                                      _ERROR_MARKER)
+                                      self._finished_input_mkr)
+        self.setMarkerBackgroundColor(QtGui.QColor(colors[_INPUT_STYLE]),
+                                      self._input_mkr)
+        self.setMarkerBackgroundColor(QtGui.QColor(colors[_ERROR_STYLE]),
+                                      self._error_mkr)
 
     #--------------------------------------------------------------------------
     # 'QConsoleWidget' virtual interface
     #--------------------------------------------------------------------------
 
-    def console_init(self):
+    def _console_init(self):
         """ Called when the console is ready to have its first messages/prompt
             displayed. All initial writing should be done in this function.
         """
-        pass
+        raise NotImplementedError
 
     def continuation_prompt(self):
         """ The string that prefixes lines for multi-line commands.
         """
         return '> '
 
-    def enter_pressed(self):
-        """ Called when the enter key is pressed.
+    def _execute(self, interactive):
+        """ Called to execute the input buffer. When triggered by an the enter
+            key press, 'interactive' is True; otherwise, it is False. Returns
+            whether the input buffer was completely processed and a new prompt
+            created.
         """
         raise NotImplementedError
 
-    def up_pressed(self):
+    def _up_pressed(self):
         """ Called when the up key is pressed. Returns whether to continue
             processing the event.
         """
         return True
 
-    def down_pressed(self):
+    def _down_pressed(self):
         """ Called when the down key is pressed. Returns whether to continue
             processing the event.
         """
         return True
 
-    def tab_pressed(self):
+    def _tab_pressed(self):
         """ Called when the tab key is pressed. Returns whether to continue
             processing the event.
         """
@@ -720,8 +747,10 @@ class QConsoleWidget(QsciScintilla):
                                        start - 1, True)
         start_line, start_index = self.lineIndexFromPosition(start)
 
-        start_line = max(start_line, self._prompt_line)
-        start_index = max(start_index, self._prompt_index)
+        if start_line < self._prompt_line:
+            start_line, start_index = self._prompt_line, self._prompt_index
+        elif start_index < self._prompt_index:
+            start_index = self._prompt_index
         return start_line, start_index
 
     def _get_word_end(self, line, index):
@@ -820,13 +849,13 @@ class QPythonShellWidget(QConsoleWidget):
     # 'QConsoleWidget' interface
     #---------------------------------------------------------------------------
 
-    def console_init(self):
+    def _console_init(self):
         self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_NULL)
 
         self.write('Python %s on %s.\n' % (sys.version, sys.platform), 
                    refresh=False)
         self.write('Type "copyright", "credits" or "license" for more ' \
-                       'information.\n\n', refresh=False)
+                       'information.\n', refresh=False)
         self.new_prompt()
 
         self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
@@ -834,10 +863,10 @@ class QPythonShellWidget(QConsoleWidget):
     def continuation_prompt(self):
         return '... '
 
-    def enter_pressed(self):
-        self.execute(self.input_buffer, interactive=True)
+    def _execute(self, interactive=False):
+        return self.execute_string(self.input_buffer, interactive=interactive)
 
-    def up_pressed(self):
+    def _up_pressed(self):
         line, _ = self.getCursorPosition()
         if line <= self._prompt_line:
             if self._history_index > 0:
@@ -851,7 +880,7 @@ class QPythonShellWidget(QConsoleWidget):
             return False
         return True
 
-    def down_pressed(self):
+    def _down_pressed(self):
         line, _ = self.getCursorPosition()
         end_line, _ = self._end_position()
         if line < self._prompt_line or line == end_line:
@@ -864,7 +893,7 @@ class QPythonShellWidget(QConsoleWidget):
             return False
         return True
 
-    def tab_pressed(self):
+    def _tab_pressed(self):
         line, index = self.getCursorPosition()
 
         # Case 1: a 'magic' command that operates on files needs completion
@@ -886,11 +915,9 @@ class QPythonShellWidget(QConsoleWidget):
             # Build the list of files and directories
             auto_list = []
             for match in self._path_matches(path, extensions):
-                dirname = os.path.dirname(match)
-                if dirname:
-                    display_match = os.path.basename(dirname) + '/'
-                else:
-                    display_match = os.path.basename(match)
+                display_match = os.path.basename(match)
+                if not display_match:
+                    display_match = os.path.basename(os.path.dirname(match))+'/'
                 auto_list.append(display_match)
             if not len(auto_list):
                 return False
@@ -927,14 +954,11 @@ class QPythonShellWidget(QConsoleWidget):
         """
         QConsoleWidget.new_prompt(self, prompt)
         
-    def execute(self, source, hidden=False, interactive=False):
-        """ Execute a Python string. If 'hidden', no output is shown.
+    def execute_string(self, source, hidden=False, interactive=False):
+        """ Execute a Python string. If 'hidden', no output is shown. Returns
+            whether the source executed (ie returns True only if no more input
+            is needed).
         """
-        source += '\n'
-        if not hidden:
-            self.write('\n', refresh=False)
-        stripped = source.strip()
-
         # Only execute interactive multiline input if it ends with a blank line
         if interactive:
             lines = source.splitlines()
@@ -943,6 +967,7 @@ class QPythonShellWidget(QConsoleWidget):
             else:
                 more = not lines[-1].strip() == ''
         else:
+            source += '\n'
             more = False
 
         # Do not syntax highlight output
@@ -950,6 +975,7 @@ class QPythonShellWidget(QConsoleWidget):
             self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_NULL)
 
         # Process 'magic' commands
+        stripped = source.strip()
         if self._is_magic(stripped, 'cd'):
             if len(stripped) == 2:
                 path = '~'
@@ -1033,7 +1059,7 @@ class QPythonShellWidget(QConsoleWidget):
 
         if not hidden:
             if more:
-                self.write('... ', refresh=False)
+                self.write(self.continuation_prompt(), refresh=False)
                 space = 0
                 for c in source.splitlines()[-1]:
                     if c == '\t':
@@ -1047,11 +1073,12 @@ class QPythonShellWidget(QConsoleWidget):
                     indent += 1
                 self.write('\t' * indent, refresh=False)
             else:
-                self.write('\n', refresh=False)
                 self.new_prompt()
             
             # Turn Python syntax highlighting back on
             self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
+
+        return not more
 
     def execute_file(self, path, hidden=False):
         """ Execute a file in the interpeter. If 'hidden', no output is shown.
@@ -1135,8 +1162,12 @@ class QPythonShellWidget(QConsoleWidget):
         """ Returns a list of matching file/directory names.
         """
         result = []
-        for ext in extensions:
-            pattern = string + '*' + ext
+        for extension in extensions:
+            end = '*' + extension
+            if os.path.isdir(string):
+                pattern = os.path.join(string, end)
+            else:
+                pattern = string + end
             matches = glob(pattern)
             result.extend(matches)
         result.sort(key=str.lower)
