@@ -1163,11 +1163,7 @@ class QPythonShellWidget(QConsoleWidget):
         """
         result = []
         for extension in extensions:
-            end = '*' + extension
-            if os.path.isdir(string):
-                pattern = os.path.join(string, end)
-            else:
-                pattern = string + end
+            pattern = string + '*' + extension
             matches = glob(pattern)
             result.extend(matches)
         result.sort(key=str.lower)
