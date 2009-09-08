@@ -57,6 +57,18 @@ class IPythonController(WxController):
         self.ipython0.magic_cls = cls
 
 
+class IPython010Controller(IPythonController):
+    """ A WxController hacked/patched specifically for the 0.10 branch.
+    """
+    
+    def execute_command(self, command, hidden=False):
+        # XXX: Overriden to fix bug where executing a hidden command still
+        # causes the prompt number to increase.
+        super(IPython010Controller, self).execute_command(command, hidden)
+        if hidden:
+            self.shell.current_cell_number -= 1
+
+
 class IPython09Controller(IPythonController):
     """ A WxController hacked/patched specifically for the 0.9 branch.
     """
@@ -184,7 +196,11 @@ class IPython09Controller(IPythonController):
         """
         # XXX: This needs to be moved to the IPython codebase.
         if hidden:
-            return self.shell.execute(command)
+            result = self.shell.execute(command)
+            # XXX: Fix bug where executing a hidden command still causes the
+            # prompt number to increase.
+            self.shell.current_cell_number -= 1
+            return result
         else:
             # XXX: we are not storing the input buffer previous to the
             # execution, as this forces us to run the execution
@@ -350,8 +366,11 @@ class IPythonWidget(Widget):
     def _create_control(self, parent):
         # Create the controller based on the version of the installed IPython
         klass = IPythonController
-        if IPYTHON_VERSION[0] == 0 and IPYTHON_VERSION[1] == 9:
-            klass = IPython09Controller
+        if IPYTHON_VERSION[0] == 0:
+            if IPYTHON_VERSION[1] == 9:
+                klass = IPython09Controller
+            elif IPYTHON_VERSION[1] == 10:
+                klass = IPython010Controller
         shell = klass(parent, -1, shell=self.interp)
 
         # Listen for key press events.
