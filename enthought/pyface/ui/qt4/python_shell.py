@@ -104,6 +104,55 @@ class PythonShell(MPythonShell, Widget):
         return QPyfacePythonShellWidget(self, parent)
 
 #-------------------------------------------------------------------------------
+# 'WrappingStringIO' class:
+#-------------------------------------------------------------------------------
+
+class WrappingStringIO(object):
+    """ A wrapper around cStringIO that wraps lines that exceed a specified
+        width.
+
+        This class exists because QScintilla's line wrapping performs *very*
+        badly for long lines (QFontMetric.width appears to get called at least
+        twice for every character). We can do this much faster than QScintilla
+        because we can guarantee a monospaced font. That being said, this is
+        still a performance bottleneck and it may be worth reimplementing in C.
+    """
+
+    def __init__(self, width):
+        """ Create a WrappingStringIO with the specified fill width.
+        """ 
+        import cStringIO
+        self.__cio = cStringIO.StringIO()
+        self.width = width
+
+    def __getattr__(self, name):
+        """ Pretend that this is a subclass of cStringIO.
+        """
+        return getattr(self.__cio, name)
+
+    def write(self, string):
+        """ Wrap text as it is written to the buffer. This wrapping ignores word
+            boundaries; all long lines will be broken at the fill width.
+        """
+        i = start = count = 0
+        for i, char in enumerate(string):
+            if char == '\n':
+                self.__cio.write(string[start:i+1])
+                start = i + 1
+                count = 0
+            elif char == '\t':
+                count += 4
+            elif char != '\r':
+                count += 1
+            if count >= self.width:
+                self.__cio.write(string[start:i+1])
+                self.__cio.write('\n')
+                start = i + 1
+                count = 0
+        if start <= i:
+            self.__cio.write(string[start:i+1])
+
+#-------------------------------------------------------------------------------
 # 'QConsoleWidget' class and associated constants:
 #-------------------------------------------------------------------------------
 
@@ -214,10 +263,10 @@ class QConsoleWidget(QsciScintilla):
         # Initialize public and protected variables
         self.colorize_regions = True
         self.title = 'Console' # captured from ANSI escape sequences
+        self._buffer = WrappingStringIO(80)
         self._console_inited = False
         self._enter_processing = False
         self._last_refresh_time = 0
-        self._line_width = 80 # initialize just to be safe
         self._prompt_line, self._prompt_index = 0, 0
         self._reading = False
 
@@ -283,17 +332,49 @@ class QConsoleWidget(QsciScintilla):
     #-------------------------------------------------------------------------- 
 
     def flush(self):
-        """ This buffer does not need to be flushed.
+        """ Flush the buffer by writing its contents to the screen.
         """
-        pass
+        self._buffer.seek(0)
+        text = self._buffer.getvalue()
+        self._buffer.close()
+        self._buffer = WrappingStringIO(self._buffer.width)
 
-    def isatty(self):
-        """ This buffer is interactive.
-        """
-        return True
+        # Because the handling of ANSI sequences is not currently being used,
+        # the following code has commented out and replaced. If ANSI sequences
+        # are to be used, this should be reimplemented more efficiently.
+        self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.length())
+        self.append(text)
+#         title = self.title_pattern.split(text)
+#         if len(title) > 1:
+#             self.title = title[-2]
+
+#         text = self.title_pattern.sub('', text)
+#         segments = self.color_pattern.split(text)
+#         segment = segments.pop(0)
+#         self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.text().length())
+#         try:
+#             self.append(segment)
+#         except UnicodeDecodeError:
+#             # FIXME: Do I really want to skip the exception?
+#             pass
+        
+#         for ansi_tag, text in zip(segments[::2], segments[1::2]):
+#             self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.text().length())
+#             try:
+#                 self.append(text)
+#             except UnicodeDecodeError:
+#                 # FIXME: Do I really want to skip the exception?
+#                 pass
+#             if ansi_tag in self._ansi_colors:
+#                 style = self._ansi_colors[ansi_tag][0] + _ANSI_STYLE_START
+#             else:
+#                 style = 0
+#             self.SendScintilla(QsciBase.SCI_SETSTYLING, len(text), style)
+                
+        self.setCursorPosition(*self._end_position())
 
     def readline(self):
-        """ Read and return one line from the buffer.
+        """ Read and return one line of input from the user.
         """
         self._reading = True
         self.new_prompt('')
@@ -301,48 +382,21 @@ class QConsoleWidget(QsciScintilla):
             QtCore.QCoreApplication.processEvents()
 
         result = self.input_buffer + '\n'
-        self.write('\n', refresh=False)
+        self.write('\n')
         return result
 
     def write(self, text, refresh=True):
-        """ Write given text to buffer, translating ANSI escape sequences as
-            appropriate.
+        """ Write text to the buffer, possibly flushing it if 'refresh' is set.
         """
         # WARNING: Do not put print statements to sys.stdout/sys.stderr in this
         # method, as print will call this method, creating an infinite loop.
-        
-        title = self.title_pattern.split(text)
-        if len(title) > 1:
-            self.title = title[-2]
 
-        text = self.title_pattern.sub('', text)
-        segments = self.color_pattern.split(text)
-        segment = segments.pop(0)
-        self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.text().length())
-        try:
-            self.append(segment)
-        except UnicodeDecodeError:
-            # FIXME: Do I really want to skip the exception?
-            pass
+        self._buffer.write(text)
         
-        for ansi_tag, text in zip(segments[::2], segments[1::2]):
-            self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.text().length())
-            try:
-                self.append(text)
-            except UnicodeDecodeError:
-                # FIXME: Do I really want to skip the exception?
-                pass
-            if ansi_tag in self._ansi_colors:
-                style = self._ansi_colors[ansi_tag][0] + _ANSI_STYLE_START
-            else:
-                style = 0
-            self.SendScintilla(QsciBase.SCI_SETSTYLING, len(text), style)
-                
-        self.setCursorPosition(*self._end_position())
-
         if refresh:
             current_time = time()
-            if current_time - self._last_refresh_time > 0.03:
+            if current_time - self._last_refresh_time > 0.05:
+                self.flush()
                 self.repaint()
                 self._last_refresh_time = current_time 
 
@@ -350,8 +404,7 @@ class QConsoleWidget(QsciScintilla):
         """ Write a list of lines to the buffer.
         """
         for line in lines:
-            self.write(line, refresh=False)
-            self.write('\n', refresh=refresh)
+            self.write(line, refresh=refresh)
 
     #--------------------------------------------------------------------------
     # 'QWidget' interface
@@ -537,28 +590,8 @@ class QConsoleWidget(QsciScintilla):
     # 'QScintilla' interface
     #--------------------------------------------------------------------------
 
-    def append(self, string):
-        """ Reimplemented to improve performance. We split long lines into
-            shorter ones because QScintilla's line wrapping performs *very*
-            badly for long lines (QFontMetric.width appears to get called at
-            least twice for every character). We can do this much faster than
-            QScintilla because we can guarantee a monospaced font.
-        """
-        # Code based on default implementation in 'qsciscintilla.cpp'
-        for i, line in enumerate(string.splitlines(True)):
-            stripped = line.rstrip('\n\r')
-            num_lines = int(ceil(len(stripped) / float(self._line_width)))
-            for j in xrange(max(1, num_lines)):
-                if j:
-                    self.SendScintilla(QsciBase.SCI_APPENDTEXT, 1, '\n')
-                start = j * self._line_width
-                sub = line[start : start + self._line_width]
-                self.SendScintilla(QsciBase.SCI_APPENDTEXT, len(sub), sub)
-
-        self.SendScintilla(QsciBase.SCI_EMPTYUNDOBUFFER)
-
     def paste(self):
-        """ Reimplemented to ensure that text is pasted in editing region.
+        """ Reimplemented to ensure that text is pasted in the editing region.
         """
         self._keep_cursor_in_buffer()
         QsciScintilla.paste(self)
@@ -605,10 +638,14 @@ class QConsoleWidget(QsciScintilla):
     def new_prompt(self, prompt):
         """ Prints a new prompt at the end of the buffer.
         """
-        self.write('\n', refresh=False)
+        self.flush()
+        self.append('\n')
         self.write(prompt, refresh=False)
+        self.flush()
+
         self._prompt = prompt
         self._prompt_line, self._prompt_index = self._end_position()
+
         if self.colorize_regions and not self._reading:
             self.markerDeleteAll(self._input_mkr)
             self.markerAdd(self._prompt_line, self._input_mkr)
@@ -618,15 +655,17 @@ class QConsoleWidget(QsciScintilla):
         """ Execute the text in the input buffer. Returns whether the input
             buffer was completely processed and a new prompt created.
         """
-        self.write('\n')
+        self.append('\n')
         current, end = self._prompt_line, self.lines() - 1
         done = self._execute(interactive=interactive)
+
         if self.colorize_regions:
             if done:
                 for i in xrange(current, end):
                     self.markerAdd(i, self._finished_input_mkr)
             else:
                 self.markerAdd(end, self._input_mkr)
+
         return done
 
     def set_ansi_colors(self, ansi_colors):
@@ -727,7 +766,7 @@ class QConsoleWidget(QsciScintilla):
         """
         font_metrics = QtGui.QFontMetrics(QtGui.QFont(_FONT, _FONT_SIZE))
         char_width = float(font_metrics.width(' '))
-        self._line_width = int(floor(self.viewport().width() / char_width))
+        self._buffer.width = int(floor(self.viewport().width() / char_width))        
 
     def _get_word_start(self, line, index):
         """ Find the start of the word to the left the given position. If a
@@ -998,7 +1037,7 @@ class QPythonShellWidget(QConsoleWidget):
                 out, err = self._subprocess_out_err(args, shell=True)
             else:
                 # Use columns, a tab width of 4, and our computed line width
-                args = [ 'ls', '-CF', '-T 4', '-w %i' % self._line_width, path ]
+                args = ['ls', '-CF', '-T 4', '-w %i' % self._buffer.width, path]
                 out, err = self._subprocess_out_err(args)
             self.write(out, refresh=False)
             self.write(err, refresh=False)
@@ -1072,9 +1111,10 @@ class QPythonShellWidget(QConsoleWidget):
                 if stripped.endswith(':'):
                     indent += 1
                 self.write('\t' * indent, refresh=False)
+                self.flush()
             else:
                 self.new_prompt()
-            
+
             # Turn Python syntax highlighting back on
             self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
 
