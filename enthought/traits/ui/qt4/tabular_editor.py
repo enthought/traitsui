@@ -495,7 +495,19 @@ class _TableView(QtGui.QTableView):
         factory = editor.factory
         
         # Configure the row headings
-        self.verticalHeader().hide()
+        vheader = self.verticalHeader()
+        vheader.hide()
+
+        # Set a default height for rows. Although setting the resize mode to
+        # ResizeToContents would provide the best sizes, this is far too
+        # expensive when the TabularEditor has a large amount of data. Instead,
+        # we make a reasonable guess based on the minimum size hint and the font
+        # of the first row.
+        size = vheader.minimumSectionSize()
+        font = editor.adapter.get_font(editor.object, editor.name, 0)
+        if font is not None:
+            size = max(size, QtGui.QFontMetrics(QtGui.QFont(font)).height())
+        vheader.setDefaultSectionSize(size)
 
         # Configure the column headings.
         hheader = self.horizontalHeader()
@@ -575,10 +587,10 @@ class _TableView(QtGui.QTableView):
         """
         sh = QtGui.QTableView.sizeHint(self)
         
-        w = 0
+        width = 0
         for column in xrange(len(self._editor.adapter.columns)):
-            w += self.sizeHintForColumn(column)
-        sh.setWidth(w)
+            width += self.sizeHintForColumn(column)
+        sh.setWidth(width)
 
         return sh
 
