@@ -40,6 +40,12 @@ class ProgressDialog(MProgressDialog, Window):
     max = Int
     margin = Int(5)
     can_cancel = Bool(False)
+
+    # The IProgressDialog interface doesn't declare this, but since this is a
+    # feature of the QT backend ProgressDialog that doesn't appear in WX, we
+    # offer an option to disable it.
+    can_ok = Bool(False)
+    
     show_time = Bool(False)
     show_percent = Bool(False)
     _user_cancelled = Bool(False)
@@ -122,19 +128,23 @@ class ProgressDialog(MProgressDialog, Window):
     def _create_buttons(self, dialog, layout):
         """ Creates the buttons. """
 
+        if not (self.can_cancel or self.can_ok):
+            return
+
         # Create the button.
         buttons = QtGui.QDialogButtonBox()
 
         if self.can_cancel:
             buttons.addButton(self.cancel_button_label, QtGui.QDialogButtonBox.RejectRole)
-                
-        buttons.addButton(QtGui.QDialogButtonBox.Ok)
+        if self.can_ok:
+            buttons.addButton(QtGui.QDialogButtonBox.Ok)
 
         # TODO: hookup the buttons to our methods, this may involve subclassing from QDialog
         
         if self.can_cancel:
             buttons.connect(buttons, QtCore.SIGNAL('rejected()'), dialog, QtCore.SLOT('reject()'))
-        buttons.connect(buttons, QtCore.SIGNAL('accepted()'), dialog, QtCore.SLOT('accept()'))
+        if self.can_ok:
+            buttons.connect(buttons, QtCore.SIGNAL('accepted()'), dialog, QtCore.SLOT('accept()'))
 
         layout.addWidget(buttons)
     
@@ -163,9 +173,9 @@ class ProgressDialog(MProgressDialog, Window):
         layout.addWidget(self.progress_bar)
         
         if self.show_percent:
-            self.progress_bar.setFormat("%p")
+            self.progress_bar.setFormat("%p%")
         else:
-            self.progress_bar.setFormat("")
+            self.progress_bar.setFormat("%v")
             
         
         return
@@ -208,6 +218,8 @@ class ProgressDialog(MProgressDialog, Window):
         self._create_percent(dialog, layout)
         self._create_timer(dialog, layout)
         self._create_buttons(dialog, layout)
+
+        dialog.setWindowTitle(self.title)
 
         parent.setLayout(layout)
         
