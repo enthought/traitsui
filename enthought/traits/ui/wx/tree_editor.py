@@ -681,40 +681,6 @@ class SimpleEditor ( Editor ):
         return copy.deepcopy( new_object )
                 
     #---------------------------------------------------------------------------
-    #  Returns whether a specified object has any children:
-    #---------------------------------------------------------------------------
-    
-    def _has_children ( self, node, object ):
-        """ Returns whether a specified object has any children.
-        """
-        return (node.allows_children( object ) and node.has_children( object )) 
-                
-    #---------------------------------------------------------------------------
-    #  Returns whether a given object is droppable on the node:    
-    #---------------------------------------------------------------------------
-                                
-    def _is_droppable ( self, node, object, add_object, for_insert ):
-        """ Returns whether a given object is droppable on the node.
-        """
-        if for_insert and (not node.can_insert( object )):
-            return False
-            
-        return node.can_add( object, add_object )
-                           
-    #---------------------------------------------------------------------------
-    #  Returns a droppable version of a specified object:    
-    #---------------------------------------------------------------------------
-                                                      
-    def _drop_object ( self, node, object, dropped_object, make_copy = True ):
-        """ Returns a droppable version of a specified object.
-        """
-        new_object = node.drop_object( object, dropped_object )
-        if (new_object is not dropped_object) or (not make_copy):
-            return new_object
-            
-        return copy.deepcopy( new_object )
-
-    #---------------------------------------------------------------------------
     #  Returns the icon index for the specified object:
     #---------------------------------------------------------------------------
 
