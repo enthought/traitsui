@@ -22,8 +22,6 @@
 #  Imports:
 #------------------------------------------------------------------------------
 
-import logging
-
 import wx
 
 from enthought.traits.api \
@@ -43,11 +41,6 @@ from editor_factory \
     
 from constants \
     import OKColor
-#-------------------------------------------------------------------------------
-#  Start logging:
-#-------------------------------------------------------------------------------
-
-logger = logging.getLogger( __name__ )
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -173,8 +166,7 @@ class SimpleEditor ( Editor ):
         try:
             value = self.evaluate( value )
         except:
-            logger.exception( 'Could not evaluate %r in TextEditor' %  
-                              ( value, ) )
+            pass
 
         try:
             ret = self.factory.mapping.get( value, value )
