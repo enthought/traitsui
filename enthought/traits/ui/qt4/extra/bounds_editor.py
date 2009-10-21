@@ -188,9 +188,3 @@ class BoundsEditor(RangeEditor):
         return _BoundsEditor
     def _get_custom_editor_class(self):
         return _BoundsEditor
-
-#    def _max_default(self):
-#        return self.high
-#    
-#    def _min_default(self):
-#        return self.low
