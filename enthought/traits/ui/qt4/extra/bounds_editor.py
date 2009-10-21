@@ -1,6 +1,6 @@
 from PyQt4 import QtGui, QtCore
 
-from enthought.traits.api import Float, Any, Str
+from enthought.traits.api import Float, Any, Str, Trait
 from enthought.traits.ui.editors.api import RangeEditor
 from enthought.traits.ui.qt4.editor import Editor
 from enthought.traits.ui.qt4.extra.range_slider import RangeSlider
@@ -22,13 +22,13 @@ class _BoundsEditor(Editor):
         factory = self.factory
         if not factory.low_name:
             self.low = factory.low
-            self.min = self.low
 
         if not factory.high_name:
             self.high = factory.high
-            self.max = self.high
 
-
+        self.max = factory.max
+        self.min = factory.min
+        
         self.format = factory.format
 
         self.evaluate = factory.evaluate
@@ -57,8 +57,8 @@ class _BoundsEditor(Editor):
         slider.setMaximum(10000)
         slider.setPageStep(1000)
         slider.setSingleStep(100)
-        slider.setLow(0)
-        slider.setHigh(10000)
+        slider.setLow(self._convert_to_slider(self.low))
+        slider.setHigh(self._convert_to_slider(self.high))
 
         QtCore.QObject.connect(slider, QtCore.SIGNAL('sliderMoved(int)'),
                 self.update_object_on_scroll)
@@ -180,8 +180,17 @@ class _BoundsEditor(Editor):
         self.control.slider.setHigh(self._convert_to_slider(self.high))
 
 class BoundsEditor(RangeEditor):
+    
+    min = Trait(None, Float)
+    max = Trait(None, Float)
+    
     def _get_simple_editor_class(self):
         return _BoundsEditor
     def _get_custom_editor_class(self):
         return _BoundsEditor
 
+#    def _max_default(self):
+#        return self.high
+#    
+#    def _min_default(self):
+#        return self.low
