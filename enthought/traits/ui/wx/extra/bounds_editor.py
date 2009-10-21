@@ -1,6 +1,6 @@
 import wx
 
-from enthought.traits.api import Float, Any, Str
+from enthought.traits.api import Float, Any, Str, Trait
 from enthought.traits.ui.editors.api import RangeEditor
 from enthought.traits.ui.wx.editor import Editor
 from enthought.traits.ui.wx.helper import TraitsUIPanel, Slider
@@ -29,6 +29,8 @@ class _BoundsEditor(Editor):
             self.high = factory.high
             self.max = self.high
 
+        self.max = factory.max
+        self.min = factory.min
 
         self.format = factory.format
 
@@ -50,9 +52,10 @@ class _BoundsEditor(Editor):
         wx.EVT_KILL_FOCUS(self._label_lo, self.update_low_on_enter)
         
         # low slider
-        self.control.lslider = Slider(panel, -1, self.low, 0, 10000,
+        self.control.lslider = Slider(panel, -1, 0, 0, 10000,
                                               size=wx.Size( 100, 20 ),
                                               style=wx.SL_HORIZONTAL|wx.SL_AUTOTICKS )
+        self.control.lslider.SetValue(self._convert_to_slider(self.low))
         self.control.lslider.SetTickFreq( 1000, 1 )
         self.control.lslider.SetPageSize( 1000 )
         self.control.lslider.SetLineSize( 100 )
@@ -133,9 +136,15 @@ class _BoundsEditor(Editor):
         except:
             pass
 
-    def update_object_on_scroll(self, pos):
+    def update_object_on_scroll(self, evt):
         low = self._convert_from_slider(self.control.lslider.GetValue())
         high = self._convert_from_slider(self.control.rslider.GetValue())
+
+        if low >= high:
+            if evt.Position == self.control.lslider.GetValue():
+                low = self.high - self._step_size()
+            else:
+                high = self.low + self._step_size()
 
         if self.factory.is_float:
             self.low = low
@@ -143,7 +152,7 @@ class _BoundsEditor(Editor):
         else:
             self.low = int(low)
             self.high = int(high)
-
+            
             # update the sliders to the int values or the sliders
             # will jiggle
             self.control.lslider.SetValue(self._convert_to_slider(low))
@@ -191,8 +200,11 @@ class _BoundsEditor(Editor):
         self.control.rslider.SetValue(self._convert_to_slider(self.high))
 
 class BoundsEditor(RangeEditor):
+    
+    min = Trait(None, Float)
+    max = Trait(None, Float)
+    
     def _get_simple_editor_class(self):
         return _BoundsEditor
     def _get_custom_editor_class(self):
         return _BoundsEditor
-
