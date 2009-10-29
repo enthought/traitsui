@@ -82,7 +82,10 @@ class ProgressDialog(MProgressDialog, Window):
         if self.max > 0:
             self.progress_bar.setValue(value)
 
-            percent = (float(value) - self.min)/(self.max - self.min)
+            if (self.max != self.min):
+                percent = (float(value) - self.min)/(self.max - self.min)
+            else:
+                percent = 1.0
             
             if self.show_time and (percent != 0):
                 current_time = time.time()
