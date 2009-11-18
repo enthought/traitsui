@@ -200,8 +200,6 @@ class TableEditor ( Editor, BaseTableEditor ):
 
             # Create the table (i.e. grid) control:
             hsizer = wx.BoxSizer( wx.HORIZONTAL )
-            hsizer.Add( wx.StaticLine( panel, -1, style = wx.LI_VERTICAL ), 0,
-                        wx.EXPAND )
             self._create_grid( panel, hsizer )
             sizer.Add( hsizer, 1, wx.EXPAND )
         else:
@@ -224,8 +222,6 @@ class TableEditor ( Editor, BaseTableEditor ):
 
             # Create the table (i.e. grid) control:
             hsizer = wx.BoxSizer( wx.HORIZONTAL )
-            hsizer.Add( wx.StaticLine( panel, -1, style = wx.LI_VERTICAL ), 0,
-                        wx.EXPAND )
             self._create_grid( panel, hsizer )
             sizer.Add( hsizer, 1, wx.EXPAND )
 
@@ -408,12 +404,11 @@ class TableEditor ( Editor, BaseTableEditor ):
 
             if toolbar.control is not None:
                 self.toolbar = toolbar
+                # add padding so the toolbar is right aligned
                 tb_sizer.Add( ( 1, 1 ), 1, wx.EXPAND )
                 tb_sizer.Add( toolbar.control, 0 )
 
             sizer.Add( tb_sizer, 0, wx.ALIGN_RIGHT | wx.EXPAND )
-            sizer.Add( wx.StaticLine( parent, -1, style = wx.LI_HORIZONTAL ), 0,
-                       wx.EXPAND | wx.BOTTOM, 5 )
 
     #---------------------------------------------------------------------------
     #  Disposes of the contents of an editor:
