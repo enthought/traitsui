@@ -352,9 +352,16 @@ class TableEditor ( Editor, BaseTableEditor ):
         if len( self.model.get_filtered_items() ) > 0:
             height = _grid.GetRowSize( 0 )
             
-        _grid.SetMinSize( wx.Size(
-            max( 150, 80 * len( self.columns ) ), 
-            _grid.GetColLabelSize() + ((factory.rows or 15) * height) ) )
+        max_rows = factory.rows or 15
+            
+        min_width = max( 150, 80 * len( self.columns ) )
+        
+        if factory.show_column_labels:
+            min_height = _grid.GetColLabelSize() + (max_rows * height)
+        else:
+            min_height = (max_rows * height)
+            
+        _grid.SetMinSize(wx.Size(min_width, min_height))
         
         # On Linux, there is what appears to be a bug in wx in which the
         # vertical scrollbar will not be sized properly if the TableEditor is 
