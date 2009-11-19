@@ -213,6 +213,11 @@ class SimpleSliderEditor ( BaseRangeEditor ):
     def update_object_on_enter ( self, event ):
         """ Handles the user pressing the Enter key in the text field.
         """
+
+        # There are cases where this method is called with self.control == None.
+        if self.control is None:
+            return
+
         try:
             try:
                 value = self.control.text.GetValue().strip()
