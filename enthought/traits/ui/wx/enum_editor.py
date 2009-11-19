@@ -191,9 +191,11 @@ class SimpleEditor ( BaseEditor ):
         
         factory = self.factory
         if factory.evaluate is None:
-            # set the initial value to the first name. The combo box will show 
-            # it selected, so this will keep the state consistent
-            self.value = self.mapping[self.names[0]]
+            # If the list of names is not empty, set the initial value to the
+            # first name. The combo box will show it selected, so this will keep
+            # the state consistent
+            if self.names:
+                self.value = self.mapping[self.names[0]]
             
             self.control = control = wx.Choice( parent, -1, wx.Point( 0, 0 ), 
                                                 wx.Size( -1, -1 ), self.names )
