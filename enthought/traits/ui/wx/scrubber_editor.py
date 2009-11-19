@@ -253,7 +253,7 @@ class _ScrubberEditor ( Editor ):
             else:
                 increment = pow( 10, round( log10( (high - low) / 100.0 ) ) )
                 
-            self.increment = increment
+        self.increment = increment
             
         self.update_editor()
             
