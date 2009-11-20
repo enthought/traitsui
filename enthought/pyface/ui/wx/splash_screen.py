@@ -1,3 +1,4 @@
+
 #------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
@@ -105,8 +106,9 @@ class SplashScreen(MSplashScreen, Window):
         """ Called when the splash screen text has been changed. """
 
         # Passing 'False' to 'Refresh' means "do not erase the background".
-        self.control.Refresh(False)
-        self.control.Update()
+        if self.control is not None:
+            self.control.Refresh(False)
+            self.control.Update()
         wx.GetApp().Yield(True)
 
     def _on_paint(self, event):
@@ -134,7 +136,7 @@ class SplashScreen(MSplashScreen, Window):
 
             x, y = self.text_location
             dc.DrawText(self.text, x, y)
-
+            
         # Let the normal wx paint handling do its stuff.
         event.Skip()
 
