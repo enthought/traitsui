@@ -244,10 +244,18 @@ class SimpleEditor ( SimpleTextEditor ):
             wildcard = '|'.join( self.factory.filter[:] )
         else:
             wildcard = 'All Files (*.*)|*.*'
+        
+        if self.factory.dialog_style == 'save':
+            style = wx.FD_SAVE
+        elif self.factory.dialog_style == 'open':
+            style = wx.FD_OPEN
+        else:
+            style = ex.FD_DEFAULT_STYLE
 
         dlg = wx.FileDialog( self.control,
                              message  = 'Select a File',
-                             wildcard = wildcard )
+                             wildcard = wildcard,
+                             style=style)
 
         dlg.SetFilename( self._get_value() )
             
