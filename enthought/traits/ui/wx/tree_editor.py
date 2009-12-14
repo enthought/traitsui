@@ -1496,8 +1496,10 @@ class SimpleEditor ( Editor ):
         parent = self._menu_parent_node
         if isinstance( parent, ObjectTreeNode ):
             can_rename = parent.can_rename( self._menu_parent_object )
+        elif parent is not None:
+            can_rename = parent.can_rename( object )
         else:
-            can_rename = ((parent is not None) and parent.can_rename( object ))
+            can_rename = True
         return (can_rename and self._menu_node.can_rename_me( object ))
 
 #----- Drag and drop event handlers: -------------------------------------------
