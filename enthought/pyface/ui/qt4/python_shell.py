@@ -1035,6 +1035,12 @@ class QPythonShellWidget(QConsoleWidget):
             if sys.platform == 'win32':
                 args = [ 'dir', path.rstrip('/') ]
                 out, err = self._subprocess_out_err(args, shell=True)
+            elif sys.platform == 'darwin':
+                # FIXME: Figure out how to get the file names to align like they
+                # do when ls is run in a terminal.
+                args = ['ls', '-CF', path]
+                out, err = self._subprocess_out_err(args,
+                                    env=dict(COLUMNS=str(self._buffer.width)))
             else:
                 # Use columns, a tab width of 4, and our computed line width
                 args = ['ls', '-CF', '-T 4', '-w %i' % self._buffer.width, path]
