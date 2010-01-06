@@ -850,7 +850,8 @@ class QPythonShellWidget(QConsoleWidget):
     def __init__(self, parent=None):
         """ Set up lexer and internal variables
         """
-        self.interpreter = InteractiveInterpreter()
+        self.locals = dict(__name__="__console__", __doc__=None)
+        self.interpreter = InteractiveInterpreter(self.locals)
         self.exec_callback = None
         self._hidden = False
         self._history = []
@@ -1062,6 +1063,24 @@ class QPythonShellWidget(QConsoleWidget):
                     self.execute_file(path, hidden)
                 else:
                     self.write('File `%s` not found.\n' % path, refresh=False)
+
+        elif self._is_magic(stripped, 'who'):
+            # The 'who' command prints the names in the namespace.
+            spacing = 8
+            skip = ['__builtins__', '__name__', '__doc__']
+            names = [n for n in sorted(self.locals.keys()) if n not in skip]
+            if names:
+                out = names[0]
+                names = names[1:]
+                for name in names:
+                    nspaces = spacing - (len(out) % spacing)
+                    if len(out+name) + nspaces >= self._buffer.width:
+                        self.write(out + '\n', refresh=False)
+                        out = name
+                    else:
+                        out = out + ' '*nspaces + name
+                if out:
+                    self.write(out + '\n', refresh=False)
 
         # Process special '?' help syntax
         elif not more and (stripped.startswith('?') or stripped.endswith('?')):
