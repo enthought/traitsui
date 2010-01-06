@@ -1026,6 +1026,9 @@ class QPythonShellWidget(QConsoleWidget):
                 self.write(str(sys.exc_info()[1]) + '\n', refresh=False)
             self.write(os.path.abspath(os.getcwd()) + '\n', refresh=False)
 
+        elif self._is_magic(stripped, 'pwd'):
+            self.write(os.path.abspath(os.getcwd()) + '\n', refresh=False)
+
         elif self._is_magic(stripped, 'ls'):
             if len(stripped) == 2:
                 path = os.getcwd()
