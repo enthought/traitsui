@@ -373,11 +373,14 @@ class QConsoleWidget(QsciScintilla):
                 
         self.setCursorPosition(*self._end_position())
 
-    def readline(self):
+    def readline(self, prompt=None):
         """ Read and return one line of input from the user.
         """
         self._reading = True
-        self.new_prompt('')
+        if prompt is None:
+            self.new_prompt('')
+        else:
+            self.new_prompt(prompt)
         while self._reading:
             QtCore.QCoreApplication.processEvents()
 
@@ -1081,6 +1084,15 @@ class QPythonShellWidget(QConsoleWidget):
                         out = out + ' '*nspaces + name
                 if out:
                     self.write(out + '\n', refresh=False)
+
+        elif self._is_magic(stripped, 'reset'):
+            # Reset the namespace.
+            answer = self.readline(prompt='Once deleted, variables cannot be recovered. Proceed (y/[n])? ')
+            answer = answer.strip().lower()
+            if answer == 'y' or answer == 'yes':
+                self.locals.clear()
+                self.locals['__name__'] = '__console__'
+                self.locals['__doc__'] = None
 
         # Process special '?' help syntax
         elif not more and (stripped.startswith('?') or stripped.endswith('?')):
