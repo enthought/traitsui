@@ -223,6 +223,7 @@ class LiveWindow ( BaseDialog ):
             sw = panel( ui, window )
 
         sw_sizer.Add( sw, 1, wx.EXPAND )
+        sw_sizer.SetMinSize(sw.GetSize())
 
         # Check to see if we need to add any of the special function buttons:
         if (not no_buttons) and (has_buttons or view.help):
