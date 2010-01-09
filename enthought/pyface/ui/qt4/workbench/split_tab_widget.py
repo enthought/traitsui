@@ -7,6 +7,8 @@
 
 #------------------------------------------------------------------------------
 
+import sys
+
 # Major library imports.
 from PyQt4 import QtCore, QtGui
 
@@ -604,7 +606,6 @@ class SplitTabWidget(QtGui.QSplitter):
 
         return miss
 
-
 class _TabWidget(QtGui.QTabWidget):
     """ The _TabWidget class is a QTabWidget with a dragable tab bar. """
 
@@ -615,6 +616,9 @@ class _TabWidget(QtGui.QTabWidget):
         """ Initialise the instance. """
 
         QtGui.QTabWidget.__init__(self, *args)
+        
+        # XXX this requires Qt > 4.5
+        self.setDocumentMode(True)
 
         self._root = root
 
@@ -622,10 +626,14 @@ class _TabWidget(QtGui.QTabWidget):
         # in PyQt v4.2 and earlier.
         self.setTabBar(_DragableTabBar(self._root, self))
 
+        self.setTabsClosable(True)
+
         # Add the button used to close the current tab.
-        buttn = _TabCloseButton(self)
-        self.connect(buttn, QtCore.SIGNAL('clicked()'), self._close_tab)
-        self.setCornerWidget(buttn)
+        #buttn = _TabCloseButton(self)
+        #self.connect(buttn, QtCore.SIGNAL('clicked()'), self._old_close_tab)
+        #self.setCornerWidget(buttn)
+        
+        self.tabCloseRequested.connect(self._close_tab)
 
     def active_icon(self):
         """ Return the QIcon to be used to indicate an active tab page. """
@@ -692,7 +700,13 @@ class _TabWidget(QtGui.QTabWidget):
         if self._root._current_tab_w is self and self._root._current_tab_idx == idx:
             self._root._current_tab_w = None
 
-    def _close_tab(self):
+    def _close_tab(self, index):
+        """ Close the current tab. """
+        # XXX want to call editor.close() to give editor a chance to react...
+
+        self.widget(index).close()
+
+    def _old_close_tab(self):
         """ Close the current tab. """
 
         self.currentWidget().close()
@@ -809,6 +823,9 @@ class _DragableTabBar(QtGui.QTabBar):
         """ Initialise the instance. """
 
         QtGui.QTabBar.__init__(self, parent)
+
+        # XXX this requires Qt > 4.5
+        self.setDocumentMode(True)
 
         self._root = root
         self._drag_state = None
