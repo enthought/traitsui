@@ -2,7 +2,7 @@ import wx
 
 from enthought.traits.api import Instance
 from enthought.traits.ui.wx.editor import Editor
-from enthought.pyface.ui.wx.progress_dialog import ProgressDialog, ProgressBar
+from enthought.pyface.ui.wx.progress_dialog import ProgressDialog
 
 class SimpleEditor(Editor):
     """
