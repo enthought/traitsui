@@ -1103,6 +1103,8 @@ class QPythonShellWidget(QConsoleWidget):
             name, obj = self.lexer().apis().get_symbol(line, index)
             if obj is None:
                 self.write('Object `%s` not found.\n' % name, refresh=False)
+            elif obj.__doc__ is None:
+                self.write("'%s' has no docstring.\n" % name, refresh=False)
             else:
                 self.write(obj.__doc__.rstrip() + '\n', refresh=False)
 
