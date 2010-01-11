@@ -50,7 +50,7 @@ def convert_to_color ( object, name, value ):
     """ Converts a number into a wxColour object.
     """
     if isinstance( value, tuple ):
-        return tuple_to_wxcolor(tup)
+        return tuple_to_wxcolor(value)
 
     elif isinstance( value, ColourPtr ):
         return wx.Colour( value.Red(), value.Green(), value.Blue() )
