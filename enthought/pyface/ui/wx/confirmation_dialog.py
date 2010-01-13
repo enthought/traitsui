@@ -46,6 +46,10 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
     image = Instance(ImageResource)
 
     message = Unicode
+    
+    informative = Unicode
+    
+    detail = Unicode
 
     no_label = Unicode
 
@@ -114,7 +118,11 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
         sizer.Add(image, 0, wx.EXPAND | wx.ALL, 10)
 
         # The message.
-        message = wx.StaticText(panel, -1, self.message)
+        if self.informative:
+            message = self.message + '\n\n' + self.informative
+        else:
+            message = self.message
+        message = wx.StaticText(panel, -1, message)
         sizer.Add(message, 1, wx.EXPAND | wx.TOP, 15)
 
         # Resize the panel to match the sizer.

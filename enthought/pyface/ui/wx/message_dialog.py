@@ -46,6 +46,10 @@ class MessageDialog(MMessageDialog, Dialog):
     #### 'IMessageDialog' interface ###########################################
 
     message = Unicode
+    
+    informative = Unicode
+    
+    detail = Unicode
 
     severity = Enum('information', 'warning', 'error')
 
@@ -62,7 +66,13 @@ class MessageDialog(MMessageDialog, Dialog):
     ###########################################################################
 
     def _create_control(self, parent):
-        return wx.MessageDialog(parent, self.message, self.title,
+        # The message.
+        if self.informative:
+            message = self.message + '\n\n' + self.informative
+        else:
+            message = self.message
+
+        return wx.MessageDialog(parent, message, self.title,
                 _SEVERITY_TO_ICON_MAP[self.severity] | wx.OK | wx.STAY_ON_TOP)
 
 #### EOF ######################################################################
