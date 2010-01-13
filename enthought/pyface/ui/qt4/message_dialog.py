@@ -40,6 +40,10 @@ class MessageDialog(MMessageDialog, Dialog):
     #### 'IMessageDialog' interface ###########################################
 
     message = Unicode
+    
+    informative = Unicode
+    
+    detail = Unicode
 
     severity = Enum('information', 'warning', 'error')
 
@@ -56,7 +60,10 @@ class MessageDialog(MMessageDialog, Dialog):
     ###########################################################################
 
     def _create_control(self, parent):
-        return QtGui.QMessageBox(_SEVERITY_TO_ICON_MAP[self.severity],
+        message_box = QtGui.QMessageBox(_SEVERITY_TO_ICON_MAP[self.severity],
                 self.title, self.message, QtGui.QMessageBox.Ok, parent)
+        message_box.setInformativeText(self.informative)
+        message_box.setDetailedText(self.detail)
+        return message_box
 
 #### EOF ######################################################################

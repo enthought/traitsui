@@ -40,6 +40,10 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
     image = Instance(ImageResource)
 
     message = Unicode
+    
+    informative = Unicode
+    
+    detail = Unicode
 
     no_label = Unicode
 
@@ -62,6 +66,8 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
 
         dlg.setWindowTitle(self.title)
         dlg.setText(self.message)
+        dlg.setInformativeText(self.informative)
+        dlg.setDetailedText(self.detail)
 
         if self.image is None:
             dlg.setIcon(QtGui.QMessageBox.Warning)
