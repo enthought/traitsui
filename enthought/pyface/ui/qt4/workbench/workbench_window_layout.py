@@ -146,6 +146,8 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         QtCore.QObject.connect(self._qt4_editor_area,
                 QtCore.SIGNAL('focusChanged(QWidget *,QWidget *)'),
                 self._qt4_view_focus_changed)
+        
+        self._qt4_editor_area.close_tab_request_callback = self._qt4_tab_close_request
 
         return self._qt4_editor_area
 
@@ -320,6 +322,14 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 if view is not focus_part and view.control is not None and view.control.isAncestorOf(old):
                     view.has_focus = False
                     break
+    
+    def _qt4_tab_close_request(self, control):
+        """ Handle a tabCloseRequest from the splitter widget. """
+        
+        for editor in self.window.editors:
+            if editor.control == control:
+                editor.close()
+                break
 
     def _qt4_get_editor_control(self, editor):
         """ Create the editor control if it hasn't already been done. """

@@ -38,6 +38,9 @@ class SplitTabWidget(QtGui.QSplitter):
         QtCore.QObject.connect(QtGui.qApp,
                 QtCore.SIGNAL('focusChanged(QWidget *,QWidget *)'),
                 self._focus_changed)
+        
+        # default close tab callback just closes a control
+        self.close_tab_request_callback = lambda w: w.close()
 
     def clear(self):
         """ Restore the widget to its pristine state. """
@@ -173,6 +176,11 @@ class SplitTabWidget(QtGui.QSplitter):
         if ch is not self._current_tab_w:
             self._set_current_tab(ch, idx)
             ch.tabBar().setFocus()
+    
+    def _close_tab_request(self, w):
+        """ A close button was clicked in one of out _TabWidgets """
+        
+        self.close_tab_request_callback(w)
 
     def setCurrentWidget(self, w):
         """ Make the given widget current. """
@@ -704,8 +712,8 @@ class _TabWidget(QtGui.QTabWidget):
         """ Close the current tab. """
         # XXX want to call editor.close() to give editor a chance to react...
 
-        self.widget(index).close()
-
+        self._root._close_tab_request(self.widget(index))
+        
     def _old_close_tab(self):
         """ Close the current tab. """
 
