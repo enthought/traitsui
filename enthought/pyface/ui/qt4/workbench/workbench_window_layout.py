@@ -287,12 +287,12 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         """ Handle an editor getting the focus. """
 
         for editor in self.window.editors:
-            editor.has_focus = (editor.control is new)
+            editor.has_focus = (editor.control is new) or (new in editor.control.children())
 
     @on_trait_change('window.active_editor')
     def _qt4_active_editor_changed(self, obj, trait_name, old, new):
         """ Handle the change of active editor. """
-
+        
         # Do we need to do this verification?
         if obj is not self.window or trait_name != 'active_editor':
             return
@@ -482,16 +482,19 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         with standard margins.
         """
         lay = w.layout()
+        
+        # XXX I don't think we should do this... CJW
 
-        if lay is not None:
-            lay.setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        #if lay is not None:
+        #    lay.setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
 
-            sty = w.style()
-            l = sty.pixelMetric(QtGui.QStyle.PM_LayoutLeftMargin)
-            t = sty.pixelMetric(QtGui.QStyle.PM_LayoutTopMargin)
-            r = sty.pixelMetric(QtGui.QStyle.PM_LayoutRightMargin)
-            b = sty.pixelMetric(QtGui.QStyle.PM_LayoutBottomMargin)
-            lay.setContentsMargins(l, t, r, b)
+        #    sty = w.style()
+        #    l = sty.pixelMetric(QtGui.QStyle.PM_LayoutLeftMargin)
+        #    t = sty.pixelMetric(QtGui.QStyle.PM_LayoutTopMargin)
+        #    r = sty.pixelMetric(QtGui.QStyle.PM_LayoutRightMargin)
+        #    b = sty.pixelMetric(QtGui.QStyle.PM_LayoutBottomMargin)
+        #    lay.setContentsMargins(l, t, r, b)
+        #    lay.setContentsMargins(0, 0, 0, 0)
 
     def _qt4_monitor(self, control):
         """ Install an event filter for a view or editor control to keep an eye

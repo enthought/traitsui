@@ -286,15 +286,16 @@ class SplitTabWidget(QtGui.QSplitter):
         # See if the widget that has lost the focus is ours.
         otw, _ = self._tab_widget_of(old)
 
-        if otw is ntw:
-            return
+        # XXX this prevents focus changes between different tabs of the same tabwidget
+        #if otw is ntw:
+        #    return
 
         if otw is not None or ntw is not None:
             if ntw is None:
                 nw = None
             else:
                 nw = ntw.widget(ntidx)
-
+    
             self.emit(QtCore.SIGNAL('hasFocus'), nw)
 
     def _tab_widget_of(self, target):
@@ -614,6 +615,16 @@ class SplitTabWidget(QtGui.QSplitter):
 
         return miss
 
+active_style = """QTabWidget::pane { /* The tab widget frame */
+     border: 2px solid #00FF00;
+ }
+"""
+inactive_style = """QTabWidget::pane { /* The tab widget frame */
+     border: 2px solid #C2C7CB;
+     margin: 0px;
+ }
+"""
+
 class _TabWidget(QtGui.QTabWidget):
     """ The _TabWidget class is a QTabWidget with a dragable tab bar. """
 
@@ -627,6 +638,7 @@ class _TabWidget(QtGui.QTabWidget):
         
         # XXX this requires Qt > 4.5
         self.setDocumentMode(True)
+        #self.setStyleSheet(inactive_style)
 
         self._root = root
 
@@ -661,7 +673,7 @@ class _TabWidget(QtGui.QTabWidget):
             p.begin(pm)
 
             # Fill the image background from the tab background.
-            p.initFrom(self)
+            p.initFrom(self.tabBar())
             p.fillRect(0, 0, width, height, p.background())
 
             # Create the colour gradient.
