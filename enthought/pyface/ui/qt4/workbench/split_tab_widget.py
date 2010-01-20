@@ -198,8 +198,19 @@ class SplitTabWidget(QtGui.QSplitter):
         if tw is not None:
             if icon is None:
                 icon = tw.active_icon()
-
+            
             tw.setTabIcon(tidx, icon)
+    
+    def setTabTextColor(self, w, color=None):
+        """ Set the tab text color on a particular widget w
+        """
+        tw, tidx = self._tab_widget(w)
+
+        if tw is not None:
+            if color is None:
+                # null color reverts to foreground role color
+                color = QtGui.QColor()
+            tw.tabBar().setTabTextColor(tidx, color)
 
     def setWidgetTitle(self, w, title):
         """ Set the title for the given widget. """
@@ -400,10 +411,11 @@ class SplitTabWidget(QtGui.QSplitter):
 
             QtGui.qApp.blockSignals(True)
 
-            ticon, ttext, twidg = self._remove_tab(stab_w, stab)
+            ticon, ttext, ttextcolor, twidg = self._remove_tab(stab_w, stab)
 
             if dhs == self._HS_AFTER_LAST_TAB:
                 idx = dtab_w.addTab(twidg, ticon, ttext)
+                dtab_w.tabBar().setTabTextColor(idx, ttextcolor)
             elif dtab_w is stab_w:
                 # Adjust the index if necessary in case the removal of the tab
                 # from its old position has skewed things.
@@ -413,8 +425,10 @@ class SplitTabWidget(QtGui.QSplitter):
                     dst -= 1
 
                 idx = dtab_w.insertTab(dst, twidg, ticon, ttext)
+                dtab_w.tabBar().setTabTextColor(idx, ttextcolor)
             else:
                 idx = dtab_w.insertTab(dhs, twidg, ticon, ttext)
+                dtab_w.tabBar().setTabTextColor(idx, ttextcolor)
 
             # Make the tab current in its new position.
             self._set_current_tab(dtab_w, idx)
@@ -427,9 +441,10 @@ class SplitTabWidget(QtGui.QSplitter):
 
             # Remove the tab from its current tab widget and create a new one
             # for it.
-            ticon, ttext, twidg = self._remove_tab(stab_w, stab)
+            ticon, ttext, ttextcolor, twidg = self._remove_tab(stab_w, stab)
             new_tw = _TabWidget(self)
             new_tw.addTab(twidg, ticon, ttext)
+            new_tw.tabBar().setTabTextColor(0, ttextcolor)
 
             # Get the splitter containing the destination tab widget.
             dspl = dtab_w.parent()
@@ -513,10 +528,11 @@ class SplitTabWidget(QtGui.QSplitter):
 
         icon = tab_w.tabIcon(tab)
         text = tab_w.tabText(tab)
+        text_color = tab_w.tabBar().tabTextColor(tab)
         w = tab_w.widget(tab)
         tab_w.removeTab(tab)
 
-        return (icon, text, w)
+        return (icon, text, text_color, w)
 
     def _hotspot(self, pos):
         """ Return a tuple of the tab widget, hotspot and hostspot geometry (as
@@ -612,6 +628,27 @@ class SplitTabWidget(QtGui.QSplitter):
                     return (tw, self._HS_AFTER_LAST_TAB, (gx, gy, w, h))
 
                 return (tw, i + 1, (gx, gy, w, h))
+        else:
+            rect = tab_bar.rect()
+            if rect.contains(tpos):
+                gpos = tab_bar.mapToGlobal(rect.topLeft())
+                gx = gpos.x()
+                gy = gpos.y()
+                w = rect.width() 
+                h = rect.height()
+                if top_bottom:
+                    tab_widths = sum(tab_bar.tabRect(i).width()
+                        for i in range(tab_bar.count()))
+                    w -= tab_widths
+                    gx += tab_widths
+                else:
+                    tab_heights = sum(tab_bar.tabRect(i).height()
+                        for i in range(tab_bar.count()))
+                    h -= tab_heights
+                    gy -= tab_heights
+                return (tw, self._HS_AFTER_LAST_TAB, (gx, gy, w, h))
+                
+                
 
         return miss
 
@@ -646,14 +683,14 @@ class _TabWidget(QtGui.QTabWidget):
         # in PyQt v4.2 and earlier.
         self.setTabBar(_DragableTabBar(self._root, self))
 
-        self.setTabsClosable(True)
-
+        self.setTabsClosable(True)        
+        self.tabCloseRequested.connect(self._close_tab)
+        
         # Add the button used to close the current tab.
         #buttn = _TabCloseButton(self)
         #self.connect(buttn, QtCore.SIGNAL('clicked()'), self._old_close_tab)
         #self.setCornerWidget(buttn)
         
-        self.tabCloseRequested.connect(self._close_tab)
 
     def active_icon(self):
         """ Return the QIcon to be used to indicate an active tab page. """
@@ -959,6 +996,8 @@ class _DragState(object):
         tab = self._tab
 
         ctb = self._clone = QtGui.QTabBar()
+        # XXX this requires Qt > 4.5
+        ctb.setDocumentMode(True)
         ctb.setWindowFlags(QtCore.Qt.FramelessWindowHint |
                            QtCore.Qt.Tool |
                            QtCore.Qt.X11BypassWindowManagerHint)

@@ -299,9 +299,10 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         for editor in self.window.editors:
             if editor is old:
-                self._qt4_editor_area.setActiveIcon(editor.control, QtGui.QIcon())
+                self._qt4_editor_area.setTabTextColor(editor.control)
             elif editor is new:
-                self._qt4_editor_area.setActiveIcon(editor.control)
+                self._qt4_editor_area.setTabTextColor(editor.control,
+                    QtGui.QColor(255, 255, 255))
 
     def _qt4_view_focus_changed(self, old, new):
         """ Handle the change of focus for a view. """
