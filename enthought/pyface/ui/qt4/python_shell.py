@@ -846,6 +846,39 @@ class QPythonShellWidget(QConsoleWidget):
     """ An embeddable Python shell.
     """
 
+    shell_help_msg = """\
+The Enthought Python Shell provides an interactive python shell, extended
+with the following commands (brackets around an argument means it is optional):
+?
+    Print this message.
+cd [path]
+    Change directory to the given path.  If the path is not given, change to
+    your home directory.
+ls [path]
+    List the files in directory path.  If the path is not given, list the files
+    in the current directory.
+pwd
+    Print the current directory.
+reset
+    Remove all names from the python shell's namespace.  This will clear all
+    variables, functions, imported names, etc.
+run filename
+    Run the python script in filename.
+who
+    List all the names in the python shell's namespace.
+    
+The shell also provides a shortcut for printing the docstring associated with
+a name: enter the name followed by or preceded by a question mark.  For
+example:
+    >>> str?
+    str(object) -> string
+
+    Return a nice string representation of the object.
+    If the argument is a string, the return value is the same object.
+
+    >>> 
+"""
+
     #--------------------------------------------------------------------------
     # 'object' interface
     #--------------------------------------------------------------------------
@@ -899,6 +932,7 @@ class QPythonShellWidget(QConsoleWidget):
                    refresh=False)
         self.write('Type "copyright", "credits" or "license" for more ' \
                        'information.\n', refresh=False)
+        self.write('''Type "?" to see this shell's enhancements.\n''', refresh=False)
         self.new_prompt()
 
         self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
@@ -1100,13 +1134,17 @@ class QPythonShellWidget(QConsoleWidget):
             index = self.text(line).length() - 1 # before newline
             if stripped.endswith('?'):
                 index -= 1
-            name, obj = self.lexer().apis().get_symbol(line, index)
-            if obj is None:
-                self.write('Object `%s` not found.\n' % name, refresh=False)
-            elif obj.__doc__ is None:
-                self.write("'%s' has no docstring.\n" % name, refresh=False)
-            else:
-                self.write(obj.__doc__.rstrip() + '\n', refresh=False)
+            if stripped == "?":
+                # The user entered a single question mark.
+                self.write(self.shell_help_msg, refresh=False)
+            else:                
+                name, obj = self.lexer().apis().get_symbol(line, index)
+                if obj is None:
+                    self.write('Object `%s` not found.\n' % name, refresh=False)
+                elif obj.__doc__ is None:
+                    self.write("'%s' has no docstring.\n" % name, refresh=False)
+                else:
+                    self.write(obj.__doc__.rstrip() + '\n', refresh=False)
 
         # Process a regular python command
         elif stripped and not more:
