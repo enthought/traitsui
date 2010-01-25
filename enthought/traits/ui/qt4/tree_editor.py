@@ -32,14 +32,10 @@ from enthought.traits.trait_base \
 from enthought.traits.ui.api \
     import TreeNode, ObjectTreeNode, MultiTreeNode
      
-# FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
-# enthought.traits.ui.editors.tree_editor file.
-from enthought.traits.ui.editors.tree_editor \
-    import ToolkitEditorFactory
-    
 from enthought.traits.ui.undo \
     import ListUndoItem
+    
+from enthought.traits.ui.tree_node import ITreeNodeAdapterBridge    
 
 from enthought.traits.ui.menu \
     import Menu, Action, Separator
@@ -286,7 +282,7 @@ class SimpleEditor ( Editor ):
                 nid.setIcon(0, self._get_icon(node, object))
                 nid.setToolTip(0, node.get_tooltip(object))
 
-            self._map[ id( object ) ] = [ ( node.children, nid ) ]
+            self._map[ id( object ) ] = [ ( node.get_children_id(object), nid ) ]
             self._add_listeners( node, object )
             self._set_node_data( nid, ( False, node, object) )
             if self.factory.hide_root or self._has_children( node, object ):
@@ -322,7 +318,7 @@ class SimpleEditor ( Editor ):
         has_children = self._has_children(node, object)
         self._set_node_data( cnid, ( False, node, object ) )
         self._map.setdefault( id( object ), [] ).append(
-            ( node.children, cnid ) )
+            ( node.get_children_id(object), cnid ) )
         self._add_listeners( node, object )
 
         # Automatically expand the new node (if requested):
@@ -555,7 +551,7 @@ class SimpleEditor ( Editor ):
 
         # If none found, give up:
         if len( nodes ) == 0:
-            return ( object, None )
+            return ( object, ITreeNodeAdapterBridge(adapter=object) )
 
         # Use all selected nodes that have the same 'node_for' list as the
         # first selected node:
