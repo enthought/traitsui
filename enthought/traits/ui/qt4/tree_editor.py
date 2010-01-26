@@ -113,7 +113,7 @@ class SimpleEditor ( Editor ):
         self._editor = None
 
         if factory.editable:
-
+            
             # Check to see if the tree view is based on a shared trait editor:
             if factory.shared_editor:
                 factory_editor = factory.editor
@@ -123,9 +123,10 @@ class SimpleEditor ( Editor ):
 
                     # Remember which editor has the trait editor in the factory:
                     factory._editor = self
-
+                    
                     # Create the trait editor panel:
-                    self.control = QtGui.QWidget(panel)
+                    self.control = QtGui.QWidget()
+                    parent.addWidget(self.control)
                     self.control._node_ui = self.control._editor_nid = None
 
                     # Check to see if there are any existing editors that are
