@@ -276,6 +276,9 @@ class SimpleEditor ( Editor ):
         wx.EVT_TREE_END_LABEL_EDIT(   tree, tid, self._on_tree_end_label_edit )
         wx.EVT_TREE_ITEM_GETTOOLTIP(  tree, tid, self._on_tree_item_gettooltip )
 
+        # Set up general mouse events
+        wx.EVT_MOTION(tree, self._on_hover)
+        
         # Synchronize external object traits with the editor:
         self.sync_value( factory.selected, 'selected' )
         self.sync_value( factory.click,    'click',  'to' )
@@ -1239,6 +1242,17 @@ class SimpleEditor ( Editor ):
 
             # Allow the editor view to show any changes that have occurred:
             editor.Thaw()
+
+    def _on_hover(self, event):
+        """ Handles the mouse moving over a tree node
+        """
+        id, flags = self._tree.HitTest(event.GetPosition())
+        if flags & wx.TREE_HITTEST_ONITEMLABEL:
+            expanded, node, object = self._get_node_data( id )
+            if self.factory.on_hover is not None:
+                self.ui.evaluate( self.factory.on_hover, object )
+                self._veto = True
+                
 
     #---------------------------------------------------------------------------
     #  Handles a tree item being activated (i.e. double clicked):
