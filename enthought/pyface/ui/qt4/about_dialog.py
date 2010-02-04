@@ -48,7 +48,7 @@ _DIALOG_TEXT = '''
       Qt %s<br>
       </p>
       <p>
-      Copyright &copy; 2003-2007 Enthought, Inc.<br>
+      Copyright &copy; 2003-2010 Enthought, Inc.<br>
       Copyright &copy; 2007 Riverbank Computing Limited
       </p>
   </center>
