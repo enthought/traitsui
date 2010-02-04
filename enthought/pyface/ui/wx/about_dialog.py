@@ -54,7 +54,7 @@ _DIALOG_TEXT = '''
       wxPython %s<br>
       </p>
       <p>
-      Copyright &copy; 2003-2007 Enthought, Inc.
+      Copyright &copy; 2003-2010 Enthought, Inc.
       </p>
 
       <p>
