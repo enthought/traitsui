@@ -20,17 +20,12 @@
 
 import wx
 
-from enthought.traits.ui.api import Item, View
 from enthought.traits.ui.editors.color_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
 
 from editor_factory \
     import SimpleEditor as BaseSimpleEditor, \
-    TextEditor as BaseTextEditor, \
     ReadonlyEditor as BaseReadonlyEditor
-
-from editor \
-    import Editor
 
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
 try:
@@ -74,7 +69,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
     def from_wx_color ( self, color ):
         """ Gets the application equivalent of a wxPython value.
         """
-        return color
+        return color.Red(), color.Green(), color.Blue()
            
     #---------------------------------------------------------------------------
     #  Returns the text representation of a specified color value:
@@ -135,11 +130,12 @@ class SimpleColorEditor ( BaseSimpleEditor ):
 
     def color_selected(self, event):
         """
-        Event for when calendar is selected, update/create date string.
+        Event for when color is selected
         """
+        
         color = event.GetColour()
         try:
-            self.value = color
+            self.value = self.factory.from_wx_color(color)
         except ValueError:
             pass
             
