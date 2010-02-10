@@ -340,11 +340,15 @@ class QConsoleWidget(QsciScintilla):
         self._buffer.close()
         self._buffer = WrappingStringIO(self._buffer.width)
 
+        self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.length())
+        self.append(text)
+        self.repaint()
+        QtCore.QCoreApplication.flush()
+
         # Because the handling of ANSI sequences is not currently being used,
         # the following code has commented out and replaced. If ANSI sequences
         # are to be used, this should be reimplemented more efficiently.
-        self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.length())
-        self.append(text)
+
 #         title = self.title_pattern.split(text)
 #         if len(title) > 1:
 #             self.title = title[-2]
@@ -401,7 +405,6 @@ class QConsoleWidget(QsciScintilla):
             current_time = time()
             if current_time - self._last_refresh_time > 0.05:
                 self.flush()
-                self.repaint()
                 self._last_refresh_time = current_time 
 
     def writelines(self, lines, refresh=True):
