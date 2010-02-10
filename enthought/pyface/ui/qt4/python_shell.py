@@ -26,6 +26,7 @@ import sys
 from textwrap import dedent
 from time import time
 import types
+import traceback
 
 # Major package imports.
 from PyQt4 import QtCore, QtGui
@@ -1238,6 +1239,8 @@ example:
                 exec file(path) in prog_ns, prog_ns
             else:
                 execfile(path, prog_ns, prog_ns)
+        except (KeyboardInterrupt, Exception), exc:
+            self.write(traceback.format_exc())
         finally:
             # Ensure key global stuctures are restored
             sys.argv = save_argv
