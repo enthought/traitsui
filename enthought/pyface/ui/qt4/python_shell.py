@@ -1246,8 +1246,8 @@ example:
             sys.argv = save_argv
             sys.modules['__main__'] = save_main
             sys.stdin = old_stdin
-            sys.stdout = old_stderr
-            sys.stderr = old_stdout
+            sys.stdout = old_stdout
+            sys.stderr = old_stderr
             self._hidden = False
 
         # Update the interpreter with the new namespace
