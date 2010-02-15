@@ -128,6 +128,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def close(self):
         self._qt4_editor_area.clear()
+        self._qt4_editor_area.close_tab_request_callback = None
 
         # Delete all dock widgets.
         for v in self.window.views:
