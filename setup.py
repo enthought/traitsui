@@ -24,31 +24,15 @@ TraitsBackendQt:
 
 from setuptools import setup, find_packages
 
+# FIXME: This works around a setuptools bug which gets setup_data.py metadata
+# from incorrect packages. Ticket #1592
+#from setup_data import INFO
+setup_data = dict(__name__='', __file__='setup_data.py')
+execfile('setup_data.py', setup_data)
+INFO = setup_data['INFO']
 
 # Pull the description values for the setup keywords from our file docstring.
 DOCLINES = __doc__.split("\n")
-
-
-# Function to convert simple ETS project names and versions to a requirements
-# spec that works for both development builds and stable builds.  Allows
-# a caller to specify a max version, which is intended to work along with
-# Enthought's standard versioning scheme -- see the following write up:
-#    https://svn.enthought.com/enthought/wiki/EnthoughtVersionNumbers
-def etsdep(p, min, max=None, literal=False):
-    require = '%s >=%s.dev' % (p, min)
-    if max is not None:
-        if literal is False:
-            require = '%s, <%s.a' % (require, max)
-        else:
-            require = '%s, <%s' % (require, max)
-    return require
-
-
-# Declare our ETS project dependencies:
-ENTHOUGHTBASE = etsdep('EnthoughtBase', '3.0.4')
-ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.4')
-TRAITS = etsdep('Traits', '3.2.1')
-TRAITSGUI = etsdep('TraitsGUI', '3.1.1')
 
 
 setup(
@@ -70,30 +54,14 @@ setup(
         Topic :: Software Development :: Libraries
         """.splitlines() if len(c.split()) > 0],
     description = DOCLINES[1],
-    extras_require = {
-
-        # Extra denoting that complete developer debug support for the ETS FBI
-        # debugger should be installed:
-        'debug': [
-            ETSDEVTOOLS_DEVELOPER,
-            ],
-
-        # All non-ets dependencies should be in this extra to ensure users can
-        # decide whether to require them or not.
-        'nonets': [
-            ],
-        },
+    extras_require = INFO['extras_require'],
     include_package_data = True,
-    install_requires = [
-        ENTHOUGHTBASE,
-        TRAITS,
-        TRAITSGUI,
-        ],
+    install_requires = INFO['install_requires'],
     license = 'BSD',
     long_description = '\n'.join(DOCLINES[3:]),
     maintainer = 'ETS Developers',
     maintainer_email = 'enthought-dev@enthought.com',
-    name = 'TraitsBackendQt',
+    name = INFO['name'],
     namespace_packages   = [
         "enthought",
         "enthought.pyface",
@@ -111,7 +79,7 @@ setup(
         ],
     # test_suite = 'nose.collector',
     url = 'http://code.enthought.com/projects/traits_gui',
-    version = '3.2.1',
+    version = INFO['version'],
     zip_safe = False,
     )
 
