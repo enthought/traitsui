@@ -588,6 +588,7 @@ class SourceEditor ( Editor ):
                                               
     def _line_changed ( self, line ):
         if not self._locked:
+            control = self._scintilla
             _, column = control.getCursorPosition()
             self._scintilla.setCursorPosition(line - 1, column)
                                   
@@ -597,6 +598,7 @@ class SourceEditor ( Editor ):
                                               
     def _column_changed ( self, column ):
         if not self._locked:
+            control = self._scintilla
             line, _ = control.getCursorPosition()
             self._scintilla.setCursorPosition(line, column - 1)
 
@@ -607,6 +609,7 @@ class SourceEditor ( Editor ):
     def _position_changed(self, line, column):
         """ Handles the cursor position being changed.
         """
+        control = self._scintilla
         self._locked = True
         self.line = line
         self.column = column
