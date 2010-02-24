@@ -7,9 +7,11 @@
 
 #------------------------------------------------------------------------------
 
+# Standard library imports.
+import sys
+
 # Major library imports.
 from PyQt4 import QtCore, QtGui
-
 
 class SplitTabWidget(QtGui.QSplitter):
     """ The SplitTabWidget class is a hierarchy of QSplitters the leaves of
@@ -672,7 +674,8 @@ class _TabWidget(QtGui.QTabWidget):
         QtGui.QTabWidget.__init__(self, *args)
         
         # XXX this requires Qt > 4.5
-        self.setDocumentMode(True)
+        if sys.platform == 'darwin':
+            self.setDocumentMode(True)
         #self.setStyleSheet(inactive_style)
 
         self._root = root
@@ -682,13 +685,7 @@ class _TabWidget(QtGui.QTabWidget):
         self.setTabBar(_DragableTabBar(self._root, self))
 
         self.setTabsClosable(True)        
-        self.tabCloseRequested.connect(self._close_tab)
-        
-        # Add the button used to close the current tab.
-        #buttn = _TabCloseButton(self)
-        #self.connect(buttn, QtCore.SIGNAL('clicked()'), self._old_close_tab)
-        #self.setCornerWidget(buttn)
-        
+        self.tabCloseRequested.connect(self._close_tab)        
 
     def active_icon(self):
         """ Return the QIcon to be used to indicate an active tab page. """
@@ -761,11 +758,6 @@ class _TabWidget(QtGui.QTabWidget):
 
         self._root._close_tab_request(self.widget(index))
         
-    def _old_close_tab(self):
-        """ Close the current tab. """
-
-        self.currentWidget().close()
-
 
 class _TabCloseButton(QtGui.QAbstractButton):
     """ The _TabCloseButton class implements a button that is intended to close
@@ -880,7 +872,8 @@ class _DragableTabBar(QtGui.QTabBar):
         QtGui.QTabBar.__init__(self, parent)
 
         # XXX this requires Qt > 4.5
-        self.setDocumentMode(True)
+        if sys.platform == 'darwin':
+            self.setDocumentMode(True)
 
         self._root = root
         self._drag_state = None
@@ -995,7 +988,9 @@ class _DragState(object):
 
         ctb = self._clone = QtGui.QTabBar()
         # XXX this requires Qt > 4.5
-        ctb.setDocumentMode(True)
+        if sys.platform == 'darwin':
+            self.setDocumentMode(True)
+            
         ctb.setWindowFlags(QtCore.Qt.FramelessWindowHint |
                            QtCore.Qt.Tool |
                            QtCore.Qt.X11BypassWindowManagerHint)
