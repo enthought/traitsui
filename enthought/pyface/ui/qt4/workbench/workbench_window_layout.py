@@ -21,7 +21,6 @@ from PyQt4 import QtCore, QtGui
 from enthought.traits.api import Instance, on_trait_change
 
 # Local imports.
-from editor import Editor
 from split_tab_widget import SplitTabWidget
 from enthought.pyface.message_dialog import error
 from enthought.pyface.workbench.i_workbench_window_layout import \
@@ -300,10 +299,11 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         for editor in self.window.editors:
             if editor is old:
-                self._qt4_editor_area.setTabTextColor(editor.control)
+                tw, tidx = self._qt4_editor_area._tab_widget(editor.control)
+                tw.setTabText(tidx, editor.name)
             elif editor is new:
-                self._qt4_editor_area.setTabTextColor(editor.control,
-                    QtGui.QColor(255, 255, 255))
+                tw, tidx = self._qt4_editor_area._tab_widget(editor.control)
+                tw.setTabText(tidx, u'\u25b6' + editor.name)
 
     def _qt4_view_focus_changed(self, old, new):
         """ Handle the change of focus for a view. """

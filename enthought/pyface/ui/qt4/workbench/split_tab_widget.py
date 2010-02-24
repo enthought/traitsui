@@ -7,8 +7,6 @@
 
 #------------------------------------------------------------------------------
 
-import sys
-
 # Major library imports.
 from PyQt4 import QtCore, QtGui
 
