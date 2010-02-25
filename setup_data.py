@@ -1,4 +1,3 @@
-
 # Function to convert simple ETS project names and versions to a requirements
 # spec that works for both development builds and stable builds.  Allows
 # a caller to specify a max version, which is intended to work along with
@@ -15,10 +14,10 @@ def etsdep(p, min, max=None, literal=False):
 
 
 # Declare our ETS project dependencies:
-ENTHOUGHTBASE = etsdep('EnthoughtBase', '3.0.4')
-ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.4')
-TRAITS = etsdep('Traits', '3.3.0')
-TRAITSGUI = etsdep('TraitsGUI', '3.3.0')
+ENTHOUGHTBASE = etsdep('EnthoughtBase', '3.0.5')
+ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.5')
+TRAITS = etsdep('Traits', '3.3.1')
+TRAITSGUI = etsdep('TraitsGUI', '3.3.1')
 
 
 INFO = {
@@ -42,5 +41,5 @@ INFO = {
         TRAITSGUI,
         ],
     'name' : 'TraitsBackendQt',
-    'version' : '3.3.0',
+    'version' : '3.3.1',
     }
