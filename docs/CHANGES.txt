@@ -1,5 +1,5 @@
-TraitsBackendQt 3.2.1 (not yet released)
-========================================
+TraitsBackendQt 3.3.0 (Feb 24, 2010)
+====================================
 
 Enhancements
 ------------
