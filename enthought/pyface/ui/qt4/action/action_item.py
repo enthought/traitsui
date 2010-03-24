@@ -71,6 +71,12 @@ class _MenuItem(HasTraits):
         self.control.setEnabled(action.enabled)
         self.control.setVisible(action.visible)
 
+        if getattr(action, 'menu_role', False):
+            if action.menu_role == "About":
+                self.control.setMenuRole(QtGui.QAction.AboutRole)
+            elif action.menu_role == "Preferences":
+                self.control.setMenuRole(QtGui.QAction.PreferencesRole)
+
         if action.style == 'toggle':
             self.control.setCheckable(True)
             self.control.setChecked(action.checked)
