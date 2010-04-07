@@ -94,6 +94,10 @@ class ProgressDialog(MProgressDialog, Window):
         if 'message' in kw:
             self._message_text = kw.pop('message')
 
+        # initialize the start time in case some tries updating
+        # before open() is called
+        self._start_time = 0
+
         super(ProgressDialog, self).__init__( *args, **kw)
 
     def open(self):
