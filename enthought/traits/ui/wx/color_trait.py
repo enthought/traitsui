@@ -32,6 +32,59 @@ try:
 except:
     class ColourPtr ( object ): pass
 
+
+#-------------------------------------------------------------------------------
+#  W3CColourDatabase
+#-------------------------------------------------------------------------------
+
+class W3CColourDatabase(object):
+    """ Proxy for the ColourDatabase which allows for finding W3C colors.
+    
+        This class is necessary because the wx 'green' is the W3C 'lime',
+        and we need some means to lookup the color names since wx has
+        only a few hardcoded.
+        
+        This class is a proxy because AddColour expects a wx.ColourDatabase
+        instance, not an instance of a subclass
+    """
+    
+    
+    _database = wx.ColourDatabase()
+    
+    def __init__(self):
+        self._color_names = ['aqua', 'black', 'blue', 'fuchsia', 'gray', 
+                             'green', 'lime', 'maroon', 'navy', 'olive', 
+                             'purple', 'red', 'silver', 'teal', 'white', 
+                             'yellow']
+        
+        self.AddColour('aqua', wx.Colour(0, 0xff, 0xff, 255))
+        self.AddColour('fuchsia', wx.Colour(0xff, 0, 0xff, 255))
+        self.AddColour('green', wx.Colour(0, 0x80, 0, 255))
+        self.AddColour('lime', wx.Colour(0, 0xff, 0, 255))
+        self.AddColour('maroon', wx.Colour(0x80, 0x0, 0, 255))
+        self.AddColour('navy', wx.Colour(0x00, 0x0, 0x80, 255))
+        self.AddColour('olive', wx.Colour(0x80, 0x80, 0, 255))
+        self.AddColour('purple', wx.Colour(0x80, 0x00, 0x80, 255))
+        self.AddColour('silver', wx.Colour(0xc0, 0xc0, 0xc0, 255))
+        self.AddColour('teal', wx.Colour(0, 0x80, 0x80, 255))
+        
+    def AddColour(self, name, color):
+        if name not in self._color_names:
+            self._color_names.append(name)
+        return self._database.AddColour(name, color)
+        
+    def Find(self, color_name):
+        return self._database.Find(color_name)
+        
+    def FindName(self, color):
+        for color_name in self._color_names:
+            if self.Find(color_name) == color:
+                return color_name
+            
+        return ''
+
+w3c_color_database = W3CColourDatabase()
+
 #-------------------------------------------------------------------------------
 #  Convert a number into a wxColour object:
 #-------------------------------------------------------------------------------
@@ -49,6 +102,7 @@ def tuple_to_wxcolor(tup):
 def convert_to_color ( object, name, value ):
     """ Converts a number into a wxColour object.
     """
+    
     if isinstance( value, tuple ):
         return tuple_to_wxcolor(value)
 
@@ -61,7 +115,7 @@ def convert_to_color ( object, name, value ):
     elif isinstance( value, str ):
         
         if value in standard_colors:
-            return wx.NamedColour(value)
+            return standard_colors[value]
         
         # Check for tuple-ness
         tmp = value.strip()
@@ -103,8 +157,9 @@ for name in [ 'aquamarine', 'black', 'blue', 'blue violet', 'brown',
               'turquoise', 'violet', 'violet red', 'wheat', 'white', 'yellow',              
               'yellow green' ]:
     try:
+        wx_color = w3c_color_database.Find(name)
         standard_colors[ name ] = convert_to_color( None, None, 
-                                                    wx.NamedColour( name ) )
+                                                    wx_color )
     except:
         pass
 
