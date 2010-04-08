@@ -141,8 +141,9 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         """
         Finishes initializing the editor by creating the underlying widget.
         """
+        current_color = self.factory.to_wx_color(self)
+        current_color_name = current_color.GetAsString()
         
-        current_color_name = self.value.GetAsString()
         if current_color_name not in self.choices:
             self.choices.insert(0, current_color_name)
         
@@ -161,7 +162,8 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
-        self.control.SetValue(self.value.GetAsString())
+        current_color = self.factory.to_wx_color(self)
+        self.control.SetValue(current_color.GetAsString())
 
 
     def color_selected(self, event):
@@ -172,8 +174,6 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         color_name = self.choices[event.Selection]
         try:
             color = w3c_color_database.Find(color_name)
-#            color = wx.Colour()
-#            color.SetFromName(color_name)
             self.value = color
         except ValueError:
             pass
