@@ -95,24 +95,27 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 class ColorComboBox(wx.combo.OwnerDrawnComboBox):
     def OnDrawItem(self, dc, rect, item, flags):
 
-        color_name = self.GetString(item)
-        color = w3c_color_database.Find(color_name)
-#        color = wx.Colour()
-#        color.SetFromName(color_name)
-
-        
         r = wx.Rect(rect.x, rect.y, rect.width, rect.height)
         r.Deflate(3, 0)
+        swatch_size = r.height - 2
+
+        color_name = self.GetString(item)
         
         dc.DrawText(color_name, r.x + 3, 
                     r.y + (r.height - dc.GetCharHeight())/2)
-        
-        swatch_size = r.height - 2
-        
-        brush = wx.Brush(color)
-        dc.SetBrush(brush)
-        dc.DrawRectangle(r.x + r.width - swatch_size, r.y+1,
-                         swatch_size, swatch_size)
+                
+        if color_name == 'custom':
+            swatch = wx.Rect(r.x + r.width - swatch_size, r.y+1,
+                             swatch_size, swatch_size)
+            dc.GradientFillLinear(swatch, wx.Colour(255,255,0), 
+                                  wx.Colour(0,0,255))
+        else:
+            color = w3c_color_database.Find(color_name)
+                        
+            brush = wx.Brush(color)
+            dc.SetBrush(brush)
+            dc.DrawRectangle(r.x + r.width - swatch_size, r.y+1,
+                             swatch_size, swatch_size)
     
 #-------------------------------------------------------------------------------
 #  'SimpleColorEditor' class:
@@ -135,7 +138,7 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         """
         return ['aqua', 'black', 'blue', 'fuchsia', 'gray', 'green', 
                 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 
-                'silver', 'teal', 'white', 'yellow'] 
+                'silver', 'teal', 'white', 'yellow', 'custom'] 
  
     def init ( self, parent ):
         """
@@ -168,11 +171,19 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         """
         
         color_name = self.choices[event.Selection]
-        try:
-            color = w3c_color_database.Find(color_name)
+        
+        if color_name == 'custom':
+            color_dialog = wx.ColourDialog(self.control)
+            color_dialog.ShowModal()
+            
+            color = color_dialog.GetColourData().GetColour()
             self.value = color
-        except ValueError:
-            pass
+        else:
+            try:
+                color = w3c_color_database.Find(color_name)
+                self.value = color
+            except ValueError:
+                pass
             
         return
 
