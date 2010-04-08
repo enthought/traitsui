@@ -324,7 +324,7 @@ class ModalDialog ( BaseDialog ):
         """ Handles the user pressing the Escape key.
         """
         if event.GetKeyCode() == 0x1B:
-           self._on_close_page( event )
+            self._on_close_page( event )
    
     #---------------------------------------------------------------------------
     #  Handles an 'Apply' all changes request:
@@ -335,7 +335,8 @@ class ModalDialog ( BaseDialog ):
         """
         ui = self.ui
         self._apply_context( ui.context, ui._context )
-        self.revert.Enable( True )
+        if hasattr(self, 'revert'):
+            self.revert.Enable( True )
         ui.handler.apply( ui.info )
         ui.modified = False
    
