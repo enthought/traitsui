@@ -85,7 +85,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
             return "rgb(%d,%d,%d,%d)" % (
                     color.Red(), color.Green(), color.Blue(), alpha )
                
-        return color
+        return str(color)
 
 
 #-------------------------------------------------------------------------------
@@ -144,9 +144,6 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         current_color = self.factory.to_wx_color(self)
         current_color_name = current_color.GetAsString()
         
-        if current_color_name not in self.choices:
-            self.choices.insert(0, current_color_name)
-        
         self.control = ColorComboBox(parent, -1, current_color_name,
                                 wx.Point( 0, 0 ), wx.Size( -1, -1 ), self.choices,
                                 style = wx.wx.CB_READONLY)
@@ -186,7 +183,7 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         if color_name != '':
             return color_name
 
-        return self.factory.str_color( color ) 
+        return color.GetAsString() 
 
 #-------------------------------------------------------------------------------
 #  'CustomColorEditor' class:
