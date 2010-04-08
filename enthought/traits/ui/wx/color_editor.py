@@ -163,8 +163,7 @@ class SimpleColorEditor ( BaseSimpleEditor ):
             editor.
         """
         current_color = self.factory.to_wx_color(self)
-        self.control.SetValue(current_color.GetAsString())
-
+        self.control.SetValue(self.string_value(current_color))
 
     def color_selected(self, event):
         """
@@ -179,6 +178,15 @@ class SimpleColorEditor ( BaseSimpleEditor ):
             pass
             
         return
+
+    def string_value ( self, color ):
+        """ Returns the text representation of a specified color value.
+        """
+        color_name = w3c_color_database.FindName(color)
+        if color_name != '':
+            return color_name
+
+        return self.factory.str_color( color ) 
 
 #-------------------------------------------------------------------------------
 #  'CustomColorEditor' class:
