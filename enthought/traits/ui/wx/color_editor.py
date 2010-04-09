@@ -250,8 +250,9 @@ class CustomColorEditor ( BaseSimpleEditor ):
             pass
         
     def set_color(self, color):
-        self._text_control.SetBackgroundColour(self.value)
-        self._text_control.SetValue(self.string_value(self.value))
+        color = self.factory.to_wx_color(self)
+        self._text_control.SetBackgroundColour(color)
+        self._text_control.SetValue(self.string_value(color))
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
