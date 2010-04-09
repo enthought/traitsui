@@ -23,6 +23,7 @@
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
+import wx
 
 from enthought.traits.api \
     import Trait, TraitError
@@ -37,7 +38,7 @@ from enthought.traits.ui.editors.rgb_color_editor \
     import RGBColorEditor
 
 from enthought.traits.ui.wx.color_trait \
-    import standard_colors
+    import standard_colors, w3c_color_database
 
 #-------------------------------------------------------------------------------
 #  Convert a number into an RGB tuple:
@@ -67,6 +68,11 @@ def convert_to_color ( object, name, value ):
         return ( (num / 0x10000)        / 255.0
                  ((num / 0x100) & 0xFF) / 255.0, 
                  (num & 0xFF)           / 255.0 )
+    if isinstance(value, wx.Colour):
+        return (value.Red()/255.0,
+                value.Green()/255.0,
+                value.Blue()/255.0)
+    
     raise TraitError
 
 convert_to_color.info = ('a tuple of the form (r,g,b), where r, g, and b '
@@ -80,9 +86,15 @@ convert_to_color.info = ('a tuple of the form (r,g,b), where r, g, and b '
 # RGB versions of standard colors:
 rgb_standard_colors = {}
 for name, color in standard_colors.items():
-    rgb_standard_colors[ name ] = ( color.Red(  ) / 255.0, 
+    rgb_standard_colors[ name ] = ( color.Red() / 255.0, 
                                     color.Green() / 255.0,
                                     color.Blue()  / 255.0 )
+# Add the W3C colors
+for color_name in w3c_color_database._color_names:
+    color = w3c_color_database.Find(color_name)
+    rgb_standard_colors[color_name] = (color.Red() / 255.0, 
+                                       color.Green() / 255.0,
+                                       color.Blue()  / 255.0)
 
 #-------------------------------------------------------------------------------
 #  Define wxPython specific color traits:
