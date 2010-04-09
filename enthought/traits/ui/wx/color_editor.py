@@ -181,7 +181,7 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         else:
             try:
                 color = w3c_color_database.Find(color_name)
-                self.value = color
+                self.value = self.factory.from_wx_color(color)
             except ValueError:
                 pass
             

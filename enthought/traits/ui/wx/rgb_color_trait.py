@@ -72,7 +72,6 @@ def convert_to_color ( object, name, value ):
         return (value.Red()/255.0,
                 value.Green()/255.0,
                 value.Blue()/255.0)
-    
     raise TraitError
 
 convert_to_color.info = ('a tuple of the form (r,g,b), where r, g, and b '
