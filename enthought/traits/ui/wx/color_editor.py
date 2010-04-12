@@ -148,7 +148,7 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         current_color_name = current_color.GetAsString()
         
         self.control = ColorComboBox(parent, -1, current_color_name,
-                                wx.Point( 0, 0 ), wx.Size( -1, -1 ), self.choices,
+                                wx.Point( 0, 0 ), wx.Size( 40, -1 ), self.choices,
                                 style = wx.wx.CB_READONLY)
         
         self.control.Bind(wx.EVT_COMBOBOX, self.color_selected)                
