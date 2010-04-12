@@ -175,7 +175,9 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         
         if color_name == 'custom':
             color_dialog = wx.ColourDialog(self.control)
-            color_dialog.ShowModal()
+            result = color_dialog.ShowModal()
+            if result == wx.ID_CANCEL:
+                return
             
             color = color_dialog.GetColourData().GetColour()
             self.value = self.factory.from_wx_color(color)
@@ -273,7 +275,9 @@ class CustomColorEditor ( BaseSimpleEditor ):
         color_data.SetColour(self.value)
         
         color_dialog = wx.ColourDialog(self.control, color_data)
-        color_dialog.ShowModal()
+        result = color_dialog.ShowModal()
+        if result == wx.ID_CANCEL:
+            return
         
         color = color_dialog.GetColourData().GetColour()
         self.value = color
