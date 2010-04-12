@@ -46,18 +46,19 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
     """ Wx editor factory for color editors.
     """
     
-    def to_wx_color ( self, editor ):
+    def to_wx_color ( self, editor, color=None ):
         """ Gets the wxPython color equivalent of the object trait.
         """
-        if self.mapped:
-            attr = getattr( editor.object, editor.name + '_' )
-        else:
-            attr = getattr( editor.object, editor.name )
+        if color is None:
+            if self.mapped:
+                color = getattr( editor.object, editor.name + '_' )
+            else:
+                color = getattr( editor.object, editor.name )
            
-        if isinstance(attr, tuple):
-            attr = wx.Colour( *[ int( round( c * 255.0 ) )
-                             for c in attr ] )
-        return attr
+        if isinstance(color, tuple):
+            color = wx.Colour( *[ int( round( c * 255.0 ) )
+                             for c in color ] )
+        return color
            
          
     #---------------------------------------------------------------------------
@@ -177,7 +178,7 @@ class SimpleColorEditor ( BaseSimpleEditor ):
             color_dialog.ShowModal()
             
             color = color_dialog.GetColourData().GetColour()
-            self.value = color
+            self.value = self.factory.from_wx_color(color)
         else:
             try:
                 color = w3c_color_database.Find(color_name)

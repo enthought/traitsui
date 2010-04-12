@@ -46,16 +46,19 @@ class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
     #  Gets the wxPython color equivalent of the object:
     #---------------------------------------------------------------------------
     
-    def to_wx_color ( self, editor ):
+    def to_wx_color ( self, editor, color=None ):
         """ Gets the wxPython color equivalent of the object trait.
         """
-        try:
-            color = getattr( editor.object, editor.name + '_' )
-        except AttributeError:
-            color = getattr( editor.object, editor.name )
-        return wx.Colour( int( color[0] * 255.0 ), 
-                          int( color[1] * 255.0 ), 
-                          int( color[2] * 255.0 ) )
+        if color is None:
+            try:
+                color = getattr( editor.object, editor.name + '_' )
+            except AttributeError:
+                color = getattr( editor.object, editor.name )
+        if isinstance(color, tuple):
+            return wx.Colour( int( color[0] * 255.0 ), 
+                              int( color[1] * 255.0 ), 
+                              int( color[2] * 255.0 ) )
+        return color
      
     #---------------------------------------------------------------------------
     #  Gets the application equivalent of a wxPython value:
