@@ -262,7 +262,8 @@ class CustomColorEditor ( BaseSimpleEditor ):
         """ Updates the editor when the object trait changes externally to the 
             editor.
         """
-        self.set_color(self.value)
+        current_color = self.factory.to_wx_color(self)        
+        self.set_color(current_color)
         
     def open_color_dialog(self, event):
         """ Opens the color dialog and sets the value upon return
@@ -296,7 +297,7 @@ class CustomColorEditor ( BaseSimpleEditor ):
         color_name = w3c_color_database.FindName(color)
         if color_name != '':
             return color_name
-
+        
         return self.factory.str_color( color ) 
     
 
