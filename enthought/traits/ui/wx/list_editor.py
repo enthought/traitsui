@@ -187,7 +187,7 @@ class SimpleEditor ( Editor ):
         item_trait    = trait_handler.item_trait
         factory       = self.factory
         list_sizer    = wx.FlexGridSizer(
-                            0, (1 + resizable) * factory.columns, 0, 0 )
+                            len(self.value), (1 + resizable) * factory.columns, 0, 0 )
         j = resizable
         for i in range( factory.columns ):
             list_sizer.AddGrowableCol( j )
@@ -201,6 +201,7 @@ class SimpleEditor ( Editor ):
         if is_fake:
             values = [ item_trait.default_value()[1] ]
 
+        panel_height = 0
         editor = self._editor
         for value in values:
             width1 = height = 0
@@ -231,7 +232,8 @@ class SimpleEditor ( Editor ):
             pcontrol.SetMinSize( size )
             width  = max( width, width1 + width2 )
             height = max( height, height2 )
-
+            panel_height += height
+            
             if resizable:
                 list_sizer.Add( control, 0, wx.LEFT | wx.RIGHT, 2 )
 
@@ -240,6 +242,10 @@ class SimpleEditor ( Editor ):
 
         list_pane.SetSizer( list_sizer )
 
+        if not self.mutable:
+            #list_sizer.SetDimension(0,0,width, panel_height)
+            list_pane.SetInitialSize(list_sizer.GetSize())
+                    
         if is_fake:
             self._cur_control = control
             self.empty_list()
@@ -255,12 +261,13 @@ class SimpleEditor ( Editor ):
         if width == 0:
             width = 100
             
-        if height == 0:
-            height = 20
+        if panel_height == 0:
+            panel_height = 20
 
         list_pane.SetMinSize( wx.Size(
              width + ((trait_handler.maxlen > rows) * scrollbar_dx),
-             height * rows ) )
+             panel_height) )
+        
         list_pane.SetupScrolling()
         list_pane.GetParent().Layout()
 
