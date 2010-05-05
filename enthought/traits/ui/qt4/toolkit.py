@@ -325,7 +325,7 @@ class GUIToolkit ( Toolkit ):
         if ui.control is not None:
             ui.recycle()
             ui.info.ui = ui
-        ui.rebuild( ui, parent )
+        ui.rebuild( ui, ui.parent )
 
     #---------------------------------------------------------------------------
     #  Sets the title for the UI window:
