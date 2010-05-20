@@ -233,7 +233,7 @@ class TableEditor(Editor, BaseTableEditor):
         is_list = (mode in ('rows', 'columns', 'cells'))
         self.sync_value(factory.click, 'click', 'to')
         self.sync_value(factory.dclick, 'dclick', 'to')
-        self.sync_value(factory.columns_name, 'columns', 'from', is_list=True)
+        self.sync_value(factory.columns_name, 'columns', is_list=True)
         self.sync_value(factory.selected, 'selected', is_list=is_list)
         self.sync_value(factory.selected_indices, 'selected_indices', is_list=is_list)
         self.sync_value(factory.filter_name, 'filter', 'from')
