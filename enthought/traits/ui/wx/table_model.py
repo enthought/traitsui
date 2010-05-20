@@ -506,10 +506,10 @@ class TableModel ( GridModel ):
         for selection in selection_list:
             row = -1
             if selection.obj is not None:
-               try:
-                   row = items.index( selection.obj )
-               except ValueError:
-                   continue
+                try:
+                    row = items.index( selection.obj )
+                except ValueError:
+                    continue
 
             column = -1
             if selection.name != '':
@@ -592,8 +592,9 @@ class TableModel ( GridModel ):
         """ Returns a wxColour object specifying the text color of the
             specified cell.
         """
-        return self.__get_column( col ).get_text_color(
-                   self.get_filtered_item( row ) )
+        column = self.__get_column(col)
+        item = self.get_filtered_item(row)
+        return column.get_text_color(item)
 
     def get_cell_font ( self, row, col ):
         """ Returns a wxFont object specifying the font of the specified cell.

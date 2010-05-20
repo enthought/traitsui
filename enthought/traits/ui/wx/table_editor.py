@@ -33,7 +33,7 @@ from enthought.traits.ui.api \
            ListUndoItem
     
 from enthought.traits.ui.editors.table_editor \
-    import BaseTableEditor, ToolkitEditorFactory, customize_filter
+    import BaseTableEditor, customize_filter
 
 from enthought.traits.ui.menu \
     import Action, ToolBar
@@ -65,8 +65,7 @@ from editor \
 from table_model \
     import TableModel, TraitGridSelection
 
-from helper \
-    import open_fbi, TraitsUIPanel
+from helper import TraitsUIPanel
 
 #-------------------------------------------------------------------------------
 #  Constants:
