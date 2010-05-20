@@ -43,7 +43,7 @@ from enthought.traits.ui.table_filter \
     import TableFilter
 
 from enthought.traits.ui.ui_traits \
-    import ATheme, SequenceTypes
+    import SequenceTypes
 
 from enthought.pyface.ui.wx.grid.api \
     import GridModel, GridSortEvent
@@ -95,15 +95,6 @@ class TableModel ( GridModel ):
     # Display the table items in reverse order?
     reverse = Bool( False )
     
-    # The theme to use for normal cells:
-    cell_theme = ATheme
-    
-    # The theme to use for alternate row cells (defaults to 'cell_theme):
-    alt_theme = ATheme
-    
-    # The theme to use for selected cells:
-    selected_theme = ATheme
-
     # Event fired when the table has been sorted
     sorted = Event
 
