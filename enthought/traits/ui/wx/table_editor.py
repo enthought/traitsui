@@ -269,7 +269,7 @@ class TableEditor ( Editor, BaseTableEditor ):
         sv( factory.click,  'click',  'to' )
         sv( factory.dclick, 'dclick', 'to' )
         sv( factory.filter_name,  'filter',  'from' )
-        sv( factory.columns_name, 'columns', 'from', is_list = True )
+        sv( factory.columns_name, 'columns', is_list = True )
         sv( factory.filtered_indices, 'filtered_indices', 'to' )
         sv( factory.selected, 'selected_%s' % mode, is_list = is_list )
         if is_list:
