@@ -384,24 +384,6 @@ class Grid(Widget):
     def _on_model_content_changed(self):
         """ A notification method called when the data in the underlying
             model changes. """
-
-        # Note: We're seeing some wx 2.6 weirdness in the traits TableEditor
-        #       because of what's going on here. TextEditors and ComboEditors
-        #       update the trait value for every character typed. The
-        #       TableEditor catches these changes and fires the
-        #       model_content_changed event. In this routine we then update
-        #       the values in the table by sending the
-        #       wxGRIDTABLE_REQUEST_VIEW_GET_VALUES message, which at the
-        #       c++ grid level forces the editor to close. So those editors
-        #       don't allow you to type more than one character before closing.
-        #       For now, we are fixing this in those specific editors, but
-        #       we may need a more general solution at some point.
-
-        # make sure we update for any new values in the table
-        #msg = GridTableMessage(self._grid_table_base,
-        #                       GRIDTABLE_REQUEST_VIEW_GET_VALUES)
-        #self._grid.ProcessTableMessage(msg)
-
         self._grid.ForceRefresh()
 
     def _on_model_structure_changed(self, *arg, **kw):
