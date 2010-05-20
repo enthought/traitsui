@@ -201,7 +201,8 @@ class Grid(Widget):
 
         self._grid_table_base = _GridTableBase(self.model, self)
 
-        grid.SetTable(self._grid_table_base, True)
+        # keep the onership of the table in this class
+        grid.SetTable(self._grid_table_base, takeOwnership=False)
 
         # Enable column and row moving:
         grid_movers.GridColMover(grid)
