@@ -181,10 +181,7 @@ class TableEditor ( Editor, BaseTableEditor ):
         
         self.model = model = TableModel( 
                                 editor         = self,
-                                reverse        = factory.reverse,
-                                cell_theme     = factory.cell_theme,
-                                alt_theme      = factory.alt_theme,
-                                selected_theme = factory.selected_theme )
+                                reverse        = factory.reverse )
         model.on_trait_change( self._model_sorted, 'sorted', dispatch = 'ui' )
         mode     = factory.selection_mode
         row_mode = mode in ( 'row', 'rows' )
