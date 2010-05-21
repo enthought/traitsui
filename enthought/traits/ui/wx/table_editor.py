@@ -311,7 +311,7 @@ class TableEditor ( Editor, BaseTableEditor ):
             model                        = self.model,
             enable_lines                 = factory.show_lines,
             grid_line_color              = factory.line_color,
-            show_row_headers             = False,
+            show_row_headers             = factory.show_row_labels,
             show_column_headers          = factory.show_column_labels,
             default_cell_font            = factory.cell_font,
             default_cell_text_color      = factory.cell_color,
