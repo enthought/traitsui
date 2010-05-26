@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2008-2009 by Enthought, Inc.
+# Copyright (c) 2008-2010 by Enthought, Inc.
 # All rights reserved.
-
 
 """
 PyQt backend for Traits and TraitsGUI (Pyface).
@@ -82,4 +81,3 @@ setup(
     version = INFO['version'],
     zip_safe = False,
     )
-
