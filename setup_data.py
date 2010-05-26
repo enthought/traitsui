@@ -16,9 +16,9 @@ def etsdep(p, min, max=None, literal=False):
 # Declare our ETS project dependencies.
 APPTOOLS = etsdep('AppTools', '3.3.2')
 ENTHOUGHTBASE_UI = etsdep('EnthoughtBase[ui]', '3.0.5')
-ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.5')
-TRAITS = etsdep('Traits', '3.3.1')
-TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.3.1')
+ETSDEVTOOLS_DEVELOPER = etsdep('ETSDevTools[developer]', '3.0.4')
+TRAITS = etsdep('Traits', '3.4.0')
+TRAITSGUI_DOCK = etsdep('TraitsGUI[dock]', '3.4.0')
 
 # The following soft dependencies are handled with appropriate try...except
 # wrappers in the code:
@@ -55,5 +55,5 @@ INFO = {
         TRAITS,
         ],
     'name': 'TraitsBackendWX',
-    'version': '3.3.1',
+    'version': '3.4.0',
     }
