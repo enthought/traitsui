@@ -289,22 +289,6 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         for editor in self.window.editors:
             editor.has_focus = (editor.control is new) or (new in editor.control.children())
 
-    @on_trait_change('window.active_editor')
-    def _qt4_active_editor_changed(self, obj, trait_name, old, new):
-        """ Handle the change of active editor. """
-        
-        # Do we need to do this verification?
-        if obj is not self.window or trait_name != 'active_editor':
-            return
-
-        for editor in self.window.editors:
-            if editor is old:
-                tw, tidx = self._qt4_editor_area._tab_widget(editor.control)
-                tw.setTabText(tidx, editor.name)
-            elif editor is new:
-                tw, tidx = self._qt4_editor_area._tab_widget(editor.control)
-                tw.setTabText(tidx, u'\u25b6' + editor.name)
-
     def _qt4_view_focus_changed(self, old, new):
         """ Handle the change of focus for a view. """
 
