@@ -740,6 +740,7 @@ class _TabWidget(QtGui.QTabWidget):
                 prune = parent
                 parent = prune.parent()
 
+            prune.hide()
             prune.deleteLater()
 
     def tabRemoved(self, idx):
