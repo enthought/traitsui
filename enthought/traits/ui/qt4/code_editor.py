@@ -325,7 +325,8 @@ class SourceEditor ( Editor ):
             if factory.auto_set:
                 control.connect(control, QtCore.SIGNAL('textChanged()'),
                                 self.update_object)
-        if (factory.line != '') or (factory.column != ''):
+        if (factory.line != '') or (factory.column != '') or \
+                (factory.selected_text != ''):
             # We need to monitor the line or column position being changed
             control.connect(control,
                     QtCore.SIGNAL('cursorPositionChanged(int, int)'),
