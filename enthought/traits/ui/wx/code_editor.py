@@ -203,7 +203,8 @@ class SourceEditor ( Editor ):
             self.sync_value(factory.squiggle_color, 'squiggle_color', 'from')
             
         # Check if we need to monitor the line or column position being changed:
-        if (factory.line != '') or (factory.column != ''):
+        if (factory.line != '') or (factory.column != '') or \
+                (factory.selected_text != ''):
             stc.EVT_STC_UPDATEUI( control, control.GetId(),
                                   self._position_changed )
         self.set_tooltip()
