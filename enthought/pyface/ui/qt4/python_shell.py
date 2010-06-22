@@ -215,11 +215,12 @@ else:
     _FONT = 'Courier'
     _FONT_SIZE = 10
 
-# Determine if the window manager is Metacity (see 'keyPressEvent' for info)
-if sys.platform == 'linux2':
-    METACITY = 'metacity' in Popen(['ps', '-A'], stdout=PIPE).communicate()[0]
+# Determine if a fix is need for QScintilla bug (see 'keyPressEvent' for info)
+if QtCore.QT_VERSION < 0x040500 and sys.platform == 'linux2':
+    METACITY_FIX = 'metacity' in Popen(['ps', '-A'], 
+                                       stdout=PIPE).communicate()[0]
 else:
-    METACITY = False
+    METACITY_FIX = False
 
 class QConsoleWidget(QsciScintilla):
     """ Specialized styled text control view for console-like workflow.
@@ -569,7 +570,7 @@ class QConsoleWidget(QsciScintilla):
         # Hack around a bug in QScintilla where creating an autocompletion
         # prompt causes the window to lose focus if the application is running
         # under Gnome.
-        if METACITY and not list_active and self.isListActive():
+        if METACITY_FIX and not list_active and self.isListActive():
             for child in self.children():
                 if isinstance(child, QtGui.QListWidget):
                     child.setWindowFlags(QtCore.Qt.ToolTip |
@@ -773,7 +774,7 @@ class QConsoleWidget(QsciScintilla):
         """
         font_metrics = QtGui.QFontMetrics(QtGui.QFont(_FONT, _FONT_SIZE))
         char_width = float(font_metrics.width(' '))
-        self._buffer.width = int(floor(self.viewport().width() / char_width))        
+        self._buffer.width = int(floor(self.viewport().width() / char_width))
 
     def _get_word_start(self, line, index):
         """ Find the start of the word to the left the given position. If a
@@ -781,7 +782,7 @@ class QConsoleWidget(QsciScintilla):
             them. (This emulates the behavior of bash, emacs, etc.)
         """
         if index == self._prompt_index:
-            # Don't let Scintilla get confused by a continuation promot
+            # Don't let Scintilla get confused by a continuation prompt
             line -= 1
             index = self.text(line).length() - 1
 
