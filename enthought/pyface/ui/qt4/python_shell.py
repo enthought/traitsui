@@ -212,10 +212,10 @@ elif sys.platform == 'darwin':
     _FONT = 'Monaco'
     _FONT_SIZE = 12
 else:
-    _FONT = 'Courier'
+    _FONT = 'Bitstream Vera Sans Mono'
     _FONT_SIZE = 10
 
-# Determine if a fix is need for QScintilla bug (see 'keyPressEvent' for info)
+# Determine if fix is needed for QScintilla bug (see 'keyPressEvent' for info)
 if QtCore.QT_VERSION < 0x040500 and sys.platform == 'linux2':
     METACITY_FIX = 'metacity' in Popen(['ps', '-A'], 
                                        stdout=PIPE).communicate()[0]
