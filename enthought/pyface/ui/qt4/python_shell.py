@@ -29,7 +29,7 @@ import types
 import traceback
 
 # Major package imports.
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore, QtGui, Qsci
 from PyQt4.Qsci import QsciScintilla, QsciScintillaBase as QsciBase, \
     QsciAbstractAPIs, QsciLexerPython, QsciStyle
 
@@ -216,7 +216,8 @@ else:
     _FONT_SIZE = 10
 
 # Determine if fix is needed for QScintilla bug (see 'keyPressEvent' for info)
-if QtCore.QT_VERSION < 0x040500 and sys.platform == 'linux2':
+if (QtCore.QT_VERSION < 0x040500 or Qsci.QSCINTILLA_VERSION < 0x20401) and \
+        sys.platform == 'linux2':
     METACITY_FIX = 'metacity' in Popen(['ps', '-A'], 
                                        stdout=PIPE).communicate()[0]
 else:
@@ -937,7 +938,8 @@ example:
                    refresh=False)
         self.write('Type "copyright", "credits" or "license" for more ' \
                        'information.\n', refresh=False)
-        self.write('''Type "?" to see this shell's enhancements.\n''', refresh=False)
+        self.write('Type "?" to see this shell\'s enhancements.\n', 
+                   refresh=False)
         self.new_prompt()
 
         self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
