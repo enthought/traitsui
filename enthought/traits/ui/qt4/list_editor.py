@@ -20,7 +20,7 @@ from PyQt4 import QtCore, QtGui
 
 from enthought.pyface.api import ImageResource
 
-from enthought.traits.api import Str, Any, Bool
+from enthought.traits.api import Str, Any, Bool, Dict
 from enthought.traits.trait_base import user_name_for, enumerate, xgetattr
     
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -479,6 +479,15 @@ class NotebookEditor ( Editor ):
     # The currently selected notebook page object:
     selected = Any
 
+    # Maps tab names to QWidgets representing the tab contents
+    # TODO: It would be nice to be able to reuse self._pages for this, but
+    # its keys are not quite what we want.
+    _pagewidgets = Dict
+    
+    # Maps names of tabs to their menu QAction instances; used to toggle
+    # checkboxes
+    _action_dict = Dict
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -505,6 +514,13 @@ class NotebookEditor ( Editor ):
             self.control.setCornerWidget( button, QtCore.Qt.TopRightCorner )
             signal = QtCore.SIGNAL( 'clicked()' )
             QtCore.QObject.connect( button, signal, self.close_current )
+
+        if self.factory.show_notebook_menu:
+            # Create the necessary attributes to manage hiding and revealing of
+            # tabs via a context menu
+            self._context_menu = QtGui.QMenu()
+            self.control.customContextMenuRequested.connect(self._context_menu_requested)
+            self.control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
         # Set up the additional 'list items changed' event handler needed for
         # a list based trait:
@@ -552,6 +568,13 @@ class NotebookEditor ( Editor ):
             ui.dispose()
             self.control.removeTab(self.control.indexOf(page))
 
+            if self.factory.show_notebook_menu:
+                for name,tmp in self._pagewidgets.items():
+                    if tmp is page:
+                        del self._pagewidgets[name]
+                self._context_menu.removeAction(self._action_dict[name])
+                del self._action_dict[name]
+
             del self._uis[index]
 
         # Add a page for each added object:
@@ -581,6 +604,23 @@ class NotebookEditor ( Editor ):
                 if force or ui.handler.close( ui.info, True ):
                     del self.value[i]
                 break
+
+        if self.factory.show_notebook_menu:
+            # Find the name associated with this widget, so we can purge its action
+            # from the menu
+            for name, tmp in self._pagewidgets.items():
+                if tmp is widget:
+                    break
+            else:
+                # Hmm... couldn't find the widget, assume that we don't need to do
+                # anything.
+                return
+
+            action = self._action_dict[name]
+            self._context_menu.removeAction(action)
+            del self._action_dict[name]
+            del self._pagewidgets[name]
+        return
 
     #---------------------------------------------------------------------------
     #  Closes all currently open notebook pages:
@@ -699,11 +739,16 @@ class NotebookEditor ( Editor ):
         else:
             self.control.addTab(ui.control, image, name)
 
-        return (ui, view_object, monitoring)                        
+        if self.factory.show_notebook_menu:
+            newaction = self._context_menu.addAction(name)
+            newaction.setText(name)
+            newaction.setCheckable(True)
+            newaction.setChecked(True)
+            newaction.triggered.connect(lambda e,name=name: self._menu_action(e,name=name))
+            self._action_dict[name] = newaction
+            self._pagewidgets[name] = ui.control
 
-    #---------------------------------------------------------------------------
-    #  Handles a notebook tab being 'activated' (i.e. clicked on) by the user:
-    #---------------------------------------------------------------------------
+        return (ui, view_object, monitoring)                        
 
     def _tab_activated(self, idx):
         """ Handles a notebook tab being "activated" (i.e. clicked on) by the
@@ -714,11 +759,6 @@ class NotebookEditor ( Editor ):
             if page is widget:
                 self.selected = ui.info.object
                 break
-
-    #---------------------------------------------------------------------------
-    #  Handles the 'selected' trait being changed:
-    #---------------------------------------------------------------------------
-
     def _selected_changed(self, selected):
         """ Handles the **selected** trait being changed.
         """
@@ -726,3 +766,22 @@ class NotebookEditor ( Editor ):
             if ui.info and selected is ui.info.object:
                 self.control.setCurrentWidget(page)
                 break
+
+    def _context_menu_requested(self, event):
+        self._context_menu.popup(self.control.mapToGlobal(event))
+
+    def _menu_action(self, event, name=""):
+        """ Qt signal handler for when a item in a context menu is actually
+        selected.  Not that we get this even after the underlying value has
+        already changed.
+        """
+        action = self._action_dict[name]
+        checked = action.isChecked()
+        if not checked:
+            for ndx in range(self.control.count()):
+                if self.control.tabText(ndx) == name:
+                    self.control.removeTab(ndx)
+        else:
+            # TODO: Fix tab order based on the context_object's list
+            self.control.addTab(self._pagewidgets[name], name)
+
