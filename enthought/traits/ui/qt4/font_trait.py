@@ -117,7 +117,9 @@ def create_traitsfont(value):
     fnt.setWeight(weight)
     fnt.setUnderline(underline)
 
-    if point_size is not None:
+    if point_size is None:
+        fnt.setPointSize(QtGui.QApplication.font().pointSize())
+    else:
         fnt.setPointSize(point_size)
 
     return fnt
