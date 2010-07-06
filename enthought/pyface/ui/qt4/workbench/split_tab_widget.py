@@ -13,11 +13,16 @@ import sys
 # Major library imports.
 from PyQt4 import QtCore, QtGui
 
+
 class SplitTabWidget(QtGui.QSplitter):
     """ The SplitTabWidget class is a hierarchy of QSplitters the leaves of
     which are QTabWidgets.  Any tab may be moved around with the hierarchy
     automatically extended and reduced as required.
     """
+
+    # Signals for WorkbenchWindowLayout to handle
+    new_window_request = QtCore.pyqtSignal(QtCore.QPoint, QtGui.QWidget)
+    tab_close_request = QtCore.pyqtSignal(QtGui.QWidget)
 
     # The different hotspots of a QTabWidget.  An non-negative value is a tab
     # index and the hotspot is to the left of it.
@@ -27,6 +32,7 @@ class SplitTabWidget(QtGui.QSplitter):
     _HS_SOUTH = -4
     _HS_EAST = -5
     _HS_WEST = -6
+    _HS_OUTSIDE = -7
 
     def __init__(self, *args):
         """ Initialise the instance. """
@@ -39,9 +45,6 @@ class SplitTabWidget(QtGui.QSplitter):
                 QtCore.SIGNAL('focusChanged(QWidget *,QWidget *)'),
                 self._focus_changed)
         
-        # default close tab callback just closes a control
-        self.close_tab_request_callback = lambda w: w.close()
-
     def clear(self):
         """ Restore the widget to its pristine state. """
 
@@ -180,7 +183,7 @@ class SplitTabWidget(QtGui.QSplitter):
     def _close_tab_request(self, w):
         """ A close button was clicked in one of out _TabWidgets """
         
-        self.close_tab_request_callback(w)
+        self.tab_close_request.emit(w)
 
     def setCurrentWidget(self, w):
         """ Make the given widget current. """
@@ -386,30 +389,35 @@ class SplitTabWidget(QtGui.QSplitter):
             self._selected_tab_widget = tw
             self._selected_hotspot = hs
 
-    def _drop(self, stab_w, stab):
+    def _drop(self, pos, stab_w, stab):
         self._rband.hide()
 
         dtab_w = self._selected_tab_widget
         dhs = self._selected_hotspot
 
         # Handle the trivial case.
-        if dtab_w is None or dhs == self._HS_NONE:
+        if dhs == self._HS_NONE:
             return
 
         self._selected_tab_widget = None
         self._selected_hotspot = self._HS_NONE
 
+        QtGui.qApp.blockSignals(True)
+
+        # See if the tab is being moved to a new window.
+        if dhs == self._HS_OUTSIDE:
+            ticon, ttext, ttextcolor, twidg = self._remove_tab(stab_w, stab)
+            self.new_window_request.emit(pos, twidg)
+
         # See if the tab is being moved to an existing tab widget.
-        if dhs >= 0 or dhs == self._HS_AFTER_LAST_TAB:
+        elif dhs >= 0 or dhs == self._HS_AFTER_LAST_TAB:
             # Make sure it really is being moved.
             if stab_w is dtab_w:
                 if stab == dhs:
                     return
 
-                if dhs == self._HS_AFTER_LAST_TAB and stab == stab_w.count() - 1:
+                if dhs == self._HS_AFTER_LAST_TAB and stab == stab_w.count()-1:
                     return
-
-            QtGui.qApp.blockSignals(True)
 
             ticon, ttext, ttextcolor, twidg = self._remove_tab(stab_w, stab)
 
@@ -432,12 +440,12 @@ class SplitTabWidget(QtGui.QSplitter):
 
             # Make the tab current in its new position.
             self._set_current_tab(dtab_w, idx)
+            self._set_focus()
+
         else:
             # Ignore drops to the same tab widget when it only has one tab.
             if stab_w is dtab_w and stab_w.count() == 1:
                 return
-
-            QtGui.qApp.blockSignals(True)
 
             # Remove the tab from its current tab widget and create a new one
             # for it.
@@ -459,8 +467,8 @@ class SplitTabWidget(QtGui.QSplitter):
             dspl.insertWidget(dspl_idx, new_tw)
 
             self._set_current_tab(new_tw, 0)
-
-        self._set_focus()
+            self._set_focus()
+        
         QtGui.qApp.blockSignals(False)
 
     def _horizontal_split(self, spl, idx, hs):
@@ -540,6 +548,11 @@ class SplitTabWidget(QtGui.QSplitter):
         """
         miss = (None, self._HS_NONE, None)
 
+        # Handle a drag outside the main window.
+        window = self.window()
+        if not window.frameGeometry().contains(self.mapToGlobal(pos)):
+            return (None, self._HS_OUTSIDE, None)
+
         # Handle the trivial case.
         if not self.geometry().contains(self.mapToParent(pos)):
             return miss
@@ -553,8 +566,8 @@ class SplitTabWidget(QtGui.QSplitter):
 
         # See if the hotspot is in the widget area.
         widg = tw.currentWidget()
-
         if widg is not None:
+
             # Get the widget's position relative to its parent.
             wpos = widg.parent().mapFrom(self, pos)
 
@@ -578,21 +591,21 @@ class SplitTabWidget(QtGui.QSplitter):
                     return (tw, self._HS_NORTH, (gx, gy, w, h / 4))
 
                 if y >= (3 * h) / 4:
-                    return (tw, self._HS_SOUTH, (gx, gy + (3 * h) / 4, w, h / 4))
+                    return (tw, self._HS_SOUTH, (gx, gy + (3*h) / 4, w, h / 4))
 
                 if x < w / 4:
                     return (tw, self._HS_WEST, (gx, gy, w / 4, h))
 
                 if x >= (3 * w) / 4:
-                    return (tw, self._HS_EAST, (gx + (3 * w) / 4, gy, w / 4, h))
+                    return (tw, self._HS_EAST, (gx + (3*w) / 4, gy, w / 4, h))
 
                 return miss
 
         # See if the hotspot is in the tab area.
         tpos = tw.mapFrom(self, pos)
         tab_bar = tw.tabBar()
-        top_bottom = tw.tabPosition() in (QtGui.QTabWidget.North, QtGui.QTabWidget.South)
-
+        top_bottom = tw.tabPosition() in (QtGui.QTabWidget.North, 
+                                          QtGui.QTabWidget.South)
         for i in range(tw.count()):
             rect = tab_bar.tabRect(i)
 
@@ -648,9 +661,8 @@ class SplitTabWidget(QtGui.QSplitter):
                     gy -= tab_heights
                 return (tw, self._HS_AFTER_LAST_TAB, (gx, gy, w, h))
                 
-                
-
         return miss
+
 
 active_style = """QTabWidget::pane { /* The tab widget frame */
      border: 2px solid #00FF00;
@@ -755,114 +767,9 @@ class _TabWidget(QtGui.QTabWidget):
 
     def _close_tab(self, index):
         """ Close the current tab. """
-        # XXX want to call editor.close() to give editor a chance to react...
 
         self._root._close_tab_request(self.widget(index))
         
-
-class _TabCloseButton(QtGui.QAbstractButton):
-    """ The _TabCloseButton class implements a button that is intended to close
-    the current tab.  It uses the same pixmap as that used to draw the dock
-    widget used for workbench views (in fact the code is based on the original
-    C++ code that implements the same).
-    """
-
-    def __init__(self, *args):
-        """ Initialise the instance. """
-
-        QtGui.QAbstractButton.__init__(self, *args)
-
-        self.setToolTip("Close current tab")
-        self.setFocusPolicy(QtCore.Qt.NoFocus)
-
-        # Get the standard icon and compute the size.  We can do it once here
-        # because the icon will never be changed.
-        sty = self.style()
-
-        icon = sty.standardIcon(QtGui.QStyle.SP_TitleBarCloseButton)
-        pm = icon.pixmap(sty.pixelMetric(QtGui.QStyle.PM_SmallIconSize))
-
-        size = max(pm.width(), pm.height())
-
-        try:
-            # This is Qt v4.3.0 and later.
-            margin = sty.pixelMetric(QtGui.QStyle.PM_DockWidgetTitleBarButtonMargin)
-        except AttributeError:
-            margin = 2
-
-        size += margin * 2
-        self._size_hint = QtCore.QSize(size, size)
-
-        self.setIcon(icon)
-
-    def minimumSizeHint(self):
-        """ Reimplemented to return the minimum size. """
-
-        return self._size_hint
-
-    def sizeHint(self):
-        """ Reimplemented to return the current size. """
-
-        return self._size_hint
-
-    def enterEvent(self, e):
-        """ Reimplemented to redraw the button on entering. """
-
-        self.update()
-        QtGui.QAbstractButton.enterEvent(self, e)
-
-    def leaveEvent(self, e):
-        """ Reimplemented to redraw the button on leaving. """
-
-        self.update()
-        QtGui.QAbstractButton.leaveEvent(self, e)
-
-    def paintEvent(self, e):
-        """ Reimplemented to paint the button. """
-
-        p = QtGui.QPainter(self)
-        r = self.rect()
-        sty = self.style()
-
-        opt = QtGui.QStyleOption()
-        opt.initFrom(self)
-        opt.state |= QtGui.QStyle.State_AutoRaise
-
-        if self.isChecked():
-            opt.state |= QtGui.QStyle.State_On
-        elif self.isDown():
-            opt.state |= QtGui.QStyle.State_Sunken
-        elif self.isEnabled() and self.underMouse():
-            opt.state |= QtGui.QStyle.State_Raised
-
-        # Create the gaps by adjusting the size.
-        r.adjust(0, 0, -4, -4)
-        opt.rect.adjust(0, 0, -4, -4)
-
-        sty.drawPrimitive(QtGui.QStyle.PE_PanelButtonTool, opt, p, self)
-
-        if opt.state & QtGui.QStyle.State_Sunken:
-            hshift = sty.pixelMetric(QtGui.QStyle.PM_ButtonShiftHorizontal, opt, self)
-            vshift = sty.pixelMetric(QtGui.QStyle.PM_ButtonShiftVertical, opt, self)
-
-            r.translate(hshift, vshift)
-
-        if self.isEnabled():
-            if self.underMouse():
-                mode = QtGui.QIcon.Active
-            else:
-                mode = QtGui.QIcon.Normal
-        else:
-            mode = QtGui.QIcon.Disabled
-
-        if self.isDown():
-            state = QtGui.QIcon.On
-        else:
-            state = QtGui.QIcon.Off
-
-        pm = self.icon().pixmap(sty.pixelMetric(QtGui.QStyle.PM_SmallIconSize), mode, state)
-        sty.drawItemPixmap(p, r, QtCore.Qt.AlignCenter, pm)
-
 
 class _DragableTabBar(QtGui.QTabBar):
     """ The _DragableTabBar class is a QTabBar that can be dragged around. """
@@ -1027,6 +934,7 @@ class _DragState(object):
         self.drag(pos)
         self._clone = None
 
-        self._root._drop(self._tab_bar.parent(), self._tab)
+        global_pos = self._tab_bar.mapToGlobal(pos)
+        self._root._drop(global_pos, self._tab_bar.parent(), self._tab)
 
         self.dragging = False

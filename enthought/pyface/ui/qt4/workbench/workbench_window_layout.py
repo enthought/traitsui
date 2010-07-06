@@ -126,8 +126,11 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         return view
 
     def close(self):
+        # Don't fire signals for editors that have destroyed their controls.
+        QtCore.QObject.disconnect(self._qt4_editor_area, 
+                QtCore.SIGNAL('hasFocus'), self._qt4_editor_focus)
+
         self._qt4_editor_area.clear()
-        self._qt4_editor_area.close_tab_request_callback = None
 
         # Delete all dock widgets.
         for v in self.window.views:
@@ -147,7 +150,10 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 QtCore.SIGNAL('focusChanged(QWidget *,QWidget *)'),
                 self._qt4_view_focus_changed)
         
-        self._qt4_editor_area.close_tab_request_callback = self._qt4_tab_close_request
+        self._qt4_editor_area.new_window_request.connect(
+            self._qt4_new_window_request)
+        self._qt4_editor_area.tab_close_request.connect(
+            self._qt4_tab_close_request)
 
         return self._qt4_editor_area
 
@@ -308,6 +314,25 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 if view is not focus_part and view.control is not None and view.control.isAncestorOf(old):
                     view.has_focus = False
                     break
+
+    def _qt4_new_window_request(self, pos, control):
+        """ Handle a tab tear-out request from the splitter widget. """
+        
+        for editor in self.window.editors:
+            if editor.control == control:
+                self.editor_closing = editor
+                editor.control.removeEventFilter(self._qt4_mon)
+                self.editor_closed = editor
+
+                window = self.window.workbench.create_window()
+                window.open()
+                window.add_editor(editor)
+                window.editor_manager.add_editor(
+                    editor, self.window.editor_manager.get_editor_kind(editor))
+                window.position = (pos.x(), pos.y())
+                window.size = self.window.size
+
+                break
     
     def _qt4_tab_close_request(self, control):
         """ Handle a tabCloseRequest from the splitter widget. """
@@ -329,14 +354,13 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             # QSplitter).
             editor.control = editor.create_control(self.window.control)
             editor.control.setObjectName(editor.id)
-            self._qt4_adjust_widget_layout(editor.control)
-
-            def on_name_changed(editor, trait_name, old, new):
-                self._qt4_editor_area.setWidgetTitle(editor.control, editor.name)
-
-            editor.on_trait_change(on_name_changed, 'name')
 
             self.editor_opened = editor
+
+        def on_name_changed(editor, trait_name, old, new):
+            self._qt4_editor_area.setWidgetTitle(editor.control, editor.name)
+
+        editor.on_trait_change(on_name_changed, 'name')
 
         self._qt4_monitor(editor.control)
 
@@ -429,7 +453,6 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 del dw
                 raise
 
-        self._qt4_adjust_widget_layout(view.control)
         dw.widget().setCentralWidget(view.control)
 
         return dw
@@ -461,26 +484,6 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
             if dw.toggleViewAction() is dw.sender():
                 v.visible = checked
-
-    @staticmethod
-    def _qt4_adjust_widget_layout(w):
-        """ Adjust the layout of a widget so that it appears at the top with
-        with standard margins.
-        """
-        lay = w.layout()
-        
-        # XXX I don't think we should do this... CJW
-
-        #if lay is not None:
-        #    lay.setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
-
-        #    sty = w.style()
-        #    l = sty.pixelMetric(QtGui.QStyle.PM_LayoutLeftMargin)
-        #    t = sty.pixelMetric(QtGui.QStyle.PM_LayoutTopMargin)
-        #    r = sty.pixelMetric(QtGui.QStyle.PM_LayoutRightMargin)
-        #    b = sty.pixelMetric(QtGui.QStyle.PM_LayoutBottomMargin)
-        #    lay.setContentsMargins(l, t, r, b)
-        #    lay.setContentsMargins(0, 0, 0, 0)
 
     def _qt4_monitor(self, control):
         """ Install an event filter for a view or editor control to keep an eye
