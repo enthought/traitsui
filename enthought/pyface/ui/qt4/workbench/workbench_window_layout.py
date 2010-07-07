@@ -138,24 +138,23 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 self._qt4_delete_view_dock_widget(v)
 
     def create_initial_layout(self, parent):
-        self._qt4_editor_area = SplitTabWidget(parent)
+        self._qt4_editor_area = editor_area = SplitTabWidget(parent)
 
-        QtCore.QObject.connect(self._qt4_editor_area,
-                QtCore.SIGNAL('hasFocus'), self._qt4_editor_focus)
+        QtCore.QObject.connect(editor_area, QtCore.SIGNAL('hasFocus'), 
+                               self._qt4_editor_focus)
 
         # We are interested in focus changes but we get them from the editor
         # area rather than qApp to allow the editor area to restrict them when
         # needed.
-        QtCore.QObject.connect(self._qt4_editor_area,
-                QtCore.SIGNAL('focusChanged(QWidget *,QWidget *)'),
-                self._qt4_view_focus_changed)
+        QtCore.QObject.connect(
+            editor_area, QtCore.SIGNAL('focusChanged(QWidget *,QWidget *)'),
+            self._qt4_view_focus_changed)
         
-        self._qt4_editor_area.new_window_request.connect(
-            self._qt4_new_window_request)
-        self._qt4_editor_area.tab_close_request.connect(
-            self._qt4_tab_close_request)
+        editor_area.new_window_request.connect(self._qt4_new_window_request)
+        editor_area.tab_close_request.connect(self._qt4_tab_close_request)
+        editor_area.tab_window_changed.connect(self._qt4_tab_window_changed)
 
-        return self._qt4_editor_area
+        return editor_area
 
     def contains_view(self, view):
         return hasattr(view, '_qt4_dock')
@@ -272,8 +271,8 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 return None
 
             # Create the restored editor.
-            editor = self.window.editor_manager.set_editor_memento(editor_memento)
-
+            editor = self.window.editor_manager.set_editor_memento(
+                editor_memento)
             if editor is None:
                 return None
 
@@ -318,21 +317,16 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
     def _qt4_new_window_request(self, pos, control):
         """ Handle a tab tear-out request from the splitter widget. """
         
-        for editor in self.window.editors:
-            if editor.control == control:
-                self.editor_closing = editor
-                editor.control.removeEventFilter(self._qt4_mon)
-                self.editor_closed = editor
+        editor = self._qt4_remove_editor_with_control(control)
+        kind = self.window.editor_manager.get_editor_kind(editor)
 
-                window = self.window.workbench.create_window()
-                window.open()
-                window.add_editor(editor)
-                window.editor_manager.add_editor(
-                    editor, self.window.editor_manager.get_editor_kind(editor))
-                window.position = (pos.x(), pos.y())
-                window.size = self.window.size
-
-                break
+        window = self.window.workbench.create_window()
+        window.open()
+        window.add_editor(editor)
+        window.editor_manager.add_editor(editor, kind)
+        window.position = (pos.x(), pos.y())
+        window.size = self.window.size
+        editor.window = window
     
     def _qt4_tab_close_request(self, control):
         """ Handle a tabCloseRequest from the splitter widget. """
@@ -341,6 +335,33 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             if editor.control == control:
                 editor.close()
                 break
+
+    def _qt4_tab_window_changed(self, control):
+        """ Handle a tab drag to a different WorkbenchWindow. """
+
+        editor = self._qt4_remove_editor_with_control(control)
+        kind = self.window.editor_manager.get_editor_kind(editor)
+        
+        while not control.isWindow():
+            control = control.parent()
+        for window in self.window.workbench.windows:
+            if window.control == control:
+                window.editors.append(editor)
+                window.editor_manager.add_editor(editor, kind)
+                window.layout._qt4_get_editor_control(editor)
+                window.activate_editor(editor)
+                editor.window = window
+
+    def _qt4_remove_editor_with_control(self, control):
+        """ Finds the editor associated with 'control' and removes it. Returns
+            the editor, or None if no editor was found.
+        """
+        for editor in self.window.editors:
+            if editor.control == control:
+                self.editor_closing = editor
+                control.removeEventFilter(self._qt4_mon)
+                self.editor_closed = editor
+                return editor
 
     def _qt4_get_editor_control(self, editor):
         """ Create the editor control if it hasn't already been done. """
