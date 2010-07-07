@@ -26,12 +26,6 @@ class CodeWidget(QtGui.QPlainTextEdit):
     """ A widget for viewing and editing code.
     """
 
-    tabs_as_spaces = True
-
-    smart_backspace = True
-
-    tab_width = 4
-
     def __init__(self, parent, should_highlight_current_line=True, font=None):
         super(CodeWidget, self).__init__(parent)
 
@@ -48,6 +42,17 @@ class CodeWidget(QtGui.QPlainTextEdit):
 
         # What that highlight color should be.
         self.line_highlight_color = QtGui.QColor(QtCore.Qt.yellow).lighter(160)
+
+        # Auto-indentation behavior
+        self.auto_indent = True
+        self.smart_backspace = True
+
+        # Tab settings
+        self.tabs_as_spaces = True
+        self.tab_width = 4
+
+        self.indent_character = ':'
+        self.comment_character = '#'
 
         self.blockCountChanged.connect(self.update_line_number_width)
         self.updateRequest.connect(self.update_line_numbers)
@@ -133,8 +138,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
         for i in range(pos):
             cursor.deleteChar()
 
-        python_mode = self.highlighter._lexer.name.startswith('Python')
-        if python_mode and trimmed.endsWith(':'):
+        if self.indent_character and trimmed.endsWith(self.indent_character):
             # indent one level
             indent = text[:current_indent_pos] + tab
         else:
@@ -210,7 +214,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
             text = cursor.block().text()
             current_indent_pos = self._get_indent_position(text)
 
-            if text[current_indent_pos] == u'#':
+            if text[current_indent_pos] == self.comment_character:
                 self.line_uncomment(cursor, current_indent_pos)
             else:
                 self.line_comment(cursor, current_indent_pos)
@@ -223,8 +227,9 @@ class CodeWidget(QtGui.QPlainTextEdit):
             comment = True
             for block in sel_blocks:
                 text = block.text()
-                if (len(text) > indent_pos) and text[indent_pos] == '#':
-                    # already commented
+                if len(text) > indent_pos and \
+                        text[indent_pos] == self.comment_character:
+                    # Already commented.
                     comment = False
                     break
 
@@ -243,15 +248,13 @@ class CodeWidget(QtGui.QPlainTextEdit):
             self._show_selected_blocks(sel_blocks)
 
     def line_comment(self, cursor, position):
-        cursor.movePosition(Qt.QTextCursor.StartOfBlock,
-                            Qt.QTextCursor.MoveAnchor)
+        cursor.movePosition(Qt.QTextCursor.StartOfBlock)
         cursor.movePosition(Qt.QTextCursor.Right,
                             Qt.QTextCursor.MoveAnchor, position)
-        cursor.insertText("#")
+        cursor.insertText(self.comment_character)
 
     def line_uncomment(self, cursor, position=0):
-        cursor.movePosition(Qt.QTextCursor.StartOfBlock,
-                            Qt.QTextCursor.MoveAnchor)
+        cursor.movePosition(Qt.QTextCursor.StartOfBlock)
         new_text = cursor.block().text().remove(position, 1)
         cursor.movePosition(Qt.QTextCursor.EndOfBlock,
                             Qt.QTextCursor.KeepAnchor)
@@ -273,9 +276,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
         if self.tabs_as_spaces:
             tab = '    '
 
-        cursor.movePosition(Qt.QTextCursor.StartOfBlock,
-                            Qt.QTextCursor.MoveAnchor)
-
+        cursor.movePosition(Qt.QTextCursor.StartOfBlock)
         if cursor.block().text().startsWith(tab):
             new_text = cursor.block().text().remove(0, len(tab))
             cursor.movePosition(Qt.QTextCursor.EndOfBlock,
@@ -305,7 +306,8 @@ class CodeWidget(QtGui.QPlainTextEdit):
                 self.setTextCursor(cursor)
                 event.accept()
 
-        elif key_sequence.matches(Qt.QKeySequence(Qt.Qt.Key_Return)):
+        elif self.auto_indent and \
+                key_sequence.matches(Qt.QKeySequence(Qt.Qt.Key_Return)):
             event.accept()
             return self.autoindent_newline()
         elif key_sequence.matches(self.indent_key):
@@ -317,8 +319,9 @@ class CodeWidget(QtGui.QPlainTextEdit):
         elif key_sequence.matches(self.comment_key):
             event.accept()
             return self.block_comment()
-        elif self.smart_backspace and key_sequence.matches(self.backspace_key) \
-                and self._backspace_should_unindent():
+        elif self.auto_indent and self.smart_backspace and \
+                key_sequence.matches(self.backspace_key) and \
+                self._backspace_should_unindent():
             event.accept()
             return self.block_unindent()
 
@@ -349,9 +352,11 @@ class CodeWidget(QtGui.QPlainTextEdit):
         cursor = self.textCursor()
         cursor.clearSelection()
         cursor.setPosition(selected_blocks[0].position())
-        cursor.movePosition(Qt.QTextCursor.StartOfBlock, Qt.QTextCursor.MoveAnchor)
-        cursor.movePosition(Qt.QTextCursor.NextBlock, Qt.QTextCursor.KeepAnchor, len(selected_blocks))
-        cursor.movePosition(Qt.QTextCursor.EndOfBlock, Qt.QTextCursor.KeepAnchor)
+        cursor.movePosition(Qt.QTextCursor.StartOfBlock)
+        cursor.movePosition(Qt.QTextCursor.NextBlock, 
+                            Qt.QTextCursor.KeepAnchor, len(selected_blocks))
+        cursor.movePosition(Qt.QTextCursor.EndOfBlock, 
+                            Qt.QTextCursor.KeepAnchor)
 
         self.setTextCursor(cursor)
 
