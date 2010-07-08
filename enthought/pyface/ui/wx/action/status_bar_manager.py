@@ -27,9 +27,6 @@ from enthought.traits.api import Any, HasTraits, List, Property, Str, Unicode
 class StatusBarManager(HasTraits):
     """ A status bar manager realizes itself in a status bar control. """
 
-    # The manager's unique identifier (if it has one).
-    id = Str
-
     # The message displayed in the first field of the status bar.
     message = Property
 
