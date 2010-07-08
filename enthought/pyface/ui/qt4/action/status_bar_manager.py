@@ -11,15 +11,12 @@
 from PyQt4 import QtGui
 
 # Enthought library imports.
-from enthought.traits.api import Any, HasTraits, List, Property, Str, Unicode
+from enthought.traits.api import Any, Bool, HasTraits, List, Property, Str, \
+    Unicode
 
 
 class StatusBarManager(HasTraits):
     """ A status bar manager realizes itself in a status bar control. """
-
-    # FIXME v3: Is this used anywhere?
-    # The manager's unique identifier (if it has one).
-    id = Str
 
     # The message displayed in the first field of the status bar.
     message = Property
@@ -29,6 +26,9 @@ class StatusBarManager(HasTraits):
 
     # The toolkit-specific control that represents the status bar.
     status_bar = Any
+
+    # Whether to show a size grip on the status bar.
+    size_grip = Bool(False)
     
     ###########################################################################
     # 'StatusBarManager' interface.
@@ -39,7 +39,7 @@ class StatusBarManager(HasTraits):
 
         if self.status_bar is None:
             self.status_bar = QtGui.QStatusBar(parent)
-            self.status_bar.setSizeGripEnabled(False)
+            self.status_bar.setSizeGripEnabled(self.size_grip)
 
             if len(self.messages) > 1:
                 self._show_messages()
@@ -87,6 +87,12 @@ class StatusBarManager(HasTraits):
 
         if self.status_bar is not None:
             self._show_messages()
+
+    def _size_grip_changed(self):
+        """ Turns the size grip on the status bar on and off. """
+
+        if self.status_bar is not None:
+            self.status_bar.setSizeGripEnabled(self.size_grip)
 
     ###########################################################################
     # Private interface.
