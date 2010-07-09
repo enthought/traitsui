@@ -1061,10 +1061,11 @@ example:
         # Process 'magic' commands
         stripped = source.strip()
         if self._is_magic(stripped, 'cd'):
-            if len(stripped) == 2:
-                path = '~'
+            arg = self._get_magic_argument(stripped, 'cd')
+            if arg:
+                path = self._parse_path(arg)
             else:
-                path = self._parse_path(stripped[2:])
+                path = '~'
             try:
                 os.chdir(os.path.expanduser(path))
             except OSError:
@@ -1075,10 +1076,11 @@ example:
             self.write(os.path.abspath(os.getcwd()) + '\n', refresh=False)
 
         elif self._is_magic(stripped, 'ls'):
-            if len(stripped) == 2:
-                path = os.getcwd()
+            arg = self._get_magic_argument(stripped, 'ls')
+            if arg:
+                path = os.path.expanduser(self._parse_path(arg))
             else:
-                path = os.path.expanduser(self._parse_path(stripped[2:]))
+                path = os.getcwd()
             # FIXME: Check for availability of 'ls' on Windows in __init__
             if sys.platform == 'win32':
                 args = [ 'dir', path.rstrip('/') ]
@@ -1097,16 +1099,17 @@ example:
             self.write(err, refresh=False)
 
         elif self._is_magic(stripped, 'run'):
-            if len(stripped) == 3:
-                self.write('A filename must be provided!\n', refresh=False)
-            else:
-                path = os.path.expanduser(self._parse_path(stripped[4:]))
+            arg = self._get_magic_argument(stripped, 'run')
+            if arg:
+                path = os.path.expanduser(self._parse_path(arg))
                 if not os.path.isfile(path) and not path.endswith('.py'):
                     path += '.py'
                 if os.path.exists(path):
                     self.execute_file(path, hidden)
                 else:
                     self.write('File `%s` not found.\n' % path, refresh=False)
+            else:
+                self.write('A filename must be provided!\n', refresh=False)
 
         elif self._is_magic(stripped, 'who'):
             # The 'who' command prints the names in the namespace.
@@ -1269,11 +1272,21 @@ example:
     def _is_magic(self, string, *magics):
         """ Returns whether a given command string matches a magic command.
         """
+        if string.startswith('%'):
+            string = string[1:]
         for magic in magics:
             if (string.startswith(magic) and 
                 (len(string) == len(magic) or string[len(magic)] == ' ')):
                 return magic
         return False
+
+    def _get_magic_argument(self, string, magic):
+        """ Assuming a given command string is call to the specified magic 
+            command, return the argument to the magic.
+        """
+        if string.startswith('%'):
+            string = string[1:]
+        return string[len(magic):]
 
     def _parse_path(self, string):
         """ Given a path string as specified by a user for a magic command,
