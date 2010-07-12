@@ -936,9 +936,8 @@ class _DragState(object):
         tab = self._tab
 
         ctb = self._clone = QtGui.QTabBar()
-        # XXX this requires Qt > 4.5
-        if sys.platform == 'darwin':
-            self.setDocumentMode(True)
+        if sys.platform == 'darwin' and QtCore.QT_VERSION >= 0x40500:
+            ctb.setDocumentMode(True)
           
         ctb.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
         ctb.setWindowFlags(QtCore.Qt.FramelessWindowHint |
@@ -968,7 +967,8 @@ class _DragState(object):
         """ Handle the movement of the cloned tab during dragging. """
 
         self._clone.move(self._tab_bar.mapToGlobal(pos) + self._clone_offset)
-        self._root._select(self._tab_bar.mapTo(self._root, pos + self._centre_offset))
+        self._root._select(self._tab_bar.mapTo(self._root,
+                                               pos + self._centre_offset))
 
     def drop(self, pos):
         """ Handle the drop of the cloned tab. """
