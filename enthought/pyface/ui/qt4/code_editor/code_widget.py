@@ -26,6 +26,10 @@ class CodeWidget(QtGui.QPlainTextEdit):
     """ A widget for viewing and editing code.
     """
 
+    ###########################################################################
+    # CodeWidget interface
+    ###########################################################################
+
     def __init__(self, parent, should_highlight_current_line=True, font=None):
         super(CodeWidget, self).__init__(parent)
 
@@ -95,13 +99,6 @@ class CodeWidget(QtGui.QPlainTextEdit):
                 self.line_number_widget.height())
             if rect.contains(self.viewport().rect()):
                 self.update_line_number_width(0)
-
-    def resizeEvent(self, event):
-        QtGui.QPlainTextEdit.resizeEvent(self, event)
-        contents = self.contentsRect()
-        self.line_number_widget.setGeometry(QtCore.QRect(contents.left(),
-            contents.top(), self.line_number_widget.digits_width(),
-            contents.height()))
 
     def highlight_current_line(self):
         """ Highlight the line with the cursor.
@@ -287,6 +284,17 @@ class CodeWidget(QtGui.QPlainTextEdit):
         else:
             return 0
 
+    def word_under_cursor(self):
+        """ Return the word under the cursor.
+        """
+        cursor = self.textCursor()
+        cursor.select(Qt.QTextCursor.WordUnderCursor)
+        return unicode(cursor.selectedText())
+
+    ###########################################################################
+    # QWidget interface
+    ###########################################################################
+
     def keyPressEvent(self, event):
         key_sequence = Qt.QKeySequence(event.key() + int(event.modifiers()))
 
@@ -327,12 +335,12 @@ class CodeWidget(QtGui.QPlainTextEdit):
 
         return super(CodeWidget, self).keyPressEvent(event)
 
-    def word_under_cursor(self):
-        """ Return the word under the cursor.
-        """
-        cursor = self.textCursor()
-        cursor.select(Qt.QTextCursor.WordUnderCursor)
-        return unicode(cursor.selectedText())
+    def resizeEvent(self, event):
+        QtGui.QPlainTextEdit.resizeEvent(self, event)
+        contents = self.contentsRect()
+        self.line_number_widget.setGeometry(QtCore.QRect(contents.left(),
+            contents.top(), self.line_number_widget.digits_width(),
+            contents.height()))
 
     ###########################################################################
     # Private methods
@@ -401,6 +409,10 @@ class AdvancedCodeWidget(QtGui.QWidget):
         for search & replace
     """
 
+    ###########################################################################
+    # AdvancedCodeWidget interface
+    ###########################################################################
+
     def __init__(self, parent, font=None):
         super(AdvancedCodeWidget, self).__init__(parent)
 
@@ -440,23 +452,6 @@ class AdvancedCodeWidget(QtGui.QWidget):
 
         # Key bindings
         self.replace_key = Qt.QKeySequence(Qt.Qt.CTRL + Qt.Qt.Key_R)
-
-    def keyPressEvent(self, event):
-        key_sequence = Qt.QKeySequence(event.key() + int(event.modifiers()))
-
-        if key_sequence.matches(Qt.QKeySequence.Find):
-            self.enable_find()
-        elif key_sequence.matches(self.replace_key):
-            self.enable_replace()
-        elif key_sequence.matches(Qt.Qt.Key_Escape):
-            if self.active_find_widget:
-                self.find.hide()
-                self.replace.hide()
-                self.code.setFocus()
-                self.previous_find_widget = self.active_find_widget
-                self.active_find_widget = None
-
-        return super(AdvancedCodeWidget, self).keyPressEvent(event)
 
     def enable_find(self):
         self.replace.hide()
@@ -574,6 +569,32 @@ class AdvancedCodeWidget(QtGui.QWidget):
             count += 1
         cursor.endEditBlock()
         return count
+
+    def print_(self, printer):
+        """ Convenience method to call 'print_' on the CodeWidget.
+        """
+        self.code.print_(printer)
+
+    ###########################################################################
+    # QWidget interface
+    ###########################################################################
+
+    def keyPressEvent(self, event):
+        key_sequence = Qt.QKeySequence(event.key() + int(event.modifiers()))
+
+        if key_sequence.matches(Qt.QKeySequence.Find):
+            self.enable_find()
+        elif key_sequence.matches(self.replace_key):
+            self.enable_replace()
+        elif key_sequence.matches(Qt.Qt.Key_Escape):
+            if self.active_find_widget:
+                self.find.hide()
+                self.replace.hide()
+                self.code.setFocus()
+                self.previous_find_widget = self.active_find_widget
+                self.active_find_widget = None
+
+        return super(AdvancedCodeWidget, self).keyPressEvent(event)
 
     ###########################################################################
     # Private methods
