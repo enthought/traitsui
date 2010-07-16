@@ -301,10 +301,6 @@ class SplitTabWidget(QtGui.QSplitter):
         # See if the widget that has lost the focus is ours.
         otw, _ = self._tab_widget_of(old)
 
-        # XXX this prevents focus changes between different tabs of the same tabwidget
-        #if otw is ntw:
-        #    return
-
         if otw is not None or ntw is not None:
             if ntw is None:
                 nw = None

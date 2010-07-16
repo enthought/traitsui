@@ -362,6 +362,11 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 self.editor_closing = editor
                 control.removeEventFilter(self._qt4_mon)
                 self.editor_closed = editor
+                
+                # Make sure that focus events get fired if this editor is
+                # subsequently added to another window.
+                editor.has_focus = False
+
                 return editor
 
     def _qt4_get_editor_control(self, editor):
