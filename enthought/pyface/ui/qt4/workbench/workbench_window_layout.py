@@ -351,6 +351,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 window.layout._qt4_get_editor_control(editor)
                 window.activate_editor(editor)
                 editor.window = window
+                break
 
     def _qt4_remove_editor_with_control(self, control):
         """ Finds the editor associated with 'control' and removes it. Returns
