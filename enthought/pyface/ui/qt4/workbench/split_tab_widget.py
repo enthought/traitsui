@@ -407,8 +407,10 @@ class SplitTabWidget(QtGui.QSplitter):
 
         # See if the tab is being moved to a new window.
         if dhs == self._HS_OUTSIDE:
-            ticon, ttext, ttextcolor, twidg = self._remove_tab(stab_w, stab)
-            self.new_window_request.emit(pos, twidg)
+            # Disable tab tear-out for now. It works, but this is something that
+            # should be turned on manually. We need an interface for this.
+            #ticon, ttext, ttextcolor, twidg = self._remove_tab(stab_w, stab)
+            #self.new_window_request.emit(pos, twidg)
             return
 
         # See if the tab is being moved to an existing tab widget.

@@ -292,7 +292,9 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         """ Handle an editor getting the focus. """
 
         for editor in self.window.editors:
-            editor.has_focus = (editor.control is new) or (new in editor.control.children())
+            control = editor.control
+            editor.has_focus = control is new or \
+                (control is not None and new in control.children())
 
     def _qt4_view_focus_changed(self, old, new):
         """ Handle the change of focus for a view. """
@@ -326,6 +328,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         window.editor_manager.add_editor(editor, kind)
         window.position = (pos.x(), pos.y())
         window.size = self.window.size
+        window.activate_editor(editor)
         editor.window = window
     
     def _qt4_tab_close_request(self, control):
