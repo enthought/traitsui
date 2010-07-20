@@ -278,7 +278,8 @@ class _StickyDialog(QtGui.QDialog):
         try:
             flags |= QtCore.Qt.WindowCloseButtonHint
             if ui.view.resizable:
-                flags |= QtCore.Qt.WindowMinimizeButtonHint | Qtcore.Qt.WindowMaximizeButtonHint
+                flags |= (QtCore.Qt.WindowMinimizeButtonHint | 
+                          QtCore.Qt.WindowMaximizeButtonHint)
         except AttributeError:
             # Either PyQt or Qt is too old.
             pass
