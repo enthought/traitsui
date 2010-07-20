@@ -277,6 +277,8 @@ class _StickyDialog(QtGui.QDialog):
             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
         try:
             flags |= QtCore.Qt.WindowCloseButtonHint
+            if ui.view.resizable:
+                flags |= QtCore.Qt.WindowMinimizeButtonHint | Qtcore.Qt.WindowMaximizeButtonHint
         except AttributeError:
             # Either PyQt or Qt is too old.
             pass
