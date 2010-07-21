@@ -19,7 +19,7 @@ interface toolkit, useful for tools such as debuggers.
 
 from PyQt4 import QtCore, QtGui
 
-from enthought.pyface.ui.qt4.code.code_widget import AdvancedCodeWidget
+from enthought.pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
 from enthought.traits.api import Str, Unicode, List, Int, Event, Bool, \
     TraitError, on_trait_change
 from enthought.traits.trait_base import SequenceTypes
@@ -97,11 +97,11 @@ class SourceEditor ( Editor ):
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        print "advanced code widget"
         self.control = QtGui.QWidget()
         layout = QtGui.QVBoxLayout(self.control)
         layout.setMargin(0)
