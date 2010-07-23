@@ -451,7 +451,17 @@ class _ListView(QtGui.QListView):
                 for row in reversed(sorted(editor.multi_selected_indices)):
                     editor.model.removeRow(row)
             elif editor.selected_index != -1:
-                editor.model.removeRow(editor.selected_index)
+                # Deleting the selected item will reset cause the ListView's
+                # selection model to select the next item before removing the
+                # originally selected rows. Visually, this looks fine because
+                # the next item is then placed where the deleted item used to
+                # be. However, some internal state is kept which makes the
+                # selected item seem off by one. So we'll reset it manually
+                # here.
+                row = editor.selected_index
+                editor.model.removeRow(row)
+                # Handle the case of deleting the last item in the list.
+                editor.selected_index = min(row, editor.adapter.len(editor.object, editor.name)-1)
 
         elif (event.key() == QtCore.Qt.Key_Insert and 
               factory.editable and 'insert' in factory.operations):
