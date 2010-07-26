@@ -193,18 +193,17 @@ class SourceEditor ( Editor ):
             new_value = '\n'.join( [ line.rstrip() for line in new_value ] )
         control = self._widget
         if control.code.toPlainText() != new_value:
-            readonly = control.isReadOnly()
-            control.setReadOnly(False)
-            vsb = control.verticalScrollBar()
-            l1 = vsb.value()
-            line, column = control.getCursorPosition()
-            control.setText(new_value)
-            control.setCursorPosition(line, column)
-            vsb.setValue(l1)
-            control.setReadOnly(readonly)
-            self._mark_lines_changed()
+            control.code.setPlainText(new_value)
+            
+            # TODO: check the readonly flag and make sure the editor
+            # is still readonly when we're done.
+            
             if self.factory.selected_line:
-                self._selected_line_changed()
+                # TODO: update the factory selected line
+                pass
+            
+            # TODO: put the cursor somewhere
+            
         self._locked = False
 
     #---------------------------------------------------------------------------
