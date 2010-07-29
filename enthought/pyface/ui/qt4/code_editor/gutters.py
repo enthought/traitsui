@@ -9,19 +9,14 @@
 # Description: <Enthought pyface code editor>
 #------------------------------------------------------------------------------
 
-
 import math
-import weakref
 
 from PyQt4 import QtGui, QtCore
+
 
 class GutterWidget(QtGui.QWidget):
 
     min_width = 5
-
-    def __init__(self, parent):
-        super(GutterWidget, self).__init__(parent)
-        self.code_widget = weakref.ref(parent)
 
     def sizeHint(self):
         return QtCore.QSize(self.min_width, 0)
@@ -31,6 +26,11 @@ class GutterWidget(QtGui.QWidget):
         """
         painter = QtGui.QPainter(self)
         painter.fillRect(event.rect(), QtCore.Qt.lightGray)
+
+    def wheelEvent(self, event):
+        """ Delegate mouse wheel events to parent for seamless scrolling.
+        """
+        self.parent().wheelEvent(event)
 
 
 class LineNumberWidget(GutterWidget):
@@ -48,8 +48,9 @@ class LineNumberWidget(GutterWidget):
         self.font = font
 
     def digits_width(self):
-        nlines = max(1, self.code_widget().blockCount())
-        ndigits = max(self.min_char_width, int(math.floor(math.log10(nlines)+1)))
+        nlines = max(1, self.parent().blockCount())
+        ndigits = max(self.min_char_width,
+                      int(math.floor(math.log10(nlines) + 1)))
         width = max(self.fontMetrics().width(u'0' * ndigits) + 3,
                     self.min_width)
         return width
@@ -63,18 +64,20 @@ class LineNumberWidget(GutterWidget):
         painter = QtGui.QPainter(self)
         painter.setFont(self.font)
         painter.fillRect(event.rect(), QtCore.Qt.lightGray)
-        cw = self.code_widget()
+        
+        cw = self.parent()
         block = cw.firstVisibleBlock()
         blocknum = block.blockNumber()
-        top = cw.blockBoundingGeometry(block).translated(cw.contentOffset()).top()
+        top = cw.blockBoundingGeometry(block).translated(
+            cw.contentOffset()).top()
         bottom = top + int(cw.blockBoundingRect(block).height())
 
         while block.isValid() and top <= event.rect().bottom():
             if block.isVisible() and bottom >= event.rect().top():
                 painter.setPen(QtCore.Qt.black)
-                painter.drawText(0, top, self.width()-2,
-                    self.fontMetrics().height(), QtCore.Qt.AlignRight,
-                    str(blocknum + 1))
+                painter.drawText(0, top, self.width() - 2,
+                                 self.fontMetrics().height(),
+                                 QtCore.Qt.AlignRight, str(blocknum + 1))
             block = block.next()
             top = bottom
             bottom = top + int(cw.blockBoundingRect(block).height())

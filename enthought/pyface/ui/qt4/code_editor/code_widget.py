@@ -33,6 +33,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
     def __init__(self, parent, should_highlight_current_line=True, font=None):
         super(CodeWidget, self).__init__(parent)
 
+        self.highlighter = PygmentsHighlighter(self.document())
         self.line_number_widget = LineNumberWidget(self)
 
         if font is None:
@@ -58,14 +59,13 @@ class CodeWidget(QtGui.QPlainTextEdit):
         self.indent_character = ':'
         self.comment_character = '#'
 
+        # Set up gutter widget and current line highlighting
         self.blockCountChanged.connect(self.update_line_number_width)
         self.updateRequest.connect(self.update_line_numbers)
         self.cursorPositionChanged.connect(self.highlight_current_line)
-
-        self.update_line_number_width(0)
+        
+        self.update_line_number_width()
         self.highlight_current_line()
-
-        self.highlighter = PygmentsHighlighter(self.document())
 
         # Don't wrap text
         self.setLineWrapMode(QtGui.QPlainTextEdit.NoWrap)
@@ -81,9 +81,9 @@ class CodeWidget(QtGui.QPlainTextEdit):
         """
         self.document().setDefaultFont(font)
         self.line_number_widget.set_font(font)
-        self.update_line_number_width(0)
+        self.update_line_number_width()
 
-    def update_line_number_width(self, nblocks):
+    def update_line_number_width(self, nblocks=0):
         """ Update the width of the line number widget.
         """
         self.setViewportMargins(self.line_number_widget.digits_width(), 0, 0, 0)
@@ -91,14 +91,12 @@ class CodeWidget(QtGui.QPlainTextEdit):
     def update_line_numbers(self, rect, dy):
         """ Update the line numbers.
         """
-        if dy != 0:
+        if dy:
             self.line_number_widget.scroll(0, dy)
-        else:
-            self.line_number_widget.update(0, rect.y(),
-                self.line_number_widget.width(),
-                self.line_number_widget.height())
-            if rect.contains(self.viewport().rect()):
-                self.update_line_number_width(0)
+        self.line_number_widget.update(
+            0, rect.y(), self.line_number_widget.width(), rect.height())
+        if rect.contains(self.viewport().rect()):
+            self.update_line_number_width()
 
     def highlight_current_line(self):
         """ Highlight the line with the cursor.
