@@ -101,7 +101,6 @@ class SourceEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        print "advanced code widget"
         self.control = QtGui.QWidget()
         layout = QtGui.QVBoxLayout(self.control)
         layout.setMargin(0)
