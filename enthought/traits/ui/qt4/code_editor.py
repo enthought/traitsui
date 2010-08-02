@@ -72,6 +72,12 @@ class SourceEditor ( Editor ):
     # The currently selected line
     selected_line = Int
     
+    # The start position of the selected
+    selected_start_pos = Int
+
+    # The end position of the selected
+    selected_end_pos = Int
+
     # The currently selected text
     selected_text = Unicode
     
@@ -131,6 +137,9 @@ class SourceEditor ( Editor ):
         self.sync_value( factory.selected_text, 'selected_text', 'to' )
         self.sync_value( factory.line, 'line' )
         self.sync_value( factory.column, 'column' )
+        
+        self.sync_value( factory.selected_start_pos, 'selected_start_pos', 'to')
+        self.sync_value( factory.selected_end_pos, 'selected_end_pos', 'to')
 
         self.sync_value(factory.dim_lines, 'dim_lines', 'from', is_list=True)
         if self.factory.dim_color == '':
@@ -263,6 +272,14 @@ class SourceEditor ( Editor ):
                 
     def _selection_changed(self):
         self.selected_text = unicode(self._widget.code.textCursor().selectedText())
+        start = self._widget.code.textCursor().selectionStart()
+        end = self._widget.code.textCursor().selectionEnd()
+        
+        if start > end:
+            start, end = end, start
+            
+        self.selected_start_pos = start
+        self.selected_end_pos = end
                 
     def _selected_line_changed ( self ):
         """ Handles a change in which line is currently selected.
@@ -310,7 +327,7 @@ class SourceEditor ( Editor ):
         self.column = column
         self._locked = False
         self.selected_text = unicode(control.selectedText())
-        
+                
     #---------------------------------------------------------------------------
     #  Handles a key being pressed within the editor:    
     #---------------------------------------------------------------------------
@@ -340,6 +357,8 @@ class SourceEditor ( Editor ):
     @on_trait_change('dim_lines, squiggle_lines')
     def _style_document(self):
         self._widget.recolor()
+                
+        
 
 
 # Define the simple, custom, text and readonly editors, which will be accessed
