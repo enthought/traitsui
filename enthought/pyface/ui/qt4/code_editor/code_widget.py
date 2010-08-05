@@ -31,10 +31,17 @@ class CodeWidget(QtGui.QPlainTextEdit):
     # CodeWidget interface
     ###########################################################################
 
-    def __init__(self, parent, should_highlight_current_line=True, font=None, lexer=None):
+    def __init__(self, parent, should_highlight_current_line=True, font=None, 
+                 lexer=None):
         super(CodeWidget, self).__init__(parent)
 
-        self.highlighter = PygmentsHighlighter(self.document(), get_lexer_by_name(lexer))
+        try:
+            lexer = get_lexer_by_name(lexer)
+        except:
+            self.highlighter = PygmentsHighlighter(self.document())
+        else:
+            self.highlighter = PygmentsHighlighter(self.document(), lexer)
+                                               
         self.line_number_widget = LineNumberWidget(self)
 
         if font is None:
