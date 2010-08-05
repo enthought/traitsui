@@ -99,6 +99,9 @@ class SourceEditor ( Editor ):
     squiggle_lines = List(Int)
     squiggle_color = Str
         
+    # The lexer to use.
+    lexer = Str
+        
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -111,7 +114,7 @@ class SourceEditor ( Editor ):
         layout = QtGui.QVBoxLayout(self.control)
         layout.setMargin(0)
         
-        self._widget = control = AdvancedCodeWidget(None)
+        self._widget = control = AdvancedCodeWidget(None, lexer=self.factory.lexer)
         layout.addWidget(control)
 
         factory = self.factory

@@ -14,6 +14,7 @@ import math
 
 # System library imports
 from PyQt4 import QtCore, QtGui, Qt
+from pygments.lexers import get_lexer_by_name
 
 # Local imports
 from find_widget import FindWidget
@@ -30,10 +31,10 @@ class CodeWidget(QtGui.QPlainTextEdit):
     # CodeWidget interface
     ###########################################################################
 
-    def __init__(self, parent, should_highlight_current_line=True, font=None):
+    def __init__(self, parent, should_highlight_current_line=True, font=None, lexer=None):
         super(CodeWidget, self).__init__(parent)
 
-        self.highlighter = PygmentsHighlighter(self.document())
+        self.highlighter = PygmentsHighlighter(self.document(), get_lexer_by_name(lexer))
         self.line_number_widget = LineNumberWidget(self)
 
         if font is None:
@@ -411,10 +412,10 @@ class AdvancedCodeWidget(QtGui.QWidget):
     # AdvancedCodeWidget interface
     ###########################################################################
 
-    def __init__(self, parent, font=None):
+    def __init__(self, parent, font=None, lexer=None):
         super(AdvancedCodeWidget, self).__init__(parent)
 
-        self.code = CodeWidget(self, font=font)
+        self.code = CodeWidget(self, font=font, lexer=lexer)
         self.find = FindWidget(self)
         self.find.hide()
         self.replace = ReplaceWidget(self)
