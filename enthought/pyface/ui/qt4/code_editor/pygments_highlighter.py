@@ -12,7 +12,7 @@
 from PyQt4 import QtGui
 
 from pygments.lexer import RegexLexer, _TokenType, Text, Error
-from pygments.lexers import CLexer, CppLexer, PythonLexer
+from pygments.lexers import CLexer, CppLexer, PythonLexer, get_lexer_by_name
 from pygments.styles.default import DefaultStyle
 from pygments.token import Comment
 
@@ -127,8 +127,12 @@ class PygmentsHighlighter(QtGui.QSyntaxHighlighter):
 
     def __init__(self, parent, lexer=None):
         super(PygmentsHighlighter, self).__init__(parent)
-
-        self._lexer = lexer if lexer else PythonLexer()
+        
+        try:
+            self._lexer = get_lexer_by_name(lexer)
+        except: 
+            self._lexer = PythonLexer()
+            
         self._style = DefaultStyle
         # Caches for formats and brushes.
         self._brushes = {}

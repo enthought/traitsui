@@ -14,7 +14,6 @@ import math
 
 # System library imports
 from PyQt4 import QtCore, QtGui, Qt
-from pygments.lexers import get_lexer_by_name
 
 # Local imports
 from find_widget import FindWidget
@@ -35,13 +34,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
                  lexer=None):
         super(CodeWidget, self).__init__(parent)
 
-        try:
-            lexer = get_lexer_by_name(lexer)
-        except:
-            self.highlighter = PygmentsHighlighter(self.document())
-        else:
-            self.highlighter = PygmentsHighlighter(self.document(), lexer)
-                                               
+        self.highlighter = PygmentsHighlighter(self.document(), lexer)
         self.line_number_widget = LineNumberWidget(self)
 
         if font is None:
