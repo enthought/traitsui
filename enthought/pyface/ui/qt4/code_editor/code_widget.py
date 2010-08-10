@@ -294,8 +294,16 @@ class CodeWidget(QtGui.QPlainTextEdit):
     # QWidget interface
     ###########################################################################
 
+    # FIXME: This is a quick hack to be able to access the keyPressEvent
+    # from the rest editor. This should be changed to work within the traits 
+    # framework.
+    def keyPressEvent_action(self, event):
+        pass
+    
     def keyPressEvent(self, event):
         key_sequence = Qt.QKeySequence(event.key() + int(event.modifiers()))
+        
+        self.keyPressEvent_action(event) # FIXME: see above
 
         # If the cursor is in the middle of the first line, pressing the "up"
         # key causes the cursor to go to the start of the first line, i.e. the
