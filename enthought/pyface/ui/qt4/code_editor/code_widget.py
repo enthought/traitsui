@@ -355,6 +355,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
         opt = QtGui.QStyleOptionHeader()
         font_metrics = QtGui.QFontMetrics(self.document().defaultFont())
         width = font_metrics.width(' ') * 80
+        width += self.line_number_widget.sizeHint().width()
         width += style.pixelMetric(QtGui.QStyle.PM_ScrollBarExtent, opt, self)
         height = font_metrics.height() * 40
         return QtCore.QSize(width, height)
