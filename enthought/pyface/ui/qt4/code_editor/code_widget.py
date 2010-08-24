@@ -349,6 +349,16 @@ class CodeWidget(QtGui.QPlainTextEdit):
             contents.top(), self.line_number_widget.digits_width(),
             contents.height()))
 
+    def sizeHint(self):
+        # Suggest a size that is 80 characters wide and 40 lines tall.
+        style = self.style()
+        opt = QtGui.QStyleOptionHeader()
+        font_metrics = QtGui.QFontMetrics(self.document().defaultFont())
+        width = font_metrics.width(' ') * 80
+        width += style.pixelMetric(QtGui.QStyle.PM_ScrollBarExtent, opt, self)
+        height = font_metrics.height() * 40
+        return QtCore.QSize(width, height)
+
     ###########################################################################
     # Private methods
     ###########################################################################
