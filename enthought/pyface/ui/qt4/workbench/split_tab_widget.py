@@ -11,6 +11,7 @@
 import sys
 
 # Major library imports.
+import sip
 from PyQt4 import QtCore, QtGui
 
 
@@ -285,9 +286,15 @@ class SplitTabWidget(QtGui.QSplitter):
     def _focus_changed(self, old, new):
         """ Handle a change in focus that affects the current tab. """
 
+        # It is possible for the C++ layer of this object to be deleted between
+        # the time when the focus change signal is emitted and time when the
+        # slots are dispatched by the Qt event loop. This may be a bug in PyQt4.
+        if sip.isdeleted(self):
+            return
+
         if self._repeat_focus_changes:
             self.emit(QtCore.SIGNAL('focusChanged(QWidget *,QWidget *)'),
-                    old, new)
+                      old, new)
 
         if isinstance(new, _DragableTabBar):
             ntw = new.parent()
