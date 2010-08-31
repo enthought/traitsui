@@ -23,9 +23,16 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-import wx
-import sys
+# Standard library imports.
 import os
+import sys
+
+# System library imports.
+import wx
+
+# ETS imports.
+from enthought.util.guisupport import is_event_loop_running_wx, \
+    start_event_loop_wx
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -34,11 +41,8 @@ import os
 # File to redirect output to. If '', output goes to stdout.
 redirect_filename = ''
 
-# The wx App object:
-app = None
-
 #-------------------------------------------------------------------------------
-#  Creates a 'stand-alone' wx Application to display a specified traits UI View:  
+#  Creates a 'stand-alone' wx Application to display a specified traits UI View:
 #-------------------------------------------------------------------------------
 
 def view_application ( context, view, kind, handler, id, scrollable, args ):
@@ -67,18 +71,14 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
         True, scroll bars appear on the dialog box if it is not large enough
         to display all of the items in the view at one time.
     """
-    global app
-
     if (kind == 'panel') or ((kind is None) and (view.kind == 'panel')):
         kind = 'modal'
-        
-    if app is None:
-        app = wx.GetApp()
-        
-    if (app is None) or (not app.IsMainLoopRunning()):
+
+    app = wx.GetApp()
+    if app is None or not is_event_loop_running_wx(app):
         return ViewApplication( context, view, kind, handler, id, 
                                 scrollable, args ).ui.result
-                                
+    
     return view.ui( context, 
                     kind       = kind, 
                     handler    = handler,
@@ -121,8 +121,9 @@ class ViewApplication ( wx.PySimpleApp ):
             super( ViewApplication, self ).__init__( 1, redirect_filename )
         else:
             super( ViewApplication, self ).__init__()
-         
-        self.MainLoop()
+        
+        # Start the event loop in an IPython-conforming manner. 
+        start_event_loop_wx(self)
     
     #---------------------------------------------------------------------------
     #  Handles application initialization:

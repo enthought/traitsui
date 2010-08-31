@@ -26,6 +26,7 @@ import wx
 
 # Enthought library imports.
 from enthought.traits.api import Bool, HasTraits, implements, Unicode
+from enthought.util.guisupport import start_event_loop_wx
 
 # Local imports.
 from enthought.pyface.i_gui import IGUI, MGUI
@@ -58,8 +59,6 @@ class GUI(MGUI, HasTraits):
         if self._splash_screen is not None:
             self._splash_screen.open()
 
-        return
-
     ###########################################################################
     # 'GUI' class interface.
     ###########################################################################
@@ -67,28 +66,20 @@ class GUI(MGUI, HasTraits):
     def invoke_after(cls, millisecs, callable, *args, **kw):
         wx.FutureCall(millisecs, callable, *args, **kw)
 
-        return
-
     invoke_after = classmethod(invoke_after)
 
     def invoke_later(cls, callable, *args, **kw):
         wx.CallAfter(callable, *args, **kw)
-
-        return
 
     invoke_later = classmethod(invoke_later)
 
     def set_trait_after(cls, millisecs, obj, trait_name, new):
         wx.FutureCall(millisecs, setattr, obj, trait_name, new)
 
-        return
-
     set_trait_after = classmethod(set_trait_after)
 
     def set_trait_later(cls, obj, trait_name, new):
         wx.CallAfter(setattr, obj, trait_name, new)
-
-        return
 
     set_trait_later = classmethod(set_trait_later)
 
@@ -97,8 +88,6 @@ class GUI(MGUI, HasTraits):
             wx.GetApp().Yield(True)
         else:
             wx.SafeYield()
-
-        return
 
     process_events = staticmethod(process_events)
 
@@ -133,19 +122,15 @@ class GUI(MGUI, HasTraits):
             self.invoke_later(_mac_os_x_hack)
 
         logger.debug("---------- starting GUI event loop ----------")
-        wx.GetApp().MainLoop()
+        start_event_loop_wx()
 
         self.started = False
-
-        return
 
     def stop_event_loop(self):
         """ Stop the GUI event loop. """
 
         logger.debug("---------- stopping GUI event loop ----------")
         wx.GetApp().ExitMainLoop()
-
-        return
 
     ###########################################################################
     # Trait handlers.
