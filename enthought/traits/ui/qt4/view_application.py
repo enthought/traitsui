@@ -17,9 +17,15 @@ complete application, using information from the specified UI object.
 #  Imports:
 #-------------------------------------------------------------------------------
 
+# Standard library imports.
 import os
 
+# System library imports.
 from PyQt4 import QtGui
+
+# ETS imports.
+from enthought.util.guisupport import is_event_loop_running_qt4, \
+    start_event_loop_qt4
 
 #-------------------------------------------------------------------------------
 #  Creates a 'stand-alone' PyQt application to display a specified traits UI
@@ -57,10 +63,8 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
     if (kind == 'panel') or ((kind is None) and (view.kind == 'panel')):
         kind = 'modal'
 
-    # The _in_event_loop hack is needed because Qt v4 won't tell you if an
-    # event loop is running.
     app = QtGui.QApplication.instance()
-    if app is not None and not hasattr(app, '_in_event_loop'):
+    if app is None or not is_event_loop_running_qt4(app):
         return ViewApplication( context, view, kind, handler, id, 
                                 scrollable, args ).ui.result
                                 
@@ -108,5 +112,4 @@ class ViewApplication ( object ):
                                 scrollable = self.scrollable,
                                 args       = self.args )
 
-        QtGui.QApplication.instance()._in_event_loop = True
-        QtGui.QApplication.exec_()
+        start_event_loop_qt4()

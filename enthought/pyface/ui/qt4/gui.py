@@ -19,6 +19,7 @@ from PyQt4 import QtCore, QtGui
 
 # Enthought library imports.
 from enthought.traits.api import Bool, HasTraits, implements, Unicode
+from enthought.util.guisupport import start_event_loop_qt4
 
 # Local imports.
 from enthought.pyface.i_gui import IGUI, MGUI
@@ -113,14 +114,9 @@ class GUI(MGUI, HasTraits):
         # has really started.
         self.set_trait_later(self, "started", True)
 
-        # This is a hack for TraitsUI.
-        QtGui.QApplication.instance()._in_event_loop = True
-
         logger.debug("---------- starting GUI event loop ----------")
-        QtGui.QApplication.exec_()
+        start_event_loop_qt4()
 
-        # This is a hack for TraitsUI.
-        QtGui.QApplication.instance()._in_event_loop = False
         self.started = False
 
     def stop_event_loop(self):
