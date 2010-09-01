@@ -70,7 +70,7 @@ class DirectoryDialog(MDirectoryDialog, Dialog):
 
     def _create_control(self, parent):
         # The default style.
-        style = wx.OPEN | wx.HIDE_READONLY
+        style = wx.OPEN
 
         # Create the wx style depending on which buttons are required etc.
         if self.new_directory:

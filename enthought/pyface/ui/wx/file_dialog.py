@@ -105,9 +105,9 @@ class FileDialog(MFileDialog, Dialog):
             default_filename = self.default_filename
 
         if self.action == 'open':
-            style = wx.OPEN | wx.HIDE_READONLY
+            style = wx.OPEN
         elif self.action == 'open files':
-            style = wx.OPEN | wx.HIDE_READONLY | wx.MULTIPLE
+            style = wx.OPEN | wx.MULTIPLE
         else:
             style = wx.SAVE | wx.OVERWRITE_PROMPT
 
