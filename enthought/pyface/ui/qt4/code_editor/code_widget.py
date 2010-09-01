@@ -17,7 +17,7 @@ from PyQt4 import QtCore, QtGui, Qt
 
 # Local imports
 from find_widget import FindWidget
-from gutters import LineNumberWidget
+from gutters import LineNumberWidget, StatusGutterWidget
 from replace_widget import ReplaceWidget
 from pygments_highlighter import PygmentsHighlighter
 
@@ -36,6 +36,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
 
         self.highlighter = PygmentsHighlighter(self.document(), lexer)
         self.line_number_widget = LineNumberWidget(self)
+        self.status_widget = StatusGutterWidget(self)
 
         if font is None:
             point_size = QtGui.QApplication.font().pointSize()
@@ -98,6 +99,18 @@ class CodeWidget(QtGui.QPlainTextEdit):
             0, rect.y(), self.line_number_widget.width(), rect.height())
         if rect.contains(self.viewport().rect()):
             self.update_line_number_width()
+            
+    def set_info_lines(self, info_lines):
+        self.status_widget.info_lines = info_lines
+        self.status_widget.update()
+        
+    def set_warn_lines(self, warn_lines):
+        self.status_widget.warn_lines = warn_lines
+        self.status_widget.update()
+        
+    def set_error_lines(self, error_lines):
+        self.status_widget.error_lines = error_lines
+        self.status_widget.update()
 
     def highlight_current_line(self):
         """ Highlight the line with the cursor.
@@ -349,6 +362,14 @@ class CodeWidget(QtGui.QPlainTextEdit):
             contents.top(), self.line_number_widget.digits_width(),
             contents.height()))
 
+        # use the viewport width to determine the right edge. This allows for
+        # the propper placement w/ and w/o the scrollbar
+        right_pos = self.viewport().width() + self.line_number_widget.width() + 1\
+                    - self.status_widget.sizeHint().width()
+        self.status_widget.setGeometry(QtCore.QRect(right_pos,
+            contents.top(), self.status_widget.sizeHint().width(), 
+            contents.height()))
+
     def sizeHint(self):
         # Suggest a size that is 80 characters wide and 40 lines tall.
         style = self.style()
@@ -356,6 +377,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
         font_metrics = QtGui.QFontMetrics(self.document().defaultFont())
         width = font_metrics.width(' ') * 80
         width += self.line_number_widget.sizeHint().width()
+        width += self.status_widget.sizeHint().width()
         width += style.pixelMetric(QtGui.QStyle.PM_ScrollBarExtent, opt, self)
         height = font_metrics.height() * 40
         return QtCore.QSize(width, height)
@@ -470,6 +492,15 @@ class AdvancedCodeWidget(QtGui.QWidget):
 
         # Key bindings
         self.replace_key = Qt.QKeySequence(Qt.Qt.CTRL + Qt.Qt.Key_R)
+        
+    def set_info_lines(self, info_lines):
+        self.code.set_info_lines(info_lines)
+        
+    def set_warn_lines(self, warn_lines):
+        self.code.set_warn_lines(warn_lines)
+        
+    def set_error_lines(self, error_lines):
+        self.code.set_error_lines(error_lines)
 
     def enable_find(self):
         self.replace.hide()
@@ -643,6 +674,8 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         f = open(sys.argv[1], 'r')
         window.code.setPlainText(f.read())
+        
+    window.code.set_info_lines([3,4,8])
 
     window.resize(640, 640)
     window.show()

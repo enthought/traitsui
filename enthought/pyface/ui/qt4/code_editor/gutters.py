@@ -17,6 +17,7 @@ from PyQt4 import QtGui, QtCore
 class GutterWidget(QtGui.QWidget):
 
     min_width = 5
+    background_color = QtGui.QColor(220, 220, 220)
 
     def sizeHint(self):
         return QtCore.QSize(self.min_width, 0)
@@ -32,7 +33,42 @@ class GutterWidget(QtGui.QWidget):
         """
         self.parent().wheelEvent(event)
 
+class StatusGutterWidget(GutterWidget):
+    """ Draws status markers
+    """
+    
+    def __init__(self, *args, **kw):
+        super(StatusGutterWidget, self).__init__(*args, **kw)
+        
+        self.error_lines = []
+        self.warn_lines = []
+        self.info_lines = []
+        
+    def sizeHint(self):
+        return QtCore.QSize(10, 0)
+        
+    def paintEvent(self, event):
+        """ Paint the line numbers.
+        """
+        painter = QtGui.QPainter(self)
+        painter.fillRect(event.rect(), self.background_color)
+        
+        cw = self.parent()
+        
+        pixels_per_block = self.height()/float(cw.blockCount())
+        
+        for line in self.info_lines:
+            painter.fillRect(QtCore.QRect(0, line*pixels_per_block, self.width(), 3), 
+                            QtCore.Qt.green)
 
+        for line in self.warn_lines:
+            painter.fillRect(QtCore.QRect(0, line*pixels_per_block, self.width(), 3), 
+                            QtCore.Qt.yellow)
+
+        for line in self.error_lines:
+            painter.fillRect(QtCore.QRect(0, line*pixels_per_block, self.width(), 3), 
+                            QtCore.Qt.red)
+                            
 class LineNumberWidget(GutterWidget):
     """ Draw line numbers.
     """
@@ -63,7 +99,7 @@ class LineNumberWidget(GutterWidget):
         """
         painter = QtGui.QPainter(self)
         painter.setFont(self.font)
-        painter.fillRect(event.rect(), QtCore.Qt.lightGray)
+        painter.fillRect(event.rect(), self.background_color)
         
         cw = self.parent()
         block = cw.firstVisibleBlock()

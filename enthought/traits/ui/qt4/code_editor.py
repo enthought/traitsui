@@ -359,7 +359,7 @@ class SourceEditor ( Editor ):
 
     @on_trait_change('dim_lines, squiggle_lines')
     def _style_document(self):
-        self._widget.recolor()
+        self._widget.set_warn_lines(self.squiggle_lines)
                 
         
 
