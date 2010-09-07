@@ -39,19 +39,20 @@ class CodeWidget(QtGui.QPlainTextEdit):
         self.line_number_widget = LineNumberWidget(self)
         self.status_widget = StatusGutterWidget(self)
 
-        # Set a decent fixed width for this platform.
-        font = QtGui.QFont()
-        if sys.platform == 'win32':
-            # Prefer Consolas, but fall back to Courier if necessary.
-            font.setFamily('Consolas')
-            if not font.exactMatch():
-                font.setFamily('Courier')
-        elif sys.platform == 'darwin':
-            font.setFamily('Monaco')
-        else:
-            font.setFamily('Monospace')
-        font.setPointSize(QtGui.qApp.font().pointSize())
-        font.setStyleHint(QtGui.QFont.TypeWriter)
+        if font is None:
+            # Set a decent fixed width font for this platform.
+            font = QtGui.QFont()
+            if sys.platform == 'win32':
+                # Prefer Consolas, but fall back to Courier if necessary.
+                font.setFamily('Consolas')
+                if not font.exactMatch():
+                    font.setFamily('Courier')
+            elif sys.platform == 'darwin':
+                font.setFamily('Monaco')
+            else:
+                font.setFamily('Monospace')
+            font.setPointSize(QtGui.qApp.font().pointSize())
+            font.setStyleHint(QtGui.QFont.TypeWriter)
         self.set_font(font)
 
         # Whether we should highlight the current line or not.
