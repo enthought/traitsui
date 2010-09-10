@@ -29,6 +29,9 @@ class StatusBarManager(HasTraits):
 
     # Whether to show a size grip on the status bar.
     size_grip = Bool(False)
+
+    # Whether the status bar is visible.
+    visible = Bool(True)
     
     ###########################################################################
     # 'StatusBarManager' interface.
@@ -40,6 +43,7 @@ class StatusBarManager(HasTraits):
         if self.status_bar is None:
             self.status_bar = QtGui.QStatusBar(parent)
             self.status_bar.setSizeGripEnabled(self.size_grip)
+            self.status_bar.setVisible(self.visible)
 
             if len(self.messages) > 1:
                 self._show_messages()
@@ -93,6 +97,12 @@ class StatusBarManager(HasTraits):
 
         if self.status_bar is not None:
             self.status_bar.setSizeGripEnabled(self.size_grip)
+
+    def _visible_changed(self):
+        """ Turns the status bar visibility on and off. """
+        
+        if self.status_bar is not None:
+            self.status_bar.setVisible(self.visible)
 
     ###########################################################################
     # Private interface.

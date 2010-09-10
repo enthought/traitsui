@@ -70,7 +70,11 @@ class ApplicationWindow(MApplicationWindow, Window):
     def _create_status_bar(self, parent):
         if self.status_bar_manager is not None:
             status_bar = self.status_bar_manager.create_status_bar(parent)
+
+            # QMainWindow automatically makes the status bar visible, but we
+            # have delegated this responsibility to the status bar manager.
             self.control.setStatusBar(status_bar)
+            status_bar.setVisible(self.status_bar_manager.visible)
 
     def _create_tool_bar(self, parent):
         tool_bar_managers = self._get_tool_bar_managers()
