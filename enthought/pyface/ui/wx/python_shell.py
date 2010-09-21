@@ -135,8 +135,8 @@ class PythonShell(MPythonShell, Widget):
             sys.argv = save_argv
             sys.modules['__main__'] = save_main
             sys.stdin = old_stdin
-            sys.stdout = old_stderr
-            sys.stderr = old_stdout
+            sys.stdout = old_stdout
+            sys.stderr = old_stderr
 
         # Update the interpreter with the new namespace
         del prog_ns['__name__']
