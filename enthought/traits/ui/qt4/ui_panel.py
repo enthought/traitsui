@@ -844,8 +844,8 @@ class _GroupPanel(object):
                 else:
                     item_height = max(item_height, height)
 
-                control.setMinimumWidth(item_width)
-                control.setMinimumHeight(item_height)
+                control.setMinimumWidth(max(item_width, 0))
+                control.setMinimumHeight(max(item_height, 0))
 
             # Bind the editor into the UIInfo object name space so it can be 
             # referred to by a Handler while the user interface is active:
