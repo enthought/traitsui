@@ -258,13 +258,8 @@ class SourceEditor ( Editor ):
     def _mark_lines_changed ( self ):
         """ Handles the set of marked lines being changed.
         """
-        lines   = self.mark_lines
-        control = self._widget
-        lc      = control.lines()
-        control.markerDeleteAll(MARK_MARKER)
-        for line in lines:
-            if 0 < line <= lc:
-                control.markerAdd(line - 1, MARK_MARKER)
+        # FIXME: Not implemented at this time.
+        return
 
     def _mark_lines_items_changed ( self ):
         self._mark_lines_changed()
@@ -287,15 +282,12 @@ class SourceEditor ( Editor ):
     def _selected_line_changed ( self ):
         """ Handles a change in which line is currently selected.
         """
-        line    = self.selected_line
         control = self._widget
-        line    = max(1, min(control.lines(), line)) - 1
-        control.markerDeleteAll(SELECTED_MARKER)
-        control.markerAdd(line, SELECTED_MARKER)
-        _, column = control.getCursorPosition()
-        control.setCursorPosition(line, column)
+        line = max(1, min(control.lines(), self.selected_line))
+        _, column = control.get_line_column()
+        control.set_line_column(line, column)
         if self.factory.auto_scroll:
-            control.ensureLineVisible(line)
+            control.centerCursor()
 
     #---------------------------------------------------------------------------
     #  Handles the 'line' trait being changed:  
@@ -303,9 +295,10 @@ class SourceEditor ( Editor ):
                                               
     def _line_changed ( self, line ):
         if not self._locked:
-            control = self._widget
-            _, column = control.getCursorPosition()
-            self._widget.setCursorPosition(line - 1, column)
+            _, column = self._widget.get_line_column()
+            self._widget.set_line_column(line, column)
+            if self.factory.auto_scroll:
+                self._widget.centerCursor()
                                   
     #---------------------------------------------------------------------------
     #  Handles the 'column' trait being changed:  
@@ -313,23 +306,23 @@ class SourceEditor ( Editor ):
                                               
     def _column_changed ( self, column ):
         if not self._locked:
-            control = self._widget
-            line, _ = control.getCursorPosition()
-            self._widget.setCursorPosition(line, column - 1)
+            line, _ = self._widget.get_line_column()
+            self._widget.set_line_column(line, column)
 
     #---------------------------------------------------------------------------
     #  Handles the cursor position being changed:  
     #---------------------------------------------------------------------------
                         
-    def _position_changed(self, line, column):
+    def _position_changed(self):
         """ Handles the cursor position being changed.
         """
         control = self._widget
         self._locked = True
-        self.line = line
-        self.column = column
+        self.line, self.column = control.get_line_column()
         self._locked = False
-        self.selected_text = unicode(control.selectedText())
+        self.selected_text = control.get_selected_text()
+        if self.factory.auto_scroll:
+            self._widget.centerCursor()
                 
     #---------------------------------------------------------------------------
     #  Handles a key being pressed within the editor:    

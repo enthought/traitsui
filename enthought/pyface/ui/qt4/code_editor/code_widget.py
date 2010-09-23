@@ -89,6 +89,48 @@ class CodeWidget(QtGui.QPlainTextEdit):
         self.comment_key = Qt.QKeySequence(Qt.Qt.CTRL + Qt.Qt.Key_Slash)
         self.backspace_key = Qt.QKeySequence(Qt.Qt.Key_Backspace)
 
+    def lines(self):
+        """ Return the number of lines.
+        """
+        return self.blockCount()
+
+    def set_line_column(self, line, column):
+        """ Move the cursor to a particular line/column number.
+
+        These line and column numbers are 1-indexed.
+        """
+        # Allow the caller to ignore either line or column by passing None.
+        line0, col0 = self.get_line_column()
+        if line is None:
+            line = line0
+        if column is None:
+            column = col0
+        line -= 1
+        column -= 1
+        block = self.document().findBlockByLineNumber(line)
+        line_start = block.position()
+        position = line_start + column
+        cursor = self.textCursor()
+        cursor.setPosition(position)
+        self.setTextCursor(cursor)
+
+    def get_line_column(self):
+        """ Get the current line and column numbers.
+
+        These line and column numbers are 1-indexed.
+        """
+        cursor = self.textCursor()
+        pos = cursor.position()
+        line = cursor.blockNumber() + 1
+        line_start = cursor.block().position()
+        column = pos - line_start + 1
+        return line, column
+
+    def get_selected_text(self):
+        """ Return the currently selected text.
+        """
+        return unicode(self.textCursor().selectedText())
+
     def set_font(self, font):
         """ Set the new QFont.
         """
@@ -504,6 +546,26 @@ class AdvancedCodeWidget(QtGui.QWidget):
         # Key bindings
         self.replace_key = Qt.QKeySequence(Qt.Qt.CTRL + Qt.Qt.Key_R)
         
+    def lines(self):
+        """ Return the number of lines.
+        """
+        return self.code.lines()
+
+    def set_line_column(self, line, column):
+        """ Move the cursor to a particular line/column position.
+        """
+        self.code.set_line_column(line, column)
+
+    def get_line_column(self):
+        """ Get the current line and column numbers.
+        """
+        return self.code.get_line_column()
+
+    def get_selected_text(self):
+        """ Return the currently selected text.
+        """
+        return self.code.get_selected_text()
+
     def set_info_lines(self, info_lines):
         self.code.set_info_lines(info_lines)
         
@@ -634,6 +696,12 @@ class AdvancedCodeWidget(QtGui.QWidget):
         """ Convenience method to call 'print_' on the CodeWidget.
         """
         self.code.print_(printer)
+
+    def ensureCursorVisible(self):
+        self.code.ensureCursorVisible()
+
+    def centerCursor(self):
+        self.code.centerCursor()
 
     ###########################################################################
     # QWidget interface
