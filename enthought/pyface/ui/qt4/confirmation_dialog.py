@@ -79,6 +79,7 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
             btn = dlg.addButton(self.yes_label, QtGui.QMessageBox.YesRole)
         else:
             btn = dlg.addButton(QtGui.QMessageBox.Yes)
+        self._button_result_map[btn] = YES
 
         if self.default == YES:
             dlg.setDefaultButton(btn)
@@ -88,6 +89,7 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
             btn = dlg.addButton(self.no_label, QtGui.QMessageBox.NoRole)
         else:
             btn = dlg.addButton(QtGui.QMessageBox.No)
+        self._button_result_map[btn] = NO
 
         if self.default == NO:
             dlg.setDefaultButton(btn)
@@ -98,6 +100,8 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
                 btn = dlg.addButton(self.cancel_label, QtGui.QMessageBox.RejectRole)
             else:
                 btn = dlg.addButton(QtGui.QMessageBox.Cancel)
+
+            self._button_result_map[btn] = CANCEL
 
             if self.default == CANCEL:
                 dlg.setDefaultButton(btn)
