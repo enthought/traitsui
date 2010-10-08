@@ -15,7 +15,7 @@
 from PyQt4 import QtCore, QtGui
 
 # Enthought library imports.
-from enthought.traits.api import Bool, Dict, Enum, implements, Int, Str, Unicode
+from enthought.traits.api import Bool, Enum, implements, Int, Str, Unicode
 
 # Local imports.
 from enthought.pyface.i_dialog import IDialog, MDialog
@@ -61,13 +61,6 @@ class Dialog(MDialog, Window):
 
     title = Unicode("Dialog")
 
-    # If we create custom buttons with the various roles, then we need to 
-    # keep track of the buttons so we can see what the user clicked.  It's
-    # not correct nor sufficient to check the return result from QMessageBox.exec_().
-    # (As of Qt 4.5.1, even clicking a button with the YesRole would lead to
-    # exec_() returning QDialog.Rejected.
-    _button_result_map = Dict()
-
     ###########################################################################
     # Protected 'IDialog' interface.
     ###########################################################################
@@ -81,7 +74,6 @@ class Dialog(MDialog, Window):
                                     QtGui.QDialogButtonBox.AcceptRole)
         else:
             btn = buttons.addButton(QtGui.QDialogButtonBox.Ok)
-        self._button_result_map[btn] = OK
 
         btn.setDefault(True)
         QtCore.QObject.connect(btn, QtCore.SIGNAL('clicked()'), 
@@ -93,7 +85,6 @@ class Dialog(MDialog, Window):
                                     QtGui.QDialogButtonBox.RejectRole)
         else:
             btn = buttons.addButton(QtGui.QDialogButtonBox.Cancel)
-        self._button_result_map[btn] = CANCEL
 
         QtCore.QObject.connect(btn, QtCore.SIGNAL('clicked()'), 
                                self.control, QtCore.SLOT('reject()'))
@@ -136,12 +127,7 @@ class Dialog(MDialog, Window):
     def _show_modal(self):
         self.control.setWindowModality(QtCore.Qt.ApplicationModal)
         retval = self.control.exec_()
-        clicked_button = self.control.clickedButton()
-        if clicked_button in self._button_result_map:
-            retval = self._button_result_map[clicked_button]
-        else:
-            retval = _RESULT_MAP[retval]
-        return retval
+        return _RESULT_MAP[retval]
 
     ###########################################################################
     # Protected 'IWidget' interface.

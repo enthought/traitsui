@@ -12,10 +12,10 @@
 
 
 # Major package imports.
-from PyQt4 import QtGui
+from PyQt4 import QtCore, QtGui
 
 # Enthought library imports.
-from enthought.traits.api import Bool, Enum, implements, Instance, Unicode
+from enthought.traits.api import Bool, Dict, Enum, implements, Instance, Unicode
 
 # Local imports.
 from enthought.pyface.i_confirmation_dialog import IConfirmationDialog, MConfirmationDialog
@@ -48,6 +48,13 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
     no_label = Unicode
 
     yes_label = Unicode
+
+    # If we create custom buttons with the various roles, then we need to 
+    # keep track of the buttons so we can see what the user clicked.  It's
+    # not correct nor sufficient to check the return result from QMessageBox.exec_().
+    # (As of Qt 4.5.1, even clicking a button with the YesRole would lead to
+    # exec_() returning QDialog.Rejected.
+    _button_result_map = Dict()
 
     ###########################################################################
     # Protected 'IDialog' interface.
@@ -107,5 +114,15 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
                 dlg.setDefaultButton(btn)
 
         return dlg
+
+    def _show_modal(self):
+        self.control.setWindowModality(QtCore.Qt.ApplicationModal)
+        retval = self.control.exec_()
+        clicked_button = self.control.clickedButton()
+        if clicked_button in self._button_result_map:
+            retval = self._button_result_map[clicked_button]
+        else:
+            retval = _RESULT_MAP[retval]
+        return retval
 
 #### EOF ######################################################################
