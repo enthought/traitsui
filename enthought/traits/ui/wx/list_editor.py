@@ -438,6 +438,7 @@ class SimpleEditor ( Editor ):
         list, index = self.get_info()
         self.value  = (list[:index-1] + [ list[index], list[index-1] ] +
                        list[index+1:])
+        self.update_editor()
 
     #---------------------------------------------------------------------------
     #  Moves the current item down one in the list:
@@ -449,6 +450,7 @@ class SimpleEditor ( Editor ):
         list, index = self.get_info()
         self.value  = (list[:index] + [ list[index+1], list[index] ] +
                        list[index+2:])
+        self.update_editor()
 
     #---------------------------------------------------------------------------
     #  Moves the current item to the top of the list:
@@ -459,6 +461,7 @@ class SimpleEditor ( Editor ):
         """
         list, index = self.get_info()
         self.value  = [ list[index] ] + list[:index] + list[index+1:]
+        self.update_editor()
 
     #---------------------------------------------------------------------------
     #  Moves the current item to the bottom of the list:
@@ -469,6 +472,7 @@ class SimpleEditor ( Editor ):
         """
         list, index = self.get_info()
         self.value  = list[:index] + list[index+1:] + [ list[index] ]
+        self.update_editor()
 
     #-- Property Implementations -----------------------------------------------
 
