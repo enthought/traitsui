@@ -48,6 +48,7 @@ class Editor(MEditor):
 
         if self.control is not None:
             self.control.hide()
+            self.control.close()
             self.control.deleteLater()
             self.control = None
 
