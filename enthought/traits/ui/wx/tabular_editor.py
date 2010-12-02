@@ -430,14 +430,7 @@ class TabularEditor ( Editor ):
         """ Performs updates when the object trait changes.
             Overloads enthought.traits.ui.editor.UIEditor
         """
-        control = self.control
-        n       = self.adapter.len( self.object, self.name )
-        top     = control.GetTopItem()
-        pn      = control.GetCountPerPage()
-        bottom = min(top + pn - 1, n, len(old_value))
-        
-        if old_value[top:bottom] != new_value[top:bottom]:
-            self._update_visible = True
+        self._update_visible = True
             
         super(TabularEditor, self)._update_editor(object, name, 
                                                   old_value, new_value)
