@@ -142,7 +142,7 @@ html_use_modindex = False
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'ETSdoc'
+htmlhelp_basename = 'TraitsBackendWXdoc'
 
 
 # Options for LaTeX output
@@ -157,7 +157,7 @@ htmlhelp_basename = 'ETSdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'ETS.tex', 'ETS Documentation', 'Enthought', 'manual'),
+  ('index', 'TraitsBackendWX.tex', 'TraitsBackendWX Documentation', 'Enthought', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
