@@ -35,7 +35,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General substitutions.
-project = 'ETS'
+project = 'TraitsBackendWX'
 copyright = '2010, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
