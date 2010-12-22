@@ -9,7 +9,7 @@
 # Description: <Enthought pyface code editor>
 #------------------------------------------------------------------------------
 
-from PyQt4 import QtGui
+from enthought.qt.api import QtGui
 
 from pygments.lexer import RegexLexer, _TokenType, Text, Error
 from pygments.lexers import CLexer, CppLexer, PythonLexer, get_lexer_by_name
@@ -111,9 +111,9 @@ class BlockUserData(QtGui.QTextBlockUserData):
     syntax_stack = ('root',)
 
     def __init__(self, **kwds):
+        QtGui.QTextBlockUserData.__init__(self)
         for key, value in kwds.iteritems():
             setattr(self, key, value)
-        QtGui.QTextBlockUserData.__init__(self)
 
     def __repr__(self):
         attrs = ['syntax_stack']
@@ -161,6 +161,11 @@ class PygmentsHighlighter(QtGui.QSyntaxHighlighter):
         if hasattr(self._lexer, '_epd_state_stack'):
             data = BlockUserData(syntax_stack=self._lexer._epd_state_stack)
             self.currentBlock().setUserData(data)
+            
+            # there is a bug in pyside and it will crash unless we
+            # hold on to the reference a little longer
+            data = self.currentBlock().userData()
+            
             # Clean up for the next go-round.
             del self._lexer._epd_state_stack
 

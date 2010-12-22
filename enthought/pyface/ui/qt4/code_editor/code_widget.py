@@ -14,7 +14,7 @@ import math
 import sys
 
 # System library imports
-from PyQt4 import QtCore, QtGui, Qt
+from enthought.qt.api import QtCore, QtGui, QKeySequence, QTextCursor, Qt
 
 # Local imports
 from find_widget import FindWidget
@@ -84,10 +84,10 @@ class CodeWidget(QtGui.QPlainTextEdit):
         self.setLineWrapMode(QtGui.QPlainTextEdit.NoWrap)
 
         # Key bindings
-        self.indent_key = Qt.QKeySequence(Qt.Qt.Key_Tab)
-        self.unindent_key = Qt.QKeySequence(Qt.Qt.SHIFT + Qt.Qt.Key_Backtab)
-        self.comment_key = Qt.QKeySequence(Qt.Qt.CTRL + Qt.Qt.Key_Slash)
-        self.backspace_key = Qt.QKeySequence(Qt.Qt.Key_Backspace)
+        self.indent_key = QKeySequence(Qt.Key_Tab)
+        self.unindent_key = QKeySequence(Qt.SHIFT + Qt.Key_Backtab)
+        self.comment_key = QKeySequence(Qt.CTRL + Qt.Key_Slash)
+        self.backspace_key = QKeySequence(Qt.Key_Backspace)
 
     def lines(self):
         """ Return the number of lines.
@@ -184,7 +184,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
 
         cursor = self.textCursor()
         text = cursor.block().text()
-        trimmed = text.trimmed()
+        trimmed = text.rstrip()
         current_indent_pos = self._get_indent_position(text)
 
         cursor.beginEditBlock()
@@ -195,12 +195,12 @@ class CodeWidget(QtGui.QPlainTextEdit):
 
         # Remove any leading whitespace from the current line
         after = cursor.block().text()
-        trimmed_after = after.trimmed()
-        pos = after.indexOf(trimmed_after)
+        trimmed_after = after.rstrip()
+        pos = after.index(trimmed_after)
         for i in range(pos):
             cursor.deleteChar()
 
-        if self.indent_character and trimmed.endsWith(self.indent_character):
+        if self.indent_character and trimmed.endswith(self.indent_character):
             # indent one level
             indent = text[:current_indent_pos] + tab
         else:
@@ -310,16 +310,16 @@ class CodeWidget(QtGui.QPlainTextEdit):
             self._show_selected_blocks(sel_blocks)
 
     def line_comment(self, cursor, position):
-        cursor.movePosition(Qt.QTextCursor.StartOfBlock)
-        cursor.movePosition(Qt.QTextCursor.Right,
-                            Qt.QTextCursor.MoveAnchor, position)
+        cursor.movePosition(QTextCursor.StartOfBlock)
+        cursor.movePosition(QTextCursor.Right,
+                            QTextCursor.MoveAnchor, position)
         cursor.insertText(self.comment_character)
 
     def line_uncomment(self, cursor, position=0):
-        cursor.movePosition(Qt.QTextCursor.StartOfBlock)
+        cursor.movePosition(QTextCursor.StartOfBlock)
         new_text = cursor.block().text().remove(position, 1)
-        cursor.movePosition(Qt.QTextCursor.EndOfBlock,
-                            Qt.QTextCursor.KeepAnchor)
+        cursor.movePosition(QTextCursor.EndOfBlock,
+                            QTextCursor.KeepAnchor)
         cursor.removeSelectedText()
         cursor.insertText(new_text)
 
@@ -338,11 +338,11 @@ class CodeWidget(QtGui.QPlainTextEdit):
         if self.tabs_as_spaces:
             tab = '    '
 
-        cursor.movePosition(Qt.QTextCursor.StartOfBlock)
-        if cursor.block().text().startsWith(tab):
-            new_text = cursor.block().text().remove(0, len(tab))
-            cursor.movePosition(Qt.QTextCursor.EndOfBlock,
-                                Qt.QTextCursor.KeepAnchor)
+        cursor.movePosition(QTextCursor.StartOfBlock)
+        if cursor.block().text().startswith(tab):
+            new_text = cursor.block().text()[len(tab):]
+            cursor.movePosition(QTextCursor.EndOfBlock,
+                                QTextCursor.KeepAnchor)
             cursor.removeSelectedText()
             cursor.insertText(new_text)
             return len(tab)
@@ -353,7 +353,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
         """ Return the word under the cursor.
         """
         cursor = self.textCursor()
-        cursor.select(Qt.QTextCursor.WordUnderCursor)
+        cursor.select(QTextCursor.WordUnderCursor)
         return unicode(cursor.selectedText())
 
     ###########################################################################
@@ -367,7 +367,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
         pass
     
     def keyPressEvent(self, event):
-        key_sequence = Qt.QKeySequence(event.key() + int(event.modifiers()))
+        key_sequence = QKeySequence(event.key() + int(event.modifiers()))
         
         self.keyPressEvent_action(event) # FIXME: see above
 
@@ -376,19 +376,19 @@ class CodeWidget(QtGui.QPlainTextEdit):
         # beginning of the document. Likewise, if the cursor is somewhere in the
         # last line, the "down" key causes it to go to the end.
         cursor = self.textCursor()
-        if key_sequence.matches(Qt.QKeySequence(Qt.Qt.Key_Up)):
+        if key_sequence.matches(QKeySequence(Qt.Key_Up)):
             cursor.movePosition(QtGui.QTextCursor.StartOfLine)
             if cursor.atStart():
                 self.setTextCursor(cursor)
                 event.accept()
-        elif key_sequence.matches(Qt.QKeySequence(Qt.Qt.Key_Down)):
+        elif key_sequence.matches(QKeySequence(Qt.Key_Down)):
             cursor.movePosition(QtGui.QTextCursor.EndOfLine)
             if cursor.atEnd():
                 self.setTextCursor(cursor)
                 event.accept()
 
         elif self.auto_indent and \
-                key_sequence.matches(Qt.QKeySequence(Qt.Qt.Key_Return)):
+                key_sequence.matches(QKeySequence(Qt.Key_Return)):
             event.accept()
             return self.autoindent_newline()
         elif key_sequence.matches(self.indent_key):
@@ -440,12 +440,12 @@ class CodeWidget(QtGui.QPlainTextEdit):
     ###########################################################################
 
     def _get_indent_position(self, line):
-        trimmed = line.trimmed()
-        if trimmed.size() != 0:
-            return line.indexOf(trimmed)
+        trimmed = line.rstrip()
+        if len(trimmed) != 0:
+            return line.index(trimmed)
         else:
             # if line is all spaces, treat it as the indent position
-            return line.size()
+            return len(line)
 
     def _show_selected_blocks(self, selected_blocks):
         """ Assumes contiguous blocks
@@ -453,30 +453,30 @@ class CodeWidget(QtGui.QPlainTextEdit):
         cursor = self.textCursor()
         cursor.clearSelection()
         cursor.setPosition(selected_blocks[0].position())
-        cursor.movePosition(Qt.QTextCursor.StartOfBlock)
-        cursor.movePosition(Qt.QTextCursor.NextBlock, 
-                            Qt.QTextCursor.KeepAnchor, len(selected_blocks))
-        cursor.movePosition(Qt.QTextCursor.EndOfBlock, 
-                            Qt.QTextCursor.KeepAnchor)
+        cursor.movePosition(QTextCursor.StartOfBlock)
+        cursor.movePosition(QTextCursor.NextBlock, 
+                            QTextCursor.KeepAnchor, len(selected_blocks))
+        cursor.movePosition(QTextCursor.EndOfBlock, 
+                            QTextCursor.KeepAnchor)
 
         self.setTextCursor(cursor)
 
     def _get_selected_blocks(self):
         cursor = self.textCursor()
         if cursor.position() > cursor.anchor():
-            move_op = Qt.QTextCursor.PreviousBlock
+            move_op = QTextCursor.PreviousBlock
             start_pos = cursor.anchor()
             end_pos = cursor.position()
         else:
-            move_op = Qt.QTextCursor.NextBlock
+            move_op = QTextCursor.NextBlock
             start_pos = cursor.position()
             end_pos = cursor.anchor()
 
         cursor.setPosition(start_pos)
-        cursor.movePosition(Qt.QTextCursor.StartOfBlock)
+        cursor.movePosition(QTextCursor.StartOfBlock)
         blocks = [cursor.block()]
 
-        while cursor.movePosition(Qt.QTextCursor.NextBlock):
+        while cursor.movePosition(QTextCursor.NextBlock):
             block = cursor.block()
             if block.position() < end_pos:
                 blocks.append(block)
@@ -544,7 +544,7 @@ class AdvancedCodeWidget(QtGui.QWidget):
         self.setLayout(layout)
 
         # Key bindings
-        self.replace_key = Qt.QKeySequence(Qt.Qt.CTRL + Qt.Qt.Key_R)
+        self.replace_key = QKeySequence(Qt.CTRL + Qt.Key_R)
         
     def lines(self):
         """ Return the number of lines.
@@ -635,9 +635,9 @@ class AdvancedCodeWidget(QtGui.QWidget):
                 find_cursor.insertText(replace)
                 find_cursor.endEditBlock()
                 find_cursor.movePosition(
-                    Qt.QTextCursor.Left, Qt.QTextCursor.MoveAnchor,len(replace))
+                    QTextCursor.Left, QTextCursor.MoveAnchor,len(replace))
                 find_cursor.movePosition(
-                    Qt.QTextCursor.Right,Qt.QTextCursor.KeepAnchor,len(replace))
+                    QTextCursor.Right, QTextCursor.KeepAnchor,len(replace))
                 self.code.setTextCursor(find_cursor)
             else:
                 self.code.setTextCursor(find_cursor)
@@ -708,13 +708,13 @@ class AdvancedCodeWidget(QtGui.QWidget):
     ###########################################################################
 
     def keyPressEvent(self, event):
-        key_sequence = Qt.QKeySequence(event.key() + int(event.modifiers()))
+        key_sequence = QKeySequence(event.key() + int(event.modifiers()))
 
-        if key_sequence.matches(Qt.QKeySequence.Find):
+        if key_sequence.matches(QKeySequence.Find):
             self.enable_find()
         elif key_sequence.matches(self.replace_key):
             self.enable_replace()
-        elif key_sequence.matches(Qt.Qt.Key_Escape):
+        elif key_sequence.matches(Qt.Key_Escape):
             if self.active_find_widget:
                 self.find.hide()
                 self.replace.hide()

@@ -11,7 +11,8 @@
 
 import weakref
 
-from PyQt4 import QtGui, Qt
+from enthought.qt.api import QtGui, Qt
+
 
 class FindWidget(QtGui.QWidget):
     
@@ -28,7 +29,7 @@ class FindWidget(QtGui.QWidget):
         layout.addLayout(form_layout)
 
         close_button = QtGui.QPushButton('Close')
-        layout.addWidget(close_button, 1, Qt.Qt.AlignRight)
+        layout.addWidget(close_button, 1, Qt.AlignRight)
         close_button.clicked.connect(self.hide)
                                 
         self.setLayout(layout)
