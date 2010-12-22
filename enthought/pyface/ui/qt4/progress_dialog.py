@@ -15,7 +15,7 @@
 
 import time
 
-from PyQt4 import QtGui, QtCore
+from enthought.qt.api import QtGui, QtCore
 
 
 # Enthought library imports

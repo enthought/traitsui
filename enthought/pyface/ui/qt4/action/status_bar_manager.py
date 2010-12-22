@@ -8,7 +8,7 @@
 #------------------------------------------------------------------------------
 
 # Major package imports.
-from PyQt4 import QtGui
+from enthought.qt.api import QtGui
 
 # Enthought library imports.
 from enthought.traits.api import Any, Bool, HasTraits, List, Property, Str, \

@@ -15,7 +15,7 @@
 import os
 
 # Major package imports.
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 # Enthought library imports.
 from enthought.traits.api import Enum, implements, Int, Unicode, List

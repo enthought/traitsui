@@ -12,7 +12,7 @@
 
 
 # Major package imports.
-from PyQt4 import QtCore
+from enthought.qt.api import QtCore
 
 
 class DoLaterTimer(QtCore.QTimer):

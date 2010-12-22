@@ -12,7 +12,7 @@
 
 
 # Major package imports.
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 # Enthought library imports.
 from enthought.traits.api import Any, Event, implements, Property, Unicode
@@ -155,7 +155,7 @@ class _EventFilter(QtCore.QObject):
         # Sanity check.
         if obj is not window.control:
             return False
-
+        
         if e.type() == QtCore.QEvent.Close:
             # Do not destroy the window during its event handler.
             GUI.invoke_later(window.close)

@@ -12,7 +12,7 @@
 
 
 # Major package imports.
-from PyQt4 import QtCore, QtGui, QtSvg
+from enthought.qt.api import QtCore, QtGui, QtSvg
 
 # Enthought library imports.
 from enthought.resource.api import ResourceFactory

@@ -16,7 +16,7 @@
 from inspect import getargspec
 
 # Major package imports.
-from PyQt4 import QtGui
+from enthought.qt.api import QtGui, QtCore
 
 # Enthought library imports.
 from enthought.traits.api import Any, Bool, HasTraits
@@ -228,13 +228,15 @@ class _Tool(HasTraits):
 
         # FIXME v3: This is a wx'ism and should be hidden in the toolkit code.
         self.control_id = None
-
+        
         if action.image is None:
-            self.control = tool_bar.addAction(action.name,
-                    self._qt4_on_triggered)
+            self.control = tool_bar.addAction(action.name)
         else:
             self.control = tool_bar.addAction(action.image.create_icon(),
-                    action.name, self._qt4_on_triggered)
+                    action.name)
+
+        QtCore.QObject.connect(self.control, QtCore.SIGNAL('triggered()'),
+                               self._qt4_on_triggered)
 
         self.control.setToolTip(action.tooltip)
         self.control.setWhatsThis(action.description)
@@ -277,7 +279,7 @@ class _Tool(HasTraits):
 
     def _qt4_on_triggered(self):
         """ Called when the tool bar tool is clicked. """
-
+        
         action = self.item.action
         action_event = ActionEvent()
 

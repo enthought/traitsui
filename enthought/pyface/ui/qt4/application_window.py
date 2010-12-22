@@ -12,7 +12,7 @@
 
 
 # Major package imports.
-from PyQt4 import QtGui
+from enthought.qt.api import QtGui
 
 # Enthought library imports.
 from enthought.pyface.action.api import MenuBarManager, StatusBarManager
@@ -85,7 +85,7 @@ class ApplicationWindow(MApplicationWindow, Window):
 
                 # Make sure that the tool bar has a name so that its state can
                 # be saved.
-                if tool_bar.objectName().isEmpty():
+                if len(tool_bar.objectName()) == 0:
                     tool_bar.setObjectName(tool_bar_manager.name)
                     
     def _set_window_icon(self):

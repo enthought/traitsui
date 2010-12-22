@@ -15,7 +15,7 @@
 import logging
 
 # Major package imports.
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 # Enthought library imports.
 from enthought.traits.api import Instance, on_trait_change
@@ -525,7 +525,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             mon = self._qt4_mon
         except AttributeError:
             mon = self._qt4_mon = _Monitor(self)
-
+            
         control.installEventFilter(mon)
 
 

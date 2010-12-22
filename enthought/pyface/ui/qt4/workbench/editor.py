@@ -29,7 +29,7 @@ class Editor(MEditor):
     def create_control(self, parent):
         """ Create the toolkit-specific control that represents the part. """
 
-        from PyQt4 import QtGui
+        from enthought.qt.api import QtGui
 
         # By default we create a yellow panel!
         control = QtGui.QWidget(parent)

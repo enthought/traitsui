@@ -13,7 +13,7 @@
 
 
 # Major package imports.
-from PyQt4 import QtGui
+from enthought.qt.api import QtGui
 
 # Local imports.
 from enthought.pyface.action.action_manager import ActionManager

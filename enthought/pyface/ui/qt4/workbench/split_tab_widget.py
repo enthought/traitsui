@@ -12,7 +12,7 @@ import sys
 
 # Major library imports.
 import sip
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui, Signal
 
 
 class SplitTabWidget(QtGui.QSplitter):
@@ -22,9 +22,9 @@ class SplitTabWidget(QtGui.QSplitter):
     """
 
     # Signals for WorkbenchWindowLayout to handle
-    new_window_request = QtCore.pyqtSignal(QtCore.QPoint, QtGui.QWidget)
-    tab_close_request = QtCore.pyqtSignal(QtGui.QWidget)
-    tab_window_changed = QtCore.pyqtSignal(QtGui.QWidget)
+    new_window_request = Signal(QtCore.QPoint, QtGui.QWidget)
+    tab_close_request = Signal(QtGui.QWidget)
+    tab_window_changed = Signal(QtGui.QWidget)
 
     # The different hotspots of a QTabWidget.  An non-negative value is a tab
     # index and the hotspot is to the left of it.
