@@ -20,7 +20,7 @@ PyQt user interface toolkit.
 from math \
     import log10
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 from enthought.traits.api \
      import TraitError, Str, Float, Any, Bool

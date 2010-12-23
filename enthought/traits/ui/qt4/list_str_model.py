@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui, QVariant
 
 from enthought.traits.ui.ui_traits import SequenceTypes
 
@@ -74,7 +74,7 @@ class ListStrModel(QtCore.QAbstractListModel):
             if role == QtCore.Qt.DisplayRole and text == '':
                 # FIXME: This is a hack to make empty strings editable.
                 text = ' '
-            return QtCore.QVariant(text)
+            return QVariant(text)
         
         elif role == QtCore.Qt.DecorationRole:
             if editor.is_auto_add(index):
@@ -84,7 +84,7 @@ class ListStrModel(QtCore.QAbstractListModel):
                 image = adapter.get_image(editor.object, editor.name, index)
             image = editor.get_image(image)
             if image is not None:
-                return QtCore.QVariant(image)
+                return QVariant(image)
 
         elif role == QtCore.Qt.BackgroundRole:
             if editor.is_auto_add(index):
@@ -96,7 +96,7 @@ class ListStrModel(QtCore.QAbstractListModel):
                     q_color = QtGui.QColor(*color)
                 else:
                     q_color = QtGui.QColor(color)
-                return QtCore.QVariant(QtGui.QBrush(q_color))
+                return QVariant(QtGui.QBrush(q_color))
 
         elif role == QtCore.Qt.ForegroundRole:
             if editor.is_auto_add(index):
@@ -110,9 +110,9 @@ class ListStrModel(QtCore.QAbstractListModel):
                     q_color = QtGui.QColor(*color)
                 else:
                     q_color = QtGui.QColor(color)
-                return QtCore.QVariant(QtGui.QBrush(q_color))
+                return QVariant(QtGui.QBrush(q_color))
 
-        return QtCore.QVariant()
+        return QVariant()
 
     def setData(self, mi, value, role):
         """ Reimplmented to allow for modification of the object trait.
@@ -157,9 +157,9 @@ class ListStrModel(QtCore.QAbstractListModel):
         """ Reimplemented to return title for vertical header data.
         """
         if orientation != QtCore.Qt.Horizontal or role != QtCore.Qt.DisplayRole:
-            return QtCore.QVariant()
+            return QVariant()
 
-        return QtCore.QVariant(self._editor.title)
+        return QVariant(self._editor.title)
 
     def insertRow(self, row, parent=QtCore.QModelIndex(), obj=None):
         """ Reimplemented to allow creation of new rows. Added an optional 

@@ -17,7 +17,7 @@ editors and text editor factories.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtGui
+from enthought.qt.api import QtGui
 
 #-------------------------------------------------------------------------------
 #  Constants:

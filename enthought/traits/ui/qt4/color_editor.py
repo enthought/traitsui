@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 from enthought.traits.ui.editors.color_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
@@ -163,10 +163,10 @@ class CustomColorEditor ( Editor ):
     #  Updates the object trait when a color swatch is clicked:
     #---------------------------------------------------------------------------
 
-    def update_object_from_swatch(self, control):
+    def update_object_from_swatch(self, color_text):
         """ Updates the object trait when a color swatch is clicked.
         """
-        color = control.palette().color(QtGui.QPalette.Button)
+        color = QtGui.QColor(*[int(part) for part in color_text.split(',')])
         self.value = self.factory.from_qt4_color(color)
         self.update_editor()
 
@@ -317,9 +317,13 @@ def color_editor_for(editor, parent):
             control = QtGui.QPushButton()
             control.setMaximumSize(18, 18)
 
-            QtCore.QObject.connect(control, QtCore.SIGNAL('clicked()'),
-                    mapper, QtCore.SLOT('map()'))
-            mapper.setMapping(control, control)
+            QtCore.QObject.connect(control, 
+                                   QtCore.SIGNAL('clicked()'),
+                                   mapper, 
+                                   QtCore.SLOT('map()'))
+            color = color_samples[r*cols + c]
+            color_text = '%d,%d,%d,%d' % color.getRgb()
+            mapper.setMapping(control, color_text)
 
             pal = QtGui.QPalette(control.palette())
             pal.setColor(QtGui.QPalette.Button, color_samples[i])
@@ -330,8 +334,9 @@ def color_editor_for(editor, parent):
 
             i += 1
 
-    QtCore.QObject.connect(mapper, QtCore.SIGNAL('mapped(QWidget *)'),
-            editor.update_object_from_swatch)
+    QtCore.QObject.connect(mapper, 
+                           QtCore.SIGNAL('mapped(const QString &)'),
+                           editor.update_object_from_swatch)
 
     panel.addLayout(grid)
 

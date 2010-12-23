@@ -21,7 +21,7 @@ complete application, using information from the specified UI object.
 import os
 
 # System library imports.
-from PyQt4 import QtGui
+from enthought.qt.api import QtGui
 
 # ETS imports.
 from enthought.util.guisupport import is_event_loop_running_qt4, \

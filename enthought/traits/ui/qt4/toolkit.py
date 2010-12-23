@@ -21,11 +21,12 @@ the PyQt user interface toolkit.
 from enthought.traits.ui.toolkit import assert_toolkit_import
 assert_toolkit_import('qt4')
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui, qt_api
 
-# Check the version numbers are late enough:
-if QtCore.QT_VERSION < 0x040200:
-    raise RuntimeError, "Need Qt v4.2 or higher, but got v%s" % QtCore.QT_VERSION_STR
+if qt_api == 'pyqt':
+    # Check the version numbers are late enough:
+    if QtCore.QT_VERSION < 0x040200:
+        raise RuntimeError, "Need Qt v4.2 or higher, but got v%s" % QtCore.QT_VERSION_STR
 
 # Make sure a QApplication object is created early:
 import sys
@@ -408,9 +409,10 @@ class GUIToolkit ( Toolkit ):
 
         # PyQt v4.3.1 and earlier deleteLater() didn't transfer ownership to
         # C++, which is necessary for the QObject system to garbage collect it.
-        if QtCore.PYQT_VERSION < 0x040302:
-            import sip
-            sip.transferto(control, None)
+        if qt_api == 'pyqt':
+            if QtCore.PYQT_VERSION < 0x040302:
+                import sip
+                sip.transferto(control, None)
 
     #---------------------------------------------------------------------------
     #  Destroys all of the child controls of a specified GUI toolkit control:

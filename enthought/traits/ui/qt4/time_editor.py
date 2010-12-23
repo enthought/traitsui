@@ -24,7 +24,7 @@
 
 import datetime
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 from editor import Editor
 from editor_factory import ReadonlyEditor as BaseReadonlyEditor

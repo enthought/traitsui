@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 from enthought.traits.ui.editors.font_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
@@ -201,7 +201,7 @@ class CustomFontEditor ( Editor ):
         fnt.setBold(self._bold)
         fnt.setItalic(self._italic)
 
-        psz, _ = self._point_size.currentText().toInt()
+        psz = int(self._point_size.currentText())
         fnt.setPointSize(psz)
 
         self.value = self.factory.from_qt4_font(fnt)

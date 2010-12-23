@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui, QVariant, qt_api
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the 
@@ -178,7 +178,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
             items in the popup menu. If there is more than one column, use a
             TableView instead of ListView for the popup.
         """
-        QtCore.QObject.__init__(self, parent)
+        QtGui.QComboBox.__init__(self, parent)
         self._editor = editor
 
         model = ImageEnumModel(editor, self)
@@ -253,10 +253,14 @@ class ImageEnumTablePopupView(QtGui.QTableView):
             case, we ensure that they cannot be selected in the popup menu.
         """
         index = QtGui.QTableView.indexAt(self, point)
-        if index.data(QtCore.Qt.DisplayRole).isValid():
-            return index
+        
+        if qt_api == 'pyqt':        
+            if index.data(QtCore.Qt.DisplayRole).isValid():
+                return index
+            else:
+                return QtCore.QModelIndex()
         else:
-            return QtCore.QModelIndex()
+            return index
       
 class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
     """ An item delegate which draws only images.
@@ -271,7 +275,7 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
     def displayText(self, value, locale):
         """ Reimplemented to display nothing.
         """
-        return QtCore.QString()
+        return ''
 
     def paint(self, painter, option, mi):
         """ Reimplemented to draw images.
@@ -281,8 +285,8 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
         
         # Now draw the pixmap
         name = mi.data(QtCore.Qt.DisplayRole)
-        if name.isValid():
-            pixmap = self._editor.get_pixmap(str(name.toString()))
+        pixmap = self._get_pixmap(name)
+        if pixmap is not None:
             target = QtGui.QStyle.alignedRect(QtCore.Qt.LeftToRight, 
                                               QtCore.Qt.AlignCenter,
                                               pixmap.size(), option.rect)
@@ -292,11 +296,22 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
         """ Reimplemented to define a size hint based on the size of the pixmap.
         """
         name = mi.data(QtCore.Qt.DisplayRole)
-        if name.isValid():
-            pixmap = self._editor.get_pixmap(str(name.toString()))
-            return pixmap.size()
-        else:
+        pixmap = self._get_pixmap(name)
+        if pixmap is None:
             return QtCore.QSize()
+        return pixmap.size()
+        
+    def _get_pixmap(self, name):
+        if qt_api == 'pyqt':
+            # name is QVariant            
+            if name.isValid():
+                return self._editor.get_pixmap(str(name.toString()))
+            return None
+        else:
+            return self._editor.get_pixmap(name)
+            
+        
+            
 
 class ImageEnumModel(QtCore.QAbstractTableModel):
     """ A table model for use with the 'simple' style ImageEnumEditor.
@@ -305,7 +320,7 @@ class ImageEnumModel(QtCore.QAbstractTableModel):
     def __init__(self, editor, parent):
         """ Reimplemented to store the editor.
         """
-        QtGui.QStyledItemDelegate.__init__(self, parent)
+        super(ImageEnumModel, self).__init__(parent)
         self._editor = editor
 
     def rowCount(self, mi):
@@ -326,6 +341,6 @@ class ImageEnumModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole:
             index = mi.row() * self._editor.factory.cols + mi.column()
             if index < len(self._editor.names):
-                return QtCore.QVariant(self._editor.names[index])
+                return QVariant(self._editor.names[index])
 
-        return QtCore.QVariant()
+        return QVariant()

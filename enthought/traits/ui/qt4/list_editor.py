@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 from enthought.pyface.api import ImageResource
 
@@ -157,22 +157,20 @@ class SimpleEditor ( Editor ):
 
         list_pane = self._list_pane
         layout = list_pane.layout()
-
+        
         # Create all of the list item trait editors:
         trait_handler = self._trait_handler
         resizable     = ((trait_handler.minlen != trait_handler.maxlen) and
                          self.mutable)
         item_trait    = trait_handler.item_trait
-        values        = self.value
-        index         = 0
 
-        is_fake = (resizable and (len( values ) == 0))
+        is_fake = (resizable and (len( self.value ) == 0))
         if is_fake:
            self.empty_list()
 
         editor = self._editor
         # FIXME: Add support for more than one column.
-        for value in values:
+        for index, value in enumerate(self.value):
             if resizable:
                 control = IconButton('list_editor.png', self.popup_menu)
                 layout.addWidget(control, index, 0)
@@ -191,8 +189,6 @@ class SimpleEditor ( Editor ):
                 layout.addWidget(pcontrol, index, 1)
             else:
                 layout.addLayout(pcontrol, index, 1)
-
-            index += 1
 
         # QScrollArea can have problems if the widget being scrolled is set too
         # early (ie. before it contains something).
@@ -271,12 +267,17 @@ class SimpleEditor ( Editor ):
     def popup_menu ( self ):
         """ Displays the list editor popup menu.
         """
-        self._cur_control = control = self.control.sender()
-        proxy    = control.proxy
+        layout = self._list_pane.layout()
+        sender = layout.sender()
+        
+        self._cur_control = sender
+        
+        proxy    = sender.proxy
         index    = proxy.index
-        menu     = MakeMenu( self.list_menu, self, True, control ).menu
+        menu     = MakeMenu( self.list_menu, self, True, sender ).menu
         len_list = len( proxy.list )
         not_full = (len_list < self._trait_handler.maxlen)
+        
         self._menu_before.enabled( not_full )
         self._menu_after.enabled(  not_full )
         self._menu_delete.enabled( len_list > self._trait_handler.minlen )
@@ -284,7 +285,8 @@ class SimpleEditor ( Editor ):
         self._menu_top.enabled( index > 0 )
         self._menu_down.enabled(   index < (len_list - 1) )
         self._menu_bottom.enabled( index < (len_list - 1) )
-        menu.exec_(control.mapToGlobal(QtCore.QPoint(0, 0)))
+        
+        menu.exec_(sender.mapToGlobal(QtCore.QPoint(0, 0)))
 
     #---------------------------------------------------------------------------
     #  Adds a new value at the specified list index:

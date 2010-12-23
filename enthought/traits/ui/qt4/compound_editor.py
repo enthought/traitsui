@@ -17,7 +17,7 @@ PyQt user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtGui
+from enthought.qt.api import QtGui
     
 from enthought.traits.api \
     import Str

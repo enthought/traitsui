@@ -20,7 +20,7 @@ user interface toolkit.
 import logging
 from string import capitalize
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 from enthought.traits.api \
     import List, Unicode, TraitError
@@ -248,7 +248,7 @@ class CustomEditor ( SimpleEditor ):
             editor.
         """
         new_values = parse_value( self.value )
-        for cb in self.control.findChildren(QtGui.QCheckBox):
+        for cb in self.control.findChildren(QtGui.QCheckBox, None):
             if cb.value in new_values:
                 cb.setCheckState(QtCore.Qt.Checked)
             else:

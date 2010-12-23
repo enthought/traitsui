@@ -17,7 +17,7 @@
 """
 
 # System library imports
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 # ETS imports
 from enthought.traits.api import Bool

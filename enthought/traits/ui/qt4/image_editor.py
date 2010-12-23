@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtGui
+from enthought.qt.api import QtGui
 
 from enthought.pyface.image_resource \
     import ImageResource

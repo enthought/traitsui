@@ -20,7 +20,7 @@ using pickle.
 from cPickle import dumps, load, loads
 from cStringIO import StringIO
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 from enthought.traits.api import HasTraits, Instance, Property
 

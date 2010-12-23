@@ -19,7 +19,7 @@
 from os.path \
     import splitext, isfile, exists
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui
 
 from enthought.traits.api \
     import List, Event, Unicode, TraitError

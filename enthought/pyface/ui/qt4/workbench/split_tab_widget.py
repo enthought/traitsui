@@ -228,7 +228,7 @@ class SplitTabWidget(QtGui.QSplitter):
     def _tab_widget(self, w):
         """ Return the tab widget and index containing the given widget. """
 
-        for tw in self.findChildren(_TabWidget):
+        for tw in self.findChildren(_TabWidget, None):
             idx = tw.indexOf(w)
 
             if idx >= 0:
@@ -321,7 +321,7 @@ class SplitTabWidget(QtGui.QSplitter):
         given widget.
         """
 
-        for tw in self.findChildren(_TabWidget):
+        for tw in self.findChildren(_TabWidget, None):
             for tidx in range(tw.count()):
                 w = tw.widget(tidx)
 
@@ -337,7 +337,7 @@ class SplitTabWidget(QtGui.QSplitter):
 
         if tidx < 0:
             # Find the tab widget logically to the left.
-            twlist = self.findChildren(_TabWidget)
+            twlist = self.findChildren(_TabWidget, None)
             i = twlist.index(tw)
             i -= 1
 
@@ -359,7 +359,7 @@ class SplitTabWidget(QtGui.QSplitter):
 
         if tidx >= tw.count():
             # Find the tab widget logically to the right.
-            twlist = self.findChildren(_TabWidget)
+            twlist = self.findChildren(_TabWidget, None)
             i = twlist.index(tw)
             i += 1
 
@@ -578,7 +578,7 @@ class SplitTabWidget(QtGui.QSplitter):
         # (compensating for the cloned QTabBar that may be rendered over it).
         split_widget = None
         for top_widget in QtGui.qApp.topLevelWidgets():
-            for split_widget in top_widget.findChildren(SplitTabWidget):
+            for split_widget in top_widget.findChildren(SplitTabWidget, None):
                 visible_region = split_widget.visibleRegion()
                 widget_pos = split_widget.mapFromGlobal(global_pos)
                 if cloned_rect and split_widget.geometry().contains(widget_pos):
@@ -604,7 +604,7 @@ class SplitTabWidget(QtGui.QSplitter):
 
         # Go through each tab widget.
         pos = split_widget.mapFromGlobal(global_pos)
-        for tw in split_widget.findChildren(_TabWidget):
+        for tw in split_widget.findChildren(_TabWidget, None):
             if tw.geometry().contains(tw.parent().mapFrom(split_widget, pos)):
                 break
         else:

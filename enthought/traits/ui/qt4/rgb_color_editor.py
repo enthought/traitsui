@@ -18,7 +18,7 @@ that are represented as tuples of the form ( *red*, *green*, *blue* ), where
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtGui
+from enthought.qt.api import QtGui
 
 from enthought.traits.trait_base \
     import SequenceTypes

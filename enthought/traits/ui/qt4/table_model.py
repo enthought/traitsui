@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui, QVariant, Qt
 
 from enthought.traits.ui.ui_traits import SequenceTypes
 
@@ -26,16 +26,16 @@ from enthought.traits.ui.ui_traits import SequenceTypes
 
 # Mapping for trait alignment values to qt4 horizontal alignment constants
 h_alignment_map = {
-    'left':   QtCore.Qt.AlignLeft,
-    'center': QtCore.Qt.AlignHCenter,
-    'right':  QtCore.Qt.AlignRight,
+    'left':   Qt.AlignLeft,
+    'center': Qt.AlignHCenter,
+    'right':  Qt.AlignRight,
 }
 
 # Mapping for trait alignment values to qt4 vertical alignment constants
 v_alignment_map = {
-    'top':    QtCore.Qt.AlignTop,
-    'center': QtCore.Qt.AlignVCenter,
-    'bottom': QtCore.Qt.AlignBottom,
+    'top':    Qt.AlignTop,
+    'center': Qt.AlignVCenter,
+    'bottom': Qt.AlignBottom,
 }
 
 # MIME type for internal table drag/drop operations
@@ -75,55 +75,55 @@ class TableModel(QtCore.QAbstractTableModel):
         obj = self._editor.items()[mi.row()]
         column = self._editor.columns[mi.column()]
 
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             text = column.get_value(obj)
             if text is not None:
-                return QtCore.QVariant(text)
+                return QVariant(text)
 
-        elif role == QtCore.Qt.ToolTipRole:
+        elif role == Qt.ToolTipRole:
             tooltip = column.get_tooltip(obj)
             if tooltip:
-                return QtCore.QVariant(tooltip)
+                return QVariant(tooltip)
 
-        elif role == QtCore.Qt.FontRole:
+        elif role == Qt.FontRole:
             font = column.get_text_font(obj)
             if font is not None:
-                return QtCore.QVariant(QtGui.QFont(font))
+                return QVariant(QtGui.QFont(font))
 
-        elif role == QtCore.Qt.TextAlignmentRole:
+        elif role == Qt.TextAlignmentRole:
             string = column.get_horizontal_alignment(obj)
-            h_alignment = h_alignment_map.get(string, QtCore.Qt.AlignLeft)
+            h_alignment = h_alignment_map.get(string, Qt.AlignLeft)
             string = column.get_vertical_alignment(obj)
-            v_alignment = v_alignment_map.get(string, QtCore.Qt.AlignVCenter)
-            return QtCore.QVariant(h_alignment | v_alignment)
+            v_alignment = v_alignment_map.get(string, Qt.AlignVCenter)
+            return QVariant(h_alignment | v_alignment)
 
-        elif role == QtCore.Qt.BackgroundRole:
+        elif role == Qt.BackgroundRole:
             color = column.get_cell_color(obj)
             if color is not None:
                 if isinstance(color, SequenceTypes):
                     q_color = QtGui.QColor(*color)
                 else:
                     q_color = QtGui.QColor(color)
-                return QtCore.QVariant(QtGui.QBrush(q_color))
+                return QVariant(QtGui.QBrush(q_color))
 
-        elif role == QtCore.Qt.ForegroundRole:
+        elif role == Qt.ForegroundRole:
             color = column.get_text_color(obj)
             if color is not None:
                 if isinstance(color, SequenceTypes):
                     q_color = QtGui.QColor(*color)
                 else:
                     q_color = QtGui.QColor(color)
-                return QtCore.QVariant(QtGui.QBrush(q_color))
+                return QVariant(QtGui.QBrush(q_color))
 
-        elif role == QtCore.Qt.UserRole:
-            return QtCore.QVariant(obj)
+        elif role == Qt.UserRole:
+            return QVariant(obj)
 
-        return QtCore.QVariant()
+        return QVariant()
 
     def flags(self, mi):
         """Reimplemented to set editable and movable status."""
         
-        flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
+        flags = Qt.ItemIsSelectable | Qt.ItemIsEnabled
 
         if not mi.isValid():
             return flags
@@ -133,30 +133,30 @@ class TableModel(QtCore.QAbstractTableModel):
         column = editor.columns[mi.column()]
 
         if editor.factory.editable and column.is_editable(obj):
-            flags |= QtCore.Qt.ItemIsEditable
+            flags |= Qt.ItemIsEditable
 
         if editor.factory.reorderable:
-            flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
+            flags |= Qt.ItemIsDragEnabled | Qt.ItemIsDropEnabled
             
         return flags
 
     def headerData(self, section, orientation, role):
         """Reimplemented to return the header data."""
 
-        if orientation == QtCore.Qt.Horizontal:
+        if orientation == Qt.Horizontal:
 
             editor = self._editor
             column = editor.columns[section]
 
-            if role == QtCore.Qt.DisplayRole:
-                return QtCore.QVariant(column.get_label())
+            if role == Qt.DisplayRole:
+                return QVariant(column.get_label())
 
-        elif orientation == QtCore.Qt.Vertical:
+        elif orientation == Qt.Vertical:
             
-            if role == QtCore.Qt.DisplayRole:
-                return QtCore.QVariant(QtCore.QString.number(section + 1))
+            if role == Qt.DisplayRole:
+                return QVariant(QtCore.QString.number(section + 1))
 
-        return QtCore.QVariant()
+        return QVariant()
 
     def insertRow(self, row, parent=QtCore.QModelIndex(), obj=None):
         """Reimplemented to allow creation of new rows. Added an optional 
@@ -217,7 +217,7 @@ class TableModel(QtCore.QAbstractTableModel):
     def dropMimeData(self, mime_data, action, row, column, parent):
         """Reimplemented to allow items to be moved."""
 
-        if action == QtCore.Qt.IgnoreAction:
+        if action == Qt.IgnoreAction:
             return False
         
         data = mime_data.data(mime_type)
@@ -231,7 +231,7 @@ class TableModel(QtCore.QAbstractTableModel):
     def supportedDropActions(self):
         """Reimplemented to allow items to be moved."""
         
-        return QtCore.Qt.MoveAction
+        return Qt.MoveAction
 
     #---------------------------------------------------------------------------
     #  TableModel interface:

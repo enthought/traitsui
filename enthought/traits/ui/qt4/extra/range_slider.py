@@ -1,4 +1,4 @@
-from PyQt4 import QtGui, QtCore
+from enthought.qt.api import QtGui, QtCore
 
 class RangeSlider(QtGui.QSlider):
     """ A slider for ranges.

@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from PyQt4 import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui, QVariant
 
 from enthought.traits.ui.ui_traits import SequenceTypes
 
@@ -68,27 +68,27 @@ class TabularModel(QtCore.QAbstractTableModel):
         row, column = mi.row(), mi.column()
 
         if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
-            return QtCore.QVariant(adapter.get_text(obj, name, row, column))
+            return QVariant(adapter.get_text(obj, name, row, column))
 
         elif role == QtCore.Qt.DecorationRole:
             image = editor._get_image(adapter.get_image(obj, name, row, column))
             if image is not None:
-                return QtCore.QVariant(image)
+                return QVariant(image)
 
         elif role == QtCore.Qt.ToolTipRole:
             tooltip = adapter.get_tooltip(obj, name, row, column)
             if tooltip:
-                return QtCore.QVariant(tooltip)
+                return QVariant(tooltip)
 
         elif role == QtCore.Qt.FontRole:
             font = adapter.get_font(obj, name, row)
             if font is not None:
-                return QtCore.QVariant(QtGui.QFont(font))
+                return QVariant(QtGui.QFont(font))
 
         elif role == QtCore.Qt.TextAlignmentRole:
             string = adapter.get_alignment(obj, name, column)
             alignment = alignment_map.get(string, QtCore.Qt.AlignLeft)
-            return QtCore.QVariant(alignment | QtCore.Qt.AlignVCenter)
+            return QVariant(alignment | QtCore.Qt.AlignVCenter)
 
         elif role == QtCore.Qt.BackgroundRole:
             color = adapter.get_bg_color(obj, name, row)
@@ -97,7 +97,7 @@ class TabularModel(QtCore.QAbstractTableModel):
                     q_color = QtGui.QColor(*color)
                 else:
                     q_color = QtGui.QColor(color)
-                return QtCore.QVariant(QtGui.QBrush(q_color))
+                return QVariant(QtGui.QBrush(q_color))
 
         elif role == QtCore.Qt.ForegroundRole:
             color = adapter.get_text_color(obj, name, row)
@@ -106,9 +106,9 @@ class TabularModel(QtCore.QAbstractTableModel):
                     q_color = QtGui.QColor(*color)
                 else:
                     q_color = QtGui.QColor(color)
-                return QtCore.QVariant(QtGui.QBrush(q_color))
+                return QVariant(QtGui.QBrush(q_color))
 
-        return QtCore.QVariant()
+        return QVariant()
 
     def setData(self, mi, value, role):
         """ Reimplmented to allow for modification for the object trait.
@@ -147,11 +147,11 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to return the header data.
         """
         if orientation != QtCore.Qt.Horizontal or role != QtCore.Qt.DisplayRole:
-            return QtCore.QVariant()
+            return QVariant()
 
         editor = self._editor
         label = editor.adapter.label_map[section]
-        return QtCore.QVariant(label)
+        return QVariant(label)
 
     def rowCount(self, mi):
         """ Reimplemented to return the number of rows.
