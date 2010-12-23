@@ -17,7 +17,7 @@
 """
 
 # System library imports
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt.api import QtCore, QtGui, qt_api
 
 # ETS imports
 from enthought.traits.ui.qt4.table_editor import TableDelegate
@@ -38,7 +38,10 @@ class CheckboxRenderer(TableDelegate):
         if event.type() == QtCore.QEvent.MouseButtonRelease and \
                 event.button() == QtCore.Qt.LeftButton:
             column = index.model()._editor.columns[index.column()]
-            obj = index.data(QtCore.Qt.UserRole).toPyObject()
+            if qt_api == 'pyqt':
+                obj = index.data(QtCore.Qt.UserRole).toPyObject()
+            else:
+                obj = index.data(QtCore.Qt.UserRole)                
             checked = bool(column.get_raw_value(obj))
             column.set_value(obj, not checked)
             return True
@@ -50,7 +53,10 @@ class CheckboxRenderer(TableDelegate):
         """
         # Determine whether the checkbox is check or unchecked
         column = index.model()._editor.columns[index.column()]
-        obj = index.data(QtCore.Qt.UserRole).toPyObject()
+        if qt_api == 'pyqt':
+            obj = index.data(QtCore.Qt.UserRole).toPyObject()
+        else:
+            obj = index.data(QtCore.Qt.UserRole)
         checked = column.get_raw_value(obj)
 
         # First draw the background
@@ -58,7 +64,11 @@ class CheckboxRenderer(TableDelegate):
         if option.state & QtGui.QStyle.State_Selected:
             bg_brush = option.palette.highlight()
         else:
-            bg_brush = index.data(QtCore.Qt.BackgroundRole).toPyObject()
+            if qt_api == 'pyqt':
+                bg_brush = index.data(QtCore.Qt.BackgroundRole).toPyObject()
+            else:
+                bg_brush = index.data(QtCore.Qt.BackgroundRole)
+                
             if bg_brush == NotImplemented:
                 bg_brush = option.palette.light()
         painter.fillRect(option.rect, bg_brush)
