@@ -32,7 +32,7 @@ class PyMimeData(QtCore.QMimeData):
     """ The PyMimeData wraps a Python instance as MIME data.
     """
     # The MIME type for instances.
-    MIME_TYPE = QtCore.QString('application/x-ets-qt4-instance')
+    MIME_TYPE = 'application/x-ets-qt4-instance'
 
     def __init__(self, data=None):
         """ Initialise the instance.

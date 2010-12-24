@@ -154,7 +154,7 @@ class TableModel(QtCore.QAbstractTableModel):
         elif orientation == Qt.Vertical:
             
             if role == Qt.DisplayRole:
-                return QVariant(QtCore.QString.number(section + 1))
+                return QVariant(str(section + 1))
 
         return QVariant()
 
