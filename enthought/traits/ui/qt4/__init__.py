@@ -13,6 +13,10 @@
 the PyQt user interface toolkit.
 """
 
+# import enthought.qt.api before anything else is done so the sipapi
+# can be set correctly if needed
+import enthought.qt.api
+
 __import__('pkg_resources').declare_namespace(__name__)
 
 #-------------------------------------------------------------------------------
