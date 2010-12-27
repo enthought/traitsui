@@ -1167,28 +1167,30 @@ class SimpleEditor ( Editor ):
         not_handled = True
         nids        = self._tree.GetSelections()
 
-	selected = []
-	for nid in nids:
-            if nid.IsOk():
-                # If there is a real selection, get the associated object:
-                expanded, node, sel_object = self._get_node_data( nid )
-		selected.append(sel_object)
-
-                # Try to inform the node specific handler of the selection,
-                # if there are multiple selections, we only care about the
-                # first (or maybe the last makes more sense?)
-		if nid == nids[0]:
-		    object = sel_object
-                    not_handled = node.select( object )
+        selected = []
+        for nid in nids:
+            if not nid.IsOk():
+                continue
+            
+            # If there is a real selection, get the associated object:
+            expanded, node, sel_object = self._get_node_data( nid )
+            selected.append(sel_object)
+    
+            # Try to inform the node specific handler of the selection,
+            # if there are multiple selections, we only care about the
+            # first (or maybe the last makes more sense?)
+            if nid == nids[0]:
+                object = sel_object
+                not_handled = node.select( object )
 
         # Set the value of the new selection:
-	if self.factory.selection_mode == 'single':
+        if self.factory.selection_mode == 'single':
             self._no_update_selected = True
             self.selected = object
             self._no_update_selected = False
-	else:
+        else:
             self._no_update_selected = True
-	    self.selected = selected
+            self.selected = selected
             self._no_update_selected = False
 
         # If no one has been notified of the selection yet, inform the editor's
@@ -1254,8 +1256,9 @@ class SimpleEditor ( Editor ):
                 self._veto = True
         elif self.factory.on_hover is not None:
             self.ui.evaluate( self.factory.on_hover, None )
-	# allow other events to be processed
-	event.Skip(True)
+            
+        # allow other events to be processed
+        event.Skip(True)
             
                 
 
