@@ -172,7 +172,7 @@ class CustomEditor ( SimpleEditor ):
 
         self._mapper = QtCore.QSignalMapper()
         QtCore.QObject.connect(self._mapper,
-                QtCore.SIGNAL('mapped(QWidget *)'), self.update_object)
+                QtCore.SIGNAL('mapped(const QString &)'), self.update_object)
 
     #---------------------------------------------------------------------------
     #  Rebuilds the editor after its definition is modified:
@@ -212,26 +212,29 @@ class CustomEditor ( SimpleEditor ):
                     else:
                         cb.setCheckState(QtCore.Qt.Unchecked)
 
-                    QtCore.QObject.connect(cb, QtCore.SIGNAL('clicked()'),
-                            self._mapper, QtCore.SLOT('map()'))
-                    self._mapper.setMapping(cb, cb)
+                    QtCore.QObject.connect(cb, 
+                                           QtCore.SIGNAL('clicked()'),
+                                           self._mapper, 
+                                           QtCore.SLOT('map()'))
+                    self._mapper.setMapping(cb, labels[index])
 
                     layout.addWidget(cb, i, j)
 
                     index += incr[j]
                     n -= 1
-
+                    
     #---------------------------------------------------------------------------
     #  Handles the user clicking one of the 'custom' check boxes:
     #---------------------------------------------------------------------------
 
-    def update_object(self, cb):
+    def update_object(self, label):
         """ Handles the user clicking one of the custom check boxes.
         """
+        cb = self._mapper.mapping(label)
         cur_value = parse_value(self.value)
         if cb.checkState() == QtCore.Qt.Checked:
             cur_value.append(cb.value)
-        else:
+        elif cb.value in cur_value:
             cur_value.remove(cb.value)
 
         if isinstance(self.value, basestring):
