@@ -109,14 +109,14 @@ class _ModalDialog(BaseDialog):
                 if self.is_button(button, 'Apply'):
                     self.apply = self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.ApplyRole, self._on_apply,
-                            apply)
+                            enabled=apply)
                     ui.on_trait_change(self._on_applyable, 'modified',
                             dispatch='ui')
 
                 elif self.is_button(button, 'Revert'):
                     self.revert = self.add_button(button, bbox, 
                             QtGui.QDialogButtonBox.ResetRole, self._on_revert,
-                            revert)
+                            enabled=revert)
 
                 elif self.is_button(button, 'OK'):
                     self.ok = self.add_button(button, bbox,
