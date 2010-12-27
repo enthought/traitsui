@@ -343,7 +343,8 @@ class SimpleEditor ( Editor ):
         id_object = id(object)
         object_info = self._map[id_object]
         for i, info in enumerate(object_info):
-            if nid == info[1]:
+            # QTreeWidgetItem does not have an equal operator, so use id()
+            if id(nid) == id(info[1]):
                 del object_info[i]
                 break
 
@@ -844,16 +845,17 @@ class SimpleEditor ( Editor ):
 
         selected = []
         if len(nids) > 0:
-            for n in nids:
+            for nid in nids:
                 # If there is a real selection, get the associated object:
-                expanded, node, sel_object = self._get_node_data(n)
+                expanded, node, sel_object = self._get_node_data(nid)
                 selected.append(sel_object)
 
                 # Try to inform the node specific handler of the selection, if
                 # there are multiple selections, we only care about the first
                 # (or maybe the last makes more sense?)
-                if n == nids[0]:
-                    nid = n
+                
+                # QTreeWidgetItem does not have an equal operator, so use id()                
+                if id(nid) == id(nids[0]):
                     object = sel_object
                     not_handled = node.select(sel_object)
         else:
