@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2008-2010 by Enthought, Inc.
+# Copyright (c) 2008-2011 by Enthought, Inc.
 # All rights reserved.
 
 """
@@ -14,7 +14,7 @@ Prerequisites
 -------------
 You must have the following libraries installed before building or installing
 TraitsBackendQt:
-    
+
 * `PyQt <http://pypi.python.org/pypi/PyQt/3.15>`_
 * `setuptools <http://pypi.python.org/pypi/setuptools/0.6c8>`_.
 
@@ -56,7 +56,6 @@ setup(
     download_url = (
         'http://www.enthought.com/repo/ETS/TraitsBackendQt-%s.tar.gz' %
         INFO['version']),
-    extras_require = INFO['extras_require'],
     include_package_data = True,
     install_requires = INFO['install_requires'],
     license = 'BSD',
@@ -83,4 +82,4 @@ setup(
     url = 'http://code.enthought.com/projects/traits_gui',
     version = INFO['version'],
     zip_safe = False,
-    )
+)
