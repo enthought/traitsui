@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2008-2010 by Enthought, Inc.
+# Copyright (c) 2008-2011 by Enthought, Inc.
 # All rights reserved.
 
 """
@@ -14,7 +14,7 @@ Prerequisite
 ------------
 You must have the following libraries installed before building or installing
 TraitsBackendWX:
-    
+
 * `wxPython <http://www.wxpython.org/>`_ version 2.8 or later
 * `setuptools <http://pypi.python.org/pypi/setuptools/0.6c8>`_.
 
@@ -57,14 +57,13 @@ setup(
     download_url = (
         'http://www.enthought.com/repo/ETS/TraitsBackendWX-%s.tar.gz' %
         INFO['version']),
-    extras_require = INFO['extras_require'],
     include_package_data = True,
     install_requires = INFO['install_requires'],
     license = 'BSD',
     long_description = '\n'.join(DOCLINES[3:]),
     maintainer = 'ETS Developers',
     maintainer_email = 'enthought-dev@enthought.com',
-    name = INFO['name'], 
+    name = INFO['name'],
     namespace_packages = [
         'enthought',
         'enthought.pyface',
@@ -84,4 +83,4 @@ setup(
     url = 'http://code.enthought.com/projects/traits_gui',
     version = INFO['version'],
     zip_safe = False,
-    )
+)
