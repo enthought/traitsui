@@ -97,7 +97,7 @@ class FileDialog(MFileDialog, Dialog):
         self.directory, self.filename = os.path.split(self.path)
 
         # Get the index of the selected filter.
-        self.wildcard_index = self.control.nameFilters().indexOf(
+        self.wildcard_index = self.control.nameFilters().index(
             self.control.selectedNameFilter())
 
         # Let the window close as normal.
@@ -123,7 +123,7 @@ class FileDialog(MFileDialog, Dialog):
         for filter_list in self.wildcard.split('|')[::2]:
             # Qt uses spaces instead of semicolons for extension separators
             filter_list = filter_list.replace(';', ' ')
-            filters << filter_list
+            filters.append(filter_list)
 
         # Set the default directory.
         if not default_directory:
@@ -134,7 +134,7 @@ class FileDialog(MFileDialog, Dialog):
         dlg.selectFile(default_filename)
         dlg.setNameFilters(filters)
 
-        if self.wildcard_index < filters.count():
+        if self.wildcard_index < len(filters):
             dlg.selectNameFilter(filters[self.wildcard_index])
 
         if self.action == 'open':
