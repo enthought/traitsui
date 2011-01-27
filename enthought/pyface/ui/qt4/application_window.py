@@ -17,10 +17,12 @@ from enthought.qt import QtGui
 # Enthought library imports.
 from enthought.pyface.action.api import MenuBarManager, StatusBarManager
 from enthought.pyface.action.api import ToolBarManager
-from enthought.traits.api import implements, Instance, List, Unicode
+from enthought.traits.api import Instance, List, Unicode, implements, \
+     on_trait_change
 
 # Local imports.
-from enthought.pyface.i_application_window import IApplicationWindow, MApplicationWindow
+from enthought.pyface.i_application_window import IApplicationWindow, \
+     MApplicationWindow
 from enthought.pyface.image_resource import ImageResource
 from window import Window
 
@@ -78,15 +80,13 @@ class ApplicationWindow(MApplicationWindow, Window):
 
     def _create_tool_bar(self, parent):
         tool_bar_managers = self._get_tool_bar_managers()
-        if len(tool_bar_managers) > 0:
-            for tool_bar_manager in tool_bar_managers:
-                tool_bar = tool_bar_manager.create_tool_bar(parent)
-                self.control.addToolBar(tool_bar)
+        for tool_bar_manager in tool_bar_managers:
+            tool_bar = tool_bar_manager.create_tool_bar(parent)
+            self.control.addToolBar(tool_bar)
 
-                # Make sure that the tool bar has a name so that its state can
-                # be saved.
-                if len(tool_bar.objectName()) == 0:
-                    tool_bar.setObjectName(tool_bar_manager.name)
+            # Make sure that the tool bar has a name so its state can be saved.
+            if len(tool_bar.objectName()) == 0:
+                tool_bar.setObjectName(tool_bar_manager.name)
                     
     def _set_window_icon(self):
         if self.icon is None:
@@ -129,7 +129,6 @@ class ApplicationWindow(MApplicationWindow, Window):
 
         control.setWindowTitle(self.title)
         control.setDockNestingEnabled(True)
-        control.setAnimated(False)
 
         return control
 
@@ -149,4 +148,28 @@ class ApplicationWindow(MApplicationWindow, Window):
 
         return tool_bar_managers
 
-#### EOF ######################################################################
+    #### Trait change handlers ################################################
+
+    # QMainWindow takes ownership of the menu bar and the status bar upon
+    # assignment. For this reason, it is unnecessary to delete the old controls
+    # in the following two handlers.
+    
+    def _menu_bar_manager_changed(self):
+        if self.control is not None:
+            self._create_menu_bar(self.control)
+        
+    def _status_bar_managed_changed(self):
+        if self.control is not None:
+            self._create_status_bar(self.control)
+
+    @on_trait_change('tool_bar_manager, tool_bar_managers')
+    def _update_tool_bar_managers(self):
+        if self.control is not None:
+            # Remove the old toolbars.
+            for child in self.control.children():
+                if isinstance(child, QtGui.QToolBar):
+                    self.control.removeToolBar(child)
+                    child.deleteLater()
+        
+            # Add the new toolbars.
+            self._create_tool_bar(self.control)
