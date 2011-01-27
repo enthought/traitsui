@@ -2,7 +2,7 @@
 import logging
 
 # System library imports.
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 # Local imports.
 from dock_pane import area_map

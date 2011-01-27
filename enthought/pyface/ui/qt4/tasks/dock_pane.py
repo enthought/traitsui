@@ -6,7 +6,7 @@ from enthought.pyface.tasks.i_dock_pane import MDockPane
 from enthought.traits.api import Bool, on_trait_change
 
 # System library imports.
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 # Constants.
 area_map = { 'left'   : QtCore.Qt.LeftDockWidgetArea,

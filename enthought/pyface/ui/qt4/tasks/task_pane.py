@@ -3,7 +3,7 @@ from enthought.pyface.tasks.i_task_pane import MTaskPane
 from enthought.traits.api import Bool, Property
 
 # System library imports.
-from enthought.qt.api import QtGui
+from enthought.qt import QtGui
 
 
 class TaskPane(MTaskPane):
