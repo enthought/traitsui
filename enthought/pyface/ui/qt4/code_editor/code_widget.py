@@ -140,7 +140,10 @@ class CodeWidget(QtGui.QPlainTextEdit):
     def update_line_number_width(self, nblocks=0):
         """ Update the width of the line number widget.
         """
-        self.setViewportMargins(self.line_number_widget.digits_width(), 0, 0, 0)
+        left = 0
+        if not self.line_number_widget.isHidden():
+            left = self.line_number_widget.digits_width()
+        self.setViewportMargins(left, 0, 0, 0)
 
     def update_line_numbers(self, rect, dy):
         """ Update the line numbers.
