@@ -16,7 +16,7 @@
 from inspect import getargspec
 
 # Major package imports.
-from enthought.qt.api import QtGui, QtCore
+from enthought.qt import QtGui, QtCore
 
 # Enthought library imports.
 from enthought.traits.api import Any, Bool, HasTraits

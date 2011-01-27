@@ -11,7 +11,7 @@
 
 import math
 
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 
 class GutterWidget(QtGui.QWidget):

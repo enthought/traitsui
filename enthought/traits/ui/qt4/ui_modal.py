@@ -13,7 +13,7 @@
 """
 
 
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 from enthought.traits.ui.menu \
     import ApplyButton, RevertButton, OKButton, CancelButton, HelpButton

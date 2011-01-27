@@ -19,7 +19,7 @@
 import cgi
 import re
 
-from enthought.qt.api import QtCore, QtGui, QtWebKit
+from enthought.qt import QtCore, QtGui, QtWebKit
 
 from enthought.traits.api \
     import Any, Instance, Undefined

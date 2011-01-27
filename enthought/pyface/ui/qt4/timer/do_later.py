@@ -12,7 +12,7 @@
 
 
 # Major package imports.
-from enthought.qt.api import QtCore
+from enthought.qt import QtCore
 
 
 class DoLaterTimer(QtCore.QTimer):

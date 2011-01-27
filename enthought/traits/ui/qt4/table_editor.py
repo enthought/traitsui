@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 from enthought.pyface.timer.api import do_later
 

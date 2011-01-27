@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt.api import QtGui
+from enthought.qt import QtGui
 
 from enthought.traits.api \
     import Trait, TraitHandler, TraitError

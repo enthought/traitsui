@@ -17,7 +17,7 @@
 """
 
 # System library imports
-from enthought.qt.api import QtCore, QtGui, qt_api
+from enthought.qt import QtCore, QtGui, qt_api
 
 # ETS imports
 from enthought.traits.ui.qt4.table_editor import TableDelegate

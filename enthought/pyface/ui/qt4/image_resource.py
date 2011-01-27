@@ -15,7 +15,7 @@
 import os
 
 # Major package imports.
-from enthought.qt.api import QtGui
+from enthought.qt import QtGui
 
 # Enthought library imports.
 from enthought.traits.api import Any, HasTraits, implements, List, Property

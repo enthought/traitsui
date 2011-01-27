@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 from enthought.pyface.image_resource import ImageResource
 from enthought.traits.api import Any, Bool, Event, Int, Instance, List, \

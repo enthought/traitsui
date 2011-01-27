@@ -1,4 +1,4 @@
-from enthought.qt.api import QtGui, QtCore
+from enthought.qt import QtGui, QtCore
 
 from enthought.traits.api import Float, Any, Str, Trait
 from enthought.traits.ui.editors.api import RangeEditor

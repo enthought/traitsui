@@ -12,7 +12,7 @@
 
 
 # Major package imports.
-from enthought.qt.api import QtGui
+from enthought.qt import QtGui
 
 # Enthought library imports.
 from enthought.traits.api import HasTraits, implements, Int, Property, Tuple

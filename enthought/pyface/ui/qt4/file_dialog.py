@@ -15,7 +15,7 @@
 import os
 
 # Major package imports.
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 # Enthought library imports.
 from enthought.traits.api import Enum, implements, Int, Unicode, List
@@ -119,7 +119,7 @@ class FileDialog(MFileDialog, Dialog):
             default_filename = self.default_filename
 
         # Convert the filter.
-        filters = QtCore.QStringList()
+        filters = []
         for filter_list in self.wildcard.split('|')[::2]:
             # Qt uses spaces instead of semicolons for extension separators
             filter_list = filter_list.replace(';', ' ')

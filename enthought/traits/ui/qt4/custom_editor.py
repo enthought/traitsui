@@ -17,7 +17,7 @@ based custom control.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt.api import QtGui
+from enthought.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the 

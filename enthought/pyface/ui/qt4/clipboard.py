@@ -17,7 +17,7 @@ from cStringIO import StringIO
 from cPickle import dumps, load, loads
 
 # System library imports
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 # ETS imports
 from enthought.traits.api import implements

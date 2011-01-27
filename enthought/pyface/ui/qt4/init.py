@@ -15,7 +15,7 @@
 import sys
 
 # Major package imports.
-from enthought.qt.api import QtCore, QtGui, qt_api
+from enthought.qt import QtCore, QtGui, qt_api
 
 if qt_api == 'pyqt':
     # Check the version numbers are late enough.

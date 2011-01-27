@@ -17,7 +17,7 @@ interface toolkit, useful for tools such as debuggers.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 from enthought.pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
 from enthought.traits.api import Str, Unicode, List, Int, Event, Bool, \

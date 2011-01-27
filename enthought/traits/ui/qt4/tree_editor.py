@@ -18,7 +18,7 @@
 
 import copy
 
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 from enthought.pyface.resource_manager import resource_manager
 from enthought.traits.api import Any, Event

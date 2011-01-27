@@ -16,7 +16,7 @@
 #-------------------------------------------------------------------------------
 
 # System library imports
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 # ETS imports
 from editor import Editor

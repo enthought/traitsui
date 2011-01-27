@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt.api import QtCore, QtGui, QVariant
+from enthought.qt import QtCore, QtGui, QVariant
 
 from enthought.traits.ui.ui_traits import SequenceTypes
 

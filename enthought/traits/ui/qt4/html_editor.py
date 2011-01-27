@@ -23,7 +23,7 @@
 
 import webbrowser
 
-from enthought.qt.api import QtCore, QtGui, QtWebKit
+from enthought.qt import QtCore, QtGui, QtWebKit
 
 from enthought.traits.api import Str
     

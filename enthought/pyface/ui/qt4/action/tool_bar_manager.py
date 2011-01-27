@@ -8,7 +8,7 @@
 #------------------------------------------------------------------------------
 
 # Major package imports.
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 # Enthought library imports.
 from enthought.traits.api import Bool, Enum, Instance, Str, Tuple

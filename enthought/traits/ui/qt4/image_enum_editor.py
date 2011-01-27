@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt.api import QtCore, QtGui, QVariant, qt_api
+from enthought.qt import QtCore, QtGui,  qt_api
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the 
@@ -303,7 +303,7 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
         
     def _get_pixmap(self, name):
         if qt_api == 'pyqt':
-            # name is QVariant            
+            # name is QtCore.QVariant            
             if name.isValid():
                 return self._editor.get_pixmap(str(name.toString()))
             return None
@@ -341,6 +341,6 @@ class ImageEnumModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole:
             index = mi.row() * self._editor.factory.cols + mi.column()
             if index < len(self._editor.names):
-                return QVariant(self._editor.names[index])
+                return QtCore.QVariant(self._editor.names[index])
 
-        return QVariant()
+        return QtCore.QVariant()

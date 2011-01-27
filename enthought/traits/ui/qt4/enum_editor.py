@@ -19,7 +19,7 @@
 
 from string import capitalize
     
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 from enthought.traits.api \
     import Bool, Property

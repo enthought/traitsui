@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt.api import QtCore, QtGui
+from enthought.qt import QtCore, QtGui
 
 from enthought.traits.ui.editors.font_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory

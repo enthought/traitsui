@@ -47,7 +47,7 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 
 import re
 
-from enthought.qt.api import QtGui
+from enthought.qt import QtGui
 
 #-------------------------------------------------------------------------------
 #  Constants:

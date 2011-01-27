@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt.api import Qt
+from enthought.qt import QtCore
     
 #-------------------------------------------------------------------------------
 #  Constants:  
@@ -24,83 +24,83 @@ from enthought.qt.api import Qt
 
 # Mapping from PyQt keypad key names to Enable key names.
 keypad_map = {
-    Qt.Key_Enter:     'Enter',
-    Qt.Key_0:         'Numpad 0',
-    Qt.Key_1:         'Numpad 1',
-    Qt.Key_2:         'Numpad 2',
-    Qt.Key_3:         'Numpad 3',
-    Qt.Key_4:         'Numpad 4',
-    Qt.Key_5:         'Numpad 5',
-    Qt.Key_6:         'Numpad 6',
-    Qt.Key_7:         'Numpad 7',
-    Qt.Key_8:         'Numpad 8',
-    Qt.Key_9:         'Numpad 9',
-    Qt.Key_Asterisk:  'Multiply',
-    Qt.Key_Plus:      'Add',
-    Qt.Key_Comma:     'Separator',
-    Qt.Key_Minus:     'Subtract',
-    Qt.Key_Period:    'Decimal',
-    Qt.Key_Slash:     'Divide'
+    QtCore.Qt.Key_Enter:     'Enter',
+    QtCore.Qt.Key_0:         'Numpad 0',
+    QtCore.Qt.Key_1:         'Numpad 1',
+    QtCore.Qt.Key_2:         'Numpad 2',
+    QtCore.Qt.Key_3:         'Numpad 3',
+    QtCore.Qt.Key_4:         'Numpad 4',
+    QtCore.Qt.Key_5:         'Numpad 5',
+    QtCore.Qt.Key_6:         'Numpad 6',
+    QtCore.Qt.Key_7:         'Numpad 7',
+    QtCore.Qt.Key_8:         'Numpad 8',
+    QtCore.Qt.Key_9:         'Numpad 9',
+    QtCore.Qt.Key_Asterisk:  'Multiply',
+    QtCore.Qt.Key_Plus:      'Add',
+    QtCore.Qt.Key_Comma:     'Separator',
+    QtCore.Qt.Key_Minus:     'Subtract',
+    QtCore.Qt.Key_Period:    'Decimal',
+    QtCore.Qt.Key_Slash:     'Divide'
 }
 
 # Mapping from PyQt non-keypad key names to Enable key names.
 key_map = {
-    Qt.Key_Backspace: 'Backspace',
-    Qt.Key_Tab:       'Tab',
-    Qt.Key_Return:    'Enter',
-    Qt.Key_Escape:    'Esc',
-    Qt.Key_Delete:    'Delete',
-    #Qt.Key_START:     'Start',
-    #Qt.Key_LBUTTON:   'Left Button',
-    #Qt.Key_RBUTTON:   'Right Button',
-    Qt.Key_Cancel:    'Cancel',
-    #Qt.Key_MBUTTON:   'Middle Button',
-    Qt.Key_Clear:     'Clear',
-    Qt.Key_Shift:     'Shift',
-    Qt.Key_Control:   'Control',
-    Qt.Key_Menu:      'Menu',
-    Qt.Key_Pause:     'Pause',
-    #Qt.Key_CAPITAL:   'Capital',
-    Qt.Key_PageUp:    'Page Up',
-    Qt.Key_PageDown:  'Page Down',
-    Qt.Key_End:       'End',
-    Qt.Key_Home:      'Home',
-    Qt.Key_Left:      'Left',
-    Qt.Key_Up:        'Up',
-    Qt.Key_Right:     'Right',
-    Qt.Key_Down:      'Down',
-    Qt.Key_Select:    'Select',
-    Qt.Key_Print:     'Print',
-    Qt.Key_Execute:   'Execute',
-    #Qt.Key_SNAPSHOT:  'Snapshot',
-    Qt.Key_Insert:    'Insert',
-    Qt.Key_Help:      'Help',
-    Qt.Key_F1:        'F1',
-    Qt.Key_F2:        'F2',
-    Qt.Key_F3:        'F3',
-    Qt.Key_F4:        'F4',
-    Qt.Key_F5:        'F5',
-    Qt.Key_F6:        'F6',
-    Qt.Key_F7:        'F7',
-    Qt.Key_F8:        'F8',
-    Qt.Key_F9:        'F9',
-    Qt.Key_F10:       'F10',
-    Qt.Key_F11:       'F11',
-    Qt.Key_F12:       'F12',
-    Qt.Key_F13:       'F13',
-    Qt.Key_F14:       'F14',
-    Qt.Key_F15:       'F15',
-    Qt.Key_F16:       'F16',
-    Qt.Key_F17:       'F17',
-    Qt.Key_F18:       'F18',
-    Qt.Key_F19:       'F19',
-    Qt.Key_F20:       'F20',
-    Qt.Key_F21:       'F21',
-    Qt.Key_F22:       'F22',
-    Qt.Key_F23:       'F23',
-    Qt.Key_F24:       'F24',
-    Qt.Key_NumLock:   'Num Lock',
-    Qt.Key_ScrollLock:'Scroll Lock'
+    QtCore.Qt.Key_Backspace: 'Backspace',
+    QtCore.Qt.Key_Tab:       'Tab',
+    QtCore.Qt.Key_Return:    'Enter',
+    QtCore.Qt.Key_Escape:    'Esc',
+    QtCore.Qt.Key_Delete:    'Delete',
+    #QtCore.Qt.Key_START:     'Start',
+    #QtCore.Qt.Key_LBUTTON:   'Left Button',
+    #QtCore.Qt.Key_RBUTTON:   'Right Button',
+    QtCore.Qt.Key_Cancel:    'Cancel',
+    #QtCore.Qt.Key_MBUTTON:   'Middle Button',
+    QtCore.Qt.Key_Clear:     'Clear',
+    QtCore.Qt.Key_Shift:     'Shift',
+    QtCore.Qt.Key_Control:   'Control',
+    QtCore.Qt.Key_Menu:      'Menu',
+    QtCore.Qt.Key_Pause:     'Pause',
+    #QtCore.Qt.Key_CAPITAL:   'Capital',
+    QtCore.Qt.Key_PageUp:    'Page Up',
+    QtCore.Qt.Key_PageDown:  'Page Down',
+    QtCore.Qt.Key_End:       'End',
+    QtCore.Qt.Key_Home:      'Home',
+    QtCore.Qt.Key_Left:      'Left',
+    QtCore.Qt.Key_Up:        'Up',
+    QtCore.Qt.Key_Right:     'Right',
+    QtCore.Qt.Key_Down:      'Down',
+    QtCore.Qt.Key_Select:    'Select',
+    QtCore.Qt.Key_Print:     'Print',
+    QtCore.Qt.Key_Execute:   'Execute',
+    #QtCore.Qt.Key_SNAPSHOT:  'Snapshot',
+    QtCore.Qt.Key_Insert:    'Insert',
+    QtCore.Qt.Key_Help:      'Help',
+    QtCore.Qt.Key_F1:        'F1',
+    QtCore.Qt.Key_F2:        'F2',
+    QtCore.Qt.Key_F3:        'F3',
+    QtCore.Qt.Key_F4:        'F4',
+    QtCore.Qt.Key_F5:        'F5',
+    QtCore.Qt.Key_F6:        'F6',
+    QtCore.Qt.Key_F7:        'F7',
+    QtCore.Qt.Key_F8:        'F8',
+    QtCore.Qt.Key_F9:        'F9',
+    QtCore.Qt.Key_F10:       'F10',
+    QtCore.Qt.Key_F11:       'F11',
+    QtCore.Qt.Key_F12:       'F12',
+    QtCore.Qt.Key_F13:       'F13',
+    QtCore.Qt.Key_F14:       'F14',
+    QtCore.Qt.Key_F15:       'F15',
+    QtCore.Qt.Key_F16:       'F16',
+    QtCore.Qt.Key_F17:       'F17',
+    QtCore.Qt.Key_F18:       'F18',
+    QtCore.Qt.Key_F19:       'F19',
+    QtCore.Qt.Key_F20:       'F20',
+    QtCore.Qt.Key_F21:       'F21',
+    QtCore.Qt.Key_F22:       'F22',
+    QtCore.Qt.Key_F23:       'F23',
+    QtCore.Qt.Key_F24:       'F24',
+    QtCore.Qt.Key_NumLock:   'Num Lock',
+    QtCore.Qt.Key_ScrollLock:'Scroll Lock'
 }
         
 #-------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ def key_event_to_name(event):
     key_code = event.key()
     modifiers = event.modifiers()
 
-    if modifiers & Qt.KeypadModifier:
+    if modifiers & QtCore.Qt.KeypadModifier:
         key = keypad_map.get(key_code)
     else:
         key = None
@@ -128,13 +128,13 @@ def key_event_to_name(event):
             key = chr(ord(key[0]) + ord('a') - 1)
     
     name = ''
-    if modifiers & Qt.AltModifier:
+    if modifiers & QtCore.Qt.AltModifier:
         name = 'Alt'
 
-    if modifiers & Qt.ControlModifier:
+    if modifiers & QtCore.Qt.ControlModifier:
         name += '-Ctrl'
             
-    if (modifiers & Qt.ShiftModifier) and ((name != '') or (len(key) > 1)):
+    if (modifiers & QtCore.Qt.ShiftModifier) and ((name != '') or (len(key) > 1)):
         name += '-Shift'
         
     if key == ' ':

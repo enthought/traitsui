@@ -12,7 +12,7 @@ import sys
 
 # Major library imports.
 import sip
-from enthought.qt.api import QtCore, QtGui, Signal
+from enthought.qt import QtCore, QtGui, Signal
 
 
 class SplitTabWidget(QtGui.QSplitter):
