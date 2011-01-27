@@ -104,8 +104,10 @@ class PythonEditor(MPythonEditor, Widget):
         self._changed_path()
 
     def _show_line_numbers_changed(self):
-        self.control.code.line_number_widget.setVisible(self.show_line_numbers)
-        self.control.code.update_line_number_width()
+        if self.control is not None:
+            self.control.code.line_number_widget.setVisible(
+                self.show_line_numbers)
+            self.control.code.update_line_number_width()
 
     ###########################################################################
     # Private interface.

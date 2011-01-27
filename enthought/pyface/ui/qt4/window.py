@@ -186,22 +186,22 @@ class _EventFilter(QtCore.QObject):
         elif e.type() == QtCore.QEvent.KeyPress:
             # Pyface doesn't seem to be Unicode aware.  Only keep the key code
             # if it corresponds to a single Latin1 character.
-            kstr = e.text().toLatin1()
-
-            if kstr.length() == 1:
-                kcode = ord(kstr.at(0))
-            else:
+            kstr = e.text()
+            try:
+                kcode = ord(str(kstr))
+            except:
                 kcode = 0
 
             mods = e.modifiers()
-
             window.key_pressed = KeyPressedEvent(
-                alt_down     = ((mods & QtCore.Qt.AltModifier) == QtCore.Qt.AltModifier),
-                control_down = ((mods & QtCore.Qt.ControlModifier) == QtCore.Qt.ControlModifier),
-                shift_down   = ((mods & QtCore.Qt.ShiftModifier) == QtCore.Qt.ShiftModifier),
+                alt_down     = ((mods & QtCore.Qt.AltModifier) ==
+                                QtCore.Qt.AltModifier),
+                control_down = ((mods & QtCore.Qt.ControlModifier) ==
+                                QtCore.Qt.ControlModifier),
+                shift_down   = ((mods & QtCore.Qt.ShiftModifier) ==
+                                QtCore.Qt.ShiftModifier),
                 key_code     = kcode,
-                event        = QtGui.QKeyEvent(e)
-            )
+                event        = QtGui.QKeyEvent(e))
 
         return False
 
