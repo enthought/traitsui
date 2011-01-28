@@ -20,21 +20,21 @@ based custom control.
 from enthought.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.custom_editor file.
 from enthought.traits.ui.editors.custom_editor \
     import ToolkitEditorFactory
-    
+
 from editor \
     import Editor
-    
+
 from helper \
     import open_fbi
 
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class CustomEditor ( Editor ):
     """ Wrapper for a custom editor control
     """
@@ -42,7 +42,7 @@ class CustomEditor ( Editor ):
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -59,13 +59,13 @@ class CustomEditor ( Editor ):
                 'Please contact the developer.')
             self.control.setStyleSheet("background-color: red; color: white")
         self.set_tooltip()
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
-        
+
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         pass

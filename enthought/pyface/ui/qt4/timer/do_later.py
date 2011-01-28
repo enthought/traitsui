@@ -19,9 +19,9 @@ class DoLaterTimer(QtCore.QTimer):
 
     # List of currently active timers:
     active_timers = []
-    
+
     #---------------------------------------------------------------------------
-    #  Initializes the object: 
+    #  Initializes the object:
     #---------------------------------------------------------------------------
 
     def __init__(self, interval, callable, args, kw_args):
@@ -44,13 +44,13 @@ class DoLaterTimer(QtCore.QTimer):
 
         self.setSingleShot(True)
         self.start(interval)
-        
+
     #---------------------------------------------------------------------------
-    #  Handles the timer pop event:  
+    #  Handles the timer pop event:
     #---------------------------------------------------------------------------
-        
+
     def Notify(self):
         global active_timers
-        
+
         self.active_timers.remove(self)
         self.callable(*self.args, **self.kw_args)

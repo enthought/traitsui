@@ -30,7 +30,7 @@ from editor import Editor
 #-------------------------------------------------------------------------------
 #  '_HistoryEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class _HistoryEditor(Editor):
     """ Simple style text editor, which displays a text field and maintains a
         history of previously entered values, the maximum number of which is
@@ -40,7 +40,7 @@ class _HistoryEditor(Editor):
     #---------------------------------------------------------------------------
     #  'Editor' interface:
     #---------------------------------------------------------------------------
-        
+
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -58,7 +58,7 @@ class _HistoryEditor(Editor):
         else:
             signal = QtCore.SIGNAL('activated(QString)')
         QtCore.QObject.connect(control, signal, self.update_object)
-        
+
         self.set_tooltip()
 
     def update_object(self, text):
@@ -103,13 +103,13 @@ class _HistoryEditor(Editor):
             current = str(self.control.currentText())
             if current != self.str_value:
                 history.insert(0, current)
-            
+
         return { 'history': history }
 
     #---------------------------------------------------------------------------
     #  '_HistoryEditor' private interface:
     #---------------------------------------------------------------------------
-        
+
     def _truncate(self, parent, start, end):
         """ Handle items being added to the combo box. If there are too many,
             remove items at the end.

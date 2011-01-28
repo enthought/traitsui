@@ -56,7 +56,7 @@ from editor \
 #  Constants:
 #-------------------------------------------------------------------------------
 
-# Pattern of all digits    
+# Pattern of all digits
 all_digits = re.compile(r'\d+')
 
 
@@ -144,7 +144,7 @@ class _Panel(BasePanel):
         # Suppress the title if this is a subpanel or if we think it should be
         # superceded by the title of an "outer" widget (eg. a dock widget).
         title = view.title
-        if (is_subpanel or (isinstance(parent, QtGui.QMainWindow) and 
+        if (is_subpanel or (isinstance(parent, QtGui.QMainWindow) and
                             not isinstance(parent.parent(), QtGui.QDialog)) or
             isinstance(parent, QtGui.QTabWidget)):
             title = ""
@@ -173,7 +173,7 @@ class _Panel(BasePanel):
 
                 # Add the horizontal separator
                 separator = QtGui.QFrame()
-                separator.setFrameStyle(QtGui.QFrame.Sunken | 
+                separator.setFrameStyle(QtGui.QFrame.Sunken |
                                         QtGui.QFrame.HLine)
                 separator.setFixedHeight(2)
                 layout.addWidget(separator)
@@ -187,7 +187,7 @@ class _Panel(BasePanel):
                                                     self._on_undo, False,
                                                     'Undo')
                         self.redo = self.add_button(button, bbox, role,
-                                                    self._on_redo, False, 
+                                                    self._on_redo, False,
                                                     'Redo')
                         history.on_trait_change(self._on_undoable, 'undoable',
                                                 dispatch = 'ui')
@@ -312,9 +312,9 @@ def show_help ( ui, button ):
     for item in group.get_content( False ):
         if not item.is_spacer():
             fields.append( template.item_help % (
-                           cgi.escape( item.get_label( ui ) ), 
+                           cgi.escape( item.get_label( ui ) ),
                            cgi.escape( item.get_help( ui ) ) ) )
-    html = template.group_html % ( header, '\n'.join( fields ) ) 
+    html = template.group_html % ( header, '\n'.join( fields ) )
     HTMLHelpWindow( button, html, .25, .33 )
 
 #-------------------------------------------------------------------------------
@@ -348,7 +348,7 @@ class _GroupSplitter(QtGui.QSplitter):
         self._initialized = False
 
     def resizeEvent(self, event):
-        """ Overridden to position the splitter based on the Group when the 
+        """ Overridden to position the splitter based on the Group when the
             application is initializing.
 
             Because the splitter layout algorithm requires that the available
@@ -368,7 +368,7 @@ class _GroupSplitter(QtGui.QSplitter):
             of the Traits UI view elements.
         """
         use_widths = (self.orientation() == QtCore.Qt.Horizontal)
-                
+
         # Get the requested size for the items.
         sizes = []
         for item in self._group.content:
@@ -491,7 +491,7 @@ class _GroupPanel(object):
             # Create an editor.
             editor = SplitterGroupEditor(control=outer, splitter=splitter,ui=ui)
             self._setup_editor(group, editor)
-                   
+
             self._add_splitter_items(content, splitter)
 
         elif group.layout in ('tabbed', 'fold'):
@@ -645,7 +645,7 @@ class _GroupPanel(object):
                 label_alignment = QtCore.Qt.AlignRight
             else:
                 label_alignment = QtCore.Qt.AlignLeft
-                
+
         else:
             # Use the existing layout if there is one.
             if outer is None:
@@ -790,8 +790,8 @@ class _GroupPanel(object):
 
             # Create the requested type of editor from the editor factory:
             factory_method = getattr( editor_factory, item.style + '_editor' )
-            editor         = factory_method( ui, object, name, item.tooltip, 
-                                        None).set( 
+            editor         = factory_method( ui, object, name, item.tooltip,
+                                        None).set(
                                  item        = item,
                                  object_name = item.object )
 
@@ -821,7 +821,7 @@ class _GroupPanel(object):
             item_height = item.height
             if (item_width != -1) or (item_height != -1):
                 is_horizontal = (self.direction == QtGui.QBoxLayout.LeftToRight)
-                
+
                 min_size = control.minimumSizeHint()
                 width = min_size.width()
                 height = min_size.height()
@@ -847,31 +847,31 @@ class _GroupPanel(object):
                 control.setMinimumWidth(max(item_width, 0))
                 control.setMinimumHeight(max(item_height, 0))
 
-            # Bind the editor into the UIInfo object name space so it can be 
+            # Bind the editor into the UIInfo object name space so it can be
             # referred to by a Handler while the user interface is active:
             id = item.id or name
             info.bind( id, editor, item.id )
 
-            # Also, add the editors to the list of editors used to construct 
+            # Also, add the editors to the list of editors used to construct
             # the user interface:
             ui._editors.append( editor )
 
-            # If the handler wants to be notified when the editor is created, 
-            # add it to the list of methods to be called when the UI is 
+            # If the handler wants to be notified when the editor is created,
+            # add it to the list of methods to be called when the UI is
             # complete:
             defined = getattr( handler, id + '_defined', None )
             if defined is not None:
                 ui.add_defined( defined )
 
-            # If the editor is conditionally visible, add the visibility 
-            # 'expression' and the editor to the UI object's list of monitored 
-            # objects: 
+            # If the editor is conditionally visible, add the visibility
+            # 'expression' and the editor to the UI object's list of monitored
+            # objects:
             if item.visible_when != '':
                 ui.add_visible( item.visible_when, editor )
 
-            # If the editor is conditionally enabled, add the enabling 
-            # 'expression' and the editor to the UI object's list of monitored 
-            # objects: 
+            # If the editor is conditionally enabled, add the enabling
+            # 'expression' and the editor to the UI object's list of monitored
+            # objects:
             if item.enabled_when != '':
                 ui.add_enabled( item.enabled_when, editor )
 
@@ -904,7 +904,7 @@ class _GroupPanel(object):
 
         return outer
 
-    def _add_widget(self, layout, w, row, column, show_labels, 
+    def _add_widget(self, layout, w, row, column, show_labels,
                     label_alignment=QtCore.Qt.AlignmentFlag(0)):
         """Adds a widget to a layout taking into account the orientation and
            the position of any labels.
@@ -933,8 +933,8 @@ class _GroupPanel(object):
             if show_labels:
                 # Convert the "logical" column to a "physical" one.
                 column *= 2
-                    
-                # Determine whether to place widget on left or right of 
+
+                # Determine whether to place widget on left or right of
                 # "logical" column.
                 if (label_alignment != 0 and not self.group.show_left) or \
                    (label_alignment == 0 and self.group.show_left):
@@ -1004,7 +1004,7 @@ class SplitterGroupEditor(GroupEditor):
     #-- UI preference save/restore interface -----------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the 
+        """ Restores any saved user preference information associated with the
             editor.
         """
         if isinstance(prefs, dict):
@@ -1025,21 +1025,21 @@ class TabbedFoldGroupEditor(GroupEditor):
     """ A pseudo-editor that allows a group with a 'tabbed' or 'fold' layout to
         be managed.
     """
-    
+
     # The QTabWidget or QToolBox for the group
     container = Any
 
     #-- UI preference save/restore interface -----------------------------------
 
     def restore_prefs(self, prefs):
-        """ Restores any saved user preference information associated with the 
+        """ Restores any saved user preference information associated with the
             editor.
         """
         if isinstance(prefs, dict):
             current_index = prefs.get('current_index')
         else:
             current_index = prefs
-        
+
         self.container.setCurrentIndex(int(current_index))
 
     def save_prefs(self):
@@ -1069,7 +1069,7 @@ class HTMLHelpWindow ( QtGui.QDialog ):
 
         # Create the html control
         html_control = QtWebKit.QWebView()
-        html_control.setSizePolicy(QtGui.QSizePolicy.Expanding, 
+        html_control.setSizePolicy(QtGui.QSizePolicy.Expanding,
                                    QtGui.QSizePolicy.Expanding)
         html_control.setHtml(html)
         layout.addWidget(html_control)

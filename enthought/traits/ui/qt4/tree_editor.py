@@ -25,7 +25,7 @@ from enthought.traits.api import Any, Event
 from enthought.traits.trait_base import enumerate
 from enthought.traits.ui.api import TreeNode, ObjectTreeNode, MultiTreeNode
 from enthought.traits.ui.undo import ListUndoItem
-from enthought.traits.ui.tree_node import ITreeNodeAdapterBridge    
+from enthought.traits.ui.tree_node import ITreeNodeAdapterBridge
 from enthought.traits.ui.menu import Menu, Action, Separator
 
 from clipboard import clipboard, PyMimeData
@@ -96,7 +96,7 @@ class SimpleEditor ( Editor ):
         self._editor = None
 
         if factory.editable:
-            
+
             # Check to see if the tree view is based on a shared trait editor:
             if factory.shared_editor:
                 factory_editor = factory.editor
@@ -106,7 +106,7 @@ class SimpleEditor ( Editor ):
 
                     # Remember which editor has the trait editor in the factory:
                     factory._editor = self
-                    
+
                     # Create the trait editor panel:
                     self.control = QtGui.QWidget()
                     parent.addWidget(self.control)
@@ -853,8 +853,8 @@ class SimpleEditor ( Editor ):
                 # Try to inform the node specific handler of the selection, if
                 # there are multiple selections, we only care about the first
                 # (or maybe the last makes more sense?)
-                
-                # QTreeWidgetItem does not have an equal operator, so use id()                
+
+                # QTreeWidgetItem does not have an equal operator, so use id()
                 if id(nid) == id(nids[0]):
                     object = sel_object
                     not_handled = node.select(sel_object)
@@ -864,14 +864,14 @@ class SimpleEditor ( Editor ):
             not_handled = True
 
         # Set the value of the new selection:
-        if self.factory.selection_mode == 'single': 
-            self._no_update_selected = True 
-            self.selected = object 
-            self._no_update_selected = False 
-        else: 
-            self._no_update_selected = True 
-            self.selected = selected 
-            self._no_update_selected = False 
+        if self.factory.selection_mode == 'single':
+            self._no_update_selected = True
+            self.selected = object
+            self._no_update_selected = False
+        else:
+            self._no_update_selected = True
+            self.selected = selected
+            self._no_update_selected = False
 
         # If no one has been notified of the selection yet, inform the editor's
         # select handler (if any) of the new selection:
@@ -1175,7 +1175,7 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
 
     def eval_when ( self, condition, object, trait ):
-        """ Evaluates a condition within a defined context, and sets a 
+        """ Evaluates a condition within a defined context, and sets a
         specified object trait based on the result, which is assumed to be a
         Boolean.
         """

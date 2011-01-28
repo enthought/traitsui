@@ -106,7 +106,7 @@ class PyMimeData(QtCore.QMimeData):
 #-------------------------------------------------------------------------------
 #  '_Clipboard' class:
 #-------------------------------------------------------------------------------
-                               
+
 class _Clipboard(HasTraits):
     """ The _Clipboard class provides a wrapper around the PyQt clipboard.
     """
@@ -120,7 +120,7 @@ class _Clipboard(HasTraits):
 
     # Set if the clipboard contains an instance.
     has_instance = Property
-           
+
     # The type of the instance on the clipboard (if any).
     instance_type = Property
 
@@ -130,7 +130,7 @@ class _Clipboard(HasTraits):
     #---------------------------------------------------------------------------
     #  Instance property methods:
     #---------------------------------------------------------------------------
-           
+
     def _get_instance(self):
         """ The instance getter.
         """
@@ -171,5 +171,5 @@ class _Clipboard(HasTraits):
 #-------------------------------------------------------------------------------
 #  The singleton clipboard instance.
 #-------------------------------------------------------------------------------
-                               
+
 clipboard = _Clipboard()

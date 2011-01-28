@@ -19,7 +19,7 @@ class Editor(MEditor):
     """ The toolkit specific implementation of an Editor.
 
     See the IEditor interface for the API documentation.
-    
+
     """
 
     ###########################################################################
@@ -53,7 +53,7 @@ class Editor(MEditor):
             self.control = None
 
         return
-    
+
     def set_focus(self):
         """ Set the focus to the appropriate control in the part. """
 
@@ -61,5 +61,5 @@ class Editor(MEditor):
             self.control.setFocus()
 
         return
-    
+
 #### EOF ######################################################################

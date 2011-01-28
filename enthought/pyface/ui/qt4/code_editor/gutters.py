@@ -1,10 +1,10 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2010, Enthought Inc
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD license.
 
-# 
+#
 # Author: Enthought Inc
 # Description: <Enthought pyface code editor>
 #------------------------------------------------------------------------------
@@ -36,39 +36,39 @@ class GutterWidget(QtGui.QWidget):
 class StatusGutterWidget(GutterWidget):
     """ Draws status markers
     """
-    
+
     def __init__(self, *args, **kw):
         super(StatusGutterWidget, self).__init__(*args, **kw)
-        
+
         self.error_lines = []
         self.warn_lines = []
         self.info_lines = []
-        
+
     def sizeHint(self):
         return QtCore.QSize(10, 0)
-        
+
     def paintEvent(self, event):
         """ Paint the line numbers.
         """
         painter = QtGui.QPainter(self)
         painter.fillRect(event.rect(), self.background_color)
-        
+
         cw = self.parent()
-        
+
         pixels_per_block = self.height()/float(cw.blockCount())
-        
+
         for line in self.info_lines:
-            painter.fillRect(QtCore.QRect(0, line*pixels_per_block, self.width(), 3), 
+            painter.fillRect(QtCore.QRect(0, line*pixels_per_block, self.width(), 3),
                             QtCore.Qt.green)
 
         for line in self.warn_lines:
-            painter.fillRect(QtCore.QRect(0, line*pixels_per_block, self.width(), 3), 
+            painter.fillRect(QtCore.QRect(0, line*pixels_per_block, self.width(), 3),
                             QtCore.Qt.yellow)
 
         for line in self.error_lines:
-            painter.fillRect(QtCore.QRect(0, line*pixels_per_block, self.width(), 3), 
+            painter.fillRect(QtCore.QRect(0, line*pixels_per_block, self.width(), 3),
                             QtCore.Qt.red)
-                            
+
 class LineNumberWidget(GutterWidget):
     """ Draw line numbers.
     """
@@ -100,7 +100,7 @@ class LineNumberWidget(GutterWidget):
         painter = QtGui.QPainter(self)
         painter.setFont(self.font)
         painter.fillRect(event.rect(), self.background_color)
-        
+
         cw = self.parent()
         block = cw.firstVisibleBlock()
         blocknum = block.blockNumber()
@@ -118,4 +118,4 @@ class LineNumberWidget(GutterWidget):
             top = bottom
             bottom = top + int(cw.blockBoundingRect(block).height())
             blocknum += 1
-            
+

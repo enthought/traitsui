@@ -17,9 +17,9 @@
 #-------------------------------------------------------------------------------
 
 from enthought.qt import QtCore
-    
+
 #-------------------------------------------------------------------------------
-#  Constants:  
+#  Constants:
 #-------------------------------------------------------------------------------
 
 # Mapping from PyQt keypad key names to Enable key names.
@@ -102,11 +102,11 @@ key_map = {
     QtCore.Qt.Key_NumLock:   'Num Lock',
     QtCore.Qt.Key_ScrollLock:'Scroll Lock'
 }
-        
+
 #-------------------------------------------------------------------------------
-#  Converts a keystroke event into a corresponding key name:  
+#  Converts a keystroke event into a corresponding key name:
 #-------------------------------------------------------------------------------
-                
+
 def key_event_to_name(event):
     """ Converts a keystroke event into a corresponding key name.
     """
@@ -126,20 +126,20 @@ def key_event_to_name(event):
 
         if len(key) == 1 and 1 <= ord(key[0]) <= 26:
             key = chr(ord(key[0]) + ord('a') - 1)
-    
+
     name = ''
     if modifiers & QtCore.Qt.AltModifier:
         name = 'Alt'
 
     if modifiers & QtCore.Qt.ControlModifier:
         name += '-Ctrl'
-            
+
     if (modifiers & QtCore.Qt.ShiftModifier) and ((name != '') or (len(key) > 1)):
         name += '-Shift'
-        
+
     if key == ' ':
         key = 'Space'
-    
+
     name += ('-' + key)
 
     if name[:1] == '-':

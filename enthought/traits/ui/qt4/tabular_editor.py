@@ -106,7 +106,7 @@ class TabularEditor(Editor):
     #---------------------------------------------------------------------------
     #  Editor interface:
     #---------------------------------------------------------------------------
-        
+
     def init (self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -134,7 +134,7 @@ class TabularEditor(Editor):
         else:
             slot = self._on_row_selection
         signal = 'selectionChanged(QItemSelection,QItemSelection)'
-        QtCore.QObject.connect(self.control.selectionModel(), 
+        QtCore.QObject.connect(self.control.selectionModel(),
                                QtCore.SIGNAL(signal), slot)
 
         # Synchronize other interesting traits as necessary:
@@ -182,7 +182,7 @@ class TabularEditor(Editor):
 
         # Rebuild the editor columns and headers whenever the adapter's
         # 'columns' changes:
-        self.on_trait_change(self.update_editor, 'adapter.columns', 
+        self.on_trait_change(self.update_editor, 'adapter.columns',
                              dispatch='ui')
 
     def dispose (self):
@@ -195,7 +195,7 @@ class TabularEditor(Editor):
             self.context_object.on_trait_change(
                 self.refresh_editor, self.extended_name + '.-', remove=True)
 
-        self.on_trait_change(self.refresh_editor, 'adapter.+update', 
+        self.on_trait_change(self.refresh_editor, 'adapter.+update',
                              remove=True)
         self.on_trait_change(self.update_editor, 'adapter.columns',
                              remove=True)
@@ -256,7 +256,7 @@ class TabularEditor(Editor):
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
-        widths = [ self.control.columnWidth(column) 
+        widths = [ self.control.columnWidth(column)
                    for column in xrange(len(self.adapter.columns)) ]
         return { 'cached_widths': widths }
 
@@ -293,7 +293,7 @@ class TabularEditor(Editor):
         """ Generate a TabularEditorEvent event for a specified model index and
             editor trait name.
         """
-        event = TabularEditorEvent(editor=self, row=index.row(), 
+        event = TabularEditorEvent(editor=self, row=index.row(),
                                    column=index.column())
         setattr(self, trait, event)
 
@@ -317,7 +317,7 @@ class TabularEditor(Editor):
             if selected_row == -1:
                 smodel.clearSelection()
             else:
-                smodel.select(self.model.index(selected_row, 0), 
+                smodel.select(self.model.index(selected_row, 0),
                               QtGui.QItemSelectionModel.ClearAndSelect |
                               QtGui.QItemSelectionModel.Rows)
 
@@ -411,7 +411,7 @@ class TabularEditor(Editor):
             for index in indexes:
                 row = index.row()
                 selected_rows.append(row)
-                selected.append(self.adapter.get_item(self.object, self.name, 
+                selected.append(self.adapter.get_item(self.object, self.name,
                                                       row))
             self.multi_selected_rows = selected_rows
             self.multi_selected = selected
@@ -449,8 +449,8 @@ class TabularEditorEvent(HasStrictTraits):
 #-------------------------------------------------------------------------------
 
 class _ItemDelegate(QtGui.QStyledItemDelegate):
-    """ A QStyledItemDelegate which draws its owns gridlines so that we can 
-        choose to draw only the horizontal or only the vertical gridlines if 
+    """ A QStyledItemDelegate which draws its owns gridlines so that we can
+        choose to draw only the horizontal or only the vertical gridlines if
         appropriate.
     """
 
@@ -488,12 +488,12 @@ class _TableView(QtGui.QTableView):
         """ Initialise the object.
         """
         QtGui.QTableView.__init__(self)
-        
+
         self._initial_size = False
         self._editor = editor
         self.setModel(editor.model)
         factory = editor.factory
-        
+
         # Configure the row headings
         vheader = self.verticalHeader()
         vheader.hide()
@@ -543,14 +543,14 @@ class _TableView(QtGui.QTableView):
         # Note that setting 'EditKeyPressed' as an edit trigger does not work on
         # most platforms, which is why we do this here.
         if (event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and
-            self.state() != QtGui.QAbstractItemView.EditingState and 
+            self.state() != QtGui.QAbstractItemView.EditingState and
             factory.editable and 'edit' in factory.operations):
             if factory.multi_select:
                 rows = editor.multi_selected_rows
                 row = rows[0] if len(rows) == 1 else -1
             else:
                 row = editor.selected_row
-            
+
             if row != -1:
                 event.accept()
                 self.edit(editor.model.index(row, 0))
@@ -565,7 +565,7 @@ class _TableView(QtGui.QTableView):
             elif editor.selected_row != -1:
                 editor.model.removeRow(editor.selected_row)
 
-        elif (event.key() == QtCore.Qt.Key_Insert and 
+        elif (event.key() == QtCore.Qt.Key_Insert and
               factory.editable and 'insert' in factory.operations):
             event.accept()
 
@@ -586,7 +586,7 @@ class _TableView(QtGui.QTableView):
         """ Reimplemented to define a reasonable size hint.
         """
         sh = QtGui.QTableView.sizeHint(self)
-        
+
         width = 0
         for column in xrange(len(self._editor.adapter.columns)):
             width += self.sizeHintForColumn(column)
@@ -630,7 +630,7 @@ class _TableView(QtGui.QTableView):
         editor = self._editor
         available_space = self.viewport().width()
         hheader = self.horizontalHeader()
-        
+
         # Assign sizes for columns with absolute size requests
         percent_vals, percent_cols = [], []
         for column in xrange(len(editor.adapter.columns)):
@@ -651,4 +651,4 @@ class _TableView(QtGui.QTableView):
             percent = percent_vals[i] / percent_total
             width = max(30, int(percent * available_space))
             hheader.resizeSection(column, width)
-            
+

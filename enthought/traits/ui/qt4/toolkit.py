@@ -78,8 +78,8 @@ class _CallAfter(QtCore.QObject):
 
         # Move to the main GUI thread.
         self.moveToThread(QtGui.QApplication.instance().thread())
-        
-        # Post an event to be dispatched on the main GUI thread. Note that 
+
+        # Post an event to be dispatched on the main GUI thread. Note that
         # we do not call QTimer.singleShot, which would be simpler, because
         # that only works on QThreads. We want regular Python threads to work.
         event = QtCore.QEvent(_QT_TRAITS_EVENT)
@@ -92,7 +92,7 @@ class _CallAfter(QtCore.QObject):
             # Invoke the handler
             self._handler(*self._args)
 
-            # We cannot remove from self._calls here. QObjects don't like being 
+            # We cannot remove from self._calls here. QObjects don't like being
             # garbage collected during event handlers (there are tracebacks,
             # plus maybe a memory leak, I think).
             QtCore.QTimer.singleShot(0, self._finished)
@@ -386,15 +386,15 @@ class GUIToolkit ( Toolkit ):
     #---------------------------------------------------------------------------
 
     def skip_event ( self, event ):
-        """ Indicates that an event should continue to be processed by the 
+        """ Indicates that an event should continue to be processed by the
             toolkit.
         """
         event.ignore()
 
     #---------------------------------------------------------------------------
-    #  Destroys a specified GUI toolkit control:  
+    #  Destroys a specified GUI toolkit control:
     #---------------------------------------------------------------------------
-    
+
     def destroy_control ( self, control ):
         """ Destroys a specified GUI toolkit control.
         """
@@ -439,24 +439,24 @@ class GUIToolkit ( Toolkit ):
             specified toolkit image.
         """
         return ( image.width(), image.height() )
-        
+
     #---------------------------------------------------------------------------
     #  Returns a dictionary of useful constants:
     #---------------------------------------------------------------------------
-    
+
     def constants ( self ):
         """ Returns a dictionary of useful constants.
-        
+
             Currently, the dictionary should have the following key/value pairs:
-                
+
             - 'WindowColor': the standard window background color in the toolkit
               specific color format.
         """
         return {
-            # fixme: This should be updated to have the Qt window background 
+            # fixme: This should be updated to have the Qt window background
             # color. This is just a placeholder to prevent traits.ui.api
             # problems.
-            'WindowColor': 0xFFFFFF 
+            'WindowColor': 0xFFFFFF
         }
 
     #---------------------------------------------------------------------------

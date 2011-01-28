@@ -1,10 +1,10 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2010, Enthought Inc
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD license.
 
-# 
+#
 # Author: Enthought Inc
 # Description: <Enthought pyface code editor>
 #------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ comment_state = [ (r'[^*/]', Comment.Multiline),
                   (r'\*/', Comment.Multiline, '#pop'),
                   (r'[*/]', Comment.Multiline) ]
 replace_pattern(CLexer.tokens, comment_start)
-replace_pattern(CppLexer.tokens, comment_start)   
+replace_pattern(CppLexer.tokens, comment_start)
 CLexer.tokens['comment'] = comment_state
 CppLexer.tokens['comment'] = comment_state
 
@@ -117,7 +117,7 @@ class BlockUserData(QtGui.QTextBlockUserData):
 
     def __repr__(self):
         attrs = ['syntax_stack']
-        kwds = ', '.join([ '%s=%r' % (attr, getattr(self, attr)) 
+        kwds = ', '.join([ '%s=%r' % (attr, getattr(self, attr))
                            for attr in attrs ])
         return 'BlockUserData(%s)' % kwds
 
@@ -127,12 +127,12 @@ class PygmentsHighlighter(QtGui.QSyntaxHighlighter):
 
     def __init__(self, parent, lexer=None):
         super(PygmentsHighlighter, self).__init__(parent)
-        
+
         try:
             self._lexer = get_lexer_by_name(lexer)
-        except: 
+        except:
             self._lexer = PythonLexer()
-            
+
         self._style = DefaultStyle
         # Caches for formats and brushes.
         self._brushes = {}
@@ -161,11 +161,11 @@ class PygmentsHighlighter(QtGui.QSyntaxHighlighter):
         if hasattr(self._lexer, '_epd_state_stack'):
             data = BlockUserData(syntax_stack=self._lexer._epd_state_stack)
             self.currentBlock().setUserData(data)
-            
+
             # there is a bug in pyside and it will crash unless we
             # hold on to the reference a little longer
             data = self.currentBlock().userData()
-            
+
             # Clean up for the next go-round.
             del self._lexer._epd_state_stack
 

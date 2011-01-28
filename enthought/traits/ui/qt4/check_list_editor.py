@@ -26,7 +26,7 @@ from enthought.traits.api \
     import List, Unicode, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.check_list_editor file.
 from enthought.traits.ui.editors.check_list_editor \
     import ToolkitEditorFactory
@@ -36,7 +36,7 @@ from editor_factory \
 
 from editor \
     import EditorWithList
-    
+
 logger = logging.getLogger(__name__)
 
 #-------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 class SimpleEditor ( EditorWithList ):
     """ Simple style of editor for checklists, which displays a combo box.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ class CustomEditor ( SimpleEditor ):
     """ Custom style of editor for checklists, which displays a set of check
         boxes.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Creates the initial editor control:
     #---------------------------------------------------------------------------
@@ -212,9 +212,9 @@ class CustomEditor ( SimpleEditor ):
                     else:
                         cb.setCheckState(QtCore.Qt.Unchecked)
 
-                    QtCore.QObject.connect(cb, 
+                    QtCore.QObject.connect(cb,
                                            QtCore.SIGNAL('clicked()'),
-                                           self._mapper, 
+                                           self._mapper,
                                            QtCore.SLOT('map()'))
                     self._mapper.setMapping(cb, labels[index])
 
@@ -222,7 +222,7 @@ class CustomEditor ( SimpleEditor ):
 
                     index += incr[j]
                     n -= 1
-                    
+
     #---------------------------------------------------------------------------
     #  Handles the user clicking one of the 'custom' check boxes:
     #---------------------------------------------------------------------------
@@ -264,7 +264,7 @@ class CustomEditor ( SimpleEditor ):
 class TextEditor ( BaseTextEditor ):
     """ Text style of editor for checklists, which displays a text field.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Handles the user changing the contents of the edit control:
     #---------------------------------------------------------------------------

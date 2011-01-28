@@ -19,7 +19,7 @@
 from enthought.qt import QtCore, QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.boolean_editor file.
 from enthought.traits.ui.editors.boolean_editor \
     import ToolkitEditorFactory
@@ -39,7 +39,7 @@ from constants \
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class SimpleEditor ( Editor ):
     """ Simple style of editor for Boolean values, which displays a check box.
     """
@@ -47,7 +47,7 @@ class SimpleEditor ( Editor ):
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -60,7 +60,7 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Handles the user clicking on the checkbox:
     #---------------------------------------------------------------------------
- 
+
     def update_object ( self, state ):
         """ Handles the user clicking the checkbox.
         """
@@ -69,20 +69,20 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
-        
+
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         if self.value:
             self.control.setCheckState(QtCore.Qt.Checked)
         else:
             self.control.setCheckState(QtCore.Qt.Unchecked)
-                                      
+
 #-------------------------------------------------------------------------------
 #  'ReadonlyEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class ReadonlyEditor ( Editor ):
     """ Read-only style of editor for Boolean values, which displays static text
     of either "True" or "False".
@@ -91,7 +91,7 @@ class ReadonlyEditor ( Editor ):
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -102,15 +102,15 @@ class ReadonlyEditor ( Editor ):
         pal = QtGui.QPalette(self.control.palette())
         pal.setColor(QtGui.QPalette.Base, ReadonlyColor)
         self.control.setPalette(pal)
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #
     #  (Should normally be overridden in a subclass)
     #---------------------------------------------------------------------------
-        
+
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         if self.value:

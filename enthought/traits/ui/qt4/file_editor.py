@@ -23,9 +23,9 @@ from enthought.qt import QtCore, QtGui
 
 from enthought.traits.api \
     import List, Event, Unicode, TraitError
-    
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.file_editor file.
 from enthought.traits.ui.editors.file_editor \
     import ToolkitEditorFactory
@@ -46,7 +46,7 @@ filter_trait = List(Unicode)
 
 class SimpleEditor ( SimpleTextEditor ):
     """ Simple style of file editor, consisting of a text field and a **Browse**
-        button that opens a file-selection dialog box. The user can also drag 
+        button that opens a file-selection dialog box. The user can also drag
         and drop a file onto this control.
     """
 
@@ -76,7 +76,7 @@ class SimpleEditor ( SimpleTextEditor ):
         button = QtGui.QPushButton("Browse...")
         layout.addWidget(button)
 
-        QtCore.QObject.connect(button, QtCore.SIGNAL('clicked()'), 
+        QtCore.QObject.connect(button, QtCore.SIGNAL('clicked()'),
                                self.show_file_dialog)
 
         self.set_tooltip(control)
@@ -95,7 +95,7 @@ class SimpleEditor ( SimpleTextEditor ):
     #---------------------------------------------------------------------------
 
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self._file_name.setText(self.str_value)
@@ -232,7 +232,7 @@ class CustomEditor ( SimpleTextEditor ):
     #---------------------------------------------------------------------------
 
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         if exists(self.str_value):

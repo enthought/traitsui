@@ -132,7 +132,7 @@ class _LiveWindow(BaseDialog):
                     if history.can_undo:
                         self._on_undoable(True)
 
-                    self.redo = self.add_button(button, bbox, 
+                    self.redo = self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.ActionRole, self._on_redo,
                             False, 'Redo')
                     history.on_trait_change(self._on_redoable, 'redoable',
@@ -140,7 +140,7 @@ class _LiveWindow(BaseDialog):
                     if history.can_redo:
                         self._on_redoable(True)
 
-                elif self.is_button(button, 'Revert'): 
+                elif self.is_button(button, 'Revert'):
                     self.revert = self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.ResetRole, self._on_revert,
                             False)
@@ -149,18 +149,18 @@ class _LiveWindow(BaseDialog):
                     if history.can_undo:
                         self._on_revertable(True)
 
-                elif self.is_button(button, 'OK'): 
+                elif self.is_button(button, 'OK'):
                     self.ok = self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.AcceptRole,
                             self.control.accept)
                     ui.on_trait_change(self._on_error, 'errors', dispatch='ui')
 
-                elif self.is_button(button, 'Cancel'): 
+                elif self.is_button(button, 'Cancel'):
                     self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.RejectRole,
                             self.control.reject)
 
-                elif self.is_button(button, 'Help'): 
+                elif self.is_button(button, 'Help'):
                     self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.HelpRole, self._on_help)
 
@@ -173,7 +173,7 @@ class _LiveWindow(BaseDialog):
 
         self.add_contents(panel(ui), bbox)
 
-    def close(self, rc=True):         
+    def close(self, rc=True):
         """Close the dialog and set the given return code.
         """
         super(_LiveWindow, self).close(rc)

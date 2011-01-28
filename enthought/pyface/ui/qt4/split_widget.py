@@ -78,7 +78,7 @@ class SplitWidget(MSplitWidget, HasTraits):
             lhs = self.lhs(parent)
             if not isinstance(lhs, QtGui.QWidget):
                 lhs = lhs.control
-                
+
         else:
             # Dummy implementation - override!
             lhs = QtGui.QWidget(parent)
@@ -92,7 +92,7 @@ class SplitWidget(MSplitWidget, HasTraits):
             rhs = self.rhs(parent)
             if not isinstance(rhs, QtGui.QWidget):
                 rhs = rhs.control
-        
+
         else:
             # Dummy implementation - override!
             rhs = QtGui.QWidget(parent)

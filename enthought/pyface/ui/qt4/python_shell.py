@@ -121,7 +121,7 @@ class WrappingStringIO(object):
 
     def __init__(self, width):
         """ Create a WrappingStringIO with the specified fill width.
-        """ 
+        """
         import cStringIO
         self.__cio = cStringIO.StringIO()
         self.width = width
@@ -185,7 +185,7 @@ _DEFAULT_STYLES = {
 
 _DEFAULT_MARKER_COLORS = {
     _INPUT_STYLE : '#EDFDFF', # Nice blue
-    _ERROR_STYLE : '#FFF1F1', # Nice red 
+    _ERROR_STYLE : '#FFF1F1', # Nice red
     _TRACE_STYLE : '#F5F5F5', # Nice grey
     }
 
@@ -218,7 +218,7 @@ else:
 # Determine if fix is needed for QScintilla bug (see 'keyPressEvent' for info)
 if (QtCore.QT_VERSION < 0x040500 or Qsci.QSCINTILLA_VERSION < 0x20401) and \
         sys.platform == 'linux2':
-    METACITY_FIX = 'metacity' in Popen(['ps', '-A'], 
+    METACITY_FIX = 'metacity' in Popen(['ps', '-A'],
                                        stdout=PIPE).communicate()[0]
 else:
     METACITY_FIX = False
@@ -250,7 +250,7 @@ class QConsoleWidget(QsciScintilla):
     # 'object' interface
     #--------------------------------------------------------------------------
 
-    def __init__(self, parent, styles=_DEFAULT_STYLES, 
+    def __init__(self, parent, styles=_DEFAULT_STYLES,
                  marker_colors=_DEFAULT_MARKER_COLORS, ansi_colors=ANSI_COLORS,
                  _base_init=True):
         """ Initialize internal variables and up all the styling options for the
@@ -332,7 +332,7 @@ class QConsoleWidget(QsciScintilla):
 
     #--------------------------------------------------------------------------
     # file-like object interface
-    #-------------------------------------------------------------------------- 
+    #--------------------------------------------------------------------------
 
     def flush(self):
         """ Flush the buffer by writing its contents to the screen.
@@ -364,7 +364,7 @@ class QConsoleWidget(QsciScintilla):
 #         except UnicodeDecodeError:
 #             # FIXME: Do I really want to skip the exception?
 #             pass
-        
+
 #         for ansi_tag, text in zip(segments[::2], segments[1::2]):
 #             self.SendScintilla(QsciBase.SCI_STARTSTYLING, self.text().length())
 #             try:
@@ -377,7 +377,7 @@ class QConsoleWidget(QsciScintilla):
 #             else:
 #                 style = 0
 #             self.SendScintilla(QsciBase.SCI_SETSTYLING, len(text), style)
-                
+
         self.setCursorPosition(*self._end_position())
 
     def readline(self, prompt=None):
@@ -402,12 +402,12 @@ class QConsoleWidget(QsciScintilla):
         # method, as print will call this method, creating an infinite loop.
 
         self._buffer.write(text)
-        
+
         if refresh:
             current_time = time()
             if current_time - self._last_refresh_time > 0.05:
                 self.flush()
-                self._last_refresh_time = current_time 
+                self._last_refresh_time = current_time
 
     def writelines(self, lines, refresh=True):
         """ Write a list of lines to the buffer.
@@ -428,7 +428,7 @@ class QConsoleWidget(QsciScintilla):
 
         can_paste = bool(self.SendScintilla(QsciBase.SCI_CANPASTE))
         self._paste_action.setEnabled(can_paste)
-        
+
         self._context_menu.exec_(event.globalPos())
 
     def keyPressEvent(self, event):
@@ -445,7 +445,7 @@ class QConsoleWidget(QsciScintilla):
             if key in self._ctrl_down_remap:
                 ctrl_down = False
                 key = self._ctrl_down_remap[key]
-                event = QtGui.QKeyEvent(QtCore.QEvent.KeyPress, key, 
+                event = QtGui.QKeyEvent(QtCore.QEvent.KeyPress, key,
                                         QtCore.Qt.NoModifier)
 
             elif key == QtCore.Qt.Key_L:
@@ -480,7 +480,7 @@ class QConsoleWidget(QsciScintilla):
             if key == QtCore.Qt.Key_B:
                 self.setCursorPosition(*self._get_word_start(line, index))
                 intercepted = True
-                
+
             elif key == QtCore.Qt.Key_F:
                 self.setCursorPosition(*self._get_word_end(line, index))
                 intercepted = True
@@ -563,7 +563,7 @@ class QConsoleWidget(QsciScintilla):
         if intercepted:
             if key != QtCore.Qt.Key_Tab:
                 # Cancel any call tips or autocompletion lists which are active
-                self.callTip() 
+                self.callTip()
                 self.cancelList()
         else:
             QsciScintilla.keyPressEvent(self, event)
@@ -611,10 +611,10 @@ class QConsoleWidget(QsciScintilla):
 
     def _set_input_buffer(self, string):
         # Remove old text
-        self.setSelection(self._prompt_line, self._prompt_index, 
+        self.setSelection(self._prompt_line, self._prompt_index,
                           *self._end_position())
         self.removeSelectedText()
-        
+
         # Add continuation prompts where necessary
         lines = string.splitlines()
         cont_prompt = self.continuation_prompt()
@@ -624,7 +624,7 @@ class QConsoleWidget(QsciScintilla):
 
         # Insert string and move cursor to end of buffer
         self.insertAt(string, self._prompt_line, self._prompt_index)
-        self.recolor(self.positionFromLineIndex(self._prompt_line, 
+        self.recolor(self.positionFromLineIndex(self._prompt_line,
                                                 self._prompt_index), -1)
         self.setCursorPosition(*self._end_position())
 
@@ -791,7 +791,7 @@ class QConsoleWidget(QsciScintilla):
         start = self.SendScintilla(QsciBase.SCI_WORDSTARTPOSITION, pos, False)
         if not self.isWordCharacter(chr(self.SendScintilla(
                     QsciBase.SCI_GETCHARAT, start))):
-            start = self.SendScintilla(QsciBase.SCI_WORDSTARTPOSITION, 
+            start = self.SendScintilla(QsciBase.SCI_WORDSTARTPOSITION,
                                        start - 1, True)
         start_line, start_index = self.lineIndexFromPosition(start)
 
@@ -810,10 +810,10 @@ class QConsoleWidget(QsciScintilla):
         end = self.SendScintilla(QsciBase.SCI_WORDENDPOSITION, pos, False)
         if not self.isWordCharacter(chr(self.SendScintilla(
                     QsciBase.SCI_GETCHARAT, end - 1))):
-            end = self.SendScintilla(QsciBase.SCI_WORDENDPOSITION, 
+            end = self.SendScintilla(QsciBase.SCI_WORDENDPOSITION,
                                        end, False)
         return self.lineIndexFromPosition(end)
-                                      
+
     def _in_buffer(self, line, index):
         """ Returns whether the given position is inside the editing region.
         """
@@ -872,7 +872,7 @@ run filename
     Run the python script in filename.
 who
     List all the names in the python shell's namespace.
-    
+
 The shell also provides a shortcut for printing the docstring associated with
 a name: enter the name followed by or preceded by a question mark.  For
 example:
@@ -882,7 +882,7 @@ example:
     Return a nice string representation of the object.
     If the argument is a string, the return value is the same object.
 
-    >>> 
+    >>>
 """
 
     #--------------------------------------------------------------------------
@@ -934,16 +934,16 @@ example:
     def _console_init(self):
         self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_NULL)
 
-        self.write('Python %s on %s.\n' % (sys.version, sys.platform), 
+        self.write('Python %s on %s.\n' % (sys.version, sys.platform),
                    refresh=False)
         self.write('Type "copyright", "credits" or "license" for more ' \
                        'information.\n', refresh=False)
-        self.write('Type "?" to see this shell\'s enhancements.\n', 
+        self.write('Type "?" to see this shell\'s enhancements.\n',
                    refresh=False)
         self.new_prompt()
 
         self.SendScintilla(QsciBase.SCI_SETLEXER, QsciBase.SCLEX_PYTHON)
-    
+
     def continuation_prompt(self):
         return '... '
 
@@ -990,7 +990,7 @@ example:
             line, end_index = self.getCursorPosition()
             path = str(self.text(line))[start_index:end_index]
             context = re.split(r'[\\/]', path)
-            
+
             # Decide which file extensions to match
             extensions = [ '/' ]
             if magic == 'run':
@@ -1037,7 +1037,7 @@ example:
         """ Convenience method because the normal prompt is always the same.
         """
         QConsoleWidget.new_prompt(self, prompt)
-        
+
     def execute_string(self, source, hidden=False, interactive=False):
         """ Execute a Python string. If 'hidden', no output is shown. Returns
             whether the source executed (ie returns True only if no more input
@@ -1147,7 +1147,7 @@ example:
             if stripped == "?":
                 # The user entered a single question mark.
                 self.write(self.shell_help_msg, refresh=False)
-            else:                
+            else:
                 name, obj = self.lexer().apis().get_symbol(line, index)
                 if obj is None:
                     self.write('Object `%s` not found.\n' % name, refresh=False)
@@ -1163,7 +1163,7 @@ example:
             old_stdout = sys.stdout
             old_stderr = sys.stderr
             sys.stdin = sys.stdout = sys.stderr = self
-            
+
             # Run the source code in the interpeter
             self._hidden = hidden
             try:
@@ -1275,13 +1275,13 @@ example:
         if string.startswith('%'):
             string = string[1:]
         for magic in magics:
-            if (string.startswith(magic) and 
+            if (string.startswith(magic) and
                 (len(string) == len(magic) or string[len(magic)] == ' ')):
                 return magic
         return False
 
     def _get_magic_argument(self, string, magic):
-        """ Assuming a given command string is call to the specified magic 
+        """ Assuming a given command string is call to the specified magic
             command, return the argument to the magic.
         """
         if string.startswith('%'):
@@ -1297,7 +1297,7 @@ example:
 
         # Convert all non-space-escaping backslashes to slashes (eg C:\blah)
         string = re.sub(r'\\(?! )', '/', string)
-    
+
         return string
 
     def _path_matches(self, string, extensions=['']):
@@ -1330,7 +1330,7 @@ class QsciPythonAPIs(QsciAbstractAPIs):
     #--------------------------------------------------------------------------
     # 'object' interface
     #--------------------------------------------------------------------------
-    
+
     def __init__(self, lexer, interpreter):
         """ Store the interpreter.
         """
@@ -1342,9 +1342,9 @@ class QsciPythonAPIs(QsciAbstractAPIs):
     #--------------------------------------------------------------------------
 
     def get_symbol(self, line, index):
-        """ Given a position defined by 'line' and 'index', use the lexer to 
+        """ Given a position defined by 'line' and 'index', use the lexer to
             determine what the symbol is to the left of the position. Returns
-            the symbol name (eg 'foo.bar') and the symbol object. 
+            the symbol name (eg 'foo.bar') and the symbol object.
         """
         editor = self.lexer().editor()
         position = editor.positionFromLineIndex(line, index)
@@ -1440,7 +1440,7 @@ class QPyfacePythonShellWidget(QPythonShellWidget):
         self._pyface_widget = pyface_widget
 
         QPythonShellWidget.__init__(self, *args, **kw)
-    
+
     #---------------------------------------------------------------------------
     # 'QWidget' interface
     #---------------------------------------------------------------------------

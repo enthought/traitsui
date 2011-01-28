@@ -36,7 +36,7 @@ from editor \
 
 # Standard font point sizes
 PointSizes = [
-   '8',  '9', '10', '11', '12', '14', '16', '18', 
+   '8',  '9', '10', '11', '12', '14', '16', '18',
   '20', '22', '24', '26', '28', '36', '48', '72'
 ]
 
@@ -52,26 +52,26 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
     #---------------------------------------------------------------------------
     #  Returns a QFont object corresponding to a specified object's font trait:
     #---------------------------------------------------------------------------
-    
+
     def to_qt4_font ( self, editor ):
         """ Returns a QFont object corresponding to a specified object's font
         trait.
         """
         return QtGui.QFont(editor.value)
-    
+
     #---------------------------------------------------------------------------
     #  Gets the application equivalent of a QFont value:
     #---------------------------------------------------------------------------
-    
+
     def from_qt4_font ( self, font ):
         """ Gets the application equivalent of a QFont value.
         """
         return font
-    
+
     #---------------------------------------------------------------------------
     #  Returns the text representation of the specified object trait value:
     #---------------------------------------------------------------------------
-    
+
     def str_font ( self, font ):
         """ Returns the text representation of the specified object trait value.
         """
@@ -88,7 +88,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 
 class SimpleFontEditor ( BaseSimpleEditor ):
     """ Simple style of font editor, which displays a text field that contains
-    a text representation of the font value (using that font if possible). 
+    a text representation of the font value (using that font if possible).
     Clicking the field displays a font selection dialog box.
     """
     #---------------------------------------------------------------------------
@@ -98,7 +98,7 @@ class SimpleFontEditor ( BaseSimpleEditor ):
     def popup_editor(self):
         """ Invokes the pop-up editor for an object trait.
         """
-        fnt, ok = QtGui.QFontDialog.getFont(self.factory.to_qt4_font(self), 
+        fnt, ok = QtGui.QFontDialog.getFont(self.factory.to_qt4_font(self),
                                             self.control)
 
         if ok:
@@ -110,7 +110,7 @@ class SimpleFontEditor ( BaseSimpleEditor ):
     #---------------------------------------------------------------------------
 
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         super( SimpleFontEditor, self ).update_editor()
@@ -123,7 +123,7 @@ class SimpleFontEditor ( BaseSimpleEditor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        return self.factory.str_font( font ) 
+        return self.factory.str_font( font )
 
 #-------------------------------------------------------------------------------
 #  'CustomFontEditor' class:
@@ -132,7 +132,7 @@ class SimpleFontEditor ( BaseSimpleEditor ):
 class CustomFontEditor ( Editor ):
     """ Custom style of font editor, which displays the following:
 
-        * A text field containing the text representation of the font value 
+        * A text field containing the text representation of the font value
           (using that font if possible).
         * A combo box containing all available type face names.
         * A combo box containing the available type sizes.
@@ -214,7 +214,7 @@ class CustomFontEditor ( Editor ):
     #---------------------------------------------------------------------------
 
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         font = self.factory.to_qt4_font( self )
@@ -238,7 +238,7 @@ class CustomFontEditor ( Editor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        return self.factory.str_font( font ) 
+        return self.factory.str_font( font )
 
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
@@ -262,7 +262,7 @@ class CustomFontEditor ( Editor ):
 #-------------------------------------------------------------------------------
 
 class TextFontEditor ( BaseTextEditor ):
-    """ Text style of font editor, which displays an editable text field 
+    """ Text style of font editor, which displays an editable text field
     containing a text representation of the font value (using that font if
     possible).
     """
@@ -280,7 +280,7 @@ class TextFontEditor ( BaseTextEditor ):
     #---------------------------------------------------------------------------
 
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes external to the 
+        """ Updates the editor when the object trait changes external to the
             editor.
         """
         super( TextFontEditor, self ).update_editor()
@@ -293,7 +293,7 @@ class TextFontEditor ( BaseTextEditor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        return self.factory.str_font( font ) 
+        return self.factory.str_font( font )
 
 #-------------------------------------------------------------------------------
 #  'ReadonlyFontEditor' class:
@@ -309,7 +309,7 @@ class ReadonlyFontEditor ( BaseReadonlyEditor ):
     #---------------------------------------------------------------------------
 
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes external to the 
+        """ Updates the editor when the object trait changes external to the
             editor.
         """
         super( ReadonlyFontEditor, self ).update_editor()
@@ -322,10 +322,10 @@ class ReadonlyFontEditor ( BaseReadonlyEditor ):
     def string_value ( self, font ):
         """ Returns the text representation of a specified font value.
         """
-        return self.factory.str_font( font ) 
+        return self.factory.str_font( font )
 
 #-------------------------------------------------------------------------------
-#  Set the editor control's font to match a specified font: 
+#  Set the editor control's font to match a specified font:
 #-------------------------------------------------------------------------------
 
 def set_font ( editor ):

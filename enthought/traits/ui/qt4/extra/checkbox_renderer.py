@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2009, Enthought, Inc.
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD
 # license included in enthought/LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-# 
+#
 # Author: Evan Patterson
 # Date: 06/26/09
 #------------------------------------------------------------------------------
@@ -24,10 +24,10 @@ from enthought.traits.ui.qt4.table_editor import TableDelegate
 
 
 class CheckboxRenderer(TableDelegate):
-    """ A renderer which displays a checked-box for a True value and an 
+    """ A renderer which displays a checked-box for a True value and an
         unchecked box for a false value.
     """
-    
+
     #---------------------------------------------------------------------------
     #  QAbstractItemDelegate interface
     #---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ class CheckboxRenderer(TableDelegate):
             if qt_api == 'pyqt':
                 obj = index.data(QtCore.Qt.UserRole).toPyObject()
             else:
-                obj = index.data(QtCore.Qt.UserRole)                
+                obj = index.data(QtCore.Qt.UserRole)
             checked = bool(column.get_raw_value(obj))
             column.set_value(obj, not checked)
             return True
@@ -68,7 +68,7 @@ class CheckboxRenderer(TableDelegate):
                 bg_brush = index.data(QtCore.Qt.BackgroundRole).toPyObject()
             else:
                 bg_brush = index.data(QtCore.Qt.BackgroundRole)
-                
+
             if bg_brush == NotImplemented:
                 bg_brush = option.palette.light()
         painter.fillRect(option.rect, bg_brush)
@@ -91,5 +91,5 @@ class CheckboxRenderer(TableDelegate):
         """
         box = QtGui.QStyleOptionButton()
         style = QtGui.QApplication.instance().style()
-        return style.sizeFromContents(QtGui.QStyle.CT_CheckBox, box, 
+        return style.sizeFromContents(QtGui.QStyle.CT_CheckBox, box,
                                       QtCore.QSize())

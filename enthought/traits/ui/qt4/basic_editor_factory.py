@@ -2,7 +2,7 @@
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
-# 
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
@@ -12,21 +12,21 @@
 #
 #------------------------------------------------------------------------------
 
-## Deprecated proxy for the BasicEditorFactory class declared in 
+## Deprecated proxy for the BasicEditorFactory class declared in
 # enthought.traits.ui, declared here just for backward compatibility.
 
 import warnings
 
 from enthought.traits.ui.basic_editor_factory \
     import BasicEditorFactory as AbstractBasicEditorFactory
-    
+
 #-------------------------------------------------------------------------------
-#  'BasicEditorFactory' class 
+#  'BasicEditorFactory' class
 #   Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory
 #-------------------------------------------------------------------------------
 
 class BasicEditorFactory(AbstractBasicEditorFactory):
-    """ Deprecated alias for 
+    """ Deprecated alias for
         enthought.traits.ui.basic_editor_factory.BasicEditorFactory.
     """
 
@@ -34,5 +34,5 @@ class BasicEditorFactory(AbstractBasicEditorFactory):
         super(BasicEditorFactory, self).__init__(*args, **kwds)
         warnings.warn("DEPRECATED: Use enthought.traits.ui.basic_editor_factory"
             ".BasicEditorFactory instead.", DeprecationWarning)
-        
+
 #---EOF-------------------------------------------------------------------------

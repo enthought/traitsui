@@ -169,8 +169,8 @@ class _FutureCall(QtCore.QObject):
 
         # Move to the main GUI thread.
         self.moveToThread(QtGui.QApplication.instance().thread())
-        
-        # Post an event to be dispatched on the main GUI thread. Note that 
+
+        # Post an event to be dispatched on the main GUI thread. Note that
         # we do not call QTimer.singleShot here, which would be simpler, because
         # that only works on QThreads. We want regular Python threads to work.
         event = QtCore.QEvent(self._pyface_event)

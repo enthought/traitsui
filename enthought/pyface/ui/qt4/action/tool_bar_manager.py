@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD license.
 # However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
 
@@ -28,7 +28,7 @@ class ToolBarManager(ActionManager):
 
     # Is the tool bar visible?
     visible = Bool(True)
-    
+
     # The size of tool images (width, height).
     image_size = Tuple((16, 16))
 
@@ -146,7 +146,7 @@ class _ToolBar(QtGui.QToolBar):
         # Listen for changes to the tool bar manager's enablement and
         # visibility.
         self.tool_bar_manager = tool_bar_manager
-        
+
         self.tool_bar_manager.on_trait_change(
             self._on_tool_bar_manager_enabled_changed, 'enabled'
         )

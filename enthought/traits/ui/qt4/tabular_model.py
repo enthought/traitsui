@@ -166,12 +166,12 @@ class TabularModel(QtCore.QAbstractTableModel):
         return len(editor.adapter.columns)
 
     def insertRow(self, row, parent=QtCore.QModelIndex(), obj=None):
-        """ Reimplemented to allow creation of new rows. Added an optional 
+        """ Reimplemented to allow creation of new rows. Added an optional
             arg to allow the insertion of an existing row object.
         """
         editor = self._editor
         adapter = editor.adapter
-        
+
         if obj is None:
             obj = adapter.get_default_value(editor.object, editor.name)
         self.beginInsertRows(parent, row, row)
@@ -206,7 +206,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         return True
 
     def mimeTypes(self):
-        """ Reimplemented to expose our internal MIME type for drag and drop 
+        """ Reimplemented to expose our internal MIME type for drag and drop
             operations.
         """
         types = QtCore.QStringList()
@@ -230,11 +230,11 @@ class TabularModel(QtCore.QAbstractTableModel):
         """
         if action == QtCore.Qt.IgnoreAction:
             return False
-        
+
         data = mime_data.data(mime_type)
         if data.isNull():
             return False
-        
+
         current_rows = map(int, str(data).split(' '))
         self.moveRows(current_rows, parent.row())
         return True
@@ -263,8 +263,8 @@ class TabularModel(QtCore.QAbstractTableModel):
         # invalidating the indices.
         current_rows.sort()
         current_rows.reverse()
-        
-        # If the the highest selected row is lower than the destination, do an 
+
+        # If the the highest selected row is lower than the destination, do an
         # insertion before rather than after the destination.
         if current_rows[-1] < new_row:
             new_row += 1
@@ -277,7 +277,7 @@ class TabularModel(QtCore.QAbstractTableModel):
             obj = editor.adapter.get_item(editor.object, editor.name, row)
             objects.insert(0, obj)
             self.removeRow(row)
-        
+
         # ...and add them at the new location.
         for i, obj in enumerate(objects):
             self.insertRow(new_row + i, obj=obj)

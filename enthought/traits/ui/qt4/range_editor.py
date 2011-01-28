@@ -24,9 +24,9 @@ from enthought.qt import QtCore, QtGui
 
 from enthought.traits.api \
      import TraitError, Str, Float, Any, Bool
-     
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.range_editor file.
 from enthought.traits.ui.editors.range_editor \
     import ToolkitEditorFactory
@@ -51,7 +51,7 @@ class BaseRangeEditor ( Editor ):
     """ The base class for Range editors. Using an evaluate trait, if specified,
         when assigning numbers the object trait.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -62,7 +62,7 @@ class BaseRangeEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Sets the associated object trait's value:
     #---------------------------------------------------------------------------
-    
+
     def _set_value ( self, value ):
         if self.evaluate is not None:
             value = self.evaluate( value )
@@ -132,7 +132,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         ivalue = self._convert_to_slider(fvalue)
 
         self._label_lo = QtGui.QLabel()
-        self._label_lo.setAlignment(QtCore.Qt.AlignRight | 
+        self._label_lo.setAlignment(QtCore.Qt.AlignRight |
                                     QtCore.Qt.AlignVCenter)
         if factory.label_width > 0:
             self._label_lo.setMinimumWidth(factory.label_width)
@@ -281,7 +281,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         """ Returns the slider setting corresponding to the user-supplied value.
         """
         if self.high > self.low:
-            ivalue = int( (float( value - self.low ) / 
+            ivalue = int( (float( value - self.low ) /
                            (self.high - self.low)) * 10000.0 )
         else:
             ivalue = self.low
@@ -291,7 +291,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         return ivalue
 
     def _convert_from_slider(self, ivalue):
-        """ Returns the float or integer value corresponding to the slider 
+        """ Returns the float or integer value corresponding to the slider
         setting.
         """
         value = self.low + ((float( ivalue ) / 10000.0) *
@@ -299,12 +299,12 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         if not self.factory.is_float:
             value = int(round(value))
         return value
-    
+
 
 #-------------------------------------------------------------------------------
 class LogRangeSliderEditor ( SimpleSliderEditor ):
 #-------------------------------------------------------------------------------
-    """ A slider editor for log-spaced values 
+    """ A slider editor for log-spaced values
     """
 
     def _convert_to_slider(self, value):
@@ -316,11 +316,11 @@ class LogRangeSliderEditor ( SimpleSliderEditor ):
         return ivalue
 
     def _convert_from_slider(self, ivalue):
-        """ Returns the float or integer value corresponding to the slider 
+        """ Returns the float or integer value corresponding to the slider
         setting.
         """
         value = float( ivalue ) / 10000.0 * (log10(self.high) -log10(self.low))
-        # Do this to handle floating point errors, where fvalue may exceed 
+        # Do this to handle floating point errors, where fvalue may exceed
         # self.high.
         fvalue = min(self.low*10**(value), self.high)
         if not self.factory.is_float:
@@ -752,7 +752,7 @@ class RangeTextEditor ( TextEditor ):
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -760,7 +760,7 @@ class RangeTextEditor ( TextEditor ):
         TextEditor.init( self, parent )
         self.evaluate = self.factory.evaluate
         self.sync_value( self.factory.evaluate_name, 'evaluate', 'from' )
-    
+
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
     #---------------------------------------------------------------------------

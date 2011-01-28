@@ -26,32 +26,32 @@ from enthought.qt import QtGui
 
 from enthought.pyface.image_resource \
     import ImageResource
-    
+
 from enthought.traits.ui.ui_traits \
     import convert_bitmap
-    
+
 # FIXME: ImageEditor is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.image_editor file.
 from enthought.traits.ui.editors.image_editor \
     import ImageEditor
-    
+
 from editor \
     import Editor
 
 #-------------------------------------------------------------------------------
 #  '_ImageEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class _ImageEditor ( Editor ):
     """ Traits UI 'display only' image editor.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -59,12 +59,12 @@ class _ImageEditor ( Editor ):
         image = self.factory.image
         if image is None:
             image = self.value
-         
+
         self.control = QtGui.QLabel()
         self.control.setPixmap( convert_bitmap( image ) )
-            
+
         self.set_tooltip()
-                        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------

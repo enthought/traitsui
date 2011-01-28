@@ -29,27 +29,27 @@ class _MenuItem(HasTraits):
     """ A menu item representation of an action item. """
 
     #### '_MenuItem' interface ################################################
-    
+
     # Is the item checked?
     checked = Bool(False)
 
     # A controller object we delegate taking actions through (if any).
     controller = Any
-    
+
     # Is the item enabled?
     enabled = Bool(True)
-    
+
     # Is the item visible?
     visible = Bool(True)
-    
+
     # The radio group we are part of (None if the menu item is not part of such
     # a group).
     group = Any
-    
+
     ###########################################################################
     # 'object' interface.
     ###########################################################################
-    
+
     def __init__(self, parent, menu, item, controller):
         """ Creates a new menu item for an action item. """
 
@@ -102,9 +102,9 @@ class _MenuItem(HasTraits):
         if controller is not None:
             self.controller = controller
             controller.add_to_menu(self)
-    
+
     ###########################################################################
-    # Private interface. 
+    # Private interface.
     ###########################################################################
 
     def _qt4_on_triggered(self):
@@ -112,9 +112,9 @@ class _MenuItem(HasTraits):
 
         action = self.item.action
         action_event = ActionEvent()
-        
+
         is_checkable = action.style in ['radio', 'toggle']
-        
+
         # Perform the action!
         if self.controller is not None:
             if is_checkable:
@@ -135,14 +135,14 @@ class _MenuItem(HasTraits):
             # the event!
             if len(args) == 2:
                 self.controller.perform(action)
-            
+
             else:
                 self.controller.perform(action, action_event)
-            
+
         else:
             if is_checkable:
                 action.checked = self.control.isChecked()
-                
+
             # Most of the time, action's do no care about the event (it
             # contains information about the time the event occurred etc), so
             # we only pass it if the perform method requires it.
@@ -151,7 +151,7 @@ class _MenuItem(HasTraits):
             # If the only argument is 'self' then don't pass the event!
             if len(args) == 1:
                 action.perform()
-            
+
             else:
                 action.perform(action_event)
 
@@ -197,7 +197,7 @@ class _Tool(HasTraits):
     """ A tool bar tool representation of an action item. """
 
     #### '_Tool' interface ####################################################
-    
+
     # Is the item checked?
     checked = Bool(False)
 
@@ -228,7 +228,7 @@ class _Tool(HasTraits):
 
         # FIXME v3: This is a wx'ism and should be hidden in the toolkit code.
         self.control_id = None
-        
+
         if action.image is None:
             self.control = tool_bar.addAction(action.name)
         else:
@@ -279,7 +279,7 @@ class _Tool(HasTraits):
 
     def _qt4_on_triggered(self):
         """ Called when the tool bar tool is clicked. """
-        
+
         action = self.item.action
         action_event = ActionEvent()
 
@@ -302,10 +302,10 @@ class _Tool(HasTraits):
             # the event!
             if len(args) == 2:
                 self.controller.perform(action)
-            
+
             else:
                 self.controller.perform(action, action_event)
-            
+
         else:
             action.checked = self.control.isChecked()
 
@@ -317,7 +317,7 @@ class _Tool(HasTraits):
             # If the only argument is 'self' then don't pass the event!
             if len(args) == 1:
                 action.perform()
-            
+
             else:
                 action.perform(action_event)
 
@@ -327,12 +327,12 @@ class _Tool(HasTraits):
         """ Called when our 'enabled' trait is changed. """
 
         self.control.setEnabled(self.enabled)
-    
+
     def _visible_changed(self):
         """ Called when our 'visible' trait is changed. """
 
         self.control.setVisible(self.visible)
-    
+
     def _checked_changed(self):
         """ Called when our 'checked' trait is changed. """
 
@@ -342,12 +342,12 @@ class _Tool(HasTraits):
         """ Called when the enabled trait is changed on an action. """
 
         self.control.setEnabled(action.enabled)
-    
+
     def _on_action_visible_changed(self, action, trait_name, old, new):
         """ Called when the visible trait is changed on an action. """
 
         self.control.setVisible(action.visible)
-    
+
     def _on_action_checked_changed(self, action, trait_name, old, new):
         """ Called when the checked trait is changed on an action. """
 

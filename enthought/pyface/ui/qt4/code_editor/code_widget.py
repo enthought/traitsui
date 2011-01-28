@@ -1,10 +1,10 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2010, Enthought Inc
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD license.
 
-# 
+#
 # Author: Enthought Inc
 # Description: <Enthought pyface code editor>
 #------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
     # CodeWidget interface
     ###########################################################################
 
-    def __init__(self, parent, should_highlight_current_line=True, font=None, 
+    def __init__(self, parent, should_highlight_current_line=True, font=None,
                  lexer=None):
         super(CodeWidget, self).__init__(parent)
 
@@ -75,7 +75,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
         self.blockCountChanged.connect(self.update_line_number_width)
         self.updateRequest.connect(self.update_line_numbers)
         self.cursorPositionChanged.connect(self.highlight_current_line)
-        
+
         self.update_line_number_width()
         self.highlight_current_line()
 
@@ -154,15 +154,15 @@ class CodeWidget(QtGui.QPlainTextEdit):
             0, rect.y(), self.line_number_widget.width(), rect.height())
         if rect.contains(self.viewport().rect()):
             self.update_line_number_width()
-            
+
     def set_info_lines(self, info_lines):
         self.status_widget.info_lines = info_lines
         self.status_widget.update()
-        
+
     def set_warn_lines(self, warn_lines):
         self.status_widget.warn_lines = warn_lines
         self.status_widget.update()
-        
+
     def set_error_lines(self, error_lines):
         self.status_widget.error_lines = error_lines
         self.status_widget.update()
@@ -333,7 +333,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
         cursor.insertText(tab)
 
     def line_unindent(self, cursor):
-        """ Unindents the cursor's line. Returns the number of characters 
+        """ Unindents the cursor's line. Returns the number of characters
             removed.
         """
         tab = '\t'
@@ -363,14 +363,14 @@ class CodeWidget(QtGui.QPlainTextEdit):
     ###########################################################################
 
     # FIXME: This is a quick hack to be able to access the keyPressEvent
-    # from the rest editor. This should be changed to work within the traits 
+    # from the rest editor. This should be changed to work within the traits
     # framework.
     def keyPressEvent_action(self, event):
         pass
-    
+
     def keyPressEvent(self, event):
         key_sequence = QtGui.QKeySequence(event.key() + int(event.modifiers()))
-        
+
         self.keyPressEvent_action(event) # FIXME: see above
 
         # If the cursor is in the middle of the first line, pressing the "up"
@@ -422,7 +422,7 @@ class CodeWidget(QtGui.QPlainTextEdit):
         right_pos = self.viewport().width() + self.line_number_widget.width() + 1\
                     - self.status_widget.sizeHint().width()
         self.status_widget.setGeometry(QtCore.QRect(right_pos,
-            contents.top(), self.status_widget.sizeHint().width(), 
+            contents.top(), self.status_widget.sizeHint().width(),
             contents.height()))
 
     def sizeHint(self):
@@ -456,9 +456,9 @@ class CodeWidget(QtGui.QPlainTextEdit):
         cursor.clearSelection()
         cursor.setPosition(selected_blocks[0].position())
         cursor.movePosition(QtGui.QTextCursor.StartOfBlock)
-        cursor.movePosition(QtGui.QTextCursor.NextBlock, 
+        cursor.movePosition(QtGui.QTextCursor.NextBlock,
                             QtGui.QTextCursor.KeepAnchor, len(selected_blocks))
-        cursor.movePosition(QtGui.QTextCursor.EndOfBlock, 
+        cursor.movePosition(QtGui.QTextCursor.EndOfBlock,
                             QtGui.QTextCursor.KeepAnchor)
 
         self.setTextCursor(cursor)
@@ -547,7 +547,7 @@ class AdvancedCodeWidget(QtGui.QWidget):
 
         # Key bindings
         self.replace_key = QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_R)
-        
+
     def lines(self):
         """ Return the number of lines.
         """
@@ -570,10 +570,10 @@ class AdvancedCodeWidget(QtGui.QWidget):
 
     def set_info_lines(self, info_lines):
         self.code.set_info_lines(info_lines)
-        
+
     def set_warn_lines(self, warn_lines):
         self.code.set_warn_lines(warn_lines)
-        
+
     def set_error_lines(self, error_lines):
         self.code.set_error_lines(error_lines)
 
@@ -755,7 +755,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         f = open(sys.argv[1], 'r')
         window.code.setPlainText(f.read())
-        
+
     window.code.set_info_lines([3,4,8])
 
     window.resize(640, 640)

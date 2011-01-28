@@ -20,14 +20,14 @@ target editor handles drag and drop operations as a drop target.
 from enthought.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.drop_editor file.
 from enthought.traits.ui.editors.drop_editor \
     import ToolkitEditorFactory
 
 from text_editor \
     import SimpleEditor as Editor
-    
+
 from constants \
     import DropColor
 
@@ -37,20 +37,20 @@ from clipboard \
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class SimpleEditor ( Editor ):
     """ Simple style of drop editor, which displays a read-only text field that
     contains the string representation of the object trait's value.
     """
-    
+
     # Background color when it is OK to drop objects.
     ok_color = DropColor
-        
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -75,18 +75,18 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Returns the text representation of a specified object trait value:
     #---------------------------------------------------------------------------
-  
+
     def string_value ( self, value ):
         """ Returns the text representation of a specified object trait value.
         """
         if value is None:
             return ''
         return str( value )
-        
+
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
     #---------------------------------------------------------------------------
-        
+
     def error ( self, excp ):
         """ Handles an error that occurs while setting the object's trait value.
         """
@@ -96,7 +96,7 @@ class SimpleEditor ( Editor ):
 class _DropWidget(object):
 
     #---------------------------------------------------------------------------
-    #  Handles a Python object being dropped on the control:    
+    #  Handles a Python object being dropped on the control:
     #---------------------------------------------------------------------------
 
     def dropEvent(self, e):
@@ -123,14 +123,14 @@ class _DropWidget(object):
                 else:
                     self.setText(editor.str_value)
             finally:
-                editor._no_update = False 
+                editor._no_update = False
 
             e.acceptProposedAction()
 
     #---------------------------------------------------------------------------
-    #  Handles a Python object being dragged over the control:    
+    #  Handles a Python object being dragged over the control:
     #---------------------------------------------------------------------------
-                
+
     def dragEnterEvent(self, e):
         """ Handles a Python object being dragged over the tree.
         """

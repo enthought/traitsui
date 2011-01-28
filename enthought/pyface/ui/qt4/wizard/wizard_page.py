@@ -54,7 +54,7 @@ class WizardPage(MWizardPage, HasTraits):
         """ Creates the wizard page. """
 
         content = self._create_page_content(parent)
-                
+
         # We allow some flexibility with the sort of control we are given.
         if not isinstance(content, QtGui.QWizardPage):
             wp = _WizardPage(self)
@@ -93,9 +93,9 @@ class WizardPage(MWizardPage, HasTraits):
     def _create_page_content(self, parent):
         """ Creates the actual page content. """
 
-        # Dummy implementation - override! 
+        # Dummy implementation - override!
         control = QtGui.QWidget(parent)
-        
+
         palette = control.palette()
         palette.setColor(QtGui.QPalette.Window, QtGui.QColor('yellow'))
         control.setPalette(palette)
@@ -120,13 +120,13 @@ class _WizardPage(QtGui.QWizardPage):
 
     def initializePage(self):
         """ Reimplemented to call the IWizard's 'next'. """
-        
+
         if self.pyface_wizard is not None:
             self.pyface_wizard.next()
 
     def cleanupPage(self):
         """ Reimplemented to call the IWizard's 'previous'. """
-        
+
         if self.pyface_wizard is not None:
             self.pyface_wizard.previous()
 

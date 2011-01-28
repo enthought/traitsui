@@ -34,7 +34,7 @@ class TaskWindowLayout(MTaskWindowLayout):
         # Save the task's layout in case it is shown later.
         layout = self.window._active_state.layout
         layout.toolkit_state = self.control.saveState()
-        
+
         # Now hide its controls.
         self.control.centralWidget().removeWidget(state.central_pane.control)
         for dock_pane in state.dock_panes:
@@ -64,7 +64,7 @@ class TaskWindowLayout(MTaskWindowLayout):
         """
         self.window._active_state.layout = layout.clone_traits()
         self._layout_state(self.window._active_state)
-        
+
     ###########################################################################
     # Private interface.
     ###########################################################################
@@ -119,4 +119,4 @@ class TaskWindowLayout(MTaskWindowLayout):
                 self._layout_area(area, state)
 
 
-    
+

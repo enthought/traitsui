@@ -47,7 +47,7 @@ class SimpleEditor(Editor):
             widget.
         """
         self.control = QtGui.QTimeEdit()
-        
+
         signal = QtCore.SIGNAL('timeChanged(QTime)')
         QtCore.QObject.connect(self.control, signal, self.update_object)
 
@@ -70,7 +70,7 @@ class SimpleEditor(Editor):
 
     def update_object(self, q_time):
         """ Handles the user entering input data in the edit control.
-        """   
+        """
         hour = q_time.hour()
         minute = q_time.minute()
         second = q_time.second()
@@ -87,7 +87,7 @@ class SimpleEditor(Editor):
 class ReadonlyEditor(BaseReadonlyEditor):
     """ Readonly Traits UI time editor that uses a QLabel for the view.
     """
- 
+
     def _get_str_value(self):
         """ Replace the default string value with our own time verision.
         """

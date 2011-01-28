@@ -9,7 +9,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the various instance editors and the instance editor factory for 
+""" Defines the various instance editors and the instance editor factory for
     the PyQt user interface toolkit..
 """
 
@@ -21,9 +21,9 @@ from enthought.qt import QtCore, QtGui
 
 from enthought.traits.api \
     import HasTraits, Property
-    
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.instance_editor file.
 from enthought.traits.ui.editors.instance_editor \
     import ToolkitEditorFactory
@@ -50,7 +50,7 @@ from helper \
     import position_window
 
 #-------------------------------------------------------------------------------
-#  Constants:  
+#  Constants:
 #-------------------------------------------------------------------------------
 
 OrientationMap = {
@@ -64,10 +64,10 @@ OrientationMap = {
 #-------------------------------------------------------------------------------
 
 class CustomEditor ( Editor ):
-    """ Custom style of editor for instances. If selection among instances is 
-    allowed, the editor displays a combo box listing instances that can be 
+    """ Custom style of editor for instances. If selection among instances is
+    allowed, the editor displays a combo box listing instances that can be
     selected. If the current instance is editable, the editor displays a panel
-    containing trait editors for all the instance's traits. 
+    containing trait editors for all the instance's traits.
     """
 
     # Background color when an item can be dropped on the editor:
@@ -80,12 +80,12 @@ class CustomEditor ( Editor ):
     extra = 0
 
     #---------------------------------------------------------------------------
-    #  Trait definitions:  
+    #  Trait definitions:
     #---------------------------------------------------------------------------
 
     # List of InstanceChoiceItem objects used by the editor
     items = Property
-    
+
     # The view to use for displaying the instance
     view = AView
 
@@ -128,14 +128,14 @@ class CustomEditor ( Editor ):
             self.set_tooltip( self._choice )
 
             if factory.name != '':
-                self._object.on_trait_change( self.rebuild_items, 
+                self._object.on_trait_change( self.rebuild_items,
                                               self._name, dispatch = 'ui' )
                 self._object.on_trait_change( self.rebuild_items,
                                  self._name + '_items', dispatch = 'ui' )
 
             factory.on_trait_change( self.rebuild_items, 'values',
                                      dispatch = 'ui' )
-            factory.on_trait_change( self.rebuild_items, 'values_items', 
+            factory.on_trait_change( self.rebuild_items, 'values_items',
                                      dispatch = 'ui' )
 
             self.rebuild_items()
@@ -177,7 +177,7 @@ class CustomEditor ( Editor ):
             layout = QtGui.QBoxLayout(orientation, parent)
             layout.setMargin(0)
             self.create_editor(parent, layout)
-            
+
         # Synchronize the 'view' to use:
         # fixme: A normal assignment can cause a crash (for unknown reasons) in
         # some cases, so we make sure that no notifications are generated:
@@ -185,7 +185,7 @@ class CustomEditor ( Editor ):
         self.sync_value( factory.view_name, 'view', 'from' )
 
     #---------------------------------------------------------------------------
-    #  Creates the editor control:  
+    #  Creates the editor control:
     #---------------------------------------------------------------------------
 
     def create_editor(self, parent, layout):
@@ -195,7 +195,7 @@ class CustomEditor ( Editor ):
         layout.addWidget(self._panel)
 
     #---------------------------------------------------------------------------
-    #  Gets the current list of InstanceChoiceItem items:  
+    #  Gets the current list of InstanceChoiceItem items:
     #---------------------------------------------------------------------------
 
     def _get_items ( self ):
@@ -222,7 +222,7 @@ class CustomEditor ( Editor ):
         return items
 
     #---------------------------------------------------------------------------
-    #  Rebuilds the object selector list:  
+    #  Rebuilds the object selector list:
     #---------------------------------------------------------------------------
 
     def rebuild_items ( self ):
@@ -242,7 +242,7 @@ class CustomEditor ( Editor ):
                 if item.is_compatible( value ):
                     name = i
 
-        # Reselect the current item if possible:                    
+        # Reselect the current item if possible:
         if name >= 0:
             choice.setCurrentIndex(name)
         else:
@@ -253,7 +253,7 @@ class CustomEditor ( Editor ):
                 pass
 
     #---------------------------------------------------------------------------
-    #  Returns the InstanceChoiceItem for a specified object:  
+    #  Returns the InstanceChoiceItem for a specified object:
     #---------------------------------------------------------------------------
 
     def item_for ( self, object ):
@@ -266,7 +266,7 @@ class CustomEditor ( Editor ):
         return None
 
     #---------------------------------------------------------------------------
-    #  Returns the view to use for a specified object:  
+    #  Returns the view to use for a specified object:
     #---------------------------------------------------------------------------
 
     def view_for ( self, object, item ):
@@ -280,7 +280,7 @@ class CustomEditor ( Editor ):
             view = self.view
 
         return self.ui.handler.trait_view_for( self.ui.info, view, object,
-                                               self.object_name, self.name ) 
+                                               self.object_name, self.name )
 
     #---------------------------------------------------------------------------
     #  Handles the user selecting a new value from the combo box:
@@ -312,7 +312,7 @@ class CustomEditor ( Editor ):
     #---------------------------------------------------------------------------
 
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         # Synchronize the editor contents:
@@ -375,7 +375,7 @@ class CustomEditor ( Editor ):
                     handler = value
                 context.setdefault( 'context', self.object )
                 context.setdefault( 'context_handler', self.ui.handler )
-                self._ui = ui = view.ui( context, panel, 'subpanel', 
+                self._ui = ui = view.ui( context, panel, 'subpanel',
                                          value.trait_view_elements(), handler,
                                          self.factory.id )
                 control         = ui.control
@@ -389,7 +389,7 @@ class CustomEditor ( Editor ):
             layout.addWidget(control)
 
     #---------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:    
+    #  Disposes of the contents of an editor:
     #---------------------------------------------------------------------------
 
     def dispose ( self ):
@@ -410,7 +410,7 @@ class CustomEditor ( Editor ):
 
             self.factory.on_trait_change( self.rebuild_items, 'values',
                                           remove = True )
-            self.factory.on_trait_change( self.rebuild_items, 
+            self.factory.on_trait_change( self.rebuild_items,
                                           'values_items', remove = True )
 
         super( CustomEditor, self ).dispose()
@@ -436,12 +436,12 @@ class CustomEditor ( Editor ):
     #-- UI preference save/restore interface -----------------------------------
 
     #---------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the 
+    #  Restores any saved user preference information associated with the
     #  editor:
     #---------------------------------------------------------------------------
 
     def restore_prefs ( self, prefs ):
-        """ Restores any saved user preference information associated with the 
+        """ Restores any saved user preference information associated with the
             editor.
         """
         ui = self._ui
@@ -461,9 +461,9 @@ class CustomEditor ( Editor ):
                      'prefs': ui.get_prefs() }
 
         return None
-        
+
     #-- Traits event handlers --------------------------------------------------
-    
+
     def _view_changed ( self, view ):
         self.resynch_editor()
 
@@ -481,12 +481,12 @@ class SimpleEditor ( CustomEditor ):
     extra       = 2
 
     #---------------------------------------------------------------------------
-    #  Creates the editor control:  
+    #  Creates the editor control:
     #---------------------------------------------------------------------------
 
     def create_editor(self, parent, layout):
         """ Creates the editor control (a button).
-        """        
+        """
         self._button = QtGui.QPushButton()
         layout.addWidget(self._button)
         QtCore.QObject.connect(self._button, QtCore.SIGNAL('clicked()'),
@@ -497,16 +497,16 @@ class SimpleEditor ( CustomEditor ):
     #---------------------------------------------------------------------------
 
     def edit_instance(self):
-        """ Edit the contents of the object trait when the user clicks the 
+        """ Edit the contents of the object trait when the user clicks the
             button.
         """
         # Create the user interface:
         factory = self.factory
         view    = self.ui.handler.trait_view_for( self.ui.info, factory.view,
-                                                  self.value, self.object_name, 
+                                                  self.value, self.object_name,
                                                   self.name )
         ui = self.value.edit_traits( view, kind=factory.kind, id=factory.id )
-        
+
         # Make sure the editor is properly disposed
         QtCore.QObject.connect( self._button, QtCore.SIGNAL( 'destroyed()' ),
                                 lambda: ui.dispose() )
@@ -528,7 +528,7 @@ class SimpleEditor ( CustomEditor ):
     #---------------------------------------------------------------------------
 
     def resynch_editor ( self ):
-        """ Resynchronizes the contents of the editor when the object trait 
+        """ Resynchronizes the contents of the editor when the object trait
             changes externally to the editor.
         """
         button = self._button

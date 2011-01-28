@@ -122,7 +122,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def flags(self, mi):
         """Reimplemented to set editable and movable status."""
-        
+
         flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
 
         if not mi.isValid():
@@ -137,7 +137,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if editor.factory.reorderable:
             flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
-            
+
         return flags
 
     def headerData(self, section, orientation, role):
@@ -152,20 +152,20 @@ class TableModel(QtCore.QAbstractTableModel):
                 return QtCore.QVariant(column.get_label())
 
         elif orientation == QtCore.Qt.Vertical:
-            
+
             if role == QtCore.Qt.DisplayRole:
                 return QtCore.QVariant(str(section + 1))
 
         return QtCore.QVariant()
 
     def insertRow(self, row, parent=QtCore.QModelIndex(), obj=None):
-        """Reimplemented to allow creation of new rows. Added an optional 
+        """Reimplemented to allow creation of new rows. Added an optional
         arg to allow the insertion of an existing row object."""
-        
+
         editor = self._editor
         if obj is None:
             obj = editor.create_new_row()
-        
+
         self.beginInsertRows(parent, row, row)
         editor.callx(editor.items().insert, row, obj)
         self.endInsertRows()
@@ -195,7 +195,7 @@ class TableModel(QtCore.QAbstractTableModel):
         return True
 
     def mimeTypes(self):
-        """Reimplemented to expose our internal MIME type for drag and drop 
+        """Reimplemented to expose our internal MIME type for drag and drop
         operations."""
 
         types = QtCore.QStringList()
@@ -219,7 +219,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if action == QtCore.Qt.IgnoreAction:
             return False
-        
+
         data = mime_data.data(mime_type)
         if data.isNull():
             return False
@@ -230,7 +230,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def supportedDropActions(self):
         """Reimplemented to allow items to be moved."""
-        
+
         return QtCore.Qt.MoveAction
 
     #---------------------------------------------------------------------------
@@ -239,7 +239,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def moveRow(self, old_row, new_row):
         """Convenience method to move a single row."""
-        
+
         return self.moveRows([old_row], new_row)
 
     def moveRows(self, current_rows, new_row):
@@ -250,8 +250,8 @@ class TableModel(QtCore.QAbstractTableModel):
         # invalidating the indices.
         current_rows.sort()
         current_rows.reverse()
-        
-        # If the the highest selected row is lower than the destination, do an 
+
+        # If the the highest selected row is lower than the destination, do an
         # insertion before rather than after the destination.
         if current_rows[-1] < new_row:
             new_row += 1
@@ -264,7 +264,7 @@ class TableModel(QtCore.QAbstractTableModel):
                 new_row -= 1
             objects.insert(0, items[row])
             self.removeRow(row)
-        
+
         # ...and add them at the new location.
         for i, obj in enumerate(objects):
             self.insertRow(new_row + i, obj=obj)
@@ -277,7 +277,7 @@ class TableModel(QtCore.QAbstractTableModel):
 #-------------------------------------------------------------------------------
 
 class SortFilterTableModel(QtGui.QSortFilterProxyModel):
-    """A wrapper for the TableModel which provides sorting and filtering 
+    """A wrapper for the TableModel which provides sorting and filtering
     capability."""
 
     def __init__(self, editor, parent=None):
@@ -305,9 +305,9 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
         return True
 
     def lessThan(self, left_mi, right_mi):
-        """Reimplemented to sort according to the 'cmp' method defined for 
+        """Reimplemented to sort according to the 'cmp' method defined for
         TableColumn."""
-        
+
         editor = self._editor
         column = editor.columns[left_mi.column()]
         items = editor.items()
@@ -318,17 +318,17 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
     #---------------------------------------------------------------------------
     #  SortFilterTableModel interface:
     #---------------------------------------------------------------------------
-    
+
     def moveRow(self, old_row, new_row):
         """Convenience method to move a single row."""
-        
+
         return self.moveRows([old_row], new_row)
 
     def moveRows(self, current_rows, new_row):
         """Delegate to source model with mapped rows."""
-        
+
         source = self.sourceModel()
-        current_rows = [ self.mapToSource(self.index(row, 0)).row() 
+        current_rows = [ self.mapToSource(self.index(row, 0)).row()
                          for row in current_rows ]
         new_row = self.mapToSource(self.index(new_row, 0)).row()
         source.moveRows(current_rows, new_row)

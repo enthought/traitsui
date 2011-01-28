@@ -25,7 +25,7 @@ class DockPane(MDockPane):
     #### Protected traits #####################################################
 
     _receiving = Bool(False)
-    
+
     ###########################################################################
     # 'ITaskPane' interface.
     ###########################################################################
@@ -72,7 +72,7 @@ class DockPane(MDockPane):
         """
         if self.control is not None:
             self.control.widget().setFocus()
-        
+
     ###########################################################################
     # 'IDockPane' interface.
     ###########################################################################
@@ -105,7 +105,7 @@ class DockPane(MDockPane):
 
     @on_trait_change('dock_area')
     def _set_dock_area(self):
-        if self.control is not None and not self._receiving: 
+        if self.control is not None and not self._receiving:
             # Only attempt to adjust the area if the task is active.
             main_window = self.window.control
             if main_window and self.task == self.window.active_task:

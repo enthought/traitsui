@@ -9,7 +9,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the compound editor and the compound editor factory for the 
+""" Defines the compound editor and the compound editor factory for the
 PyQt user interface toolkit.
 """
 
@@ -18,23 +18,23 @@ PyQt user interface toolkit.
 #-------------------------------------------------------------------------------
 
 from enthought.qt import QtGui
-    
+
 from enthought.traits.api \
     import Str
-    
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.compound_editor file.
 from enthought.traits.ui.editors.compound_editor \
     import ToolkitEditorFactory
 
 from editor \
     import Editor
-    
+
 #-------------------------------------------------------------------------------
 #  'CompoundEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class CompoundEditor ( Editor ):
     """ Editor for compound traits, which displays editors for each of the
     combined traits, in the appropriate style.
@@ -42,15 +42,15 @@ class CompoundEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
-    
+
     # The kind of editor to create for each list item
-    kind = Str  
-        
+    kind = Str
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -62,26 +62,26 @@ class CompoundEditor ( Editor ):
         # Add all of the component trait editors:
         self._editors = editors = []
         for factory in self.factory.editors:
-            editor = getattr( factory, self.kind )( self.ui, self.object, 
+            editor = getattr( factory, self.kind )( self.ui, self.object,
                                        self.name, self.description, None )
             editor.prepare(self.control)
             layout.addWidget(editor.control)
             editors.append(editor)
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
-        
+
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         pass
-        
+
     #---------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:    
+    #  Disposes of the contents of an editor:
     #---------------------------------------------------------------------------
-                
+
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """

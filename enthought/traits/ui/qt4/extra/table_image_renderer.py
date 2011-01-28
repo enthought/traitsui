@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2009, Enthought, Inc.
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD
 # license included in enthought/LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-# 
+#
 # Author: Evan Patterson
 # Date: 06/25/09
 #------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ class TableImageRenderer(TableDelegate):
     #---------------------------------------------------------------------------
     #  TableImageRenderer interface
     #---------------------------------------------------------------------------
-    
+
     def get_image_for_obj(self, value, row, col):
         """ Return the image for the cell given the raw cell value and the row
             and column numbers.
@@ -57,7 +57,7 @@ class TableImageRenderer(TableDelegate):
             value = index.data(QtCore.Qt.UserRole).toPyObject()
         else:
             value = index.data(QtCore.Qt.UserRole)
-            
+
         image = self.get_image_for_obj(value, index.row(), index.column())
         if image:
             image = image.create_bitmap()
@@ -67,15 +67,15 @@ class TableImageRenderer(TableDelegate):
             else:
                 w = image.width()
                 h = image.height()
-                
+
             x = option.rect.x()
             y = option.rect.y() + (option.rect.height()-h)/2
-                
+
             target = QtCore.QRect(x, y, w, h)
             painter.drawPixmap(target, image)
 
     def sizeHint(self, option, index):
-        """ Overriden to take image size into account when providing a size 
+        """ Overriden to take image size into account when providing a size
             hint.
         """
         size = QtGui.QStyledItemDelegate.sizeHint(self, option, index)
@@ -87,7 +87,7 @@ class TableImageRenderer(TableDelegate):
         image = self.get_image_for_obj(value, index.row(), index.column())
         if image:
             image = image.create_bitmap()
-            size.setWidth(max(image.width(), size.width()))           
+            size.setWidth(max(image.width(), size.width()))
             size.setHeight(max(image.height(), size.height()))
 
         return size

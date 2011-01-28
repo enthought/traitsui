@@ -10,11 +10,11 @@
 #------------------------------------------------------------------------------
 
 """
-Dynamically construct PyQt Menus or MenuBars from a supplied string 
+Dynamically construct PyQt Menus or MenuBars from a supplied string
 description of the menu.
 
 Menu Description Syntax::
-    
+
     submenu_label {help_string}
         menuitem_label | accelerator {help_string} [~/-name]: code
 
@@ -22,22 +22,22 @@ Menu Description Syntax::
     Label of a sub menu
 *menuitem_label*
     Label of a menu item
-{*help_string*}    
+{*help_string*}
     Help string to display on the status line (optional)
-*accelerator*    
+*accelerator*
     Accelerator key (e.g., Ctrl-C) (The '|' and keyname are optional, but must
     be used together.)
-[~]           
+[~]
     The menu item is checkable, but is not checked initially (optional)
-[/]            
+[/]
     The menu item is checkable, and is checked initially (optional)
 [-]
     The menu item disabled initially (optional)
-[*name*]         
+[*name*]
     Symbolic name used to refer to menu item (optional)
-*code*           
+*code*
     Python code invoked when menu item is selected
-    
+
 A line beginning with a hyphen (-) is interpreted as a menu separator.
 """
 

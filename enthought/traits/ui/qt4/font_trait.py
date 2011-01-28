@@ -51,7 +51,7 @@ font_weights = {
 font_noise = [ 'pt', 'point', 'family' ]
 
 #-------------------------------------------------------------------------------
-#  Converts a QFont into a string description of itself:  
+#  Converts a QFont into a string description of itself:
 #-------------------------------------------------------------------------------
 
 def font_to_str ( font ):
@@ -66,7 +66,7 @@ def font_to_str ( font ):
         underline = ' underline'
     return '%s point %s%s%s%s' % (
            font.pointSize(), unicode(font.family()), style, weight, underline )
-    
+
 #-------------------------------------------------------------------------------
 #  Create a TraitFont object from a string description:
 #-------------------------------------------------------------------------------
@@ -125,71 +125,71 @@ def create_traitsfont(value):
     return fnt
 
 #-------------------------------------------------------------------------------
-#  'TraitsFont' class:  
+#  'TraitsFont' class:
 #-------------------------------------------------------------------------------
-    
+
 class TraitsFont(QtGui.QFont):
     """ A Traits-specific QFont.
     """
     #---------------------------------------------------------------------------
     #  Returns the pickleable form of a TraitsFont object:
     #---------------------------------------------------------------------------
-    
+
     def __reduce_ex__(self, protocol):
         """ Returns the pickleable form of a TraitsFont object.
         """
         return (create_traitsfont, (font_to_str(self), ))
 
     #---------------------------------------------------------------------------
-    #  Returns a printable form of the font:  
+    #  Returns a printable form of the font:
     #---------------------------------------------------------------------------
 
     def __str__(self):
         """ Returns a printable form of the font.
         """
         return font_to_str(self)
-        
+
 #-------------------------------------------------------------------------------
 #  'TraitPyQtFont' class'
 #-------------------------------------------------------------------------------
 
 class TraitPyQtFont ( TraitHandler ):
     """ Ensures that values assigned to a trait attribute are valid font
-    descriptor strings; the value actually assigned is the corresponding 
+    descriptor strings; the value actually assigned is the corresponding
     TraitsFont.
     """
     #---------------------------------------------------------------------------
     #  Validates that the value is a valid font:
     #---------------------------------------------------------------------------
-    
+
     def validate ( self, object, name, value ):
-        """ Validates that the value is a valid font descriptor string. If so, 
-        it returns the corresponding TraitsFont; otherwise, it raises a 
+        """ Validates that the value is a valid font descriptor string. If so,
+        it returns the corresponding TraitsFont; otherwise, it raises a
         TraitError.
         """
         if value is None:
             return None
-            
+
         try:
             return create_traitsfont( value )
         except:
             pass
-            
+
         raise TraitError, ( object, name, 'a font descriptor string',
                             repr( value ) )
 
-    def info ( self ):                              
+    def info ( self ):
         return ( "a string describing a font (e.g. '12 pt bold italic "
                  "swiss family Arial' or 'default 12')" )
 
 #-------------------------------------------------------------------------------
-#  Callable that returns an instance of the PyQtToolkitEditorFactory for font 
+#  Callable that returns an instance of the PyQtToolkitEditorFactory for font
 #  editors.
 #-------------------------------------------------------------------------------
 
 ### FIXME: We have declared the 'editor' to be a function instead of  the
 # enthought.traits.ui.qt4.font_editor.ToolkitEditorFactory class, since the
-# latter is leading to too many circular imports. In the future, try to see if 
+# latter is leading to too many circular imports. In the future, try to see if
 # there is a better way to do this.
 def get_font_editor(*args, **traits):
     from enthought.traits.ui.qt4.font_editor import ToolkitEditorFactory

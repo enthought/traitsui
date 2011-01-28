@@ -1,10 +1,10 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2010, Enthought Inc
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD license.
 
-# 
+#
 # Author: Enthought Inc
 # Description: <Enthought pyface code editor>
 #------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ from enthought.qt import QtGui, QtCore
 
 
 class FindWidget(QtGui.QWidget):
-    
+
     def __init__(self, parent):
         super(FindWidget, self).__init__(parent)
         self.adv_code_widget = weakref.ref(parent)
@@ -31,7 +31,7 @@ class FindWidget(QtGui.QWidget):
         close_button = QtGui.QPushButton('Close')
         layout.addWidget(close_button, 1, QtCore.Qt.AlignRight)
         close_button.clicked.connect(self.hide)
-                                
+
         self.setLayout(layout)
 
     def setFocus(self):
@@ -39,7 +39,7 @@ class FindWidget(QtGui.QWidget):
 
     def _create_find_control(self):
         control = QtGui.QWidget(self)
-            
+
         self.line_edit = QtGui.QLineEdit()
         self.next_button = QtGui.QPushButton('&Next')
         self.next_button.setFixedWidth(self.button_size)
@@ -47,7 +47,7 @@ class FindWidget(QtGui.QWidget):
         self.prev_button.setFixedWidth(self.button_size)
         self.options_button = QtGui.QPushButton('&Options')
         self.options_button.setFixedWidth(self.button_size)
-        
+
         options_menu = QtGui.QMenu(self)
         self.case_action = QtGui.QAction('Match &case', options_menu)
         self.case_action.setCheckable(True)
@@ -60,7 +60,7 @@ class FindWidget(QtGui.QWidget):
         options_menu.addAction(self.word_action)
         options_menu.addAction(self.wrap_action)
         self.options_button.setMenu(options_menu)
-        
+
         layout = QtGui.QHBoxLayout()
         layout.addWidget(self.line_edit)
         layout.addWidget(self.next_button)
@@ -68,7 +68,7 @@ class FindWidget(QtGui.QWidget):
         layout.addWidget(self.options_button)
         layout.addStretch(2)
         layout.setMargin(0)
-            
+
         control.setLayout(layout)
         return control
 

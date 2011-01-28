@@ -49,7 +49,7 @@ anyway:
     improvement. In particular, the add/remove buttons should be replaced with
     toolbar icons, and the add button should have a drop-down menu when pressed
     for selecting which template to use. This is better than the always-present
-    EnumEditor for tempate selection because templates are clearly associated 
+    EnumEditor for tempate selection because templates are clearly associated
     with the creation of new filters.
 
 * ImageEnumEditor usability enhancement: when there are multiple columns, the

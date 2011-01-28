@@ -23,12 +23,12 @@ from enthought.qt import QtCore, QtGui
 
 from enthought.traits.api \
     import Enum, CTrait, BaseTraitHandler, TraitError
-    
+
 from enthought.traits.ui.ui_traits \
     import convert_image, SequenceTypes
-    
+
 #-------------------------------------------------------------------------------
-#  Trait definitions:  
+#  Trait definitions:
 #-------------------------------------------------------------------------------
 
 # Layout orientation for a control and its associated editor
@@ -119,36 +119,36 @@ def position_window ( window, width = None, height = None, parent = None ):
     # Position the window (making sure it will fit on the screen).
     window.move(max(0, min(x, screen_dx - width)),
                 max(0, min(y, screen_dy - height)))
-    
+
 #-------------------------------------------------------------------------------
 #  Restores the user preference items for a specified UI:
 #-------------------------------------------------------------------------------
-    
+
 def restore_window ( ui ):
     """ Restores the user preference items for a specified UI.
     """
     prefs = ui.restore_prefs()
     if prefs is not None:
         ui.control.setGeometry( *prefs )
-    
+
 #-------------------------------------------------------------------------------
 #  Saves the user preference items for a specified UI:
 #-------------------------------------------------------------------------------
-    
+
 def save_window ( ui ):
     """ Saves the user preference items for a specified UI.
     """
     geom = ui.control.geometry()
-    ui.save_prefs( (geom.x(), geom.y(), geom.width(), geom.height()) ) 
+    ui.save_prefs( (geom.x(), geom.y(), geom.width(), geom.height()) )
 
 #-------------------------------------------------------------------------------
 #  Recomputes the mappings for a new set of enumeration values:
 #-------------------------------------------------------------------------------
- 
+
 def enum_values_changed ( values ):
     """ Recomputes the mappings for a new set of enumeration values.
     """
-    
+
     if isinstance( values, dict ):
         data = [ ( str( v ), n ) for n, v in values.items() ]
         if len( data ) > 0:
@@ -169,15 +169,15 @@ def enum_values_changed ( values ):
             data = [ ( str( v ), v ) for v in handler.values ]
     else:
         data = [ ( str( v ), v ) for v in values ]
-    
+
     names           = [ x[0] for x in data ]
     mapping         = {}
     inverse_mapping = {}
     for name, value in data:
         mapping[ name ] = value
         inverse_mapping[ value ] = name
-        
-    return ( names, mapping, inverse_mapping )  
+
+    return ( names, mapping, inverse_mapping )
 
 #-------------------------------------------------------------------------------
 #  Safely tries to pop up an FBI window if enthought.debug is installed

@@ -35,23 +35,23 @@ class PythonEditor(MPythonEditor, Widget):
     implements(IPythonEditor)
 
     #### 'IPythonEditor' interface ############################################
-    
+
     dirty = Bool(False)
 
     path = Unicode
 
     show_line_numbers = Bool(True)
-    
+
     #### Events ####
 
     changed = Event
 
     key_pressed = Event(KeyPressedEvent)
-    
+
     ###########################################################################
     # 'object' interface.
     ###########################################################################
-    
+
     def __init__(self, parent, **traits):
         super(PythonEditor, self).__init__(**traits)
         self.control = self._create_control(parent)
@@ -59,7 +59,7 @@ class PythonEditor(MPythonEditor, Widget):
     ###########################################################################
     # 'PythonEditor' interface.
     ###########################################################################
-    
+
     def load(self, path=None):
         """ Loads the contents of the editor.
         """
@@ -73,7 +73,7 @@ class PythonEditor(MPythonEditor, Widget):
             f.close()
         else:
             text = ''
-        
+
         self.control.code.setPlainText(text)
         self.dirty = False
 
@@ -86,7 +86,7 @@ class PythonEditor(MPythonEditor, Widget):
         f = file(path, 'w')
         f.write(self.control.code.toPlainText())
         f.close()
-        
+
         self.dirty = False
 
     def select_line(self, lineno):
@@ -95,7 +95,7 @@ class PythonEditor(MPythonEditor, Widget):
         self.control.code.set_line_column(lineno, 0)
         self.control.code.moveCursor(QtGui.QTextCursor.EndOfLine,
                                      QtGui.QTextCursor.KeepAnchor)
-    
+
     ###########################################################################
     # Trait handlers.
     ###########################################################################
@@ -130,9 +130,9 @@ class PythonEditor(MPythonEditor, Widget):
 
         # Load the editor's contents.
         self.load()
-        
+
         return control
-    
+
     def _on_dirty_changed(self, dirty):
         """ Called whenever a change is made to the dirty state of the
             document.
@@ -161,7 +161,7 @@ class PythonEditorEventFilter(QtCore.QObject):
                event.type() == QtCore.QEvent.FocusOut:
             # Hack for Traits UI compatibility.
             self.control.emit(QtCore.SIGNAL('lostFocus'))
-            
+
         elif self.__editor.control and obj == self.__editor.control.code and \
                event.type() == QtCore.QEvent.KeyPress:
             # Pyface doesn't seem to be Unicode aware.  Only keep the key code

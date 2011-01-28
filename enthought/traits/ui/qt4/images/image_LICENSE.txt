@@ -4,7 +4,7 @@ licensed accordingly to the original license:
 Project                 License                   File
 ----------------------------------------------------------------------------
 Enthought               BSD 3-Clause              LICENSE.txt
-Qt                      GNU LGPL 2.1              
+Qt                      GNU LGPL 2.1
 
 Unless stated in this file, icons are the work of Enthought, and are
 released under a 3 clause BSD license.

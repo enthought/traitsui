@@ -30,11 +30,11 @@ class HeadingText(MHeadingText, Widget):
     implements(IHeadingText)
 
     #### 'IHeadingText' interface #############################################
-    
+
     level = Int(1)
 
     text = Unicode('Default')
-    
+
     ###########################################################################
     # 'object' interface.
     ###########################################################################
@@ -60,7 +60,7 @@ class HeadingText(MHeadingText, Widget):
 
         self.control.setFrameShape(QtGui.QFrame.StyledPanel)
         self.control.setFrameShadow(QtGui.QFrame.Raised)
-        self.control.setSizePolicy(QtGui.QSizePolicy.Preferred, 
+        self.control.setSizePolicy(QtGui.QSizePolicy.Preferred,
                                    QtGui.QSizePolicy.Fixed)
 
     def _set_text(self, text):
@@ -68,7 +68,7 @@ class HeadingText(MHeadingText, Widget):
 
         # Bold the text. Qt supports a limited subset of HTML for rich text.
         text = "<b>" + text + "</b>"
-        
+
         self.control.setText(text)
 
     #### Trait event handlers #################################################

@@ -19,7 +19,7 @@ class View(MView):
     """ The toolkit specific implementation of a View.
 
     See the IView interface for the API documentation.
-    
+
     """
 
     ###########################################################################
@@ -57,5 +57,5 @@ class View(MView):
             self.control.setFocus()
 
         return
-    
+
 #### EOF ######################################################################

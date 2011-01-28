@@ -70,7 +70,7 @@ class SimpleEditor(Editor):
 
     def update_object(self, q_date):
         """ Handles the user entering input data in the edit control.
-        """   
+        """
         year = q_date.year()
         month = q_date.month()
         day = q_date.day()
@@ -104,7 +104,7 @@ class CustomEditor(Editor):
 
         signal = QtCore.SIGNAL('clicked(QDate)')
         QtCore.QObject.connect(self.control, signal, self.update_object)
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
@@ -124,7 +124,7 @@ class CustomEditor(Editor):
 
     def update_object(self, q_date):
         """ Handles the user entering input data in the edit control.
-        """   
+        """
         year = q_date.year()
         month = q_date.month()
         day = q_date.day()
@@ -141,7 +141,7 @@ class CustomEditor(Editor):
 class ReadonlyEditor(BaseReadonlyEditor):
     """ Readonly Traits UI date editor that uses a QLabel for the view.
     """
- 
+
     def _get_str_value(self):
         """ Replace the default string value with our own date verision.
         """

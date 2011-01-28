@@ -10,7 +10,7 @@
 #------------------------------------------------------------------------------
 
 """ Defines a subclass of the base PyQt color editor factory, for colors
-that are represented as tuples of the form ( *red*, *green*, *blue* ), where 
+that are represented as tuples of the form ( *red*, *green*, *blue* ), where
 *red*, *green* and *blue* are floats in the range from 0.0 to 1.0.
 """
 
@@ -24,12 +24,12 @@ from enthought.traits.trait_base \
     import SequenceTypes
 
 # Note: The ToolkitEditorFactory class imported from color_editor is a
-# subclass of the abstract ToolkitEditorFactory class 
+# subclass of the abstract ToolkitEditorFactory class
 # (in enthought.traits.ui.api) with qt4-specific methods defined.
 # We need to override the implementations of the qt4-specific methods here.
 from color_editor \
     import ToolkitEditorFactory as BaseColorToolkitEditorFactory
-    
+
 #-------------------------------------------------------------------------------
 #  The PyQt4 ToolkitEditorFactory class.
 #-------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
     #---------------------------------------------------------------------------
     #  Gets the PyQt color equivalent of the object trait:
     #---------------------------------------------------------------------------
-    
+
     def to_qt4_color ( self, editor ):
         """ Gets the PyQt color equivalent of the object trait.
         """
@@ -49,25 +49,25 @@ class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
             color = getattr( editor.object, editor.name + '_' )
         except AttributeError:
             color = getattr( editor.object, editor.name )
-    
+
         c = QtGui.QColor()
         c.setRgbF(color[0], color[1], color[2])
-    
+
         return c
-    
+
     #---------------------------------------------------------------------------
     #  Gets the application equivalent of a PyQt value:
     #---------------------------------------------------------------------------
-    
+
     def from_qt4_color ( self, color ):
         """ Gets the application equivalent of a PyQt value.
         """
         return (color.redF(), color.greenF(), color.blueF())
-    
+
     #---------------------------------------------------------------------------
     #  Returns the text representation of a specified color value:
     #---------------------------------------------------------------------------
-    
+
     def str_color ( self, color ):
         """ Returns the text representation of a specified color value.
         """

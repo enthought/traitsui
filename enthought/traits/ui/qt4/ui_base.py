@@ -50,7 +50,7 @@ class RadioGroup ( HasStrictTraits ):
     """ A group of mutually-exclusive menu or toolbar actions.
     """
     # List of menu or tool bar items
-    items = List  
+    items = List
 
     #---------------------------------------------------------------------------
     #  Handles a menu item in the group being checked:
@@ -278,7 +278,7 @@ class _StickyDialog(QtGui.QDialog):
         try:
             flags |= QtCore.Qt.WindowCloseButtonHint
             if ui.view.resizable:
-                flags |= (QtCore.Qt.WindowMinimizeButtonHint | 
+                flags |= (QtCore.Qt.WindowMinimizeButtonHint |
                           QtCore.Qt.WindowMaximizeButtonHint)
         except AttributeError:
             # Either PyQt or Qt is too old.
@@ -481,7 +481,7 @@ class BaseDialog(BasePanel):
                 name = item.name
                 item_control = QtGui.QLabel()
                 item_control.setText(self.ui.get_extended_value(name))
-                
+
                 # Add the widget to the control with correct size
                 width = abs(item.width)
                 stretch = 0
@@ -490,7 +490,7 @@ class BaseDialog(BasePanel):
                 else:
                     item_control.setMinimumWidth(width)
                 control.addWidget(item_control, stretch)
-                
+
                 # Set up event listener for updating the status text
                 col = name.find('.')
                 obj = 'object'

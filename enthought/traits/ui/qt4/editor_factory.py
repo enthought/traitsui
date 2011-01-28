@@ -18,7 +18,7 @@ Traits-based user interface.
 #-------------------------------------------------------------------------------
 
 from enthought.qt import QtCore, QtGui
-    
+
 from enthought.traits.api \
     import TraitError
 
@@ -29,7 +29,7 @@ from editor \
     import Editor
 
 #-------------------------------------------------------------------------------
-#  'EditorFactory' class 
+#  'EditorFactory' class
 #   Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory
 #-------------------------------------------------------------------------------
 
@@ -41,11 +41,11 @@ class EditorFactory(BaseEditorFactory):
         super(EditorFactory, self).__init__(*args, **kwds)
         warnings.warn("DEPRECATED: Use enthought.traits.ui.editor_factory."
             ".EditorFactory instead.", DeprecationWarning)
-    
+
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------
-                        
+
 class SimpleEditor ( Editor ):
     """ Base class for simple style editors, which displays a text field
     containing the text representation of the object trait value. Clicking in
@@ -56,7 +56,7 @@ class SimpleEditor ( Editor ):
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -66,10 +66,10 @@ class SimpleEditor ( Editor ):
 
     #---------------------------------------------------------------------------
     #  Invokes the pop-up editor for an object trait:
-    #  
+    #
     #  (Normally overridden in a subclass)
     #---------------------------------------------------------------------------
- 
+
     def popup_editor(self):
         """ Invokes the pop-up editor for an object trait.
         """
@@ -80,14 +80,14 @@ class SimpleEditor ( Editor ):
 #-------------------------------------------------------------------------------
 
 class TextEditor ( Editor ):
-    """ Base class for text style editors, which displays an editable text 
+    """ Base class for text style editors, which displays an editable text
     field, containing a text representation of the object trait value.
     """
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -100,7 +100,7 @@ class TextEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Handles the user changing the contents of the edit control:
     #---------------------------------------------------------------------------
-  
+
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
@@ -121,7 +121,7 @@ class ReadonlyEditor ( Editor ):
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -134,13 +134,13 @@ class ReadonlyEditor ( Editor ):
             self.control.setWordWrap(True)
 
         self.set_tooltip()
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
-        
+
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self.control.setText(self.str_value)

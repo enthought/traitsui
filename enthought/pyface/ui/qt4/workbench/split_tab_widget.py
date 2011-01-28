@@ -46,7 +46,7 @@ class SplitTabWidget(QtGui.QSplitter):
         QtCore.QObject.connect(QtGui.qApp,
                 QtCore.SIGNAL('focusChanged(QWidget *,QWidget *)'),
                 self._focus_changed)
-        
+
     def clear(self):
         """ Restore the widget to its pristine state. """
 
@@ -181,10 +181,10 @@ class SplitTabWidget(QtGui.QSplitter):
         if ch is not self._current_tab_w:
             self._set_current_tab(ch, idx)
             ch.tabBar().setFocus()
-    
+
     def _close_tab_request(self, w):
         """ A close button was clicked in one of out _TabWidgets """
-        
+
         self.tab_close_request.emit(w)
 
     def setCurrentWidget(self, w):
@@ -203,9 +203,9 @@ class SplitTabWidget(QtGui.QSplitter):
         if tw is not None:
             if icon is None:
                 icon = tw.active_icon()
-            
+
             tw.setTabIcon(tidx, icon)
-    
+
     def setTabTextColor(self, w, color=None):
         """ Set the tab text color on a particular widget w
         """
@@ -313,7 +313,7 @@ class SplitTabWidget(QtGui.QSplitter):
                 nw = None
             else:
                 nw = ntw.widget(ntidx)
-    
+
             self.emit(QtCore.SIGNAL('hasFocus'), nw)
 
     def _tab_widget_of(self, target):
@@ -480,13 +480,13 @@ class SplitTabWidget(QtGui.QSplitter):
             dspl.insertWidget(dspl_idx, new_tw)
 
             dsplit_w._set_current_tab(new_tw, 0)
-        
+
         dsplit_w._set_focus()
 
         # Signal that the tab's SplitTabWidget has changed, if necessary.
         if dsplit_w != self:
             self.tab_window_changed.emit(twidg)
-        
+
         QtGui.qApp.blockSignals(False)
 
     def _horizontal_split(self, spl, idx, hs):
@@ -573,7 +573,7 @@ class SplitTabWidget(QtGui.QSplitter):
             cloned_rect = top_widget.frameGeometry()
         else:
             cloned_rect = None
-        
+
         # Determine which visible SplitTabWidget, if any, is under the cursor
         # (compensating for the cloned QTabBar that may be rendered over it).
         split_widget = None
@@ -650,7 +650,7 @@ class SplitTabWidget(QtGui.QSplitter):
         # See if the hotspot is in the tab area.
         tpos = tw.mapFrom(split_widget, pos)
         tab_bar = tw.tabBar()
-        top_bottom = tw.tabPosition() in (QtGui.QTabWidget.North, 
+        top_bottom = tw.tabPosition() in (QtGui.QTabWidget.North,
                                           QtGui.QTabWidget.South)
         for i in range(tw.count()):
             rect = tab_bar.tabRect(i)
@@ -693,7 +693,7 @@ class SplitTabWidget(QtGui.QSplitter):
                 gpos = tab_bar.mapToGlobal(rect.topLeft())
                 gx = gpos.x()
                 gy = gpos.y()
-                w = rect.width() 
+                w = rect.width()
                 h = rect.height()
                 if top_bottom:
                     tab_widths = sum(tab_bar.tabRect(i).width()
@@ -706,7 +706,7 @@ class SplitTabWidget(QtGui.QSplitter):
                     h -= tab_heights
                     gy -= tab_heights
                 return (tw, self._HS_AFTER_LAST_TAB, (gx, gy, w, h))
-                
+
         return miss
 
 
@@ -730,7 +730,7 @@ class _TabWidget(QtGui.QTabWidget):
         """ Initialise the instance. """
 
         QtGui.QTabWidget.__init__(self, *args)
-        
+
         # XXX this requires Qt > 4.5
         if sys.platform == 'darwin':
             self.setDocumentMode(True)
@@ -742,8 +742,8 @@ class _TabWidget(QtGui.QTabWidget):
         # in PyQt v4.2 and earlier.
         self.setTabBar(_DragableTabBar(self._root, self))
 
-        self.setTabsClosable(True)        
-        self.tabCloseRequested.connect(self._close_tab)        
+        self.setTabsClosable(True)
+        self.tabCloseRequested.connect(self._close_tab)
 
     def active_icon(self):
         """ Return the QIcon to be used to indicate an active tab page. """
@@ -815,7 +815,7 @@ class _TabWidget(QtGui.QTabWidget):
         """ Close the current tab. """
 
         self._root._close_tab_request(self.widget(index))
-        
+
 
 class _DragableTabBar(QtGui.QTabBar):
     """ The _DragableTabBar class is a QTabBar that can be dragged around. """
@@ -943,7 +943,7 @@ class _DragState(object):
         ctb = self._clone = QtGui.QTabBar()
         if sys.platform == 'darwin' and QtCore.QT_VERSION >= 0x40500:
             ctb.setDocumentMode(True)
-          
+
         ctb.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
         ctb.setWindowFlags(QtCore.Qt.FramelessWindowHint |
                            QtCore.Qt.Tool |

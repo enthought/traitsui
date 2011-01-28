@@ -9,7 +9,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the concrete implementations of the traits Toolkit interface for 
+""" Defines the concrete implementations of the traits Toolkit interface for
 the PyQt user interface toolkit.
 """
 
@@ -22,7 +22,7 @@ __import__('pkg_resources').declare_namespace(__name__)
 #-------------------------------------------------------------------------------
 #  Define the reference to the exported GUIToolkit object:
 #-------------------------------------------------------------------------------
-    
+
 import toolkit
 
 # Reference to the GUIToolkit object for PyQt.

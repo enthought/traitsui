@@ -67,7 +67,7 @@ class ListStrModel(QtCore.QAbstractListModel):
 
         if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
             if editor.is_auto_add(index):
-                text = adapter.get_default_text(editor.object, editor.name, 
+                text = adapter.get_default_text(editor.object, editor.name,
                                                 index)
             else:
                 text = adapter.get_text(editor.object, editor.name, index)
@@ -75,10 +75,10 @@ class ListStrModel(QtCore.QAbstractListModel):
                 # FIXME: This is a hack to make empty strings editable.
                 text = ' '
             return QVariant(text)
-        
+
         elif role == QtCore.Qt.DecorationRole:
             if editor.is_auto_add(index):
-                image = adapter.get_default_image(editor.object, 
+                image = adapter.get_default_image(editor.object,
                                                   editor.name, index)
             else:
                 image = adapter.get_image(editor.object, editor.name, index)
@@ -100,10 +100,10 @@ class ListStrModel(QtCore.QAbstractListModel):
 
         elif role == QtCore.Qt.ForegroundRole:
             if editor.is_auto_add(index):
-                color = adapter.get_default_text_color(editor.object, 
+                color = adapter.get_default_text_color(editor.object,
                                                        editor.name)
             else:
-                color = adapter.get_text_color(editor.object, 
+                color = adapter.get_text_color(editor.object,
                                                editor.name, index)
             if color is not None:
                 if isinstance(color, SequenceTypes):
@@ -162,12 +162,12 @@ class ListStrModel(QtCore.QAbstractListModel):
         return QVariant(self._editor.title)
 
     def insertRow(self, row, parent=QtCore.QModelIndex(), obj=None):
-        """ Reimplemented to allow creation of new rows. Added an optional 
+        """ Reimplemented to allow creation of new rows. Added an optional
             arg to allow the insertion of an existing row object.
         """
         editor = self._editor
         adapter = editor.adapter
-        
+
         if obj is None:
             obj = adapter.get_default_value(editor.object, editor.name)
         self.beginInsertRows(parent, row, row)
@@ -202,7 +202,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         return True
 
     def mimeTypes(self):
-        """ Reimplemented to expose our internal MIME type for drag and drop 
+        """ Reimplemented to expose our internal MIME type for drag and drop
             operations.
         """
         types = QtCore.QStringList()
@@ -226,11 +226,11 @@ class ListStrModel(QtCore.QAbstractListModel):
         """
         if action == QtCore.Qt.IgnoreAction:
             return False
-        
+
         data = mime_data.data(mime_type)
         if data.isNull():
             return False
-        
+
         current_rows = map(int, str(data).split(' '))
         self.moveRows(current_rows, parent.row())
         return True
@@ -259,8 +259,8 @@ class ListStrModel(QtCore.QAbstractListModel):
         # invalidating the indices.
         current_rows.sort()
         current_rows.reverse()
-        
-        # If the the highest selected row is lower than the destination, do an 
+
+        # If the the highest selected row is lower than the destination, do an
         # insertion before rather than after the destination.
         if current_rows[-1] < new_row:
             new_row += 1
@@ -273,7 +273,7 @@ class ListStrModel(QtCore.QAbstractListModel):
             obj = editor.adapter.get_item(editor.object, editor.name, row)
             objects.insert(0, obj)
             self.removeRow(row)
-        
+
         # ...and add them at the new location.
         for i, obj in enumerate(objects):
             self.insertRow(new_row + i, obj=obj)

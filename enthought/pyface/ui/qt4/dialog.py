@@ -1,11 +1,11 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD license.
 # However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
 
-# 
+#
 # Author: Riverbank Computing Limited
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -70,23 +70,23 @@ class Dialog(MDialog, Window):
 
         # 'OK' button.
         if self.ok_label:
-            btn = buttons.addButton(self.ok_label, 
+            btn = buttons.addButton(self.ok_label,
                                     QtGui.QDialogButtonBox.AcceptRole)
         else:
             btn = buttons.addButton(QtGui.QDialogButtonBox.Ok)
 
         btn.setDefault(True)
-        QtCore.QObject.connect(btn, QtCore.SIGNAL('clicked()'), 
+        QtCore.QObject.connect(btn, QtCore.SIGNAL('clicked()'),
                                self.control, QtCore.SLOT('accept()'))
 
         # 'Cancel' button.
         if self.cancel_label:
-            btn = buttons.addButton(self.cancel_label, 
+            btn = buttons.addButton(self.cancel_label,
                                     QtGui.QDialogButtonBox.RejectRole)
         else:
             btn = buttons.addButton(QtGui.QDialogButtonBox.Cancel)
 
-        QtCore.QObject.connect(btn, QtCore.SIGNAL('clicked()'), 
+        QtCore.QObject.connect(btn, QtCore.SIGNAL('clicked()'),
                                self.control, QtCore.SLOT('reject()'))
 
         # 'Help' button.
@@ -136,7 +136,7 @@ class Dialog(MDialog, Window):
     def _create_control(self, parent):
         dlg = QtGui.QDialog(parent)
 
-        # Setting return code and firing close events is handled for 'modal' in 
+        # Setting return code and firing close events is handled for 'modal' in
         # MDialog's open method. For 'nonmodal', we do it here.
         if self.style == 'nonmodal':
             QtCore.QObject.connect(dlg, QtCore.SIGNAL('finished(int)'),

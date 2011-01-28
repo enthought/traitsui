@@ -22,7 +22,7 @@ from enthought.traits.api \
     import TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.text_editor file.
 from enthought.traits.ui.editors.text_editor \
     import evaluate_trait, ToolkitEditorFactory
@@ -51,7 +51,7 @@ class SimpleEditor ( Editor ):
     ok_color = OKColor
 
     #---------------------------------------------------------------------------
-    #  Trait definitions: 
+    #  Trait definitions:
     #---------------------------------------------------------------------------
 
     # Function used to evaluate textual user input:
@@ -189,9 +189,9 @@ class SimpleEditor ( Editor ):
     #  Returns whether or not the editor is in an error state:
     #---------------------------------------------------------------------------
 
-    def in_error_state ( self ): 
+    def in_error_state ( self ):
         """ Returns whether or not the editor is in an error state.
-        """ 
+        """
         return (self.invalid or self._error)
 
 #-------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ class ReadonlyEditor ( BaseReadonlyEditor ):
     #---------------------------------------------------------------------------
 
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         new_value = self.str_value

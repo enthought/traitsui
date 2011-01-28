@@ -24,7 +24,7 @@ class Timer(QtCore.QTimer):
     `StopIteration` is raised the timer stops.  If other exceptions are
     encountered the timer is stopped and the exception re-raised.
     """
-    
+
     def __init__(self, millisecs, callable, *args, **kw_args):
         """ Initialize instance to invoke the given `callable` with given
         arguments and keyword args after every `millisecs` (milliseconds).

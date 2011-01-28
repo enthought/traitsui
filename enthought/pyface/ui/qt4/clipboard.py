@@ -31,7 +31,7 @@ PYTHON_TYPE = "python/object"
 
 
 class Clipboard(BaseClipboard):
-    
+
     implements(IClipboard)
 
     #---------------------------------------------------------------------------
@@ -90,7 +90,7 @@ class Clipboard(BaseClipboard):
     #---------------------------------------------------------------------------
     #  'file_data' property methods:
     #---------------------------------------------------------------------------
-    
+
     def _get_file_data(self):
         mime_data = cb.mimeData()
         if mime_data.hasUrls():

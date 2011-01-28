@@ -28,7 +28,7 @@ class _BoundsEditor(Editor):
 
         self.max = factory.max
         self.min = factory.min
-        
+
         self.format = factory.format
 
         self.evaluate = factory.evaluate
@@ -180,10 +180,10 @@ class _BoundsEditor(Editor):
         self.control.slider.setHigh(self._convert_to_slider(self.high))
 
 class BoundsEditor(RangeEditor):
-    
+
     min = Trait(None, Float)
     max = Trait(None, Float)
-    
+
     def _get_simple_editor_class(self):
         return _BoundsEditor
     def _get_custom_editor_class(self):

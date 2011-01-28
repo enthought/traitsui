@@ -1,11 +1,11 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD license.
 # However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
 
-# 
+#
 # Author: Riverbank Computing Limited
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ class ApplicationWindow(MApplicationWindow, Window):
             # Make sure that the tool bar has a name so its state can be saved.
             if len(tool_bar.objectName()) == 0:
                 tool_bar.setObjectName(tool_bar_manager.name)
-                    
+
     def _set_window_icon(self):
         if self.icon is None:
             icon = ImageResource('application.png')
@@ -153,11 +153,11 @@ class ApplicationWindow(MApplicationWindow, Window):
     # QMainWindow takes ownership of the menu bar and the status bar upon
     # assignment. For this reason, it is unnecessary to delete the old controls
     # in the following two handlers.
-    
+
     def _menu_bar_manager_changed(self):
         if self.control is not None:
             self._create_menu_bar(self.control)
-        
+
     def _status_bar_managed_changed(self):
         if self.control is not None:
             self._create_status_bar(self.control)
@@ -170,6 +170,6 @@ class ApplicationWindow(MApplicationWindow, Window):
                 if isinstance(child, QtGui.QToolBar):
                     self.control.removeToolBar(child)
                     child.deleteLater()
-        
+
             # Add the new toolbars.
             self._create_tool_bar(self.control)

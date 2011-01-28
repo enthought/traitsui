@@ -1,11 +1,11 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD license.
 # However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
 
-# 
+#
 # Author: Riverbank Computing Limited
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -155,7 +155,7 @@ class _EventFilter(QtCore.QObject):
         # Sanity check.
         if obj is not window.control:
             return False
-        
+
         if e.type() == QtCore.QEvent.Close:
             # Do not destroy the window during its event handler.
             GUI.invoke_later(window.close)

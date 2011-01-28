@@ -9,7 +9,7 @@
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-""" Defines the key binding editor for use with the KeyBinding class. This is a 
+""" Defines the key binding editor for use with the KeyBinding class. This is a
 specialized editor used to associate a particular key with a control (i.e., the
 key binding editor).
 """
@@ -22,33 +22,33 @@ from enthought.qt import QtCore, QtGui
 
 from enthought.traits.api \
     import Bool, Event
-    
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.key_binding_editor file.
 from enthought.traits.ui.editors.key_binding_editor \
     import KeyBindingEditor as ToolkitEditorFactory
 
 from editor \
     import Editor
-    
+
 from key_event_to_name \
     import key_event_to_name
-                                      
+
 #-------------------------------------------------------------------------------
 #  'KeyBindingEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class KeyBindingEditor ( Editor ):
     """ An editor for modifying bindings of keys to controls.
     """
     #---------------------------------------------------------------------------
-    #  Trait definitions:  
+    #  Trait definitions:
     #---------------------------------------------------------------------------
-        
+
     # Does the editor's control have focus currently?
     has_focus = Bool(False)
-    
+
     # Keyboard event
     key = Event
 
@@ -59,7 +59,7 @@ class KeyBindingEditor ( Editor ):
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init (self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -69,7 +69,7 @@ class KeyBindingEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
     #---------------------------------------------------------------------------
-  
+
     def update_object ( self, event ):
         """ Handles the user entering input data in the edit control.
         """
@@ -78,32 +78,32 @@ class KeyBindingEditor ( Editor ):
             self._binding.text = value
         except:
             pass
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
-        
+
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self.control.setText(self.value)
 
     #---------------------------------------------------------------------------
-    #  Updates the current focus setting of the control:  
+    #  Updates the current focus setting of the control:
     #---------------------------------------------------------------------------
-    
+
     def update_focus ( self, has_focus ):
         """ Updates the current focus setting of the control.
         """
         if has_focus:
             self._binding.border_size     = 1
             self.object.owner.focus_owner = self._binding
-        
+
     #---------------------------------------------------------------------------
-    #  Handles a keyboard event:   
+    #  Handles a keyboard event:
     #---------------------------------------------------------------------------
-    
+
     def _key_changed ( self, event ):
         """ Handles a keyboard event.
         """
@@ -119,7 +119,7 @@ class KeyBindingEditor ( Editor ):
                      QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
                      QtGui.QMessageBox.No) != QtGui.QMessageBox.Yes:
                 return
-                
+
         self.value = key_name
 
     #---------------------------------------------------------------------------
@@ -141,7 +141,7 @@ class KeyBindingCtrl(QtGui.QLabel):
     #---------------------------------------------------------------------------
     #  Initialize the object:
     #---------------------------------------------------------------------------
-    
+
     def __init__(self, editor, parent):
 
         QtGui.QLabel.__init__(self, parent)
@@ -157,14 +157,14 @@ class KeyBindingCtrl(QtGui.QLabel):
 
         # Save the reference to the controlling editor object:
         self.editor = editor
-        
+
         # Indicate we don't have the focus right now:
         editor.has_focus = False
 
     #---------------------------------------------------------------------------
     #  Handle keyboard keys being pressed:
     #---------------------------------------------------------------------------
-           
+
     def keyPressEvent(self, event):
         """ Handle keyboard keys being pressed.
         """
@@ -200,14 +200,14 @@ class KeyBindingCtrl(QtGui.QLabel):
     #---------------------------------------------------------------------------
     #  Handles getting/losing the focus:
     #---------------------------------------------------------------------------
-    
+
     def focusInEvent(self, event):
         """ Handles getting the focus.
         """
         self.editor.has_focus = True
         self.update()
 
-    def focusOutEvent(self, event):  
+    def focusOutEvent(self, event):
         """ Handles losing the focus.
         """
         self.editor.has_focus = False

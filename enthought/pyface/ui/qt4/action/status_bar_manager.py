@@ -32,11 +32,11 @@ class StatusBarManager(HasTraits):
 
     # Whether the status bar is visible.
     visible = Bool(True)
-    
+
     ###########################################################################
     # 'StatusBarManager' interface.
     ###########################################################################
-    
+
     def create_status_bar(self, parent):
         """ Creates a status bar. """
 
@@ -49,7 +49,7 @@ class StatusBarManager(HasTraits):
                 self._show_messages()
             else:
                 self.status_bar.showMessage(self.message)
-            
+
         return self.status_bar
 
     ###########################################################################
@@ -100,7 +100,7 @@ class StatusBarManager(HasTraits):
 
     def _visible_changed(self):
         """ Turns the status bar visibility on and off. """
-        
+
         if self.status_bar is not None:
             self.status_bar.setVisible(self.visible)
 

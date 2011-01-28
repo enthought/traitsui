@@ -31,7 +31,7 @@ class MenuManager(ActionManager, ActionManagerItem):
     """
 
     #### 'MenuManager' interface ##############################################
-    
+
     # The menu manager's name (if the manager is a sub-menu, this is what its
     # label will be).
     name = Unicode
@@ -99,7 +99,7 @@ class _Menu(QtGui.QMenu):
         self._manager.on_trait_change(self._on_enabled_changed, 'enabled')
 
         return
-    
+
     ###########################################################################
     # '_Menu' interface.
     ###########################################################################
@@ -136,7 +136,7 @@ class _Menu(QtGui.QMenu):
         """ Dynamic trait change handler. """
 
         self.setEnabled(new)
-        
+
         return
 
     def _add_group(self, parent, group, previous_non_empty_group=None):

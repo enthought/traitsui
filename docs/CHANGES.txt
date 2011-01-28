@@ -13,7 +13,7 @@ Enhancements
 Fixes
 -----
 
- 
+
 TraitsBackendQt 3.2.0 (July 15, 2009)
 =====================================
 

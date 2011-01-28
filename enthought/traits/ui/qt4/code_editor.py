@@ -25,20 +25,20 @@ from enthought.traits.api import Str, Unicode, List, Int, Event, Bool, \
 from enthought.traits.trait_base import SequenceTypes
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.code_editor file.
 from enthought.traits.ui.editors.code_editor import ToolkitEditorFactory
 
 from enthought.pyface.key_pressed_event import KeyPressedEvent
 
-from constants import OKColor, ErrorColor    
+from constants import OKColor, ErrorColor
 from editor import Editor
 from helper import pixmap_cache
 
 #-------------------------------------------------------------------------------
-#  Constants:  
+#  Constants:
 #-------------------------------------------------------------------------------
-        
+
 # Marker line constants:
 MARK_MARKER = 0 # Marks a marked line
 SEARCH_MARKER = 1 # Marks a line matching the current search
@@ -61,17 +61,17 @@ class SourceEditor ( Editor ):
 
     # The code editor is scrollable. This value overrides the default.
     scrollable = True
-    
+
     #---------------------------------------------------------------------------
     #  SoureEditor interface:
     #---------------------------------------------------------------------------
-    
+
     # Is the editor read only?
     readonly = Bool( False )
-    
+
     # The currently selected line
     selected_line = Int
-    
+
     # The start position of the selected
     selected_start_pos = Int
 
@@ -80,13 +80,13 @@ class SourceEditor ( Editor ):
 
     # The currently selected text
     selected_text = Unicode
-    
+
     # The list of line numbers to mark
     mark_lines = List( Int )
-    
+
     # The current line number
     line = Event
-    
+
     # The current column
     column = Event
 
@@ -94,14 +94,14 @@ class SourceEditor ( Editor ):
     dim_lines = List(Int)
     dim_color = Str
     dim_style_number = Int(16) # 0-15 are reserved for the python lexer
-    
+
     # The lines to have squiggles drawn under them
     squiggle_lines = List(Int)
     squiggle_color = Str
-        
+
     # The lexer to use.
     lexer = Str
-        
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -113,12 +113,12 @@ class SourceEditor ( Editor ):
         self.control = QtGui.QWidget()
         layout = QtGui.QVBoxLayout(self.control)
         layout.setMargin(0)
-        
+
         self._widget = control = AdvancedCodeWidget(None, lexer=self.factory.lexer)
         layout.addWidget(control)
 
         factory = self.factory
-        
+
         # Set up listeners for the signals we care about
         code_editor = self._widget.code
         if not self.readonly:
@@ -132,7 +132,7 @@ class SourceEditor ( Editor ):
 
         # Make sure the editor has been initialized:
         self.update_editor()
-        
+
         # Set up any event listeners:
         self.sync_value( factory.mark_lines, 'mark_lines', 'from',
                          is_list = True )
@@ -140,7 +140,7 @@ class SourceEditor ( Editor ):
         self.sync_value( factory.selected_text, 'selected_text', 'to' )
         self.sync_value( factory.line, 'line' )
         self.sync_value( factory.column, 'column' )
-        
+
         self.sync_value( factory.selected_start_pos, 'selected_start_pos', 'to')
         self.sync_value( factory.selected_end_pos, 'selected_end_pos', 'to')
 
@@ -161,9 +161,9 @@ class SourceEditor ( Editor ):
         self.set_tooltip()
 
     #---------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:    
+    #  Disposes of the contents of an editor:
     #---------------------------------------------------------------------------
-                
+
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
@@ -173,7 +173,7 @@ class SourceEditor ( Editor ):
                                   self.update_object)
 
         super( SourceEditor, self ).dispose()
-    
+
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
     #---------------------------------------------------------------------------
@@ -189,13 +189,13 @@ class SourceEditor ( Editor ):
                 self.value = value
             except TraitError, excp:
                 pass
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
-        
+
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes externally to the 
+        """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self._locked = True
@@ -205,22 +205,22 @@ class SourceEditor ( Editor ):
         control = self._widget
         if control.code.toPlainText() != new_value:
             control.code.setPlainText(new_value)
-            
+
             # TODO: check the readonly flag and make sure the editor
             # is still readonly when we're done.
-            
+
             if self.factory.selected_line:
                 # TODO: update the factory selected line
                 pass
-            
+
             # TODO: put the cursor somewhere
-            
+
         self._locked = False
 
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
     #---------------------------------------------------------------------------
-        
+
     def error ( self, excp ):
         """ Handles an error that occurs while setting the object's trait value.
         """
@@ -229,32 +229,32 @@ class SourceEditor ( Editor ):
     #-- UI preference save/restore interface -----------------------------------
 
     #---------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the 
+    #  Restores any saved user preference information associated with the
     #  editor:
     #---------------------------------------------------------------------------
-            
+
     def restore_prefs ( self, prefs ):
-        """ Restores any saved user preference information associated with the 
+        """ Restores any saved user preference information associated with the
             editor.
         """
         if self.factory.key_bindings is not None:
             key_bindings = prefs.get( 'key_bindings' )
             if key_bindings is not None:
                 self.factory.key_bindings.merge( key_bindings )
-            
+
     #---------------------------------------------------------------------------
     #  Returns any user preference information associated with the editor:
     #---------------------------------------------------------------------------
-            
+
     def save_prefs ( self ):
         """ Returns any user preference information associated with the editor.
         """
         return { 'key_bindings': self.factory.key_bindings }
-        
+
     #---------------------------------------------------------------------------
-    #  Handles the set of 'marked lines' being changed:  
+    #  Handles the set of 'marked lines' being changed:
     #---------------------------------------------------------------------------
-                
+
     def _mark_lines_changed ( self ):
         """ Handles the set of marked lines being changed.
         """
@@ -263,22 +263,22 @@ class SourceEditor ( Editor ):
 
     def _mark_lines_items_changed ( self ):
         self._mark_lines_changed()
-        
+
     #---------------------------------------------------------------------------
-    #  Handles the currently 'selected line' being changed:  
+    #  Handles the currently 'selected line' being changed:
     #---------------------------------------------------------------------------
-                
+
     def _selection_changed(self):
         self.selected_text = unicode(self._widget.code.textCursor().selectedText())
         start = self._widget.code.textCursor().selectionStart()
         end = self._widget.code.textCursor().selectionEnd()
-        
+
         if start > end:
             start, end = end, start
-            
+
         self.selected_start_pos = start
         self.selected_end_pos = end
-                
+
     def _selected_line_changed ( self ):
         """ Handles a change in which line is currently selected.
         """
@@ -290,29 +290,29 @@ class SourceEditor ( Editor ):
             control.centerCursor()
 
     #---------------------------------------------------------------------------
-    #  Handles the 'line' trait being changed:  
+    #  Handles the 'line' trait being changed:
     #---------------------------------------------------------------------------
-                                              
+
     def _line_changed ( self, line ):
         if not self._locked:
             _, column = self._widget.get_line_column()
             self._widget.set_line_column(line, column)
             if self.factory.auto_scroll:
                 self._widget.centerCursor()
-                                  
+
     #---------------------------------------------------------------------------
-    #  Handles the 'column' trait being changed:  
+    #  Handles the 'column' trait being changed:
     #---------------------------------------------------------------------------
-                                              
+
     def _column_changed ( self, column ):
         if not self._locked:
             line, _ = self._widget.get_line_column()
             self._widget.set_line_column(line, column)
 
     #---------------------------------------------------------------------------
-    #  Handles the cursor position being changed:  
+    #  Handles the cursor position being changed:
     #---------------------------------------------------------------------------
-                        
+
     def _position_changed(self):
         """ Handles the cursor position being changed.
         """
@@ -323,17 +323,17 @@ class SourceEditor ( Editor ):
         self.selected_text = control.get_selected_text()
         if self.factory.auto_scroll:
             self._widget.centerCursor()
-                
+
     #---------------------------------------------------------------------------
-    #  Handles a key being pressed within the editor:    
+    #  Handles a key being pressed within the editor:
     #---------------------------------------------------------------------------
-                
+
     def _key_pressed_changed ( self, event ):
         """ Handles a key being pressed within the editor.
         """
         key_bindings = self.factory.key_bindings
         if key_bindings:
-            processed = key_bindings.do(event.event, self.ui.handler, 
+            processed = key_bindings.do(event.event, self.ui.handler,
                                         self.ui.info)
         else:
             processed = False
@@ -353,8 +353,8 @@ class SourceEditor ( Editor ):
     @on_trait_change('dim_lines, squiggle_lines')
     def _style_document(self):
         self._widget.set_warn_lines(self.squiggle_lines)
-                
-        
+
+
 
 
 # Define the simple, custom, text and readonly editors, which will be accessed

@@ -1,11 +1,11 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD license.
 # However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
 
-# 
+#
 # Author: Riverbank Computing Limited
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -40,16 +40,16 @@ class ConfirmationDialog(MConfirmationDialog, Dialog):
     image = Instance(ImageResource)
 
     message = Unicode
-    
+
     informative = Unicode
-    
+
     detail = Unicode
 
     no_label = Unicode
 
     yes_label = Unicode
 
-    # If we create custom buttons with the various roles, then we need to 
+    # If we create custom buttons with the various roles, then we need to
     # keep track of the buttons so we can see what the user clicked.  It's
     # not correct nor sufficient to check the return result from QMessageBox.exec_().
     # (As of Qt 4.5.1, even clicking a button with the YesRole would lead to

@@ -17,11 +17,11 @@
 #-------------------------------------------------------------------------------
 
 from enthought.qt import QtCore, QtGui
-    
+
 from enthought.traits.api import Unicode, List, Str, on_trait_change
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.button_editor file.
 from enthought.traits.ui.editors.button_editor \
     import ToolkitEditorFactory
@@ -59,7 +59,7 @@ class SimpleEditor ( Editor ):
             widget.
         """
         label = self.factory.label or self.item.get_label(self.ui)
-        
+
         if self.factory.values_trait:
             self.control = QtGui.QToolButton()
             self.control.toolButtonStyle = QtCore.Qt.ToolButtonTextOnly
@@ -78,7 +78,7 @@ class SimpleEditor ( Editor ):
         self.sync_value(self.factory.label_value, 'label', 'from')
         self.control.clicked.connect(self.update_object)
         self.set_tooltip()
-        
+
 
     def _label_changed(self, label):
         self.control.setText(self.string_value(label))

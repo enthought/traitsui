@@ -25,7 +25,7 @@
 from enthought.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.null_editor file.
 from enthought.traits.ui.editors.null_editor \
     import NullEditor as ToolkitEditorFactory
@@ -36,7 +36,7 @@ from editor \
 #-------------------------------------------------------------------------------
 #  'NullEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class NullEditor ( Editor ):
     """ A completely empty editor.
     """
@@ -44,13 +44,13 @@ class NullEditor ( Editor ):
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.control = QtGui.QWidget()
-                        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------

@@ -35,16 +35,16 @@ class MenuBarManager(ActionManager):
         # trait).
         if controller is None:
             controller = self.controller
-            
+
         menu_bar = QtGui.QMenuBar(parent)
-        
+
         # Every item in every group must be a menu manager.
         for group in self.groups:
             for item in group.items:
                 menu = item.create_menu(parent, controller)
                 menu.menuAction().setText(item.name)
                 menu_bar.addMenu(menu)
-                 
+
         return menu_bar
 
 #### EOF ######################################################################

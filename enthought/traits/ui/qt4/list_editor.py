@@ -22,9 +22,9 @@ from enthought.pyface.api import ImageResource
 
 from enthought.traits.api import Str, Any, Bool, Dict
 from enthought.traits.trait_base import user_name_for, enumerate, xgetattr
-    
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.list_editor file.
 from enthought.traits.ui.editors.list_editor import ListItemProxy, \
     ToolkitEditorFactory
@@ -121,7 +121,7 @@ class SimpleEditor ( Editor ):
 
         # Set up the additional 'list items changed' event handler needed for
         # a list based trait. Note that we want to fire the update_editor_item
-        # only when the items in the list change and not when intermediate 
+        # only when the items in the list change and not when intermediate
         # traits change. Therefore, replace "." by ":" in the extended_name
         # when setting up the listener.
         extended_name = self.extended_name.replace('.', ':')
@@ -157,7 +157,7 @@ class SimpleEditor ( Editor ):
 
         list_pane = self._list_pane
         layout = list_pane.layout()
-        
+
         # Create all of the list item trait editors:
         trait_handler = self._trait_handler
         resizable     = ((trait_handler.minlen != trait_handler.maxlen) and
@@ -175,7 +175,7 @@ class SimpleEditor ( Editor ):
                 control = IconButton('list_editor.png', self.popup_menu)
                 layout.addWidget(control, index, 0)
 
-            proxy = ListItemProxy( self.object, self.name, index, item_trait, 
+            proxy = ListItemProxy( self.object, self.name, index, item_trait,
                                    value )
             if resizable:
                 control.proxy = proxy
@@ -269,15 +269,15 @@ class SimpleEditor ( Editor ):
         """
         layout = self._list_pane.layout()
         sender = layout.sender()
-        
+
         self._cur_control = sender
-        
+
         proxy    = sender.proxy
         index    = proxy.index
         menu     = MakeMenu( self.list_menu, self, True, sender ).menu
         len_list = len( proxy.list )
         not_full = (len_list < self._trait_handler.maxlen)
-        
+
         self._menu_before.enabled( not_full )
         self._menu_after.enabled(  not_full )
         self._menu_delete.enabled( len_list > self._trait_handler.minlen )
@@ -285,7 +285,7 @@ class SimpleEditor ( Editor ):
         self._menu_top.enabled( index > 0 )
         self._menu_down.enabled(   index < (len_list - 1) )
         self._menu_bottom.enabled( index < (len_list - 1) )
-        
+
         menu.exec_(sender.mapToGlobal(QtCore.QPoint(0, 0)))
 
     #---------------------------------------------------------------------------
@@ -485,7 +485,7 @@ class NotebookEditor ( Editor ):
     # TODO: It would be nice to be able to reuse self._pages for this, but
     # its keys are not quite what we want.
     _pagewidgets = Dict
-    
+
     # Maps names of tabs to their menu QAction instances; used to toggle
     # checkboxes
     _action_dict = Dict
@@ -595,7 +595,7 @@ class NotebookEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Closes the currently selected tab:
     #---------------------------------------------------------------------------
-                                    
+
     def close_current ( self, force=False ):
         """ Closes the currently selected tab:
         """
@@ -750,7 +750,7 @@ class NotebookEditor ( Editor ):
             self._action_dict[name] = newaction
             self._pagewidgets[name] = ui.control
 
-        return (ui, view_object, monitoring)                        
+        return (ui, view_object, monitoring)
 
     def _tab_activated(self, idx):
         """ Handles a notebook tab being "activated" (i.e. clicked on) by the

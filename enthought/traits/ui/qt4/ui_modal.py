@@ -114,7 +114,7 @@ class _ModalDialog(BaseDialog):
                             dispatch='ui')
 
                 elif self.is_button(button, 'Revert'):
-                    self.revert = self.add_button(button, bbox, 
+                    self.revert = self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.ResetRole, self._on_revert,
                             enabled=revert)
 
@@ -142,7 +142,7 @@ class _ModalDialog(BaseDialog):
 
         self.add_contents(panel(ui), bbox)
 
-    def close(self, rc):            
+    def close(self, rc):
         """Close the dialog and set the given return code.
         """
         super(_ModalDialog, self).close(rc)
@@ -208,5 +208,5 @@ class _ModalDialog(BaseDialog):
         self._apply_context(ui._revert, ui.context)
         self._apply_context(ui._revert, ui._context)
         self.revert.setEnabled(False)
-        ui.handler.revert(ui.info) 
+        ui.handler.revert(ui.info)
         ui.modified = False

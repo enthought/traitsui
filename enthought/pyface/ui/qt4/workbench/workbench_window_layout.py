@@ -52,7 +52,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
     """ The Qt4 implementation of the workbench window layout interface.
 
     See the 'IWorkbenchWindowLayout' interface for the API documentation.
-    
+
     """
 
     #### Private interface ####################################################
@@ -127,7 +127,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def close(self):
         # Don't fire signals for editors that have destroyed their controls.
-        QtCore.QObject.disconnect(self._qt4_editor_area, 
+        QtCore.QObject.disconnect(self._qt4_editor_area,
                 QtCore.SIGNAL('hasFocus'), self._qt4_editor_focus)
 
         self._qt4_editor_area.clear()
@@ -140,7 +140,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
     def create_initial_layout(self, parent):
         self._qt4_editor_area = editor_area = SplitTabWidget(parent)
 
-        QtCore.QObject.connect(editor_area, QtCore.SIGNAL('hasFocus'), 
+        QtCore.QObject.connect(editor_area, QtCore.SIGNAL('hasFocus'),
                                self._qt4_editor_focus)
 
         # We are interested in focus changes but we get them from the editor
@@ -149,7 +149,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         QtCore.QObject.connect(
             editor_area, QtCore.SIGNAL('focusChanged(QWidget *,QWidget *)'),
             self._qt4_view_focus_changed)
-        
+
         editor_area.new_window_request.connect(self._qt4_new_window_request)
         editor_area.tab_close_request.connect(self._qt4_tab_close_request)
         editor_area.tab_window_changed.connect(self._qt4_tab_window_changed)
@@ -318,7 +318,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def _qt4_new_window_request(self, pos, control):
         """ Handle a tab tear-out request from the splitter widget. """
-        
+
         editor = self._qt4_remove_editor_with_control(control)
         kind = self.window.editor_manager.get_editor_kind(editor)
 
@@ -330,10 +330,10 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         window.size = self.window.size
         window.activate_editor(editor)
         editor.window = window
-    
+
     def _qt4_tab_close_request(self, control):
         """ Handle a tabCloseRequest from the splitter widget. """
-        
+
         for editor in self.window.editors:
             if editor.control == control:
                 editor.close()
@@ -344,7 +344,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         editor = self._qt4_remove_editor_with_control(control)
         kind = self.window.editor_manager.get_editor_kind(editor)
-        
+
         while not control.isWindow():
             control = control.parent()
         for window in self.window.workbench.windows:
@@ -365,7 +365,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 self.editor_closing = editor
                 control.removeEventFilter(self._qt4_mon)
                 self.editor_closed = editor
-                
+
                 # Make sure that focus events get fired if this editor is
                 # subsequently added to another window.
                 editor.has_focus = False
@@ -403,7 +403,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         # position.
         if position is None:
             position = view.position
-            
+
         dw = self._qt4_create_view_dock_widget(view, size)
         mw = self.window.control
 
@@ -525,7 +525,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             mon = self._qt4_mon
         except AttributeError:
             mon = self._qt4_mon = _Monitor(self)
-            
+
         control.installEventFilter(mon)
 
 

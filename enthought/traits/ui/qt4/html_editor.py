@@ -2,18 +2,18 @@
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #------------------------------------------------------------------------------
 
-""" Defines the HTML "editor" for the QT4 user interface toolkit. 
-    HTML editors interpret and display HTML-formatted text, but do not 
+""" Defines the HTML "editor" for the QT4 user interface toolkit.
+    HTML editors interpret and display HTML-formatted text, but do not
     modify it.
 """
 
@@ -26,7 +26,7 @@ import webbrowser
 from enthought.qt import QtCore, QtGui, QtWebKit
 
 from enthought.traits.api import Str
-    
+
 from editor import Editor
 
 #-------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ class SimpleEditor ( Editor ):
             widget.
         """
         self.control = QtWebKit.QWebView()
-        self.control.setSizePolicy( QtGui.QSizePolicy.Expanding, 
+        self.control.setSizePolicy( QtGui.QSizePolicy.Expanding,
                                     QtGui.QSizePolicy.Expanding )
 
         if self.factory.open_externally:
@@ -65,16 +65,16 @@ class SimpleEditor ( Editor ):
             page.setLinkDelegationPolicy( QtWebKit.QWebPage.DelegateAllLinks )
             signal = QtCore.SIGNAL( 'linkClicked(QUrl)' )
             QtCore.QObject.connect( page, signal, self._link_clicked )
-                                   
+
         self.base_url = self.factory.base_url
         self.sync_value( self.factory.base_url_name, 'base_url', 'from' )
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
-        
+
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes external to the 
+        """ Updates the editor when the object trait changes external to the
             editor.
         """
         text = self.str_value
