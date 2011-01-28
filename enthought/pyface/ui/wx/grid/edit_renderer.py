@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2007, Enthought, Inc.
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD
 # license included in enthought/LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-# 
+#
 # Author: Enthought, Inc.
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -32,9 +32,9 @@ class EditRenderer(GridCellRenderer):
         """ Calls edit_traits on the object represented by the row. """
 
         obj = grid.model.get_rows_drag_value([row])[0]
-        
+
         # allow editting if the obj does not have an editable trait
         # or if the editable trait is True
-        
+
         if (not hasattr(obj, 'editable')) or obj.editable:
             obj.edit_traits(kind='live')

@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-# 
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-# 
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -87,14 +87,14 @@ class WorkbenchDockWindow(DockWindow):
             logger.debug('no control <%s> to close', id)
 
         return
-    
+
     def get_control(self, id, visible_only=True):
         """ Returns the dock control with the specified Id.
 
         Returns None if no such dock control exists.
 
         """
-        
+
         for control in self.get_controls(visible_only):
             if control.id == id:
                 break
@@ -106,7 +106,7 @@ class WorkbenchDockWindow(DockWindow):
 
     def get_controls(self, visible_only=True):
         """ Returns all of the dock controls in the window. """
-        
+
         sizer   = self.control.GetSizer()
         section = sizer.GetContents()
 
@@ -149,7 +149,7 @@ class WorkbenchDockWindow(DockWindow):
 
         sizer = self.control.GetSizer()
         sizer.SetStructure(self.control.GetParent(), structure, handler)
-        
+
         return
 
 #### EOF ######################################################################

@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2005, Enthought, Inc.
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD
 # license included in enthought/LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-# 
+#
 # Author: Enthought, Inc.
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ class GridCellImageRenderer(PyGridCellRenderer):
 
         # save the string renderer to use for text.
         self._string_renderer = GridCellStringRenderer()
-        
+
         self._provider = provider
 
         return
@@ -54,7 +54,7 @@ class GridCellImageRenderer(PyGridCellRenderer):
             bgcolor = grid.GetSelectionBackground()
         else:
             bgcolor = grid.GetCellBackgroundColour(row, col)
-        
+
         dc.SetBackgroundMode(SOLID)
         dc.SetBrush(Brush(bgcolor, SOLID))
         dc.SetPen(TRANSPARENT_PEN)
@@ -69,9 +69,9 @@ class GridCellImageRenderer(PyGridCellRenderer):
         # fixme: we should be responding to the horizontal/vertical
         #        alignment info in the attr object!
         size = self.GetBestSize(grid, attr, dc, row, col)
-        
+
         halign, valign = attr.GetAlignment()
-        
+
         # width first
         wdelta = rect.width - size.GetWidth()
         x = rect.x
@@ -87,7 +87,7 @@ class GridCellImageRenderer(PyGridCellRenderer):
 
         dc.SetClippingRegion(*rect)
 
-        if bmp is not None:                        
+        if bmp is not None:
             # now draw our image into it
             dc.DrawBitmap(bmp, x, y, 1)
             x += bmp.GetWidth()
@@ -99,7 +99,7 @@ class GridCellImageRenderer(PyGridCellRenderer):
             new_rect = Rect(x, y, width, height)
             self._string_renderer.Draw(grid, attr, dc, new_rect,
                                        row, col, isSelected)
-            
+
         dc.DestroyClippingRegion()
 
         return
@@ -147,7 +147,7 @@ class GridCellImageRenderer(PyGridCellRenderer):
                 bmp = img.create_bitmap()
             else:
                 bmp = None
-                
+
         return bmp
 
     def _get_text(self, grid, row, col):
@@ -164,4 +164,4 @@ class GridCellImageRenderer(PyGridCellRenderer):
         return text
 
 #### EOF ######################################################################
-    
+

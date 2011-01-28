@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-#  
+#
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
@@ -12,7 +12,7 @@
 #
 #  Author: David C. Morrill
 #  Date:   09/22/2005
-#  
+#
 #-------------------------------------------------------------------------------
 
 """ Converts a wx.KeyEvent to a standardized "name".
@@ -23,11 +23,11 @@
 #-------------------------------------------------------------------------------
 
 import wx
-    
+
 #-------------------------------------------------------------------------------
-#  Constants:  
+#  Constants:
 #-------------------------------------------------------------------------------
-        
+
 # Mapping from wxPython special key names to Enable key names
 key_map = {
     wx.WXK_BACK:      'Backspace',
@@ -103,11 +103,11 @@ key_map = {
     wx.WXK_NUMLOCK:   'Num Lock',
     wx.WXK_SCROLL:    'Scroll Lock'
 }
-        
+
 #-------------------------------------------------------------------------------
-#  Converts a keystroke event into a corresponding key name:  
+#  Converts a keystroke event into a corresponding key name:
 #-------------------------------------------------------------------------------
-                
+
 def key_event_to_name ( event ):
     """ Converts a keystroke event into a corresponding key name.
     """
@@ -123,25 +123,25 @@ def key_event_to_name ( event ):
                 # Handle the case of strange keyboard codes (such as the Apple
                 # keyboard 'apple' key):
                 key = 'unknown'
-    
+
     name = ''
     if event.AltDown():
         name = 'Alt'
-        
+
     if event.ControlDown():
         name += '-Ctrl'
-            
+
     if event.ShiftDown() and ((name != '') or (len( key ) > 1)):
         name += '-Shift'
-        
+
     if key == ' ':
         key = 'Space'
-    
+
     if len( name ) > 0:
         key = key.lower()
-        
+
     name += ('-' + key)
-    
+
     if name[:1] == '-':
         return name[1:]
     return name

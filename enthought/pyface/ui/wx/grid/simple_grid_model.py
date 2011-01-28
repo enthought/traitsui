@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2005, Enthought, Inc.
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD
 # license included in enthought/LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-# 
+#
 # Author: Enthought, Inc.
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -32,7 +32,7 @@ class SimpleGridModel(GridModel):
 
     # A 2-dimensional list/array containing the grid data.
     data = Any
-        
+
     # The rows in the model.
     rows = Trait(None, None, List(GridRow))
 
@@ -114,7 +114,7 @@ class SimpleGridModel(GridModel):
             except IndexError:
                 pass
         return read_only
-    
+
     def get_row_count(self):
         """ Return the number of rows for this table. """
 
@@ -181,7 +181,7 @@ class SimpleGridModel(GridModel):
 
         try:
             return self.data[row][col]
-        
+
         except IndexError:
             pass
 
@@ -213,7 +213,7 @@ class SimpleGridModel(GridModel):
                 id = 'Group'
                 )
             )
-    
+
         return context_menu
 
     def is_cell_editable(self, row, col):
@@ -256,7 +256,7 @@ class SimpleGridModel(GridModel):
 
     def __get_data_column(self, col):
         """ Return a 1-d list of data from the column indexed by col. """
-        
+
         row_count = self.get_row_count()
 
         coldata = []
@@ -270,7 +270,7 @@ class SimpleGridModel(GridModel):
 
     def __get_data_row(self, row):
         """ Return a 1-d list of data from the row indexed by row. """
-        
+
         col_count = self.get_column_count()
 
         rowdata = []
@@ -298,7 +298,7 @@ class _CopyAction(Action):
         # clipboard
         value = self._model.get_cell_drag_value(self._row, self._col)
         enClipboard.data = value
-        
+
 
 #### EOF ####################################################################
 

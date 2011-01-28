@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ class HeadingText(MHeadingText, Widget):
     implements(IHeadingText)
 
     #### 'IHeadingText' interface #############################################
-    
+
     level = Int(1)
 
     text = Unicode('Default')
@@ -78,7 +78,7 @@ class HeadingText(MHeadingText, Widget):
 
         # Create a suitable font.
         self._font = new_font_like(wx.NORMAL_FONT, family=wx.SWISS)
-        
+
         width, height = self._get_preferred_size(self.text, self._font)
         panel.SetMinSize((width, height))
 
@@ -99,7 +99,7 @@ class HeadingText(MHeadingText, Widget):
 
     def _tile_background_image(self, dc, width, height):
         """ Tiles the background image. """
-        
+
         w = self._bmp.GetWidth()
         h = self._bmp.GetHeight()
 
@@ -109,7 +109,7 @@ class HeadingText(MHeadingText, Widget):
             while y < height:
                 dc.DrawBitmap(self._bmp, x, y)
                 y = y + h
-                
+
             x = x + w
 
         return
@@ -123,7 +123,7 @@ class HeadingText(MHeadingText, Widget):
             self.control.Refresh()
 
         return
-    
+
     #### wx event handlers ####################################################
 
     def _on_paint_background(self, event):
@@ -143,7 +143,7 @@ class HeadingText(MHeadingText, Widget):
 
     def _on_erase_background(self, event):
         """ Called when the background of the panel is erased. """
-        
+
         dc = event.GetDC()
         size = self.control.GetClientSize()
 
@@ -155,5 +155,5 @@ class HeadingText(MHeadingText, Widget):
         dc.DrawText(self.text, 5, 4)
 
         return
-    
+
 #### EOF ######################################################################

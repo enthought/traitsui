@@ -23,37 +23,37 @@
 #-------------------------------------------------------------------------------
 
 import wx
-    
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.null_editor file.
 from enthought.traits.ui.editors.null_editor \
     import NullEditor as ToolkitEditorFactory
-    
+
 from editor \
     import Editor
-    
+
 #-------------------------------------------------------------------------------
 #  'NullEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class NullEditor ( Editor ):
     """ A completely empty editor.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = control = wx.Window( parent, -1, 
+        self.control = control = wx.Window( parent, -1,
                                             size = wx.Size( 1, 1 ) )
         control.SetBackgroundColour( parent.GetBackgroundColour() )
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------

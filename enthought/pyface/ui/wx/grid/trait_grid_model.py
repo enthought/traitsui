@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2005, Enthought, Inc.
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD
 # license included in enthought/LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-# 
+#
 # Author: Enthought, Inc.
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ class TraitGridModel(GridModel):
 
     # A 2-dimensional list/array containing the grid data.
     data = List()#HasTraits)
-    
+
     # The column definitions
     columns = Trait(None, None, List(Trait(None, Str, TraitGridColumn)))
 
@@ -97,7 +97,7 @@ class TraitGridModel(GridModel):
         # from the first trait in the list. if the list is empty,
         # the columns should be an empty list as well.
         self._auto_columns = self.columns
-        
+
         if self.columns is None or len(self.columns) == 0:
             if self.data is not None and len(self.data) > 0:
                 self._auto_columns = []
@@ -125,7 +125,7 @@ class TraitGridModel(GridModel):
                             'columns_items')
         # attach listeners to the column definitions themselves
         self.__manage_column_listeners(self.columns)
-            
+
         # attach a listener to the row_name_trait
         self.on_trait_change(self._on_row_name_trait_changed, 'row_name_trait')
 
@@ -238,14 +238,14 @@ class TraitGridModel(GridModel):
         self.column_sorted = GridSortEvent(index = col, reversed = reverse)
 
         return
-        
+
 
     def is_column_read_only(self, index):
         """ Return True if the column specified by the zero-based index
         is read-only. """
 
         return self.__get_column_readonly(index)
-    
+
     def get_row_count(self):
         """ Return the number of rows for this table. """
 
@@ -270,7 +270,7 @@ class TraitGridModel(GridModel):
 
         else:
             name = str(index + 1)
-            
+
         return name
 
     def get_rows_drag_value(self, rows):
@@ -367,7 +367,7 @@ class TraitGridModel(GridModel):
                 column = self._get_column_index_by_trait(selection.trait_name)
                 if column is None:
                     continue
-                
+
             cells.append((row, column))
 
         return cells
@@ -519,7 +519,7 @@ class TraitGridModel(GridModel):
                     #       type(value) != bool:
                         # convert the value to a boolean
                     #    value = bool(value)
-                        
+
                     setattr(row, column, value)
                     success = True
             elif column.name is not None and hasattr(row, column.name):
@@ -535,9 +535,9 @@ class TraitGridModel(GridModel):
 
             # do nothing in the method case as we don't allow rows
             # defined to return a method value to set the value
-            
+
         return success
-    
+
     def _insert_rows_into_model(self, pos, new_data):
         """ Insert the given new rows into the model. Override this method
         to handle very large data sets. """
@@ -563,7 +563,7 @@ class TraitGridModel(GridModel):
         """ Force the grid to refresh when any underlying trait changes. """
         self.fire_content_changed()
         return
-        
+
     def _on_columns_changed(self, object, name, old, new):
         """ Force the grid to refresh when any underlying trait changes. """
         self.__manage_column_listeners(old, remove=True)
@@ -611,7 +611,7 @@ class TraitGridModel(GridModel):
 
     def __get_data_column(self, col):
         """ Return a 1-d list of data from the column indexed by col. """
-        
+
         row_count = self.get_row_count()
 
         coldata = []
@@ -700,6 +700,6 @@ class TraitGridModel(GridModel):
                                         remove = remove)
 
         return
-    
+
 #### EOF ####################################################################
 

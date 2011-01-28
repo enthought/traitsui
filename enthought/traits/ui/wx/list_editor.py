@@ -34,7 +34,7 @@ from enthought.traits.trait_base \
 
 from enthought.traits.ui.ui_traits \
     import Image, convert_bitmap
-    
+
 from enthought.traits.ui.editors.list_editor \
     import ListItemProxy, ToolkitEditorFactory
 
@@ -142,7 +142,7 @@ class SimpleEditor ( Editor ):
 
         # Set up the additional 'list items changed' event handler needed for
         # a list based trait. Note that we want to fire the update_editor_item
-        # only when the items in the list change and not when intermediate 
+        # only when the items in the list change and not when intermediate
         # traits change. Therefore, replace "." by ":" in the extended_name
         # when setting up the listener.
         extended_name = self.extended_name.replace('.', ':')
@@ -192,7 +192,7 @@ class SimpleEditor ( Editor ):
         for i in range( factory.columns ):
             list_sizer.AddGrowableCol( j )
             j += (1 + resizable)
-            
+
         values        = self.value
         index         = 0
         width, height = 0, 0
@@ -224,7 +224,7 @@ class SimpleEditor ( Editor ):
             except:
                 if not is_fake:
                     raise
-                    
+
                 pcontrol = wx.Button( list_pane, -1, 'sample' )
 
             pcontrol.Fit()
@@ -233,7 +233,7 @@ class SimpleEditor ( Editor ):
             width  = max( width, width1 + width2 )
             height = max( height, height2 )
             panel_height += height
-            
+
             if resizable:
                 list_sizer.Add( control, 0, wx.LEFT | wx.RIGHT, 2 )
 
@@ -245,7 +245,7 @@ class SimpleEditor ( Editor ):
         if not self.mutable:
             #list_sizer.SetDimension(0,0,width, panel_height)
             list_pane.SetInitialSize(list_sizer.GetSize())
-                    
+
         if is_fake:
             self._cur_control = control
             self.empty_list()
@@ -255,19 +255,19 @@ class SimpleEditor ( Editor ):
         rows = 1
         if not self.single_row:
             rows = self.factory.rows
-        
+
         # Make sure we have valid values set for width and height (in case there
         # was no data to base them on):
         if width == 0:
             width = 100
-            
+
         if panel_height == 0:
             panel_height = 20
 
         list_pane.SetMinSize( wx.Size(
              width + ((trait_handler.maxlen > rows) * scrollbar_dx),
              panel_height) )
-        
+
         list_pane.SetupScrolling()
         list_pane.GetParent().Layout()
 
@@ -492,12 +492,12 @@ class SimpleEditor ( Editor ):
                 editor.control = None
 
     #-- Trait initializers ----------------------------------------------------
-    
+
     def _kind_default(self):
         """ Returns a default value for the 'kind' trait.
         """
         return self.factory.style + '_editor'
-        
+
     def _mutable_default(self):
         """ Trait handler to set the mutable trait from the factory. """
         return self.factory.mutable
@@ -537,17 +537,17 @@ class TextEditor(CustomEditor):
     # The kind of editor to create for each list item. This value overrides the
     # default.
     kind = 'text_editor'
-    
+
 #-------------------------------------------------------------------------------
 #  'ReadonlyEditor' class:
 #-------------------------------------------------------------------------------
-   
+
 class ReadonlyEditor(CustomEditor):
 
-    # Is the list of items being edited mutable? This value overrides the 
+    # Is the list of items being edited mutable? This value overrides the
     # default.
     mutable = False
-    
+
 #-------------------------------------------------------------------------------
 #  'NotebookEditor' class:
 #-------------------------------------------------------------------------------
@@ -603,7 +603,7 @@ class NotebookEditor ( Editor ):
         """
         # Make sure the DockWindow is in a correct state:
         self._sizer.Reset( self. control )
-        
+
         # Destroy the views on each current notebook page:
         self.close_all()
 
@@ -631,7 +631,7 @@ class NotebookEditor ( Editor ):
         """
         # Make sure the DockWindow is in a correct state:
         self._sizer.Reset( self.control )
-        
+
         index = event.index
 
         # Delete the page corresponding to each removed item:
@@ -745,7 +745,7 @@ class NotebookEditor ( Editor ):
 
         if changed:
             self.update_layout()
-             
+
     #---------------------------------------------------------------------------
     #  Creates a DockControl for a specified object:
     #---------------------------------------------------------------------------
@@ -758,7 +758,7 @@ class NotebookEditor ( Editor ):
         factory     = self.factory
         if factory.factory is not None:
             view_object = factory.factory( object )
-            
+
         ui = view_object.edit_traits( parent = self.control,
                                       view   = factory.view,
                                       kind   = factory.ui_kind ).set(
@@ -820,7 +820,7 @@ class NotebookEditor ( Editor ):
     #  the editor is changed.
     #---------------------------------------------------------------------------
     def _selected_changed(self, old, new):
-        """ Activates the corresponding dock window when the 'selected' trait 
+        """ Activates the corresponding dock window when the 'selected' trait
         of the editor is changed.
         """
         for i, value in enumerate(self._uis):
@@ -828,7 +828,7 @@ class NotebookEditor ( Editor ):
                 value[0].activate()
                 break
         return
-                        
+
 #-------------------------------------------------------------------------------
 #  'DockableListElement' class:
 #-------------------------------------------------------------------------------
@@ -878,7 +878,7 @@ class DockableListElement ( DockableViewElement ):
         """ Handles a notebook tab being activated or deactivated.
         Sets the value of the editor's selected trait to the activated
         dock_control's object.
-        
+
         """
         for i, value in enumerate( self.editor._uis ):
             if dock_control is value[0] and activated:

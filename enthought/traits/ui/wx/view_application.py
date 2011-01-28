@@ -2,20 +2,20 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: David C. Morrill
 #  Date:   11/10/2004
 #
 #------------------------------------------------------------------------------
 
-""" Creates a wxPython specific modal dialog user interface that runs as a 
+""" Creates a wxPython specific modal dialog user interface that runs as a
     complete application, using information from the specified UI object.
 """
 
@@ -46,9 +46,9 @@ redirect_filename = ''
 #-------------------------------------------------------------------------------
 
 def view_application ( context, view, kind, handler, id, scrollable, args ):
-    """ Creates a stand-alone wx Application to display a specified traits UI 
+    """ Creates a stand-alone wx Application to display a specified traits UI
         View.
-    
+
     Parameters
     ----------
     context : object or dictionary
@@ -57,17 +57,17 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
         used.
     view : view object
         A View object that defines a user interface for editing trait attribute
-        values. 
+        values.
     kind : string
-        The type of user interface window to create. See the 
+        The type of user interface window to create. See the
         **enthought.traits.ui.view.kind_trait** trait for values and
-        their meanings. If *kind* is unspecified or None, the **kind** 
+        their meanings. If *kind* is unspecified or None, the **kind**
         attribute of the View object is used.
     handler : Handler object
         A handler object used for event handling in the dialog box. If
         None, the default handler for Traits UI is used.
     scrollable : Boolean
-        Indicates whether the dialog box should be scrollable. When set to 
+        Indicates whether the dialog box should be scrollable. When set to
         True, scroll bars appear on the dialog box if it is not large enough
         to display all of the items in the view at one time.
     """
@@ -76,16 +76,16 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
 
     app = wx.GetApp()
     if app is None or not is_event_loop_running_wx(app):
-        return ViewApplication( context, view, kind, handler, id, 
+        return ViewApplication( context, view, kind, handler, id,
                                 scrollable, args ).ui.result
-    
-    return view.ui( context, 
-                    kind       = kind, 
+
+    return view.ui( context,
+                    kind       = kind,
                     handler    = handler,
                     id         = id,
                     scrollable = scrollable,
                     args       = args ).result
-    
+
 #-------------------------------------------------------------------------------
 #  'ViewApplication' class:
 #-------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ class ViewApplication ( wx.PySimpleApp ):
     #---------------------------------------------------------------------------
     #  Initializes the object:
     #---------------------------------------------------------------------------
-    
+
     def __init__ ( self, context, view, kind, handler, id, scrollable, args ):
         """ Initializes the object.
         """
@@ -107,7 +107,7 @@ class ViewApplication ( wx.PySimpleApp ):
         self.id         = id
         self.scrollable = scrollable
         self.args       = args
-        
+
         wx.InitAllImageHandlers()
 
         if os.environ.get( 'ENABLE_FBI' ) is not None:
@@ -116,24 +116,24 @@ class ViewApplication ( wx.PySimpleApp ):
                 enable_fbi()
             except:
                 pass
-            
+
         if redirect_filename.strip() != '':
             super( ViewApplication, self ).__init__( 1, redirect_filename )
         else:
             super( ViewApplication, self ).__init__()
-        
-        # Start the event loop in an IPython-conforming manner. 
+
+        # Start the event loop in an IPython-conforming manner.
         start_event_loop_wx(self)
-    
+
     #---------------------------------------------------------------------------
     #  Handles application initialization:
     #---------------------------------------------------------------------------
-  
+
     def OnInit ( self ):
         """ Handles application initialization.
         """
-        self.ui = self.view.ui( self.context, 
-                                kind       = self.kind, 
+        self.ui = self.view.ui( self.context,
+                                kind       = self.kind,
                                 handler    = self.handler,
                                 id         = self.id,
                                 scrollable = self.scrollable,

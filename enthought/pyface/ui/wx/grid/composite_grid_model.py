@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2005, Enthought, Inc.
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD
 # license included in enthought/LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-# 
+#
 # Author: Enthought, Inc.
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -21,16 +21,16 @@ from grid_model import GridModel, GridRow
 class CompositeGridModel(GridModel):
     """ A CompositeGridModel is a model whose underlying data is
     a collection of other grid models. """
-    
+
     # The models this model is comprised of.
     data = List(GridModel)
-    
-    # The rows in the model. 
+
+    # The rows in the model.
     rows = Trait(None, None, List(GridRow))
 
     # The cached data indexes.
     _data_index = Dict
-    
+
     #########################################################################
     # 'object' interface.
     #########################################################################
@@ -63,7 +63,7 @@ class CompositeGridModel(GridModel):
         (zero-based) index. """
 
         model, new_index = self._resolve_column_index(index)
-        
+
         return model.get_column_name(new_index)
 
     def get_column_size(self, index):
@@ -96,21 +96,21 @@ class CompositeGridModel(GridModel):
         context menu for this column."""
 
         model, new_index = self._resolve_column_index(col)
-        
+
         return model.get_column_context_menu(new_index)
 
     def sort_by_column(self, col, reverse=False):
         """ Sort model data by the column indexed by col. The reverse flag
         indicates that the sort should be done in reverse. """
         pass
-    
+
     def is_column_read_only(self, index):
         """ Return True if the column specified by the zero-based index
         is read-only. """
         model, new_index = self._resolve_column_index(index)
-        
+
         return model.is_column_read_only(new_index)
-    
+
     def get_row_count(self):
         """ Return the number of rows for this table. """
 
@@ -176,20 +176,20 @@ class CompositeGridModel(GridModel):
     def get_type(self, row, col):
         """ Return the type of the value stored in the table at (row, col). """
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.get_type(row, new_col)
 
-        
+
     def get_value(self, row, col):
         """ Return the value stored in the table at (row, col). """
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.get_value(row, new_col)
 
     def get_cell_selection_value(self, row, col):
         """ Return the value stored in the table at (row, col). """
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.get_cell_selection_value(row, new_col)
 
     def resolve_selection(self, selection_list):
@@ -224,7 +224,7 @@ class CompositeGridModel(GridModel):
         context menu for this cell."""
 
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.get_cell_context_menu(row, new_col)
 
     def is_cell_empty(self, row, col):
@@ -242,7 +242,7 @@ class CompositeGridModel(GridModel):
         """ Returns True if the cell at (row, col) is editable,
         False otherwise. """
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.is_cell_editable(row, new_col)
 
     def is_cell_read_only(self, row, col):
@@ -250,28 +250,28 @@ class CompositeGridModel(GridModel):
         False otherwise. """
 
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.is_cell_read_only(row, new_col)
-        
+
     def get_cell_bg_color(self, row, col):
         """ Return a wxColour object specifying what the background color
             of the specified cell should be. """
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.get_cell_bg_color(row, new_col)
 
     def get_cell_text_color(self, row, col):
         """ Return a wxColour object specifying what the text color
             of the specified cell should be. """
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.get_cell_text_color(row, new_col)
 
     def get_cell_font(self, row, col):
         """ Return a wxFont object specifying what the font
             of the specified cell should be. """
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.get_cell_font(row, new_col)
 
     def get_cell_halignment(self, row, col):
@@ -281,7 +281,7 @@ class CompositeGridModel(GridModel):
             Return 'left' for left alignment, 'right' for right alignment,
             or 'center' for center alignment. """
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.get_cell_halignment(row, new_col)
 
     def get_cell_valignment(self, row, col):
@@ -291,7 +291,7 @@ class CompositeGridModel(GridModel):
             Return 'top' for top alignment, 'bottom' for bottom alignment,
             or 'center' for center alignment. """
         model, new_col = self._resolve_column_index(col)
-        
+
         return model.get_cell_valignment(row, new_col)
 
     #########################################################################
@@ -309,7 +309,7 @@ class CompositeGridModel(GridModel):
     def _insert_rows(self, pos, num_rows):
         """ Implementation method for insert_rows. Should return the
         number of rows that were inserted. """
-        
+
         for model in self.data:
             model._insert_rows(pos, num_rows)
 
@@ -345,7 +345,7 @@ class CompositeGridModel(GridModel):
                 else:
                     real_index -= cols
             self._data_index[index] = (model, real_index)
-            
+
         return model, real_index
 
     def _data_changed(self):
@@ -354,7 +354,7 @@ class CompositeGridModel(GridModel):
         Since this is called when our underlying models change, the cached
         results of the column lookups is wrong and needs to be invalidated.
         """
-        
+
         self._data_index.clear()
 
         return
@@ -368,5 +368,5 @@ class CompositeGridModel(GridModel):
         self._data_index.clear()
 
         return
-    
+
 #### EOF ####################################################################

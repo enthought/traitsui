@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ class FileDialog(MFileDialog, Dialog):
     wildcard = Unicode
 
     wildcard_index = Int(0)
-    
+
     ###########################################################################
     # Protected 'IDialog' interface.
     ###########################################################################
@@ -115,9 +115,9 @@ class FileDialog(MFileDialog, Dialog):
         dialog = wx.FileDialog(parent, self.title, defaultDir=default_directory,
                     defaultFile=default_filename, style=style,
                     wildcard=self.wildcard.rstrip('|'))
-        
-        dialog.SetFilterIndex(self.wildcard_index)            
-        
+
+        dialog.SetFilterIndex(self.wildcard_index)
+
         return dialog
 
     ###########################################################################

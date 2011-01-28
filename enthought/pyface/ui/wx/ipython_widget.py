@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ class IPythonController(WxController):
 
     def __init__(self, *args, **kwargs):
         WxController.__init__(self, *args, **kwargs)
-        
+
         # Add a magic to clear the screen
         def cls(args):
             self.ClearAll()
@@ -60,7 +60,7 @@ class IPythonController(WxController):
 class IPython010Controller(IPythonController):
     """ A WxController hacked/patched specifically for the 0.10 branch.
     """
-    
+
     def execute_command(self, command, hidden=False):
         # XXX: Overriden to fix bug where executing a hidden command still
         # causes the prompt number to increase.
@@ -81,12 +81,12 @@ class IPython09Controller(IPythonController):
     # Cached value of the banner for the IPython shell.
     # NOTE: The WxController object (declared in wx_frontend module) contains
     # a 'banner' attribute. If this is None, WxController sets the
-    # banner = IPython banner + an additional string ("This is the wx 
-    # frontend, by Gael Varoquaux. This is EXPERIMENTAL code."). We want to 
+    # banner = IPython banner + an additional string ("This is the wx
+    # frontend, by Gael Varoquaux. This is EXPERIMENTAL code."). We want to
     # set banner = the IPython banner. This means 'banner' needs to be
-    # a property, since in the __init__ method of WxController, the IPython 
+    # a property, since in the __init__ method of WxController, the IPython
     # shell object is created AND started (meaning the banner is written to
-    # stdout). 
+    # stdout).
     _banner = None
 
     def _get_banner(self):
@@ -139,9 +139,9 @@ class IPython09Controller(IPythonController):
         """ Returns a list of possible completions for line.
         Overridden from the base class implementation to fix bugs in retrieving
         the completion text from line.
-        
+
         """
-          
+
         completion_text = self._get_completion_text(line)
         suggestion, completions = super(IPython09Controller, self).complete( \
             completion_text)
@@ -155,11 +155,11 @@ class IPython09Controller(IPythonController):
         For the line-oriented frontend, multi-line code is not executed
         as soon as it is complete: the users has to enter two line
         returns.
-        
+
         Overridden from the base class (linefrontendbase.py in IPython\frontend
         to handle a bug with using the '\' symbol in multi-line inputs.
         """
-        
+
         # FIXME: There has to be a nicer way to do this. Th code is
         # identical to the base class implementation, except for the if ..
         # statement on line 146.
@@ -169,7 +169,7 @@ class IPython09Controller(IPythonController):
             # thus want to consider an empty string as a complete
             # statement.
             return True
-        elif ( len(self.input_buffer.split('\n'))>2 
+        elif ( len(self.input_buffer.split('\n'))>2
                         and not re.findall(r"\n[\t ]*\n[\t ]*$", string)):
             return False
         else:
@@ -180,7 +180,7 @@ class IPython09Controller(IPythonController):
                 # This should probably be done in a different place (like
                 # maybe 'prefilter_input' method? For now, this works.
                 clean_string = string.rstrip('\n')
-                if not clean_string.endswith('\\'): clean_string +='\n\n' 
+                if not clean_string.endswith('\\'): clean_string +='\n\n'
                 is_complete = codeop.compile_command(clean_string,
                             "<string>", "exec")
                 self.release_output()
@@ -189,7 +189,7 @@ class IPython09Controller(IPythonController):
                 # code gets executed and the error captured.
                 is_complete = True
             return is_complete
-        
+
     def execute_command(self, command, hidden=False):
         """ Execute a command, not only in the model, but also in the
             view.
@@ -237,33 +237,33 @@ class IPython09Controller(IPythonController):
         """Returns the current continuation prompt.
         Overridden to generate a continuation prompt matching the length of the
         current prompt."""
-        
+
         # This assumes that the prompt is always of the form 'In [#]'.
         n = self.last_result['number']
         promptstr = "In [%d]" % n
-        return ("."*len(promptstr) + ':')    
-    
+        return ("."*len(promptstr) + ':')
+
     def _popup_completion(self, create=False):
-        """ Updates the popup completion menu if it exists. If create is 
+        """ Updates the popup completion menu if it exists. If create is
             true, open the menu.
             Overridden from the base class implementation to filter out
             delimiters from the input buffer.
         """
-        
+
         # FIXME: The implementation in the base class (wx_frontend.py in
-        # IPython/wx/frontend) is faulty in that it doesn't filter out 
-        # special characters (such as parentheses, '=') in the input buffer 
-        # correctly. 
-        # For example, (a): typing 's=re.' does not pop up the menu.  
+        # IPython/wx/frontend) is faulty in that it doesn't filter out
+        # special characters (such as parentheses, '=') in the input buffer
+        # correctly.
+        # For example, (a): typing 's=re.' does not pop up the menu.
         # (b): typing 'x[0].' brings up a menu for x[0] but the offset is
-        # incorrect and so, upon selection from the menu, the text is pasted 
+        # incorrect and so, upon selection from the menu, the text is pasted
         # incorrectly.
         # I am patching this here instead of in the IPython module, but at some
         # point, this needs to be merged in.
         if self.debug:
             print >>sys.__stdout__, "_popup_completion" , self.input_buffer
-        
-        line = self.input_buffer        
+
+        line = self.input_buffer
         if (self.AutoCompActive() and line and not line[-1] == '.') \
                     or create==True:
             suggestion, completions = self.complete(line)
@@ -272,7 +272,7 @@ class IPython09Controller(IPythonController):
                 self.pop_completion(completions, offset=offset)
                 if self.debug:
                     print >>sys.__stdout__, completions
-    
+
     def _get_completion_text(self, line):
         """ Returns the text to be completed by breaking the line at specified
         delimiters.
@@ -282,7 +282,7 @@ class IPython09Controller(IPythonController):
         # that in the 'pyreadline' module (modes/basemode.py) where we break at
         # each delimiter and try to complete the residual line, until we get a
         # successful list of completions.
-        expression = '\s|=|,|:|\((?!.*\))|\[(?!.*\])|\{(?!.*\})' 
+        expression = '\s|=|,|:|\((?!.*\))|\[(?!.*\])|\{(?!.*\})'
         complete_sep = re.compile(expression)
         text = complete_sep.split(line)[-1]
         return text
@@ -290,7 +290,7 @@ class IPython09Controller(IPythonController):
     def _on_enter(self):
         """ Called when the return key is pressed in a line editing
             buffer.
-            Overridden from the base class implementation (in 
+            Overridden from the base class implementation (in
             IPython/frontend/linefrontendbase.py) to include a continuation
             prompt.
         """
@@ -390,12 +390,12 @@ class IPythonWidget(Widget):
 
         # If this is a file, we'll just print the file name
         if isinstance(obj, EnthoughtFile):
-            self.control.write(obj.absolute_path) 
-            
-        elif ( isinstance(obj, list) and len(obj) ==1 
+            self.control.write(obj.absolute_path)
+
+        elif ( isinstance(obj, list) and len(obj) ==1
                         and isinstance(obj[0], EnthoughtFile)):
-            self.control.write(obj[0].absolute_path) 
-            
+            self.control.write(obj[0].absolute_path)
+
         else:
             # Not a file, we'll inject the object in the namespace
             # If we can't create a valid Python identifier for the name of an

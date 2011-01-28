@@ -8,7 +8,7 @@
 # Author: Vibha Srinivasan <vibha@enthought.com>
 #------------------------------------------------------------------------------
 
-""" Generates a file containing definitions for all of the editors defined in 
+""" Generates a file containing definitions for all of the editors defined in
 the WX backend.
 """
 
@@ -17,7 +17,7 @@ from enthought.traits.ui.api import Editor
 from enthought.traits.ui.editor_factory import EditorFactory
 
 def gen_editor_definitions(target_filename):
-    """ Generates a file containing definitions for all of the editors 
+    """ Generates a file containing definitions for all of the editors
     defined in the Qt backend.
     """
 
@@ -29,20 +29,20 @@ def gen_editor_definitions(target_filename):
         if '.svn' in dirs:
             dirs.remove('.svn')
         editor_files.extend(glob.glob(os.path.join(root, '*_editor.py')))
-    
+
     for absfilename in editor_files:
-        (dirname, filename) = (os.path.dirname(absfilename), 
+        (dirname, filename) = (os.path.dirname(absfilename),
                                os.path.basename(absfilename).rstrip('.py'))
         import_path = 'enthought.traits.ui.wx' + \
                        dirname.replace(dirpath, '').replace(os.sep, '.') +\
-                       '.' + filename 
+                       '.' + filename
         __import__(import_path)
         module = sys.modules[import_path]
         class_names = []
         for name in dir(module):
             try:
                 if issubclass(getattr(module, name), EditorFactory) and \
-                    name not in ['EditorFactory', 'BasicEditorFactory']: 
+                    name not in ['EditorFactory', 'BasicEditorFactory']:
                     class_names.append(name)
                 elif issubclass(getattr(module, name), Editor) and \
                      name != 'Editor':
@@ -60,10 +60,10 @@ def gen_editor_definitions(target_filename):
             if 'ToolkitEditorFactory' in class_names:
                 class_name = 'ToolkitEditorFactory'
             else:
-                class_name = ''.join([name.capitalize() for name in 
+                class_name = ''.join([name.capitalize() for name in
                                      filename.split('_')])
                 if class_name not in class_names:
-                    class_name = class_names[0]        
+                    class_name = class_names[0]
             function = "def %(filename)s(*args, **traits):"%locals()
             target_file.write(function)
             target_file.write('\n')
@@ -72,5 +72,5 @@ def gen_editor_definitions(target_filename):
                     % locals()
             target_file.write(func_code)
             target_file.write('\n\n')
-    
+
     target_file.close()

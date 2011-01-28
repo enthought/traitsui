@@ -16,7 +16,7 @@ class InvertedGridModel(GridModel):
     the underlying model's sense of row and column. """
 
     model = Instance(GridModel, ())
-    
+
     #########################################################################
     # 'GridModel' interface.
     #########################################################################
@@ -44,11 +44,11 @@ class InvertedGridModel(GridModel):
     def sort_by_column(self, col, reverse=False):
 
         return self.model.sort_by_row(col, reverse)
-    
+
     def is_column_read_only(self, index):
 
         return self.model.is_row_read_only(index)
-    
+
     def get_row_count(self):
 
         return self.model.get_column_count()
@@ -74,7 +74,7 @@ class InvertedGridModel(GridModel):
         return self.model.sort_by_col(row, reverse)
 
     def is_row_read_only(self, index):
-        
+
         return self.model.is_column_read_only(index)
 
     def delete_rows(self, pos, num_rows):
@@ -108,7 +108,7 @@ class InvertedGridModel(GridModel):
     def set_value(self, row, col, value):
 
         return self.model.set_value(col, row, value)
-    
+
     def is_cell_empty(self, row, col):
 
         return self.model.is_cell_empty(col, row)

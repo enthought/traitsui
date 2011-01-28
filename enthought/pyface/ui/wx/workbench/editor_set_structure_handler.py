@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-# 
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-# 
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -38,13 +38,13 @@ class EditorSetStructureHandler(SetStructureHandler):
     ###########################################################################
     # 'object' interface.
     ###########################################################################
-    
+
     def __init__(self, window_layout, editor_mementos):
         """ Creates a new handler. """
 
         self.window_layout = window_layout
         self.editor_mementos = editor_mementos
-        
+
         return
 
     ###########################################################################
@@ -56,14 +56,14 @@ class EditorSetStructureHandler(SetStructureHandler):
 
         window_layout = self.window_layout
         window        = window_layout.window
-        
+
         try:
             # Get the memento for the editor with this Id.
             memento = self._get_editor_memento(id)
 
             # Ask the editor manager to create an editor from the memento.
             editor = window.editor_manager.set_editor_memento(memento)
-            
+
             # Get the editor's toolkit-specific control.
             #
             # fixme: This is using a 'private' method on the window layout.
@@ -77,7 +77,7 @@ class EditorSetStructureHandler(SetStructureHandler):
         except:
             logger.warn('could not restore editor [%s]', id)
             control = None
-            
+
         return control
 
     ###########################################################################
@@ -96,5 +96,5 @@ class EditorSetStructureHandler(SetStructureHandler):
             raise ValueError('no editor memento with Id %s' % id)
 
         return editor_memento
-    
+
 #### EOF ######################################################################

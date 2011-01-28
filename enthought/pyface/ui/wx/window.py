@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ class Window(MWindow, Widget):
         self._position = event.GetEventObject().GetPositionTuple()
 
         event.Skip()
-    
+
     def _wx_on_control_size(self, event):
         """ Called when the window is resized. """
 
@@ -168,7 +168,7 @@ class Window(MWindow, Widget):
         self._size = (wxsize.GetWidth(), wxsize.GetHeight())
 
         event.Skip()
-    
+
     def _wx_on_char(self, event):
         """ Called when a key is pressed when the tree has focus. """
 

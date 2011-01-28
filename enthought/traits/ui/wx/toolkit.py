@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: David C. Morrill
 #  Date:   10/13/2004
 #
@@ -39,13 +39,13 @@ from enthought.traits.api \
 
 from enthought.traits.trait_notifiers \
     import set_ui_handler
-    
+
 from enthought.traits.ui.ui \
     import UI
 
 from enthought.traits.ui.theme \
     import Theme
-    
+
 from enthought.traits.ui.dock_window_theme \
     import DockWindowTheme
 
@@ -57,9 +57,9 @@ from enthought.util.wx.drag_and_drop \
 
 from constants \
     import WindowColor, screen_dx, screen_dy
-    
+
 from helper \
-    import position_window    
+    import position_window
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -154,21 +154,21 @@ class GUIToolkit ( Toolkit ):
         ui_modal.ui_nonmodal( ui, parent )
 
     def ui_popup ( self, ui, parent ):
-        """ Creates a wxPython temporary "live update" popup dialog user 
+        """ Creates a wxPython temporary "live update" popup dialog user
             interface using information from the specified UI object.
         """
         import ui_live
         ui_live.ui_popup( ui, parent )
 
     def ui_popover ( self, ui, parent ):
-        """ Creates a wxPython temporary "live update" popup dialog user 
+        """ Creates a wxPython temporary "live update" popup dialog user
             interface using information from the specified UI object.
         """
         import ui_live
         ui_live.ui_popover( ui, parent )
 
     def ui_info ( self, ui, parent ):
-        """ Creates a wxPython temporary "live update" popup dialog user 
+        """ Creates a wxPython temporary "live update" popup dialog user
             interface using information from the specified UI object.
         """
         import ui_live
@@ -255,7 +255,7 @@ class GUIToolkit ( Toolkit ):
             height = int( height * screen_dy )
         else:
             height = int( height )
-        
+
         if view.kind in Popups:
             position_window( window, width, height )
             return
@@ -333,7 +333,7 @@ class GUIToolkit ( Toolkit ):
         """ Rebuilds a UI after a change to the content of the UI.
         """
         parent = size = None
-        
+
         if ui.control is not None:
             size   = ui.control.GetSize()
             parent = ui.control._parent
@@ -341,9 +341,9 @@ class GUIToolkit ( Toolkit ):
             ui.recycle()
             ui.info= info
             info.ui = ui
-            
+
         ui.rebuild( ui, parent )
-        
+
         if parent is not None:
             ui.control.SetSize( size )
             sizer = parent.GetSizer()
@@ -387,27 +387,27 @@ class GUIToolkit ( Toolkit ):
     #  routed to the correct event handler:
     #---------------------------------------------------------------------------
 
-    def hook_events ( self, ui, control, events = None, handler = None, 
+    def hook_events ( self, ui, control, events = None, handler = None,
                       drop_target = None ):
-        """ Hooks all specified events for all controls in a UI so that they 
+        """ Hooks all specified events for all controls in a UI so that they
             can be routed to the correct event handler.
         """
         if events is None:
-            events = ( 
-               wx.wxEVT_LEFT_DOWN, wx.wxEVT_LEFT_DCLICK, wx.wxEVT_LEFT_UP,      
-               wx.wxEVT_MIDDLE_DOWN, wx.wxEVT_MIDDLE_DCLICK, wx.wxEVT_MIDDLE_UP,    
-               wx.wxEVT_RIGHT_DOWN, wx.wxEVT_RIGHT_DCLICK, wx.wxEVT_RIGHT_UP,     
-               wx.wxEVT_MOTION, wx.wxEVT_ENTER_WINDOW, wx.wxEVT_LEAVE_WINDOW, 
+            events = (
+               wx.wxEVT_LEFT_DOWN, wx.wxEVT_LEFT_DCLICK, wx.wxEVT_LEFT_UP,
+               wx.wxEVT_MIDDLE_DOWN, wx.wxEVT_MIDDLE_DCLICK, wx.wxEVT_MIDDLE_UP,
+               wx.wxEVT_RIGHT_DOWN, wx.wxEVT_RIGHT_DCLICK, wx.wxEVT_RIGHT_UP,
+               wx.wxEVT_MOTION, wx.wxEVT_ENTER_WINDOW, wx.wxEVT_LEAVE_WINDOW,
                wx.wxEVT_MOUSEWHEEL, wx.wxEVT_PAINT
             )
             control.SetDropTarget( PythonDropTarget(
                                    DragHandler( ui = ui, control = control ) ) )
         elif events == 'keys':
             events = ( wx.wxEVT_CHAR, )
-            
+
         if handler is None:
             handler = ui.route_event
-        
+
         id            = control.GetId()
         event_handler = wx.EvtHandler()
         connect       = event_handler.Connect
@@ -440,7 +440,7 @@ class GUIToolkit ( Toolkit ):
         if method is None:
             method = (getattr( handler, 'on_%s' % suffix, None ) or
                       getattr( handler, 'on_any_event',   None ))
-            
+
         if (method is None) or (method( ui.info, owner, event ) is False):
             event.Skip()
 
@@ -449,64 +449,64 @@ class GUIToolkit ( Toolkit ):
     #---------------------------------------------------------------------------
 
     def skip_event ( self, event ):
-        """ Indicates that an event should continue to be processed by the 
+        """ Indicates that an event should continue to be processed by the
             toolkit.
         """
         event.Skip()
 
     #---------------------------------------------------------------------------
-    #  Destroys a specified GUI toolkit control:  
+    #  Destroys a specified GUI toolkit control:
     #---------------------------------------------------------------------------
-    
+
     def destroy_control ( self, control ):
         """ Destroys a specified GUI toolkit control.
         """
         control.Destroy()
 
     #---------------------------------------------------------------------------
-    #  Destroys all of the child controls of a specified GUI toolkit control:  
+    #  Destroys all of the child controls of a specified GUI toolkit control:
     #---------------------------------------------------------------------------
-    
+
     def destroy_children ( self, control ):
-        """ Destroys all of the child controls of a specified GUI toolkit 
+        """ Destroys all of the child controls of a specified GUI toolkit
             control.
         """
         control.DestroyChildren()
-        
+
     #---------------------------------------------------------------------------
     #  Returns a ( width, height ) tuple containing the size of a specified
     #  toolkit image:
     #---------------------------------------------------------------------------
-    
+
     def image_size ( self, image ):
-        """ Returns a ( width, height ) tuple containing the size of a 
+        """ Returns a ( width, height ) tuple containing the size of a
             specified toolkit image.
         """
         return ( image.GetWidth(), image.GetHeight() )
-        
+
     #---------------------------------------------------------------------------
     #  Returns a dictionary of useful constants:
     #---------------------------------------------------------------------------
-    
+
     def constants ( self ):
         """ Returns a dictionary of useful constants.
-        
+
             Currently, the dictionary should have the following key/value pairs:
-                
+
             - WindowColor': the standard window background color in the toolkit
               specific color format.
         """
         return {
             'WindowColor': WindowColor
         }
-        
+
     #---------------------------------------------------------------------------
-    #  Returns a renderer used to render 'themed' table cells for a specified 
+    #  Returns a renderer used to render 'themed' table cells for a specified
     #  TableColumn object:
     #---------------------------------------------------------------------------
-    
+
     def themed_cell_renderer ( self, column ):
-        """ Returns a renderer used to render 'themed' table cells for a 
+        """ Returns a renderer used to render 'themed' table cells for a
             specified TableColum object.
         """
         from themed_cell_renderer import ThemedCellRenderer
@@ -683,96 +683,96 @@ class DragHandler ( HasPrivateTraits ):
         if result is None:
             result = drag_result
         return result
-        
+
 #-------------------------------------------------------------------------------
 #  Defines the extensions needed to make the generic Theme class specific to
 #  wxPython:
 #-------------------------------------------------------------------------------
-            
+
 class WXTheme ( Category, Theme ):
     """ Defines the extensions needed to make the generic Theme class specific
         to wxPython.
     """
-    
+
     # The color to use for content text:
     content_color = Property
-    
+
     # The color to use for label text:
     label_color = Property
-    
+
     # The image slice used to draw the theme:
     image_slice = Property( depends_on = 'image' )
-    
+
     #-- Property Implementations -----------------------------------------------
-    
+
     def _get_content_color ( self ):
         if self._content_color is None:
             color  = wx.BLACK
             islice = self.image_slice
             if islice is not None:
                 color = islice.content_color
-                
+
             self._content_color = color
-            
+
         return self._content_color
-        
+
     def _set_content_color ( self, color ):
         self._content_color = color
-        
+
     def _get_label_color ( self ):
         if self._label_color is None:
             color  = wx.BLACK
             islice = self.image_slice
             if islice is not None:
                 color = islice.label_color
-                
+
             self._label_color = color
-            
+
         return self._label_color
-        
+
     def _set_label_color ( self, color ):
         self._label_color = color
-        
+
     @cached_property
     def _get_image_slice ( self ):
         from image_slice import image_slice_for
-        
+
         if self.image is None:
             return None
-            
+
         return image_slice_for( self.image )
-        
+
 #-------------------------------------------------------------------------------
-#  Defines the extensions needed to make the generic DockWindowTheme class 
+#  Defines the extensions needed to make the generic DockWindowTheme class
 #  specific to wxPython:
 #-------------------------------------------------------------------------------
-            
+
 class WXDockWindowTheme ( Category, DockWindowTheme ):
-    """ Defines the extensions needed to make the generic DockWindowTheme class 
+    """ Defines the extensions needed to make the generic DockWindowTheme class
         specific to wxPython.
     """
-    
+
     # The bitmap for the 'tab_inactive_edge' image:
     tab_inactive_edge_bitmap = Property( depends_on = 'tab_inactive_edge' )
-    
+
     # The bitmap for the 'tab_hover_edge' image:
     tab_hover_edge_bitmap = Property( depends_on = 'tab_hover_edge' )
-    
+
     #-- Property Implementations -----------------------------------------------
-        
+
     @cached_property
     def _get_tab_inactive_edge_bitmap ( self ):
         image = self.tab_inactive_edge
         if image is None:
             return None
-            
+
         return image.create_image().ConvertToBitmap()
-        
+
     @cached_property
     def _get_tab_hover_edge_bitmap ( self ):
         image = self.tab_hover_edge
         if image is None:
             return self.tab_inactive_edge_bitmap
-            
+
         return image.create_image().ConvertToBitmap()
-            
+

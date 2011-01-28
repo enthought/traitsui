@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2005, Enthought, Inc.
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD
 # license included in enthought/LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-# 
+#
 # Author: Enthought, Inc.
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -42,11 +42,11 @@ class Wizard(MWizard, Dialog):
     controller = Instance(IWizardController)
 
     show_cancel = Bool(True)
-    
+
     #### 'IWindow' interface ##################################################
 
     title = Unicode('Wizard')
-    
+
     ###########################################################################
     # Protected 'IDialog' interface.
     ###########################################################################
@@ -75,13 +75,13 @@ class Wizard(MWizard, Dialog):
         wx.EVT_BUTTON(parent, next.GetId(), self._on_next)
         sizer.Add(next, 0, wx.LEFT, 5)
         next.SetDefault()
-        
+
         # 'Finish' button.
         self._finish = finish = wx.Button(parent, wx.ID_OK, "Finish")
         finish.Enable(self.controller.complete)
         wx.EVT_BUTTON(parent, wx.ID_OK, self._wx_on_ok)
         sizer.Add(finish, 0, wx.LEFT, 5)
-        
+
         # 'Cancel' button.
         if self.show_cancel:
             self._cancel = cancel = wx.Button(parent, wx.ID_CANCEL, "Cancel")
@@ -112,14 +112,14 @@ class Wizard(MWizard, Dialog):
         # Show the page.
         layer = panel.show_layer(page.id)
         layer.SetFocus()
-        
+
         # Set the current page in the controller.
         #
         # fixme: Shouldn't this interface be reversed?  Maybe calling
         # 'next_page' on the controller should cause it to set its own current
         # page?
         self.controller.current_page = page
-        
+
         return
 
     def _update(self):
@@ -130,7 +130,7 @@ class Wizard(MWizard, Dialog):
 
         is_first_page = controller.is_first_page(current_page)
         is_last_page  = controller.is_last_page(current_page)
-        
+
         # 'Next button'.
         if self._next is not None:
             self._next.Enable(current_page.complete and not is_last_page)
@@ -142,7 +142,7 @@ class Wizard(MWizard, Dialog):
         # 'Finish' button.
         if self._finish is not None:
             self._finish.Enable(controller.complete)
-        
+
         # If this is the last page then the 'Finish' button is the default
         # button, otherwise the 'Next' button is the default button.
         if is_last_page:
@@ -152,7 +152,7 @@ class Wizard(MWizard, Dialog):
         else:
             if self._next is not None:
                 self._next.SetDefault()
-            
+
         return
 
     #### Trait handlers #######################################################
@@ -180,14 +180,14 @@ class Wizard(MWizard, Dialog):
         """ Called when the 'Next' button is pressed. """
 
         self.next()
-        
+
         return
 
     def _on_back(self, event):
         """ Called when the 'Back' button is pressed. """
 
         self.previous()
-        
+
         return
-    
+
 #### EOF ######################################################################

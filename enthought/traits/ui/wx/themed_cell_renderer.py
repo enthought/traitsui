@@ -2,20 +2,20 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: David C. Morrill
 #  Date:   10/13/2004
 #
 #------------------------------------------------------------------------------
 
-""" Defines the ThemedCellRenderer class used to render theme-based cells for 
+""" Defines the ThemedCellRenderer class used to render theme-based cells for
     the TableEditor.
 """
 
@@ -27,31 +27,31 @@ import wx
 
 from wx.grid \
     import PyGridCellRenderer, GridCellStringRenderer
-    
+
 from enthought.traits.ui.ui_traits \
     import convert_bitmap
-    
+
 from helper \
     import BufferDC
 
 #-------------------------------------------------------------------------------
 #  'ThemedCellRenderer' class:
 #-------------------------------------------------------------------------------
-        
+
 class ThemedCellRenderer ( PyGridCellRenderer ):
-    """ Defines the ThemedCellRenderer class used to render theme-based cells 
+    """ Defines the ThemedCellRenderer class used to render theme-based cells
         for the TableEditor.
     """
-    
+
     def __init__( self, column ):
         """ Creates a new ThemedCellRenderer.
         """
         PyGridCellRenderer.__init__( self )
-        
+
         # We are merging the pyface grid GridCellRenderer interface with the
         # wx.grid.PyGridCellRenderer interface, so we need to do this:
         self.renderer = self
-        
+
         # Save the reference to the TableColumn:
         self.column = column
 
@@ -81,25 +81,25 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
     def dispose ( self ):
         del self.renderer
         del self.column
-    
+
     #-- wx.GridCellRenderer Method Overrides -----------------------------------
-    
+
     def Draw ( self, grid, attr, dc, rect, row, col, is_selected ):
         """ Draws the contents of the specified grid cell.
         """
         # Get the model object this cell is being rendered for:
         model  = grid.grid.model
         object = model.get_filtered_item( row )
-        
+
         # Get the draw bounds:
         x0  = rect.x
         y0  = rect.y
         dx  = rect.width
         dy  = rect.height
-        
+
         # Do all drawing into an off-screen buffer:
         bdc = BufferDC( dc, dx, dy )
-        
+
         # Draw the appropriate theme background:
         column = self.column
         if is_selected:
@@ -107,7 +107,7 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                      column.get_cell_theme(     object ))
         else:
             theme = column.get_cell_theme( object )
-        
+
         # If no column theme is specified, try to get the global theme from the
         # model:
         if theme is None:
@@ -115,18 +115,18 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                 theme = model.alt_theme or model.cell_theme
             else:
                 theme = model.cell_theme
-                
+
             if is_selected:
                 theme = model.selected_theme or theme
-                
+
         if theme is not None:
             content = theme.content
             slice   = theme.image_slice
             slice.fill( bdc, 0, 0, dx, dy )
-            
+
             # Set up the correct text color to use:
             bdc.SetTextForeground( theme.content_color )
-            
+
             # Calculate the margins for the draw area:
             left   = slice.xleft   + content.left
             top    = slice.xtop    + content.top
@@ -138,30 +138,30 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                 bg_color = grid.GetSelectionBackground()
             else:
                 bg_color = attr.GetBackgroundColour()
-        
+
             bdc.SetBackgroundMode( wx.SOLID )
             bdc.SetBrush( wx.Brush( bg_color, wx.SOLID ) )
             bdc.SetPen( wx.TRANSPARENT_PEN )
             bdc.DrawRectangle( 0, 0, dx, dy )
-            
+
             # Set up the correct text color to use:
             bdc.SetTextForeground( attr.GetTextColour() )
-            
+
             # Calculate the margins for the draw area:
             left = right  = 4
             top  = bottom = 3
             ox   = oy     = 0
-        
+
         # Get the alignment information:
         halign, valign = attr.GetAlignment()
-            
+
         # Draw the bar graph (if any):
         maximum = column.get_maximum( object )
         if (not is_selected) and (maximum > 0.0):
             if theme is None:
                 left = right = top = bottom = 0
             try:
-                ratio    = max( min( column.get_raw_value( object ) / maximum, 
+                ratio    = max( min( column.get_raw_value( object ) / maximum,
                                      1.0 ), -1.0 )
                 avail_dx = dx - left - right
                 bar_dx   = int( round( ratio * avail_dx ) )
@@ -176,7 +176,7 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                     else:
                         bar_x  = avail_dx - bar_dx
                         right += 4
-                    
+
                 if bar_dx > 0:
                     bdc.SetBackgroundMode( wx.SOLID )
                     bdc.SetBrush( wx.Brush( column.get_graph_color( object ),
@@ -185,31 +185,31 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                     bdc.DrawRectangle( bar_x, top, bar_dx, dy - top - bottom )
             except:
                 pass
-            
+
             if theme is None:
                 left = right  = 4
                 top  = bottom = 3
-        
+
         # Get the optional image bitmap and text:
         bitmap = convert_bitmap( column.get_image( object ) )
         text   = grid.GetCellValue( row, col )
-                  
+
         # If no text or bitmap to display, then we are done:
         if (bitmap is None) and (text == ''):
             bdc.copy( x0, y0 )
             return
-            
+
         # Get the bitmap size:
         idx = idy = tdx = tdy = 0
         if bitmap is not None:
             idx = bitmap.GetWidth()
             idy = bitmap.GetHeight()
-        
+
         # Get the text size:
         if text != '':
             bdc.SetFont( attr.GetFont() )
             tdx, tdy = bdc.GetTextExtent( text )
-            
+
             # Get the spacing between text and image:
             if bitmap is not None:
                 idx += 4
@@ -232,26 +232,26 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
             y = (dy - bottom - max_dy)
 
         # Set up the clipping region to prevent drawing outside the margins:
-        bdc.SetClippingRegion( left, top, dx - left - right, dy - top - bottom ) 
-            
+        bdc.SetClippingRegion( left, top, dx - left - right, dy - top - bottom )
+
         # Draw the image (if left or center aligned):
         if (bitmap is not None) and (halign != wx.ALIGN_RIGHT):
             bdc.DrawBitmap( bitmap, x, y + ((max_dy - idy) / 2),  True )
             x += idx
-            
+
         # Finally, draw the text:
         if text != '':
             bdc.SetBackgroundMode( wx.TRANSPARENT )
             bdc.DrawText( text, x + ox, y + oy )
             x += tdx + 4
-            
+
         # Draw the image (if right-aligned):
         if (bitmap is not None) and (halign == wx.ALIGN_RIGHT):
             bdc.DrawBitmap( bitmap, x, y + ((max_dy - idy) / 2),  True )
-            
+
         # Discard the clipping region:
         bdc.DestroyClippingRegion()
-        
+
         # Copy the buffer to the display:
         bdc.copy( x0, y0 )
 
@@ -262,26 +262,26 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
 
         # Get the text for this cell:
         text = grid.GetCellValue( row, col ) or 'My'
-        
+
         # Now calculate and return the best size for the text and image:
         dc.SetFont( attr.GetFont() )
         tdx, tdy = dc.GetTextExtent( text )
-        
+
         column = self.column
         bitmap = convert_bitmap( column.get_image( object ) )
         if bitmap is not None:
             tdx += (bitmap.GetWdth() + 4)
             tdy  = max( tdy, bitmap.GetHeight() )
-            
+
         theme = column.get_cell_theme( object )
         if theme is None:
             return wx.Size( tdx + 8, tdy + 6 )
-            
+
         content = theme.content
         tdx    += (content.left + content.right)
         tdy    += (content.top  + content.bottom)
         slice   = theme.image_slice
-            
+
         return wx.Size( max( slice.left  + slice.right,
                              slice.xleft + slice.xright  + tdx ),
                         max( slice.top   + slice.bottom,
@@ -289,4 +289,4 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
 
     def Clone ( self ):
         return self.__class__( self.column )
-        
+

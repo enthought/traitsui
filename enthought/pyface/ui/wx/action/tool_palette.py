@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ PART = """<wxp module="wx" class="Panel"><param name="id" value="%s"><param name
 class ToolPalette(Widget):
 
     tools = List
-    
+
     id_tool_map = Dict
 
     tool_id_to_button_map = Dict
@@ -52,9 +52,9 @@ class ToolPalette(Widget):
 
     # Maps a button id to its tool id.
     button_tool_map = Dict
-    
+
     ###########################################################################
-    # 'object' interface. 
+    # 'object' interface.
     ###########################################################################
 
     def __init__(self, parent, **traits):
@@ -95,7 +95,7 @@ class ToolPalette(Widget):
         if the 'checked' parameter is True; unchecked otherwise.  If the button
         is a standard button, this method is a NOP.
         """
-        
+
         button = self.tool_id_to_button_map.get(id, None)
         if button is not None and hasattr(button, 'SetToggle'):
             button.SetToggle(checked)
@@ -104,7 +104,7 @@ class ToolPalette(Widget):
 
     def enable_tool(self, id, enabled):
         """ Enable or disable the tool identified by 'id'. """
-        
+
         button = self.tool_id_to_button_map.get(id, None)
         if button is not None:
             button.SetEnabled(enabled)
@@ -121,7 +121,7 @@ class ToolPalette(Widget):
 
     def realize(self):
         """ Realize the control so that it can be displayed. """
-        
+
         self.is_realized = True
         self._reflow()
 
@@ -140,16 +140,16 @@ class ToolPalette(Widget):
             state = 0
 
         return state
-            
-    
+
+
     ###########################################################################
     # Private interface.
     ###########################################################################
-    
+
     def _create_control(self, parent):
 
         html_window = wx.html.HtmlWindow(parent, -1, style=wx.CLIP_CHILDREN)
-        
+
         return html_window
 
 
@@ -177,14 +177,14 @@ class ToolPalette(Widget):
         """ Initialize the tool palette button. """
 
         wxid, label, bmp, kind, tooltip, longtip = param
-        
+
         panel = self.control.FindWindowById(wxid)
-        
+
         sizer = wx.BoxSizer(wx.VERTICAL)
         panel.SetSizer(sizer)
         panel.SetAutoLayout(True)
         panel.SetWindowStyleFlag(wx.CLIP_CHILDREN)
-        
+
         from wx.lib.buttons import GenBitmapToggleButton, GenBitmapButton
 
         if kind == 'radio':
@@ -200,11 +200,11 @@ class ToolPalette(Widget):
         button.SetToolTipString(label)
         sizer.Add(button, 0, wx.EXPAND)
 
-        
+
         return
 
     def _on_button(self, event):
-        
+
         button_id = event.GetId()
         tool_id = self.button_tool_map.get(button_id, None)
         if tool_id is not None:
@@ -212,5 +212,5 @@ class ToolPalette(Widget):
                 listener(event)
 
         return
-        
+
 #### EOF ######################################################################

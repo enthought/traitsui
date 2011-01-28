@@ -46,11 +46,11 @@ class _BoundsEditor(Editor):
         # low text box
         self._label_lo = wx.TextCtrl(panel, -1, self.format % self.low,
                                          size=wx.Size(56, 20),
-                                         style=wx.TE_PROCESS_ENTER )                            
+                                         style=wx.TE_PROCESS_ENTER )
         sizer.Add(self._label_lo, 0, wx.ALIGN_CENTER)
         wx.EVT_TEXT_ENTER(panel, self._label_lo.GetId(), self.update_low_on_enter)
         wx.EVT_KILL_FOCUS(self._label_lo, self.update_low_on_enter)
-        
+
         # low slider
         self.control.lslider = Slider(panel, -1, 0, 0, 10000,
                                               size=wx.Size( 100, 20 ),
@@ -61,7 +61,7 @@ class _BoundsEditor(Editor):
         self.control.lslider.SetLineSize( 100 )
         wx.EVT_SCROLL( self.control.lslider, self.update_object_on_scroll )
         sizer.Add(self.control.lslider, 1, wx.EXPAND)
-        sizer.AddStretchSpacer(0)        
+        sizer.AddStretchSpacer(0)
 
         # high slider
         sizer.AddStretchSpacer(0)
@@ -72,12 +72,12 @@ class _BoundsEditor(Editor):
         self.control.rslider.SetPageSize( 1000 )
         self.control.rslider.SetLineSize( 100 )
         wx.EVT_SCROLL( self.control.rslider, self.update_object_on_scroll )
-        sizer.Add(self.control.rslider, 1, wx.EXPAND)        
+        sizer.Add(self.control.rslider, 1, wx.EXPAND)
 
         # high text box
         self._label_hi = wx.TextCtrl(panel, -1, self.format % self.high,
                                          size=wx.Size(56, 20),
-                                         style=wx.TE_PROCESS_ENTER )                            
+                                         style=wx.TE_PROCESS_ENTER )
         sizer.Add(self._label_hi, 0, wx.ALIGN_CENTER)
         wx.EVT_TEXT_ENTER(panel, self._label_hi.GetId(), self.update_high_on_enter)
         wx.EVT_KILL_FOCUS(self._label_hi, self.update_high_on_enter)
@@ -86,11 +86,11 @@ class _BoundsEditor(Editor):
         self.set_tooltip(self.control.rslider)
         self.set_tooltip(self._label_lo)
         self.set_tooltip(self._label_hi)
-        
-                
+
+
         # Set-up the layout:
         panel.SetSizerAndFit(sizer)
-                
+
 
     def update_low_on_enter(self, value):
         try:
@@ -152,7 +152,7 @@ class _BoundsEditor(Editor):
         else:
             self.low = int(low)
             self.high = int(high)
-            
+
             # update the sliders to the int values or the sliders
             # will jiggle
             self.control.lslider.SetValue(self._convert_to_slider(low))
@@ -200,10 +200,10 @@ class _BoundsEditor(Editor):
         self.control.rslider.SetValue(self._convert_to_slider(self.high))
 
 class BoundsEditor(RangeEditor):
-    
+
     min = Trait(None, Float)
     max = Trait(None, Float)
-    
+
     def _get_simple_editor_class(self):
         return _BoundsEditor
     def _get_custom_editor_class(self):

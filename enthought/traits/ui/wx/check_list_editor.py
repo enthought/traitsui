@@ -2,20 +2,20 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-# 
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-# 
+#
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
 #------------------------------------------------------------------------------
 
-""" Defines the various editors for multi-selection enumerations, for the 
+""" Defines the various editors for multi-selection enumerations, for the
 wxPython user interface toolkit.
 """
 
@@ -34,17 +34,17 @@ from enthought.traits.api \
     import List, Str, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.check_list_editor file.
 from enthought.traits.ui.editors.check_list_editor \
     import ToolkitEditorFactory
-    
+
 from editor_factory \
     import TextEditor as BaseTextEditor
 
 from editor \
     import EditorWithList
-    
+
 from helper \
     import TraitsUIPanel
 
@@ -57,7 +57,7 @@ logger = logging.getLogger(__name__)
 class SimpleEditor ( EditorWithList ):
     """ Simple style of editor for checklists, which displays a combo box.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -134,7 +134,7 @@ class SimpleEditor ( EditorWithList ):
         control.Clear()
         for name in self.names:
             control.Append( name )
-            
+
         self.update_editor()
 
     #----------------------------------------------------------------------------
@@ -147,7 +147,7 @@ class SimpleEditor ( EditorWithList ):
         value = self.values[ self.names.index( event.GetString() ) ]
         if type( self.value ) is not str:
            value = [ value ]
-           
+
         self.value = value
 
     #---------------------------------------------------------------------------
@@ -172,7 +172,7 @@ class CustomEditor ( SimpleEditor ):
     """ Custom style of editor for checklists, which displays a set of check
         boxes.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Creates the initial editor control:
     #---------------------------------------------------------------------------
@@ -204,11 +204,11 @@ class CustomEditor ( SimpleEditor ):
         rows   = (n + cols - 1) / cols
         incr   = [ n / cols ] * cols
         rem    = n % cols
-        
+
         for i in range( cols ):
             incr[i] += (rem > i)
         incr[-1] = -(reduce( lambda x, y: x + y, incr[:-1], 0 ) - 1)
-        
+
         if cols > 1:
            sizer = wx.GridSizer( 0, cols, 2, 4 )
         else:
@@ -229,12 +229,12 @@ class CustomEditor ( SimpleEditor ):
                 else:
                     control = wx.CheckBox( panel, -1, '' )
                     control.Show( False )
-                    
+
                 sizer.Add( control, 0, wx.NORTH, 5 )
 
         # Lay out the controls:
         panel.SetSizerAndFit( sizer )
-        
+
         # FIXME: There are cases where one of the parent panel's of the check
         # list editor has a fixed 'min size' which prevents the check list
         # editor from expanding correctly, so we currently are making sure
@@ -245,7 +245,7 @@ class CustomEditor ( SimpleEditor ):
             parent.SetMinSize( wx.Size( -1, -1 ) )
             panel  = parent
             parent = parent.GetParent()
-            
+
         panel.Layout()
         panel.Refresh()
 
@@ -286,7 +286,7 @@ class CustomEditor ( SimpleEditor ):
 class TextEditor ( BaseTextEditor ):
     """ Text style of editor for checklists, which displays a text field.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Handles the user changing the contents of the edit control:
     #---------------------------------------------------------------------------
@@ -313,10 +313,10 @@ def parse_value ( value ):
     """
     if value is None:
        return []
-       
+
     if type( value ) is not str:
        return value[:]
-       
+
     return [ x.strip() for x in value.split( ',' ) ]
 
 ### EOF ########################################################################

@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -38,13 +38,13 @@ class ToolBarManager(ActionManager):
 
     # Is the tool bar visible?
     visible = Bool(True)
-    
+
     # The size of tool images (width, height).
     image_size = Tuple((16, 16))
 
     # The toolbar name (used to distinguish multiple toolbars).
     name = Str('ToolBar')
-    
+
     # The orientation of the toolbar.
     orientation = Enum('horizontal', 'vertical')
 
@@ -81,7 +81,7 @@ class ToolBarManager(ActionManager):
 
     #### Trait change handlers ################################################
     #### Methods ##############################################################
-    
+
     def create_tool_bar(self, parent, controller=None):
         """ Creates a tool bar. """
 
@@ -95,7 +95,7 @@ class ToolBarManager(ActionManager):
         # Determine the wx style for the tool bar based on any optional
         # settings.
         style = wx.NO_BORDER | wx.TB_FLAT | wx.CLIP_CHILDREN
-        
+
         if self.show_tool_names:
             style |= wx.TB_TEXT
 
@@ -104,7 +104,7 @@ class ToolBarManager(ActionManager):
 
         else:
             style |= wx.TB_VERTICAL
-            
+
         if not self.show_divider:
             style |= wx.TB_NODIVIDER
 
@@ -203,7 +203,7 @@ class _ToolBar(wx.ToolBar):
         # Listen for changes to the tool bar manager's enablement and
         # visibility.
         self.tool_bar_manager = tool_bar_manager
-        
+
         self.tool_bar_manager.on_trait_change(
             self._on_tool_bar_manager_enabled_changed, 'enabled'
         )
@@ -229,7 +229,7 @@ class _ToolBar(wx.ToolBar):
         """ Dynamic trait change handler. """
 
         obj.window._wx_show_tool_bar(self, new)
-        
+
         return
-    
+
 #### EOF ######################################################################

@@ -14,11 +14,11 @@
 #
 #------------------------------------------------------------------------------
 
-""" Table column object for Color traits. 
+""" Table column object for Color traits.
 """
 
 #-------------------------------------------------------------------------------
-#  Imports:  
+#  Imports:
 #-------------------------------------------------------------------------------
 
 from wx \
@@ -26,18 +26,18 @@ from wx \
 
 from enthought.traits.ui.table_column \
     import ObjectColumn
-    
+
 #-------------------------------------------------------------------------------
-#  'ColorColumn' class:  
+#  'ColorColumn' class:
 #-------------------------------------------------------------------------------
-        
+
 class ColorColumn ( ObjectColumn ):
     """ Table column object for Color traits. """
-    
+
 #-- ObjectColumn Overrides -----------------------------------------------------
-    
+
     def get_cell_color ( self, object ):
-        """ Returns the cell background color for the column for a specified 
+        """ Returns the cell background color for the column for a specified
             object.
         """
         color_values = getattr( object, self.name + '_' )
@@ -55,14 +55,14 @@ class ColorColumn ( ObjectColumn ):
             value = "(%3d, %3d, %3d)" % self._as_int_rgb_tuple( value[:-1] )
         elif type( value ) is not str:
             value = str( value )
-        
+
         return value
 
 #-- Private Methods ------------------------------------------------------------
-    
+
     def _as_int_rgb_tuple ( self, color_values ):
         """ Returns object color as RGB integers. """
-        return ( int( 255 * color_values[0] ), 
+        return ( int( 255 * color_values[0] ),
                  int( 255 * color_values[1] ),
                  int( 255 * color_values[2] ) )
-                                
+

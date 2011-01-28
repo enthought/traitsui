@@ -2,19 +2,19 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
 
-""" Mix-in class for split widgets. 
+""" Mix-in class for split widgets.
 """
 
 # Major package imports.
@@ -67,7 +67,7 @@ class SplitWidget(MSplitWidget, HasTraits):
         # Right hand side/bottom.
         rhs = self._create_rhs(splitter)
         sizer.Add(rhs, 1, wx.EXPAND)
-        
+
         # Resize the splitter to fit the sizer's minimum size.
         sizer.Fit(splitter)
 
@@ -99,7 +99,7 @@ class SplitWidget(MSplitWidget, HasTraits):
                 # wx 2.8 did away with WindowPtr
                 if not isinstance(lhs, wx.Window):
                     lhs = lhs.control
-                
+
         else:
             # Dummy implementation - override!
             lhs = wx.Panel(parent, -1)
@@ -120,7 +120,7 @@ class SplitWidget(MSplitWidget, HasTraits):
                 # wx 2.8 did away with WindowPtr
                 if not isinstance(rhs, wx.Window):
                     rhs = rhs.control
-        
+
         else:
             # Dummy implementation - override!
             rhs = wx.Panel(parent, -1)
@@ -128,7 +128,7 @@ class SplitWidget(MSplitWidget, HasTraits):
             rhs.SetSize((100, 200))
 
         return rhs
-    
+
     ###########################################################################
     # Private interface.
     ###########################################################################
@@ -147,7 +147,7 @@ class SplitWidget(MSplitWidget, HasTraits):
 
         else:
             position = int(height * self.ratio)
-        
+
         splitter.SetSashPosition(position)
 
         # Since we only care about the FIRST size event, remove ourselves as
@@ -155,5 +155,5 @@ class SplitWidget(MSplitWidget, HasTraits):
         #wx.EVT_SIZE(splitter, None)
 
         return
-    
+
 #### EOF ######################################################################

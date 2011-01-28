@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
@@ -24,16 +24,16 @@
 
 
 import wx
-    
+
 from enthought.traits.api \
     import Str
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.button_editor file.
 from enthought.traits.ui.editors.button_editor \
     import ToolkitEditorFactory
-    
+
 from editor \
     import Editor
 
@@ -44,7 +44,7 @@ from editor \
 class SimpleEditor ( Editor ):
     """ Simple style editor for a button.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -84,7 +84,7 @@ class SimpleEditor ( Editor ):
         """
         factory    = self.factory
         self.value = factory.value
-        
+
         # If there is an associated view, then display it:
         if factory.view is not None:
             self.object.edit_traits( view   = factory.view,
@@ -108,7 +108,7 @@ class SimpleEditor ( Editor ):
         """ Disposes of the contents of an editor.
         """
         wx.EVT_BUTTON( self.control.GetParent(), self.control.GetId(), None )
-        
+
         super( SimpleEditor, self ).dispose()
 
 #-------------------------------------------------------------------------------
@@ -118,7 +118,7 @@ class SimpleEditor ( Editor ):
 class CustomEditor ( SimpleEditor ):
     """ Custom style editor for a button, which can contain an image.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -154,7 +154,7 @@ class CustomEditor ( SimpleEditor ):
         """
         self._control.on_trait_change( self.update_object, 'clicked',
                                        remove = True )
-                                       
+
         super( CustomEditor, self ).dispose()
 
 ### EOF #######################################################################

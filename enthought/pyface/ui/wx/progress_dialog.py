@@ -143,14 +143,14 @@ class ProgressDialog(MProgressDialog, Window):
 
         self.progress_bar.update(value)
 
-        # a bit hackish, but on Windows if another window sets focus, the 
-        # other window will come to the top, obscuring the progress dialog. 
+        # a bit hackish, but on Windows if another window sets focus, the
+        # other window will come to the top, obscuring the progress dialog.
         # Only do this if the control is a top level window, so windows which
         # embed a progress dialog won't keep popping to the top
-        
+
         if self.control.IsTopLevel():
             self.control.Raise()
-        
+
         if self.max > 0:
             percent = (float(value) - self.min)/(self.max - self.min)
 

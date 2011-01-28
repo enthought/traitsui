@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ class ToolPaletteManager(ActionManager):
     """ A tool bar manager realizes itself in a tool palette bar control. """
 
     #### 'ToolPaletteManager' interface #######################################
-    
+
     # The size of tool images (width, height).
     image_size = Tuple((16, 16))
 
@@ -58,7 +58,7 @@ class ToolPaletteManager(ActionManager):
         # An image cache to make sure that we only load each image used in the
         # tool bar exactly once.
         self._image_cache = ImageCache(self.image_size[0], self.image_size[1])
-        
+
         return
 
     ###########################################################################
@@ -70,12 +70,12 @@ class ToolPaletteManager(ActionManager):
 
         # Create the control.
         tool_palette = ToolPalette(parent)
-        
+
         # Add all of items in the manager's groups to the tool bar.
         self._add_tools(tool_palette, self.groups)
 
         self._set_initial_tool_state(tool_palette, self.groups)
-        
+
         return tool_palette
 
     ###########################################################################
@@ -84,7 +84,7 @@ class ToolPaletteManager(ActionManager):
 
     def _add_tools(self, tool_palette, groups):
         """ Adds tools for all items in a list of groups. """
-        
+
         previous_non_empty_group = None
         for group in self.groups:
             if len(group.items) > 0:
@@ -105,7 +105,7 @@ class ToolPaletteManager(ActionManager):
                     item.control_id = control_id
 
         tool_palette.realize()
-        
+
         return
 
     def _set_initial_tool_state(self, tool_palette, groups):
@@ -113,9 +113,9 @@ class ToolPaletteManager(ActionManager):
 
         Without this,  only the first item in a radio group can be selected
          when the tool bar is first realised 8^()
-         
+
         """
-        
+
         for group in groups:
             checked = False
             for item in group.items:
@@ -136,7 +136,7 @@ class ToolPaletteManager(ActionManager):
                 # we will check the first one.
                 if not checked and len(group.items) > 0:
                     group.items[0].action.checked = True
-            
+
         return
-    
+
 #### EOF ######################################################################

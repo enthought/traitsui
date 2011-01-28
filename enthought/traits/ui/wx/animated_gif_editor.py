@@ -27,6 +27,6 @@ import wx
 # Define the wx version dependent version of the editor:
 if wx.__version__[:3] == '2.6':
     from animated_gif_editor_26 import AnimatedGIFEditor
-else:    
+else:
     from animated_gif_editor_28 import AnimatedGIFEditor
 

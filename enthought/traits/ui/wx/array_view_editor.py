@@ -7,7 +7,7 @@ from enthought.traits.ui.ui_editors.array_view_editor \
 
 from ui_editor \
     import UIEditor
-    
+
 #-------------------------------------------------------------------------------
 #  '_ArrayViewEditor' class:
 #-------------------------------------------------------------------------------

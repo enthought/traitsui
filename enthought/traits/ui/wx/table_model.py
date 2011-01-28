@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-# 
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-# 
+#
 #  Author: David C. Morrill
 #  Date:   07/01/2005
 #
@@ -62,7 +62,7 @@ logger = logging.getLogger(__name__)
 #-------------------------------------------------------------------------------
 
 class TraitGridSelection ( HasPrivateTraits ):
-    """ Structure for holding specification information. 
+    """ Structure for holding specification information.
     """
 
     # The selected object
@@ -78,7 +78,7 @@ class TraitGridSelection ( HasPrivateTraits ):
 class TableModel ( GridModel ):
     """ Model for table data.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -94,7 +94,7 @@ class TableModel ( GridModel ):
 
     # Display the table items in reverse order?
     reverse = Bool( False )
-    
+
     # Event fired when the table has been sorted
     sorted = Event
 
@@ -121,9 +121,9 @@ class TableModel ( GridModel ):
 
         # Set up listeners for any of the model data changing:
         object.on_trait_change( self._on_data_changed, name, dispatch = 'ui' )
-        object.on_trait_change( self.fire_content_changed, name + '.-', 
+        object.on_trait_change( self.fire_content_changed, name + '.-',
                                 dispatch = 'ui' )
-        
+
         # Set up listeners for any column definitions changing:
         editor.on_trait_change( self.update_columns, 'columns',
                                 dispatch = 'ui' )
@@ -132,7 +132,7 @@ class TableModel ( GridModel ):
 
         # Initialize the current filter from the editor's default filter:
         self.filter = editor.filter
-        
+
         # If we are using 'auto_add' mode, create the first 'auto_add' row:
         if editor.auto_add:
             self.auto_add_row = row = editor.create_new_row()
@@ -154,7 +154,7 @@ class TableModel ( GridModel ):
 
         # Remove listeners for any of the model data changing:
         object.on_trait_change( self._on_data_changed, name, remove = True )
-        object.on_trait_change( self.fire_content_changed, name + '.-', 
+        object.on_trait_change( self.fire_content_changed, name + '.-',
                                 remove = True )
 
         # Remove listeners for any column definitions changing:
@@ -165,7 +165,7 @@ class TableModel ( GridModel ):
         # Make sure we have removed listeners from the current filter also:
         if self.filter is not None:
             self.filter.on_trait_change( self._filter_modified, remove = True )
-            
+
         # Clean-up any links that should be broken:
         self.editor = None
 
@@ -193,14 +193,14 @@ class TableModel ( GridModel ):
             logger.error( 'TableModel error: Request for invalid row %d out of '
                           '%d' % ( index, len( self.__filtered_items() ) ) )
             return None
-            
+
     #---------------------------------------------------------------------------
-    #  Returns the raw, unfiltered index corresponding to a specified filtered 
+    #  Returns the raw, unfiltered index corresponding to a specified filtered
     #  index:
     #---------------------------------------------------------------------------
 
     def raw_index_of ( self, row ):
-        """ Returns the raw, unfiltered index corresponding to a specified 
+        """ Returns the raw, unfiltered index corresponding to a specified
             filtered index.
         """
         if self._filtered_cache is None:
@@ -238,7 +238,7 @@ class TableModel ( GridModel ):
         """
         if index >= len( self.editor.filtered_indices ):
             raise IndexError
-            
+
         mapped_index = self.editor.filtered_indices[ index ]
         items        = self.__items()
         object       = items[ mapped_index ]
@@ -269,7 +269,7 @@ class TableModel ( GridModel ):
         #self.fire_structure_changed()
 
     #-- Event Handlers ---------------------------------------------------------
-    
+
     #---------------------------------------------------------------------------
     #  Handles the contents of the filter being changed:
     #---------------------------------------------------------------------------
@@ -281,47 +281,47 @@ class TableModel ( GridModel ):
         self._filtered_cache = None
         self.fire_structure_changed()
         self.editor.filter_modified()
-        
+
     #---------------------------------------------------------------------------
     #  Handles the grid firing a 'click' event:
     #---------------------------------------------------------------------------
-    
+
     def _click_changed ( self, event ):
         """ Handles the grid firing a 'click' event.
         """
         row, col = event
-        
+
         # Fire the same event on the editor after mapping it to a model object
         # and column name:
         object = self.get_filtered_item( row )
         column = self.__get_column( col )
         self.editor.click = ( object, column )
-        
+
         # Check to see if the column has a view to display:
         view = column.get_view( object )
         if view is not None:
-            column.get_object( object ).edit_traits( 
-                view   = view, 
+            column.get_object( object ).edit_traits(
+                view   = view,
                 parent = self._bounds_for( row, col ) )
-                            
+
         # Invoke the column's click handler:
         column.on_click( object )
-        
+
     #---------------------------------------------------------------------------
     #  Handles the grid firing a 'dclick' event:
     #---------------------------------------------------------------------------
-    
+
     def _dclick_changed ( self, event ):
         """ Handles the grid firing a 'dclick' event.
         """
         row, col = event
-        
+
         # Fire the same event on the editor after mapping it to a model object
         # and column name:
         object = self.get_filtered_item( row )
         column = self.__get_column( col )
         self.editor.dclick = ( object, column )
-                            
+
         # Invoke the column's double-click handler:
         column.on_dclick( object )
 
@@ -334,11 +334,11 @@ class TableModel ( GridModel ):
         """
         object = self.auto_add_row
         object.on_trait_change( self.on_auto_add_row, remove = True )
-        
+
         self.auto_add_row = row = self.editor.create_new_row()
         if row is not None:
             row.on_trait_change( self.on_auto_add_row, dispatch = 'ui' )
-            
+
         do_later( self.editor.add_row, object,
                                        len( self.get_filtered_items() ) - 2 )
 
@@ -356,7 +356,7 @@ class TableModel ( GridModel ):
 
     def get_column_size ( self, index ):
         """ Returns the size in pixels of the column indexed by *index*.
-            A value of -1 or None means to use the default. 
+            A value of -1 or None means to use the default.
         """
         return self.__get_column( index ).get_width()
 
@@ -447,19 +447,19 @@ class TableModel ( GridModel ):
 
         if self.editor is None:
             return None
-            
+
         column = self.__get_column( col )
         object = self.get_filtered_item( row )
         editor = column.get_editor( object )
         if editor is None:
             return None
-         
+
         editor._ui = self.editor.ui
-        
+
         target, name = column.target_name( object )
-        
+
         return TraitGridCellAdapter( editor, target, name, '',
-                   context = self.editor.ui.context, 
+                   context = self.editor.ui.context,
                    style   = column.get_style( object ),
                    width   = column.get_edit_width( object ),
                    height  = column.get_edit_height( object ) )
@@ -519,15 +519,15 @@ class TableModel ( GridModel ):
         column = self.__get_column( col )
         menu   = column.get_menu( self.get_filtered_item( row ) )
         editor = self.editor
-        
+
         if menu is None:
             menu = editor.factory.menu
-            
+
         if menu is not None:
             editor.prepare_menu( row, column )
-            
+
             return ( menu, editor )
-            
+
         return None
 
     def get_value ( self, row, col ):
@@ -683,8 +683,8 @@ class TableModel ( GridModel ):
         to_column = None
         if to < len( self.__get_columns() ):
             to_column = self.__get_column( to )
-            
-        return self.editor.move_column( self.__get_column( frm ), to_column ) 
+
+        return self.editor.move_column( self.__get_column( frm ), to_column )
 
     #---------------------------------------------------------------------------
     #  Protected interface:
@@ -734,13 +734,13 @@ class TableModel ( GridModel ):
         row, col = new
         column   = self.__get_column( col )
         object   = self.get_filtered_item( row )
-        
+
         # Update the tooltip if necessary:
-        tooltip = column.get_tooltip( object ) 
+        tooltip = column.get_tooltip( object )
         if tooltip != self._tooltip:
             self._tooltip = tooltip
             self.editor.grid._grid_window.SetToolTip( wx.ToolTip( tooltip ) )
-        
+
         if column.is_auto_editable( object ):
             x, y, dx, dy = self._bounds_for( row, col )
             if column.is_editable( object ):
@@ -752,13 +752,13 @@ class TableModel ( GridModel ):
                              kind   = 'info',
                              width  = dx,
                              height = dy )
-            else:    
+            else:
                 view = column.get_view( object )
                 if view is None:
                     return
-                    
+
             column.get_object( object ).edit_traits(
-                view   = view, 
+                view   = view,
                 parent = ( x, y, dx, dy ) )
 
     #---------------------------------------------------------------------------
@@ -773,9 +773,9 @@ class TableModel ( GridModel ):
         coords       = wxg.GridCellCoords( row, col )
         x, y, dx, dy = grid._grid.BlockToDeviceRect( coords, coords )
         x, y         = grid._grid_window.ClientToScreenXY( x, y )
-        
+
         return ( x, y, dx, dy )
-        
+
     def _sort_model ( self ):
         """ Sorts the underlying model if that is what the user requested.
         """
@@ -795,10 +795,10 @@ class TableModel ( GridModel ):
         result = self.editor.value
         if not isinstance( result, SequenceTypes ):
             return [ result ]
-            
+
         if ordered and self.reverse:
             return ReversedList( result )
-            
+
         return result
 
     def __filtered_items ( self ):

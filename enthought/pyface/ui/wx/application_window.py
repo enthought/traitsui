@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -26,10 +26,10 @@ import wx
 try:
     import wx.aui
     AUI = True
-    
+
 except ImportError:
     AUI = False
-    
+
 # Enthought library imports.
 from enthought.pyface.action.api import MenuBarManager, StatusBarManager
 from enthought.pyface.action.api import ToolBarManager
@@ -40,7 +40,7 @@ from enthought.pyface.image_resource import ImageResource
 
 # Local imports.
 from window import Window
-from system_metrics import SystemMetrics 
+from system_metrics import SystemMetrics
 
 
 class ApplicationWindow(MApplicationWindow, Window):
@@ -98,7 +98,7 @@ class ApplicationWindow(MApplicationWindow, Window):
             self.control.SetStatusBar(status_bar)
 
         return
-    
+
     def _create_tool_bar(self, parent):
         tool_bar_managers = self._get_tool_bar_managers()
         if len(tool_bar_managers) > 0:
@@ -121,7 +121,7 @@ class ApplicationWindow(MApplicationWindow, Window):
         self.control.SetIcon(icon.create_icon())
 
         return
-    
+
     ###########################################################################
     # 'Window' interface.
     ###########################################################################
@@ -134,7 +134,7 @@ class ApplicationWindow(MApplicationWindow, Window):
     ###########################################################################
     # Protected 'IWidget' interface.
     ###########################################################################
-    
+
     def _create(self):
 
         if AUI:
@@ -142,7 +142,7 @@ class ApplicationWindow(MApplicationWindow, Window):
             # otherwise it gets garbage collected and we get a core dump...
             # Ahh, the sweet smell of open-source ;^()
             self._aui_manager = wx.aui.AuiManager()
-        
+
         super(ApplicationWindow, self)._create()
 
         if AUI:
@@ -153,7 +153,7 @@ class ApplicationWindow(MApplicationWindow, Window):
 
         else:
             contents = self._create_contents(self.control)
-            
+
         self._create_trim_widgets(self.control)
 
         if AUI:
@@ -162,24 +162,24 @@ class ApplicationWindow(MApplicationWindow, Window):
             self._aui_manager.Update()
 
         return
-    
+
     def _create_control(self, parent):
 
         style = wx.DEFAULT_FRAME_STYLE \
                 | wx.FRAME_NO_WINDOW_MENU \
                 | wx.CLIP_CHILDREN
-        
+
         control = wx.Frame(
             parent, -1, self.title, style=style, size=self.size,
             pos=self.position
         )
 
         control.SetBackgroundColour(SystemMetrics().dialog_background_color)
-        
+
         if AUI:
             # Let the AUI manager look after the frame.
             self._aui_manager.SetManagedWindow(control)
-    
+
         return control
 
     ###########################################################################
@@ -198,7 +198,7 @@ class ApplicationWindow(MApplicationWindow, Window):
         info.Top()
 
         self._aui_manager.AddPane(tool_bar, info)
-        
+
         return
 
     def _create_body(self, parent):
@@ -214,7 +214,7 @@ class ApplicationWindow(MApplicationWindow, Window):
         info.Floatable(False)
         info.Name('Body')
         info.CentrePane()
-        
+
         self._aui_manager.AddPane(panel, info)
 
         return panel
@@ -242,7 +242,7 @@ class ApplicationWindow(MApplicationWindow, Window):
             tool_bar.Enable(enabled)
 
         return
-    
+
     def _wx_show_tool_bar(self, tool_bar, visible):
         """ Hide/Show a tool bar. """
 
@@ -259,7 +259,7 @@ class ApplicationWindow(MApplicationWindow, Window):
 
         else:
             tool_bar.Show(visible)
-            
+
         return
-    
+
 #### EOF ######################################################################

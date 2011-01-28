@@ -30,9 +30,9 @@ from math \
 
 from enthought.traits.api \
      import TraitError, Str, Float, Any, Bool
-    
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.range_editor file.
 from enthought.traits.ui.editors.range_editor \
     import ToolkitEditorFactory
@@ -57,7 +57,7 @@ class BaseRangeEditor ( Editor ):
     """ The base class for Range editors. Using an evaluate trait, if specified,
         when assigning numbers the object trait.
     """
-    
+
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ class BaseRangeEditor ( Editor ):
     #---------------------------------------------------------------------------
     #  Sets the associated object trait's value:
     #---------------------------------------------------------------------------
-    
+
     def _set_value ( self, value ):
         if self.evaluate is not None:
             value = self.evaluate( value )
@@ -97,7 +97,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
 
     # Formatting string used to format value and labels
     format = Str
-    
+
     # Flag indicating that the UI is in the process of being updated
     ui_changing = Bool( False )
 
@@ -162,7 +162,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
                                          style = wx.TE_PROCESS_ENTER )
         wx.EVT_TEXT_ENTER( panel, text.GetId(), self.update_object_on_enter )
         wx.EVT_KILL_FOCUS( text, self.update_object_on_enter )
-        
+
         sizer.Add( text, 0, wx.LEFT | wx.EXPAND, 4 )
 
         low_label = factory.low_label
@@ -195,7 +195,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
             (self.factory.auto_set and
              (event_type == wx.wxEVT_SCROLL_THUMBTRACK)) or
-            (self.factory.enter_set and 
+            (self.factory.enter_set and
              (event_type == wx.wxEVT_SCROLL_THUMBRELEASE))):
             try:
                 self.ui_changing = True
@@ -253,7 +253,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         if self._error is None:
             self._error     = True
             self.ui.errors += 1
-            super(SimpleSliderEditor, self).error(excp)            
+            super(SimpleSliderEditor, self).error(excp)
         self.set_error_state( True )
 
     #---------------------------------------------------------------------------
@@ -271,7 +271,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         except:
             text  = ''
             value = self.low
-        
+
         ivalue = self._convert_to_slider( value )
         self.control.text.SetValue( text )
         self.control.slider.SetValue( ivalue )
@@ -280,14 +280,14 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         """ Returns the slider setting corresponding to the user-supplied value.
         """
         if self.high > self.low:
-            ivalue = int( (float( value - self.low ) / 
+            ivalue = int( (float( value - self.low ) /
                            (self.high - self.low)) * 10000.0 )
         else:
             ivalue = self.low
         return ivalue
 
     def _convert_from_slider(self, ivalue):
-        """ Returns the float or integer value corresponding to the slider 
+        """ Returns the float or integer value corresponding to the slider
         setting.
         """
         value = self.low + ((float( ivalue ) / 10000.0) *
@@ -295,11 +295,11 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         if not self.factory.is_float:
             value = int(round(value))
         return value
-            
+
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
     #---------------------------------------------------------------------------
-    
+
     def get_error_control ( self ):
         """ Returns the editor's control for indicating error status.
         """
@@ -335,7 +335,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
 #-------------------------------------------------------------------------------
 class LogRangeSliderEditor ( SimpleSliderEditor ):
 #-------------------------------------------------------------------------------
-    """ A slider editor for log-spaced values 
+    """ A slider editor for log-spaced values
     """
 
     def _convert_to_slider(self, value):
@@ -347,11 +347,11 @@ class LogRangeSliderEditor ( SimpleSliderEditor ):
         return ivalue
 
     def _convert_from_slider(self, ivalue):
-        """ Returns the float or integer value corresponding to the slider 
+        """ Returns the float or integer value corresponding to the slider
         setting.
         """
         value = float( ivalue ) / 10000.0 * (log10(self.high) -log10(self.low))
-        # Do this to handle floating point errors, where fvalue may exceed 
+        # Do this to handle floating point errors, where fvalue may exceed
         # self.high.
         fvalue = min(self.low*10**(value), self.high)
         if not self.factory.is_float:
@@ -507,7 +507,7 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
             if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
                 (self.factory.auto_set and
                  (event_type == wx.wxEVT_SCROLL_THUMBTRACK)) or
-                (self.factory.enter_set and 
+                (self.factory.enter_set and
                  (event_type == wx.wxEVT_SCROLL_THUMBRELEASE))):
                 if self.factory.is_float:
                     self.value = value
@@ -540,8 +540,8 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
             self.control.text.SetBackgroundColour(OKColor)
             self.control.text.Refresh()
             # Update the slider range.
-            # Set ui_changing to True to avoid recursion: 
-            # the update_range_ui method will try to set the value in the text 
+            # Set ui_changing to True to avoid recursion:
+            # the update_range_ui method will try to set the value in the text
             # box, which will again fire this method if auto_set is True.
             if not self.ui_changing:
                 self.ui_changing = True
@@ -553,7 +553,7 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
                 self.ui.errors -= 1
         except TraitError, excp:
             pass
-         
+
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
     #---------------------------------------------------------------------------
@@ -564,7 +564,7 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
         if self._error is None:
             self._error     = True
             self.ui.errors += 1
-            super(LargeRangeSliderEditor, self).error(excp)            
+            super(LargeRangeSliderEditor, self).error(excp)
         self.set_error_state( True )
 
     #---------------------------------------------------------------------------
@@ -690,11 +690,11 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
                                                   int( log10( high - low ) ) )
             else:
                 self._format = '%.3f'
-            
+
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
     #---------------------------------------------------------------------------
-    
+
     def get_error_control ( self ):
         """ Returns the editor's control for indicating error status.
         """
@@ -757,7 +757,7 @@ class SimpleSpinEditor ( BaseRangeEditor ):
 
         if not factory.high_name:
             self.high = factory.high
-        
+
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
         low  = self.low
@@ -838,32 +838,32 @@ class RangeTextEditor ( TextEditor ):
 
     # Function to evaluate floats/ints
     evaluate = Any
-    
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
- 
+
         if self.factory.enter_set:
             control = wx.TextCtrl( parent, -1, self.str_value,
                                    style = wx.TE_PROCESS_ENTER )
             wx.EVT_TEXT_ENTER( parent, control.GetId(), self.update_object )
         else:
             control = wx.TextCtrl( parent, -1, self.str_value )
-            
+
         wx.EVT_KILL_FOCUS( control, self.update_object )
-        
+
         if self.factory.auto_set:
             wx.EVT_TEXT( parent, control.GetId(), self.update_object )
 
         self.evaluate = self.factory.evaluate
         self.sync_value( self.factory.evaluate_name, 'evaluate', 'from' )
-           
+
         self.control = control
         self.set_tooltip()
 
@@ -910,14 +910,14 @@ class RangeTextEditor ( TextEditor ):
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
     #---------------------------------------------------------------------------
-        
+
     def error ( self, excp ):
         """ Handles an error that occurs while setting the object's trait value.
         """
         if self._error is None:
             self._error     = True
             self.ui.errors += 1
-            super(RangeTextEditor, self).error(excp)            
+            super(RangeTextEditor, self).error(excp)
         self.set_error_state( True )
 
 #-------------------------------------------------------------------------------

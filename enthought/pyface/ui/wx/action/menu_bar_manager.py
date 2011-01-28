@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -40,15 +40,15 @@ class MenuBarManager(ActionManager):
         # trait).
         if controller is None:
             controller = self.controller
-            
+
         menu_bar = wx.MenuBar()
-        
+
         # Every item in every group must be a menu manager.
         for group in self.groups:
             for item in group.items:
                 menu = item.create_menu(parent, controller)
                 menu_bar.Append(menu, item.name)
-                 
+
         return menu_bar
 
 #### EOF ######################################################################

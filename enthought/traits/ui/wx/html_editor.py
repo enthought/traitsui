@@ -2,21 +2,21 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
 #------------------------------------------------------------------------------
 
-""" Defines the HTML "editor" for the wxPython user interface toolkit. 
-    HTML editors interpret and display HTML-formatted text, but do not 
+""" Defines the HTML "editor" for the wxPython user interface toolkit.
+    HTML editors interpret and display HTML-formatted text, but do not
     modify it.
 """
 
@@ -30,12 +30,12 @@ import webbrowser
 import wx.html as wh
 
 from enthought.traits.api import Str
-    
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
-# compatibility. The class has been moved to the 
+# compatibility. The class has been moved to the
 # enthought.traits.ui.editors.html_editor file.
 from enthought.traits.ui.editors.html_editor import ToolkitEditorFactory
-    
+
 from editor import Editor
 
 #-------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ class URLResolvingHtmlWindow( wh.HtmlWindow ):
         """
         if self.open_externally:
             url = link_info.GetHref()
-            if (self.base_url and 
+            if (self.base_url and
                 not url.startswith( ( 'http://', 'https://' ) )):
                 url = self.base_url + url
             if not url.startswith( ( 'file://', 'http://', 'https://' ) ):
@@ -67,62 +67,62 @@ class URLResolvingHtmlWindow( wh.HtmlWindow ):
     def OnOpeningURL( self, url_type, url ):
         """ According to the documentation, this method is supposed to be called
             for both images and link clicks, but it appears to only be called
-            for image loading, hence the base url handling code in 
+            for image loading, hence the base url handling code in
             OnLinkClicked.
         """
         if (self.base_url and not os.path.isabs(url) and
             not url.startswith( ( 'http://', 'https://', self.base_url ) )):
-            return self.base_url + url 
+            return self.base_url + url
         else:
             return wh.HTML_OPEN
-                                      
+
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class SimpleEditor ( Editor ):
     """ Simple style of editor for HTML, which displays interpreted HTML.
     """
     #---------------------------------------------------------------------------
-    #  Trait definitions:  
+    #  Trait definitions:
     #---------------------------------------------------------------------------
-        
+
     # Is the HTML editor scrollable? This values override the default.
     scrollable = True
 
     # External objects referenced in the HTML are relative to this URL
     base_url = Str
-        
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = URLResolvingHtmlWindow( parent , 
+        self.control = URLResolvingHtmlWindow( parent ,
                                                self.factory.open_externally,
                                                self.base_url )
         self.control.SetBorders( 2 )
 
         self.base_url = self.factory.base_url
         self.sync_value( self.factory.base_url_name, 'base_url', 'from' )
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
-        
+
     def update_editor ( self ):
-        """ Updates the editor when the object trait changes external to the 
+        """ Updates the editor when the object trait changes external to the
             editor.
         """
         text = self.str_value
         if self.factory.format_text:
             text = self.factory.parse_text( text )
         self.control.SetPage( text )
-        
+
     #-- Event Handlers ---------------------------------------------------------
 
     def _base_url_changed(self):

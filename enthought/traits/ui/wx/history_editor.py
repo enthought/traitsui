@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
@@ -22,10 +22,10 @@
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
-    
+
 from enthought.traits.api \
     import Any, on_trait_change
-    
+
 from enthought.pyface.timer.api \
     import do_later
 
@@ -38,7 +38,7 @@ from history_control \
 #-------------------------------------------------------------------------------
 #  '_HistoryEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class _HistoryEditor ( Editor ):
     """ Simple style text editor, which displays a text field and maintains a
         history of previously entered values, the maximum number of which is
@@ -46,17 +46,17 @@ class _HistoryEditor ( Editor ):
     """
 
     #---------------------------------------------------------------------------
-    #  Trait definitions: 
+    #  Trait definitions:
     #---------------------------------------------------------------------------
-    
+
     # The history control:
     history = Any
-    
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -66,21 +66,21 @@ class _HistoryEditor ( Editor ):
                                      entries  = self.factory.entries,
                                      auto_set = self.factory.auto_set )
         self.control = history.create_control( parent )
-        
+
         self.set_tooltip()
-        
+
     def dispose ( self ):
         """ Disposes of the contents of an editor.
         """
         self.history.dispose()
         self.history = None
-        
+
         super( _HistoryEditor, self ).dispose()
 
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
     #---------------------------------------------------------------------------
-  
+
     @on_trait_change( 'history:value' )
     def _value_changed ( self, value ):
         """ Handles the history object's 'value' trait being changed.
@@ -93,13 +93,13 @@ class _HistoryEditor ( Editor ):
                 history.error     = False
             except:
                 history.error = True
-                
+
             do_later( self.set, _dont_update = False )
-        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
-        
+
     def update_editor ( self ):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -109,16 +109,16 @@ class _HistoryEditor ( Editor ):
             self.history.value = self.value
             self.history.error = False
             self._dont_update  = False
-        
+
     #---------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
     #---------------------------------------------------------------------------
-        
+
     def error ( self, excp ):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
-        
+
     #-- UI preference save/restore interface -----------------------------------
 
     #---------------------------------------------------------------------------
@@ -146,7 +146,7 @@ class _HistoryEditor ( Editor ):
             self._dont_update = True
             self.history.set_value( self.value )
             self._dont_update = False
-            
+
         return { 'history': self.history.history[:] }
-    
+
 # EOF #########################################################################

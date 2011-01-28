@@ -188,7 +188,7 @@ class Panel ( BaseDialog ):
                 # getter is picking the wrong color.  Set to transparent
                 # and hope that the parent has been painted.
                 bg_color = wx.Color(224, 224, 224, 0)
-                self.control = cpanel = TraitsUIPanel( parent, -1, 
+                self.control = cpanel = TraitsUIPanel( parent, -1,
                                                        bg_color=bg_color )
             else:
                 self.control = cpanel = TraitsUIPanel( parent, -1 )
@@ -981,7 +981,7 @@ class FillPanel ( object ):
             if show_left:
                 if item.show_label:
                     label = self.create_label( item, ui, desc, panel,
-                                               item_sizer, 
+                                               item_sizer,
                                                border=group.show_border )
                 elif (cols > 1) and show_labels:
                     label = self.dummy_label( panel, item_sizer )
@@ -1176,10 +1176,10 @@ class FillPanel ( object ):
         label = item.get_label( ui )
         if (label == '') or (label[-1:] in '?=:;,.<>/\\"\'-+#|'):
             suffix = ''
-        
+
         control = ImageText( parent, item.label_theme, label + suffix,
                              border=border )
-        
+
         self._set_owner( control, item )
 
         if item.emphasized:

@@ -21,30 +21,30 @@
 #-------------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------------
-    
+
 from editor \
     import Editor
-    
+
 from enthought.pyface.heading_text \
     import HeadingText
-    
-# FIXME: TitleEditor (the editor factory for title editors) is a proxy class 
-# defined here just for backward compatibility. The class has been moved to 
+
+# FIXME: TitleEditor (the editor factory for title editors) is a proxy class
+# defined here just for backward compatibility. The class has been moved to
 # enthought.traits.ui.editors.title_editor.
 from enthought.traits.ui.editors.title_editor \
     import TitleEditor
-                                      
+
 #-------------------------------------------------------------------------------
 #  '_TitleEditor' class:
 #-------------------------------------------------------------------------------
-                               
+
 class _TitleEditor ( Editor ):
-    
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
     #---------------------------------------------------------------------------
-        
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -52,7 +52,7 @@ class _TitleEditor ( Editor ):
         self._control = HeadingText( parent )
         self.control  = self._control.control
         self.set_tooltip()
-                        
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------

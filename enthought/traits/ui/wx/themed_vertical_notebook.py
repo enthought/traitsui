@@ -92,10 +92,10 @@ class ThemedPage ( HasPrivateTraits ):
 
     # The minimum size for the page:
     min_size = Property
-    
+
     # The open size property for the page:
     open_size = Property
-    
+
     # The closed size property for the page:
     closed_size = Property
 

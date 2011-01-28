@@ -101,7 +101,7 @@ class wxListCtrl ( wx.ListCtrl, TextEditMixin ):
         # if the selected is editable, then we have to init the mixin
         if can_edit:
             TextEditMixin.__init__(self, edit_labels)
-            
+
     def SetVirtualData(self, row, col, text):
         # this method is called but the job is already done by
         # the _end_label_edit method. Commmented code is availabed
@@ -165,7 +165,7 @@ class wxListCtrl ( wx.ListCtrl, TextEditMixin ):
         editor = self._editor
         return editor.adapter.get_text( editor.object, editor.name,
                                         row, column )
-        
+
 #-------------------------------------------------------------------------------
 #  'TabularEditor' class:
 #-------------------------------------------------------------------------------
@@ -229,7 +229,7 @@ class TabularEditor ( Editor ):
 
     # An image being converted:
     image = Image
-    
+
     # Flag for marking whether the update was within the visible area
     _update_visible = Bool(False)
 
@@ -270,7 +270,7 @@ class TabularEditor ( Editor ):
                                              can_edit = factory.editable,
                                              edit_labels = factory.editable_labels)
         control._editor = self
-        
+
         # Create the list control column:
         #fixme: what do we do here?
         #control.InsertColumn( 0, '' )
@@ -431,11 +431,11 @@ class TabularEditor ( Editor ):
             Overloads enthought.traits.ui.editor.UIEditor
         """
         self._update_visible = True
-            
-        super(TabularEditor, self)._update_editor(object, name, 
+
+        super(TabularEditor, self)._update_editor(object, name,
                                                   old_value, new_value)
-        
-        
+
+
     def update_editor ( self ):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -447,11 +447,11 @@ class TabularEditor ( Editor ):
         bottom = min(top + pn - 1, n)
 
         control.SetItemCount( n )
-                
+
         if self._update_visible:
             control.RefreshItems( 0, n-1 )
             self._update_visible = False
-                
+
         if len( self.multi_selected_rows ) > 0:
             self._multi_selected_rows_changed( self.multi_selected_rows )
         if len( self.multi_selected ) > 0:
@@ -459,7 +459,7 @@ class TabularEditor ( Editor ):
 
         edit, self.edit = self.edit, False
         row,  self.row  = self.row,  None
-        
+
         if row is not None:
             if row >= n:
                 row -= 1
@@ -471,7 +471,7 @@ class TabularEditor ( Editor ):
             if visible >= 0 and visible < control.GetItemCount():
                 control.EnsureVisible( visible )
             return
-        
+
 
         if 0 <= (row - top) < pn:
             control.EnsureVisible( top + pn - 2 )
@@ -1129,8 +1129,8 @@ class TabularEditor ( Editor ):
                 column = self._get_column( x, translate = True )
             ) )
 
-        # wx should continue with additional event handlers. Skip(False) 
-        # actually means to skip looking, skip(True) means to keep looking. 
+        # wx should continue with additional event handlers. Skip(False)
+        # actually means to skip looking, skip(True) means to keep looking.
         # This seems backwards to me...
         event.Skip(True)
 

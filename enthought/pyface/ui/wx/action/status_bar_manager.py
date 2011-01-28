@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -35,11 +35,11 @@ class StatusBarManager(HasTraits):
 
     # The toolkit-specific control that represents the status bar.
     status_bar = Any
-    
+
     ###########################################################################
     # 'StatusBarManager' interface.
     ###########################################################################
-    
+
     def create_status_bar(self, parent):
         """ Creates a status bar. """
 
@@ -52,7 +52,7 @@ class StatusBarManager(HasTraits):
                     self.status_bar.SetStatusText(self.messages[i], i)
             else:
                 self.status_bar.SetStatusText(self.message)
-            
+
         return self.status_bar
 
     ###########################################################################
@@ -61,7 +61,7 @@ class StatusBarManager(HasTraits):
 
     def _get_message(self):
         """ Property getter. """
-        
+
         if len(self.messages) > 0:
             message = self.messages[0]
 
@@ -72,7 +72,7 @@ class StatusBarManager(HasTraits):
 
     def _set_message(self, value):
         """ Property setter. """
-        
+
         if len(self.messages) > 0:
             old = self.messages[0]
             self.messages[0] = value
@@ -106,5 +106,5 @@ class StatusBarManager(HasTraits):
                 self.status_bar.SetStatusText(self.messages[i], i)
 
         return
-    
+
 #### EOF ######################################################################

@@ -33,14 +33,14 @@ class SearchEditor(Editor):
         if self.factory.enter_set:
             style = wx.TE_PROCESS_ENTER
         self.control = wx.SearchCtrl(parent, -1, value=self.value, style=style)
-        
+
         self.control.SetDescriptiveText(self.factory.text)
         self.control.ShowSearchButton(self.factory.search_button)
         self.control.ShowCancelButton(self.factory.cancel_button)
-        
+
         if self.factory.auto_set:
             wx.EVT_TEXT(parent, self.control.GetId(), self.update_object)
-            
+
         if self.factory.enter_set:
             wx.EVT_TEXT_ENTER(parent, self.control.GetId(), self.update_object)
 
@@ -61,7 +61,7 @@ class SearchEditor(Editor):
     def clear_text(self, event):
         """ Handles the user pressing the cancel search button.
         """
-        
+
         if not self._no_update:
             self.control.SetValue("")
             self.value = ""

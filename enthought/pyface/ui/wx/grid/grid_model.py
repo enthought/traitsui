@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2005, Enthought, Inc.
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD
 # license included in enthought/LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-# 
+#
 # Author: Enthought, Inc.
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ class GridModel(HasPrivateTraits):
 
     # The cell (row, col) the mouse is currently in.
     mouse_cell = Tuple(Int, Int)
-    
+
     #### Events ####
 
     # A row was inserted or appended to this model
@@ -74,10 +74,10 @@ class GridModel(HasPrivateTraits):
 
     # A row sort took place
     row_sorted = Event
-    
+
     # Event fired when a cell is clicked on:
     click = Event # = (row, column) that was clicked on
-    
+
     # Event fired when a cell is double-clicked on:
     dclick = Event # = (row, column) that was double-clicked on
 
@@ -89,9 +89,9 @@ class GridModel(HasPrivateTraits):
 
         # Base class constructors.
         super(GridModel, self).__init__(**traits)
-        
+
         return
-    
+
     #########################################################################
     # 'GridModel' interface -- Subclasses MUST override the following
     #########################################################################
@@ -145,7 +145,7 @@ class GridModel(HasPrivateTraits):
                 col_data.append(self.get_value(row, col))
 
             cols_data.append(col_data)
-            
+
         return cols_data
 
     def get_column_context_menu(self, col):
@@ -168,7 +168,7 @@ class GridModel(HasPrivateTraits):
     def no_column_sort(self):
         """ Turn off any column sorting of the model data. """
         raise NotImplementedError
-    
+
     def is_column_read_only(self, index):
         """ Return True if the column specified by the zero-based index
         is read-only. """
@@ -192,7 +192,7 @@ class GridModel(HasPrivateTraits):
                 row_data.append(self.get_value(row, col))
 
             rows_data.append(row_data)
-            
+
         return rows_data
 
     def get_row_context_menu(self, row):
@@ -282,7 +282,7 @@ class GridModel(HasPrivateTraits):
 
         self.fire_content_changed()
         return
-    
+
     def is_cell_read_only(self, row, col):
         """ Returns True if the cell at (row, col) is not editable,
         False otherwise. """
@@ -327,14 +327,14 @@ class GridModel(HasPrivateTraits):
         """ Fires the appearance changed event. """
 
         self.content_changed = 'changed'
-        
+
         return
 
     def fire_structure_changed(self):
         """ Fires the appearance changed event. """
 
         self.structure_changed = 'changed'
-        
+
         return
 
     def delete_rows(self, pos, num_rows):
@@ -346,7 +346,7 @@ class GridModel(HasPrivateTraits):
 
         if deleted > 0:
             self.fire_structure_changed()
-        
+
         return True
 
     def insert_rows(self, pos, num_rows):
@@ -358,7 +358,7 @@ class GridModel(HasPrivateTraits):
 
         if inserted > 0:
             self.fire_structure_changed()
-        
+
         return True
 
     def delete_columns(self, pos, num_cols):
@@ -370,7 +370,7 @@ class GridModel(HasPrivateTraits):
 
         if deleted > 0:
             self.fire_structure_changed()
-        
+
         return True
 
     def insert_columns(self, pos, num_cols):
@@ -382,7 +382,7 @@ class GridModel(HasPrivateTraits):
 
         if inserted > 0:
             self.fire_structure_changed()
-        
+
         return True
 
     #########################################################################
@@ -393,31 +393,31 @@ class GridModel(HasPrivateTraits):
     def _delete_rows(self, pos, num_rows):
         """ Implementation method for delete_rows. Should return the
         number of rows that were deleted. """
-        
+
         pass
 
     def _insert_rows(self, pos, num_rows):
         """ Implementation method for insert_rows. Should return the
         number of rows that were inserted. """
-        
+
         pass
 
     def _delete_columns(self, pos, num_cols):
         """ Implementation method for delete_cols. Should return the
         number of columns that were deleted. """
-        
+
         pass
 
     def _insert_columns(self, pos, num_cols):
         """ Implementation method for insert_columns. Should return the
         number of columns that were inserted. """
-        
+
         pass
 
     def _set_value(self, row, col, value):
         """ Implementation method for set_value. Should return the
         number of rows or columns, if any, that were appended. """
-        
+
         pass
 
     def _move_column(self, frm, to):

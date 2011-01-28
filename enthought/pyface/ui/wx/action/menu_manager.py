@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ class MenuManager(ActionManager, ActionManagerItem):
         # fixme: Nasty hack to allow enabling/disabling of menus.
         sub._id = id
         sub._menu = menu
-        
+
         menu.AppendMenu(id, self.name, sub)
 
         return
@@ -96,16 +96,16 @@ class _Menu(wx.Menu):
 
         # The parent of the menu.
         self._parent = parent
-        
+
         # The manager that the menu is a view of.
         self._manager = manager
 
         # The controller.
         self._controller = controller
-        
+
         # List of menu items
         self.menu_items = []
-        
+
         # Create the menu structure.
         self.refresh()
 
@@ -121,15 +121,15 @@ class _Menu(wx.Menu):
 
     def clear(self):
         """ Clears the items from the menu. """
-        
+
         for item in self.GetMenuItems():
             if item.GetSubMenu() is not None:
                 item.GetSubMenu().clear()
             self.Delete(item.GetId())
-            
+
         for item in self.menu_items:
             item.dispose()
-        
+
         self.menu_items = []
 
         return
@@ -176,9 +176,9 @@ class _Menu(wx.Menu):
 
         if hasattr(self, '_id'):
             self._menu.Enable(self._id, new)
-        
+
         return
-    
+
     def _add_group(self, parent, group, previous_non_empty_group=None):
         """ Adds a group to a menu. """
 

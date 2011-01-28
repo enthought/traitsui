@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2005, Enthought, Inc.
 # All rights reserved.
-# 
+#
 # This software is provided without warranty under the terms of the BSD
 # license included in enthought/LICENSE.txt and may be redistributed only
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-# 
+#
 # Author: Enthought, Inc.
 # Description: <Enthought pyface package component>
 #------------------------------------------------------------------------------
@@ -29,14 +29,14 @@ wx_28 = (float( wx.__version__[:3] ) >= 2.8)
 def get_control(control):
     if isinstance(control, wx.Control):
         return control
-        
+
     for control in control.GetChildren():
         result = get_control(control)
         if result is not None:
             return result
-            
+
     return None
-    
+
 def push_control(control, grid):
     control.PushEventHandler(ComboboxFocusHandler(grid))
     for child_control in control.GetChildren():
@@ -44,24 +44,24 @@ def push_control(control, grid):
 
 class TraitGridCellAdapter(PyGridCellEditor):
     """ Wrap a trait editor as a GridCellEditor object. """
-    
+
     def __init__(self, trait_editor_factory, obj, name, description,
-                 handler = None, context = None, style = 'simple', 
+                 handler = None, context = None, style = 'simple',
                  width = -1.0, height = -1.0):
         """ Build a new TraitGridCellAdapter object. """
 
         PyGridCellEditor.__init__(self)
         self._factory     = trait_editor_factory
-        self._style       = style 
+        self._style       = style
         self._width       = width
-        self._height      = height 
+        self._height      = height
         self._editor      = None
         self._obj         = obj
         self._name        = name
         self._description = description
         self._handler     = handler
         self._context     = context
-        
+
     def Create(self, parent, id, evtHandler):
         """ Called to create the control, which must derive from wxControl. """
         # If the editor has already been created, ignore the request:
@@ -79,13 +79,13 @@ class TraitGridCellAdapter(PyGridCellEditor):
             context['table_editor_object'] = context['object']
             context['object'] = self._obj
             ui = UI(handler = handler, context = context)
-            
+
         # Link the editor's undo history in to the main ui undo history if the
         # UI object is available:
         factory = self._factory
         if factory._ui is not None:
             ui.history = factory._ui.history
-            
+
         # make sure the factory knows this is a grid_cell editor
         factory.is_grid_cell = True
         factory_method = getattr(factory, self._style + '_editor')
@@ -94,17 +94,17 @@ class TraitGridCellAdapter(PyGridCellEditor):
                                         self._name,
                                         self._description,
                                         parent)
-                                 
+
         # Tell the editor to actually build the editing widget:
         self._editor.prepare(parent)
-        
+
         # Find the control to use as the editor:
         self._control = control = self._editor.control
-            
+
         # Calculate and save the required editor height:
         grid, row, col = getattr(self, '_grid_info', (None, None, None))
         width, height  = control.GetBestSize()
-        
+
         self_height    = self._height
         if self_height > 1.0:
             height = int( self_height )
@@ -118,16 +118,16 @@ class TraitGridCellAdapter(PyGridCellEditor):
             width = int( self_width * grid.GetSize()[0] )
 
         self._edit_width, self._edit_height = width, height
-        
+
         # Set up the event handler for each window in the cell editor:
         push_control(control, grid)
-        
+
         # Set up the first control found within the cell editor as the cell
         # editor control:
         control = get_control(control)
         if control is not None:
             self.SetControl(control)
-    
+
     def SetSize(self, rect):
         """ Called to position/size the edit control within the cell rectangle.
             If you don't fill the cell (the rect) then be sure to override
@@ -138,11 +138,11 @@ class TraitGridCellAdapter(PyGridCellEditor):
         grid, row, col = getattr(self, '_grid_info', (None, None, None))
         if (grid is not None) and self._editor.scrollable:
             edit_width, cur_width = self._edit_width, grid.GetColSize(col)
-            
+
             restore_width = getattr( grid, '_restore_width', None )
             if restore_width is not None:
                 cur_width = restore_width
-                
+
             if (edit_width > cur_width) or (restore_width is not None):
                 edit_width = max( edit_width, cur_width )
                 grid._restore_width = cur_width
@@ -150,13 +150,13 @@ class TraitGridCellAdapter(PyGridCellEditor):
                 changed = True
             else:
                 edit_width = cur_width
-                
+
             edit_height, cur_height = self._edit_height, grid.GetRowSize(row)
-            
+
             restore_height = getattr( grid, '_restore_height', None )
             if restore_height is not None:
                 cur_height = restore_height
-                
+
             if (edit_height > cur_height) or (restore_height is not None):
                 edit_height = max( edit_height, cur_height )
                 grid._restore_height = cur_height
@@ -164,29 +164,29 @@ class TraitGridCellAdapter(PyGridCellEditor):
                 changed = True
             else:
                 edit_height = cur_height
-                
+
             if changed:
                 grid.ForceRefresh()
-                
+
         self._control.SetDimensions(rect.x + 1, rect.y + 1,
                                     edit_width, edit_height,
                                     SIZE_ALLOW_MINUS_ONE)
-        
+
         if changed:
-            grid.MakeCellVisible(grid.GetGridCursorRow(), 
+            grid.MakeCellVisible(grid.GetGridCursorRow(),
                                  grid.GetGridCursorCol())
-        
+
     def Show(self, show, attr):
-        """ Show or hide the edit control.  You can use the attr (if not None) 
-            to set colours or fonts for the control. 
-        """ 
+        """ Show or hide the edit control.  You can use the attr (if not None)
+            to set colours or fonts for the control.
+        """
         if self.IsCreated():
-            if wx_28: 
-                super(TraitGridCellAdapter, self).Show(show, attr) 
-            else: 
-                self.base_Show(show, attr) 
-  
-        return 
+            if wx_28:
+                super(TraitGridCellAdapter, self).Show(show, attr)
+            else:
+                self.base_Show(show, attr)
+
+        return
 
     def PaintBackground(self, rect, attr):
         """ Draws the part of the cell not occupied by the edit control.  The
@@ -209,10 +209,10 @@ class TraitGridCellAdapter(PyGridCellEditor):
     def EndEdit(self, row, col, grid):
         """ Do anything necessary to complete the editing. """
         self._control.Show(False)
-        
+
         changed        = False
         grid, row, col = self._grid_info
-        
+
         if grid._no_reset_col:
             grid._no_reset_col = False
         else:
@@ -221,7 +221,7 @@ class TraitGridCellAdapter(PyGridCellEditor):
                 del grid._restore_width
                 grid.SetColSize(col, width)
                 changed = True
-            
+
         if grid._no_reset_row:
             grid._no_reset_row = False
         else:
@@ -230,7 +230,7 @@ class TraitGridCellAdapter(PyGridCellEditor):
                 del grid._restore_height
                 grid.SetRowSize(row, height)
                 changed = True
-            
+
         if changed:
             grid.ForceRefresh()
 
@@ -267,8 +267,8 @@ class TraitGridCellAdapter(PyGridCellEditor):
     def dispose(self):
         if self._editor is not None:
             self._editor.dispose()
-            
+
         self.DecRef()
-        
+
 #### EOF ######################################################################
-    
+

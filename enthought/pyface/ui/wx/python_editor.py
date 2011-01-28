@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -44,17 +44,17 @@ class PythonEditor(MPythonEditor, Widget):
     path = Unicode
 
     show_line_numbers = Bool(True)
-    
+
     #### Events ####
 
     changed = Event
 
     key_pressed = Event(KeyPressedEvent)
-    
+
     ###########################################################################
     # 'object' interface.
     ###########################################################################
-    
+
     def __init__(self, parent, **traits):
         """ Creates a new pager. """
 
@@ -69,10 +69,10 @@ class PythonEditor(MPythonEditor, Widget):
     ###########################################################################
     # 'PythonEditor' interface.
     ###########################################################################
-    
+
     def load(self, path=None):
         """ Loads the contents of the editor. """
-        
+
         if path is None:
             path = self.path
 
@@ -84,7 +84,7 @@ class PythonEditor(MPythonEditor, Widget):
 
         else:
             text = ''
-        
+
         self.control.SetText(text)
         self.dirty = False
 
@@ -99,7 +99,7 @@ class PythonEditor(MPythonEditor, Widget):
         f = file(path, 'w')
         f.write(self.control.GetText())
         f.close()
-        
+
         self.dirty = False
 
         return
@@ -161,10 +161,10 @@ class PythonEditor(MPythonEditor, Widget):
 
     def _create_control(self, parent):
         """ Creates the toolkit-specific control for the widget. """
-        
+
         # Base-class constructor.
         self.control = stc = PythonSTC(parent, -1)
-        
+
         # No folding!
         stc.SetProperty("fold", "0")
 
@@ -200,11 +200,11 @@ class PythonEditor(MPythonEditor, Widget):
         self.set_style(wx.stc.STC_STYLE_CONTROLCHAR, "#000000", "#ffffff")
         self.set_style(wx.stc.STC_STYLE_BRACELIGHT, "#000000", "#ffffff")
         self.set_style(wx.stc.STC_STYLE_BRACEBAD, "#000000", "#ffffff")
-         
+
         ##########################################
         # Python styles.
         ##########################################
-        
+
         # White space
         self.set_style(wx.stc.STC_P_DEFAULT, "#000000", "#ffffff")
 
@@ -250,7 +250,7 @@ class PythonEditor(MPythonEditor, Widget):
         ##########################################
         # Events.
         ##########################################
-        
+
         # By default, the will fire EVT_STC_CHANGE evented for all mask values
         # (STC_MODEVENTMASKALL). This generates too many events.
         stc.SetModEventMask(wx.stc.STC_MOD_INSERTTEXT |
@@ -266,9 +266,9 @@ class PythonEditor(MPythonEditor, Widget):
 
         # Load the editor's contents.
         self.load()
-        
+
         return stc
-    
+
     #### wx event handlers ####################################################
 
     def _on_stc_changed(self, event):
@@ -276,10 +276,10 @@ class PythonEditor(MPythonEditor, Widget):
 
         self.dirty = True
         self.changed = True
-        
+
         # Give other event handlers a chance.
         event.Skip()
-        
+
         return
 
     def _on_char(self, event):
@@ -292,10 +292,10 @@ class PythonEditor(MPythonEditor, Widget):
             key_code     = event.m_keyCode,
             event        = event
         )
-        
+
         # Give other event handlers a chance.
         event.Skip()
-        
+
         return
 
 #### EOF ######################################################################

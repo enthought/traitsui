@@ -1,24 +1,24 @@
 #------------------------------------------------------------------------------
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-# 
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-# 
+#
 #  Author: David C. Morrill
 #  Date:   01/24/2002
 #
 #------------------------------------------------------------------------------
 
-""" Dynamically construct wxPython Menus or MenuBars from a supplied string 
+""" Dynamically construct wxPython Menus or MenuBars from a supplied string
     description of the menu.
 
 Menu Description Syntax::
-    
+
     submenu_label {help_string}
         menuitem_label | accelerator {help_string} [~/-name]: code
 
@@ -26,22 +26,22 @@ Menu Description Syntax::
     Label of a sub menu
 *menuitem_label*
     Label of a menu item
-{*help_string*}    
+{*help_string*}
     Help string to display on the status line (optional)
-*accelerator*    
+*accelerator*
     Accelerator key (e.g., Ctrl-C) (The '|' and keyname are optional, but must
     be used together.)
-[~]           
+[~]
     The menu item is checkable, but is not checked initially (optional)
-[/]            
+[/]
     The menu item is checkable, and is checked initially (optional)
 [-]
     The menu item disabled initially (optional)
-[*name*]         
+[*name*]
     Symbolic name used to refer to menu item (optional)
-*code*           
+*code*
     Python code invoked when menu item is selected
-    
+
 A line beginning with a hyphen (-) is interpreted as a menu separator.
 """
 

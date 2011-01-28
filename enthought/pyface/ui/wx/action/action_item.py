@@ -2,19 +2,19 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-#  
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-#  
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
 
-""" The wx specific implementations the action manager internal classes. 
+""" The wx specific implementations the action manager internal classes.
 """
 
 # Standard libary imports.
@@ -84,14 +84,14 @@ class _MenuItem(HasTraits):
         # helpful!).
         if len(label) == 0:
             label = item.action.__class__.__name__
-            
+
         self.control_id = wx.NewId()
         self.control = wx.MenuItem(menu, self.control_id, label, longtip, kind)
 
         # If the action has an image then display it.
         if action.image is not None:
             self.control.SetBitmap(action.image.create_bitmap())
-            
+
         menu.AppendItem(self.control)
         menu.menu_items.append(self)
 
@@ -119,7 +119,7 @@ class _MenuItem(HasTraits):
             controller.add_to_menu(self)
 
         return
-    
+
     def dispose(self):
         action = self.item.action
         action.on_trait_change(self._on_action_enabled_changed, 'enabled',
@@ -255,7 +255,7 @@ class _MenuItem(HasTraits):
             # the event!
             if len(args) == 2:
                 self.controller.perform(action)
-            
+
             else:
                 self.controller.perform(action, action_event)
 
@@ -271,7 +271,7 @@ class _MenuItem(HasTraits):
             # If the only argument is 'self' then don't pass the event!
             if len(args) == 1:
                 action.perform()
-            
+
             else:
                 action.perform(action_event)
 
@@ -334,7 +334,7 @@ class _Tool(HasTraits):
             from enthought.pyface.api import ImageResource
             image = ImageResource('foo')
             bmp  = image.create_bitmap()
-            
+
         kind    = _STYLE_TO_KIND_MAP[action.style]
         tooltip = action.tooltip
         longtip = action.description
@@ -471,7 +471,7 @@ class _Tool(HasTraits):
             # the event!
             if len(args) == 2:
                 self.controller.perform(action)
-            
+
             else:
                 self.controller.perform(action, action_event)
 
@@ -486,7 +486,7 @@ class _Tool(HasTraits):
             # If the only argument is 'self' then don't pass the event!
             if len(args) == 1:
                 action.perform()
-            
+
             else:
                 action.perform(action_event)
 

@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-# 
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-# 
+#
 #  Author: David C. Morrill
 #  Date:   12/18/2004
 #
@@ -55,7 +55,7 @@ class RadioGroup ( HasStrictTraits ):
     """ A group of mutually-exclusive menu or toolbar actions.
     """
     # List of menu or tool bar items
-    items = List  
+    items = List
 
     #---------------------------------------------------------------------------
     #  Handles a menu item in the group being checked:
@@ -140,7 +140,7 @@ class BaseDialog ( object ):
         if not isinstance( icon, ImageResource ):
             icon = ImageResource( 'frame.ico' )
         self.control.SetIcon( icon.create_icon() )
-        
+
     #---------------------------------------------------------------------------
     #  Adds a status bar to the dialog:
     #---------------------------------------------------------------------------
@@ -162,10 +162,10 @@ class BaseDialog ( object ):
                     widths.append( -max( 1, int( 1000 * width ) ) )
                 else:
                     widths.append( int( width ) )
-                    
+
                 set_text = self._set_status_text( control, i )
                 name     = item.name
-                set_text( ui.get_extended_value( name ) )  
+                set_text( ui.get_extended_value( name ) )
                 col    = name.find( '.' )
                 object = 'object'
                 if col >= 0:
@@ -174,17 +174,17 @@ class BaseDialog ( object ):
                 object = context[ object ]
                 object.on_trait_change( set_text, name, dispatch = 'ui' )
                 listeners.append( ( object, set_text, name ) )
-                    
+
             control.SetStatusWidths( widths )
             self.control.SetStatusBar( control )
             ui._statusbar = listeners
-            
+
     def _set_status_text ( self, control, i ):
         def set_status_text ( text ):
             control.SetStatusText( text, i )
-            
+
         return set_status_text
-        
+
     #---------------------------------------------------------------------------
     #  Adds a menu bar to the dialog:
     #---------------------------------------------------------------------------

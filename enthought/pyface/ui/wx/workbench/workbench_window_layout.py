@@ -2,14 +2,14 @@
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
-# 
+#
 #  This software is provided without warranty under the terms of the BSD
 #  license included in enthought/LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Thanks for using Enthought open source!
-# 
+#
 #  Author: Enthought, Inc.
 #
 #------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
     """ The wx implementation of the workbench window layout interface.
 
     See the 'IWorkbenchWindowLayout' interface for the API documentation.
-    
+
     """
 
     #### 'IWorkbenchWindowLayout' interface ###################################
@@ -71,7 +71,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def activate_editor(self, editor):
         """ Activate an editor. """
-        
+
         # This brings the dock control tab to the front.
         self._wx_editor_dock_window.activate_control(editor.id)
 
@@ -81,20 +81,20 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def activate_view(self, view):
         """ Activate a view. """
-        
+
         # This brings the dock control tab to the front.
         self._wx_view_dock_window.activate_control(view.id)
-        
+
         view.set_focus()
-        
+
         return view
 
     def add_editor(self, editor, title):
         """ Add an editor. """
-        
+
         try:
             self._wx_add_editor(editor, title)
-            
+
         except Exception:
             logger.exception('error creating editor control <%s>', editor.id)
 
@@ -102,7 +102,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def add_view(self, view, position=None, relative_to=None, size=(-1, -1)):
         """ Add a view. """
-        
+
         try:
             self._wx_add_view(view, position, relative_to, size)
             view.visible = True
@@ -123,21 +123,21 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def close_editor(self, editor):
         """ Close and editor. """
-        
+
         self._wx_editor_dock_window.close_control(editor.id)
 
         return editor
 
     def close_view(self, view):
         """ Close a view. """
-        
+
         self.hide_view(view)
 
         return view
 
     def close(self):
         """ Close the entire window layout. """
-        
+
         self._wx_editor_dock_window.close()
         self._wx_view_dock_window.close()
 
@@ -145,7 +145,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def create_initial_layout(self, parent):
         """ Create the initial window layout. """
-        
+
         # The view dock window is where all of the views live. It also contains
         # a nested dock window where all of the editors live.
         self._wx_view_dock_window = WorkbenchDockWindow(parent)
@@ -167,7 +167,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             width   = self.window.editor_area_size[0],
             height  = self.window.editor_area_size[1],
         )
-        
+
         view_dock_window_sizer = DockSizer(
             contents=[editor_dock_window_control]
         )
@@ -185,7 +185,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def hide_editor_area(self):
         """ Hide the editor area. """
-        
+
         dock_control = self._wx_view_dock_window.get_control(
             self.editor_area_id, visible_only=False
         )
@@ -195,7 +195,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def hide_view(self, view):
         """ Hide a view. """
-        
+
         dock_control = self._wx_view_dock_window.get_control(
             view.id, visible_only=False
         )
@@ -207,28 +207,28 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def refresh(self):
         """ Refresh the window layout to reflect any changes. """
-        
+
         self._wx_view_dock_window.update_layout()
 
         return
 
     def reset_editors(self):
         """ Activate the first editor in every group. """
-        
+
         self._wx_editor_dock_window.reset_regions()
 
         return
 
     def reset_views(self):
         """ Activate the first view in every group. """
-        
+
         self._wx_view_dock_window.reset_regions()
 
         return
 
     def show_editor_area(self):
         """ Show the editor area. """
-        
+
         dock_control = self._wx_view_dock_window.get_control(
             self.editor_area_id, visible_only=False
         )
@@ -238,14 +238,14 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def show_view(self, view):
         """ Show a view. """
-        
+
         dock_control = self._wx_view_dock_window.get_control(
             view.id, visible_only=False
         )
 
         dock_control.show(True, layout=True)
         view.visible = True
-        
+
         return
 
     #### Methods for saving and restoring the layout ##########################
@@ -318,7 +318,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
         # Create a dock control that contains the editor.
         editor_dock_control = self._wx_create_editor_dock_control(editor)
-            
+
         # If there are no other editors open (i.e., this is the first one!),
         # then create a new region to put the editor in.
         controls = self._wx_editor_dock_window.get_controls()
@@ -353,7 +353,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         # position.
         if position is None:
             position = view.position
-            
+
         # Create a dock control that contains the view.
         dock_control = self._wx_create_view_dock_control(view)
 
@@ -437,7 +437,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def _wx_create_editor_dock_control(self, editor):
         """ Creates a dock control that contains the specified editor. """
-        
+
         self._wx_get_editor_control(editor)
 
         # Wrap a dock control around it.
@@ -451,7 +451,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             # editor trait!
             _editor   = editor
         )
-        
+
         # Hook up the 'on_close' and trait change handlers etc.
         self._wx_initialize_editor_dock_control(editor, editor_dock_control)
 
@@ -459,7 +459,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def _wx_create_view_dock_control(self, view):
         """ Creates a dock control that contains the specified view. """
-        
+
         # Get the view's toolkit-specific control.
         control = self._wx_get_view_control(view)
 
@@ -468,10 +468,10 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         # view by clicking 'X' rather than just hiding the view. The two actions
         # appear to do the same thing however, so I'm not sure if the comment
         # below is an out-of-date comment. This needs more investigation.
-        # For the time being, I am making a view closeable if it has a 
+        # For the time being, I am making a view closeable if it has a
         # 'closeable' trait set to True.
         closeable = view.closeable
-            
+
         # Wrap a dock control around it.
         view_dock_control = DockControl(
             id        = view.id,
@@ -526,7 +526,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
             """ Called when the control gets the focus. """
 
             editor.has_focus = True
-            
+
             # Let the default wx event handling do its thang.
             event.Skip()
 
@@ -559,7 +559,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
             # Make sure that the view knows which window it is in.
             view.window = self.window
-            
+
             # This is the toolkit-specific control that represents the 'guts'
             # of the view.
             self.view_opening = view
@@ -614,14 +614,14 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         if on_set_focus is not None:
             #control.Bind(wx.EVT_SET_FOCUS, on_set_focus)
             wx.EVT_SET_FOCUS(control, on_set_focus)
-            
+
         if on_kill_focus is not None:
             #control.Bind(wx.EVT_KILL_FOCUS, on_kill_focus)
             wx.EVT_KILL_FOCUS(control, on_kill_focus)
-        
+
         for child in control.GetChildren():
             self._wx_add_focus_listeners(child, on_set_focus, on_kill_focus)
-            
+
         return
 
     def _wx_initialize_editor_dock_control(self, editor, editor_dock_control):
@@ -697,9 +697,9 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
         if hasattr(view, 'ui') and view.ui is not None:
             # This makes the control draggable outside of the main window.
             #view_dock_control.export = 'enthought.pyface.workbench.view'
-            
-            # If the ui's 'view' trait has an 'export' field set, pass that on 
-            # to the dock control. This makes the control detachable from the 
+
+            # If the ui's 'view' trait has an 'export' field set, pass that on
+            # to the dock control. This makes the control detachable from the
             # main window (if 'export' is not an empty string).
             if view.ui.view is not None:
                 view_dock_control.export = view.ui.view.export
@@ -753,7 +753,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 
     def _wx_on_editor_area_size_changed(self, new):
         """ Dynamic trait change handler. """
-        
+
         window_width, window_height = self.window.control.GetSize()
 
         # Get the dock control that contains the editor dock window.
@@ -780,7 +780,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
                 self.view_closing = view
                 view.destroy_control()
                 self.view_closed = view
-                
+
             except:
                 logger.exception('error destroying view control <%s>', view)
 
@@ -819,7 +819,7 @@ class WorkbenchWindowLayout(MWorkbenchWindowLayout):
 ##         gc.collect()
 
 ##         print 'Is editor gone?', editor_ref() is None, 'ref', editor_ref()
-        
+
         return True
 
 #### EOF ######################################################################
