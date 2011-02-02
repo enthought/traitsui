@@ -6,21 +6,21 @@ from enthought.qt import QtCore, QtGui
 
 # Local imports.
 from dock_pane import area_map
-from enthought.pyface.tasks.i_task_window_layout import MTaskWindowLayout
+from enthought.pyface.tasks.i_task_window_backend import MTaskWindowBackend
 from enthought.pyface.tasks.task import TaskLayout
 
 # Logging.
 logger = logging.getLogger(__name__)
 
 
-class TaskWindowLayout(MTaskWindowLayout):
-    """ The toolkit-specific implementation of a TaskWindowLayout.
+class TaskWindowBackend(MTaskWindowBackend):
+    """ The toolkit-specific implementation of a TaskWindowBackend.
 
-    See the ITaskWindowLayout interface for API documentation.
+    See the ITaskWindowBackend interface for API documentation.
     """
 
     ###########################################################################
-    # 'ITaskWindowLayout' interface.
+    # 'ITaskWindowBackend' interface.
     ###########################################################################
 
     def create_contents(self, parent):
