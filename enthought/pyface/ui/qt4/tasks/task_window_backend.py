@@ -71,7 +71,9 @@ class TaskWindowBackend(MTaskWindowBackend):
 
     def _layout_area(self, area, state):
         """ Layout the dock panes in the specified area of the given TaskState.
+            Returns the list of dock panes processed for the area.
         """
+        panes = []
         pane_ids = getattr(state.layout, area + '_panes')
         qt_area = area_map[area]
         for group_ids in pane_ids:
@@ -87,9 +89,11 @@ class TaskWindowBackend(MTaskWindowBackend):
                                                       dock_pane.control)
                     else:
                         first_pane = dock_pane
+                    panes.append(dock_pane)
                 else:
                     logger.warn("Pane layout: task %r does not contain pane "
                                 "with id %r." % (state.task, pane_id))
+        return panes
 
     def _layout_state(self, state):
         """ Layout the dock panes in the specified TaskState using its
@@ -115,8 +119,14 @@ class TaskWindowBackend(MTaskWindowBackend):
 
         # Layout the panes according to toolkit-indepedent TaskLayout API.
         if not restored:
+            processed_panes = []
             for area in ('left', 'right', 'top', 'bottom'):
-                self._layout_area(area, state)
+                processed_panes.extend(self._layout_area(area, state))
 
-
-
+            # Add all panes not assigned an area by the TaskLayout (but make
+            # sure to hide them!).
+            for dock_pane in state.dock_panes:
+                if dock_pane not in processed_panes:
+                    self.control.addDockWidget(area_map[dock_pane.dock_area],
+                                               dock_pane.control)
+                    dock_pane.control.hide()

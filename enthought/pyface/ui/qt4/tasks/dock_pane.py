@@ -107,8 +107,8 @@ class DockPane(MDockPane):
     def _set_dock_area(self):
         if self.control is not None and not self._receiving:
             # Only attempt to adjust the area if the task is active.
-            main_window = self.window.control
-            if main_window and self.task == self.window.active_task:
+            main_window = self.task.window.control
+            if main_window and self.task == self.task.window.active_task:
                 # Qt will automatically remove the dock widget from its previous
                 # area, if it had one.
                 main_window.addDockWidget(area_map[self.dock_area], self.control)
