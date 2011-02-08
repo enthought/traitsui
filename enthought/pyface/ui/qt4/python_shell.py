@@ -537,8 +537,8 @@ class QConsoleWidget(QsciScintilla):
                 # Handle case where a line needs to be removed
                 len_prompt = len(self.continuation_prompt())
                 if line != self._prompt_line and index == len_prompt:
-                    self.setSelection(
-                        line-1, self.text(line-1).length()-1, line, index)
+                    self.setSelection(line-1, len(self.text(line-1))-1,
+                                      line, index)
                     self.removeSelectedText()
                     intercepted = True
 
@@ -785,7 +785,7 @@ class QConsoleWidget(QsciScintilla):
         if index == self._prompt_index:
             # Don't let Scintilla get confused by a continuation prompt
             line -= 1
-            index = self.text(line).length() - 1
+            index = len(self.text(line)) - 1
 
         pos = self.positionFromLineIndex(line, index)
         start = self.SendScintilla(QsciBase.SCI_WORDSTARTPOSITION, pos, False)
@@ -842,7 +842,7 @@ class QConsoleWidget(QsciScintilla):
         """ Returns the line and index of the last character.
         """
         line = self.lines() - 1
-        return line, self.text(line).length()
+        return line, len(self.text(line))
 
 #-------------------------------------------------------------------------------
 # 'QPythonShellWidget' class:
@@ -1141,7 +1141,7 @@ example:
         # Process special '?' help syntax
         elif not more and (stripped.startswith('?') or stripped.endswith('?')):
             line = self._prompt_line
-            index = self.text(line).length() - 1 # before newline
+            index = len(self.text(line)) - 1 # before newline
             if stripped.endswith('?'):
                 index -= 1
             if stripped == "?":
@@ -1450,10 +1450,10 @@ class QPyfacePythonShellWidget(QPythonShellWidget):
         """
         # Pyface doesn't seem to be Unicode aware.  Only keep the key code if it
         # corresponds to a single Latin1 character.
-        kstr = event.text().toLatin1()
-        if kstr.length() == 1:
-            kcode = ord(kstr.at(0))
-        else:
+        kstr = event.text()
+        try:
+            kcode = ord(str(kstr))
+        except:
             kcode = 0
 
         mods = event.modifiers()
