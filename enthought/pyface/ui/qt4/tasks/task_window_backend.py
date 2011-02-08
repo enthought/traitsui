@@ -83,8 +83,12 @@ class TaskWindowBackend(MTaskWindowBackend):
         panes = []
         pane_ids = getattr(state.layout, area + '_panes')
         for group_ids in pane_ids:
+            # Transform the degenerate case into the general case.
             if isinstance(group_ids, basestring):
                 group_ids = [ group_ids ]
+
+            # Add the first dock pane in the group normally and tabify the
+            # others.
             first_pane = None
             for pane_id in group_ids:
                 dock_pane = state.get_dock_pane(pane_id)
@@ -99,6 +103,10 @@ class TaskWindowBackend(MTaskWindowBackend):
                 else:
                     logger.warn("Pane layout: task %r does not contain pane "
                                 "with id %r." % (state.task, pane_id))
+                    
+            # Activate the first (left-most) pane in the tab group by default.
+            if first_pane:
+                first_pane.control.raise_()
         return panes
 
     def _layout_state(self, state):
