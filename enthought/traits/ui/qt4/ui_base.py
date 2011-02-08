@@ -309,6 +309,17 @@ class _StickyDialog(QtGui.QDialog):
             return
         QtGui.QDialog.keyPressEvent(self, e)
 
+    def sizeHint(self):
+        """Reimplemented to provide an appropriate size hint for the window.
+        """
+        size = QtGui.QDialog.sizeHint(self)
+        view = self._ui.view
+        if view.width > 0:
+            size.setWidth(view.width)
+        if view.height > 0:
+            size.setHeight(view.height)
+        return size
+
     def done(self, r):
         """Reimplemented to ignore calls to accept() or reject() if
         appropriate."""
