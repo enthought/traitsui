@@ -3,7 +3,7 @@ from contextlib import contextmanager
 
 # Enthought library imports.
 from enthought.pyface.tasks.i_dock_pane import MDockPane
-from enthought.traits.api import Bool, on_trait_change
+from enthought.traits.api import Bool, Property, Tuple, on_trait_change
 
 # System library imports.
 from enthought.qt import QtCore, QtGui
@@ -21,6 +21,14 @@ class DockPane(MDockPane):
 
     See the IDockPane interface for API documentation.
     """
+
+    #### 'ITaskPane' interface ################################################
+
+    has_focus = Property(Bool)
+
+    #### 'IDockPane' interface ################################################
+
+    size = Property(Tuple)
 
     #### Protected traits #####################################################
 
@@ -54,11 +62,6 @@ class DockPane(MDockPane):
         contents = self.create_contents()
         control.setWidget(contents)
 
-        # If an initial size has been specified, apply it.
-        size = QtCore.QSize(*self.size)
-        if size.isValid():
-            self.control.resize(size)
-
     def destroy(self):
         """ Destroy the toolkit-specific control that represents the pane.
         """
@@ -86,11 +89,6 @@ class DockPane(MDockPane):
     # Protected interface.
     ###########################################################################
 
-    def _get_has_focus(self):
-        if self.control is not None:
-            return self.control.widget().hasFocus()
-        return False
-
     @contextmanager
     def _signal_context(self):
         """ Defines a context appropriate for Qt signal callbacks. Necessary to
@@ -100,6 +98,18 @@ class DockPane(MDockPane):
         self._receiving = True
         yield
         self._receiving = original
+
+    #### Trait property getters/setters #######################################
+
+    def _get_has_focus(self):
+        if self.control is not None:
+            return self.control.widget().hasFocus()
+        return False
+
+    def _get_size(self):
+        if self.control is not None:
+            return (self.control.width(), self.control.height())
+        return (-1, -1)
 
     #### Trait change handlers ################################################
 

@@ -69,13 +69,19 @@ class TaskWindowBackend(MTaskWindowBackend):
     # Private interface.
     ###########################################################################
 
+    def _add_dock_pane(self, dock_pane, area=None):
+        """ Adds a DockPane's QDockWidget to the main window.
+        """
+        if area is None:
+            area = dock_pane.dock_area
+        self.control.addDockWidget(area_map[area], dock_pane.control)
+
     def _layout_area(self, area, state):
         """ Layout the dock panes in the specified area of the given TaskState.
             Returns the list of dock panes processed for the area.
         """
         panes = []
         pane_ids = getattr(state.layout, area + '_panes')
-        qt_area = area_map[area]
         for group_ids in pane_ids:
             if isinstance(group_ids, basestring):
                 group_ids = [ group_ids ]
@@ -83,7 +89,7 @@ class TaskWindowBackend(MTaskWindowBackend):
             for pane_id in group_ids:
                 dock_pane = state.get_dock_pane(pane_id)
                 if dock_pane:
-                    self.control.addDockWidget(qt_area, dock_pane.control)
+                    self._add_dock_pane(dock_pane, area)
                     if first_pane:
                         self.control.tabifyDockWidget(first_pane.control,
                                                       dock_pane.control)
@@ -127,6 +133,5 @@ class TaskWindowBackend(MTaskWindowBackend):
             # sure to hide them!).
             for dock_pane in state.dock_panes:
                 if dock_pane not in processed_panes:
-                    self.control.addDockWidget(area_map[dock_pane.dock_area],
-                                               dock_pane.control)
+                    self._add_dock_pane(dock_pane)
                     dock_pane.control.hide()
