@@ -43,9 +43,10 @@ class DockPane(MDockPane):
         """
         self.control = control = QtGui.QDockWidget(parent)
 
-        # Set the widget's object name to the pane's id. This important for
-        # QMainWindow state saving.
-        control.setObjectName(self.id)
+        # Set the widget's object name. This important for QMainWindow state
+        # saving. Use the task ID and the pane ID to avoid collisions when a
+        # pane is present in multiple tasks attached to the same window.
+        control.setObjectName(self.task.id + ':' + self.id)
 
         # Configure the dock widget according to the DockPane settings.
         self._set_dock_features()
@@ -61,6 +62,10 @@ class DockPane(MDockPane):
         # Add the pane contents to the dock widget.
         contents = self.create_contents()
         control.setWidget(contents)
+
+        # Hide the control by default. Otherwise, the widget will visible in its
+        # parent immediately!
+        control.hide()
 
     def destroy(self):
         """ Destroy the toolkit-specific control that represents the pane.

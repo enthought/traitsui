@@ -38,6 +38,9 @@ class TaskWindowBackend(MTaskWindowBackend):
         # Now hide its controls.
         self.control.centralWidget().removeWidget(state.central_pane.control)
         for dock_pane in state.dock_panes:
+            # Warning: The layout behavior is subtly different (and wrong!) if
+            # the order of these two statement is switched.
+            dock_pane.control.hide()
             self.control.removeDockWidget(dock_pane.control)
 
     def show_task(self, state):
@@ -46,6 +49,7 @@ class TaskWindowBackend(MTaskWindowBackend):
         """
         # Show the central pane.
         self.control.centralWidget().addWidget(state.central_pane.control)
+
         # Show the dock panes.
         self._layout_state(state)
 
@@ -99,6 +103,7 @@ class TaskWindowBackend(MTaskWindowBackend):
                                                       dock_pane.control)
                     else:
                         first_pane = dock_pane
+                    dock_pane.control.show()
                     panes.append(dock_pane)
                 else:
                     logger.warn("Pane layout: task %r does not contain pane "
@@ -107,6 +112,7 @@ class TaskWindowBackend(MTaskWindowBackend):
             # Activate the first (left-most) pane in the tab group by default.
             if first_pane:
                 first_pane.control.raise_()
+
         return panes
 
     def _layout_state(self, state):
@@ -120,16 +126,6 @@ class TaskWindowBackend(MTaskWindowBackend):
         restored = False
         if layout.toolkit_state is not None:
             restored = self.control.restoreState(layout.toolkit_state)
-            if restored:
-                # If the dock pane has already been added to the window, its
-                # layout will have been restored by the call to
-                # 'restoreState'. Otherwise, we need to add it now.
-                for dock_pane in state.dock_panes:
-                    area = self.control.dockWidgetArea(dock_pane.control)
-                    if (area == QtCore.Qt.NoDockWidgetArea and
-                        not self.control.restoreDockWidget(dock_pane.control)):
-                        restored = False
-                        break
 
         # Layout the panes according to toolkit-indepedent TaskLayout API.
         if not restored:
@@ -137,9 +133,7 @@ class TaskWindowBackend(MTaskWindowBackend):
             for area in ('left', 'right', 'top', 'bottom'):
                 processed_panes.extend(self._layout_area(area, state))
 
-            # Add all panes not assigned an area by the TaskLayout (but make
-            # sure to hide them!).
+            # Add all panes not assigned an area by the TaskLayout.
             for dock_pane in state.dock_panes:
                 if dock_pane not in processed_panes:
                     self._add_dock_pane(dock_pane)
-                    dock_pane.control.hide()
