@@ -80,13 +80,21 @@ class ApplicationWindow(MApplicationWindow, Window):
 
     def _create_tool_bar(self, parent):
         tool_bar_managers = self._get_tool_bar_managers()
+        visible = self.control.isVisible()
         for tool_bar_manager in tool_bar_managers:
+            # Add the tool bar and make sure it is visible.
             tool_bar = tool_bar_manager.create_tool_bar(parent)
             self.control.addToolBar(tool_bar)
+            tool_bar.show()
 
             # Make sure that the tool bar has a name so its state can be saved.
             if len(tool_bar.objectName()) == 0:
                 tool_bar.setObjectName(tool_bar_manager.name)
+
+        # Work around bug in Qt on OS X where creating a tool bar with a
+        # QMainWindow parent hides the window. See
+        # http://bugreports.qt.nokia.com/browse/QTBUG-5069 for more info.
+        self.control.setVisible(visible)
 
     def _set_window_icon(self):
         if self.icon is None:

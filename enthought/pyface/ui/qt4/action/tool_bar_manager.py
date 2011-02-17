@@ -81,8 +81,8 @@ class ToolBarManager(ActionManager):
 
         # Create the control.
         tool_bar = _ToolBar(self, parent)
-
         tool_bar.setObjectName(self.id)
+        tool_bar.setWindowTitle(self.name)
 
         if self.show_tool_names:
             tool_bar.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
