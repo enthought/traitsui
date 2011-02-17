@@ -545,6 +545,9 @@ class BaseDialog(BasePanel):
             self._last_group.items.append( menu_item )
             menu_item.group = self._last_group
 
+        if action.visible_when != '':
+            self.ui.add_visible( action.visible_when, menu_item )
+
         if action.enabled_when != '':
             self.ui.add_enabled( action.enabled_when, menu_item )
 
