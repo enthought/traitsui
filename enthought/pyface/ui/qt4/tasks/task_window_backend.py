@@ -53,6 +53,12 @@ class TaskWindowBackend(MTaskWindowBackend):
         # Show the dock panes.
         self._layout_state(state)
 
+        # OSX-specific: if there is only a single tool bar, it doesn't matter if
+        # the user can drag it around or not. Therefore, we can combine it with
+        # the title bar, which is idiomatic on the Mac.
+        self.control.setUnifiedTitleAndToolBarOnMac(
+            len(state.tool_bar_managers) <= 1)
+
     #### Methods for saving and restoring the layout ##########################
 
     def get_layout(self):
