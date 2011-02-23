@@ -1,6 +1,6 @@
 # Enthought library imports.
-from enthought.pyface.tasks.i_task_pane import MTaskPane
-from enthought.traits.api import Bool, Property
+from enthought.pyface.tasks.i_task_pane import ITaskPane, MTaskPane
+from enthought.traits.api import Bool, Property, implements
 
 # System library imports.
 from enthought.qt import QtGui
@@ -11,6 +11,8 @@ class TaskPane(MTaskPane):
 
     See the ITaskPane interface for API documentation.
     """
+
+    implements(ITaskPane)
 
     #### 'ITaskPane' interface ################################################
 

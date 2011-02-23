@@ -2,11 +2,15 @@
 from contextlib import contextmanager
 
 # Enthought library imports.
-from enthought.pyface.tasks.i_dock_pane import MDockPane
-from enthought.traits.api import Bool, Property, Tuple, on_trait_change
+from enthought.pyface.tasks.i_dock_pane import IDockPane, MDockPane
+from enthought.traits.api import Bool, Property, Tuple, implements, \
+    on_trait_change
 
 # System library imports.
 from enthought.qt import QtCore, QtGui
+
+# Local imports.
+from task_pane import TaskPane
 
 # Constants.
 area_map = { 'left'   : QtCore.Qt.LeftDockWidgetArea,
@@ -16,15 +20,13 @@ area_map = { 'left'   : QtCore.Qt.LeftDockWidgetArea,
 reverse_area_map = dict((v, k) for k, v in area_map.iteritems())
 
 
-class DockPane(MDockPane):
+class DockPane(TaskPane, MDockPane):
     """ The toolkit-specific implementation of a DockPane.
 
     See the IDockPane interface for API documentation.
     """
 
-    #### 'ITaskPane' interface ################################################
-
-    has_focus = Property(Bool)
+    implements(IDockPane)
 
     #### 'IDockPane' interface ################################################
 
@@ -67,20 +69,6 @@ class DockPane(MDockPane):
         # parent immediately!
         control.hide()
 
-    def destroy(self):
-        """ Destroy the toolkit-specific control that represents the pane.
-        """
-        if self.control is not None:
-            self.control.hide()
-            self.control.deleteLater()
-            self.control = None
-
-    def set_focus(self):
-        """ Gives focus to the control that represents the pane.
-        """
-        if self.control is not None:
-            self.control.widget().setFocus()
-
     ###########################################################################
     # 'IDockPane' interface.
     ###########################################################################
@@ -106,11 +94,6 @@ class DockPane(MDockPane):
 
     #### Trait property getters/setters #######################################
 
-    def _get_has_focus(self):
-        if self.control is not None:
-            return self.control.widget().hasFocus()
-        return False
-
     def _get_size(self):
         if self.control is not None:
             return (self.control.width(), self.control.height())
@@ -126,7 +109,8 @@ class DockPane(MDockPane):
             if main_window and self.task == self.task.window.active_task:
                 # Qt will automatically remove the dock widget from its previous
                 # area, if it had one.
-                main_window.addDockWidget(area_map[self.dock_area], self.control)
+                main_window.addDockWidget(area_map[self.dock_area], 
+                                          self.control)
 
     @on_trait_change('closable', 'floatable', 'movable')
     def _set_dock_features(self):
