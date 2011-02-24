@@ -27,12 +27,13 @@ class EditorAreaPane(TaskPane, MEditorAreaPane):
             pane.
         """
         self.control = control = QtGui.QTabWidget(parent)
+        control.tabBar().setVisible(not self.hide_tab_bar)
         control.setDocumentMode(True)
         control.setMovable(True)
         control.setTabsClosable(True)
 
-        control.currentChanged(self._update_active_editor)
-        control.tabCloseRequested(self._close_requested)
+        control.currentChanged.connect(self._update_active_editor)
+        control.tabCloseRequested.connect(self._close_requested)
 
     ###########################################################################
     # 'IEditorAreaPane' interface.
@@ -47,17 +48,20 @@ class EditorAreaPane(TaskPane, MEditorAreaPane):
     def add_editor(self, editor):
         """ Adds an editor to the pane.
         """
+        editor.editor_area = self
         editor.create(self.control)
         self.control.addTab(editor.control, self._get_label(editor))
         self.editors.append(editor)
+        self._update_tab_bar()
 
     def remove_editor(self, editor):
         """ Removes an editor from the pane.
         """
+        self.editors.remove(editor)
+        self.control.removeTab(self.control.indexOf(editor.control))
         editor.destroy()
-        index = self.control.indexOf(editor.control)
-        self.control.removeTab(index)
-        self.editors.remove(editors)
+        editor.editor_area = None
+        self._update_tab_bar()
 
     ###########################################################################
     # Protected interface.
@@ -99,3 +103,9 @@ class EditorAreaPane(TaskPane, MEditorAreaPane):
         else:
             control = self.control.widget(index)
             self.active_editor = self._get_editor_with_control(control)
+
+    @on_trait_change('hide_tab_bar')
+    def _update_tab_bar(self):
+        if self.control is not None:
+            visible = self.control.count() > 1 if self.hide_tab_bar else False
+            self.control.tabBar().setVisible(visible)
