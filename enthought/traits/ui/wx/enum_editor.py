@@ -190,6 +190,7 @@ class SimpleEditor ( BaseEditor ):
         super( SimpleEditor, self ).init( parent )
 
         factory = self.factory
+
         if factory.evaluate is None:
             self.control = control = wx.Choice( parent, -1, wx.Point( 0, 0 ),
                                                 wx.Size( -1, -1 ), self.names )
@@ -202,6 +203,7 @@ class SimpleEditor ( BaseEditor ):
             wx.EVT_TEXT_ENTER( parent, control.GetId(),
                                self.update_text_object )
             wx.EVT_KILL_FOCUS( control, self.on_kill_focus )
+                        
             if (not factory.is_grid_cell) and factory.auto_set:
                 wx.EVT_TEXT( parent, control.GetId(), self.update_text_object )
 
@@ -227,7 +229,21 @@ class SimpleEditor ( BaseEditor ):
         """
         self._no_enum_update += 1
         try:
-            self.value = self.mapping[ event.GetString() ]
+            new_value = self.mapping[ event.GetString() ]
+            if new_value == self.value and self.factory.is_grid_cell:
+                # If the enum editor is in a grid cell and the value did not
+                # change, we want the enum editor to go away, reverting back to
+                # the normal cell appearance. This is for 2 reasons:
+                #  1. it looks nicer
+                #  2. if the grid id suddenly closed, wx freaks & causes a
+                #     segfault
+                
+                grid = self.control.Parent.Parent
+                grid.EnableEditing(False)
+                grid.EnableEditing(True)
+                
+            self.value = new_value
+            
         except:
             pass
         self._no_enum_update -= 1
