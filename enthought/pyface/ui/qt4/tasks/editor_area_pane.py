@@ -4,7 +4,7 @@ from enthought.pyface.tasks.i_editor_area_pane import IEditorAreaPane, \
 from enthought.traits.api import implements, on_trait_change
 
 # System library imports.
-from enthought.qt import QtGui
+from enthought.qt import QtCore, QtGui
 
 # Local imports.
 from task_pane import TaskPane
@@ -26,14 +26,31 @@ class EditorAreaPane(TaskPane, MEditorAreaPane):
         """ Create and set the toolkit-specific control that represents the
             pane.
         """
+        # Create and configure the tab widget.
         self.control = control = QtGui.QTabWidget(parent)
         control.tabBar().setVisible(not self.hide_tab_bar)
         control.setDocumentMode(True)
         control.setMovable(True)
         control.setTabsClosable(True)
 
+        # Connect to the widget's signals.
         control.currentChanged.connect(self._update_active_editor)
         control.tabCloseRequested.connect(self._close_requested)
+
+        # Add shortcuts for scrolling through tabs.
+        shortcut = QtGui.QShortcut(QtGui.QKeySequence('Alt+n'), self.control)
+        shortcut.activated.connect(self._next_tab)
+        shortcut = QtGui.QShortcut(QtGui.QKeySequence('Alt+p'), self.control)
+        shortcut.activated.connect(self._previous_tab)
+
+        # Add shortcuts for switching to a specific tab.
+        mapper = QtCore.QSignalMapper(self.control)
+        mapper.mapped.connect(self.control.setCurrentIndex)
+        for i in xrange(1, 10):
+            sequence = QtGui.QKeySequence('Alt+%i' % i)
+            shortcut = QtGui.QShortcut(sequence, self.control)
+            shortcut.activated.connect(mapper.map)
+            mapper.setMapping(shortcut, i - 1)
 
     ###########################################################################
     # 'IEditorAreaPane' interface.
@@ -80,12 +97,22 @@ class EditorAreaPane(TaskPane, MEditorAreaPane):
         return label
 
     def _get_editor_with_control(self, control):
-        """ Returns the editor with the specified control.
+        """ Return the editor with the specified control.
         """
         for editor in self.editors:
             if editor.control == control:
                 return editor
         return None
+
+    def _next_tab(self):
+        """ Activate the tab after the currently active tab.
+        """
+        self.control.setCurrentIndex(self.control.currentIndex() + 1)
+
+    def _previous_tab(self):
+        """ Activate the tab before the currently active tab.
+        """
+        self.control.setCurrentIndex(self.control.currentIndex() - 1)
 
     #### Trait change handlers ################################################
 
