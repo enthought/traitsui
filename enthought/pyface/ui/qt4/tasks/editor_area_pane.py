@@ -138,5 +138,5 @@ class EditorAreaPane(TaskPane, MEditorAreaPane):
     @on_trait_change('hide_tab_bar')
     def _update_tab_bar(self):
         if self.control is not None:
-            visible = self.control.count() > 1 if self.hide_tab_bar else False
+            visible = self.control.count() > 1 if self.hide_tab_bar else True
             self.control.tabBar().setVisible(visible)
