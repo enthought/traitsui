@@ -42,8 +42,7 @@ class EditorAreaPane(TaskPane, MEditorAreaPane):
     def activate_editor(self, editor):
         """ Activates the specified editor in the pane.
         """
-        if editor.control is not None:
-            self.control.setCurrentWidget(editor.control)
+        self.control.setCurrentWidget(editor.control)
         
     def add_editor(self, editor):
         """ Adds an editor to the pane.
@@ -53,6 +52,11 @@ class EditorAreaPane(TaskPane, MEditorAreaPane):
         self.control.addTab(editor.control, self._get_label(editor))
         self.editors.append(editor)
         self._update_tab_bar()
+
+        # The 'currentChanged' signal, used below, is not emitted when the first
+        # editor is added.
+        if len(self.editors) == 1:
+            self.active_editor = editor
 
     def remove_editor(self, editor):
         """ Removes an editor from the pane.
