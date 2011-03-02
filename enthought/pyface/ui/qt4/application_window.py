@@ -166,7 +166,7 @@ class ApplicationWindow(MApplicationWindow, Window):
         if self.control is not None:
             self._create_menu_bar(self.control)
 
-    def _status_bar_managed_changed(self):
+    def _status_bar_manager_changed(self):
         if self.control is not None:
             self._create_status_bar(self.control)
 
