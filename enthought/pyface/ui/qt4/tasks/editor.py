@@ -1,6 +1,6 @@
 # Enthought library imports.
 from enthought.pyface.tasks.i_editor import IEditor, MEditor
-from enthought.traits.api import implements
+from enthought.traits.api import Bool, Property, implements
 
 # System library imports.
 from enthought.qt import QtGui
@@ -13,6 +13,10 @@ class Editor(MEditor):
     """
 
     implements(IEditor)
+
+    #### 'IEditor' interface ##################################################
+
+    has_focus = Property(Bool)
 
     ###########################################################################
     # 'IEditor' interface.
@@ -31,3 +35,12 @@ class Editor(MEditor):
             self.control.hide()
             self.control.deleteLater()
             self.control = None
+
+    ###########################################################################
+    # Private interface.
+    ###########################################################################
+
+    def _get_has_focus(self):
+        if self.control is not None:
+            return self.control.hasFocus()
+        return False

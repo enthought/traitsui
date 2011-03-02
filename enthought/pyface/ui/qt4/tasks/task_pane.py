@@ -43,7 +43,7 @@ class TaskPane(MTaskPane):
             self.control.setFocus()
 
     ###########################################################################
-    # Protected interface.
+    # Private interface.
     ###########################################################################
 
     def _get_has_focus(self):
