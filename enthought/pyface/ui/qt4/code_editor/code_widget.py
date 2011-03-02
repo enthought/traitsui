@@ -379,12 +379,12 @@ class CodeWidget(QtGui.QPlainTextEdit):
         # last line, the "down" key causes it to go to the end.
         cursor = self.textCursor()
         if key_sequence.matches(QtGui.QKeySequence(QtCore.Qt.Key_Up)):
-            cursor.movePosition(QtGui.QtGui.QTextCursor.StartOfLine)
+            cursor.movePosition(QtGui.QTextCursor.StartOfLine)
             if cursor.atStart():
                 self.setTextCursor(cursor)
                 event.accept()
         elif key_sequence.matches(QtGui.QKeySequence(QtCore.Qt.Key_Down)):
-            cursor.movePosition(QtGui.QtGui.QTextCursor.EndOfLine)
+            cursor.movePosition(QtGui.QTextCursor.EndOfLine)
             if cursor.atEnd():
                 self.setTextCursor(cursor)
                 event.accept()
