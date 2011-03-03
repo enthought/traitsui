@@ -89,6 +89,12 @@ class Window(MWindow, Widget):
             # Avoid problems with recursive calls.
             control = self.control
             self.control = None
+
+            # Hide the widget before closing it. This is not strictly necessary
+            # (closing the window in fact hides it), but the close may
+            # trigger an application shutdown, which can take a long time.
+            # The window should not be visible during this process.
+            control.hide()
             control.close()
 
     ###########################################################################
