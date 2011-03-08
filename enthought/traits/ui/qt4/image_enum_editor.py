@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui,  qt_api
+from enthought.qt import QtCore, QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -232,6 +232,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
         size = self.style().sizeFromContents(QtGui.QStyle.CT_ComboBox, option,
                                              size, self)
         return size
+    
 
 class ImageEnumTablePopupView(QtGui.QTableView):
 
@@ -247,20 +248,6 @@ class ImageEnumTablePopupView(QtGui.QTableView):
         vheader.hide()
         self.setShowGrid(False)
 
-    def indexAt(self, point):
-        """ Reimplemented because our table may have cells in the last row which
-            have no data in them. By returning an invalid model index in this
-            case, we ensure that they cannot be selected in the popup menu.
-        """
-        index = QtGui.QTableView.indexAt(self, point)
-
-        if qt_api == 'pyqt':
-            if index.data(QtCore.Qt.DisplayRole).isValid():
-                return index
-            else:
-                return QtCore.QModelIndex()
-        else:
-            return index
 
 class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
     """ An item delegate which draws only images.
@@ -302,15 +289,7 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
         return pixmap.size()
 
     def _get_pixmap(self, name):
-        if qt_api == 'pyqt':
-            # name is QtCore.QVariant
-            if name.isValid():
-                return self._editor.get_pixmap(str(name.toString()))
-            return None
-        else:
-            return self._editor.get_pixmap(name)
-
-
+        return self._editor.get_pixmap(name)
 
 
 class ImageEnumModel(QtCore.QAbstractTableModel):
@@ -341,6 +320,6 @@ class ImageEnumModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole:
             index = mi.row() * self._editor.factory.cols + mi.column()
             if index < len(self._editor.names):
-                return QtCore.QVariant(self._editor.names[index])
+                return self._editor.names[index]
 
-        return QtCore.QVariant()
+        return None

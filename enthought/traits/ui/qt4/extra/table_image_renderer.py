@@ -17,7 +17,7 @@
 """
 
 # System library imports
-from enthought.qt import QtCore, QtGui, qt_api
+from enthought.qt import QtCore, QtGui
 
 # ETS imports
 from enthought.traits.api import Bool
@@ -53,11 +53,7 @@ class TableImageRenderer(TableDelegate):
         QtGui.QStyledItemDelegate.paint(self, painter, option, index)
 
         # Now draw the image, if possible
-        if qt_api == 'pyqt':
-            value = index.data(QtCore.Qt.UserRole).toPyObject()
-        else:
-            value = index.data(QtCore.Qt.UserRole)
-
+        value = index.data(QtCore.Qt.UserRole)
         image = self.get_image_for_obj(value, index.row(), index.column())
         if image:
             image = image.create_bitmap()
@@ -80,10 +76,7 @@ class TableImageRenderer(TableDelegate):
         """
         size = QtGui.QStyledItemDelegate.sizeHint(self, option, index)
 
-        if qt_api == 'pyqt':
-            value = index.data(QtCore.Qt.UserRole).toPyObject()
-        else:
-            value = index.data(QtCore.Qt.UserRole)
+        value = index.data(QtCore.Qt.UserRole)
         image = self.get_image_for_obj(value, index.row(), index.column())
         if image:
             image = image.create_bitmap()

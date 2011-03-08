@@ -78,24 +78,24 @@ class TableModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
             text = column.get_value(obj)
             if text is not None:
-                return QtCore.QVariant(text)
+                return text
 
         elif role == QtCore.Qt.ToolTipRole:
             tooltip = column.get_tooltip(obj)
             if tooltip:
-                return QtCore.QVariant(tooltip)
+                return tooltip
 
         elif role == QtCore.Qt.FontRole:
             font = column.get_text_font(obj)
             if font is not None:
-                return QtCore.QVariant(QtGui.QFont(font))
+                return QtGui.QFont(font)
 
         elif role == QtCore.Qt.TextAlignmentRole:
             string = column.get_horizontal_alignment(obj)
             h_alignment = h_alignment_map.get(string, QtCore.Qt.AlignLeft)
             string = column.get_vertical_alignment(obj)
             v_alignment = v_alignment_map.get(string, QtCore.Qt.AlignVCenter)
-            return QtCore.QVariant(h_alignment | v_alignment)
+            return (h_alignment | v_alignment)
 
         elif role == QtCore.Qt.BackgroundRole:
             color = column.get_cell_color(obj)
@@ -104,7 +104,7 @@ class TableModel(QtCore.QAbstractTableModel):
                     q_color = QtGui.QColor(*color)
                 else:
                     q_color = QtGui.QColor(color)
-                return QtCore.QVariant(QtGui.QBrush(q_color))
+                return QtGui.QBrush(q_color)
 
         elif role == QtCore.Qt.ForegroundRole:
             color = column.get_text_color(obj)
@@ -113,12 +113,12 @@ class TableModel(QtCore.QAbstractTableModel):
                     q_color = QtGui.QColor(*color)
                 else:
                     q_color = QtGui.QColor(color)
-                return QtCore.QVariant(QtGui.QBrush(q_color))
+                return QtGui.QBrush(q_color)
 
         elif role == QtCore.Qt.UserRole:
-            return QtCore.QVariant(obj)
+            return obj
 
-        return QtCore.QVariant()
+        return None
 
     def flags(self, mi):
         """Reimplemented to set editable and movable status."""
@@ -149,14 +149,14 @@ class TableModel(QtCore.QAbstractTableModel):
             column = editor.columns[section]
 
             if role == QtCore.Qt.DisplayRole:
-                return QtCore.QVariant(column.get_label())
+                return column.get_label()
 
         elif orientation == QtCore.Qt.Vertical:
 
             if role == QtCore.Qt.DisplayRole:
-                return QtCore.QVariant(str(section + 1))
+                return str(section + 1)
 
-        return QtCore.QVariant()
+        return None
 
     def insertRow(self, row, parent=QtCore.QModelIndex(), obj=None):
         """Reimplemented to allow creation of new rows. Added an optional
