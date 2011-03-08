@@ -515,6 +515,6 @@ class PyfacePythonWidget(PythonWidget):
             shift_down   = ((mods & QtCore.Qt.ShiftModifier) == 
                             QtCore.Qt.ShiftModifier),
             key_code     = kcode,
-            event        = QtGui.QKeyEvent(event))
+            event        = event)
 
         super(PyfacePythonWidget, self).keyPressEvent(event)

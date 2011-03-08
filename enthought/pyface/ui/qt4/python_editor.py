@@ -181,6 +181,6 @@ class PythonEditorEventFilter(QtCore.QObject):
                 shift_down   = ((mods & QtCore.Qt.ShiftModifier) ==
                                 QtCore.Qt.ShiftModifier),
                 key_code     = kcode,
-                event        = QtGui.QKeyEvent(event))
+                event        = event)
 
         return super(PythonEditorEventFilter, self).eventFilter(obj, event)

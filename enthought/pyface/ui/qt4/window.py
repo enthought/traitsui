@@ -207,7 +207,7 @@ class _EventFilter(QtCore.QObject):
                 shift_down   = ((mods & QtCore.Qt.ShiftModifier) ==
                                 QtCore.Qt.ShiftModifier),
                 key_code     = kcode,
-                event        = QtGui.QKeyEvent(e))
+                event        = e)
 
         return False
 
