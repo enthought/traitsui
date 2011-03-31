@@ -93,10 +93,12 @@ class SimpleEditor (Editor):
             # FIXME: A Trait assignment should support fixing an invalid
             # date in the widget.
             if date.IsValid():
+                # Important: set the day before setting the month, otherwise wx may fail
+                # to set the month.
                 date.SetYear(self.value.year)
+                date.SetDay(self.value.day)
                 # wx 2.8.8 has 0-indexed months.
                 date.SetMonth(self.value.month - 1)
-                date.SetDay(self.value.day)
                 self.control.SetValue(date)
                 self.control.Refresh()
         return
