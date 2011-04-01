@@ -171,11 +171,11 @@ class _EventFilter(QtCore.QObject):
 
             return True
 
-        if e.type() == QtCore.QEvent.WindowStateChange:
-            if obj.windowState() & QtCore.Qt.WindowActive:
-                window.activated = window
-            else:
-                window.deactivated = window
+        if e.type() == QtCore.QEvent.WindowActivate:
+            window.activated = window
+
+        elif e.type() == QtCore.QEvent.WindowDeactivate:
+            window.deactivated = window
 
         elif e.type() == QtCore.QEvent.Resize:
             # Get the new size and set the shadow trait without performing
