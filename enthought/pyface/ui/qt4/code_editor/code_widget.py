@@ -545,9 +545,6 @@ class AdvancedCodeWidget(QtGui.QWidget):
 
         self.setLayout(layout)
 
-        # Key bindings
-        self.replace_key = QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_R)
-
     def lines(self):
         """ Return the number of lines.
         """
@@ -714,7 +711,7 @@ class AdvancedCodeWidget(QtGui.QWidget):
 
         if key_sequence.matches(QtGui.QKeySequence.Find):
             self.enable_find()
-        elif key_sequence.matches(self.replace_key):
+        elif key_sequence.matches(QtGui.QKeySequence.Replace):
             self.enable_replace()
         elif key_sequence.matches(QtCore.Qt.Key_Escape):
             if self.active_find_widget:
