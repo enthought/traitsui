@@ -117,11 +117,12 @@ class _ListStrEditor(Editor):
         layout.setMargin(0)
         layout.setSpacing(0)
 
-        header_view = QtGui.QHeaderView(QtCore.Qt.Horizontal, self.control)
-        header_view.setModel(self.model)
-        header_view.setMaximumHeight(header_view.sizeHint().height())
-        header_view.setResizeMode(QtGui.QHeaderView.Stretch)
-        layout.addWidget(header_view)
+        if factory.title or factory.title_name:
+            header_view = QtGui.QHeaderView(QtCore.Qt.Horizontal, self.control)
+            header_view.setModel(self.model)
+            header_view.setMaximumHeight(header_view.sizeHint().height())
+            header_view.setResizeMode(QtGui.QHeaderView.Stretch)
+            layout.addWidget(header_view)
 
         self.list_view = _ListView(self)
         layout.addWidget(self.list_view)
