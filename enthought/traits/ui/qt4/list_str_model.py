@@ -118,8 +118,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         """ Reimplmented to allow for modification of the object trait.
         """
         editor = self._editor
-        editor.adapter.set_text(editor.object, editor.name, mi.row(),
-                                str(value.toString()))
+        editor.adapter.set_text(editor.object, editor.name, mi.row(), value)
         signal = QtCore.SIGNAL('dataChanged(QModelIndex,QModelIndex)')
         self.emit(signal, mi, mi)
         return True

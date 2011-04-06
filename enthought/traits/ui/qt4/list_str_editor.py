@@ -384,7 +384,6 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
         """ Overrident to draw gridlines.
         """
         QtGui.QStyledItemDelegate.paint(self, painter, option, index)
-
         if self._editor.factory.horizontal_lines:
             painter.save()
             painter.setPen(option.palette.color(QtGui.QPalette.Dark))
@@ -404,10 +403,6 @@ class _ListView(QtGui.QListView):
         self.setItemDelegate(_ItemDelegate(editor, self))
         self.setModel(editor.model)
         factory = editor.factory
-
-        # Configure the grid.
-        if factory.horizontal_lines:
-            pass
 
         # Configure the selection behavior
         if factory.multi_select:
@@ -461,7 +456,8 @@ class _ListView(QtGui.QListView):
                 row = editor.selected_index
                 editor.model.removeRow(row)
                 # Handle the case of deleting the last item in the list.
-                editor.selected_index = min(row, editor.adapter.len(editor.object, editor.name)-1)
+                editor.selected_index = min(
+                    row, editor.adapter.len(editor.object, editor.name) - 1)
 
         elif (event.key() == QtCore.Qt.Key_Insert and
               factory.editable and 'insert' in factory.operations):
