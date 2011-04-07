@@ -22,7 +22,7 @@ from enthought.qt import QtCore
 #  Constants:
 #-------------------------------------------------------------------------------
 
-# Mapping from PyQt keypad key names to Enable key names.
+# Mapping from PyQt keypad key names to Pyface key names.
 keypad_map = {
     QtCore.Qt.Key_Enter:     'Enter',
     QtCore.Qt.Key_0:         'Numpad 0',
@@ -43,24 +43,56 @@ keypad_map = {
     QtCore.Qt.Key_Slash:     'Divide'
 }
 
-# Mapping from PyQt non-keypad key names to Enable key names.
+# Mapping from PyQt non-keypad key names to Pyface key names.
 key_map = {
+    QtCore.Qt.Key_0:         '0',
+    QtCore.Qt.Key_1:         '1',
+    QtCore.Qt.Key_2:         '2',
+    QtCore.Qt.Key_3:         '3',
+    QtCore.Qt.Key_4:         '4',
+    QtCore.Qt.Key_5:         '5',
+    QtCore.Qt.Key_6:         '6',
+    QtCore.Qt.Key_7:         '7',
+    QtCore.Qt.Key_8:         '8',
+    QtCore.Qt.Key_9:         '9',
+    QtCore.Qt.Key_A:         'A',
+    QtCore.Qt.Key_B:         'B',
+    QtCore.Qt.Key_C:         'C',
+    QtCore.Qt.Key_D:         'D',
+    QtCore.Qt.Key_E:         'E',
+    QtCore.Qt.Key_F:         'F',
+    QtCore.Qt.Key_G:         'G',
+    QtCore.Qt.Key_H:         'H',
+    QtCore.Qt.Key_I:         'I',
+    QtCore.Qt.Key_J:         'J',
+    QtCore.Qt.Key_K:         'K',
+    QtCore.Qt.Key_L:         'L',
+    QtCore.Qt.Key_M:         'M',
+    QtCore.Qt.Key_N:         'N',
+    QtCore.Qt.Key_O:         'O',
+    QtCore.Qt.Key_P:         'P',
+    QtCore.Qt.Key_Q:         'Q',
+    QtCore.Qt.Key_R:         'R',
+    QtCore.Qt.Key_S:         'S',
+    QtCore.Qt.Key_T:         'T',
+    QtCore.Qt.Key_U:         'U',
+    QtCore.Qt.Key_V:         'V',
+    QtCore.Qt.Key_W:         'W',
+    QtCore.Qt.Key_X:         'X',
+    QtCore.Qt.Key_Y:         'Y',
+    QtCore.Qt.Key_Z:         'Z',
+    QtCore.Qt.Key_Space:     'Space',
     QtCore.Qt.Key_Backspace: 'Backspace',
     QtCore.Qt.Key_Tab:       'Tab',
-    QtCore.Qt.Key_Return:    'Enter',
+    QtCore.Qt.Key_Enter:     'Enter',
+    QtCore.Qt.Key_Return:    'Return',
     QtCore.Qt.Key_Escape:    'Esc',
     QtCore.Qt.Key_Delete:    'Delete',
-    #QtCore.Qt.Key_START:     'Start',
-    #QtCore.Qt.Key_LBUTTON:   'Left Button',
-    #QtCore.Qt.Key_RBUTTON:   'Right Button',
     QtCore.Qt.Key_Cancel:    'Cancel',
-    #QtCore.Qt.Key_MBUTTON:   'Middle Button',
     QtCore.Qt.Key_Clear:     'Clear',
     QtCore.Qt.Key_Shift:     'Shift',
-    QtCore.Qt.Key_Control:   'Control',
     QtCore.Qt.Key_Menu:      'Menu',
     QtCore.Qt.Key_Pause:     'Pause',
-    #QtCore.Qt.Key_CAPITAL:   'Capital',
     QtCore.Qt.Key_PageUp:    'Page Up',
     QtCore.Qt.Key_PageDown:  'Page Down',
     QtCore.Qt.Key_End:       'End',
@@ -72,7 +104,6 @@ key_map = {
     QtCore.Qt.Key_Select:    'Select',
     QtCore.Qt.Key_Print:     'Print',
     QtCore.Qt.Key_Execute:   'Execute',
-    #QtCore.Qt.Key_SNAPSHOT:  'Snapshot',
     QtCore.Qt.Key_Insert:    'Insert',
     QtCore.Qt.Key_Help:      'Help',
     QtCore.Qt.Key_F1:        'F1',
@@ -112,37 +143,28 @@ def key_event_to_name(event):
     """
     key_code = event.key()
     modifiers = event.modifiers()
-
     if modifiers & QtCore.Qt.KeypadModifier:
         key = keypad_map.get(key_code)
     else:
         key = None
-
     if key is None:
         key = key_map.get(key_code)
 
-    if key is None:
-        key = unicode(event.text())
-
-        if len(key) == 1 and 1 <= ord(key[0]) <= 26:
-            key = chr(ord(key[0]) + ord('a') - 1)
-
     name = ''
-    if modifiers & QtCore.Qt.AltModifier:
-        name = 'Alt'
-
     if modifiers & QtCore.Qt.ControlModifier:
-        name += '-Ctrl'
+        name += 'Ctrl'
 
-    if (modifiers & QtCore.Qt.ShiftModifier) and ((name != '') or (len(key) > 1)):
-        name += '-Shift'
+    if modifiers & QtCore.Qt.AltModifier:
+        name += '-Alt' if name else 'Alt'
 
-    if key == ' ':
-        key = 'Space'
+    if modifiers & QtCore.Qt.MetaModifier:
+        name += '-Meta' if name else 'Meta'
 
-    name += ('-' + key)
+    if modifiers & QtCore.Qt.ShiftModifier and ((name != '') or (len(key) > 1)):
+        name += '-Shift' if name else 'Shift'
 
-    if name[:1] == '-':
-        return name[1:]
-
+    if key:
+        if name:
+            name += '-'
+        name += key
     return name
