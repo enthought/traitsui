@@ -74,9 +74,6 @@ class _ListStrEditor(Editor):
     # Is the list editor scrollable? This value overrides the default.
     scrollable = True
 
-    # Index of item to select after rebuilding editor list:
-    index = Any
-
     # Should the selected item be edited after rebuilding the editor list:
     edit = Bool(False)
 
@@ -281,8 +278,9 @@ class _ListStrEditor(Editor):
             if selected_index == -1:
                 smodel.clearSelection()
             else:
-                smodel.select(self.model.index(selected_index, 0),
-                              QtGui.QItemSelectionModel.ClearAndSelect)
+                mi = self.model.index(selected_index)
+                smodel.select(mi, QtGui.QItemSelectionModel.ClearAndSelect)
+                self.list_view.scrollTo(mi)
 
     def _multi_selected_changed(self, selected):
         """ Handles the editor's 'multi_selected' trait being changed.
@@ -315,8 +313,10 @@ class _ListStrEditor(Editor):
             smodel = self.list_view.selectionModel()
             smodel.clearSelection()
             for selected_index in selected_indices:
-                smodel.select(self.model.index(selected_index, 0),
+                smodel.select(self.model.index(selected_index),
                               QtGui.QItemSelectionModel.Select)
+            if selected_indices:
+                self.list_view.scrollTo(self.model.index(selected_indices[-1]))
 
     def _multi_selected_indices_items_changed(self, event):
         """ Handles the editor's 'multi_selected_indices' trait being modified.
@@ -324,10 +324,10 @@ class _ListStrEditor(Editor):
         if not self._no_update:
             smodel = self.list_view.selectionModel()
             for selected_index in event.removed:
-                smodel.select(self.model.index(selected_index, 0),
+                smodel.select(self.model.index(selected_index),
                               QtGui.QItemSelectionModel.Deselect)
             for selected_index in event.added:
-                smodel.select(self.model.index(selected_index, 0),
+                smodel.select(self.model.index(selected_index),
                               QtGui.QItemSelectionModel.Select)
 
     #-- List Control Event Handlers --------------------------------------------
@@ -361,7 +361,8 @@ class _ListStrEditor(Editor):
         try:
             indices = self.list_view.selectionModel().selectedRows()
             self.multi_selected_indices = indices = [ i.row() for i in indices ]
-            self.multi_selected = [ self.adapter.get_item(self.object, self.name, i)
+            self.multi_selected = [ self.adapter.get_item(self.object,
+                                                          self.name, i)
                                     for i in self.multi_selected_indices ]
         finally:
             self._no_update = False
@@ -437,7 +438,7 @@ class _ListView(QtGui.QListView):
 
             if row != -1:
                 event.accept()
-                self.edit(editor.model.index(row, 0))
+                self.edit(editor.model.index(row))
 
         elif (event.key() in (QtCore.Qt.Key_Backspace, QtCore.Qt.Key_Delete) and
               factory.editable and 'delete' in factory.operations):
@@ -472,7 +473,7 @@ class _ListView(QtGui.QListView):
             if row == -1:
                 row = editor.adapter.len(editor.object, editor.name)
             editor.model.insertRow(row)
-            self.setCurrentIndex(editor.model.index(row, 0))
+            self.setCurrentIndex(editor.model.index(row))
 
         else:
             QtGui.QListView.keyPressEvent(self, event)
