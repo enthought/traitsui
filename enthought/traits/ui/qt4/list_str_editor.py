@@ -136,6 +136,9 @@ class _ListStrEditor(Editor):
         signal = QtCore.SIGNAL('activated(QModelIndex)')
         QtCore.QObject.connect(self.list_view, signal, self._on_activate)
 
+        signal = QtCore.SIGNAL('customContextMenuRequested(QPoint)')
+        QtCore.QObject.connect(self.list_view, signal, self._on_context_menu)
+
         # Initialize the editor title:
         self.title = factory.title
         self.sync_value(factory.title_name, 'title', 'from')
@@ -338,6 +341,14 @@ class _ListStrEditor(Editor):
         self.activated_index = index = mi.row()
         self.activated = self.adapter.get_item(self.object, self.name, index)
 
+    def _on_context_menu(self, point):
+        """ Handle a context menu request.
+        """
+        mi = self.list_view.indexAt(point)
+        self.right_clicked_index = index = mi.row()
+        self.right_clicked = self.adapter.get_item(self.object, self.name,
+                                                   index)
+
     def _on_row_selection(self, added, removed):
         """ Handle the row selection being changed.
         """
@@ -418,6 +429,9 @@ class _ListView(QtGui.QListView):
         self.setDragDropOverwriteMode(True)
         self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
         self.setDropIndicatorShown(True)
+
+        # Configure context menu behavior
+        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
     def keyPressEvent(self, event):
         """ Reimplemented to support edit, insert, and delete by keyboard.
