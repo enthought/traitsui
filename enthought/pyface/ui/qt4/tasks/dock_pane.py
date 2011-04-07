@@ -62,7 +62,7 @@ class DockPane(TaskPane, MDockPane):
         control.visibilityChanged.connect(self._receive_visible)
 
         # Add the pane contents to the dock widget.
-        contents = self.create_contents()
+        contents = self.create_contents(control)
         control.setWidget(contents)
 
         # Hide the control by default. Otherwise, the widget will visible in its
@@ -73,10 +73,10 @@ class DockPane(TaskPane, MDockPane):
     # 'IDockPane' interface.
     ###########################################################################
 
-    def create_contents(self):
+    def create_contents(self, parent):
         """ Create and return the toolkit-specific contents of the dock pane.
         """
-        return QtGui.QWidget()
+        return QtGui.QWidget(parent)
 
     ###########################################################################
     # Protected interface.
