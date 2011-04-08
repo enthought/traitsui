@@ -123,10 +123,14 @@ class _Menu(QtGui.QMenu):
             previous_non_empty_group = self._add_group(parent, group,
                     previous_non_empty_group)
 
-    def show(self, x, y):
+    def show(self, x=None, y=None):
         """ Show the menu at the specified location. """
 
-        self.popup(QtCore.QPoint(x, y))
+        if x is None or y is None:
+            point = QtGui.QCursor.pos()
+        else:
+            point = QtCore.QPoint(x, y)
+        self.popup(point)
 
     ###########################################################################
     # Private interface.
