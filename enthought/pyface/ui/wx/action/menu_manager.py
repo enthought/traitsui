@@ -155,10 +155,13 @@ class _Menu(wx.Menu):
 
         return
 
-    def show(self, x, y):
+    def show(self, x=None, y=None):
         """ Show the menu at the specified location. """
 
-        self._parent.PopupMenuXY(self, x, y)
+        if x is None or y is None:
+            self._parent.PopupMenu(self)
+        else:
+            self._parent.PopupMenuXY(self, x, y)
 
         return
 
