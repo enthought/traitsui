@@ -71,6 +71,16 @@ class Editor ( UIEditor ):
             control._editor = self
 
     #---------------------------------------------------------------------------
+    #  Assigns focus to the editor's underlying toolkit widget:
+    #---------------------------------------------------------------------------
+    
+    def set_focus ( self ):
+        """ Assigns focus to the editor's underlying toolkit widget.
+        """
+        if self.control is not None:
+            self.control.SetFocus()
+
+    #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------
 
