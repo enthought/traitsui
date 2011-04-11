@@ -27,8 +27,7 @@ class SearchWidget(QtGui.QLineEdit):
     def __init__(self, desc):
         """ Store the descriptive text for the widget.
         """
-        QtGui.QLineEdit.__init__(self)
-
+        super(SearchWidget, self).__init__()
         self._desc = unicode(desc)
         self._set_descriptive_text()
 
@@ -66,7 +65,6 @@ class SearchWidget(QtGui.QLineEdit):
                          palette.color(QtGui.QPalette.Dark))
         self.setPalette(palette)
         self.setText(self._desc)
-        self.setModified(True)
         self.update()
 
 
@@ -76,7 +74,11 @@ class SearchEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        control = self.control = SearchWidget(self.factory.text)
+        if QtCore.QT_VERSION < 0x40700:
+            control = self.control = SearchWidget(self.factory.text)
+        else:
+            control = self.control = QtGui.QLineEdit()
+            control.setPlaceholderText(self.factory.text)
 
         if self.factory.auto_set:
             control.textEdited.connect(self.update_object)
