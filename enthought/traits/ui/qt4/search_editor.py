@@ -1,6 +1,5 @@
 #-------------------------------------------------------------------------------
-#
-#  Copyright (c) 2009, Enthought, Inc.
+#  Copyright (c) 20011, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -11,8 +10,6 @@
 #  Thanks for using Enthought open source!
 #
 #  Author: Evan Patterson
-#  Date:   06/25/09
-#
 #-------------------------------------------------------------------------------
 
 # System library imports
@@ -33,48 +30,37 @@ class SearchWidget(QtGui.QLineEdit):
         QtGui.QLineEdit.__init__(self)
 
         self._desc = unicode(desc)
-
-    def paintEvent(self, event):
-        """ Overloads the QLineEdit paintEvent handler. Sets the default text if
-            the user has not modified it yet, then calls the parent paintEvent
-        """
-        if not self.isModified():
-            self._set_default_text()
-        super(SearchWidget, self).paintEvent(event)
+        self._set_descriptive_text()
 
     def focusInEvent(self, event):
         """ Handles accepting focus.
 
-            If the text box contains the default description string,
-            change the text color back to the correct color and reset the
-            text string so the user doesn't have to select & delete it before
-            typing in the box
+        If the text box contains the default description string, reset the text
+        color and clear the box.
         """
         palette = QtGui.QApplication.instance().palette()
         self.setPalette(palette)
-
+        
         if self.text() == self._desc:
-            # Set the text to an empty string, but make sure to set the modified
-            # property because Qt will reset it when the text is an empty string
             self.setText('')
-            self.setModified(True)
             self.update()
 
         super(SearchWidget, self).focusInEvent(event)
 
-
     def focusOutEvent(self, event):
-        """ Handles accepting focus.
+        """ Handles losing focus.
 
-            When focus is lost, if the user had typed something, keep that text,
-            otherwise replace it with the default description string.
+        When focus is lost, if the user had typed something, keep that text,
+        otherwise replace it with the default description string.
         """
         if len(self.text()) == 0:
-            self._set_default_text()
+            self._set_descriptive_text()
 
         super(SearchWidget, self).focusOutEvent(event)
 
-    def _set_default_text(self):
+    def _set_descriptive_text(self):
+        """ Sets the greyed-out descriptive text.
+        """
         palette = QtGui.QApplication.instance().palette()
         palette.setColor(QtGui.QPalette.Text,
                          palette.color(QtGui.QPalette.Dark))
@@ -90,15 +76,12 @@ class SearchEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-
         control = self.control = SearchWidget(self.factory.text)
 
         if self.factory.auto_set:
-            QtCore.QObject.connect(control, QtCore.SIGNAL('textEdited(QString)'),
-                                   self.update_object)
+            control.textEdited.connect(self.update_object)
         if self.factory.enter_set:
-            QtCore.QObject.connect(control, QtCore.SIGNAL('editingFinished()'),
-                                   self.update_object)
+            control.editingFinished.connect(self.update_object)
 
     def update_object(self, event=None):
         """ Handles the user entering input data in the edit control.
