@@ -91,6 +91,9 @@ class _Menu(QtGui.QMenu):
         # The controller.
         self._controller = controller
 
+        # List of menu items
+        self.menu_items = []
+
         # Create the menu structure.
         self.refresh()
 
@@ -103,6 +106,16 @@ class _Menu(QtGui.QMenu):
     ###########################################################################
     # '_Menu' interface.
     ###########################################################################
+
+    def clear(self):
+        """ Clears the items from the menu. """
+
+        for item in self.menu_items:
+            item.dispose()
+            
+        self.menu_items = []
+
+        super(_Menu, self).clear()
 
     def is_empty(self):
         """ Is the menu empty? """

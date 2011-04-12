@@ -65,6 +65,7 @@ class _MenuItem(HasTraits):
         else:
             self.control = menu.addAction(action.image.create_icon(),
                     action.name, self._qt4_on_triggered, action.accelerator)
+        menu.menu_items.append(self)
 
         self.control.setToolTip(action.tooltip)
         self.control.setWhatsThis(action.description)
@@ -102,6 +103,17 @@ class _MenuItem(HasTraits):
         if controller is not None:
             self.controller = controller
             controller.add_to_menu(self)
+
+    def dispose(self):
+        action = self.item.action
+        action.on_trait_change(self._on_action_enabled_changed, 'enabled',
+            remove=True)
+        action.on_trait_change(self._on_action_visible_changed, 'visible',
+            remove=True)
+        action.on_trait_change(self._on_action_checked_changed, 'checked',
+            remove=True)
+        action.on_trait_change(self._on_action_name_changed, 'name',
+            remove=True)
 
     ###########################################################################
     # Private interface.
