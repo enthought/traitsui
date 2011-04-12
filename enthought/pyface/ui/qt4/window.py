@@ -68,6 +68,10 @@ class Window(MWindow, Widget):
     # 'IWindow' interface.
     ###########################################################################
 
+    def activate(self):
+        self.control.activateWindow()
+        self.control.raise_()
+
     def show(self, visible):
         self.control.setVisible(visible)
 
