@@ -135,8 +135,9 @@ class ApplicationWindow(MApplicationWindow, Window):
         if self.size != (-1, -1):
             control.resize(*self.size)
 
-        control.setWindowTitle(self.title)
+        control.setAnimated(False)
         control.setDockNestingEnabled(True)
+        control.setWindowTitle(self.title)
 
         return control
 
