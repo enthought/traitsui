@@ -29,7 +29,7 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
         """ Create and set the toolkit-specific control that represents the
             pane.
         """
-        self.control = control = EditorAreaWidget(parent)
+        self.control = control = EditorAreaWidget(self, parent)
 
         # Add shortcuts for scrolling through tabs.
         shortcut = QtGui.QShortcut(QtGui.QKeySequence('Alt+n'), self.control)
@@ -53,14 +53,17 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
     def activate_editor(self, editor):
         """ Activates the specified editor in the pane.
         """
-        editor.control.parent().raise_()
+        editor_widget = editor.control.parent()
+        editor_widget.setVisible(True)
+        editor_widget.raise_()
+        editor.control.setFocus()
         
     def add_editor(self, editor):
         """ Adds an editor to the pane.
         """
         editor.editor_area = self
         editor_widget = EditorWidget(editor, self.control)
-        self.control.add_dock_widget(editor_widget)
+        self.control.add_editor_widget(editor_widget)
         self.editors.append(editor)
 
     def remove_editor(self, editor):
@@ -68,8 +71,7 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
         """
         editor_widget = editor.control.parent()
         self.editors.remove(editor)
-        self.control.remove_dock_widget(editor_widget)
-        editor.destroy()
+        self.control.remove_editor_widget(editor_widget)
         editor.editor_area = None
 
     ###########################################################################
@@ -79,16 +81,19 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
     def _activate_tab(self, index):
         """ Activates the tab with the specified index, if there is one.
         """
+        # FIXME: Not implemented.
         pass
 
     def _next_tab(self):
         """ Activate the tab after the currently active tab.
         """
+        # FIXME: Not implemented.
         pass
 
     def _previous_tab(self):
         """ Activate the tab before the currently active tab.
         """
+        # FIXME: Not implemented.
         pass
 
     def _get_label(self, editor):
@@ -117,6 +122,7 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
     @on_trait_change('hide_tab_bar')
     def _update_tab_bar(self):
         if self.control is not None:
+            # FIXME: Not implemented.
             pass
 
 ###############################################################################
@@ -152,21 +158,38 @@ class EditorAreaWidget(QtGui.QMainWindow):
         self.setTabPosition(QtCore.Qt.AllDockWidgetAreas,
                             QtGui.QTabWidget.North)
 
-    def add_dock_widget(self, dock_widget):
+    def add_editor_widget(self, editor_widget):
         """ Adds a dock widget to the editor area.
         """
-        dock_widget.installEventFilter(self)
-        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock_widget)
+        editor_widget.installEventFilter(self)
+        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, editor_widget)
 
-    def get_dock_widgets(self, tab_bar):
+        # Try to place the editor in a sensible spot.
+        top_left = None
+        for widget in self.get_dock_widgets():
+            if top_left is None or (widget.pos().manhattanLength() <
+                                    top_left.pos().manhattanLength()):
+                top_left = widget
+        if top_left:
+            self.tabifyDockWidget(top_left, editor_widget)
+
+        # Qt will not give the dock widget focus by default.
+        self.editor_area.activate_editor(editor_widget.editor)
+
+    def get_dock_widgets(self):
+        """ Gets all visible dock widgets.
+        """
+        return [ child for child in self.children()
+                 if isinstance(child, QtGui.QDockWidget) and child.isVisible() ]
+    
+    def get_dock_widgets_for_bar(self, tab_bar):
         """ Get the dock widgets, in order, attached to given tab bar.
 
         Because QMainWindow locks this info down, we have resorted to a hack.
         """
         pos = tab_bar.pos()
         key = lambda w: QtGui.QVector2D(pos - w.pos()).lengthSquared()
-        all_widgets = [ w for w in self.children()
-                        if isinstance(w, QtGui.QDockWidget) and w.isVisible() ]
+        all_widgets = self.get_dock_widgets()
         if all_widgets:
             current = min(all_widgets, key=key)
             widgets = self.tabifiedDockWidgets(current)
@@ -174,12 +197,13 @@ class EditorAreaWidget(QtGui.QMainWindow):
             return widgets
         return []
 
-    def remove_dock_widget(self, dock_widget):
+    def remove_editor_widget(self, editor_widget):
         """ Removes a dock widget from the editor area.
         """
-        dock_widget.hide()
-        dock_widget.removeEventFilter(self)
-        self.removeDockWidget(dock_widget)
+        editor_widget.hide()
+        editor_widget.removeEventFilter(self)
+        editor_widget.editor.destroy()
+        self.removeDockWidget(editor_widget)
 
     def reset_drag(self):
         """ Clear out all drag state.
@@ -251,7 +275,7 @@ class EditorAreaWidget(QtGui.QMainWindow):
             if widget.geometry() == self._rubber_band.geometry():
                 self.set_hover_widget(widget)
 
-        if self._drag_widget == widget and event.type() == QtCore.QEvent.Move:
+        elif self._drag_widget == widget and event.type() == QtCore.QEvent.Move:
             if len(self._tear_widgets) == 1 and not self._tear_handled:
                 widget = self._tear_widgets[0]
                 widget.set_title_bar(True)
@@ -268,7 +292,7 @@ class EditorAreaWidget(QtGui.QMainWindow):
             else:
                 if not self._drag_widget:
                     index = tab_bar.currentIndex()
-                    self._tear_widgets = self.get_dock_widgets(tab_bar)
+                    self._tear_widgets = self.get_dock_widgets_for_bar(tab_bar)
                     self._drag_widget = widget = self._tear_widgets.pop(index)
 
                     pos = QtCore.QPoint(0, 0)
@@ -303,7 +327,7 @@ class EditorAreaWidget(QtGui.QMainWindow):
     def _tab_close_requested(self, index):
         """ Handle a tab close request.
         """
-        editor_widget = self.get_dock_widgets(self.sender())[index]
+        editor_widget = self.get_dock_widgets_for_bar(self.sender())[index]
         editor_widget.editor.close()
 
     
