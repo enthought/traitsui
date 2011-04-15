@@ -57,6 +57,7 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
         editor_widget.setVisible(True)
         editor_widget.raise_()
         editor.control.setFocus()
+        self.active_editor = editor
         
     def add_editor(self, editor):
         """ Adds an editor to the pane.
@@ -73,6 +74,8 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
         self.editors.remove(editor)
         self.control.remove_editor_widget(editor_widget)
         editor.editor_area = None
+        # FIXME: Handle case where single pane was closed. We need to adjust the
+        # focus and active editor.
 
     ###########################################################################
     # Protected interface.
@@ -106,24 +109,17 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
 
     #### Trait change handlers ################################################
 
-    @on_trait_change('editors:[dirty, name]')
-    def _update_label(self, editor, name, new):
-        editor.control.parent().update_title()
+    def _active_editor_changed(self, value):
+        print value.name if value else value
 
-    #### Signal handlers ######################################################
-
-    def _update_active_editor(self, index):
-        if index == -1:
-            self.active_editor = None
-        else:
-            control = self.control.widget(index)
-            self.active_editor = self._get_editor_with_control(control)
-
-    @on_trait_change('hide_tab_bar')
-    def _update_tab_bar(self):
+    def _hide_tab_bar_changed(self):
         if self.control is not None:
             # FIXME: Not implemented.
             pass
+
+    @on_trait_change('editors:[dirty, name]')
+    def _update_label(self, editor, name, new):
+        editor.control.parent().update_title()
 
 ###############################################################################
 # Auxillary classes.
@@ -150,9 +146,12 @@ class EditorAreaWidget(QtGui.QMainWindow):
                 self._rubber_band = child
                 break
 
+        # Monitor focus changes so we can set the active editor.
+        QtGui.QApplication.instance().focusChanged.connect(self._focus_changed)
+
+        # Configure the QMainWindow.
         # FIXME: Currently animation is not supported.
         self.setAnimated(False)
-        
         self.setDockNestingEnabled(True)
         self.setDocumentMode(True)
         self.setTabPosition(QtCore.Qt.AllDockWidgetAreas,
@@ -244,15 +243,16 @@ class EditorAreaWidget(QtGui.QMainWindow):
         if event.polished():
             child = event.child()
             if isinstance(child, QtGui.QTabBar):
+                # Use UniqueConnections since Qt recycles the tab bars.
                 child.installEventFilter(self)
-
-                # FIXME: We would like to have the tabs movable, but this
-                # confuses the QMainWindowLayout. For now, we disable this.
-                #child.setMovable(True)
-                
+                child.currentChanged.connect(self._tab_index_changed,
+                                             QtCore.Qt.UniqueConnection)
                 child.setTabsClosable(True)
                 child.tabCloseRequested.connect(self._tab_close_requested,
                                                 QtCore.Qt.UniqueConnection)
+                # FIXME: We would like to have the tabs movable, but this
+                # confuses the QMainWindowLayout. For now, we disable this.
+                #child.setMovable(True)
 
     def eventFilter(self, obj, event):
         """ Reimplemented to dispatch to sub-handlers.
@@ -323,6 +323,22 @@ class EditorAreaWidget(QtGui.QMainWindow):
     ###########################################################################
     # Signal handlers.
     ###########################################################################
+
+    def _focus_changed(self, old, new):
+        """ Handle an application-level focus change.
+        """
+        if new is not None:
+            for editor in self.editor_area.editors:
+                control = editor.control
+                if control is not None and control.isAncestorOf(new):
+                    self.editor_area.active_editor = focused = editor
+                    break
+
+    def _tab_index_changed(self, index):
+        """ Handle a tab selection.
+        """
+        editor_widget = self.get_dock_widgets_for_bar(self.sender())[index]
+        editor_widget.editor.control.setFocus()
 
     def _tab_close_requested(self, index):
         """ Handle a tab close request.
