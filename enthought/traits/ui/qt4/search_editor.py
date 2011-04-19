@@ -74,7 +74,7 @@ class SearchEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        if QtCore.QT_VERSION < 0x40700:
+        if QtCore.__version_info__ < (4, 7, 0):
             control = self.control = SearchWidget(self.factory.text)
         else:
             control = self.control = QtGui.QLineEdit()

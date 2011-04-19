@@ -44,7 +44,6 @@ _DIALOG_TEXT = '''
       %s<br>
       <br>
       Python %s<br>
-      PyQt %s<br>
       Qt %s<br>
       </p>
       <p>
@@ -94,11 +93,10 @@ class AboutDialog(MAboutDialog, Dialog):
 
         # Get the version numbers.
         py_version = sys.version[0:sys.version.find("(")]
-        pyqt_version = QtCore.PYQT_VERSION_STR
-        qt_version = QtCore.QT_VERSION_STR
+        qt_version = QtCore.__version__
 
         # Set the page contents.
-        label.setText(_DIALOG_TEXT % (path, additions, py_version, pyqt_version, qt_version))
+        label.setText(_DIALOG_TEXT % (path, additions, py_version, qt_version))
 
         # Create the button.
         buttons = QtGui.QDialogButtonBox()
