@@ -1,3 +1,6 @@
+# Standard library imports.
+import sys
+
 # Enthought library imports.
 from enthought.pyface.tasks.i_editor_area_pane import IEditorAreaPane, \
     MEditorAreaPane
@@ -32,16 +35,17 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
         self.control = control = EditorAreaWidget(self, parent)
 
         # Add shortcuts for scrolling through tabs.
-        shortcut = QtGui.QShortcut(QtGui.QKeySequence('Alt+n'), self.control)
+        mod = 'Meta+' if sys.platform == 'darwin' else 'Alt+'
+        shortcut = QtGui.QShortcut(QtGui.QKeySequence(mod+'n'), self.control)
         shortcut.activated.connect(self._next_tab)
-        shortcut = QtGui.QShortcut(QtGui.QKeySequence('Alt+p'), self.control)
+        shortcut = QtGui.QShortcut(QtGui.QKeySequence(mod+'p'), self.control)
         shortcut.activated.connect(self._previous_tab)
 
         # Add shortcuts for switching to a specific tab.
         mapper = QtCore.QSignalMapper(self.control)
         mapper.mapped.connect(self._activate_tab)
         for i in xrange(1, 10):
-            sequence = QtGui.QKeySequence('Alt+%i' % i)
+            sequence = QtGui.QKeySequence(mod + str(i))
             shortcut = QtGui.QShortcut(sequence, self.control)
             shortcut.activated.connect(mapper.map)
             mapper.setMapping(shortcut, i - 1)
@@ -74,8 +78,6 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
         self.editors.remove(editor)
         self.control.remove_editor_widget(editor_widget)
         editor.editor_area = None
-        # FIXME: Handle case where single pane was closed. We need to adjust the
-        # focus and active editor.
 
     ###########################################################################
     # Protected interface.
@@ -84,20 +86,27 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
     def _activate_tab(self, index):
         """ Activates the tab with the specified index, if there is one.
         """
-        # FIXME: Not implemented.
-        pass
+        widgets = self.control.get_dock_widgets_ordered()
+        if index < len(widgets):
+            self.activate_editor(widgets[index].editor)
 
     def _next_tab(self):
         """ Activate the tab after the currently active tab.
         """
-        # FIXME: Not implemented.
-        pass
+        if self.active_editor:
+            widgets = self.control.get_dock_widgets_ordered()
+            index = widgets.index(self.active_editor.control.parent()) + 1
+            if index < len(widgets):
+                self.activate_editor(widgets[index].editor)
 
     def _previous_tab(self):
         """ Activate the tab before the currently active tab.
         """
-        # FIXME: Not implemented.
-        pass
+        if self.active_editor:
+            widgets = self.control.get_dock_widgets_ordered()
+            index = widgets.index(self.active_editor.control.parent()) - 1
+            if index >= 0:
+                self.activate_editor(widgets[index].editor)
 
     def _get_label(self, editor):
         """ Return a tab label for an editor.
@@ -108,14 +117,6 @@ class AdvancedEditorAreaPane(TaskPane, MEditorAreaPane):
         return label
 
     #### Trait change handlers ################################################
-
-    def _active_editor_changed(self, value):
-        print value.name if value else value
-
-    def _hide_tab_bar_changed(self):
-        if self.control is not None:
-            # FIXME: Not implemented.
-            pass
 
     @on_trait_change('editors:[dirty, name]')
     def _update_label(self, editor, name, new):
@@ -171,6 +172,7 @@ class EditorAreaWidget(QtGui.QMainWindow):
                 top_left = widget
         if top_left:
             self.tabifyDockWidget(top_left, editor_widget)
+            top_left.set_title_bar(False)
 
         # Qt will not give the dock widget focus by default.
         self.editor_area.activate_editor(editor_widget.editor)
@@ -196,13 +198,58 @@ class EditorAreaWidget(QtGui.QMainWindow):
             return widgets
         return []
 
+    def get_dock_widgets_ordered(self, visible_only=False):
+        """ Gets all dock widgets in left-to-right, top-to-bottom order.
+        """
+        def compare(one, two):
+            y = cmp(one.pos().y(), two.pos().y())
+            return cmp(one.pos().x(), two.pos().x()) if y == 0 else y
+        
+        children = []
+        for child in self.children():
+            if (child.isWidgetType() and child.isVisible() and
+                ((isinstance(child, QtGui.QTabBar) and not visible_only) or
+                 (isinstance(child, QtGui.QDockWidget) and
+                  (visible_only or not self.tabifiedDockWidgets(child))))):
+                children.append(child)
+        children.sort(cmp=compare)
+        
+        widgets = []
+        for child in children:
+            if isinstance(child, QtGui.QTabBar):
+                widgets.extend(self.get_dock_widgets_for_bar(child))
+            else:
+                widgets.append(child)
+        return widgets
+
     def remove_editor_widget(self, editor_widget):
         """ Removes a dock widget from the editor area.
         """
+        # Get the tabs in this editor's dock area before removing it.
+        tabified = self.tabifiedDockWidgets(editor_widget)
+        if tabified:
+            tabified = [tabified[0]] + self.tabifiedDockWidgets(tabified[0])
+        visible = self.get_dock_widgets_ordered(visible_only=True)
+
+        # Destroy and remove the editor.
         editor_widget.hide()
         editor_widget.removeEventFilter(self)
         editor_widget.editor.destroy()
         self.removeDockWidget(editor_widget)
+
+        # Ensure that the appropriate editor is activated.
+        editor_area = self.editor_area
+        choices = tabified if len(tabified) >= 2 else visible
+        if len(choices) >= 2:
+             i = choices.index(editor_widget)
+             next_widget = choices[i+1] if i+1 < len(choices) else choices[i-1]
+             editor_area.activate_editor(next_widget.editor)
+
+        # Update tab bar hide state.
+        if len(tabified) == 2:
+            next_widget.editor.control.parent().set_title_bar(True)
+        if editor_area.hide_tab_bar and len(editor_area.editors) == 1:
+            editor_area.editors[0].control.parent().set_title_bar(False)
 
     def reset_drag(self):
         """ Clear out all drag state.
@@ -333,12 +380,17 @@ class EditorAreaWidget(QtGui.QMainWindow):
                 if control is not None and control.isAncestorOf(new):
                     self.editor_area.active_editor = focused = editor
                     break
+            else:
+                if not self.editor_area.editors:
+                    self.editor_area.active_editor = None
 
     def _tab_index_changed(self, index):
         """ Handle a tab selection.
         """
-        editor_widget = self.get_dock_widgets_for_bar(self.sender())[index]
-        editor_widget.editor.control.setFocus()
+        widgets = self.get_dock_widgets_for_bar(self.sender())
+        if index < len(widgets):
+            editor_widget = widgets[index]
+            editor_widget.editor.control.setFocus()
 
     def _tab_close_requested(self, index):
         """ Handle a tab close request.
@@ -377,14 +429,15 @@ class EditorWidget(QtGui.QDockWidget):
         if not self._updating and self not in self.parent()._tear_widgets:
             self._updating = True
             try:
-                tabbed = [ w for w in self.parent().tabifiedDockWidgets(self)
-                           if w.isVisible() ]
+                tabbed = [ w for w in self.parent().tabifiedDockWidgets(self) ]
                 self.set_title_bar(not tabbed)
             finally:
                 self._updating = False
 
     def set_title_bar(self, title_bar):
-        if title_bar:
+        editor_area = self.editor.editor_area
+        if title_bar and editor_area and (not editor_area.hide_tab_bar or
+                                          len(editor_area.editors) > 1):
             self.setTitleBarWidget(EditorTitleBarWidget(self))
         else:
             self.setTitleBarWidget(QtGui.QWidget())
