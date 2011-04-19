@@ -1,3 +1,6 @@
+# Standard library imports.
+import sys
+
 # Enthought library imports.
 from enthought.pyface.tasks.i_editor_area_pane import IEditorAreaPane, \
     MEditorAreaPane
@@ -38,16 +41,17 @@ class EditorAreaPane(TaskPane, MEditorAreaPane):
         control.tabCloseRequested.connect(self._close_requested)
 
         # Add shortcuts for scrolling through tabs.
-        shortcut = QtGui.QShortcut(QtGui.QKeySequence('Alt+n'), self.control)
+        mod = 'Meta+' if sys.platform == 'darwin' else 'Alt+'
+        shortcut = QtGui.QShortcut(QtGui.QKeySequence(mod+'n'), self.control)
         shortcut.activated.connect(self._next_tab)
-        shortcut = QtGui.QShortcut(QtGui.QKeySequence('Alt+p'), self.control)
+        shortcut = QtGui.QShortcut(QtGui.QKeySequence(mod+'p'), self.control)
         shortcut.activated.connect(self._previous_tab)
 
         # Add shortcuts for switching to a specific tab.
         mapper = QtCore.QSignalMapper(self.control)
         mapper.mapped.connect(self.control.setCurrentIndex)
         for i in xrange(1, 10):
-            sequence = QtGui.QKeySequence('Alt+%i' % i)
+            sequence = QtGui.QKeySequence(mod + str(i))
             shortcut = QtGui.QShortcut(sequence, self.control)
             shortcut.activated.connect(mapper.map)
             mapper.setMapping(shortcut, i - 1)
