@@ -50,29 +50,13 @@ Traits:
 * `setuptools <http://pypi.python.org/pypi/setuptools/0.6c8>`_
 """
 
-from setuptools import setup, Extension, find_packages
+from setuptools import setup, find_packages
 
 # This works around a setuptools bug which gets setup_data.py metadata
 # from incorrect packages.
 setup_data = dict(__name__='', __file__='setup_data.py')
 execfile('setup_data.py', setup_data)
 INFO = setup_data['INFO']
-
-ctraits = Extension(
-    'enthought.traits.ctraits',
-    sources = ['enthought/traits/ctraits.c'],
-    extra_compile_args = ['-DNDEBUG=1', '-O3'],
-    )
-
-
-speedups = Extension(
-    'enthought.traits.protocols._speedups',
-    # fixme: Use the generated sources until Pyrex 0.9.6 and setuptools can
-    # play with each other. See #1364
-    sources = ['enthought/traits/protocols/_speedups.c'],
-    extra_compile_args = ['-DNDEBUG=1', '-O3'],
-    )
-
 
 # Pull the description values for the setup keywords from our file docstring.
 DOCLINES = __doc__.split("\n")
@@ -97,22 +81,15 @@ setup(
         Topic :: Software Development :: Libraries
         """.splitlines() if len(c.strip()) > 0],
     description = DOCLINES[1],
-    download_url = ('http://www.enthought.com/repo/ETS/Traits-%s.tar.gz' %
+    download_url = ('http://www.enthought.com/repo/ets/traitsui-%s.tar.gz' %
                     INFO['version']),
-    ext_modules = [ctraits, speedups],
     include_package_data = True,
-    package_data = {'enthought': ['traits/protocols/_speedups.pyx']},
     install_requires = INFO['install_requires'],
     license = 'BSD',
     long_description = '\n'.join(DOCLINES[3:]),
     maintainer = 'ETS Developers',
     maintainer_email = 'enthought-dev@enthought.com',
-    name = 'Traits',
-    namespace_packages = [
-        'enthought',
-        'enthought.traits',
-        'enthought.traits.ui',
-        ],
+    name = 'traitsui',
     packages = find_packages(exclude = [
         'docs',
         'docs.*',
@@ -124,7 +101,6 @@ setup(
         'nose >= 0.10.3',
         ],
     test_suite = 'nose.collector',
-    url = 'http://code.enthought.com/projects/traits',
     version = INFO['version'],
     zip_safe = False,
 )

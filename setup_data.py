@@ -1,7 +1,7 @@
 INFO = {
-    'name': 'Traits',
+    'name': 'traitsui',
     'version': '3.6.1',
     'install_requires': [
-        'EnthoughtBase >= 3.1.0.dev',
+        'pyface >= 3.6.0.dev',
     ],
 }
