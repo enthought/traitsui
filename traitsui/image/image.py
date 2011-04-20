@@ -187,6 +187,7 @@ def get_python_value ( source, name ):
         code string.
     """
     temp = {}
+    source = source.replace('enthought.traits.ui', 'traitsui')
     exec source.replace( '\r', '' ) in globals(), temp
     return temp[ name ]
 
