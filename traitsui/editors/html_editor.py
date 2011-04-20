@@ -25,7 +25,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Str, false
+from traits.api import Str, false
 
 from ..basic_editor_factory import BasicEditorFactory
 

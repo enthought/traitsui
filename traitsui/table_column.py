@@ -25,10 +25,10 @@
 
 from __future__ import absolute_import
 
-from ..api import (Any, Bool, Callable, Color, Constant, Enum, Expression, Float,
+from traits.api import (Any, Bool, Callable, Color, Constant, Enum, Expression, Float,
     Font, HasPrivateTraits, Instance, Int, Property, Str)
 
-from ..trait_base import user_name_for, xgetattr
+from traits.trait_base import user_name_for, xgetattr
 
 from .editor_factory import EditorFactory
 from .menu import Menu

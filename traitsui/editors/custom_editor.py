@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Callable, Tuple, Property
+from traits.api import Callable, Tuple, Property
 
 from ..basic_editor_factory import BasicEditorFactory
 

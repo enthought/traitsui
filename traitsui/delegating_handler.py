@@ -18,11 +18,11 @@
 A handler that delegates the handling of events to a set of sub-handlers.
 
 This is typically used as the handler for dynamic views.  See the
-**enthought.traits.has_dynamic_view** module.
+**traits.has_dynamic_view** module.
 """
 
 # Enthought library imports
-from ..api import HasTraits, List
+from traits.api import HasTraits, List
 from .ui import Dispatcher
 
 # Local imports.

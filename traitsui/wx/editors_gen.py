@@ -13,8 +13,8 @@ the WX backend.
 """
 
 import os, glob, sys
-from enthought.traits.ui.api import Editor
-from enthought.traits.ui.editor_factory import EditorFactory
+from traitsui.api import Editor
+from traitsui.editor_factory import EditorFactory
 
 def gen_editor_definitions(target_filename):
     """ Generates a file containing definitions for all of the editors
@@ -33,7 +33,7 @@ def gen_editor_definitions(target_filename):
     for absfilename in editor_files:
         (dirname, filename) = (os.path.dirname(absfilename),
                                os.path.basename(absfilename).rstrip('.py'))
-        import_path = 'enthought.traits.ui.wx' + \
+        import_path = 'traitsui.wx' + \
                        dirname.replace(dirpath, '').replace(os.sep, '.') +\
                        '.' + filename
         __import__(import_path)

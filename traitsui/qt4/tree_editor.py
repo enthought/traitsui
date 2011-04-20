@@ -18,15 +18,15 @@
 
 import copy
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.pyface.resource_manager import resource_manager
-from enthought.traits.api import Any, Event
-from enthought.traits.trait_base import enumerate
-from enthought.traits.ui.api import TreeNode, ObjectTreeNode, MultiTreeNode
-from enthought.traits.ui.undo import ListUndoItem
-from enthought.traits.ui.tree_node import ITreeNodeAdapterBridge
-from enthought.traits.ui.menu import Menu, Action, Separator
+from pyface.resource_manager import resource_manager
+from traits.api import Any, Event
+from traits.trait_base import enumerate
+from traitsui.api import TreeNode, ObjectTreeNode, MultiTreeNode
+from traitsui.undo import ListUndoItem
+from traitsui.tree_node import ITreeNodeAdapterBridge
+from traitsui.menu import Menu, Action, Separator
 
 from clipboard import clipboard, PyMimeData
 from editor import Editor

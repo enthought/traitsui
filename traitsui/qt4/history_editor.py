@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
 from editor import Editor
 

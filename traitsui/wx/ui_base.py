@@ -25,13 +25,13 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import HasStrictTraits, HasPrivateTraits, Instance, List, Event
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import UI
 
-from enthought.traits.ui.menu \
+from traitsui.menu \
     import Action
 
 from editor \
@@ -135,7 +135,7 @@ class BaseDialog ( object ):
     def set_icon ( self, icon = None ):
         """ Sets the frame's icon.
         """
-        from enthought.pyface.image_resource import ImageResource
+        from pyface.image_resource import ImageResource
 
         if not isinstance( icon, ImageResource ):
             icon = ImageResource( 'frame.ico' )

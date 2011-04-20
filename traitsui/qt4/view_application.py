@@ -21,10 +21,10 @@ complete application, using information from the specified UI object.
 import os
 
 # System library imports.
-from enthought.qt import QtGui
+from traits.qt import QtGui
 
 # ETS imports.
-from enthought.util.guisupport import is_event_loop_running_qt4, \
+from traits.util.guisupport import is_event_loop_running_qt4, \
     start_event_loop_qt4
 
 #-------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
         values.
     kind : string
         The type of user interface window to create. See the
-        **enthought.traits.ui.view.kind_trait** trait for values and
+        **traitsui.view.kind_trait** trait for values and
         their meanings. If *kind* is unspecified or None, the **kind**
         attribute of the View object is used.
     handler : Handler object

@@ -25,17 +25,17 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import HasTraits, HasPrivateTraits, Instance, List, Str, Bool, Property, \
            Event, Any, on_trait_change, cached_property
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import UI, Theme
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import ATheme
 
-from enthought.traits.ui.editor \
+from traitsui.editor \
     import Editor
 
 from constants \

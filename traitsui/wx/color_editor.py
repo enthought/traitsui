@@ -21,8 +21,8 @@
 import wx
 import wx.combo
 
-from enthought.traits.api import List, TraitError
-from enthought.traits.ui.editors.color_editor \
+from traits.api import List, TraitError
+from traitsui.editors.color_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
 
 from editor_factory import SimpleEditor as BaseSimpleEditor

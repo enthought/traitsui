@@ -1,9 +1,9 @@
 import wx
 
-from enthought.traits.api import Float, Any, Str, Trait
-from enthought.traits.ui.editors.api import RangeEditor
-from enthought.traits.ui.wx.editor import Editor
-from enthought.traits.ui.wx.helper import TraitsUIPanel, Slider
+from traits.api import Float, Any, Str, Trait
+from traitsui.editors.api import RangeEditor
+from traitsui.wx.editor import Editor
+from traitsui.wx.helper import TraitsUIPanel, Slider
 
 
 class _BoundsEditor(Editor):

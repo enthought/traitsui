@@ -23,9 +23,9 @@
 
 import webbrowser
 
-from enthought.qt import QtCore, QtGui, QtWebKit
+from traits.qt import QtCore, QtGui, QtWebKit
 
-from enthought.traits.api import Str
+from traits.api import Str
 
 from editor import Editor
 

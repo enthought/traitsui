@@ -22,12 +22,12 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.pyface.image_resource import ImageResource
-from enthought.traits.api import Any, Bool, Event, Int, Instance, List, \
+from pyface.image_resource import ImageResource
+from traits.api import Any, Bool, Event, Int, Instance, List, \
     Property, Str, TraitListEvent
-from enthought.traits.ui.list_str_adapter import ListStrAdapter
+from traitsui.list_str_adapter import ListStrAdapter
 
 from editor import Editor
 from list_str_model import ListStrModel

@@ -22,7 +22,7 @@
 
 from __future__ import absolute_import
 
-from ...api import List, true
+from traits.api import List, true
 
 from ..editor_factory import EditorFactory
 

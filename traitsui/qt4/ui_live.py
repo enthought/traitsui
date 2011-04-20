@@ -14,12 +14,12 @@
 """
 
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.ui.undo \
+from traitsui.undo \
     import UndoHistory
 
-from enthought.traits.ui.menu \
+from traitsui.menu \
     import UndoButton, RevertButton, OKButton, CancelButton, HelpButton
 
 from ui_base \

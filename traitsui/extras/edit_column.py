@@ -25,11 +25,11 @@
 
 from __future__ import absolute_import
 
-from ....etsconfig.api import ETSConfig
+from traits.etsconfig.api import ETSConfig
 from ..table_column import ObjectColumn
 
 if ETSConfig.toolkit == 'wx':
-    from ....pyface.ui.wx.grid.edit_renderer import EditRenderer
+    from pyface.ui.wx.grid.edit_renderer import EditRenderer
 else:
     raise NotImplementedError, "No EditColumn implementation for backend"
 

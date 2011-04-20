@@ -25,19 +25,19 @@
 #-------------------------------------------------------------------------------
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Trait, TraitError
 
-from enthought.traits.trait_base \
+from traits.trait_base \
     import SequenceTypes
 
 ### Note: Import from the source rather than the api to avoid circular imports
 # since some classes declared in the traits UI api define Color traits which
 # will end up importing this file.
-from enthought.traits.ui.editors.rgb_color_editor \
+from traitsui.editors.rgb_color_editor \
     import RGBColorEditor
 
-from enthought.traits.ui.wx.color_trait \
+from traitsui.wx.color_trait \
     import standard_colors, w3c_color_database
 
 #-------------------------------------------------------------------------------

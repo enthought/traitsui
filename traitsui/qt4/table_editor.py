@@ -16,19 +16,19 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.pyface.timer.api import do_later
+from pyface.timer.api import do_later
 
-from enthought.traits.api import Any, Button, Event, List, HasTraits, \
+from traits.api import Any, Button, Event, List, HasTraits, \
     Instance, Int, Property, Str, cached_property, on_trait_change
 
-from enthought.traits.ui.api import EnumEditor, InstanceEditor, Group, \
+from traitsui.api import EnumEditor, InstanceEditor, Group, \
     Handler, Item, Label, TableColumn, TableFilter, UI, View, default_handler, \
     spring
-from enthought.traits.ui.editors.table_editor import BaseTableEditor, \
+from traitsui.editors.table_editor import BaseTableEditor, \
     ReversedList, ToolkitEditorFactory, customize_filter
-from enthought.traits.ui.ui_traits import SequenceTypes
+from traitsui.ui_traits import SequenceTypes
 
 from editor import Editor
 from table_model import TableModel, SortFilterTableModel
@@ -1043,7 +1043,7 @@ class TableFilterEditor(HasTraits):
                       show_labels=False,
                       layout='split',
                       orientation='horizontal'),
-                id='enthought.traits.ui.qt4.table_editor.TableFilterEditor',
+                id='traitsui.qt4.table_editor.TableFilterEditor',
                 buttons=[ 'OK', 'Cancel' ],
                 kind='livemodal',
                 resizable=True, width=800, height=400,

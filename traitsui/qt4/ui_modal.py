@@ -13,9 +13,9 @@
 """
 
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.ui.menu \
+from traitsui.menu \
     import ApplyButton, RevertButton, OKButton, CancelButton, HelpButton
 
 from ui_base \

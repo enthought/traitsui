@@ -23,7 +23,7 @@
 #-------------------------------------------------------------------------------
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Trait, TraitError
 
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):

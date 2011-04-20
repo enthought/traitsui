@@ -4,7 +4,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Float, Enum, Any, Property
+from traits.api import Float, Enum, Any, Property
 
 from ..view import View
 

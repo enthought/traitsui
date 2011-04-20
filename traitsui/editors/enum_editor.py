@@ -26,7 +26,7 @@ import os, sys
 
 from ..editor_factory import EditorWithListFactory
 
-from ...api import Any, Range, Enum, Bool
+from traits.api import Any, Range, Enum, Bool
 
 from ..toolkit import toolkit_object
 

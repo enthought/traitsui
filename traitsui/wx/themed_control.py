@@ -25,14 +25,14 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import HasTraits, Str, Int, Enum, Bool, Property, Event, Tuple, Instance, \
            cached_property, on_trait_change
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import default_theme
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import Image, Position, Alignment, Spacing
 
 from image_slice \

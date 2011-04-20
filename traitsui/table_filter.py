@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ..api import (Any, Bool, Callable, Enum, Event, Expression, HasPrivateTraits,
+from traits.api import (Any, Bool, Callable, Enum, Event, Expression, HasPrivateTraits,
     Instance, List, Str, Trait)
 
 from .editor_factory import EditorFactory
@@ -489,7 +489,7 @@ class RuleTableFilter ( TableFilter ):
     modified = Event
 
     # Persistence ID of the view
-    view_id = Str( 'enthought.traits.ui.table_filter.RuleTableFilter' )
+    view_id = Str( 'traitsui.table_filter.RuleTableFilter' )
 
     # Sample object that the filter will apply to
     _object = Any
@@ -668,7 +668,7 @@ class MenuTableFilter ( RuleTableFilter ):
     name = 'Default menu-based filter'
 
     # Overrides the persistence ID of the view
-    view_id = Str( 'enthought.traits.ui.table_filter.MenuTableFilter' )
+    view_id = Str( 'traitsui.table_filter.MenuTableFilter' )
 
     #---------------------------------------------------------------------------
     #  Returns whether a specified object meets the filter/search criteria:

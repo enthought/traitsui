@@ -30,13 +30,13 @@ import wx
 from string \
     import capitalize
 
-from enthought.traits.api \
+from traits.api \
     import List, Str, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.check_list_editor file.
-from enthought.traits.ui.editors.check_list_editor \
+# traitsui.editors.check_list_editor file.
+from traitsui.editors.check_list_editor \
     import ToolkitEditorFactory
 
 from editor_factory \

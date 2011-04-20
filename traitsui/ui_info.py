@@ -25,7 +25,7 @@
 
 from __future__ import absolute_import
 
-from ..api import HasPrivateTraits, Instance, Constant, Bool
+from traits.api import HasPrivateTraits, Instance, Constant, Bool
 
 #-------------------------------------------------------------------------------
 #  'UIInfo' class:
@@ -41,7 +41,7 @@ class UIInfo ( HasPrivateTraits ):
     #---------------------------------------------------------------------------
 
     # Bound to a UI object at UIInfo construction time
-    ui = Instance( 'enthought.traits.ui.ui.UI', allow_none = True )
+    ui = Instance( 'traitsui.ui.UI', allow_none = True )
 
     # Indicates whether the UI has finished initialization
     initialized = Bool( False )

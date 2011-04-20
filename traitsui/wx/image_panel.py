@@ -24,7 +24,7 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Str, Property, Instance, Bool, cached_property
 
 from themed_window \

@@ -37,7 +37,7 @@ from helper \
 from ui_panel \
     import fill_panel_for_group
 
-from enthought.traits.api \
+from traits.api \
     import Trait, Str
 
 #-------------------------------------------------------------------------------

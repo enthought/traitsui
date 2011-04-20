@@ -17,12 +17,12 @@ Traits-based user interface.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.api \
+from traits.api \
     import TraitError
 
-from enthought.traits.ui.editor_factory \
+from traitsui.editor_factory \
     import EditorFactory as BaseEditorFactory
 
 from editor \
@@ -30,16 +30,16 @@ from editor \
 
 #-------------------------------------------------------------------------------
 #  'EditorFactory' class
-#   Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory
+#   Deprecated alias for traitsui.editor_factory.EditorFactory
 #-------------------------------------------------------------------------------
 
 class EditorFactory(BaseEditorFactory):
-    """ Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory.
+    """ Deprecated alias for traitsui.editor_factory.EditorFactory.
     """
 
     def __init__(self, *args, **kwds):
         super(EditorFactory, self).__init__(*args, **kwds)
-        warnings.warn("DEPRECATED: Use enthought.traits.ui.editor_factory."
+        warnings.warn("DEPRECATED: Use traitsui.editor_factory."
             ".EditorFactory instead.", DeprecationWarning)
 
 #-------------------------------------------------------------------------------

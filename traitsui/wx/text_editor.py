@@ -24,13 +24,13 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.text_editor file.
-from enthought.traits.ui.editors.text_editor \
+# traitsui.editors.text_editor file.
+from traitsui.editors.text_editor \
     import ToolkitEditorFactory, evaluate_trait
 
 from editor \

@@ -27,7 +27,7 @@ from __future__ import absolute_import
 
 from string import uppercase, lowercase
 
-from ..api import BaseTraitHandler, CTrait, Enum, TraitError
+from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
 
 from .ui_traits import SequenceTypes
 

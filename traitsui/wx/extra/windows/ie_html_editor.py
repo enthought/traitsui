@@ -36,13 +36,13 @@ if wx.Platform == '__WXMSW__':
     except ImportError:
         import wx.lib.iewin as iewin
 
-from enthought.traits.api \
+from traits.api \
     import Bool, Event, Property, Str
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.traits.ui.basic_editor_factory \
+from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
 #-------------------------------------------------------------------------------

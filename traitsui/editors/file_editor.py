@@ -21,7 +21,7 @@
 
 from __future__ import absolute_import
 
-from ...api import List, Str, Bool, Int, Unicode
+from traits.api import List, Str, Bool, Int, Unicode
 
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
 # to avoid circular imports, as this EditorFactory will be part of

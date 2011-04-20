@@ -25,11 +25,11 @@
 
 from __future__ import absolute_import
 
-from ..api import (Any, Bool, HasPrivateTraits, HasTraits, Instance, Property,
+from traits.api import (Any, Bool, HasPrivateTraits, HasTraits, Instance, Property,
     ReadOnly, Str, Trait, TraitError, TraitListEvent, Undefined,
     cached_property)
 
-from ..trait_base import not_none
+from traits.trait_base import not_none
 
 from .editor_factory import EditorFactory
 
@@ -60,7 +60,7 @@ class Editor ( HasPrivateTraits ):
     #---------------------------------------------------------------------------
 
     # The UI (user interface) this editor is part of:
-    ui = Instance( 'enthought.traits.ui.ui.UI' )
+    ui = Instance( 'traitsui.ui.UI' )
 
     # Full name of the object the editor is editing (e.g. 'object.link1.link2'):
     object_name = Str( 'object' )

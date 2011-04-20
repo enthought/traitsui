@@ -25,16 +25,16 @@
 from wx.animate \
     import GIFAnimationCtrl
 
-from enthought.traits.api \
+from traits.api \
     import Bool, Str
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.traits.ui.basic_editor_factory \
+from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
-from enthought.pyface.timer.api \
+from pyface.timer.api \
     import do_after
 
 #-------------------------------------------------------------------------------

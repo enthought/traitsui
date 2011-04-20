@@ -23,7 +23,7 @@
 
 from __future__ import absolute_import
 
-from ...api import (Int, Float, List, Instance, Str, Color, Font, Any, Tuple,
+from traits.api import (Int, Float, List, Instance, Str, Color, Font, Any, Tuple,
         Dict, Enum, Trait, Bool, Callable, Range, on_trait_change)
 
 from ..editor_factory import EditorFactory
@@ -70,11 +70,11 @@ class ToolkitEditorFactory ( EditorFactory ):
     #---------------------------------------------------------------------------
 
     # List of initial table column descriptors
-    columns = List( Instance('enthought.traits.ui.table_column.TableColumn') )
+    columns = List( Instance('traitsui.table_column.TableColumn') )
 
     # List of other table column descriptors (not initially displayed)
     other_columns = List(
-                     Instance('enthought.traits.ui.table_column.TableColumn') )
+                     Instance('traitsui.table_column.TableColumn') )
 
     # The object trait containing the list of column descriptors
     columns_name = Str
@@ -90,18 +90,18 @@ class ToolkitEditorFactory ( EditorFactory ):
     filter_name = Str
 
     # Initial filter that should be applied to the table
-    filter = Instance( 'enthought.traits.ui.table_filter.TableFilter' )
+    filter = Instance( 'traitsui.table_filter.TableFilter' )
 
     # List of available filters that can be applied to the table
     filters = List( Instance(
-                     'enthought.traits.ui.table_filter.TableFilter' ) )
+                     'traitsui.table_filter.TableFilter' ) )
 
     # Filter object used to allow a user to search the table.
     # NOTE: If left as None, the table will not be searchable.
-    search = Instance( 'enthought.traits.ui.table_filter.TableFilter' )
+    search = Instance( 'traitsui.table_filter.TableFilter' )
 
     # Default context menu to display when any cell is right-clicked
-    menu = Instance( 'enthought.traits.ui.menu.Menu' )
+    menu = Instance( 'traitsui.menu.Menu' )
 
     # Are objects deletable from the table?
     deletable = BoolOrCallable( False )

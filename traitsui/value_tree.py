@@ -28,7 +28,7 @@ import inspect
 
 from types import FunctionType, MethodType
 
-from ..api import Any, Bool, HasPrivateTraits, HasTraits, Instance, List, Str
+from traits.api import Any, Bool, HasPrivateTraits, HasTraits, Instance, List, Str
 
 from .tree_node import ObjectTreeNode, TreeNode, TreeNodeObject
 

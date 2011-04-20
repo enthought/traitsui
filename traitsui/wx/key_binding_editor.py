@@ -26,16 +26,16 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Event, false
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.key_binding_editor file.
-from enthought.traits.ui.editors.key_binding_editor \
+# traitsui.editors.key_binding_editor file.
+from traitsui.editors.key_binding_editor \
     import KeyBindingEditor as ToolkitEditorFactory
 
-from enthought.util.wx.dialog \
+from traits.util.wx.dialog \
     import confirmation
 
 from editor \

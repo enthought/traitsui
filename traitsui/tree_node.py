@@ -25,10 +25,10 @@
 
 from __future__ import absolute_import
 
-from ..api import (AdaptedTo, Adapter, Any, Bool, Callable, HasPrivateTraits,
+from traits.api import (AdaptedTo, Adapter, Any, Bool, Callable, HasPrivateTraits,
     Instance, Interface, List, Property, Str, cached_property)
 
-from ..trait_base import SequenceTypes, get_resource_path, xgetattr, xsetattr
+from traits.trait_base import SequenceTypes, get_resource_path, xgetattr, xsetattr
 
 from .view import View
 
@@ -136,7 +136,7 @@ class TreeNode ( HasPrivateTraits ):
     icon_path = Str
 
     # fixme: The 'menu' trait should really be defined as:
-    #        Instance( 'enthought.traits.ui.menu.MenuBar' ), but it doesn't work
+    #        Instance( 'traitsui.menu.MenuBar' ), but it doesn't work
     #        right currently.
 
     #---------------------------------------------------------------------------

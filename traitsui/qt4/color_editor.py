@@ -16,9 +16,9 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.ui.editors.color_editor \
+from traitsui.editors.color_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
 
 from editor_factory \

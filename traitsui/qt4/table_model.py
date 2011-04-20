@@ -16,9 +16,9 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.ui.ui_traits import SequenceTypes
+from traitsui.ui_traits import SequenceTypes
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -39,7 +39,7 @@ v_alignment_map = {
 }
 
 # MIME type for internal table drag/drop operations
-mime_type = 'enthought/traits-ui-table-editor'
+mime_type = 'traits-ui-table-editor'
 
 #-------------------------------------------------------------------------------
 #  'TableModel' class:

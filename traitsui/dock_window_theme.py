@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ..api import HasPrivateTraits, Bool
+from traits.api import HasPrivateTraits, Bool
 
 from .ui_traits import Image, ATheme
 

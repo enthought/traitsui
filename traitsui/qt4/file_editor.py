@@ -19,15 +19,15 @@
 from os.path \
     import splitext, isfile, exists
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.api \
+from traits.api \
     import List, Event, Unicode, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.file_editor file.
-from enthought.traits.ui.editors.file_editor \
+# traitsui.editors.file_editor file.
+from traitsui.editors.file_editor \
     import ToolkitEditorFactory
 
 from text_editor \

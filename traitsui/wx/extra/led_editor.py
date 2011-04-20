@@ -25,13 +25,13 @@
 from wx.gizmos \
     import LEDNumberCtrl, LED_ALIGN_LEFT, LED_ALIGN_CENTER, LED_ALIGN_RIGHT
 
-from enthought.traits.api \
+from traits.api \
     import Enum
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.traits.ui.basic_editor_factory \
+from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
 #-------------------------------------------------------------------------------

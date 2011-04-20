@@ -24,10 +24,10 @@
 
 from __future__ import absolute_import
 
-from ..api import (Any, Delegate, Enum, Expression, Float, HasStrictTraits,
+from traits.api import (Any, Delegate, Enum, Expression, Float, HasStrictTraits,
     Instance, List, Range, Str, Trait, TraitError, TraitPrefixList, TraitType)
 
-from ..trait_base import get_resource_path
+from traits.trait_base import get_resource_path
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:
@@ -64,7 +64,7 @@ ContainerDelegate = container_delegate = Delegate( 'container',
 HelpId = help_id_trait = Str( desc = "the external help context identifier" )
 
 # A button to add to a view:
-AButton = Trait( '', Str, Instance( 'enthought.traits.ui.menu.Action' ) )
+AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
 
 # The set of buttons to add to the view:
 Buttons = List( AButton,
@@ -72,7 +72,7 @@ Buttons = List( AButton,
 
 # View trait specified by name or instance:
 AView = Any
-#AView = Trait( '', Str, Instance( 'enthought.traits.ui.View' ) )
+#AView = Trait( '', Str, Instance( 'traitsui.View' ) )
 
 #-------------------------------------------------------------------------------
 #  'StatusItem' class:
@@ -171,7 +171,7 @@ def convert_image ( value, level = 3 ):
             except:
                 result = None
         else:
-            from ...pyface.image_resource import ImageResource
+            from pyface.image_resource import ImageResource
             result = ImageResource( value, search_path = [ search_path ] )
 
         image_resource_cache[ key ] = result
@@ -218,7 +218,7 @@ class Image ( TraitType ):
     def validate ( self, object, name, value ):
         """ Validates that a specified value is valid for this trait.
         """
-        from ...pyface.image_resource import ImageResource
+        from pyface.image_resource import ImageResource
 
         if value is None:
             return None

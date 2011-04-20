@@ -25,7 +25,7 @@ toolkits.
 
 from __future__ import absolute_import
 
-from ...api import Str, List, Enum, Unicode, Type, Bool
+from traits.api import Str, List, Enum, Unicode, Type, Bool
 
 from ..view import View, AKind
 

@@ -24,30 +24,30 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Str, Int, List, Bool, Instance, Any, Event, TraitListEvent, \
            Property
 
 # FIXME: ListStrEditor is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.list_editor file.
-from enthought.traits.ui.editors.list_str_editor \
+# traitsui.editors.list_editor file.
+from traitsui.editors.list_str_editor \
     import ListStrEditor
 
-from enthought.traits.ui.list_str_adapter \
+from traitsui.list_str_adapter \
     import ListStrAdapter
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.pyface.image_resource \
+from pyface.image_resource \
     import ImageResource
 
 from helper \
     import disconnect, disconnect_no_id
 
 try:
-    from enthought.util.wx.drag_and_drop \
+    from traits.util.wx.drag_and_drop \
         import PythonDropSource, PythonDropTarget
 except:
     PythonDropSource = PythonDropTarget = None
@@ -765,12 +765,12 @@ class _ListStrEditor ( Editor ):
             index = selected[0]
             if index < self.item_count:
                 try:
-                    from enthought.util.wx.clipboard import clipboard
+                    from traits.util.wx.clipboard import clipboard
 
                     clipboard.data = self.adapter.get_text( self.object,
                                                             self.name, index )
                 except:
-                    # Handle the enthought.util package not being installed by
+                    # Handle the traits.util package not being installed by
                     # just ignoring the request:
                     pass
 
@@ -785,14 +785,14 @@ class _ListStrEditor ( Editor ):
                 index = selected[0]
                 if index < self.item_count:
                     try:
-                        from enthought.util.wx.clipboard import clipboard
+                        from traits.util.wx.clipboard import clipboard
 
                         clipboard.data = self.adapter.get_text(
                                              self.object, self.name, index )
                         self.index = index
                         self.adapter.delete( self.object, self.name, index )
                     except:
-                        # Handle the enthought.util package not being installed
+                        # Handle the traits.util package not being installed
                         # by just ignoring the request:
                         pass
 
@@ -804,12 +804,12 @@ class _ListStrEditor ( Editor ):
             selected = self._get_selected()
             if len( selected ) == 1:
                 try:
-                    from enthought.util.wx.clipboard import clipboard
+                    from traits.util.wx.clipboard import clipboard
 
                     self._set_text_current( selected[0], clipboard.text_data,
                                             insert = True )
                 except:
-                    # Handle the enthought.util package not being installed by
+                    # Handle the traits.util package not being installed by
                     # just ignoring the request:
                     pass
 

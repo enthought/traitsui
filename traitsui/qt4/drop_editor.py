@@ -17,12 +17,12 @@ target editor handles drag and drop operations as a drop target.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtGui
+from traits.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.drop_editor file.
-from enthought.traits.ui.editors.drop_editor \
+# traitsui.editors.drop_editor file.
+from traitsui.editors.drop_editor \
     import ToolkitEditorFactory
 
 from text_editor \

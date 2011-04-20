@@ -20,9 +20,9 @@ using pickle.
 from cPickle import dumps, load, loads
 from cStringIO import StringIO
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.api import HasTraits, Instance, Property
+from traits.api import HasTraits, Instance, Property
 
 #-------------------------------------------------------------------------------
 #  'PyMimeData' class:

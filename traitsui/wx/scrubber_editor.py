@@ -27,23 +27,23 @@ import wx
 from math \
    import log10, pow
 
-from enthought.traits.api \
+from traits.api \
     import Any, BaseRange, BaseEnum, Str, Float, TraitError, \
            on_trait_change
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import View, Item, EnumEditor
 
 # FIXME: ScrubberEditor is a proxy class defined here just for backward
 # compatibility (represents the editor factory for scrubber editors).
-# The class has been moved to enthought.traits.ui.editors.scrubber_editor
-from enthought.traits.ui.editors.scrubber_editor \
+# The class has been moved to traitsui.editors.scrubber_editor
+from traitsui.editors.scrubber_editor \
     import ScrubberEditor
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.pyface.timer.api \
+from pyface.timer.api \
     import do_after
 
 from constants \

@@ -32,16 +32,16 @@ import numpy
 from cPickle \
     import load
 
-from enthought.traits.api \
+from traits.api \
     import Bool
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.dnd_editor file.
-from enthought.traits.ui.editors.dnd_editor \
+# traitsui.editors.dnd_editor file.
+from traitsui.editors.dnd_editor \
     import ToolkitEditorFactory
 
-from enthought.util.wx.drag_and_drop \
+from traits.util.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
 
 try:
@@ -54,7 +54,7 @@ try:
 except ImportError:
     Binding = None
 
-from enthought.pyface.image_resource \
+from pyface.image_resource \
     import ImageResource
 
 from editor \

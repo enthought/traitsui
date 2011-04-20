@@ -21,10 +21,10 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.traits.api import Trait, TraitError
-from enthought.traits.trait_base import SequenceTypes
+from traits.api import Trait, TraitError
+from traits.trait_base import SequenceTypes
 
-from enthought.traits.ui.qt4.color_trait import standard_colors
+from traitsui.qt4.color_trait import standard_colors
 
 #-------------------------------------------------------------------------------
 #  Convert a number into an RGB tuple:

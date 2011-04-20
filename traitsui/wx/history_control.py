@@ -25,10 +25,10 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import HasPrivateTraits, Instance, Str, List, Int, Bool
 
-from enthought.pyface.timer.api \
+from pyface.timer.api \
     import do_later
 
 from constants \

@@ -23,10 +23,10 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.traits.api \
+from traits.api \
     import Any, on_trait_change
 
-from enthought.pyface.timer.api \
+from pyface.timer.api \
     import do_later
 
 from editor \

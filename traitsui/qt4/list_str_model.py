@@ -22,16 +22,16 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.ui.ui_traits import SequenceTypes
+from traitsui.ui_traits import SequenceTypes
 
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------
 
 # MIME type for internal table drag/drop operations
-mime_type = 'enthought/traits-ui-list-str-editor'
+mime_type = 'traits-ui-list-str-editor'
 
 #-------------------------------------------------------------------------------
 #  'ListStrModel' class:

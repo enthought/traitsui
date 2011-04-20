@@ -25,9 +25,9 @@
 
 from __future__ import absolute_import
 
-from ..api import HasPrivateTraits, TraitError
+from traits.api import HasPrivateTraits, TraitError
 
-from ..trait_base import ETSConfig
+from traits.trait_base import ETSConfig
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -226,7 +226,7 @@ class Toolkit ( HasPrivateTraits ):
             attribute values.
         kind : string
             The type of user interface window to create. See the
-            **enthought.traits.ui.view.kind_trait** trait for values and
+            **traitsui.view.kind_trait** trait for values and
             their meanings. If *kind* is unspecified or None, the **kind**
             attribute of the View object is used.
         handler : Handler object

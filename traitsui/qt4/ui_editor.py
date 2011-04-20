@@ -20,7 +20,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.traits.ui.ui_editor import UIEditor as BaseUIEditor
+from traitsui.ui_editor import UIEditor as BaseUIEditor
 
 from editor import Editor
 

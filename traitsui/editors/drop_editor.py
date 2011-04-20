@@ -23,7 +23,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Any, Bool
+from traits.api import Any, Bool
 
 from .text_editor import ToolkitEditorFactory as EditorFactory
 

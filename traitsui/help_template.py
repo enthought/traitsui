@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ..api import HasStrictTraits, Str
+from traits.api import HasStrictTraits, Str
 
 #-------------------------------------------------------------------------------
 #  Constants:

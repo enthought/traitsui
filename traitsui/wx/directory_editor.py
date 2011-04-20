@@ -29,8 +29,8 @@ from os.path \
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.custom_editor file.
-from enthought.traits.ui.editors.directory_editor \
+# traitsui.editors.custom_editor file.
+from traitsui.editors.directory_editor \
     import ToolkitEditorFactory
 
 from file_editor \

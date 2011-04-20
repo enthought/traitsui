@@ -18,14 +18,14 @@ that are represented as tuples of the form ( *red*, *green*, *blue* ), where
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtGui
+from traits.qt import QtGui
 
-from enthought.traits.trait_base \
+from traits.trait_base \
     import SequenceTypes
 
 # Note: The ToolkitEditorFactory class imported from color_editor is a
 # subclass of the abstract ToolkitEditorFactory class
-# (in enthought.traits.ui.api) with qt4-specific methods defined.
+# (in traitsui.api) with qt4-specific methods defined.
 # We need to override the implementations of the qt4-specific methods here.
 from color_editor \
     import ToolkitEditorFactory as BaseColorToolkitEditorFactory

@@ -22,7 +22,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Instance, Property, List, Str, Bool, Font
+from traits.api import Instance, Property, List, Str, Bool, Font
 
 from ..api import View, Item, TabularEditor, BasicEditorFactory
 

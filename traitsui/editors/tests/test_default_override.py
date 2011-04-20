@@ -4,7 +4,7 @@ from __future__ import absolute_import
 from nose.tools import assert_equals
 
 from ...api import DefaultOverride, EditorFactory
-from ....api import HasTraits, Int
+from traits.api import HasTraits, Int
 
 
 class DummyEditor(EditorFactory):

@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Bool, Str, Event, Property
+from traits.api import Bool, Str, Event, Property
 
 from ..editor import Editor
 
@@ -63,7 +63,7 @@ class _ShellEditor ( Editor ):
         # Moving the import here, since PythonShell is implemented in the
         # Pyface backend packages, and we want to delay loading this toolkit
         # specific class until this editor is actually used.
-        from ....pyface.python_shell import PythonShell
+        from pyface.python_shell import PythonShell
 
         locals = None
         value  = self.value

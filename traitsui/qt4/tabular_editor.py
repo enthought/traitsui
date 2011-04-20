@@ -23,15 +23,15 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.pyface.image_resource import ImageResource
+from pyface.image_resource import ImageResource
 
-from enthought.traits.api import Any, Bool, Event, HasStrictTraits, Instance, \
+from traits.api import Any, Bool, Event, HasStrictTraits, Instance, \
     Int, List, Property, TraitListEvent
 
-from enthought.traits.ui.tabular_adapter import TabularAdapter
-from enthought.traits.ui.ui_traits import Image
+from traitsui.tabular_adapter import TabularAdapter
+from traitsui.ui_traits import Image
 
 from editor import Editor
 from tabular_model import TabularModel

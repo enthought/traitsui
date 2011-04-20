@@ -25,20 +25,20 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Enum, Instance, Bool, Dict, Str, Any, Property, TraitError, \
            cached_property
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import ATheme
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.traits.ui.wx.editor_factory \
+from traitsui.wx.editor_factory \
     import EditorFactory
 
-from enthought.pyface.image_resource \
+from pyface.image_resource \
     import ImageResource
 
 from image_slice \

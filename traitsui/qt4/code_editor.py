@@ -17,19 +17,19 @@ interface toolkit, useful for tools such as debuggers.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
-from enthought.traits.api import Str, Unicode, List, Int, Event, Bool, \
+from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
+from traits.api import Str, Unicode, List, Int, Event, Bool, \
     TraitError, on_trait_change
-from enthought.traits.trait_base import SequenceTypes
+from traits.trait_base import SequenceTypes
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.code_editor file.
-from enthought.traits.ui.editors.code_editor import ToolkitEditorFactory
+# traitsui.editors.code_editor file.
+from traitsui.editors.code_editor import ToolkitEditorFactory
 
-from enthought.pyface.key_pressed_event import KeyPressedEvent
+from pyface.key_pressed_event import KeyPressedEvent
 
 from constants import OKColor, ErrorColor
 from editor import Editor

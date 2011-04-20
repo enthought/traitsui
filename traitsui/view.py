@@ -25,7 +25,7 @@
 
 from __future__ import absolute_import
 
-from ..api import (Any, Bool, Callable, Enum, Event, Float, Instance, List, Str,
+from traits.api import (Any, Bool, Callable, Enum, Event, Float, Instance, List, Str,
     Trait, TraitPrefixList)
 
 from .view_element import ViewElement, ViewSubElement
@@ -65,7 +65,7 @@ AHandler = Any( desc = 'the handler for the view' )
 ATitle = Str( desc = 'the window title for the view' )
 
 # Dialog window icon trait
-#icon_trait = Instance( 'enthought.pyface.image_resource.ImageResource',
+#icon_trait = Instance( 'pyface.image_resource.ImageResource',
 #                     desc = 'the ImageResource of the icon file for the view' )
 
 # User interface 'kind' trait. The values have the following meanings:
@@ -122,7 +122,7 @@ CloseResult = Enum( None, True, False,
                            'window or dialog close button or icon' )
 
 # The KeyBindings trait:
-AKeyBindings = Instance( 'enthought.traits.ui.key_bindings.KeyBindings',
+AKeyBindings = Instance( 'traitsui.key_bindings.KeyBindings',
                          desc = 'the global key bindings for the view' )
 
 #-------------------------------------------------------------------------------
@@ -149,10 +149,10 @@ class View ( ViewElement ):
     content = Content
 
     # The menu bar for the view. Usually requires a custom **handler**:
-    menubar = Any # Instance( enthought.pyface.action.MenuBarManager )
+    menubar = Any # Instance( pyface.action.MenuBarManager )
 
     # The toolbar for the view. Usually requires a custom **handler**:
-    toolbar = Any # Instance( enthought.pyface.action.ToolBarManager )
+    toolbar = Any # Instance( pyface.action.ToolBarManager )
 
     # Status bar items to add to the view's status bar. The value can be:
     #
@@ -165,14 +165,14 @@ class View ( ViewElement ):
     #     converted to: StatusItem( name = string ):
     statusbar = ViewStatus
 
-    # List of button actions to add to the view. The **enthought.traits.ui.menu**
+    # List of button actions to add to the view. The **traitsui.menu**
     # module defines standard buttons, such as **OKButton**, and standard sets
     # of buttons, such as **ModalButtons**, which can be used to define a value
     # for this attribute. This value can also be a list of button name strings,
     # such as ``['OK', 'Cancel', 'Help']``. If set to the empty list, the
     # view contains a default set of buttons (equivalent to **LiveButtons**:
     # Undo/Redo, Revert, OK, Cancel, Help). To suppress buttons in the view,
-    # use the **NoButtons** variable, defined in **enthought.traits.ui.menu**.
+    # use the **NoButtons** variable, defined in **traitsui.menu**.
     buttons = Buttons
 
     # The set of global key bindings for the view. Each time a key is pressed

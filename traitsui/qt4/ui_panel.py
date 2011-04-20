@@ -19,24 +19,24 @@
 import cgi
 import re
 
-from enthought.qt import QtCore, QtGui, QtWebKit
+from traits.qt import QtCore, QtGui, QtWebKit
 
-from enthought.traits.api \
+from traits.api \
     import Any, Instance, Undefined
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import Group
 
-from enthought.traits.trait_base \
+from traits.trait_base \
     import enumerate
 
-from enthought.traits.ui.undo \
+from traitsui.undo \
     import UndoHistory
 
-from enthought.traits.ui.help_template \
+from traitsui.help_template \
     import help_template
 
-from enthought.traits.ui.menu \
+from traitsui.menu \
     import UndoButton, RevertButton, HelpButton
 
 from helper \
@@ -1097,6 +1097,6 @@ def heading_text(*args, **kw):
     global HeadingText
 
     if HeadingText is None:
-        from enthought.pyface.api import HeadingText
+        from pyface.api import HeadingText
 
     return HeadingText(*args, **kw)

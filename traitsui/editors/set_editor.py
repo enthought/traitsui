@@ -25,7 +25,7 @@ from __future__ import absolute_import
 
 from ..editor_factory import EditorWithListFactory
 
-from ...api import Bool, Str
+from traits.api import Bool, Str
 
 #-------------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:

@@ -24,19 +24,19 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Instance, Str, on_trait_change
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import Theme
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import ATheme, AView, Image, Position, Spacing
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.traits.ui.basic_editor_factory \
+from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
 from themed_control \

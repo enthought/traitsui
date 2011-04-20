@@ -13,26 +13,26 @@
 #------------------------------------------------------------------------------
 
 ## Deprecated proxy for the BasicEditorFactory class declared in
-# enthought.traits.ui, declared here just for backward compatibility.
+# traitsui, declared here just for backward compatibility.
 
 import warnings
 
-from enthought.traits.ui.basic_editor_factory \
+from traitsui.basic_editor_factory \
     import BasicEditorFactory as AbstractBasicEditorFactory
 
 #-------------------------------------------------------------------------------
 #  'BasicEditorFactory' class
-#   Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory
+#   Deprecated alias for traitsui.editor_factory.EditorFactory
 #-------------------------------------------------------------------------------
 
 class BasicEditorFactory(AbstractBasicEditorFactory):
     """ Deprecated alias for
-        enthought.traits.ui.basic_editor_factory.BasicEditorFactory.
+        traitsui.basic_editor_factory.BasicEditorFactory.
     """
 
     def __init__(self, *args, **kwds):
         super(BasicEditorFactory, self).__init__(*args, **kwds)
-        warnings.warn("DEPRECATED: Use enthought.traits.ui.basic_editor_factory"
+        warnings.warn("DEPRECATED: Use traitsui.basic_editor_factory"
             ".BasicEditorFactory instead.", DeprecationWarning)
 
 #---EOF-------------------------------------------------------------------------

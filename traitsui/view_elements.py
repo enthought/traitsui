@@ -30,9 +30,9 @@
 
 from __future__ import absolute_import
 
-from ..api import HasStrictTraits, List, Dict, Str, Int, Any, TraitError
+from traits.api import HasStrictTraits, List, Dict, Str, Int, Any, TraitError
 
-from ..trait_base import enumerate
+from traits.trait_base import enumerate
 
 from .view_element import ViewElement
 

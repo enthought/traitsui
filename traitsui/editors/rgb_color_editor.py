@@ -41,13 +41,13 @@ class ToolkitEditorFactory ( EditorFactory ):
 
 # Define the RGBColorEditor class
 # The function will try to return the toolkit-specific editor factory (located
-# in enthought.traits.ui.<toolkit>.rgb_color_editor, and if none is found, the
+# in traitsui.<toolkit>.rgb_color_editor, and if none is found, the
 # ToolkitEditorFactory declared here is returned.
 def RGBColorEditor(*args, **traits):
     """ Returns an instance of the toolkit-specific editor factory declared in
-    enthought.traits.ui.<toolkit>.rgb_color_editor. If such an editor factory
+    traitsui.<toolkit>.rgb_color_editor. If such an editor factory
     cannot be located, an instance of the abstract ToolkitEditorFactory
-    declared in enthought.traits.ui.editors.rgb_color_editor is returned.
+    declared in traitsui.editors.rgb_color_editor is returned.
 
     Parameters
     ----------

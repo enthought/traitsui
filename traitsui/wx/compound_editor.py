@@ -25,13 +25,13 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Str
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.compound_editor file.
-from enthought.traits.ui.editors.compound_editor \
+# traitsui.editors.compound_editor file.
+from traitsui.editors.compound_editor \
     import ToolkitEditorFactory
 
 from editor \

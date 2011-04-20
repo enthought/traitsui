@@ -23,7 +23,7 @@ backends.
 
 from __future__ import absolute_import
 
-from ...api import Range
+from traits.api import Range
 
 from ..editor_factory import EditorWithListFactory
 

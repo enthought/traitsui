@@ -28,7 +28,7 @@ import wx
 from wx.grid \
     import PyGridCellRenderer, GridCellStringRenderer
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import convert_bitmap
 
 from helper \

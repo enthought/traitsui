@@ -14,7 +14,7 @@ released under a 3 clause BSD license.
 
 Files and orginal authors:
 ----------------------------------------------------------------------------
-enthought/traits/ui/wx/images:
+traitsui/wx/images:
                    cb_hover_off.png | Enthought
                     cb_hover_on.png | Enthought
                          cb_off.png | Enthought

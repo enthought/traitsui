@@ -25,14 +25,14 @@
 
 from __future__ import absolute_import
 
-from ..api import Str
+from traits.api import Str
 
 # Import and rename the needed PyFace elements:
-from ...pyface.action.api import ToolBarManager as ToolBar
-from ...pyface.action.api import MenuBarManager as MenuBar
-from ...pyface.action.api import MenuManager as Menu
-from ...pyface.action.api import Group as ActionGroup
-from ...pyface.action.api import Action as PyFaceAction
+from pyface.action.api import ToolBarManager as ToolBar
+from pyface.action.api import MenuBarManager as MenuBar
+from pyface.action.api import MenuManager as Menu
+from pyface.action.api import Group as ActionGroup
+from pyface.action.api import Action as PyFaceAction
 
 #-------------------------------------------------------------------------------
 #  'Action' class (extends the core pyface Action class):
@@ -169,7 +169,7 @@ CancelButton = Action( name = 'Cancel' )
 # which contains the **help** text for the top-level Group (if any), and for
 # the items in the view. If the default help handler has been overridden,
 # the action is determined by the custom help handler. See
-# **enthought.traits.ui.help**.
+# **traitsui.help**.
 HelpButton = Action( name = 'Help' )
 
 OKCancelButtons = [ OKButton, CancelButton ]

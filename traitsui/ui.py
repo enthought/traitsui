@@ -28,11 +28,11 @@ from __future__ import absolute_import
 import shelve
 import os
 
-from ..api import (Any, Bool, Callable, DictStrAny, Event, HasPrivateTraits,
+from traits.api import (Any, Bool, Callable, DictStrAny, Event, HasPrivateTraits,
     Instance, Int, List, Property, Str, TraitError, on_trait_change,
     property_depends_on)
 
-from ..trait_base import traits_home, is_str
+from traits.trait_base import traits_home, is_str
 
 from .editor import Editor
 
@@ -77,7 +77,7 @@ class UI ( HasPrivateTraits ):
     handler = Instance( Handler )
 
     # View template used to construct the user interface
-    view = Instance( 'enthought.traits.ui.view.View' )
+    view = Instance( 'traitsui.view.View' )
 
     # Panel or dialog associated with the user interface
     control = Any

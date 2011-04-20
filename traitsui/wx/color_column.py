@@ -24,7 +24,7 @@
 from wx \
     import Colour as WxColour
 
-from enthought.traits.ui.table_column \
+from traitsui.table_column \
     import ObjectColumn
 
 #-------------------------------------------------------------------------------

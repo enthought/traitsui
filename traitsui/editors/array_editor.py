@@ -26,7 +26,7 @@ from __future__ import absolute_import
 
 import numpy
 
-from ...api import Bool, HasTraits, Int, Float, Instance, false, TraitError
+from traits.api import Bool, HasTraits, Int, Float, Instance, false, TraitError
 
 from ..editor import Editor
 

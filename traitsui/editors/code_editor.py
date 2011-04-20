@@ -25,7 +25,7 @@ useful for tools such as debuggers.
 
 from __future__ import absolute_import
 
-from ...api import Instance, Str, Color, Enum, Bool
+from traits.api import Instance, Str, Color, Enum, Bool
 
 from ..editor_factory import EditorFactory
 
@@ -87,7 +87,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     auto_scroll = Bool( True )
 
     # Optional key bindings associated with the editor
-    key_bindings = Instance( 'enthought.traits.ui.key_bindings.KeyBindings' )
+    key_bindings = Instance( 'traitsui.key_bindings.KeyBindings' )
 
     # Calltip clicked event
     calltip_clicked = Str

@@ -17,12 +17,12 @@ based custom control.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtGui
+from traits.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.custom_editor file.
-from enthought.traits.ui.editors.custom_editor \
+# traitsui.editors.custom_editor file.
+from traitsui.editors.custom_editor \
     import ToolkitEditorFactory
 
 from editor \

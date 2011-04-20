@@ -29,31 +29,31 @@ import re
 from cgi \
     import escape
 
-from enthought.traits.api \
+from traits.api \
     import Instance, Undefined
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import Group
 
-from enthought.traits.trait_base \
+from traits.trait_base \
     import enumerate
 
-from enthought.traits.ui.undo \
+from traitsui.undo \
     import UndoHistory
 
-from enthought.traits.ui.dockable_view_element \
+from traitsui.dockable_view_element \
     import DockableViewElement
 
-from enthought.traits.ui.help_template \
+from traitsui.help_template \
     import help_template
 
-from enthought.traits.ui.menu \
+from traitsui.menu \
     import UndoButton, RevertButton, HelpButton
 
-from enthought.pyface.dock.api \
+from pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
-from enthought.pyface.sizers.flow \
+from pyface.sizers.flow \
     import FlowSizer
 
 from helper \
@@ -1338,7 +1338,7 @@ def heading_text ( *args, **kw ):
     global HeadingText
 
     if HeadingText is None:
-        from enthought.pyface.heading_text import HeadingText
+        from pyface.heading_text import HeadingText
 
     return HeadingText( *args, **kw )
 

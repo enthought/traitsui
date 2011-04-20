@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Dict, Str, Any
+from traits.api import Dict, Str, Any
 
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
 # to avoid circular imports, as this EditorFactory will be part of

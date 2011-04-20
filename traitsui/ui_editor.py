@@ -25,7 +25,7 @@
 
 from __future__ import absolute_import
 
-from ..api import Instance
+from traits.api import Instance
 
 from .ui import UI
 

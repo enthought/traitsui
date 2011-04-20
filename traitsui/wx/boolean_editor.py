@@ -26,15 +26,15 @@ import wx
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.boolean_editor file.
-from enthought.traits.ui.editors.boolean_editor \
+# traitsui.editors.boolean_editor file.
+from traitsui.editors.boolean_editor \
     import ToolkitEditorFactory
 
 from editor \
     import Editor
 
 # This needs to be imported in here for use by the editor factory for boolean
-# editors (declared in enthought.traits.ui). The editor factory's text_editor
+# editors (declared in traitsui). The editor factory's text_editor
 # method will use the TextEditor in the ui.
 from text_editor \
     import SimpleEditor as TextEditor

@@ -25,7 +25,7 @@
 
 from __future__ import absolute_import
 
-from ..api import HasPrivateTraits, Instance, Str, Int, Float, Either
+from traits.api import HasPrivateTraits, Instance, Str, Int, Float, Either
 
 #-------------------------------------------------------------------------------
 #  'ContextValue' class:

@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Bool
+from traits.api import Bool
 
 from ..toolkit import toolkit_object
 
@@ -59,13 +59,13 @@ class ToolkitEditorFactory ( EditorFactory ):
 
 # Define the ColorEditor class
 # The function will try to return the toolkit-specific editor factory (located
-# in enthought.traits.ui.<toolkit>.color_editor, and if none is found, the
+# in traitsui.<toolkit>.color_editor, and if none is found, the
 # ToolkitEditorFactory declared here is returned.
 def ColorEditor(*args, **traits):
     """ Returns an instance of the toolkit-specific editor factory declared in
-    enthought.traits.ui.<toolkit>.color_editor. If such an editor factory
+    traitsui.<toolkit>.color_editor. If such an editor factory
     cannot be located, an instance of the abstract ToolkitEditorFactory
-    declared in enthought.traits.ui.editors.color_editor is returned.
+    declared in traitsui.editors.color_editor is returned.
 
     Parameters
     ----------

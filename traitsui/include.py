@@ -25,7 +25,7 @@
 
 from __future__ import absolute_import
 
-from ..api import Str
+from traits.api import Str
 
 from .view_element import ViewSubElement
 

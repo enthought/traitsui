@@ -16,14 +16,14 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.api import Unicode, List, Str, on_trait_change
+from traits.api import Unicode, List, Str, on_trait_change
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.button_editor file.
-from enthought.traits.ui.editors.button_editor \
+# traitsui.editors.button_editor file.
+from traitsui.editors.button_editor \
     import ToolkitEditorFactory
 
 from editor import Editor

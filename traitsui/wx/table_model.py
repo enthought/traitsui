@@ -29,29 +29,29 @@ import wx
 
 import wx.grid as wxg
 
-from enthought.traits.api \
+from traits.api \
     import HasPrivateTraits, Any, Str, Instance, Event, Bool, \
            on_trait_change
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import View, Item, Editor
 
-from enthought.traits.ui.editors.table_editor \
+from traitsui.editors.table_editor \
     import ReversedList
 
-from enthought.traits.ui.table_filter \
+from traitsui.table_filter \
     import TableFilter
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import SequenceTypes
 
-from enthought.pyface.ui.wx.grid.api \
+from pyface.ui.wx.grid.api \
     import GridModel, GridSortEvent
 
-from enthought.pyface.ui.wx.grid.trait_grid_cell_adapter \
+from pyface.ui.wx.grid.trait_grid_cell_adapter \
     import TraitGridCellAdapter
 
-from enthought.pyface.timer.api \
+from pyface.timer.api \
     import do_later
 
 

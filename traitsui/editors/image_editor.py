@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Property
+from traits.api import Property
 
 from ..ui_traits import Image
 

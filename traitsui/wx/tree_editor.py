@@ -27,48 +27,48 @@ import wx
 import copy
 
 try:
-    from enthought.util.wx.drag_and_drop import PythonDropSource, \
+    from traits.util.wx.drag_and_drop import PythonDropSource, \
                                                 PythonDropTarget
 except:
     PythonDropSource = PythonDropTarget = None
 
-from enthought.pyface.resource_manager \
+from pyface.resource_manager \
     import resource_manager
 
-from enthought.pyface.image_list \
+from pyface.image_list \
     import ImageList
 
-from enthought.traits.api \
+from traits.api \
     import HasStrictTraits, Any, Str, Event, TraitError
 
-from enthought.traits.trait_base \
+from traits.trait_base \
     import enumerate
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import View, TreeNode, ObjectTreeNode, MultiTreeNode, Image
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.tree_editor file.
-from enthought.traits.ui.editors.tree_editor \
+# traitsui.editors.tree_editor file.
+from traitsui.editors.tree_editor \
     import ToolkitEditorFactory
 
-from enthought.traits.ui.undo \
+from traitsui.undo \
     import ListUndoItem
 
-from enthought.traits.ui.tree_node \
+from traitsui.tree_node \
     import ITreeNodeAdapterBridge
 
-from enthought.traits.ui.tree_node \
+from traitsui.tree_node \
     import ITreeNodeAdapterBridge
 
-from enthought.traits.ui.menu \
+from traitsui.menu \
     import Menu, Action, Separator
 
-from enthought.pyface.api \
+from pyface.api \
     import ImageResource
 
-from enthought.pyface.dock.api \
+from pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
 from constants \
@@ -1502,7 +1502,7 @@ class SimpleEditor ( Editor ):
         return (can_cut and self._menu_node.can_delete_me( object ))
 
     def _is_pasteable ( self, object ):
-        from enthought.util.wx.clipboard import clipboard
+        from traits.util.wx.clipboard import clipboard
 
         return self._menu_node.can_add( object, clipboard.object_type )
 
@@ -1755,7 +1755,7 @@ class SimpleEditor ( Editor ):
     def _menu_copy_node ( self ):
         """ Copies the current tree node object to the paste buffer.
         """
-        from enthought.util.wx.clipboard import clipboard
+        from traits.util.wx.clipboard import clipboard
 
         clipboard.data = self._data[1]
         self._data     = None
@@ -1767,7 +1767,7 @@ class SimpleEditor ( Editor ):
     def _menu_cut_node ( self ):
         """  Cuts the current tree node object into the paste buffer.
         """
-        from enthought.util.wx.clipboard import clipboard
+        from traits.util.wx.clipboard import clipboard
 
         node, object, nid = self._data
         clipboard.data    = object
@@ -1782,7 +1782,7 @@ class SimpleEditor ( Editor ):
         """ Pastes the current contents of the paste buffer into the current
             node.
         """
-        from enthought.util.wx.clipboard import clipboard
+        from traits.util.wx.clipboard import clipboard
 
         node, object, nid = self._data
         self._data        = None

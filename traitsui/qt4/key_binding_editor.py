@@ -18,15 +18,15 @@ key binding editor).
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.api \
+from traits.api \
     import Bool, Event
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.key_binding_editor file.
-from enthought.traits.ui.editors.key_binding_editor \
+# traitsui.editors.key_binding_editor file.
+from traitsui.editors.key_binding_editor \
     import KeyBindingEditor as ToolkitEditorFactory
 
 from editor \

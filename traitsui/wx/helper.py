@@ -31,14 +31,14 @@ import sys
 from os.path \
     import join, dirname, abspath
 
-from enthought.traits.api \
+from traits.api \
     import HasPrivateTraits, Enum, CTrait, Instance, Any, Int, \
            Event, Bool, BaseTraitHandler, TraitError
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import convert_image, SequenceTypes
 
-from enthought.pyface.timer.api \
+from pyface.timer.api \
     import do_later
 
 from constants \
@@ -82,8 +82,8 @@ def bitmap_cache ( name, standard_size, path = None ):
 
     if path is None:
         if traits_path is None:
-           import  enthought.traits.ui.wx
-           traits_path = join( dirname( enthought.traits.ui.wx.__file__ ),
+           import  traitsui.wx
+           traits_path = join( dirname( traitsui.wx.__file__ ),
                                'images' )
         path = traits_path
     elif path == '':

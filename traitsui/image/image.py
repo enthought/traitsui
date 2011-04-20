@@ -49,29 +49,29 @@ from thread \
 from threading \
     import Thread
 
-from enthought.traits.api \
+from traits.api \
     import HasPrivateTraits, Property, Str, Int, List, Dict, File, Instance, \
            Bool, Undefined, TraitError, Float, Any, cached_property
 
-from enthought.traits.trait_base \
+from traits.trait_base \
     import get_resource_path, traits_home
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import HasMargin, HasBorder, Alignment
 
-from enthought.traits.ui.theme \
+from traitsui.theme \
     import Theme
 
-from enthought.traits.ui.toolkit \
+from traitsui.toolkit \
     import toolkit
 
-from enthought.pyface.api \
+from pyface.api \
     import ImageResource
 
-from enthought.pyface.resource_manager \
+from pyface.resource_manager \
     import resource_manager
 
-from enthought.resource.resource_reference \
+from pyface.resource.resource_reference \
     import ImageReference, ResourceReference
 
 #-------------------------------------------------------------------------------
@@ -114,7 +114,7 @@ Applicable Images:
 
 # Template for creating an ImageVolume object:
 ImageVolumeTemplate = \
-"""from enthought.traits.ui.image.image import ImageVolume, ImageVolumeInfo
+"""from traitsui.image.image import ImageVolume, ImageVolumeInfo
 
 volume = ImageVolume(
     category    = %(category)s,
@@ -128,8 +128,8 @@ volume = ImageVolume(
 
 # Template for creating an ImageVolume 'images' list:
 ImageVolumeImagesTemplate = \
-"""from enthought.traits.ui.image.image import ImageInfo
-from enthought.traits.ui.ui_traits   import Margin, Border
+"""from traitsui.image.image import ImageInfo
+from traitsui.ui_traits   import Margin, Border
 
 images = [
 %s

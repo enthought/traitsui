@@ -16,17 +16,17 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.pyface.api import ImageResource
+from pyface.api import ImageResource
 
-from enthought.traits.api import Str, Any, Bool, Dict
-from enthought.traits.trait_base import user_name_for, enumerate, xgetattr
+from traits.api import Str, Any, Bool, Dict
+from traits.trait_base import user_name_for, enumerate, xgetattr
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.list_editor file.
-from enthought.traits.ui.editors.list_editor import ListItemProxy, \
+# traitsui.editors.list_editor file.
+from traitsui.editors.list_editor import ListItemProxy, \
     ToolkitEditorFactory
 
 from editor import Editor

@@ -37,10 +37,10 @@ from ui_panel \
 from constants \
     import DefaultTitle, WindowColor, screen_dy, \
                                      scrollbar_dx
-from enthought.traits.ui.undo \
+from traitsui.undo \
     import UndoHistory
 
-from enthought.traits.ui.menu \
+from traitsui.menu \
     import UndoButton, RevertButton, OKButton, CancelButton, HelpButton
 
 #-------------------------------------------------------------------------------

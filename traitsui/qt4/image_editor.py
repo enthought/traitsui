@@ -22,18 +22,18 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtGui
+from traits.qt import QtGui
 
-from enthought.pyface.image_resource \
+from pyface.image_resource \
     import ImageResource
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import convert_bitmap
 
 # FIXME: ImageEditor is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.image_editor file.
-from enthought.traits.ui.editors.image_editor \
+# traitsui.editors.image_editor file.
+from traitsui.editors.image_editor \
     import ImageEditor
 
 from editor \

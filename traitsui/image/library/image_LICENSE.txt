@@ -10,5 +10,5 @@ released under a 3 clause BSD license.
 
 Files and orginal authors:
 ----------------------------------------------------------------------------
-enthought/traits/ui/image/library:
+traitsui/image/library:
                             std.zip | Enthought

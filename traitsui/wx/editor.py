@@ -24,19 +24,19 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import HasTraits, Int, Instance, Str, Callable
 
 # CIRCULAR IMPORT FIXME:
 # We are importing from the source instead of from the api in order to
 # avoid circular imports. The 'toolkit.py' file imports from 'helper' which in
 # turns imports from this file. Therefore, trying to import
-# 'enthought.traits.ui.wx' (which imports the toolkit) will lead to importing
-# all of the editor factories declared in enthought.traits.ui.api. In addition,# some of the editor factories have a Color trait defined, and this will lead
+# 'traitsui.wx' (which imports the toolkit) will lead to importing
+# all of the editor factories declared in traitsui.api. In addition,# some of the editor factories have a Color trait defined, and this will lead
 # to an import of the wx 'toolkit' causing a circular import problem.
 # Another solution could be to move the GroupEditor object from helper to this
 # file.
-from enthought.traits.ui.editor \
+from traitsui.editor \
     import Editor as UIEditor
 
 from constants \
@@ -152,7 +152,7 @@ class Editor ( UIEditor ):
         # Handle the case where the item whose visibility has changed is a
         # notebook page:
         sizer = parent.GetSizer()
-        from enthought.pyface.dock.api import DockSizer
+        from pyface.dock.api import DockSizer
         if isinstance(sizer, DockSizer):
             dock_controls = sizer.GetContents().get_controls(False)
             for dock_control in dock_controls:

@@ -24,10 +24,10 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import HasPrivateTraits, HasTraits, Instance, Str, Enum, Any, Bool
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import ATheme
 
 from helper \

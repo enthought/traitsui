@@ -24,39 +24,39 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Int, List, Instance, Str, Any, Button, Tuple, \
            HasPrivateTraits, Bool, Event, Property
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import View, Item, UI, InstanceEditor, EnumEditor, Handler, SetEditor, \
            ListUndoItem
 
-from enthought.traits.ui.editors.table_editor \
+from traitsui.editors.table_editor \
     import BaseTableEditor, customize_filter
 
-from enthought.traits.ui.menu \
+from traitsui.menu \
     import Action, ToolBar
 
-from enthought.traits.ui.table_column \
+from traitsui.table_column \
     import TableColumn, ObjectColumn
 
-from enthought.traits.ui.table_filter \
+from traitsui.table_filter \
     import TableFilter
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import SequenceTypes
 
-from enthought.pyface.ui.wx.grid.api \
+from pyface.ui.wx.grid.api \
     import Grid
 
-from enthought.pyface.dock.api \
+from pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
-from enthought.pyface.image_resource \
+from pyface.image_resource \
     import ImageResource
 
-from enthought.pyface.timer.api \
+from pyface.timer.api \
     import do_later
 
 from editor \

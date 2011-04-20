@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Trait, TraitError
+from traits.api import Trait, TraitError
 
 #-------------------------------------------------------------------------------
 #  Convert a number into a wxColour object:

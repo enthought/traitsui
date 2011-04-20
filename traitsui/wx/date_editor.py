@@ -27,10 +27,10 @@ import datetime
 import wx
 import wx.calendar
 
-from enthought.traits.api import Bool
-from enthought.traits.ui.wx.editor import Editor
-from enthought.traits.ui.wx.constants import WindowColor
-from enthought.traits.ui.wx.text_editor \
+from traits.api import Bool
+from traitsui.wx.editor import Editor
+from traitsui.wx.constants import WindowColor
+from traitsui.wx.text_editor \
     import ReadonlyEditor as TextReadonlyEditor
 
 

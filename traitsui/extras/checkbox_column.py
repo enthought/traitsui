@@ -24,12 +24,12 @@
 
 from __future__ import absolute_import
 
-from ....etsconfig.api import ETSConfig
+from traits.etsconfig.api import ETSConfig
 
 from ..table_column import ObjectColumn
 
 if ETSConfig.toolkit == 'wx':
-    from ....pyface.ui.wx.grid.checkbox_renderer import CheckboxRenderer
+    from pyface.ui.wx.grid.checkbox_renderer import CheckboxRenderer
 elif ETSConfig.toolkit == 'qt4':
     from ..qt4.extra.checkbox_renderer import CheckboxRenderer
 else:

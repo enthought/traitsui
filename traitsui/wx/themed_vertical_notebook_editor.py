@@ -22,19 +22,19 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.traits.api \
+from traits.api \
     import Instance, Str, Any, List, Bool, Undefined, on_trait_change
 
-from enthought.traits.trait_base \
+from traits.trait_base \
     import user_name_for
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.traits.ui.basic_editor_factory \
+from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import AView, ATheme
 
 from themed_vertical_notebook \

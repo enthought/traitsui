@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Trait, TraitHandler, TraitError
+from traits.api import Trait, TraitHandler, TraitError
 
 #-------------------------------------------------------------------------------
 #  Convert a string into a valid 'wxFont' object (if possible):

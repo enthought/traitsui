@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ..api import HasPrivateTraits, Str, Float
+from traits.api import HasPrivateTraits, Str, Float
 
 from .view import View
 
@@ -32,7 +32,7 @@ from .group import HGroup
 
 from .item import Item, spring
 
-from ...pyface.timer.api import do_after
+from pyface.timer.api import do_after
 
 #-------------------------------------------------------------------------------
 #  'Message' class:

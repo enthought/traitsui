@@ -19,12 +19,12 @@
 
 import os.path
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
-from enthought.traits.api \
+from traits.api \
     import Enum, CTrait, BaseTraitHandler, TraitError
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import convert_image, SequenceTypes
 
 #-------------------------------------------------------------------------------

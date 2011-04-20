@@ -24,7 +24,7 @@
 #-------------------------------------------------------------------------------
 
 # Make sure that importimg from this backend is OK:
-from enthought.traits.ui.toolkit import assert_toolkit_import
+from traitsui.toolkit import assert_toolkit_import
 assert_toolkit_import('wx')
 
 import wx
@@ -34,25 +34,25 @@ _app = wx.GetApp()
 if _app is None:
     _app = wx.PySimpleApp()
 
-from enthought.traits.api \
+from traits.api \
     import HasPrivateTraits, Instance, Property, Category, cached_property
 
-from enthought.traits.trait_notifiers \
+from traits.trait_notifiers \
     import set_ui_handler
 
-from enthought.traits.ui.ui \
+from traitsui.ui \
     import UI
 
-from enthought.traits.ui.theme \
+from traitsui.theme \
     import Theme
 
-from enthought.traits.ui.dock_window_theme \
+from traitsui.dock_window_theme \
     import DockWindowTheme
 
-from enthought.traits.ui.toolkit \
+from traitsui.toolkit \
     import Toolkit
 
-from enthought.util.wx.drag_and_drop \
+from traits.util.wx.drag_and_drop \
     import PythonDropTarget
 
 from constants \
@@ -198,7 +198,7 @@ class GUIToolkit ( Toolkit ):
             attribute values.
         kind : string
             The type of user interface window to create. See the
-            **enthought.traits.ui.view.kind_trait** trait for values and
+            **traitsui.view.kind_trait** trait for values and
             their meanings. If *kind* is unspecified or None, the **kind**
             attribute of the View object is used.
         handler : Handler object
@@ -366,7 +366,7 @@ class GUIToolkit ( Toolkit ):
     def set_icon ( self, ui ):
         """ Sets the icon for the UI window.
         """
-        from enthought.pyface.image_resource import ImageResource
+        from pyface.image_resource import ImageResource
 
         if isinstance( ui.icon, ImageResource ):
             ui.control.SetIcon( ui.icon.create_icon() )

@@ -39,13 +39,13 @@ class ToolkitEditorFactory ( EditorFactory ):
 
 # Define the FontEditor class
 # The function will try to return the toolkit-specific editor factory (located
-# in enthought.traits.ui.<toolkit>.font_editor, and if none is found, the
+# in traitsui.<toolkit>.font_editor, and if none is found, the
 # ToolkitEditorFactory declared here is returned.
 def FontEditor(*args, **traits):
     """ Returns an instance of the toolkit-specific editor factory declared in
-    enthought.traits.ui.<toolkit>.font_editor. If such an editor factory
+    traitsui.<toolkit>.font_editor. If such an editor factory
     cannot be located, an instance of the abstract ToolkitEditorFactory
-    declared in enthought.traits.ui.editors.font_editor is returned.
+    declared in traitsui.editors.font_editor is returned.
 
     Parameters
     ----------

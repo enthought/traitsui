@@ -21,7 +21,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Bool, Property, Str
+from traits.api import Bool, Property, Str
 from ..toolkit import toolkit_object
 from ..basic_editor_factory import BasicEditorFactory
 

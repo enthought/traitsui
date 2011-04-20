@@ -27,10 +27,10 @@ from __future__ import absolute_import
 
 from operator import isSequenceType
 
-from ..api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
+from traits.api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
     Instance, Int, List, Property, Str, Trait)
 
-from ..trait_base import enumerate
+from traits.trait_base import enumerate
 
 #-------------------------------------------------------------------------------
 #  Constants:

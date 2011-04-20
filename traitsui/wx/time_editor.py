@@ -28,8 +28,8 @@ import datetime
 
 import wx.lib.masked as masked
 
-from enthought.traits.ui.wx.editor import Editor
-from enthought.traits.ui.wx.text_editor \
+from traitsui.wx.editor import Editor
+from traitsui.wx.text_editor \
     import ReadonlyEditor as TextReadonlyEditor
 
 

@@ -23,9 +23,9 @@
 from __future__ import absolute_import
 
 # ETS imports
-from ....pyface.api import FileDialog, confirm, error, YES, CANCEL
-from ....pyface.timer.api import Timer
-from ...api import HasTraits, Str, Bool, Any, Int, Instance, on_trait_change
+from pyface.api import FileDialog, confirm, error, YES, CANCEL
+from pyface.timer.api import Timer
+from traits.api import HasTraits, Str, Bool, Any, Int, Instance, on_trait_change
 from ..api import Handler
 
 

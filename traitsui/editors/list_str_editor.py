@@ -24,13 +24,13 @@
 
 from __future__ import absolute_import
 
-from ...api import Str, Enum, List, Bool, Instance, Property
+from traits.api import Str, Enum, List, Bool, Instance, Property
 
 from ..basic_editor_factory import BasicEditorFactory
 
 from ..toolkit import toolkit_object
 
-from ....pyface.image_resource import ImageResource
+from pyface.image_resource import ImageResource
 
 #-------------------------------------------------------------------------------
 #  'ListStrEditor' editor factory class:
@@ -89,7 +89,7 @@ class ListStrEditor ( BasicEditorFactory ):
     auto_add = Bool( False )
 
     # The adapter from list items to editor values:
-    adapter = Instance( 'enthought.traits.ui.list_str_adapter.ListStrAdapter',
+    adapter = Instance( 'traitsui.list_str_adapter.ListStrAdapter',
                         () )
 
     # The optional extended name of the trait containing the adapter:

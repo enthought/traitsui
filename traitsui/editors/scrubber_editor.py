@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Float, Color, Property
+from traits.api import Float, Color, Property
 
 from ..ui_traits import Alignment
 

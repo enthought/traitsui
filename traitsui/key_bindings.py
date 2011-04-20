@@ -26,12 +26,12 @@
 
 from __future__ import absolute_import
 
-from ..api import (Any, Event, HasPrivateTraits, HasStrictTraits, Instance, List,
+from traits.api import (Any, Event, HasPrivateTraits, HasStrictTraits, Instance, List,
     Property, Str, cached_property, on_trait_change)
 
 from .api import HGroup, Item, KeyBindingEditor, ListEditor, View, toolkit
 
-from ..trait_base import SequenceTypes
+from traits.trait_base import SequenceTypes
 
 #-------------------------------------------------------------------------------
 #  Key binding trait definition:

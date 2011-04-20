@@ -22,9 +22,9 @@
 
 from __future__ import absolute_import
 
-from ...trait_base import SequenceTypes, enumerate
+from traits.trait_base import SequenceTypes, enumerate
 
-from ...api import Bool, HasTraits, List, Tuple, Unicode, Int, Any, TraitType
+from traits.api import Bool, HasTraits, List, Tuple, Unicode, Int, Any, TraitType
 
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
 # to avoid circular imports, as this EditorFactory will be part of

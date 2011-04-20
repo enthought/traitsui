@@ -28,7 +28,7 @@ import sys
 import glob
 from configobj import ConfigObj
 
-from ...api import (HasTraits, HasPrivateTraits, Str, Instance, Property, Any,
+from traits.api import (HasTraits, HasPrivateTraits, Str, Instance, Property, Any,
     Code, HTML, true, false, Dict)
 
 from ..api import (TreeEditor, ObjectTreeNode, TreeNodeObject, View, Item,
@@ -45,7 +45,7 @@ from os.path import (join, isdir, split, splitext, dirname, basename, abspath,
 #-------------------------------------------------------------------------------
 
 # Define the code used to populate the 'execfile' dictionary:
-exec_str =  """from enthought.traits.api import *
+exec_str =  """from traits.api import *
 
 """
 
@@ -696,7 +696,7 @@ path_view = View(
         export = 'DockWindowShell',
         id     = 'tabbed'
     ),
-    id      = 'enthought.traits.ui.demos.demo.path_view',
+    id      = 'traitsui.demos.demo.path_view',
     dock    = 'horizontal'
 )
 
@@ -736,7 +736,7 @@ demo_view = View(
          export = 'DockWindowShell',
          id     = 'vsplit'
      ),
-     id      = 'enthought.traits.ui.demos.demo.file_view',
+     id      = 'traitsui.demos.demo.file_view',
      dock    = 'horizontal',
      handler = demo_file_handler
 )
@@ -786,7 +786,7 @@ class Demo ( HasPrivateTraits ):
                   editor     = demo_tree_editor
             ),
             title     = self.title,
-            id        = 'enthought.traits.ui.demos.demo.Demo',
+            id        = 'traitsui.demos.demo.Demo',
             dock      = 'horizontal',
             resizable = True,
             width     = 950,

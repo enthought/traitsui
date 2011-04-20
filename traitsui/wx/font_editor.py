@@ -25,9 +25,9 @@
 
 import wx
 
-from enthought.traits.api import Bool
+from traits.api import Bool
 
-from enthought.traits.ui.editors.font_editor \
+from traitsui.editors.font_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
 
 from editor_factory \

@@ -20,7 +20,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Str
+from traits.api import Str
 from ..editor_factory import EditorFactory
 from ..ui_traits import AView
 

@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Instance, Int, false
+from traits.api import Instance, Int, false
 
 from .tree_editor import TreeEditor
 from ..view import View

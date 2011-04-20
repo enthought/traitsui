@@ -27,10 +27,10 @@ import warnings
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import TraitError, Any, Bool, Event, Str
 
-from enthought.traits.ui.editor_factory \
+from traitsui.editor_factory \
     import EditorFactory as BaseEditorFactory
 
 from editor \
@@ -41,16 +41,16 @@ from constants \
 
 #-------------------------------------------------------------------------------
 #  'EditorFactory' class
-#   Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory
+#   Deprecated alias for traitsui.editor_factory.EditorFactory
 #-------------------------------------------------------------------------------
 
 class EditorFactory(BaseEditorFactory):
-    """ Deprecated alias for enthought.traits.ui.editor_factory.EditorFactory.
+    """ Deprecated alias for traitsui.editor_factory.EditorFactory.
     """
 
     def __init__(self, *args, **kwds):
         super(EditorFactory, self).__init__(*args, **kwds)
-        warnings.warn("DEPRECATED: Use enthought.traits.ui.editor_factory."
+        warnings.warn("DEPRECATED: Use traitsui.editor_factory."
             ".EditorFactory instead.", DeprecationWarning)
 
 #-------------------------------------------------------------------------------

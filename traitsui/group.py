@@ -28,10 +28,10 @@ from __future__ import absolute_import
 from string \
     import find
 
-from ..api import (Bool, Delegate, Float, Instance, List, Property, Range,
+from traits.api import (Bool, Delegate, Float, Instance, List, Property, Range,
     ReadOnly, Str, TraitError, cached_property)
 
-from ..trait_base import enumerate
+from traits.trait_base import enumerate
 
 from .view_element import ViewSubElement
 

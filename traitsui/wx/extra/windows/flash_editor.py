@@ -27,10 +27,10 @@ import  wx
 if wx.Platform == '__WXMSW__':
     from wx.lib.flashwin import FlashWindow
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.traits.ui.basic_editor_factory \
+from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
 #-------------------------------------------------------------------------------

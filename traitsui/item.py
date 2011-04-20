@@ -29,10 +29,10 @@ import re
 
 from string import find, rfind
 
-from ..api import (Bool, Callable, Constant, Delegate, Float, Instance,
+from traits.api import (Bool, Callable, Constant, Delegate, Float, Instance,
     Range, Str, Undefined,)
 
-from ..trait_base import user_name_for
+from traits.trait_base import user_name_for
 
 from .view_element import ViewSubElement
 
@@ -518,7 +518,7 @@ class Spring ( Item ):
     show_label = Bool( False )
 
     # Editor to use for the item
-    editor = Instance( 'enthought.traits.ui.api.NullEditor', () )
+    editor = Instance( 'traitsui.api.NullEditor', () )
 
     # Should the item use extra space along its Group's layout orientation?
     springy = True

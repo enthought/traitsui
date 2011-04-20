@@ -24,7 +24,7 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Trait, TraitHandler, TraitError
 
 #-------------------------------------------------------------------------------

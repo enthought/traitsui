@@ -32,17 +32,17 @@ from colorsys \
 from numpy \
     import reshape, fromstring, uint8
 
-from enthought.traits.api \
+from traits.api \
     import HasPrivateTraits, Instance, Int, List, Color, Enum, Bool
 
-from enthought.pyface.image_resource \
+from pyface.image_resource \
     import ImageResource
 
 from constants \
     import WindowColor
 
 from constants import is_mac
-import enthought.traits.ui.wx.constants
+import traitsui.wx.constants
 
 #-------------------------------------------------------------------------------
 #  Recursively paint the parent's background if they have an associated image

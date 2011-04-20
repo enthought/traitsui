@@ -17,10 +17,10 @@
 """
 
 # System library imports
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
 # ETS imports
-from enthought.traits.ui.qt4.table_editor import TableDelegate
+from traitsui.qt4.table_editor import TableDelegate
 
 
 class CheckboxRenderer(TableDelegate):

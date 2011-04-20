@@ -31,7 +31,7 @@ from os import getcwd
 
 from os.path import join, dirname, exists
 
-from ...api import Module, Type, Unicode, on_trait_change
+from traits.api import Module, Type, Unicode, on_trait_change
 
 from .enum_editor import ToolkitEditorFactory as EditorFactory
 

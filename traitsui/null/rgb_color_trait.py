@@ -26,9 +26,9 @@
 
 from __future__ import absolute_import
 
-from ...api import Trait, TraitError
+from traits.api import Trait, TraitError
 
-from ...trait_base import SequenceTypes
+from traits.trait_base import SequenceTypes
 
 #-------------------------------------------------------------------------------
 #  Convert a number into an RGB tuple:

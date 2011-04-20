@@ -20,7 +20,7 @@
 
 from __future__ import absolute_import
 
-from ...trait_types import Bool, Int, Enum, Str
+from traits.trait_types import Bool, Int, Enum, Str
 from ..ui_traits import AView
 from ..editor_factory import EditorFactory
 

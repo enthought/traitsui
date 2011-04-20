@@ -35,7 +35,7 @@ from .helper import user_name_for
 
 from .ui_info import UIInfo
 
-from ..api import HasPrivateTraits, HasTraits, Instance
+from traits.api import HasPrivateTraits, HasTraits, Instance
 
 #-------------------------------------------------------------------------------
 #  Closes a DockControl (if allowed by the associated traits UI Handler):
@@ -230,7 +230,7 @@ class Handler ( HasPrivateTraits ):
         This method is called when the user clicks a **Help** button in a
         Traits user interface. The method calls the global help handler, which
         might be the default help handler, or might be a custom help handler.
-        See **enthought.traits.ui.help** for details about the setting the
+        See **traitsui.help** for details about the setting the
         global help handler.
         """
         if control is None:
@@ -325,7 +325,7 @@ class Handler ( HasPrivateTraits ):
     def can_drop ( self, info, object ):
         """ Can the specified object be inserted into the view?
         """
-        from ...pyface.dock.api import DockControl
+        from pyface.dock.api import DockControl
 
         if isinstance( object, DockControl ):
             return self.can_import( info, object.export )
@@ -349,7 +349,7 @@ class Handler ( HasPrivateTraits ):
     def dock_control_for ( self, info, parent, object ):
         """ Returns the DockControl object for a specified object.
         """
-        from ...pyface.dock.api import IDockable, DockControl
+        from pyface.dock.api import IDockable, DockControl
         from .dockable_view_element import DockableViewElement
 
         try:
@@ -410,7 +410,7 @@ class Handler ( HasPrivateTraits ):
     def open_view_for ( self, control, use_mouse = True ):
         """ Creates a new view of a specified control.
         """
-        from ...pyface.dock.api import DockWindowShell
+        from pyface.dock.api import DockWindowShell
 
         DockWindowShell( control, use_mouse = use_mouse )
 

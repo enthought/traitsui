@@ -16,9 +16,9 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtGui
+from traits.qt import QtGui
 
-from enthought.traits.api \
+from traits.api \
     import Trait, TraitHandler, TraitError
 
 #-------------------------------------------------------------------------------
@@ -188,11 +188,11 @@ class TraitPyQtFont ( TraitHandler ):
 #-------------------------------------------------------------------------------
 
 ### FIXME: We have declared the 'editor' to be a function instead of  the
-# enthought.traits.ui.qt4.font_editor.ToolkitEditorFactory class, since the
+# traitsui.qt4.font_editor.ToolkitEditorFactory class, since the
 # latter is leading to too many circular imports. In the future, try to see if
 # there is a better way to do this.
 def get_font_editor(*args, **traits):
-    from enthought.traits.ui.qt4.font_editor import ToolkitEditorFactory
+    from traitsui.qt4.font_editor import ToolkitEditorFactory
     return ToolkitEditorFactory(*args, **traits)
 
 #-------------------------------------------------------------------------------

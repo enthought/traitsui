@@ -27,7 +27,7 @@ from __future__ import absolute_import
 
 import sys, os
 
-from ..api import HasPrivateTraits, Callable, Str, Bool, Event, Any, Property
+from traits.api import HasPrivateTraits, Callable, Str, Bool, Event, Any, Property
 
 from .helper import enum_values_changed
 

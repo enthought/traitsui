@@ -16,12 +16,12 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtCore, QtGui
+from traits.qt import QtCore, QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.set_editor file.
-from enthought.traits.ui.editors.set_editor \
+# traitsui.editors.set_editor file.
+from traitsui.editors.set_editor \
     import ToolkitEditorFactory
 
 from helper \
@@ -30,7 +30,7 @@ from helper \
 from editor \
     import Editor
 
-from enthought.traits.api \
+from traits.api \
     import Instance, Property
 
 #-------------------------------------------------------------------------------

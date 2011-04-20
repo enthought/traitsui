@@ -26,37 +26,37 @@
 import wx
 import wx.lib.mixins.listctrl as listmix
 
-from enthought.traits.api \
+from traits.api \
     import HasStrictTraits, Int, \
            List, Bool, Instance, Any, Event, \
            Property, TraitListEvent
 
 # FIXME: TabularEditor (the editor factory for tabular editors) is a proxy class
 # defined here just for backward compatibility. The class has been moved to the
-# enthought.traits.ui.editors.tabular_editor file.
-from enthought.traits.ui.editors.tabular_editor \
+# traitsui.editors.tabular_editor file.
+from traitsui.editors.tabular_editor \
     import TabularEditor
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import Image
 
-from enthought.traits.ui.tabular_adapter \
+from traitsui.tabular_adapter \
     import TabularAdapter
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.pyface.image_resource \
+from pyface.image_resource \
     import ImageResource
 
-from enthought.pyface.timer.api \
+from pyface.timer.api \
     import do_later
 
 from constants \
     import is_mac, scrollbar_dx
 
 try:
-    from enthought.util.wx.drag_and_drop \
+    from traits.util.wx.drag_and_drop \
         import PythonDropSource, PythonDropTarget
 except:
     PythonDropSource = PythonDropTarget = None
@@ -428,7 +428,7 @@ class TabularEditor ( Editor ):
 
     def _update_editor ( self, object, name, old_value, new_value ):
         """ Performs updates when the object trait changes.
-            Overloads enthought.traits.ui.editor.UIEditor
+            Overloads traitsui.editor.UIEditor
         """
         self._update_visible = True
 

@@ -31,7 +31,7 @@ import sys
 import wx
 
 # ETS imports.
-from enthought.util.guisupport import is_event_loop_running_wx, \
+from traits.util.guisupport import is_event_loop_running_wx, \
     start_event_loop_wx
 
 #-------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
         values.
     kind : string
         The type of user interface window to create. See the
-        **enthought.traits.ui.view.kind_trait** trait for values and
+        **traitsui.view.kind_trait** trait for values and
         their meanings. If *kind* is unspecified or None, the **kind**
         attribute of the View object is used.
     handler : Handler object

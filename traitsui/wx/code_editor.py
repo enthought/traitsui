@@ -26,22 +26,22 @@
 import wx
 import wx.stc as stc
 
-from enthought.traits.api \
+from traits.api \
     import Str, List, Int, Event, Bool, TraitError, on_trait_change
 
-from enthought.traits.trait_base \
+from traits.trait_base \
     import SequenceTypes
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.code_editor file.
-from enthought.traits.ui.editors.code_editor \
+# traitsui.editors.code_editor file.
+from traitsui.editors.code_editor \
     import ToolkitEditorFactory
 
-from enthought.pyface.api \
+from pyface.api \
     import PythonEditor
 
-from enthought.pyface.util.python_stc \
+from pyface.util.python_stc \
     import faces
 
 from editor \

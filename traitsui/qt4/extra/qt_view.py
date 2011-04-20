@@ -19,11 +19,11 @@
 import logging
 
 # System library imports.
-from enthought.qt import QtGui
+from traits.qt import QtGui
 
 # Enthought library imports.
-from enthought.traits.api import File, List, Str
-from enthought.traits.ui.view import View
+from traits.api import File, List, Str
+from traitsui.view import View
 
 # Logger.
 logger = logging.getLogger(__name__)

@@ -28,13 +28,13 @@ import wx
 from math \
     import log10
 
-from enthought.traits.api \
+from traits.api \
      import TraitError, Str, Float, Any, Bool
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.range_editor file.
-from enthought.traits.ui.editors.range_editor \
+# traitsui.editors.range_editor file.
+from traitsui.editors.range_editor \
     import ToolkitEditorFactory
 
 from editor_factory \
@@ -938,7 +938,7 @@ def CustomEnumEditor ( parent, factory, ui, object, name, description,
         style.
     """
     if factory._enum is None:
-        import enthought.traits.ui.editors.enum_editor as enum_editor
+        import traitsui.editors.enum_editor as enum_editor
         factory._enum = enum_editor.ToolkitEditorFactory(
                             values = range( factory.low, factory.high + 1 ),
                             cols   = factory.cols )

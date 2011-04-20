@@ -25,8 +25,8 @@
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.value_editor file.
-from enthought.traits.ui.editors.value_editor \
+# traitsui.editors.value_editor file.
+from traitsui.editors.value_editor \
     import _ValueEditor, ToolkitEditorFactory
 
 from editor import Editor

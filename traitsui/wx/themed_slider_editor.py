@@ -27,20 +27,20 @@ import wx
 from math \
    import log10, pow
 
-from enthought.traits.api \
+from traits.api \
     import HasPrivateTraits, Instance, Enum, Range, Str, Float, Bool, Color, \
            TraitError
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import Alignment
 
-from enthought.traits.ui.wx.editor \
+from traitsui.wx.editor \
     import Editor
 
-from enthought.traits.ui.basic_editor_factory \
+from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
-from enthought.pyface.timer.api \
+from pyface.timer.api \
     import do_after
 
 from constants \

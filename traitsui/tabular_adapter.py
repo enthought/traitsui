@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from ..api import (Any, Bool, Color, Enum, Event, Float, Font, HasPrivateTraits,
+from traits.api import (Any, Bool, Color, Enum, Event, Float, Font, HasPrivateTraits,
     HasTraits, Instance, Int, Interface, List, Property, Str, cached_property,
     implements, on_trait_change)
 

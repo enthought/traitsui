@@ -22,7 +22,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Any, Dict, Bool, Tuple, Int, List, Instance, Str, Enum
+from traits.api import Any, Dict, Bool, Tuple, Int, List, Instance, Str, Enum
 
 from ..tree_node import TreeNode
 

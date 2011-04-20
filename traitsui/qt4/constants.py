@@ -17,7 +17,7 @@ editors and text editor factories.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtGui
+from traits.qt import QtGui
 
 #-------------------------------------------------------------------------------
 #  Constants:

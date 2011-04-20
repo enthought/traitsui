@@ -25,7 +25,7 @@
 
 from __future__ import absolute_import
 
-from ...api import Str, Bool, Property, List, Enum, Instance
+from traits.api import Str, Bool, Property, List, Enum, Instance
 
 from ..ui_traits import Image
 
@@ -112,7 +112,7 @@ class TabularEditor ( BasicEditorFactory ):
     vertical_lines = Bool( True )
 
     # The adapter from trait values to editor values:
-    adapter = Instance( 'enthought.traits.ui.tabular_adapter.TabularAdapter', () )
+    adapter = Instance( 'traitsui.tabular_adapter.TabularAdapter', () )
 
     # What type of operations are allowed on the list:
     operations = List( Enum( 'delete', 'insert', 'append', 'edit', 'move' ),

@@ -16,12 +16,12 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtGui
+from traits.qt import QtGui
 
-from enthought.traits.api \
+from traits.api \
     import HasTraits, Instance, Str, Callable
 
-from enthought.traits.ui.api \
+from traitsui.api \
     import Editor as UIEditor
 
 from constants \

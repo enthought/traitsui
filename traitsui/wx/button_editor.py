@@ -25,13 +25,13 @@
 
 import wx
 
-from enthought.traits.api \
+from traits.api \
     import Str
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.button_editor file.
-from enthought.traits.ui.editors.button_editor \
+# traitsui.editors.button_editor file.
+from traitsui.editors.button_editor \
     import ToolkitEditorFactory
 
 from editor \
@@ -128,7 +128,7 @@ class CustomEditor ( SimpleEditor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        from enthought.pyface.image_button import ImageButton
+        from pyface.image_button import ImageButton
 
         factory       = self.factory
         self._control = ImageButton(

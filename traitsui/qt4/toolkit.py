@@ -18,10 +18,10 @@ the PyQt user interface toolkit.
 #-------------------------------------------------------------------------------
 
 # Make sure that importing from this backend is OK:
-from enthought.traits.ui.toolkit import assert_toolkit_import
+from traitsui.toolkit import assert_toolkit_import
 assert_toolkit_import('qt4')
 
-from enthought.qt import QtCore, QtGui, qt_api
+from traits.qt import QtCore, QtGui, qt_api
 
 if qt_api == 'pyqt':
     # Check the version numbers are late enough:
@@ -38,9 +38,9 @@ if QtGui.QApplication.startingUp():
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-from enthought.traits.trait_notifiers import set_ui_handler
+from traits.trait_notifiers import set_ui_handler
 
-from enthought.traits.ui.toolkit import Toolkit
+from traitsui.toolkit import Toolkit
 
 from constants import screen_dx, screen_dy
 
@@ -195,7 +195,7 @@ class GUIToolkit ( Toolkit ):
             attribute values.
         kind : string
             The type of user interface window to create. See the
-            **enthought.traits.ui.view.kind_trait** trait for values and
+            **traitsui.view.kind_trait** trait for values and
             their meanings. If *kind* is unspecified or None, the **kind**
             attribute of the View object is used.
         handler : Handler object
@@ -344,7 +344,7 @@ class GUIToolkit ( Toolkit ):
     def set_icon ( self, ui ):
         """ Sets the icon for the UI window.
         """
-        from enthought.pyface.image_resource import ImageResource
+        from pyface.image_resource import ImageResource
 
         if isinstance(ui.icon, ImageResource):
             ui.control.setWindowIcon(ui.icon.create_icon())

@@ -29,7 +29,7 @@ import re
 
 from string import rfind
 
-from ..api import HasPrivateTraits, Trait, Bool
+from traits.api import HasPrivateTraits, Trait, Bool
 
 from .ui_traits import (ATheme, AnObject, DockStyle, EditorStyle, ExportType,
     HelpId, Image)

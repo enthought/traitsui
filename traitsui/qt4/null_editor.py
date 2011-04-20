@@ -22,12 +22,12 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from enthought.qt import QtGui
+from traits.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
-# enthought.traits.ui.editors.null_editor file.
-from enthought.traits.ui.editors.null_editor \
+# traitsui.editors.null_editor file.
+from traitsui.editors.null_editor \
     import NullEditor as ToolkitEditorFactory
 
 from editor \

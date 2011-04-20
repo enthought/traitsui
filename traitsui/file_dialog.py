@@ -32,19 +32,19 @@ from os.path import (basename, dirname, exists, getatime, getctime, getmtime,
 
 from time import localtime, strftime
 
-from ..api import (Bool, Button, CList, Event, File, HasPrivateTraits,
+from traits.api import (Bool, Button, CList, Event, File, HasPrivateTraits,
     Instance, Int, Interface, Property, Str, cached_property, implements)
 
-from ..trait_base import user_name_for
+from traits.trait_base import user_name_for
 
 from .api import (CodeEditor, FileEditor, HGroup, HSplit, Handler, HistoryEditor,
     ImageEditor, InstanceEditor, Item, UIInfo, VGroup, VSplit, View, spring)
 
 from .ui_traits import AView
 
-from ...pyface.api import ImageResource
+from pyface.api import ImageResource
 
-from ...pyface.timer.api import do_later
+from pyface.timer.api import do_later
 
 from .helper import commatize
 
@@ -446,7 +446,7 @@ class OpenFileDialog ( Handler ):
     title = Str( 'Open File' )
 
     # The Traits UI persistence id to use:
-    id = Str( 'enthought.traits.ui.file_dialog.OpenFileDialog' )
+    id = Str( 'traitsui.file_dialog.OpenFileDialog' )
 
     # A list of optional file dialog extensions:
     extensions = CList( IFileDialogModel )

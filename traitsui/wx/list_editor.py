@@ -26,22 +26,22 @@ import wx
 
 import wx.lib.scrolledpanel as wxsp
 
-from enthought.traits.api \
+from traits.api \
     import Str, Any, Instance, Property, Bool, cached_property
 
-from enthought.traits.trait_base \
+from traits.trait_base \
     import user_name_for, enumerate, xgetattr
 
-from enthought.traits.ui.ui_traits \
+from traitsui.ui_traits \
     import Image, convert_bitmap
 
-from enthought.traits.ui.editors.list_editor \
+from traitsui.editors.list_editor \
     import ListItemProxy, ToolkitEditorFactory
 
-from enthought.traits.ui.dockable_view_element \
+from traitsui.dockable_view_element \
     import DockableViewElement
 
-from enthought.pyface.dock.api \
+from pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
 from constants \

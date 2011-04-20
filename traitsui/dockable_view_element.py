@@ -25,7 +25,7 @@
 
 from __future__ import absolute_import
 
-from ..api import HasPrivateTraits, Instance, Bool
+from traits.api import HasPrivateTraits, Instance, Bool
 
 from .ui import UI
 
@@ -35,7 +35,7 @@ from .view import View
 
 from .view_element import ViewSubElement
 
-from ...pyface.dock.idockable import IDockable
+from pyface.dock.idockable import IDockable
 
 #-------------------------------------------------------------------------------
 #  'DockableViewElement' class:

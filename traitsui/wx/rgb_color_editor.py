@@ -26,11 +26,11 @@
 
 import wx
 
-from enthought.traits.trait_base \
+from traits.trait_base \
     import SequenceTypes
 
 # Note: The ToolkitEditorFactory class imported from color_editor is the
-# abstract ToolkitEditorFactory class (in enthought.traits.ui.api) along with
+# abstract ToolkitEditorFactory class (in traitsui.api) along with
 # wx-specific methods added via a category. We need to override the
 # implementations of the wx-specific methods here.
 from color_editor \
