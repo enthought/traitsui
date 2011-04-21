@@ -17,21 +17,11 @@ the PyQt user interface toolkit.
 # can be set correctly if needed
 import traits.qt
 
-__import__('pkg_resources').declare_namespace(__name__)
-
-#-------------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 #  Define the reference to the exported GUIToolkit object:
-#-------------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 
 import toolkit
 
 # Reference to the GUIToolkit object for PyQt.
 toolkit = toolkit.GUIToolkit()
-
-# For py2app / py2exe support
-try:
-    import modulefinder
-    for p in __path__:
-        modulefinder.AddPackagePath(__name__, p)
-except:
-    pass
