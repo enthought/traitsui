@@ -148,7 +148,7 @@ class CustomFontEditor ( Editor ):
         """
         self.control = QtGui.QWidget()
         layout = QtGui.QVBoxLayout(self.control)
-        layout.setMargin(0)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         # Add the standard font control:
         self._font = font = QtGui.QLineEdit(self.str_value)

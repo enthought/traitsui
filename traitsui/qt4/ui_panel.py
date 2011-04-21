@@ -155,7 +155,7 @@ class _Panel(BasePanel):
         if not isinstance(self.control, QtGui.QWidget) or title != "" or has_buttons:
             w = QtGui.QWidget()
             layout = QtGui.QVBoxLayout(w)
-            layout.setMargin(0)
+            layout.setContentsMargins(0, 0, 0, 0)
 
             # Handle any view title.
             if title != "":
@@ -283,7 +283,7 @@ def _fill_panel(panel, content, ui, item_handler=None):
         else:
             new = QtGui.QWidget()
             layout = QtGui.QVBoxLayout(new)
-            layout.setMargin(0)
+            layout.setContentsMargins(0, 0, 0, 0)
             item_handler(item, layout)
 
         # Add the content.
@@ -562,7 +562,7 @@ class _GroupPanel(object):
                 if isinstance(panel, QtGui.QLayout):
                     # A QSplitter needs a widget.
                     w = QtGui.QWidget()
-                    panel.setMargin(0)
+                    panel.setContentsMargins(0, 0, 0, 0)
                     w.setLayout(panel)
                     panel = w
 
@@ -914,7 +914,7 @@ class _GroupPanel(object):
         if isinstance(w, QtGui.QWidget):
             wl = w.layout()
             if wl is not None:
-                wl.setMargin(0)
+                wl.setContentsMargins(0, 0, 0, 0)
 
         # See if the layout is a grid.
         if row < 0:
@@ -1065,7 +1065,7 @@ class HTMLHelpWindow ( QtGui.QDialog ):
         """
         QtGui.QDialog.__init__(self, parent)
         layout = QtGui.QVBoxLayout(self)
-        layout.setMargin(0)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         # Create the html control
         html_control = QtWebKit.QWebView()

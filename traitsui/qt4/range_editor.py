@@ -118,7 +118,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
 
         self.control = QtGui.QWidget()
         panel = QtGui.QHBoxLayout(self.control)
-        panel.setMargin(0)
+        panel.setContentsMargins(0, 0, 0, 0)
 
         fvalue = self.value
 
@@ -386,7 +386,7 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
 
         self.control = QtGui.QWidget()
         panel = QtGui.QHBoxLayout(self.control)
-        panel.setMargin(0)
+        panel.setContentsMargins(0, 0, 0, 0)
 
         fvalue = self.value
 

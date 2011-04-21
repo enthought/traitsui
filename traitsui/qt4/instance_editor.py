@@ -154,7 +154,7 @@ class CustomEditor ( Editor ):
 
         if (selectable or droppable) and factory.editable:
             layout = QtGui.QBoxLayout(orientation, parent)
-            layout.setMargin(0)
+            layout.setContentsMargins(0, 0, 0, 0)
             layout.addWidget(self._choice)
 
             if orientation == QtGui.QBoxLayout.TopToBottom:
@@ -175,7 +175,7 @@ class CustomEditor ( Editor ):
             self.control = self._choice
         else:
             layout = QtGui.QBoxLayout(orientation, parent)
-            layout.setMargin(0)
+            layout.setContentsMargins(0, 0, 0, 0)
             self.create_editor(parent, layout)
 
         # Synchronize the 'view' to use:
@@ -348,7 +348,7 @@ class CustomEditor ( Editor ):
             layout = panel.layout()
             if layout is None:
                 layout = QtGui.QVBoxLayout(panel)
-                layout.setMargin(0)
+                layout.setContentsMargins(0, 0, 0, 0)
             elif self._ui is not None:
                 self._ui.dispose()
                 self._ui = None

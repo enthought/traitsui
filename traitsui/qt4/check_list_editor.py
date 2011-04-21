@@ -168,7 +168,7 @@ class CustomEditor ( SimpleEditor ):
         """
         self.control = QtGui.QWidget()
         layout = QtGui.QGridLayout(self.control)
-        layout.setMargin(0)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
         QtCore.QObject.connect(self._mapper,

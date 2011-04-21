@@ -111,7 +111,7 @@ class _ListStrEditor(Editor):
 
         self.control = QtGui.QWidget()
         layout = QtGui.QVBoxLayout(self.control)
-        layout.setMargin(0)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
         if factory.title or factory.title_name:

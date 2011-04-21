@@ -163,7 +163,7 @@ class TableEditor(Editor, BaseTableEditor):
         if factory.show_toolbar and len(factory.filters) > 0:
             main_view = QtGui.QWidget()
             layout = QtGui.QVBoxLayout(main_view)
-            layout.setMargin(0)
+            layout.setContentsMargins(0, 0, 0, 0)
             self.toolbar_ui = self.edit_traits(
                 parent = parent,
                 kind = 'subpanel',

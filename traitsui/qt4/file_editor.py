@@ -61,7 +61,7 @@ class SimpleEditor ( SimpleTextEditor ):
         """
         self.control = QtGui.QWidget()
         layout = QtGui.QHBoxLayout(self.control)
-        layout.setMargin(0)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         self._file_name = control = QtGui.QLineEdit()
         layout.addWidget(control)

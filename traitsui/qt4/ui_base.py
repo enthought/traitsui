@@ -265,7 +265,7 @@ class _StickyDialog(QtGui.QDialog):
         # Create the main window so we can add toolbars etc.
         self._mw = QtGui.QMainWindow()
         layout = QtGui.QVBoxLayout()
-        layout.setMargin(0)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._mw)
         self.setLayout(layout)
 
@@ -383,7 +383,7 @@ class BaseDialog(BasePanel):
         # If the panel is a layout then provide a widget for it.
         if isinstance(panel, QtGui.QLayout):
             w = QtGui.QWidget()
-            panel.setMargin(0)
+            panel.setContentsMargins(0, 0, 0, 0)
             w.setLayout(panel)
             panel = w
 

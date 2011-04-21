@@ -111,7 +111,7 @@ class SimpleEditor ( Editor ):
                                       QtGui.QSizePolicy.Expanding)
         layout = QtGui.QGridLayout(self._list_pane)
         layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
-        layout.setMargin(0)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         # Remember the editor to use for each individual list item:
         editor = self.factory.editor

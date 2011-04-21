@@ -112,7 +112,7 @@ class SourceEditor ( Editor ):
         """
         self.control = QtGui.QWidget()
         layout = QtGui.QVBoxLayout(self.control)
-        layout.setMargin(0)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         self._widget = control = AdvancedCodeWidget(None, lexer=self.factory.lexer)
         layout.addWidget(control)

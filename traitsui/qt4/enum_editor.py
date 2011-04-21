@@ -332,7 +332,7 @@ class RadioEditor ( BaseEditor ):
 
         self.control = QtGui.QWidget()
         layout = QtGui.QGridLayout(self.control)
-        layout.setMargin(0)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
         QtCore.QObject.connect(self._mapper, QtCore.SIGNAL('mapped(int)'),

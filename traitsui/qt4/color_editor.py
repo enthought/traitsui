@@ -295,7 +295,7 @@ def color_editor_for(editor, parent):
 
     root = QtGui.QWidget()
     panel = QtGui.QHBoxLayout(root)
-    panel.setMargin(0)
+    panel.setContentsMargins(0, 0, 0, 0)
 
     swatch_editor = editor.factory.simple_editor(editor.ui, editor.object,
             editor.name, editor.description, None)

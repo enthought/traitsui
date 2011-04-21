@@ -77,7 +77,7 @@ class SimpleEditor ( Editor ):
         """
         self.control = QtGui.QWidget()
         self.root_layout = QtGui.QGridLayout(self.control)
-        self.root_layout.setMargin(0)
+        self.root_layout.setContentsMargins(0, 0, 0, 0)
 
         factory = self.factory
         if factory.name != '':

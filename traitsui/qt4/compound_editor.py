@@ -57,7 +57,7 @@ class CompoundEditor ( Editor ):
         """
         self.control = QtGui.QWidget()
         layout = QtGui.QVBoxLayout(self.control)
-        layout.setMargin(0)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         # Add all of the component trait editors:
         self._editors = editors = []

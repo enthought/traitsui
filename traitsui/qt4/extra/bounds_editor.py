@@ -39,7 +39,7 @@ class _BoundsEditor(Editor):
 
         self.control = QtGui.QWidget()
         panel = QtGui.QHBoxLayout(self.control)
-        panel.setMargin(0)
+        panel.setContentsMargins(0, 0, 0, 0)
 
         self._label_lo = QtGui.QLineEdit(self.format % self.low)
         QtCore.QObject.connect(self._label_lo, QtCore.SIGNAL('editingFinished()'),
