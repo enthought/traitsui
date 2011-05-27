@@ -206,6 +206,11 @@ class _Panel(BasePanel):
                         self.add_button(button, bbox, role)
                 layout.addWidget(bbox)
 
+        # Ensure the control has a size hint reflecting the View specification.
+        # Yes, this is a hack, but it's too late to repair this convoluted
+        # control building process, so we do what we have to...
+        self.control.sizeHint = _size_hint_wrapper(self.control.sizeHint, ui)
+
 
 def panel(ui):
     """Creates a panel-based PyQt user interface for a specified UI object.
@@ -294,6 +299,18 @@ def _fill_panel(panel, content, ui, item_handler=None):
 
     panel.setCurrentIndex(active)
 
+
+def _size_hint_wrapper(f, ui):
+    """Wrap an existing sizeHint method with sizes from a UI object.
+    """
+    def sizeHint():
+        size = f()
+        if ui.view.width > 0:
+            size.setWidth(ui.view.width)
+        if ui.view.height > 0:
+            size.setHeight(ui.view.height)
+        return size
+    return sizeHint
 
 #-------------------------------------------------------------------------------
 #  Displays a help window for the specified UI's active Group:
