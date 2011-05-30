@@ -33,11 +33,6 @@ import sys
 if QtGui.QApplication.startingUp():
     _app = QtGui.QApplication(sys.argv)
 
-# Make sure that SIGINTs actually stop the application event loop (Qt sometimes
-# swallows KeyboardInterrupt exceptions):
-import signal
-signal.signal(signal.SIGINT, signal.SIG_DFL)
-
 from traits.trait_notifiers import set_ui_handler
 
 from traitsui.toolkit import Toolkit
