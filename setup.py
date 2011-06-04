@@ -83,13 +83,13 @@ setup(
     description = DOCLINES[1],
     download_url = ('http://www.enthought.com/repo/ets/traitsui-%s.tar.gz' %
                     INFO['version']),
-    include_package_data = True,
     install_requires = INFO['install_requires'],
     license = 'BSD',
     long_description = '\n'.join(DOCLINES[3:]),
     maintainer = 'ETS Developers',
     maintainer_email = 'enthought-dev@enthought.com',
     name = 'traitsui',
+    package_data = dict(traitsui=['image/library/*', 'qt4/images/*', 'wx/images/*']),
     packages = find_packages(exclude = [
         'docs',
         'docs.*',
