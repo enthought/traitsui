@@ -21,6 +21,10 @@ docs/source/tutorials/images:
                     interactive.png | Enthought
               mpl_figure_editor.png | Enthought
                   traits_thread.png | Enthought
+
+traitsui/image/library:
+                            std.zip | Enthought
+
 traitsui/images:
                      array_node.png | Enthought
                       bool_node.png | Enthought
@@ -50,10 +54,13 @@ traitsui/images:
                     string_node.png | Enthought
                     traits_node.png | Eclipse
                      tuple_node.png | Enthought
+
 examples/demo/:
                  traits_ui_demo.jpg | Enthought
+
 examples/demo/Advanced/images:
                        red_flag.png | Nuvola
+
 examples/demo/Applications/images:
                       blue_ball.png | Nuvola
                             GG5.png | Enthought
@@ -62,21 +69,25 @@ examples/demo/Applications/images:
                   notebook_open.png | Enthought
                        red_ball.png | Enthought
                             TFB.png | Enthought
+
 examples/demo/Extras/images:
                            info.png | Enthought
                      logo_32x32.gif | Enthought
                      logo_48x48.gif | Enthought
                      logo_64x64.gif | Enthought
-examples/demo/Standard Editors/images:
+
+examples/demo/Standard_Editors/images:
              bottom_left_origin.gif | Enthought
             bottom_right_origin.gif | Enthought
                 top_left_origin.gif | Enthought
                top_right_origin.gif | Enthought
-examples/demo/Standard Editors/Popup_versions/images:
+
+examples/demo/Standard_Editors/Popup_versions/images:
              bottom_left_origin.gif | Enthought
             bottom_right_origin.gif | Enthought
                 top_left_origin.gif | Enthought
                top_right_origin.gif | Enthought
+
 examples/tutorials/images:
                            next.png | Nuvola
                          parent.png | Nuvola
