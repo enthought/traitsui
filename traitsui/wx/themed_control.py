@@ -35,8 +35,7 @@ from traitsui.api \
 from traitsui.ui_traits \
     import Image, Position, Alignment, Spacing
 
-from image_slice \
-    import default_image_slice
+from image_slice import ImageSlice
 
 from themed_window \
     import ThemedWindow
@@ -246,7 +245,7 @@ class ThemedControl ( ThemedWindow ):
         wdx, wdy  = control.GetClientSizeTuple()
         spacing   = (tdx != 0) * (bdx != 0) * self.spacing
         theme     = self.theme or default_theme
-        slice     = theme.image_slice or default_image_slice
+        slice     = theme.image_slice or ImageSlice()
         content   = theme.content
 
         position = self.position

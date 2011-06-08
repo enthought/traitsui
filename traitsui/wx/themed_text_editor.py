@@ -41,8 +41,7 @@ from traitsui.wx.editor_factory \
 from pyface.image_resource \
     import ImageResource
 
-from image_slice \
-    import paint_parent, default_image_slice
+from image_slice import paint_parent, ImageSlice
 
 from constants \
     import OKColor, ErrorColor
@@ -52,6 +51,11 @@ from helper \
 
 from themed_control \
     import ThemedControl
+
+
+# Define a reusable, default ImageSlice object:
+default_image_slice = ImageSlice()
+
 
 #-------------------------------------------------------------------------------
 #  Define a simple identity mapping:

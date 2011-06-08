@@ -458,8 +458,6 @@ class ImageSlice ( HasPrivateTraits ):
         return (abs( data[ y0: y0 + dy, x0: x0 + dx ] -
                      data[ y1: y1 + dy, x1: x1 + dx ] ).sum() < 0.10 * dx * dy)
 
-# Define a reusable, default ImageSlice object:
-#default_image_slice = ImageSlice()
 
 #-------------------------------------------------------------------------------
 #  Returns a (possibly cached) ImageSlice:
@@ -477,4 +475,3 @@ def image_slice_for ( image ):
         image_slice_cache[ image ] = result = ImageSlice( image = image )
 
     return result
-
