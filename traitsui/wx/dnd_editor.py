@@ -45,12 +45,12 @@ from traits.util.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
 
 try:
-    from enthought.io import File
+    from apptools.io import File
 except ImportError:
     File = None
 
 try:
-    from enthought.naming.api import Binding
+    from apptools.naming.api import Binding
 except ImportError:
     Binding = None
 

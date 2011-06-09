@@ -112,7 +112,7 @@ class ViewApplication ( wx.PySimpleApp ):
 
         if os.environ.get( 'ENABLE_FBI' ) is not None:
             try:
-                from enthought.developer.helper.fbi import enable_fbi
+                from etsdevtools.developer.helper.fbi import enable_fbi
                 enable_fbi()
             except:
                 pass
