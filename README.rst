@@ -19,5 +19,5 @@ Prerequisites
 -------------
 If you want to run traitsui, you must also install:
 
-`traits <https://github.com/enthought/traits>`_.
-`pyface <https://github.com/enthought/pyface>`_.
+* `traits <https://github.com/enthought/traits>`_.
+* `pyface <https://github.com/enthought/pyface>`_.
