@@ -17,7 +17,7 @@ PyQt user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from traits.qt import QtGui
+from pyface.qt import QtGui
 
 from traits.api \
     import Str

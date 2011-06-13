@@ -13,9 +13,9 @@
 the PyQt user interface toolkit.
 """
 
-# import traits.qt before anything else is done so the sipapi
+# import pyface.qt before anything else is done so the sipapi
 # can be set correctly if needed
-import traits.qt
+import pyface.qt
 
 #----------------------------------------------------------------------------
 #  Define the reference to the exported GUIToolkit object:

@@ -19,7 +19,7 @@
 
 import os.path
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from traits.api \
     import Enum, CTrait, BaseTraitHandler, TraitError

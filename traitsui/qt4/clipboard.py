@@ -20,7 +20,7 @@ using pickle.
 from cPickle import dumps, load, loads
 from cStringIO import StringIO
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Property
 

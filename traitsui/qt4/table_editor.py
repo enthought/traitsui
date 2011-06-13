@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from pyface.timer.api import do_later
 

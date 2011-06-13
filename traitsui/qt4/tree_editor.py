@@ -18,7 +18,7 @@
 
 import copy
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from pyface.resource_manager import resource_manager
 from traits.api import Any, Event

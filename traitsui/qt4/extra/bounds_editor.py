@@ -1,4 +1,4 @@
-from traits.qt import QtGui, QtCore
+from pyface.qt import QtGui, QtCore
 
 from traits.api import Float, Any, Str, Trait
 from traitsui.editors.api import RangeEditor

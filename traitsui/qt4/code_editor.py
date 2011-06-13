@@ -17,7 +17,7 @@ interface toolkit, useful for tools such as debuggers.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
 from traits.api import Str, Unicode, List, Int, Event, Bool, \

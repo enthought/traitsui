@@ -14,7 +14,7 @@
 """
 
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from traitsui.undo \
     import UndoHistory

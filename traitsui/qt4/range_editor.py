@@ -20,7 +20,7 @@ PyQt user interface toolkit.
 from math \
     import log10
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from traits.api \
      import TraitError, Str, Float, Any, Bool

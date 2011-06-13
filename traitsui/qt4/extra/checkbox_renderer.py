@@ -17,7 +17,7 @@
 """
 
 # System library imports
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 # ETS imports
 from traitsui.qt4.table_editor import TableDelegate

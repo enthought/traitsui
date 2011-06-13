@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
 

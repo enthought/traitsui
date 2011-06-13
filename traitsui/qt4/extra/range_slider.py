@@ -1,4 +1,4 @@
-from traits.qt import QtGui, QtCore
+from pyface.qt import QtGui, QtCore
 
 class RangeSlider(QtGui.QSlider):
     """ A slider for ranges.

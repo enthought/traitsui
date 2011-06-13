@@ -19,7 +19,7 @@
 import cgi
 import re
 
-from traits.qt import QtCore, QtGui, QtWebKit
+from pyface.qt import QtCore, QtGui, QtWebKit
 
 from traits.api \
     import Any, Instance, Undefined

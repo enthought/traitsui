@@ -21,7 +21,7 @@ complete application, using information from the specified UI object.
 import os
 
 # System library imports.
-from traits.qt import QtGui
+from pyface.qt import QtGui
 
 # ETS imports.
 from traits.util.guisupport import is_event_loop_running_qt4, \

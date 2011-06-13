@@ -19,7 +19,7 @@
 from os.path \
     import splitext, isfile, exists
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from traits.api \
     import List, Event, Unicode, TraitError

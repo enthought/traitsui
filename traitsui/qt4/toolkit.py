@@ -21,7 +21,7 @@ the PyQt user interface toolkit.
 from traitsui.toolkit import assert_toolkit_import
 assert_toolkit_import('qt4')
 
-from traits.qt import QtCore, QtGui, qt_api
+from pyface.qt import QtCore, QtGui, qt_api
 
 if qt_api == 'pyqt':
     # Check the version numbers are late enough:

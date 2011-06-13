@@ -17,7 +17,7 @@ editors and text editor factories.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from traits.qt import QtGui
+from pyface.qt import QtGui
 
 #-------------------------------------------------------------------------------
 #  Constants:

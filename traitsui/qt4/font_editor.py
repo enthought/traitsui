@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from traitsui.editors.font_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory

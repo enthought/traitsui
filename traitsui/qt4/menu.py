@@ -47,7 +47,7 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 
 import re
 
-from traits.qt import QtGui
+from pyface.qt import QtGui
 
 #-------------------------------------------------------------------------------
 #  Constants:

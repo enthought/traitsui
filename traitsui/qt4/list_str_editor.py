@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from pyface.image_resource import ImageResource
 from traits.api import Any, Bool, Event, Int, Instance, List, \

@@ -18,7 +18,7 @@ that are represented as tuples of the form ( *red*, *green*, *blue* ), where
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from traits.qt import QtGui
+from pyface.qt import QtGui
 
 from traits.trait_base \
     import SequenceTypes

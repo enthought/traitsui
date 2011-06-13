@@ -20,7 +20,7 @@ user interface toolkit.
 import logging
 from string import capitalize
 
-from traits.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui
 
 from traits.api \
     import List, Unicode, TraitError

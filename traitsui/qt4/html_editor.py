@@ -23,7 +23,7 @@
 
 import webbrowser
 
-from traits.qt import QtCore, QtGui, QtWebKit
+from pyface.qt import QtCore, QtGui, QtWebKit
 
 from traits.api import Str
 
