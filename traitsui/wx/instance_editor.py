@@ -55,7 +55,7 @@ from constants \
 from helper \
     import TraitsUIPanel, position_window
 
-from traits.util.wx.drag_and_drop \
+from pyface.wx.drag_and_drop \
     import PythonDropTarget
 
 #-------------------------------------------------------------------------------

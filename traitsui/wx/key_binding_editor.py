@@ -35,7 +35,7 @@ from traits.api \
 from traitsui.editors.key_binding_editor \
     import KeyBindingEditor as ToolkitEditorFactory
 
-from traits.util.wx.dialog \
+from pyface.wx.dialog \
     import confirmation
 
 from editor \
