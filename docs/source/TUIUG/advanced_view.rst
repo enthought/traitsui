@@ -50,7 +50,7 @@ phenomenon called *visual inheritance*.
 
 Defining a Default View
 ```````````````````````
-index:: default view, View; default
+.. index:: default view, View; default
 
 It is easy to define a default view for a HasTraits class: simply create a View
 attribute called **traits_view** for that class. Consider the following
