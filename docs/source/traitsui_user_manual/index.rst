@@ -22,12 +22,3 @@ Traits UI User Guide
    glossary.rst
    predefined_traits.rst
    
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-

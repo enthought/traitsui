@@ -1,12 +1,15 @@
-Traits Documentation
+TraitsUI Documentation
 ==============================================
 
 .. toctree::
     :maxdepth: 2
     :glob:
       
-    traits_user_manual/index
+    traitsui_user_manual/index
     tutorials/index
-    TUIUG/index
       
+Indices and tables
+==================
+
+* :ref:`genindex`
 * :ref:`search`

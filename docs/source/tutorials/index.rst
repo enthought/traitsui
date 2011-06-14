@@ -6,9 +6,3 @@ Traits 3 Tutorials
 
     traits_ui_scientific_app.rst
     
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
-

@@ -82,7 +82,7 @@ Binding a Singleton Handler to a View
 To associate a given custom Handler with all windows produced from a given View,
 assign an instance of the custom Handler class to the View's **handler**
 attribute. The result of this technique, as shown in 
-:ref:`Example 9 <example-9-using-a-handler-that-reacts-to-trait-changes`, is 
+:ref:`Example 9 <example-9-using-a-handler-that-reacts-to-trait-changes>`, is 
 that the window created by the View object is automatically controlled by the
 specified handler instance.
 

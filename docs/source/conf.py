@@ -35,7 +35,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General substitutions.
-project = 'Traits'
+project = 'TraitsUI'
 copyright = '2008, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
@@ -87,7 +87,7 @@ html_style = 'default.css'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "Traits 3 User Manual"
+html_title = "Traits UI User Manual"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -143,7 +143,7 @@ html_use_modindex = False
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Traitsdoc'
+htmlhelp_basename = 'Traitsuidoc'
 
 
 # Options for LaTeX output
@@ -158,7 +158,7 @@ htmlhelp_basename = 'Traitsdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'Traits.tex', 'Traits 3 User Manual', 'Enthought, Inc.', 'manual'),
+  ('index', 'TraitsUI.tex', 'Traits UI User Manual', 'Enthought, Inc.', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
