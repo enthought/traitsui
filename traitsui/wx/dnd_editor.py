@@ -41,7 +41,7 @@ from traits.api \
 from traitsui.editors.dnd_editor \
     import ToolkitEditorFactory
 
-from traits.util.wx.drag_and_drop \
+from pyface.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
 
 try:

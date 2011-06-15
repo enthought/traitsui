@@ -56,7 +56,7 @@ from constants \
     import is_mac, scrollbar_dx
 
 try:
-    from traits.util.wx.drag_and_drop \
+    from pyface.wx.drag_and_drop \
         import PythonDropSource, PythonDropTarget
 except:
     PythonDropSource = PythonDropTarget = None

@@ -24,7 +24,7 @@ import os
 from pyface.qt import QtGui
 
 # ETS imports.
-from traits.util.guisupport import is_event_loop_running_qt4, \
+from pyface.util.guisupport import is_event_loop_running_qt4, \
     start_event_loop_qt4
 
 #-------------------------------------------------------------------------------

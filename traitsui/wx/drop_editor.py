@@ -31,7 +31,7 @@ import wx
 from traitsui.editors.drop_editor \
     import ToolkitEditorFactory
 
-from traits.util.wx.drag_and_drop \
+from pyface.wx.drag_and_drop \
     import PythonDropTarget, clipboard
 
 from text_editor \

@@ -47,7 +47,7 @@ from helper \
     import disconnect, disconnect_no_id
 
 try:
-    from traits.util.wx.drag_and_drop \
+    from pyface.wx.drag_and_drop \
         import PythonDropSource, PythonDropTarget
 except:
     PythonDropSource = PythonDropTarget = None
@@ -765,7 +765,7 @@ class _ListStrEditor ( Editor ):
             index = selected[0]
             if index < self.item_count:
                 try:
-                    from traits.util.wx.clipboard import clipboard
+                    from pyface.wx.clipboard import clipboard
 
                     clipboard.data = self.adapter.get_text( self.object,
                                                             self.name, index )
@@ -785,7 +785,7 @@ class _ListStrEditor ( Editor ):
                 index = selected[0]
                 if index < self.item_count:
                     try:
-                        from traits.util.wx.clipboard import clipboard
+                        from pyface.wx.clipboard import clipboard
 
                         clipboard.data = self.adapter.get_text(
                                              self.object, self.name, index )
@@ -804,7 +804,7 @@ class _ListStrEditor ( Editor ):
             selected = self._get_selected()
             if len( selected ) == 1:
                 try:
-                    from traits.util.wx.clipboard import clipboard
+                    from pyface.wx.clipboard import clipboard
 
                     self._set_text_current( selected[0], clipboard.text_data,
                                             insert = True )

@@ -31,7 +31,7 @@ import sys
 import wx
 
 # ETS imports.
-from traits.util.guisupport import is_event_loop_running_wx, \
+from pyface.util.guisupport import is_event_loop_running_wx, \
     start_event_loop_wx
 
 #-------------------------------------------------------------------------------

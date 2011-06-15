@@ -27,7 +27,7 @@ import wx
 import copy
 
 try:
-    from traits.util.wx.drag_and_drop import PythonDropSource, \
+    from pyface.wx.drag_and_drop import PythonDropSource, \
                                                 PythonDropTarget
 except:
     PythonDropSource = PythonDropTarget = None
@@ -1502,7 +1502,7 @@ class SimpleEditor ( Editor ):
         return (can_cut and self._menu_node.can_delete_me( object ))
 
     def _is_pasteable ( self, object ):
-        from traits.util.wx.clipboard import clipboard
+        from pyface.wx.clipboard import clipboard
 
         return self._menu_node.can_add( object, clipboard.object_type )
 
@@ -1755,7 +1755,7 @@ class SimpleEditor ( Editor ):
     def _menu_copy_node ( self ):
         """ Copies the current tree node object to the paste buffer.
         """
-        from traits.util.wx.clipboard import clipboard
+        from pyface.wx.clipboard import clipboard
 
         clipboard.data = self._data[1]
         self._data     = None
@@ -1767,7 +1767,7 @@ class SimpleEditor ( Editor ):
     def _menu_cut_node ( self ):
         """  Cuts the current tree node object into the paste buffer.
         """
-        from traits.util.wx.clipboard import clipboard
+        from pyface.wx.clipboard import clipboard
 
         node, object, nid = self._data
         clipboard.data    = object
@@ -1782,7 +1782,7 @@ class SimpleEditor ( Editor ):
         """ Pastes the current contents of the paste buffer into the current
             node.
         """
-        from traits.util.wx.clipboard import clipboard
+        from pyface.wx.clipboard import clipboard
 
         node, object, nid = self._data
         self._data        = None

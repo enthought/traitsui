@@ -52,7 +52,7 @@ from traitsui.dock_window_theme \
 from traitsui.toolkit \
     import Toolkit
 
-from traits.util.wx.drag_and_drop \
+from pyface.wx.drag_and_drop \
     import PythonDropTarget
 
 from constants \
