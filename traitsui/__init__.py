@@ -17,7 +17,7 @@
 
 from __future__ import absolute_import
 
-__version__ = '3.6.1'
+__version__ = '4.0.0'
 
 __requires__ = [
     'traits',
