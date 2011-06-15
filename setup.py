@@ -1,16 +1,17 @@
 # Copyright (c) 2008-2011 by Enthought, Inc.
 # All rights reserved.
+from os.path import join
 
 from setuptools import setup, find_packages
 
-# This works around a setuptools bug which gets setup_data.py metadata
-# from incorrect packages.
-setup_data = dict(__name__='', __file__='setup_data.py')
-execfile('setup_data.py', setup_data)
-INFO = setup_data['INFO']
+
+info = {}
+execfile(join('traitsui', '__init__.py'), info)
 
 
 setup(
+    name = 'traitsui',
+    version = info['__version__'],
     author = 'David C. Morrill, et. al.',
     author_email = 'dmorrill@enthought.com',
     classifiers = [c.strip() for c in """\
@@ -32,25 +33,14 @@ setup(
     description = 'traitsui: traits-capable user interfaces',
     long_description = open('README.rst').read(),
     download_url = ('http://www.enthought.com/repo/ets/traitsui-%s.tar.gz' %
-                    INFO['version']),
-    install_requires = INFO['install_requires'],
+                    info['__version__']),
+    install_requires = info['__requires__'],
     license = 'BSD',
     maintainer = 'ETS Developers',
     maintainer_email = 'enthought-dev@enthought.com',
-    name = 'traitsui',
     package_data = dict(traitsui=['images/library/*.zip',
                                   'wx/images/*', 'qt4/images/*']),
-    packages = find_packages(exclude = [
-        'docs',
-        'docs.*',
-        'integrationtests',
-        'integrationtests.*',
-        ]),
+    packages = find_packages(),
     platforms = ["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
-    tests_require = [
-        'nose >= 0.10.3',
-        ],
-    test_suite = 'nose.collector',
-    version = INFO['version'],
     zip_safe = False,
 )
