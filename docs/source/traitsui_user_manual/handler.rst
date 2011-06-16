@@ -183,10 +183,11 @@ easily referenced with unqualified names (such as Item('name')).
 ModelView Class
 ```````````````
 
-The ModelView class is useful when creating a variant of the standard MVC design
-pattern. In this variant, the ModelView subclass reformulates a number of trait
-attributes on it model object as properties on the ModelView, usually to convert
-the model's data into a format that is more suited to a user interface.
+The ModelView class is useful when creating a variant of the standard MVC
+design pattern. In this variant, the ModelView subclass reformulates a number
+of trait attributes on its model object as properties on the ModelView, usually
+to convert the model's data into a format that is more suited to a user
+interface.
 
 The context dictionary that a ModelView object passes to the View's ui() method
 contains the following entries:
