@@ -35,8 +35,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General substitutions.
-project = 'TraitsUI'
-copyright = '2008, Enthought'
+project = 'traitsui'
+copyright = '2008-2011, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
