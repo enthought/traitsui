@@ -64,7 +64,7 @@ package is a set of GUI (Graphical User Interface) tools designed to complement
 <a class="reference internal" href="glossary.html#term-traits"><em class="xref std std-term">Traits</em></a>, another Enthought open-source package that provides explicit
 typing, validation, and change notification for Python. This guide is intended
 for readers who are already moderately familiar with Traits; those who are not
-may wish to refer to the <em>Traits User Manual</em> for an introduction. This guide
+may wish to refer to the <a class="reference external" href="http://github.enthought.com/traits/index.html">Traits User Manual</a> for an introduction. This guide
 discusses many but not all features of TraitsUI. For complete details of the
 TraitsUI API, refer to the <em>Traits API Reference</em>.</p>
 <div class="section" id="the-model-view-controller-mvc-design-pattern">
@@ -94,14 +94,14 @@ Traits and TraitsUI packages.</p>
 or <a class="reference internal" href="glossary.html#term-instance"><em class="xref std std-term">instance</em></a>s of the HasTraits class, whose <a class="reference internal" href="glossary.html#term-trait-attribute"><em class="xref std std-term">trait attribute</em></a>s
 (typed attributes as defined in Traits) represent the model data. The specifics
 of building such a model are outside the scope of this manual; please see the
-<em>Traits User Manual</em> for further information.</p>
+<a class="reference external" href="http://github.enthought.com/traits/index.html">Traits User Manual</a> for further information.</p>
 </div>
 <div class="section" id="the-view-view-objects">
-<span id="index-2"></span><span id="id3"></span><h3>The View: View Objects<a class="headerlink" href="#the-view-view-objects" title="Permalink to this headline">¶</a></h3>
+<span id="index-2"></span><span id="id4"></span><h3>The View: View Objects<a class="headerlink" href="#the-view-view-objects" title="Permalink to this headline">¶</a></h3>
 <p>A view for a Traits-based application is an instance of a class called,
 conveniently enough, View. A View object is essentially a display specification
 for a GUI window or <a class="reference internal" href="glossary.html#term-panel"><em class="xref std std-term">panel</em></a>. Its contents are defined in terms of
-instances of two other classes: <a class="reference internal" href="glossary.html#term-item"><em class="xref std std-term">Item</em></a> and <a class="reference internal" href="glossary.html#term-group"><em class="xref std std-term">Group</em></a>. <a class="footnote-reference" href="#id8" id="id4">[1]</a> These three
+instances of two other classes: <a class="reference internal" href="glossary.html#term-item"><em class="xref std std-term">Item</em></a> and <a class="reference internal" href="glossary.html#term-group"><em class="xref std std-term">Group</em></a>. <a class="footnote-reference" href="#id9" id="id5">[1]</a> These three
 classes are described in detail in <a class="reference internal" href="view.html#the-view-and-its-building-blocks"><em>The View and Its Building Blocks</em></a>; for
 the moment, it is important to note that they are all defined independently of
 the model they are used to display.</p>
@@ -110,9 +110,9 @@ of this document. The former refers to the component of the MVC design pattern;
 the latter is a TraitsUI construct.</p>
 </div>
 <div class="section" id="the-controller-handler-subclasses-and-objects">
-<span id="index-3"></span><span id="id5"></span><h3>The Controller: Handler Subclasses and Objects<a class="headerlink" href="#the-controller-handler-subclasses-and-objects" title="Permalink to this headline">¶</a></h3>
+<span id="index-3"></span><span id="id6"></span><h3>The Controller: Handler Subclasses and Objects<a class="headerlink" href="#the-controller-handler-subclasses-and-objects" title="Permalink to this headline">¶</a></h3>
 <p>The controller for a Traits-based application is defined in terms of the
-<a class="reference internal" href="glossary.html#term-handler"><em class="xref std std-term">Handler</em></a> class. <a class="footnote-reference" href="#id9" id="id6">[2]</a> Specifically, the relationship between any given
+<a class="reference internal" href="glossary.html#term-handler"><em class="xref std std-term">Handler</em></a> class. <a class="footnote-reference" href="#id10" id="id7">[2]</a> Specifically, the relationship between any given
 View instance and the underlying model is managed by an instance of the Handler
 class. For simple interfaces, the Handler can be implicit. For example, none of
 the examples in the first four chapters includes or requires any specific
@@ -125,7 +125,7 @@ building sophisticated application interfaces, as discussed in
 </div>
 </div>
 <div class="section" id="toolkit-selection">
-<span id="index-4"></span><span id="id7"></span><h2>Toolkit Selection<a class="headerlink" href="#toolkit-selection" title="Permalink to this headline">¶</a></h2>
+<span id="index-4"></span><span id="id8"></span><h2>Toolkit Selection<a class="headerlink" href="#toolkit-selection" title="Permalink to this headline">¶</a></h2>
 <p>The TraitsUI package is designed to be toolkit-independent. Programs that use
 TraitsUI do not need to explicitly import or call any particular GUI toolkit
 code unless they need some capability of the toolkit that is not provided by
@@ -189,17 +189,17 @@ summary for the TraitsUI classes covered in this Manual, are located in the
 Appendices.</li>
 </ul>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id8" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[1]</a></td><td>A third type of content object, Include, is discussed briefly in
-<a class="reference internal" href="advanced_view.html#include-objects"><em>Include Objects</em></a>, but presently is not commonly used.</td></tr>
-</tbody>
-</table>
 <table class="docutils footnote" frame="void" id="id9" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id6">[2]</a></td><td>Not to be confused with the TraitHandler class of the Traits package,
+<tr><td class="label"><a class="fn-backref" href="#id5">[1]</a></td><td>A third type of content object, Include, is discussed briefly in
+<a class="reference internal" href="advanced_view.html#include-objects"><em>Include Objects</em></a>, but presently is not commonly used.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[2]</a></td><td>Not to be confused with the TraitHandler class of the Traits package,
 which enforces type validation.</td></tr>
 </tbody>
 </table>

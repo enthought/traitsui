@@ -418,8 +418,8 @@ is not defined. Also, avoid extended trait references where one of the
 intermediate objects could be None, because there is no way to obtain a valid
 reference from None.
 
-Refer to the *Traits User Manual*, in the chapter on trait notification, for
-details of the extended trait name syntax.
+Refer to the `Traits User Manual <http://github.enthought.com/traits/index.html>`_, in the chapter on trait
+notification, for details of the extended trait name syntax.
 
 .. index:: 
    object: Include
