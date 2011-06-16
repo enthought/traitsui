@@ -8,7 +8,7 @@ package is a set of GUI (Graphical User Interface) tools designed to complement
 :term:`Traits`, another Enthought open-source package that provides explicit
 typing, validation, and change notification for Python. This guide is intended
 for readers who are already moderately familiar with Traits; those who are not
-may wish to refer to the *Traits User Manual* for an introduction. This guide
+may wish to refer to the `Traits User Manual <http://github.enthought.com/traits/index.html>`_ for an introduction. This guide
 discusses many but not all features of TraitsUI. For complete details of the
 TraitsUI API, refer to the *Traits API Reference*.
 
@@ -51,7 +51,7 @@ In the context of Traits, a model consists primarily of one or more subclasses
 or :term:`instance`\ s of the HasTraits class, whose :term:`trait attribute`\ s
 (typed attributes as defined in Traits) represent the model data. The specifics
 of building such a model are outside the scope of this manual; please see the
-*Traits User Manual* for further information.
+`Traits User Manual <http://github.enthought.com/traits/index.html>`_ for further information.
 
 .. index:: View; as MVC view
 
