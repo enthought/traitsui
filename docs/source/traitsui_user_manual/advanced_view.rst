@@ -7,7 +7,7 @@
 Advanced View Concepts
 ======================
 
-The preceding chapters of this Guide give an overview of how to use the View
+The preceding chapters of this Manual give an overview of how to use the View
 class to quickly construct a simple window for a single HasTraits object. This
 chapter explores a number of more complex techniques that significantly increase
 the power and versatility of the View object.
@@ -170,7 +170,7 @@ the object rather than being a module-level variable::
     
 Note that if more than one View is defined for a model class, you must indicate
 which one is to be used as the default by naming it ``traits_view``. Otherwise,
-Traits UI gives preference to none of them, and instead tries to construct a
+TraitsUI gives preference to none of them, and instead tries to construct a
 default View, resulting in a simple alphabetized display as described in
 :ref:`the-view-and-its-building-blocks`. For this reason, it is usually
 preferable to name a model's default View traits_view even if there are no other
@@ -189,8 +189,8 @@ remained closely coupled. In some cases the view has been defined in the model
 class, as in :ref:`internal-views`; in other cases the configure_traits() method
 that produces a window from a View has been called from a HasTraits object.
 However, these strategies are simply conveniences; they are not an intrinsic
-part of the relationship between model and view in Traits UI. This section
-begins to explore how the Traits UI package truly supports the separation of
+part of the relationship between model and view in TraitsUI. This section
+begins to explore how the TraitsUI package truly supports the separation of
 model and view prescribed by the :term:`MVC` design pattern.
 
 An *external* view is one that is defined outside the model classes. In Traits
@@ -222,7 +222,7 @@ described in :ref:`controlling-the-interface-the-handler`.
 Displaying a View
 -----------------
 
-Traits UI provides three methods for creating a window or panel from a View
+TraitsUI provides three methods for creating a window or panel from a View
 object. The first two, configure_traits() and edit_traits(), are defined on the
 HasTraits class, which is a superclass of all Traits-based model classes, as
 well as of Handler and its subclasses. The third method, ui(), is defined on the
@@ -238,7 +238,7 @@ configure_traits()
 The configure_traits() method creates a standalone window for a given View
 object, i.e., it does not require an existing GUI to run in. It is therefore
 suitable for building command-line functions, as well as providing an accessible
-tool for the beginning Traits UI programmer.
+tool for the beginning TraitsUI programmer.
 
 The configure_traits() method also provides options for saving 
 :term:`trait attribute` values to and restoring them from a file. Refer to the
@@ -267,7 +267,7 @@ ui()
 The View object includes a method called ui(), which performs the actual
 generation of the window or panel from the View for both edit_traits() and
 configure_traits(). The ui() method is also available directly through the
-Traits UI API; however, using one of the other two methods is usually
+TraitsUI API; however, using one of the other two methods is usually
 preferable. [9]_
 
 The ui() method has five keyword parameters:
@@ -327,7 +327,7 @@ A multi-object view is any view whose contents depend on multiple "independent"
 model objects, i.e., objects that are not attributes of one another. For
 example, suppose you are building a real estate listing application, and want to
 display a window that shows two properties side by side for a comparison of
-price and features. This is straightforward in Traits UI, as the following
+price and features. This is straightforward in TraitsUI, as the following
 example shows:
 
 .. index:: examples; context, context; examples, examples; multi-object Views
@@ -430,7 +430,7 @@ Include Objects
 ---------------
    
 In addition to the Item and Group class, a third building block class for Views
-exists in Traits UI: the Include class. For the sake of completeness, this
+exists in TraitsUI: the Include class. For the sake of completeness, this
 section gives a brief description of Include objects and their purpose and
 usage. However, they are not commonly used as of this writing, and should be
 considered unsupported pending redesign.
@@ -487,7 +487,7 @@ parameterization*.
 .. [10] If the script were designed to run within an existing GUI, it would make
    sense to replace the last line with 
    ``comp_view.ui(context={'h1': house1, 'h2': house2})``, since neither object
-   particularly dominates the view. However, the examples in this Guide are
+   particularly dominates the view. However, the examples in this Manual are
    designed to be fully executable from the Python command line, which is why 
    configure_traits() was used instead.
    

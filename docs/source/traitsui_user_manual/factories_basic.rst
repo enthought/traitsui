@@ -6,7 +6,7 @@ The Predefined Trait Editor Factories
 =====================================
 
 This chapter contains individual descriptions of the predefined trait editor
-factories provided by Traits UI. Most of these editor factories are
+factories provided by TraitsUI. Most of these editor factories are
 straightforward and can be used easily with little or no expertise on the part
 of the programmer or end user; these are described in Section 10.1. Section 10.2
 (on page 91) covers a smaller set of specialized editors that have more complex
@@ -105,7 +105,7 @@ BooleanEditor()
     *mapping*
 
 BooleanEditor is one of the simplest of the built-in editor factories in the
-Traits UI package. It is used exclusively to edit and display Boolean (i.e,
+TraitsUI package. It is used exclusively to edit and display Boolean (i.e,
 True/False) traits. In the simple and custom styles, it generates a checkbox. In
 the text style, the editor displays the trait value (as one would expect) as the
 strings True or False. However, several variations are accepted as input:
@@ -665,7 +665,7 @@ function (see :ref:`enumeditor`), as well as some additional parameters.
 
 .. NOTE:: Image enumeration editors do not use ImageResource.
 
-   Unlike most other images in the Traits and Traits UI packages, images in the
+   Unlike most other images in the Traits and TraitsUI packages, images in the
    wxWindows implementation of image enumeration editors do not use the PyFace
    ImageResource class.
 
@@ -1175,7 +1175,7 @@ that is displayed by the "pickle viewer" utility in enthought.debug.
 .. [16]  In Traits, a Button and an Event are essentially the same thing, 
    except that Buttons are automatically associated with button editors.
 
-.. [17]  Traits UI makes minor modifications to the name, capitalizing the 
+.. [17]  TraitsUI makes minor modifications to the name, capitalizing the 
    first letter and replacing underscores with spaces, as in the case of a 
    default Item label (see :ref:`the-view-object`).
 
