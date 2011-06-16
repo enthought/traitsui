@@ -156,7 +156,7 @@ with associated key bindings, and a button that invokes the key binding editor.
                     method_name = 'edit_bindings' )  
     )  
                   
-    # Traits UI Handler class for bound methods
+    # TraitsUI Handler class for bound methods
     class CodeHandler ( Handler ):
         
         def save_file ( self, info ):
@@ -225,7 +225,7 @@ interacting with and formatting the table.
    Figure 51: Table editor
 
 To see the code that results in Figure 51, refer to :file:`TableEditor_demo.py`
-in the :file:`demos/Traits UI Demo/Standard Editors` subdirectory of the Traits
+in the :file:`demos/TraitsUI Demo/Standard Editors` subdirectory of the Traits
 UI package. This example demonstrates object columns, expression columns,
 filters, searching, and adding and deleting rows.
 
@@ -251,7 +251,7 @@ parameter.
 
 The items in the list must be instances of traitsui.api.TableColumn,
 or of a subclass of TableColumn. Some subclasses of TableColumn that are
-provided by the Traits UI package include ObjectColumn, ListColumn,
+provided by the TraitsUI package include ObjectColumn, ListColumn,
 NumericColumn, and ExpressionColumn. (See the *Traits API Reference* for details
 about these classes.) In practice, most columns are derived from one of these
 subclasses, rather than from TableColumn. For the usual case of editing trait
@@ -291,7 +291,7 @@ Organizing Items
 Table editors provide two mechanisms for the user to organize the contents of a
 table: sorting and reordering. The user can sort the items based on the values
 in a column, or the user can manually order the items. Usually, only one of
-these mechanisms is used in any particular table, although the Traits UI package
+these mechanisms is used in any particular table, although the TraitsUI package
 does not enforce a separation. If the user has manually ordered the items,
 sorting them would throw away that effort.
 
@@ -340,9 +340,9 @@ only items that pass the filter are displayed. This feature can be very useful
 when dealing with lengthy lists. You can specify a filter to apply to the table
 either directly, or via another trait. Table filters must be instances of
 traitsui.api.TableFilter, or of a subclass of TableFilter. Some
-subclasses of TableFilter that are provided by the Traits UI package include
+subclasses of TableFilter that are provided by the TraitsUI package include
 EvalTableFilter, RuleTableFilter, and MenuTableFilter. (See the *Traits API
-Reference* for details about these classes.) The Traits UI package also provides
+Reference* for details about these classes.) The TraitsUI package also provides
 instances of these filter classes as "templates", which cannot be edited or
 deleted, but which can be used as models for creating new filters.
 
@@ -427,7 +427,7 @@ The *on_select* and *on_dclick* parameters are callables to invoke when the user
 selects or double-clicks an item, respectively.
 
 You can define a shortcut menu that opens when the user right-clicks an item.
-Use the *menu* parameter to specify a Traits UI or PyFace Menu, containing
+Use the *menu* parameter to specify a TraitsUI or PyFace Menu, containing
 Action objects for the menu commands.
 
 .. _editing-the-table:
@@ -1025,7 +1025,7 @@ Shortcut Menus on Nodes
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Use the **menu** attribute of TreeNode to define a shortcut menu that opens when
-the user right-clicks on a node. The value is a Traits UI or PyFace menu
+the user right-clicks on a node. The value is a TraitsUI or PyFace menu
 containing Action objects for the menu commands. In Example 16, the following
 lines define the node type for employees, including a shortcut menu for employee
 nodes::

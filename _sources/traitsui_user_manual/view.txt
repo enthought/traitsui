@@ -56,7 +56,7 @@ The View Object
 
 In order to control the layout of the interface, it is necessary to define a
 View object. A View object is a template for a GUI window or panel. In other
-words, a View specifies the content and appearance of a Traits UI window or
+words, a View specifies the content and appearance of a TraitsUI window or
 panel display.
 
 For example, suppose you want to construct a GUI window that shows only the
@@ -188,9 +188,9 @@ Item class.
 |          |* **image**          |                                             |
 |          |* **item_theme**     |If an Item's **label** attribute is specified|
 |          |* **label**          |but not its name, the value of  **label** is |
-|          |* **label_theme**    |displayed as a simple, non-editable string.  | 
+|          |* **label_theme**    |displayed as a simple, non-editable string.  |
 |          |* **padding**        |(This feature can be useful for displaying   |
-|          |* **resizable**      |comments or instructions in a Traits UI      |
+|          |* **resizable**      |comments or instructions in a TraitsUI       |
 |          |* **show_label**     |window.)                                     |
 |          |* **springy**        |                                             |
 |          |* **width**          |                                             |
@@ -204,7 +204,7 @@ Item class.
 |          |                     |license plate number.                        |
 +----------+---------------------+---------------------------------------------+
 |Widget    |* **editor**         |These attributes override the widget that is |
-|override  |* **style**          |automatically selected by Traits UI. These   |
+|override  |* **style**          |automatically selected by TraitsUI. These    |
 |          |                     |options are discussed in                     |
 |          |                     |:ref:`introduction-to-trait-editor-factories`|
 |          |                     |and                                          |
@@ -241,13 +241,13 @@ Item class.
 Subclasses of Item
 ``````````````````
    
-The Traits UI package defines the following subclasses of Item:
+The TraitsUI package defines the following subclasses of Item:
 
 * Label
 * Heading
 * Spring
 
-These classes are intended to help with the layout of a Traits UI View, and need
+These classes are intended to help with the layout of a TraitsUI View, and need
 not have a trait attribute associated with them. See the *Traits API Reference*
 for details.
 
@@ -265,7 +265,7 @@ more sophisticated interfaces, though, it is often desirable to treat a group of
 data elements as a unit for reasons that might be visual (e.g., placing the
 widgets within a labeled border) or logical (activating or deactivating the
 widgets in response to a single condition, defining group-level help text). In
-Traits UI, such grouping is accomplished by means of the :term:`Group` object.
+TraitsUI, such grouping is accomplished by means of the :term:`Group` object.
 
 Consider the following enhancement to Example 2:
 
@@ -427,7 +427,7 @@ See the *Traits API Reference* for details of the Group class.
 Subclasses of Group
 ```````````````````
    
-The Traits UI package defines the following subclasses of Group, which are
+The TraitsUI package defines the following subclasses of Group, which are
 helpful shorthands for defining certain types of groups. Refer to the *Traits
 API Reference* for details.
 

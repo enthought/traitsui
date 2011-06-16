@@ -2,15 +2,15 @@
 Introduction
 ============
 
-This guide is designed to act as a conceptual guide to :term:`Traits UI`, an
-open-source package built and maintained by Enthought, Inc. The Traits UI
+This guide is designed to act as a conceptual guide to :term:`TraitsUI`, an
+open-source package built and maintained by Enthought, Inc. The TraitsUI
 package is a set of GUI (Graphical User Interface) tools designed to complement
 :term:`Traits`, another Enthought open-source package that provides explicit
 typing, validation, and change notification for Python. This guide is intended
 for readers who are already moderately familiar with Traits; those who are not
 may wish to refer to the *Traits User Manual* for an introduction. This guide
-discusses many but not all features of Traits UI. For complete details of the
-Traits UI API, refer to the *Traits API Reference*.
+discusses many but not all features of TraitsUI. For complete details of the
+TraitsUI API, refer to the *Traits API Reference*.
 
 .. index:: MVC design pattern, Model-View-Controller, model, view (in MVC), controller
 
@@ -32,11 +32,11 @@ closely linked as to be almost indistinguishable, but it remains useful to think
 of them as distinct entities.
 
 The three parts of the MVC pattern correspond roughly to three classes in the
-Traits and Traits UI packages.
+Traits and TraitsUI packages.
 
 * Model: :term:`HasTraits` class (Traits package)
-* View: View class (Traits UI package)
-* Controller: :term:`Handler` class (Traits UI package)
+* View: View class (TraitsUI package)
+* Controller: :term:`Handler` class (TraitsUI package)
 
 The remainder of this section gives an overview of these relationships.
 
@@ -70,7 +70,7 @@ the model they are used to display.
 
 Note that the terms :term:`view` and :term:`View` are distinct for the purposes
 of this document. The former refers to the component of the MVC design pattern;
-the latter is a Traits UI construct.
+the latter is a TraitsUI construct.
 
 .. index:: Handler class; as MVC controller
 
@@ -86,7 +86,7 @@ class. For simple interfaces, the Handler can be implicit. For example, none of
 the examples in the first four chapters includes or requires any specific
 Handler code; they are managed by a default Handler that performs the basic
 operations of window initialization, transfer of data between GUI and model, and
-window closing. Thus, a programmer new to Traits UI need not be concerned with
+window closing. Thus, a programmer new to TraitsUI need not be concerned with
 Handlers at all. Nonetheless, custom handlers can be a powerful tool for
 building sophisticated application interfaces, as discussed in
 :ref:`controlling-the-interface-the-handler`.
@@ -98,13 +98,13 @@ building sophisticated application interfaces, as discussed in
 Toolkit Selection
 -----------------
 
-The Traits UI package is designed to be toolkit-independent. Programs that use
-Traits UI do not need to explicitly import or call any particular GUI toolkit
+The TraitsUI package is designed to be toolkit-independent. Programs that use
+TraitsUI do not need to explicitly import or call any particular GUI toolkit
 code unless they need some capability of the toolkit that is not provided by
-Traits UI. However, *some* particular toolkit must be installed on the system in
+TraitsUI. However, *some* particular toolkit must be installed on the system in
 order to actually display GUI windows.
 
-Traits UI uses a separate package, traits.etsconfig, to determine which GUI
+TraitsUI uses a separate package, traits.etsconfig, to determine which GUI
 toolkit to use. This package is also used by other Enthought packages that need
 GUI capabilities, so that all such packages "agree" on a single GUI toolkit per
 application. The etsconfig package contains a singleton object, **ETSConfig**
@@ -113,7 +113,7 @@ application. The etsconfig package contains a singleton object, **ETSConfig**
 
 .. index:: ETSConfig.toolkit
 
-The values of **ETSConfig.toolkit** that are supported by Traits UI version 3
+The values of **ETSConfig.toolkit** that are supported by TraitsUI version 3
 are:
 
 .. index:: wxPython toolkit, Qt toolkit, null toolkit
@@ -125,7 +125,7 @@ are:
 * 'null': A do-nothing toolkit, for situations where neither of the other 
   toolkits is installed, but Traits is needed for non-UI purposes.
 
-The default behavior of Traits UI is to search for available toolkit-specific
+The default behavior of TraitsUI is to search for available toolkit-specific
 packages in the order listed, and uses the first one it finds. The programmer or
 the user can override this behavior in any of several ways, in the following
 order of precedence:
@@ -146,10 +146,10 @@ order of precedence:
 
 .. _structure-of-this-guide:
 
-Structure of this Guide
------------------------
+Structure of this Manual
+------------------------
 
-The intent of this guide is to present the capabilities of the Traits UI package
+The intent of this guide is to present the capabilities of the TraitsUI package
 in usable increments, so that you can create and display gradually more
 sophisticated interfaces from one chapter to the next. 
 
@@ -166,7 +166,7 @@ sophisticated interfaces from one chapter to the next.
   selection by means of trait :term:`editor`\ s. 
 * :ref:`tips-tricks-and-gotchas` covers miscellaneous additional topics.
 * Further reference materials, including a :ref:`glossary-of-terms` and an API 
-  summary for the Traits UI classes covered in this Guide, are located in the
+  summary for the TraitsUI classes covered in this Manual, are located in the
   Appendices.
 
 .. rubric:: Footnotes

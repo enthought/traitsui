@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Customizing a View &mdash; Traits UI User Manual</title>
+    <title>Customizing a View &mdash; TraitsUI 4 User Manual</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/et.ico"/>
-    <link rel="top" title="Traits UI User Manual" href="../index.html" />
-    <link rel="up" title="Traits UI User Guide" href="index.html" />
+    <link rel="top" title="TraitsUI 4 User Manual" href="../index.html" />
+    <link rel="up" title="TraitsUI 4 User Manual" href="index.html" />
     <link rel="next" title="Advanced View Concepts" href="advanced_view.html" />
     <link rel="prev" title="The View and Its Building Blocks" href="view.html" /> 
   </head>
@@ -42,8 +42,8 @@
         <li class="right" >
           <a href="view.html" title="The View and Its Building Blocks"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Traits UI User Manual</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Traits UI User Guide</a> &raquo;</li>
+        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
   
     <li><a href="#">Customizing a View</a></li>
   
@@ -59,7 +59,7 @@
   <div class="section" id="customizing-a-view">
 <span id="index-0"></span><span id="id1"></span><h1>Customizing a View<a class="headerlink" href="#customizing-a-view" title="Permalink to this headline">¶</a></h1>
 <p>As shown in the preceding two chapters, it is possible to specify a window in
-Traits UI simply by creating a View object with the appropriate contents. In
+TraitsUI simply by creating a View object with the appropriate contents. In
 designing real-life applications, however, you usually need to be able to
 control the appearance and behavior of the windows themselves, not merely their
 content. This chapter covers a variety of options for tailoring the appearance
@@ -71,7 +71,7 @@ the physical properties of the window.</p>
 <p>Many types of windows can be used to display the same data content. A form can
 appear in a window, a wizard, or an embedded panel; windows can be <em>modal</em>
 (i.e., stop all other program processing until the box is dismissed) or not, and
-can interact with live data or with a buffered copy. In Traits UI, a single View
+can interact with live data or with a buffered copy. In TraitsUI, a single View
 can be used to implement any of these options simply by modifying its <strong>kind</strong>
 attribute. There are seven possible values of <strong>kind</strong>:</p>
 <span class="target" id="index-2"></span><span class="target" id="index-3"></span><ul class="simple" id="index-4">
@@ -87,7 +87,7 @@ attribute. There are seven possible values of <strong>kind</strong>:</p>
 object is not specified, the default value is &#8216;modal&#8217;.</p>
 <div class="section" id="stand-alone-windows">
 <span id="index-5"></span><span id="id3"></span><h3>Stand-alone Windows<a class="headerlink" href="#stand-alone-windows" title="Permalink to this headline">¶</a></h3>
-<p>The behavior of a stand-alone Traits UI window can vary over two significant
+<p>The behavior of a stand-alone TraitsUI window can vary over two significant
 degrees of freedom. First, it can be <a class="reference internal" href="glossary.html#term-modal"><em class="xref std std-term">modal</em></a>, meaning that when the window
 appears, all other GUI interaction is suspended until the window is closed; if
 it is not modal, then both the window and the rest of the GUI remain active and
@@ -99,7 +99,7 @@ the model data, and are only copied to the model when the user commits them
 <a class="reference internal" href="#command-buttons-the-buttons-attribute"><em>Command Buttons: the buttons Attribute</em></a>). The four possible combinations of
 these behaviors correspond to four of the possible values of the &#8216;kind &#8216;
 attribute of the View object, as shown in the following table.</p>
-<p class="rubric" id="matrix-of-traits-ui-windows-table">Matrix of Traits UI windows</p>
+<p class="rubric" id="matrix-of-traits-ui-windows-table">Matrix of TraitsUI windows</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="28%" />
@@ -133,7 +133,7 @@ buttons is called a <a class="reference internal" href="glossary.html#term-dialo
 <p>Unlike a window, whose contents generally appear as a single page or a tabbed
 display, a <a class="reference internal" href="glossary.html#term-wizard"><em class="xref std std-term">wizard</em></a> is presented as a series of pages that a user must
 navigate sequentially.</p>
-<p>Traits UI Wizards are always modal and live. They always display a standard
+<p>TraitsUI Wizards are always modal and live. They always display a standard
 wizard button set; i.e., they ignore the <strong>buttons</strong> View attribute. In short,
 wizards are considerably less flexible than windows, and are primarily suitable
 for highly controlled user interactions such as software installation.</p>
@@ -145,7 +145,7 @@ the main program display, if any. Often, however, you might need to create a
 window element that is embedded in a larger display. For such cases, the
 <strong>kind</strong> of the corresponding View object should be &#8216;panel&#8217; or &#8216;subpanel &#8216;.</p>
 <p>A <a class="reference internal" href="glossary.html#term-panel"><em class="xref std std-term">panel</em></a> is very similar to a window, except that it is embedded in a
-larger window, which need not be a Traits UI window. Like windows, panels
+larger window, which need not be a TraitsUI window. Like windows, panels
 support the <strong>buttons</strong> View attribute, as well as any menus and toolbars that
 are specified for the View (see <a class="reference internal" href="handler.html#menus-and-menu-bars"><em>Menus and Menu Bars</em></a>). Panels are always
 live and nonmodal.</p>
@@ -161,7 +161,7 @@ the frame. These buttons have a fixed position outside any scrolled panels in
 the window, and are thus always visible while the window is displayed. They are
 usually used for window-level commands such as committing or cancelling the
 changes made to the form data, or displaying a help window.</p>
-<p>In Traits UI, these command buttons are specified by means of the View object&#8217;s
+<p>In TraitsUI, these command buttons are specified by means of the View object&#8217;s
 <strong>buttons</strong> attribute, whose value is a list of buttons to display. <a class="footnote-reference" href="#id9" id="id7">[6]</a>
 Consider the following variation on Example 3:</p>
 <p class="rubric" id="example-4-using-a-view-object-with-buttons"><span id="index-9"></span>Example 4: Using a View object with buttons</p>
@@ -195,7 +195,7 @@ displayed at the bottom: <em class="guilabel">OK</em> and <em class="guilabel">C
 <img alt="Dialog box with three fields and OK and Cancel buttons." src="../_images/ui_for_ex4.jpg" />
 <p class="caption">Figure 4: User interface for Example 4</p>
 </div>
-<p>There are six standard buttons defined by Traits UI. Each of the standard
+<p>There are six standard buttons defined by TraitsUI. Each of the standard
 buttons has matching a string alias. You can either import and use the button
 names, or simply use their aliases:</p>
 <span class="target" id="index-10"></span><p class="rubric" id="command-button-aliases-table"><span id="index-11"></span>Command button aliases</p>
@@ -299,7 +299,7 @@ of its content.<span class="target" id="index-20"></span><span class="target" id
 <li><strong>updated</strong></li>
 </ul>
 </td>
-<td>Traits UI menus and toolbars are generally
+<td>TraitsUI menus and toolbars are generally
 implemented in conjunction with custom
 <a class="reference internal" href="glossary.html#term-handler"><em class="xref std std-term">Handler</em></a>s; see
 <a class="reference internal" href="handler.html#menus-and-menu-bars"><em>Menus and Menu Bars</em></a> for details. The
@@ -358,7 +358,7 @@ preferences are saved for the view.</td>
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id7">[6]</a></td><td>Actually, the value of the <strong>buttons</strong> attribute is really a list of
-Action objects, from which GUI buttons are generated by Traits UI. The
+Action objects, from which GUI buttons are generated by TraitsUI. The
 Action class is described in <a class="reference internal" href="handler.html#actions"><em>Actions</em></a>.</td></tr>
 </tbody>
 </table>
@@ -429,8 +429,8 @@ Action class is described in <a class="reference internal" href="handler.html#ac
         <li class="right" >
           <a href="view.html" title="The View and Its Building Blocks"
              >previous</a> |</li>
-        <li><a href="../index.html">Traits UI User Manual</a> &raquo;</li>
-          <li><a href="index.html" >Traits UI User Guide</a> &raquo;</li>
+        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li><a href="index.html" >TraitsUI 4 User Manual</a> &raquo;</li>
   
     <li><a href="#">Customizing a View</a></li>
   

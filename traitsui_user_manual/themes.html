@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Traits UI Themes &mdash; Traits UI User Manual</title>
+    <title>TraitsUI Themes &mdash; TraitsUI 4 User Manual</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/et.ico"/>
-    <link rel="top" title="Traits UI User Manual" href="../index.html" />
-    <link rel="up" title="Traits UI User Guide" href="index.html" />
+    <link rel="top" title="TraitsUI 4 User Manual" href="../index.html" />
+    <link rel="up" title="TraitsUI 4 User Manual" href="index.html" />
     <link rel="next" title="Introduction to Trait Editor Factories" href="factory_intro.html" />
     <link rel="prev" title="Controlling the Interface: the Handler" href="handler.html" /> 
   </head>
@@ -42,10 +42,10 @@
         <li class="right" >
           <a href="handler.html" title="Controlling the Interface: the Handler"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Traits UI User Manual</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Traits UI User Guide</a> &raquo;</li>
+        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
   
-    <li><a href="#">Traits UI Themes</a></li>
+    <li><a href="#">TraitsUI Themes</a></li>
   
 
       </ul>
@@ -56,9 +56,9 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="traits-ui-themes">
-<span id="id1"></span><h1>Traits UI Themes<a class="headerlink" href="#traits-ui-themes" title="Permalink to this headline">¶</a></h1>
-<p>Beginning in Traits 3.0, Traits UI supports using <em>themes</em> to customize the
+  <div class="section" id="traitsui-themes">
+<span id="traits-ui-themes"></span><h1>TraitsUI Themes<a class="headerlink" href="#traitsui-themes" title="Permalink to this headline">¶</a></h1>
+<p>Beginning in Traits 3.0, TraitsUI supports using <em>themes</em> to customize the
 appearance of user interfaces, by applying graphical elements extracted from
 simple images. For example, Figure 8 shows an unthemed Traits user interface.</p>
 <div class="figure">
@@ -77,7 +77,7 @@ simple images. For example, Figure 8 shows an unthemed Traits user interface.</p
 </div>
 <div class="section" id="theme-data">
 <h2>Theme Data<a class="headerlink" href="#theme-data" title="Permalink to this headline">¶</a></h2>
-<p>All of the data used by Traits UI for themes is in the form of simple images, a
+<p>All of the data used by TraitsUI for themes is in the form of simple images, a
 few examples of which are shown in Figure 11:</p>
 <img alt="Gray square with rounded, gray, shaded border" src="../_images/theme_image1.gif" />
 <img alt="Yellow square with sharp-cornered, orange, raised border" src="../_images/theme_image2.gif" />
@@ -91,9 +91,9 @@ multiple theme images. The first image in Figure 11 is an example of a PNG
 file containing alpha information. That is, the interior of the rectangle is not
 gray, but transparent, with a thin alpha gradient shadow around its edges.</p>
 </div>
-<div class="section" id="themeable-traits-ui-elements">
-<h2>Themeable Traits UI Elements<a class="headerlink" href="#themeable-traits-ui-elements" title="Permalink to this headline">¶</a></h2>
-<p>Theme information can be applied to the following classes of Traits UI objects:</p>
+<div class="section" id="themeable-traitsui-elements">
+<h2>Themeable TraitsUI Elements<a class="headerlink" href="#themeable-traitsui-elements" title="Permalink to this headline">¶</a></h2>
+<p>Theme information can be applied to the following classes of TraitsUI objects:</p>
 <ul class="simple">
 <li><a class="reference internal" href="glossary.html#term-group"><em class="xref std std-term">Group</em></a></li>
 <li><a class="reference internal" href="glossary.html#term-item"><em class="xref std std-term">Item</em></a></li>
@@ -107,9 +107,9 @@ which are either PyFace ImageResource objects, or strings that specify an image
 file to use. In the case of string values, no path information need be included.
 The path to the image file is assumed to be the images subdirectory or
 <tt class="file docutils literal"><span class="pre">images.zip</span></tt> file located in the same directory as the source file
-containing the string. <a class="footnote-reference" href="#id4" id="id2">[13]</a> However, if the string begins with an &#8216;&#64;&#8217;
+containing the string. <a class="footnote-reference" href="#id3" id="id1">[13]</a> However, if the string begins with an &#8216;&#64;&#8217;
 (at-sign), the string is assumed to be a reference to an image in the default
-image library provided with PyFace. <a class="footnote-reference" href="#id5" id="id3">[14]</a></p>
+image library provided with PyFace. <a class="footnote-reference" href="#id4" id="id2">[14]</a></p>
 <p>The <strong>item_theme</strong> and <strong>label_theme</strong> attributes are transferred via
 containment. That is, if an Item object has an <strong>item_theme</strong> defined, that
 value is used for the Item object&#8217;s editor. If <strong>item_theme</strong> is not defined on
@@ -127,7 +127,7 @@ nested group hierarchy.</p>
 <p>To add themes to a Traits user interface, you add the theme-related attributes
 to the View, Group, and Item definitions. Example 10 shows the code for the
 unthemed user interface shown in Figure 8.</p>
-<p class="rubric" id="example-10-traits-ui-without-themes">Example 10: Traits UI without themes</p>
+<p class="rubric" id="example-10-traits-ui-without-themes">Example 10: TraitsUI without themes</p>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -149,7 +149,7 @@ unthemed user interface shown in Figure 8.</p>
 19
 20
 21
-22</pre></div></td><td class="code"><div class="highlight"><pre><span class="c"># unthemed.py -- Example of a Traits UI without themes</span>
+22</pre></div></td><td class="code"><div class="highlight"><pre><span class="c"># unthemed.py -- Example of a TraitsUI without themes</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Range</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Group</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">Label</span>
 <span class="k">class</span> <span class="nc">Test</span> <span class="p">(</span> <span class="n">HasTraits</span> <span class="p">):</span>
@@ -167,7 +167,7 @@ unthemed user interface shown in Figure 8.</p>
             <span class="n">Item</span><span class="p">(</span> <span class="s">&#39;weight&#39;</span> <span class="p">),</span>
             <span class="n">Item</span><span class="p">(</span> <span class="s">&#39;gender&#39;</span> <span class="p">)</span>
         <span class="p">),</span>
-        <span class="n">title</span>   <span class="o">=</span> <span class="s">&#39;Unthemed Traits UI&#39;</span><span class="p">,</span>
+        <span class="n">title</span>   <span class="o">=</span> <span class="s">&#39;Unthemed TraitsUI&#39;</span><span class="p">,</span>
     <span class="p">)</span>
 
 <span class="n">Test</span><span class="p">()</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
@@ -175,7 +175,7 @@ unthemed user interface shown in Figure 8.</p>
 </td></tr></table></div>
 <p>Example 11 shows the code for the user interface shown in Figure 9, which is
 essentially the same as in Example 10, but with theme data added.</p>
-<p class="rubric" id="example-11-traits-ui-with-themese">Example 11: Traits UI with themes</p>
+<p class="rubric" id="example-11-traits-ui-with-themese">Example 11: TraitsUI with themes</p>
 <div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -206,7 +206,7 @@ essentially the same as in Example 10, but with theme data added.</p>
 28
 29
 30
-31</pre></div></td><td class="code"><div class="highlight"><pre><span class="c"># themed.py -- Example of a Traits UI with themes</span>
+31</pre></div></td><td class="code"><div class="highlight"><pre><span class="c"># themed.py -- Example of a TraitsUI with themes</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Range</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Group</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">Label</span>
 <span class="kn">from</span> <span class="nn">traitsui.wx.themed_text_editor</span> <span class="kn">import</span> \
@@ -233,7 +233,7 @@ essentially the same as in Example 10, but with theme data added.</p>
             <span class="n">item_theme</span>  <span class="o">=</span> <span class="s">&#39;@B0B&#39;</span><span class="p">,</span>
             <span class="n">label_theme</span> <span class="o">=</span> <span class="s">&#39;@BEA&#39;</span>
         <span class="p">),</span>
-        <span class="n">title</span>   <span class="o">=</span> <span class="s">&#39;Themed Traits UI&#39;</span><span class="p">,</span>
+        <span class="n">title</span>   <span class="o">=</span> <span class="s">&#39;Themed TraitsUI&#39;</span><span class="p">,</span>
     <span class="p">)</span>
 
 <span class="n">Test</span><span class="p">()</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
@@ -261,18 +261,18 @@ gray band appears.</li>
 default image library.</li>
 </ul>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="id4" rules="none">
+<table class="docutils footnote" frame="void" id="id3" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[13]</a></td><td>This is very similar to the way that PyFace ImageResource objects work
+<tr><td class="label"><a class="fn-backref" href="#id1">[13]</a></td><td>This is very similar to the way that PyFace ImageResource objects work
 when no search path is specified.</td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id5" rules="none">
+<table class="docutils footnote" frame="void" id="id4" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[14]</a></td><td>PyFace is provided by the pyface package in the Traits GUI
-project (not to be confused with the Traits UI package, traitsui,
+<tr><td class="label"><a class="fn-backref" href="#id2">[14]</a></td><td>PyFace is provided by the pyface package in the Traits GUI
+project (not to be confused with the TraitsUI package, traitsui,
 the subject of this document.)</td></tr>
 </tbody>
 </table>
@@ -290,9 +290,9 @@ the subject of this document.)</td></tr>
             </a></p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Traits UI Themes</a><ul>
+<li><a class="reference internal" href="#">TraitsUI Themes</a><ul>
 <li><a class="reference internal" href="#theme-data">Theme Data</a></li>
-<li><a class="reference internal" href="#themeable-traits-ui-elements">Themeable Traits UI Elements</a></li>
+<li><a class="reference internal" href="#themeable-traitsui-elements">Themeable TraitsUI Elements</a></li>
 <li><a class="reference internal" href="#adding-themes-to-a-ui">Adding Themes to a UI</a></li>
 </ul>
 </li>
@@ -338,10 +338,10 @@ the subject of this document.)</td></tr>
         <li class="right" >
           <a href="handler.html" title="Controlling the Interface: the Handler"
              >previous</a> |</li>
-        <li><a href="../index.html">Traits UI User Manual</a> &raquo;</li>
-          <li><a href="index.html" >Traits UI User Guide</a> &raquo;</li>
+        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li><a href="index.html" >TraitsUI 4 User Manual</a> &raquo;</li>
   
-    <li><a href="#">Traits UI Themes</a></li>
+    <li><a href="#">TraitsUI Themes</a></li>
   
 
       </ul>

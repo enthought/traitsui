@@ -1,9 +1,9 @@
-.. Traits UI documentation master file, created by sphinx-quickstart on Mon Aug 18 11:27:34 2008.
+.. TraitsUI documentation master file, created by sphinx-quickstart on Mon Aug 18 11:27:34 2008.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Traits UI User Guide
-====================
+TraitsUI 4 User Manual
+======================
 
 .. toctree::
    :maxdepth: 3

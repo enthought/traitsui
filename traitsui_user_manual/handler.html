@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Controlling the Interface: the Handler &mdash; Traits UI User Manual</title>
+    <title>Controlling the Interface: the Handler &mdash; TraitsUI 4 User Manual</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/et.ico"/>
-    <link rel="top" title="Traits UI User Manual" href="../index.html" />
-    <link rel="up" title="Traits UI User Guide" href="index.html" />
-    <link rel="next" title="Traits UI Themes" href="themes.html" />
+    <link rel="top" title="TraitsUI 4 User Manual" href="../index.html" />
+    <link rel="up" title="TraitsUI 4 User Manual" href="index.html" />
+    <link rel="next" title="TraitsUI Themes" href="themes.html" />
     <link rel="prev" title="Advanced View Concepts" href="advanced_view.html" /> 
   </head>
   <body>
@@ -37,13 +37,13 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="themes.html" title="Traits UI Themes"
+          <a href="themes.html" title="TraitsUI Themes"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="advanced_view.html" title="Advanced View Concepts"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Traits UI User Manual</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Traits UI User Guide</a> &raquo;</li>
+        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
   
     <li><a href="#">Controlling the Interface: the Handler</a></li>
   
@@ -60,36 +60,36 @@
 <span id="id1"></span><h1>Controlling the Interface: the Handler<a class="headerlink" href="#controlling-the-interface-the-handler" title="Permalink to this headline">¶</a></h1>
 <p>Most of the material in the preceding chapters is concerned with the
 relationship between the model and view aspects of the <a class="reference internal" href="glossary.html#term-mvc"><em class="xref std std-term">MVC</em></a> design
-pattern as supported by Traits UI. This chapter examines the third aspect: the
-<a class="reference internal" href="glossary.html#term-controller"><em class="xref std std-term">controller</em></a>, implemented in Traits UI as an <a class="reference internal" href="glossary.html#term-instance"><em class="xref std std-term">instance</em></a> of the
+pattern as supported by TraitsUI. This chapter examines the third aspect: the
+<a class="reference internal" href="glossary.html#term-controller"><em class="xref std std-term">controller</em></a>, implemented in TraitsUI as an <a class="reference internal" href="glossary.html#term-instance"><em class="xref std std-term">instance</em></a> of the
 <a class="reference internal" href="glossary.html#term-handler"><em class="xref std std-term">Handler</em></a> class. <a class="footnote-reference" href="#id20" id="id2">[11]</a></p>
 <p>A controller for an MVC-based application is essentially an event handler for
 GUI events, i.e., for events that are generated through or by the program
 interface. Such events can require changes to one or more model objects (e.g.,
 because a data value has been updated) or manipulation of the interface itself
-(e.g., window closure, dynamic interface behavior). In Traits UI, such actions
+(e.g., window closure, dynamic interface behavior). In TraitsUI, such actions
 are performed by a Handler object.</p>
 <p>In the preceding examples in this guide, the Handler object has been implicit:
-Traits UI provides a default Handler that takes care of a common set of GUI
+TraitsUI provides a default Handler that takes care of a common set of GUI
 events including window initialization and closure, data value updates, and
-button press events for the standard Traits UI window buttons (see
+button press events for the standard TraitsUI window buttons (see
 <a class="reference internal" href="custom_view.html#command-buttons-the-buttons-attribute"><em>Command Buttons: the buttons Attribute</em></a>).</p>
-<p>This chapter explains the features of the Traits UI Handler, and shows how to
+<p>This chapter explains the features of the TraitsUI Handler, and shows how to
 implement custom GUI behaviors by building and instantiating custom subclasses
 of the Handler class. The final section of the chapter describes several
 techniques for linking a custom Handler to the window or windows it is designed
 to control.</p>
 <div class="section" id="backstage-introducing-the-uiinfo-object">
 <span id="id3"></span><h2>Backstage: Introducing the UIInfo Object<a class="headerlink" href="#backstage-introducing-the-uiinfo-object" title="Permalink to this headline">¶</a></h2>
-<p>Traits UI supports the MVC design pattern by maintaining the model, view, and
+<p>TraitsUI supports the MVC design pattern by maintaining the model, view, and
 controller as separate entities. A single View object can be used to construct
 windows for multiple model objects; likewise a single Handler can handle GUI
 events for windows created using different Views. Thus there is no static link
 between a Handler and any particular window or model object. However, in order
 to be useful, a Handler must be able to observe and manipulate both its
-corresponding window and model objects. In Traits UI, this is accomplished by
+corresponding window and model objects. In TraitsUI, this is accomplished by
 means of the UIInfo object.</p>
-<p>Whenever Traits UI creates a window or panel from a View, a UIInfo object is
+<p>Whenever TraitsUI creates a window or panel from a View, a UIInfo object is
 created to act as the Handler&#8217;s reference to that window and to the objects
 whose <a class="reference internal" href="glossary.html#term-trait-attribute"><em class="xref std std-term">trait attribute</em></a>s are displayed in it. Each entry in the View&#8217;s
 context (see <a class="reference internal" href="advanced_view.html#the-view-context"><em>The View Context</em></a>) becomes an attribute of the UIInfo
@@ -101,7 +101,7 @@ through
 <a class="reference internal" href="advanced_view.html#example-6-defining-multiple-view-objects-in-a-hastraits-class"><em>Example 6</em></a>,
 the created UIInfo object has an attribute <strong>object</strong> whose value is the object
 <strong>sam</strong>.</p>
-<p>Whenever a window event causes a Handler method to be called, Traits UI passes
+<p>Whenever a window event causes a Handler method to be called, TraitsUI passes
 the corresponding UIInfo object as one of the method arguments. This gives the
 Handler the information necessary to perform its tasks.</p>
 </div>
@@ -110,7 +110,7 @@ Handler the information necessary to perform its tasks.</p>
 <p>In accordance with the MVC design pattern, Handlers and Views are separate
 entities belonging to distinct classes. In order for a custom Handler to provide
 the control logic for a window, it must be explicitly associated with the View
-for that window. The Traits UI package provides three ways to accomplish this:</p>
+for that window. The TraitsUI package provides three ways to accomplish this:</p>
 <ul class="simple">
 <li>Make the Handler an attribute of the View.</li>
 <li>Provide the Handler as an argument to a display method such as edit_traits().</li>
@@ -128,7 +128,7 @@ specified handler instance.</p>
 <div class="section" id="linking-handler-and-view-at-edit-time">
 <span id="id7"></span><h3>Linking Handler and View at Edit Time<a class="headerlink" href="#linking-handler-and-view-at-edit-time" title="Permalink to this headline">¶</a></h3>
 <p>It is also possible to associate a custom Handler with a specific window without
-assigning it permanently to the View. Each of the three Traits UI
+assigning it permanently to the View. Each of the three TraitsUI
 window-building methods (the configure_traits() and edit_traits() methods of the
 HasTraits class and the ui() method of the View class) has a <em>handler</em> keyword
 argument. Assigning an instance of Handler to this argument gives that handler
@@ -329,13 +329,13 @@ for this window.</td>
 <div class="section" id="reacting-to-trait-changes">
 <span id="id14"></span><h3>Reacting to Trait Changes<a class="headerlink" href="#reacting-to-trait-changes" title="Permalink to this headline">¶</a></h3>
 <p>The setattr() method described above is called whenever any trait value is
-changed in the UI. However, Traits UI also provides a mechanism for calling
+changed in the UI. However, TraitsUI also provides a mechanism for calling
 methods that are automatically executed whenever the user edits a <em>particular</em>
 trait. While you can use static notification handler methods on the HasTraits
 object, you might want to implement behavior that concerns only the user
 interface. In that case, following the MVC pattern dictates that such behavior
 should not be implemented in the &#8220;model&#8221; part of the code. In keeping with this
-pattern, Traits UI supports &#8220;user interface notification&#8221; methods, which must
+pattern, TraitsUI supports &#8220;user interface notification&#8221; methods, which must
 have a signature with the following format:</p>
 <dl class="method">
 <dt id="extended_traitname_changed">
@@ -421,7 +421,7 @@ overridden setattr() method and user interface notification method.</p>
 actions, which can be presented as buttons, menu items, or toolbar buttons.</p>
 <div class="section" id="actions">
 <span id="id16"></span><h4>Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h4>
-<p>In Traits UI, window commands are implemented as instances of the Action class.
+<p>In TraitsUI, window commands are implemented as instances of the Action class.
 Actions can be used in <a class="reference internal" href="glossary.html#term-command-button"><em class="xref std std-term">command button</em></a>s, menus, and toolbars.</p>
 <p>Suppose you want to build a window with a custom <strong>Recalculate</strong> action. Suppose
 further that you have defined a subclass of Handler called MyHandler to provide
@@ -577,7 +577,7 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
                         title="previous chapter">Advanced View Concepts</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="themes.html"
-                        title="next chapter">Traits UI Themes</a></p>
+                        title="next chapter">TraitsUI Themes</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/traitsui_user_manual/handler.txt"
@@ -607,13 +607,13 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="themes.html" title="Traits UI Themes"
+          <a href="themes.html" title="TraitsUI Themes"
              >next</a> |</li>
         <li class="right" >
           <a href="advanced_view.html" title="Advanced View Concepts"
              >previous</a> |</li>
-        <li><a href="../index.html">Traits UI User Manual</a> &raquo;</li>
-          <li><a href="index.html" >Traits UI User Guide</a> &raquo;</li>
+        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li><a href="index.html" >TraitsUI 4 User Manual</a> &raquo;</li>
   
     <li><a href="#">Controlling the Interface: the Handler</a></li>
   

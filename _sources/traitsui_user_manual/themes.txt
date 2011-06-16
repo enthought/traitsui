@@ -1,10 +1,10 @@
 .. _traits-ui-themes:
 
 ================
-Traits UI Themes
+TraitsUI Themes
 ================
 
-Beginning in Traits 3.0, Traits UI supports using *themes* to customize the
+Beginning in Traits 3.0, TraitsUI supports using *themes* to customize the
 appearance of user interfaces, by applying graphical elements extracted from
 simple images. For example, Figure 8 shows an unthemed Traits user interface.
 
@@ -30,7 +30,7 @@ Figure 10 shows the same user interface with a different theme applied.
 Theme Data
 ----------
 
-All of the data used by Traits UI for themes is in the form of simple images, a
+All of the data used by TraitsUI for themes is in the form of simple images, a
 few examples of which are shown in Figure 11:
 
 .. image:: images/theme_image1.gif
@@ -50,10 +50,10 @@ multiple theme images. The first image in Figure 11 is an example of a PNG
 file containing alpha information. That is, the interior of the rectangle is not
 gray, but transparent, with a thin alpha gradient shadow around its edges.
 
-Themeable Traits UI Elements
+Themeable TraitsUI Elements
 ----------------------------
 
-Theme information can be applied to the following classes of Traits UI objects:
+Theme information can be applied to the following classes of TraitsUI objects:
 
 - :term:`Group`
 - :term:`Item`
@@ -93,14 +93,14 @@ unthemed user interface shown in Figure 8.
 
 .. _example-10-traits-ui-without-themes:
 
-.. rubric:: Example 10: Traits UI without themes
+.. rubric:: Example 10: TraitsUI without themes
 
 .. highlight:: python
    :linenothreshold: 5
    
 ::
 
-    # unthemed.py -- Example of a Traits UI without themes
+    # unthemed.py -- Example of a TraitsUI without themes
     from traits.api import HasTraits, Str, Range, Float, Enum
     from traitsui.api import View, Group, Item, Label
     class Test ( HasTraits ):
@@ -118,7 +118,7 @@ unthemed user interface shown in Figure 8.
                 Item( 'weight' ),
                 Item( 'gender' )
             ),
-            title   = 'Unthemed Traits UI',
+            title   = 'Unthemed TraitsUI',
         )
     
     Test().configure_traits()
@@ -128,11 +128,11 @@ essentially the same as in Example 10, but with theme data added.
 
 .. _example-11-traits-ui-with-themese:
 
-.. rubric:: Example 11: Traits UI with themes
+.. rubric:: Example 11: TraitsUI with themes
 
 :: 
 
-    # themed.py -- Example of a Traits UI with themes
+    # themed.py -- Example of a TraitsUI with themes
     from traits.api import HasTraits, Str, Range, Float, Enum
     from traitsui.api import View, Group, Item, Label
     from traitsui.wx.themed_text_editor import \
@@ -159,7 +159,7 @@ essentially the same as in Example 10, but with theme data added.
                 item_theme  = '@B0B',
                 label_theme = '@BEA'
             ),
-            title   = 'Themed Traits UI',
+            title   = 'Themed TraitsUI',
         )
     
     Test().configure_traits()
@@ -191,5 +191,5 @@ This example uses the following theme-related items:
    when no search path is specified.
    
 .. [14] PyFace is provided by the pyface package in the Traits GUI 
-   project (not to be confused with the Traits UI package, traitsui,
+   project (not to be confused with the TraitsUI package, traitsui,
    the subject of this document.)

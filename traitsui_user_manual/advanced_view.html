@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Advanced View Concepts &mdash; Traits UI User Manual</title>
+    <title>Advanced View Concepts &mdash; TraitsUI 4 User Manual</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/et.ico"/>
-    <link rel="top" title="Traits UI User Manual" href="../index.html" />
-    <link rel="up" title="Traits UI User Guide" href="index.html" />
+    <link rel="top" title="TraitsUI 4 User Manual" href="../index.html" />
+    <link rel="up" title="TraitsUI 4 User Manual" href="index.html" />
     <link rel="next" title="Controlling the Interface: the Handler" href="handler.html" />
     <link rel="prev" title="Customizing a View" href="custom_view.html" /> 
   </head>
@@ -42,8 +42,8 @@
         <li class="right" >
           <a href="custom_view.html" title="Customizing a View"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Traits UI User Manual</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Traits UI User Guide</a> &raquo;</li>
+        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
   
     <li><a href="#">Advanced View Concepts</a></li>
   
@@ -58,7 +58,7 @@
             
   <div class="section" id="advanced-view-concepts">
 <span id="index-0"></span><span id="id1"></span><h1>Advanced View Concepts<a class="headerlink" href="#advanced-view-concepts" title="Permalink to this headline">¶</a></h1>
-<p>The preceding chapters of this Guide give an overview of how to use the View
+<p>The preceding chapters of this Manual give an overview of how to use the View
 class to quickly construct a simple window for a single HasTraits object. This
 chapter explores a number of more complex techniques that significantly increase
 the power and versatility of the View object.</p>
@@ -183,7 +183,7 @@ the object rather than being a module-level variable:</p>
 </div>
 <p>Note that if more than one View is defined for a model class, you must indicate
 which one is to be used as the default by naming it <tt class="docutils literal"><span class="pre">traits_view</span></tt>. Otherwise,
-Traits UI gives preference to none of them, and instead tries to construct a
+TraitsUI gives preference to none of them, and instead tries to construct a
 default View, resulting in a simple alphabetized display as described in
 <a class="reference internal" href="view.html#the-view-and-its-building-blocks"><em>The View and Its Building Blocks</em></a>. For this reason, it is usually
 preferable to name a model&#8217;s default View traits_view even if there are no other
@@ -198,8 +198,8 @@ remained closely coupled. In some cases the view has been defined in the model
 class, as in <a class="reference internal" href="#internal-views"><em>Internal Views</em></a>; in other cases the configure_traits() method
 that produces a window from a View has been called from a HasTraits object.
 However, these strategies are simply conveniences; they are not an intrinsic
-part of the relationship between model and view in Traits UI. This section
-begins to explore how the Traits UI package truly supports the separation of
+part of the relationship between model and view in TraitsUI. This section
+begins to explore how the TraitsUI package truly supports the separation of
 model and view prescribed by the <a class="reference internal" href="glossary.html#term-mvc"><em class="xref std std-term">MVC</em></a> design pattern.</p>
 <p>An <em>external</em> view is one that is defined outside the model classes. In Traits
 UI, you can define a named View wherever you can define a variable or class
@@ -222,7 +222,7 @@ described in <a class="reference internal" href="handler.html#controlling-the-in
 </div>
 <div class="section" id="displaying-a-view">
 <span id="index-8"></span><span id="id8"></span><h2>Displaying a View<a class="headerlink" href="#displaying-a-view" title="Permalink to this headline">¶</a></h2>
-<p>Traits UI provides three methods for creating a window or panel from a View
+<p>TraitsUI provides three methods for creating a window or panel from a View
 object. The first two, configure_traits() and edit_traits(), are defined on the
 HasTraits class, which is a superclass of all Traits-based model classes, as
 well as of Handler and its subclasses. The third method, ui(), is defined on the
@@ -232,7 +232,7 @@ View class itself.</p>
 <p>The configure_traits() method creates a standalone window for a given View
 object, i.e., it does not require an existing GUI to run in. It is therefore
 suitable for building command-line functions, as well as providing an accessible
-tool for the beginning Traits UI programmer.</p>
+tool for the beginning TraitsUI programmer.</p>
 <p>The configure_traits() method also provides options for saving
 <a class="reference internal" href="glossary.html#term-trait-attribute"><em class="xref std std-term">trait attribute</em></a> values to and restoring them from a file. Refer to the
 <em>Traits API Reference</em> for details.</p>
@@ -250,7 +250,7 @@ handled elsewhere in the application.</p>
 <p>The View object includes a method called ui(), which performs the actual
 generation of the window or panel from the View for both edit_traits() and
 configure_traits(). The ui() method is also available directly through the
-Traits UI API; however, using one of the other two methods is usually
+TraitsUI API; however, using one of the other two methods is usually
 preferable. <a class="footnote-reference" href="#id19" id="id12">[9]</a></p>
 <p>The ui() method has five keyword parameters:</p>
 <ul class="simple">
@@ -296,7 +296,7 @@ ui() at all? One answer lies in <em>multi-object Views</em>.</p>
 model objects, i.e., objects that are not attributes of one another. For
 example, suppose you are building a real estate listing application, and want to
 display a window that shows two properties side by side for a comparison of
-price and features. This is straightforward in Traits UI, as the following
+price and features. This is straightforward in TraitsUI, as the following
 example shows:</p>
 <span class="target" id="index-14"></span><p class="rubric" id="example-7-using-a-multi-object-view-with-a-context"><span id="index-15"></span>Example 7: Using a multi-object view with a context</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># multi_object_view.py -- Sample code to show multi-object view</span>
@@ -377,7 +377,7 @@ details of the extended trait name syntax.</p>
 <div class="section" id="include-objects">
 <span id="index-17"></span><span id="id16"></span><h2>Include Objects<a class="headerlink" href="#include-objects" title="Permalink to this headline">¶</a></h2>
 <p>In addition to the Item and Group class, a third building block class for Views
-exists in Traits UI: the Include class. For the sake of completeness, this
+exists in TraitsUI: the Include class. For the sake of completeness, this
 section gives a brief description of Include objects and their purpose and
 usage. However, they are not commonly used as of this writing, and should be
 considered unsupported pending redesign.</p>
@@ -437,7 +437,7 @@ associated more or less equally with multiple model objects; see
 <tr><td class="label"><a class="fn-backref" href="#id15">[10]</a></td><td>If the script were designed to run within an existing GUI, it would make
 sense to replace the last line with
 <tt class="docutils literal"><span class="pre">comp_view.ui(context={'h1':</span> <span class="pre">house1,</span> <span class="pre">'h2':</span> <span class="pre">house2})</span></tt>, since neither object
-particularly dominates the view. However, the examples in this Guide are
+particularly dominates the view. However, the examples in this Manual are
 designed to be fully executable from the Python command line, which is why
 configure_traits() was used instead.</td></tr>
 </tbody>
@@ -518,8 +518,8 @@ configure_traits() was used instead.</td></tr>
         <li class="right" >
           <a href="custom_view.html" title="Customizing a View"
              >previous</a> |</li>
-        <li><a href="../index.html">Traits UI User Manual</a> &raquo;</li>
-          <li><a href="index.html" >Traits UI User Guide</a> &raquo;</li>
+        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li><a href="index.html" >TraitsUI 4 User Manual</a> &raquo;</li>
   
     <li><a href="#">Advanced View Concepts</a></li>
   
