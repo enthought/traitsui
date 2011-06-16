@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.7: http://docutils.sourceforge.net/" />
+<title>The TabularEditor</title>
+<style type="text/css">
+
+body { background-color: #FFFFFF; }
+
+h1 { font-family: Arial; 
+     font-size: 14pt;
+     color: #303030;
+     background-color: #FCD062;
+     padding-top: 3px; 
+     padding-left:8px;
+     padding-bottom: 3px; 
+     padding-right: 8px; }
+
+h2 { font-family: Arial;
+     font-size: 12pt;
+     color: #303030;
+     background-color: #FCD062;
+     padding-top: 3px; 
+     padding-left:8px;
+     padding-bottom: 3px; 
+     padding-right: 8px; }
+
+pre { border: 1px solid #A0A0A0; 
+      background-color: #FDF7E7; 
+      padding: 4px; }
+      
+dl { border: 1px solid #A0A0A0;
+     background-color: #FDF7E7;
+     padding-top: 4px;
+     padding-bottom: 6px;
+     padding-left: 8px;
+     padding-right: 8px; }
+      
+dl dl { border: 0px solid #A0A0A0; }
+     
+dt { font-family: Arial;
+     font-weight: bold;
+
+dd { padding-bottom: 10px; }
+
+</style>
+</head>
+<body>
+<div class="document" id="the-tabulareditor">
+<h1 class="title">The TabularEditor</h1>
+
+<p>Traits 3.0 introduces a new editor, called the <strong>TabularEditor</strong>, located in the
+<em>traitsui.wx.extras.tabular_editor</em> module that can be used for many
+of the same purposes as the existing <strong>TableEditor</strong>. However, while similar in
+function, each editor has its own particular strengths and weaknesses.</p>
+<p>Some of the strengths of the new <strong>TabularEditor</strong> are:</p>
+<ul class="simple">
+<li><strong>Very fast</strong>. The editor uses a <em>virtual</em> model which only accesses data
+from the underlying data model as needed. For example, if you have a million
+element array, but can only view 50 rows at a time, the editor will only
+request 50 rows at a time.</li>
+<li><strong>Very flexible data model</strong>. The editor uses a new adapter model for
+interfacing with your underlying data that allows it to easily deal with many
+types of data representation: from lists of objects, to arrays of numbers, to
+tuples of tuples, and many other formats as well.</li>
+<li><strong>Supports a useful set of data operations</strong>. The editor includes built-in
+support for a number of useful data operations, including:<ul>
+<li>Moving the selection up and down using the keyboard arrow keys.</li>
+<li>Moving rows up and down using the keyboard arrow keys.</li>
+<li>Inserting and deleting rows using the keyboard.</li>
+<li>Begin editing table rows using the keyboard.</li>
+<li>Drag and drop of table items to and from the editor, including support for
+both <em>copy</em> and <em>move</em> operations for single or multiple table items.</li>
+</ul>
+</li>
+<li><strong>Visually appealing</strong>. The editor, in general, uses the underlying OS's
+native table or grid control, and as a result often looks better than the
+control used by the <strong>TableEditor</strong>.</li>
+<li><strong>Supports displaying text and images in any cell</strong>. Note however that
+the images displayed must all be the same size for optimal results.</li>
+</ul>
+<p>Some of the weaknesses of the <strong>TabularEditor</strong> compared to the <strong>TableEditor</strong>
+are:</p>
+<ul class="simple">
+<li><strong>Not as full-featured</strong>. The <strong>TableEditor</strong> includes support for arbitrary
+data filters and searches and different types of data sorting. The differences
+here may narrow over time as new features get added to the <strong>TabularEditor</strong>.</li>
+<li><strong>Limited data editing capabilities</strong>: The <strong>TabularEditor</strong> only supports
+editing textual values, unlike the <strong>TableEditor</strong>, which supports a wide
+variety of column editors and can be extended with more as needed. This is
+due to limitations of the underlying native OS control used by the editor.</li>
+</ul>
+<p>Setting up a <strong>TabularEditor</strong> for use in a Traits UI is divided into two main
+parts:</p>
+<ul class="simple">
+<li>Configuring the <strong>TabularEditor</strong> object.</li>
+<li>Creating a suitable adapter (or adapters) for use with the editor.</li>
+</ul>
+<p>We'll start off first with a description of the <strong>TabularEditor</strong> class, and
+describe the adapter interface in a later section.</p>
+<div class="section" id="the-tabulareditor-class">
+<h1>The TabularEditor Class</h1>
+<p>The <strong>TabularEditor</strong> class defines a large number of traits which are used to
+configure the editor. We'll divide the set of traits into several categories,
+and describe each in turn.</p>
+</div>
+<div class="section" id="visual-traits">
+<h1>Visual Traits</h1>
+<dl class="docutils">
+<dt>show_titles</dt>
+<dd>A boolean value which specifies whether or not column headers should be
+displayed at the top of the table. It defaults to <strong>True</strong>.</dd>
+<dt>horizontal_lines</dt>
+<dd>A boolean value which specifies whether or not horizontal lines should be
+drawn between rows in the table. It defaults to <strong>True</strong>.</dd>
+<dt>vertical_lines</dt>
+<dd>A boolean value which specifies whether or not vertical lines should be
+drawn between columns in the table. It defaults to <strong>True</strong>.</dd>
+</dl>
+</div>
+<div class="section" id="control-traits">
+<h1>Control Traits</h1>
+<dl class="docutils">
+<dt>editable</dt>
+<dd>A boolean value that specifies whether or not the user is allowed to edit
+data in the table. It defaults to <strong>True</strong>.</dd>
+<dt>multi_select</dt>
+<dd>A boolean value that specifies whether or not the user is allowed to select
+multiple rows in the table at once. It defaults to <strong>False</strong>.</dd>
+<dt>operations</dt>
+<dd><p class="first">A list of strings that specify what operations the user is allowed to
+perform on items in the table. The possible values are:</p>
+<ul class="simple">
+<li><strong>delete</strong>: The user can delete table rows.</li>
+<li><strong>insert</strong>: The user can insert new table rows at any position in the
+table.</li>
+<li><strong>append</strong>: The user can append new table rows to the end of the table.</li>
+<li><strong>edit</strong>: The user can edit the contents of table rows.</li>
+<li><strong>move</strong>: The user can move table rows within the table.</li>
+</ul>
+<p class="last">You should include in the list all operations that you want to allow the
+user to perform (e.g. <em>['delete','insert','append']</em>).</p>
+</dd>
+<dt>drag_move</dt>
+<dd>A boolean value that specifies whether <em>drag move</em> operations are allowed
+(<strong>True</strong>), or should all drag operations be treated as <em>drag copy</em>
+operations (<strong>False</strong>). The default is <strong>False</strong>.</dd>
+<dt>adapter</dt>
+<dd>An instance of <strong>TabularAdapter</strong> that the editor uses to interface to the
+underlying <strong>Item</strong> data supplied to the editor. This is normally an
+instance of a subclass of <strong>TabularAdapter</strong> specially written for the type
+of data being edited. This will be described more fully in the
+<strong>TabularAdapter</strong> section.</dd>
+<dt>adapter_name</dt>
+<dd>An optional string that specifies the extended trait name of a trait that
+contains the <strong>TabularAdapter</strong> the editor should used. If the value of the
+trait changes while the editor is active, the editor will automatically
+start using the new adapter. Normally you will use either the <em>adapter</em>
+trait <em>or</em> the <em>adapter_name</em> trait, but not both. However, it is possible
+to use both together if needed.</dd>
+<dt>images</dt>
+<dd>An optional list of <strong>ImageResource</strong> objects describing a set of images
+that can be displayed in the table's cells. Specifying a set here allows you
+to refer to the images by name within the adapter. However, it is also
+possible for the adapter to supply the <strong>ImageResource</strong> object directly
+for any image it wants to display.</dd>
+</dl>
+</div>
+<div class="section" id="event-handling-traits">
+<h1>Event Handling Traits</h1>
+<dl class="docutils">
+<dt>selected</dt>
+<dd>An optional string that specifies the extended trait name of a trait that
+contains the currently selected table items. For a single-select mode
+editor, this should be a scalar trait, and for a multi-select mode editor,
+it should be a list trait. The type of the trait should be the same as the
+type of data being displayed in the table. This trait can be used to both
+set and get the current table selection.</dd>
+<dt>selected_row</dt>
+<dd>An optional string that specifies the extended trait name of a trait that
+contains the currently selected table item indices. For a single-select mode
+editor this should be an <strong>Int</strong> value, and for a multi-select mode editor
+it should be a <strong>List(Int)</strong> value. This trait can be used to both set and
+get the current table selection.</dd>
+<dt>activated</dt>
+<dd>An optional string that specifies the extended trait name of a trait that
+contains the currently activated table item. It should be an instance of the
+table item data type. The trait can only be used to get the value of
+the most recently activated table item. An item is activated either by the
+user double-clicking on it or by pressing the <strong>Enter</strong> key when the item
+is selected.</dd>
+<dt>activated_row</dt>
+<dd>An optional string that specifies the extended trait name of a trait that
+contains the currently activated table item index. It should be an <strong>Int</strong>
+value. The trait can only be used to get the index of the most recently
+activated table item. An item is activated either by the user
+double-clicking on it or by pressing the <strong>Enter</strong> key when the item is
+selected.</dd>
+<dt>clicked</dt>
+<dd>An optional string that specifies the extended trait name of a trait that
+contains a <strong>TabularEditorEvent</strong> object containing the information
+associated with the most recent left mouse button click within the editor.
+The trait can only be used to get the <strong>TabularEditorEvent</strong> object. The
+<strong>TabularEditorEvent</strong> object is described in the next section.</dd>
+<dt>dclicked</dt>
+<dd>An optional string that specifies the extended trait name of a trait that
+contains a <strong>TabularEditorEvent</strong> object containing the information
+associated with the most recent left mouse button double-click within the
+editor. The trait can only be used to get the <strong>TabularEditorEvent</strong>
+object. The <strong>TabularEditorEvent</strong> object is described in the next section.</dd>
+<dt>right_clicked</dt>
+<dd>An optional string that specifies the extended trait name of a trait that
+contains a <strong>TabularEditorEvent</strong> object containing the information
+associated with the most recent right mouse button click within the editor.
+The trait can only be used to get the <strong>TabularEditorEvent</strong> object. The
+<strong>TabularEditorEvent</strong> object is described in the next section.</dd>
+<dt>right_dclicked</dt>
+<dd>An optional string that specifies the extended trait name of a trait that
+contains a <strong>TabularEditorEvent</strong> object containing the information
+associated with the most recent right mouse button double-click within the
+editor. The trait can only be used to get the <strong>TabularEditorEvent</strong>
+object. The <strong>TabularEditorEvent</strong> object is described in the next section.</dd>
+</dl>
+</div>
+<div class="section" id="the-tabulareditorevent-class">
+<h1>The TabularEditorEvent Class</h1>
+<p>Objects of the <strong>TabularEditorEvent</strong> class contain information related to a
+mouse button click that occurs within the editor. The class has no methods,
+but does define the following traits:</p>
+<dl class="docutils">
+<dt>row</dt>
+<dd>An integer specifying the index of the table item that was clicked on.</dd>
+<dt>column</dt>
+<dd>A value specifying the column id of the table cell that was clicked on.
+This value will correspond to the second element of the tuple used to
+define the column in the <strong>TabularEditor</strong> adapter supplied to the editor.
+This will be described in a later section.</dd>
+<dt>item</dt>
+<dd>The data item corresponding to the table row that was clicked on. The type
+of this data will depend upon the type of data contained in the underlying
+data model.</dd>
+</dl>
+</div>
+<div class="section" id="the-tabulareditor-user-interface">
+<h1>The TabularEditor User Interface</h1>
+<p>Depending upon how you have configured the <strong>TabularEditor</strong> and its associated
+adapter, the following user interface features may be available:</p>
+<ul class="simple">
+<li><strong>Up arrow</strong>: Move the selection up one line.</li>
+<li><strong>Down arrow</strong>: Move the selection down one line.</li>
+<li><strong>Page down</strong>: Append a new item to the end of the list (<em>'append'</em>).</li>
+<li><strong>Left arrow</strong>: Move the current selection up one line (<em>'move'</em>).</li>
+<li><strong>Right arrow</strong>: Move the current selection down one line (<em>'move'</em>).</li>
+<li><strong>Backspace, Delete</strong>: Delete all items in the current selection from the
+list (<em>'delete'</em>).</li>
+<li><strong>Enter, Escape</strong>: Edit the current selection (<em>'edit'</em>).</li>
+<li><strong>Insert</strong>: Insert a new item before the current selection (<em>'insert'</em>).</li>
+</ul>
+<p>In the preceding list, the values in parentheses refer to the operation that
+must be included in the <strong>TabularEditor</strong> <em>operations</em> trait in order for the
+specified key to have any effect.</p>
+<p>The <em>append</em>, <em>move</em>, <em>edit</em> and <em>insert</em> operations are only available if a
+single item is selected. The <em>delete</em> operation works when the selection has
+one or more items.</p>
+<p>Depending upon how the <strong>TabularEditor</strong> and adapter are specified, drag and
+drop operations may also be available. If multiple items are selected and the
+user drags one of the selected items, all selected items will be included in
+the drag operation. If the user drags a non-selected item, only that item will
+be dragged.</p>
+<p>The editor also supports both <em>drag-move</em> and <em>drag-copy</em> semantics. A
+<em>drag-move</em> operation means that the dragged items will be sent to the target
+and removed from the list data. A <em>drag-copy</em> operation means that the
+dragged items will be sent to the target, but will <em>not</em> be deleted from the
+<strong>Item</strong> data. Note that in a <em>drag-copy</em> operation, if you do not want the
+target to receive the same data contained in the list, then you must return a
+copy or clone of the data when the editor requests the drag data from the
+adapter.</p>
+<p>You can prevent <em>drag-move</em> operations by making sure that the
+<strong>TabularEditor</strong> <em>drag_move</em> trait is set to <strong>False</strong> (the default).</p>
+<p>Note that the default operation when a user begins a drag operation is
+<em>drag_move</em>. A <em>drag-copy</em> operation occurs when the user also holds the
+<em>Ctrl</em> key down during the drag operation (the mouse pointer changes to indicate
+the change in drag semantics). If <em>drag_move</em> operations are disabled by
+setting the <strong>TabularEditor</strong> <em>drag_move</em> trait to <strong>False</strong>, any <em>drag-move</em>
+operation is automatically treated as a <em>drag_copy</em>.</p>
+<p>The tabular editor only allows the user to edit the first column of data in the
+table (a restriction imposed by the underlying OS widget). If the <em>'edit'</em>
+operation is enabled, the user can begin editing the first column either by
+clicking on the row twice, or by selecting the row and pressing the <strong>Enter</strong> or
+<strong>Escape</strong> key.</p>
+<p>Finally, the user can resize columns in the table by dragging the column title
+dividers left or right with the mouse. Once resized in this manner, the column
+remains that size until the user resizes the column again. This is true
+even if you assigned a dynamic width to the column (see the <strong>TabularAdapter</strong>
+section for more information about what this means). If the user wants to allow
+a previously user-sized column to be restored to its original developer
+specified size again, they must right-click on the column title to <em>release</em>
+its user specified size and restore its original size.</p>
+<p>If you enable <em>persistence</em> for the editor by specifying a non-empty <em>id</em> trait
+for the editor's <strong>Item</strong> and <strong>View</strong> objects, any user specified column
+widths will be saved across application sessions.</p>
+</div>
+<div class="section" id="the-tabularadapter-class">
+<h1>The TabularAdapter Class</h1>
+<p>The power and flexibility of the tabular editor is mostly a result of the
+<strong>TabularAdapter</strong> class, which is the base class from which all tabular editor
+adapters must be derived.</p>
+<p>The <strong>TabularEditor</strong> object interfaces between the underlying toolkit widget
+and your program, while the <strong>TabularAdapter</strong> object associated with the
+editor interfaces between the editor and your data.</p>
+<p>The design of the <strong>TabularAdapter</strong> base class is such that it tries to make
+simple cases simple and complex cases possible. How it accomplishes this is what
+we'll be discussing in the following sections.</p>
+</div>
+<div class="section" id="the-tabularadapter-columns-trait">
+<h1>The TabularAdapter <em>columns</em> Trait</h1>
+<p>First up is the <strong>TabularAdapter</strong> <em>columns</em> trait, which is a list of values
+which define, in presentation order, the set of columns to be displayed by the
+associated <strong>TabularEditor</strong>.</p>
+<p>Each entry in the <em>columns</em> list can have one of two forms:</p>
+<ul class="simple">
+<li>string</li>
+<li>( string, any )</li>
+</ul>
+<p>where <em>string</em> is the user interface name of the column (which will appear in
+the table column header) and <em>any</em> is any value that you want to use to
+identify that column to your adapter. Normally this value is either a trait name
+or an integer index value, but it can be any value you want. If only <em>string</em>
+is specified, then <em>any</em> is the index of the <em>string</em> within <em>columns</em>.</p>
+<p>For example, say you want to display a table containing a list of tuples, each
+of which has three values: a name, an age, and a weight. You could then use
+the following value for the <em>columns</em> trait:</p>
+<pre class="literal-block">
+columns = [ 'Name', 'Age', 'Weight' ]
+</pre>
+<p>By default, the <em>any</em> values (also referred to in later sections as the
+<em>column ids</em>) for the columns will be the corresponding tuple index values.</p>
+<p>Say instead that you have a list of <strong>Person</strong> objects, with <em>name</em>, <em>age</em> and
+<em>weight</em> traits that you want to display in the table. Then you could use the
+following <em>columns</em> value instead:</p>
+<pre class="literal-block">
+columns = [ ( 'Name',   'name' ),
+            ( 'Age',    'age' ),
+            ( 'Weight', 'weight' ) ]
+</pre>
+<p>In this case, the <em>column ids</em> are the names of the traits you want to display
+in each column.</p>
+<p>Note that it is possible to dynamically modify the contents of the <em>columns</em>
+trait while the <strong>TabularEditor</strong> is active. The <strong>TabularEditor</strong> will
+automatically modify the table to show the new set of defined columns.</p>
+</div>
+<div class="section" id="the-core-tabularadapter-interface">
+<h1>The Core TabularAdapter Interface</h1>
+<p>In this section, we'll describe the core interface to the <strong>TabularAdapter</strong>
+class. This is the actual interface used by the <strong>TabularEditor</strong> to access your
+data and display attributes. In the most complex data representation cases,
+these are the methods that you must override in order to have the greatest
+control over what the editor sees and does.</p>
+<p>However, the base <strong>TabularAdapter</strong> class provides default implementations for
+all of these methods. In subsequent sections, we'll look at how these default
+implementations provide simple means  of customizing the adapter to your needs.
+But for now, let's start by covering the details of the core interface itself.</p>
+<p>To reduce the amount of repetition, we'll use the following definitions in all
+of the method argument lists that follow in this section:</p>
+<dl class="docutils">
+<dt>object</dt>
+<dd>The object whose trait is being edited by the <strong>TabularEditor</strong>.</dd>
+<dt>trait</dt>
+<dd>The name of the trait the <strong>TabularEditor</strong> is editing.</dd>
+<dt>row</dt>
+<dd>The row index (starting with 0) of a table item.</dd>
+<dt>column</dt>
+<dd>The column index (starting with 0) of a table column.</dd>
+</dl>
+<p>The adapter interface consists of a number of methods which can be divided into
+two main categories: those which are sensitive to the type of a particular table
+item, and those which are not. We'll begin with the methods that are
+sensitive to an item's type:</p>
+<dl class="docutils">
+<dt>get_alignment ( object, trait, column )</dt>
+<dd><p class="first">Returns the alignment style to use for a specified column.</p>
+<p class="last">The possible values that can be returned are: <em>'left'</em>, <em>'center'</em> or
+<em>'right'</em>. All table items share the same alignment for a specified column.</p>
+</dd>
+<dt>get_width ( object, trait, column )</dt>
+<dd><p class="first">Returns the width to use for a specified column. The result can either be a
+float or integer value.</p>
+<p>If the value is &lt;= 0, the column will have a <em>default</em> width, which is the
+same as specifying a width of <em>0.1</em>.</p>
+<p>If the value is &gt; 1.0, it is converted to an integer and the result is
+the width of the column in pixels. This is referred to as a <em>fixed width</em>
+column.</p>
+<p>If the value is a float such that 0.0 &lt; value &lt;= 1.0, it is treated as the
+<em>unnormalized fraction of the available space</em> that is to be assigned to the
+column. What this means requires a little explanation.</p>
+<p class="last">To arrive at the size in pixels of the column at any given time, the editor
+adds together all of the <em>unnormalized fraction</em> values returned for all
+columns in the table to arrive at a total value. Each
+<em>unnormalized fraction</em> is then divided by the total to create a
+<em>normalized fraction</em>. Each column is then assigned an amount of space in
+pixels equal to the maximum of 30 or its <em>normalized fraction</em> multiplied
+by the <em>available space</em>. The <em>available space</em> is defined as the actual
+width of the table minus the width of all <em>fixed width</em> columns. Note that
+this calculation is performed each time the table is resized in the user
+interface, thus allowing columns of this type to increase or decrease their
+width dynamically, while leaving <em>fixed width</em> columns unchanged.</p>
+</dd>
+<dt>get_can_edit ( object, trait, row )</dt>
+<dd><p class="first">Returns a boolean value indicating whether the user can edit a specified
+<em>object.trait[row]</em> item.</p>
+<p class="last">A <strong>True</strong> result indicates that the value can be edited, while a <strong>False</strong>
+result indicates that it cannot.</p>
+</dd>
+<dt>get_drag ( object, trait, row )</dt>
+<dd><p class="first">Returns the value to be <em>dragged</em> for a specified <em>object.trait[row]</em> item.
+A result of <strong>None</strong> means that the item cannot be dragged. Note that the
+value returned does not have to be the actual row item. It can be any
+value that you want to drag in its place. In particular, if you want the
+drag target to receive a copy of the row item, you should return a copy or
+clone of the item in its place.</p>
+<p class="last">Also note that if multiple items are being dragged, and this method returns
+<strong>None</strong> for any item in the set, no drag operation is performed.</p>
+</dd>
+<dt>get_can_drop ( object, trait, row, value )</dt>
+<dd><p class="first">Returns whether the specified <em>value</em> can be dropped on the specified
+<em>object.trait[row]</em> item. A value of <strong>True</strong> means the <em>value</em> can be
+dropped; and a value of <strong>False</strong> indicates that it cannot be dropped.</p>
+<p class="last">The result is used to provide the user positive or negative drag feedback
+while dragging items over the table. <em>Value</em> will always be a single value,
+even if multiple items are being dragged. The editor handles multiple drag
+items by making a separate call to <em>get_can_drop</em> for each item being
+dragged.</p>
+</dd>
+<dt>get_dropped ( object, trait, row, value )</dt>
+<dd><p class="first">Returns how to handle a specified <em>value</em> being dropped on a specified
+<em>object.trait[row]</em> item. The possible return values are:</p>
+<ul class="simple">
+<li><strong>'before'</strong>: Insert the specified <em>value</em> before the dropped on item.</li>
+<li><strong>'after'</strong>: Insert the specified <em>value</em> after the dropped on item.</li>
+</ul>
+<p class="last">Note there is no result indicating <em>do not drop</em> since you will have already
+indicated that the <em>object</em> can be dropped by the result returned from a
+previous call to <em>get_can_drop</em>.</p>
+</dd>
+<dt>get_font ( object, trait, row )</dt>
+<dd><p class="first">Returns the font to use for displaying a specified <em>object.trait[row]</em> item.</p>
+<p class="last">A result of <strong>None</strong> means use the default font; otherwise a <strong>wx.Font</strong>
+object should be returned. Note that all columns for the specified table row
+will use the font value returned.</p>
+</dd>
+<dt>get_text_color ( object, trait, row )</dt>
+<dd><p class="first">Returns the text color to use for a specified <em>object.trait[row]</em> item.</p>
+<p class="last">A result of <strong>None</strong> means use the default text color; otherwise a
+<strong>wx.Colour</strong> object should be returned. Note that all columns for the
+specified table row will use the text color value returned.</p>
+</dd>
+<dt>get_bg_color ( object, trait, row )</dt>
+<dd><p class="first">Returns the background color to use for a specified <em>object.trait[row]</em>
+item.</p>
+<p class="last">A result of <strong>None</strong> means use the default background color; otherwise a
+<strong>wx.Colour</strong> object should be returned. Note that all columns for the
+specified table row will use the background color value returned.</p>
+</dd>
+<dt>get_image ( object, trait, row, column )</dt>
+<dd><p class="first">Returns the image to display for a specified <em>object.trait[row].column</em>
+item.</p>
+<p>A result of <strong>None</strong> means no image will be displayed in the specified table
+cell. Otherwise the result should either be the name of the image, or an
+<strong>ImageResource</strong> object specifying the image to display.</p>
+<p class="last">A name is allowed in the case where the image is specified in the
+<strong>TabularEditor</strong> <em>images</em> trait. In that case, the name should be the same
+as the string specified in the <strong>ImageResource</strong> constructor.</p>
+</dd>
+<dt>get_format ( object, trait, row, column )</dt>
+<dd><p class="first">Returns the Python formatting string to apply to the specified
+<em>object.trait[row].column</em> item in order to display it in the table.</p>
+<p class="last">The result can be any Python string containing exactly one Python formatting
+sequence, such as <em>'%.4f'</em> or <em>'(%5.2f)'</em>.</p>
+</dd>
+<dt>get_text ( object, trait, row, column )</dt>
+<dd><p class="first">Returns a string containing the text to display for a specified
+<em>object.trait[row].column</em> item.</p>
+<p class="last">If the underlying data representation for a specified item is not a string,
+then it is your responsibility to convert it to one before returning it as
+the result.</p>
+</dd>
+<dt>set_text ( object, trait, row, text ):</dt>
+<dd><p class="first">Sets the value for the specified <em>object.trait[row].column</em> item to the
+string specified by <em>text</em>.</p>
+<p class="last">If the underlying data does not store the value as text, it is your
+responsibility to convert <em>text</em> to the correct representation used. This
+method is called when the user completes an editing operation on a table
+cell.</p>
+</dd>
+<dt>get_tooltip ( object, trait, row, column )</dt>
+<dd><p class="first">Returns a string containing the tooltip to display for a specified
+<em>object.trait[row].column</em> item.</p>
+<p class="last">You should return the empty string if you do not wish to display a tooltip.</p>
+</dd>
+</dl>
+<p>The following are the remaining adapter methods, which are not sensitive to the
+type of item or column data:</p>
+<dl class="docutils">
+<dt>get_item ( object, trait, row )</dt>
+<dd><p class="first">Returns the specified <em>object.trait[row]</em> item.</p>
+<p class="last">The value returned should be the value that exists (or <em>logically</em> exists)
+at the specified <em>row</em> in your data. If your data is not really a list or
+array, then you can just use <em>row</em> as an integer <em>key</em> or <em>token</em> that
+can be used to retrieve a corresponding item. The value of <em>row</em> will
+always be in the range: 0 &lt;= row &lt; <em>len( object, trait )</em> (i.e. the result
+returned by the adapter <em>len</em> method).</p>
+</dd>
+<dt>len ( object, trait )</dt>
+<dd><p class="first">Returns the number of row items in the specified <em>object.trait</em> list.</p>
+<p class="last">The result should be an integer greater than or equal to 0.</p>
+</dd>
+<dt>delete ( object, trait, row )</dt>
+<dd><p class="first">Deletes the specified <em>object.trait[row]</em> item.</p>
+<p class="last">This method is only called if the <em>delete</em> operation is specified in the
+<strong>TabularEditor</strong> <em>operation</em> trait, and the user requests that the item be
+deleted from the table. The adapter can still choose not to delete the
+specified item if desired, although that may prove confusing to the user.</p>
+</dd>
+<dt>insert ( object, trait, row, value )</dt>
+<dd><p class="first">Inserts <em>value</em> at the specified <em>object.trait[row]</em> index. The specified
+<em>value</em> can be:</p>
+<ul class="simple">
+<li>An item being moved from one location in the data to another.</li>
+<li>A new item created by a previous call to <em>get_default_value</em>.</li>
+<li>An item the adapter previously approved via a call to <em>get_can_drop</em>.</li>
+</ul>
+<p class="last">The adapter can still choose not to insert the item into the data, although
+that may prove confusing to the user.</p>
+</dd>
+<dt>get_default_value ( object, trait )</dt>
+<dd><p class="first">Returns a new default value for the specified <em>object.trait</em> list.</p>
+<p class="last">This method is called when <em>insert</em> or <em>append</em> operations are allowed and
+the user requests that a new item be added to the table. The result should
+be a new instance of whatever underlying representation is being used for
+table items.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="creating-a-custom-tabularadapter">
+<h1>Creating a Custom TabularAdapter</h1>
+<p>Having just taken a look at the core <strong>TabularAdapter</strong> interface, you might now
+be thinking that there are an awful lot of methods that need to be specified to
+get an adapter up and running. But as we mentioned earlier, <strong>TabularAdapter</strong>
+is not an abstract base class. It is a concrete base class with implementations
+for each of the methods in its interface. And the implementations are written
+in such a way that you will hopefully hardly ever need to override them.</p>
+<p>In this section, we'll explain the general implementation style used by these
+methods, and how you can take advantage of them in creating your own adapters.</p>
+<p>One of the things you probably noticed as you read through the core adapter
+interface section is that most of the methods have names of the form:
+<em>get_xxx</em> or <em>set_xxx</em>, which is similar to the familiar <em>getter/setter</em> pattern
+used when defining trait properties. The adapter interface is purposely defined
+this way so that it can expose and leverage a simple set of design rules.</p>
+<p>The design rules are followed consistently in the implementations of all of the
+adapter methods described in the first section of the core adapter interface, so
+that once you understand how they work, you can easily apply the design pattern
+to all items in that section. Then, only in the case where the design rules will
+not work for your application will you ever have to override any of those
+<strong>TabularAdapter</strong> base class method implementations.</p>
+<p>So the first thing to understand is that if an adapter method name has the form:
+<em>get_xxx</em> or <em>set_xxx</em> it really is dealing with some kind of trait called
+<em>xxx</em>, or which contains <em>xxx</em> in its name. For example, the <em>get_alignment</em>
+method retrieves the value of some <em>alignment</em> trait defined on the adapter.
+In the following discussion we'll simply refer to an attribute name generically
+as <em>attribute</em>, but you will need to replace it by an actual attribute name
+(e.g. <em>alignment</em>) in your adapter.</p>
+<p>The next thing to keep in mind is that the adapter interface is designed to
+easily deal with items that are not all of the same type. As we just said, the
+design rules apply to all adapter methods in the first group, which were
+defined as methods which are sensitive to an item's type. Item type sensitivity
+plays an important part in the design rules, as we will see shortly.</p>
+<p>With this in mind, we now describe the simple design rules used by the first
+group of methods in the <strong>TabularAdapter</strong> class:</p>
+<ul>
+<li><p class="first">When getting or setting an adapter attribute, the method first retrieves the
+underlying item for the specified data row. The item, and type (i.e. class) of
+the item, are then used in the next rule.</p>
+</li>
+<li><p class="first">The method gets or sets the first trait it finds on the adapter that matches
+one of the following names:</p>
+<ul class="simple">
+<li><em>classname_columnid_attribute</em></li>
+<li><em>classsname_attribute</em></li>
+<li><em>columnid_attribute</em></li>
+<li><em>attribute</em></li>
+</ul>
+<p>where:</p>
+<ul class="simple">
+<li><em>classname</em> is the name of the class of the item found in the first step, or
+one of its base class names, searched in the order defined by the <em>mro</em>
+(<strong>method resolution order</strong>) for the item's class.</li>
+<li><em>columnid</em> is the column id specified by the developer in the adapter's
+<em>column</em> trait for the specified table column.</li>
+<li><em>attribute</em> is the attribute name as described previously (e.g.
+<em>alignment</em>).</li>
+</ul>
+</li>
+</ul>
+<p>Note that this last rule always finds a matching trait, since the
+<strong>TabularAdapter</strong> base class provides traits that match the simple <em>attribute</em>
+form for all attributes these rules apply to. Some of these are simple traits,
+while others are properties. We'll describe the behavior of all these <em>default</em>
+traits shortly.</p>
+<p>The basic idea is that rather than override the first group of core adapter
+methods, you simply define one or more simple traits or trait properties on your
+<strong>TabularAdapter</strong> subclass that provide or accept the specified information.</p>
+<p>All of the adapter methods in the first group provide a number of arguments,
+such as <em>object</em>, <em>trait</em>, <em>row</em> and <em>column</em>. In order to define a trait
+property, which cannot be passed this information directly, the adapter always
+stores the arguments and values it computes in the following adapter traits,
+where they can be easily accessed by a trait getter or setter method:</p>
+<ul class="simple">
+<li><em>row</em>: The table row being accessed.</li>
+<li><em>column</em>: The column id of the table column being accessed (not its index).</li>
+<li><em>item</em>: The data item for the specified table row (i.e. the item determined
+in the first step described above).</li>
+<li><em>value</em>: In the case of a <em>set_xxx</em> method, the value to be set; otherwise it
+is <strong>None</strong>.</li>
+</ul>
+<p>As mentioned previously, the <strong>TabularAdapter</strong> class provides trait definitions
+for all of the attributes these rules apply to. You can either use the
+default values as they are, override the default, set a new value, or completely
+replace the trait definition in a subclass. A description of the default trait
+implementation for each attribute is as follows:</p>
+<dl class="docutils">
+<dt>default_value = Any( '' )</dt>
+<dd><p class="first">The default value for a new row.</p>
+<p class="last">The default value is the empty string, but you will normally need to assign
+a different (default) value.</p>
+</dd>
+<dt>format = Str( '%s' )</dt>
+<dd><p class="first">The default Python formatting string for a column item.</p>
+<p class="last">The default value is <em>'%s'</em> which will simply convert the column item to a
+displayable string value.</p>
+</dd>
+<dt>text = Property</dt>
+<dd><p class="first">The text to display for the column item.</p>
+<p>The implementation of the property checks the type of the column's
+<em>column id</em>:</p>
+<ul class="simple">
+<li>If it is an integer, it returns <em>format%item[column_id]</em>.</li>
+<li>Otherwise, it returns <em>format%item.column_id</em>.</li>
+</ul>
+<p class="last">Note that <em>format</em> refers to the value returned by a call to <em>get_format</em>
+for the current column item.</p>
+</dd>
+<dt>text_color = Property</dt>
+<dd><p class="first">The text color for a row item.</p>
+<p>The property implementation checks to see if the current table row is even
+or odd, and based on the result returns the value of the <em>even_text_color</em>
+or <em>odd_text_color</em> trait if the value is not <strong>None</strong>, and the value of the
+<em>default_text_color</em> trait if it is. The definition of these additional
+traits are as follows:</p>
+<ul class="simple">
+<li>odd_text_color = Color( None )</li>
+<li>even_text_color = Color( None )</li>
+<li>default_text_color = Color( None )</li>
+</ul>
+<p class="last">Remember that a <strong>None</strong> value means use the default text color.</p>
+</dd>
+<dt>bg_color = Property</dt>
+<dd><p class="first">The background color for a row item.</p>
+<p>The property implementation checks to see if the current table row is even
+or odd, and based on the result returns the value of the <em>even_bg_color</em> or
+<em>odd_bg_color</em> trait if the value is not <strong>None</strong>, and the value of the
+<em>default_bg_color</em> trait if it is. The definition of these additional
+traits are as follows:</p>
+<ul class="simple">
+<li>odd_bg_color = Color( None )</li>
+<li>even_bg_color = Color( None )</li>
+<li>default_bg_color = Color( None )</li>
+</ul>
+<p class="last">Remember that a <strong>None</strong> value means use the default background color.</p>
+</dd>
+<dt>alignment = Enum( 'left', 'center', 'right' )</dt>
+<dd><p class="first">The alignment to use for a specified column.</p>
+<p class="last">The default value is <em>'left'</em>.</p>
+</dd>
+<dt>width = Float( -1 )</dt>
+<dd><p class="first">The width of a specified column.</p>
+<p class="last">The default value is <em>-1</em>, which means a dynamically sized column with an
+<em>unnormalized fractional</em> value of <em>0.1</em>.</p>
+</dd>
+<dt>can_edit = Bool( True )</dt>
+<dd><p class="first">Specifies whether the text value of the current item can be edited.</p>
+<p class="last">The default value is <strong>True</strong>, which means that the user can edit the value.</p>
+</dd>
+<dt>drag = Property</dt>
+<dd><p class="first">A property which returns the value to be dragged for a specified row item.</p>
+<p class="last">The property implementation simply returns the current row item.</p>
+</dd>
+<dt>can_drop = Bool( False )</dt>
+<dd><p class="first">Specifies whether the specified value be dropped on the current item.</p>
+<p class="last">The default value is <strong>False</strong>, meaning that the value cannot be dropped.</p>
+</dd>
+<dt>dropped = Enum( 'after', 'before' )</dt>
+<dd><p class="first">Specifies where a dropped item should be placed in the table relative to
+the item it is dropped on.</p>
+<p class="last">The default value is <em>'after'</em>.</p>
+</dd>
+<dt>font = Font</dt>
+<dd><p class="first">The font to use for the current item.</p>
+<p class="last">The default value is the standard default Traits font value.</p>
+</dd>
+<dt>image = Str( None )</dt>
+<dd><p class="first">The name of the default image to use for a column.</p>
+<p>The default value is <strong>None</strong>, which means that no image will be displayed
+for the column.</p>
+<p class="last"># The text of a row/column item:
+text = Property</p>
+</dd>
+<dt>tooltip = Str</dt>
+<dd><p class="first">The tooltip information for a column item.</p>
+<p class="last">The default value is the empty string, which means no tooltip information
+will be displayed for the column.</p>
+</dd>
+</dl>
+<p>The preceding discussion applies to all of the methods defined in the first
+group of <strong>TabularAdapter</strong> interface methods. However, the design rules do not
+apply to the remaining five adapter methods, although they all provide a useful
+default implementation:</p>
+<dl class="docutils">
+<dt>get_item ( object, trait, row )</dt>
+<dd><p class="first">Returns the value of the <em>object.trait[row]</em> item.</p>
+<p>The default implementation assumes the trait defined by <em>object.trait</em> is a
+<em>sequence</em> and attempts to return the value at index <em>row</em>. If an error
+occurs, it returns <strong>None</strong> instead. This definition should work correctly
+for lists, tuples and arrays, or any other object that is indexable, but
+will have to be overridden for all other cases.</p>
+<p class="last">Note that this method is the one called in the first design rule described
+previously to retrieve the item at the current table row.</p>
+</dd>
+<dt>len ( object, trait )</dt>
+<dd><p class="first">Returns the number of items in the specified <em>object.trait</em> list.</p>
+<p class="last">Again, the default implementation assumes the trait defined by
+<em>object.trait</em> is a <em>sequence</em> and attempts to return the result of calling
+<em>len( object.trait )</em>. It will need to be overridden for any type of data
+which for which <em>len</em> will not work.</p>
+</dd>
+<dt>delete ( object, trait, row )</dt>
+<dd><p class="first">Deletes the specified <em>object.trait[row]</em> item.</p>
+<p class="last">The default implementation assumes the trait defined by <em>object.trait</em> is a
+mutable sequence and attempts to perform a <em>del object.trait[row]</em>
+operation.</p>
+</dd>
+<dt>insert ( object, trait, row, value )</dt>
+<dd><p class="first">Inserts a new value at the specified <em>object.trait[row]</em> index.</p>
+<p class="last">The default implementation assumes the trait defined by <em>object.trait</em> is a
+mutable sequence and attempts to perform an <em>object.trait[row:row]=[value]</em>
+operation.</p>
+</dd>
+<dt>get_default_value ( object, trait )</dt>
+<dd><p class="first">Returns a new default value for the specified <em>object.trait</em> list.</p>
+<p class="last">The default implementation simply returns the value of the adapter's
+<em>default_value</em> trait.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="a-tabularadapter-example">
+<h1>A TabularAdapter Example</h1>
+<p>Having now learned about the core adapter interface as well as the design rules
+supported by the default method implementations, you're probably wondering how
+you can use a <strong>TabularAdapter</strong> for creating a real user interface.</p>
+<p>So in this section we'll cover a simple example of creating a <strong>TabularAdapter</strong>
+subclass to try and show how all of the pieces fit together.</p>
+<p>In subsequent tutorials, we'll provide complete examples of creating
+user interfaces using both the <strong>TabularEditor</strong> and <strong>TabularAdapter</strong> in
+combination.</p>
+<p>For this example, let's assume we have the following two classes:</p>
+<pre class="literal-block">
+class Person ( HasTraits ):
+
+    name    = Str
+    age     = Int
+    address = Str
+
+class MarriedPerson ( Person ):
+
+    partner = Instance( Person )
+</pre>
+<p>where <strong>Person</strong> represents a single person, and <strong>MarriedPerson</strong> represents
+a married person and is derived from <strong>Person</strong> but adds the <em>partner</em> trait to
+reference the person they are married to.</p>
+<p>Now, assume we also have the following additional class:</p>
+<pre class="literal-block">
+class Report ( HasTraits ):
+
+    people = List( Person )
+</pre>
+<p>which has a <em>people</em> trait which contains a list of both <strong>Person</strong> and
+<strong>MarriedPerson</strong> objects, and we want to create a tabular display showing the
+following information:</p>
+<ul class="simple">
+<li>Name of the person</li>
+<li>Age of the person</li>
+<li>The person's address</li>
+<li>The name of the person's spouse (if any)</li>
+</ul>
+<p>In addition:</p>
+<ul class="simple">
+<li>We want to use a Courier 10 point font for each line in the table.</li>
+<li>We want the age column to be right, instead of left, justified</li>
+<li>If the person is a minor (age &lt; 18) and married, we want to show a red flag
+image in the age column.</li>
+<li>If the person is married, we want to make the background color for that row
+a light blue.</li>
+</ul>
+<p>Given this set of requirements, we can now define the following
+<strong>TabularAdapter</strong> subclass:</p>
+<pre class="literal-block">
+class ReportAdapter ( TabularAdapter ):
+
+    columns = [ ( 'Name',    'name' ),
+                ( 'Age',     'age' ),
+                ( 'Address', 'address' )
+                ( 'Spouse',  'spouse' ) ]
+
+    font                      = 'Courier 10'
+    age_alignment             = Constant( 'right' )
+    MarriedPerson_age_image   = Property
+    MarriedPerson_bg_color    = Color( 0xE0E0FF )
+    MarriedPerson_spouse_text = Property
+    Person_spouse_text        = Constant( '' )
+
+    def _get_MarriedPerson_age_image ( self ):
+        if self.item.age &lt; 18:
+            return 'red_flag'
+        return None
+
+    def _get_MarriedPerson_spouse_text ( self ):
+        return self.item.partner.name
+</pre>
+<p>Hopefully, this simple example conveys some of the power and flexibility that
+the <strong>TabularAdapter</strong> class provides you. But, just in case it doesn't, let's
+go over some of the more interesting details:</p>
+<ul class="simple">
+<li>Note the values in the <em>columns</em> trait. The first three values define
+<em>column ids</em> which map directly to traits defined on our data objects, while
+the last one defines an arbitrary string which we define so that we can
+reference it in the <em>MarriedPerson_spouse_text</em> and <em>Person_spouse_text</em> trait
+definitions.</li>
+<li>Since the font we want to use applies to all table rows, we just specify a
+new default value for the existing <strong>TabularAdapter</strong> <em>font</em> trait.</li>
+<li>Since we only want to override the default left alignment for the age column,
+we simply define an <em>age_alignment</em> trait as a constant <em>'right'</em> value. We
+could have also used <em>age_alignment = Str('right')</em>, but <em>Constant</em> never
+requires storage to be used in an object.</li>
+<li>We define the <em>MarriedPerson_age_image</em> property to handle putting the
+<em>red flag</em> image in the age column. By including the class name of the items
+it applies to, we only need to check the <em>age</em> value in determining what
+value to return.</li>
+<li>Similary, we use the <em>MarriedPerson_bg_color</em> trait to ensure that each
+<strong>MarriedPerson</strong> object has the correct background color in the table.</li>
+<li>Finally, we use the <em>MarriedPerson_spouse_text</em> and <em>Person_spouse_text</em>
+traits, one a property and the other a simple constant value, to determine
+what text to display in the <em>Spouse</em> column for the different object types.
+Note that even though a <strong>MarriedPerson</strong> is both a <strong>Person</strong> and a
+<strong>MarriedPerson</strong>, it will correctly use the <em>MarriedPerson_spouse_text</em> trait
+since the search for a matching trait is always made in <em>mro</em> order.</li>
+</ul>
+<p>Although this is completely subjective, some of the things that the author
+feels stand out about this approach are:</p>
+<ul class="simple">
+<li>The class definition is short and sweet. Less code is good.</li>
+<li>The bulk of the code is declarative. Less room for logic errors.</li>
+<li>There is only one bit of logic in the class (the <em>if</em> statement in the
+<em>MarriedPerson_age_image</em> property implementation). Again, less logic usually
+translates into more reliable code).</li>
+<li>The defined traits and even the property implementation method names read
+very descriptively. <em>_get_MarriedPerson_age_image</em> pretty much says what you
+would write in a comment or doc string. The implementation almost is the
+documentation.</li>
+</ul>
+<p>Look for a complete traits UI example based on this sample problem definition in
+the <em>Single and Married Person Example</em> tutorial in this section.</p>
+<p>Now, as the complexity of a tabular view increases, the definition of the
+<strong>TabularAdapter</strong> class could possibly start to get large and unwieldy. At
+this point we could begin refactoring our design to use the <strong>ITabularAdapter</strong>
+interface and <strong>AnITabularAdapter</strong> implementation class to create
+<em>sub-adapters</em> that can be added to our <strong>TabularAdapter</strong> subclass to extend
+its functionality even further. Creating sub-adapters and adding them via the
+<strong>TabularAdapter</strong> <em>adapters</em> trait is a topic covered in a follow-on tutorial.</p>
+</div>
+</div>
+</body>
+</html>
