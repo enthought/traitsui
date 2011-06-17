@@ -6,24 +6,24 @@ Controlling the Interface: the Handler
 
 Most of the material in the preceding chapters is concerned with the
 relationship between the model and view aspects of the :term:`MVC` design
-pattern as supported by Traits UI. This chapter examines the third aspect: the
-:term:`controller`, implemented in Traits UI as an :term:`instance` of the
+pattern as supported by TraitsUI. This chapter examines the third aspect: the
+:term:`controller`, implemented in TraitsUI as an :term:`instance` of the
 :term:`Handler` class. [11]_
 
 A controller for an MVC-based application is essentially an event handler for
 GUI events, i.e., for events that are generated through or by the program
 interface. Such events can require changes to one or more model objects (e.g.,
 because a data value has been updated) or manipulation of the interface itself
-(e.g., window closure, dynamic interface behavior). In Traits UI, such actions
+(e.g., window closure, dynamic interface behavior). In TraitsUI, such actions
 are performed by a Handler object. 
 
 In the preceding examples in this guide, the Handler object has been implicit:
-Traits UI provides a default Handler that takes care of a common set of GUI
+TraitsUI provides a default Handler that takes care of a common set of GUI
 events including window initialization and closure, data value updates, and
-button press events for the standard Traits UI window buttons (see 
+button press events for the standard TraitsUI window buttons (see 
 :ref:`command-buttons-the-buttons-attribute`).
 
-This chapter explains the features of the Traits UI Handler, and shows how to
+This chapter explains the features of the TraitsUI Handler, and shows how to
 implement custom GUI behaviors by building and instantiating custom subclasses
 of the Handler class. The final section of the chapter describes several
 techniques for linking a custom Handler to the window or windows it is designed
@@ -34,16 +34,16 @@ to control.
 Backstage: Introducing the UIInfo Object
 ----------------------------------------
 
-Traits UI supports the MVC design pattern by maintaining the model, view, and
+TraitsUI supports the MVC design pattern by maintaining the model, view, and
 controller as separate entities. A single View object can be used to construct
 windows for multiple model objects; likewise a single Handler can handle GUI
 events for windows created using different Views. Thus there is no static link
 between a Handler and any particular window or model object. However, in order
 to be useful, a Handler must be able to observe and manipulate both its
-corresponding window and model objects. In Traits UI, this is accomplished by
+corresponding window and model objects. In TraitsUI, this is accomplished by
 means of the UIInfo object.
 
-Whenever Traits UI creates a window or panel from a View, a UIInfo object is
+Whenever TraitsUI creates a window or panel from a View, a UIInfo object is
 created to act as the Handler's reference to that window and to the objects
 whose :term:`trait attribute`\ s are displayed in it. Each entry in the View's 
 context (see :ref:`the-view-context`) becomes an attribute of the UIInfo 
@@ -56,7 +56,7 @@ through
 the created UIInfo object has an attribute **object** whose value is the object
 **sam**.
 
-Whenever a window event causes a Handler method to be called, Traits UI passes
+Whenever a window event causes a Handler method to be called, TraitsUI passes
 the corresponding UIInfo object as one of the method arguments. This gives the
 Handler the information necessary to perform its tasks.
 
@@ -68,7 +68,7 @@ Assigning Handlers to Views
 In accordance with the MVC design pattern, Handlers and Views are separate
 entities belonging to distinct classes. In order for a custom Handler to provide
 the control logic for a window, it must be explicitly associated with the View
-for that window. The Traits UI package provides three ways to accomplish this:
+for that window. The TraitsUI package provides three ways to accomplish this:
 
 - Make the Handler an attribute of the View.
 - Provide the Handler as an argument to a display method such as edit_traits().
@@ -92,7 +92,7 @@ Linking Handler and View at Edit Time
 `````````````````````````````````````
 
 It is also possible to associate a custom Handler with a specific window without
-assigning it permanently to the View. Each of the three Traits UI
+assigning it permanently to the View. Each of the three TraitsUI
 window-building methods (the configure_traits() and edit_traits() methods of the
 HasTraits class and the ui() method of the View class) has a *handler* keyword
 argument. Assigning an instance of Handler to this argument gives that handler
@@ -285,13 +285,13 @@ Reacting to Trait Changes
 `````````````````````````
 
 The setattr() method described above is called whenever any trait value is
-changed in the UI. However, Traits UI also provides a mechanism for calling
+changed in the UI. However, TraitsUI also provides a mechanism for calling
 methods that are automatically executed whenever the user edits a *particular*
 trait. While you can use static notification handler methods on the HasTraits
 object, you might want to implement behavior that concerns only the user
 interface. In that case, following the MVC pattern dictates that such behavior
 should not be implemented in the "model" part of the code. In keeping with this
-pattern, Traits UI supports "user interface notification" methods, which must
+pattern, TraitsUI supports "user interface notification" methods, which must
 have a signature with the following format:
 
 .. method:: extended_traitname_changed(info)
@@ -391,7 +391,7 @@ actions, which can be presented as buttons, menu items, or toolbar buttons.
 Actions
 :::::::
 
-In Traits UI, window commands are implemented as instances of the Action class.
+In TraitsUI, window commands are implemented as instances of the Action class.
 Actions can be used in :term:`command button`\ s, menus, and toolbars.
 
 Suppose you want to build a window with a custom **Recalculate** action. Suppose

@@ -1,6 +1,6 @@
-====================
-Traits UI User Guide
-====================
+======================
+TraitsUI 4 User Manual
+======================
 
 :Authors: Lyn Pierce, Janet Swisher
 :Version: Document Version 4

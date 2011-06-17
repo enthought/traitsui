@@ -38,7 +38,7 @@ Appendix I: Glossary of Terms
         A user interface component for editing the value of a trait attribute.
         Each type of trait has a default editor, but you can override this 
         selection with one of a number of editor factories provided by the 
-        Traits UI package. In some cases an editor can include multiple widgets,
+        TraitsUI package. In some cases an editor can include multiple widgets,
         e.g., a slider and a text box for a Range trait attribute. 
         
    editor factory 
@@ -53,16 +53,16 @@ Appendix I: Glossary of Terms
         
    Group 
         An object that specifies an ordered set of Items and other Groups for 
-        display in a Traits UI View. Various display options can be specified 
+        display in a TraitsUI View. Various display options can be specified 
         by means of attributes of this class, including a border, a group label,
         and the orientation of elements within the Group. An instance of the 
-        Traits UI class Group.
+        TraitsUI class Group.
         
    Handler
-        A Traits UI object that implements GUI logic (data manipulation and
+        A TraitsUI object that implements GUI logic (data manipulation and
         dynamic window behavior) for one or more user interface windows. A 
         Handler instance fills the role of :term:`controller` in the MVC 
-        design pattern. An instance of the Traits UI class :term:`Handler`.
+        design pattern. An instance of the TraitsUI class :term:`Handler`.
         
    HasTraits 
         A class defined in the Traits package to specify objects whose 
@@ -78,7 +78,7 @@ Appendix I: Glossary of Terms
    Item
         A non-subdividable element of a Traits user interface specification
         (View), usually specifying the display options to be used for a single
-        trait attribute. An instance of the Traits UI class Item.
+        trait attribute. An instance of the TraitsUI class Item.
         
    live 
         A term used to describe a window that is linked directly to the
@@ -142,7 +142,7 @@ Appendix I: Glossary of Terms
         An open source package engineered by Enthought, Inc. to perform explicit
         typing in Python.
         
-   Traits UI 
+   TraitsUI 
         A high-level user interface toolkit designed to be used with the Traits
         package.
         
@@ -151,7 +151,7 @@ Appendix I: Glossary of Terms
         set of traits. The structure of a View is defined by one or more Group
         or Item objects; a number of attributes are defined for specifying 
         display options including height and width, menu bar (if any), and the
-        set of buttons (if any) that are displayed. A member of the Traits UI
+        set of buttons (if any) that are displayed. A member of the TraitsUI
         class View.
         
    view 
