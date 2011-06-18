@@ -1,1 +1,1 @@
-""" Implementations of dynamic form behavior using Traits UI """
+""" Implementations of dynamic form behavior using TraitsUI """
