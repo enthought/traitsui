@@ -618,7 +618,7 @@ The most important attribute of TabularAdapter is **columns**, which is list of
 columns to be displayed. Each entry in the **columns** list can be either a
 string, or a tuple consisting of a string and another value, which can be of any
 type. The string is used as the label for the column. The second value in the
-tuple, called the* column ID*, identifies the column to the adapter. It is
+tuple, called the *column ID*, identifies the column to the adapter. It is
 typically a trait attribute name or an integer index, but it can be any value
 appropriate to the adapter. If only a string is specified for an entry, then the
 index of the entry within the **columns** list is used as that entry's column
