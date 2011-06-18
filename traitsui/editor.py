@@ -167,7 +167,7 @@ class Editor ( HasPrivateTraits ):
     #---------------------------------------------------------------------------
     #  Assigns focus to the editor's underlying toolkit widget:
     #---------------------------------------------------------------------------
-    
+
     def set_focus ( self ):
         """ Assigns focus to the editor's underlying toolkit widget.
         """

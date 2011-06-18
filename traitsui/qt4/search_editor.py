@@ -39,7 +39,7 @@ class SearchWidget(QtGui.QLineEdit):
         """
         palette = QtGui.QApplication.instance().palette()
         self.setPalette(palette)
-        
+
         if self.text() == self._desc:
             self.setText('')
             self.update()
