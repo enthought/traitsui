@@ -232,7 +232,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
         size = self.style().sizeFromContents(QtGui.QStyle.CT_ComboBox, option,
                                              size, self)
         return size
-    
+
 
 class ImageEnumTablePopupView(QtGui.QTableView):
 

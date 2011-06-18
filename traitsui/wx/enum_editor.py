@@ -203,7 +203,7 @@ class SimpleEditor ( BaseEditor ):
             wx.EVT_TEXT_ENTER( parent, control.GetId(),
                                self.update_text_object )
             wx.EVT_KILL_FOCUS( control, self.on_kill_focus )
-                        
+
             if (not factory.is_grid_cell) and factory.auto_set:
                 wx.EVT_TEXT( parent, control.GetId(), self.update_text_object )
 
@@ -237,13 +237,13 @@ class SimpleEditor ( BaseEditor ):
                 #  1. it looks nicer
                 #  2. if the grid id suddenly closed, wx freaks & causes a
                 #     segfault
-                
+
                 grid = self.control.Parent.Parent
                 grid.EnableEditing(False)
                 grid.EnableEditing(True)
-                
+
             self.value = new_value
-            
+
         except:
             pass
         self._no_enum_update -= 1
