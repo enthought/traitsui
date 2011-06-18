@@ -20,7 +20,6 @@ As an extra <i>feature</i>, the <b>TabularEditor</b> also displays a:
 """
 
 import traits
-import traitsui
 
 from time \
     import localtime, strftime

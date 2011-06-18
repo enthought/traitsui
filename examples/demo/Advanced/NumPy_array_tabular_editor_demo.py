@@ -12,9 +12,6 @@ index of each point in the array, as well as a red flag if the point lies within
 
 #-- Imports --------------------------------------------------------------------
 
-from os.path \
-    import join, dirname
-
 from numpy \
     import sqrt
 

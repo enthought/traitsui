@@ -6,9 +6,9 @@ A simple demonstration of how to use the ImageEditor to add a graphic element
 to a Traits UI View.
 """
 
-# Imports:
-import traitsui
+import traits
 
+# Imports:
 from os.path \
     import join, dirname
 

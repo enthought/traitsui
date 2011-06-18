@@ -8,8 +8,7 @@ at the bottom of this file.
 """
 
 from traits.api import HasTraits, Str, List, Instance
-from traitsui.api import TreeEditor, TreeNode, View, Item, VSplit, HGroup, Handler, Group
-from traitsui.menu import Menu, Action, Separator
+from traitsui.api import TreeEditor, TreeNode, View, Item, Group
 
 import tables as tb
 

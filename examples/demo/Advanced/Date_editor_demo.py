@@ -5,7 +5,7 @@
 A Traits UI editor that wraps a WX calendar panel.
 """
 
-from traits.api import HasTraits, Date, List, Str, on_trait_change
+from traits.api import HasTraits, Date, List, Str
 from traitsui.api import View, Item, DateEditor, Group
 
 
