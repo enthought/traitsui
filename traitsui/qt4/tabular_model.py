@@ -39,7 +39,7 @@ alignment_map = {
 }
 
 # MIME type for internal table drag/drop operations
-mime_type = 'traits-ui-tabular-editor'
+tabular_mime_type = 'traits-ui-tabular-editor'
 
 #-------------------------------------------------------------------------------
 #  'TabularModel' class:
@@ -208,9 +208,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to expose our internal MIME type for drag and drop
             operations.
         """
-        types = QtCore.QStringList()
-        types.append(mime_type)
-        return types
+        return [ tabular_mime_type ]
 
     def mimeData(self, indexes):
         """ Reimplemented to generate MIME data containing the rows of the
@@ -221,7 +219,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         data = QtCore.QByteArray(str(rows[0]))
         for row in rows[1:]:
             data.append(' %i' % row)
-        mime_data.setData(mime_type, data)
+        mime_data.setData(tabular_mime_type, data)
         return mime_data
 
     def dropMimeData(self, mime_data, action, row, column, parent):
@@ -230,7 +228,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         if action == QtCore.Qt.IgnoreAction:
             return False
 
-        data = mime_data.data(mime_type)
+        data = mime_data.data(tabular_mime_type)
         if data.isNull():
             return False
 
