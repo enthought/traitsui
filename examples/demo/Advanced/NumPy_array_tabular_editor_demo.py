@@ -19,7 +19,7 @@ from numpy.random \
     import random
 
 from traits.api \
-    import HasTraits, Property, Array
+    import HasTraits, Property, Array, Font
 
 from traitsui.api \
     import View, Item, TabularEditor
@@ -33,7 +33,7 @@ class ArrayAdapter ( TabularAdapter ):
 
     columns = [ ( 'i', 'index' ), ( 'x', 0 ), ( 'y', 1 ),  ( 'z', 2 ) ]
 
-    font        = 'Courier 10'
+    font        = Font('Courier 10')
     alignment   = 'right'
     format      = '%.4f'
     index_text  = Property

@@ -32,7 +32,7 @@ from os.path \
 
 from traits.api \
     import HasPrivateTraits, Str, Float, List, Directory, File, Code, \
-           Instance, Property, cached_property
+           Instance, Property, Font, cached_property
 
 from traitsui.api \
     import View, Item, HSplit, VSplit, TabularEditor
@@ -88,7 +88,7 @@ class FileInfoAdapter ( TabularAdapter ):
                 ( 'Date',      'date' ) ]
 
     even_bg_color  = ( 201, 223, 241 )
-    font           = 'Courier 10'
+    font           = Font('Courier 10')
     size_alignment = Str( 'right' )
     time_alignment = Str( 'right' )
     date_alignment = Str( 'right' )
