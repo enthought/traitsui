@@ -1017,7 +1017,7 @@ class TabularEditor ( Editor ):
             adapter   = self.adapter
             self.row  = self.control.GetItemCount()
             self.edit = True
-            adapter.insert( self.object, self.name, row,
+            adapter.insert( self.object, self.name, self.row,
                            adapter.get_default_value( self.object, self.name ) )
 
     def _insert_current ( self ):
