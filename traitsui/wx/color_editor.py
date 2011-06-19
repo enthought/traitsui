@@ -252,13 +252,16 @@ class CustomColorEditor ( BaseSimpleEditor ):
             # The TextCtrl object was saved as self._text_control in init().
             value = self._text_control.GetValue()
             self.value = w3c_color_database.Find(value)
-            set_color(self)
+            self.set_color()
         except TraitError:
             pass
 
-    def set_color(self, color):
+    def set_color(self):
+        # The CustomColorEditor uses this method instead of the global
+        # set_color function.
         color = self.factory.to_wx_color(self)
         self._text_control.SetBackgroundColour(color)
+        self.control.SetBackgroundColour(color)
         self._text_control.SetValue(self.string_value(color))
 
     #---------------------------------------------------------------------------
@@ -269,8 +272,7 @@ class CustomColorEditor ( BaseSimpleEditor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        current_color = self.factory.to_wx_color(self)
-        self.set_color(current_color)
+        self.set_color()
 
     def open_color_dialog(self, event):
         """ Opens the color dialog and sets the value upon return
@@ -285,7 +287,7 @@ class CustomColorEditor ( BaseSimpleEditor ):
 
         color = color_dialog.GetColourData().GetColour()
         self.value = color
-        self.set_color(self)
+        self.set_color()
 
 
     def color_selected(self, event):
