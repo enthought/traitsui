@@ -220,11 +220,13 @@ class CustomColorEditor ( BaseSimpleEditor ):
         self.control = self._panel = parent = TraitsUIPanel( parent, -1 )
         sizer = wx.BoxSizer(wx.HORIZONTAL)
 
+        # 'text_control' is the text display of the color.
         text_control = wx.TextCtrl( parent, -1, self.str_value,
                                     style = wx.TE_PROCESS_ENTER )
         wx.EVT_KILL_FOCUS( text_control, self.update_object )
         wx.EVT_TEXT_ENTER( parent, text_control.GetId(), self.update_object )
 
+        # 'button_control' shows the 'Edit' button.
         button_control = wx.Button(parent, label='Edit', style=wx.BU_EXACTFIT)
         wx.EVT_BUTTON( button_control, button_control.GetId(), self.open_color_dialog )
 
@@ -241,14 +243,16 @@ class CustomColorEditor ( BaseSimpleEditor ):
         return
 
 
-    def update_object ( self, event ):
+    def update_object(self, event):
         """ Handles the user changing the contents of the edit control.
         """
         if not isinstance(event, wx._core.CommandEvent):
             return
         try:
-            self.value = w3c_color_database.Find(self.control.GetValue())
-            set_color( self )
+            # The TextCtrl object was saved as self._text_control in init().
+            value = self._text_control.GetValue()
+            self.value = w3c_color_database.Find(value)
+            set_color(self)
         except TraitError:
             pass
 
