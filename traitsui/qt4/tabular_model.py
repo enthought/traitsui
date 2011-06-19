@@ -120,7 +120,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         obj, name = editor.object, editor.name
         row, column = mi.row(), mi.column()
 
-        editor.adapter.set_text(obj, name, row, column, str(value.toString()))
+        editor.adapter.set_text(obj, name, row, column, value)
         signal = QtCore.SIGNAL('dataChanged(QModelIndex,QModelIndex)')
         self.emit(signal, mi, mi)
         return True
