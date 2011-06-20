@@ -250,7 +250,7 @@ class SimpleEditor ( SimpleTextEditor ):
         elif self.factory.dialog_style == 'open':
             style = wx.FD_OPEN
         else:
-            style = ex.FD_DEFAULT_STYLE
+            style = wx.FD_DEFAULT_STYLE
 
         dlg = wx.FileDialog( self.control,
                              message  = 'Select a File',
