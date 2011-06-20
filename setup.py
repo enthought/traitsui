@@ -38,7 +38,7 @@ setup(
     license = 'BSD',
     maintainer = 'ETS Developers',
     maintainer_email = 'enthought-dev@enthought.com',
-    package_data = dict(traitsui=['images/library/*.zip',
+    package_data = dict(traitsui=['image/library/*.zip',
                                   'wx/images/*', 'qt4/images/*']),
     packages = find_packages(),
     platforms = ["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
