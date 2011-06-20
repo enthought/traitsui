@@ -64,16 +64,14 @@ ContainerDelegate = container_delegate = Delegate( 'container',
 HelpId = help_id_trait = Str( desc = "the external help context identifier" )
 
 # A button to add to a view:
-AButton = Any
-#AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
+AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
 
 # The set of buttons to add to the view:
 Buttons = List( AButton,
                 desc = 'the action buttons to add to the bottom of the view' )
 
 # View trait specified by name or instance:
-AView = Any
-#AView = Trait( '', Str, Instance( 'traitsui.View' ) )
+AView = Trait( '', Str, Instance( 'traitsui.View' ) )
 
 #-------------------------------------------------------------------------------
 #  'StatusItem' class:
