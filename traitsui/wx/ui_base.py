@@ -339,9 +339,8 @@ class BaseDialog ( object ):
     #  Creates a user specified button:
     #---------------------------------------------------------------------------
 
-    def add_button ( self, action, sizer, method  = None,
-                                          enabled = True,
-                                          name    = None ):
+    def add_button ( self, action, sizer, method  = None, enabled = True,
+                     name = None, default = False ):
         """ Creates a button.
         """
         ui = self.ui
@@ -354,6 +353,8 @@ class BaseDialog ( object ):
         id     = action.id
         button = wx.Button( self.control, -1, name )
         button.Enable( enabled )
+        if default:
+            button.SetDefault()
         if (method is None) or (action.enabled_when != '') or (id != ''):
             editor = ButtonEditor( ui      = ui,
                                    action  = action,

@@ -105,37 +105,40 @@ class _ModalDialog(BaseDialog):
                 if view.help:
                     self.check_button(buttons, HelpButton)
 
-            for button in buttons:
+            for raw_button, button in zip(view.buttons, buttons):
+                default = raw_button == view.default_button
+                
                 if self.is_button(button, 'Apply'):
                     self.apply = self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.ApplyRole, self._on_apply,
-                            enabled=apply)
+                            enabled=apply, default=default)
                     ui.on_trait_change(self._on_applyable, 'modified',
                             dispatch='ui')
 
                 elif self.is_button(button, 'Revert'):
                     self.revert = self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.ResetRole, self._on_revert,
-                            enabled=revert)
+                            enabled=revert, default=default)
 
                 elif self.is_button(button, 'OK'):
                     self.ok = self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.AcceptRole,
-                            self.control.accept)
+                            self.control.accept, default=default)
                     ui.on_trait_change(self._on_error, 'errors', dispatch='ui')
 
                 elif self.is_button(button, 'Cancel'):
                     self.add_button(button, bbox,
                             QtGui.QDialogButtonBox.RejectRole,
-                            self.control.reject)
+                            self.control.reject, default=default)
 
                 elif self.is_button(button, 'Help'):
                     self.add_button(button, bbox,
-                            QtGui.QDialogButtonBox.HelpRole, self._on_help)
+                            QtGui.QDialogButtonBox.HelpRole, self._on_help,
+                            default=default)
 
                 elif not self.is_button(button, ''):
                     self.add_button(button, bbox,
-                            QtGui.QDialogButtonBox.ActionRole)
+                            QtGui.QDialogButtonBox.ActionRole, default=default)
 
         else:
             bbox = None

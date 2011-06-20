@@ -179,7 +179,8 @@ class BasePanel(object):
     #  Creates a user specified button:
     #---------------------------------------------------------------------------
 
-    def add_button ( self, action, bbox, role, method=None, enabled=True, name=None ):
+    def add_button ( self, action, bbox, role, method=None, enabled=True,
+                     name=None, default=False ):
         """ Creates a button.
         """
         ui = self.ui
@@ -192,6 +193,7 @@ class BasePanel(object):
         id     = action.id
         button = bbox.addButton(name, role)
         button.setAutoDefault(False)
+        button.setDefault(default)
         button.setEnabled(enabled)
         if (method is None) or (action.enabled_when != '') or (id != ''):
             editor = ButtonEditor( ui      = ui,
@@ -300,13 +302,16 @@ class _StickyDialog(QtGui.QDialog):
             e.ignore()
 
     def keyPressEvent(self, e):
-        """Reimplemented to ignore the Escape key if appropriate, and always
-        ignore the Enter key because it will trigger a button if any are
-        present in the dialog."""
+        """Reimplemented to ignore the Escape key if appropriate, and to ignore
+        the Enter key if no default button has been explicitly set."""
 
-        if (e.key() == QtCore.Qt.Key_Enter or e.key() == QtCore.Qt.Key_Return or
-                (e.key() == QtCore.Qt.Key_Escape and not self._ok_to_close())):
+        if e.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and \
+               not self._ui.view.default_button:
             return
+        
+        if e.key() == QtCore.Qt.Key_Escape and not self._ok_to_close():
+            return
+        
         QtGui.QDialog.keyPressEvent(self, e)
 
     def sizeHint(self):

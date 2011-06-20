@@ -32,8 +32,8 @@ from .view_element import ViewElement, ViewSubElement
 
 from .ui import UI
 
-from .ui_traits import (ATheme, AnObject, Buttons, DockStyle, EditorStyle,
-    ExportType, HelpId, Image, SequenceTypes, ViewStatus)
+from .ui_traits import (AButton, ATheme, AnObject, Buttons, DockStyle,
+    EditorStyle, ExportType, HelpId, Image, SequenceTypes, ViewStatus)
 
 from .handler import Handler, default_handler
 
@@ -174,6 +174,10 @@ class View ( ViewElement ):
     # Undo/Redo, Revert, OK, Cancel, Help). To suppress buttons in the view,
     # use the **NoButtons** variable, defined in **traitsui.menu**.
     buttons = Buttons
+
+    # The default button to activate when Enter is pressed. If not specified,
+    # pressing Enter will not activate any button.
+    default_button = AButton
 
     # The set of global key bindings for the view. Each time a key is pressed
     # while the view has keyboard focus, the key is checked to see if it is one
