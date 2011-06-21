@@ -71,8 +71,7 @@ Buttons = List( AButton,
                 desc = 'the action buttons to add to the bottom of the view' )
 
 # View trait specified by name or instance:
-AView = Any
-#AView = Trait( '', Str, Instance( 'traitsui.view.View' ) )
+AView = Trait( '', Str, Instance( 'traitsui.view.View' ) )
 
 #-------------------------------------------------------------------------------
 #  'StatusItem' class:
