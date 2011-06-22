@@ -32,6 +32,7 @@ setup(
         """.splitlines() if len(c.strip()) > 0],
     description = 'traitsui: traits-capable user interfaces',
     long_description = open('README.rst').read(),
+    url = 'https://github.com/enthought/traitsui',
     download_url = ('http://www.enthought.com/repo/ets/traitsui-%s.tar.gz' %
                     info['__version__']),
     install_requires = info['__requires__'],
