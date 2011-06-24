@@ -64,14 +64,23 @@ ContainerDelegate = container_delegate = Delegate( 'container',
 HelpId = help_id_trait = Str( desc = "the external help context identifier" )
 
 # A button to add to a view:
-AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
+AButton = Any
+#AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
 
 # The set of buttons to add to the view:
 Buttons = List( AButton,
                 desc = 'the action buttons to add to the bottom of the view' )
 
 # View trait specified by name or instance:
-AView = Trait( '', Str, Instance( 'traitsui.view.View' ) )
+AView = Any
+#AView = Trait( '', Str, Instance( 'traitsui.view.View' ) )
+
+# FIXME: on AButton and AView: TraitCompound handlers with deferred-import
+# Instance traits are just broken. The Instance trait tries to update the
+# top-level CTrait's fast_validate table when the import is resolved. However,
+# sometimes the CTrait gets copied for unknown reasons and the copy's
+# fast_validate table is not updated although the TraitCompound's slow_validates
+# table is modified.
 
 #-------------------------------------------------------------------------------
 #  'StatusItem' class:
