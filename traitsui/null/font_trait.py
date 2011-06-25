@@ -18,17 +18,17 @@
 """ Trait definition for a null-based (i.e., no UI) font.
 """
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
 from traits.api import Trait, TraitHandler, TraitError
 
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 #  Convert a string into a valid 'wxFont' object (if possible):
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 # Mapping of strings to valid wxFont families
 font_families = [
@@ -53,27 +53,28 @@ font_weights = [
 ]
 
 # Strings to ignore in text representations of fonts
-font_noise = [ 'pt', 'point', 'family' ]
+font_noise = ['pt', 'point', 'family']
 
-#-------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------
 #  'TraitFont' class'
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
-class TraitFont ( TraitHandler ):
+class TraitFont(TraitHandler):
     """ Ensures that values assigned to a trait attribute are valid font
     descriptor strings; the value actually assigned is the corresponding
     canonical font descriptor string.
     """
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     #  Validates that the value is a valid font:
-    #---------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
 
-    def validate ( self, object, name, value ):
+    def validate(self, object, name, value):
         """ Validates that the value is a valid font descriptor string.
         """
         try:
             point_size = family = style = weight = underline = ''
-            facename   = ['']
+            facename = ['']
             for word in value.split():
                 lword = word.lower()
                 if lword in font_families:
@@ -86,25 +87,26 @@ class TraitFont ( TraitHandler ):
                     underline = ' ' + lword
                 elif lword not in font_noise:
                     try:
-                        int( lword )
+                        int(lword)
                         point_size = lword + ' pt'
                     except:
-                        facename.append( word )
-            fontstr = ('%s%s%s%s%s%s' % ( point_size, family, style, weight,
-                        underline, ' '.join( facename ) )).strip()
+                        facename.append(word)
+            fontstr = ('%s%s%s%s%s%s' % (point_size, family, style, weight,
+                        underline, ' '.join(facename))).strip()
             return fontstr
         except Exception:
             pass
-        raise TraitError, ( object, name, 'a font descriptor string',
-                            repr( value ) )
+        raise TraitError(object, name, 'a font descriptor string',
+                            repr(value))
 
-    def info ( self ):
-        return ( "a string describing a font (e.g. '12 pt bold italic "
-                 "swiss family Arial' or 'default 12')" )
+    def info(self):
+        return ("a string describing a font (e.g. '12 pt bold italic "
+                "swiss family Arial' or 'default 12')")
 
-#-------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------
 #  Define a 'null' specific font trait:
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 ### Note: Declare the editor to be a function which returns the FontEditor
 # class from traits ui to avoid circular import issues. For backwards
@@ -116,7 +118,6 @@ def get_font_editor(*args, **traits):
     from ..api import FontEditor
     return FontEditor(*args, **traits)
 
-fh       = TraitFont()
-NullFont = Trait( fh.validate( None, None, 'Arial 10' ), fh,
-                  editor = get_font_editor )
-
+fh = TraitFont()
+NullFont = Trait(fh.validate(None, None, 'Arial 10'), fh,
+                editor=get_font_editor)
