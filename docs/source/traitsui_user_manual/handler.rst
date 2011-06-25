@@ -124,9 +124,9 @@ optional.
 Handler Subclasses
 ------------------
 
-Traits version 3.0 provides two Handler subclasses: ModelView and Controller.
-Both of these classes are designed to simplify the process of creating an
-MVC-based application.
+TraitsUI provides two Handler subclasses: ModelView and Controller.  Both of
+these classes are designed to simplify the process of creating an MVC-based
+application.
 
 Both ModelView and Controller extend the Hander class by adding the following
 trait attributes:
