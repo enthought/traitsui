@@ -73,7 +73,7 @@ class TraitFont ( TraitHandler ):
         """
         try:
             point_size = family = style = weight = underline = ''
-            facename   = []
+            facename   = ['']
             for word in value.split():
                 lword = word.lower()
                 if lword in font_families:
@@ -90,9 +90,10 @@ class TraitFont ( TraitHandler ):
                         point_size = lword + ' pt'
                     except:
                         facename.append( word )
-            return ('%s%s%s%s%s%s' % ( point_size, family, style, weight,
-                    underline, ' '.join( facename ) )).strip()
-        except:
+            fontstr = ('%s%s%s%s%s%s' % ( point_size, family, style, weight,
+                        underline, ' '.join( facename ) )).strip()
+            return fontstr
+        except Exception:
             pass
         raise TraitError, ( object, name, 'a font descriptor string',
                             repr( value ) )
