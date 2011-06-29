@@ -726,13 +726,14 @@ demo_view = View(
              export = 'DockWindowShell',
              id     = 'tabbed',
          ),
-         VGroup(
-             Item( 'log',
-                   show_label = False,
-                   style      = 'readonly'
-             ),
-             label = 'Log'
-         ),
+         # JDM removing log panel provisionally, distracting, unclear usefulness.
+         #VGroup(
+             #Item( 'log',
+                   #show_label = False,
+                   #style      = 'readonly'
+             #),
+             #label = 'Log'
+         #),
          export = 'DockWindowShell',
          id     = 'vsplit'
      ),
@@ -789,8 +790,15 @@ class Demo ( HasPrivateTraits ):
             id        = 'traitsui.demos.demo.Demo',
             dock      = 'horizontal',
             resizable = True,
+            # JDM: Seems that QT interface does not deal well with these size
+            # limits.
+            # With them, we get repeated:
+            #   Object::disconnect: Parentheses expected, signal AdvancedCodeWidget::lostFocus
+            # But without them, it throws an exception on exit:
+            #    Internal C++ object (_StickyDialog) already deleted.
+            # No, actually sometimes we get the latter even with them.
             width     = 950,
-            height    = 600
+            height    = 900
         )
         return traits_view
 
