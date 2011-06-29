@@ -697,11 +697,11 @@ path_view = View(
         id     = 'tabbed'
     ),
     id      = 'traitsui.demos.demo.path_view',
-    dock    = 'horizontal'
+    #dock    = 'horizontal'
 )
 
 demo_view = View(
-     VSplit(
+     #VSplit(
          Tabbed(
              Item( 'description',
                    label      = 'Description',
@@ -734,11 +734,11 @@ demo_view = View(
              #),
              #label = 'Log'
          #),
-         export = 'DockWindowShell',
-         id     = 'vsplit'
-     ),
+         #export = 'DockWindowShell',
+         #id     = 'vsplit'
+     #),
      id      = 'traitsui.demos.demo.file_view',
-     dock    = 'horizontal',
+     #dock    = 'horizontal',
      handler = demo_file_handler
 )
 
@@ -788,7 +788,7 @@ class Demo ( HasPrivateTraits ):
             ),
             title     = self.title,
             id        = 'traitsui.demos.demo.Demo',
-            dock      = 'horizontal',
+            #dock      = 'horizontal',
             resizable = True,
             # JDM: Seems that QT interface does not deal well with these size
             # limits.
