@@ -1,5 +1,3 @@
-#------------------------------------------------------------------------------
-#
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
 #
@@ -12,71 +10,38 @@
 #
 #  Author: David C. Morrill
 #  Date:   11/03/2007
-#
-#------------------------------------------------------------------------------
 
 """ Defines the ImageLibrary object used to manage Traits UI image libraries.
 """
 
-#-------------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------------
-
 import sys
+from os import (environ, listdir, remove, stat, makedirs, rename, access,
+                R_OK, W_OK, X_OK)
+from os.path import (join, isdir, isfile, splitext, abspath, dirname,
+                     basename, exists)
+from stat import ST_MTIME
+from platform import system
+from zipfile import is_zipfile, ZipFile, ZIP_DEFLATED
+from time import time, sleep, localtime, strftime
+from thread import allocate_lock
+from threading import Thread
 
-from os \
-    import environ, listdir, remove, stat, makedirs, rename, access, R_OK, \
-           W_OK, X_OK
+from traits.api import (HasPrivateTraits, Property, Str, Int, List, Dict,
+                        File, Instance, Bool, Undefined, TraitError, Float,
+                        Any, cached_property)
+from traits.trait_base import get_resource_path, traits_home
 
-from os.path \
-    import join, isdir, isfile, splitext, abspath, dirname, basename, exists
+from traitsui.ui_traits import HasMargin, HasBorder, Alignment
+from traitsui.theme import Theme
+from traitsui.toolkit import toolkit
+from pyface.api import ImageResource
+from pyface.resource_manager import resource_manager
+from pyface.resource.resource_reference import (ImageReference,
+                                                ResourceReference)
 
-from stat \
-    import ST_MTIME
-
-from platform \
-    import system
-
-from zipfile \
-    import is_zipfile, ZipFile, ZIP_DEFLATED
-
-from time \
-    import time, sleep, localtime, strftime
-
-from thread \
-    import allocate_lock
-
-from threading \
-    import Thread
-
-from traits.api \
-    import HasPrivateTraits, Property, Str, Int, List, Dict, File, Instance, \
-           Bool, Undefined, TraitError, Float, Any, cached_property
-
-from traits.trait_base \
-    import get_resource_path, traits_home
-
-from traitsui.ui_traits \
-    import HasMargin, HasBorder, Alignment
-
-from traitsui.theme \
-    import Theme
-
-from traitsui.toolkit \
-    import toolkit
-
-from pyface.api \
-    import ImageResource
-
-from pyface.resource_manager \
-    import resource_manager
-
-from pyface.resource.resource_reference \
-    import ImageReference, ResourceReference
-
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------------------
 
 # Standard image file extensions:
 ImageFileExts = ( '.png', '.gif', '.jpg', 'jpeg' )
@@ -87,7 +52,7 @@ image_cache_path = join( traits_home(), 'image_cache' )
 # Names of files that should not be copied when ceating a new library copy:
 dont_copy_list = ( 'image_volume.py', 'image_info.py', 'license.txt' )
 
-#-- Code Generation Templates --------------------------------------------------
+#-- Code Generation Templates ----------------------------------------------
 
 # Template for creating an ImageVolumeInfo object:
 ImageVolumeInfoCodeTemplate = \
