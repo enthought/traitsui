@@ -24,6 +24,9 @@
 
 from __future__ import absolute_import
 
+import faulthandler
+faulthandler.enable()
+
 import sys
 import glob
 from configobj import ConfigObj
@@ -723,10 +726,14 @@ demo_view = View(
                    # for tabbed items. Needs more investigation.
                    visible_when = 'demo',
              ),
+             Item( 'log',
+                   show_label = False,
+                   style      = 'readonly'
+             ),
              export = 'DockWindowShell',
              id     = 'tabbed',
          ),
-         # JDM removing log panel provisionally, distracting, unclear usefulness.
+         # JDM moving log panel provisionally to its own tab, distracting here.
          #VGroup(
              #Item( 'log',
                    #show_label = False,
