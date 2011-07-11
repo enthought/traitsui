@@ -107,7 +107,7 @@ def random_player ( name ):
                 triples     = randint( 0,  5 ),
                 home_runs   = randint( 0, 30 ),
                 walks       = randint( 0, 50 ) )
-    return p.set( at_bats = p.strike_outs + p.singles + p.doubles + p.triples +
+    return p.trait_set( at_bats = p.strike_outs + p.singles + p.doubles + p.triples +
                             p.home_runs + randint( 100, 200 ) )
 
 # Create the demo:
