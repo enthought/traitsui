@@ -1,4 +1,10 @@
-"""Demonstrate the CSVListEditor class."""
+"""
+Demonstrate the CSVListEditor class.<br>
+<br>
+This editor allows the user to enter a *single* line of input text, containing
+comma-separated values (or another separator may be specified). Your program
+specifies an element Trait type of Int, Float, Str, Enum, or Range.
+"""
 
 from traits.api import HasTraits, List, Int, Float, Enum, Range, Str, Button
 from traitsui.api import View, Item, Label, Heading, VGroup, HGroup, UItem, \
@@ -13,7 +19,7 @@ class Demo(HasTraits):
 
     list3 = List(Str, maxlen=3)
 
-    list4 = List(Enum('red', 'green', 'blue'))
+    list4 = List(Enum('red', 'green', 'blue', 2, 3))
 
     list5 = List(Range(low=0.0, high=10.0))
 
@@ -44,7 +50,8 @@ class Demo(HasTraits):
                         tooltip='options: enter_set=True, auto_set=False'),
                     Item('list3', label="List(Str, maxlen=3)",
                         editor=CSVListEditor()),
-                    Item('list4', label="List(Enum('red', 'green', 'blue'))",
+                    Item('list4',
+                         label="List(Enum('red', 'green', 'blue', 2, 3))",
                         editor=CSVListEditor(sep=None),
                         tooltip='options: sep=None'),
                     Item('list5', label="List(Range(low=0.0, high=10.0))",
@@ -79,13 +86,19 @@ class Demo(HasTraits):
             '_',
             HGroup('low', 'high', spring, UItem('pop1'), UItem('sort1')),
             Heading("Notes"),
+            Label("Hover over a list to see which editor options are set, "
+                  "if any."),
             Label("The editor of the first list, List(Int), uses "
                   "ignore_trailing_sep=False, so a trailing comma is "
                   "an error."),
             Label("The second list is a read-only view of the first list."),
-            Label("The editor of the third list, List(Float), "
-                  "has enter_set=True and auto_set=False."),
-            Label("The editor of the List(Enum(...)) example uses sep=None."),
+            Label("The editor of the List(Float) example has enter_set=True "
+                  "and auto_set=False; press Enter to validate."),
+            Label("The List(Str) example will accept at most 3 elements."),
+            Label("The editor of the List(Enum(...)) example uses sep=None, "
+                  "i.e. whitespace acts as a separator."),
+            Label("The last two List(Range(...)) examples take one or both "
+                  "of their limits from the Low and High fields below."),
             width=720,
             title="CSVListEditor Demonstration",
         )
