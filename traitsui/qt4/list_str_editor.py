@@ -345,9 +345,10 @@ class _ListStrEditor(Editor):
         """ Handle a context menu request.
         """
         mi = self.list_view.indexAt(point)
-        self.right_clicked_index = index = mi.row()
-        self.right_clicked = self.adapter.get_item(self.object, self.name,
-                                                   index)
+        if mi.isValid():
+            self.right_clicked_index = index = mi.row()
+            self.right_clicked = self.adapter.get_item(
+                self.object, self.name, index)
 
     def _on_row_selection(self, added, removed):
         """ Handle the row selection being changed.
