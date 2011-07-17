@@ -1,45 +1,33 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-Implementation of a ButtonEditor demo plugin for Traits UI demo program.
+Button trait editor
 
-This demo shows each of the two styles of the ButtonEditor
-(As of this writing, they are identical.)
+A Button trait is displayed as a button in a Traits UI view. When the button is
+clicked, Traits UI will execute a method of your choice (a 'listener').
+
+In this example, the listener just increments a click counter.
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Button
+from traits.api import HasTraits, Button, Int
+from traitsui.api import View
+from traitsui.message import message
 
-from traitsui.api \
-    import Item, View, Group
-
-# Define the demo class:
-class ButtonEditorDemo ( HasTraits ):
+class ButtonEditorDemo(HasTraits):
     """ Defines the main ButtonEditor demo class. """
 
     # Define a Button trait:
-    fire_event = Button( 'Click Me' )
+    my_button_trait = Button('Click Me')
+    click_counter = Int
 
-    def _fire_event_fired ( self ):
-        print 'Button clicked!'
-
-    # ButtonEditor display:
-    # (Note that Text and ReadOnly versions are not applicable)
-    event_group = Group(
-        Item( 'fire_event', style = 'simple', label = 'Simple' ),
-        Item( '_' ),
-        Item( 'fire_event', style = 'custom', label = 'Custom' ),
-        Item( '_' ),
-        Item( label = '[text style unavailable]' ),
-        Item( '_' ),
-        Item( label = '[read only style unavailable]' )
-    )
+    # When the button is clicked, do something.
+    # The listener method is named '_TraitName_fired', where
+    # 'TraitName' is the name of the button trait.
+    def _my_button_trait_fired(self):
+        self.click_counter += 1
 
     # Demo view:
-    view = View(
-        event_group,
+    traits_view = View(
+        'my_button_trait',
+        'click_counter',
         title     = 'ButtonEditor',
         buttons   = [ 'OK' ],
         resizable = True

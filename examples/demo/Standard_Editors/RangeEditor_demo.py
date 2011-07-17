@@ -1,22 +1,19 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-Implementation of a RangeEditor demo plugin for the Traits UI demo program.
+Range trait editor
 
-This demo shows each of the four styles of the RangeEditor. Variations for
-a small integer range, a medium-sized integer range, a large integer range
-and a float range are demonstrated on separate tabs.
+A Range Trait holds a numeric value which is restricted to a specified range.
+
+This example shows how the RangeEditor's simple and custom styles vary
+depending on the type (integer or float) and size (small, medium, or large
+integer) of the specified range.
+
+The example also shows how multiple Groups at the top level of a View are
+automatically placed into separate tabs.
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Range
+from traits.api import HasTraits, Range
+from traitsui.api import Item, Group, View
 
-from traitsui.api \
-    import Item, Group, View
-
-# The main demo class:
 class RangeEditorDemo ( HasTraits ):
     """ Defines the RangeEditor demo class.
     """
@@ -77,7 +74,7 @@ class RangeEditorDemo ( HasTraits ):
 
     # The view includes one group per data type. These will be displayed
     # on separate tabbed panels:
-    view = View(
+    traits_view = View(
         int_range_group1,
         int_range_group2,
         int_range_group3,

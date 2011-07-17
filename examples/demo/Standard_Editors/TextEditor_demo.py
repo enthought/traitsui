@@ -1,19 +1,22 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-Implementation of a TextEditor demo plugin for the Traits UI demo program.
+Edit a string, password, or integer
 
-For each of three data types for which TextEditor is used, this demo shows
-each of the four styles of the TextEditor.
+The Traits UI TextEditor permits you to edit a Str (string), Password, or
+Int (integer) trait.
+
+When editing a Str, consider styles 'simple' (one-line), 'custom' (multi-line),
+or read-only (multi-line).
+
+When editing a Password, consider styles 'simple' (shows asterisks), or 'text'
+(shows characters).
+
+When editing an Int, consider styles 'simple' and 'readonly'.
 """
 
 # Imports:
-from traits.api \
-    import HasTraits, Str, Int, Password
+from traits.api import HasTraits, Str, Int, Password
 
-from traitsui.api \
-    import Item, Group, View
+from traitsui.api import Item, Group, View
 
 # The main demo class:
 class TextEditorDemo ( HasTraits ):
@@ -25,48 +28,43 @@ class TextEditorDemo ( HasTraits ):
     int_trait    = Int( 1 )
     password     = Password
 
-    # TextEditor display without multi-line capability (for various traits):
-    text_int_group = Group(
-        Item( 'int_trait', style = 'simple',   label = 'Simple' ),
-        Item( '_' ),
-        Item( 'int_trait', style = 'custom',   label = 'Custom' ),
-        Item( '_' ),
-        Item( 'int_trait', style = 'text',     label = 'Text' ),
-        Item( '_' ),
-        Item( 'int_trait', style = 'readonly', label = 'ReadOnly' ),
-        label = 'Integer'
-    )
-
-    # TextEditor display with multi-line capability (for various traits):
+    # TextEditor display with multi-line capability (for a string):
     text_str_group = Group(
         Item( 'string_trait', style = 'simple',  label = 'Simple' ),
         Item( '_' ),
         Item( 'string_trait', style = 'custom',  label = 'Custom' ),
         Item( '_' ),
-        Item( 'string_trait', style = 'text',     label = 'Text' ),
-        Item( '_' ),
+        # text style is the same as simple, not shown.
         Item( 'string_trait', style = 'readonly', label = 'ReadOnly' ),
         label = 'String'
+    )
+
+    # TextEditor display without multi-line capability (for an integer):
+    text_int_group = Group(
+        Item( 'int_trait', style = 'simple',   label = 'Simple' ),
+        # custom and text styles are not useful for editing integers, not shown:
+        Item( '_' ),
+        Item( 'int_trait', style = 'readonly', label = 'ReadOnly' ),
+        label = 'Integer'
     )
 
     # TextEditor display with secret typing capability (for Password traits):
     text_pass_group = Group(
         Item( 'password', style = 'simple',   label = 'Simple' ),
-        Item( '_' ),
-        Item( 'password', style = 'custom',   label = 'Custom' ),
+        # custom style is the same as simple, not shown.
         Item( '_' ),
         Item( 'password', style = 'text',     label = 'Text' ),
         Item( '_' ),
-        Item( 'password', style = 'readonly', label = 'ReadOnly' ),
+        # read-only is not useful, not shown
         label = 'Password'
     )
 
     # The view includes one group per data type. These will be displayed
     # on separate tabbed panels:
-    view = View(
-        text_int_group,
+    traits_view = View(
         text_str_group,
         text_pass_group,
+        text_int_group,
         title   = 'TextEditor',
         buttons = [ 'OK' ]
     )
