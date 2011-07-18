@@ -1,8 +1,8 @@
 """
 Checklist editor for a List of strings
 
-The checklist editor provides a simple way for the user to select zero, one, or
-more items from a list of known strings.
+The checklist editor provides a simple way for the user to select multiple items
+from a list of known strings.
 
 This example demonstrates the checklist editor's two most useful styles:
   * 'custom' displays all the strings in columns next to checkboxes.

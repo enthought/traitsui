@@ -1,5 +1,5 @@
 """
-Button trait editor
+Button editor
 
 A Button trait is displayed as a button in a Traits UI view. When the button is
 clicked, Traits UI will execute a method of your choice (a 'listener').
@@ -9,7 +9,6 @@ In this example, the listener just increments a click counter.
 
 from traits.api import HasTraits, Button, Int
 from traitsui.api import View
-from traitsui.message import message
 
 class ButtonEditorDemo(HasTraits):
     """ Defines the main ButtonEditor demo class. """

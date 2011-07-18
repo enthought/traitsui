@@ -1,5 +1,5 @@
 """
-Enum trait editor
+Enum editor
 
 The Enum editor provides a simple way for the user to choose one item from
 a list of known values (normally strings or numbers).

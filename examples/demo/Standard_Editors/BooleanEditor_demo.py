@@ -1,19 +1,19 @@
 """
-Boolean trait editor (checkbox or text)
+Boolean editor (checkbox or text)
 
 A Boolean (True/False) trait is displayed and edited as a checkbox, by default.
+
 It can also be displayed as text 'True' / 'False', either editable or read-only.
 
 This example also shows how to listen for a change in a trait, and take
 action when its value changes.
 
-It also shows how to add vertical space and a Label (plain text which is not
-editable.)
+It also demonstrates how to add vertical space and a Label (plain text which is
+not editable.)
 """
 
-from traits.api import HasTraits, Bool
+from traits.api import HasTraits, Bool, Int
 from traitsui.api import Item, Label, Group, View
-from traitsui.message import message
 
 class BooleanEditorDemo (HasTraits):
     """ Defines the main BooleanEditor demo class. """

@@ -1,8 +1,7 @@
 """
 Edit a string, password, or integer
 
-The Traits UI TextEditor permits you to edit a Str (string), Password, or
-Int (integer) trait.
+The TextEditor displays a Str, Password, or Int trait for the user to edit.
 
 When editing a Str, consider styles 'simple' (one-line), 'custom' (multi-line),
 or read-only (multi-line).

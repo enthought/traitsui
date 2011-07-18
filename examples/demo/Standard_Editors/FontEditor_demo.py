@@ -1,5 +1,5 @@
 """
-Font trait editor
+Font editor
 
 A Font editor in a Traits UI allows the user to select a font from the operating
 system.
@@ -13,12 +13,11 @@ The default 'simple' Font editor style is usually the most useful and powerful
 style - it pops up a font selection dialog which is specific to the OS and
 toolkit.
 
-This example also displays some other style choices, which are usually less
-convenient for the user.
+This example also displays some other less common style choices.
 """
 
 # Imports:
-from traits.api import HasTraits, Font, Button
+from traits.api import HasTraits, Font
 
 from traitsui.api import Item, Group, View
 
