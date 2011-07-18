@@ -1,5 +1,5 @@
 """
-Range trait editor
+Range editor
 
 A Range Trait holds a numeric value which is restricted to a specified range.
 
@@ -9,6 +9,9 @@ integer) of the specified range.
 
 The example also shows how multiple Groups at the top level of a View are
 automatically placed into separate tabs.
+
+For an example of how to dynamically vary the bounds of a Range trait, see
+the *Dynamic Range Editor* example.
 """
 
 from traits.api import HasTraits, Range

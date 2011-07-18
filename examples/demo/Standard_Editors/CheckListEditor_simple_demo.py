@@ -5,10 +5,12 @@ The checklist editor provides a simple way for the user to select multiple items
 from a list of known strings.
 
 This example demonstrates the checklist editor's two most useful styles:
+
   * 'custom' displays all the strings in columns next to checkboxes.
   * 'readonly' displays only the selected strings, as a Python list of strings.
 
 We do *not* demonstrate two styles which are not as useful for this editor:
+
   * 'text' is like 'readonly' except editable. It will accept a list of strings
     or numbers or even expressions. This is useful for quick, non-production
     data entry, but it ignores the editor's list of valid 'values'.
