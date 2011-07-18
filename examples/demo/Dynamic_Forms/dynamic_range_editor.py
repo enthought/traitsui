@@ -1,15 +1,20 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-Demonstrates how to set up a range-based trait whose high and low range end
-values can be modified at run-time.
+Dynamic Range editor
 
-The demo is divided into three pages:
+Demonstrates how to dynamically modify the low and high limits of a Range Trait.
 
- - A dynamic range using a simple slider.
- - A dynamic range using a large range slider.
- - A dynamic range using a spinner.
+In the *Range Editor* example, we saw how to define a Range Trait, whose
+values were restricted to a fixed range. Here, we show how the *low* and *high*
+limits of the range can be changed dynamically.
+
+In this example, these range limits are set with simple sliders. In practice,
+they would often be calculated.
+
+The demo is divided into three tabs:
+
+ * A dynamic range using a simple slider.
+ * A dynamic range using a large range slider.
+ * A dynamic range using a spinner.
 
 In each section of the demo, the top-most 'value' trait can have its range
 end points changed dynamically by modifying the 'low' and 'high' sliders
@@ -20,11 +25,9 @@ widths can also be specified if desired.
 """
 
 # Imports:
-from traits.api \
-    import HasPrivateTraits, Float, Range, Int
+from traits.api import HasPrivateTraits, Float, Range, Int
 
-from traitsui.api \
-    import View, Group, Item, Label, RangeEditor
+from traitsui.api import View, Group, Item, Label, RangeEditor
 
 class DynamicRangeEditor ( HasPrivateTraits ):
     """ Defines an editor for dynamic ranges (i.e. ranges whose bounds can be
@@ -50,7 +53,7 @@ class DynamicRangeEditor ( HasPrivateTraits ):
     int_high = Range( 20, 100, 20 )
 
     # Traits view definitions:
-    view = View(
+    traits_view = View(
 
         # Dynamic simple slider demo:
         Group(
