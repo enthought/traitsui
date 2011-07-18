@@ -64,7 +64,7 @@ class KeyBindingEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = KeyBindingCtrl(self, parent)
+        self.control = KeyBindingCtrl(self)
 
     #---------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
@@ -142,9 +142,8 @@ class KeyBindingCtrl(QtGui.QLabel):
     #  Initialize the object:
     #---------------------------------------------------------------------------
 
-    def __init__(self, editor, parent):
-
-        QtGui.QLabel.__init__(self, parent)
+    def __init__(self, editor, parent=None):
+        super(KeyBindingCtrl, self).__init__(parent)
 
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.setIndent(4)
@@ -192,7 +191,7 @@ class KeyBindingCtrl(QtGui.QLabel):
             p.setPen(pen)
             p.drawRect(1, 1, w - 2, h - 2)
         else:
-            p.setPen(QtCore.Qt.black)
+            p.setPen(self.palette().color(QtGui.QPalette.Mid))
             p.drawRect(0, 0, w - 1, h - 1)
 
         p.end()
