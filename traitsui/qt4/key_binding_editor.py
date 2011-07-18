@@ -186,7 +186,7 @@ class KeyBindingCtrl(QtGui.QLabel):
 
         if self.editor.has_focus:
             p.setRenderHint(QtGui.QPainter.Antialiasing, True)
-            pen = QtGui.QPen(QtCore.Qt.red)
+            pen = QtGui.QPen(QtGui.QColor('tomato'))
             pen.setWidth(2)
             p.setPen(pen)
             p.drawRect(1, 1, w - 2, h - 2)
