@@ -368,13 +368,18 @@ class GUIToolkit ( Toolkit ):
             return
 
         elif events == 'keys':
-            class KeyEventCatcher(QtCore.QObject):
+            class KeyEventHook(QtCore.QObject):
                 def eventFilter(self, object, event):
                     if event.type() == QtCore.QEvent.KeyPress:
                         return handler(event)
                     else:
                         return QtCore.QObject.eventFilter(self, object, event)
-            control.installEventFilter(KeyEventCatcher(control))
+
+            # It's unsafe to parent the event filter with the object it's
+            # filtering, so we store a reference to it here to ensure that it's
+            # not garbage collected prematurely.
+            ui._key_event_hook = KeyEventHook()
+            control.installEventFilter(ui._key_event_hook)
 
     #---------------------------------------------------------------------------
     #  Indicates that an event should continue to be processed by the toolkit
