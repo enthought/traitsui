@@ -3,12 +3,13 @@ Dynamic Range editor
 
 Demonstrates how to dynamically modify the low and high limits of a Range Trait.
 
-In the *Range Editor* example, we saw how to define a Range Trait, whose
-values were restricted to a fixed range. Here, we show how the *low* and *high*
-limits of the range can be changed dynamically.
+In the simple *Range Editor* example, we saw how to define a Range Trait, whose
+values were restricted to a fixed range. Here, we show how the limits of the
+range can be changed dynamically using the editor's *low_name* and *high_name*
+attributes.
 
-In this example, these range limits are set with simple sliders. In practice,
-they would often be calculated.
+In this example, these range limits are set with sliders. In practice, the
+limits would often be calculated from other user input or model data.
 
 The demo is divided into three tabs:
 
