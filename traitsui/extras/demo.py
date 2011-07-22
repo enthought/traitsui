@@ -24,9 +24,6 @@
 
 from __future__ import absolute_import
 
-import faulthandler
-faulthandler.enable()
-
 import sys
 import glob
 from configobj import ConfigObj
