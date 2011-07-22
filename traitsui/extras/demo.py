@@ -31,9 +31,9 @@ from configobj import ConfigObj
 from traits.api import (HasTraits, HasPrivateTraits, Str, Instance, Property, Any,
     Code, HTML, true, false, Dict)
 
-from ..api import (TreeEditor, ObjectTreeNode, TreeNodeObject, View, Item,
+from traitsui.api import (TreeEditor, ObjectTreeNode, TreeNodeObject, View, Item,
     VSplit, Tabbed, VGroup, HGroup, Heading, Handler, UIInfo, InstanceEditor,
-    Include, spring)
+    HTMLEditor, Include, spring)
 
 from os import listdir
 
@@ -686,7 +686,8 @@ path_view = View(
         Item( 'description',
               label      = 'Description',
               show_label = False,
-              style      = 'readonly'
+              style      = 'readonly',
+              editor=HTMLEditor(format_text=True)
         ),
         Item( 'source',
               label      = 'Source',
@@ -706,7 +707,8 @@ demo_view = View(
              Item( 'description',
                    label      = 'Description',
                    show_label = False,
-                   style      = 'readonly'
+                   style      = 'readonly',
+                   editor=HTMLEditor(format_text=True)
              ),
              Item( 'source',
                    label      = 'Source',
