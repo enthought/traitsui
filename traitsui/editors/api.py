@@ -10,6 +10,7 @@ from .check_list_editor import CheckListEditor
 from .code_editor import CodeEditor
 from .color_editor import ColorEditor
 from .compound_editor import CompoundEditor
+from .csv_list_editor import CSVListEditor
 from .custom_editor import CustomEditor
 from .date_editor import DateEditor
 from .default_override import DefaultOverride
