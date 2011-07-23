@@ -334,6 +334,59 @@ being edited should be updated with every keystroke (True) or only when the
 editor loses focus, i.e., when the user tabs away from it or closes the window
 (False). The default value of this parameter is True.
 
+CSVListEditor()
+````````````````
+
+:Suitable for:
+    lists of simple data types
+:Default for:
+    none
+:Optional parameters:
+    *auto_set*, *enter_set*, *ignore_trailing_sep*, *sep*
+
+This editor provides a line of text for editing a list of certain simple
+data types.  The following List traits can be edited by a CSVListEditor:
+
+* List(Int)
+* List(Float)
+* List(Str)
+* List(Enum('string1', 'string2', `etc`))
+* List(Range(low= `low value or trait name`, high= `high value or trait name`))
+
+The 'text', 'simple' and 'custom' styles are all the same.  They provide a
+single line of text in which the user can enter the list.  The 'readonly'
+style provides a line of text that can not be edited by the user.
+
+The default separator of items in the list is a comma.  This can be
+overridden with the *sep* keyword parameter.
+
+Parameters
+::::::::::
+*auto_set* : bool
+    If *auto_set* is True, each key pressed by the user triggers validation of the
+    input, and if it is valid, the value of the object being edited is
+    updated.
+    `Default:` True
+*enter_set* : bool
+    If *enter_set* is True, the input is updated when the user presses the `Enter`
+    key.
+    `Default:` False
+*sep* : str or None
+    The separator of the list item in the text field.  If `sep` is None,
+    each contiguous span of whitespace is a separator. (Note: After the
+    text field is split at the occurrences of `sep`, leading and trailing
+    whitespace is removed from each item before converting to the underlying
+    data type.)
+    `Default:` ',' (a comma)
+*ignore_trailing_sep* : bool
+    If *ignore_trailing_sep* is True, the user may enter a trailing separator (e.g. '1, 2, 3,')
+    and it will be ignored.  If this is False, a trailing separator is an
+    error.
+    `Default:` True
+
+See Also
+::::::::
+ListEditor, TextEditor
 
 DefaultOverride()
 `````````````````

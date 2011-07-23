@@ -34,6 +34,7 @@ from .editor_factory import EditorFactory
 
 from .editors.api import (ArrayEditor, BooleanEditor, ButtonEditor,
     CheckListEditor, CodeEditor, ColorEditor, CompoundEditor, CustomEditor,
+    CSVListEditor,
     DNDEditor, DateEditor, DefaultOverride, DirectoryEditor, DropEditor,
     EnumEditor, FileEditor, FontEditor, HTMLEditor, HistoryEditor, ImageEditor,
     ImageEnumEditor, InstanceEditor, KeyBindingEditor, ListEditor,
