@@ -6,7 +6,8 @@ comma-separated values (or another separator may be specified). Your program
 specifies an element Trait type of Int, Float, Str, Enum, or Range.
 """
 
-from traits.api import HasTraits, List, Int, Float, Enum, Range, Str, Button
+from traits.api import HasTraits, List, Int, Float, Enum, Range, Str, Button, \
+                            Property
 from traitsui.api import View, Item, Label, Heading, VGroup, HGroup, UItem, \
                             spring, TextEditor, CSVListEditor
 
@@ -35,10 +36,13 @@ class Demo(HasTraits):
 
     sort1 = Button("Sort first list")
 
+    # This will be str(self.list1).
+    list1str = Property(Str, depends_on='list1')
+
     traits_view = \
         View(
             HGroup(
-                # This VGroup forms the columns of CSVListEditor examples.
+                # This VGroup forms the column of CSVListEditor examples.
                 VGroup(
                     Item('list1', label="List(Int)",
                         editor=CSVListEditor(ignore_trailing_sep=False),
@@ -65,9 +69,9 @@ class Demo(HasTraits):
                 # This VGroup forms the right column; it will display the
                 # Python str representation of the lists.
                 VGroup(
-                    UItem('list1', editor=TextEditor(),
+                    UItem('list1str', editor=TextEditor(),
                                         enabled_when='False', width=240),
-                    UItem('list1', editor=TextEditor(),
+                    UItem('list1str', editor=TextEditor(),
                                         enabled_when='False', width=240),
                     UItem('list2', editor=TextEditor(),
                                         enabled_when='False', width=240),
@@ -105,6 +109,9 @@ class Demo(HasTraits):
 
     def _list1_default(self):
         return [1, 4, 0, 10]
+
+    def _get_list1str(self):
+        return str(self.list1)
 
     def _pop1_fired(self):
         if len(self.list1) > 0:
