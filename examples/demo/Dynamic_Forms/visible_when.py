@@ -1,5 +1,5 @@
 """
-Dynamic restructuring of a user interface using *visible_when*
+Dynamic restructuring of a user interface using 'visible_when'
 
 How to dynamically change which components of a Traits UI view are visible,
 depending on the value of another trait.

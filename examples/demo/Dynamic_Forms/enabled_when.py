@@ -1,6 +1,6 @@
 """
 Dynamic enabling and disabling of parts of a a user interface using
-*enabled_when*
+'enabled_when'
 
 How to dynamically enable or disable components of a Traits UI view, depending
 on the value of another trait.
