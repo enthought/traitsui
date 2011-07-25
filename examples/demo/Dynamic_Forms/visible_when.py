@@ -1,32 +1,30 @@
 """
 Dynamic restructuring of a user interface using *visible_when*
 
-A simple example of how to dynamically restructure a Traits UI View depending on
-the value of a trait.
+How to dynamically change which components of a Traits UI view are visible,
+depending on the value of another trait.
 
 The demo class "Person" has a set of attributes that apply to all instances
-('first_name', 'last_name', 'age'), a set of attributes that apply only
-to children (Persons whose age is under 18), and a set of attributes that
-apply only to adults.  The view for the Person object is defined in such
-a way that the visible fields change accordingly when the 'age' attribute
-crosses the boundary.
+('first_name', 'last_name', 'age'), a set of attributes that apply only to
+children (Persons whose age is under 18), and a set of attributes that apply
+only to adults. As a Person's age changes, only the age-appropriate attributes
+will be visible.
 
 **Detail:** The optional *visible_when* attribute of an Item or Group is a
-string containing a boolean expression indicating when this Item or Group will
-be displayed. The boolean expression is implicitly evaluated in the namespace of
-the class instance being viewed, so that in this example, 'age' refers to the
-'age' attribute of the Person being viewed.
+string containing a boolean expression (logical condition) indicating when this
+Item or Group will be visible. The boolean expression is evaluated for the
+object being viewed, so that in this example, 'age' refers to the 'age'
+attribute of the Person being viewed.
 
-You may also explicitly specify attributes of this instance, referring to the
-instance as 'object'. Thus, this example would work identically, if the
-*visible_when* strings referred to 'object.age' instead of 'age'. This is useful
-when referring to nested (dotted) attributes.
+Compare this to very similar demo of *enabled_when*.
 """
 
 from traits.api import HasTraits, Str, Range, Bool, Enum
 from traitsui.api import Item, Group, View
 
 class Person(HasTraits):
+    """ Example of restructuring a user interface by controlling visibility.
+    """
 
     # General traits:
     first_name = Str
@@ -57,9 +55,9 @@ class Person(HasTraits):
         Item(name = 'legal_guardian'),
         Item(name = 'school'),
         Item(name = 'grade'),
-        label        = 'Additional Info',
+        label        = 'Additional Info for minors',
         show_border  = True,
-        visible_when = 'age < 18'
+        visible_when = 'age < 18',
     )
 
     # Interface for attributes of Persons 18 and over:
@@ -67,9 +65,9 @@ class Person(HasTraits):
         Item(name = 'marital_status'),
         Item(name = 'registered_voter'),
         Item(name = 'military_service'),
-        label        = 'Additional Info',
+        label        = 'Additional Info for adults',
         show_border  = True,
-        visible_when = 'age >= 18'
+        visible_when = 'age >= 18',
     )
 
     # A simple View is sufficient, since the Group definitions do all the work:
