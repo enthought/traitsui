@@ -1,77 +1,83 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-Demo to redefine legal values of one attribute based on another via GUI.
+Dynamically changing a selection list, using a Handler.
 
-Code sample showing a simple implementation of the dynamic
-redefining of a trait attribute's legal values on the basis of another
-trait attribute's assigned value.
+Shows one way to dynamically change the list of values shown by an EnumEditor:
+using a Handler.
 
-Demo class "Address" has a simple set of attributes: 'street_address',
-'st' and 'city'.  The values of 'st' and 'city' are to be chosen
-from enumerated lists; however, the user does not want to see every
-city in the U.S. on the list, but only those for the chosen state.
+This example demonstrates several useful Traits UI concepts. It dynamically
+changes the values which an EnumEditor presents to the user for selection. It
+does this with a custom *Handler* which is assigned to the view, listens for
+changes in a viewed trait, and changes the selection list accordingly.
 
-Various implementations of the dynamic data retrieval are possible, but
-should allow for run-time changes to the lists of permitted values.
-We have chosen a dictionary for this simple example.
+Various implementations of dynamic data retrieval are possible. This example
+shows how a Handler can interact with the traits in a view, separating model
+logic from the view implementation.
 
-Note that 'city' is simply defined as a trait of type Str.  The values
-that appear in the enumerated list of the GUI are determined by the
-argument to the TraitEnum constructor.  (TraitEnum is a subclass of
-TraitHandler, the class of objects that perform validation tasks for
-trait attributes.)
+Demo class *Address* has a simple set of attributes: *street_address*, *state*
+and *city*. The values of *state* and *city* are to be chosen from enumerated
+lists; however, the user does not want to see every city in the USA, but only
+those for the chosen state.
+
+Note that *city* is simply defined as a trait of type Str. By default, a Str
+would be displayed using a simple TextEditor, but in this view we explicitly
+specify that *city* should be displayed with an EnumEditor. The values that
+appear in the GUI's enumerated list are determined by the *cities* attribute of
+the view's handler, as specified in the EnumEditor's *name* parameter.
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Str, Enum, List
-
-from traitsui.api \
-    import View, Item, Handler, EnumEditor
-
+from traits.api import HasTraits, Str, Enum, List
+from traitsui.api import View, Item, Handler, EnumEditor
 
 # Dictionary of defined states and cities.
 cities = {
-    'GA': [ 'Athens', 'Atlanta', 'Macon', 'Marietta', 'Savannah' ],
-    'TX': [ 'Austin', 'Amarillo', 'Dallas', 'Houston', 'San Antonio', 'Waco' ],
-    'OR': [ 'Albany', 'Eugene', 'Portland' ]
+    'GA': ['Athens', 'Atlanta', 'Macon', 'Marietta', 'Savannah'],
+    'TX': ['Austin', 'Amarillo', 'Dallas', 'Houston', 'San Antonio', 'Waco'],
+    'OR': ['Albany', 'Eugene', 'Portland']
 }
 
 
-class AddressHandler ( Handler ):
-    """ Handler class to redefine the possible values of 'city' based on 'st'.
+class AddressHandler(Handler):
+    """
+    Handler class to redefine the possible values of 'city' based on 'state'.
+    This handler will be assigned to a view of an Address, and can listen and
+    respond to changes in the viewed Address.
     """
 
-    # Current list of cities that apply:
-    cities = List( Str )
+    # Current list of available cities:
+    cities = List(Str)
 
-    def object_st_changed ( self, info ):
-        # Change the selector options:
-        #info.cityedit.factory.values = cities[ info.object.st ]
-        self.cities = cities[ info.object.st ]
+    def object_state_changed(self, info):
+        """
+        This method listens for a change in the *state* attribute of the
+        object (Address) being viewed.
 
-        # Assign the default value to the first element of the list:
+        When this listener method is called, *info.object* is a reference to
+        the viewed object (Address).
+
+        """
+        # Change the list of available cities
+        self.cities = cities[info.object.state]
+
+        # As default value, use the first city in the list:
         info.object.city = self.cities[0]
 
 
-class Address ( HasTraits ):
+class Address(HasTraits):
     """ Demo class for demonstrating dynamic redefinition of valid trait values.
     """
 
     street_address = Str
-    st             = Enum( cities.keys()[0], cities.keys() )
+    state          = Enum(cities.keys()[0], cities.keys())
     city           = Str
 
     view = View(
-        Item( name  = 'street_address' ),
-        Item( name  = 'st', label = 'State' ),
-        Item( name  = 'city',
-              editor = EnumEditor( name = 'handler.cities' ),
-              id     = 'cityedit' ),
+        Item(name  = 'street_address'),
+        Item(name  = 'state'),
+        Item(name  = 'city',
+             editor = EnumEditor(name = 'handler.cities'),
+             ),
         title     = 'Address Information',
-        buttons   = [ 'OK' ],
+        buttons   = ['OK'],
         resizable = True,
         handler   = AddressHandler
     )
