@@ -1,85 +1,93 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-Demo of dynamic enabling and disabling of trait editors in an interface.
+Dynamic enabling and disabling of parts of a a user interface using
+*enabled_when*
 
-Code sample showing a simple implementation of the dynamic
-enabling and disabling of trait attribute editor interfaces
-on the basis of another trait attribute's assigned value.
+How to dynamically enable or disable components of a Traits UI view, depending
+on the value of another trait.
 
-Demo class "Person" has attributes that apply to all instances
-('first_name', 'last_name', 'age') and attributes that are
-specific to age group ('marital_status' and 'registered_voter'
-for adults, 'legal_guardian' for children.)  The adult-specific
-attributes are disabled if 'age' is less than 18; otherwise
-'legal_guardian' is disabled.
+The demo class "Person" has a set of attributes that apply to all instances
+('first_name', 'last_name', 'age'), a set of attributes that apply only to
+children (Persons whose age is under 18), and a set of attributes that apply
+only to adults. As a Person's age changes, only the age-appropriate attributes
+will be enabled (available for editing).
 
-(NOTE: The 'enabled_when' expression for a given attribute must
-be a condition on some attribute, e.g. 'object.age >= 18' so
-that the evaluation is triggered by its trait handler.)
+**Detail:** The optional *enabled_when* attribute of an Item or Group is a
+string containing a boolean expression (logical condition) indicating when this
+Item or Group will be enabled. The boolean expression is evaluated for the
+object being viewed, so that in this example, 'age' refers to the 'age'
+attribute of the Person being viewed.
+
+Compare this to very similar demo of *visible_when*.
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Str, Range, Enum, Bool
-
-from traitsui.api \
-    import Item, Group, View
+from traits.api import HasTraits, Str, Range, Bool, Enum
+from traitsui.api import Item, Group, View
 
 
 class Person( HasTraits ):
-    """ Demo class for demonstrating enabling/disabling of trait editors
+    """ Example of enabling/disabling components of a user interface.
     """
 
-    first_name       = Str
-    last_name        = Str
-    age              = Range( 0, 120 )
-    marital_status   = Enum( 'single', 'married', 'divorced', 'widowed' )
-    registered_voter = Bool
-    legal_guardian   = Str
+    # General traits:
+    first_name = Str
+    last_name  = Str
+    age        = Range(0, 120)
 
-    # Interface for attributes that are always enabled:
+    # Traits for children only:
+    legal_guardian = Str
+    school         = Str
+    grade          = Range(1, 12)
+
+    # Traits for adults only:
+    marital_status   = Enum('single', 'married', 'divorced', 'widowed')
+    registered_voter = Bool(False)
+    military_service = Bool(False)
+
+    # Interface for attributes that are always visible in interface:
     gen_group = Group(
-        Item( name = 'first_name' ),
-        Item( name = 'last_name' ),
-        Item( name = 'age' ),
+        Item(name = 'first_name'),
+        Item(name = 'last_name'),
+        Item(name = 'age'),
         label       = 'General Info',
         show_border = True
     )
 
-    # Interface for adult-only attributes:
-    adult_group = Group(
-        Item( name = 'marital_status' ),
-        Item( name = 'registered_voter' ),
-        enabled_when = 'age >= 18',
-        label        = 'Adults',
-        show_border  = True
-    )
-
-    # Interface for child-only attribute:
+    # Interface for attributes of Persons under 18:
     child_group = Group(
-        Item( name         = 'legal_guardian',
-              enabled_when = 'age < 18'),
-        label        = 'Minors',
-        show_border  = True
+        Item(name = 'legal_guardian'),
+        Item(name = 'school'),
+        Item(name = 'grade'),
+        label        = 'Additional Info for minors',
+        show_border  = True,
+        enabled_when = 'age < 18',
     )
 
-    # The view specification is simple, as the group specs have done the work:
+    # Interface for attributes of Persons 18 and over:
+    adult_group = Group(
+        Item(name = 'marital_status'),
+        Item(name = 'registered_voter'),
+        Item(name = 'military_service'),
+        label        = 'Additional Info for adults',
+        show_border  = True,
+        enabled_when = 'age >= 18',
+    )
+
+    # A simple View is sufficient, since the Group definitions do all the work:
     view = View(
         Group(
             gen_group,
-            adult_group,
-            child_group
+            child_group,
+            adult_group
         ),
+        title     = 'Personal Information',
         resizable = True,
         buttons   = [ 'OK' ]
     )
 
 # Create the demo:
 demo = Person(
-    first_name = 'Samuel',
-    last_name  = 'Johnson',
+    first_name = "Samuel",
+    last_name  = "Johnson",
     age        = 16
 )
 
