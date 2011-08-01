@@ -1,41 +1,59 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
+"""
+Spacing widgets using springs
+
+*Springs* are a simple technique for adding space before, after, or between
+Traits UI editors (a.k.a. widgets).
+
+By default, Traits UI arranges widgets immediately adjacent to each other --
+from left to right in a horizontal group, or from top to bottom in a vertical
+group. Sometimes this works well, but sometimes it results in widgets that are
+placed confusingly, or have been unattractively stretched to fill available
+space.
+
+When you place a *spring* in a group, Traits UI will not try to fill that space
+with an adjacent widget, instead allowing empty space which varies depending on
+the overall size of the containing group.
 
 """
-This demo shows you how to space editors horizontally using 'springs'.
 
-It illustrates several different combinations, including a normal, non-spring,
-example.
-"""
+from traits.api import HasTraits, Button
+from traitsui.api import View, VGroup, HGroup, Item, spring, Label
 
-from traits.api \
-    import HasTraits, Button
-
-from traitsui.api \
-    import View, VGroup, HGroup, Item, spring
-
+# dummy button which will be used repeatedly to demonstrate widget spacing:
 button = Item( 'ignore', show_label = False )
 
-class SpringDemo ( HasTraits ):
+class SpringDemo(HasTraits):
 
-    ignore = Button( 'Ignore' )
+    ignore = Button('Ignore')
 
     view = View(
                VGroup(
-                   HGroup( button, spring, button,
-                           show_border = True,
-                           label       = 'Left and right justified' ),
-                   HGroup( button, button, spring,
-                           button, button, spring,
-                           button, button,
-                           show_border = True,
-                           label       = 'Left, center and right justified' ),
-                   HGroup( spring, button, button,
-                           show_border = True,
-                           label       = 'Right justified' ),
-                   HGroup( button, button,
-                           show_border = True,
-                           label       = 'Left justified (no springs)' ),
+                   '10',
+                   Label(label='Spring in a horizontal group moves widget right:'),
+                   '10',
+                   HGroup(button, button,
+                        show_border = True,
+                        label = 'Left justified (no springs)' ),
+                   HGroup(spring, button, button,
+                        show_border = True,
+                        label = 'Right justified with a spring '
+                                'before any buttons'),
+                   HGroup(button, spring, button,
+                        show_border = True,
+                        label = 'Left and right justified with a '
+                                         'spring between buttons'),
+                   HGroup(button, button, spring,
+                        button, button, spring,
+                        button, button,
+                        show_border = True,
+                        label = 'Left, center and right justified '
+                                'with springs after the 2nd and 4th '
+                                'buttons'),
+                   spring,
+                   VGroup(
+                       Label('Spring in vertical group moves widget down:')
+                       ),
+                   button
                ),
                title   = 'Spring Demo',
                buttons = [ 'OK' ]
