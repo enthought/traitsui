@@ -272,25 +272,17 @@ class CustomEditor ( SimpleTextEditor ):
 #-------------------------------------------------------------------------------
 
 class _TreeView(QtGui.QTreeView):
-    """ This is an internal class needed because QAbstractItemView (for some
-        strange reason) doesn't provide a signal when the current index
-        changes.
+    """ This is an internal class needed because QAbstractItemView doesn't
+        provide a signal for when the current index changes.
     """
 
     def __init__(self, editor):
-
-        QtGui.QTreeView.__init__(self)
-
-        self.connect(self, QtCore.SIGNAL('doubleClicked(QModelIndex)'),
-                editor._on_dclick)
-
+        super(_TreeView, self).__init__()
+        self.doubleClicked.connect(editor._on_dclick)
         self._editor = editor
 
-    def currentChanged(self, curr, prev):
-        """ Reimplemented to tell the editor when the current index has
-            changed.
+    def currentChanged(self, current, previous):
+        """ Reimplemented to tell the editor when the current index has changed.
         """
-
-        QtGui.QTreeView.currentChanged(self, curr, prev)
-
-        self._editor.update_object(curr)
+        super(_TreeView, self).currentChanged(current, previous)
+        self._editor.update_object(current)
