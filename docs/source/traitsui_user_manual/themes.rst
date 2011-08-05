@@ -33,13 +33,13 @@ Theme Data
 All of the data used by TraitsUI for themes is in the form of simple images, a
 few examples of which are shown in Figure 11:
 
-.. image:: images/theme_image1.gif
+.. image:: images/theme_image1.png
    :alt: Gray square with rounded, gray, shaded border
    
-.. image:: images/theme_image2.gif
+.. image:: images/theme_image2.png
    :alt: Yellow square with sharp-cornered, orange, raised border
    
-.. figure:: images/theme_image3.gif
+.. figure:: images/theme_image3.png
    :alt: Green square, raised, with no border
    
    Figure 11: Theme images

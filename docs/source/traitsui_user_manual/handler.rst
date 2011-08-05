@@ -370,10 +370,10 @@ overridden setattr() method and user interface notification method.
     tc = TestClass()
     tc.configure_traits(view=view1)
 
-.. image:: images/alter_title_before.gif
+.. image:: images/alter_title_before.png
    :alt: Dialog box with empty checkboxes and a title of "Alter Title"
    
-.. figure:: images/alter_title_after.gif
+.. figure:: images/alter_title_after.png
    :alt: Dialog box with one filled checkbox and a title of "Alter Title*"
      
    Figure 7: Before and after views of Example 9
