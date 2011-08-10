@@ -45,6 +45,9 @@ class _ShellEditor ( Editor ):
     #  Trait definitions:
     #---------------------------------------------------------------------------
 
+    # An event fired to execute a command in the shell.
+    command_to_execute = Event()
+
     # An event fired whenver the user executes a command in the shell:
     command_executed = Event( Bool )
 
@@ -84,6 +87,8 @@ class _ShellEditor ( Editor ):
                     locals[ name ] = None
 
         # Synchronize any editor events:
+        self.sync_value( self.factory.command_to_execute,
+                         'command_to_execute', 'from' )
         self.sync_value( self.factory.command_executed,
                          'command_executed', 'to' )
 
@@ -196,6 +201,17 @@ class _ShellEditor ( Editor ):
         return { 'history':      control.history,
                  'historyIndex': control.historyIndex }
 
+    #---------------------------------------------------------------------------
+    #  Handles the 'command_to_execute' trait being fired:
+    #---------------------------------------------------------------------------
+
+    def _command_to_execute_fired ( self, command ):
+        """ Handles the 'command_to_execute' trait being fired.
+        """
+        # Show the command. A 'hidden' command should be executed directly on
+        # the namespace trait!
+        self._shell.execute_command(command, hidden=False)
+
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:
 #-------------------------------------------------------------------------------
@@ -209,8 +225,12 @@ class ToolkitEditorFactory ( BasicEditorFactory ):
     # Should the shell interpreter use the object value's dictionary?
     share = Bool( False )
 
+    # Extended trait name of the object event trait which triggers a command
+    # execution in the shell when fired.
+    command_to_execute = Str
+
     # Extended trait name of the object event trait which is fired when a
-    # command is executed
+    # command is executed.
     command_executed = Str
 
     def _get_klass(self):
