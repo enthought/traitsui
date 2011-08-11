@@ -1,8 +1,7 @@
 """
-Dynamically changing a selection list, using a Handler.
+Dynamic changing of a selection list, using a Handler
 
-Shows one way to dynamically change the list of values shown by an EnumEditor:
-using a Handler.
+One way to dynamically change the list of values shown by an EnumEditor.
 
 This example demonstrates several useful Traits UI concepts. It dynamically
 changes the values which an EnumEditor presents to the user for selection. It

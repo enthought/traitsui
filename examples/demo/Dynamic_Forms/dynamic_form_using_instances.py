@@ -1,8 +1,8 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-Demo of the dynamic restructuring of an interface using InstanceEditor
+Dynamic restructuring of a user interface using an Instance editor and a Handler
+
+How to dynamically change the *structure* of a user interface (not merely which
+components are visible), depending on the value of another trait.
 
 This code sample shows a simple implementation of the dynamic
 restructuring of a View on the basis of some trait attribute's
@@ -20,13 +20,19 @@ The multi-attribute instance assigned to 'misc' is edited by means
 of a single InstanceEditor, which is displayed in the 'custom' style
 so that the dynamic portion of the interface is displayed in a panel
 rather than a separate window.
+
+It is necessary to use a Handler because otherwise when the instance is
+updated dynamically, Traits UI will not detect the change and the UI will not
+be reconfigured. This is due to architectural limitations of the current
+version of Traits UI.
+
+Compare this to the simpler, but less powerful demos of *enabled_when*
+and *visible_when*.
 """
 
-from traits.api \
-    import HasTraits, Str, Range, Enum, Bool, Instance
+from traits.api import HasTraits, Str, Range, Enum, Bool, Instance
 
-from traitsui.api \
-    import Item, Group, View, Handler
+from traitsui.api import Item, Group, View, Handler
 
 
 class Spec ( HasTraits ):
@@ -63,6 +69,11 @@ class AdultSpec ( Spec ):
 
 class PersonHandler ( Handler ):
     """ Handler class to perform restructuring action when conditions are met.
+    The restructuring consists of replacing a ChildSpec instance by an
+    AdultSpec instance, or vice-versa. We would not need a handler to listen
+    for a change in age, but we do need a Handler so that Traits UI will
+    respond immediately to changes in the viewed Person, which require
+    immediate restructuring of the UI.
     """
 
     def object_age_changed ( self, info ):
@@ -109,7 +120,6 @@ class Person ( HasTraits ):
         resizable = True,
         handler   = PersonHandler()
     )
-
 
 # Create the demo:
 demo = Person( first_name = "Samuel",

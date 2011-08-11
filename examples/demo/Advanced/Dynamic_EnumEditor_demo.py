@@ -1,8 +1,7 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-Demonstrates how to set up an EnumEditor that is updated dynamically.
+Dynamic changing of a Enum selection list, depending on checked items
+
+Another way to dynamically change the values shown by an EnumEditor.
 
 The scenario is a restaurant that at the beginning of the day has a menu list
 of entrees based upon a fully stocked kitchen. However, as the day progresses,
@@ -23,6 +22,7 @@ As entrees are checked on or off from the Kitchen tab, the customer's Entree
 drop-down is dynamically updated with the current list of available entrees.
 
 Notes:
+
  - The key point of the demo is the use of the 'name' trait in the EnumEditor
    definition, which links the list of available entrees from the
    KitchenCapabilities object to the OrderMenu object's entree EnumEditor.
