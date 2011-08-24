@@ -70,32 +70,32 @@ from traitsui.api \
 
 #-- Demo Class -----------------------------------------------------------------
 
-class SettableCachedProperty ( HasTraits ):
+class SettableCachedProperty(HasTraits):
 
-    a = Range( 1, 10 )
-    b = Range( 1, 10 )
-    c = Property( Int )
+    a = Range(1, 10)
+    b = Range(1, 10)
+    c = Property(Int)
     d = Property
 
     view = View(
-        Item( 'a' ),
-        Item( 'b' ),
+        Item('a'),
+        Item('b'),
         '_',
-        Item( 'c',
-              editor = RangeEditor( low = 1, high = 100, mode = 'slider' ) ),
-        Item( 'c' ),
+        Item('c',
+              editor = RangeEditor(low = 1, high = 100, mode = 'slider')),
+        Item('c'),
         '_',
-        Item( 'd',
-              editor = RangeEditor( low = 1, high = 400, mode = 'slider' ) ),
-        Item( 'd' ),
+        Item('d',
+              editor = RangeEditor(low = 1, high = 400, mode = 'slider')),
+        Item('d'),
         width = 0.3
     )
 
-    @property_depends_on( 'a,b', settable = True )
+    @property_depends_on('a,b', settable = True)
     def _get_c(self):
         return (self.a * self.b)
 
-    @property_depends_on( 'c' )
+    @property_depends_on('c')
     def _get_d(self):
         return (self.c + self.c)
 

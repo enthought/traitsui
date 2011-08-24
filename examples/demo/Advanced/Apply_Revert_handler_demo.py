@@ -1,32 +1,31 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-This program demonstrates hows how to add an event handler which performs an
-action when the 'Apply' or 'Revert' buttons are pressed.
+Apply / Revert
+
+Provides support in a dialog box for an "Apply" button which modifies the
+object being viewed, and a "Revert" button, which returns the object to its
+starting state (before any "Apply").
+
+Note that this does not automatically provide a full (multi-step incremental)
+Undo capability.
 """
 
-# Imports:
-from traits.api \
-    import HasTraits, Str, List
-
-from traitsui.api \
-    import Item, View, Handler, HGroup, VGroup
+from traits.api import HasTraits, Str, List
+from traitsui.api import Item, View, Handler, HGroup, VGroup
 
 # 'ApplyRevert_Handler' class:
-class ApplyRevert_Handler ( Handler ):
+class ApplyRevert_Handler(Handler):
 
-    def apply ( self, info ):
+    def apply(self, info):
         object = info.object
-        object.stack.insert( 0, object.input )
-        object.queue.append( object.input )
+        object.stack.insert(0, object.input)
+        object.queue.append(object.input)
 
-    def revert ( self, info ):
+    def revert(self, info):
         # Do something exciting here...
         print 'revert called...'
 
 # 'ApplyRevertDemo' class:
-class ApplyRevertDemo ( HasTraits ):
+class ApplyRevertDemo(HasTraits):
 
     # Trait definitions:
     input = Str
@@ -37,7 +36,7 @@ class ApplyRevertDemo ( HasTraits ):
     traits_view = View(
         VGroup(
             VGroup(
-                Item( 'input',
+                Item('input',
                       show_label = False
                 ),
                 label       = 'Input',
@@ -45,7 +44,7 @@ class ApplyRevertDemo ( HasTraits ):
             ),
             HGroup(
                 VGroup(
-                    Item( 'stack',
+                    Item('stack',
                           show_label = False,
                           height     = 50,
                           width      = 100,
@@ -55,7 +54,7 @@ class ApplyRevertDemo ( HasTraits ):
                     show_border = True
                 ),
                 VGroup(
-                    Item( 'queue',
+                    Item('queue',
                           show_label = False,
                           height     = 50,
                           width      = 100,
