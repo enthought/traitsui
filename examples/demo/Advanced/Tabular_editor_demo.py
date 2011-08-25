@@ -1,15 +1,17 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-A tabular editor demo based on the Person/Married Person example in the main
-Traits UI Tabular Editor tutorial.
+Tabular editor
+
+The TabularEditor can be used for many of the same purposes as the TableEditor,
+that is, for displaying a table of attributes of lists or arrays of objects.
+
+While similar in function, the tabular editor has advantages and disadvantages
+relative to the table editor. See the Traits UI User Manual for details.
 
 This example defines three classes:
 
- - <b>Person</b>: A single person.
- - <b>MarriedPerson</b>: A married person (subclass of Person).
- - <b>Report</b>: Defines a report based on a list of single and married people.
+ - *Person*: A single person.
+ - *MarriedPerson*: A married person (subclass of Person).
+ - *Report*: Defines a report based on a list of single and married people.
 
 It creates a tabular display of 10,000 single and married people showing the
 following information:
@@ -30,9 +32,9 @@ In addition:
 
 This example demonstrates:
 
- - How to set up a <b>TabularEditor</b>.
- - The display speed of the <b>TabularEditor</b>.
- - How to create a <b>TabularAdapter</b> that meets each of the specified display
+ - How to set up a *TabularEditor*.
+ - The display speed of the *TabularEditor*.
+ - How to create a *TabularAdapter* that meets each of the specified display
    requirements.
 
 Additional notes:
@@ -42,23 +44,14 @@ Additional notes:
    right arrow keys.
 """
 
-#-- Imports --------------------------------------------------------------------
-
-from random \
-    import randint, choice, shuffle
-
-from traits.api \
-    import HasTraits, Str, Int, List, Instance, Property, Constant, Color
-
-from traitsui.api \
-    import View, Group, Item, TabularEditor
-
-from traitsui.tabular_adapter \
-    import TabularAdapter
+from random import randint, choice, shuffle
+from traits.api import HasTraits, Str, Int, List, Instance, Property, Constant, Color
+from traitsui.api import View, Group, Item, TabularEditor
+from traitsui.tabular_adapter import TabularAdapter
 
 #-- Person Class Definition ----------------------------------------------------
 
-class Person ( HasTraits ):
+class Person(HasTraits):
 
     name    = Str
     address = Str
@@ -66,33 +59,33 @@ class Person ( HasTraits ):
 
 #-- MarriedPerson Class Definition ---------------------------------------------
 
-class MarriedPerson ( Person ):
+class MarriedPerson(Person):
 
-    partner = Instance( Person )
+    partner = Instance(Person)
 
 #-- Tabular Adapter Definition -------------------------------------------------
 
-class ReportAdapter ( TabularAdapter ):
+class ReportAdapter(TabularAdapter):
 
-    columns = [ ( 'Name',    'name' ),
-                ( 'Age',     'age' ),
-                ( 'Address', 'address' ),
-                ( 'Spouse',  'spouse' ) ]
+    columns = [ ('Name',    'name'),
+                ('Age',     'age'),
+                ('Address', 'address'),
+                ('Spouse',  'spouse') ]
 
     font                      = 'Courier 10'
-    age_alignment             = Constant( 'right' )
+    age_alignment             = Constant('right')
     MarriedPerson_age_image   = Property
-    MarriedPerson_bg_color    = Color( 0xE0E0FF )
+    MarriedPerson_bg_color    = Color(0xE0E0FF)
     MarriedPerson_spouse_text = Property
-    Person_spouse_text        = Constant( '' )
+    Person_spouse_text        = Constant('')
 
-    def _get_MarriedPerson_age_image ( self ):
+    def _get_MarriedPerson_age_image(self):
         if self.item.age < 18:
             return '@icons:red_ball'
 
         return None
 
-    def _get_MarriedPerson_spouse_text ( self ):
+    def _get_MarriedPerson_spouse_text(self):
         return self.item.partner.name
 
 #-- Tabular Editor Definition --------------------------------------------------
@@ -104,13 +97,13 @@ tabular_editor = TabularEditor(
 
 #-- Report Class Definition ----------------------------------------------------
 
-class Report ( HasTraits ):
+class Report(HasTraits):
 
-    people = List( Person )
+    people = List(Person)
 
     view = View(
         Group(
-            Item( 'people', id = 'table', editor = tabular_editor ),
+            Item('people', id = 'table', editor = tabular_editor),
             show_labels        = False
         ),
         title     = 'Tabular Editor Demo',
@@ -136,12 +129,12 @@ female_names = [ 'Leah', 'Jaya', 'Katrina', 'Vibha', 'Diane', 'Lisa', 'Jean',
 
 all_names = male_names + female_names
 
-male_name   = lambda: choice( male_names )
-female_name = lambda: choice( female_names )
-any_name    = lambda: choice( all_names )
-age         = lambda: randint( 15, 72 )
+male_name   = lambda: choice(male_names)
+female_name = lambda: choice(female_names)
+any_name    = lambda: choice(all_names)
+age         = lambda: randint(15, 72)
 
-family_name = lambda: choice( [ 'Jones', 'Smith', 'Thompson', 'Hayes', 'Thomas', 'Boyle',
+family_name = lambda: choice([ 'Jones', 'Smith', 'Thompson', 'Hayes', 'Thomas', 'Boyle',
     "O'Reilly", 'Lebowski', 'Lennon', 'Starr', 'McCartney', 'Harrison',
     'Harrelson', 'Steinbeck', 'Rand', 'Hemingway', 'Zhivago', 'Clemens',
     'Heinlien', 'Farmer', 'Niven', 'Van Vogt', 'Sturbridge', 'Washington',
@@ -151,39 +144,39 @@ family_name = lambda: choice( [ 'Jones', 'Smith', 'Thompson', 'Hayes', 'Thomas',
     'Clapton', 'Santana', 'Midler', 'Flack', 'Conner', 'Bond', 'Seinfeld',
     'Costanza', 'Kramer', 'Falk', 'Moore', 'Cramdon', 'Baird', 'Baer',
     'Spears', 'Simmons', 'Roberts', 'Michaels', 'Stuart', 'Montague',
-    'Miller' ] )
+    'Miller' ])
 
-address = lambda: '%d %s %s' % ( randint( 11, 999 ), choice( [ 'Spring',
+address = lambda: '%d %s %s' % (randint(11, 999), choice([ 'Spring',
     'Summer', 'Moonlight', 'Winding', 'Windy', 'Whispering', 'Falling',
     'Roaring', 'Hummingbird', 'Mockingbird', 'Bluebird', 'Robin', 'Babbling',
     'Cedar', 'Pine', 'Ash', 'Maple', 'Oak', 'Birch', 'Cherry', 'Blossom',
     'Rosewood', 'Apple', 'Peach', 'Blackberry', 'Strawberry', 'Starlight',
-    'Wilderness', 'Dappled', 'Beaver', 'Acorn', 'Pecan', 'Pheasant', 'Owl' ] ),
-    choice( [ 'Way', 'Lane', 'Boulevard', 'Street', 'Drive', 'Circle',
-    'Avenue', 'Trail' ] ) )
+    'Wilderness', 'Dappled', 'Beaver', 'Acorn', 'Pecan', 'Pheasant', 'Owl' ]),
+    choice([ 'Way', 'Lane', 'Boulevard', 'Street', 'Drive', 'Circle',
+    'Avenue', 'Trail' ]))
 
-people = [ Person( name    = '%s %s' % ( any_name(), family_name() ),
+people = [ Person(name    = '%s %s' % (any_name(), family_name()),
                    age     = age(),
-                   address = address() ) for i in range( 5000 ) ]
+                   address = address()) for i in range(5000) ]
 
-marrieds = [ ( MarriedPerson( name    = '%s %s' % ( female_name(), last_name ),
+marrieds = [ (MarriedPerson(name    = '%s %s' % (female_name(), last_name),
                               age     = age(),
-                              address = address ),
-               MarriedPerson( name    = '%s %s' % ( male_name(), last_name ),
+                              address = address),
+               MarriedPerson(name    = '%s %s' % (male_name(), last_name),
                               age     = age(),
-                              address = address ) )
+                              address = address))
              for last_name, address in
-                 [ ( family_name(), address() ) for i in range( 2500 ) ] ]
+                 [ (family_name(), address()) for i in range(2500) ] ]
 
 for female, male in marrieds:
     female.partner = male
     male.partner   = female
-    people.extend( [ female, male ] )
+    people.extend([ female, male ])
 
-shuffle( people )
+shuffle(people)
 
 # Create the demo:
-demo = Report( people = people )
+demo = Report(people = people)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

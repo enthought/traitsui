@@ -1,8 +1,7 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-This shows a table editor which has column-specific context menus.
+Defining a column-specific context menu in a Table
+
+Shows a TableEditor which has column-specific context menus.
 
 The demo is a simple baseball scoring system, which lists each player and
 their current batting statistics. After a given player has an at bat, you
@@ -17,28 +16,17 @@ a single event handler defined for the category (in this case, the category
 is 'affects_average').
 """
 
-# Imports:
-from random \
-    import randint
-
-from traits.api \
-    import HasStrictTraits, Str, Int, Float, List, Property
-
-from traitsui.api \
-    import View, Item, TableEditor
-
-from traitsui.menu \
-    import Menu, Action
-
-from traitsui.table_column \
-    import ObjectColumn
-
+from random import randint
+from traits.api import HasStrictTraits, Str, Int, Float, List, Property
+from traitsui.api import View, Item, TableEditor
+from traitsui.menu import Menu, Action
+from traitsui.table_column import ObjectColumn
 
 # Define a custom table column for handling items which affect the player's
 # batting average:
 class AffectsAverageColumn(ObjectColumn):
 
-    # The context menu for the column:
+    # Define the context menu for the column:
     menu = Menu(Action(name = 'Add', action = 'column.add(object)'),
                  Action(name = 'Sub', action = 'column.sub(object)'))
 
@@ -50,6 +38,8 @@ class AffectsAverageColumn(ObjectColumn):
 
     # Don't allow the data to be edited directly:
     editable = False
+
+    # Action methods for the context menu items:
 
     def add(self, object):
         """ Increment the affected player statistic.

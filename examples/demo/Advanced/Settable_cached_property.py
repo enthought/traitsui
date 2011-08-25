@@ -1,7 +1,8 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
+Creating a settable cached Property in Traits
+
+How to create a Traits Property which is cached but is not read-only.
+
 The example demonstrates how to create a 'settable cached' property. The example
 itself is nonsensical, and is provided mainly to show how to set up such a
 property, and how it differs from a standard 'cached' property.
@@ -60,13 +61,8 @@ results (indicated by the text entry field turning red), because this is a
 normal 'cached' trait that has no 'setter' method defined.
 """
 
-#-- Imports --------------------------------------------------------------------
-
-from traits.api \
-    import HasTraits, Int, Range, Property, property_depends_on
-
-from traitsui.api \
-    import View, Item, RangeEditor
+from traits.api import HasTraits, Int, Range, Property, property_depends_on
+from traitsui.api import View, Item, RangeEditor
 
 #-- Demo Class -----------------------------------------------------------------
 

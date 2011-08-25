@@ -1,8 +1,8 @@
-#  Copyright (c) 2007, Enthought, Inc.
-#  License: BSD Style.
-
 """
-A Traits UI editor that wraps a WX timer control.
+A timer editor
+
+Display or edit a time.
+
 """
 import datetime
 
@@ -32,5 +32,3 @@ demo = TimeEditorDemo()
 
 if __name__ == "__main__":
     demo.configure_traits()
-
-#-- eof -----------------------------------------------------------------------
