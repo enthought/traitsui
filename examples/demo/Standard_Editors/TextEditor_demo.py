@@ -7,7 +7,7 @@ When editing a Str, consider styles 'simple' (one-line), 'custom' (multi-line),
 or read-only (multi-line).
 
 When editing a Password, consider styles 'simple' (shows asterisks), or 'text'
-(shows characters).
+(should show characters, but currently shows asterisks just like 'simple').
 
 When editing an Int, consider styles 'simple' and 'readonly'.
 """
