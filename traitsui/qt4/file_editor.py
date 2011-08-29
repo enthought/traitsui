@@ -16,22 +16,16 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from os.path \
-    import splitext, isfile, exists
+from os.path import splitext, isfile, exists
 
 from pyface.qt import QtCore, QtGui
-
-from traits.api \
-    import List, Event, Unicode, TraitError
+from traits.api import List, Event, File, Unicode, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.file_editor file.
-from traitsui.editors.file_editor \
-    import ToolkitEditorFactory
-
-from text_editor \
-    import SimpleEditor as SimpleTextEditor
+from traitsui.editors.file_editor import ToolkitEditorFactory
+from text_editor import SimpleEditor as SimpleTextEditor
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:
@@ -171,6 +165,9 @@ class CustomEditor ( SimpleTextEditor ):
     # Wildcard filter to apply to the file dialog:
     filter = filter_trait
 
+    # The root path of the file tree view.
+    root_path = File
+
     # Event fired when the file system view should be rebuilt:
     reload = Event
 
@@ -195,7 +192,7 @@ class CustomEditor ( SimpleTextEditor ):
         model.setFilter(QtCore.QDir.AllDirs | QtCore.QDir.Files |
                         QtCore.QDir.Drives | QtCore.QDir.NoDotAndDotDot)
 
-        # Show the full filesystem.
+        # Show the full filesystem by default.
         model.setRootPath(QtCore.QDir.rootPath())
 
         # Hide the labels at the top and only show the column for the file name
@@ -205,7 +202,9 @@ class CustomEditor ( SimpleTextEditor ):
 
         factory = self.factory
         self.filter = factory.filter
+        self.root_path = factory.root_path
         self.sync_value(factory.filter_name, 'filter', 'from', is_list=True)
+        self.sync_value(factory.root_path_name, 'root_path', 'from')
         self.sync_value(factory.reload_name, 'reload', 'from')
         self.sync_value(factory.dclick_name, 'dclick', 'to')
 
@@ -248,6 +247,19 @@ class CustomEditor ( SimpleTextEditor ):
         """ Handles the 'filter' trait being changed.
         """
         self._model.setNameFilters(self.filter)
+
+    #---------------------------------------------------------------------------
+    #  Handles the 'root_path' trait being changed:
+    #---------------------------------------------------------------------------
+
+    def _root_path_changed ( self ):
+        """ Handles the 'root_path' trait being changed.
+        """
+        path = self.root_path
+        if not path:
+            path = QtCore.QDir.rootPath()
+        self._model.setRootPath(path)
+        self.control.setRootIndex(self._model.index(path))
 
     #---------------------------------------------------------------------------
     #  Handles the user double-clicking on a file name:

@@ -21,7 +21,7 @@
 
 from __future__ import absolute_import
 
-from traits.api import List, Str, Bool, Int, Unicode
+from traits.api import List, Str, Bool, Int, Unicode, File
 
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
 # to avoid circular imports, as this EditorFactory will be part of
@@ -74,6 +74,13 @@ class ToolkitEditorFactory ( EditorFactory ):
     # The number of history entries to maintain:
     # FIXME: add support
     entries = Int( 10 )
+
+    # The root path of the file tree view ('custom' style only, not supported
+    # under wx). If not specified, the filesystem root is used.
+    root_path = File
+
+    # Optional extend trait name of the trait containing the root path.
+    root_path_name = Str
 
     # Optional extended trait name used to notify the editor when the file
     # system view should be reloaded ('custom' style only):
