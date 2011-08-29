@@ -10,10 +10,9 @@ group. Sometimes this works well, but sometimes it results in widgets that are
 placed confusingly, or have been unattractively stretched to fill available
 space.
 
-When you place a *spring* in a group, Traits UI will not try to fill that space
-with an adjacent widget, instead allowing empty space which varies depending on
-the overall size of the containing group.
-
+When you place a *spring* in a horizontal group, Traits UI will not try to fill
+that space with an adjacent widget, instead allowing empty space which varies 
+depending on the overall size of the containing group.
 """
 
 from traits.api import HasTraits, Button
@@ -50,11 +49,13 @@ class SpringDemo(HasTraits):
                                 'with springs after the 2nd and 4th '
                                 'buttons'),
                    spring,
-                   VGroup(
-                       Label('Spring in vertical group moves widget down:')
-                       ),
+                   Label('But spring in vertical group does not move '
+                         'widget down at present.'),
                    button
                ),
+               width=600,
+               height=600,
+               resizable=True,
                title   = 'Spring Demo',
                buttons = [ 'OK' ]
            )
