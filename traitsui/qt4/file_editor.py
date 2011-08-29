@@ -188,15 +188,15 @@ class CustomEditor ( SimpleTextEditor ):
         """
         self.control = _TreeView(self)
 
-        self._model = model = QtGui.QDirModel()
+        self._model = model = QtGui.QFileSystemModel()
         self.control.setModel(model)
 
         # Don't apply filters to directories and don't show "." and ".."
         model.setFilter(QtCore.QDir.AllDirs | QtCore.QDir.Files |
                         QtCore.QDir.Drives | QtCore.QDir.NoDotAndDotDot)
 
-        # Show directories before files
-        model.setSorting(QtCore.QDir.Name | QtCore.QDir.DirsFirst)
+        # Show the full filesystem.
+        model.setRootPath(QtCore.QDir.rootPath())
 
         # Hide the labels at the top and only show the column for the file name
         self.control.header().hide()
