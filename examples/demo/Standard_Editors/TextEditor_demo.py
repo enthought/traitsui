@@ -6,11 +6,12 @@ The TextEditor displays a Str, Password, or Int trait for the user to edit.
 When editing a Str, consider styles 'simple' (one-line), 'custom' (multi-line),
 or read-only (multi-line).
 
-When editing a Password, consider styles 'simple' (shows asterisks), or 'text'
-(should show characters, but currently shows asterisks just like 'simple').
+When editing a Password, use style 'simple' (shows asterisks).
 
 When editing an Int, consider styles 'simple' and 'readonly'.
 """
+# FIXME:? as of 7/1/2011, Password style 'text' showed typed characters.
+# It no longer does. Should it?
 
 # Imports:
 from traits.api import HasTraits, Str, Int, Password
@@ -50,11 +51,7 @@ class TextEditorDemo ( HasTraits ):
     # TextEditor display with secret typing capability (for Password traits):
     text_pass_group = Group(
         Item( 'password', style = 'simple',   label = 'Simple' ),
-        # custom style is the same as simple, not shown.
-        Item( '_' ),
-        Item( 'password', style = 'text',     label = 'Text' ),
-        Item( '_' ),
-        # read-only is not useful, not shown
+        # custom and text style are the same as simple, not shown.
         label = 'Password'
     )
 
