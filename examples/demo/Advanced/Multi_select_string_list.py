@@ -40,7 +40,10 @@ class MultiSelect(HasPrivateTraits):
                                    editable     = False,
                                    adapter      = MultiSelectAdapter())
             )
-        )
+        ),
+        resizable=True,
+        width=200,
+        height=300
     )
 
 # Create the demo:
