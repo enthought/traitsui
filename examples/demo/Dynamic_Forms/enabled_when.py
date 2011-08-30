@@ -21,7 +21,7 @@ Compare this to very similar demo of *visible_when*.
 """
 
 from traits.api import HasTraits, Str, Range, Bool, Enum
-from traitsui.api import Item, Group, View
+from traitsui.api import Item, Group, View, Label
 
 
 class Person( HasTraits ):
@@ -67,6 +67,7 @@ class Person( HasTraits ):
         Item(name = 'marital_status'),
         Item(name = 'registered_voter'),
         Item(name = 'military_service'),
+        '10',
         label        = 'Additional Info for adults',
         show_border  = True,
         enabled_when = 'age >= 18',
@@ -76,6 +77,9 @@ class Person( HasTraits ):
     view = View(
         Group(
             gen_group,
+            '10',
+            Label("Using 'enabled_when':"),
+            '10',
             child_group,
             adult_group
         ),

@@ -26,13 +26,12 @@ updated dynamically, Traits UI will not detect the change and the UI will not
 be reconfigured. This is due to architectural limitations of the current
 version of Traits UI.
 
-Compare this to the simpler, but less powerful demos of *enabled_when*
-and *visible_when*.
+Compare this to the simpler, but less powerful demo of *enabled_when*.
 """
 
 from traits.api import HasTraits, Str, Range, Enum, Bool, Instance
 
-from traitsui.api import Item, Group, View, Handler
+from traitsui.api import Item, Group, View, Handler, Label
 
 
 class Spec ( HasTraits ):
@@ -114,7 +113,13 @@ class Person ( HasTraits ):
 
     # A simple View is enough as long as the right handler is specified:
     view = View(
-        Group( gen_group, spec_group ),
+        Group( 
+            gen_group, 
+            '10',
+            Label("Using Instances and a Handler:"),
+            '10',
+            spec_group 
+            ),
         title     = 'Personal Information',
         buttons   = [ 'OK' ],
         resizable = True,

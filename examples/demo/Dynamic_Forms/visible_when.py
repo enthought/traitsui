@@ -16,11 +16,13 @@ Item or Group will be visible. The boolean expression is evaluated for the
 object being viewed, so that in this example, 'age' refers to the 'age'
 attribute of the Person being viewed.
 
-Compare this to very similar demo of *enabled_when*.
+Compare this to very similar demo of *enabled_when*, and the visually similar,
+but structurally very different demo of *dynamic restructuring of a user 
+interface using an Instance editor and a Handler*.
 """
 
 from traits.api import HasTraits, Str, Range, Bool, Enum
-from traitsui.api import Item, Group, View
+from traitsui.api import Item, Group, View, Label
 
 class Person(HasTraits):
     """ Example of restructuring a user interface by controlling visibility.
@@ -74,6 +76,9 @@ class Person(HasTraits):
     view = View(
         Group(
             gen_group,
+            '10',
+            Label("Using 'visible_when':"),
+            '10',
             child_group,
             adult_group
         ),
