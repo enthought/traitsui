@@ -3,6 +3,9 @@ A timer editor
 
 Display or edit a time.
 
+You can edit the time directly, or by using only the arrow keys (left & right
+to navigate, up & down to change).
+
 """
 import datetime
 
