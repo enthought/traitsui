@@ -55,7 +55,8 @@ class ShowArray(HasTraits):
               show_label = False,
               editor     = ArrayViewEditor(titles = [ 'x', 'y', 'z' ],
                                            format = '%.4f',
-                                           # font works in Windows, not OSX:
+                                           # Font fails with wx in OSX;
+                                           #   see traitsui issue #13:
                                            # font   = 'Arial 8'
                                           )
         ),
