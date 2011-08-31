@@ -54,8 +54,10 @@ class ShowArray(HasTraits):
         Item('data',
               show_label = False,
               editor     = ArrayViewEditor(titles = [ 'x', 'y', 'z' ],
-                                            format = '%.4f',
-                                            font   = 'Arial 8')
+                                           format = '%.4f',
+                                           # font works in Windows, not OSX:
+                                           # font   = 'Arial 8'
+                                          )
         ),
         title     = 'Array Viewer',
         width     = 0.3,
