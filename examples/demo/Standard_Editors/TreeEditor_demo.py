@@ -122,7 +122,7 @@ class Partner(HasTraits):
         resizable = True,
         style     = 'custom',
         width     = .3,
-        height    = .3
+        height    = 500
     )
 
 # Create an example data structure:
