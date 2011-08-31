@@ -72,7 +72,8 @@ class ReportAdapter(TabularAdapter):
                 ('Address', 'address'),
                 ('Spouse',  'spouse') ]
 
-    font                      = 'Courier 10'
+    # Font fails with wx in OSX; see traitsui issue #13:
+    # font                      = 'Courier 10'
     age_alignment             = Constant('right')
     MarriedPerson_age_image   = Property
     MarriedPerson_bg_color    = Color(0xE0E0FF)

@@ -23,7 +23,8 @@ class ArrayAdapter(TabularAdapter):
 
     columns = [('i', 'index'), ('x', 0), ('y', 1),  ('z', 2)]
 
-    font        = Font('Courier 10')
+    # Font fails with wx in OSX; see traitsui issue #13:
+    # font        = Font('Courier 10')
     alignment   = 'right'
     format      = '%.4f'
     index_text  = Property
