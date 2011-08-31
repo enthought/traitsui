@@ -15,7 +15,7 @@ becomes active again once all threads have finished running.
 from threading import Thread
 from time import sleep
 from traits.api import HasTraits, Int, Button
-from traitsui.api import View, Item
+from traitsui.api import View, Item, VGroup
 
 class ThreadDemo(HasTraits):
 
@@ -31,14 +31,18 @@ class ThreadDemo(HasTraits):
     running = Int
 
     view = View(
-        Item('thread_0', style = 'readonly'),
-        Item('thread_1', style = 'readonly'),
-        Item('thread_2', style = 'readonly'),
+        VGroup(
+            Item('thread_0', style = 'readonly'),
+            Item('thread_1', style = 'readonly'),
+            Item('thread_2', style = 'readonly'),
+        ),
         '_',
         Item('start', show_label = False,
              width = -90,
              enabled_when = 'running == 0' ),
-        resizable = True
+        resizable = True,
+        width = 250,
+        title = 'Monitoring threads'
     )
 
     def _start_changed(self):

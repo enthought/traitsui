@@ -46,7 +46,10 @@ class ThreadDemo(HasTraits):
                           show_label = False,
                           editor     = ListEditor(use_notebook = True,
                                                    dock_style   = 'tab')),
-        resizable=True
+        resizable = True,
+        width = 300,
+        height = 150,
+        title = 'Dynamic threads'
     )
 
     def __init__(self, **traits):
