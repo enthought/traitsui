@@ -123,11 +123,12 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         fvalue = self.value
 
         try:
+            if not (self.low <= fvalue <= self.high):
+                fvalue = self.low
             fvalue_text = self.format % fvalue
-            1 / (self.low <= fvalue <= self.high)
         except:
             fvalue_text = ''
-            fvalue      = low
+            fvalue      = self.low
 
         ivalue = self._convert_to_slider(fvalue)
 
