@@ -88,6 +88,7 @@ class FileInfoAdapter ( TabularAdapter ):
                 ( 'Date',      'date' ) ]
 
     even_bg_color  = ( 201, 223, 241 )
+    # FIXME: Font fails with wx in OSX; see traitsui issue #13:
     font           = Font('Courier 10')
     size_alignment = Str( 'right' )
     time_alignment = Str( 'right' )
