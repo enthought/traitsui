@@ -36,8 +36,8 @@ class MultiSelect(HasPrivateTraits):
     # FIXME (TraitsUI defect #14): When multi-select is done by keyboard 
     # (shift+arrow), the 'selected' trait list does not update.
     
-    # FIXME (TraitsUI defect #15): When show_titles is False, left table
-    # does not draw until selection passes through all rows.
+    # FIXME (TraitsUI defect #15): In Windows wx, when show_titles is False, 
+    # left table does not draw until selection passes through all rows.
     # (Workaround here: set show_titles True and make column titles empty.)
     
     choices  = List(Str)
