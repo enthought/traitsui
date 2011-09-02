@@ -2,30 +2,46 @@
 Creating a multi-select list box
 
 How to use a TabularEditor to create a multi-select list box.
+
+This demo uses two TabularEditors, side-by-side. Selections from the left table
+are shown in the right table. Each table has only one column.
+
 """
 
 from traits.api import HasPrivateTraits, List, Str, Property
-from traitsui.api import View, HGroup, Item, TabularEditor
+from traitsui.api import View, HGroup, UItem, TabularEditor
 from traitsui.tabular_adapter import TabularAdapter
 
 class MultiSelectAdapter(TabularAdapter):
+    """ This adapter is used by both the left and right tables
+    """
 
-    columns = [ ('Value', 'value') ]
+    # Titles and column names for each column of a table.
+    # In this example, each table has only one column.
+    columns = [ ('Value', 'myvalue') ]
 
-    value_text = Property
-
-    def _get_value_text(self):
+    # Magically named trait which gives the display text of the column named 
+    # 'myvalue'. This is done using a Traits Property and its getter:
+    myvalue_text = Property
+    
+    # The getter for Property 'myvalue_text' simply takes the value of the 
+    # corresponding item in the list being displayed in this table.
+    # A more complicated example could format the item before displaying it.
+    def _get_myvalue_text(self):
         return self.item
 
 class MultiSelect(HasPrivateTraits):
-
+    """ This is the class used to view two tables
+    """
+    # FIXME (TraitsUI defect #14): When multi-select is done by keyboard 
+    # (shift+arrow), the 'selected' trait list does not update.
+    
     choices  = List(Str)
     selected = List(Str)
-
+    
     view = View(
         HGroup(
-            Item('choices',
-                  show_label = False,
+            UItem('choices',
                   editor     = TabularEditor(
                                    show_titles  = False,
                                    selected     = 'selected',
@@ -33,8 +49,7 @@ class MultiSelect(HasPrivateTraits):
                                    multi_select = True,
                                    adapter      = MultiSelectAdapter())
             ),
-            Item('selected',
-                  show_label = False,
+            UItem('selected',
                   editor     = TabularEditor(
                                    show_titles  = False,
                                    editable     = False,
