@@ -18,7 +18,7 @@ class MultiSelectAdapter(TabularAdapter):
 
     # Titles and column names for each column of a table.
     # In this example, each table has only one column.
-    columns = [ ('Value', 'myvalue') ]
+    columns = [ ('', 'myvalue') ]
 
     # Magically named trait which gives the display text of the column named 
     # 'myvalue'. This is done using a Traits Property and its getter:
@@ -36,6 +36,10 @@ class MultiSelect(HasPrivateTraits):
     # FIXME (TraitsUI defect #14): When multi-select is done by keyboard 
     # (shift+arrow), the 'selected' trait list does not update.
     
+    # FIXME (TraitsUI defect #15): When show_titles is False, left table
+    # does not draw until selection passes through all rows.
+    # (Workaround here: set show_titles True and make column titles empty.)
+    
     choices  = List(Str)
     selected = List(Str)
     
@@ -43,7 +47,7 @@ class MultiSelect(HasPrivateTraits):
         HGroup(
             UItem('choices',
                   editor     = TabularEditor(
-                                   show_titles  = False,
+                                   show_titles  = True,
                                    selected     = 'selected',
                                    editable     = False,
                                    multi_select = True,
@@ -51,7 +55,7 @@ class MultiSelect(HasPrivateTraits):
             ),
             UItem('selected',
                   editor     = TabularEditor(
-                                   show_titles  = False,
+                                   show_titles  = True,
                                    editable     = False,
                                    adapter      = MultiSelectAdapter())
             )
