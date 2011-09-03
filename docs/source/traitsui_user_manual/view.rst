@@ -479,7 +479,7 @@ API Reference* for details.
 
 .. [3] If the code is being run from a program that already has a GUI defined,
    then use edit_traits() instead of configure_traits(). These methods are
-   discussed in more detail in Section 4.3.
+   discussed in more detail in :ref:`displaying-a-view`.
    
 .. [4] All code examples in this guide that include a file name are also
    available as examples in the :file:`tutorials/doc_examples/examples` 

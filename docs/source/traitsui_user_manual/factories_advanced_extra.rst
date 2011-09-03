@@ -1058,7 +1058,7 @@ children, through operations such as dragging and dropping, copying and pasting,
 or creating new objects. Two attributes control these operations: **add** and
 **move**. Both are lists of classes. The **add** attribute contains classes that
 can be added by any means, including creation. The code snippet in the preceding
-section (8.2.7.2.1) includes an example of the **add** attribute. The **move**
+section includes an example of the **add** attribute. The **move**
 attribute contains classes that can be dragged and dropped, but not created. The
 **move** attribute need not be specified if all classes that can be moved can
 also be created (and therefore are specified in the **add** value).

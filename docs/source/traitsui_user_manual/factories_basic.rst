@@ -8,8 +8,9 @@ The Predefined Trait Editor Factories
 This chapter contains individual descriptions of the predefined trait editor
 factories provided by TraitsUI. Most of these editor factories are
 straightforward and can be used easily with little or no expertise on the part
-of the programmer or end user; these are described in Section 10.1. Section 10.2
-(on page 91) covers a smaller set of specialized editors that have more complex
+of the programmer or end user; these are described in :ref:`basic-trait-editor-factories`.
+The section :ref:`advanced-trait-editors`
+covers a smaller set of specialized editors that have more complex
 interfaces or that are designed to be used along with complex editors.
 
 .. NOTE:: Examples are toolkit-specific.
@@ -20,7 +21,7 @@ interfaces or that are designed to be used along with complex editors.
 
 Rather than trying to memorize all the information in this chapter, you might
 skim it to get a general idea of the available trait editors and their
-capabilities, and to use it as a reference thereafter.
+capabilities, and use it as a reference thereafter.
 
 .. _basic-trait-editor-factories:
 
