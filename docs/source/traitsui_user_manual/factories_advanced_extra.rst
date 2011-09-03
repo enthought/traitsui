@@ -269,7 +269,7 @@ see :ref:`seteditor`.) Any columns that were specified in the *other_columns*
 parameter are listed in the left list box of this dialog box, and can be
 displayed by moving them into the right list box.
 
-.. |preferences_icon| image:: images/table_prefs.gif
+.. |preferences_icon| image:: images/table_prefs.png
  
 .. figure:: images/table_column_selection.jpg
    :alt: Dialog box with two list boxes for selecting column names
@@ -299,9 +299,9 @@ If the *reorderable* parameter is True, :guilabel:`Move up` (|move_up_icon|) and
 :guilabel:`Move down` (|move_down_icon|) icons appear in the table toolbar. Clicking one of
 these icons changes the position of the selected item.
 
-.. |move_up_icon| image:: images/move_up_icon.gif
+.. |move_up_icon| image:: images/move_up_icon.png
 
-.. |move_down_icon| image:: images/move_down_icon.gif
+.. |move_down_icon| image:: images/move_down_icon.png
 
 If the *sortable* parameter is True (the default), then the user can sort the
 items in the table based on the values in a column by Control-clicking the
@@ -324,7 +324,7 @@ If *sortable* is True and *sort_model* is False, then a
 :guilabel:`Do not sort columns` icon (|no_sort_icon|) appears in the table 
 toolbar. Clicking this icon restores the original sort order. 
 
-.. |no_sort_icon| image:: images/no_sort_icon.gif
+.. |no_sort_icon| image:: images/no_sort_icon.png
 
 If the *reverse* parameter is True, then the items in the underlying list are
 maintained in the reverse order of the items in the table (regardless of whether
@@ -372,7 +372,7 @@ table toolbar. Clicking this icon opens a :guilabel:`Search for` dialog box,
 which enables the user to specify filter criteria, to browse through matching
 items, or select all matching items.
 
-.. |search_table_icon| image:: images/search_table_icon.gif
+.. |search_table_icon| image:: images/search_table_icon.png
 
 .. TODO: Add a screenshot of the dialog when it actually works
 
@@ -454,7 +454,7 @@ the table; for example, the class of the objects in the table. When
 the table. Optionally, you can use *row_factory_args* and *row_factory_kw* to
 specify positional and keyword arguments to the row factory callable.
 
-.. |insert_item_icon| image:: images/insert_item_icon.gif
+.. |insert_item_icon| image:: images/insert_item_icon.png
 
 To save users the trouble of mousing to the toolbar, you can enable them to add
 an item by selecting the last row in the table. To do this, set *auto_add* to
@@ -473,7 +473,7 @@ is not False, a :guilabel:`Delete current item` icon (|delete_item_icon|) appear
 toolbar; clicking it deletes the item corresponding to the row that is selected
 in the table.
 
-.. |delete_item_icon| image:: images/delete_item_icon.gif
+.. |delete_item_icon| image:: images/delete_item_icon.png
 
 .. _modifying-items:
 
@@ -730,7 +730,7 @@ You must specify the types of nodes that can appear in the tree using the
 *nodes* parameter, which must be a list of instances of TreeNode (or of
 subclasses of TreeNode).
 
-.. figure:: images/tree_editor.gif
+.. figure:: images/tree_editor.png
    :alt: Tree control with instance editor pane
    
    Figure 54: Tree editor
@@ -1362,7 +1362,7 @@ read-only.
 The *alignment* parameter can be 'left', 'center', or 'right' to indicate how
 the value should be aligned within the display. The default is right-alignment.
 
-.. figure:: images/led_editor.gif
+.. figure:: images/led_editor.png
    :alt: LED-like display of 90452
    
    Figure 56: LED Editor with right alignment
@@ -1381,7 +1381,7 @@ ThemedButtonEditor()
 The ThemedButtonEditor() factory generates a button that is formatted according
 to specified or default themes. All editor styles have the same appearance.
 
-.. figure:: images/themed_button_editor.gif
+.. figure:: images/themed_button_editor.png
    :alt: Themed buttons for normal, hover, down, and disabled states
    
    Figure 57: Themed buttons in various states
@@ -1404,7 +1404,7 @@ The ThemedCheckboxEditor() factory generates a checkbox that is formatted
 according to specified or default themes. All editor styles have the same
 appearance.
 
-.. figure:: images/themed_checkbox_editor.gif
+.. figure:: images/themed_checkbox_editor.png
    :alt: Themed checkbox for On, Off, Hover Off, and Hover On states
    
    Figure 58: Themed checkbox in various states
@@ -1434,10 +1434,10 @@ range represented by a slider. For example, if the range is from -2 to 2, a
 value of 0 is represented by a bar covering the left half of the control area,
 as shown in Figure 59.
 
-.. image:: images/themed_slider_no_focus.gif
+.. image:: images/themed_slider_no_focus.png
    :alt: Themed box with shading in the left half and a vertical orange bar in the middle
    
-.. figure:: images/themed_slide_with_focus.gif
+.. figure:: images/themed_slide_with_focus.png
    :alt: Themed box with the value 0 selected in the center
    
    Figure 59: Themed slider without focus, and with focus
@@ -1459,10 +1459,10 @@ theme, if any, specified by the surrounding Group or View. Thus, there is no
 default theme. All editor styles have the same appearance, except the read-only
 style, which is not editable.
 
-.. image:: images/themed_text_editor_no_focus.gif
+.. image:: images/themed_text_editor_no_focus.png
    :alt: Themed text editor, displaying text ``a*x*x-b*x``
    
-.. figure:: images/themed_text_editor_with_focus.gif
+.. figure:: images/themed_text_editor_with_focus.png
    :alt: Themed text editor, with text ``a*x*x-b*x`` selected
    
    Figure 60: Themed text editor, without focus and with focus
@@ -1484,13 +1484,13 @@ lists of instances, similarly to the ListEditor() factory, with the
 *use_notebook* parameter. You can specify themes to use for the open and closed
 states of the tabs.
 
-.. figure:: images/themed_notebook_closed.gif
+.. figure:: images/themed_notebook_closed.png
    :alt: Stacked boxes displaying names as labels
    
    Figure 61: Themed vertical notebook, with tabs for Person instances closed
 
 
-.. figure:: images/themed_notebook_open.gif
+.. figure:: images/themed_notebook_open.png
    :alt: Stacked boxes, with one expanded to show themed text editors
    
    Figure 62: Themed vertical notebook, with one tab open
