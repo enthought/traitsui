@@ -123,6 +123,7 @@ class Person ( HasTraits ):
         title     = 'Personal Information',
         buttons   = [ 'OK' ],
         resizable = True,
+        width = 300,
         handler   = PersonHandler()
     )
 
