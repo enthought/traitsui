@@ -65,6 +65,8 @@ class ApplyRevertDemo(HasTraits):
                 )
             )
         ),
+        resizable = True,
+        height = 300,
         title   = 'Apply/Revert example',
         buttons = [ 'Apply', 'Revert' ],
         kind    = 'modal',
