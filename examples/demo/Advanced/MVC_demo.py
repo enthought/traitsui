@@ -1,5 +1,5 @@
 """
-Supporting the Model/View/Controller (MVC) pattern
+Supporting Model/View/Controller (MVC) pattern
 
 Demonstrates one approach to writing Model/View/Controller (MVC)-based
 applications using Traits UI.

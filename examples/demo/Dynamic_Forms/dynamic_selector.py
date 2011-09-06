@@ -1,5 +1,5 @@
 """
-Dynamic changing of a selection list, using a Handler
+Dynamic changing a selection list, using Handler
 
 One way to dynamically change the list of values shown by an EnumEditor.
 

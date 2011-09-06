@@ -1,5 +1,5 @@
 """
-Starting and monitoring a dynamic number of threads
+Monitoring a dynamic number of threads
 
 Shows a simple user interface being updated by a dynamic number of threads.
 

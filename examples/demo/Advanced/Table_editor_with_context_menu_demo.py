@@ -1,5 +1,5 @@
 """
-Defining a column-specific context menu in a Table
+Defining column-specific context menu in a Table
 
 Shows a TableEditor which has column-specific context menus.
 

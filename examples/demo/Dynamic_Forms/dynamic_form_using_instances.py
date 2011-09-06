@@ -1,5 +1,5 @@
 """
-Dynamic restructuring of a user interface using an Instance editor and a Handler
+Dynamic restructuring a user interface using Instance editor and Handler
 
 How to dynamically change the *structure* of a user interface (not merely which
 components are visible), depending on the value of another trait.

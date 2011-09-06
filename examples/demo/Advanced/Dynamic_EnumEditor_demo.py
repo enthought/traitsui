@@ -1,5 +1,5 @@
 """
-Dynamic changing of a Enum selection list, depending on checked items
+Dynamic changing an Enum selection list, depending on checked items
 
 Another way to dynamically change the values shown by an EnumEditor.
 

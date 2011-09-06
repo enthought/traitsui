@@ -1,5 +1,5 @@
 """
-Creating a settable cached Property in Traits
+Creating settable cached Property in Traits
 
 How to create a Traits Property which is cached but is not read-only.
 

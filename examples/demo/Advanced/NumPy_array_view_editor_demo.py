@@ -1,5 +1,5 @@
 """
-Using the ArrayViewEditor to display large NumPy arrays in a table.
+Using ArrayViewEditor to display large NumPy arrays in a table.
 
 This example displays 100,000 random 3D points from a unit cube.
 
