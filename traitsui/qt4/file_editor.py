@@ -136,7 +136,7 @@ class SimpleEditor ( SimpleTextEditor ):
         dlg.selectFile(self._file_name.text())
 
         if len(self.factory.filter) > 0:
-            dlg.setFilters(self.factory.filter)
+            dlg.setNameFilters(self.factory.filter)
 
         return dlg
 
