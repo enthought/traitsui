@@ -261,10 +261,7 @@ class SimpleEditor ( Editor ):
             if self.factory.hide_root:
                 nid = tree.invisibleRootItem()
             else:
-                nid = QtGui.QTreeWidgetItem(tree)
-                nid.setText(0, node.get_label(object))
-                nid.setIcon(0, self._get_icon(node, object))
-                nid.setToolTip(0, node.get_tooltip(object))
+                nid = self._create_item(tree, node, object)
 
             self._map[ id( object ) ] = [ ( node.get_children_id(object), nid ) ]
             self._add_listeners( node, object )
@@ -287,6 +284,67 @@ class SimpleEditor ( Editor ):
         """
         return self._tree
 
+
+    #---------------------------------------------------------------------------
+    #  Private Delegate class to do drawing in case of wrapped text labels
+    #---------------------------------------------------------------------------
+
+    class ItemDelegate(QtGui.QStyledItemDelegate):
+        """ A delegate class to draw wrapped text labels """
+
+        def sizeHint(self, option, index):
+            """ returns area taken by the text based on the tree width """
+            item = self.editor._tree.itemFromIndex(index)
+            expanded, node, object = self.editor._get_node_data(item)
+            text = node.get_label(object)
+            fm = self.editor._tree.fontMetrics()
+            bounding_rect = fm.boundingRect(0,0,self.editor._tree.width(),1000,
+                                            QtCore.Qt.TextWordWrap, text)
+            return bounding_rect.size()
+
+        def paint(self, painter, option, index):
+            """ Do the actual drawing of the text """
+            # For icon and highlights during selection etc
+            super(self.__class__, self).paint(painter, option, index)
+
+            item = self.editor._tree.itemFromIndex(index)
+            expanded, node, object = self.editor._get_node_data(item)
+            text = node.get_label(object)
+            textrect = option.rect
+            if self.editor.factory.show_icons:
+                iconwidth = 24 # FIXME: get width from actual
+            else:
+                iconwidth = 0
+            rect = painter.drawText(option.rect.left() + iconwidth,
+                                    option.rect.top(),
+                                    option.rect.width() - iconwidth,
+                                    option.rect.height(),
+                                    QtCore.Qt.TextWordWrap, text)
+
+
+    #---------------------------------------------------------------------------
+    #  Create a TreeWidgetItem as per word wrap policy and set icon,tooltip
+    #---------------------------------------------------------------------------
+
+    def _create_item(self, nid, node, object ):
+        """ create  a new TreeWidgetItem as per word_wrap policy """
+        cnid = QtGui.QTreeWidgetItem(nid)
+        if self.factory.word_wrap:
+            item = self.ItemDelegate()
+            item.editor = self
+            self._tree.setItemDelegate(item)
+        else:
+            cnid.setText(0, node.get_label(object))
+        cnid.setIcon(0, self._get_icon(node, object))
+        cnid.setToolTip(0, node.get_tooltip(object))
+        return cnid
+
+    def _set_label(self, nid, text, col=0):
+        """ Set the label of the specified item """
+        if not self.factory.word_wrap or col!=0:
+            expanded, node, object = self._get_node_data(nid)
+            nid.setText(col, node.get_label(object))
+
     #---------------------------------------------------------------------------
     #  Appends a new node to the specified node:
     #---------------------------------------------------------------------------
@@ -294,10 +352,7 @@ class SimpleEditor ( Editor ):
     def _append_node ( self, nid, node, object ):
         """ Appends a new node to the specified node.
         """
-        cnid = QtGui.QTreeWidgetItem(nid)
-        cnid.setText(0, node.get_label(object))
-        cnid.setIcon(0, self._get_icon(node, object))
-        cnid.setToolTip(0, node.get_tooltip(object))
+        cnid = self._create_item(nid, node, object)
 
         has_children = self._has_children(node, object)
         self._set_node_data( cnid, ( False, node, object ) )
@@ -1276,7 +1331,7 @@ class SimpleEditor ( Editor ):
             if new_label != '':
                 node.set_label(object, new_label)
             else:
-                nid.setText(col, old_label)
+                self._set_label(nid, old_label, col)
 
     #---------------------------------------------------------------------------
     #  Adds a new object to the current node:
@@ -1383,7 +1438,7 @@ class SimpleEditor ( Editor ):
             if nid not in nids:
                 nids[ nid ] = None
                 node = self._get_node_data( nid )[1]
-                nid.setText(0, node.get_label(object))
+                self._set_label(nid, node.get_label(object), 0)
                 self._update_icon(nid)
 
         self._tree.blockSignals(blk)
@@ -1443,26 +1498,25 @@ class _TreeWidget(QtGui.QTreeWidget):
         if editor.factory.selection_mode == 'extended':
             self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
 
-        self.connect(self, QtCore.SIGNAL('itemExpanded(QTreeWidgetItem *)'),
-                editor._on_item_expanded)
-        self.connect(self, QtCore.SIGNAL('itemCollapsed(QTreeWidgetItem *)'),
-                editor._on_item_collapsed)
-        self.connect(self,
-                QtCore.SIGNAL('itemClicked(QTreeWidgetItem *, int)'),
-                editor._on_item_clicked)
-        self.connect(self,
-                QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem *, int)'),
-                editor._on_item_dclicked)
-        self.connect(self, QtCore.SIGNAL('itemSelectionChanged()'),
-                editor._on_tree_sel_changed)
-        self.connect(self, QtCore.SIGNAL('customContextMenuRequested(QPoint)'),
-                editor._on_context_menu)
-        self.connect(self,
-                QtCore.SIGNAL('itemChanged(QTreeWidgetItem *, int)'),
-                editor._on_nid_changed)
+        self.itemExpanded.connect(editor._on_item_expanded)
+        self.itemCollapsed.connect(editor._on_item_collapsed)
+        self.itemClicked.connect(editor._on_item_clicked)
+        self.itemDoubleClicked.connect(editor._on_item_dclicked)
+        self.itemSelectionChanged.connect(editor._on_tree_sel_changed)
+        self.customContextMenuRequested.connect(editor._on_context_menu)
+        self.itemChanged.connect(editor._on_nid_changed)
 
         self._editor = editor
         self._dragging = None
+
+    def resizeEvent(self, event):
+        """ Overridden to emit sizeHintChanged() of items for word wrapping """
+        if self._editor.factory.word_wrap:
+            for i in range(self.topLevelItemCount()):
+                mi = self.indexFromItem(self.topLevelItem(i))
+                id = self.itemDelegate(mi)
+                id.sizeHintChanged.emit(mi)
+        super(self.__class__, self).resizeEvent(event)
 
     def startDrag(self, actions):
         """ Reimplemented to start the drag of a tree widget item.

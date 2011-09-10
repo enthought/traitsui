@@ -134,6 +134,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     lines_mode = Enum ( 'appearance', 'on', 'off' )
     # FIXME: Document as unimplemented or wx specific.
 
+    # Whether the labels should be wrapped around, if not an ellipsis is shown
+    # This works only in the qt backend and if there is only one column in tree
+    word_wrap = Bool(False)
 
 # Define the TreeEditor class.
 TreeEditor = ToolkitEditorFactory
