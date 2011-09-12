@@ -230,7 +230,6 @@ class SimpleEditor ( Editor ):
         values  = [ v for v in self.value if v in mapping ]
         if len( values ) < len( self.value ):
             self.value = values
-            return
 
         # Get a list of the selected items in the right box:
         used        = self._used
