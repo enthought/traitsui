@@ -256,8 +256,9 @@ class SimpleEditor ( BaseEditor ):
 
     def update_autoset_text_object(self):
         # Don't get the final text with the editingFinished signal
-        text = self.control.lineEdit().text()
-        return self.update_text_object(text)
+        if self.control:
+            text = self.control.lineEdit().text()
+            return self.update_text_object(text)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
