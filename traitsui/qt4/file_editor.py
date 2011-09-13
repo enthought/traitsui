@@ -192,6 +192,9 @@ class CustomEditor ( SimpleTextEditor ):
         model.setFilter(QtCore.QDir.AllDirs | QtCore.QDir.Files |
                         QtCore.QDir.Drives | QtCore.QDir.NoDotAndDotDot)
 
+        # Hide filtered out files instead of only disabling them
+        self._model.setNameFilterDisables(False)
+
         # Show the full filesystem by default.
         model.setRootPath(QtCore.QDir.rootPath())
 
