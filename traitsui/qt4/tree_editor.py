@@ -17,6 +17,7 @@
 #-------------------------------------------------------------------------------
 
 import copy
+import collections
 
 from pyface.qt import QtCore, QtGui
 
@@ -187,7 +188,18 @@ class SimpleEditor ( Editor ):
         """ Handles the **selection** event.
         """
         try:
-            self._tree.setCurrentItem(self._object_info(selection)[2])
+            if (not isinstance(selection, basestring) and 
+                isinstance(selection, collections.Iterable)):
+                # clear current selection
+                self._tree.blockSignals(True)
+                self._tree.clearSelection()
+                if sel in selection:
+                    tree_item = self._object_info(sel)[2]
+                    tree_item.setSelected(True)
+                self._tree.blockSignals(False)
+                self._tree.itemSelectionChanged.emit()
+            else:
+                self._tree.setCurrentItem(self._object_info(selection)[2])
         except:
             pass
 
@@ -254,6 +266,11 @@ class SimpleEditor ( Editor ):
         tree = self._tree
         saved_state = {}
 
+        object, node = self._node_for( self.old_value )
+        old_nid = self._get_object_nid( object, node.get_children_id(object) )
+        if old_nid:
+            self._delete_node(old_nid)
+            
         tree.clear()
 
         object, node = self._node_for( self.value )
