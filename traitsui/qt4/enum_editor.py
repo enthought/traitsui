@@ -191,9 +191,14 @@ class SimpleEditor ( BaseEditor ):
 
         if self.factory.evaluate is not None:
             control.setEditable(True)
-            QtCore.QObject.connect(control,
-                                   QtCore.SIGNAL('editTextChanged(QString)'),
-                                   self.update_text_object)
+            if self.factory.auto_set:
+                QtCore.QObject.connect(control,
+                                       QtCore.SIGNAL('editTextChanged(QString)'),
+                                       self.update_text_object)
+            else:
+                QtCore.QObject.connect(control,
+                                       QtCore.SIGNAL('editingFinished()'),
+                                       self.update_autoset_text_object)
 
         self._no_enum_update = 0
         self.set_tooltip()
@@ -248,6 +253,12 @@ class SimpleEditor ( BaseEditor ):
             self.value = value
             self._set_background(OKColor)
             self._no_enum_update -= 1
+
+    def update_autoset_text_object(self):
+        # Don't get the final text with the editingFinished signal
+        if self.control:
+            text = self.control.lineEdit().text()
+            return self.update_text_object(text)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
