@@ -188,18 +188,20 @@ class SimpleEditor ( Editor ):
         """ Handles the **selection** event.
         """
         try:
+            tree = self._tree
             if (not isinstance(selection, basestring) and 
                 isinstance(selection, collections.Iterable)):
-                # clear current selection
-                self._tree.blockSignals(True)
-                self._tree.clearSelection()
-                if sel in selection:
-                    tree_item = self._object_info(sel)[2]
-                    tree_item.setSelected(True)
-                self._tree.blockSignals(False)
-                self._tree.itemSelectionChanged.emit()
+                
+                item_selection = QtGui.QItemSelection()
+                for sel in selection:
+                    item = self._object_info(sel)[2]
+                    idx = tree.indexFromItem(item)
+                    item_selection.append(QtGui.QItemSelectionRange(idx))
+                
+                tree.selectionModel().select(item_selection,
+                    QtGui.QItemSelectionModel.ClearAndSelect)
             else:
-                self._tree.setCurrentItem(self._object_info(selection)[2])
+                tree.setCurrentItem(self._object_info(selection)[2])
         except:
             pass
 
