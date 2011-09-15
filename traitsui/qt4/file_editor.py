@@ -82,7 +82,15 @@ class SimpleEditor ( SimpleTextEditor ):
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
-        self._update(unicode(self._file_name.text()))
+        if self.control is not None:
+            file_name = unicode(self._file_name.text())
+            try:
+                if self.factory.truncate_ext:
+                    file_name = splitext( file_name )[0]
+
+                self.value = file_name
+            except TraitError, excp:
+                pass
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -139,17 +147,6 @@ class SimpleEditor ( SimpleTextEditor ):
             dlg.setNameFilters(self.factory.filter)
 
         return dlg
-
-    def _update ( self, file_name ):
-        """ Updates the editor value with a specified file name.
-        """
-        try:
-            if self.factory.truncate_ext:
-                file_name = splitext( file_name )[0]
-
-            self.value = file_name
-        except TraitError, excp:
-            pass
 
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:
