@@ -406,7 +406,7 @@ class CustomEditor ( SimpleTextEditor ):
     def _on_dclick ( self, event ):
         """ Handles the user double-clicking on a file name.
         """
-        self.dclick = True
+        self.dclick = self.control.GetPath()
 
     #---------------------------------------------------------------------------
     #  Handles the 'reload' trait being changed:

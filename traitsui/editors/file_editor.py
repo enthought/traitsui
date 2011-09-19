@@ -87,7 +87,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     reload_name = Str
 
     # Optional extended trait name used to notify when the user double-clicks
-    # an entry in the file tree view:
+    # an entry in the file tree view. The associated path is assigned it:
     dclick_name = Str
 
     # The style of file dialog to use when the 'Browse...' button is clicked
