@@ -268,7 +268,7 @@ class CustomEditor ( SimpleTextEditor ):
     def _on_dclick ( self, idx ):
         """ Handles the user double-clicking on a file name.
         """
-        self.dclick = True
+        self.dclick = unicode(self._model.filePath(idx))
 
     #---------------------------------------------------------------------------
     #  Handles the 'reload' trait being changed:
