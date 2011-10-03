@@ -297,6 +297,13 @@ class _TreeView(QtGui.QTreeView):
         self.doubleClicked.connect(editor._on_dclick)
         self._editor = editor
 
+    def keyPressEvent(self, keyevent):
+        key = keyevent.key()
+        if key == QtCore.Qt.Key_Return or key == QtCore.Qt.Key_Enter:
+            self._editor._on_dclick(self.selectedIndexes()[0])
+            keyevent.accept()
+        QtGui.QTreeView.keyPressEvent(self, keyevent)
+
     def currentChanged(self, current, previous):
         """ Reimplemented to tell the editor when the current index has changed.
         """
