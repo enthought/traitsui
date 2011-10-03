@@ -26,6 +26,7 @@ from traits.api import List, Event, File, Unicode, TraitError
 # traitsui.editors.file_editor file.
 from traitsui.editors.file_editor import ToolkitEditorFactory
 from text_editor import SimpleEditor as SimpleTextEditor
+from helper import IconButton
 
 #-------------------------------------------------------------------------------
 #  Trait definitions:
@@ -67,11 +68,8 @@ class SimpleEditor ( SimpleTextEditor ):
             signal = QtCore.SIGNAL('editingFinished()')
         QtCore.QObject.connect(control, signal, self.update_object)
 
-        button = QtGui.QPushButton("Browse...")
+        button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
         layout.addWidget(button)
-
-        QtCore.QObject.connect(button, QtCore.SIGNAL('clicked()'),
-                               self.show_file_dialog)
 
         self.set_tooltip(control)
 

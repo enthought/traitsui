@@ -100,7 +100,10 @@ class SimpleEditor ( SimpleTextEditor ):
             if factory.auto_set:
                 wx.EVT_TEXT( panel, control.GetId(), self.update_object )
 
-            button = wx.Button( panel, -1, 'Browse...' )
+            bmp    = wx.ArtProvider.GetBitmap( wx.ART_FOLDER_OPEN,
+                                               size = ( 15, 15 ) )
+            button = wx.BitmapButton( panel, -1, bitmap = bmp )
+            
             pad    = 8
 
         self._file_name = control
