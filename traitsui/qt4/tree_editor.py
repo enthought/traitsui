@@ -22,6 +22,7 @@ import collections
 from pyface.qt import QtCore, QtGui
 
 from pyface.resource_manager import resource_manager
+from pyface.timer.api import do_later
 from traits.api import Any, Event
 from traits.trait_base import enumerate
 from traitsui.api import TreeNode, ObjectTreeNode, MultiTreeNode
@@ -311,15 +312,13 @@ class SimpleEditor ( Editor ):
     class ItemDelegate(QtGui.QStyledItemDelegate):
         """ A delegate class to draw wrapped text labels """
 
+        def __init__(self, *args, **kwargs):
+            self.size_map = collections.defaultdict(lambda:QtCore.QSize(1,21))
+            QtGui.QStyledItemDelegate.__init__(self, *args, **kwargs)
+
         def sizeHint(self, option, index):
-            """ returns area taken by the text based on the tree width """
-            item = self.editor._tree.itemFromIndex(index)
-            expanded, node, object = self.editor._get_node_data(item)
-            text = node.get_label(object)
-            fm = self.editor._tree.fontMetrics()
-            bounding_rect = fm.boundingRect(0,0,self.editor._tree.width(),1000,
-                                            QtCore.Qt.TextWordWrap, text)
-            return bounding_rect.size()
+            """ returns area taken by the text. """
+            return self.size_map[self.editor._tree.itemFromIndex(index)]
 
         def paint(self, painter, option, index):
             """ Do the actual drawing of the text """
@@ -339,6 +338,10 @@ class SimpleEditor ( Editor ):
                                     option.rect.width() - iconwidth,
                                     option.rect.height(),
                                     QtCore.Qt.TextWordWrap, text)
+            # Need to set the appropriate sizeHint of the item.
+            if self.size_map[item] != rect.size():
+                self.size_map[item] = rect.size()
+                do_later(self.sizeHintChanged.emit, index)
 
 
     #---------------------------------------------------------------------------
