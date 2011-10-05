@@ -311,6 +311,12 @@ class SimpleEditor ( Editor ):
 
     class ItemDelegate(QtGui.QStyledItemDelegate):
         """ A delegate class to draw wrapped text labels """
+        # FIXME: sizeHint() should return the size required by the label,
+        # which is dependent on the width available, which is different for
+        # each item due to the nested tree structure. However the option.rect
+        # argument available to the sizeHint() is invalid (width=-1) so as a
+        # hack sizeHintChanged is emitted in paint() and the size of drawn
+        # text is returned, as paint() gets a valid option.rect argument.
 
         def __init__(self, *args, **kwargs):
             self.size_map = collections.defaultdict(lambda:QtCore.QSize(1,21))
