@@ -325,8 +325,9 @@ class CustomEditor ( SimpleTextEditor ):
         self.control = wx.GenericDirCtrl( parent, style = style )
         self._tree   = tree = self.control.GetTreeCtrl()
         id           = tree.GetId()
-        wx.EVT_TREE_SEL_CHANGED(    tree, id, self.update_object )
-        wx.EVT_TREE_ITEM_ACTIVATED( tree, id, self._on_dclick )
+        wx.EVT_TREE_SEL_CHANGED(     tree, id, self.update_object )
+        wx.EVT_TREE_ITEM_ACTIVATED(  tree, id, self._on_dclick )
+        wx.EVT_TREE_ITEM_GETTOOLTIP( tree, id, self._on_tooltip )
 
         self.filter = factory.filter
         self.sync_value( factory.filter_name, 'filter', 'from', is_list = True )
@@ -407,6 +408,16 @@ class CustomEditor ( SimpleTextEditor ):
         """ Handles the user double-clicking on a file name.
         """
         self.dclick = self.control.GetPath()
+
+    #---------------------------------------------------------------------------
+    #  Handles the user hovering on a file name for a tooltip:
+    #---------------------------------------------------------------------------
+
+    def _on_tooltip ( self, event ):
+        """ Handles the user hovering on a file name for a tooltip.
+        """
+        text = self._tree.GetItemText(event.GetItem())
+        event.SetToolTip(text)
 
     #---------------------------------------------------------------------------
     #  Handles the 'reload' trait being changed:
