@@ -296,6 +296,19 @@ class _TreeView(QtGui.QTreeView):
         super(_TreeView, self).__init__()
         self.doubleClicked.connect(editor._on_dclick)
         self._editor = editor
+        
+    def event(self, event): 
+        if event.type() == QtCore.QEvent.ToolTip:
+            index = self.indexAt(event.pos())
+            if index and index.isValid():
+                QtGui.QToolTip.showText(event.globalPos(), index.data(), self)
+            else:
+                QtGui.QToolTip.hideText()
+                event.ignore()
+                                
+            return True
+            
+        return super(_TreeView, self).event(event)
 
     def keyPressEvent(self, keyevent):
         key = keyevent.key()
