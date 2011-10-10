@@ -47,6 +47,7 @@ class SimpleEditor ( SimpleFileEditor ):
         dlg = QtGui.QFileDialog(self.control)
         dlg.selectFile(self._file_name.text())
         dlg.setFileMode(QtGui.QFileDialog.Directory)
+        dlg.setOptions(QtGui.QFileDialog.ShowDirsOnly)
 
         return dlg
 
