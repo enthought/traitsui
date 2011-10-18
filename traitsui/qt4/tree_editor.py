@@ -18,6 +18,7 @@
 
 import copy
 import collections
+import logging
 
 from pyface.qt import QtCore, QtGui
 
@@ -32,7 +33,11 @@ from traitsui.menu import Menu, Action, Separator
 
 from clipboard import clipboard, PyMimeData
 from editor import Editor
-from helper import open_fbi, pixmap_cache
+# Commenting out the open_fbi function because deprecated and not toolkit 
+# independent
+from helper import pixmap_cache #open_fbi, 
+
+logger = logging.getLogger(__name__)
 
 #-------------------------------------------------------------------------------
 #  The core tree node menu actions:
@@ -1267,8 +1272,12 @@ class SimpleEditor ( Editor ):
             try:
                 if not eval( condition, globals(), self._context ):
                     value = False
-            except:
-                open_fbi()
+            except Exception as e:
+                logger.warning("Exception (%s) raised when evaluating the "
+                               "condition %s. Returning True." % (e,condition))
+                # Removing this call because function deprecated and not 
+                # toolkit independent.
+                #open_fbi()
             setattr( object, trait, value )
 
 #----- Menu event handlers: ----------------------------------------------------
