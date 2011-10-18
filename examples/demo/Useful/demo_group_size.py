@@ -16,7 +16,7 @@ This demo includes a simple Chaco plot for variety, but it is not a Chaco demo.
 from numpy import linspace, pi, sin
 from traits.api import HasTraits, Instance, Str, Int
 # UItem is Unlabeled Item
-from traitsui.api import View, Item, UItem, HSplit, InstanceEditor, Item, \
+from traitsui.api import View, Item, UItem, HSplit, InstanceEditor, \
      VGroup, HGroup
 from chaco.api import Plot, AbstractPlotData, ArrayPlotData
 from enable.component_editor import ComponentEditor
@@ -64,11 +64,9 @@ class BigView(HasTraits):
     vertical bar and a plot under an integer) whose relative sizes we wish
     to control explicitly. If these were simply defined as Groups, we could 
     not control their sizes. But by extracting them as separate classes with
-    their own views.
-    separate views
+    their own views, the resizing becomes possible, because they are loaded
+    as Items now.
     """
-    a = Str('abcdefg')
-    b = Int(123)
     bar = Instance(VerticalBar, ())
     plot = Instance(PlotView)
     view = View(
