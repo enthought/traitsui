@@ -1045,7 +1045,13 @@ class TabularEditor ( Editor ):
             for row in selected:
                 delete( self.object, self.name, row )
 
-            self.row = row
+            n = self.adapter.len( self.object, self.name )
+            if not self.factory.multi_select:
+                self.selected_row = self.row = n-1 if row>=n else row
+            else:
+                #FIXME: What should the selection be?
+                self.multi_selected = []
+                self.multi_selected_rows = []
 
     def _move_up_current ( self ):
         """ Moves the currently selected item up one line in the list control.

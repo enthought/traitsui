@@ -197,11 +197,16 @@ class TabularModel(QtCore.QAbstractTableModel):
         """
         editor = self._editor
         adapter = editor.adapter
-
         self.beginRemoveRows(parent, row, row + count - 1)
         for i in xrange(count):
             editor.callx(adapter.delete, editor.object, editor.name, row)
         self.endRemoveRows()
+        n = self.rowCount(None)
+        if not editor.factory.multi_select:
+            editor.selected_row = row if row < n else row-1
+        else:
+            #FIXME: what should the selection be?
+            editor.multi_selected_rows = []
         return True
 
     def mimeTypes(self):
