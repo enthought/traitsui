@@ -219,6 +219,9 @@ class Editor ( UIEditor ):
             control = [ control ]
 
         for item in control:
+            if item is None:
+                continue
+
             pal = QtGui.QPalette(item.palette())
 
             if state:
