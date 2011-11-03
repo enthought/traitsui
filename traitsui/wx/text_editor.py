@@ -108,6 +108,7 @@ class SimpleEditor ( Editor ):
             wx.EVT_TEXT( parent, control.GetId(), self.update_object )
 
         self.control = control
+        self.set_error_state( False )
         self.set_tooltip()
 
     #---------------------------------------------------------------------------
