@@ -136,6 +136,12 @@ class ToolkitEditorFactory ( EditorFactory ):
     # * 'off': Don't show lines.
     lines_mode = Enum ( 'appearance', 'on', 'off' )
     # FIXME: Document as unimplemented or wx specific.
+    # Whether to alternate row colors or not.
+    alternating_row_colors = Bool(False)
+
+    # Any extra vertical padding to add.
+    vertical_padding = Int(0)
+
 
     # Whether the labels should be wrapped around, if not an ellipsis is shown
     # This works only in the qt backend and if there is only one column in tree

@@ -1582,6 +1582,16 @@ class _TreeWidget(QtGui.QTreeWidget):
         else:
             self.setHeaderHidden(True)
 
+        self.setAlternatingRowColors(editor.factory.alternating_row_colors)
+        padding = editor.factory.vertical_padding
+        if padding > 0:
+            self.setStyleSheet("""
+            QTreeView::item {
+                padding-top: %spx;
+                padding-bottom: %spx;
+            }
+            """ % (padding, padding))
+
         if editor.factory.selection_mode == 'extended':
             self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
 
