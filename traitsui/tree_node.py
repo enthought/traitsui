@@ -30,7 +30,7 @@ from traits.api import (AdaptedTo, Adapter, Any, Bool, Callable, Either,
 
 from traits.trait_base import SequenceTypes, get_resource_path, xgetattr, xsetattr
 
-from .view import View
+from .ui_traits import AView
 
 #-------------------------------------------------------------------------------
 #  'TreeNode' class:
@@ -120,7 +120,7 @@ class TreeNode ( HasPrivateTraits ):
     on_dclick = Callable
 
     # View to use for editing the object
-    view = Instance( View )
+    view = AView
 
     # Right-click context menu. The value can be one of:
     #
