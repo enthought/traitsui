@@ -1712,8 +1712,8 @@ class SimpleEditor ( Editor ):
                         'info':    info,
                         'handler': handler } )
             except:
-                # fixme: Should the exception be logged somewhere?
-                pass
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
 
             return
 

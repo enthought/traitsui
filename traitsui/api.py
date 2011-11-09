@@ -99,3 +99,11 @@ from . import view_elements
 _constants  = toolkit().constants()
 WindowColor = _constants.get( 'WindowColor', 0xFFFFFF )
 
+
+def raise_to_debug() :
+    """ When we would otherwise silently swallow an exception, call this instead
+    to allow people to set the TRAITS_DEBUG environment variable and get the
+    exception.
+    """
+    import os
+    if os.getenv('TRAITS_DEBUG') is not None : raise
