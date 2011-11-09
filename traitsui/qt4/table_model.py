@@ -41,6 +41,14 @@ v_alignment_map = {
 # MIME type for internal table drag/drop operations
 mime_type = 'traits-ui-table-editor'
 
+def as_qcolor(color):
+    """ Convert a color specification (maybe a tuple) into a QColor.
+    """
+    if isinstance(color, SequenceTypes):
+        return QtGui.QColor(*color)
+    else:
+        return QtGui.QColor(color)
+
 #-------------------------------------------------------------------------------
 #  'TableModel' class:
 #-------------------------------------------------------------------------------
@@ -99,20 +107,18 @@ class TableModel(QtCore.QAbstractTableModel):
 
         elif role == QtCore.Qt.BackgroundRole:
             color = column.get_cell_color(obj)
-            if color is not None:
-                if isinstance(color, SequenceTypes):
-                    q_color = QtGui.QColor(*color)
-                else:
-                    q_color = QtGui.QColor(color)
+            if color is None:
+                # FIXME: Yes, this is weird. It should work fine to fall through
+                # to the catch-all None at the end, but it doesn't.
+                return None
+            else:
+                q_color = as_qcolor(color)
                 return QtGui.QBrush(q_color)
 
         elif role == QtCore.Qt.ForegroundRole:
             color = column.get_text_color(obj)
             if color is not None:
-                if isinstance(color, SequenceTypes):
-                    q_color = QtGui.QColor(*color)
-                else:
-                    q_color = QtGui.QColor(color)
+                q_color = as_qcolor(color)
                 return QtGui.QBrush(q_color)
 
         elif role == QtCore.Qt.UserRole:
