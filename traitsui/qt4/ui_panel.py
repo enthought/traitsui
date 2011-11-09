@@ -380,6 +380,14 @@ class _GroupSplitter(QtGui.QSplitter):
             self._initialized = True
             self._resize_items()
 
+    def showEvent(self, event):
+        """ Wait for the show event to resize items if necessary.
+        """
+        QtGui.QSplitter.showEvent(self, event)
+        if not self._initialized:
+            self._initialized = True
+            self._resize_items()
+
     def _resize_items(self):
         """ Size the splitter based on the 'width' or 'height' attributes
             of the Traits UI view elements.
