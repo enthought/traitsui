@@ -993,8 +993,9 @@ class SimpleEditor ( Editor ):
             if object is not None:
                 # Try to chain the undo history to the main undo history:
                 view = node.get_view( object )
-                if view is None:
-                    view = object.trait_view()
+                if view is None or isinstance(view, str) :
+                    view = object.trait_view(view)
+
                 if (self.ui.history is not None) or (view.kind == 'subpanel'):
                     ui = object.edit_traits( parent = editor,
                                              view   = view,
@@ -1176,6 +1177,23 @@ class SimpleEditor ( Editor ):
         nid.setFlags(flags)
 
         return can_rename
+
+    def _is_droppable ( self, node, object, add_object, for_insert ):
+        """ Returns whether a given object is droppable on the node.
+        """
+        if for_insert and (not node.can_insert( object )):
+            return False
+
+        return node.can_add( object, add_object )
+
+    def _drop_object ( self, node, object, dropped_object, make_copy = True ):
+        """ Returns a droppable version of a specified object.
+        """
+        new_object = node.drop_object( object, dropped_object )
+        if (new_object is not dropped_object) or (not make_copy):
+            return new_object
+
+        return copy.deepcopy( new_object )
 
 #----- pyface.action 'controller' interface implementation: --------------------
 
@@ -1557,11 +1575,9 @@ class _TreeWidget(QtGui.QTreeWidget):
         # Set up headers if necessary.
         column_count = len(editor.factory.column_headers)
         if column_count > 0:
-            print "column_count = %r" % column_count
             self.setHeaderHidden(False)
             self.setColumnCount(column_count)
             self.setHeaderLabels(editor.factory.column_headers)
-            print editor.factory.column_headers
         else:
             self.setHeaderHidden(True)
 
@@ -1681,7 +1697,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         # See if the model will accept a drop.
         data = PyMimeData.coerce(e.mimeData()).instance()
 
-        if not node._is_droppable(object, data, insert):
+        if not self._editor._is_droppable(node, object, data, insert):
             return
 
         e.acceptProposedAction()
@@ -1707,11 +1723,11 @@ class _TreeWidget(QtGui.QTreeWidget):
         _, node, object = editor._get_node_data(nid)
 
         if e.proposedAction() == QtCore.Qt.MoveAction:
-            if not node._is_droppable( object, data, False ):
+            if not self._editor._is_droppable(node, object, data, False ):
                 return
 
             if dragging is not None:
-                data = node._drop_object( object, data, False )
+                data = self._editor._drop_object( node, object, data, False )
                 if data is not None:
                     try:
                         editor._begin_undo()
@@ -1721,14 +1737,14 @@ class _TreeWidget(QtGui.QTreeWidget):
                     finally:
                         editor._end_undo()
             else:
-                data = node._drop_object( object, data )
+                data = self._editor._drop_object( node, object, data, True )
                 if data is not None:
                     editor._undoable_append( node, object, data, False )
         else:
             to_node, to_object, to_index = editor._node_index( nid )
             if to_node is not None:
                 if dragging is not None:
-                    data = node._drop_object( to_object, data, False )
+                    data = self._editor._drop_object( node, to_object, data, False )
                     if data is not None:
                         from_node, from_object, from_index = \
                             editor._node_index( dragging )
@@ -1744,7 +1760,7 @@ class _TreeWidget(QtGui.QTreeWidget):
                         finally:
                             editor._end_undo()
                 else:
-                    data = to_node._drop_object( to_object, data )
+                    data = self._editor._drop_object( to_node, to_object, data, True )
                     if data is not None:
                         editor._undoable_insert( to_node, to_object, to_index,
                                                data, False )

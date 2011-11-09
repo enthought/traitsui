@@ -1209,8 +1209,9 @@ class SimpleEditor ( Editor ):
             if object is not None:
                 # Try to chain the undo history to the main undo history:
                 view = node.get_view( object )
-                if view is None:
-                    view = object.trait_view()
+
+                if view is None or isinstance(view, str) :
+                    view = object.trait_view(view)
 
                 if (self.ui.history is not None) or (view.kind == 'subpanel'):
                     ui = object.edit_traits( parent = editor,

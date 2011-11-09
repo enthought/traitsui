@@ -538,7 +538,8 @@ class Editor ( HasPrivateTraits ):
                         try:
                             setattr( eval( user_ref ), user_name, new )
                         except:
-                            pass
+                            from traitsui.api import raise_to_debug
+                            raise_to_debug()
                         del self._no_trait_update[ key ]
 
                 self.on_trait_change( editor_trait_modified, editor_name )
