@@ -87,6 +87,9 @@ class SimpleEditor ( Editor ):
     # The event fired when the application wants to veto an operation:
     veto = Event
 
+    # The vent fired when the application wants to refresh the viewport.
+    refresh = Event
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -181,6 +184,7 @@ class SimpleEditor ( Editor ):
         self._undoable = []
 
         # Synchronize external object traits with the editor:
+        self.sync_value( factory.refresh,  'refresh' )
         self.sync_value( factory.selected, 'selected' )
         self.sync_value( factory.click,    'click',  'to' )
         self.sync_value( factory.dclick,   'dclick', 'to' )
@@ -229,6 +233,11 @@ class SimpleEditor ( Editor ):
         """ Handles the 'veto' event being fired.
         """
         self._veto = True
+
+    def _refresh_changed ( self ):
+        """ Update the viewport.
+        """
+        self._tree.viewport().update()
 
     #---------------------------------------------------------------------------
     #  Disposes of the contents of an editor:

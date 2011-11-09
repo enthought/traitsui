@@ -129,6 +129,11 @@ class ToolkitEditorFactory ( EditorFactory ):
     # handler.
     veto = Str
 
+    # The optional extended trait name of the trait event that is fired when the
+    # application wishes the currently visible portion of the tree widget to
+    # repaint itself.
+    refresh = Str
+
     # Mode for lines connecting tree nodes
     #
     # * 'appearance': Show lines only when they look good.
