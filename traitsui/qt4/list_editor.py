@@ -471,6 +471,9 @@ class NotebookEditor ( Editor ):
     pages.
     """
 
+    # The "Close Tab" button.
+    close_button = Any()
+
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -516,6 +519,7 @@ class NotebookEditor ( Editor ):
             self.control.setCornerWidget( button, QtCore.Qt.TopRightCorner )
             signal = QtCore.SIGNAL( 'clicked()' )
             QtCore.QObject.connect( button, signal, self.close_current )
+            self.close_button = button
 
         if self.factory.show_notebook_menu:
             # Create the necessary attributes to manage hiding and revealing of
@@ -737,6 +741,12 @@ class NotebookEditor ( Editor ):
             image = method( self.ui.info, object )
 
         if image is None:
+        deletable = self.factory.deletable
+        deletable_trait = self.factory.deletable_trait
+        if deletable and deletable_trait:
+            enabled = xgetattr(selected, deletable_trait, True)
+            self.close_button.setEnabled(enabled)
+
             self.control.addTab(ui.control, name)
         else:
             self.control.addTab(ui.control, image, name)
