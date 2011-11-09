@@ -766,6 +766,11 @@ class TableDelegate(QtGui.QStyledItemDelegate):
 
         return control
 
+    def updateEditorGeometry(self, editor, option, index):
+        """ Update the editor's geometry.
+        """
+        editor.setGeometry(option.rect)
+
 class TableView(QtGui.QTableView):
     """A QTableView configured to behave as expected by TraitsUI."""
 
