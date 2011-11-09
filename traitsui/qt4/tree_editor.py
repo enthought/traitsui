@@ -282,6 +282,7 @@ class SimpleEditor ( Editor ):
             self._delete_node(old_nid)
             
         tree.clear()
+        self._map = {}
 
         object, node = self._node_for( self.value )
         if node is not None:
@@ -1271,8 +1272,8 @@ class SimpleEditor ( Editor ):
                         'info':    info,
                         'handler': handler } )
             except:
-                # fixme: Should the exception be logged somewhere?
-                pass
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
             return
 
         method = getattr( handler, method_name, None )
