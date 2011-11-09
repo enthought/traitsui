@@ -115,8 +115,9 @@ class SimpleEditor ( Editor ):
                     factory._editor = self
 
                     # Create the trait editor panel:
-                    self.control = QtGui.QWidget()
-                    parent.addWidget(self.control)
+                    self.control = sa = QtGui.QScrollArea()
+                    sa.setFrameShape(QtGui.QFrame.NoFrame)
+                    sa.setWidgetResizable(True)
                     self.control._node_ui = self.control._editor_nid = None
 
                     # Check to see if there are any existing editors that are
@@ -158,6 +159,7 @@ class SimpleEditor ( Editor ):
 
                 self._editor = sa = QtGui.QScrollArea()
                 sa.setFrameShape(QtGui.QFrame.NoFrame)
+                sa.setWidgetResizable(True)
                 sa._node_ui = sa._editor_nid = None
 
                 if factory.orientation == 'horizontal':
@@ -272,6 +274,8 @@ class SimpleEditor ( Editor ):
             editor.
         """
         tree = self._tree
+        if tree is None:
+            return
         saved_state = {}
 
         object, node = self._node_for( self.old_value )
