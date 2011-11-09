@@ -1469,13 +1469,13 @@ class SimpleEditor ( Editor ):
         start = event.index
         n     = len( event.added )
         end   = start + len( event.removed )
-        tree                = self._tree
+        tree  = self._tree
 
         for expanded, node, nid in self._object_info_for( object, name ):
             children = node.get_children( object )
 
             # If the new children aren't all at the end, remove/add them all:
-            if (n > 0) and ((start + n) != len( children )):
+            if (n > 0) and ((start + n) > len( children )):
                 self._children_replaced( object, name, event )
                 return
 
