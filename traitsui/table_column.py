@@ -85,6 +85,12 @@ class TableColumn ( HasPrivateTraits ):
     # Vertical alignment of text in the column:
     vertical_alignment = Enum( 'center', [ 'top', 'center', 'bottom' ] )
 
+    # Horizontal cell margin
+    horizontal_margin = Int(4)
+
+    # Vertical cell margin
+    vertical_margin = Int(3)
+
     # The image to display in the cell:
     image = Image
 
