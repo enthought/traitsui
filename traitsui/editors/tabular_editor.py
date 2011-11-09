@@ -53,6 +53,10 @@ class TabularEditor ( BasicEditorFactory ):
     # table update is needed:
     update = Str
 
+    # The optional extended name of the trait used to indicate that the table
+    # just needs to be repainted.
+    refresh = Str
+
     # Should the table update automatically when the table item's contents
     # change? Note that in order for this feature to work correctly, the editor
     # trait should be a list of objects derived from HasTraits. Also,

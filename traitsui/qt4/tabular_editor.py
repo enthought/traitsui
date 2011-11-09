@@ -50,6 +50,9 @@ class TabularEditor(Editor):
     # The event fired when a table update is needed:
     update = Event
 
+    # The event fired when a simple repaint is needed:
+    refresh = Event
+
     # The current set of selected items (which one is used depends upon the
     # initial state of the editor factory 'multi_select' trait):
     selected       = Any
@@ -139,6 +142,7 @@ class TabularEditor(Editor):
 
         # Synchronize other interesting traits as necessary:
         self.sync_value(factory.update, 'update', 'from')
+        self.sync_value(factory.refresh, 'refresh', 'from')
         self.sync_value(factory.activated,     'activated',     'to')
         self.sync_value(factory.activated_row, 'activated_row', 'to')
         self.sync_value(factory.clicked,  'clicked',  'to')
@@ -301,6 +305,9 @@ class TabularEditor(Editor):
 
     def _update_changed(self):
         self.update_editor()
+
+    def _refresh_changed(self):
+        self.refresh_editor()
 
     def _selected_changed(self, new):
         if not self._no_update:
