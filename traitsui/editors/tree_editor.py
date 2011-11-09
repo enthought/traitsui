@@ -56,6 +56,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Mapping from TreeNode tuples to MultiTreeNodes
     multi_nodes = Dict
 
+    # The column header labels if any.
+    column_headers = List(Str)
+
     # Are the individual nodes editable?
     editable = Bool(True)
 

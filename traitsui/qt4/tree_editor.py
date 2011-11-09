@@ -33,9 +33,7 @@ from traitsui.menu import Menu, Action, Separator
 
 from clipboard import clipboard, PyMimeData
 from editor import Editor
-# Commenting out the open_fbi function because deprecated and not toolkit 
-# independent
-from helper import pixmap_cache #open_fbi, 
+from helper import pixmap_cache
 
 logger = logging.getLogger(__name__)
 
@@ -302,6 +300,10 @@ class SimpleEditor ( Editor ):
                     tree.setCurrentItem(nid)
 
             self.expand_levels( nid, self.factory.auto_open, False )
+        ncolumns = self._tree.columnCount()
+        if ncolumns > 1:
+            for i in range(ncolumns):
+                self._tree.resizeColumnToContents(i)
         # FIXME: Clear the current editor (if any)...
 
     #---------------------------------------------------------------------------
@@ -313,6 +315,14 @@ class SimpleEditor ( Editor ):
         """
         return self._tree
 
+
+    def _set_column_labels(self, nid, column_labels):
+        """ Set the column labels.
+        """
+        for i, (header, label) in enumerate(map(None,
+            self.factory.column_headers[1:], column_labels), 1):
+            if header is not None and label is not None:
+                nid.setText(i, label)
 
     #---------------------------------------------------------------------------
     #  Private Delegate class to do drawing in case of wrapped text labels
@@ -560,6 +570,7 @@ class SimpleEditor ( Editor ):
             node.when_children_changed(  object, self._children_updated,  False)
 
         node.when_label_changed( object, self._label_updated, False )
+        node.when_column_labels_change(object, self._column_labels_updated, False)
 
     #---------------------------------------------------------------------------
     #  Removes any event listeners from a specified object:
@@ -573,6 +584,7 @@ class SimpleEditor ( Editor ):
             node.when_children_changed(  object, self._children_updated,  True )
 
         node.when_label_changed( object, self._label_updated, True )
+        node.when_column_labels_change(object, self._column_labels_updated, False)
 
     #---------------------------------------------------------------------------
     #  Returns the tree node data for a specified object in the form
@@ -1195,18 +1207,12 @@ class SimpleEditor ( Editor ):
         """ Returns whether the action should be defined in the user interface.
         """
         if action.defined_when != '':
-            try:
-                if not eval( action.defined_when, globals(), self._context ):
-                    return False
-            except:
-                open_fbi()
+            if not eval( action.defined_when, globals(), self._context ):
+                return False
 
         if action.visible_when != '':
-            try:
-                if not eval( action.visible_when, globals(), self._context ):
-                    return False
-            except:
-                open_fbi()
+            if not eval( action.visible_when, globals(), self._context ):
+                return False
 
         return True
 
@@ -1279,9 +1285,6 @@ class SimpleEditor ( Editor ):
             except Exception as e:
                 logger.warning("Exception (%s) raised when evaluating the "
                                "condition %s. Returning True." % (e,condition))
-                # Removing this call because function deprecated and not 
-                # toolkit independent.
-                #open_fbi()
             setattr( object, trait, value )
 
 #----- Menu event handlers: ----------------------------------------------------
@@ -1484,6 +1487,23 @@ class SimpleEditor ( Editor ):
 
         self._tree.blockSignals(blk)
 
+    def _column_labels_updated(self, object, name, new):
+        """  Handles the column labels of an object being changed.
+        """
+        # Prevent the itemChanged() signal from being emitted.
+        blk = self._tree.blockSignals(True)
+
+        nids = {}
+        for name2, nid in self._map[ id( object ) ]:
+            if nid not in nids:
+                nids[ nid ] = None
+                node = self._get_node_data( nid )[1]
+                # Just do all of them at once. The number of columns should be
+                # small.
+                self._set_column_labels(nid, node.get_column_labels(object))
+
+        self._tree.blockSignals(blk)
+
 #-- UI preference save/restore interface ---------------------------------------
 
     #---------------------------------------------------------------------------
@@ -1531,10 +1551,19 @@ class _TreeWidget(QtGui.QTreeWidget):
         """
         QtGui.QTreeWidget.__init__(self, parent)
 
-        self.header().hide()
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.setDragEnabled(True)
         self.setAcceptDrops(True)
+        # Set up headers if necessary.
+        column_count = len(editor.factory.column_headers)
+        if column_count > 0:
+            print "column_count = %r" % column_count
+            self.setHeaderHidden(False)
+            self.setColumnCount(column_count)
+            self.setHeaderLabels(editor.factory.column_headers)
+            print editor.factory.column_headers
+        else:
+            self.setHeaderHidden(True)
 
         if editor.factory.selection_mode == 'extended':
             self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)

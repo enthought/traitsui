@@ -25,8 +25,8 @@
 
 from __future__ import absolute_import
 
-from traits.api import (AdaptedTo, Adapter, Any, Bool, Callable, HasPrivateTraits,
-    Instance, Interface, List, Property, Str, cached_property)
+from traits.api import (AdaptedTo, Adapter, Any, Bool, Callable, Either,
+    HasPrivateTraits, Instance, Interface, List, Property, Str, cached_property)
 
 from traits.trait_base import SequenceTypes, get_resource_path, xgetattr, xsetattr
 
@@ -51,6 +51,9 @@ class TreeNode ( HasPrivateTraits ):
     # Either the name of a trait containing a label, or a constant label, if
     # the string starts with '='.
     label = Str
+
+    # The name of a trait containing a list of labels for any columns.
+    column_labels = Str
 
     # Either the name of a trait containing a tooltip, or constant tooltip, if
     # the string starts with '='.
@@ -100,6 +103,9 @@ class TreeNode ( HasPrivateTraits ):
 
     # Function for formatting the label
     formatter = Callable
+
+    # Functions for formatting the other columns.
+    column_formatters = List(Either(None, Callable))
 
     # Function for formatting the tooltip
     tooltip_formatter = Callable
@@ -309,6 +315,37 @@ class TreeNode ( HasPrivateTraits ):
         if label[:1] != '=':
             object.on_trait_change( listener, label, remove = remove,
                                     dispatch = 'ui' )
+
+    def get_column_labels(self, object):
+        """ Get the labels for any columns that have been defined.
+        """
+        trait = self.column_labels
+        labels = xgetattr(object, trait, [])
+        formatted = []
+        for formatter, label in map(None, self.column_formatters, labels):
+            # If the list of column formatters is shorter than the list of
+            # labels, then map(None) will extend it with Nones. Just pass the label
+            # as preformatted. Similarly, explicitly using None in the list will
+            # pass through the item.
+            if formatter is None:
+                formatted.append(label)
+            else:
+                formatted.append(formatter(label))
+        return formatted
+
+    def when_column_labels_change(self, object, listener, remove):
+        """ Sets up or removes a listener for the column labels being changed on
+        a specified object.
+
+        This will fire when either the list is reassigned or when it is
+        modified. I.e., it listens both to the trait change event and the
+        trait_items change event. Implement the listener appropriately to handle
+        either case.
+        """
+        trait = self.column_labels
+        if trait != '':
+            object.on_trait_change(listener, trait, remove=remove, dispatch='ui')
+            object.on_trait_change(listener, trait+'_items', remove=remove, dispatch='ui')
 
     #---------------------------------------------------------------------------
     #  Gets the tooltip to display for a specified object:
@@ -663,6 +700,20 @@ class ITreeNode ( Interface ):
             specified object.
         """
 
+    def get_column_labels(self, object):
+        """ Get the labels for any columns that have been defined.
+        """
+
+    def when_column_labels_change(self, object, listener, remove):
+        """ Sets up or removes a listener for the column labels being changed on
+        a specified object.
+
+        This will fire when either the list is reassigned or when it is
+        modified. I.e., it listens both to the trait change event and the
+        trait_items change event. Implement the listener appropriately to handle
+        either case.
+        """
+
     def get_tooltip ( self ):
         """ Gets the tooltip to display for a specified object.
         """
@@ -847,6 +898,22 @@ class ITreeNodeAdapter ( Adapter ):
     def when_label_changed ( self, listener, remove ):
         """ Sets up or removes a listener for the label being changed on a
             specified object.
+        """
+        pass
+
+    def get_column_labels(self):
+        """ Get the labels for any columns that have been defined.
+        """
+        return []
+
+    def when_column_labels_change(self, listener, remove):
+        """ Sets up or removes a listener for the column labels being changed on
+        a specified object.
+
+        This will fire when either the list is reassigned or when it is
+        modified. I.e., it listens both to the trait change event and the
+        trait_items change event. Implement the listener appropriately to handle
+        either case.
         """
         pass
 
@@ -1049,6 +1116,22 @@ class ITreeNodeAdapterBridge ( HasPrivateTraits ):
         """
         return self.adapter.when_label_changed( listener, remove )
 
+    def get_column_labels(self, object):
+        """ Get the labels for any columns that have been defined.
+        """
+        return self.adapter.get_column_labels()
+
+    def when_column_labels_change(self, object, listener, remove):
+        """ Sets up or removes a listener for the column labels being changed on
+        a specified object.
+
+        This will fire when either the list is reassigned or when it is
+        modified. I.e., it listens both to the trait change event and the
+        trait_items change event. Implement the listener appropriately to handle
+        either case.
+        """
+        return self.adapter.when_column_labels_change(listener, remove)
+
     def get_tooltip ( self, object ):
         """ Gets the tooltip to display for a specified object.
         """
@@ -1157,6 +1240,10 @@ class ITreeNodeAdapterBridge ( HasPrivateTraits ):
         """ Handles an object being double-clicked.
         """
         return self.adapter.dclick()
+
+
+# FIXME RTK: add the column_labels API to the following TreeNodes, too.
+
 
 #-------------------------------------------------------------------------------
 #  'ObjectTreeNode' class
