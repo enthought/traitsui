@@ -72,15 +72,21 @@ class CheckboxRenderer(TableDelegate):
         box = QtGui.QStyleOptionButton()
         box.palette = option.palette
 
-        # FIXME: Allow other alignments. For now, center it.
+        # Align the checkbox appropriately.
         box.rect = option.rect
         size = style.sizeFromContents(QtGui.QStyle.CT_CheckBox, box,
             QtCore.QSize())
-        margin = style.pixelMetric(QtGui.QStyle.PM_ButtonMargin, box)
-        # FIXME: I don't know why I need the 2 pixels, but I do.
-        box.rect.setLeft(option.rect.width() // 2 -
-            size.width() // 2 + margin - 2)
         box.rect.setWidth(size.width())
+        margin = style.pixelMetric(QtGui.QStyle.PM_ButtonMargin, box)
+        alignment = column.horizontal_alignment
+        if alignment == 'left':
+            box.rect.setLeft(margin)
+        elif alignment == 'right':
+            box.rect.setLeft(option.rect.right() - size.width() - margin)
+        else:
+            # FIXME: I don't know why I need the 2 pixels, but I do.
+            box.rect.setLeft(option.rect.width() // 2 -
+                size.width() // 2 + margin - 2)
 
         box.state = QtGui.QStyle.State_Enabled
         if checked:
