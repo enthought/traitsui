@@ -23,6 +23,7 @@
 #-------------------------------------------------------------------------------
 
 from pyface.qt import QtCore, QtGui
+import collections
 
 from pyface.image_resource import ImageResource
 from traits.api import Any, Bool, Event, Int, Instance, List, \
@@ -31,6 +32,7 @@ from traitsui.list_str_adapter import ListStrAdapter
 
 from editor import Editor
 from list_str_model import ListStrModel
+from traitsui.menu import Menu
 
 #-------------------------------------------------------------------------------
 #  '_ListStrEditor' class:
@@ -379,6 +381,98 @@ class _ListStrEditor(Editor):
         finally:
             self._no_update = False
 
+    def _on_context_menu(self, pos) :
+        menu = self.factory.menu
+
+        index = self.list_view.indexAt(pos).row()
+
+        if isinstance(menu, str) :
+            menu = getattr(self.object, menu, None)
+
+        if isinstance(menu, collections.Callable) :
+            menu = menu(index)
+
+        if menu is not None :
+            qmenu = menu.create_menu( self.list_view, self )
+
+            self._context = {'object':  self.object,
+                             'editor':  self,
+                             'index':   index,
+                             'info':    self.ui.info,
+                             'handler': self.ui.handler }
+
+            qmenu.exec_(self.list_view.mapToGlobal(pos))
+
+            self._context = None
+
+    def eval_when ( self, condition, object, trait ):
+        """ Evaluates a condition within a defined context, and sets a
+        specified object trait based on the result, which is assumed to be a
+        Boolean.
+        """
+        if condition != '':
+            value = True
+            try:
+                if not eval( condition, globals(), self._context ):
+                    value = False
+            except:
+                open_fbi()
+            setattr( object, trait, value )
+
+    def add_to_menu ( self, menu_item ):
+        """ Adds a menu item to the menu bar being constructed.
+        """
+        action = menu_item.item.action
+        self.eval_when( action.enabled_when, menu_item, 'enabled' )
+        self.eval_when( action.checked_when, menu_item, 'checked' )
+
+    def can_add_to_menu(self, action) :
+        """ Returns whether the action should be defined in the user interface.
+        """
+        if action.defined_when != '':
+            try:
+                if not eval( action.defined_when, globals(), self._context ):
+                    return False
+            except:
+                open_fbi()
+
+        if action.visible_when != '':
+            try:
+                if not eval( action.visible_when, globals(), self._context ):
+                    return False
+            except:
+                open_fbi()
+
+        return True
+
+    def perform ( self, action, action_event = None ):
+        """ Performs the action described by a specified Action object.
+        """
+        self.ui.do_undoable( self._perform, action )
+
+    def _perform ( self, action ):
+        method_name       = action.action
+        info              = self._context['info']
+        handler           = self._context['handler']
+        object            = self._context['object']
+
+        if method_name.find( '.' ) >= 0:
+            if method_name.find( '(' ) < 0:
+                method_name += '()'
+            try:
+                eval( method_name, globals(), self._context )
+            except:
+                from enthought.traits.api import raise_to_debug
+                raise_to_debug()
+            return
+
+        method = getattr( handler, method_name, None )
+        if method is not None:
+            method( info, object )
+            return
+
+        if action.on_perform is not None:
+            action.on_perform(object)
 #-------------------------------------------------------------------------------
 #  Qt widgets that have been configured to behave as expected by Traits UI:
 #-------------------------------------------------------------------------------
@@ -430,6 +524,14 @@ class _ListView(QtGui.QListView):
         self.setDragDropOverwriteMode(True)
         self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
         self.setDropIndicatorShown(True)
+
+        if editor.factory.menu is False :
+            self.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
+        elif editor.factory.menu is not False :
+            self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+
+        self.connect(self, QtCore.SIGNAL('customContextMenuRequested(QPoint)'),
+                editor._on_context_menu)
 
         # Configure context menu behavior
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
