@@ -103,6 +103,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Default context menu to display when any cell is right-clicked
     menu = Instance( 'traitsui.menu.Menu' )
 
+    # Default trait name containg menu
+    menu_name = Str
+
     # Are objects deletable from the table?
     deletable = BoolOrCallable( False )
 
