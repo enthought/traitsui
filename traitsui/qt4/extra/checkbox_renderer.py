@@ -64,15 +64,25 @@ class CheckboxRenderer(TableDelegate):
         painter.fillRect(option.rect, bg_brush)
 
         # Then draw the checkbox
+        style = QtGui.QApplication.instance().style()
         box = QtGui.QStyleOptionButton()
         box.palette = option.palette
+
+        # FIXME: Allow other alignments. For now, center it.
         box.rect = option.rect
+        size = style.sizeFromContents(QtGui.QStyle.CT_CheckBox, box,
+            QtCore.QSize())
+        margin = style.pixelMetric(QtGui.QStyle.PM_ButtonMargin, box)
+        # FIXME: I don't know why I need the 2 pixels, but I do.
+        box.rect.setLeft(option.rect.width() // 2 -
+            size.width() // 2 + margin - 2)
+        box.rect.setWidth(size.width())
+
         box.state = QtGui.QStyle.State_Enabled
         if checked:
             box.state |= QtGui.QStyle.State_On
         else:
             box.state |= QtGui.QStyle.State_Off
-        style = QtGui.QApplication.instance().style()
         style.drawControl(QtGui.QStyle.CE_CheckBox, box, painter)
         painter.restore()
 
