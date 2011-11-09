@@ -453,10 +453,7 @@ class GUIToolkit ( Toolkit ):
               specific color format.
         """
         return {
-            # fixme: This should be updated to have the Qt window background
-            # color. This is just a placeholder to prevent traits.ui.api
-            # problems.
-            'WindowColor': 0xFFFFFF
+            'WindowColor': QtGui.QApplication.palette().color(QtGui.QPalette.Window), 
         }
 
     #---------------------------------------------------------------------------
