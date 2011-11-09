@@ -194,6 +194,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Color to use for read-only cell backgrounds
     cell_read_only_bg_color = Color( 0xF8F7F1 )
 
+    # Whether to even-odd alternate the background color.
+    alternate_bg_color = Bool(False)
+
     # Font to use for text in labels
     label_font = Font
 

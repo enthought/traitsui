@@ -298,6 +298,7 @@ class TableEditor(Editor, BaseTableEditor):
 
             if self.factory.auto_size:
                 self.table_view.resizeColumnsToContents()
+                self.table_view.resizeRowsToContents()
 
         finally:
             self.table_view.setUpdatesEnabled(True)
@@ -546,6 +547,7 @@ class TableEditor(Editor, BaseTableEditor):
 
         self.model.reset()
         self.table_view.resizeColumnsToContents()
+        self.table_view.resizeRowsToContents()
 
     def _selected_changed(self, new):
         """Handle the selected row/column/cell being changed externally."""
@@ -781,6 +783,7 @@ class TableView(QtGui.QTableView):
             vheader.installEventFilter(self)
         else:
             vheader.hide()
+        self.setAlternatingRowColors(factory.alternate_bg_color)
 
         # Configure the column headings.
         hheader = self.horizontalHeader()
@@ -813,6 +816,9 @@ class TableView(QtGui.QTableView):
             self.setDropIndicatorShown(True)
         elif factory.sortable:
             self.setSortingEnabled(True)
+
+        if factory._qt_stylesheet is not None:
+            self.setStyleSheet(factory._qt_stylesheet)
 
     def contextMenuEvent(self, event):
         """Reimplemented to create context menus for cells and empty space."""
@@ -889,6 +895,7 @@ class TableView(QtGui.QTableView):
 
         if self._editor.factory.auto_size:
             self.resizeColumnsToContents()
+            self.resizeRowsToContents()
 
         else:
             parent = self.parent()
@@ -896,6 +903,7 @@ class TableView(QtGui.QTableView):
                 (self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
                 self._initial_size = True
                 self.resizeColumnsToContents()
+                self.resizeRowsToContents()
 
     def sizeHint(self):
         """Reimplemented to define a better size hint for the width of the
@@ -952,7 +960,6 @@ class TableView(QtGui.QTableView):
                 # Add distance between sort indicator and text
                 width += style.pixelMetric(QtGui.QStyle.PM_HeaderMargin, option,
                                            self)
-
             return max(base_width, width)
 
         # Or else set width absolutely
