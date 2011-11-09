@@ -1550,7 +1550,7 @@ class SimpleEditor ( Editor ):
                 structure = prefs
 
             self.control.restoreState(structure)
-        header = self._tree.horizontalHeader()
+        header = self._tree.header()
         if header is not None and 'column_state' in prefs:
             header.restoreState(prefs['column_state'])
 
@@ -1564,7 +1564,7 @@ class SimpleEditor ( Editor ):
         prefs = {}
         if isinstance(self.control, QtGui.QSplitter):
             prefs['structure'] = str(self.control.saveState())
-        header = self._tree.horizontalHeader()
+        header = self._tree.header()
         if header is not None:
             prefs['column_state'] = str(header.saveState())
 
