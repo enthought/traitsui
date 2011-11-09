@@ -303,6 +303,24 @@ class TableEditor(Editor, BaseTableEditor):
         finally:
             self.table_view.setUpdatesEnabled(True)
 
+    def restore_prefs ( self, prefs ):
+        """ Restores any saved user preference information associated with the
+            editor.
+        """
+        header = self.table_view.horizontalHeader()
+        if header is not None and 'column_state' in prefs:
+            header.restoreState(prefs['column_state'])
+
+    def save_prefs ( self ):
+        """ Returns any user preference information associated with the editor.
+        """
+        prefs = {}
+        header = self.table_view.horizontalHeader()
+        if header is not None:
+            prefs['column_state'] = str(header.saveState())
+
+        return prefs
+
     #---------------------------------------------------------------------------
     #  Requests that the underlying table widget to redraw itself:
     #---------------------------------------------------------------------------

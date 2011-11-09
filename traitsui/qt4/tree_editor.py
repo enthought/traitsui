@@ -1550,6 +1550,9 @@ class SimpleEditor ( Editor ):
                 structure = prefs
 
             self.control.restoreState(structure)
+        header = self._tree.horizontalHeader()
+        if header is not None and 'column_state' in prefs:
+            header.restoreState(prefs['column_state'])
 
     #---------------------------------------------------------------------------
     #  Returns any user preference information associated with the editor:
@@ -1558,10 +1561,14 @@ class SimpleEditor ( Editor ):
     def save_prefs ( self ):
         """ Returns any user preference information associated with the editor.
         """
+        prefs = {}
         if isinstance(self.control, QtGui.QSplitter):
-            return {'structure': str(self.control.saveState())}
+            prefs['structure'] = str(self.control.saveState())
+        header = self._tree.horizontalHeader()
+        if header is not None:
+            prefs['column_state'] = str(header.saveState())
 
-        return None
+        return prefs
 
 #-- End UI preference save/restore interface -----------------------------------
 
