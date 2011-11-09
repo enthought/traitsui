@@ -169,7 +169,6 @@ class SimpleEditor ( Editor ):
            self.empty_list()
 
         editor = self._editor
-        # FIXME: Add support for more than one column.
         for index, value in enumerate(self.value):
             if resizable:
                 control = IconButton('list_editor.png', self.popup_menu)
@@ -185,10 +184,11 @@ class SimpleEditor ( Editor ):
             pcontrol = peditor.control
             pcontrol.proxy = proxy
 
+            i, j = divmod(index, self.factory.columns)
             if isinstance(pcontrol, QtGui.QWidget):
-                layout.addWidget(pcontrol, index, 1)
+                layout.addWidget(pcontrol, i, j)
             else:
-                layout.addLayout(pcontrol, index, 1)
+                layout.addLayout(pcontrol, i, j)
 
         # QScrollArea can have problems if the widget being scrolled is set too
         # early (ie. before it contains something).
