@@ -1254,7 +1254,7 @@ class SimpleEditor ( Editor ):
             if self.factory.on_hover is not None:
                 self.ui.evaluate( self.factory.on_hover, object )
                 self._veto = True
-        elif self.factory.on_hover is not None:
+        elif self.factory and self.factory.on_hover is not None:
             self.ui.evaluate( self.factory.on_hover, None )
 
         # allow other events to be processed
