@@ -55,12 +55,16 @@ class CheckboxRenderer(TableDelegate):
 
         # First draw the background
         painter.save()
+        row_brushes = [option.palette.base(), option.palette.alternateBase()]
         if option.state & QtGui.QStyle.State_Selected:
             bg_brush = option.palette.highlight()
         else:
             bg_brush = index.data(QtCore.Qt.BackgroundRole)
-            if bg_brush == NotImplemented:
-                bg_brush = option.palette.light()
+            if bg_brush == NotImplemented or bg_brush is None:
+                if index.model()._editor.factory.alternate_bg_color:
+                    bg_brush = row_brushes[index.row() % 2]
+                else:
+                    bg_brush = row_brushes[0]
         painter.fillRect(option.rect, bg_brush)
 
         # Then draw the checkbox

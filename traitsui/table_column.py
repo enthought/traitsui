@@ -25,8 +25,8 @@
 
 from __future__ import absolute_import
 
-from traits.api import (Any, Bool, Callable, Color, Constant, Enum, Expression, Float,
-    Font, HasPrivateTraits, Instance, Int, Property, Str)
+from traits.api import (Any, Bool, Callable, Color, Constant, Either, Enum,
+    Expression, Float, Font, HasPrivateTraits, Instance, Int, Property, Str)
 
 from traits.trait_base import user_name_for, xgetattr
 
@@ -71,10 +71,10 @@ class TableColumn ( HasPrivateTraits ):
     text_font = Font
 
     # Cell background color for this column:
-    cell_color = Color( 'white' )
+    cell_color = Either(Color( 'white' ), None)
 
     # Cell background color for non-editable columns:
-    read_only_cell_color = Color( 0xF4F3EE )
+    read_only_cell_color = Either(Color( 0xF4F3EE ), None)
 
     # Cell graph color:
     graph_color = Color( 0xDDD9CC )
