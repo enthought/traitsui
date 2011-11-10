@@ -13,23 +13,21 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from editor \
-    import Editor
+from __future__ import absolute_import
 
-from pyface.heading_text \
-    import HeadingText
+from pyface.qt import QtCore
+
+from .editor import Editor
+
+from pyface.heading_text import HeadingText
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.title_editor file.
-from traitsui.editors.title_editor \
-    import TitleEditor
+from ..editors.title_editor import TitleEditor
 
-#-------------------------------------------------------------------------------
-#  '_TitleEditor' class:
-#-------------------------------------------------------------------------------
 
-class _TitleEditor ( Editor ):
+class SimpleEditor ( Editor ):
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -42,6 +40,10 @@ class _TitleEditor ( Editor ):
         """
         self._control = HeadingText( None )
         self.control  = self._control.control
+        if self.factory.allow_selection:
+            flags = (self.control.textInteractionFlags() |
+                QtCore.Qt.TextSelectableByMouse)
+            self.control.setTextInteractionFlags(flags)
         self.set_tooltip()
 
     #---------------------------------------------------------------------------
@@ -53,3 +55,7 @@ class _TitleEditor ( Editor ):
             editor.
         """
         self._control.text = self.str_value
+
+CustomEditor = SimpleEditor
+ReadonlyEditor = SimpleEditor
+TextEditor = SimpleEditor

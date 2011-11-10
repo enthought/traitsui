@@ -23,17 +23,31 @@
 
 from __future__ import absolute_import
 
-from ..basic_editor_factory import BasicEditorFactory
-
+from traits.api import Bool
+from ..editor_factory import EditorFactory
 from ..toolkit import toolkit_object
 
-# Callable which returns the editor to use in the ui.
-def title_editor(*args, **traits):
-    return toolkit_object('title_editor:_TitleEditor')(*args, **traits)
+class ToolkitEditorFactory ( EditorFactory ):
+    """ Editor factory for Title editors.
+    """
+
+    allow_selection = Bool(False)
+
+    def _get_simple_editor_class(self):
+        """ Returns the editor class to use for "simple" style views.
+        The default implementation tries to import the SimpleEditor class in the
+        editor file in the backend package, and if such a class is not to found
+        it returns the SimpleEditor class defined in editor_factory module in
+        the backend package.
+
+        """
+        SimpleEditor = toolkit_object('title_editor:SimpleEditor')
+        return SimpleEditor
+
 
 #-------------------------------------------------------------------------------
 #  Create the editor factory object:
 #-------------------------------------------------------------------------------
-TitleEditor = BasicEditorFactory(klass = title_editor)
+TitleEditor = ToolkitEditorFactory
 
 ### EOF #######################################################################
