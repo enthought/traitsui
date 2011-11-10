@@ -242,6 +242,7 @@ class TableEditor(Editor, BaseTableEditor):
         self.sync_value(factory.filter_name, 'filter', 'from')
         self.sync_value(factory.filtered_indices, 'filtered_indices', 'to')
 
+        self.auto_size = self.factory.auto_size
 
         # Initialize the ItemDelegates for each column
         self._update_columns()
@@ -275,7 +276,6 @@ class TableEditor(Editor, BaseTableEditor):
         self.on_trait_change(self._update_columns, 'columns', remove=True)
         self.on_trait_change(self._update_columns, 'columns_items', remove=True)
 
-        self.auto_size = self.factory.auto_size
 
         super(TableEditor, self).dispose()
 
@@ -820,11 +820,10 @@ class TableView(QtGui.QTableView):
         resize_mode_map = dict(interactive = QtGui.QHeaderView.Interactive,
                                fixed = QtGui.QHeaderView.Fixed,
                                stretch = QtGui.QHeaderView.Stretch,
-                               fit = QtGui.QHeaderView.ResizeToContents)
+                               resize_to_contents = QtGui.QHeaderView.ResizeToContents)
         stretchable_columns = []
         for i, column in enumerate(editor.columns):
             hheader.setResizeMode(i, resize_mode_map[column.resize_mode])
-            print "setting column", i, "to", column_resize_mode
             if column.resize_mode in ("stretch", "interactive"):
                 stretchable_columns.append(i)
         if not stretchable_columns:
@@ -833,6 +832,7 @@ class TableView(QtGui.QTableView):
             hheader.setStretchLastSection(True)
         else:
             hheader.setResizeMode(stretchable_columns[-1], QtGui.QHeaderView.Stretch)
+            hheader.setStretchLastSection(False)
 
         if factory.show_column_labels:
             hheader.setHighlightSections(False)
@@ -863,29 +863,11 @@ class TableView(QtGui.QTableView):
         elif factory.sortable:
             self.setSortingEnabled(True)
 
-        # Set the table size policy
-        policy_map = dict(
-                preferred = QtGui.QSizePolicy.Preferred,
-                fixed = QtGui.QSizePolicy.Fixed,
-                minimum = QtGui.QSizePolicy.Minimum,
-                maximum = QtGui.QSizePolicy.Maximum,
-                expanding = QtGui.QSizePolicy.Expanding,
-                minimum_expanding = QtGui.QSizePolicy.MinimumExpanding,
-                ignored = QtGui.QSizePolicy.Ignored)
-        sp = None
-        if factory.h_size_policy is not None:
-            sp = self.sizePolicy()
-            sp.setHorizontalPolicy(policy_map[factory.h_size_policy])
-        if factory.v_size_policy is not None:
-            if not sp:
-                sp = self.sizePolicy()
-            sp.setVerticalPolicy(policy_map[factory.v_size_policy])
-        if sp:
-            self.setSizePolicy(sp)
-
         if factory._qt_stylesheet is not None:
             self.setStyleSheet(factory._qt_stylesheet)
+
         self.resizeColumnsToContents()
+
 
     def contextMenuEvent(self, event):
         """Reimplemented to create context menus for cells and empty space."""
@@ -1037,7 +1019,14 @@ class TableView(QtGui.QTableView):
     def resizeColumnsToContents(self):
         """Reimplemented to support proportional column width specifications."""
 
-        print "resizing column to contents"
+        # TODO: The proportional size specification approach found in the
+        # TableColumns is not entirely compatible with the ability to
+        # specify the resize_mode.  Namely, there are combinations of
+        # specifications that are redundant, and others which are 
+        # contradictory.  Rework this method so that the various values
+        # for **width** have a well-defined, sensible meaning for each
+        # of the possible values of resize_mode.
+
         editor = self._editor
         available_space = self.viewport().width()
         hheader = self.horizontalHeader()
@@ -1047,7 +1036,7 @@ class TableView(QtGui.QTableView):
         for column_index in xrange(len(editor.columns)):
             column = editor.columns[column_index]
             requested_width = column.get_width()
-            if column.resize_mode in ("interactive", "stretch") and 0 < requested_width < 1:
+            if column.resize_mode in ("interactive", "stretch") and 0 < requested_width <= 1.0:
                 proportional.append((column_index, requested_width))
             else:
                 base_width = hheader.sectionSizeHint(column_index)
