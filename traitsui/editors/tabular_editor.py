@@ -72,6 +72,9 @@ class TabularEditor ( BasicEditorFactory ):
     # with:
     selected_row = Str
 
+    # Whether or not to allow selection.
+    selectable = Bool( True )
+
     # The optional extended name of the trait to synchronize the activated value
     # with:
     activated = Str

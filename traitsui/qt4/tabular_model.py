@@ -132,7 +132,9 @@ class TabularModel(QtCore.QAbstractTableModel):
         row = mi.row()
         column = mi.column()
 
-        flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
+        flags = QtCore.Qt.ItemIsEnabled
+        if editor.factory.selectable:
+            flags |= QtCore.Qt.ItemIsSelectable
 
         # If the adapter defines get_can_edit_cell(), use it to determine
         # editability over the row-wise get_can_edit().
