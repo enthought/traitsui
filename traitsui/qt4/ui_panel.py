@@ -526,6 +526,7 @@ class _GroupPanel(object):
             # Create the TabWidget or ToolBox.
             if group.layout == 'tabbed':
                 sub = QtGui.QTabWidget()
+                sub.setProperty("traits_tabbed_group", QtCore.QVariant(True))
             else:
                 sub = QtGui.QToolBox()
 

@@ -169,18 +169,18 @@ class Editor ( UIEditor ):
             # Store the page number and name on the parent
             for i in range(0, notebook.count()):
                 if notebook.widget(i) == page:
-                    self.__tab_index = i
-                    self.__tab_text = notebook.tabText(i)
+                    self._tab_index = i
+                    self._tab_text = notebook.tabText(i)
                     page.setVisible(False)
                     notebook.removeTab(i)
                     break
         else:
             # Check to see if our parent has previously-stored tab
             # index and text attributes
-            if (getattr(self, "__tab_index", None) is not None and
-                    getattr(self, "__tab_text", None) is not None):
+            if (getattr(self, "_tab_index", None) is not None and
+                    getattr(self, "_tab_text", None) is not None):
                 page.setVisible(True)
-                notebook.insertTab(self.__tab_index, page, self.__tab_text)
+                notebook.insertTab(self._tab_index, page, self._tab_text)
         return
 
     def _visible_changed_helper(self, control, visible):
@@ -194,7 +194,6 @@ class Editor ( UIEditor ):
                 itm = control.itemAt(i)
                 self._visible_changed_helper((itm.widget() or itm.layout()),
                         visible)
-
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
     #---------------------------------------------------------------------------
