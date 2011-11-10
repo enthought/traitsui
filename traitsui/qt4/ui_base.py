@@ -42,6 +42,10 @@ from helper \
 # List of all predefined system button names:
 SystemButtons = ['Undo', 'Redo', 'Apply', 'Revert', 'OK', 'Cancel', 'Help']
 
+def default_icon():
+    from enthought.pyface.image_resource import ImageResource
+    return ImageResource('frame.png')
+
 #-------------------------------------------------------------------------------
 #  'RadioGroup' class:
 #-------------------------------------------------------------------------------
@@ -445,7 +449,7 @@ class BaseDialog(BasePanel):
         from pyface.image_resource import ImageResource
 
         if not isinstance(icon, ImageResource):
-            icon = ImageResource('frame.png')
+            icon = default_icon()
 
         self.control.setWindowIcon(icon.create_icon())
 
