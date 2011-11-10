@@ -192,9 +192,16 @@ class SimpleEditor ( BaseEditor ):
         if self.factory.evaluate is not None:
             control.setEditable(True)
             if self.factory.auto_set:
+            if self.factory.auto_set:
                 QtCore.QObject.connect(control,
                                        QtCore.SIGNAL('editTextChanged(QString)'),
                                        self.update_text_object)
+            else:
+                QtCore.QObject.connect(control.lineEdit(),
+                                   QtCore.SIGNAL('returnPressed()'),
+                                   self.update_autoset_text_object)
+            control.setInsertPolicy(QtGui.QComboBox.NoInsert)
+
             else:
                 QtCore.QObject.connect(control,
                                        QtCore.SIGNAL('editingFinished()'),
@@ -271,6 +278,10 @@ class SimpleEditor ( BaseEditor ):
         if self.control:
             text = self.control.lineEdit().text()
             return self.update_text_object(text)
+
+    def update_autoset_text_object(self):
+        text = self.control.lineEdit().text()
+        return self.update_text_object(text)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
