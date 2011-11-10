@@ -151,25 +151,35 @@ class Editor ( UIEditor ):
 
         self._visible_changed_helper(self.control, visible)
 
-        # FIXME: Does PyQt need something similar?
-        # Handle the case where the item whose visibility has changed is a
-        # notebook page:
-        #page      = self.control.GetParent()
-        #page_name = getattr( page, '_page_name', '' )
-        #if page_name != '':
-        #    notebook = page.GetParent()
-        #    for i in range( 0, notebook.GetPageCount() ):
-        #        if notebook.GetPage( i ) is page:
-        #            break
-        #    else:
-        #        i = -1
+        page = self.control.parent()
+        if page is None or page.parent() is None:
+            return
 
-        #    if visible:
-        #        if i < 0:
-        #            notebook.AddPage( page, page_name )
+        # The TabWidget (representing the notebook) has a StackedWidget inside it,
+        # which then contains our parent.
+        # Even after the tab is removed, the parent-child relationship between
+        # our container widget (representing the page) and the enclosing TabWidget,
+        # so the following reference is still valid.
+        notebook = page.parent().parent()
+        if notebook is None or not isinstance(notebook, QtGui.QTabWidget):
+            return
 
-        #    elif i >= 0:
-        #        notebook.RemovePage( i )
+        if not visible:
+            # Store the page number and name on the parent
+            for i in range(0, notebook.count()):
+                if notebook.widget(i) == page:
+                    self.__tab_index = i
+                    self.__tab_text = notebook.tabText(i)
+                    page.setVisible(False)
+                    notebook.removeTab(i)
+                    break
+        else:
+            # Check to see if our parent has previously-stored tab
+            # index and text attributes
+            if hasattr(self, "__tab_index") and hasattr(self, "__tab_text"):
+                page.setVisible(True)
+                notebook.insertTab(self.__tab_index, page, self.__tab_text)
+        return
 
     def _visible_changed_helper(self, control, visible):
         """A helper that allows the control to be a layout and recursively
