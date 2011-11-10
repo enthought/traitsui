@@ -280,8 +280,9 @@ class SimpleEditor ( BaseEditor ):
             return self.update_text_object(text)
 
     def update_autoset_text_object(self):
-        text = self.control.lineEdit().text()
-        return self.update_text_object(text)
+        if self.control:
+            text = self.control.lineEdit().text()
+            self.update_text_object(text)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
