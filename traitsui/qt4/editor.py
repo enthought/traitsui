@@ -152,7 +152,7 @@ class Editor ( UIEditor ):
         self._visible_changed_helper(self.control, visible)
 
         page = self.control.parent()
-        if page is None or page.parent() is None:
+        if page is None or page.parent() is None or page.parent().parent() is None:
             return
 
         # The TabWidget (representing the notebook) has a StackedWidget inside it,
@@ -160,9 +160,10 @@ class Editor ( UIEditor ):
         # Even after the tab is removed, the parent-child relationship between
         # our container widget (representing the page) and the enclosing TabWidget,
         # so the following reference is still valid.
-        notebook = page.parent().parent()
+        stack_widget = page.parent()
+        notebook = stack_widget.parent()
         is_tabbed_group = notebook.property("traits_tabbed_group").toBool()
-        if notebook is None or not isinstance(notebook, QtGui.QTabWidget) or not is_tabbed_group:
+        if notebook is None or not isinstance(notebook, QtGui.QTabWidget) or not is_tabbed_group or stack_widget.count() != 1:
             return
 
         if not visible:
