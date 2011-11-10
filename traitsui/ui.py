@@ -834,8 +834,8 @@ class UI ( HasPrivateTraits ):
                 if not eval( when, globals(), context ):
                     value = False
             except:
-                # fixme: Should the exception be logged somewhere?
-                pass
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
 
             setattr( editor, trait, value )
 
