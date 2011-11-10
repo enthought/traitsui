@@ -784,9 +784,8 @@ class TableDelegate(QtGui.QStyledItemDelegate):
         control.setAutoFillBackground(True)
 
         # Make sure that editors are disposed of correctly
-        QtCore.QObject.connect(control, QtCore.SIGNAL('destroyed()'),
-                               lambda: editor.dispose())
-
+        # will be disposed in closeEditor of the TableView
+        control._editor = editor
         return control
 
     def updateEditorGeometry(self, editor, option, index):
@@ -1068,6 +1067,15 @@ class TableView(QtGui.QTableView):
             base_width = hheader.sectionSizeHint(column_index)
             width = max(base_width, int(percent * available_space))
             hheader.resizeSection(column_index, width)
+
+    def closeEditor(self, control, hint) :
+        # dispose traits editor associated with control if any
+        editor = getattr(control, "_editor", None)
+        if editor is not None :
+            editor.dispose()
+            delattr(control, "_editor")
+
+        return super(TableView, self).closeEditor(control, hint)
 
 #-------------------------------------------------------------------------------
 #  Editor for configuring the filters available to a TableEditor:
