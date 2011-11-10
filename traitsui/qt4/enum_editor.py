@@ -217,6 +217,17 @@ class SimpleEditor ( BaseEditor ):
         return control
 
     #---------------------------------------------------------------------------
+    #  Adjust size polify to behave properly in group
+    #---------------------------------------------------------------------------
+
+    def set_size_policy(self, direction, resizable, springy, stretch) :
+        super(SimpleEditor, self).set_size_policy(direction, resizable, springy, stretch)
+
+        if ((direction == QtGui.QBoxLayout.LeftToRight and springy) or
+            (direction != QtGui.QBoxLayout.LeftToRight and resizable)) :
+            self.control.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContentsOnFirstShow)
+
+    #---------------------------------------------------------------------------
     #  Handles the user selecting a new value from the combo box:
     #---------------------------------------------------------------------------
 

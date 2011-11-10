@@ -318,6 +318,23 @@ class Editor ( UIEditor ):
         """ Returns whether the action should be defined in the user interface.
         """
         if action.defined_when != '':
+
+    def set_size_policy(self, direction, resizable, springy, stretch) :
+        policy = self.control.sizePolicy()
+        if direction == QtGui.QBoxLayout.LeftToRight:
+            policy.setHorizontalStretch(stretch)
+            if springy:
+                policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+            if resizable :
+                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+        else:
+            policy.setVerticalStretch(stretch)
+            if resizable :
+                policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+            if springy :
+                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+        self.control.setSizePolicy(policy)
+
             try:
                 if not eval( action.defined_when, globals(), self._menu_context ):
                     return False
