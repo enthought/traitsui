@@ -96,6 +96,11 @@ class ToolkitEditorFactory ( EditorFactory ):
     filters = List( Instance(
                      'traitsui.table_filter.TableFilter' ) )
 
+    # The optional extended trait name of the trait used to notify that the
+    # filter has changed and the displayed objects should be updated.
+    # It should be an Event.
+    update_filter_name = Str
+
     # Filter object used to allow a user to search the table.
     # NOTE: If left as None, the table will not be searchable.
     search = Instance( 'traitsui.table_filter.TableFilter' )

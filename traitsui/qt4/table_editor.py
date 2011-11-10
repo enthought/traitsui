@@ -76,6 +76,9 @@ class TableEditor(Editor, BaseTableEditor):
     # Current filter summary message
     filter_summary = Str('All items')
 
+    # Update the filtered contents.
+    update_filter = Event()
+
     # The event fired when a cell is clicked on:
     click = Event
 
@@ -241,6 +244,7 @@ class TableEditor(Editor, BaseTableEditor):
         self.sync_value(factory.selected_indices, 'selected_indices', is_list=is_list)
         self.sync_value(factory.filter_name, 'filter', 'from')
         self.sync_value(factory.filtered_indices, 'filtered_indices', 'to')
+        self.sync_value(factory.update_filter_name, 'update_filter', 'from')
 
         self.auto_size = self.factory.auto_size
 
@@ -292,7 +296,7 @@ class TableEditor(Editor, BaseTableEditor):
 
         self.table_view.setUpdatesEnabled(False)
         try:
-            filtering = len(self.factory.filters) > 0
+            filtering = len(self.factory.filters) > 0 or self.filter is not None
             if filtering:
                 self._update_filtering()
 
@@ -576,6 +580,11 @@ class TableEditor(Editor, BaseTableEditor):
         """Handle the selected row/column/cell being changed externally."""
         if not self._no_notify:
             self.set_selection(self.selected, notify=False)
+
+    def _update_filter_changed(self):
+        """ The filter has changed internally.
+        """
+        self._filter_changed(self.filter, self.filter)
 
     #-- Event Handlers ---------------------------------------------------------
 
