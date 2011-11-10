@@ -462,7 +462,7 @@ class _ListStrEditor(Editor):
             try:
                 eval( method_name, globals(), self._context )
             except:
-                from enthought.traits.api import raise_to_debug
+                from traitsui.api import raise_to_debug
                 raise_to_debug()
             return
 
