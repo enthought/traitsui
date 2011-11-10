@@ -377,11 +377,13 @@ class TabularEditor(Editor):
     def _multi_selected_rows_changed(self, selected_rows):
         if not self._no_update:
             smodel = self.control.selectionModel()
-            smodel.clearSelection()
+            selection = QtGui.QItemSelection()
             for row in selected_rows:
-                smodel.select(self.model.index(row, 0),
-                              QtGui.QItemSelectionModel.Select |
-                              QtGui.QItemSelectionModel.Rows)
+                selection.select(self.model.index(row, 0), self.model.index(row, 0))
+            smodel.clearSelection()
+            smodel.select(selection,
+                QtGui.QItemSelectionModel.Select | 
+                QtGui.QItemSelectionModel.Rows)
 
     def _multi_selected_rows_items_changed(self, event):
         smodel = self.control.selectionModel()
