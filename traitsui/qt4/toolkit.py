@@ -57,7 +57,7 @@ class _CallAfter(QtCore.QObject):
     # The mutex around the list of pending calls.
     _calls_mutex = QtCore.QMutex()
 
-    def __init__(self, handler, *args):
+    def __init__(self, handler, *args, **kwds):
         """ Initialise the call.
         """
         QtCore.QObject.__init__(self)
@@ -65,6 +65,7 @@ class _CallAfter(QtCore.QObject):
         # Save the details of the call.
         self._handler = handler
         self._args = args
+        self._kwds = kwds
 
         # Add this to the list.
         self._calls_mutex.lock()
@@ -85,7 +86,7 @@ class _CallAfter(QtCore.QObject):
         """
         if event.type() == _QT_TRAITS_EVENT:
             # Invoke the handler
-            self._handler(*self._args)
+            self._handler(*self._args, **self._kwds)
 
             # We cannot remove from self._calls here. QObjects don't like being
             # garbage collected during event handlers (there are tracebacks,
@@ -103,11 +104,11 @@ class _CallAfter(QtCore.QObject):
         del self._calls[self._calls.index(self)]
         self._calls_mutex.unlock()
 
-def ui_handler ( handler, *args ):
+def ui_handler ( handler, *args, **kwds ):
     """ Handles UI notification handler requests that occur on a thread other
         than the UI thread.
     """
-    _CallAfter(handler, *args)
+    _CallAfter(handler, *args, **kwds)
 
 # Tell the traits notification handlers to use this UI handler
 set_ui_handler( ui_handler )
