@@ -239,7 +239,8 @@ class SimpleEditor ( BaseEditor ):
             try:
                 self.value = self.mapping[unicode(text)]
             except:
-                pass
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
             self._no_enum_update -= 1
 
     #---------------------------------------------------------------------------
