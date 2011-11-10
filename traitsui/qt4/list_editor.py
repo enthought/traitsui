@@ -170,9 +170,15 @@ class SimpleEditor ( Editor ):
 
         editor = self._editor
         for index, value in enumerate(self.value):
+            row, column = divmod(index, self.factory.columns)
+
+            # Account for the fact that we have <columns> number of
+            # pairs
+            column = column * self.factory.columns
+
             if resizable:
                 control = IconButton('list_editor.png', self.popup_menu)
-                layout.addWidget(control, index, 0)
+                layout.addWidget(control, row, column)
 
             proxy = ListItemProxy( self.object, self.name, index, item_trait,
                                    value )
@@ -184,11 +190,10 @@ class SimpleEditor ( Editor ):
             pcontrol = peditor.control
             pcontrol.proxy = proxy
 
-            i, j = divmod(index, self.factory.columns)
             if isinstance(pcontrol, QtGui.QWidget):
-                layout.addWidget(pcontrol, i, j)
+                layout.addWidget(pcontrol, row, column+1)
             else:
-                layout.addLayout(pcontrol, i, j)
+                layout.addLayout(pcontrol, row, column+1)
 
         # QScrollArea can have problems if the widget being scrolled is set too
         # early (ie. before it contains something).
