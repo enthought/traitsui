@@ -148,6 +148,9 @@ class Editor ( UIEditor ):
         """
         if self.label_control is not None:
             self.label_control.setVisible(visible)
+        if self.control is None:
+            # We are being called after the editor has already gone away.
+            return
 
         self._visible_changed_helper(self.control, visible)
 
