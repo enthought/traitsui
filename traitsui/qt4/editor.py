@@ -161,7 +161,8 @@ class Editor ( UIEditor ):
         # our container widget (representing the page) and the enclosing TabWidget,
         # so the following reference is still valid.
         notebook = page.parent().parent()
-        if notebook is None or not isinstance(notebook, QtGui.QTabWidget):
+        is_tabbed_group = notebook.property("traits_tabbed_group").toBool()
+        if notebook is None or not isinstance(notebook, QtGui.QTabWidget) or not is_tabbed_group:
             return
 
         if not visible:
@@ -176,7 +177,8 @@ class Editor ( UIEditor ):
         else:
             # Check to see if our parent has previously-stored tab
             # index and text attributes
-            if hasattr(self, "__tab_index") and hasattr(self, "__tab_text"):
+            if (getattr(self, "__tab_index", None) is not None and
+                    getattr(self, "__tab_text", None) is not None):
                 page.setVisible(True)
                 notebook.insertTab(self.__tab_index, page, self.__tab_text)
         return
