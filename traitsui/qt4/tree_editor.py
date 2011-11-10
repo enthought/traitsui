@@ -1487,9 +1487,10 @@ class SimpleEditor ( Editor ):
 
                 # Add all of the children that were added:
                 for child in event.added:
-                    child, child_node = self._node_for( child )
-                    if child_node is not None:
-                        self._append_node( nid, child_node, child )
+                    if id(child) not in self._map:
+                        child, child_node = self._node_for( child )
+                        if child_node is not None:
+                            self._append_node( nid, child_node, child )
 
             # Try to expand the node (if requested):
             if node.can_auto_open( object ):
