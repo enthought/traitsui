@@ -155,7 +155,7 @@ class Editor ( UIEditor ):
         self._visible_changed_helper(self.control, visible)
 
         page = self.control.parent()
-        if page is None or page.parent() is None or page.parent().parent() is None:
+        if page is None or page.parent() is None or page.parent().parent() is None or page.layout().count() != 1:
             return
 
         # The TabWidget (representing the notebook) has a StackedWidget inside it,
