@@ -488,6 +488,10 @@ class TabularEditor(Editor):
                              'handler': self.ui.handler }
             qmenu.exec_(self.control.mapToGlobal(pos))
             self._menu_context = None
+        else:
+            #If no menu is defined on the adapter, just trigger a click event.
+            self._on_column_right_click(column)
+
 
 #-------------------------------------------------------------------------------
 #  'TabularEditorEvent' class:
