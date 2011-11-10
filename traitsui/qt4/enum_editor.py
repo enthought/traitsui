@@ -36,7 +36,7 @@ from editor \
 from constants \
     import OKColor, ErrorColor
 
-from helper \
+from traitsui.helper \
     import enum_values_changed
 
 #-------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ class BaseEditor ( Editor ):
         """ Recomputes the cached data based on the underlying enumeration model.
         """
         self._names, self._mapping, self._inverse_mapping = \
-            enum_values_changed( self._value() )
+            enum_values_changed( self._value(), self.string_value )
 
     #---------------------------------------------------------------------------
     #  Handles the underlying object model's enumeration set being changed:
