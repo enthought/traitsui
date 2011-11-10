@@ -1,5 +1,5 @@
 
-from ...api import Bool, List, Str
+from traits.api import Bool, List, Str
 from .date_editor import DateEditor
 
 class CellFormat(object):

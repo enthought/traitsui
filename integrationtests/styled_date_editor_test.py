@@ -1,12 +1,12 @@
 
 from datetime import date
 
-from enthought.etsconfig.api import ETSConfig
+from traits.etsconfig.api import ETSConfig
 ETSConfig.toolkit = 'qt4'
 
-from enthought.traits.api import Date, Dict, HasTraits, List, on_trait_change
-from enthought.traits.ui.api import View, Item, StyledDateEditor
-from enthought.traits.ui.editors.styled_date_editor import CellFormat
+from traits.api import Date, Dict, HasTraits, List, on_trait_change
+from traitsui.api import View, Item, StyledDateEditor
+from traitsui.editors.styled_date_editor import CellFormat
 
 class Foo(HasTraits):
     dates = Dict()

@@ -1,6 +1,8 @@
 
-from PyQt4 import QtCore, QtGui
-from PyQt4.QtGui import QFont
+from pyface.qt import QtCore, QtGui
+from pyface.qt.QtGui import QFont
+
+from traits.api import Dict
 
 # For a simple editor style, we just punt and use the same simple editor
 # as in the default date_editor.
@@ -9,6 +11,10 @@ from date_editor import CustomEditor as DateCustomEditor
 
 
 class CustomEditor(DateCustomEditor):
+
+    dates = Dict()
+
+    styles = Dict()
 
     def init(self, parent):
         self.control = QtGui.QCalendarWidget()
@@ -20,19 +26,14 @@ class CustomEditor(DateCustomEditor):
             self.control.setMinimumDate(QtCore.QDate.currentDate())
 
         if self.factory.dates_trait and self.factory.styles_trait:
-            # Attach listeners to the factory
-            self.object.on_trait_change(self._set_dates, self.factory.dates_trait)
-            self.object.on_trait_change(self._update_dates, self.factory.dates_trait + "_items")
-            self.object.on_trait_change(self._set_styles, self.factory.styles_trait)
-            self.object.on_trait_change(self._update_styles, self.factory.styles_trait + "_items")
-            self._set_styles(None, getattr(self.object, self.factory.styles_trait))
-            self._set_dates(None, getattr(self.object, self.factory.dates_trait))
+            self.sync_value(self.factory.dates_trait, "dates", "from")
+            self.sync_value(self.factory.styles_trait, "styles", "from")
 
         self.control.clicked.connect(self.update_object)
 
         return
 
-    def _set_dates(self, old, new):
+    def _dates_changed(self, old, new):
         # Someone changed out the entire dict.  The easiest, most robust
         # way to handle this is to reset the text formats of all the dates
         # in the old dict, and then set the dates in the new dict.
@@ -42,7 +43,7 @@ class CustomEditor(DateCustomEditor):
             styles = getattr(self.object, self.factory.styles_trait, None)
             self._apply_styles(styles, new)
 
-    def _update_dates(self, event):
+    def _dates_items_changed(self, event):
         # Handle the added and changed items
         groups_to_set = event.added
         groups_to_set.update(event.changed)
@@ -52,7 +53,7 @@ class CustomEditor(DateCustomEditor):
         # Handle the removed items by resetting them
         [map(self._reset_formatting, dates) for dates in event.removed.values()]
 
-    def _set_styles(self, old, new):
+    def _styles_changed(self, old, new):
         groups = getattr(self.object, self.factory.dates_trait, {})
         if not new:
             # If no new styles, then reset all the dates to a default style
@@ -61,7 +62,7 @@ class CustomEditor(DateCustomEditor):
             self._apply_styles(new, groups)
         return
 
-    def _update_styles(self, event):
+    def _styles_items_changed(self, event):
         groups = getattr(self.object, self.factory.dates_trait)
         styles = getattr(self.object, self.factory.styles_trait)
 
