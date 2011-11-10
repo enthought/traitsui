@@ -176,8 +176,11 @@ class TabularEditor(Editor):
         signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
         QtCore.QObject.connect(control, signal, self._on_dclick)
         signal = QtCore.SIGNAL('sectionClicked(int)')
-        QtCore.QObject.connect(control.horizontalHeader(), signal,
-                               self._on_column_click)
+        QtCore.QObject.connect(control.horizontalHeader(), signal, self._on_column_click)
+
+        control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        signal = QtCore.SIGNAL('customContextMenuRequested(QPoint)')
+        QtCore.QObject.connect(control, signal, self._on_context_menu)
 
         self.header_event_filter = HeaderEventFilter(self)
         control.horizontalHeader().installEventFilter(self.header_event_filter)
@@ -448,6 +451,21 @@ class TabularEditor(Editor):
             self.multi_selected = selected
         finally:
             self._no_update = False
+
+    def _on_context_menu(self, pos) :
+        column, row = self.control.columnAt(pos.x()), self.control.rowAt(pos.y())
+        menu = self.adapter.get_menu(self.object, self.name, row, column)
+        if menu :
+            qmenu = menu.create_menu( self.control, self )
+            self._context = {'object':  self.object,
+                             'editor':  self,
+                             'column':  column,
+                             'row':     row,
+                             'item':    self.adapter.get_item(self.object, self.name, row),
+                             'info':    self.ui.info,
+                             'handler': self.ui.handler }
+            qmenu.exec_(self.control.mapToGlobal(pos))
+            self._context = None
 
 #-------------------------------------------------------------------------------
 #  'TabularEditorEvent' class:

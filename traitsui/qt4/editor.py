@@ -255,6 +255,83 @@ class Editor ( UIEditor ):
         """
         self.set_error_state()
 
+    #---------------------------------------------------------------------------
+    #  Handles the editor's context menu action
+    #---------------------------------------------------------------------------
+
+    def perform (self, action, action_event = None ):
+        """ Performs the action described by a specified Action object.
+        """
+        self.ui.do_undoable( self._perform, action )
+
+    def _perform ( self, action ):
+        method_name       = action.action
+        info              = self._context['info']
+        handler           = self._context['handler']
+        object            = self._context['object']
+        self._context['action'] = action
+
+        if method_name.find( '.' ) >= 0:
+            if method_name.find( '(' ) < 0:
+                method_name += '()'
+            try:
+                eval( method_name, globals(), self._context )
+            except:
+                from enthought.traits.api import raise_to_debug
+                raise_to_debug()
+            return
+
+        method = getattr( handler, method_name, None )
+        if method is not None:
+            method( info, object )
+            return
+
+        if action.on_perform is not None:
+            action.on_perform(object)
+
+    def eval_when ( self, condition, object, trait ):
+        """ Evaluates a condition within a defined context, and sets a 
+        specified object trait based on the result, which is assumed to be a
+        Boolean.
+        """
+        if condition != '':
+            value = True
+            try:
+                if not eval( condition, globals(), self._context ):
+                    value = False
+            except:
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
+            setattr( object, trait, value )
+
+    def add_to_menu ( self, menu_item ):
+        """ Adds a menu item to the menu bar being constructed.
+        """
+        action = menu_item.item.action
+        self.eval_when( action.enabled_when, menu_item, 'enabled' )
+        self.eval_when( action.checked_when, menu_item, 'checked' )
+
+    def can_add_to_menu(self, action) :
+        """ Returns whether the action should be defined in the user interface.
+        """
+        if action.defined_when != '':
+            try:
+                if not eval( action.defined_when, globals(), self._context ):
+                    return False
+            except:
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
+
+        if action.visible_when != '':
+            try:
+                if not eval( action.visible_when, globals(), self._context ):
+                    return False
+            except:
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
+
+        return True
+
 #-------------------------------------------------------------------------------
 #  'EditorWithList' class:
 #-------------------------------------------------------------------------------

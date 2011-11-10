@@ -167,6 +167,9 @@ class TabularAdapter ( HasPrivateTraits ):
     # The tooltip information for a row/column item:
     tooltip = Str
 
+    # The tooltip information for a row/column item:
+    menu = Any
+
     # List of optional delegated adapters:
     adapters = List( ITabularAdapter, update = True )
 
@@ -314,6 +317,11 @@ class TabularAdapter ( HasPrivateTraits ):
         """ Returns the tooltip for a specified row.
         """
         return self._result_for( 'get_tooltip', object, trait, row, column )
+
+    def get_menu ( self, object, trait, row, column ):
+        """ Returns the context menu for a specified cell.
+        """
+        return self._result_for( 'get_menu', object, trait, row, column )
 
     #-- Adapter methods that are not sensitive to item type --------------------
 
