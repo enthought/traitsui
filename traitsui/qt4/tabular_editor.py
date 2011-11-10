@@ -36,9 +36,20 @@ from traitsui.ui_traits import Image
 from editor import Editor
 from tabular_model import TabularModel
 
-#-------------------------------------------------------------------------------
-#  'TabularEditor' class
-#-------------------------------------------------------------------------------
+
+class HeaderEventFilter(QtCore.QObject) :
+    def __init__(self, editor) :
+        super(HeaderEventFilter, self).__init__()
+        self.editor = editor
+
+    def eventFilter(self, obj, event) :
+        if event.type() == QtCore.QEvent.ContextMenu :
+            column = obj.logicalIndexAt(event.pos())
+            if column != -1 :
+                self.editor._on_column_right_click(column)
+            return True
+        return False
+
 
 class TabularEditor(Editor):
     """ A traits UI editor for editing tabular data (arrays, list of tuples,
@@ -82,6 +93,9 @@ class TabularEditor(Editor):
     # The most recent column click data:
     column_clicked = Instance('TabularEditorEvent')
 
+    # The most recent column click data:
+    column_right_clicked = Instance('TabularEditorEvent')
+
     # Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
 
@@ -105,6 +119,8 @@ class TabularEditor(Editor):
 
     # An image being converted:
     image = Image
+
+    header_event_filter = Any()
 
     #---------------------------------------------------------------------------
     #  Editor interface:
@@ -150,6 +166,7 @@ class TabularEditor(Editor):
         self.sync_value(factory.right_clicked,  'right_clicked',  'to')
         self.sync_value(factory.right_dclicked, 'right_dclicked', 'to')
         self.sync_value(factory.column_clicked, 'column_clicked', 'to')
+        self.sync_value(factory.column_right_clicked, 'column_right_clicked', 'to')
 
         # Connect other signals as necessary
         signal = QtCore.SIGNAL('activated(QModelIndex)')
@@ -161,6 +178,9 @@ class TabularEditor(Editor):
         signal = QtCore.SIGNAL('sectionClicked(int)')
         QtCore.QObject.connect(control.horizontalHeader(), signal,
                                self._on_column_click)
+
+        self.header_event_filter = HeaderEventFilter(self)
+        control.horizontalHeader().installEventFilter(self.header_event_filter)
 
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
@@ -390,6 +410,10 @@ class TabularEditor(Editor):
     def _on_column_click(self, column):
         event = TabularEditorEvent(editor=self, row=0, column=column)
         setattr(self, 'column_clicked', event)
+
+    def _on_column_right_click(self, column):
+        event = TabularEditorEvent(editor=self, row=0, column=column)
+        setattr(self, 'column_right_clicked', event)
 
     def _on_row_selection(self, added, removed):
         """ Handle the row selection being changed.

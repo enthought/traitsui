@@ -100,6 +100,10 @@ class TabularEditor ( BasicEditorFactory ):
     # clicked data with. The data is a TabularEditorEvent:
     column_clicked = Str
 
+    # The optional extended name of the trait to synchronize column
+    # right clicked data with. The data is a TabularEditorEvent:
+    column_right_clicked = Str
+
     # Can the user edit the values?
     editable = Bool( True )
 
