@@ -453,7 +453,7 @@ class GUIToolkit ( Toolkit ):
               specific color format.
         """
         return {
-            'WindowColor': QtGui.QApplication.palette().color(QtGui.QPalette.Window), 
+            'WindowColor': QtGui.QApplication.palette().color(QtGui.QPalette.Window),
         }
 
     #---------------------------------------------------------------------------
@@ -519,6 +519,10 @@ class GUIToolkit ( Toolkit ):
     def compound_editor ( self, *args, **traits ):
         import compound_editor as ce
         return ce.ToolkitEditorFactory( *args, **traits )
+
+    def styled_date_editor ( self, *args, **traits ):
+        import styled_date_editor as sde
+        return sde.ToolkitEditorFactory( *args, **traits )
 
     # Custom:
     def custom_editor ( self, *args, **traits ):

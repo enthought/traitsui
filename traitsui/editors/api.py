@@ -13,6 +13,7 @@ from .compound_editor import CompoundEditor
 from .csv_list_editor import CSVListEditor
 from .custom_editor import CustomEditor
 from .date_editor import DateEditor
+from .styled_date_editor import StyledDateEditor
 from .default_override import DefaultOverride
 from .directory_editor import DirectoryEditor
 from .dnd_editor import DNDEditor
