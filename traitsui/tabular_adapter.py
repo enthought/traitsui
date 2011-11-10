@@ -276,7 +276,7 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         return self._result_for( 'get_font', object, trait, row, 0 )
 
-    def get_text_color ( self, object, trait, row ):
+    def get_text_color ( self, object, trait, row, column=0 ):
         """ Returns the text color for a specified *object.trait[row]*
             item. A result of None means use the default text color.
         """

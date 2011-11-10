@@ -100,7 +100,7 @@ class TabularModel(QtCore.QAbstractTableModel):
                 return QtGui.QBrush(q_color)
 
         elif role == QtCore.Qt.ForegroundRole:
-            color = adapter.get_text_color(obj, name, row)
+            color = adapter.get_text_color(obj, name, row, column)
             if color is not None:
                 if isinstance(color, SequenceTypes):
                     q_color = QtGui.QColor(*color)
