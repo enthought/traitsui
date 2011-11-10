@@ -20,7 +20,7 @@ from pyface.qt import QtCore, QtGui
 
 from pyface.timer.api import do_later
 
-from traits.api import Any, Button, Event, List, HasTraits, \
+from traits.api import Any, Bool, Button, Event, List, HasTraits, \
     Instance, Int, Property, Str, cached_property, on_trait_change
 
 from traitsui.api import EnumEditor, InstanceEditor, Group, \
@@ -97,6 +97,9 @@ class TableEditor(Editor, BaseTableEditor):
 
     # The index of the row that was last right clicked on its vertical header
     header_row = Int
+
+    # Whether to auto-size the columns or not.
+    auto_size = Bool(False)
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -272,6 +275,8 @@ class TableEditor(Editor, BaseTableEditor):
         self.on_trait_change(self._update_columns, 'columns', remove=True)
         self.on_trait_change(self._update_columns, 'columns_items', remove=True)
 
+        self.auto_size = self.factory.auto_size
+
         super(TableEditor, self).dispose()
 
     #---------------------------------------------------------------------------
@@ -296,7 +301,7 @@ class TableEditor(Editor, BaseTableEditor):
             # externally to manage the selections
             self.model.invalidate()
 
-            if self.factory.auto_size:
+            if self.auto_size:
                 self.table_view.resizeColumnsToContents()
                 self.table_view.resizeRowsToContents()
 
@@ -318,7 +323,6 @@ class TableEditor(Editor, BaseTableEditor):
         header = self.table_view.horizontalHeader()
         if header is not None:
             prefs['column_state'] = str(header.saveState())
-
         return prefs
 
     #---------------------------------------------------------------------------
@@ -564,8 +568,9 @@ class TableEditor(Editor, BaseTableEditor):
                 self.table_view.setItemDelegateForColumn(i, column.renderer)
 
         self.model.reset()
-        self.table_view.resizeColumnsToContents()
-        self.table_view.resizeRowsToContents()
+        if self.auto_size:
+            self.table_view.resizeColumnsToContents()
+            self.table_view.resizeRowsToContents()
 
     def _selected_changed(self, new):
         """Handle the selected row/column/cell being changed externally."""
@@ -916,7 +921,7 @@ class TableView(QtGui.QTableView):
 
         QtGui.QTableView.resizeEvent(self, event)
 
-        if self._editor.factory.auto_size:
+        if self._editor.auto_size:
             self.resizeColumnsToContents()
             self.resizeRowsToContents()
 
@@ -925,8 +930,9 @@ class TableView(QtGui.QTableView):
             if (not self._initial_size and parent and
                 (self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
                 self._initial_size = True
-                self.resizeColumnsToContents()
-                self.resizeRowsToContents()
+                if self._editor.auto_size:
+                    self.resizeColumnsToContents()
+                    self.resizeRowsToContents()
 
     def sizeHint(self):
         """Reimplemented to define a better size hint for the width of the
