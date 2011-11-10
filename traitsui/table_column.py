@@ -132,6 +132,14 @@ class TableColumn ( HasPrivateTraits ):
     # > 1.0: absolute height in pixels):
     edit_height = Float( -1.0 )
 
+    # The resize mode for this column.  This takes precedence over other settings
+    # (like **width**, above).
+    #   "interactive": column can be resized by users or programmatically
+    #   "fixed": users cannot resize the column, but it can be set programmatically
+    #   "stretch": the column will be resized to fill the available space
+    #   "resize_to_contents": column will be sized to fit the contents, but then cannot be resized
+    resize_mode = Enum("interactive", "fixed", "stretch", "resize_to_contents")
+
     # The view (if any) to display when clicking a non-editable cell:
     view = AView
 

@@ -124,6 +124,15 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Should the cells of the table automatically size to the optimal size?
     auto_size = Bool( True )
 
+    # Mirrors the Qt QSizePolicy.Policy attribute, for horizontal and vertical
+    # dimensions.  For these to be useful, set auto_size to False.  If these
+    # are None, then the table size policy will not be set in that dimension
+    # (for backwards compatibility).
+    h_size_policy = Enum( None, "preferred", "fixed", "minimum", "maximum", "expanding",
+                        "minimum_expanding", "ignored" )
+    v_size_policy = Enum( None, "preferred", "fixed", "minimum", "maximum", "expanding",
+                        "minimum_expanding", "ignored" )
+
     # Should a new row automatically be added to the end of the table to allow
     # the user to create new entries? If True, **row_factory** must be set.
     auto_add = Bool( False )
