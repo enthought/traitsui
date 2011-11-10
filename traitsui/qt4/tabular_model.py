@@ -129,16 +129,24 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to set editable status and movable status.
         """
         editor = self._editor
-        index = mi.row()
+        row = mi.row()
+        column = mi.column()
 
         flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
 
+        # If the adapter defines get_can_edit_cell(), use it to determine
+        # editability over the row-wise get_can_edit().
         if (editor.factory.editable and 'edit' in editor.factory.operations and
-            editor.adapter.get_can_edit(editor.object, editor.name, index)):
+            hasattr(editor.adapter, 'get_can_edit_cell')):
+            if editor.adapter.get_can_edit_cell(editor.object, editor.name,
+                row, column):
+                flags |= QtCore.Qt.ItemIsEditable
+        elif (editor.factory.editable and 'edit' in editor.factory.operations and
+            editor.adapter.get_can_edit(editor.object, editor.name, row)):
             flags |= QtCore.Qt.ItemIsEditable
 
         if (editor.factory.editable and 'move' in editor.factory.operations and
-            editor.adapter.get_drag(editor.object, editor.name, index) is not None):
+            editor.adapter.get_drag(editor.object, editor.name, row) is not None):
             flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
 
         return flags
