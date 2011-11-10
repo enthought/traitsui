@@ -175,6 +175,8 @@ class TabularEditor(Editor):
         QtCore.QObject.connect(control, signal, self._on_activate)
         signal = QtCore.SIGNAL('clicked(QModelIndex)')
         QtCore.QObject.connect(control, signal, self._on_click)
+        signal = QtCore.SIGNAL('clicked(QModelIndex)')
+        QtCore.QObject.connect(control, signal, self._on_right_click)
         signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
         QtCore.QObject.connect(control, signal, self._on_dclick)
         signal = QtCore.SIGNAL('sectionClicked(int)')
@@ -436,6 +438,10 @@ class TabularEditor(Editor):
     def _on_column_click(self, column):
         event = TabularEditorEvent(editor=self, row=0, column=column)
         setattr(self, 'column_clicked', event)
+
+    def _on_right_click(self, column):
+        event = TabularEditorEvent(editor=self, row=0, column=column)
+        setattr(self, 'right_clicked', event)
 
     def _on_column_right_click(self, column):
         event = TabularEditorEvent(editor=self, row=0, column=column)
