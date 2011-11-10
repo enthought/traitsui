@@ -166,7 +166,7 @@ class Editor ( UIEditor ):
         stack_widget = page.parent()
         notebook = stack_widget.parent()
         is_tabbed_group = notebook.property("traits_tabbed_group").toBool()
-        if notebook is None or not isinstance(notebook, QtGui.QTabWidget) or not is_tabbed_group or stack_widget.count() != 1:
+        if notebook is None or not isinstance(notebook, QtGui.QTabWidget) or not is_tabbed_group:
             return
 
         if not visible:
