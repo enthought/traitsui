@@ -94,6 +94,9 @@ class TabularEditor(Editor):
     # The most recent column click data:
     column_right_clicked = Instance('TabularEditorEvent')
 
+    # The event triggering scrolling.
+    scroll_to_row = Event(Int)
+
     # Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
 
@@ -165,6 +168,7 @@ class TabularEditor(Editor):
         self.sync_value(factory.right_dclicked, 'right_dclicked', 'to')
         self.sync_value(factory.column_clicked, 'column_clicked', 'to')
         self.sync_value(factory.column_right_clicked, 'column_right_clicked', 'to')
+        self.sync_value(factory.scroll_to_row, 'scroll_to_row', 'from')
 
         # Connect other signals as necessary
         signal = QtCore.SIGNAL('activated(QModelIndex)')
@@ -389,6 +393,12 @@ class TabularEditor(Editor):
             smodel.select(self.model.index(row, 0),
                           QtGui.QItemSelectionModel.Select |
                           QtGui.QItemSelectionModel.Rows)
+
+    def _scroll_to_row_changed(self, row):
+        """ Scroll to the given row.
+        """
+        self.control.scrollTo(self.model.index(row, 0), self.control.PositionAtCenter)
+
 
     #-- Table Control Event Handlers -------------------------------------------
 

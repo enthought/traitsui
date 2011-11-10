@@ -107,6 +107,10 @@ class TabularEditor ( BasicEditorFactory ):
     # right clicked data with. The data is a TabularEditorEvent:
     column_right_clicked = Str
 
+    # The optional extended name of the Event trait that should be used to
+    # trigger a scroll-to command. The data is an integer giving the row.
+    scroll_to_row = Str
+
     # Can the user edit the values?
     editable = Bool( True )
 
