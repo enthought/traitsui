@@ -115,6 +115,10 @@ class TabularEditor ( BasicEditorFactory ):
     # Should vertical lines be drawn between items?
     vertical_lines = Bool( True )
 
+    # Should the columns automatically resize? Don't allow this when the amount
+    # of data is large.
+    auto_resize = Bool( False )
+
     # The adapter from trait values to editor values:
     adapter = Instance( 'traitsui.tabular_adapter.TabularAdapter', () )
 

@@ -622,6 +622,9 @@ class _TableView(QtGui.QTableView):
             large data sets.)
         """
         editor = self._editor
+        if editor.factory.auto_resize:
+            # Use the default implementation.
+            return super(_TableView, self).sizeHintForColumn(column)
 
         width = editor.adapter.get_width(editor.object, editor.name, column)
         if width > 1:
@@ -635,6 +638,9 @@ class _TableView(QtGui.QTableView):
             https://svn.enthought.com/enthought/wiki/Traits_3_0_tabular_editor.
         """
         editor = self._editor
+        if editor.factory.auto_resize:
+            # Use the default implementation.
+            return super(_TableView, self).resizeColumnsToContents()
         available_space = self.viewport().width()
         hheader = self.horizontalHeader()
 
