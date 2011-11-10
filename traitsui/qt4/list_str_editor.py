@@ -27,7 +27,7 @@ import collections
 
 from pyface.image_resource import ImageResource
 from traits.api import Any, Bool, Event, Int, Instance, List, \
-    Property, Str, TraitListEvent
+    Property, Str, TraitListEvent, NO_COMPARE
 from traitsui.list_str_adapter import ListStrAdapter
 
 from editor import Editor
@@ -65,9 +65,10 @@ class _ListStrEditor(Editor):
     selected_index = Int(-1)
     multi_selected_indices = List(Int)
 
-    # The most recently actived item and its index:
-    activated = Any
-    activated_index = Int
+    # The most recently actived item and its index.
+    # Always trigger change notification.
+    activated = Any(comparison_mode=NO_COMPARE)
+    activated_index = Int(comparison_mode=NO_COMPARE)
 
     # The most recently right_clicked item and its index:
     right_clicked = Event
