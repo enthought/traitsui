@@ -451,18 +451,23 @@ class SimpleEditor ( Editor ):
             del pnid._dummy
             return
 
-        expanded, node, object = self._get_node_data(nid)
-        id_object = id(object)
-        object_info = self._map[id_object]
-        for i, info in enumerate(object_info):
-            # QTreeWidgetItem does not have an equal operator, so use id()
-            if id(nid) == id(info[1]):
-                del object_info[i]
-                break
+        try:
+            expanded, node, object = self._get_node_data(nid)
+        except AttributeError:
+            # The node has already been deleted.
+            pass
+        else:
+            id_object = id(object)
+            object_info = self._map[id_object]
+            for i, info in enumerate(object_info):
+                # QTreeWidgetItem does not have an equal operator, so use id()
+                if id(nid) == id(info[1]):
+                    del object_info[i]
+                    break
 
-        if len( object_info ) == 0:
-            self._remove_listeners( node, object )
-            del self._map[ id_object ]
+            if len( object_info ) == 0:
+                self._remove_listeners( node, object )
+                del self._map[ id_object ]
 
         if pnid is None:
             self._tree.takeTopLevelItem(self._tree.indexOfTopLevelItem(nid))
