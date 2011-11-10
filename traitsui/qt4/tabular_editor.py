@@ -239,6 +239,10 @@ class TabularEditor(Editor):
         """
         if not self._no_update:
             self.model.reset()
+            if self.factory.multi_select:
+                self._multi_selected_changed(self.multi_selected)
+            else :
+                self._selected_changed(self.selected)
 
     #---------------------------------------------------------------------------
     #  TabularEditor interface:
@@ -384,7 +388,7 @@ class TabularEditor(Editor):
                 selection.select(self.model.index(row, 0), self.model.index(row, 0))
             smodel.clearSelection()
             smodel.select(selection,
-                QtGui.QItemSelectionModel.Select | 
+                QtGui.QItemSelectionModel.Select |
                 QtGui.QItemSelectionModel.Rows)
 
     def _multi_selected_rows_items_changed(self, event):
@@ -398,11 +402,18 @@ class TabularEditor(Editor):
                           QtGui.QItemSelectionModel.Select |
                           QtGui.QItemSelectionModel.Rows)
 
+    scroll_to_row_hint_map = {
+        'center'  : QtGui.QTableView.PositionAtCenter,
+        'top'     : QtGui.QTableView.PositionAtTop,
+        'bottom'  : QtGui.QTableView.PositionAtBottom,
+        'visible' : QtGui.QTableView.EnsureVisible,
+    }
+
     def _scroll_to_row_changed(self, row):
         """ Scroll to the given row.
         """
-        self.control.scrollTo(self.model.index(row, 0), self.control.PositionAtCenter)
-
+        scroll_hint = self.scroll_to_row_hint_map.get(self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
+        self.control.scrollTo(self.model.index(row, 0), scroll_hint)
 
     #-- Table Control Event Handlers -------------------------------------------
 
