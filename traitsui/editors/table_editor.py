@@ -303,6 +303,11 @@ class ToolkitEditorFactory ( EditorFactory ):
     # is created
     row_factory_kw = Dict
 
+    # Hooks for replacing parts of the implementation.
+    table_view_factory = Callable()
+    source_model_factory = Callable()
+    model_factory = Callable()
+
     #---------------------------------------------------------------------------
     #  Traits view definitions:
     #---------------------------------------------------------------------------

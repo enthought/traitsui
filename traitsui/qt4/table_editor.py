@@ -49,12 +49,18 @@ class TableEditor(Editor, BaseTableEditor):
 
     # The table view control associated with the editor:
     table_view = Any
+    def _table_view_default(self):
+        return TableView(editor=self)
 
     # A wrapper around the source model which provides filtering and sorting:
     model = Instance(SortFilterTableModel)
+    def _model_default(self):
+        return SortFilterTableModel(editor=self)
 
     # The table model associated with the editor:
     source_model = Instance(TableModel)
+    def _source_model_default(self):
+        return TableModel(editor=self)
 
     # The set of columns currently defined on the editor:
     columns = List(TableColumn)
@@ -115,11 +121,14 @@ class TableEditor(Editor, BaseTableEditor):
 
         factory = self.factory
         self.columns = factory.columns[:]
+        if factory.table_view_factory is not None:
+            self.table_view = factory.table_view_factory(editor=self)
+        if factory.source_model_factory is not None:
+            self.source_model = factory.source_model_factory(editor=self)
+        if factory.model_factory is not None:
+            self.model = factory.model_factory(editor=self)
 
         # Create the table view and model
-        self.table_view = TableView(editor=self)
-        self.source_model = TableModel(editor=self)
-        self.model = SortFilterTableModel(editor=self)
         self.model.setDynamicSortFilter(True)
         self.model.setSourceModel(self.source_model)
         self.table_view.setModel(self.model)
