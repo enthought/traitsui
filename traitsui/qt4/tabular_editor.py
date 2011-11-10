@@ -28,7 +28,7 @@ from pyface.qt import QtCore, QtGui
 from pyface.image_resource import ImageResource
 
 from traits.api import Any, Bool, Event, HasStrictTraits, Instance, \
-    Int, List, Property, TraitListEvent
+    Int, List, Property, TraitListEvent, NO_COMPARE
 
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.ui_traits import Image
@@ -73,8 +73,8 @@ class TabularEditor(Editor):
     multi_selected_rows = List(Int)
 
     # The most recently actived item and its index:
-    activated     = Any
-    activated_row = Int
+    activated     = Any(comparison_mode=NO_COMPARE)
+    activated_row = Int(comparison_mode=NO_COMPARE)
 
     # The most recent left click data:
     clicked = Instance('TabularEditorEvent')
