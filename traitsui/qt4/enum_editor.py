@@ -198,7 +198,7 @@ class SimpleEditor ( BaseEditor ):
                                        self.update_text_object)
             else:
                 QtCore.QObject.connect(control.lineEdit(),
-                                   QtCore.SIGNAL('returnPressed()'),
+                                   QtCore.SIGNAL('editingFinished()'),
                                    self.update_autoset_text_object)
             control.setInsertPolicy(QtGui.QComboBox.NoInsert)
 
