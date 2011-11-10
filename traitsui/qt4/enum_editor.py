@@ -192,7 +192,6 @@ class SimpleEditor ( BaseEditor ):
         if self.factory.evaluate is not None:
             control.setEditable(True)
             if self.factory.auto_set:
-            if self.factory.auto_set:
                 QtCore.QObject.connect(control,
                                        QtCore.SIGNAL('editTextChanged(QString)'),
                                        self.update_text_object)
@@ -201,11 +200,6 @@ class SimpleEditor ( BaseEditor ):
                                    QtCore.SIGNAL('editingFinished()'),
                                    self.update_autoset_text_object)
             control.setInsertPolicy(QtGui.QComboBox.NoInsert)
-
-            else:
-                QtCore.QObject.connect(control,
-                                       QtCore.SIGNAL('editingFinished()'),
-                                       self.update_autoset_text_object)
 
         self._no_enum_update = 0
         self.set_tooltip()
