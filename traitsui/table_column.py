@@ -107,6 +107,9 @@ class TableColumn ( HasPrivateTraits ):
     # or popup be activated automatically on mouse over)?
     auto_editable = Bool( False )
 
+    # Should a checkbox be displayed instead of True/False?
+    show_checkbox = Bool( True )
+
     # Can external objects be dropped on the column?
     droppable = Bool( False )
 

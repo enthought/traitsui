@@ -124,6 +124,13 @@ class TableModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.UserRole:
             return obj
 
+        elif role == QtCore.Qt.CheckStateRole:
+            if column.get_type(obj) == "bool" and column.show_checkbox:
+                if column.get_raw_value(obj):
+                    return QtCore.QVariant(QtCore.Qt.Checked)
+                else:
+                    return QtCore.QVariant(QtCore.Qt.Unchecked)
+
         return None
 
     def flags(self, mi):
@@ -143,6 +150,9 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if editor.factory.reorderable:
             flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
+
+        if column.get_type(obj) == "bool" and column.show_checkbox:
+            flags |= QtCore.Qt.ItemIsUserCheckable
 
         return flags
 
