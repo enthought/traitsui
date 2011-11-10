@@ -194,6 +194,11 @@ class _ListStrEditor(Editor):
         """
         if not self._no_update:
             self.model.reset()
+            # restore selection back
+            if self.factory.multi_select :
+                self._multi_selected_changed(self.multi_selected)
+            else :
+                self._selected_changed(self.selected)
 
     #---------------------------------------------------------------------------
     #  ListStrEditor interface:
@@ -292,12 +297,13 @@ class _ListStrEditor(Editor):
         """ Handles the editor's 'multi_selected' trait being changed.
         """
         if not self._no_update:
-            try:
-                indices = [ self.value.index(item) for item in selected ]
-            except ValueError:
-                pass
-            else:
-                self._multi_selected_indices_changed(indices)
+            indices = []
+            for item in selected :
+                try:
+                    indices.append(self.value.index(item))
+                except ValueError:
+                    pass
+            self._multi_selected_indices_changed(indices)
 
     def _multi_selected_items_changed(self, event):
         """ Handles the editor's 'multi_selected' trait being modified.
