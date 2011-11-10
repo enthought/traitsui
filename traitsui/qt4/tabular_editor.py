@@ -229,6 +229,8 @@ class TabularEditor(Editor):
         self.on_trait_change(self.update_editor, 'adapter.columns',
                              remove=True)
 
+        self.adapter.cleanup()
+
         super(TabularEditor, self).dispose()
 
     def update_editor(self):

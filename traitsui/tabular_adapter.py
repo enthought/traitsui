@@ -224,6 +224,17 @@ class TabularAdapter ( HasPrivateTraits ):
     # For each adapter, specifies the mapping from column index to column id:
     adapter_column_map = Property( depends_on = 'adapters,columns' )
 
+    #### TabularAdapter interface ####
+
+    def cleanup(self):
+        """ Clean up the adapter to remove references to objects.
+        """
+        self.trait_setq(
+            object=None,
+            item=None,
+            value=None,
+        )
+
     #-- Adapter methods that are sensitive to item type ------------------------
 
     def get_alignment ( self, object, trait, column ):
