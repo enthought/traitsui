@@ -80,6 +80,9 @@ class SimpleEditor ( Editor ):
 
         control = wtype(self.str_value)
 
+        if factory.read_only:
+            control.setReadOnly(True)
+
         if factory.password:
             control.setEchoMode(QtGui.QLineEdit.Password)
 

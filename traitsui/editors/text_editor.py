@@ -81,6 +81,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Is multi-line text allowed?
     multi_line = Bool( True )
 
+    # Is editor readonly (will use custom / default editor appearance with readonly flag set to true)
+    # in contrasrt with readonly style for item when completely another edito is used
+    read_only = Bool( False )
+
     # Is user input unreadable? (e.g., for a password)
     password = Bool( False )
 
