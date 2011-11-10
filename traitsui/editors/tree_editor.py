@@ -147,6 +147,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Any extra vertical padding to add.
     vertical_padding = Int(0)
 
+    # Whether or not to expand on a double-click.
+    expands_on_dclick = Bool(True)
+
 
     # Whether the labels should be wrapped around, if not an ellipsis is shown
     # This works only in the qt backend and if there is only one column in tree
