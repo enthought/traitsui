@@ -27,8 +27,8 @@ from pyface.qt import QtCore, QtGui
 
 from pyface.image_resource import ImageResource
 
-from traits.api import Any, Bool, Event, HasStrictTraits, Instance, \
-    Int, List, Property, TraitListEvent, NO_COMPARE
+from traits.api import (Any, Bool, Callable, Event, HasStrictTraits, Instance,
+    Int, List, NO_COMPARE, Property, TraitListEvent)
 
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.ui_traits import Image
@@ -123,6 +123,8 @@ class TabularEditor(Editor):
 
     header_event_filter = Any()
 
+    widget_factory = Callable(lambda *args, **kwds: _TableView(*args, **kwds))
+
     #---------------------------------------------------------------------------
     #  Editor interface:
     #---------------------------------------------------------------------------
@@ -136,7 +138,7 @@ class TabularEditor(Editor):
         self.model = TabularModel(editor=self)
 
         # Create the control
-        control = self.control = _TableView(self)
+        control = self.control = self.widget_factory(self)
 
         # Set up the selection listener
         if factory.multi_select:
