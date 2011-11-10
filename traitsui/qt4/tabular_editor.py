@@ -44,9 +44,7 @@ class HeaderEventFilter(QtCore.QObject) :
 
     def eventFilter(self, obj, event) :
         if event.type() == QtCore.QEvent.ContextMenu :
-            column = obj.logicalIndexAt(event.pos())
-            if column != -1 :
-                self.editor._on_column_right_click(column)
+            self.editor._on_column_context_menu(event.pos())
             return True
         return False
 
@@ -462,6 +460,19 @@ class TabularEditor(Editor):
                              'column':  column,
                              'row':     row,
                              'item':    self.adapter.get_item(self.object, self.name, row),
+                             'info':    self.ui.info,
+                             'handler': self.ui.handler }
+            qmenu.exec_(self.control.mapToGlobal(pos))
+            self._context = None
+
+    def _on_column_context_menu(self, pos) :
+        column = self.control.columnAt(pos.x())
+        menu = self.adapter.get_column_menu(self.object, self.name, -1, column)
+        if menu :
+            qmenu = menu.create_menu( self.control, self )
+            self._context = {'object':  self.object,
+                             'editor':  self,
+                             'column':  column,
                              'info':    self.ui.info,
                              'handler': self.ui.handler }
             qmenu.exec_(self.control.mapToGlobal(pos))
