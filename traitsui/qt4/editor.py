@@ -291,6 +291,8 @@ class EditorWithList ( Editor ):
 
         self.list_object.on_trait_change( self._list_updated,
                                           self.list_name, dispatch = 'ui' )
+        self.list_object.on_trait_change( self._list_updated,
+                                          self.list_name+'_items', dispatch = 'ui' )
 
         self._list_updated()
 
@@ -303,6 +305,8 @@ class EditorWithList ( Editor ):
         """
         self.list_object.on_trait_change( self._list_updated,
                                           self.list_name, remove = True )
+        self.list_object.on_trait_change( self._list_updated,
+                                          self.list_name+'_items', remove = True )
 
         super( EditorWithList, self ).dispose()
 
