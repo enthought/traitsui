@@ -281,23 +281,23 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         return self._result_for( 'get_dropped', object, trait, row, 0, value )
 
-    def get_font ( self, object, trait, row ):
+    def get_font ( self, object, trait, row, column = 0):
         """ Returns the font for a specified *object.trait[row]* item. A result
             of None means use the default font.
         """
-        return self._result_for( 'get_font', object, trait, row, 0 )
+        return self._result_for( 'get_font', object, trait, row, column )
 
-    def get_text_color ( self, object, trait, row, column=0 ):
+    def get_text_color ( self, object, trait, row, column = 0):
         """ Returns the text color for a specified *object.trait[row]*
             item. A result of None means use the default text color.
         """
-        return self._result_for( 'get_text_color', object, trait, row, 0 )
+        return self._result_for( 'get_text_color', object, trait, row, column )
 
-    def get_bg_color ( self, object, trait, row ):
+    def get_bg_color ( self, object, trait, row, column = 0):
         """ Returns the background color for a specified *object.trait[row]*
             item. A result of None means use the default background color.
         """
-        return self._result_for( 'get_bg_color', object, trait, row, 0 )
+        return self._result_for( 'get_bg_color', object, trait, row, column )
 
     def get_image ( self, object, trait, row, column ):
         """ Returns the name of the image to use for a specified

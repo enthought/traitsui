@@ -81,7 +81,7 @@ class TabularModel(QtCore.QAbstractTableModel):
                 return tooltip
 
         elif role == QtCore.Qt.FontRole:
-            font = adapter.get_font(obj, name, row)
+            font = adapter.get_font(obj, name, row, column)
             if font is not None:
                 return QtGui.QFont(font)
 
@@ -91,7 +91,7 @@ class TabularModel(QtCore.QAbstractTableModel):
             return (alignment | QtCore.Qt.AlignVCenter)
 
         elif role == QtCore.Qt.BackgroundRole:
-            color = adapter.get_bg_color(obj, name, row)
+            color = adapter.get_bg_color(obj, name, row, column)
             if color is not None:
                 if isinstance(color, SequenceTypes):
                     q_color = QtGui.QColor(*color)
