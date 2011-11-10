@@ -494,7 +494,8 @@ class Editor ( HasPrivateTraits ):
                         try:
                             setattr( self, editor_name, new )
                         except:
-                            pass
+                            from traitsui.api import raise_to_debug
+                            raise_to_debug()
                         del self._no_trait_update[ key ]
 
                 user_object.on_trait_change( user_trait_modified, xuser_name )
@@ -515,7 +516,8 @@ class Editor ( HasPrivateTraits ):
                                     getattr( self, editor_name )[
                                         n: n + len(event.removed)] = event.added
                                 except:
-                                    pass
+                                    from traitsui.api import raise_to_debug
+                                    raise_to_debug()
                                 del self._no_trait_update[ key ]
 
                     user_object.on_trait_change( user_list_modified,
@@ -526,7 +528,8 @@ class Editor ( HasPrivateTraits ):
                 try:
                     setattr( self, editor_name, eval( user_value ) )
                 except:
-                    pass
+                    from traitsui.api import raise_to_debug
+                    raise_to_debug()
 
             if mode in ( 'to', 'both' ):
 
@@ -560,7 +563,8 @@ class Editor ( HasPrivateTraits ):
                                 eval( user_value )[ n:
                                     n + len( event.removed ) ] = event.added
                             except:
-                                pass
+                                from traitsui.api import raise_to_debug
+                                raise_to_debug()
                             del self._no_trait_update[ key ]
 
                     self.on_trait_change( editor_list_modified,
@@ -573,7 +577,8 @@ class Editor ( HasPrivateTraits ):
                         setattr( eval( user_ref ), user_name,
                                  getattr( self, editor_name ) )
                     except:
-                        pass
+                        from traitsui.api import raise_to_debug
+                        raise_to_debug()
 
     #-- UI preference save/restore interface -----------------------------------
 
