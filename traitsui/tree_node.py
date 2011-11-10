@@ -141,6 +141,12 @@ class TreeNode ( HasPrivateTraits ):
     # Resource path used to locate the node icon
     icon_path = Str
 
+    # Selector or name for background color
+    background = Any
+
+    # Selector or name for foreground color
+    foreground = Any
+
     # fixme: The 'menu' trait should really be defined as:
     #        Instance( 'traitsui.menu.MenuBar' ), but it doesn't work
     #        right currently.
@@ -420,6 +426,18 @@ class TreeNode ( HasPrivateTraits ):
         """ Returns the right-click context menu for an object.
         """
         return self.menu
+
+    def get_background(self, object) :
+        background = self.background
+        if isinstance(background, basestring) :
+            background = getattr(object, background, background)
+        return background
+
+    def get_foreground(self, object) :
+        foreground = self.foreground
+        if isinstance(foreground, basestring) :
+            foreground = getattr(object, foreground, foreground)
+        return foreground
 
     #---------------------------------------------------------------------------
     #  Returns whether or not the object's children can be renamed:

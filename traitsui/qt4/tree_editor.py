@@ -40,6 +40,8 @@ logger = logging.getLogger(__name__)
 #-------------------------------------------------------------------------------
 #  The core tree node menu actions:
 #-------------------------------------------------------------------------------
+from traitsui.ui_traits import SequenceTypes
+
 
 NewAction    = 'NewAction'
 CopyAction   = Action( name         = 'Copy',
@@ -199,15 +201,15 @@ class SimpleEditor ( Editor ):
         """
         try:
             tree = self._tree
-            if (not isinstance(selection, basestring) and 
+            if (not isinstance(selection, basestring) and
                 isinstance(selection, collections.Iterable)):
-                
+
                 item_selection = QtGui.QItemSelection()
                 for sel in selection:
                     item = self._object_info(sel)[2]
                     idx = tree.indexFromItem(item)
                     item_selection.append(QtGui.QItemSelectionRange(idx))
-                
+
                 tree.selectionModel().select(item_selection,
                     QtGui.QItemSelectionModel.ClearAndSelect)
             else:
@@ -289,7 +291,7 @@ class SimpleEditor ( Editor ):
         old_nid = self._get_object_nid( object, node.get_children_id(object) )
         if old_nid:
             self._delete_node(old_nid)
-            
+
         tree.clear()
         self._map = {}
 
@@ -325,6 +327,13 @@ class SimpleEditor ( Editor ):
         """
         return self._tree
 
+    def _get_brush(self, color) :
+        if isinstance(color, SequenceTypes):
+            q_color = QtGui.QColor(*color)
+        else:
+            q_color = QtGui.QColor(color)
+        return QtGui.QBrush(q_color)
+
 
     def _set_column_labels(self, nid, column_labels):
         """ Set the column labels.
@@ -335,6 +344,10 @@ class SimpleEditor ( Editor ):
                 nid.setText(i, label)
 
     #---------------------------------------------------------------------------
+        color = node.get_background(object)
+        if color : nid.setBackground(0, self._get_brush(color))
+        color = node.get_foreground(object)
+        if color : nid.setForeground(0, self._get_brush(color))
     #  Private Delegate class to do drawing in case of wrapped text labels
     #---------------------------------------------------------------------------
 
