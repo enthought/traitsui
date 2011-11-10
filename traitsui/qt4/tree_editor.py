@@ -215,7 +215,8 @@ class SimpleEditor ( Editor ):
             else:
                 tree.setCurrentItem(self._object_info(selection)[2])
         except:
-            pass
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
 
     #---------------------------------------------------------------------------
     #  Handles the 'selected' trait being changed:
