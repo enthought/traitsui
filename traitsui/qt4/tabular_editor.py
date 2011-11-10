@@ -455,7 +455,8 @@ class TabularEditor(Editor):
         menu = self.adapter.get_menu(self.object, self.name, row, column)
         if menu :
             qmenu = menu.create_menu( self.control, self )
-            self._context = {'object':  self.object,
+            self._menu_context = {'selection' : self.object,
+                             'object':  self.object,
                              'editor':  self,
                              'column':  column,
                              'row':     row,
@@ -463,20 +464,20 @@ class TabularEditor(Editor):
                              'info':    self.ui.info,
                              'handler': self.ui.handler }
             qmenu.exec_(self.control.mapToGlobal(pos))
-            self._context = None
+            self._menu_context = None
 
     def _on_column_context_menu(self, pos) :
         column = self.control.columnAt(pos.x())
         menu = self.adapter.get_column_menu(self.object, self.name, -1, column)
         if menu :
             qmenu = menu.create_menu( self.control, self )
-            self._context = {'object':  self.object,
+            self._menu_context = {'selection' : self.object, 'object':  self.object,
                              'editor':  self,
                              'column':  column,
                              'info':    self.ui.info,
                              'handler': self.ui.handler }
             qmenu.exec_(self.control.mapToGlobal(pos))
-            self._context = None
+            self._menu_context = None
 
 #-------------------------------------------------------------------------------
 #  'TabularEditorEvent' class:

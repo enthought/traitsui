@@ -266,16 +266,17 @@ class Editor ( UIEditor ):
 
     def _perform ( self, action ):
         method_name       = action.action
-        info              = self._context['info']
-        handler           = self._context['handler']
-        object            = self._context['object']
-        self._context['action'] = action
+        info              = self._menu_context['info']
+        handler           = self._menu_context['handler']
+        object            = self._menu_context['object']
+        selection         = self._menu_context['selection']
+        self._menu_context['action'] = action
 
         if method_name.find( '.' ) >= 0:
             if method_name.find( '(' ) < 0:
                 method_name += '()'
             try:
-                eval( method_name, globals(), self._context )
+                eval( method_name, globals(), self._menu_context )
             except:
                 from enthought.traits.api import raise_to_debug
                 raise_to_debug()
@@ -283,11 +284,13 @@ class Editor ( UIEditor ):
 
         method = getattr( handler, method_name, None )
         if method is not None:
-            method( info, object )
+            method( info, selection )
             return
 
         if action.on_perform is not None:
-            action.on_perform(object)
+            action.on_perform(selection)
+
+        action.perform(selection)
 
     def eval_when ( self, condition, object, trait ):
         """ Evaluates a condition within a defined context, and sets a 
@@ -297,7 +300,7 @@ class Editor ( UIEditor ):
         if condition != '':
             value = True
             try:
-                if not eval( condition, globals(), self._context ):
+                if not eval( condition, globals(), self._menu_context ):
                     value = False
             except:
                 from traitsui.api import raise_to_debug
@@ -316,7 +319,7 @@ class Editor ( UIEditor ):
         """
         if action.defined_when != '':
             try:
-                if not eval( action.defined_when, globals(), self._context ):
+                if not eval( action.defined_when, globals(), self._menu_context ):
                     return False
             except:
                 from traitsui.api import raise_to_debug
@@ -324,7 +327,7 @@ class Editor ( UIEditor ):
 
         if action.visible_when != '':
             try:
-                if not eval( action.visible_when, globals(), self._context ):
+                if not eval( action.visible_when, globals(), self._menu_context ):
                     return False
             except:
                 from traitsui.api import raise_to_debug

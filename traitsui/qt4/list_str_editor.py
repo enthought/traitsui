@@ -396,7 +396,8 @@ class _ListStrEditor(Editor):
         if menu is not None :
             qmenu = menu.create_menu( self.list_view, self )
 
-            self._context = {'object':  self.object,
+            self._menu_context = {'selection': self.object,
+                             'object':  self.object,
                              'editor':  self,
                              'index':   index,
                              'info':    self.ui.info,
@@ -404,7 +405,7 @@ class _ListStrEditor(Editor):
 
             qmenu.exec_(self.list_view.mapToGlobal(pos))
 
-            self._context = None
+            self._menu_context = None
 
 #-------------------------------------------------------------------------------
 #  Qt widgets that have been configured to behave as expected by Traits UI:
