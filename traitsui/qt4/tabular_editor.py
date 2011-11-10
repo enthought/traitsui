@@ -518,7 +518,7 @@ class _TableView(QtGui.QTableView):
 
         # Configure the column headings.
         hheader = self.horizontalHeader()
-        hheader.setStretchLastSection(True)
+        hheader.setStretchLastSection(factory.stretch_last_section)
         if factory.show_titles:
             hheader.setHighlightSections(False)
         else:

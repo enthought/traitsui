@@ -119,6 +119,9 @@ class TabularEditor ( BasicEditorFactory ):
     # of data is large.
     auto_resize = Bool( False )
 
+    # Whether to stretch the last column to fit the available space.
+    stretch_last_section = Bool( True )
+
     # The adapter from trait values to editor values:
     adapter = Instance( 'traitsui.tabular_adapter.TabularAdapter', () )
 
