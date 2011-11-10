@@ -160,7 +160,8 @@ class TabularModel(QtCore.QAbstractTableModel):
             return None
 
         editor = self._editor
-        return editor.adapter.label_map[section]
+        label = editor.adapter.get_label(section, editor.object)
+        return label
 
     def rowCount(self, mi):
         """ Reimplemented to return the number of rows.

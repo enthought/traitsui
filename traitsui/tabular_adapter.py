@@ -111,6 +111,9 @@ class TabularAdapter ( HasPrivateTraits ):
     # then *any* is the index of the *string* within *columns*.
     columns = List()
 
+    #Maps UI name of column to value identifying column to the adapter, if different.
+    column_dict = Property()
+
     # Specifies the default value for a new row:
     default_value = Any( '' )
 
@@ -414,6 +417,16 @@ class TabularAdapter ( HasPrivateTraits ):
     #-- Property Implementations -----------------------------------------------
 
     @cached_property
+    def _get_column_dict(self):
+        cols = {}
+        for i, value in enumerate(self.columns):
+            if isinstance(value, basestring):
+                cols.update({value: value})
+            else:
+                cols.update({value[0]: value[1]})
+        return cols
+
+    @cached_property
     def _get_column_map ( self ):
         map = []
         for i, value in enumerate( self.columns ):
@@ -424,14 +437,22 @@ class TabularAdapter ( HasPrivateTraits ):
 
         return map
 
+    def get_label(self, section, obj=None):
+        """Override this method if labels will vary from object to object."""
+        return self.label_map[section]
+
     @cached_property
-    def _get_label_map ( self ):
+    def _get_label_map (self):
         map = []
         for i, value in enumerate( self.columns ):
             if isinstance( value, basestring ):
                 map.append( value )
             else:
-                map.append( value[0] )
+                try:
+                    col_name = getattr(self, value[0])
+                except AttributeError:
+                    col_name = value[0]
+                map.append( col_name )
 
         return map
 
