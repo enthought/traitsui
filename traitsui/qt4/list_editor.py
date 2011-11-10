@@ -174,7 +174,7 @@ class SimpleEditor ( Editor ):
 
             # Account for the fact that we have <columns> number of
             # pairs
-            column = column * self.factory.columns
+            column = column * 2
 
             if resizable:
                 control = IconButton('list_editor.png', self.popup_menu)
