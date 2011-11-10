@@ -228,8 +228,11 @@ class GUIToolkit ( Toolkit ):
             pdx = screen_dx
             pdy = screen_dy
         else:
-            px = parent.x()
-            py = parent.y()
+            pos = parent.pos()
+            if int(parent.windowFlags()) & QtCore.Qt.Window == 0 :
+                pos = parent.mapToGlobal(pos)
+            px = pos.x()
+            py = pos.y()
             pdx = parent.width()
             pdy = parent.height()
 
