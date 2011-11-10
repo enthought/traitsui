@@ -288,6 +288,10 @@ class SimpleEditor ( Editor ):
         saved_state = {}
 
         object, node = self._node_for( self.old_value )
+        old_nid = self._get_object_nid( object, node.get_children_id(object))
+        if old_nid: self._delete_node(old_nid)
+
+        object, node = self._node_for( self.old_value )
         old_nid = self._get_object_nid( object, node.get_children_id(object) )
         if old_nid:
             self._delete_node(old_nid)
