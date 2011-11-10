@@ -215,6 +215,14 @@ class ReadonlyEditor ( BaseReadonlyEditor ):
     """ Read-only style of text editor, which displays a read-only text field.
     """
 
+    def init(self, parent):
+        super(ReadonlyEditor, self).init(parent)
+
+        if self.factory.readonly_allow_selection:
+            flags = (self.control.textInteractionFlags() |
+                QtCore.Qt.TextSelectableByMouse)
+            self.control.setTextInteractionFlags(flags)
+
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
     #---------------------------------------------------------------------------

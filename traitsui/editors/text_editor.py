@@ -93,6 +93,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     # The optional view to display when a read-only text editor is clicked:
     view = AView
 
+    # In a read-only text editor, allow selection and copying of the text.
+    readonly_allow_selection = Bool(False)
+
     #---------------------------------------------------------------------------
     #  Traits view definition:
     #---------------------------------------------------------------------------
