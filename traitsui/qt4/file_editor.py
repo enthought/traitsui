@@ -88,7 +88,7 @@ class SimpleEditor ( SimpleTextEditor ):
 
                 self.value = file_name
             except TraitError, excp:
-                pass
+                self._file_name.setText(self.value)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
