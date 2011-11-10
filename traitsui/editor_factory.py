@@ -62,6 +62,11 @@ class EditorFactory ( HasPrivateTraits ):
     # status:
     invalid = Str
 
+    # Text aligment to use in most readonly editors
+    # Possible values: left, right, top, bottom, just, vcenter, hcenter, center
+    # Example: left,vcenter
+    text_alignment = Str
+
     # The editor class to use for 'simple' style views.
     simple_editor_class = Property
 

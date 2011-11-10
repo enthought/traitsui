@@ -76,6 +76,8 @@ class Group ( ViewSubElement ):
     # the group's parent group or view.
     label = Str
 
+    style_sheet = Str
+
     # Default context object for group items.
     object = ContainerDelegate
 
@@ -401,7 +403,7 @@ class Group ( ViewSubElement ):
 
         options = self._repr_options( 'orientation', 'show_border',
                       'show_labels', 'show_left', 'selected', 'id', 'object',
-                      'label', 'style', 'layout' )
+                      'label', 'style', 'layout', 'style_sheet' )
         if options is not None:
             result.append( options )
 
@@ -695,6 +697,9 @@ class ShadowGroup ( Group ):
 
     # Amount of padding to add around each item
     padding = ShadowDelegate
+
+    # Style sheet for the panel
+    style_sheet = ShadowDelegate
 
     #---------------------------------------------------------------------------
     #  Returns the contents of the ShadowGroup within a specified user interface

@@ -569,6 +569,16 @@ class _GroupPanel(object):
             elif layout is not inner:
                 inner.addLayout(layout)
 
+        if group.style_sheet :
+            if isinstance(outer, QtGui.QLayout) :
+                inner = outer
+                outer = QtGui.QWidget()
+                outer.setLayout(inner)
+
+            # ensure this is not empty group
+            if isinstance(outer, QtGui.QWidget) :
+                outer.setStyleSheet(group.style_sheet)
+
         # Publish the top-level widget, layout or None.
         self.control = outer
 
@@ -797,7 +807,7 @@ class _GroupPanel(object):
             # Get the editor factory associated with the Item:
             editor_factory = item.editor
             if editor_factory is None:
-                editor_factory = trait.get_editor()
+                editor_factory = trait.get_editor().set(**item.editor_args)
 
                 # If still no editor factory found, use a default text editor:
                 if editor_factory is None:
@@ -831,6 +841,9 @@ class _GroupPanel(object):
             # the "kind" of the created UI object).
             editor.prepare(inner)
             control = editor.control
+
+            if item.style_sheet :
+                control.setStyleSheet(item.style_sheet)
 
             # Set the initial 'enabled' state of the editor from the factory:
             editor.enabled = editor_factory.enabled
