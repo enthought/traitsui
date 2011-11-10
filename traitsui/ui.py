@@ -279,7 +279,8 @@ class UI ( HasPrivateTraits ):
         self.control = None
 
         # Dispose of any KeyBindings object we reference:
-        self.key_bindings.dispose()
+        if self.key_bindings is not None:
+            self.key_bindings.dispose()
 
         # Break the linkage to any objects in the context dictionary:
         self.context.clear()
