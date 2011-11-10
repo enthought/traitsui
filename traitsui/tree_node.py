@@ -966,6 +966,16 @@ class ITreeNodeAdapter ( Adapter ):
         """
         return None
 
+    def get_background ( self ):
+        """ Returns the background for object
+        """
+        return None
+
+    def get_foreground ( self ):
+        """ Returns the foreground for object
+        """
+        return None
+
     def can_rename ( self ):
         """ Returns whether the object's children can be renamed.
         """
@@ -1180,6 +1190,16 @@ class ITreeNodeAdapterBridge ( HasPrivateTraits ):
         """ Returns the right-click context menu for an object.
         """
         return self.adapter.get_menu()
+
+    def get_background ( self, object ):
+        """ Returns the background for object
+        """
+        return self.adapter.get_background()
+
+    def get_foreground ( self, object ):
+        """ Returns the foreground for object
+        """
+        return self.adapter.get_foreground()
 
     def can_rename ( self, object ):
         """ Returns whether the object's children can be renamed.
