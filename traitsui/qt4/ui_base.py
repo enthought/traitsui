@@ -43,7 +43,7 @@ from helper \
 SystemButtons = ['Undo', 'Redo', 'Apply', 'Revert', 'OK', 'Cancel', 'Help']
 
 def default_icon():
-    from enthought.pyface.image_resource import ImageResource
+    from pyface.image_resource import ImageResource
     return ImageResource('frame.png')
 
 #-------------------------------------------------------------------------------
