@@ -232,7 +232,7 @@ def panel(ui):
         panel = QtGui.QTabWidget()
         # Identify ourselves as being a Tabbed group so we can later
         # distinguish this from other QTabWidgets.
-        panel.setProperty("traits_tabbed_group", QtCore.QVariant(True))
+        panel.setProperty("traits_tabbed_group", True)
         _fill_panel(panel, content, ui)
         panel.ui = ui
 
@@ -526,7 +526,7 @@ class _GroupPanel(object):
             # Create the TabWidget or ToolBox.
             if group.layout == 'tabbed':
                 sub = QtGui.QTabWidget()
-                sub.setProperty("traits_tabbed_group", QtCore.QVariant(True))
+                sub.setProperty("traits_tabbed_group", True)
             else:
                 sub = QtGui.QToolBox()
 

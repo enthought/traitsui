@@ -127,9 +127,9 @@ class TableModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.CheckStateRole:
             if column.get_type(obj) == "bool" and column.show_checkbox:
                 if column.get_raw_value(obj):
-                    return QtCore.QVariant(QtCore.Qt.Checked)
+                    return QtCore.Qt.Checked
                 else:
-                    return QtCore.QVariant(QtCore.Qt.Unchecked)
+                    return QtCore.Qt.Unchecked
 
         return None
 
