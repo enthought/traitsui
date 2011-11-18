@@ -1717,3 +1717,17 @@ class _TreeWidget(QtGui.QTreeWidget):
                                                data, False )
 
         e.acceptProposedAction()
+
+    def keyPressEvent(self, keyevent):
+        """ Implemented to call the ``_on_dclick`` function on Enter key press.
+
+        This matches the behaviour on wx toolkit and is normally expected.
+        """
+        key = keyevent.key()
+        if key == QtCore.Qt.Key_Return or key == QtCore.Qt.Key_Enter:
+            index = self.selectedIndexes()[0]
+            item = self._editor._tree.itemFromIndex(index)
+            self._editor._on_item_dclicked(item, None)
+            keyevent.accept()
+
+        QtGui.QTreeView.keyPressEvent(self, keyevent)
