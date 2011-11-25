@@ -14,6 +14,7 @@ class NumberWithSpinnerEditor(HasTraits):
     number = Int
 
     traits_view = View(
+        Item(label="Enter 4, then press OK without defocusing"),
         Item('number', editor=RangeEditor(low=3, high=8, mode='spinner')),
         buttons = ['OK']
     )
@@ -93,5 +94,6 @@ def test_qt_spin_control_editing():
 
 
 if __name__ == '__main__':
+    # Executing the file opens the dialog for manual testing
     num = NumberWithSpinnerEditor()
     num.configure_traits()
