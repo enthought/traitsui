@@ -32,9 +32,14 @@ def store_exceptions_on_all_threads():
 def skip_if_not_backend(test_func, backend_name=''):
     """Decorator that skip tests if the backend is not the desired one."""
     from traits.etsconfig.api import ETSConfig
+
     if ETSConfig.toolkit != backend_name:
+        # preserve original name so that it appears in the report
+        orig_name = test_func.__name__
         def test_func():
             raise nose.SkipTest
+        test_func.__name__ = orig_name
+
     return test_func
 
 
