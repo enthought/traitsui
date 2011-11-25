@@ -77,14 +77,19 @@ def test_wx_spin_control_editing():
         spin = ui.control.FindWindowByName('wxSpinCtrl')
         spin.SetFocusFromKbd()
 
-        # TextCtrl object of the spin control
-        spintxt = spin.FindWindowByName('text')
-        # unlike spintxt.SetValue, this method does not fire a
-        # wxEVT_COMMAND_TEXT_UPDATED event
-        spintxt.ChangeValue('4')
+        # on Windows, a wxSpinCtrl does not have children, and we cannot do
+        # the more fine-grained testing below
+        if len(spin.GetChildren()) == 0:
+            spin.SetValueString('4')
+        else:
+            # TextCtrl object of the spin control
+            spintxt = spin.FindWindowByName('text')
+            # unlike spintxt.SetValue, this method does not fire a
+            # wxEVT_COMMAND_TEXT_UPDATED event
+            spintxt.ChangeValue('4')
 
-        # make sure that the change in text has not been notified
-        assert spin.GetValue() == 3
+            # make sure that the change in text has not been notified
+            assert spin.GetValue() == 3
 
         # press the OK button and close the dialog
         okbutton = ui.control.FindWindowByName('button')
