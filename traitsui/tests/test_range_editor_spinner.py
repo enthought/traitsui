@@ -23,7 +23,7 @@ class NumberWithSpinnerEditor(HasTraits):
 
 
 @contextmanager
-def capture_exceptions_on_all_threads():
+def store_exceptions_on_all_threads():
     """Context manager that captures all exceptions, even those coming from
     the UI thread. On exit, the first exception is raised (if any).
     """
@@ -66,22 +66,19 @@ def test_wx_spin_control_editing():
     # the OK button should update the value of the HasTraits class
     # (tests a bug where this fails with an AttributeError
 
-    with capture_exceptions_on_all_threads():
+    with store_exceptions_on_all_threads():
         num = NumberWithSpinnerEditor()
         ui = num.edit_traits()
 
         # the following is equivalent to clicking in the text control of the
         # range editor, enter a number, and clicking ok without defocusing
 
-        # the frame
-        panel = ui.control.GetChildren()[0]
-
         # SpinCtrl object
-        spin = panel.GetChildren()[1]
+        spin = ui.control.FindWindowByName('wxSpinCtrl')
         spin.SetFocusFromKbd()
 
         # TextCtrl object of the spin control
-        spintxt = spin.GetChildren()[0]
+        spintxt = spin.FindWindowByName('text')
         # unlike spintxt.SetValue, this method does not fire a
         # wxEVT_COMMAND_TEXT_UPDATED event
         spintxt.ChangeValue('4')
@@ -90,7 +87,7 @@ def test_wx_spin_control_editing():
         assert spin.GetValue() == 3
 
         # press the OK button and close the dialog
-        okbutton = ui.control.GetChildren()[2]
+        okbutton = ui.control.FindWindowByName('button')
         click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED,
                                       okbutton.GetId())
         okbutton.ProcessEvent(click_event)
@@ -104,36 +101,25 @@ def test_qt_spin_control_editing():
     # behavior: when editing the text part of a spin control box, pressing
     # the OK button should update the value of the HasTraits class
 
-    with capture_exceptions_on_all_threads():
+    from pyface import qt
+
+    with store_exceptions_on_all_threads():
         num = NumberWithSpinnerEditor()
         ui = num.edit_traits()
 
         # the following is equivalent to clicking in the text control of the
         # range editor, enter a number, and clicking ok without defocusing
 
-        mainwin = ui.control.children()[1]
-        widget = mainwin.children()[2]
-
-        # spin control
-        spin = widget.children()[2]
-
         # text element inside the spin control
-        lineedit = spin.children()[0]
+        lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
         lineedit.setFocus()
-
-        #keyevent =qt.QtGui.QKeyEvent(qt.QtCore.QEvent.KeyPress,
-        #                             qt.QtCore.Qt.Key_4,
-        #                             qt.QtCore.Qt.NoModifier)
-        #app = qt.QtGui.QApplication.instance()
-        #app.sendEvent(lineedit, keyevent)
 
         # NOTE: I'm not sure at the moment that this is the exact equivalent
         # of the wx test
         lineedit.setText('4')
 
         # press the OK button and close the dialog
-        bbox = ui.control.children()[2]
-        okb = bbox.children()[1]
+        okb = ui.control.findChild(qt.QtGui.QPushButton)
         okb.click()
 
     # if all went well, the number traits has been updated and its value is 4
