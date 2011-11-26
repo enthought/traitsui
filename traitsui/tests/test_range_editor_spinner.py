@@ -1,3 +1,15 @@
+"""
+Test case for bug (wx, Max OS X)
+
+Editing the text part of a spin control box and pressing the OK button
+without de-focusing raises an AttributeError
+
+Traceback (most recent call last):
+  File "ETS/traitsui/traitsui/wx/range_editor.py", line 783, in update_object
+    self.value = self.control.GetValue()
+AttributeError: 'NoneType' object has no attribute 'GetValue'
+"""
+
 from traits.has_traits import HasTraits
 from traits.trait_types import Int
 from traitsui.item import Item
@@ -24,7 +36,7 @@ class NumberWithSpinnerEditor(HasTraits):
 def test_wx_spin_control_editing():
     # behavior: when editing the text part of a spin control box, pressing
     # the OK button should update the value of the HasTraits class
-    # (tests a bug where this fails with an AttributeError
+    # (tests a bug where this fails with an AttributeError)
 
     import wx
 
