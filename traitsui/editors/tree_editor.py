@@ -106,6 +106,13 @@ class ToolkitEditorFactory ( EditorFactory ):
     selected = Str
 
     # The optional extended trait name of the trait that should be assigned
+    # a node object when a tree node is activated, by double-clicking or
+    # pressing the Enter key when a node has focus (Note: if you want to
+    # receive repeated activated events on the same node, make sure the trait
+    # is defined as an Event):
+    activated = Str
+
+    # The optional extended trait name of the trait that should be assigned
     # a node object when a tree node is clicked on (Note: If you want to
     # receive repeated clicks on the same node, make sure the trait is defined
     # as an Event):
