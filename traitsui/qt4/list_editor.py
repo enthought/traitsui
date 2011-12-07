@@ -543,13 +543,6 @@ class NotebookEditor ( Editor ):
             self.control.customContextMenuRequested.connect(self._context_menu_requested)
             self.control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
-        if self.factory.show_notebook_menu:
-            # Create the necessary attributes to manage hiding and revealing of
-            # tabs via a context menu
-            self._context_menu = QtGui.QMenu()
-            self.control.customContextMenuRequested.connect(self._context_menu_requested)
-            self.control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-
         # Set up the additional 'list items changed' event handler needed for
         # a list based trait:
         self.context_object.on_trait_change( self.update_editor_item,
@@ -597,14 +590,7 @@ class NotebookEditor ( Editor ):
             self.control.removeTab(self.control.indexOf(page))
 
             if self.factory.show_notebook_menu:
-                for name,tmp in self._pagewidgets.items():
-                    if tmp is page:
-                        del self._pagewidgets[name]
-                self._context_menu.removeAction(self._action_dict[name])
-                del self._action_dict[name]
-
-            if self.factory.show_notebook_menu:
-                for name,tmp in self._pagewidgets.items():
+                for name, tmp in self._pagewidgets.items():
                     if tmp is page:
                         del self._pagewidgets[name]
                 self._context_menu.removeAction(self._action_dict[name])
@@ -624,23 +610,6 @@ class NotebookEditor ( Editor ):
 
         if first_page is not None:
             self.control.setCurrentWidget(first_page)
-
-        if self.factory.show_notebook_menu:
-            # Find the name associated with this widget, so we can purge its action
-            # from the menu
-            for name, tmp in self._pagewidgets.items():
-                if tmp is widget:
-                    break
-            else:
-                # Hmm... couldn't find the widget, assume that we don't need to do
-                # anything.
-                return
-
-            action = self._action_dict[name]
-            self._context_menu.removeAction(action)
-            del self._action_dict[name]
-            del self._pagewidgets[name]
-        return
 
     #---------------------------------------------------------------------------
     #  Closes the currently selected tab:
@@ -787,12 +756,6 @@ class NotebookEditor ( Editor ):
             image = method( self.ui.info, object )
 
         if image is None:
-        deletable = self.factory.deletable
-        deletable_trait = self.factory.deletable_trait
-        if deletable and deletable_trait:
-            enabled = xgetattr(selected, deletable_trait, True)
-            self.close_button.setEnabled(enabled)
-
             self.control.addTab(ui.control, name)
         else:
             self.control.addTab(ui.control, image, name)
@@ -817,6 +780,7 @@ class NotebookEditor ( Editor ):
             if page is widget:
                 self.selected = ui.info.object
                 break
+
     def _selected_changed(self, selected):
         """ Handles the **selected** trait being changed.
         """
@@ -824,6 +788,11 @@ class NotebookEditor ( Editor ):
             if ui.info and selected is ui.info.object:
                 self.control.setCurrentWidget(page)
                 break
+            deletable = self.factory.deletable
+            deletable_trait = self.factory.deletable_trait
+            if deletable and deletable_trait:
+                enabled = xgetattr(selected, deletable_trait, True)
+                self.close_button.setEnabled(enabled)
 
     def _context_menu_requested(self, event):
         self._context_menu.popup(self.control.mapToGlobal(event))
