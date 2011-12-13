@@ -1279,6 +1279,10 @@ class SimpleEditor ( Editor ):
         # Fire the 'activated' event with the clicked on object as value:
         self.activated = object
 
+        # FIXME: Firing the dclick event also for backward compatibility on wx.
+        # Change it occur on mouse double click only.
+        self.dclick = object
+
     #---------------------------------------------------------------------------
     #  Handles the user starting to edit a tree node label:
     #---------------------------------------------------------------------------
@@ -1371,7 +1375,9 @@ class SimpleEditor ( Editor ):
                 self.ui.evaluate( self.factory.on_dclick, object )
 
             # Fire the 'dclick' event with the object as its value:
-            self.dclick = object
+            # FIXME: This is instead done in _on_item_activated for backward
+            # compatibility only on wx toolkit.
+            #self.dclick = object
 
         # Allow normal mouse event processing to occur:
         event.Skip()
