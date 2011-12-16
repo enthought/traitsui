@@ -359,9 +359,16 @@ class SimpleEditor ( Editor ):
     #  Create a TreeWidgetItem as per word wrap policy and set icon,tooltip
     #---------------------------------------------------------------------------
 
-    def _create_item(self, nid, node, object ):
-        """ create  a new TreeWidgetItem as per word_wrap policy """
-        cnid = QtGui.QTreeWidgetItem(nid)
+    def _create_item(self, nid, node, object, index=None):
+        """ Create  a new TreeWidgetItem as per word_wrap policy.
+
+        Index is the index of the new node in the parent:
+            None implies append the child to the end. """
+        if index is None:
+            cnid = QtGui.QTreeWidgetItem(nid)
+        else:
+            cnid = QtGui.QTreeWidgetItem()
+            nid.insertChild(index, cnid)
         if self.factory.word_wrap:
             item = self.ItemDelegate()
             item.editor = self
@@ -385,7 +392,17 @@ class SimpleEditor ( Editor ):
     def _append_node ( self, nid, node, object ):
         """ Appends a new node to the specified node.
         """
-        cnid = self._create_item(nid, node, object)
+        return self._insert_node( nid, None, node, object )
+
+    #---------------------------------------------------------------------------
+    #  Inserts a new node to the specified node:
+    #---------------------------------------------------------------------------
+
+    def _insert_node ( self, nid, index, node, object ):
+        """ Inserts a new node before a specified index into the children of the
+            specified node.
+        """
+        cnid = self._create_item(nid, node, object, index)
 
         has_children = self._has_children(node, object)
         self._set_node_data( cnid, ( False, node, object ) )
@@ -1440,9 +1457,9 @@ class SimpleEditor ( Editor ):
             children = node.get_children( object )
 
             # If the new children aren't all at the end, remove/add them all:
-            if (n > 0) and ((start + n) != len( children )):
-                self._children_replaced( object, name, event )
-                return
+            #if (n > 0) and ((start + n) != len( children )):
+            #    self._children_replaced( object, name, event )
+            #    return
 
             # Only add/remove the changes if the node has already been expanded:
             if expanded:
@@ -1450,11 +1467,17 @@ class SimpleEditor ( Editor ):
                 for cnid in self._nodes_for( nid )[ start: end ]:
                     self._delete_node( cnid )
 
+                remaining = n - len( event.removed )
+                child_index = 0
                 # Add all of the children that were added:
                 for child in event.added:
                     child, child_node = self._node_for( child )
                     if child_node is not None:
-                        self._append_node( nid, child_node, child )
+                        insert_index = (start + child_index) if \
+                                        (start <= remaining) else None
+                        self._insert_node( nid, insert_index, child_node,
+                                        child )
+                        child_index += 1
 
             # Try to expand the node (if requested):
             if node.can_auto_open( object ):
