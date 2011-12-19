@@ -1492,7 +1492,7 @@ class SimpleEditor ( Editor ):
         start = event.index
         n     = len( event.added )
         end   = start + len( event.removed )
-        tree                = self._tree
+        tree  = self._tree
 
         for expanded, node, nid in self._object_info_for( object, name ):
             children = node.get_children( object )
