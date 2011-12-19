@@ -129,6 +129,10 @@ class SimpleEditor ( Editor ):
     # The currently selected object
     selected = Any
 
+    # The event fired when a tree node is activated by double clicking or
+    # pressing the enter key on a node.
+    activated = Event
+
     # The event fired when a tree node is clicked on:
     click = Event
 
@@ -263,6 +267,7 @@ class SimpleEditor ( Editor ):
         # Set up the mouse event handlers:
         wx.EVT_LEFT_DOWN(  tree, self._on_left_down )
         wx.EVT_RIGHT_DOWN( tree, self._on_right_down )
+        wx.EVT_LEFT_DCLICK(tree, self._on_left_dclick )
 
         # Set up the tree event handlers:
         wx.EVT_TREE_ITEM_EXPANDING(   tree, tid, self._on_tree_item_expanding )
@@ -281,6 +286,7 @@ class SimpleEditor ( Editor ):
 
         # Synchronize external object traits with the editor:
         self.sync_value( factory.selected, 'selected' )
+        self.sync_value( factory.activated,'activated', 'to' )
         self.sync_value( factory.click,    'click',  'to' )
         self.sync_value( factory.dclick,   'dclick', 'to' )
         self.sync_value( factory.veto,     'veto',   'from' )
@@ -1261,23 +1267,20 @@ class SimpleEditor ( Editor ):
         event.Skip(True)
 
 
-
     #---------------------------------------------------------------------------
-    #  Handles a tree item being activated (i.e. double clicked):
+    #  Handles a tree item being activated:
     #---------------------------------------------------------------------------
 
     def _on_tree_item_activated ( self, event ):
-        """ Handles a tree item being activated (i.e. double-clicked).
+        """ Handles a tree item being activated.
         """
         expanded, node, object = self._get_node_data( event.GetItem() )
-        if node.dclick( object ) is True:
-            if self.factory.on_dclick is not None:
-                self.ui.evaluate( self.factory.on_dclick, object )
-                self._veto = True
-        else:
-            self._veto = True
 
-        # Fire the 'dclick' event with the clicked on object as value:
+        # Fire the 'activated' event with the clicked on object as value:
+        self.activated = object
+
+        # FIXME: Firing the dclick event also for backward compatibility on wx.
+        # Change it occur on mouse double click only.
         self.dclick = object
 
     #---------------------------------------------------------------------------
@@ -1353,6 +1356,30 @@ class SimpleEditor ( Editor ):
                 if tooltip != '':
                     event.SetToolTip( tooltip )
 
+        event.Skip()
+
+    #---------------------------------------------------------------------------
+    #  Handles a tree item being double-clicked:
+    #---------------------------------------------------------------------------
+
+    def _on_left_dclick ( self, event ):
+        """ Handle left mouse dclick to emit dclick event for associated node.
+        """
+        # Determine what node (if any) was clicked on:
+        expanded, node, object, nid, point = self._unpack_event( event )
+
+        # If the mouse is over a node, then process the click:
+        if node is not None:
+            if ((node.dclick( object ) is True) and
+                (self.factory.on_dclick is not None)):
+                self.ui.evaluate( self.factory.on_dclick, object )
+
+            # Fire the 'dclick' event with the object as its value:
+            # FIXME: This is instead done in _on_item_activated for backward
+            # compatibility only on wx toolkit.
+            #self.dclick = object
+
+        # Allow normal mouse event processing to occur:
         event.Skip()
 
     #---------------------------------------------------------------------------
