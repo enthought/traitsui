@@ -80,6 +80,10 @@ class SimpleEditor ( Editor ):
     # The currently selected object
     selected = Any
 
+    # The event fired when a tree node is activated by double clicking or
+    # pressing the Enter key on a node.
+    activated = Event
+
     # The event fired when a tree node is clicked on:
     click = Event
 
@@ -182,6 +186,7 @@ class SimpleEditor ( Editor ):
 
         # Synchronize external object traits with the editor:
         self.sync_value( factory.selected, 'selected' )
+        self.sync_value( factory.activated,'activated', 'to' )
         self.sync_value( factory.click,    'click',  'to' )
         self.sync_value( factory.dclick,   'dclick', 'to' )
         self.sync_value( factory.veto,     'veto',   'from' )
@@ -939,6 +944,18 @@ class SimpleEditor ( Editor ):
         self.dclick = object
 
     #---------------------------------------------------------------------------
+    #  Handles a tree item being activated:
+    #---------------------------------------------------------------------------
+
+    def _on_item_activated(self, nid, col):
+        """ Handles a tree item being activated.
+        """
+        _, node, object = self._get_node_data(nid)
+
+        # Fire the 'activated' event with the clicked on object as value:
+        self.activated = object
+
+    #---------------------------------------------------------------------------
     #  Handles a tree node being selected:
     #---------------------------------------------------------------------------
 
@@ -1562,6 +1579,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         self.itemCollapsed.connect(editor._on_item_collapsed)
         self.itemClicked.connect(editor._on_item_clicked)
         self.itemDoubleClicked.connect(editor._on_item_dclicked)
+        self.itemActivated.connect(editor._on_item_activated)
         self.itemSelectionChanged.connect(editor._on_tree_sel_changed)
         self.customContextMenuRequested.connect(editor._on_context_menu)
         self.itemChanged.connect(editor._on_nid_changed)
