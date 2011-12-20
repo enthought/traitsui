@@ -33,10 +33,49 @@ class NumberWithSpinnerEditor(HasTraits):
 
 
 @skip_if_not_wx
-def test_wx_spin_control_editing():
-    # behavior: when editing the text part of a spin control box, pressing
-    # the OK button should update the value of the HasTraits class
-    # (tests a bug where this fails with an AttributeError)
+def test_wx_spin_control_editing_should_not_crash():
+    # Bug: when editing the text part of a spin control box, pressing
+    # the OK button raises an AttributeError on Mac OS X
+
+    import wx
+
+    try:
+        with store_exceptions_on_all_threads():
+            num = NumberWithSpinnerEditor()
+            ui = num.edit_traits()
+
+            # the following is equivalent to clicking in the text control of the
+            # range editor, enter a number, and clicking ok without defocusing
+
+            # SpinCtrl object
+            spin = ui.control.FindWindowByName('wxSpinCtrl')
+            spin.SetFocusFromKbd()
+
+            # on Windows, a wxSpinCtrl does not have children, and we cannot do
+            # the more fine-grained testing below
+            if len(spin.GetChildren()) == 0:
+                spin.SetValueString('4')
+            else:
+                # TextCtrl object of the spin control
+                spintxt = spin.FindWindowByName('text')
+                spintxt.SetValue('4')
+
+            # press the OK button and close the dialog
+            okbutton = ui.control.FindWindowByName('button')
+            click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED,
+                                          okbutton.GetId())
+            okbutton.ProcessEvent(click_event)
+    except AttributeError:
+        # if all went well, we should not be here
+        assert False, "AttributeError raised"
+
+
+
+@skip_if_not_wx
+def test_wx_spin_control_editing_does_not_update():
+    # Bug: when editing the text part of a spin control box, pressing
+    # the OK button does not update the value of the HasTraits class
+    # on Mac OS X
 
     import wx
 
@@ -58,12 +97,7 @@ def test_wx_spin_control_editing():
         else:
             # TextCtrl object of the spin control
             spintxt = spin.FindWindowByName('text')
-            # unlike spintxt.SetValue, this method does not fire a
-            # wxEVT_COMMAND_TEXT_UPDATED event
-            spintxt.ChangeValue('4')
-
-            # make sure that the change in text has not been notified
-            assert spin.GetValue() == 3
+            spintxt.SetValue('4')
 
         # press the OK button and close the dialog
         okbutton = ui.control.FindWindowByName('button')
@@ -71,14 +105,14 @@ def test_wx_spin_control_editing():
                                       okbutton.GetId())
         okbutton.ProcessEvent(click_event)
 
-    # if all went well, the number traits has been updated and its value is 4
-    assert num.number == 4
+        # if all went well, the number traits has been updated and its value is 4
+        assert num.number == 4
 
 
 @skip_if_not_qt4
 def test_qt_spin_control_editing():
-    # behavior: when editing the text part of a spin control box, pressing
-    # the OK button should update the value of the HasTraits class
+    # Behavior: when editing the text part of a spin control box, pressing
+    # the OK button updates the value of the HasTraits class
 
     from pyface import qt
 
@@ -92,9 +126,6 @@ def test_qt_spin_control_editing():
         # text element inside the spin control
         lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
         lineedit.setFocus()
-
-        # NOTE: I'm not sure at the moment that this is the exact equivalent
-        # of the wx test
         lineedit.setText('4')
 
         # press the OK button and close the dialog
@@ -109,3 +140,4 @@ if __name__ == '__main__':
     # Executing the file opens the dialog for manual testing
     num = NumberWithSpinnerEditor()
     num.configure_traits()
+    print num.number
