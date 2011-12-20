@@ -314,8 +314,8 @@ class TableEditor(Editor, BaseTableEditor):
             # externally to manage the selections
             self.model.invalidate()
 
+            self.table_view.resizeColumnsToContents()
             if self.auto_size:
-                self.table_view.resizeColumnsToContents()
                 self.table_view.resizeRowsToContents()
 
         finally:
@@ -581,8 +581,8 @@ class TableEditor(Editor, BaseTableEditor):
                 self.table_view.setItemDelegateForColumn(i, column.renderer)
 
         self.model.reset()
+        self.table_view.resizeColumnsToContents()
         if self.auto_size:
-            self.table_view.resizeColumnsToContents()
             self.table_view.resizeRowsToContents()
 
     def _selected_changed(self, new):
