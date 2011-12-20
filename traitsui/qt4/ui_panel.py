@@ -19,7 +19,7 @@
 import cgi
 import re
 
-from pyface.qt import QtCore, QtGui, QtWebKit
+from pyface.qt import QtCore, QtGui
 
 from traits.api \
     import Any, Instance, Undefined
@@ -230,6 +230,9 @@ def panel(ui):
         panel = _GroupPanel(content[0], ui).control
     elif nr_groups > 1:
         panel = QtGui.QTabWidget()
+        # Identify ourselves as being a Tabbed group so we can later
+        # distinguish this from other QTabWidgets.
+        panel.setProperty("traits_tabbed_group", True)
         _fill_panel(panel, content, ui)
         panel.ui = ui
 
@@ -380,6 +383,14 @@ class _GroupSplitter(QtGui.QSplitter):
             self._initialized = True
             self._resize_items()
 
+    def showEvent(self, event):
+        """ Wait for the show event to resize items if necessary.
+        """
+        QtGui.QSplitter.showEvent(self, event)
+        if not self._initialized:
+            self._initialized = True
+            self._resize_items()
+
     def _resize_items(self):
         """ Size the splitter based on the 'width' or 'height' attributes
             of the Traits UI view elements.
@@ -515,6 +526,7 @@ class _GroupPanel(object):
             # Create the TabWidget or ToolBox.
             if group.layout == 'tabbed':
                 sub = QtGui.QTabWidget()
+                sub.setProperty("traits_tabbed_group", True)
             else:
                 sub = QtGui.QToolBox()
 
@@ -556,6 +568,16 @@ class _GroupPanel(object):
                 outer = layout
             elif layout is not inner:
                 inner.addLayout(layout)
+
+        if group.style_sheet :
+            if isinstance(outer, QtGui.QLayout) :
+                inner = outer
+                outer = QtGui.QWidget()
+                outer.setLayout(inner)
+
+            # ensure this is not empty group
+            if isinstance(outer, QtGui.QWidget) :
+                outer.setStyleSheet(group.style_sheet)
 
         # Publish the top-level widget, layout or None.
         self.control = outer
@@ -785,7 +807,7 @@ class _GroupPanel(object):
             # Get the editor factory associated with the Item:
             editor_factory = item.editor
             if editor_factory is None:
-                editor_factory = trait.get_editor()
+                editor_factory = trait.get_editor().set(**item.editor_args)
 
                 # If still no editor factory found, use a default text editor:
                 if editor_factory is None:
@@ -820,6 +842,9 @@ class _GroupPanel(object):
             editor.prepare(inner)
             control = editor.control
 
+            if item.style_sheet :
+                control.setStyleSheet(item.style_sheet)
+
             # Set the initial 'enabled' state of the editor from the factory:
             editor.enabled = editor_factory.enabled
 
@@ -843,12 +868,16 @@ class _GroupPanel(object):
                 width = min_size.width()
                 height = min_size.height()
 
+                force_width  = False
+                force_height = False
+
                 if (0.0 < item_width <= 1.0) and is_horizontal:
                     stretch = int(100 * item_width)
 
                 item_width = int(item_width)
                 if item_width < -1:
                     item_width  = -item_width
+                    force_width = True
                 else:
                     item_width = max(item_width, width)
 
@@ -858,11 +887,16 @@ class _GroupPanel(object):
                 item_height = int(item_height)
                 if item_height < -1:
                     item_height = -item_height
+                    force_height = True
                 else:
                     item_height = max(item_height, height)
 
                 control.setMinimumWidth(max(item_width, 0))
                 control.setMinimumHeight(max(item_height, 0))
+                if (stretch == 0 or not is_horizontal) and force_width :
+                    control.setMaximumWidth(item_width)
+                if (stretch == 0 or is_horizontal) and force_height :
+                    control.setMaximumHeight(item_height)
 
             # Bind the editor into the UIInfo object name space so it can be
             # referred to by a Handler while the user interface is active:
@@ -897,21 +931,14 @@ class _GroupPanel(object):
             ui._scrollable |= scrollable
             item_resizable  = ((item.resizable is True) or
                                ((item.resizable is Undefined) and scrollable))
+
             if item_resizable:
                 stretch = stretch or 50
                 self.resizable = True
             elif item.springy:
                 stretch = stretch or 50
-            policy = control.sizePolicy()
-            if self.direction == QtGui.QBoxLayout.LeftToRight:
-                policy.setHorizontalStretch(stretch)
-                if item_resizable or item.springy:
-                    policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
-            else:
-                policy.setVerticalStretch(stretch)
-                if item_resizable or item.springy:
-                    policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
-            control.setSizePolicy(policy)
+
+            editor.set_size_policy(self.direction, item_resizable, item.springy, stretch)
 
             # FIXME: Need to decide what to do about border_size and padding
             self._add_widget(inner, control, row, col, show_labels)
@@ -1080,6 +1107,9 @@ class HTMLHelpWindow ( QtGui.QDialog ):
     def __init__ ( self, parent, html, scale_dx, scale_dy ):
         """ Initializes the object.
         """
+        # Local import to avoid a WebKit dependency when one isn't needed.
+        from pyface.qt import QtWebKit
+
         QtGui.QDialog.__init__(self, parent)
         layout = QtGui.QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)

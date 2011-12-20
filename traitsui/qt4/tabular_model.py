@@ -81,7 +81,7 @@ class TabularModel(QtCore.QAbstractTableModel):
                 return tooltip
 
         elif role == QtCore.Qt.FontRole:
-            font = adapter.get_font(obj, name, row)
+            font = adapter.get_font(obj, name, row, column)
             if font is not None:
                 return QtGui.QFont(font)
 
@@ -91,7 +91,7 @@ class TabularModel(QtCore.QAbstractTableModel):
             return (alignment | QtCore.Qt.AlignVCenter)
 
         elif role == QtCore.Qt.BackgroundRole:
-            color = adapter.get_bg_color(obj, name, row)
+            color = adapter.get_bg_color(obj, name, row, column)
             if color is not None:
                 if isinstance(color, SequenceTypes):
                     q_color = QtGui.QColor(*color)
@@ -100,7 +100,7 @@ class TabularModel(QtCore.QAbstractTableModel):
                 return QtGui.QBrush(q_color)
 
         elif role == QtCore.Qt.ForegroundRole:
-            color = adapter.get_text_color(obj, name, row)
+            color = adapter.get_text_color(obj, name, row, column)
             if color is not None:
                 if isinstance(color, SequenceTypes):
                     q_color = QtGui.QColor(*color)
@@ -129,16 +129,26 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to set editable status and movable status.
         """
         editor = self._editor
-        index = mi.row()
+        row = mi.row()
+        column = mi.column()
 
-        flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
+        flags = QtCore.Qt.ItemIsEnabled
+        if editor.factory.selectable:
+            flags |= QtCore.Qt.ItemIsSelectable
 
+        # If the adapter defines get_can_edit_cell(), use it to determine
+        # editability over the row-wise get_can_edit().
         if (editor.factory.editable and 'edit' in editor.factory.operations and
-            editor.adapter.get_can_edit(editor.object, editor.name, index)):
+            hasattr(editor.adapter, 'get_can_edit_cell')):
+            if editor.adapter.get_can_edit_cell(editor.object, editor.name,
+                row, column):
+                flags |= QtCore.Qt.ItemIsEditable
+        elif (editor.factory.editable and 'edit' in editor.factory.operations and
+            editor.adapter.get_can_edit(editor.object, editor.name, row)):
             flags |= QtCore.Qt.ItemIsEditable
 
         if (editor.factory.editable and 'move' in editor.factory.operations and
-            editor.adapter.get_drag(editor.object, editor.name, index) is not None):
+            editor.adapter.get_drag(editor.object, editor.name, row) is not None):
             flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
 
         return flags
@@ -150,7 +160,8 @@ class TabularModel(QtCore.QAbstractTableModel):
             return None
 
         editor = self._editor
-        return editor.adapter.label_map[section]
+        label = editor.adapter.get_label(section, editor.object)
+        return label
 
     def rowCount(self, mi):
         """ Reimplemented to return the number of rows.

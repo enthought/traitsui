@@ -20,7 +20,7 @@ from pyface.qt import QtCore, QtGui
 
 from pyface.timer.api import do_later
 
-from traits.api import Any, Button, Event, List, HasTraits, \
+from traits.api import Any, Bool, Button, Event, List, HasTraits, \
     Instance, Int, Property, Str, cached_property, on_trait_change
 
 from traitsui.api import EnumEditor, InstanceEditor, Group, \
@@ -49,12 +49,18 @@ class TableEditor(Editor, BaseTableEditor):
 
     # The table view control associated with the editor:
     table_view = Any
+    def _table_view_default(self):
+        return TableView(editor=self)
 
     # A wrapper around the source model which provides filtering and sorting:
     model = Instance(SortFilterTableModel)
+    def _model_default(self):
+        return SortFilterTableModel(editor=self)
 
     # The table model associated with the editor:
     source_model = Instance(TableModel)
+    def _source_model_default(self):
+        return TableModel(editor=self)
 
     # The set of columns currently defined on the editor:
     columns = List(TableColumn)
@@ -75,6 +81,9 @@ class TableEditor(Editor, BaseTableEditor):
 
     # Current filter summary message
     filter_summary = Str('All items')
+
+    # Update the filtered contents.
+    update_filter = Event()
 
     # The event fired when a cell is clicked on:
     click = Event
@@ -98,6 +107,9 @@ class TableEditor(Editor, BaseTableEditor):
     # The index of the row that was last right clicked on its vertical header
     header_row = Int
 
+    # Whether to auto-size the columns or not.
+    auto_size = Bool(False)
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -109,11 +121,14 @@ class TableEditor(Editor, BaseTableEditor):
 
         factory = self.factory
         self.columns = factory.columns[:]
+        if factory.table_view_factory is not None:
+            self.table_view = factory.table_view_factory(editor=self)
+        if factory.source_model_factory is not None:
+            self.source_model = factory.source_model_factory(editor=self)
+        if factory.model_factory is not None:
+            self.model = factory.model_factory(editor=self)
 
         # Create the table view and model
-        self.table_view = TableView(editor=self)
-        self.source_model = TableModel(editor=self)
-        self.model = SortFilterTableModel(editor=self)
         self.model.setDynamicSortFilter(True)
         self.model.setSourceModel(self.source_model)
         self.table_view.setModel(self.model)
@@ -238,7 +253,9 @@ class TableEditor(Editor, BaseTableEditor):
         self.sync_value(factory.selected_indices, 'selected_indices', is_list=is_list)
         self.sync_value(factory.filter_name, 'filter', 'from')
         self.sync_value(factory.filtered_indices, 'filtered_indices', 'to')
+        self.sync_value(factory.update_filter_name, 'update_filter', 'from')
 
+        self.auto_size = self.factory.auto_size
 
         # Initialize the ItemDelegates for each column
         self._update_columns()
@@ -272,6 +289,7 @@ class TableEditor(Editor, BaseTableEditor):
         self.on_trait_change(self._update_columns, 'columns', remove=True)
         self.on_trait_change(self._update_columns, 'columns_items', remove=True)
 
+
         super(TableEditor, self).dispose()
 
     #---------------------------------------------------------------------------
@@ -287,7 +305,7 @@ class TableEditor(Editor, BaseTableEditor):
 
         self.table_view.setUpdatesEnabled(False)
         try:
-            filtering = len(self.factory.filters) > 0
+            filtering = len(self.factory.filters) > 0 or self.filter is not None
             if filtering:
                 self._update_filtering()
 
@@ -296,11 +314,29 @@ class TableEditor(Editor, BaseTableEditor):
             # externally to manage the selections
             self.model.invalidate()
 
-            if self.factory.auto_size:
-                self.table_view.resizeColumnsToContents()
+            self.table_view.resizeColumnsToContents()
+            if self.auto_size:
+                self.table_view.resizeRowsToContents()
 
         finally:
             self.table_view.setUpdatesEnabled(True)
+
+    def restore_prefs ( self, prefs ):
+        """ Restores any saved user preference information associated with the
+            editor.
+        """
+        header = self.table_view.horizontalHeader()
+        if header is not None and 'column_state' in prefs:
+            header.restoreState(prefs['column_state'])
+
+    def save_prefs ( self ):
+        """ Returns any user preference information associated with the editor.
+        """
+        prefs = {}
+        header = self.table_view.horizontalHeader()
+        if header is not None:
+            prefs['column_state'] = str(header.saveState())
+        return prefs
 
     #---------------------------------------------------------------------------
     #  Requests that the underlying table widget to redraw itself:
@@ -546,11 +582,18 @@ class TableEditor(Editor, BaseTableEditor):
 
         self.model.reset()
         self.table_view.resizeColumnsToContents()
+        if self.auto_size:
+            self.table_view.resizeRowsToContents()
 
     def _selected_changed(self, new):
         """Handle the selected row/column/cell being changed externally."""
         if not self._no_notify:
             self.set_selection(self.selected, notify=False)
+
+    def _update_filter_changed(self):
+        """ The filter has changed internally.
+        """
+        self._filter_changed(self.filter, self.filter)
 
     #-- Event Handlers ---------------------------------------------------------
 
@@ -741,10 +784,14 @@ class TableDelegate(QtGui.QStyledItemDelegate):
         control.setAutoFillBackground(True)
 
         # Make sure that editors are disposed of correctly
-        QtCore.QObject.connect(control, QtCore.SIGNAL('destroyed()'),
-                               lambda: editor.dispose())
-
+        # will be disposed in closeEditor of the TableView
+        control._editor = editor
         return control
+
+    def updateEditorGeometry(self, editor, option, index):
+        """ Update the editor's geometry.
+        """
+        editor.setGeometry(option.rect)
 
 class TableView(QtGui.QTableView):
     """A QTableView configured to behave as expected by TraitsUI."""
@@ -781,10 +828,29 @@ class TableView(QtGui.QTableView):
             vheader.installEventFilter(self)
         else:
             vheader.hide()
+        self.setAlternatingRowColors(factory.alternate_bg_color)
 
         # Configure the column headings.
+        # We detect if there are any stretchy sections at all; if not, then
+        # we make the last non-fixed-size column stretchy.
         hheader = self.horizontalHeader()
-        hheader.setStretchLastSection(True)
+        resize_mode_map = dict(interactive = QtGui.QHeaderView.Interactive,
+                               fixed = QtGui.QHeaderView.Fixed,
+                               stretch = QtGui.QHeaderView.Stretch,
+                               resize_to_contents = QtGui.QHeaderView.ResizeToContents)
+        stretchable_columns = []
+        for i, column in enumerate(editor.columns):
+            hheader.setResizeMode(i, resize_mode_map[column.resize_mode])
+            if column.resize_mode in ("stretch", "interactive"):
+                stretchable_columns.append(i)
+        if not stretchable_columns:
+            # Use the behavior from before the "resize_mode" trait was added
+            # to TableColumn
+            hheader.setStretchLastSection(True)
+        else:
+            hheader.setResizeMode(stretchable_columns[-1], QtGui.QHeaderView.Stretch)
+            hheader.setStretchLastSection(False)
+
         if factory.show_column_labels:
             hheader.setHighlightSections(False)
         else:
@@ -813,6 +879,12 @@ class TableView(QtGui.QTableView):
             self.setDropIndicatorShown(True)
         elif factory.sortable:
             self.setSortingEnabled(True)
+
+        if factory._qt_stylesheet is not None:
+            self.setStyleSheet(factory._qt_stylesheet)
+
+        self.resizeColumnsToContents()
+
 
     def contextMenuEvent(self, event):
         """Reimplemented to create context menus for cells and empty space."""
@@ -887,15 +959,18 @@ class TableView(QtGui.QTableView):
 
         QtGui.QTableView.resizeEvent(self, event)
 
-        if self._editor.factory.auto_size:
+        if self._editor.auto_size:
             self.resizeColumnsToContents()
+            self.resizeRowsToContents()
 
         else:
             parent = self.parent()
             if (not self._initial_size and parent and
                 (self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
                 self._initial_size = True
-                self.resizeColumnsToContents()
+                if self._editor.auto_size:
+                    self.resizeColumnsToContents()
+                    self.resizeRowsToContents()
 
     def sizeHint(self):
         """Reimplemented to define a better size hint for the width of the
@@ -952,7 +1027,6 @@ class TableView(QtGui.QTableView):
                 # Add distance between sort indicator and text
                 width += style.pixelMetric(QtGui.QStyle.PM_HeaderMargin, option,
                                            self)
-
             return max(base_width, width)
 
         # Or else set width absolutely
@@ -962,6 +1036,14 @@ class TableView(QtGui.QTableView):
     def resizeColumnsToContents(self):
         """Reimplemented to support proportional column width specifications."""
 
+        # TODO: The proportional size specification approach found in the
+        # TableColumns is not entirely compatible with the ability to
+        # specify the resize_mode.  Namely, there are combinations of
+        # specifications that are redundant, and others which are 
+        # contradictory.  Rework this method so that the various values
+        # for **width** have a well-defined, sensible meaning for each
+        # of the possible values of resize_mode.
+
         editor = self._editor
         available_space = self.viewport().width()
         hheader = self.horizontalHeader()
@@ -969,8 +1051,9 @@ class TableView(QtGui.QTableView):
         # Compute sizes for columns with absolute or no size requests
         proportional = []
         for column_index in xrange(len(editor.columns)):
-            requested_width = editor.columns[column_index].get_width()
-            if 0 < requested_width < 1:
+            column = editor.columns[column_index]
+            requested_width = column.get_width()
+            if column.resize_mode in ("interactive", "stretch") and 0 < requested_width <= 1.0:
                 proportional.append((column_index, requested_width))
             else:
                 base_width = hheader.sectionSizeHint(column_index)
@@ -984,6 +1067,15 @@ class TableView(QtGui.QTableView):
             base_width = hheader.sectionSizeHint(column_index)
             width = max(base_width, int(percent * available_space))
             hheader.resizeSection(column_index, width)
+
+    def closeEditor(self, control, hint) :
+        # dispose traits editor associated with control if any
+        editor = getattr(control, "_editor", None)
+        if editor is not None :
+            editor.dispose()
+            delattr(control, "_editor")
+
+        return super(TableView, self).closeEditor(control, hint)
 
 #-------------------------------------------------------------------------------
 #  Editor for configuring the filters available to a TableEditor:

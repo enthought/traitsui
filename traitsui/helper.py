@@ -79,12 +79,12 @@ def commatize ( value ):
 #  Recomputes the mappings for a new set of enumeration values:
 #-------------------------------------------------------------------------------
 
-def enum_values_changed ( values ):
+def enum_values_changed ( values, strfunc=unicode ):
     """ Recomputes the mappings for a new set of enumeration values.
     """
 
     if isinstance( values, dict ):
-        data = [ ( unicode( v ), n ) for n, v in values.items() ]
+        data = [ ( strfunc( v ), n ) for n, v in values.items() ]
         if len( data ) > 0:
             data.sort( lambda x, y: cmp( x[0], y[0] ) )
             col = data[0][0].find( ':' ) + 1
@@ -97,12 +97,12 @@ def enum_values_changed ( values ):
         if not isinstance( handler, BaseTraitHandler ):
             raise TraitError, "Invalid value for 'values' specified"
         if handler.is_mapped:
-            data = [ ( unicode( n ), n ) for n in handler.map.keys() ]
+            data = [ ( strfunc( n ), n ) for n in handler.map.keys() ]
             data.sort( lambda x, y: cmp( x[0], y[0] ) )
         else:
-            data = [ ( unicode( v ), v ) for v in handler.values ]
+            data = [ ( strfunc( v ), v ) for v in handler.values ]
     else:
-        data = [ ( unicode( v ), v ) for v in values ]
+        data = [ ( strfunc( v ), v ) for v in values ]
 
     names           = [ x[0] for x in data ]
     mapping         = {}

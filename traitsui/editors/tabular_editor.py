@@ -53,6 +53,10 @@ class TabularEditor ( BasicEditorFactory ):
     # table update is needed:
     update = Str
 
+    # The optional extended name of the trait used to indicate that the table
+    # just needs to be repainted.
+    refresh = Str
+
     # Should the table update automatically when the table item's contents
     # change? Note that in order for this feature to work correctly, the editor
     # trait should be a list of objects derived from HasTraits. Also,
@@ -67,6 +71,9 @@ class TabularEditor ( BasicEditorFactory ):
     # The optional extended name of the trait to synchronize the selection rows
     # with:
     selected_row = Str
+
+    # Whether or not to allow selection.
+    selectable = Bool( True )
 
     # The optional extended name of the trait to synchronize the activated value
     # with:
@@ -96,6 +103,17 @@ class TabularEditor ( BasicEditorFactory ):
     # clicked data with. The data is a TabularEditorEvent:
     column_clicked = Str
 
+    # The optional extended name of the trait to synchronize column
+    # right clicked data with. The data is a TabularEditorEvent:
+    column_right_clicked = Str
+
+    # The optional extended name of the Event trait that should be used to
+    # trigger a scroll-to command. The data is an integer giving the row.
+    scroll_to_row = Str
+
+    # Controls behavior of scroll to row
+    scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
+
     # Can the user edit the values?
     editable = Bool( True )
 
@@ -110,6 +128,13 @@ class TabularEditor ( BasicEditorFactory ):
 
     # Should vertical lines be drawn between items?
     vertical_lines = Bool( True )
+
+    # Should the columns automatically resize? Don't allow this when the amount
+    # of data is large.
+    auto_resize = Bool( False )
+
+    # Whether to stretch the last column to fit the available space.
+    stretch_last_section = Bool( True )
 
     # The adapter from trait values to editor values:
     adapter = Instance( 'traitsui.tabular_adapter.TabularAdapter', () )

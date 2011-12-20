@@ -523,6 +523,11 @@ class TableModel ( GridModel ):
         if menu is None:
             menu = editor.factory.menu
 
+        if menu is None:
+            menu_name = editor.factory.menu_name
+            if menu_name :
+                menu = getattr(self.editor.object, menu_name, None)
+
         if menu is not None:
             editor.prepare_menu( row, column )
 

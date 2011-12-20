@@ -56,6 +56,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Mapping from TreeNode tuples to MultiTreeNodes
     multi_nodes = Dict
 
+    # The column header labels if any.
+    column_headers = List(Str)
+
     # Are the individual nodes editable?
     editable = Bool(True)
 
@@ -133,6 +136,11 @@ class ToolkitEditorFactory ( EditorFactory ):
     # handler.
     veto = Str
 
+    # The optional extended trait name of the trait event that is fired when the
+    # application wishes the currently visible portion of the tree widget to
+    # repaint itself.
+    refresh = Str
+
     # Mode for lines connecting tree nodes
     #
     # * 'appearance': Show lines only when they look good.
@@ -140,6 +148,15 @@ class ToolkitEditorFactory ( EditorFactory ):
     # * 'off': Don't show lines.
     lines_mode = Enum ( 'appearance', 'on', 'off' )
     # FIXME: Document as unimplemented or wx specific.
+    # Whether to alternate row colors or not.
+    alternating_row_colors = Bool(False)
+
+    # Any extra vertical padding to add.
+    vertical_padding = Int(0)
+
+    # Whether or not to expand on a double-click.
+    expands_on_dclick = Bool(True)
+
 
     # Whether the labels should be wrapped around, if not an ellipsis is shown
     # This works only in the qt backend and if there is only one column in tree

@@ -24,7 +24,7 @@
 
 from __future__ import absolute_import
 
-from traits.api import Str, Enum, List, Bool, Instance, Property
+from traits.api import Any, Str, Enum, List, Bool, Instance, Property
 
 from ..basic_editor_factory import BasicEditorFactory
 
@@ -105,6 +105,14 @@ class ListStrEditor ( BasicEditorFactory ):
 
     # The set of images that can be used:
     images = List( ImageResource )
+
+    # Right-click context menu (Qt4 only). The value can be one of:
+    #
+    # - Instance( Menu ): Use this menu as the context menu
+    # - string: Name of traits that will provide menu
+    # - None: Use the default context menu
+    # - False: Do not display a context menu
+    menu = Any
 
     def _get_klass(self):
         """ Returns the editor class to be created.

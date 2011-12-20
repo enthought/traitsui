@@ -33,8 +33,9 @@ class PyMimeData(QtCore.QMimeData):
     """
     # The MIME type for instances.
     MIME_TYPE = 'application/x-ets-qt4-instance'
+    NOPICKLE_MIME_TYPE = 'application/x-ets-qt4-instance-no-pickle'
 
-    def __init__(self, data=None):
+    def __init__(self, data=None, pickle=True):
         """ Initialise the instance.
         """
         QtCore.QMimeData.__init__(self)
@@ -42,16 +43,19 @@ class PyMimeData(QtCore.QMimeData):
         # Keep a local reference to be returned if possible.
         self._local_instance = data
 
-        if data is not None:
-            # We may not be able to pickle the data.
-            try:
-                pdata = dumps(data)
-            except:
-                return
+        if pickle:
+            if data is not None:
+                # We may not be able to pickle the data.
+                try:
+                    pdata = dumps(data)
+                except:
+                    return
 
-            # This format (as opposed to using a single sequence) allows the
-            # type to be extracted without unpickling the data itself.
-            self.setData(self.MIME_TYPE, dumps(data.__class__) + pdata)
+                # This format (as opposed to using a single sequence) allows the
+                # type to be extracted without unpickling the data itself.
+                self.setData(self.MIME_TYPE, dumps(data.__class__) + pdata)
+        else:
+            self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
 
     @classmethod
     def coerce(cls, md):
@@ -97,7 +101,8 @@ class PyMimeData(QtCore.QMimeData):
             return self._local_instance.__class__
 
         try:
-            return loads(str(self.data(self.MIME_TYPE)))
+            if self.hasFormat(self.MIME_TYPE):
+                return loads(str(self.data(self.MIME_TYPE)))
         except:
             pass
 

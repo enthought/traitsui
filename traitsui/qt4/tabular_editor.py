@@ -27,8 +27,8 @@ from pyface.qt import QtCore, QtGui
 
 from pyface.image_resource import ImageResource
 
-from traits.api import Any, Bool, Event, HasStrictTraits, Instance, \
-    Int, List, Property, TraitListEvent
+from traits.api import (Any, Bool, Callable, Event, HasStrictTraits, Instance,
+    Int, List, NO_COMPARE, Property, TraitListEvent)
 
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.ui_traits import Image
@@ -36,9 +36,18 @@ from traitsui.ui_traits import Image
 from editor import Editor
 from tabular_model import TabularModel
 
-#-------------------------------------------------------------------------------
-#  'TabularEditor' class
-#-------------------------------------------------------------------------------
+
+class HeaderEventFilter(QtCore.QObject) :
+    def __init__(self, editor) :
+        super(HeaderEventFilter, self).__init__()
+        self.editor = editor
+
+    def eventFilter(self, obj, event) :
+        if event.type() == QtCore.QEvent.ContextMenu :
+            self.editor._on_column_context_menu(event.pos())
+            return True
+        return False
+
 
 class TabularEditor(Editor):
     """ A traits UI editor for editing tabular data (arrays, list of tuples,
@@ -49,6 +58,9 @@ class TabularEditor(Editor):
 
     # The event fired when a table update is needed:
     update = Event
+
+    # The event fired when a simple repaint is needed:
+    refresh = Event
 
     # The current set of selected items (which one is used depends upon the
     # initial state of the editor factory 'multi_select' trait):
@@ -61,8 +73,8 @@ class TabularEditor(Editor):
     multi_selected_rows = List(Int)
 
     # The most recently actived item and its index:
-    activated     = Any
-    activated_row = Int
+    activated     = Any(comparison_mode=NO_COMPARE)
+    activated_row = Int(comparison_mode=NO_COMPARE)
 
     # The most recent left click data:
     clicked = Instance('TabularEditorEvent')
@@ -78,6 +90,12 @@ class TabularEditor(Editor):
 
     # The most recent column click data:
     column_clicked = Instance('TabularEditorEvent')
+
+    # The most recent column click data:
+    column_right_clicked = Instance('TabularEditorEvent')
+
+    # The event triggering scrolling.
+    scroll_to_row = Event(Int)
 
     # Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
@@ -103,6 +121,10 @@ class TabularEditor(Editor):
     # An image being converted:
     image = Image
 
+    header_event_filter = Any()
+
+    widget_factory = Callable(lambda *args, **kwds: _TableView(*args, **kwds))
+
     #---------------------------------------------------------------------------
     #  Editor interface:
     #---------------------------------------------------------------------------
@@ -116,7 +138,7 @@ class TabularEditor(Editor):
         self.model = TabularModel(editor=self)
 
         # Create the control
-        control = self.control = _TableView(self)
+        control = self.control = self.widget_factory(self)
 
         # Set up the selection listener
         if factory.multi_select:
@@ -139,6 +161,7 @@ class TabularEditor(Editor):
 
         # Synchronize other interesting traits as necessary:
         self.sync_value(factory.update, 'update', 'from')
+        self.sync_value(factory.refresh, 'refresh', 'from')
         self.sync_value(factory.activated,     'activated',     'to')
         self.sync_value(factory.activated_row, 'activated_row', 'to')
         self.sync_value(factory.clicked,  'clicked',  'to')
@@ -146,17 +169,27 @@ class TabularEditor(Editor):
         self.sync_value(factory.right_clicked,  'right_clicked',  'to')
         self.sync_value(factory.right_dclicked, 'right_dclicked', 'to')
         self.sync_value(factory.column_clicked, 'column_clicked', 'to')
+        self.sync_value(factory.column_right_clicked, 'column_right_clicked', 'to')
+        self.sync_value(factory.scroll_to_row, 'scroll_to_row', 'from')
 
         # Connect other signals as necessary
         signal = QtCore.SIGNAL('activated(QModelIndex)')
         QtCore.QObject.connect(control, signal, self._on_activate)
         signal = QtCore.SIGNAL('clicked(QModelIndex)')
         QtCore.QObject.connect(control, signal, self._on_click)
+        signal = QtCore.SIGNAL('clicked(QModelIndex)')
+        QtCore.QObject.connect(control, signal, self._on_right_click)
         signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
         QtCore.QObject.connect(control, signal, self._on_dclick)
         signal = QtCore.SIGNAL('sectionClicked(int)')
-        QtCore.QObject.connect(control.horizontalHeader(), signal,
-                               self._on_column_click)
+        QtCore.QObject.connect(control.horizontalHeader(), signal, self._on_column_click)
+
+        control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        signal = QtCore.SIGNAL('customContextMenuRequested(QPoint)')
+        QtCore.QObject.connect(control, signal, self._on_context_menu)
+
+        self.header_event_filter = HeaderEventFilter(self)
+        control.horizontalHeader().installEventFilter(self.header_event_filter)
 
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
@@ -200,6 +233,8 @@ class TabularEditor(Editor):
         self.on_trait_change(self.update_editor, 'adapter.columns',
                              remove=True)
 
+        self.adapter.cleanup()
+
         super(TabularEditor, self).dispose()
 
     def update_editor(self):
@@ -208,6 +243,10 @@ class TabularEditor(Editor):
         """
         if not self._no_update:
             self.model.reset()
+            if self.factory.multi_select:
+                self._multi_selected_changed(self.multi_selected)
+            else :
+                self._selected_changed(self.selected)
 
     #---------------------------------------------------------------------------
     #  TabularEditor interface:
@@ -302,6 +341,9 @@ class TabularEditor(Editor):
     def _update_changed(self):
         self.update_editor()
 
+    def _refresh_changed(self):
+        self.refresh_editor()
+
     def _selected_changed(self, new):
         if not self._no_update:
             try:
@@ -345,11 +387,13 @@ class TabularEditor(Editor):
     def _multi_selected_rows_changed(self, selected_rows):
         if not self._no_update:
             smodel = self.control.selectionModel()
-            smodel.clearSelection()
+            selection = QtGui.QItemSelection()
             for row in selected_rows:
-                smodel.select(self.model.index(row, 0),
-                              QtGui.QItemSelectionModel.Select |
-                              QtGui.QItemSelectionModel.Rows)
+                selection.select(self.model.index(row, 0), self.model.index(row, 0))
+            smodel.clearSelection()
+            smodel.select(selection,
+                QtGui.QItemSelectionModel.Select |
+                QtGui.QItemSelectionModel.Rows)
 
     def _multi_selected_rows_items_changed(self, event):
         smodel = self.control.selectionModel()
@@ -361,6 +405,19 @@ class TabularEditor(Editor):
             smodel.select(self.model.index(row, 0),
                           QtGui.QItemSelectionModel.Select |
                           QtGui.QItemSelectionModel.Rows)
+
+    scroll_to_row_hint_map = {
+        'center'  : QtGui.QTableView.PositionAtCenter,
+        'top'     : QtGui.QTableView.PositionAtTop,
+        'bottom'  : QtGui.QTableView.PositionAtBottom,
+        'visible' : QtGui.QTableView.EnsureVisible,
+    }
+
+    def _scroll_to_row_changed(self, row):
+        """ Scroll to the given row.
+        """
+        scroll_hint = self.scroll_to_row_hint_map.get(self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
+        self.control.scrollTo(self.model.index(row, 0), scroll_hint)
 
     #-- Table Control Event Handlers -------------------------------------------
 
@@ -383,6 +440,14 @@ class TabularEditor(Editor):
     def _on_column_click(self, column):
         event = TabularEditorEvent(editor=self, row=0, column=column)
         setattr(self, 'column_clicked', event)
+
+    def _on_right_click(self, column):
+        event = TabularEditorEvent(editor=self, row=0, column=column)
+        setattr(self, 'right_clicked', event)
+
+    def _on_column_right_click(self, column):
+        event = TabularEditorEvent(editor=self, row=0, column=column)
+        setattr(self, 'column_right_clicked', event)
 
     def _on_row_selection(self, added, removed):
         """ Handle the row selection being changed.
@@ -417,6 +482,39 @@ class TabularEditor(Editor):
             self.multi_selected = selected
         finally:
             self._no_update = False
+
+    def _on_context_menu(self, pos) :
+        column, row = self.control.columnAt(pos.x()), self.control.rowAt(pos.y())
+        menu = self.adapter.get_menu(self.object, self.name, row, column)
+        if menu :
+            qmenu = menu.create_menu( self.control, self )
+            self._menu_context = {'selection' : self.object,
+                             'object':  self.object,
+                             'editor':  self,
+                             'column':  column,
+                             'row':     row,
+                             'item':    self.adapter.get_item(self.object, self.name, row),
+                             'info':    self.ui.info,
+                             'handler': self.ui.handler }
+            qmenu.exec_(self.control.mapToGlobal(pos))
+            self._menu_context = None
+
+    def _on_column_context_menu(self, pos) :
+        column = self.control.columnAt(pos.x())
+        menu = self.adapter.get_column_menu(self.object, self.name, -1, column)
+        if menu :
+            qmenu = menu.create_menu( self.control, self )
+            self._menu_context = {'selection' : self.object, 'object':  self.object,
+                             'editor':  self,
+                             'column':  column,
+                             'info':    self.ui.info,
+                             'handler': self.ui.handler }
+            qmenu.exec_(self.control.mapToGlobal(pos))
+            self._menu_context = None
+        else:
+            #If no menu is defined on the adapter, just trigger a click event.
+            self._on_column_right_click(column)
+
 
 #-------------------------------------------------------------------------------
 #  'TabularEditorEvent' class:
@@ -511,7 +609,7 @@ class _TableView(QtGui.QTableView):
 
         # Configure the column headings.
         hheader = self.horizontalHeader()
-        hheader.setStretchLastSection(True)
+        hheader.setStretchLastSection(factory.stretch_last_section)
         if factory.show_titles:
             hheader.setHighlightSections(False)
         else:
@@ -615,6 +713,9 @@ class _TableView(QtGui.QTableView):
             large data sets.)
         """
         editor = self._editor
+        if editor.factory.auto_resize:
+            # Use the default implementation.
+            return super(_TableView, self).sizeHintForColumn(column)
 
         width = editor.adapter.get_width(editor.object, editor.name, column)
         if width > 1:
@@ -628,6 +729,9 @@ class _TableView(QtGui.QTableView):
             https://svn.enthought.com/enthought/wiki/Traits_3_0_tabular_editor.
         """
         editor = self._editor
+        if editor.factory.auto_resize:
+            # Use the default implementation.
+            return super(_TableView, self).resizeColumnsToContents()
         available_space = self.viewport().width()
         hheader = self.horizontalHeader()
 

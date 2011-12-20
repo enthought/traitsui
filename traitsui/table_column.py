@@ -25,8 +25,8 @@
 
 from __future__ import absolute_import
 
-from traits.api import (Any, Bool, Callable, Color, Constant, Enum, Expression, Float,
-    Font, HasPrivateTraits, Instance, Int, Property, Str)
+from traits.api import (Any, Bool, Callable, Color, Constant, Either, Enum,
+    Expression, Float, Font, HasPrivateTraits, Instance, Int, Property, Str)
 
 from traits.trait_base import user_name_for, xgetattr
 
@@ -71,10 +71,10 @@ class TableColumn ( HasPrivateTraits ):
     text_font = Font
 
     # Cell background color for this column:
-    cell_color = Color( 'white' )
+    cell_color = Either(Color( 'white' ), None)
 
     # Cell background color for non-editable columns:
-    read_only_cell_color = Color( 0xF4F3EE )
+    read_only_cell_color = Either(Color( 0xF4F3EE ), None)
 
     # Cell graph color:
     graph_color = Color( 0xDDD9CC )
@@ -84,6 +84,12 @@ class TableColumn ( HasPrivateTraits ):
 
     # Vertical alignment of text in the column:
     vertical_alignment = Enum( 'center', [ 'top', 'center', 'bottom' ] )
+
+    # Horizontal cell margin
+    horizontal_margin = Int(4)
+
+    # Vertical cell margin
+    vertical_margin = Int(3)
 
     # The image to display in the cell:
     image = Image
@@ -100,6 +106,9 @@ class TableColumn ( HasPrivateTraits ):
     # Is the column automatically edited/viewed (i.e. should the column editor
     # or popup be activated automatically on mouse over)?
     auto_editable = Bool( False )
+
+    # Should a checkbox be displayed instead of True/False?
+    show_checkbox = Bool( True )
 
     # Can external objects be dropped on the column?
     droppable = Bool( False )
@@ -122,6 +131,14 @@ class TableColumn ( HasPrivateTraits ):
     # (< 0.0: Default, 0.0..1.0: fraction of total table height,
     # > 1.0: absolute height in pixels):
     edit_height = Float( -1.0 )
+
+    # The resize mode for this column.  This takes precedence over other settings
+    # (like **width**, above).
+    #   "interactive": column can be resized by users or programmatically
+    #   "fixed": users cannot resize the column, but it can be set programmatically
+    #   "stretch": the column will be resized to fill the available space
+    #   "resize_to_contents": column will be sized to fit the contents, but then cannot be resized
+    resize_mode = Enum("interactive", "fixed", "stretch", "resize_to_contents")
 
     # The view (if any) to display when clicking a non-editable cell:
     view = AView

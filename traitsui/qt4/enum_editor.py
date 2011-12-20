@@ -36,7 +36,7 @@ from editor \
 from constants \
     import OKColor, ErrorColor
 
-from helper \
+from traitsui.helper \
     import enum_values_changed
 
 #-------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ class BaseEditor ( Editor ):
         """ Recomputes the cached data based on the underlying enumeration model.
         """
         self._names, self._mapping, self._inverse_mapping = \
-            enum_values_changed( self._value() )
+            enum_values_changed( self._value(), self.string_value )
 
     #---------------------------------------------------------------------------
     #  Handles the underlying object model's enumeration set being changed:
@@ -196,9 +196,10 @@ class SimpleEditor ( BaseEditor ):
                                        QtCore.SIGNAL('editTextChanged(QString)'),
                                        self.update_text_object)
             else:
-                QtCore.QObject.connect(control,
-                                       QtCore.SIGNAL('editingFinished()'),
-                                       self.update_autoset_text_object)
+                QtCore.QObject.connect(control.lineEdit(),
+                                   QtCore.SIGNAL('editingFinished()'),
+                                   self.update_autoset_text_object)
+            control.setInsertPolicy(QtGui.QComboBox.NoInsert)
 
         self._no_enum_update = 0
         self.set_tooltip()
@@ -217,6 +218,17 @@ class SimpleEditor ( BaseEditor ):
         return control
 
     #---------------------------------------------------------------------------
+    #  Adjust size polify to behave properly in group
+    #---------------------------------------------------------------------------
+
+    def set_size_policy(self, direction, resizable, springy, stretch) :
+        super(SimpleEditor, self).set_size_policy(direction, resizable, springy, stretch)
+
+        if ((direction == QtGui.QBoxLayout.LeftToRight and springy) or
+            (direction != QtGui.QBoxLayout.LeftToRight and resizable)) :
+            self.control.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContentsOnFirstShow)
+
+    #---------------------------------------------------------------------------
     #  Handles the user selecting a new value from the combo box:
     #---------------------------------------------------------------------------
 
@@ -228,7 +240,8 @@ class SimpleEditor ( BaseEditor ):
             try:
                 self.value = self.mapping[unicode(text)]
             except:
-                pass
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
             self._no_enum_update -= 1
 
     #---------------------------------------------------------------------------
@@ -256,7 +269,7 @@ class SimpleEditor ( BaseEditor ):
 
     def update_autoset_text_object(self):
         # Don't get the final text with the editingFinished signal
-        if self.control:
+        if self.control is not None:
             text = self.control.lineEdit().text()
             return self.update_text_object(text)
 

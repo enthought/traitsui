@@ -23,14 +23,16 @@
 #-------------------------------------------------------------------------------
 
 from pyface.qt import QtCore, QtGui
+import collections
 
 from pyface.image_resource import ImageResource
 from traits.api import Any, Bool, Event, Int, Instance, List, \
-    Property, Str, TraitListEvent
+    Property, Str, TraitListEvent, NO_COMPARE
 from traitsui.list_str_adapter import ListStrAdapter
 
 from editor import Editor
 from list_str_model import ListStrModel
+from traitsui.menu import Menu
 
 #-------------------------------------------------------------------------------
 #  '_ListStrEditor' class:
@@ -63,9 +65,10 @@ class _ListStrEditor(Editor):
     selected_index = Int(-1)
     multi_selected_indices = List(Int)
 
-    # The most recently actived item and its index:
-    activated = Any
-    activated_index = Int
+    # The most recently actived item and its index.
+    # Always trigger change notification.
+    activated = Any(comparison_mode=NO_COMPARE)
+    activated_index = Int(comparison_mode=NO_COMPARE)
 
     # The most recently right_clicked item and its index:
     right_clicked = Event
@@ -191,6 +194,11 @@ class _ListStrEditor(Editor):
         """
         if not self._no_update:
             self.model.reset()
+            # restore selection back
+            if self.factory.multi_select :
+                self._multi_selected_changed(self.multi_selected)
+            else :
+                self._selected_changed(self.selected)
 
     #---------------------------------------------------------------------------
     #  ListStrEditor interface:
@@ -289,12 +297,13 @@ class _ListStrEditor(Editor):
         """ Handles the editor's 'multi_selected' trait being changed.
         """
         if not self._no_update:
-            try:
-                indices = [ self.value.index(item) for item in selected ]
-            except ValueError:
-                pass
-            else:
-                self._multi_selected_indices_changed(indices)
+            indices = []
+            for item in selected :
+                try:
+                    indices.append(self.value.index(item))
+                except ValueError:
+                    pass
+            self._multi_selected_indices_changed(indices)
 
     def _multi_selected_items_changed(self, event):
         """ Handles the editor's 'multi_selected' trait being modified.
@@ -379,6 +388,31 @@ class _ListStrEditor(Editor):
         finally:
             self._no_update = False
 
+    def _on_context_menu(self, pos) :
+        menu = self.factory.menu
+
+        index = self.list_view.indexAt(pos).row()
+
+        if isinstance(menu, str) :
+            menu = getattr(self.object, menu, None)
+
+        if isinstance(menu, collections.Callable) :
+            menu = menu(index)
+
+        if menu is not None :
+            qmenu = menu.create_menu( self.list_view, self )
+
+            self._menu_context = {'selection': self.object,
+                             'object':  self.object,
+                             'editor':  self,
+                             'index':   index,
+                             'info':    self.ui.info,
+                             'handler': self.ui.handler }
+
+            qmenu.exec_(self.list_view.mapToGlobal(pos))
+
+            self._menu_context = None
+
 #-------------------------------------------------------------------------------
 #  Qt widgets that have been configured to behave as expected by Traits UI:
 #-------------------------------------------------------------------------------
@@ -430,6 +464,14 @@ class _ListView(QtGui.QListView):
         self.setDragDropOverwriteMode(True)
         self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
         self.setDropIndicatorShown(True)
+
+        if editor.factory.menu is False :
+            self.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
+        elif editor.factory.menu is not False :
+            self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+
+        self.connect(self, QtCore.SIGNAL('customContextMenuRequested(QPoint)'),
+                editor._on_context_menu)
 
         # Configure context menu behavior
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)

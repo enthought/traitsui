@@ -148,28 +148,44 @@ class Editor ( UIEditor ):
         """
         if self.label_control is not None:
             self.label_control.setVisible(visible)
+        if self.control is None:
+            # We are being called after the editor has already gone away.
+            return
 
         self._visible_changed_helper(self.control, visible)
 
-        # FIXME: Does PyQt need something similar?
-        # Handle the case where the item whose visibility has changed is a
-        # notebook page:
-        #page      = self.control.GetParent()
-        #page_name = getattr( page, '_page_name', '' )
-        #if page_name != '':
-        #    notebook = page.GetParent()
-        #    for i in range( 0, notebook.GetPageCount() ):
-        #        if notebook.GetPage( i ) is page:
-        #            break
-        #    else:
-        #        i = -1
+        page = self.control.parent()
+        if page is None or page.parent() is None or page.parent().parent() is None or page.layout().count() != 1:
+            return
 
-        #    if visible:
-        #        if i < 0:
-        #            notebook.AddPage( page, page_name )
+        # The TabWidget (representing the notebook) has a StackedWidget inside it,
+        # which then contains our parent.
+        # Even after the tab is removed, the parent-child relationship between
+        # our container widget (representing the page) and the enclosing TabWidget,
+        # so the following reference is still valid.
+        stack_widget = page.parent()
+        notebook = stack_widget.parent()
+        is_tabbed_group = notebook.property("traits_tabbed_group")
+        if notebook is None or not isinstance(notebook, QtGui.QTabWidget) or not is_tabbed_group:
+            return
 
-        #    elif i >= 0:
-        #        notebook.RemovePage( i )
+        if not visible:
+            # Store the page number and name on the parent
+            for i in range(0, notebook.count()):
+                if notebook.widget(i) == page:
+                    self._tab_index = i
+                    self._tab_text = notebook.tabText(i)
+                    page.setVisible(False)
+                    notebook.removeTab(i)
+                    break
+        else:
+            # Check to see if our parent has previously-stored tab
+            # index and text attributes
+            if (getattr(self, "_tab_index", None) is not None and
+                    getattr(self, "_tab_text", None) is not None):
+                page.setVisible(True)
+                notebook.insertTab(self._tab_index, page, self._tab_text)
+        return
 
     def _visible_changed_helper(self, control, visible):
         """A helper that allows the control to be a layout and recursively
@@ -182,7 +198,6 @@ class Editor ( UIEditor ):
                 itm = control.itemAt(i)
                 self._visible_changed_helper((itm.widget() or itm.layout()),
                         visible)
-
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
     #---------------------------------------------------------------------------
@@ -243,6 +258,103 @@ class Editor ( UIEditor ):
         """
         self.set_error_state()
 
+    #---------------------------------------------------------------------------
+    #  Handles the editor's context menu action
+    #---------------------------------------------------------------------------
+
+    def perform (self, action, action_event = None ):
+        """ Performs the action described by a specified Action object.
+        """
+        self.ui.do_undoable( self._perform, action )
+
+    def _perform ( self, action ):
+        method_name       = action.action
+        info              = self._menu_context['info']
+        handler           = self._menu_context['handler']
+        object            = self._menu_context['object']
+        selection         = self._menu_context['selection']
+        self._menu_context['action'] = action
+
+        if method_name.find( '.' ) >= 0:
+            if method_name.find( '(' ) < 0:
+                method_name += '()'
+            try:
+                eval( method_name, globals(), self._menu_context )
+            except:
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
+            return
+
+        method = getattr( handler, method_name, None )
+        if method is not None:
+            method( info, selection )
+            return
+
+        if action.on_perform is not None:
+            action.on_perform(selection)
+
+        action.perform(selection)
+
+    def eval_when ( self, condition, object, trait ):
+        """ Evaluates a condition within a defined context, and sets a 
+        specified object trait based on the result, which is assumed to be a
+        Boolean.
+        """
+        if condition != '':
+            value = True
+            try:
+                if not eval( condition, globals(), self._menu_context ):
+                    value = False
+            except:
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
+            setattr( object, trait, value )
+
+    def add_to_menu ( self, menu_item ):
+        """ Adds a menu item to the menu bar being constructed.
+        """
+        action = menu_item.item.action
+        self.eval_when( action.enabled_when, menu_item, 'enabled' )
+        self.eval_when( action.checked_when, menu_item, 'checked' )
+
+    def can_add_to_menu(self, action) :
+        """ Returns whether the action should be defined in the user interface.
+        """
+        if action.defined_when != '':
+
+            try:
+                if not eval( action.defined_when, globals(), self._menu_context ):
+                    return False
+            except:
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
+
+        if action.visible_when != '':
+            try:
+                if not eval( action.visible_when, globals(), self._menu_context ):
+                    return False
+            except:
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
+
+        return True
+
+    def set_size_policy(self, direction, resizable, springy, stretch) :
+        policy = self.control.sizePolicy()
+        if direction == QtGui.QBoxLayout.LeftToRight:
+            policy.setHorizontalStretch(stretch)
+            if springy:
+                policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+            if resizable :
+                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+        else:
+            policy.setVerticalStretch(stretch)
+            if resizable :
+                policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+            if springy :
+                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+        self.control.setSizePolicy(policy)
+
 #-------------------------------------------------------------------------------
 #  'EditorWithList' class:
 #-------------------------------------------------------------------------------
@@ -281,6 +393,8 @@ class EditorWithList ( Editor ):
 
         self.list_object.on_trait_change( self._list_updated,
                                           self.list_name, dispatch = 'ui' )
+        self.list_object.on_trait_change( self._list_updated,
+                                          self.list_name+'_items', dispatch = 'ui' )
 
         self._list_updated()
 
@@ -293,6 +407,8 @@ class EditorWithList ( Editor ):
         """
         self.list_object.on_trait_change( self._list_updated,
                                           self.list_name, remove = True )
+        self.list_object.on_trait_change( self._list_updated,
+                                          self.list_name+'_items', remove = True )
 
         super( EditorWithList, self ).dispose()
 

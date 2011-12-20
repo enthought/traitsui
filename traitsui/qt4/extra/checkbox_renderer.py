@@ -55,24 +55,44 @@ class CheckboxRenderer(TableDelegate):
 
         # First draw the background
         painter.save()
+        row_brushes = [option.palette.base(), option.palette.alternateBase()]
         if option.state & QtGui.QStyle.State_Selected:
             bg_brush = option.palette.highlight()
         else:
             bg_brush = index.data(QtCore.Qt.BackgroundRole)
-            if bg_brush == NotImplemented:
-                bg_brush = option.palette.light()
+            if bg_brush == NotImplemented or bg_brush is None:
+                if index.model()._editor.factory.alternate_bg_color:
+                    bg_brush = row_brushes[index.row() % 2]
+                else:
+                    bg_brush = row_brushes[0]
         painter.fillRect(option.rect, bg_brush)
 
         # Then draw the checkbox
+        style = QtGui.QApplication.instance().style()
         box = QtGui.QStyleOptionButton()
         box.palette = option.palette
+
+        # Align the checkbox appropriately.
         box.rect = option.rect
+        size = style.sizeFromContents(QtGui.QStyle.CT_CheckBox, box,
+            QtCore.QSize())
+        box.rect.setWidth(size.width())
+        margin = style.pixelMetric(QtGui.QStyle.PM_ButtonMargin, box)
+        alignment = column.horizontal_alignment
+        if alignment == 'left':
+            box.rect.setLeft(option.rect.left() + margin)
+        elif alignment == 'right':
+            box.rect.setLeft(option.rect.right() - size.width() - margin)
+        else:
+            # FIXME: I don't know why I need the 2 pixels, but I do.
+            box.rect.setLeft(option.rect.left() + option.rect.width() // 2 -
+                size.width() // 2 + margin - 2)
+
         box.state = QtGui.QStyle.State_Enabled
         if checked:
             box.state |= QtGui.QStyle.State_On
         else:
             box.state |= QtGui.QStyle.State_Off
-        style = QtGui.QApplication.instance().style()
         style.drawControl(QtGui.QStyle.CE_CheckBox, box, painter)
         painter.restore()
 

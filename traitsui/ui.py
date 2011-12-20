@@ -279,7 +279,8 @@ class UI ( HasPrivateTraits ):
         self.control = None
 
         # Dispose of any KeyBindings object we reference:
-        self.key_bindings.dispose()
+        if self.key_bindings is not None:
+            self.key_bindings.dispose()
 
         # Break the linkage to any objects in the context dictionary:
         self.context.clear()
@@ -834,8 +835,8 @@ class UI ( HasPrivateTraits ):
                 if not eval( when, globals(), context ):
                     value = False
             except:
-                # fixme: Should the exception be logged somewhere?
-                pass
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
 
             setattr( editor, trait, value )
 
