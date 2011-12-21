@@ -42,6 +42,10 @@ from helper \
 # List of all predefined system button names:
 SystemButtons = ['Undo', 'Redo', 'Apply', 'Revert', 'OK', 'Cancel', 'Help']
 
+def default_icon():
+    from pyface.image_resource import ImageResource
+    return ImageResource('frame.png')
+
 #-------------------------------------------------------------------------------
 #  'RadioGroup' class:
 #-------------------------------------------------------------------------------
@@ -277,6 +281,8 @@ class _StickyDialog(QtGui.QDialog):
         else:
             flags = QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint
             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+            if ui.view.resizable:
+                flags |= QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowMaximizeButtonHint
         try:
             flags |= QtCore.Qt.WindowCloseButtonHint
             if ui.view.resizable:
@@ -443,7 +449,7 @@ class BaseDialog(BasePanel):
         from pyface.image_resource import ImageResource
 
         if not isinstance(icon, ImageResource):
-            icon = ImageResource('frame.png')
+            icon = default_icon()
 
         self.control.setWindowIcon(icon.create_icon())
 

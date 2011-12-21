@@ -1215,8 +1215,9 @@ class SimpleEditor ( Editor ):
             if object is not None:
                 # Try to chain the undo history to the main undo history:
                 view = node.get_view( object )
-                if view is None:
-                    view = object.trait_view()
+
+                if view is None or isinstance(view, str) :
+                    view = object.trait_view(view)
 
                 if (self.ui.history is not None) or (view.kind == 'subpanel'):
                     ui = object.edit_traits( parent = editor,
@@ -1260,7 +1261,7 @@ class SimpleEditor ( Editor ):
             if self.factory.on_hover is not None:
                 self.ui.evaluate( self.factory.on_hover, object )
                 self._veto = True
-        elif self.factory.on_hover is not None:
+        elif self.factory and self.factory.on_hover is not None:
             self.ui.evaluate( self.factory.on_hover, None )
 
         # allow other events to be processed
@@ -1739,8 +1740,8 @@ class SimpleEditor ( Editor ):
                         'info':    info,
                         'handler': handler } )
             except:
-                # fixme: Should the exception be logged somewhere?
-                pass
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
 
             return
 

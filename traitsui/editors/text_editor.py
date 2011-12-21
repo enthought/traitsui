@@ -81,6 +81,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Is multi-line text allowed?
     multi_line = Bool( True )
 
+    # Is editor readonly (will use custom / default editor appearance with readonly flag set to true)
+    # in contrasrt with readonly style for item when completely another edito is used
+    read_only = Bool( False )
+
     # Is user input unreadable? (e.g., for a password)
     password = Bool( False )
 
@@ -92,6 +96,9 @@ class ToolkitEditorFactory ( EditorFactory ):
 
     # The optional view to display when a read-only text editor is clicked:
     view = AView
+
+    # In a read-only text editor, allow selection and copying of the text.
+    readonly_allow_selection = Bool(False)
 
     #---------------------------------------------------------------------------
     #  Traits view definition:

@@ -80,6 +80,9 @@ class SimpleEditor ( Editor ):
 
         control = wtype(self.str_value)
 
+        if factory.read_only:
+            control.setReadOnly(True)
+
         if factory.password:
             control.setEchoMode(QtGui.QLineEdit.Password)
 
@@ -214,6 +217,14 @@ class CustomEditor ( SimpleEditor ):
 class ReadonlyEditor ( BaseReadonlyEditor ):
     """ Read-only style of text editor, which displays a read-only text field.
     """
+
+    def init(self, parent):
+        super(ReadonlyEditor, self).init(parent)
+
+        if self.factory.readonly_allow_selection:
+            flags = (self.control.textInteractionFlags() |
+                QtCore.Qt.TextSelectableByMouse)
+            self.control.setTextInteractionFlags(flags)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

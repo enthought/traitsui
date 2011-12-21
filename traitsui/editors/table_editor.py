@@ -96,12 +96,20 @@ class ToolkitEditorFactory ( EditorFactory ):
     filters = List( Instance(
                      'traitsui.table_filter.TableFilter' ) )
 
+    # The optional extended trait name of the trait used to notify that the
+    # filter has changed and the displayed objects should be updated.
+    # It should be an Event.
+    update_filter_name = Str
+
     # Filter object used to allow a user to search the table.
     # NOTE: If left as None, the table will not be searchable.
     search = Instance( 'traitsui.table_filter.TableFilter' )
 
     # Default context menu to display when any cell is right-clicked
     menu = Instance( 'traitsui.menu.Menu' )
+
+    # Default trait name containg menu
+    menu_name = Str
 
     # Are objects deletable from the table?
     deletable = BoolOrCallable( False )
@@ -120,6 +128,15 @@ class ToolkitEditorFactory ( EditorFactory ):
 
     # Should the cells of the table automatically size to the optimal size?
     auto_size = Bool( True )
+
+    # Mirrors the Qt QSizePolicy.Policy attribute, for horizontal and vertical
+    # dimensions.  For these to be useful, set auto_size to False.  If these
+    # are None, then the table size policy will not be set in that dimension
+    # (for backwards compatibility).
+    h_size_policy = Enum( None, "preferred", "fixed", "minimum", "maximum", "expanding",
+                        "minimum_expanding", "ignored" )
+    v_size_policy = Enum( None, "preferred", "fixed", "minimum", "maximum", "expanding",
+                        "minimum_expanding", "ignored" )
 
     # Should a new row automatically be added to the end of the table to allow
     # the user to create new entries? If True, **row_factory** must be set.
@@ -190,6 +207,9 @@ class ToolkitEditorFactory ( EditorFactory ):
 
     # Color to use for read-only cell backgrounds
     cell_read_only_bg_color = Color( 0xF8F7F1 )
+
+    # Whether to even-odd alternate the background color.
+    alternate_bg_color = Bool(False)
 
     # Font to use for text in labels
     label_font = Font
@@ -282,6 +302,11 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Keyword arguments to pass to the **row_factory** callable when a new row
     # is created
     row_factory_kw = Dict
+
+    # Hooks for replacing parts of the implementation.
+    table_view_factory = Callable()
+    source_model_factory = Callable()
+    model_factory = Callable()
 
     #---------------------------------------------------------------------------
     #  Traits view definitions:

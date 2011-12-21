@@ -148,8 +148,8 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
             bdc.SetTextForeground( attr.GetTextColour() )
 
             # Calculate the margins for the draw area:
-            left = right  = 4
-            top  = bottom = 3
+            left = right  = self.column.horizontal_margin
+            top  = bottom = self.column.vertical_margin
             ox   = oy     = 0
 
         # Get the alignment information:
@@ -172,10 +172,10 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                     bar_dx = abs( bar_dx )
                     if halign == wx.ALIGN_LEFT:
                         bar_x = left
-                        left += 4
+                        left += self.column.horizontal_margin
                     else:
                         bar_x  = avail_dx - bar_dx
-                        right += 4
+                        right += self.column.horizontal_margin
 
                 if bar_dx > 0:
                     bdc.SetBackgroundMode( wx.SOLID )
@@ -187,8 +187,8 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
                 pass
 
             if theme is None:
-                left = right  = 4
-                top  = bottom = 3
+                left = right  = self.column.horizontal_margin
+                top  = bottom = self.column.vertical_margin
 
         # Get the optional image bitmap and text:
         bitmap = convert_bitmap( column.get_image( object ) )
@@ -212,7 +212,7 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
 
             # Get the spacing between text and image:
             if bitmap is not None:
-                idx += 4
+                idx += self.column.horizontal_margin
 
         # Calculate the x-coordinate of the image/text:
         if halign == wx.ALIGN_LEFT:
@@ -243,7 +243,7 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         if text != '':
             bdc.SetBackgroundMode( wx.TRANSPARENT )
             bdc.DrawText( text, x + ox, y + oy )
-            x += tdx + 4
+            x += tdx + self.column.horizontal_margin
 
         # Draw the image (if right-aligned):
         if (bitmap is not None) and (halign == wx.ALIGN_RIGHT):
@@ -270,12 +270,12 @@ class ThemedCellRenderer ( PyGridCellRenderer ):
         column = self.column
         bitmap = convert_bitmap( column.get_image( object ) )
         if bitmap is not None:
-            tdx += (bitmap.GetWdth() + 4)
+            tdx += (bitmap.GetWdth() + self.column.horizontal_margin)
             tdy  = max( tdy, bitmap.GetHeight() )
 
         theme = column.get_cell_theme( object )
         if theme is None:
-            return wx.Size( tdx + 8, tdy + 6 )
+            return wx.Size( tdx + self.column.horizontal_margin * 2, tdy + self.column.vertical_margin * 2 )
 
         content = theme.content
         tdx    += (content.left + content.right)

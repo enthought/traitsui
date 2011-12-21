@@ -169,11 +169,16 @@ class SimpleEditor ( Editor ):
            self.empty_list()
 
         editor = self._editor
-        # FIXME: Add support for more than one column.
         for index, value in enumerate(self.value):
+            row, column = divmod(index, self.factory.columns)
+
+            # Account for the fact that we have <columns> number of
+            # pairs
+            column = column * 2
+
             if resizable:
                 control = IconButton('list_editor.png', self.popup_menu)
-                layout.addWidget(control, index, 0)
+                layout.addWidget(control, row, column)
 
             proxy = ListItemProxy( self.object, self.name, index, item_trait,
                                    value )
@@ -186,9 +191,9 @@ class SimpleEditor ( Editor ):
             pcontrol.proxy = proxy
 
             if isinstance(pcontrol, QtGui.QWidget):
-                layout.addWidget(pcontrol, index, 1)
+                layout.addWidget(pcontrol, row, column+1)
             else:
-                layout.addLayout(pcontrol, index, 1)
+                layout.addLayout(pcontrol, row, column+1)
 
         # QScrollArea can have problems if the widget being scrolled is set too
         # early (ie. before it contains something).
@@ -471,6 +476,19 @@ class NotebookEditor ( Editor ):
     pages.
     """
 
+    # The "Close Tab" button.
+    close_button = Any()
+
+    # Maps tab names to QWidgets representing the tab contents
+    # TODO: It would be nice to be able to reuse self._pages for this, but
+    # its keys are not quite what we want.
+    _pagewidgets = Dict
+
+    # Maps names of tabs to their menu QAction instances; used to toggle
+    # checkboxes
+    _action_dict = Dict
+
+
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
@@ -516,6 +534,7 @@ class NotebookEditor ( Editor ):
             self.control.setCornerWidget( button, QtCore.Qt.TopRightCorner )
             signal = QtCore.SIGNAL( 'clicked()' )
             QtCore.QObject.connect( button, signal, self.close_current )
+            self.close_button = button
 
         if self.factory.show_notebook_menu:
             # Create the necessary attributes to manage hiding and revealing of
@@ -571,7 +590,7 @@ class NotebookEditor ( Editor ):
             self.control.removeTab(self.control.indexOf(page))
 
             if self.factory.show_notebook_menu:
-                for name,tmp in self._pagewidgets.items():
+                for name, tmp in self._pagewidgets.items():
                     if tmp is page:
                         del self._pagewidgets[name]
                 self._context_menu.removeAction(self._action_dict[name])
@@ -761,6 +780,7 @@ class NotebookEditor ( Editor ):
             if page is widget:
                 self.selected = ui.info.object
                 break
+
     def _selected_changed(self, selected):
         """ Handles the **selected** trait being changed.
         """
@@ -768,6 +788,11 @@ class NotebookEditor ( Editor ):
             if ui.info and selected is ui.info.object:
                 self.control.setCurrentWidget(page)
                 break
+            deletable = self.factory.deletable
+            deletable_trait = self.factory.deletable_trait
+            if deletable and deletable_trait:
+                enabled = xgetattr(selected, deletable_trait, True)
+                self.close_button.setEnabled(enabled)
 
     def _context_menu_requested(self, event):
         self._context_menu.popup(self.control.mapToGlobal(event))
@@ -787,3 +812,20 @@ class NotebookEditor ( Editor ):
             # TODO: Fix tab order based on the context_object's list
             self.control.addTab(self._pagewidgets[name], name)
 
+    def _context_menu_requested(self, event):
+        self._context_menu.popup(self.control.mapToGlobal(event))
+
+    def _menu_action(self, event, name=""):
+        """ Qt signal handler for when a item in a context menu is actually
+        selected.  Not that we get this even after the underlying value has
+        already changed.
+        """
+        action = self._action_dict[name]
+        checked = action.isChecked()
+        if not checked:
+            for ndx in range(self.control.count()):
+                if self.control.tabText(ndx) == name:
+                    self.control.removeTab(ndx)
+        else:
+            # TODO: Fix tab order based on the context_object's list
+            self.control.addTab(self._pagewidgets[name], name)

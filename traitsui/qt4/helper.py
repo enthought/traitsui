@@ -142,44 +142,6 @@ def save_window ( ui ):
     ui.save_prefs( (geom.x(), geom.y(), geom.width(), geom.height()) )
 
 #-------------------------------------------------------------------------------
-#  Recomputes the mappings for a new set of enumeration values:
-#-------------------------------------------------------------------------------
-
-def enum_values_changed ( values ):
-    """ Recomputes the mappings for a new set of enumeration values.
-    """
-
-    if isinstance( values, dict ):
-        data = [ ( str( v ), n ) for n, v in values.items() ]
-        if len( data ) > 0:
-            data.sort( lambda x, y: cmp( x[0], y[0] ) )
-            col = data[0][0].find( ':' ) + 1
-            if col > 0:
-                data = [ ( n[ col: ], v ) for n, v in data ]
-    elif not isinstance( values, SequenceTypes ):
-        handler = values
-        if isinstance( handler, CTrait ):
-            handler = handler.handler
-        if not isinstance( handler, BaseTraitHandler ):
-            raise TraitError, "Invalid value for 'values' specified"
-        if handler.is_mapped:
-            data = [ ( str( n ), n ) for n in handler.map.keys() ]
-            data.sort( lambda x, y: cmp( x[0], y[0] ) )
-        else:
-            data = [ ( str( v ), v ) for v in handler.values ]
-    else:
-        data = [ ( str( v ), v ) for v in values ]
-
-    names           = [ x[0] for x in data ]
-    mapping         = {}
-    inverse_mapping = {}
-    for name, value in data:
-        mapping[ name ] = value
-        inverse_mapping[ value ] = name
-
-    return ( names, mapping, inverse_mapping )
-
-#-------------------------------------------------------------------------------
 #  Safely tries to pop up an FBI window if etsdevtools.debug is installed
 #-------------------------------------------------------------------------------
 

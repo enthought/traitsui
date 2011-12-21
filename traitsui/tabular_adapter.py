@@ -111,6 +111,9 @@ class TabularAdapter ( HasPrivateTraits ):
     # then *any* is the index of the *string* within *columns*.
     columns = List()
 
+    #Maps UI name of column to value identifying column to the adapter, if different.
+    column_dict = Property()
+
     # Specifies the default value for a new row:
     default_value = Any( '' )
 
@@ -167,6 +170,12 @@ class TabularAdapter ( HasPrivateTraits ):
     # The tooltip information for a row/column item:
     tooltip = Str
 
+    # The context menu for a row/column item:
+    menu = Any
+
+    # The context menu for column header:
+    column_menu = Any
+
     # List of optional delegated adapters:
     adapters = List( ITabularAdapter, update = True )
 
@@ -215,6 +224,17 @@ class TabularAdapter ( HasPrivateTraits ):
     # For each adapter, specifies the mapping from column index to column id:
     adapter_column_map = Property( depends_on = 'adapters,columns' )
 
+    #### TabularAdapter interface ####
+
+    def cleanup(self):
+        """ Clean up the adapter to remove references to objects.
+        """
+        self.trait_setq(
+            object=None,
+            item=None,
+            value=None,
+        )
+
     #-- Adapter methods that are sensitive to item type ------------------------
 
     def get_alignment ( self, object, trait, column ):
@@ -261,23 +281,23 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         return self._result_for( 'get_dropped', object, trait, row, 0, value )
 
-    def get_font ( self, object, trait, row ):
+    def get_font ( self, object, trait, row, column = 0):
         """ Returns the font for a specified *object.trait[row]* item. A result
             of None means use the default font.
         """
-        return self._result_for( 'get_font', object, trait, row, 0 )
+        return self._result_for( 'get_font', object, trait, row, column )
 
-    def get_text_color ( self, object, trait, row ):
+    def get_text_color ( self, object, trait, row, column = 0):
         """ Returns the text color for a specified *object.trait[row]*
             item. A result of None means use the default text color.
         """
-        return self._result_for( 'get_text_color', object, trait, row, 0 )
+        return self._result_for( 'get_text_color', object, trait, row, column )
 
-    def get_bg_color ( self, object, trait, row ):
+    def get_bg_color ( self, object, trait, row, column = 0):
         """ Returns the background color for a specified *object.trait[row]*
             item. A result of None means use the default background color.
         """
-        return self._result_for( 'get_bg_color', object, trait, row, 0 )
+        return self._result_for( 'get_bg_color', object, trait, row, column )
 
     def get_image ( self, object, trait, row, column ):
         """ Returns the name of the image to use for a specified
@@ -315,6 +335,16 @@ class TabularAdapter ( HasPrivateTraits ):
         """
         return self._result_for( 'get_tooltip', object, trait, row, column )
 
+    def get_menu ( self, object, trait, row, column ):
+        """ Returns the context menu for a specified cell.
+        """
+        return self._result_for( 'get_menu', object, trait, row, column )
+
+    def get_column_menu ( self, object, trait, row, column ):
+        """ Returns the context menu for a specified column.
+        """
+        return self._result_for( 'get_column_menu', object, trait, row, column )
+
     #-- Adapter methods that are not sensitive to item type --------------------
 
     def get_item ( self, object, trait, row ):
@@ -328,7 +358,11 @@ class TabularAdapter ( HasPrivateTraits ):
     def len ( self, object, trait ):
         """ Returns the number of items in the specified *object.trait* list.
         """
-        return len( getattr( object, trait ) )
+        # Sometimes, during shutdown, the object has been set to None.
+        if object is None:
+            return 0
+        else:
+            return len( getattr( object, trait ) )
 
     def get_default_value ( self, object, trait ):
         """ Returns a new default value for the specified *object.trait* list.
@@ -394,6 +428,16 @@ class TabularAdapter ( HasPrivateTraits ):
     #-- Property Implementations -----------------------------------------------
 
     @cached_property
+    def _get_column_dict(self):
+        cols = {}
+        for i, value in enumerate(self.columns):
+            if isinstance(value, basestring):
+                cols.update({value: value})
+            else:
+                cols.update({value[0]: value[1]})
+        return cols
+
+    @cached_property
     def _get_column_map ( self ):
         map = []
         for i, value in enumerate( self.columns ):
@@ -404,14 +448,22 @@ class TabularAdapter ( HasPrivateTraits ):
 
         return map
 
+    def get_label(self, section, obj=None):
+        """Override this method if labels will vary from object to object."""
+        return self.label_map[section]
+
     @cached_property
-    def _get_label_map ( self ):
+    def _get_label_map (self):
         map = []
         for i, value in enumerate( self.columns ):
             if isinstance( value, basestring ):
                 map.append( value )
             else:
-                map.append( value[0] )
+                try:
+                    col_name = getattr(self, value[0])
+                except AttributeError:
+                    col_name = value[0]
+                map.append( col_name )
 
         return map
 

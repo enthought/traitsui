@@ -30,7 +30,7 @@ import re
 from string import find, rfind
 
 from traits.api import (Bool, Callable, Constant, Delegate, Float, Instance,
-    Range, Str, Undefined,)
+    Range, Str, Undefined, Dict,)
 
 from traits.trait_base import user_name_for
 
@@ -89,6 +89,9 @@ class Item ( ViewSubElement ):
     # Name of the trait the item is editing:
     name = Str
 
+    # Style-sheet to apply to item / group (Qt only)
+    style_sheet = Str
+
     # Help text describing the purpose of the item. The built-in help handler
     # displays this text in a pop-up window if the user clicks the widget's
     # label. View-level help displays the help text for all items in a view.
@@ -122,6 +125,9 @@ class Item ( ViewSubElement ):
 
     # Editor to use for the item:
     editor = ItemEditor
+
+    # Additional editor traits to be set if default traits editor to be used:
+    editor_args = Dict
 
     # Should the item use extra space along its Group's layout axis? If set to
     # True, the widget expands to fill any extra space that is available in the

@@ -47,6 +47,31 @@ class SimpleEditor(Editor):
             widget.
         """
         self.control = QtGui.QDateEdit()
+        if hasattr(self.factory, 'qt_date_format'):
+            self.control.setDisplayFormat(self.factory.qt_date_format)
+
+        if not self.factory.allow_future:
+            self.control.setMaximumDate(QtCore.QDate.currentDate())
+
+        if getattr(self.factory, 'maximum_date_name', None):
+            obj, extended_name, func = self.parse_extended_name(self.factory.maximum_date_name)
+            self.factory.maximum_date = func()
+
+        if getattr(self.factory, 'minimum_date_name', None):
+            obj, extended_name, func = self.parse_extended_name(self.factory.minimum_date_name)
+            self.factory.minimum_date = func()
+
+        if getattr(self.factory, 'minimum_date', None):
+            min_date = QtCore.QDate(self.factory.minimum_date.year,
+                                    self.factory.minimum_date.month,
+                                    self.factory.minimum_date.day)
+            self.control.setMinimumDate(min_date)
+
+        if getattr(self.factory, 'maximum_date', None):
+            max_date = QtCore.QDate(self.factory.maximum_date.year,
+                                    self.factory.maximum_date.month,
+                                    self.factory.maximum_date.day)
+            self.control.setMaximumDate(max_date)
 
         signal = QtCore.SIGNAL('dateChanged(QDate)')
         QtCore.QObject.connect(self.control, signal, self.update_object)

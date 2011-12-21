@@ -33,15 +33,15 @@ from traitsui.menu import Menu, Action, Separator
 
 from clipboard import clipboard, PyMimeData
 from editor import Editor
-# Commenting out the open_fbi function because deprecated and not toolkit 
-# independent
-from helper import pixmap_cache #open_fbi, 
+from helper import pixmap_cache
 
 logger = logging.getLogger(__name__)
 
 #-------------------------------------------------------------------------------
 #  The core tree node menu actions:
 #-------------------------------------------------------------------------------
+from traitsui.ui_traits import SequenceTypes
+
 
 NewAction    = 'NewAction'
 CopyAction   = Action( name         = 'Copy',
@@ -93,6 +93,9 @@ class SimpleEditor ( Editor ):
     # The event fired when the application wants to veto an operation:
     veto = Event
 
+    # The vent fired when the application wants to refresh the viewport.
+    refresh = Event
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -119,8 +122,9 @@ class SimpleEditor ( Editor ):
                     factory._editor = self
 
                     # Create the trait editor panel:
-                    self.control = QtGui.QWidget()
-                    parent.addWidget(self.control)
+                    self.control = sa = QtGui.QScrollArea()
+                    sa.setFrameShape(QtGui.QFrame.NoFrame)
+                    sa.setWidgetResizable(True)
                     self.control._node_ui = self.control._editor_nid = None
 
                     # Check to see if there are any existing editors that are
@@ -162,6 +166,7 @@ class SimpleEditor ( Editor ):
 
                 self._editor = sa = QtGui.QScrollArea()
                 sa.setFrameShape(QtGui.QFrame.NoFrame)
+                sa.setWidgetResizable(True)
                 sa._node_ui = sa._editor_nid = None
 
                 if factory.orientation == 'horizontal':
@@ -185,6 +190,7 @@ class SimpleEditor ( Editor ):
         self._undoable = []
 
         # Synchronize external object traits with the editor:
+        self.sync_value( factory.refresh,  'refresh' )
         self.sync_value( factory.selected, 'selected' )
         self.sync_value( factory.activated,'activated', 'to' )
         self.sync_value( factory.click,    'click',  'to' )
@@ -200,21 +206,22 @@ class SimpleEditor ( Editor ):
         """
         try:
             tree = self._tree
-            if (not isinstance(selection, basestring) and 
+            if (not isinstance(selection, basestring) and
                 isinstance(selection, collections.Iterable)):
-                
+
                 item_selection = QtGui.QItemSelection()
                 for sel in selection:
                     item = self._object_info(sel)[2]
                     idx = tree.indexFromItem(item)
                     item_selection.append(QtGui.QItemSelectionRange(idx))
-                
+
                 tree.selectionModel().select(item_selection,
                     QtGui.QItemSelectionModel.ClearAndSelect)
             else:
                 tree.setCurrentItem(self._object_info(selection)[2])
         except:
-            pass
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
 
     #---------------------------------------------------------------------------
     #  Handles the 'selected' trait being changed:
@@ -234,6 +241,11 @@ class SimpleEditor ( Editor ):
         """ Handles the 'veto' event being fired.
         """
         self._veto = True
+
+    def _refresh_changed ( self ):
+        """ Update the viewport.
+        """
+        self._tree.viewport().update()
 
     #---------------------------------------------------------------------------
     #  Disposes of the contents of an editor:
@@ -277,14 +289,21 @@ class SimpleEditor ( Editor ):
             editor.
         """
         tree = self._tree
+        if tree is None:
+            return
         saved_state = {}
+
+        object, node = self._node_for( self.old_value )
+        old_nid = self._get_object_nid( object, node.get_children_id(object))
+        if old_nid: self._delete_node(old_nid)
 
         object, node = self._node_for( self.old_value )
         old_nid = self._get_object_nid( object, node.get_children_id(object) )
         if old_nid:
             self._delete_node(old_nid)
-            
+
         tree.clear()
+        self._map = {}
 
         object, node = self._node_for( self.value )
         if node is not None:
@@ -303,6 +322,10 @@ class SimpleEditor ( Editor ):
                     tree.setCurrentItem(nid)
 
             self.expand_levels( nid, self.factory.auto_open, False )
+        ncolumns = self._tree.columnCount()
+        if ncolumns > 1:
+            for i in range(ncolumns):
+                self._tree.resizeColumnToContents(i)
         # FIXME: Clear the current editor (if any)...
 
     #---------------------------------------------------------------------------
@@ -314,8 +337,27 @@ class SimpleEditor ( Editor ):
         """
         return self._tree
 
+    def _get_brush(self, color) :
+        if isinstance(color, SequenceTypes):
+            q_color = QtGui.QColor(*color)
+        else:
+            q_color = QtGui.QColor(color)
+        return QtGui.QBrush(q_color)
+
+
+    def _set_column_labels(self, nid, column_labels):
+        """ Set the column labels.
+        """
+        for i, (header, label) in enumerate(map(None,
+            self.factory.column_headers[1:], column_labels), 1):
+            if header is not None and label is not None:
+                nid.setText(i, label)
 
     #---------------------------------------------------------------------------
+        color = node.get_background(object)
+        if color : nid.setBackground(0, self._get_brush(color))
+        color = node.get_foreground(object)
+        if color : nid.setForeground(0, self._get_brush(color))
     #  Private Delegate class to do drawing in case of wrapped text labels
     #---------------------------------------------------------------------------
 
@@ -449,18 +491,23 @@ class SimpleEditor ( Editor ):
             del pnid._dummy
             return
 
-        expanded, node, object = self._get_node_data(nid)
-        id_object = id(object)
-        object_info = self._map[id_object]
-        for i, info in enumerate(object_info):
-            # QTreeWidgetItem does not have an equal operator, so use id()
-            if id(nid) == id(info[1]):
-                del object_info[i]
-                break
+        try:
+            expanded, node, object = self._get_node_data(nid)
+        except AttributeError:
+            # The node has already been deleted.
+            pass
+        else:
+            id_object = id(object)
+            object_info = self._map[id_object]
+            for i, info in enumerate(object_info):
+                # QTreeWidgetItem does not have an equal operator, so use id()
+                if id(nid) == id(info[1]):
+                    del object_info[i]
+                    break
 
-        if len( object_info ) == 0:
-            self._remove_listeners( node, object )
-            del self._map[ id_object ]
+            if len( object_info ) == 0:
+                self._remove_listeners( node, object )
+                del self._map[ id_object ]
 
         if pnid is None:
             self._tree.takeTopLevelItem(self._tree.indexOfTopLevelItem(nid))
@@ -578,6 +625,7 @@ class SimpleEditor ( Editor ):
             node.when_children_changed(  object, self._children_updated,  False)
 
         node.when_label_changed( object, self._label_updated, False )
+        node.when_column_labels_change(object, self._column_labels_updated, False)
 
     #---------------------------------------------------------------------------
     #  Removes any event listeners from a specified object:
@@ -591,6 +639,7 @@ class SimpleEditor ( Editor ):
             node.when_children_changed(  object, self._children_updated,  True )
 
         node.when_label_changed( object, self._label_updated, True )
+        node.when_column_labels_change(object, self._column_labels_updated, False)
 
     #---------------------------------------------------------------------------
     #  Returns the tree node data for a specified object in the form
@@ -1011,8 +1060,9 @@ class SimpleEditor ( Editor ):
             if object is not None:
                 # Try to chain the undo history to the main undo history:
                 view = node.get_view( object )
-                if view is None:
-                    view = object.trait_view()
+                if view is None or isinstance(view, str) :
+                    view = object.trait_view(view)
+
                 if (self.ui.history is not None) or (view.kind == 'subpanel'):
                     ui = object.edit_traits( parent = editor,
                                              view   = view,
@@ -1195,6 +1245,23 @@ class SimpleEditor ( Editor ):
 
         return can_rename
 
+    def _is_droppable ( self, node, object, add_object, for_insert ):
+        """ Returns whether a given object is droppable on the node.
+        """
+        if for_insert and (not node.can_insert( object )):
+            return False
+
+        return node.can_add( object, add_object )
+
+    def _drop_object ( self, node, object, dropped_object, make_copy = True ):
+        """ Returns a droppable version of a specified object.
+        """
+        new_object = node.drop_object( object, dropped_object )
+        if (new_object is not dropped_object) or (not make_copy):
+            return new_object
+
+        return copy.deepcopy( new_object )
+
 #----- pyface.action 'controller' interface implementation: --------------------
 
     #---------------------------------------------------------------------------
@@ -1225,18 +1292,12 @@ class SimpleEditor ( Editor ):
         """ Returns whether the action should be defined in the user interface.
         """
         if action.defined_when != '':
-            try:
-                if not eval( action.defined_when, globals(), self._context ):
-                    return False
-            except:
-                open_fbi()
+            if not eval( action.defined_when, globals(), self._context ):
+                return False
 
         if action.visible_when != '':
-            try:
-                if not eval( action.visible_when, globals(), self._context ):
-                    return False
-            except:
-                open_fbi()
+            if not eval( action.visible_when, globals(), self._context ):
+                return False
 
         return True
 
@@ -1277,8 +1338,8 @@ class SimpleEditor ( Editor ):
                         'info':    info,
                         'handler': handler } )
             except:
-                # fixme: Should the exception be logged somewhere?
-                pass
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
             return
 
         method = getattr( handler, method_name, None )
@@ -1309,9 +1370,6 @@ class SimpleEditor ( Editor ):
             except Exception as e:
                 logger.warning("Exception (%s) raised when evaluating the "
                                "condition %s. Returning True." % (e,condition))
-                # Removing this call because function deprecated and not 
-                # toolkit independent.
-                #open_fbi()
             setattr( object, trait, value )
 
 #----- Menu event handlers: ----------------------------------------------------
@@ -1468,7 +1526,7 @@ class SimpleEditor ( Editor ):
         start = event.index
         n     = len( event.added )
         end   = start + len( event.removed )
-        tree                = self._tree
+        tree  = self._tree
 
         for expanded, node, nid in self._object_info_for( object, name ):
             children = node.get_children( object )
@@ -1520,6 +1578,23 @@ class SimpleEditor ( Editor ):
 
         self._tree.blockSignals(blk)
 
+    def _column_labels_updated(self, object, name, new):
+        """  Handles the column labels of an object being changed.
+        """
+        # Prevent the itemChanged() signal from being emitted.
+        blk = self._tree.blockSignals(True)
+
+        nids = {}
+        for name2, nid in self._map[ id( object ) ]:
+            if nid not in nids:
+                nids[ nid ] = None
+                node = self._get_node_data( nid )[1]
+                # Just do all of them at once. The number of columns should be
+                # small.
+                self._set_column_labels(nid, node.get_column_labels(object))
+
+        self._tree.blockSignals(blk)
+
 #-- UI preference save/restore interface ---------------------------------------
 
     #---------------------------------------------------------------------------
@@ -1538,6 +1613,11 @@ class SimpleEditor ( Editor ):
                 structure = prefs
 
             self.control.restoreState(structure)
+        header = self._tree.header()
+        self.setExpandsOnDoubleClick(editor.factory.expands_on_dclick)
+
+        if header is not None and 'column_state' in prefs:
+            header.restoreState(prefs['column_state'])
 
     #---------------------------------------------------------------------------
     #  Returns any user preference information associated with the editor:
@@ -1546,10 +1626,14 @@ class SimpleEditor ( Editor ):
     def save_prefs ( self ):
         """ Returns any user preference information associated with the editor.
         """
+        prefs = {}
         if isinstance(self.control, QtGui.QSplitter):
-            return {'structure': str(self.control.saveState())}
+            prefs['structure'] = str(self.control.saveState())
+        header = self._tree.header()
+        if header is not None:
+            prefs['column_state'] = str(header.saveState())
 
-        return None
+        return prefs
 
 #-- End UI preference save/restore interface -----------------------------------
 
@@ -1567,10 +1651,27 @@ class _TreeWidget(QtGui.QTreeWidget):
         """
         QtGui.QTreeWidget.__init__(self, parent)
 
-        self.header().hide()
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.setDragEnabled(True)
         self.setAcceptDrops(True)
+        # Set up headers if necessary.
+        column_count = len(editor.factory.column_headers)
+        if column_count > 0:
+            self.setHeaderHidden(False)
+            self.setColumnCount(column_count)
+            self.setHeaderLabels(editor.factory.column_headers)
+        else:
+            self.setHeaderHidden(True)
+
+        self.setAlternatingRowColors(editor.factory.alternating_row_colors)
+        padding = editor.factory.vertical_padding
+        if padding > 0:
+            self.setStyleSheet("""
+            QTreeView::item {
+                padding-top: %spx;
+                padding-bottom: %spx;
+            }
+            """ % (padding, padding))
 
         if editor.factory.selection_mode == 'extended':
             self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
@@ -1689,7 +1790,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         # See if the model will accept a drop.
         data = PyMimeData.coerce(e.mimeData()).instance()
 
-        if not node._is_droppable(object, data, insert):
+        if not self._editor._is_droppable(node, object, data, insert):
             return
 
         e.acceptProposedAction()
@@ -1715,11 +1816,11 @@ class _TreeWidget(QtGui.QTreeWidget):
         _, node, object = editor._get_node_data(nid)
 
         if e.proposedAction() == QtCore.Qt.MoveAction:
-            if not node._is_droppable( object, data, False ):
+            if not self._editor._is_droppable(node, object, data, False ):
                 return
 
             if dragging is not None:
-                data = node._drop_object( object, data, False )
+                data = self._editor._drop_object( node, object, data, False )
                 if data is not None:
                     try:
                         editor._begin_undo()
@@ -1729,14 +1830,14 @@ class _TreeWidget(QtGui.QTreeWidget):
                     finally:
                         editor._end_undo()
             else:
-                data = node._drop_object( object, data )
+                data = self._editor._drop_object( node, object, data, True )
                 if data is not None:
                     editor._undoable_append( node, object, data, False )
         else:
             to_node, to_object, to_index = editor._node_index( nid )
             if to_node is not None:
                 if dragging is not None:
-                    data = node._drop_object( to_object, data, False )
+                    data = self._editor._drop_object( node, to_object, data, False )
                     if data is not None:
                         from_node, from_object, from_index = \
                             editor._node_index( dragging )
@@ -1752,7 +1853,7 @@ class _TreeWidget(QtGui.QTreeWidget):
                         finally:
                             editor._end_undo()
                 else:
-                    data = to_node._drop_object( to_object, data )
+                    data = self._editor._drop_object( to_node, to_object, data, True )
                     if data is not None:
                         editor._undoable_insert( to_node, to_object, to_index,
                                                data, False )

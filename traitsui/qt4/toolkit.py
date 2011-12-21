@@ -57,7 +57,7 @@ class _CallAfter(QtCore.QObject):
     # The mutex around the list of pending calls.
     _calls_mutex = QtCore.QMutex()
 
-    def __init__(self, handler, *args):
+    def __init__(self, handler, *args, **kwds):
         """ Initialise the call.
         """
         QtCore.QObject.__init__(self)
@@ -65,6 +65,7 @@ class _CallAfter(QtCore.QObject):
         # Save the details of the call.
         self._handler = handler
         self._args = args
+        self._kwds = kwds
 
         # Add this to the list.
         self._calls_mutex.lock()
@@ -85,7 +86,7 @@ class _CallAfter(QtCore.QObject):
         """
         if event.type() == _QT_TRAITS_EVENT:
             # Invoke the handler
-            self._handler(*self._args)
+            self._handler(*self._args, **self._kwds)
 
             # We cannot remove from self._calls here. QObjects don't like being
             # garbage collected during event handlers (there are tracebacks,
@@ -103,11 +104,11 @@ class _CallAfter(QtCore.QObject):
         del self._calls[self._calls.index(self)]
         self._calls_mutex.unlock()
 
-def ui_handler ( handler, *args ):
+def ui_handler ( handler, *args, **kwds ):
     """ Handles UI notification handler requests that occur on a thread other
         than the UI thread.
     """
-    _CallAfter(handler, *args)
+    _CallAfter(handler, *args, **kwds)
 
 # Tell the traits notification handlers to use this UI handler
 set_ui_handler( ui_handler )
@@ -228,8 +229,11 @@ class GUIToolkit ( Toolkit ):
             pdx = screen_dx
             pdy = screen_dy
         else:
-            px = parent.x()
-            py = parent.y()
+            pos = parent.pos()
+            if int(parent.windowFlags()) & QtCore.Qt.Window == 0 :
+                pos = parent.mapToGlobal(pos)
+            px = pos.x()
+            py = pos.y()
             pdx = parent.width()
             pdy = parent.height()
 
@@ -453,10 +457,7 @@ class GUIToolkit ( Toolkit ):
               specific color format.
         """
         return {
-            # fixme: This should be updated to have the Qt window background
-            # color. This is just a placeholder to prevent traits.ui.api
-            # problems.
-            'WindowColor': 0xFFFFFF
+            'WindowColor': QtGui.QApplication.palette().color(QtGui.QPalette.Window),
         }
 
     #---------------------------------------------------------------------------
@@ -522,6 +523,10 @@ class GUIToolkit ( Toolkit ):
     def compound_editor ( self, *args, **traits ):
         import compound_editor as ce
         return ce.ToolkitEditorFactory( *args, **traits )
+
+    def styled_date_editor ( self, *args, **traits ):
+        import styled_date_editor as sde
+        return sde.ToolkitEditorFactory( *args, **traits )
 
     # Custom:
     def custom_editor ( self, *args, **traits ):

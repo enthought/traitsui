@@ -35,7 +35,7 @@ from .editor_factory import EditorFactory
 from .editors.api import (ArrayEditor, BooleanEditor, ButtonEditor,
     CheckListEditor, CodeEditor, ColorEditor, CompoundEditor, CustomEditor,
     CSVListEditor,
-    DNDEditor, DateEditor, DefaultOverride, DirectoryEditor, DropEditor,
+    DNDEditor, StyledDateEditor, DateEditor, DefaultOverride, DirectoryEditor, DropEditor,
     EnumEditor, FileEditor, FontEditor, HTMLEditor, HistoryEditor, ImageEditor,
     ImageEnumEditor, InstanceEditor, KeyBindingEditor, ListEditor,
     ListStrEditor, NullEditor, PopupEditor, ProgressEditor, RGBColorEditor,
@@ -99,3 +99,11 @@ from . import view_elements
 _constants  = toolkit().constants()
 WindowColor = _constants.get( 'WindowColor', 0xFFFFFF )
 
+
+def raise_to_debug() :
+    """ When we would otherwise silently swallow an exception, call this instead
+    to allow people to set the TRAITS_DEBUG environment variable and get the
+    exception.
+    """
+    import os
+    if os.getenv('TRAITS_DEBUG') is not None : raise

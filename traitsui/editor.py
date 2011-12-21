@@ -131,9 +131,12 @@ class Editor ( HasPrivateTraits ):
         HasPrivateTraits.__init__( self, **traits )
         try:
             self.old_value = getattr( self.object, self.name )
-        except AttributeError:
-            # Getting the attribute will fail for 'Event' traits:
-            self.old_value = Undefined
+        except AttributeError, ex:
+            if ex.args[0].endswith("instance is an 'event', which is write only.") or self.name == 'spring' :
+                # Getting the attribute will fail for 'Event' traits:
+                self.old_value = Undefined
+            else :
+                raise
 
         # Synchronize the application invalid state status with the editor's:
         self.sync_value( self.factory.invalid, 'invalid', 'from' )
@@ -494,7 +497,8 @@ class Editor ( HasPrivateTraits ):
                         try:
                             setattr( self, editor_name, new )
                         except:
-                            pass
+                            from traitsui.api import raise_to_debug
+                            raise_to_debug()
                         del self._no_trait_update[ key ]
 
                 user_object.on_trait_change( user_trait_modified, xuser_name )
@@ -515,7 +519,8 @@ class Editor ( HasPrivateTraits ):
                                     getattr( self, editor_name )[
                                         n: n + len(event.removed)] = event.added
                                 except:
-                                    pass
+                                    from traitsui.api import raise_to_debug
+                                    raise_to_debug()
                                 del self._no_trait_update[ key ]
 
                     user_object.on_trait_change( user_list_modified,
@@ -526,7 +531,8 @@ class Editor ( HasPrivateTraits ):
                 try:
                     setattr( self, editor_name, eval( user_value ) )
                 except:
-                    pass
+                    from traitsui.api import raise_to_debug
+                    raise_to_debug()
 
             if mode in ( 'to', 'both' ):
 
@@ -538,7 +544,8 @@ class Editor ( HasPrivateTraits ):
                         try:
                             setattr( eval( user_ref ), user_name, new )
                         except:
-                            pass
+                            from traitsui.api import raise_to_debug
+                            raise_to_debug()
                         del self._no_trait_update[ key ]
 
                 self.on_trait_change( editor_trait_modified, editor_name )
@@ -559,7 +566,8 @@ class Editor ( HasPrivateTraits ):
                                 eval( user_value )[ n:
                                     n + len( event.removed ) ] = event.added
                             except:
-                                pass
+                                from traitsui.api import raise_to_debug
+                                raise_to_debug()
                             del self._no_trait_update[ key ]
 
                     self.on_trait_change( editor_list_modified,
@@ -572,7 +580,8 @@ class Editor ( HasPrivateTraits ):
                         setattr( eval( user_ref ), user_name,
                                  getattr( self, editor_name ) )
                     except:
-                        pass
+                        from traitsui.api import raise_to_debug
+                        raise_to_debug()
 
     #-- UI preference save/restore interface -----------------------------------
 

@@ -100,6 +100,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Are notebook items deletable?
     deletable = Bool(False)
 
+    # The extended name of the trait on each page object which should be used
+    # to determine whether or not an individual page should be deletable.
+    deletable_trait = Str()
+
     # FIXME: Currently, this trait is used only in the wx backend.
     # The DockWindow graphical theme
     dock_theme = Any

@@ -122,6 +122,17 @@ class ReadonlyEditor ( Editor ):
     #  widget:
     #---------------------------------------------------------------------------
 
+    text_alignment_map = {
+        'left'    : QtCore.Qt.AlignLeft,
+        'right'   : QtCore.Qt.AlignRight,
+        'just'    : QtCore.Qt.AlignJustify,
+        'top'     : QtCore.Qt.AlignLeft,
+        'bottom'  : QtCore.Qt.AlignBottom,
+        'vcenter' : QtCore.Qt.AlignVCenter,
+        'hcenter' : QtCore.Qt.AlignHCenter,
+        'center'  : QtCore.Qt.AlignVCenter | QtCore.Qt.AlignHCenter
+    }
+
     def init ( self, parent ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -132,6 +143,18 @@ class ReadonlyEditor ( Editor ):
             self.control.setSizePolicy(QtGui.QSizePolicy.Expanding,
                                        QtGui.QSizePolicy.Expanding)
             self.control.setWordWrap(True)
+
+        alignment = None
+        for item in self.factory.text_alignment.split(",") :
+            item_alignment = self.text_alignment_map.get(item, None)
+            if item_alignment :
+                if alignment :
+                    alignment = alignment | item_alignment
+                else :
+                    alignment = item_alignment
+
+        if alignment :
+            self.control.setAlignment(alignment)
 
         self.set_tooltip()
 

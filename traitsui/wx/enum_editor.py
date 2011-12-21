@@ -245,7 +245,9 @@ class SimpleEditor ( BaseEditor ):
             self.value = new_value
 
         except:
-            pass
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
+
         self._no_enum_update -= 1
 
     #---------------------------------------------------------------------------
