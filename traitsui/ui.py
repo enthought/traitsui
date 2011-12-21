@@ -259,8 +259,9 @@ class UI ( HasPrivateTraits ):
     def finish ( self ):
         """ Finishes disposing of a user interface.
         """
-        # Reset the contents of the user interface:
-        self.reset( destroy = False )
+
+        # Reset the contents of the user interface
+        self.reset( destroy = True )
 
         # Make sure that 'visible', 'enabled', and 'checked' handlers are not
         # called after the editor has been disposed:
