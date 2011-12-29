@@ -1277,6 +1277,13 @@ class SimpleEditor ( Editor ):
         """
         expanded, node, object = self._get_node_data( event.GetItem() )
 
+        if node.activated( object ) is True:
+            if self.factory.on_activated is not None:
+                self.ui.evaluate( self.factory.on_activated, object )
+                self._veto = True
+        else:
+            self._veto = True
+
         # Fire the 'activated' event with the clicked on object as value:
         self.activated = object
 
@@ -1371,9 +1378,12 @@ class SimpleEditor ( Editor ):
 
         # If the mouse is over a node, then process the click:
         if node is not None:
-            if ((node.dclick( object ) is True) and
-                (self.factory.on_dclick is not None)):
-                self.ui.evaluate( self.factory.on_dclick, object )
+            if node.dclick( object ) is True:
+                if self.factory.on_dclick is not None:
+                    self.ui.evaluate( self.factory.on_dclick, object )
+                    self._veto = True
+            else:
+                self._veto = True
 
             # Fire the 'dclick' event with the object as its value:
             # FIXME: This is instead done in _on_item_activated for backward
