@@ -119,6 +119,10 @@ class TreeNode ( HasPrivateTraits ):
     # Function for handling double-clicking an object
     on_dclick = Callable
 
+    # Function for handling activation of an object
+    # (double-click or Enter key press when node is in focus)
+    on_activated = Callable
+
     # View to use for editing the object
     view = AView
 
@@ -623,6 +627,19 @@ class TreeNode ( HasPrivateTraits ):
         return True
 
     #---------------------------------------------------------------------------
+    #  Handles an object being activated:
+    #---------------------------------------------------------------------------
+
+    def activated ( self, object ):
+        """ Handles an object being activated.
+        """
+        if self.on_activated is not None:
+            self.on_activated( object )
+            return None
+
+        return True
+
+    #---------------------------------------------------------------------------
     #  Returns whether or not a specified object class can be added to the node:
     #---------------------------------------------------------------------------
 
@@ -818,6 +835,10 @@ class ITreeNode ( Interface ):
 
     def dclick ( self ):
         """ Handles an object being double-clicked.
+        """
+
+    def activated ( self ):
+        """ Handles an object being activated.
         """
 
 #-------------------------------------------------------------------------------
@@ -1054,6 +1075,11 @@ class ITreeNodeAdapter ( Adapter ):
         """
         pass
 
+    def activated ( self ):
+        """ Handles an object being activated.
+        """
+        pass
+
 #-------------------------------------------------------------------------------
 #  'ITreeNodeAdapterBridge' class
 #-------------------------------------------------------------------------------
@@ -1278,6 +1304,11 @@ class ITreeNodeAdapterBridge ( HasPrivateTraits ):
         """ Handles an object being double-clicked.
         """
         return self.adapter.dclick()
+
+    def activated ( self, object ):
+        """ Handles an object being activated.
+        """
+        return self.adapter.activated()
 
 
 # FIXME RTK: add the column_labels API to the following TreeNodes, too.
@@ -1629,6 +1660,15 @@ class ObjectTreeNode ( TreeNode ):
         """ Handles an object being double-clicked.
         """
         return object.tno_dclick( self )
+
+    #---------------------------------------------------------------------------
+    #  Handles an object being activated:
+    #---------------------------------------------------------------------------
+
+    def activated ( self, object ):
+        """ Handles an object being activated.
+        """
+        return object.tno_activated( self )
 
 #-------------------------------------------------------------------------------
 #  'TreeNodeObject' class:
@@ -2042,6 +2082,19 @@ class TreeNodeObject ( HasPrivateTraits ):
 
         return True
 
+    #---------------------------------------------------------------------------
+    #  Handles an object being activated:
+    #---------------------------------------------------------------------------
+
+    def tno_activated ( self, node ):
+        """ Handles an object being activated.
+        """
+        if node.on_activated is not None:
+            node.on_activated( self )
+            return None
+
+        return True
+
 #-------------------------------------------------------------------------------
 #  'MultiTreeNode' object:
 #-------------------------------------------------------------------------------
@@ -2333,4 +2386,13 @@ class MultiTreeNode ( TreeNode ):
         """ Handles an object being double-clicked.
         """
         return self.root_node.dclick( object )
+
+    #---------------------------------------------------------------------------
+    #  Handles an object being activated:
+    #---------------------------------------------------------------------------
+
+    def activated ( self, object ):
+        """ Handles an object being activated.
+        """
+        return self.root_node.activated( object )
 

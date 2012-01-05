@@ -1001,6 +1001,13 @@ class SimpleEditor ( Editor ):
         """
         _, node, object = self._get_node_data(nid)
 
+        if node.activated(object) is True:
+            if self.factory.on_activated is not None:
+                self.ui.evaluate(self.factory.on_activated, object)
+                self._veto = True
+        else:
+            self._veto = True
+
         # Fire the 'activated' event with the clicked on object as value:
         self.activated = object
 

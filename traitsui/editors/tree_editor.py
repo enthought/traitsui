@@ -101,6 +101,9 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Called when a node is double-clicked
     on_dclick = Any
 
+    # Called when a node is activated
+    on_activated = Any
+
     # Call when the mouse hovers over a node
     on_hover = Any
 
