@@ -76,6 +76,25 @@ def get_children(node):
         return node.children()
 
 
+def press_ok_button(ui):
+    """Press the OK button in a wx or qt dialog."""
+
+    if ETSConfig.toolkit == 'wx':
+        import wx
+
+        ok_button = ui.control.FindWindowByName('button')
+        click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED,
+                                      ok_button.GetId())
+        ok_button.ProcessEvent(click_event)
+
+    elif ETSConfig.toolkit == 'qt4':
+        from pyface import qt
+
+        # press the OK button and close the dialog
+        ok_button = ui.control.findChild(qt.QtGui.QPushButton)
+        ok_button.click()
+
+
 # ######### Debug tools
 
 def apply_on_children(func, node, _level=0):
