@@ -155,7 +155,7 @@ def _validate_range_value(range_object, object, name, value):
 def _prepare_method(cls, parent):
         """ Unbound implementation of the prepare editor method to add a
         change notification hook in the items of the list before calling
-        the parent prepere method of the parent class.
+        the parent prepare method of the parent class.
 
         """
         name = cls.extended_name
