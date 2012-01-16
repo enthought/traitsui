@@ -25,8 +25,9 @@
 #  Imports:
 #------------------------------------------------------------------------------
 
-from .text_editor import (SimpleEditor, CustomEditor,
-                         ReadonlyEditor, TextEditor)
+from .text_editor import SimpleEditor as WXSimpleEditor
+from .text_editor import CustomEditor as WXCustomEditor
+from .text_editor import ReadonlyEditor as WXReadonlyEditor
 from ..editors.csv_list_editor import _prepare_method, _dispose_method
 
 class SimpleEditor(WXSimpleEditor):
