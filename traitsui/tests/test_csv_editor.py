@@ -1,5 +1,9 @@
-from traits.api import HasTraits, List, Float, Instance
-from traitsui.api import View, Item, CSVListEditor, ModelView
+from traits.has_traits import HasTraits
+from traits.trait_types import Float, List, Instance
+from traitsui.handler import ModelView
+from traitsui.view import View
+from traitsui.item import Item
+from traitsui.editors.csv_list_editor import CSVListEditor
 
 from _tools import *
 

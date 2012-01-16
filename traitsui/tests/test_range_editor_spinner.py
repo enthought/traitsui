@@ -37,8 +37,6 @@ def test_wx_spin_control_editing_should_not_crash():
     # Bug: when editing the text part of a spin control box, pressing
     # the OK button raises an AttributeError on Mac OS X
 
-    import wx
-
     try:
         with store_exceptions_on_all_threads():
             num = NumberWithSpinnerEditor()
@@ -61,10 +59,7 @@ def test_wx_spin_control_editing_should_not_crash():
                 spintxt.SetValue('4')
 
             # press the OK button and close the dialog
-            okbutton = ui.control.FindWindowByName('button')
-            click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED,
-                                          okbutton.GetId())
-            okbutton.ProcessEvent(click_event)
+            press_ok_button(ui)
     except AttributeError:
         # if all went well, we should not be here
         assert False, "AttributeError raised"
@@ -76,8 +71,6 @@ def test_wx_spin_control_editing_does_not_update():
     # Bug: when editing the text part of a spin control box, pressing
     # the OK button does not update the value of the HasTraits class
     # on Mac OS X
-
-    import wx
 
     with store_exceptions_on_all_threads():
         num = NumberWithSpinnerEditor()
@@ -100,10 +93,7 @@ def test_wx_spin_control_editing_does_not_update():
             spintxt.SetValue('4')
 
         # press the OK button and close the dialog
-        okbutton = ui.control.FindWindowByName('button')
-        click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED,
-                                      okbutton.GetId())
-        okbutton.ProcessEvent(click_event)
+        press_ok_button(ui)
 
         # if all went well, the number traits has been updated and its value is 4
         assert num.number == 4
@@ -129,8 +119,7 @@ def test_qt_spin_control_editing():
         lineedit.setText('4')
 
         # press the OK button and close the dialog
-        okb = ui.control.findChild(qt.QtGui.QPushButton)
-        okb.click()
+        press_ok_button(ui)
 
     # if all went well, the number traits has been updated and its value is 4
     assert num.number == 4

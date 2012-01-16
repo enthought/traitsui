@@ -32,8 +32,6 @@ def test_wx_spin_control_editing():
     # the OK button should update the value of the HasTraits class
     # (tests a bug where this fails with an AttributeError)
 
-    import wx
-
     with store_exceptions_on_all_threads():
         num = NumberWithTextEditor()
         ui = num.edit_traits()
@@ -45,10 +43,7 @@ def test_wx_spin_control_editing():
         textctrl.SetValue('1')
 
         # press the OK button and close the dialog
-        okbutton = ui.control.FindWindowByName('button')
-        click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED,
-                                      okbutton.GetId())
-        okbutton.ProcessEvent(click_event)
+        press_ok_button(ui)
 
     # the number traits should be between 3 and 8
     assert num.number >= 3 and num.number <=8
