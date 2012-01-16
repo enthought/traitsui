@@ -26,7 +26,7 @@
 
 from .text_editor import (SimpleEditor, CustomEditor,
                          ReadonlyEditor, TextEditor)
-from ..editors.csv_list_editor import hook_on_item_change
+from ..editors.csv_list_editor import _prepare_method, _dispose_method
 
 class SimpleEditor(WXSimpleEditor):
     """ Simple Editor style for CSVListEditor. """
