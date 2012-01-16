@@ -6,6 +6,7 @@ import sys
 import traceback
 
 from traits.etsconfig.api import ETSConfig
+import traits.trait_notifiers
 
 # ######### Testing tools
 
@@ -13,23 +14,38 @@ from traits.etsconfig.api import ETSConfig
 def store_exceptions_on_all_threads():
     """Context manager that captures all exceptions, even those coming from
     the UI thread. On exit, the first exception is raised (if any).
+
+    It also temporarily overwrites the global function
+    traits.trait_notifier.handle_exception , which logs exceptions to
+    console without re-raising them by default.
     """
 
     exceptions = []
 
-    def excepthook(type, value, tb):
-        exceptions.append(value)
+    def _print_uncaught_exception(type, value, tb):
         message = 'Uncaught exception:\n'
         message += ''.join(traceback.format_exception(type, value, tb))
         print message
 
+    def excepthook(type, value, tb):
+        exceptions.append(value)
+        _print_uncaught_exception(type, value, tb)
+
+    def handle_exception(object, trait_name, old, new):
+        type, value, tb = sys.exc_info()
+        exceptions.append(value)
+        _print_uncaught_exception(type, value, tb)
+
+    _original_handle_exception = traits.trait_notifiers.handle_exception
     try:
         sys.excepthook = excepthook
+        traits.trait_notifiers.handle_exception = handle_exception
         yield
     finally:
         if len(exceptions) > 0:
             raise exceptions[0]
         sys.excepthook = sys.__excepthook__
+        traits.trait_notifiers.handle_exception = _original_handle_exception
 
 
 def skip_if_not_backend(test_func, backend_name=''):
