@@ -1,3 +1,18 @@
+#------------------------------------------------------------------------------
+#
+#  Copyright (c) 2012, Enthought, Inc.
+#  All rights reserved.
+#
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Author: Pietro Berkes
+#  Date:   Jan 2012
+#
+#------------------------------------------------------------------------------
+
 from traits.has_traits import HasTraits
 from traits.trait_types import Float, List, Instance
 from traitsui.handler import ModelView
@@ -25,7 +40,7 @@ class ListOfFloatsWithCSVEditor(ModelView):
 def test_csv_editor_disposal():
     # Bug: CSVListEditor does not un-hook the traits notifications after its
     # disposal, causing errors when the hooked data is accessed after
-    # the window is closed
+    # the window is closed (Issue #48)
 
     try:
         with store_exceptions_on_all_threads():

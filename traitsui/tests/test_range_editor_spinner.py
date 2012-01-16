@@ -1,5 +1,20 @@
+#------------------------------------------------------------------------------
+#
+#  Copyright (c) 2012, Enthought, Inc.
+#  All rights reserved.
+#
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Author: Pietro Berkes
+#  Date:   Jan 2012
+#
+#------------------------------------------------------------------------------
+
 """
-Test case for bug (wx, Max OS X)
+Test case for bug (wx, Mac OS X)
 
 Editing the text part of a spin control box and pressing the OK button
 without de-focusing raises an AttributeError
@@ -63,7 +78,6 @@ def test_wx_spin_control_editing_should_not_crash():
     except AttributeError:
         # if all went well, we should not be here
         assert False, "AttributeError raised"
-
 
 
 @skip_if_not_wx
