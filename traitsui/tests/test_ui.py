@@ -2,8 +2,6 @@
 Test cases for the UI object.
 """
 
-import nose.tools
-
 from traits.has_traits import HasTraits
 from traits.trait_types import Str, Int
 import traitsui

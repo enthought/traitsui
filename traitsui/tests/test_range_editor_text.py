@@ -1,5 +1,20 @@
+#------------------------------------------------------------------------------
+#
+#  Copyright (c) 2012, Enthought, Inc.
+#  All rights reserved.
+#
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Author: Pietro Berkes
+#  Date:   Jan 2012
+#
+#------------------------------------------------------------------------------
+
 """
-Test case for bug (wx, Max OS X)
+Test case for bug (wx, Mac OS X)
 
 A RangeEditor in mode 'text' for an Int allows values out of range.
 """
@@ -32,8 +47,6 @@ def test_wx_spin_control_editing():
     # the OK button should update the value of the HasTraits class
     # (tests a bug where this fails with an AttributeError)
 
-    import wx
-
     with store_exceptions_on_all_threads():
         num = NumberWithTextEditor()
         ui = num.edit_traits()
@@ -45,10 +58,7 @@ def test_wx_spin_control_editing():
         textctrl.SetValue('1')
 
         # press the OK button and close the dialog
-        okbutton = ui.control.FindWindowByName('button')
-        click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED,
-                                      okbutton.GetId())
-        okbutton.ProcessEvent(click_event)
+        press_ok_button(ui)
 
     # the number traits should be between 3 and 8
     assert num.number >= 3 and num.number <=8

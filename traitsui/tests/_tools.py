@@ -1,3 +1,18 @@
+#------------------------------------------------------------------------------
+#
+#  Copyright (c) 2012, Enthought, Inc.
+#  All rights reserved.
+#
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Author: Pietro Berkes
+#  Date:   Jan 2012
+#
+#------------------------------------------------------------------------------
+
 from functools import partial
 from contextlib import contextmanager
 import nose
@@ -6,6 +21,7 @@ import sys
 import traceback
 
 from traits.etsconfig.api import ETSConfig
+import traits.trait_notifiers
 
 # ######### Testing tools
 
@@ -13,29 +29,48 @@ from traits.etsconfig.api import ETSConfig
 def store_exceptions_on_all_threads():
     """Context manager that captures all exceptions, even those coming from
     the UI thread. On exit, the first exception is raised (if any).
+
+    It also temporarily overwrites the global function
+    traits.trait_notifier.handle_exception , which logs exceptions to
+    console without re-raising them by default.
     """
 
     exceptions = []
 
-    def excepthook(type, value, tb):
-        exceptions.append(value)
+    def _print_uncaught_exception(type, value, tb):
         message = 'Uncaught exception:\n'
         message += ''.join(traceback.format_exception(type, value, tb))
         print message
 
+    def excepthook(type, value, tb):
+        exceptions.append(value)
+        _print_uncaught_exception(type, value, tb)
+
+    def handle_exception(object, trait_name, old, new):
+        type, value, tb = sys.exc_info()
+        exceptions.append(value)
+        _print_uncaught_exception(type, value, tb)
+
+    _original_handle_exception = traits.trait_notifiers.handle_exception
     try:
         sys.excepthook = excepthook
+        traits.trait_notifiers.handle_exception = handle_exception
         yield
     finally:
         if len(exceptions) > 0:
             raise exceptions[0]
         sys.excepthook = sys.__excepthook__
+        traits.trait_notifiers.handle_exception = _original_handle_exception
+
+
+def _is_current_backend(backend_name=''):
+    return ETSConfig.toolkit == backend_name
 
 
 def skip_if_not_backend(test_func, backend_name=''):
     """Decorator that skip tests if the backend is not the desired one."""
 
-    if ETSConfig.toolkit != backend_name:
+    if not _is_current_backend(backend_name):
         # preserve original name so that it appears in the report
         orig_name = test_func.__name__
         def test_func():
@@ -44,6 +79,12 @@ def skip_if_not_backend(test_func, backend_name=''):
 
     return test_func
 
+
+#: Return True if current backend is 'wx'
+is_current_backend_wx = partial(_is_current_backend, backend_name='wx')
+
+#: Return True if current backend is 'qt4'
+is_current_backend_qt4 = partial(_is_current_backend, backend_name='qt4')
 
 #: Test decorator: Skip test if backend is not 'wx'
 skip_if_not_wx = partial(skip_if_not_backend, backend_name='wx')
@@ -76,6 +117,25 @@ def get_children(node):
         return node.children()
 
 
+def press_ok_button(ui):
+    """Press the OK button in a wx or qt dialog."""
+
+    if is_current_backend_wx():
+        import wx
+
+        ok_button = ui.control.FindWindowByName('button')
+        click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED,
+                                      ok_button.GetId())
+        ok_button.ProcessEvent(click_event)
+
+    elif is_current_backend_qt4():
+        from pyface import qt
+
+        # press the OK button and close the dialog
+        ok_button = ui.control.findChild(qt.QtGui.QPushButton)
+        ok_button.click()
+
+
 # ######### Debug tools
 
 def apply_on_children(func, node, _level=0):
@@ -89,12 +149,22 @@ def apply_on_children(func, node, _level=0):
 
 def wx_print_names(node):
     """Print the name and id of `node` and its children.
+
+    Use as::
+
+        >>> ui = xxx.edit_traits()
+        >>> wx_print_names(ui.control)
     """
     apply_on_children(lambda n: (n.GetName(), n.GetId()), node)
 
 
 def qt_print_names(node):
     """Print the name of `node` and its children.
+
+    Use as::
+
+        >>> ui = xxx.edit_traits()
+        >>> wx_print_names(ui.control)
     """
     apply_on_children(lambda n: n.objectName(), node)
 
