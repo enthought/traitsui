@@ -63,10 +63,14 @@ def store_exceptions_on_all_threads():
         traits.trait_notifiers.handle_exception = _original_handle_exception
 
 
+def _is_current_backend(backend_name=''):
+    return ETSConfig.toolkit == backend_name
+
+
 def skip_if_not_backend(test_func, backend_name=''):
     """Decorator that skip tests if the backend is not the desired one."""
 
-    if ETSConfig.toolkit != backend_name:
+    if not _is_current_backend(backend_name):
         # preserve original name so that it appears in the report
         orig_name = test_func.__name__
         def test_func():
@@ -75,6 +79,12 @@ def skip_if_not_backend(test_func, backend_name=''):
 
     return test_func
 
+
+#: Return True if current backend is 'wx'
+is_current_backend_wx = partial(_is_current_backend, backend_name='wx')
+
+#: Return True if current backend is 'qt4'
+is_current_backend_qt4 = partial(_is_current_backend, backend_name='qt4')
 
 #: Test decorator: Skip test if backend is not 'wx'
 skip_if_not_wx = partial(skip_if_not_backend, backend_name='wx')
@@ -139,12 +149,22 @@ def apply_on_children(func, node, _level=0):
 
 def wx_print_names(node):
     """Print the name and id of `node` and its children.
+
+    Use as::
+
+        >>> ui = xxx.edit_traits()
+        >>> wx_print_names(ui.control)
     """
     apply_on_children(lambda n: (n.GetName(), n.GetId()), node)
 
 
 def qt_print_names(node):
     """Print the name of `node` and its children.
+
+    Use as::
+
+        >>> ui = xxx.edit_traits()
+        >>> wx_print_names(ui.control)
     """
     apply_on_children(lambda n: n.objectName(), node)
 
