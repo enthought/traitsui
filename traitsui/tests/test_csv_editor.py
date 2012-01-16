@@ -19,6 +19,7 @@ from traitsui.handler import ModelView
 from traitsui.view import View
 from traitsui.item import Item
 from traitsui.editors.csv_list_editor import CSVListEditor
+import traitsui.editors.csv_list_editor as csv_list_editor
 
 from _tools import *
 
@@ -55,6 +56,41 @@ def test_csv_editor_disposal():
     except AttributeError:
         # if all went well, we should not be here
         assert False, "AttributeError raised"
+
+
+def test_csv_editor_external_append():
+    # Behavior: CSV editor is notified when an element is appended to the
+    # list externally
+
+    def _wx_get_text_value(ui):
+        txt_ctrl = ui.control.FindWindowByName('text')
+        return txt_ctrl.GetValue()
+
+    def _qt_get_text_value(ui):
+        from pyface import qt
+        txt_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
+        return txt_ctrl.text()
+
+    with store_exceptions_on_all_threads():
+        list_of_floats = ListOfFloats(data=[1.0])
+        csv_view = ListOfFloatsWithCSVEditor(model=list_of_floats)
+        ui = csv_view.edit_traits()
+
+        # add element to list, make sure that editor knows about it
+        list_of_floats.data.append(3.14)
+
+        # get current value from editor
+        if is_current_backend_wx():
+            value_str = _wx_get_text_value(ui)
+        elif is_current_backend_qt4():
+            value_str = _qt_get_text_value(ui)
+        else:
+            raise Exception('Unknown backend', ETSConfig.toolkit)
+
+        expected = csv_list_editor._format_list_str([1.0, 3.14])
+        nose.tools.assert_equal(value_str, expected)
+
+        press_ok_button(ui)
 
 
 if __name__ == '__main__':
