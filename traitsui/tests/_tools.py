@@ -100,6 +100,23 @@ skip_if_not_qt4 = partial(skip_if_not_backend, backend_name='qt4')
 skip_if_not_null = partial(skip_if_not_backend, backend_name='null')
 
 
+def skip_if_null(test_func):
+    """Decorator that skip tests if the backend is set to 'null'.
+
+    Some tests handle both wx and Qt in one go, but many things are not
+    defined in the null backend. Use this decorator to skip the test.
+    """
+
+    if _is_current_backend('null'):
+        # preserve original name so that it appears in the report
+        orig_name = test_func.__name__
+        def test_func():
+            raise nose.SkipTest
+        test_func.__name__ = orig_name
+
+    return test_func
+
+
 def count_calls(func):
     """Decorator that stores the number of times a function is called.
 

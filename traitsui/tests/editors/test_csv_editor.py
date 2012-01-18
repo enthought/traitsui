@@ -38,6 +38,7 @@ class ListOfFloatsWithCSVEditor(ModelView):
     )
 
 
+@skip_if_null
 def test_csv_editor_disposal():
     # Bug: CSVListEditor does not un-hook the traits notifications after its
     # disposal, causing errors when the hooked data is accessed after
@@ -58,6 +59,7 @@ def test_csv_editor_disposal():
         assert False, "AttributeError raised"
 
 
+@skip_if_null
 def test_csv_editor_external_append():
     # Behavior: CSV editor is notified when an element is appended to the
     # list externally
@@ -84,8 +86,6 @@ def test_csv_editor_external_append():
             value_str = _wx_get_text_value(ui)
         elif is_current_backend_qt4():
             value_str = _qt_get_text_value(ui)
-        else:
-            raise Exception('Unknown backend', ETSConfig.toolkit)
 
         expected = csv_list_editor._format_list_str([1.0, 3.14])
         nose.tools.assert_equal(value_str, expected)
