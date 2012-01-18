@@ -31,7 +31,7 @@ from traitsui.item import Item
 from traitsui.view import View
 from traitsui.editors.range_editor import RangeEditor
 
-from _tools import *
+from traitsui.tests._tools import *
 
 
 class NumberWithSpinnerEditor(HasTraits):
