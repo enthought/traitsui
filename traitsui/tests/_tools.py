@@ -86,11 +86,18 @@ is_current_backend_wx = partial(_is_current_backend, backend_name='wx')
 #: Return True if current backend is 'qt4'
 is_current_backend_qt4 = partial(_is_current_backend, backend_name='qt4')
 
+#: Return True if current backend is 'null'
+is_current_backend_null = partial(_is_current_backend, backend_name='null')
+
+
 #: Test decorator: Skip test if backend is not 'wx'
 skip_if_not_wx = partial(skip_if_not_backend, backend_name='wx')
 
 #: Test decorator: Skip test if backend is not 'qt4'
 skip_if_not_qt4 = partial(skip_if_not_backend, backend_name='qt4')
+
+#: Test decorator: Skip test if backend is not 'null'
+skip_if_not_null = partial(skip_if_not_backend, backend_name='null')
 
 
 def count_calls(func):
@@ -192,7 +199,7 @@ def wx_announce_when_destroyed(node):
 
 
 def wx_find_event_by_number(evt_num):
-    """Find all wx event names that correspond to a ceratin event number.
+    """Find all wx event names that correspond to a certain event number.
 
     Example:
 

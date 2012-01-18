@@ -21,7 +21,7 @@ from traitsui.item import Item
 from traitsui.editors.csv_list_editor import CSVListEditor
 import traitsui.editors.csv_list_editor as csv_list_editor
 
-from _tools import *
+from traitsui.tests._tools import *
 
 
 class ListOfFloats(HasTraits):

@@ -3,10 +3,10 @@ from nose.tools import assert_equals
 
 from traits.api import HasTraits, Font
 
-from traits.etsconfig.api import ETSConfig
-ETSConfig.toolkit = 'null'
+from traitsui.tests._tools import *
 
 
+@skip_if_not_null
 def test_font_trait_default():
     class Foo(HasTraits):
         font = Font()
@@ -14,6 +14,7 @@ def test_font_trait_default():
     assert_equals(f.font, '10 pt Arial')
 
 
+@skip_if_not_null
 def test_font_trait_examples():
     """
     An assigned font string is parsed, and the substrings are
