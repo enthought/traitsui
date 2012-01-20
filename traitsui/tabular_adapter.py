@@ -24,9 +24,9 @@
 
 from __future__ import absolute_import
 
-from traits.api import (Any, Bool, Color, Enum, Event, Float, Font, HasPrivateTraits,
-    HasTraits, Instance, Int, Interface, List, Property, Str, cached_property,
-    implements, on_trait_change)
+from traits.api import (Any, Bool, Color, Either, Enum, Event, Float, Font,
+    HasPrivateTraits, HasTraits, Instance, Int, Interface, List, Property,
+    Str, cached_property, implements, on_trait_change)
 
 #-------------------------------------------------------------------------------
 #  'ITabularAdapter' interface:
@@ -217,6 +217,10 @@ class TabularAdapter ( HasPrivateTraits ):
     # The mapping from column indices to column labels (defined by the *columns*
     # trait):
     label_map = Property( depends_on = 'columns' )
+
+    # The name of the trait on a row item containing the value to use
+    # as a row label. If None, the label will be the empty string.
+    row_label_name = Either(None, Str)
 
     # For each adapter, specifies the column indices the adapter handles:
     adapter_column_indices = Property( depends_on = 'adapters,columns' )
@@ -451,6 +455,15 @@ class TabularAdapter ( HasPrivateTraits ):
     def get_label(self, section, obj=None):
         """Override this method if labels will vary from object to object."""
         return self.label_map[section]
+
+    def get_row_label(self, section, obj=None):
+        if self.row_label_name is None:
+            return None
+        rows = getattr(obj, self.name, None)
+        if rows is None:
+            return None
+        item = rows[section]
+        return getattr(item, self.row_label_name, None)
 
     @cached_property
     def _get_label_map (self):
