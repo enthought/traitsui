@@ -49,6 +49,9 @@ class TabularEditor ( BasicEditorFactory ):
     # Should column headers (i.e. titles) be displayed?
     show_titles = Bool( True )
 
+    # Should row headers be displated (Qt4 only)?
+    show_row_titles = Bool( False )
+
     # The optional extended name of the trait used to indicate that a complete
     # table update is needed:
     update = Str
@@ -132,6 +135,10 @@ class TabularEditor ( BasicEditorFactory ):
     # Should the columns automatically resize? Don't allow this when the amount
     # of data is large.
     auto_resize = Bool( False )
+
+    # Should the rows automatically resize (Qt4 only)? Don't allow
+    # this when the amount of data is large.
+    auto_resize_rows = Bool( False )
 
     # Whether to stretch the last column to fit the available space.
     stretch_last_section = Bool( True )

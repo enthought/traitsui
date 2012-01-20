@@ -156,11 +156,17 @@ class TabularModel(QtCore.QAbstractTableModel):
     def headerData(self, section, orientation, role):
         """ Reimplemented to return the header data.
         """
-        if orientation != QtCore.Qt.Horizontal or role != QtCore.Qt.DisplayRole:
+        if role != QtCore.Qt.DisplayRole:
             return None
 
         editor = self._editor
-        label = editor.adapter.get_label(section, editor.object)
+
+        label = None
+        if orientation == QtCore.Qt.Vertical:
+            label = editor.adapter.get_row_label(section, editor.object)
+        elif orientation == QtCore.Qt.Horizontal:
+            label = editor.adapter.get_label(section, editor.object)
+
         return label
 
     def rowCount(self, mi):
