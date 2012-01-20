@@ -594,7 +594,10 @@ class _TableView(QtGui.QTableView):
 
         # Configure the row headings
         vheader = self.verticalHeader()
-        vheader.hide()
+        if factory.show_row_titles:
+            vheader.setHighlightSections(False)
+        else:
+            vheader.hide()
 
         # Set a default height for rows. Although setting the resize mode to
         # ResizeToContents would provide the best sizes, this is far too
