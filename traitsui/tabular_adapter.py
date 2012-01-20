@@ -457,7 +457,6 @@ class TabularAdapter ( HasPrivateTraits ):
         return self.label_map[section]
 
     def get_row_label(self, section, obj=None):
-        """Override this method if labels will vary from object to object."""
         if self.row_label_name is None:
             return None
         rows = getattr(obj, self.name, None)
