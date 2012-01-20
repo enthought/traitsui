@@ -29,6 +29,9 @@ In addition:
    image in the age column.
  - If the person is married, it makes the background color for that row a light
    blue.
+   
+ - If this demo is running under QT, it displays each person's surname
+   in a row label.
 
 This example demonstrates:
 
@@ -45,7 +48,9 @@ Additional notes:
 """
 
 from random import randint, choice, shuffle
-from traits.api import HasTraits, Str, Int, List, Instance, Property, Constant, Color
+from traits.api import HasTraits, Str, Int, List, Instance, Property, \
+     Constant, Color
+from traits.etsconfig.api import ETSConfig
 from traitsui.api import View, Group, Item, TabularEditor
 from traitsui.tabular_adapter import TabularAdapter
 
@@ -56,6 +61,10 @@ class Person(HasTraits):
     name    = Str
     address = Str
     age     = Int
+    
+    # surname is displayed in qt-only row label:
+    surname = Property(fget=lambda self: self.name.split()[-1], 
+                       depends_on='name')
 
 #-- MarriedPerson Class Definition ---------------------------------------------
 
@@ -71,6 +80,8 @@ class ReportAdapter(TabularAdapter):
                 ('Age',     'age'),
                 ('Address', 'address'),
                 ('Spouse',  'spouse') ]
+
+    row_label_name = 'surname'
 
     # Font fails with wx in OSX; see traitsui issue #13:
     # font                      = 'Courier 10'
@@ -94,6 +105,8 @@ class ReportAdapter(TabularAdapter):
 tabular_editor = TabularEditor(
     adapter    = ReportAdapter(),
     operations = [ 'move' ],
+    # Row titles are not supported in WX:
+    show_row_titles = ETSConfig.toolkit == 'qt4'
 )
 
 #-- Report Class Definition ----------------------------------------------------
