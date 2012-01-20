@@ -136,6 +136,10 @@ class TabularEditor ( BasicEditorFactory ):
     # of data is large.
     auto_resize = Bool( False )
 
+    # Should the rows automatically resize (Qt4 only)? Don't allow
+    # this when the amount of data is large.
+    auto_resize_rows = Bool( False )
+
     # Whether to stretch the last column to fit the available space.
     stretch_last_section = Bool( True )
 
