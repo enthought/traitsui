@@ -472,11 +472,7 @@ class TabularAdapter ( HasPrivateTraits ):
             if isinstance( value, basestring ):
                 map.append( value )
             else:
-                try:
-                    col_name = getattr(self, value[0])
-                except AttributeError:
-                    col_name = value[0]
-                map.append( col_name )
+                map.append( value[0] )
 
         return map
 
