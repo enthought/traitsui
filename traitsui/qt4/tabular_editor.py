@@ -587,7 +587,6 @@ class _TableView(QtGui.QTableView):
         """
         QtGui.QTableView.__init__(self)
 
-        self._initial_size = False
         self._editor = editor
         self.setModel(editor.model)
         factory = editor.factory
@@ -707,9 +706,8 @@ class _TableView(QtGui.QTableView):
         QtGui.QTableView.resizeEvent(self, event)
 
         parent = self.parent()
-        if (not self._initial_size and parent and
-            (self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
-            self._initial_size = True
+        if parent and (self.isVisible() or
+                       isinstance(parent, QtGui.QMainWindow)):
             self.resizeColumnsToContents()
 
     def sizeHintForColumn(self, column):
