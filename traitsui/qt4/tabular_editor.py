@@ -587,6 +587,7 @@ class _TableView(QtGui.QTableView):
         """
         QtGui.QTableView.__init__(self)
 
+        self._initial_size = False
         self._editor = editor
         self.setModel(editor.model)
         factory = editor.factory
@@ -706,8 +707,13 @@ class _TableView(QtGui.QTableView):
         QtGui.QTableView.resizeEvent(self, event)
 
         parent = self.parent()
-        if parent and (self.isVisible() or
-                       isinstance(parent, QtGui.QMainWindow)):
+        should_resize = not self._initial_size or \
+            (self._editor is not None and not self._editor.factory.auto_resize)
+        if self._editor.adapter.__class__.__name__ == 'ValuationViewTabularAdapter':
+            import pdb ; pdb.set_trace()
+        if (should_resize and parent and
+            (self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
+            self._initial_size = True
             self.resizeColumnsToContents()
 
     def sizeHintForColumn(self, column):
