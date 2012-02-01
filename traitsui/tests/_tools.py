@@ -188,7 +188,7 @@ def qt_print_names(node):
     Use as::
 
         >>> ui = xxx.edit_traits()
-        >>> wx_print_names(ui.control)
+        >>> qt_print_names(ui.control)
     """
     apply_on_children(lambda n: n.objectName(), node)
 

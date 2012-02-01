@@ -198,6 +198,7 @@ class Editor ( UIEditor ):
                 itm = control.itemAt(i)
                 self._visible_changed_helper((itm.widget() or itm.layout()),
                         visible)
+
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
     #---------------------------------------------------------------------------
