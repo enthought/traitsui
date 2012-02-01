@@ -1721,16 +1721,13 @@ class _TreeWidget(QtGui.QTreeWidget):
         # Render the item being dragged as a pixmap.
         nid_rect = self.visualItemRect(nid)
         rect = nid_rect.intersected(self.viewport().rect())
-
         pm = QtGui.QPixmap(rect.size())
         pm.fill(self.palette().base().color())
-
         painter = QtGui.QPainter(pm)
 
         option = self.viewOptions()
         option.state |= QtGui.QStyle.State_Selected
         option.rect = QtCore.QRect(nid_rect.topLeft() - rect.topLeft(), nid_rect.size())
-
         self.itemDelegate().paint(painter, option, self.indexFromItem(nid))
 
         painter.end()
@@ -1738,7 +1735,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         # Calculate the hotspot so that the pixmap appears on top of the
         # original item.
         rect.adjust(self.horizontalOffset(), self.verticalOffset(), 0, 0)
-        hspos = self.mapFromGlobal(QtGui.QCursor.pos()) - rect.topLeft()
+        hspos = self.mapFromGlobal(QtGui.QCursor.pos()) - nid_rect.topLeft()
 
         # Start the drag.
         drag = QtGui.QDrag(self)
