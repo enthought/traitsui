@@ -324,6 +324,18 @@ class Item ( ViewSubElement ):
 
     def get_label ( self, ui ):
         """ Gets the label to use for a specified Item.
+
+        If not specified, the label is set as the name of the
+        corresponding trait, replacing '_' with ' ', and capitalizing
+        the first letter (see :func:`user_name_for`). This is called
+        the *user name*.
+
+        Magic:
+
+        - if attr:`item.label` is specified, and it begins with '...',
+          the final label is the user name followed by the item label
+        - if attr:`item.label` is specified, and it ends with '...',
+          the final label is the item label followed by the user name
         """
         # Return 'None' if the Item is a separator or spacer:
         if self.is_spacer():

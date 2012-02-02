@@ -56,6 +56,10 @@ from editor \
 #  Constants:
 #-------------------------------------------------------------------------------
 
+#: Characters that are considered punctuation symbols at the end of a label.
+#: If a label ends with one of these charactes, we do not append a colon.
+LABEL_PUNCTUATION_CHARS = '?=:;,.<>/\\"\'-+#|'
+
 # Pattern of all digits
 all_digits = re.compile(r'\d+')
 
@@ -991,27 +995,63 @@ class _GroupPanel(object):
             else:
                 layout.addItem(w, row, column, 1, 1, label_alignment)
 
-    def _create_label(self, item, ui, desc, suffix = ':'):
-        """Creates an item label.
-        """
-        label = item.get_label(ui)
-        if (label == '') or (label[-1:] in '?=:;,.<>/\\"\'-+#|'):
-            suffix = ''
 
-        control = QtGui.QLabel(label + suffix)
+    def _create_label(self, item, ui, desc, suffix=':'):
+        """Creates an item label.
+
+        When the label on the left, it is not empty, and it does not end with a
+        punctuation character (see :attr:`LABEL_PUNCTUATION_CHARS`),
+        we append a suffix (by default a colon ':') at the end of the
+        label text.
+
+        We also set the help on the QLabel control (from item.help) and
+        the tooltip (it item.desc exists; we add "Specifies " at the start
+        of the item.desc string).
+
+        Parameters
+        ----------
+        item : Item
+            The item for which we want to create a label
+        ui : UI
+            Current ui object
+        desc : string
+            Description of the item, to create an appropriate tooltip
+        suffix : string
+            Characters to at the end of the label
+
+        Returns
+        -------
+        label_control : QLabel
+            The control for the label
+        """
+
+        label = item.get_label(ui)
+
+        # append a suffix if the label is on the left and it does
+        # not already end with a punctuation character
+        if (label != ''
+            and label[-1] not in LABEL_PUNCTUATION_CHARS
+            and self.group.show_left):
+            label = label + suffix
+
+        # create label controller
+        label_control = QtGui.QLabel(label)
 
         if item.emphasized:
-            self._add_emphasis(control)
+            self._add_emphasis(label_control)
 
         # FIXME: Decide what to do about the help.  (The non-standard wx way,
         # What's This style help, both?)
         #wx.EVT_LEFT_UP( control, show_help_popup )
-        control.help = item.get_help(ui)
+        label_control.help = item.get_help(ui)
 
+        # FIXME: do people rely on traitsui adding 'Specifies ' to the start
+        # of every tooltip?
         if desc != '':
-            control.setToolTip('Specifies ' + desc)
+            label_control.setToolTip('Specifies ' + desc)
 
-        return control
+        return label_control
+
 
     def _add_emphasis(self, control):
         """Adds emphasis to a specified control's font.
