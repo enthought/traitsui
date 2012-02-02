@@ -69,7 +69,25 @@ Padding = Range( -15, 15, 0, desc = 'amount of padding to add around item' )
 
 class Item ( ViewSubElement ):
     """ An element in a Traits-based user interface.
+
+    Magic:
+
+    - Items are rendered as layout elements if :attr:`name` is set to
+      special values:
+
+      * name='', the item is rendered as a static label
+
+      * name='_', the item is rendered as a separator
+
+      * name=' ', the item is rendered as a 5 pixel spacer
+
+      * name='23' (any number), the item is rendered as a spacer of
+        the size specified (number of pixels)
     """
+
+    # FIXME: all the logic for the name = '', '_', ' ', '23' magic is in
+    # _GroupPanel._add_items in qt/ui_panel.py, which is a very unlikely place
+    # to look for it. Ideally, that logic should be in this class.
 
     #---------------------------------------------------------------------------
     #  Trait definitions:
