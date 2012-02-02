@@ -366,11 +366,6 @@ class Editor ( UIEditor ):
         stretch : int
             Stretch factor used by Qt to distribute the total size to
             each component.
-
-        Returns
-        -------
-        policy : QtGui.QSizePolicy
-            The final size policy of the control
         """
 
         policy = self.control.sizePolicy()

@@ -553,7 +553,7 @@ class _GroupPanel(object):
             self._setup_editor(group, editor)
 
         else:
-            # See if we need to control the visual appearence of the group.
+            # See if we need to control the visual appearance of the group.
             if group.visible_when != '' or group.enabled_when != '':
                 # Make sure that outer is a widget or a layout.
                 if outer is None:
@@ -654,6 +654,7 @@ class _GroupPanel(object):
                 outer.addWidget(QtGui.QLabel(' '))
 
         return outer
+
 
     def _add_items(self, content, outer=None):
         """Adds a list of Item objects, creating a layout if needed.  Return
@@ -833,10 +834,9 @@ class _GroupPanel(object):
 
             # Create the requested type of editor from the editor factory:
             factory_method = getattr( editor_factory, item.style + '_editor' )
-            editor         = factory_method( ui, object, name, item.tooltip,
-                                        None).set(
-                                 item        = item,
-                                 object_name = item.object )
+            editor = factory_method(
+                ui, object, name, item.tooltip, None
+            ).set(item = item, object_name = item.object )
 
             # Tell the editor to actually build the editing widget.  Note that
             # "inner" is a layout.  This shouldn't matter as individual editors
@@ -932,25 +932,69 @@ class _GroupPanel(object):
 
             # Add the created editor control to the layout with the appropriate
             # size and stretch policies:
-            ui._scrollable |= scrollable
-            item_resizable  = ((item.resizable is True) or
-                               ((item.resizable is Undefined) and scrollable))
 
-            if item_resizable:
+            # 1) The general rule is that we obey the item.resizable and
+            #    item.springy settings. An item is considered resizable also if
+            #    resizable is Undefined but the item is scrollable
+            # 2) However, if the labels are on the right, and the item is of a
+            #    kind that cannot be stretched in horizontal (e.g. a checkbox),
+            #    we make the label stretchable instead (to avoid big gaps
+            #    between element and label)
+
+            ui._scrollable |= scrollable
+            resizable_item  = ((item.resizable is True) or
+                              ((item.resizable is Undefined) and scrollable))
+            springy_item = item.springy
+
+            # TODO: refactor
+
+            # handle exceptional case 2)
+            item_policy = control.sizePolicy().horizontalPolicy()
+            if (not show_left
+                and item_policy == QtGui.QSizePolicy.Policy.Minimum):
+                # this item cannot be stretched horizontally, and the label
+                # is on the right -> make label stretchable if necessary
+
+                if (self.direction == QtGui.QBoxLayout.LeftToRight
+                    and springy_item):
+                    springy_item = False
+                    self._make_label_h_stretchable(label, stretch or 50)
+
+                elif (self.direction == QtGui.QBoxLayout.TopToBottom
+                      and resizable_item):
+                    resizable_item = False
+                    self._make_label_h_stretchable(label, stretch or 50)
+
+            if resizable_item:
                 stretch = stretch or 50
                 self.resizable = True
-            elif item.springy:
+            elif springy_item:
                 stretch = stretch or 50
 
-            editor.set_size_policy(self.direction, item_resizable, item.springy, stretch)
+            editor.set_size_policy(self.direction,
+                                   resizable_item, springy_item, stretch)
 
             # FIXME: Need to decide what to do about border_size and padding
             self._add_widget(inner, control, row, col, show_labels)
 
-            # Save the reference to the label control (if any) in the editor:
+            # Save the reference to the label control (if any) in the editor
             editor.label_control = label
 
         return outer
+
+
+    def _make_label_h_stretchable(self, label, stretch):
+        """ Set size policies of a QLabel to be stretchable horizontally.
+
+        :attr:`stretch` is the stretch factor that Qt uses to distribute the
+        total size to individual elements
+        """
+        label_policy = label.sizePolicy()
+        label_policy.setHorizontalStretch(stretch)
+        label_policy.setHorizontalPolicy(
+            QtGui.QSizePolicy.Policy.Expanding)
+        label.setSizePolicy(label_policy)
+
 
     def _add_widget(self, layout, w, row, column, show_labels,
                     label_alignment=QtCore.Qt.AlignmentFlag(0)):
@@ -999,7 +1043,8 @@ class _GroupPanel(object):
     def _create_label(self, item, ui, desc, suffix=':'):
         """Creates an item label.
 
-        When the label on the left, it is not empty, and it does not end with a
+        When the label is on the left of its component,
+        it is not empty, and it does not end with a
         punctuation character (see :attr:`LABEL_PUNCTUATION_CHARS`),
         we append a suffix (by default a colon ':') at the end of the
         label text.
@@ -1046,7 +1091,7 @@ class _GroupPanel(object):
         label_control.help = item.get_help(ui)
 
         # FIXME: do people rely on traitsui adding 'Specifies ' to the start
-        # of every tooltip?
+        # of every tooltip? It's not flexible at all
         if desc != '':
             label_control.setToolTip('Specifies ' + desc)
 
