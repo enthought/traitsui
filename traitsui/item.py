@@ -147,7 +147,7 @@ class Item ( ViewSubElement ):
     # Additional editor traits to be set if default traits editor to be used:
     editor_args = Dict
 
-    # Should the item use extra space along its Group's layout axis? If set to
+    # Should the item use extra space along its Group's non-layout axis? If set to
     # True, the widget expands to fill any extra space that is available in the
     # display. If set to True for more than one item in the same View, any extra
     # space is divided between them. If set to False, the widget uses only
