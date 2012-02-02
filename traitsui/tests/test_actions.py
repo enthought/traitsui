@@ -1,4 +1,20 @@
-"""Test triggering of menu and toolbar actions.
+#------------------------------------------------------------------------------
+#
+#  Copyright (c) 2012, Enthought, Inc.
+#  All rights reserved.
+#
+#  This software is provided without warranty under the terms of the BSD
+#  license included in enthought/LICENSE.txt and may be redistributed only
+#  under the conditions described in the aforementioned license.  The license
+#  is also available online at http://www.enthought.com/licenses/BSD.txt
+#
+#  Author: Pietro Berkes
+#  Date:   Feb 2012
+#
+#------------------------------------------------------------------------------
+
+"""
+Test that menu and toolbar actions are triggered.
 """
 
 import pyface
@@ -8,8 +24,6 @@ from traits.trait_types import Bool
 from traitsui.menu import Action, ActionGroup, Menu, MenuBar, ToolBar
 from traitsui.item import Item
 from traitsui.view import View
-
-import nose.tools
 
 from traitsui.tests._tools import *
 
@@ -105,6 +119,8 @@ def test_qt_menu_action():
 
     _test_actions(qt_trigger_menu_action)
 
+
+# ----- wx tests
 
 @skip_if_not_wx
 def test_wx_toolbar_action():
