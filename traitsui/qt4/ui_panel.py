@@ -42,9 +42,6 @@ from traitsui.menu \
 from helper \
     import position_window
 
-from constants \
-    import screen_dx, screen_dy, WindowColor
-
 from ui_base \
     import BasePanel
 
@@ -667,7 +664,6 @@ class _GroupPanel(object):
 
         group = self.group
         show_left = group.show_left
-        padding = group.padding
         columns = group.columns
 
         # See if a label is needed.
@@ -799,15 +795,6 @@ class _GroupPanel(object):
             object      = eval( item.object_, globals(), ui.context )
             trait       = object.base_trait( name )
             desc        = trait.desc or ''
-            fixed_width = False
-
-            # Handle any label.
-            if item.show_label:
-                label = self._create_label(item, ui, desc)
-                self._add_widget(inner, label, row, col, show_labels,
-                                 label_alignment)
-            else:
-                label = None
 
             # Get the editor factory associated with the Item:
             editor_factory = item.editor
@@ -852,6 +839,16 @@ class _GroupPanel(object):
             # Set the initial 'enabled' state of the editor from the factory:
             editor.enabled = editor_factory.enabled
 
+            # Handle any label.
+            if item.show_label:
+                label = self._create_label(item, ui, desc)
+                self._add_widget(inner, label, row, col, show_labels,
+                                 label_alignment)
+            else:
+                label = None
+
+            editor.label_control = label
+
             # Add emphasis to the editor control if requested:
             if item.emphasized:
                 self._add_emphasis(control)
@@ -862,7 +859,6 @@ class _GroupPanel(object):
 
             # Set the correct size on the control, as specified by the user:
             stretch = 0
-            scrollable = editor.scrollable
             item_width = item.width
             item_height = item.height
             if (item_width != -1) or (item_height != -1):
@@ -902,10 +898,21 @@ class _GroupPanel(object):
                 if (stretch == 0 or is_horizontal) and force_height :
                     control.setMaximumHeight(item_height)
 
+            # Set size and stretch policies
+            self._set_item_size_policy(editor, item, label, stretch)
+
+            # Add the created editor control to the layout
+            # FIXME: Need to decide what to do about border_size and padding
+            self._add_widget(inner, control, row, col, show_labels)
+
+            # ---- Update the UI object
+
             # Bind the editor into the UIInfo object name space so it can be
             # referred to by a Handler while the user interface is active:
             id = item.id or name
             info.bind( id, editor, item.id )
+
+            self.ui._scrollable |= editor.scrollable
 
             # Also, add the editors to the list of editors used to construct
             # the user interface:
@@ -930,57 +937,63 @@ class _GroupPanel(object):
             if item.enabled_when != '':
                 ui.add_enabled( item.enabled_when, editor )
 
-            # Add the created editor control to the layout with the appropriate
-            # size and stretch policies:
-
-            # 1) The general rule is that we obey the item.resizable and
-            #    item.springy settings. An item is considered resizable also if
-            #    resizable is Undefined but the item is scrollable
-            # 2) However, if the labels are on the right, and the item is of a
-            #    kind that cannot be stretched in horizontal (e.g. a checkbox),
-            #    we make the label stretchable instead (to avoid big gaps
-            #    between element and label)
-
-            ui._scrollable |= scrollable
-            resizable_item  = ((item.resizable is True) or
-                              ((item.resizable is Undefined) and scrollable))
-            springy_item = item.springy
-
-            # TODO: refactor
-
-            # handle exceptional case 2)
-            item_policy = control.sizePolicy().horizontalPolicy()
-            if (not show_left
-                and item_policy == QtGui.QSizePolicy.Policy.Minimum):
-                # this item cannot be stretched horizontally, and the label
-                # is on the right -> make label stretchable if necessary
-
-                if (self.direction == QtGui.QBoxLayout.LeftToRight
-                    and springy_item):
-                    springy_item = False
-                    self._make_label_h_stretchable(label, stretch or 50)
-
-                elif (self.direction == QtGui.QBoxLayout.TopToBottom
-                      and resizable_item):
-                    resizable_item = False
-                    self._make_label_h_stretchable(label, stretch or 50)
-
-            if resizable_item:
-                stretch = stretch or 50
-                self.resizable = True
-            elif springy_item:
-                stretch = stretch or 50
-
-            editor.set_size_policy(self.direction,
-                                   resizable_item, springy_item, stretch)
-
-            # FIXME: Need to decide what to do about border_size and padding
-            self._add_widget(inner, control, row, col, show_labels)
-
-            # Save the reference to the label control (if any) in the editor
-            editor.label_control = label
-
         return outer
+
+
+    def _set_item_size_policy(self, editor, item, label, stretch):
+        """ Set size policy of an item and its label (if any).
+
+        How it is set:
+
+        1) The general rule is that we obey the item.resizable and
+           item.springy settings. An item is considered resizable also if
+           resizable is Undefined but the item is scrollable
+
+        2) However, if the labels are on the right, and the item is of a
+           kind that cannot be stretched in horizontal (e.g. a checkbox),
+           we make the label stretchable instead (to avoid big gaps
+           between element and label)
+
+        If the item is resizable, the _GroupPanel is set to be resizable.
+        """
+
+        labels_left = self.group.show_left
+
+        is_item_resizable = (
+            (item.resizable is True) or
+            ((item.resizable is Undefined) and editor.scrollable)
+            )
+        is_item_springy = item.springy
+
+        # handle exceptional case 2)
+        item_policy = editor.control.sizePolicy().horizontalPolicy()
+
+        if (not labels_left
+            and item_policy == QtGui.QSizePolicy.Policy.Minimum):
+            print editor.control, label
+            # this item cannot be stretched horizontally, and the label
+            # is on the right -> make label stretchable if necessary
+
+            if (self.direction == QtGui.QBoxLayout.LeftToRight
+                and is_item_springy):
+                is_item_springy = False
+                self._make_label_h_stretchable(label, stretch or 50)
+
+            elif (self.direction == QtGui.QBoxLayout.TopToBottom
+                  and is_item_resizable):
+                is_item_resizable = False
+                self._make_label_h_stretchable(label, stretch or 50)
+
+        if is_item_resizable:
+            stretch = stretch or 50
+            # FIXME: resizable is not defined as trait, were is it used?
+            self.resizable = True
+        elif is_item_springy:
+            stretch = stretch or 50
+
+        editor.set_size_policy(self.direction,
+                               is_item_resizable, is_item_springy, stretch)
+        return stretch
 
 
     def _make_label_h_stretchable(self, label, stretch):
