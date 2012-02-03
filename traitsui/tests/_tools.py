@@ -160,6 +160,22 @@ def press_ok_button(ui):
         ok_button.click()
 
 
+def get_dialog_size(ui_control):
+    """Return the size of the dialog.
+
+    Return a tuple (width, height) with the size of the dialog in pixels.
+    E.g.:
+
+        >>> get_dialog_size(ui.control)
+    """
+
+    if is_current_backend_wx():
+        return ui_control.GetSizeTuple()
+
+    elif is_current_backend_qt4():
+        return ui_control.size().toTuple()
+
+
 # ######### Debug tools
 
 def apply_on_children(func, node, _level=0):
