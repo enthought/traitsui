@@ -218,7 +218,7 @@ class SimpleEditor ( BaseEditor ):
         return control
 
     #---------------------------------------------------------------------------
-    #  Adjust size polify to behave properly in group
+    #  Adjust size policy to behave properly in group
     #---------------------------------------------------------------------------
 
     def set_size_policy(self, direction, resizable, springy, stretch) :

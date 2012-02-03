@@ -42,9 +42,6 @@ from traitsui.menu \
 from helper \
     import position_window
 
-from constants \
-    import screen_dx, screen_dy, WindowColor
-
 from ui_base \
     import BasePanel
 
@@ -55,6 +52,10 @@ from editor \
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------
+
+#: Characters that are considered punctuation symbols at the end of a label.
+#: If a label ends with one of these charactes, we do not append a colon.
+LABEL_PUNCTUATION_CHARS = '?=:;,.<>/\\"\'-+#|'
 
 # Pattern of all digits
 all_digits = re.compile(r'\d+')
@@ -549,7 +550,7 @@ class _GroupPanel(object):
             self._setup_editor(group, editor)
 
         else:
-            # See if we need to control the visual appearence of the group.
+            # See if we need to control the visual appearance of the group.
             if group.visible_when != '' or group.enabled_when != '':
                 # Make sure that outer is a widget or a layout.
                 if outer is None:
@@ -651,6 +652,7 @@ class _GroupPanel(object):
 
         return outer
 
+
     def _add_items(self, content, outer=None):
         """Adds a list of Item objects, creating a layout if needed.  Return
            the outermost layout.
@@ -662,7 +664,6 @@ class _GroupPanel(object):
 
         group = self.group
         show_left = group.show_left
-        padding = group.padding
         columns = group.columns
 
         # See if a label is needed.
@@ -794,15 +795,6 @@ class _GroupPanel(object):
             object      = eval( item.object_, globals(), ui.context )
             trait       = object.base_trait( name )
             desc        = trait.desc or ''
-            fixed_width = False
-
-            # Handle any label.
-            if item.show_label:
-                label = self._create_label(item, ui, desc)
-                self._add_widget(inner, label, row, col, show_labels,
-                                 label_alignment)
-            else:
-                label = None
 
             # Get the editor factory associated with the Item:
             editor_factory = item.editor
@@ -829,10 +821,9 @@ class _GroupPanel(object):
 
             # Create the requested type of editor from the editor factory:
             factory_method = getattr( editor_factory, item.style + '_editor' )
-            editor         = factory_method( ui, object, name, item.tooltip,
-                                        None).set(
-                                 item        = item,
-                                 object_name = item.object )
+            editor = factory_method(
+                ui, object, name, item.tooltip, None
+            ).set(item = item, object_name = item.object )
 
             # Tell the editor to actually build the editing widget.  Note that
             # "inner" is a layout.  This shouldn't matter as individual editors
@@ -848,6 +839,16 @@ class _GroupPanel(object):
             # Set the initial 'enabled' state of the editor from the factory:
             editor.enabled = editor_factory.enabled
 
+            # Handle any label.
+            if item.show_label:
+                label = self._create_label(item, ui, desc)
+                self._add_widget(inner, label, row, col, show_labels,
+                                 label_alignment)
+            else:
+                label = None
+
+            editor.label_control = label
+
             # Add emphasis to the editor control if requested:
             if item.emphasized:
                 self._add_emphasis(control)
@@ -858,7 +859,6 @@ class _GroupPanel(object):
 
             # Set the correct size on the control, as specified by the user:
             stretch = 0
-            scrollable = editor.scrollable
             item_width = item.width
             item_height = item.height
             if (item_width != -1) or (item_height != -1):
@@ -898,10 +898,21 @@ class _GroupPanel(object):
                 if (stretch == 0 or is_horizontal) and force_height :
                     control.setMaximumHeight(item_height)
 
+            # Set size and stretch policies
+            self._set_item_size_policy(editor, item, label, stretch)
+
+            # Add the created editor control to the layout
+            # FIXME: Need to decide what to do about border_size and padding
+            self._add_widget(inner, control, row, col, show_labels)
+
+            # ---- Update the UI object
+
             # Bind the editor into the UIInfo object name space so it can be
             # referred to by a Handler while the user interface is active:
             id = item.id or name
             info.bind( id, editor, item.id )
+
+            self.ui._scrollable |= editor.scrollable
 
             # Also, add the editors to the list of editors used to construct
             # the user interface:
@@ -926,27 +937,77 @@ class _GroupPanel(object):
             if item.enabled_when != '':
                 ui.add_enabled( item.enabled_when, editor )
 
-            # Add the created editor control to the layout with the appropriate
-            # size and stretch policies:
-            ui._scrollable |= scrollable
-            item_resizable  = ((item.resizable is True) or
-                               ((item.resizable is Undefined) and scrollable))
-
-            if item_resizable:
-                stretch = stretch or 50
-                self.resizable = True
-            elif item.springy:
-                stretch = stretch or 50
-
-            editor.set_size_policy(self.direction, item_resizable, item.springy, stretch)
-
-            # FIXME: Need to decide what to do about border_size and padding
-            self._add_widget(inner, control, row, col, show_labels)
-
-            # Save the reference to the label control (if any) in the editor:
-            editor.label_control = label
-
         return outer
+
+
+    def _set_item_size_policy(self, editor, item, label, stretch):
+        """ Set size policy of an item and its label (if any).
+
+        How it is set:
+
+        1) The general rule is that we obey the item.resizable and
+           item.springy settings. An item is considered resizable also if
+           resizable is Undefined but the item is scrollable
+
+        2) However, if the labels are on the right, and the item is of a
+           kind that cannot be stretched in horizontal (e.g. a checkbox),
+           we make the label stretchable instead (to avoid big gaps
+           between element and label)
+
+        If the item is resizable, the _GroupPanel is set to be resizable.
+        """
+
+        is_label_left = self.group.show_left
+
+        is_item_resizable = (
+            (item.resizable is True) or
+            ((item.resizable is Undefined) and editor.scrollable)
+            )
+        is_item_springy = item.springy
+
+        # handle exceptional case 2)
+        item_policy = editor.control.sizePolicy().horizontalPolicy()
+
+        if (label is not None
+            and not is_label_left
+            and item_policy == QtGui.QSizePolicy.Policy.Minimum):
+            # this item cannot be stretched horizontally, and the label
+            # exists and is on the right -> make label stretchable if necessary
+
+            if (self.direction == QtGui.QBoxLayout.LeftToRight
+                and is_item_springy):
+                is_item_springy = False
+                self._make_label_h_stretchable(label, stretch or 50)
+
+            elif (self.direction == QtGui.QBoxLayout.TopToBottom
+                  and is_item_resizable):
+                is_item_resizable = False
+                self._make_label_h_stretchable(label, stretch or 50)
+
+        if is_item_resizable:
+            stretch = stretch or 50
+            # FIXME: resizable is not defined as trait, were is it used?
+            self.resizable = True
+        elif is_item_springy:
+            stretch = stretch or 50
+
+        editor.set_size_policy(self.direction,
+                               is_item_resizable, is_item_springy, stretch)
+        return stretch
+
+
+    def _make_label_h_stretchable(self, label, stretch):
+        """ Set size policies of a QLabel to be stretchable horizontally.
+
+        :attr:`stretch` is the stretch factor that Qt uses to distribute the
+        total size to individual elements
+        """
+        label_policy = label.sizePolicy()
+        label_policy.setHorizontalStretch(stretch)
+        label_policy.setHorizontalPolicy(
+            QtGui.QSizePolicy.Policy.Expanding)
+        label.setSizePolicy(label_policy)
+
 
     def _add_widget(self, layout, w, row, column, show_labels,
                     label_alignment=QtCore.Qt.AlignmentFlag(0)):
@@ -991,27 +1052,64 @@ class _GroupPanel(object):
             else:
                 layout.addItem(w, row, column, 1, 1, label_alignment)
 
-    def _create_label(self, item, ui, desc, suffix = ':'):
-        """Creates an item label.
-        """
-        label = item.get_label(ui)
-        if (label == '') or (label[-1:] in '?=:;,.<>/\\"\'-+#|'):
-            suffix = ''
 
-        control = QtGui.QLabel(label + suffix)
+    def _create_label(self, item, ui, desc, suffix=':'):
+        """Creates an item label.
+
+        When the label is on the left of its component,
+        it is not empty, and it does not end with a
+        punctuation character (see :attr:`LABEL_PUNCTUATION_CHARS`),
+        we append a suffix (by default a colon ':') at the end of the
+        label text.
+
+        We also set the help on the QLabel control (from item.help) and
+        the tooltip (it item.desc exists; we add "Specifies " at the start
+        of the item.desc string).
+
+        Parameters
+        ----------
+        item : Item
+            The item for which we want to create a label
+        ui : UI
+            Current ui object
+        desc : string
+            Description of the item, to create an appropriate tooltip
+        suffix : string
+            Characters to at the end of the label
+
+        Returns
+        -------
+        label_control : QLabel
+            The control for the label
+        """
+
+        label = item.get_label(ui)
+
+        # append a suffix if the label is on the left and it does
+        # not already end with a punctuation character
+        if (label != ''
+            and label[-1] not in LABEL_PUNCTUATION_CHARS
+            and self.group.show_left):
+            label = label + suffix
+
+        # create label controller
+        label_control = QtGui.QLabel(label)
 
         if item.emphasized:
-            self._add_emphasis(control)
+            self._add_emphasis(label_control)
 
         # FIXME: Decide what to do about the help.  (The non-standard wx way,
         # What's This style help, both?)
         #wx.EVT_LEFT_UP( control, show_help_popup )
-        control.help = item.get_help(ui)
+        label_control.help = item.get_help(ui)
 
+        # FIXME: do people rely on traitsui adding 'Specifies ' to the start
+        # of every tooltip? It's not flexible at all
         if desc != '':
-            control.setToolTip('Specifies ' + desc)
+            label_control.setToolTip('Specifies ' + desc)
 
-        return control
+        return label_control
+
 
     def _add_emphasis(self, control):
         """Adds emphasis to a specified control's font.
