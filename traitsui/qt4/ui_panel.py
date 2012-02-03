@@ -957,7 +957,7 @@ class _GroupPanel(object):
         If the item is resizable, the _GroupPanel is set to be resizable.
         """
 
-        labels_left = self.group.show_left
+        is_label_left = self.group.show_left
 
         is_item_resizable = (
             (item.resizable is True) or
@@ -968,11 +968,11 @@ class _GroupPanel(object):
         # handle exceptional case 2)
         item_policy = editor.control.sizePolicy().horizontalPolicy()
 
-        if (not labels_left
+        if (label is not None
+            and not is_label_left
             and item_policy == QtGui.QSizePolicy.Policy.Minimum):
-            print editor.control, label
             # this item cannot be stretched horizontally, and the label
-            # is on the right -> make label stretchable if necessary
+            # exists and is on the right -> make label stretchable if necessary
 
             if (self.direction == QtGui.QBoxLayout.LeftToRight
                 and is_item_springy):

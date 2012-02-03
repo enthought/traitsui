@@ -85,7 +85,7 @@ class VResizeTestDialog(HasTraits):
     traits_view = View(
         VGroup(
             VGroup(
-                Item('bool_item', springy=True),
+                Item('bool_item', resizable=True),
                 show_left=False
             ),
             VGroup(
@@ -95,6 +95,21 @@ class VResizeTestDialog(HasTraits):
             ),
         width  = _DIALOG_WIDTH,
         height = 100,
+        resizable=True
+    )
+
+
+class NoLabelResizeTestDialog(HasTraits):
+    """ Test the combination show_label=False, show_left=False.
+    """
+
+    bool_item = Bool(True)
+
+    traits_view = View(
+        VGroup(
+            Item('bool_item', resizable=True, show_label=False),
+            show_left=False
+        ),
         resizable=True
     )
 
@@ -172,6 +187,18 @@ def test_qt_labels_right_resizing_vertical():
 @skip_if_not_qt4
 def test_qt_labels_right_resizing_horizontal():
     _test_qt_labels_right_resizing(HResizeTestDialog)
+
+
+@skip_if_not_qt4
+def test_qt_no_labels_on_the_right_bug():
+    # Bug: If one set show_left=False, show_label=False on a non-resizable
+    # item like a checkbox, the Qt backend tried to set the label's size
+    # policy and failed because label=None.
+
+    with store_exceptions_on_all_threads():
+        dialog = NoLabelResizeTestDialog()
+        ui = dialog.edit_traits()
+
 
 
 if __name__ == "__main__":
