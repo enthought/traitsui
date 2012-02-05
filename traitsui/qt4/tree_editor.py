@@ -686,8 +686,11 @@ class SimpleEditor ( Editor ):
 
         # Select all nodes which understand this object:
         factory = self.factory
-        nodes   = [ node for node in factory.nodes
-                    if node.is_node_for( object ) ]
+        if factory is not None:
+            nodes   = [ node for node in factory.nodes
+                        if node.is_node_for( object ) ]
+        else:
+            nodes   = []
 
         # If only one found, we're done, return it:
         if len( nodes ) == 1:
