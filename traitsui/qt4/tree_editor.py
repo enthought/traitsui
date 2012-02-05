@@ -416,7 +416,7 @@ class SimpleEditor ( Editor ):
         else:
             cnid = QtGui.QTreeWidgetItem()
             nid.insertChild(index, cnid)
-        if self.factory.word_wrap:
+        if self.factory is not None and self.factory.word_wrap:
             item = self.ItemDelegate()
             item.editor = self
             self._tree.setItemDelegate(item)
@@ -588,7 +588,7 @@ class SimpleEditor ( Editor ):
     def _get_icon ( self, node, object, is_expanded = False ):
         """ Returns the index of the specified object icon.
         """
-        if not self.factory.show_icons:
+        if self.factory is not None and not self.factory.show_icons:
             return QtGui.QIcon()
 
         icon_name = node.get_icon(object, is_expanded)
