@@ -4,17 +4,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Appendix II: Editor Factories for Predefined Traits &mdash; TraitsUI 4 User Manual</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.0.0',
+        VERSION:     '4.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -67,163 +70,163 @@ and have no other appropriate editor factories.</p>
 <col width="46%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Trait</th>
+<tr class="row-odd"><th class="head">Trait</th>
 <th class="head">Default Editor Factory</th>
 <th class="head">Other Possible Editor Factories</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>Any</td>
+<tr class="row-even"><td>Any</td>
 <td>TextEditor</td>
 <td>EnumEditor, ImageEnumEditor,
 ValueEditor</td>
 </tr>
-<tr><td>Array</td>
+<tr class="row-odd"><td>Array</td>
 <td>ArrayEditor (for 2-D arrays)</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>Bool</td>
+<tr class="row-even"><td>Bool</td>
 <td>BooleanEditor</td>
 <td>ThemedCheckboxEditor</td>
 </tr>
-<tr><td>Button</td>
+<tr class="row-odd"><td>Button</td>
 <td>ButtonEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>CArray</td>
+<tr class="row-even"><td>CArray</td>
 <td>ArrayEditor (for 2-D arrays)</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>CBool</td>
+<tr class="row-odd"><td>CBool</td>
 <td>BooleanEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>CComplex</td>
+<tr class="row-even"><td>CComplex</td>
 <td>TextEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>CFloat, CInt,
+<tr class="row-odd"><td>CFloat, CInt,
 CLong</td>
 <td>TextEditor</td>
 <td>LEDEditor</td>
 </tr>
-<tr><td>Code</td>
+<tr class="row-even"><td>Code</td>
 <td>CodeEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>Color</td>
+<tr class="row-odd"><td>Color</td>
 <td>ColorEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>Complex</td>
+<tr class="row-even"><td>Complex</td>
 <td>TextEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>CStr,
+<tr class="row-odd"><td>CStr,
 CUnicode</td>
 <td>TextEditor (multi_line=True)</td>
 <td>CodeEditor, HTMLEditor</td>
 </tr>
-<tr><td>Dict</td>
+<tr class="row-even"><td>Dict</td>
 <td>TextEditor</td>
 <td>ValueEditor</td>
 </tr>
-<tr><td>Directory</td>
+<tr class="row-odd"><td>Directory</td>
 <td>DirectoryEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>Enum</td>
+<tr class="row-even"><td>Enum</td>
 <td>EnumEditor</td>
 <td>ImageEnumEditor</td>
 </tr>
-<tr><td>Event</td>
+<tr class="row-odd"><td>Event</td>
 <td>(none)</td>
 <td>ButtonEditor, ToolbarButtonEditor</td>
 </tr>
-<tr><td>File</td>
+<tr class="row-even"><td>File</td>
 <td>FileEditor</td>
 <td>AnimatedGIFEditor</td>
 </tr>
-<tr><td>Float</td>
+<tr class="row-odd"><td>Float</td>
 <td>TextEditor</td>
 <td>LEDEditor</td>
 </tr>
-<tr><td>Font</td>
+<tr class="row-even"><td>Font</td>
 <td>FontEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>HTML</td>
+<tr class="row-odd"><td>HTML</td>
 <td>HTMLEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>Instance</td>
+<tr class="row-even"><td>Instance</td>
 <td>InstanceEditor</td>
 <td>TreeEditor, DropEditor, DNDEditor,
 ValueEditor</td>
 </tr>
-<tr><td>List</td>
+<tr class="row-odd"><td>List</td>
 <td>TableEditor for lists of
 HasTraits objects;
 ListEditor for all other
 lists.</td>
-<td>CheckListEditor, SetEditor,
-ValueEditor,
+<td>CSVListEditor, CheckListEditor,
+SetEditor, ValueEditor,
 ThemedVerticalNotebookEditor</td>
 </tr>
-<tr><td>Long</td>
+<tr class="row-even"><td>Long</td>
 <td>TextEditor</td>
 <td>LEDEditor</td>
 </tr>
-<tr><td>Password</td>
+<tr class="row-odd"><td>Password</td>
 <td>TextEditor(password=True)</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>PythonValue</td>
+<tr class="row-even"><td>PythonValue</td>
 <td>ShellEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>Range</td>
+<tr class="row-odd"><td>Range</td>
 <td>RangeEditor</td>
 <td>ThemedSliderEditor</td>
 </tr>
-<tr><td>Regex</td>
+<tr class="row-even"><td>Regex</td>
 <td>TextEditor</td>
 <td>CodeEditor</td>
 </tr>
-<tr><td>RGBColor</td>
+<tr class="row-odd"><td>RGBColor</td>
 <td>RGBColorEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>Str</td>
+<tr class="row-even"><td>Str</td>
 <td>TextEditor(multi_line=True)</td>
 <td>CodeEditor, HTMLEditor</td>
 </tr>
-<tr><td>String</td>
+<tr class="row-odd"><td>String</td>
 <td>TextEditor</td>
 <td>CodeEditor, ThemedTextEditor</td>
 </tr>
-<tr><td>This</td>
+<tr class="row-even"><td>This</td>
 <td>InstanceEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>ToolbarButton</td>
+<tr class="row-odd"><td>ToolbarButton</td>
 <td>ButtonEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>Tuple</td>
+<tr class="row-even"><td>Tuple</td>
 <td>TupleEditor</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>UIDebugger</td>
+<tr class="row-odd"><td>UIDebugger</td>
 <td>ButtonEditor (button calls
 the UIDebugEditor factory)</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td>Unicode</td>
+<tr class="row-even"><td>Unicode</td>
 <td>TextEditor(multi_line=True)</td>
 <td>HTMLEditor</td>
 </tr>
-<tr><td>WeakRef</td>
+<tr class="row-odd"><td>WeakRef</td>
 <td>InstanceEditor</td>
 <td>&nbsp;</td>
 </tr>
@@ -254,7 +257,7 @@ the UIDebugEditor factory)</td>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -290,8 +293,8 @@ the UIDebugEditor factory)</td>
     </div>
     <div class="footer">
         &copy; Copyright 2008-2011, Enthought.
-      Last updated on Jun 16, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Last updated on Feb 10, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

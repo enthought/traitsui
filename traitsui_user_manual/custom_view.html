@@ -4,17 +4,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Customizing a View &mdash; TraitsUI 4 User Manual</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.0.0',
+        VERSION:     '4.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -107,17 +110,17 @@ attribute of the View object, as shown in the following table.</p>
 <col width="37%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">&nbsp;</th>
+<tr class="row-odd"><th class="head">&nbsp;</th>
 <th class="head">not modal</th>
 <th class="head">modal</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><strong>not live</strong></td>
+<tr class="row-even"><td><strong>not live</strong></td>
 <td><a class="reference internal" href="glossary.html#term-nonmodal"><em class="xref std std-term">nonmodal</em></a></td>
 <td><a class="reference internal" href="glossary.html#term-modal"><em class="xref std std-term">modal</em></a></td>
 </tr>
-<tr><td><strong>live</strong></td>
+<tr class="row-odd"><td><strong>live</strong></td>
 <td><a class="reference internal" href="glossary.html#term-live"><em class="xref std std-term">live</em></a></td>
 <td><a class="reference internal" href="glossary.html#term-livemodal"><em class="xref std std-term">livemodal</em></a></td>
 </tr>
@@ -192,7 +195,7 @@ Consider the following variation on Example 3:</p>
 <p>The resulting window has the same content as before, but now two buttons are
 displayed at the bottom: <em class="guilabel">OK</em> and <em class="guilabel">Cancel</em>:</p>
 <div class="figure">
-<img alt="Dialog box with three fields and OK and Cancel buttons." src="../_images/ui_for_ex41.jpg" />
+<img alt="Dialog box with three fields and OK and Cancel buttons." src="../_images/ui_for_ex4.jpg" />
 <p class="caption">Figure 4: User interface for Example 4</p>
 </div>
 <p>There are six standard buttons defined by TraitsUI. Each of the standard
@@ -205,24 +208,24 @@ names, or simply use their aliases:</p>
 <col width="66%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Button Name</th>
+<tr class="row-odd"><th class="head">Button Name</th>
 <th class="head">Button Alias</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>UndoButton</td>
+<tr class="row-even"><td>UndoButton</td>
 <td>&#8216;Undo&#8217;</td>
 </tr>
-<tr><td>ApplyButton</td>
+<tr class="row-odd"><td>ApplyButton</td>
 <td>&#8216;Apply&#8217;</td>
 </tr>
-<tr><td>RevertButton</td>
+<tr class="row-even"><td>RevertButton</td>
 <td>&#8216;Revert&#8217;</td>
 </tr>
-<tr><td>OKButton</td>
+<tr class="row-odd"><td>OKButton</td>
 <td>&#8216;OK&#8217;  (case sensitive!)</td>
 </tr>
-<tr><td>CancelButton</td>
+<tr class="row-even"><td>CancelButton</td>
 <td>&#8216;Cancel&#8217;</td>
 </tr>
 </tbody>
@@ -258,13 +261,13 @@ list; see <a class="reference internal" href="handler.html#custom-command-button
 <col width="59%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Category</th>
+<tr class="row-odd"><th class="head">Category</th>
 <th class="head">Attributes</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>Window
+<tr class="row-even"><td>Window
 display</td>
 <td><ul class="first last simple">
 <li><strong>dock</strong></li>
@@ -287,7 +290,7 @@ display</td>
 properties of the window itself, regardless
 of its content.<span class="target" id="index-20"></span><span class="target" id="index-21"></span><span class="target" id="index-22"></span><span class="target" id="index-23"></span><span class="target" id="index-24"></span><span class="target" id="index-25"></span><span class="target" id="index-26"></span><span class="target" id="index-27"></span><span class="target" id="index-28"></span></td>
 </tr>
-<tr id="index-29"><td>Command</td>
+<tr class="row-odd" id="index-29"><td>Command</td>
 <td><ul class="first last simple">
 <li><strong>close_result</strong></li>
 <li><strong>handler</strong></li>
@@ -306,7 +309,7 @@ implemented in conjunction with custom
 <strong>key_bindings</strong> attribute references the set
 of global key bindings for the view.<span class="target" id="index-30"></span><span class="target" id="index-31"></span></td>
 </tr>
-<tr id="index-32"><td>Content</td>
+<tr class="row-even" id="index-32"><td>Content</td>
 <td><ul class="first last simple">
 <li><strong>content</strong></li>
 <li><strong>drop_class</strong></li>
@@ -322,7 +325,7 @@ attribute is the  object being edited. The
 control what objects can be dragged and
 dropped on the view.<span class="target" id="index-33"></span></td>
 </tr>
-<tr id="index-34"><td>User help</td>
+<tr class="row-odd" id="index-34"><td>User help</td>
 <td><ul class="first last simple">
 <li><strong>help</strong></li>
 <li><strong>help_id</strong></li>
@@ -336,7 +339,7 @@ for details). The <strong>help_id</strong> attribute is
 not used by Traits, but can be used by a
 custom help handler.</td>
 </tr>
-<tr id="index-35"><td>Unique
+<tr class="row-even" id="index-35"><td>Unique
 identifier</td>
 <td><ul class="first last simple">
 <li><strong>id</strong></li>
@@ -403,7 +406,7 @@ Action class is described in <a class="reference internal" href="handler.html#ac
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -439,8 +442,8 @@ Action class is described in <a class="reference internal" href="handler.html#ac
     </div>
     <div class="footer">
         &copy; Copyright 2008-2011, Enthought.
-      Last updated on Jun 16, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Last updated on Feb 10, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

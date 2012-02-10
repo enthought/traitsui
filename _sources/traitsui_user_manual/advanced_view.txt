@@ -411,6 +411,12 @@ regardless of whether the context contains a single object or multiple objects.
 For example::
 
     Item('object.axle.chassis.serial_number')
+    
+where `"object"` is the literal name which refers to the top-level object being
+viewed. (Note that `"object"` is **not** some user-defined attribute name like 
+`"axle"` in this example.) More precisely, `"object"` is the default name, in 
+the view's `context` dictionary, of this top-level viewed object 
+(see :ref:`advanced-view-concepts`).
 
 Because an Item can refer only to a single trait, do not use extended trait
 references that refer to multiple traits, since the behavior of such references

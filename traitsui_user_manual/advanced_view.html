@@ -4,17 +4,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Advanced View Concepts &mdash; TraitsUI 4 User Manual</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.0.0',
+        VERSION:     '4.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -350,7 +353,7 @@ example shows:</p>
 </div>
 <p>The resulting window has the desired appearance: <a class="footnote-reference" href="#id20" id="id15">[10]</a></p>
 <div class="figure">
-<img alt="UI showing side-by-side groups." src="../_images/ui_for_ex72.jpg" />
+<img alt="UI showing side-by-side groups." src="../_images/ui_for_ex7.jpg" />
 <p class="caption">Figure 6: User interface for Example 7</p>
 </div>
 <p>For the purposes of this particular example, it makes sense to create a separate
@@ -365,6 +368,11 @@ For example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Item</span><span class="p">(</span><span class="s">&#39;object.axle.chassis.serial_number&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>where <cite>&#8220;object&#8221;</cite> is the literal name which refers to the top-level object being
+viewed. (Note that <cite>&#8220;object&#8221;</cite> is <strong>not</strong> some user-defined attribute name like
+<cite>&#8220;axle&#8221;</cite> in this example.) More precisely, <cite>&#8220;object&#8221;</cite> is the default name, in
+the view&#8217;s <cite>context</cite> dictionary, of this top-level viewed object
+(see <a class="reference internal" href="#advanced-view-concepts"><em>Advanced View Concepts</em></a>).</p>
 <p>Because an Item can refer only to a single trait, do not use extended trait
 references that refer to multiple traits, since the behavior of such references
 is not defined. Also, avoid extended trait references where one of the
@@ -492,7 +500,7 @@ configure_traits() was used instead.</td></tr>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -528,8 +536,8 @@ configure_traits() was used instead.</td></tr>
     </div>
     <div class="footer">
         &copy; Copyright 2008-2011, Enthought.
-      Last updated on Jun 16, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Last updated on Feb 10, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

@@ -4,17 +4,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The Predefined Trait Editor Factories &mdash; TraitsUI 4 User Manual</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.0.0',
+        VERSION:     '4.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -61,8 +64,9 @@
 <p>This chapter contains individual descriptions of the predefined trait editor
 factories provided by TraitsUI. Most of these editor factories are
 straightforward and can be used easily with little or no expertise on the part
-of the programmer or end user; these are described in Section 10.1. Section 10.2
-(on page 91) covers a smaller set of specialized editors that have more complex
+of the programmer or end user; these are described in <a class="reference internal" href="#basic-trait-editor-factories"><em>Basic Trait Editor Factories</em></a>.
+The section <a class="reference internal" href="factories_advanced_extra.html#advanced-trait-editors"><em>Advanced Trait Editors</em></a>
+covers a smaller set of specialized editors that have more complex
 interfaces or that are designed to be used along with complex editors.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -73,7 +77,7 @@ Another supported GUI toolkit is Qt, from TrollTech.</p>
 </div>
 <p>Rather than trying to memorize all the information in this chapter, you might
 skim it to get a general idea of the available trait editors and their
-capabilities, and to use it as a reference thereafter.</p>
+capabilities, and use it as a reference thereafter.</p>
 <div class="section" id="basic-trait-editor-factories">
 <span id="id2"></span><h2>Basic Trait Editor Factories<a class="headerlink" href="#basic-trait-editor-factories" title="Permalink to this headline">¶</a></h2>
 <p>The editor factories described in the following sections are straightforward to
@@ -85,12 +89,12 @@ of the <em>editor</em> keyword parameter when defining a trait.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">2-D Array, 2-D CArray</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">2-D Array, 2-D CArray</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Array, CArray (if 2-D)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Array, CArray (if 2-D)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameter:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>width</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameter:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>width</em></td>
 </tr>
 </tbody>
 </table>
@@ -99,7 +103,7 @@ the read-only style) for each cell of a two-dimensional Numeric array. Only the
 simple and read-only styles are supported by the wxWidgets implementation. You
 can specify the width of the text fields with the <em>width</em> parameter.</p>
 <div class="figure">
-<img alt="3x3 integer; integer read-only; 4x4 float; float read-only" src="../_images/array_editors1.gif" />
+<img alt="3x3 integer; integer read-only; 4x4 float; float read-only" src="../_images/array_editors.png" />
 <p class="caption">Figure 21: Array editors</p>
 </div>
 <p>The following code generates the editors shown in Figure 21.</p>
@@ -145,12 +149,12 @@ can specify the width of the text fields with the <em>width</em> parameter.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Bool, CBool</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Bool, CBool</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Bool, CBool</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Bool, CBool</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>mapping</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>mapping</em></td>
 </tr>
 </tbody>
 </table>
@@ -182,7 +186,7 @@ expression:</p>
 text input.</p>
 <p>Figure 22 shows the four styles generated by BooleanEditor().</p>
 <div class="figure">
-<img alt="simple: checkbox; custom: checkbox; text: text field; read-only: read-only" src="../_images/boolean_editors1.jpg" />
+<img alt="simple: checkbox; custom: checkbox; text: text field; read-only: read-only" src="../_images/boolean_editors.jpg" />
 <p class="caption">Figure 22: Boolean editor styles</p>
 </div>
 </div>
@@ -192,12 +196,12 @@ text input.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Button, Event, ToolbarButton</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Button, Event, ToolbarButton</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Button, ToolbarButton</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Button, ToolbarButton</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>image</em>, <em>label</em>, <em>orientation</em>, <em>style</em>, <em>value</em>, <em>view</em>, <em>width_padding</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>image</em>, <em>label</em>, <em>orientation</em>, <em>style</em>, <em>value</em>, <em>view</em>, <em>width_padding</em></td>
 </tr>
 </tbody>
 </table>
@@ -207,7 +211,7 @@ Because events are not printable objects, the text and read-only styles are not
 implemented for this editor. The simple and custom styles of this editor are
 identical.</p>
 <div class="figure">
-<img alt="simple: button; custom: button; text style unavailable; read-only style unavailable" src="../_images/button_editors1.gif" />
+<img alt="simple: button; custom: button; text style unavailable; read-only style unavailable" src="../_images/button_editors.png" />
 <p class="caption">Figure 23: Button editor styles</p>
 </div>
 <p>By default, the label of the button is the name of the Button or Event trait to
@@ -223,12 +227,12 @@ an event listener.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">List</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">List</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>cols</em>, <em>name</em>, <em>values</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>cols</em>, <em>name</em>, <em>values</em></td>
 </tr>
 </tbody>
 </table>
@@ -259,7 +263,7 @@ master list values that have not been selected.</p>
 <p>The four styles generated by CheckListEditor() are shown in Figure 24. Note that
 in this case the <em>cols</em> parameter has been set to 4.</p>
 <div class="figure">
-<img alt="simple: drop-list; custom: checkboxes; text and read-only: str() of the list" src="../_images/checklist_editors1.gif" />
+<img alt="simple: drop-list; custom: checkboxes; text and read-only: str() of the list" src="../_images/checklist_editors.png" />
 <p class="caption">Figure 24: Checklist editor styles</p>
 </div>
 </div>
@@ -269,12 +273,12 @@ in this case the <em>cols</em> parameter has been set to 4.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Code, Str, String</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Code, Str, String</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Code</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Code</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>auto_set</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>auto_set</em></td>
 </tr>
 </tbody>
 </table>
@@ -286,7 +290,7 @@ trait value using a single scrolling line with special characters to represent
 line breaks. The read-only style is similar to the simple and custom styles
 except that the text is not editable.</p>
 <div class="figure">
-<img alt="simple, custom, and read-only: multi-line, numbered, text field; text: single line text field" src="../_images/code_editors1.jpg" />
+<img alt="simple, custom, and read-only: multi-line, numbered, text field; text: single line text field" src="../_images/code_editors.jpg" />
 <p class="caption">Figure 25: Code editor styles</p>
 </div>
 <p>The <em>auto_set</em> keyword parameter is a Boolean value indicating whether the trait
@@ -300,12 +304,12 @@ editor loses focus, i.e., when the user tabs away from it or closes the window
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Color</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Color</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Color</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Color</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>mapped</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>mapped</em></td>
 </tr>
 </tbody>
 </table>
@@ -314,7 +318,7 @@ display a Color trait or edit it by selecting a color from the palette available
 in the underlying GUI toolkit. The four styles of color editor are shown in
 Figure 26.</p>
 <div class="figure">
-<img alt="simple and text: colored text field; custom: color picker; read-only: colored field" src="../_images/color_editors1.jpg" />
+<img alt="simple and text: colored text field; custom: color picker; read-only: colored field" src="../_images/color_editors.jpg" />
 <p class="caption">Figure 26: Color editor styles</p>
 </div>
 <p>In the simple style, the editor appears as a text box whose background is a
@@ -331,7 +335,7 @@ the swatch to update accordingly. Clicking on the swatch itself causes a more
 detailed, platform-specific interface to appear in a dialog box, such as is
 shown in Figure 27.</p>
 <div class="figure">
-<img alt="MS Windows color selection dialog box" src="../_images/color_picker_windows1.jpg" />
+<img alt="MS Windows color selection dialog box" src="../_images/color_picker_windows.jpg" />
 <p class="caption">Figure 27: Custom color selection dialog box for Microsoft Windows XP</p>
 </div>
 <p>The text style of editor looks exactly like the simple style, but the text box
@@ -355,12 +359,12 @@ representation), which is why the attribute is available.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">special</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">special</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">&#8220;compound&#8221; traits</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">&#8220;compound&#8221; traits</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>auto_set</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>auto_set</em></td>
 </tr>
 </tbody>
 </table>
@@ -373,7 +377,7 @@ can be an integer between 1 and 6, or any of the letters &#8216;a&#8217; through
 </pre></div>
 </div>
 <div class="figure">
-<img alt="simple: slider for numbers, drop-list for letters; custom: radio buttons for both" src="../_images/compound_editors1.gif" />
+<img alt="simple: slider for numbers, drop-list for letters; custom: radio buttons for both" src="../_images/compound_editors.png" />
 <p class="caption">Figure 28: Example compound editor styles</p>
 </div>
 <p>The <em>auto_set</em> keyword parameter is a Boolean value indicating whether the trait
@@ -381,15 +385,75 @@ being edited should be updated with every keystroke (True) or only when the
 editor loses focus, i.e., when the user tabs away from it or closes the window
 (False). The default value of this parameter is True.</p>
 </div>
+<div class="section" id="csvlisteditor">
+<h3>CSVListEditor()<a class="headerlink" href="#csvlisteditor" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">lists of simple data types</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">none</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>auto_set</em>, <em>enter_set</em>, <em>ignore_trailing_sep</em>, <em>sep</em></td>
+</tr>
+</tbody>
+</table>
+<p>This editor provides a line of text for editing a list of certain simple
+data types.  The following List traits can be edited by a CSVListEditor:</p>
+<ul class="simple">
+<li>List(Int)</li>
+<li>List(Float)</li>
+<li>List(Str)</li>
+<li>List(Enum(&#8216;string1&#8217;, &#8216;string2&#8217;, <cite>etc</cite>))</li>
+<li>List(Range(low= <cite>low value or trait name</cite>, high= <cite>high value or trait name</cite>))</li>
+</ul>
+<p>The &#8216;text&#8217;, &#8216;simple&#8217; and &#8216;custom&#8217; styles are all the same.  They provide a
+single line of text in which the user can enter the list.  The &#8216;readonly&#8217;
+style provides a line of text that can not be edited by the user.</p>
+<p>The default separator of items in the list is a comma.  This can be
+overridden with the <em>sep</em> keyword parameter.</p>
+<div class="section" id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt><em>auto_set</em> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd>If <em>auto_set</em> is True, each key pressed by the user triggers validation of the
+input, and if it is valid, the value of the object being edited is
+updated.
+<cite>Default:</cite> True</dd>
+<dt><em>enter_set</em> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd>If <em>enter_set</em> is True, the input is updated when the user presses the <cite>Enter</cite>
+key.
+<cite>Default:</cite> False</dd>
+<dt><em>sep</em> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd>The separator of the list item in the text field.  If <cite>sep</cite> is None,
+each contiguous span of whitespace is a separator. (Note: After the
+text field is split at the occurrences of <cite>sep</cite>, leading and trailing
+whitespace is removed from each item before converting to the underlying
+data type.)
+<cite>Default:</cite> &#8216;,&#8217; (a comma)</dd>
+<dt><em>ignore_trailing_sep</em> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd>If <em>ignore_trailing_sep</em> is True, the user may enter a trailing separator (e.g. &#8216;1, 2, 3,&#8217;)
+and it will be ignored.  If this is False, a trailing separator is an
+error.
+<cite>Default:</cite> True</dd>
+</dl>
+</div>
+<div class="section" id="see-also">
+<h4>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h4>
+<p>ListEditor, TextEditor</p>
+</div>
+</div>
 <div class="section" id="defaultoverride">
 <h3>DefaultOverride()<a class="headerlink" href="#defaultoverride" title="Permalink to this headline">¶</a></h3>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">(any)</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">(any)</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
 </tbody>
 </table>
@@ -408,12 +472,12 @@ tweak some of the other parameters without having recreate that data.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Directory</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Directory</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Directory</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Directory</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>entries</em>, <em>filter</em>, <em>filter_name</em>, <em>reload_name</em>, <em>truncate_ext</em>, <em>dclick_name</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>entries</em>, <em>filter</em>, <em>filter_name</em>, <em>reload_name</em>, <em>truncate_ext</em>, <em>dclick_name</em></td>
 </tr>
 </tbody>
 </table>
@@ -421,7 +485,7 @@ tweak some of the other parameters without having recreate that data.</p>
 some directory in the local system hierarchy. The four styles of this editor are
 shown in Figure 29.</p>
 <div class="figure">
-<img alt="simple: combo box with '...' button; custom: folder tree" src="../_images/directory_editors1.gif" />
+<img alt="simple: combo box with '...' button; custom: folder tree" src="../_images/directory_editors.png" />
 <p class="caption">Figure 29: Directory editor styles</p>
 </div>
 <p>In the simple style, the current value of the trait is displayed in a combo box
@@ -449,22 +513,22 @@ typed-in value is in fact an actual directory on the system.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Enum, Any</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Enum, Any</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Enum</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Enum</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Required parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body">for non-Enum traits: <em>values</em> or <em>name</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Required parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">for non-Enum traits: <em>values</em> or <em>name</em></td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>cols</em>, <em>evaluate</em>, <em>mode</em></td>
+<tr class="field-even field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><em>cols</em>, <em>evaluate</em>, <em>mode</em></td>
 </tr>
 </tbody>
 </table>
 <p>The editors generated by EnumEditor() enable the user to pick a single value
 from a closed set of values.</p>
 <div class="figure">
-<img alt="simple: drop-list; custom: radio buttons; text: text; read-only: read-only" src="../_images/enum_editors1.gif" />
+<img alt="simple: drop-list; custom: radio buttons; text: text; read-only: read-only" src="../_images/enum_editors.png" />
 <p class="caption">Figure 30: Enumeration editor styles</p>
 </div>
 <p>The simple style of editor is a drop-down list box.</p>
@@ -515,19 +579,19 @@ that have fewer digits.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">File</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">File</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">File</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">File</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>entries</em>, <em>filter</em>, <em>filter_name</em>, <em>reload_name</em>, <em>truncate_ext</em>, <em>dclick_name</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>entries</em>, <em>filter</em>, <em>filter_name</em>, <em>reload_name</em>, <em>truncate_ext</em>, <em>dclick_name</em></td>
 </tr>
 </tbody>
 </table>
 <p>A file editor enables the user to display a File trait or set it to some file in
 the local system hierarchy. The styles of this editor are shown in Figure 31.</p>
 <div class="figure">
-<img alt="simple: text box with 'Browse' or '...' button; custom: file tree; text: text box; read-only: read-only" src="../_images/file_editors1.gif" />
+<img alt="simple: text box with 'Browse' or '...' button; custom: file tree; text: text box; read-only: read-only" src="../_images/file_editors.png" />
 <p class="caption">Figure 31: File editor styles</p>
 </div>
 <p>The default version of the simply style displays a text box and a <em class="guilabel">Browse</em>
@@ -565,9 +629,9 @@ fired when the user double-clicks on a file name when using the custom style.</p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Font</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Font</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Font</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Font</td>
 </tr>
 </tbody>
 </table>
@@ -575,7 +639,7 @@ fired when the user double-clicks on a file name when using the custom style.</p
 one of the fonts provided by the underlying GUI toolkit. The four styles of this
 editor are shown in Figure 32.</p>
 <div class="figure">
-<img alt="simple: text box; custom: text box with drop-lists for typeface and size" src="../_images/font_editors1.gif" />
+<img alt="simple: text box; custom: text box with drop-lists for typeface and size" src="../_images/font_editors.png" />
 <p class="caption">Figure 32: Font editor styles</p>
 </div>
 <p>In the simple style, the currently selected font appears in a display similar to
@@ -584,7 +648,7 @@ box appears with a detailed interface, such as is shown in Figure 33. When the
 user clicks <em class="guilabel">OK</em>, control returns to the editor, which then displays the newly
 selected font.</p>
 <div class="figure">
-<img alt="MS Windows font selection dialog box" src="../_images/font_dialog_windows1.jpg" />
+<img alt="MS Windows font selection dialog box" src="../_images/font_dialog_windows.jpg" />
 <p class="caption">Figure 33: Example font dialog box for Microsoft Windows</p>
 </div>
 <p>In the custom style, an abbreviated version of the font dialog box is displayed
@@ -601,12 +665,12 @@ editable.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">HTML, string traits</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">HTML, string traits</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">HTML</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">HTML</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>format_text</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>format_text</em></td>
 </tr>
 </tbody>
 </table>
@@ -616,7 +680,7 @@ same type of editor, regardless of the style specified. Figure 34 shows an HTML
 editor in the upper pane, with a code editor in the lower pane, displaying the
 uninterpreted text.</p>
 <div class="figure">
-<img alt="formatted and unformatted HTML text" src="../_images/html_code_editor1.gif" />
+<img alt="formatted and unformatted HTML text" src="../_images/html_code_editor.png" />
 <p class="caption">Figure 34: Example HTML editor, with code editor showing original text</p>
 </div>
 <div class="admonition note">
@@ -663,22 +727,22 @@ This is an ordered list:
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Enum, Any</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Enum, Any</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Required parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body">for non-Enum traits: <em>values</em> or <em>name</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Required parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">for non-Enum traits: <em>values</em> or <em>name</em></td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>path</em>, <em>klass</em> or <em>module</em>, <em>cols</em>, <em>evaluate</em>, <em>suffix</em></td>
+<tr class="field-even field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><em>path</em>, <em>klass</em> or <em>module</em>, <em>cols</em>, <em>evaluate</em>, <em>suffix</em></td>
 </tr>
 </tbody>
 </table>
 <p>The editors generated by ImageEnumEditor() enable the user to select an item in
 an enumeration by selecting an image that represents the item.</p>
 <div class="figure">
-<img alt="simple: single image button; custom: multiple images: text: &quot;top right&quot;; read-only: image" src="../_images/image_enum_editors1.jpg" />
+<img alt="simple: single image button; custom: multiple images: text: &quot;top right&quot;; read-only: image" src="../_images/image_enum_editors.jpg" />
 <p class="caption">Figure 35: Editor styles for image enumeration</p>
 </div>
 <p>The custom style of editor displays a set of images; the user selects one by
@@ -744,12 +808,12 @@ the application was run.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Instance, Property, self, ThisClass, This</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Instance, Property, self, ThisClass, This</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Instance, self, ThisClass, This</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Instance, self, ThisClass, This</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>cachable</em>, <em>editable</em>, <em>id</em>, <em>kind</em>, <em>label</em>, <em>name</em>, <em>object</em>,
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>cachable</em>, <em>editable</em>, <em>id</em>, <em>kind</em>, <em>label</em>, <em>name</em>, <em>object</em>,
 <em>orientation</em>, <em>values</em>, <em>view</em></td>
 </tr>
 </tbody>
@@ -761,7 +825,7 @@ or edit an instance, or both.</p>
 <p>In the simplest case, the user can modify the trait attributes of an instance
 assigned to a trait attribute, but cannot modify which instance is assigned.</p>
 <div class="figure">
-<img alt="simple: button; custom: editors for instance traits; text and custom: str() of instance" src="../_images/single_instance_editors1.jpg" />
+<img alt="simple: button; custom: editors for instance traits; text and custom: str() of instance" src="../_images/single_instance_editors.jpg" />
 <p class="caption">Figure 36: Editor styles for instances</p>
 </div>
 <p>The custom style displays a user interface panel for editing the trait
@@ -843,7 +907,7 @@ pick a captain and edit that person&#8217;s information.</p>
 </pre></div>
 </div>
 <div class="figure">
-<img alt="Dialog box for a &quot;team&quot;, with drop-list selection for &quot;Team Captain&quot;" src="../_images/ui_for_ex161.gif" />
+<img alt="Dialog box for a &quot;team&quot;, with drop-list selection for &quot;Team Captain&quot;" src="../_images/ui_for_ex16.png" />
 <p class="caption">Figure 37: User interface for Example 16</p>
 </div>
 <p>If you want the user to be able to select instances, but not modify their
@@ -869,14 +933,14 @@ values list.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body"><p class="first">List</p>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body"><p class="first">List</p>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body"><p class="first">List <a class="footnote-reference" href="#id13" id="id9">[18]</a></p>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body"><p class="first">List <a class="footnote-reference" href="#id13" id="id9">[18]</a></p>
 </td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first"><em>editor</em>, <em>rows</em>, <em>style</em>, <em>trait_handler</em>, <em>use_notebook</em></p>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><em>editor</em>, <em>rows</em>, <em>style</em>, <em>trait_handler</em>, <em>use_notebook</em></p>
 <p class="last">The following parameters are used only if <em>use_notebook</em> is True:
 <em>deletable</em>, <em>dock_style</em>, <em>export</em>, <em>page_name</em>, <em>select</em>, <em>view</em></p>
 </td>
@@ -887,7 +951,7 @@ values list.</p>
 a list, both by editing the individual items and by adding, deleting, and
 reordering items within the list.</p>
 <div class="figure">
-<img alt="simple: single text box; custom and text: multiple text boxes; read-only: read-only list" src="../_images/list_editors1.jpg" />
+<img alt="simple: single text box; custom and text: multiple text boxes; read-only: read-only list" src="../_images/list_editors.jpg" />
 <p class="caption">Figure 38: List editor styles</p>
 </div>
 <p>The simple style displays a single item at a time, with small arrows on the
@@ -905,7 +969,7 @@ the list. You can specify a different handler to use for the items using the
 each item editor; clicking this button opens a context menu for modifying the
 list, as shown in Figure 39.</p>
 <div class="figure">
-<img alt="list editor with context menu" src="../_images/list_with_context_menu1.gif" />
+<img alt="list editor with context menu" src="../_images/list_with_context_menu.png" />
 <p class="caption">Figure 39: List editor showing context menu</p>
 </div>
 <p>In addition to the four standard styles for list editors, a fifth list editor
@@ -916,7 +980,7 @@ list items are instances with their own views. If the <em>deletable</em> paramet
 True, a close box appears on each tab, allowing the user to delete the item; the
 user cannot add items interactively through this style of editor.</p>
 <div class="figure">
-<img alt="tabbed instance editors" src="../_images/notebook_list_editor1.jpg" />
+<img alt="tabbed instance editors" src="../_images/notebook_list_editor.jpg" />
 <p class="caption">Figure 40: Notebook list editor</p>
 </div>
 </div>
@@ -926,12 +990,12 @@ user cannot add items interactively through this style of editor.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">ListStr or List of values mapped to strings</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">ListStr or List of values mapped to strings</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>activated, activated_index, adapter, adapter_name, auto_add, drag_move</em>,
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>activated, activated_index, adapter, adapter_name, auto_add, drag_move</em>,
 <em>editable, horizontal_lines, images, multi_select, operations</em>,
 <em>right_clicked, right_clicked_index, selected, selected_index, title</em>,
 <em>title_name</em></td>
@@ -946,7 +1010,7 @@ whether more than one can be selected at a time. You can also specify extended
 references for trait attributes to synchronize with user actions, such as the
 item that is currently selected, activated for editing, or right-clicked.</p>
 <div class="figure">
-<img alt="list box displaying strings" src="../_images/list_string_editor1.jpg" />
+<img alt="list box displaying strings" src="../_images/list_string_editor.jpg" />
 <p class="caption">Figure 41: List string editor</p>
 </div>
 </div>
@@ -956,9 +1020,9 @@ item that is currently selected, activated for editing, or right-clicked.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">controlling layout</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">controlling layout</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
 </tbody>
 </table>
@@ -973,12 +1037,12 @@ of a fixed height and width.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Range</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Range</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Range</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Range</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>auto_set</em>, <em>cols</em>, <em>enter_set</em>, <em>format</em>, <em>high_label</em>, <em>high_name</em>,
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>auto_set</em>, <em>cols</em>, <em>enter_set</em>, <em>format</em>, <em>high_label</em>, <em>high_name</em>,
 <em>label_width</em>, <em>low_label</em>, <em>low_name</em>, <em>mode</em></td>
 </tr>
 </tbody>
@@ -997,7 +1061,7 @@ Figure 42. If one limit of the range is unspecified, then a text editor is used.
 <col width="15%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Data type/range size</th>
+<tr class="row-odd"><th class="head">Data type/range size</th>
 <th class="head">Simple</th>
 <th class="head">Custom</th>
 <th class="head">Text</th>
@@ -1005,7 +1069,7 @@ Figure 42. If one limit of the range is unspecified, then a text editor is used.
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>Integer: Small Range (Size
+<tr class="row-even"><td>Integer: Small Range (Size
 0-16)</td>
 <td>Slider with
 text box</td>
@@ -1013,7 +1077,7 @@ text box</td>
 <td>Text field</td>
 <td>Static text</td>
 </tr>
-<tr><td>Integer: Medium Range (Size
+<tr class="row-odd"><td>Integer: Medium Range (Size
 17-101)</td>
 <td>Slider with
 text box</td>
@@ -1022,14 +1086,14 @@ text box</td>
 <td>Text field</td>
 <td>Static text</td>
 </tr>
-<tr><td>Integer: Large Range (Size &gt;
+<tr class="row-even"><td>Integer: Large Range (Size &gt;
 101)</td>
 <td>Spin box</td>
 <td>Spin box</td>
 <td>Text field</td>
 <td>Static text</td>
 </tr>
-<tr><td>Floating Point: Small Range
+<tr class="row-odd"><td>Floating Point: Small Range
 (Size &lt;= 100.0)</td>
 <td>Slider with
 text box</td>
@@ -1038,7 +1102,7 @@ text box</td>
 <td>Text field</td>
 <td>Static text</td>
 </tr>
-<tr><td>Floating Point: Large Range
+<tr class="row-even"><td>Floating Point: Large Range
 (Size &gt; 100.0)</td>
 <td>Large-range
 slider</td>
@@ -1050,7 +1114,7 @@ slider</td>
 </tbody>
 </table>
 <div class="figure">
-<img alt="slider with text box; radio buttons; text box; static text; spin box; large-range slider" src="../_images/range_editors1.jpg" />
+<img alt="slider with text box; radio buttons; text box; static text; spin box; large-range slider" src="../_images/range_editors.jpg" />
 <p class="caption">Figure 42: Range editor widgets</p>
 </div>
 <p>In the large-range slider, the arrows on either side of the slider move the
@@ -1077,12 +1141,12 @@ for the limits.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">RGBColor</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">RGBColor</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">RGBColor</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">RGBColor</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>mapped</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>mapped</em></td>
 </tr>
 </tbody>
 </table>
@@ -1096,15 +1160,15 @@ generated by ColorEditor(), but they are used for RGBColor traits. See
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">List</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">List</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Required parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body">Either <em>values</em> or <em>name</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Required parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Either <em>values</em> or <em>name</em></td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>can_move_all</em>, <em>left_column_title</em>, <em>object</em>, <em>ordered</em>,
+<tr class="field-even field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><em>can_move_all</em>, <em>left_column_title</em>, <em>object</em>, <em>ordered</em>,
 <em>right_column_title</em></td>
 </tr>
 </tbody>
@@ -1124,7 +1188,7 @@ and <em class="guilabel">Move down</em>, which affect the position of the select
 within the set in the right list box.</li>
 </ul>
 <div class="figure">
-<img alt="set editor list boxes with buttons" src="../_images/set_editor1.jpg" />
+<img alt="set editor list boxes with buttons" src="../_images/set_editor.jpg" />
 <p class="caption">Figure 43: Set editor showing all possible buttons</p>
 </div>
 <p>You can specify the set of candidate items in either of two ways:</p>
@@ -1140,15 +1204,15 @@ contains the list.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">special</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">special</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">PythonValue</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">PythonValue</td>
 </tr>
 </tbody>
 </table>
 <p>The editor generated by ShellEditor() displays an interactive Python shell.</p>
 <div class="figure">
-<img alt="interactive shell pane" src="../_images/shell_editor1.jpg" />
+<img alt="interactive shell pane" src="../_images/shell_editor.jpg" />
 <p class="caption">Figure 44: Python shell editor</p>
 </div>
 </div>
@@ -1158,13 +1222,13 @@ contains the list.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">all</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">all</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Str, String, Password, Unicode, Int, Float, Dict, CStr, CUnicode, and
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Str, String, Password, Unicode, Int, Float, Dict, CStr, CUnicode, and
 any trait that does not have a specialized TraitHandler</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>auto_set</em>, <em>enter_set</em>, <em>evaluate</em>, <em>evaluate_name</em>, <em>mapping</em>,
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>auto_set</em>, <em>enter_set</em>, <em>evaluate</em>, <em>evaluate_name</em>, <em>mapping</em>,
 <em>multi_line</em>, <em>password</em></td>
 </tr>
 </tbody>
@@ -1173,15 +1237,15 @@ any trait that does not have a specialized TraitHandler</td>
 it is a multi-line field; for the read-only style, it is static text. If
 <em>password</em> is True, the text that the user types in the text box is obscured.</p>
 <div class="figure">
-<img alt="simple: text box; custom: multi-line text box; text: text box; read-only: static text" src="../_images/text_editor_integers1.gif" />
+<img alt="simple: text box; custom: multi-line text box; text: text box; read-only: static text" src="../_images/text_editor_integers.png" />
 <p class="caption">Figure 45: Text editor styles for integers</p>
 </div>
 <div class="figure">
-<img alt="simple: text box; custom: multi-line text box; text: text box; read-only: static text" src="../_images/text_editor_strings1.gif" />
+<img alt="simple: text box; custom: multi-line text box; text: text box; read-only: static text" src="../_images/text_editor_strings.png" />
 <p class="caption">Figure 46: Text editor styles for strings</p>
 </div>
 <div class="figure">
-<img alt="same as above, but with value obscured by asterisks" src="../_images/text_editors_passwords1.gif" />
+<img alt="same as above, but with value obscured by asterisks" src="../_images/text_editors_passwords.png" />
 <p class="caption">Figure 47: Text editor styles for passwords</p>
 </div>
 <p>You can specify whether the trait being edited is updated on every keystroke
@@ -1199,9 +1263,9 @@ extended name of a trait that references it in the <em>evaluate_name</em> parame
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">string traits</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">string traits</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
 </tbody>
 </table>
@@ -1216,12 +1280,12 @@ heading by modifying the underlying attribute.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Tuple</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Tuple</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">Tuple</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Tuple</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>cols</em>, <em>editors</em>, <em>labels</em>, <em>traits</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>cols</em>, <em>editors</em>, <em>labels</em>, <em>traits</em></td>
 </tr>
 </tbody>
 </table>
@@ -1229,7 +1293,7 @@ heading by modifying the underlying attribute.</p>
 each slot of the tuple being edited, based on the type of data in the slot. The
 text and read-only editors edit or display the text representation of the tuple.</p>
 <div class="figure">
-<img alt="simple and custom: color editor, range editor, text box" src="../_images/tuple_editors1.gif" />
+<img alt="simple and custom: color editor, range editor, text box" src="../_images/tuple_editors.png" />
 <p class="caption">Figure 48: Tuple editor styles</p>
 </div>
 <p>You can specify the number of columns to use to lay out the widgets with the
@@ -1248,12 +1312,12 @@ for editors.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">(any)</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">(any)</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>auto_open</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>auto_open</em></td>
 </tr>
 </tbody>
 </table>
@@ -1261,7 +1325,7 @@ for editors.</p>
 including all the objects&#8217; members. For example, Figure 49 shows a value editor
 that is displayed by the &#8220;pickle viewer&#8221; utility in enthought.debug.</p>
 <div class="figure">
-<img alt="tree of Python values, including dictionaries, lists, and tuples" src="../_images/value_editor1.gif" />
+<img alt="tree of Python values, including dictionaries, lists, and tuples" src="../_images/value_editor.png" />
 <p class="caption">Figure 49: Value editor from Pickle Viewer</p>
 </div>
 <p class="rubric">Footnotes</p>
@@ -1311,6 +1375,11 @@ instead; see <a class="reference internal" href="factories_advanced_extra.html#t
 <li><a class="reference internal" href="#codeeditor">CodeEditor()</a></li>
 <li><a class="reference internal" href="#coloreditor">ColorEditor()</a></li>
 <li><a class="reference internal" href="#compoundeditor">CompoundEditor()</a></li>
+<li><a class="reference internal" href="#csvlisteditor">CSVListEditor()</a><ul>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#defaultoverride">DefaultOverride()</a></li>
 <li><a class="reference internal" href="#directoryeditor">DirectoryEditor()</a></li>
 <li><a class="reference internal" href="#enumeditor">EnumEditor()</a></li>
@@ -1355,7 +1424,7 @@ instead; see <a class="reference internal" href="factories_advanced_extra.html#t
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -1391,8 +1460,8 @@ instead; see <a class="reference internal" href="factories_advanced_extra.html#t
     </div>
     <div class="footer">
         &copy; Copyright 2008-2011, Enthought.
-      Last updated on Jun 16, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Last updated on Feb 10, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

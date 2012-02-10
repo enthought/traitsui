@@ -23,7 +23,7 @@ Appendix I: Glossary of Terms
    command button
         A button on a window that globally controls the window. Examples include
         :guilabel:`OK`, :guilabel:`Cancel`, :guilabel:`Apply`, 
-        :guilabel:`Revert`, and:guilabel:` Help`. 
+        :guilabel:`Revert`, and :guilabel:`Help`. 
         
    controller
         The element of the :term:`MVC` ("model-view-controller") design pattern

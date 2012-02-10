@@ -124,9 +124,9 @@ optional.
 Handler Subclasses
 ------------------
 
-Traits version 3.0 provides two Handler subclasses: ModelView and Controller.
-Both of these classes are designed to simplify the process of creating an
-MVC-based application.
+TraitsUI provides two Handler subclasses: ModelView and Controller.  Both of
+these classes are designed to simplify the process of creating an MVC-based
+application.
 
 Both ModelView and Controller extend the Hander class by adding the following
 trait attributes:
@@ -183,10 +183,11 @@ easily referenced with unqualified names (such as Item('name')).
 ModelView Class
 ```````````````
 
-The ModelView class is useful when creating a variant of the standard MVC design
-pattern. In this variant, the ModelView subclass reformulates a number of trait
-attributes on it model object as properties on the ModelView, usually to convert
-the model's data into a format that is more suited to a user interface.
+The ModelView class is useful when creating a variant of the standard MVC
+design pattern. In this variant, the ModelView subclass reformulates a number
+of trait attributes on its model object as properties on the ModelView, usually
+to convert the model's data into a format that is more suited to a user
+interface.
 
 The context dictionary that a ModelView object passes to the View's ui() method
 contains the following entries:
@@ -369,10 +370,10 @@ overridden setattr() method and user interface notification method.
     tc = TestClass()
     tc.configure_traits(view=view1)
 
-.. image:: images/alter_title_before.gif
+.. image:: images/alter_title_before.png
    :alt: Dialog box with empty checkboxes and a title of "Alter Title"
    
-.. figure:: images/alter_title_after.gif
+.. figure:: images/alter_title_after.png
    :alt: Dialog box with one filled checkbox and a title of "Alter Title*"
      
    Figure 7: Before and after views of Example 9

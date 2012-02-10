@@ -4,17 +4,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>The View and Its Building Blocks &mdash; TraitsUI 4 User Manual</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.0.0',
+        VERSION:     '4.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -87,7 +90,7 @@ object:</p>
 <strong>sam</strong> in alphabetical order with little formatting, which is seldom what is
 wanted:</p>
 <div class="figure">
-<img alt="Dialog box showing all attributes of SimpleEmployee in alphabetical order" src="../_images/ui_for_ex11.jpg" />
+<img alt="Dialog box showing all attributes of SimpleEmployee in alphabetical order" src="../_images/ui_for_ex1.jpg" />
 <p class="caption">Figure 1: User interface for Example 1</p>
 </div>
 <div class="section" id="the-view-object">
@@ -126,7 +129,7 @@ View object and passing it to the configure_traits() method:</p>
 </div>
 <p>The resulting window has the desired appearance:</p>
 <div class="figure">
-<img alt="User interface showing only First name, Last name, and Department" src="../_images/ui_for_ex21.jpg" />
+<img alt="User interface showing only First name, Last name, and Department" src="../_images/ui_for_ex2.jpg" />
 <p class="caption">Figure 2: User interface for Example 2</p>
 </div>
 <p>A View object can have a variety of attributes, which are set in the View
@@ -172,13 +175,13 @@ Item class.</p>
 <col width="59%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Category</th>
+<tr class="row-odd"><th class="head">Category</th>
 <th class="head">Attributes</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>Content</td>
+<tr class="row-even"><td>Content</td>
 <td><ul class="first last simple">
 <li><strong>name</strong></li>
 </ul>
@@ -189,7 +192,7 @@ essentially a template for displaying a
 single trait, its <strong>name</strong> attribute is
 nearly always specified.</td>
 </tr>
-<tr><td>Display
+<tr class="row-odd"><td>Display
 format</td>
 <td><ul class="first last simple">
 <li><strong>dock</strong></li>
@@ -219,7 +222,7 @@ comments or instructions in a TraitsUI
 window.)</p>
 </td>
 </tr>
-<tr><td>Content
+<tr class="row-even"><td>Content
 format</td>
 <td><ul class="first last simple">
 <li><strong>format_str</strong></li>
@@ -234,7 +237,7 @@ floating-point value to two decimal places,
 or capitalizing all letter characters in a
 license plate number.</td>
 </tr>
-<tr><td>Widget
+<tr class="row-odd"><td>Widget
 override</td>
 <td><ul class="first last simple">
 <li><strong>editor</strong></li>
@@ -248,7 +251,7 @@ options are discussed in
 and
 <a class="reference internal" href="factories_basic.html#the-predefined-trait-editor-factories"><em>The Predefined Trait Editor Factories</em></a>.</td>
 </tr>
-<tr><td>Visibility
+<tr class="row-even"><td>Visibility
 and status</td>
 <td><ul class="first last simple">
 <li><strong>enabled_when</strong></li>
@@ -266,7 +269,7 @@ can be implemented using a custom
 <a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><em>Controlling the Interface: the Handler</em></a>
 ).</td>
 </tr>
-<tr><td>User help</td>
+<tr class="row-odd"><td>User help</td>
 <td><ul class="first last simple">
 <li><strong>tooltip</strong></li>
 <li><strong>help</strong></li>
@@ -281,7 +284,7 @@ system-generated message is used instead. The
 default help handler, but can be used by a
 custom help handler.</td>
 </tr>
-<tr><td>Unique
+<tr class="row-even"><td>Unique
 identifier</td>
 <td><ul class="first last simple">
 <li><strong>id</strong></li>
@@ -374,13 +377,13 @@ acceptable displays and behavior.</p>
 <col width="59%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Category</th>
+<tr class="row-odd"><th class="head">Category</th>
 <th class="head">Attributes</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>Content</td>
+<tr class="row-even"><td>Content</td>
 <td><ul class="first last simple">
 <li><strong>object</strong></li>
 <li><strong>content</strong></li>
@@ -393,7 +396,7 @@ members of the group; by default this is
 current context. The <strong>content</strong> attribute is
 a list of elements in the group.</td>
 </tr>
-<tr><td>Display
+<tr class="row-odd"><td>Display
 format</td>
 <td><ul class="first last simple">
 <li><strong>columns</strong></li>
@@ -419,7 +422,7 @@ format</td>
 <td>These attributes define display options for
 the group as a whole.<span class="target" id="index-26"></span><span class="target" id="index-27"></span><span class="target" id="index-28"></span><span class="target" id="index-29"></span><span class="target" id="index-30"></span></td>
 </tr>
-<tr id="index-31"><td>Visibility
+<tr class="row-even" id="index-31"><td>Visibility
 and status</td>
 <td><ul class="first last simple">
 <li><strong>enabled_when</strong></li>
@@ -431,7 +434,7 @@ and status</td>
 attributes of the same names on the Item
 class.</td>
 </tr>
-<tr><td>User help</td>
+<tr class="row-odd"><td>User help</td>
 <td><ul class="first last simple">
 <li><strong>help</strong></li>
 <li><strong>help_id</strong></li>
@@ -456,7 +459,7 @@ default help handler, but can be used by a
 custom help handler.</p>
 </td>
 </tr>
-<tr><td>Unique
+<tr class="row-even"><td>Unique
 identifier</td>
 <td><ul class="first last simple">
 <li><strong>id</strong></li>
@@ -485,50 +488,50 @@ API Reference</em> for details.</p>
 <col width="50%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Subclass</th>
+<tr class="row-odd"><th class="head">Subclass</th>
 <th class="head">Description</th>
 <th class="head">Equivalent To</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>HGroup</td>
+<tr class="row-even"><td>HGroup</td>
 <td>A group whose items are laid
 out horizontally.</td>
 <td><tt class="samp docutils literal"><span class="pre">Group(orientation='horizontal')</span></tt></td>
 </tr>
-<tr><td>HFlow</td>
+<tr class="row-odd"><td>HFlow</td>
 <td>A horizontal group whose items
 &#8220;wrap&#8221; when they exceed the
 available horizontal space.</td>
 <td><tt class="samp docutils literal"><span class="pre">Group(orientation='horizontal',</span>
 <span class="pre">layout='flow',</span> <span class="pre">show_labels=False)</span></tt></td>
 </tr>
-<tr><td>HSplit</td>
+<tr class="row-even"><td>HSplit</td>
 <td>A horizontal group with
 splitter bars to separate it
 from other groups.</td>
 <td><tt class="samp docutils literal"><span class="pre">Group(orientation='horizontal',</span>
 <span class="pre">layout='split')</span></tt></td>
 </tr>
-<tr><td>Tabbed</td>
+<tr class="row-odd"><td>Tabbed</td>
 <td>A group that is shown as a tab
 in a notebook.</td>
 <td><tt class="samp docutils literal"><span class="pre">Group(orientation='horizontal'</span>
 <span class="pre">layout='tabbed',</span> <span class="pre">springy=True)</span></tt></td>
 </tr>
-<tr><td>VGroup</td>
+<tr class="row-even"><td>VGroup</td>
 <td>A group whose items are laid
 out vertically.</td>
 <td><tt class="samp docutils literal"><span class="pre">Group(orientation='vertical')</span></tt></td>
 </tr>
-<tr><td>VFlow</td>
+<tr class="row-odd"><td>VFlow</td>
 <td>A vertical group whose items
 &#8220;wrap&#8221; when they exceed the
 available vertical space.</td>
 <td><tt class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
 <span class="pre">layout='flow',</span> <span class="pre">show_labels=False)</span></tt></td>
 </tr>
-<tr><td>VFold</td>
+<tr class="row-even"><td>VFold</td>
 <td>A vertical group in which
 items can be collapsed (i.e.,
 folded) by clicking their
@@ -536,13 +539,13 @@ titles.</td>
 <td><tt class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
 <span class="pre">layout='fold',</span> <span class="pre">show_labels=False)</span></tt></td>
 </tr>
-<tr><td>VGrid</td>
+<tr class="row-odd"><td>VGrid</td>
 <td>A vertical group whose items
 are laid out in two columns.</td>
 <td><tt class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
 <span class="pre">columns=2)</span></tt></td>
 </tr>
-<tr><td>VSplit</td>
+<tr class="row-even"><td>VSplit</td>
 <td>A vertical group with splitter
 bars to separate it from other
 groups.</td>
@@ -557,7 +560,7 @@ groups.</td>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id2">[3]</a></td><td>If the code is being run from a program that already has a GUI defined,
 then use edit_traits() instead of configure_traits(). These methods are
-discussed in more detail in Section 4.3.</td></tr>
+discussed in more detail in <a class="reference internal" href="advanced_view.html#displaying-a-view"><em>Displaying a View</em></a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id14" rules="none">
@@ -623,7 +626,7 @@ one type, but it is not recommended.</td></tr>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -659,8 +662,8 @@ one type, but it is not recommended.</td></tr>
     </div>
     <div class="footer">
         &copy; Copyright 2008-2011, Enthought.
-      Last updated on Jun 16, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Last updated on Feb 10, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

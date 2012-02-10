@@ -56,8 +56,8 @@ and have no other appropriate editor factories.
 |Instance     |InstanceEditor              |TreeEditor, DropEditor, DNDEditor, |
 |             |                            |ValueEditor                        |
 +-------------+----------------------------+-----------------------------------+
-|List         |TableEditor for lists of    |CheckListEditor, SetEditor,        |
-|             |HasTraits objects;          |ValueEditor,                       |
+|List         |TableEditor for lists of    |CSVListEditor, CheckListEditor,    |
+|             |HasTraits objects;          |SetEditor, ValueEditor,            |
 |             |ListEditor for all other    |ThemedVerticalNotebookEditor       |
 |             |lists.                      |                                   |
 +-------------+----------------------------+-----------------------------------+

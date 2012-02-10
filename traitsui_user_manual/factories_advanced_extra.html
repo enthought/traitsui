@@ -4,17 +4,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Advanced Trait Editors &mdash; TraitsUI 4 User Manual</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.0.0',
+        VERSION:     '4.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -68,15 +71,15 @@ interfaces, in conjunction with other editors.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Special cases</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Special cases</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Required parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>factory</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Required parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>factory</em></td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>args</em></td>
+<tr class="field-even field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><em>args</em></td>
 </tr>
 </tbody>
 </table>
@@ -100,12 +103,12 @@ CustomEditor() is used to generate the plots in the user interface.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Instance traits</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Instance traits</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>binding</em>, <em>klass</em>, <em>readonly</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>binding</em>, <em>klass</em>, <em>readonly</em></td>
 </tr>
 </tbody>
 </table>
@@ -134,12 +137,12 @@ text editor.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Instance traits</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Instance traits</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>drag_target, drop_target, image</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>drag_target, drop_target, image</em></td>
 </tr>
 </tbody>
 </table>
@@ -157,21 +160,21 @@ target).</p>
 <col width="33%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Editor Style</th>
+<tr class="row-odd"><th class="head">Editor Style</th>
 <th class="head">Drag Source?</th>
 <th class="head">Drop Target?</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>Simple</td>
+<tr class="row-even"><td>Simple</td>
 <td>Yes</td>
 <td>Yes</td>
 </tr>
-<tr><td>Custom</td>
+<tr class="row-odd"><td>Custom</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
-<tr><td>Read-only</td>
+<tr class="row-even"><td>Read-only</td>
 <td>Yes</td>
 <td>No</td>
 </tr>
@@ -195,7 +198,7 @@ representation of each key code and a description of the corresponding method.
 The user can click a text box, and then press a key or key combination to
 associate that key press with a method.</p>
 <div class="figure">
-<img alt="Dialog box with fields for key presses corresponding to operations" src="../_images/key_binding_editor1.jpg" />
+<img alt="Dialog box with fields for key presses corresponding to operations" src="../_images/key_binding_editor.jpg" />
 <p class="caption">Figure 50: Key binding editor dialog box</p>
 </div>
 <p>The following code example creates a user interface containing a code editor
@@ -273,15 +276,15 @@ with associated key bindings, and a button that invokes the key binding editor.<
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">List(<em>InstanceType</em>)</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">List(<em>InstanceType</em>)</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Required parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>columns</em> or <em>columns_name</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Required parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>columns</em> or <em>columns_name</em></td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body">See <em>Traits API Reference</em>,
+<tr class="field-even field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">See <em>Traits API Reference</em>,
 traitsui.wx.table_editor.ToolkitEditorFactory attributes.</td>
 </tr>
 </tbody>
@@ -292,7 +295,7 @@ the columns in the table. Optionally, you can provide filters for filtering the
 set of displayed items, and you can specify a wide variety of options for
 interacting with and formatting the table.</p>
 <div class="figure">
-<img alt="Table editor with toolbar and instance editor" src="../_images/table_editor1.jpg" />
+<img alt="Table editor with toolbar and instance editor" src="../_images/table_editor.jpg" />
 <p class="caption">Figure 51: Table editor</p>
 </div>
 <p>To see the code that results in Figure 51, refer to <tt class="file docutils literal"><span class="pre">TableEditor_demo.py</span></tt>
@@ -326,7 +329,7 @@ parameter to the ObjectColumn() constructor, referencing the name of the trait
 attribute to be edited.</p>
 <p>You can specify additional columns that are not initially displayed using the
 <em>other_columns</em> parameter. If the <em>configurable</em> parameter is True (the
-default), a <em class="guilabel">Set user preferences for table</em> icon (<img alt="preferences_icon" src="../_images/table_prefs1.gif" />)
+default), a <em class="guilabel">Set user preferences for table</em> icon (<img alt="preferences_icon" src="../_images/table_prefs.png" />)
 appears on the table&#8217;s toolbar. When the user clicks this icon, a dialog box
 opens that enables the user to select and order the columns displayed in the
 table, as shown in Figure 52. (The dialog box is implemented using a set editor;
@@ -334,7 +337,7 @@ see <a class="reference internal" href="factories_basic.html#seteditor"><em>SetE
 parameter are listed in the left list box of this dialog box, and can be
 displayed by moving them into the right list box.</p>
 <div class="figure">
-<img alt="Dialog box with two list boxes for selecting column names" src="../_images/table_column_selection1.jpg" />
+<img alt="Dialog box with two list boxes for selecting column names" src="../_images/table_column_selection.jpg" />
 <p class="caption">Figure 52: Column selection dialog box for a table editor</p>
 </div>
 </div>
@@ -349,8 +352,8 @@ in a column, or the user can manually order the items. Usually, only one of
 these mechanisms is used in any particular table, although the TraitsUI package
 does not enforce a separation. If the user has manually ordered the items,
 sorting them would throw away that effort.</p>
-<p>If the <em>reorderable</em> parameter is True, <em class="guilabel">Move up</em> (<img alt="move_up_icon" src="../_images/move_up_icon1.gif" />) and
-<em class="guilabel">Move down</em> (<img alt="move_down_icon" src="../_images/move_down_icon1.gif" />) icons appear in the table toolbar. Clicking one of
+<p>If the <em>reorderable</em> parameter is True, <em class="guilabel">Move up</em> (<img alt="move_up_icon" src="../_images/move_up_icon.png" />) and
+<em class="guilabel">Move down</em> (<img alt="move_down_icon" src="../_images/move_down_icon.png" />) icons appear in the table toolbar. Clicking one of
 these icons changes the position of the selected item.</p>
 <p>If the <em>sortable</em> parameter is True (the default), then the user can sort the
 items in the table based on the values in a column by Control-clicking the
@@ -369,7 +372,7 @@ column header is undecorated.</li>
 sorted when the table is sorted. The default value is False, in which case, the
 list order is not affected by sorting the table.</p>
 <p>If <em>sortable</em> is True and <em>sort_model</em> is False, then a
-<em class="guilabel">Do not sort columns</em> icon (<img alt="no_sort_icon" src="../_images/no_sort_icon1.gif" />) appears in the table
+<em class="guilabel">Do not sort columns</em> icon (<img alt="no_sort_icon" src="../_images/no_sort_icon.png" />) appears in the table
 toolbar. Clicking this icon restores the original sort order.</p>
 <p>If the <em>reverse</em> parameter is True, then the items in the underlying list are
 maintained in the reverse order of the items in the table (regardless of whether
@@ -404,7 +407,7 @@ provided; clicking this item opens a dialog box that enables the user to create
 new filters, or to edit or delete existing filters (except templates).</p>
 <p>You can also provide an option for the user to use filters to search the table.
 If you set the <em>search</em> parameter to an instance of TableFilter (or of a
-subclass), a <em class="guilabel">Search table</em> icon (<img alt="search_table_icon" src="../_images/search_table_icon1.gif" />) appears on the
+subclass), a <em class="guilabel">Search table</em> icon (<img alt="search_table_icon" src="../_images/search_table_icon.png" />) appears on the
 table toolbar. Clicking this icon opens a <em class="guilabel">Search for</em> dialog box,
 which enables the user to specify filter criteria, to browse through matching
 items, or select all matching items.</p>
@@ -479,7 +482,7 @@ TableColumn.</p>
 parameter a callable that generates an object that can be added to the list in
 the table; for example, the class of the objects in the table. When
 <em>row_factory</em> is specified, an <em class="guilabel">Insert new item</em> icon
-(<img alt="insert_item_icon" src="../_images/insert_item_icon1.gif" />) appears in the table toolbar, which generates a new row in
+(<img alt="insert_item_icon" src="../_images/insert_item_icon.png" />) appears in the table toolbar, which generates a new row in
 the table. Optionally, you can use <em>row_factory_args</em> and <em>row_factory_kw</em> to
 specify positional and keyword arguments to the row factory callable.</p>
 <p>To save users the trouble of mousing to the toolbar, you can enable them to add
@@ -492,7 +495,7 @@ Enter creates the new item and generates a new, blank last row.</p>
 <p>The <em>deletable</em> parameter controls whether items can be deleted from the table.
 This parameter can be a Boolean (defaulting to False) or a callable; the
 callable must take an item as an argument and handle deleting it. If <em>deletable</em>
-is not False, a <em class="guilabel">Delete current item</em> icon (<img alt="delete_item_icon" src="../_images/delete_item_icon1.gif" />) appears on the table
+is not False, a <em class="guilabel">Delete current item</em> icon (<img alt="delete_item_icon" src="../_images/delete_item_icon.png" />) appears on the table
 toolbar; clicking it deletes the item corresponding to the row that is selected
 in the table.</p>
 </div>
@@ -562,15 +565,15 @@ dragging.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">lists, arrays, and other large sequences of objects</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">lists, arrays, and other large sequences of objects</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Required parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>adapter</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Required parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>adapter</em></td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>activated, clicked, column_clicked, dclicked, drag_move, editable,</em>
+<tr class="field-even field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><em>activated, clicked, column_clicked, dclicked, drag_move, editable,</em>
 <em>horizontal_lines, images, multi_select, operations, right_clicked,</em>
 <em>right_dclicked, selected, selected_row, show_titles, vertical_lines</em></td>
 </tr>
@@ -629,7 +632,7 @@ and power of the tabular editor to display a wide variety of data.</p>
 columns to be displayed. Each entry in the <strong>columns</strong> list can be either a
 string, or a tuple consisting of a string and another value, which can be of any
 type. The string is used as the label for the column. The second value in the
-tuple, called the* column ID*, identifies the column to the adapter. It is
+tuple, called the <em>column ID</em>, identifies the column to the adapter. It is
 typically a trait attribute name or an integer index, but it can be any value
 appropriate to the adapter. If only a string is specified for an entry, then the
 index of the entry within the <strong>columns</strong> list is used as that entry&#8217;s column
@@ -670,7 +673,7 @@ were no <strong>Employee_age_text_color</strong> attribute).</p>
 information about source files in the Traits package. This example includes a
 column that contains an image for files that meet certain conditions.</p>
 <div class="figure">
-<img alt="Tabular editor with columns for file name, size, an icon, time, and date" src="../_images/tabular_editor1.jpg" />
+<img alt="Tabular editor with columns for file name, size, an icon, time, and date" src="../_images/tabular_editor.jpg" />
 <p class="caption">Figure 53: Tabular editor on MS Windows</p>
 </div>
 <p>Depending on how the tabular editor is configured, certain keyboard interactions
@@ -723,15 +726,15 @@ dragged items are sent to the target, but are not deleted from the list data.</p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Instance</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Instance</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Required parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>nodes</em> (required except for shared editors; see <a class="reference internal" href="#editing-objects"><em>Editing Objects</em></a>)</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Required parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>nodes</em> (required except for shared editors; see <a class="reference internal" href="#editing-objects"><em>Editing Objects</em></a>)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>auto_open, editable, editor, hide_root, icon_size, lines_mode,</em>
+<tr class="field-even field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><em>auto_open, editable, editor, hide_root, icon_size, lines_mode,</em>
 <em>on_dclick, on_select, orientation, selected, shared_editor, show_icons</em></td>
 </tr>
 </tbody>
@@ -746,7 +749,7 @@ of TreeEditor(), which can be &#8216;horizontal&#8217; or &#8216;vertical&#8217;
 <em>nodes</em> parameter, which must be a list of instances of TreeNode (or of
 subclasses of TreeNode).</p>
 <div class="figure">
-<img alt="Tree control with instance editor pane" src="../_images/tree_editor1.gif" />
+<img alt="Tree control with instance editor pane" src="../_images/tree_editor.png" />
 <p class="caption">Figure 54: Tree editor</p>
 </div>
 <p>The following example shows the code that produces the editor shown in Figure
@@ -1042,7 +1045,7 @@ children, through operations such as dragging and dropping, copying and pasting,
 or creating new objects. Two attributes control these operations: <strong>add</strong> and
 <strong>move</strong>. Both are lists of classes. The <strong>add</strong> attribute contains classes that
 can be added by any means, including creation. The code snippet in the preceding
-section (8.2.7.2.1) includes an example of the <strong>add</strong> attribute. The <strong>move</strong>
+section includes an example of the <strong>add</strong> attribute. The <strong>move</strong>
 attribute contains classes that can be dragged and dropped, but not created. The
 <strong>move</strong> attribute need not be specified if all classes that can be moved can
 also be created (and therefore are specified in the <strong>add</strong> value).</p>
@@ -1076,29 +1079,29 @@ deleted, by setting the following attributes on TreeNode:</p>
 <col width="29%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Attribute</th>
+<tr class="row-odd"><th class="head">Attribute</th>
 <th class="head">If True, the ...</th>
 <th class="head">can be...</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td><strong>copy</strong></td>
+<tr class="row-even"><td><strong>copy</strong></td>
 <td>object&#8217;s children</td>
 <td>copied.</td>
 </tr>
-<tr><td><strong>delete</strong></td>
+<tr class="row-odd"><td><strong>delete</strong></td>
 <td>object&#8217;s children</td>
 <td>deleted.</td>
 </tr>
-<tr><td><strong>delete_me</strong></td>
+<tr class="row-even"><td><strong>delete_me</strong></td>
 <td>object</td>
 <td>deleted.</td>
 </tr>
-<tr><td><strong>rename</strong></td>
+<tr class="row-odd"><td><strong>rename</strong></td>
 <td>object&#8217;s children</td>
 <td>renamed.</td>
 </tr>
-<tr><td><strong>rename_me</strong></td>
+<tr class="row-even"><td><strong>rename_me</strong></td>
 <td>object</td>
 <td>renamed.</td>
 </tr>
@@ -1227,12 +1230,12 @@ implemented for other GUI toolkits or other operating system platforms.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">File</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">File</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>playing</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>playing</em></td>
 </tr>
 </tbody>
 </table>
@@ -1246,12 +1249,12 @@ or static.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">2-D Array, 2-D CArray</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">2-D Array, 2-D CArray</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>format, show_index, titles, transpose</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>format, show_index, titles, transpose</em></td>
 </tr>
 </tbody>
 </table>
@@ -1259,7 +1262,7 @@ or static.</p>
 use with large arrays, which do not work well with the editors generated by
 ArrayEditor(). All styles of the editor have the same appearance.</p>
 <div class="figure">
-<img alt="Tabular display of numeric data, with columns Index, x, y, and z" src="../_images/array_view_editor1.jpg" />
+<img alt="Tabular display of numeric data, with columns Index, x, y, and z" src="../_images/array_view_editor.jpg" />
 <p class="caption">Figure 55: Array view editor</p>
 </div>
 </div>
@@ -1269,9 +1272,9 @@ ArrayEditor(). All styles of the editor have the same appearance.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">string traits, Enum(string values)</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">string traits, Enum(string values)</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
 </tbody>
 </table>
@@ -1288,12 +1291,12 @@ URLs.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">string traits</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">string traits</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>entries</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>entries</em></td>
 </tr>
 </tbody>
 </table>
@@ -1309,12 +1312,12 @@ part of the simple style of file editor; see <a class="reference internal" href=
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">string traits, Enum(string values)</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">string traits, Enum(string values)</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>back, forward, home, html, page_loaded, refresh, search, status, stop,</em>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>back, forward, home, html, page_loaded, refresh, search, status, stop,</em>
 <em>title</em></td>
 </tr>
 </tbody>
@@ -1347,12 +1350,12 @@ from the URL represented by the attribute being edited.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">(any)</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">(any)</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>image</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>image</em></td>
 </tr>
 </tbody>
 </table>
@@ -1369,12 +1372,12 @@ of the trait attribute being edited are irrelevant and are ignored.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">numeric traits</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">numeric traits</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>alignment, format_str</em></td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>alignment, format_str</em></td>
 </tr>
 </tbody>
 </table>
@@ -1384,7 +1387,7 @@ read-only.</p>
 <p>The <em>alignment</em> parameter can be &#8216;left&#8217;, &#8216;center&#8217;, or &#8216;right&#8217; to indicate how
 the value should be aligned within the display. The default is right-alignment.</p>
 <div class="figure">
-<img alt="LED-like display of 90452" src="../_images/led_editor1.gif" />
+<img alt="LED-like display of 90452" src="../_images/led_editor.png" />
 <p class="caption">Figure 56: LED Editor with right alignment</p>
 </div>
 </div>
@@ -1394,12 +1397,12 @@ the value should be aligned within the display. The default is right-alignment.<
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Event</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Event</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>label</em>, <em>theme, down_theme, hover_theme, disabled_theme, image, position,</em>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>label</em>, <em>theme, down_theme, hover_theme, disabled_theme, image, position,</em>
 <em>spacing, view</em></td>
 </tr>
 </tbody>
@@ -1407,7 +1410,7 @@ the value should be aligned within the display. The default is right-alignment.<
 <p>The ThemedButtonEditor() factory generates a button that is formatted according
 to specified or default themes. All editor styles have the same appearance.</p>
 <div class="figure">
-<img alt="Themed buttons for normal, hover, down, and disabled states" src="../_images/themed_button_editor1.gif" />
+<img alt="Themed buttons for normal, hover, down, and disabled states" src="../_images/themed_button_editor.png" />
 <p class="caption">Figure 57: Themed buttons in various states</p>
 </div>
 <p>The theme-related parameters determine the appearance of the button in various
@@ -1419,12 +1422,12 @@ states. Figure 57 shows the default theme.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Boolean</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Boolean</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>label</em>, <em>theme, hover_off_image,  hover_off_theme, hover_on_image,</em>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>label</em>, <em>theme, hover_off_image,  hover_off_theme, hover_on_image,</em>
 <em>hover_on_theme,  image, on_image, on_theme, position, spacing</em></td>
 </tr>
 </tbody>
@@ -1433,7 +1436,7 @@ states. Figure 57 shows the default theme.</p>
 according to specified or default themes. All editor styles have the same
 appearance.</p>
 <div class="figure">
-<img alt="Themed checkbox for On, Off, Hover Off, and Hover On states" src="../_images/themed_checkbox_editor1.gif" />
+<img alt="Themed checkbox for On, Off, Hover Off, and Hover On states" src="../_images/themed_checkbox_editor.png" />
 <p class="caption">Figure 58: Themed checkbox in various states</p>
 </div>
 <p>The theme-related parameters determine the appearance of the checkbox in the
@@ -1447,12 +1450,12 @@ Item. Both labels may be displayed, if the Item&#8217;s label is not hidden.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Range</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Range</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>alignment, bg_color,  high, increment, low, show_value, slider_color,</em>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>alignment, bg_color,  high, increment, low, show_value, slider_color,</em>
 <em>text_color, tip_color</em></td>
 </tr>
 </tbody>
@@ -1464,9 +1467,9 @@ background of the control updates to reflect the value relative to the total
 range represented by a slider. For example, if the range is from -2 to 2, a
 value of 0 is represented by a bar covering the left half of the control area,
 as shown in Figure 59.</p>
-<img alt="Themed box with shading in the left half and a vertical orange bar in the middle" src="../_images/themed_slider_no_focus1.gif" />
+<img alt="Themed box with shading in the left half and a vertical orange bar in the middle" src="../_images/themed_slider_no_focus.png" />
 <div class="figure">
-<img alt="Themed box with the value 0 selected in the center" src="../_images/themed_slide_with_focus1.gif" />
+<img alt="Themed box with the value 0 selected in the center" src="../_images/themed_slide_with_focus.png" />
 <p class="caption">Figure 59: Themed slider without focus, and with focus</p>
 </div>
 </div>
@@ -1476,12 +1479,12 @@ as shown in Figure 59.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Str, String, Unicode, CStr, CUnicode, and any trait whose value is a string</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Str, String, Unicode, CStr, CUnicode, and any trait whose value is a string</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>auto_set</em>, <em>enter_set</em>, <em>evaluate</em>, <em>evaluate_name</em>, <em>mapping</em>,
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>auto_set</em>, <em>enter_set</em>, <em>evaluate</em>, <em>evaluate_name</em>, <em>mapping</em>,
 <em>multi_line</em>, <em>password, theme</em></td>
 </tr>
 </tbody>
@@ -1491,9 +1494,9 @@ according to a specified theme. If no theme is specified, the editor uses the
 theme, if any, specified by the surrounding Group or View. Thus, there is no
 default theme. All editor styles have the same appearance, except the read-only
 style, which is not editable.</p>
-<img alt="Themed text editor, displaying text ``a*x*x-b*x``" src="../_images/themed_text_editor_no_focus1.gif" />
+<img alt="Themed text editor, displaying text ``a*x*x-b*x``" src="../_images/themed_text_editor_no_focus.png" />
 <div class="figure">
-<img alt="Themed text editor, with text ``a*x*x-b*x`` selected" src="../_images/themed_text_editor_with_focus1.gif" />
+<img alt="Themed text editor, with text ``a*x*x-b*x`` selected" src="../_images/themed_text_editor_with_focus.png" />
 <p class="caption">Figure 60: Themed text editor, without focus and with focus</p>
 </div>
 </div>
@@ -1503,12 +1506,12 @@ style, which is not editable.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Suitable for:</th><td class="field-body">Lists of Instances</td>
+<tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">Lists of Instances</td>
 </tr>
-<tr class="field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><em>closed_theme, double_click, open_theme, page_name, multiple_open,</em>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>closed_theme, double_click, open_theme, page_name, multiple_open,</em>
 <em>scrollable, view</em></td>
 </tr>
 </tbody>
@@ -1519,11 +1522,11 @@ lists of instances, similarly to the ListEditor() factory, with the
 <em>use_notebook</em> parameter. You can specify themes to use for the open and closed
 states of the tabs.</p>
 <div class="figure">
-<img alt="Stacked boxes displaying names as labels" src="../_images/themed_notebook_closed1.gif" />
+<img alt="Stacked boxes displaying names as labels" src="../_images/themed_notebook_closed.png" />
 <p class="caption">Figure 61: Themed vertical notebook, with tabs for Person instances closed</p>
 </div>
 <div class="figure">
-<img alt="Stacked boxes, with one expanded to show themed text editors" src="../_images/themed_notebook_open1.gif" />
+<img alt="Stacked boxes, with one expanded to show themed text editors" src="../_images/themed_notebook_open.png" />
 <p class="caption">Figure 62: Themed vertical notebook, with one tab open</p>
 </div>
 </div>
@@ -1622,7 +1625,7 @@ states of the tabs.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -1658,8 +1661,8 @@ states of the tabs.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2008-2011, Enthought.
-      Last updated on Jun 16, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Last updated on Feb 10, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

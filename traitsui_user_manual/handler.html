@@ -4,17 +4,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Controlling the Interface: the Handler &mdash; TraitsUI 4 User Manual</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.0.0',
+        VERSION:     '4.1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -154,9 +157,9 @@ optional.</p>
 </div>
 <div class="section" id="handler-subclasses">
 <span id="id9"></span><h2>Handler Subclasses<a class="headerlink" href="#handler-subclasses" title="Permalink to this headline">¶</a></h2>
-<p>Traits version 3.0 provides two Handler subclasses: ModelView and Controller.
-Both of these classes are designed to simplify the process of creating an
-MVC-based application.</p>
+<p>TraitsUI provides two Handler subclasses: ModelView and Controller.  Both of
+these classes are designed to simplify the process of creating an MVC-based
+application.</p>
 <p>Both ModelView and Controller extend the Hander class by adding the following
 trait attributes:</p>
 <ul class="simple">
@@ -207,10 +210,11 @@ easily referenced with unqualified names (such as Item(&#8216;name&#8217;)).</p>
 </div>
 <div class="section" id="modelview-class">
 <span id="id11"></span><h3>ModelView Class<a class="headerlink" href="#modelview-class" title="Permalink to this headline">¶</a></h3>
-<p>The ModelView class is useful when creating a variant of the standard MVC design
-pattern. In this variant, the ModelView subclass reformulates a number of trait
-attributes on it model object as properties on the ModelView, usually to convert
-the model&#8217;s data into a format that is more suited to a user interface.</p>
+<p>The ModelView class is useful when creating a variant of the standard MVC
+design pattern. In this variant, the ModelView subclass reformulates a number
+of trait attributes on its model object as properties on the ModelView, usually
+to convert the model&#8217;s data into a format that is more suited to a user
+interface.</p>
 <p>The context dictionary that a ModelView object passes to the View&#8217;s ui() method
 contains the following entries:</p>
 <ul class="simple">
@@ -258,13 +262,13 @@ of the window (if setting the x and y attributes of the View is insufficient).</
 <col width="30%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Method</th>
+<tr class="row-odd"><th class="head">Method</th>
 <th class="head">Called When</th>
 <th class="head">Override When?</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>apply(info)</td>
+<tr class="row-even"><td>apply(info)</td>
 <td>The user clicks the
 <em class="guilabel">Apply</em> button,
 and after the changes have
@@ -274,7 +278,7 @@ context objects.</td>
 processing at this
 point.</td>
 </tr>
-<tr><td>close(info, is_ok)</td>
+<tr class="row-odd"><td>close(info, is_ok)</td>
 <td>The user requests to close
 the window, clicking
 <em class="guilabel">OK</em>,
@@ -285,13 +289,13 @@ or icon.</td>
 checks before
 destroying the window.</td>
 </tr>
-<tr><td>closed(info, is_ok)</td>
+<tr class="row-even"><td>closed(info, is_ok)</td>
 <td>The window has been
 destroyed.</td>
 <td>To perform additional
 clean-up tasks.</td>
 </tr>
-<tr><td>revert(info)</td>
+<tr class="row-odd"><td>revert(info)</td>
 <td>The user clicks the
 <em class="guilabel">Revert</em> button,
 or clicks
@@ -300,7 +304,7 @@ live window.</td>
 <td>To perform additional
 processing.</td>
 </tr>
-<tr><td>setattr(info, object, name,
+<tr class="row-even"><td>setattr(info, object, name,
 value)</td>
 <td>The user changes a trait
 attribute value through
@@ -313,7 +317,7 @@ the overriding method
 actually sets the
 attribute.</td>
 </tr>
-<tr><td>show_help(info,
+<tr class="row-odd"><td>show_help(info,
 control=None)</td>
 <td>The user clicks the
 <em class="guilabel">Help</em> button.</td>
@@ -409,9 +413,9 @@ overridden setattr() method and user interface notification method.</p>
 <span class="n">tc</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="n">view1</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="Dialog box with empty checkboxes and a title of &quot;Alter Title&quot;" src="../_images/alter_title_before1.gif" />
+<img alt="Dialog box with empty checkboxes and a title of &quot;Alter Title&quot;" src="../_images/alter_title_before.png" />
 <div class="figure">
-<img alt="Dialog box with one filled checkbox and a title of &quot;Alter Title*&quot;" src="../_images/alter_title_after1.gif" />
+<img alt="Dialog box with one filled checkbox and a title of &quot;Alter Title*&quot;" src="../_images/alter_title_after.png" />
 <p class="caption">Figure 7: Before and after views of Example 9</p>
 </div>
 </div>
@@ -586,7 +590,7 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -622,8 +626,8 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
     </div>
     <div class="footer">
         &copy; Copyright 2008-2011, Enthought.
-      Last updated on Jun 16, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Last updated on Feb 10, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>
