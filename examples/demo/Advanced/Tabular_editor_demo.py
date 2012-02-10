@@ -31,7 +31,7 @@ In addition:
    blue.
    
  - If this demo is running under QT, it displays each person's surname
-   in a row label.
+   in a row label, and auto-sizes the column widths.
 
 This example demonstrates:
 
@@ -105,8 +105,12 @@ class ReportAdapter(TabularAdapter):
 tabular_editor = TabularEditor(
     adapter    = ReportAdapter(),
     operations = [ 'move' ],
-    # Row titles are not supported in WX:
-    show_row_titles = ETSConfig.toolkit == 'qt4'
+    
+    # Row titles and column auto resize are only supported in QT:
+    **(dict(show_row_titles = True, auto_resize = True) 
+       if ETSConfig.toolkit == 'qt4' 
+       else {}
+       )
 )
 
 #-- Report Class Definition ----------------------------------------------------
