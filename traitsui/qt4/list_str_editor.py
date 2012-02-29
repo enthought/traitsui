@@ -139,9 +139,6 @@ class _ListStrEditor(Editor):
         signal = QtCore.SIGNAL('activated(QModelIndex)')
         QtCore.QObject.connect(self.list_view, signal, self._on_activate)
 
-        signal = QtCore.SIGNAL('customContextMenuRequested(QPoint)')
-        QtCore.QObject.connect(self.list_view, signal, self._on_context_menu)
-
         # Initialize the editor title:
         self.title = factory.title
         self.sync_value(factory.title_name, 'title', 'from')
