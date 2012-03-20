@@ -69,7 +69,25 @@ Padding = Range( -15, 15, 0, desc = 'amount of padding to add around item' )
 
 class Item ( ViewSubElement ):
     """ An element in a Traits-based user interface.
+
+    Magic:
+
+    - Items are rendered as layout elements if :attr:`name` is set to
+      special values:
+
+      * name='', the item is rendered as a static label
+
+      * name='_', the item is rendered as a separator
+
+      * name=' ', the item is rendered as a 5 pixel spacer
+
+      * name='23' (any number), the item is rendered as a spacer of
+        the size specified (number of pixels)
     """
+
+    # FIXME: all the logic for the name = '', '_', ' ', '23' magic is in
+    # _GroupPanel._add_items in qt/ui_panel.py, which is a very unlikely place
+    # to look for it. Ideally, that logic should be in this class.
 
     #---------------------------------------------------------------------------
     #  Trait definitions:
@@ -129,7 +147,7 @@ class Item ( ViewSubElement ):
     # Additional editor traits to be set if default traits editor to be used:
     editor_args = Dict
 
-    # Should the item use extra space along its Group's layout axis? If set to
+    # Should the item use extra space along its Group's non-layout axis? If set to
     # True, the widget expands to fill any extra space that is available in the
     # display. If set to True for more than one item in the same View, any extra
     # space is divided between them. If set to False, the widget uses only
@@ -324,6 +342,18 @@ class Item ( ViewSubElement ):
 
     def get_label ( self, ui ):
         """ Gets the label to use for a specified Item.
+
+        If not specified, the label is set as the name of the
+        corresponding trait, replacing '_' with ' ', and capitalizing
+        the first letter (see :func:`user_name_for`). This is called
+        the *user name*.
+
+        Magic:
+
+        - if attr:`item.label` is specified, and it begins with '...',
+          the final label is the user name followed by the item label
+        - if attr:`item.label` is specified, and it ends with '...',
+          the final label is the item label followed by the user name
         """
         # Return 'None' if the Item is a separator or spacer:
         if self.is_spacer():

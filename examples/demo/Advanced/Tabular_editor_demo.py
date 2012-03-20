@@ -104,9 +104,9 @@ class ReportAdapter(TabularAdapter):
 
 tabular_editor = TabularEditor(
     adapter    = ReportAdapter(),
-    operations = [ 'move' ],
+    operations = [ 'move', 'edit' ],
     # Row titles are not supported in WX:
-    show_row_titles = ETSConfig.toolkit == 'qt4'
+    show_row_titles = ETSConfig.toolkit == 'qt4',
 )
 
 #-- Report Class Definition ----------------------------------------------------
