@@ -198,6 +198,7 @@ class Editor ( UIEditor ):
                 itm = control.itemAt(i)
                 self._visible_changed_helper((itm.widget() or itm.layout()),
                         visible)
+
     #---------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
     #---------------------------------------------------------------------------
@@ -339,20 +340,52 @@ class Editor ( UIEditor ):
 
         return True
 
-    def set_size_policy(self, direction, resizable, springy, stretch) :
+    # TODO: move this method, it should be part of ui_panel or some other
+    # place that is responsible for setting up the Qt layout.
+    def set_size_policy(self, direction, resizable, springy, stretch):
+        """ Set the size policy of the editor's controller.
+
+        Based on the "direction" of the group that contains this editor
+        (VGroup or HGroup), set the stretch factor and the resizing
+        policy of the control.
+
+        Parameters
+        ----------
+        direction : QtGui.QBoxLayout.Direction
+            Directionality of the group that contains this edito. Either
+            QtGui.QBoxLayout.LeftToRight or QtGui.QBoxLayout.TopToBottom
+
+        resizable : bool
+            True if control should be resizable in the orientation opposite
+            to the group directionality
+
+        springy : bool
+            True if control should be resizable in the orientation equal
+            to the group directionality
+
+        stretch : int
+            Stretch factor used by Qt to distribute the total size to
+            each component.
+        """
+
         policy = self.control.sizePolicy()
+
         if direction == QtGui.QBoxLayout.LeftToRight:
-            policy.setHorizontalStretch(stretch)
             if springy:
+                policy.setHorizontalStretch(stretch)
                 policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
-            if resizable :
+            if resizable:
+                policy.setVerticalStretch(stretch)
                 policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
-        else:
-            policy.setVerticalStretch(stretch)
-            if resizable :
+
+        else: # TopToBottom
+            if springy:
+                policy.setVerticalStretch(stretch)
+                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+            if resizable:
+                policy.setHorizontalStretch(stretch)
                 policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
-            if springy :
-                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+
         self.control.setSizePolicy(policy)
 
 #-------------------------------------------------------------------------------

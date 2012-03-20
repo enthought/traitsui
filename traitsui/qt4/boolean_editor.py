@@ -54,7 +54,7 @@ class SimpleEditor ( Editor ):
         """
         self.control = QtGui.QCheckBox()
         self.control.connect(self.control, QtCore.SIGNAL('stateChanged(int)'),
-                self.update_object)
+                             self.update_object)
         self.set_tooltip()
 
     #---------------------------------------------------------------------------

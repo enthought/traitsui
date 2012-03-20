@@ -448,7 +448,7 @@ class UI ( HasPrivateTraits ):
             len( self._checked )) > 0:
             for object in context.values():
                 object.on_trait_change( self._evaluate_when, dispatch = 'ui' )
-            self._evaluate_when()
+            self._do_evaluate_when(at_init=True)
 
         # Indicate that the user interface has been initialized:
         info.initialized = True
@@ -771,8 +771,8 @@ class UI ( HasPrivateTraits ):
         try:
             result = eval( when, globals(), context )
         except:
-            # fixme: Should the exception be logged somewhere?
-            pass
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
 
         del context[ 'ui' ]
 
@@ -811,35 +811,103 @@ class UI ( HasPrivateTraits ):
     #  expression:
     #---------------------------------------------------------------------------
 
-    def _evaluate_when ( self ):
-        """ Sets the 'visible', 'enabled', and 'checked' states for all Editors
+    def _evaluate_when(self):
+        """ Set the 'visible', 'enabled', and 'checked' states for all Editors
             controlled by a 'visible_when', 'enabled_when' or 'checked_when'
             expression.
         """
-        self._evaluate_condition( self._visible, 'visible' )
-        self._evaluate_condition( self._enabled, 'enabled' )
-        self._evaluate_condition( self._checked, 'checked' )
+        self._do_evaluate_when(at_init=False)
+
+
+    def _do_evaluate_when(self, at_init=False):
+        """ Set the 'visible', 'enabled', and 'checked' states for all Editors.
+
+        This function does the job of _evaluate_when. We define it here to
+        work around the traits dispatching mechanism that automatically
+        determines the number of arguments of a notification method.
+
+        :attr:`at_init` is set to true when this function is called the first
+        time at initialization. In that case, we want to force the state of
+        the items to be set (normally it is set only if it changes).
+        """
+        self._evaluate_condition(self._visible, 'visible', at_init)
+        self._evaluate_condition(self._enabled, 'enabled', at_init)
+        self._evaluate_condition(self._checked, 'checked', at_init)
+
 
     #---------------------------------------------------------------------------
     #  Evaluates a list of ( eval, editor ) pairs and sets a specified trait on
     #  each editor to reflect the boolean truth of the expression evaluated:
     #---------------------------------------------------------------------------
 
-    def _evaluate_condition ( self, conditions, trait ):
-        """ Evaluates a list of (eval,editor) pairs and sets a specified trait
+    def _evaluate_condition(self, conditions, trait, at_init=False):
+        """ Evaluates a list of (eval, editor) pairs and sets a specified trait
         on each editor to reflect the Boolean value of the expression.
+
+        1) All conditions are evaluated
+        2) The elements whose condition evaluates to False are updated
+        3) The elements whose condition evaluates to True are updated
+
+        E.g., we first make invisible all elements for which 'visible_when'
+        evaluates to False, and then we make visible the ones
+        for which 'visible_when' is True. This avoids mutually exclusive
+        elements to be visible at the same time, and thus making a dialog
+        unnecessarily large.
+
+        The state of an editor is updated only when it changes, unless
+        at_init is set to True.
+
+        Parameters
+        ----------
+        conditions : list of (str, Editor) tuple
+            A list of tuples, each formed by 1) a string that contains a
+            condition that evaluates to either True or False, and
+            2) the editor whose state depends on the condition
+
+        trait : str
+            The trait that is set by the condition.
+            Either 'visible, 'enabled', or 'checked'.
+
+        at_init : bool
+            If False, the state of an editor is set only when it changes
+            (e.g., a visible element would not be updated to visible=True
+            again). If True, the state is always updated (used at
+            initialization).
         """
+
         context = self._get_context( self.context )
+
+
+        # list of elements that should be activated
+        activate = []
+        # list of elements that should be de-activated
+        deactivate = []
+
         for when, editor in conditions:
-            value = True
             try:
-                if not eval( when, globals(), context ):
-                    value = False
-            except:
+                cond_value = eval(when, globals(), context)
+                editor_state = getattr(editor, trait)
+
+                # add to update lists only if at_init is True (called on
+                # initialization), or if the editor state has to change
+
+                if cond_value and (at_init or not editor_state):
+                    activate.append(editor)
+
+                if not cond_value and (at_init or editor_state):
+                    deactivate.append(editor)
+
+            except Exception:
+                # catch errors in the validate_when expression
                 from traitsui.api import raise_to_debug
                 raise_to_debug()
 
-            setattr( editor, trait, value )
+        # update the state of the editors
+        for editor in deactivate:
+            setattr(editor, trait, False)
+        for editor in activate:
+            setattr(editor, trait, True)
+
 
     #---------------------------------------------------------------------------
     #  Implementation of the '_groups' property:
