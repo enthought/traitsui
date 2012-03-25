@@ -128,7 +128,7 @@ TraitsUI provides two Handler subclasses: ModelView and Controller.  Both of
 these classes are designed to simplify the process of creating an MVC-based
 application.
 
-Both ModelView and Controller extend the Hander class by adding the following
+Both ModelView and Controller extend the Handler class by adding the following
 trait attributes:
 
 - **model**: The model object for which this handler defines a view and 
