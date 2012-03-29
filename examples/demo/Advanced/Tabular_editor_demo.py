@@ -75,7 +75,10 @@ class MarriedPerson(Person):
 #-- Tabular Adapter Definition -------------------------------------------------
 
 class ReportAdapter(TabularAdapter):
-
+    """ The tabular adapter interfaces between the tabular editor and the data 
+    being displayed. For more details, please refer to the traitsUI user guide. 
+    """
+    # List of (Column labels, Column ID).
     columns = [ ('Name',    'name'),
                 ('Age',     'age'),
                 ('Address', 'address'),
@@ -83,6 +86,11 @@ class ReportAdapter(TabularAdapter):
 
     row_label_name = 'surname'
 
+    # Interfacing between the model and the view: make some of the cell 
+    # attributes a property whose behavior is then controlled by the get 
+    # (and optionally set methods). The cell is identified by its column 
+    # ID (age, spouse).
+    
     # Font fails with wx in OSX; see traitsui issue #13:
     # font                      = 'Courier 10'
     age_alignment             = Constant('right')
@@ -102,6 +110,8 @@ class ReportAdapter(TabularAdapter):
 
 #-- Tabular Editor Definition --------------------------------------------------
 
+# The tabular editor works in conjunction with an adapter class, derived from 
+# TabularAdapter. 
 tabular_editor = TabularEditor(
     adapter    = ReportAdapter(),
     operations = [ 'move', 'edit' ],
