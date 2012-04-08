@@ -34,6 +34,7 @@ from pyface.heading_text \
 from traitsui.editors.title_editor \
     import TitleEditor
 
+
 #-------------------------------------------------------------------------------
 #  '_TitleEditor' class:
 #-------------------------------------------------------------------------------
@@ -63,4 +64,8 @@ class _TitleEditor ( Editor ):
         """
         self._control.text = self.str_value
 
-#--EOF-------------------------------------------------------------------------
+
+SimpleEditor = _TitleEditor
+CustomEditor = _TitleEditor
+ReadonlyEditor = _TitleEditor
+TextEditor = _TitleEditor
