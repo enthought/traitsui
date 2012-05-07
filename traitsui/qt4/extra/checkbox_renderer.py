@@ -75,7 +75,7 @@ class CheckboxRenderer(TableDelegate):
         # Align the checkbox appropriately.
         box.rect = option.rect
         size = style.sizeFromContents(QtGui.QStyle.CT_CheckBox, box,
-            QtCore.QSize())
+            QtCore.QSize(), None)
         box.rect.setWidth(size.width())
         margin = style.pixelMetric(QtGui.QStyle.PM_ButtonMargin, box)
         alignment = column.horizontal_alignment
@@ -102,4 +102,4 @@ class CheckboxRenderer(TableDelegate):
         box = QtGui.QStyleOptionButton()
         style = QtGui.QApplication.instance().style()
         return style.sizeFromContents(QtGui.QStyle.CT_CheckBox, box,
-                                      QtCore.QSize())
+                                      QtCore.QSize(), None)
