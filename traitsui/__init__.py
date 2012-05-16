@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------
 #
-#  Copyright (c) 2005-2011, Enthought, Inc.
+#  Copyright (c) 2005-2012, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -17,7 +17,7 @@
 
 from __future__ import absolute_import
 
-__version__ = '4.1.1'
+__version__ = '4.2.0'
 
 __requires__ = [
     'traits',
