@@ -21,7 +21,7 @@ from traits.api \
 from traitsui.api \
     import View, Item, TableEditor
 
-from traitsui.wx.color_column \
+from traitsui.color_column \
     import ColorColumn
 
 from enable.api \
