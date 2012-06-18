@@ -147,7 +147,19 @@ class CustomColorEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = color_editor_for(self, parent)
+        self.control, self._simple_field = color_editor_for(self, parent)
+
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:
+    #---------------------------------------------------------------------------
+
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        if getattr(self, '_simple_field', None) is not None:
+            self._simple_field.dispose()
+            self._simple_field = None
+        super(CustomColorEditor, self).dispose()
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -177,7 +189,7 @@ class CustomColorEditor ( Editor ):
     def string_value ( self, color ):
         """ Returns the text representation of a specified color value.
         """
-        return str_color( color )
+        return self.factory.str_color( color )
 
 #-------------------------------------------------------------------------------
 #  'TextColorEditor' class:
@@ -341,6 +353,7 @@ def color_editor_for(editor, parent):
     panel.addLayout(grid)
 
     return root
+    return root, swatch_editor
 
 
 # Define the SimpleEditor, CustomEditor, etc. classes which are used by the
