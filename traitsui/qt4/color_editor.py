@@ -294,6 +294,16 @@ def set_color ( editor ):
 #  Creates a custom color editor panel for a specified editor:
 #----------------------------------------------------------------------------
 
+class FixedButton(QtGui.QPushButton):
+    """ Override to work around a bug in Qt 4.7 on Macs.
+
+    https://bugreports.qt-project.org/browse/QTBUG-15936
+    """
+
+    def hitButton(self, pos):
+        return QtGui.QAbstractButton.hitButton(self, pos)
+
+
 def color_editor_for(editor, parent):
     """ Creates a custom color editor panel for a specified editor.
     """
@@ -324,35 +334,36 @@ def color_editor_for(editor, parent):
     cols = len(color_samples) / rows
     i = 0
 
+    sheet_template = """
+    QPushButton {
+        min-height: 18px;
+        max-height: 18px;
+        min-width: 18px;
+        max-width: 18px;
+        background-color: rgb(%s);
+    }
+    """
+
     for r in range(rows):
         for c in range(cols):
-            control = QtGui.QPushButton()
-            control.setMaximumSize(18, 18)
-
-            QtCore.QObject.connect(control,
-                                   QtCore.SIGNAL('clicked()'),
-                                   mapper,
-                                   QtCore.SLOT('map()'))
+            control = FixedButton()
             color = color_samples[r*cols + c]
             color_text = '%d,%d,%d,%d' % color.getRgb()
-            mapper.setMapping(control, color_text)
+            control.setStyleSheet(sheet_template % color_text)
+            control.setAttribute(QtCore.Qt.WA_LayoutUsesWidgetRect, True)
 
-            pal = QtGui.QPalette(control.palette())
-            pal.setColor(QtGui.QPalette.Button, color_samples[i])
-            control.setPalette(pal)
+            control.clicked.connect(mapper.map)
+            mapper.setMapping(control, color_text)
 
             grid.addWidget(control, r, c)
             editor.set_tooltip(control)
 
             i += 1
 
-    QtCore.QObject.connect(mapper,
-                           QtCore.SIGNAL('mapped(const QString &)'),
-                           editor.update_object_from_swatch)
+    mapper.mapped[unicode].connect(editor.update_object_from_swatch)
 
     panel.addLayout(grid)
 
-    return root
     return root, swatch_editor
 
 
