@@ -147,7 +147,19 @@ class CustomColorEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = color_editor_for(self, parent)
+        self.control, self._simple_field = color_editor_for(self, parent)
+
+    #---------------------------------------------------------------------------
+    #  Disposes of the contents of an editor:
+    #---------------------------------------------------------------------------
+
+    def dispose ( self ):
+        """ Disposes of the contents of an editor.
+        """
+        if getattr(self, '_simple_field', None) is not None:
+            self._simple_field.dispose()
+            self._simple_field = None
+        super(CustomColorEditor, self).dispose()
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -177,7 +189,7 @@ class CustomColorEditor ( Editor ):
     def string_value ( self, color ):
         """ Returns the text representation of a specified color value.
         """
-        return str_color( color )
+        return self.factory.str_color( color )
 
 #-------------------------------------------------------------------------------
 #  'TextColorEditor' class:
@@ -282,6 +294,16 @@ def set_color ( editor ):
 #  Creates a custom color editor panel for a specified editor:
 #----------------------------------------------------------------------------
 
+class FixedButton(QtGui.QPushButton):
+    """ Override to work around a bug in Qt 4.7 on Macs.
+
+    https://bugreports.qt-project.org/browse/QTBUG-15936
+    """
+
+    def hitButton(self, pos):
+        return QtGui.QAbstractButton.hitButton(self, pos)
+
+
 def color_editor_for(editor, parent):
     """ Creates a custom color editor panel for a specified editor.
     """
@@ -312,35 +334,37 @@ def color_editor_for(editor, parent):
     cols = len(color_samples) / rows
     i = 0
 
+    sheet_template = """
+    QPushButton {
+        min-height: 18px;
+        max-height: 18px;
+        min-width: 18px;
+        max-width: 18px;
+        background-color: rgb(%s);
+    }
+    """
+
     for r in range(rows):
         for c in range(cols):
-            control = QtGui.QPushButton()
-            control.setMaximumSize(18, 18)
-
-            QtCore.QObject.connect(control,
-                                   QtCore.SIGNAL('clicked()'),
-                                   mapper,
-                                   QtCore.SLOT('map()'))
+            control = FixedButton()
             color = color_samples[r*cols + c]
             color_text = '%d,%d,%d,%d' % color.getRgb()
-            mapper.setMapping(control, color_text)
+            control.setStyleSheet(sheet_template % color_text)
+            control.setAttribute(QtCore.Qt.WA_LayoutUsesWidgetRect, True)
 
-            pal = QtGui.QPalette(control.palette())
-            pal.setColor(QtGui.QPalette.Button, color_samples[i])
-            control.setPalette(pal)
+            control.clicked.connect(mapper.map)
+            mapper.setMapping(control, color_text)
 
             grid.addWidget(control, r, c)
             editor.set_tooltip(control)
 
             i += 1
 
-    QtCore.QObject.connect(mapper,
-                           QtCore.SIGNAL('mapped(const QString &)'),
-                           editor.update_object_from_swatch)
+    mapper.mapped[unicode].connect(editor.update_object_from_swatch)
 
     panel.addLayout(grid)
 
-    return root
+    return root, swatch_editor
 
 
 # Define the SimpleEditor, CustomEditor, etc. classes which are used by the
