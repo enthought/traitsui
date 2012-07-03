@@ -471,6 +471,13 @@ class GUIToolkit ( Toolkit ):
         """ Destroys all of the child controls of a specified GUI toolkit
             control.
         """
+        def _popAllEvtHandlers(win):
+            while win.GetEventHandler() is not win:
+                win.PopEventHandler(True)
+            for child in win.GetChildren():
+                _popAllEvtHandlers(child)
+
+        _popAllEvtHandlers(control)
         control.DestroyChildren()
 
     #---------------------------------------------------------------------------
