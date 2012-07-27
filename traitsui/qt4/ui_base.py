@@ -315,6 +315,9 @@ class _StickyDialog(QtGui.QDialog):
         self._ui = ui
         self._result = None
 
+    def showEvent(self, e):
+        self.raise_()
+
     def closeEvent(self, e):
         """Reimplemented to check when the clicks the window close button.
         (Note that QDialog doesn't get a close event when the dialog is closed
