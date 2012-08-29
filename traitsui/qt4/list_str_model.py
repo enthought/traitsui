@@ -205,9 +205,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         """ Reimplemented to expose our internal MIME type for drag and drop
             operations.
         """
-        types = QtCore.QStringList()
-        types.append(mime_type)
-        return types
+        return [mime_type]
 
     def mimeData(self, indexes):
         """ Reimplemented to generate MIME data containing the rows of the
