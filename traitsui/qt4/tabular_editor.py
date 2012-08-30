@@ -374,7 +374,7 @@ class TabularEditor(Editor):
                 self._multi_selected_rows_changed(rows)
 
     def _multi_selected_items_changed(self, event):
-        values = self.values
+        values = self.value
         try:
             added = [ values.index(item) for item in event.added ]
             removed = [ values.index(item) for item in event.removed ]
