@@ -250,7 +250,7 @@ class Editor ( HasPrivateTraits ):
         return getattr( self.object, self.name, Undefined )
 
     def _set_value ( self, value ):
-        if self.name != 'None':
+        if self.ui and self.name != 'None':
             self.ui.do_undoable( self.__set_value, value )
 
     def __set_value ( self, value ):
