@@ -552,9 +552,16 @@ class _GroupPanel(object):
         else:
             # See if we need to control the visual appearance of the group.
             if group.visible_when != '' or group.enabled_when != '':
-                # Make sure that outer is a widget or a layout.
+                # Make sure that outer is a widget and inner is a layout.
+                # Hiding a layout is not properly supported by Qt (the
+                # workaround in ``traitsui.qt4.editor._visible_changed_helper``
+                # often leaves undesirable blank space).
                 if outer is None:
                     outer = inner = QtGui.QBoxLayout(self.direction)
+                if isinstance(outer, QtGui.QLayout):
+                    widget = QtGui.QWidget()
+                    widget.setLayout(outer)
+                    outer = widget
 
                 # Create an editor.
                 self._setup_editor(group, GroupEditor(control=outer))
