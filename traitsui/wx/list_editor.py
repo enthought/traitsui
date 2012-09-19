@@ -737,8 +737,8 @@ class NotebookEditor ( Editor ):
                     name = handler( self.ui.info, user_object )
 
                 if name is None:
-                    name = unicode( xgetattr( view_object,
-                                          self.factory.page_name[1:], u'???' ) )
+                    name = str( xgetattr( view_object,
+                                          self.factory.page_name[1:], '???' ) )
 
                 changed |= (dock_control.name != name)
                 dock_control.name = name
@@ -780,7 +780,7 @@ class NotebookEditor ( Editor ):
                 if handler_name is not None:
                     name = handler_name
                 else:
-                    name = unicode( name ) or u'???'
+                    name = str( name ) or '???'
                 view_object.on_trait_change( self.update_page_name,
                                              page_name[1:], dispatch = 'ui' )
             else:
