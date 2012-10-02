@@ -168,6 +168,8 @@ You can specify a value for the trait to be set to, using the *value* parameter.
 If the trait is an Event, then the value is not stored, but might be useful to
 an event listener.
 
+.. _checklisteditor:
+
 CheckListEditor()
 `````````````````
 

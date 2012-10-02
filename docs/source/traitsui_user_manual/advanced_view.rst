@@ -104,6 +104,48 @@ treated as the default display template for the class. However, if there are
 multiple View attributes for the class (as discussed in the next section), if
 one is named 'traits_view', it is always used as the default.
 
+.. index:: default_traits_view(); default view method, default view
+
+Sometimes, it is necessary to build a view based on the state of the object
+when it is being built. In such cases, defining the view statically is limiting,
+so one can override the default_traits_view() method of a HasTraits object. The
+example above would be implemented as follows:
+
+.. _example-5b-using-default-traits-view:
+
+.. rubric:: Example 5b: Building a default View object with default_traits_view()
+
+::
+
+    # default_traits_view2.py -- Sample code to demonstrate the use of
+    #                            'default_traits_view'
+    from traits.api import HasTraits, Str, Int
+    from traitsui.api import View, Item, Group
+    import traitsui
+
+    class SimpleEmployee2(HasTraits):
+        first_name = Str
+        last_name = Str
+        department = Str
+
+        employee_number = Str
+        salary = Int
+
+        def default_traits_view(self):
+            return View(Group(Item(name = 'first_name'),
+                              Item(name = 'last_name'),
+                              Item(name = 'department'),
+                              label = 'Personnel profile',
+                              show_border = True))
+
+    sam = SimpleEmployee2()
+    sam.configure_traits()
+
+This pattern can be useful for situations where the layout of GUI elements
+depends on the state of the object. For instance, to populate the values of a
+:ref:`checklisteditor` with items read in from a file, it would be useful to build the
+default view this way.
+
 .. index:: View; multiple, multiple Views
 
 .. _defining-multiple-views-within-the-model:
