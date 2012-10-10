@@ -97,8 +97,7 @@ class SimpleEditor ( Editor ):
     refresh = Event
 
     #---------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
+    #  Finishes initializing the editor by creating the underlying toolkit widget
     #---------------------------------------------------------------------------
 
     def init ( self, parent ):
@@ -1716,8 +1715,9 @@ class _TreeWidget(QtGui.QTreeWidget):
         _, node, object = self._editor._get_node_data(nid)
 
         # Convert the item being dragged to MIME data.
-        md = PyMimeData(node.get_drag_object(object))
-
+        drag_object = node.get_drag_object(object)
+        md = PyMimeData.coerce(drag_object)
+        
         # Render the item being dragged as a pixmap.
         nid_rect = self.visualItemRect(nid)
         rect = nid_rect.intersected(self.viewport().rect())
