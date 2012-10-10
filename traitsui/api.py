@@ -96,8 +96,6 @@ from .view_element import ViewElement, ViewSubElement
 
 from . import view_elements
 
-from .mimedata import PyMimeData
-
 _constants  = toolkit().constants()
 WindowColor = _constants.get( 'WindowColor', 0xFFFFFF )
 
