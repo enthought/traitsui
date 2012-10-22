@@ -108,6 +108,16 @@ class PyMimeData(QtCore.QMimeData):
 
         return None
 
+    @property
+    def local_paths(self):
+        """ The list of local paths from url list, if any.
+        """
+        ret = []
+        for url in self.urls():
+            if url.scheme() == 'file':
+                ret.append(url.toLocalFile())
+        return ret
+
 #-------------------------------------------------------------------------------
 #  '_Clipboard' class:
 #-------------------------------------------------------------------------------
