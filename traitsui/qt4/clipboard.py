@@ -109,7 +109,7 @@ class PyMimeData(QtCore.QMimeData):
         return None
 
     @property
-    def local_paths(self):
+    def localPaths(self):
         """ The list of local paths from url list, if any.
         """
         ret = []
