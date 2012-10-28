@@ -17,22 +17,16 @@ target editor handles drag and drop operations as a drop target.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtGui
+from pyface.qt import QtGui, QtCore
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.drop_editor file.
-from traitsui.editors.drop_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.drop_editor import ToolkitEditorFactory
 
-from text_editor \
-    import SimpleEditor as Editor
-
-from constants \
-    import DropColor
-
-from clipboard \
-    import PyMimeData
+from text_editor import SimpleEditor as Editor
+from constants import DropColor
+from clipboard import PyMimeData, clipboard
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -66,9 +60,9 @@ class SimpleEditor ( Editor ):
         pal.setColor(QtGui.QPalette.Base, self.ok_color)
         self.control.setPalette(pal)
 
-        # Patch the type of the control to insert the DND event handlers.
-        self.control.__class__ = type(_DropWidget.__name__,
-                (type(self.control), ), dict(_DropWidget.__dict__))
+        # Install EventFilter on control to handle DND events.
+        drop_event_filter = _DropEventFilter(self.control)
+        self.control.installEventFilter(drop_event_filter)
 
         self.control._qt4_editor = self
 
@@ -93,7 +87,15 @@ class SimpleEditor ( Editor ):
         pass
 
 
-class _DropWidget(object):
+class _DropEventFilter(QtCore.QObject):
+
+    def eventFilter(self, source, event):
+        typ = event.type()
+        if typ == QtCore.QEvent.Drop:
+            self.dropEvent(event)
+        elif typ == QtCore.QEvent.DragEnter:
+            self.dragEnterEvent(event)
+        return super(_DropEventFilter, self).eventFilter(source, event)
 
     #---------------------------------------------------------------------------
     #  Handles a Python object being dropped on the control:
@@ -102,7 +104,7 @@ class _DropWidget(object):
     def dropEvent(self, e):
         """ Handles a Python object being dropped on the tree.
         """
-        editor = self._qt4_editor
+        editor = self.parent()._qt4_editor
 
         klass = editor.factory.klass
 
@@ -111,7 +113,7 @@ class _DropWidget(object):
         else:
             value = e.mimeData().instance()
 
-        if (klass is None) or isinstance(data, klass):
+        if (klass is None) or isinstance(value, klass):
             editor._no_update = True
             try:
                 if hasattr( value, 'drop_editor_value' ):
@@ -134,7 +136,7 @@ class _DropWidget(object):
     def dragEnterEvent(self, e):
         """ Handles a Python object being dragged over the tree.
         """
-        editor = self._qt4_editor
+        editor = self.parent()._qt4_editor
 
         if editor.factory.binding:
             data = getattr(clipboard, 'node', None)
