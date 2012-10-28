@@ -47,6 +47,8 @@ class BaseEditor(object):
     def get_pixmap(self, name):
         """ Get a pixmap representing a possible object traits value.
         """
+        if name is None:
+            return None
         factory = self.factory
         name = ''.join((factory.prefix, name, factory.suffix))
         return pixmap_cache(name, factory._image_path)
@@ -212,7 +214,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
         editor = self._editor
         pixmap = editor.get_pixmap(editor.inverse_mapping[editor.value])
         arrow = self.style().subControlRect(QtGui.QStyle.CC_ComboBox, option,
-                                            QtGui.QStyle.SC_ComboBoxArrow)
+                                            QtGui.QStyle.SC_ComboBoxArrow, None)
         option.rect.setWidth(option.rect.width() - arrow.width())
         target = QtGui.QStyle.alignedRect(QtCore.Qt.LeftToRight,
                                           QtCore.Qt.AlignCenter,

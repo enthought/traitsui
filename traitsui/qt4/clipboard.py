@@ -17,7 +17,7 @@ using pickle.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from cPickle import dumps, load, loads
+from cPickle import dumps, load, loads, PickleError
 from cStringIO import StringIO
 
 from pyface.qt import QtCore, QtGui
@@ -48,30 +48,32 @@ class PyMimeData(QtCore.QMimeData):
                 # We may not be able to pickle the data.
                 try:
                     pdata = dumps(data)
-                except:
+                    # This format (as opposed to using a single sequence) allows
+                    # the type to be extracted without unpickling the data.
+                    self.setData(self.MIME_TYPE, dumps(data.__class__) + pdata)
+                except PickleError:
                     return
 
-                # This format (as opposed to using a single sequence) allows the
-                # type to be extracted without unpickling the data itself.
-                self.setData(self.MIME_TYPE, dumps(data.__class__) + pdata)
         else:
             self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
 
     @classmethod
     def coerce(cls, md):
-        """ Coerce a QMimeData instance to a PyMimeData instance if possible.
+        """ Wrap a QMimeData or a python object to a PyMimeData.
         """
         # See if the data is already of the right type.  If it is then we know
         # we are in the same process.
         if isinstance(md, cls):
             return md
 
-        # See if the data type is supported.
-        if not md.hasFormat(cls.MIME_TYPE):
-            return None
-
-        nmd = cls()
-        nmd.setData(cls.MIME_TYPE, md.data())
+        # see if it is a QMimeData, and migrate all its data
+        if isinstance(md, QtCore.QMimeData):
+            nmd = cls()
+            for format in md.formats():
+                nmd.setData(format, md.data(format))
+        else:
+            # Arbitrary python object, wrap it into PyMimeData
+            nmd = cls(md)
 
         return nmd
 
@@ -89,7 +91,7 @@ class PyMimeData(QtCore.QMimeData):
 
             # Recreate the instance.
             return load(io)
-        except:
+        except PickleError:
             pass
 
         return None
@@ -103,7 +105,7 @@ class PyMimeData(QtCore.QMimeData):
         try:
             if self.hasFormat(self.MIME_TYPE):
                 return loads(str(self.data(self.MIME_TYPE)))
-        except:
+        except PickleError:
             pass
 
         return None
