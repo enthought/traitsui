@@ -454,7 +454,7 @@ class Handler ( HasPrivateTraits ):
                                  id       = '',   scrollable = None, **args ):
         """ Configures the object's traits.
         """
-        super( HasPrivateTraits, self ).configure_traits(
+        return super( HasPrivateTraits, self ).configure_traits(
                        filename, view, kind, edit, context, handler or self, id,
                        scrollable, **args )
 
