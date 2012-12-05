@@ -19,14 +19,14 @@ How to Use Pydoh to Generate HTML from Word for the Traits User Manual
         =========   ========
         Non-ASCII   Entity
         =========   ========
-        ©           &copy;
-        ∑           &middot;
-        ì           &ldquo;
-        î           &rdquo;
-        ë           &lsquo;
-        í           &rsquo;
-        Ö           &hellip;
-        ñ           ``-``
+        ¬©           &copy;
+        ¬∑           &middot;
+        ‚Äú           &ldquo;
+        ‚Äù           &rdquo;
+        ‚Äò           &lsquo;
+        ‚Äô           &rsquo;
+        ‚Ä¶           &hellip;
+        ‚Äì           ``-``
         =========   ========
 
     b. In Traits3_UM.css, comment out **margin-top** for h1, h2, and h3.
@@ -50,7 +50,7 @@ How to Use Pydoh to Generate HTML from Word for the Traits User Manual
 
        and::
 
-           <p class=s14>†Index.......................................... 77</p>
+           <p class=s14>¬†Index.......................................... 77</p>
            </div>
 
     f. In the last HTML file (currently Traits3_UM_75.html), delete the
