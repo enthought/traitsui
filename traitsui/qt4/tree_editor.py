@@ -448,6 +448,7 @@ class SimpleEditor ( Editor ):
         """ Inserts a new node before a specified index into the children of the
             specified node.
         """
+
         cnid = self._create_item(nid, node, object, index)
 
         has_children = self._has_children(node, object)
@@ -477,11 +478,9 @@ class SimpleEditor ( Editor ):
     def _delete_node ( self, nid ):
         """ Deletes a specified tree node and all its children.
         """
+
         for cnid in self._nodes_for( nid ):
             self._delete_node( cnid )
-
-        if nid is self._tree.invisibleRootItem():
-            return
 
         # See if it is a dummy.
         pnid = nid.parent()
@@ -619,6 +618,7 @@ class SimpleEditor ( Editor ):
     def _add_listeners ( self, node, object ):
         """ Adds the event listeners for a specified object.
         """
+
         if node.allows_children( object ):
             node.when_children_replaced( object, self._children_replaced, False)
             node.when_children_changed(  object, self._children_updated,  False)
@@ -633,6 +633,7 @@ class SimpleEditor ( Editor ):
     def _remove_listeners ( self, node, object ):
         """ Removes any event listeners from a specified object.
         """
+
         if node.allows_children( object ):
             node.when_children_replaced( object, self._children_replaced, True )
             node.when_children_changed(  object, self._children_updated,  True )
