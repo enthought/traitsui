@@ -569,7 +569,8 @@ class NotebookEditor ( Editor ):
             # Remember the page for later deletion processing:
             self._uis.append([ui.control, ui, view_object, monitoring])
 
-        if self.selected: self._selected_changed(self.selected)
+        if self.selected: 
+            self._selected_changed(self.selected)
 
     #---------------------------------------------------------------------------
     #  Handles some subset of the trait's list being updated:
