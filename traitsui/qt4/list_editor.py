@@ -566,6 +566,9 @@ class NotebookEditor ( Editor ):
         for object in self.value:
             ui, view_object, monitoring = self._create_page(object)
 
+            if self.selected and ui.info and self.selected is ui.info.object:
+                self.control.setCurrentWidget(ui.control)
+
             # Remember the page for later deletion processing:
             self._uis.append([ui.control, ui, view_object, monitoring])
 
