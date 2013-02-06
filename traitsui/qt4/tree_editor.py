@@ -513,8 +513,9 @@ class SimpleEditor ( Editor ):
             pnid.removeChild(nid)
 
         # If the deleted node had an active editor panel showing, remove it:
-        if (self._editor is not None) and (nid == self._editor._editor_nid):
-            self._clear_editor()
+        # Note: QTreeWidgetItem does not have an equal operator, so use id()
+        if (self._editor is not None) and (id(nid) == id(self._editor._editor_nid)):
+                self._clear_editor()
 
     #---------------------------------------------------------------------------
     #  Expands the contents of a specified node (if required):
