@@ -1786,10 +1786,12 @@ class _TreeWidget(QtGui.QTreeWidget):
         # A copy action is interpreted as moving the source to a particular
         # place within the target's parent.  A move action is interpreted as
         # moving the source to be a child of the target.
+        node = None
         if e.proposedAction() == QtCore.Qt.CopyAction:
             node, object, _ = self._editor._node_index(nid)
+            # `node` is None in case of top-level tree node, in which case we try move
             insert = True
-        else:
+        if node is None:
             _, node, object = self._editor._get_node_data(nid)
             insert = False
 
