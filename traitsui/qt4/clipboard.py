@@ -83,6 +83,10 @@ class PyMimeData(QtCore.QMimeData):
         if self._local_instance is not None:
             return self._local_instance
 
+        if not self.hasFormat(self.MIME_TYPE):
+            # We have no pickled python data defined.
+            return None
+
         io = StringIO(str(self.data(self.MIME_TYPE)))
 
         try:
