@@ -26,19 +26,23 @@ from __future__ import absolute_import
 
 import sys
 import glob
+import token
+import tokenize
+from StringIO import StringIO
 from configobj import ConfigObj
 
-from traits.api import (HasTraits, HasPrivateTraits, Str, Instance, Property, Any,
-    Code, HTML, true, false, Dict)
+from traits.api import (HasTraits, HasPrivateTraits, Str, Instance, Property,
+                        Any, Code, HTML, true, false, Dict)
 
-from traitsui.api import (TreeEditor, ObjectTreeNode, TreeNodeObject, View, Item,
-    VSplit, Tabbed, VGroup, HGroup, Heading, Handler, UIInfo, InstanceEditor,
-    HTMLEditor, Include, spring)
+from traitsui.api import (TreeEditor, ObjectTreeNode, TreeNodeObject, View,
+                          Item, VSplit, Tabbed, VGroup, HGroup, Heading,
+                          Handler, UIInfo, InstanceEditor, HTMLEditor, Include,
+                          spring)
 
 from os import listdir
 
 from os.path import (join, isdir, split, splitext, dirname, basename, abspath,
-    exists, isabs)
+                     exists, isabs)
 
 #-------------------------------------------------------------------------------
 #  Global data:
@@ -62,32 +66,56 @@ def user_name_for ( name ):
 #  source text:
 #-------------------------------------------------------------------------------
 
-def parse_source ( file_name ):
+def extract_docstring_from_source(source):
+    """Return module docstring and source code from python source code.
+
+    Returns
+    -------
+    docstring : str
+        The first module-level string; i.e. the module docstring.
+    source : str
+        The source code, sans docstring.
+    """
+    # Reset file and generate python tokens
+    f = StringIO(source)
+    python_tokens = tokenize.generate_tokens(f.readline)
+
+    for ttype, tstring, tstart, tend, tline in python_tokens:
+        token_name = token.tok_name[ttype]
+        if token_name == 'STRING' and tstart[1] == 0:
+            break
+    else:
+        # No docstrings found. Return blank docstring and all the source.
+        return '', source.strip()
+
+    source_lines = source.split('\n')
+
+    # Extract module docstring lines and recombine
+    docstring = eval('\n'.join(source_lines[tstart[0] - 1:tend[0]]))
+    source_lines = source_lines[:tstart[0] - 1] + source_lines[tend[0]:]
+    source = '\n'.join(source_lines)
+    source = source.strip()
+
+    return docstring, source
+
+
+def parse_source(file_name):
+    """Return module docstring and source code from python source file.
+
+    Returns
+    -------
+    docstring : str
+        The first module-level string; i.e. the module docstring.
+    source : str
+        The source code, sans docstring.
+    """
     try:
-        fh     = open( file_name, 'rb' )
-        source = fh.read().strip()
-        fh.close()
-
-        # Extract out the module comment as the description:
-        # FIXME: This isn't ideal: it will retrieve the first docstring found
-        # which might not be for the module as a whole. This needs to be
-        # improved later. For now, we want to make sure we catch docstrings
-        # even if there are comments etc. prior to them.
-        comment = ''
-        quotes_styles = ["'''", '"""']
-        for quotes in quotes_styles:
-            start_index = source.find(quotes)
-            if start_index >= 0:
-                col = source.find( quotes, start_index + 3 )
-                if col >= 0:
-                    comment = source[ start_index + 3: col ]
-                    source  = source[: start_index].strip() + source[ col + 3: ].strip()
-                break
-
-        return ( comment, source )
-
+        fh = open(file_name, 'rb')
+        source_code = fh.read()
+        return extract_docstring_from_source(source_code)
     except:
         return ( '', '' )
+
 
 #-------------------------------------------------------------------------------
 #  'DemoFileHandler' class:
