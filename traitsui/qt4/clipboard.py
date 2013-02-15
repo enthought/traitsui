@@ -51,7 +51,7 @@ class PyMimeData(QtCore.QMimeData):
                     # This format (as opposed to using a single sequence) allows
                     # the type to be extracted without unpickling the data.
                     self.setData(self.MIME_TYPE, dumps(data.__class__) + pdata)
-                except PickleError:
+                except (PickleError, TypeError) as e:
                     return
 
         else:
