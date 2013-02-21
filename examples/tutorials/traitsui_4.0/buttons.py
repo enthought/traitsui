@@ -76,3 +76,6 @@ class Adder ( HasTraits ):
 
 popup = Adder()
 
+
+if __name__ == '__main__':
+    popup.configure_traits()

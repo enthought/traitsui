@@ -11,10 +11,14 @@ from traitsui.api \
            HGroup, Handler, Group
 from traitsui.menu \
     import Menu, Action, Separator
-from traitsui.wx.tree_editor \
-    import NewAction, CopyAction, CutAction, \
-           PasteAction, DeleteAction, RenameAction
-
+try:
+    from traitsui.wx.tree_editor \
+        import NewAction, CopyAction, CutAction, \
+            PasteAction, DeleteAction, RenameAction
+except RuntimeError:
+    from traitsui.qt4.tree_editor \
+        import NewAction, CopyAction, CutAction, \
+            PasteAction, DeleteAction, RenameAction
 #--[Code]-----------------------------------------------------------------------
 
 # DATA CLASSES

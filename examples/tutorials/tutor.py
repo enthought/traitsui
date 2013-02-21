@@ -57,8 +57,11 @@ try:
 
     from traitsui.wx.extra.windows.flash_editor \
         import FlashEditor
+    wx_available = True
 except:
-    IEHTMLEditor = FlashEditor = None
+    IEHTMLEditor = HTMLEditor
+    FlashEditor = ValueEditor # Set this to a random editor to prevent error.
+    wx_available = False
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -1312,7 +1315,7 @@ class SectionFactory ( HasPrivateTraits ):
     def _add_swf_item ( self, path ):
         """ Creates a description item for a Flash file.
         """
-        if is_windows:
+        if is_windows and wx_available:
             self.descriptions.append( FlashItem( path = path ) )
 
     def _add_mov_item ( self, path ):
@@ -1473,7 +1476,7 @@ class SectionFactory ( HasPrivateTraits ):
                                         settings_overrides = settings )
 
         # Choose the right HTML renderer:
-        if is_windows:
+        if is_windows and wx_available:
             item = IEHTMLStrItem( content = html, title = title )
         else:
             item = HTMLStrItem( content = html, title = title )
@@ -1485,7 +1488,7 @@ class SectionFactory ( HasPrivateTraits ):
         """ Creates a platform specific html item and adds it to the list of
             descriptions.
         """
-        if is_windows:
+        if is_windows and wx_available:
             item = IEHTMLItem( **traits )
         else:
             item = HTMLItem( **traits )
