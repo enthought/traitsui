@@ -13,4 +13,4 @@ class Person(HasTraits):
     pcode = Str
 
 bill = Person()
-bill.configure_traits(kind='modal')
+bill.configure_traits()
