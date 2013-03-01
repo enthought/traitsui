@@ -88,7 +88,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.TextAlignmentRole:
             string = adapter.get_alignment(obj, name, column)
             alignment = alignment_map.get(string, QtCore.Qt.AlignLeft)
-            return (alignment | QtCore.Qt.AlignVCenter)
+            return alignment
 
         elif role == QtCore.Qt.BackgroundRole:
             color = adapter.get_bg_color(obj, name, row, column)
