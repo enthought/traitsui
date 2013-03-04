@@ -55,6 +55,18 @@ class TestParseSource(unittest.TestCase):
         self.assertEqual(source, '\n'.join(['class Foo:',
                                             '    """Class docstring"""']))
 
+    def test_ignore_starting_comment(self):
+        source_code = '\n'.join(['# Copyright notice.',
+                                 '# Something about the author.',
+                                 '"""',
+                                 'Docstring',
+                                 '"""',
+                                 'a = 1'])
+        docstring, source = extract_docstring_from_source(source_code)
+        self.assertEqual(docstring, '\nDocstring\n')
+        self.assertEqual(source, '\n'.join(['# Copyright notice.',
+                                            '# Something about the author.',
+                                            'a = 1']))
 
 if __name__ == '__main__':
     unittest.main()
