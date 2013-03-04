@@ -88,7 +88,7 @@ def extract_docstring_from_source(source):
         # No docstrings found. Return blank docstring and all the source.
         return '', source.strip()
 
-    source_lines = source.split('\n')
+    source_lines = source.splitlines()
 
     # Extract module docstring lines and recombine
     docstring = eval('\n'.join(source_lines[tstart[0] - 1:tend[0]]))
