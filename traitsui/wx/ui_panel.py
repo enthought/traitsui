@@ -187,7 +187,7 @@ class Panel ( BaseDialog ):
                 # Groups with borders have a two-tone background, and the
                 # getter is picking the wrong color.  Set to transparent
                 # and hope that the parent has been painted.
-                bg_color = wx.Color(224, 224, 224, 0)
+                bg_color = wx.Colour(224, 224, 224, 0)
                 self.control = cpanel = TraitsUIPanel( parent, -1,
                                                        bg_color=bg_color )
             else:
