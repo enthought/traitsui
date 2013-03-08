@@ -150,3 +150,6 @@ son = Child( mother = mom, father = dad, first_name = 'John' )
 # Create the controller for the model:
 demo = ChildModelView( model = son )
 
+
+if __name__ == '__main__':
+    demo.configure_traits()

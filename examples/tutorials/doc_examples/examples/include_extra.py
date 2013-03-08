@@ -3,18 +3,14 @@
 
 # include_extra.py --- Example of Include object
 #                      provided for subclasses
-from traits.api import HasTraits, Int, Str, Trait
+from traits.api import HasTraits, Int, Str
 from traitsui.api import Group, Include, View
-import traitsui
 
 class Person(HasTraits):
     name = Str
     age = Int
 
-    person_view = View('name', Include('extra'), 'age',
-                       kind='livemodal')
-
-Person().configure_traits()
+    person_view = View('name', Include('extra'), 'age')
 
 class LocatedPerson(Person):
     street = Str
@@ -24,5 +20,6 @@ class LocatedPerson(Person):
 
     extra = Group('street', 'city', 'state', 'zip')
 
-LocatedPerson().configure_traits()
 
+Person().configure_traits()
+LocatedPerson().configure_traits()

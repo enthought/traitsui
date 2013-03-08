@@ -24,3 +24,5 @@ class EnumExample(HasTraits):
                           'Low'     : '4:Low',
                           'Lowest'  : '5:Lowest', })))
 
+
+EnumExample().configure_traits()

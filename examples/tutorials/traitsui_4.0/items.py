@@ -261,3 +261,6 @@ demo = LeagueModelView(
             teams = [ blue_birds, chicken_hawks, eagles ] )
 )
 
+
+if __name__ == '__main__':
+    demo.configure_traits()

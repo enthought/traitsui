@@ -69,7 +69,6 @@ class ApplyRevertDemo(HasTraits):
         height = 300,
         title   = 'Apply/Revert example',
         buttons = [ 'Apply', 'Revert' ],
-        kind    = 'modal',
         handler = ApplyRevert_Handler
     )
 
