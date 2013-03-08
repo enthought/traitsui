@@ -13,20 +13,17 @@ applications.
 
 #-- Imports ------------------------------------------------------------------
 
-from traits.api \
-    import HasPrivateTraits, List, Str, Property, on_trait_change
+from traits.api import HasPrivateTraits, List, Str, Property, on_trait_change
 
-from traitsui.api \
-    import View, HGroup, Item, TabularEditor
+from traitsui.api import View, HGroup, Item, TabularEditor
+from traitsui.tabular_adapter import TabularAdapter
+from traitsui.basic_editor_factory import BasicEditorFactory
 
-from traitsui.tabular_adapter \
-    import TabularAdapter
-
-from traitsui.ui_editor \
-    import UIEditor
-
-from traitsui.basic_editor_factory \
-    import BasicEditorFactory
+from traits.etsconfig.api import ETSConfig
+if ETSConfig.toolkit == 'wx':
+    from traitsui.wx.ui_editor import UIEditor
+else:
+    from traitsui.qt4.ui_editor import UIEditor
 
 #-- Define the reusable StringListEditor class and its helper classes --------
 
