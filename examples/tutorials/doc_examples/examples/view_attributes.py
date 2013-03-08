@@ -5,7 +5,6 @@
 #                        attribute of a class
 from traits.api import HasTraits, Int, Str, Trait
 from traitsui.api import View
-import traitsui
 
 class Person(HasTraits):
     first_name = Str
