@@ -27,8 +27,6 @@ from __future__ import absolute_import
 
 import re
 
-from string import find, rfind
-
 from traits.api import (Bool, Callable, Constant, Delegate, Float, Instance,
     Range, Str, Undefined, Dict,)
 
@@ -289,8 +287,8 @@ class Item ( ViewSubElement ):
         value = self._parse_tooltip( value )
         value = self._option( value, '#',  'resizable',  True )
         value = self._option( value, '^',  'emphasized', True )
-        value = self._split( 'id',     value, ':', find,  0, 1 )
-        value = self._split( 'object', value, '.', rfind, 0, 1 )
+        value = self._split( 'id',     value, ':', str.find,  0, 1 )
+        value = self._split( 'object', value, '.', str.rfind, 0, 1 )
 
         if value != '':
             self.name = value

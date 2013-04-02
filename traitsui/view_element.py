@@ -27,8 +27,6 @@ from __future__ import absolute_import
 
 import re
 
-from string import rfind
-
 from traits.api import HasPrivateTraits, Trait, Bool
 
 from .ui_traits import (ATheme, AnObject, DockStyle, EditorStyle, ExportType,
@@ -181,7 +179,7 @@ class ViewSubElement ( ViewElement ):
         value = self._option( value, '@', 'style', 'custom' )
         value = self._option( value, '*', 'style', 'text' )
         value = self._option( value, '~', 'style', 'readonly' )
-        value = self._split( 'style',  value, ';', rfind, 1, 0 )
+        value = self._split( 'style',  value, ';', str.rfind, 1, 0 )
 
         return value
 

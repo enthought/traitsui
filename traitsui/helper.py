@@ -25,8 +25,6 @@
 
 from __future__ import absolute_import
 
-from string import uppercase, lowercase
-
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
 
 from .ui_traits import SequenceTypes
@@ -53,9 +51,9 @@ def user_name_for ( name ):
     result     = ''
     last_lower = 0
     for c in name:
-        if (c in uppercase) and last_lower:
+        if c.isupper() and last_lower:
            result += ' '
-        last_lower = (c in lowercase)
+        last_lower = c.islower()
         result    += c
     return result
 
