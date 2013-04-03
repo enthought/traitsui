@@ -25,7 +25,6 @@ from pyface.qt import QtCore, QtGui
 from pyface.resource_manager import resource_manager
 from pyface.timer.api import do_later
 from traits.api import Any, Event
-from traits.trait_base import enumerate
 from traitsui.api import TreeNode, ObjectTreeNode, MultiTreeNode
 from traitsui.undo import ListUndoItem
 from traitsui.tree_node import ITreeNodeAdapterBridge

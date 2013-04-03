@@ -30,8 +30,6 @@ import collections
 from traits.api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
     Instance, Int, List, Property, Str, Trait)
 
-from traits.trait_base import enumerate
-
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------

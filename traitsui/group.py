@@ -28,8 +28,6 @@ from __future__ import absolute_import
 from traits.api import (Bool, Delegate, Float, Instance, List, Property, Range,
     ReadOnly, Str, TraitError, cached_property)
 
-from traits.trait_base import enumerate
-
 from .view_element import ViewSubElement
 
 from .item import Item
