@@ -6,7 +6,8 @@ from setuptools import setup, find_packages
 
 
 info = {}
-execfile(join('traitsui', '__init__.py'), info)
+traitsui_init = join('traitsui', '__init__.py')
+exec(compile(open(traitsui_init).read(), traitsui_init, 'exec'), info)
 
 
 setup(
@@ -44,4 +45,6 @@ setup(
     packages = find_packages(),
     platforms = ["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
     zip_safe = False,
+    use_2to3 = True,
+    use_2to3_exclude_fixers = ['lib2to3.fixes.fix_next']   # traits_listener.ListenerItem has a trait *name* which gets wrongly renamed
 )
