@@ -977,7 +977,7 @@ class _GroupPanel(object):
 
         if (label is not None
             and not is_label_left
-            and item_policy == QtGui.QSizePolicy.Policy.Minimum):
+            and item_policy == QtGui.QSizePolicy.Minimum):
             # this item cannot be stretched horizontally, and the label
             # exists and is on the right -> make label stretchable if necessary
 
@@ -1012,7 +1012,7 @@ class _GroupPanel(object):
         label_policy = label.sizePolicy()
         label_policy.setHorizontalStretch(stretch)
         label_policy.setHorizontalPolicy(
-            QtGui.QSizePolicy.Policy.Expanding)
+            QtGui.QSizePolicy.Expanding)
         label.setSizePolicy(label_policy)
 
 

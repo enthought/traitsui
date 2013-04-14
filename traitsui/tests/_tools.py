@@ -173,7 +173,7 @@ def get_dialog_size(ui_control):
         return ui_control.GetSizeTuple()
 
     elif is_current_backend_qt4():
-        return ui_control.size().toTuple()
+        return ui_control.size().width(), ui_control.size().height()
 
 
 # ######### Debug tools
