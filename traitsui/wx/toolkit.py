@@ -461,6 +461,7 @@ class GUIToolkit ( Toolkit ):
     def destroy_control ( self, control ):
         """ Destroys a specified GUI toolkit control.
         """
+        _popEventHandlers(control)
         control.Destroy()
 
     #---------------------------------------------------------------------------
@@ -471,13 +472,8 @@ class GUIToolkit ( Toolkit ):
         """ Destroys all of the child controls of a specified GUI toolkit
             control.
         """
-        def _popAllEvtHandlers(win):
-            while win.GetEventHandler() is not win:
-                win.PopEventHandler(True)
-            for child in win.GetChildren():
-                _popAllEvtHandlers(child)
-
-        _popAllEvtHandlers(control)
+        for child in control.GetChildren():
+            _popEventHandlers(child)
         control.DestroyChildren()
 
     #---------------------------------------------------------------------------
@@ -783,3 +779,13 @@ class WXDockWindowTheme ( Category, DockWindowTheme ):
 
         return image.create_image().ConvertToBitmap()
 
+
+#-------------------------------------------------------------------------------
+def _popEventHandlers(ctrl):
+    """ Pop any event handlers that have been pushed on to a window and its
+        children.
+    """
+    while ctrl is not ctrl.GetEventHandler():
+        ctrl.PopEventHandler(True)
+    for child in ctrl.GetChildren():
+        _popEventHandlers(child)
