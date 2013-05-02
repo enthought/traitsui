@@ -26,7 +26,8 @@
 from __future__ import absolute_import
 
 from traits.api import (AdaptedTo, Adapter, Any, Bool, Callable, Either,
-    HasPrivateTraits, Instance, Interface, List, Property, Str, cached_property)
+    HasPrivateTraits, Instance, Interface, isinterface, List, Property, Str,
+    cached_property)
 
 from traits.trait_base import SequenceTypes, get_resource_path, xgetattr, xsetattr
 
@@ -169,12 +170,12 @@ class TreeNode ( HasPrivateTraits ):
     @cached_property
     def _get_node_for_class ( self ):
         return tuple( [ klass for klass in self.node_for
-                        if not issubclass( klass, Interface ) ] )
+                        if not isinterface(klass) ] )
 
     @cached_property
     def _get_node_for_interface ( self ):
         return [ klass for klass in self.node_for
-                 if issubclass( klass, Interface ) ]
+                 if isinterface(klass, Interface) ]
 
     #-- Overridable Methods: ---------------------------------------------------
 
