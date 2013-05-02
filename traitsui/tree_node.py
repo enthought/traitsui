@@ -175,7 +175,7 @@ class TreeNode ( HasPrivateTraits ):
     @cached_property
     def _get_node_for_interface ( self ):
         return [ klass for klass in self.node_for
-                 if isinterface(klass, Interface) ]
+                 if isinterface(klass) ]
 
     #-- Overridable Methods: ---------------------------------------------------
 
