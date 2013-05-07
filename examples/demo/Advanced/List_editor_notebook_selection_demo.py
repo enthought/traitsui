@@ -72,9 +72,10 @@ class ListEditorNotebookSelectionDemo(HasStrictTraits):
         Item('index'),
         '_',
         VGroup(
-            Item('people@',
+            Item('people',
                   id         = 'notebook',
                   show_label = False,
+                  style      = 'custom',
                   editor     = ListEditor(use_notebook = True,
                                            deletable    = False,
                                            selected     = 'selected',
