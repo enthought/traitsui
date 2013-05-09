@@ -11,6 +11,7 @@ released under a 3 clause BSD license.
 Files and orginal authors:
 ----------------------------------------------------------------------------
 examples/demo/Extras/images:
+                     e-logo-rev.png | Enthought
                            info.png | Enthought
                      logo_32x32.gif | Enthought
                      logo_48x48.gif | Enthought
