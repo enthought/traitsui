@@ -148,7 +148,7 @@ def key_event_to_name(event):
     else:
         key = None
     if key is None:
-        key = key_map.get(key_code)
+        key = key_map.get(key_code, 'Unknown-Key')
 
     name = ''
     if modifiers & QtCore.Qt.ControlModifier:
