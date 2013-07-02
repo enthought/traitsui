@@ -73,6 +73,8 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
     """
     if (kind == 'panel') or ((kind is None) and (view.kind == 'panel')):
         kind = 'modal'
+    if (kind is None) and (view.kind == 'live'):
+        kind = 'livemodal'
 
     app = wx.GetApp()
     if app is None or not is_event_loop_running_wx(app):
