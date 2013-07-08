@@ -1053,8 +1053,13 @@ class TableView(QtGui.QTableView):
         for column_index in xrange(len(editor.columns)):
             column = editor.columns[column_index]
             requested_width = column.get_width()
-            if column.resize_mode in ("interactive", "stretch") and 0 < requested_width <= 1.0:
+            if column.resize_mode in ("interactive", "stretch") \
+                    and 0 < requested_width <= 1.0:
                 proportional.append((column_index, requested_width))
+            elif column.resize_mode == "interactive" and requested_width < 0 \
+                    and self._initial_size:
+                # Keep previous size if initial sizing has been done
+                available_space -= hheader.sectionSize(column_index)
             else:
                 base_width = hheader.sectionSizeHint(column_index)
                 width = max(base_width, self.sizeHintForColumn(column_index))
