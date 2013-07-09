@@ -829,6 +829,7 @@ class TableView(QtGui.QTableView):
         else:
             vheader.hide()
         self.setAlternatingRowColors(factory.alternate_bg_color)
+        self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
 
         # Configure the column headings.
         # We detect if there are any stretchy sections at all; if not, then
