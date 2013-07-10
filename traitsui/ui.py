@@ -124,6 +124,9 @@ class UI ( HasPrivateTraits ):
     # The code used to rebuild an updated user interface
     rebuild = Callable
 
+    # Set to True when the UI has finished being destroyed.
+    destroyed = Bool( False )
+
     #-- Private Traits ---------------------------------------------------------
 
     # Original context when used with a modal dialog
@@ -289,6 +292,8 @@ class UI ( HasPrivateTraits ):
         # Remove specified symbols from our dictionary to aid in clean-up:
         self.reset_traits( self.recyclable_traits )
         self.reset_traits( self.disposable_traits )
+
+        self.destroyed = True
 
     #---------------------------------------------------------------------------
     #  Resets the contents of the user interface:
