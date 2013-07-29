@@ -26,6 +26,8 @@ from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
 
+from .clipboard import PyMimeData
+
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------
@@ -236,7 +238,9 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to generate MIME data containing the rows of the
             current selection.
         """
-        mime_data = QtCore.QMimeData()
+        items = [self._editor.adapter.get_drag(self._editor.object,
+            self._editor.name, index.row()) for index in indexes]
+        mime_data = PyMimeData.coerce(items)
         rows = list(set([ index.row() for index in indexes ]))
         data = QtCore.QByteArray(str(rows[0]))
         for row in rows[1:]:
