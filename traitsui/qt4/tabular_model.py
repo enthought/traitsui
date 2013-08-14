@@ -26,6 +26,8 @@ from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
 
+from .clipboard import PyMimeData
+
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------
@@ -236,7 +238,9 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to generate MIME data containing the rows of the
             current selection.
         """
-        mime_data = QtCore.QMimeData()
+        items = [self._editor.adapter.get_drag(self._editor.object,
+            self._editor.name, index.row()) for index in indexes]
+        mime_data = PyMimeData.coerce(items)
         rows = list(set([ index.row() for index in indexes ]))
         data = QtCore.QByteArray(str(rows[0]))
         for row in rows[1:]:
@@ -250,13 +254,18 @@ class TabularModel(QtCore.QAbstractTableModel):
         if action == QtCore.Qt.IgnoreAction:
             return False
 
+        # this is an internal drag
         data = mime_data.data(tabular_mime_type)
-        if data.isNull():
-            return False
-
-        current_rows = map(int, str(data).split(' '))
-        self.moveRows(current_rows, parent.row())
-        return True
+        if not data.isNull():
+            current_rows = map(int, str(data).split(' '))
+            self.moveRows(current_rows, parent.row())
+            return True
+        else:
+            data = PyMimeData.coerce(mime_data).instance()
+            if data is not None:
+                return self._editor.adapter.can_drop(self._editor.object,
+                    self._editor.name, row, data)
+        return False
 
     def supportedDropActions(self):
         """ Reimplemented to allow items to be moved.
