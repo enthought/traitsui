@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms described
+# in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -20,7 +21,7 @@ from pyface.qt import QtCore, QtGui
 
 from pyface.api import ImageResource
 
-from traits.api import Str, Any, Bool, Dict, List, Instance
+from traits.api import Str, Any, Bool, Dict, Instance
 from traits.trait_base import user_name_for, enumerate, xgetattr
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -53,12 +54,9 @@ class SimpleEditor ( Editor ):
     # Is the list of items being edited mutable?
     mutable = Bool( True )
 
-    #Signal mapper allowing to identify which icon button requested a context
-    #menu
+    # Signal mapper allowing to identify which icon button requested a context
+    # menu
     mapper = Instance(QtCore.QSignalMapper)
-
-    #List of icon button of that list
-    controls = List(Instance(QtGui.QPushButton),[])
 
     #---------------------------------------------------------------------------
     #  Class constants:
@@ -163,8 +161,6 @@ class SimpleEditor ( Editor ):
             editor.
         """
         self.mapper = QtCore.QSignalMapper(self.control)
-        #Cleaning the list of icon buttons
-        self.controls = []
         # Disconnect the editor from any control about to be destroyed:
         self._dispose_items()
 
@@ -179,9 +175,10 @@ class SimpleEditor ( Editor ):
 
         is_fake = (resizable and (len( self.value ) == 0))
         if is_fake:
-           self.empty_list()
+            self.empty_list()
         else:
-            self.mapper.mapped.connect(self.popup_menu)
+            # Asking the mapper to send the sender to the callback method
+            self.mapper.mapped[QtCore.QObject].connect(self.popup_menu)
 
         editor = self._editor
         for index, value in enumerate(self.value):
@@ -192,12 +189,11 @@ class SimpleEditor ( Editor ):
             column = column * 2
 
             if resizable:
-                #Connecting the new button to the mapper
+                # Connecting the new button to the mapper
                 control = IconButton('list_editor.png', self.mapper.map)
-                self.controls.append(control)
-                #Setting the mapping and asking it to send the index of the
-                #sender to the callback method
-                self.mapper.setMapping(control, index)
+                # Setting the mapping and asking it to send the index of the
+                # sender to the callback method
+                self.mapper.setMapping(control, control)
 
                 layout.addWidget(control, row, column)
 
@@ -253,13 +249,12 @@ class SimpleEditor ( Editor ):
     def empty_list ( self ):
         """ Creates an empty list entry (so the user can add a new item).
         """
-        #Connecting the new button to the mapper
+        # Connecting the new button to the mapper
         control = IconButton('list_editor.png', self.mapper.map)
-        self.controls = [control]
-        #Setting the mapping and asking it to send the index of the
-        #sender to the callback method
-        self.mapper.setMapping(control, 0)
-        self.mapper.mapped.connect(self.popup_empty_menu)
+        # Setting the mapping and asking it to send the sender to the
+        # callback method
+        self.mapper.setMapping(control, control)
+        self.mapper.mapped[QtCore.QObject].connect(self.popup_empty_menu)
         control.is_empty = True
         self._cur_control = control
 
@@ -285,11 +280,10 @@ class SimpleEditor ( Editor ):
     #  Displays the empty list editor popup menu:
     #---------------------------------------------------------------------------
 
-    def popup_empty_menu ( self , sender_index):
+    def popup_empty_menu ( self , sender):
         """ Displays the empty list editor popup menu.
         """
-        #Get the sender from the list of icon button with its index
-        self._cur_control = control = self.controls[sender_index]
+        self._cur_control = control = sender
         menu = MakeMenu( self.empty_list_menu, self, True, control ).menu
         menu.exec_(control.mapToGlobal(QtCore.QPoint(0, 0)))
 
@@ -297,11 +291,9 @@ class SimpleEditor ( Editor ):
     #  Displays the list editor popup menu:
     #---------------------------------------------------------------------------
 
-    def popup_menu ( self , sender_index):
+    def popup_menu ( self , sender):
         """ Displays the list editor popup menu.
         """
-        #Get the sender from the list of icon button with its index
-        sender = self.controls[sender_index]
         self._cur_control = sender
 
         proxy    = sender.proxy
