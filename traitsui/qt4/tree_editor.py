@@ -1754,8 +1754,8 @@ class _TreeWidget(QtGui.QTreeWidget):
         e.ignore()
 
         # Check what is being dragged.
-        md = PyMimeData.coerce(e.mimeData())
-        if md is None:
+        data = PyMimeData.coerce(e.mimeData()).instance()
+        if data is None:
             return
 
         # We might be able to handle it (but it depends on what the final
