@@ -558,7 +558,10 @@ class SimpleEditor ( Editor ):
     def _node_index ( self, nid ):
         pnid = nid.parent()
         if pnid is None:
-            return ( None, None, None )
+            if self.factory.hide_root:
+                pnid = self._tree.invisibleRootItem()
+            else:
+                return ( None, None, None )
 
         for i in range(pnid.childCount()):
             if pnid.child(i) is nid:
@@ -1772,7 +1775,10 @@ class _TreeWidget(QtGui.QTreeWidget):
         # Get the tree widget item under the cursor.
         nid = self.itemAt(e.pos())
         if nid is None:
-            return
+            if self._editor.factory.hide_root:
+                nid = self.invisibleRootItem()
+            else:
+	        return
 
         # Check that the target is not the source of a child of the source.
         if self._dragging is not None:
@@ -1815,7 +1821,10 @@ class _TreeWidget(QtGui.QTreeWidget):
         # Get the tree widget item under the cursor.
         nid = self.itemAt(e.pos())
         if nid is None:
-            return
+            if self._editor.factory.hide_root:
+                nid = self.invisibleRootItem()
+            else:
+	        return
 
         # Get the data being dropped.
         data = PyMimeData.coerce(e.mimeData()).instance()
