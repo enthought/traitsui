@@ -1628,7 +1628,7 @@ class SimpleEditor ( Editor ):
 
             self.control.restoreState(structure)
         header = self._tree.header()
-        self.setExpandsOnDoubleClick(editor.factory.expands_on_dclick)
+        self.setExpandsOnDoubleClick(self.factory.expands_on_dclick)
 
         if header is not None and 'column_state' in prefs:
             header.restoreState(prefs['column_state'])
