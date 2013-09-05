@@ -560,13 +560,16 @@ class SimpleEditor ( Editor ):
         if pnid is None:
             if self.factory.hide_root:
                 pnid = self._tree.invisibleRootItem()
-            else:
+            if pnid is None:
                 return ( None, None, None )
 
         for i in range(pnid.childCount()):
             if pnid.child(i) is nid:
                 _, pnode, pobject = self._get_node_data( pnid )
                 return ( pnode, pobject, i )
+        else:
+            # doesn't match any node, so return None
+            return ( None, None, None )
 
     #---------------------------------------------------------------------------
     #  Returns whether a specified object has any children:
@@ -1553,7 +1556,7 @@ class SimpleEditor ( Editor ):
                 for cnid in self._nodes_for( nid )[ start: end ]:
                     self._delete_node( cnid )
 
-                remaining = n - len( event.removed )
+                remaining = len( children ) - len( event.removed )
                 child_index = 0
                 # Add all of the children that were added:
                 for child in event.added:
