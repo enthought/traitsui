@@ -1864,9 +1864,7 @@ class _TreeWidget(QtGui.QTreeWidget):
 
                 pnid = pnid.parent()
 
-
         data = PyMimeData.coerce(event.mimeData()).instance()
-
         _, node, object = editor._get_node_data(nid)
         
         if event.proposedAction() == QtCore.Qt.MoveAction and \
