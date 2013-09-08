@@ -822,7 +822,7 @@ SimpleEditorMap = {
     'spinner': SimpleSpinEditor,
     'enum':    SimpleEnumEditor,
     'text':    RangeTextEditor,
-    'low':     LogRangeSliderEditor
+    'logslider':     LogRangeSliderEditor
 }
 # Mapping between editor factory modes and custom editor classes
 CustomEditorMap = {
@@ -831,5 +831,5 @@ CustomEditorMap = {
     'spinner': SimpleSpinEditor,
     'enum':    CustomEnumEditor,
     'text':    RangeTextEditor,
-    'low':     LogRangeSliderEditor
+    'logslider':     LogRangeSliderEditor
 }

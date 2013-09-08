@@ -51,15 +51,24 @@ class Employee ( HasTraits ):
             VGroup(
                 Item( 'name' ),
                 Item( 'dept' ),
-                Item( 'email' )
+                Item( 'email' ),
+                Item( 'picture',
+                        editor = ImageEditor(
+                            scale=True,
+                            preserve_aspect_ratio=True,
+                            allow_upscaling=True ),
+                        springy = True ),
             )
-        )
+        ),
+        resizable=True
     )
 
 # Create the demo:
 popup = Employee( name  = 'William Murchison',
                   dept  = 'Receiving',
-                  email = 'wmurchison@acme.com' )
+                  email = 'wmurchison@acme.com',
+                  picture = ImageResource('e-logo-rev',
+                                            search_path=search_path) )
 
 # Run the demo (if invoked form the command line):
 if __name__ == '__main__':
