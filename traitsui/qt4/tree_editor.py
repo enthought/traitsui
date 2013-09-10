@@ -1880,7 +1880,7 @@ class _TreeWidget(QtGui.QTreeWidget):
             if to_node is None:
                 # no parent, can't do anything
                 action = None
-            if editor._is_droppable(to_node, to_object, data, True):
+            elif editor._is_droppable(to_node, to_object, data, True):
                 # insert into the parent of the node being dropped on
                 action = 'insert'
             elif editor._is_droppable(to_node, to_object, data, False):
