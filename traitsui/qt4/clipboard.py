@@ -51,8 +51,10 @@ class PyMimeData(QtCore.QMimeData):
                     # This format (as opposed to using a single sequence) allows
                     # the type to be extracted without unpickling the data.
                     self.setData(self.MIME_TYPE, dumps(data.__class__) + pdata)
-                except (PickleError, TypeError) as e:
-                    return
+                except (PickleError, TypeError):
+                    # if pickle fails, still try to create a draggable
+                    # XXX log the failure?
+                    self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
 
         else:
             self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
@@ -72,8 +74,21 @@ class PyMimeData(QtCore.QMimeData):
             for format in md.formats():
                 nmd.setData(format, md.data(format))
         else:
+            # by default, try to pickle the coerced object
+            pickle = True
+    
+            # See if the data is a list, if so check for any items which are
+            # themselves of the right type.  If so, extract the instance and
+            # track whether we should pickle.
+            # XXX lists should suffice for now, but may want other containers
+            if isinstance(md, list):
+                pickle = all(cls.NOPICKLE_MIME_TYPE not in item.formats()
+                        for item in md if isinstance(item, QtCore.QMimeData))
+                md = [item.instance() if isinstance(item, PyMimeData) else item
+                        for item in md]
+    
             # Arbitrary python object, wrap it into PyMimeData
-            nmd = cls(md)
+            nmd = cls(md, pickle)
 
         return nmd
 
