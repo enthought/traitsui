@@ -19,6 +19,7 @@ using pickle.
 
 from cPickle import dumps, load, loads, PickleError
 from cStringIO import StringIO
+import warnings
 
 from pyface.qt import QtCore, QtGui
 
@@ -53,7 +54,9 @@ class PyMimeData(QtCore.QMimeData):
                     self.setData(self.MIME_TYPE, dumps(data.__class__) + pdata)
                 except (PickleError, TypeError):
                     # if pickle fails, still try to create a draggable
-                    # XXX log the failure?
+                    warnings.warn(("Could not pickle dragged object %s, " +
+                            "using %s mimetype instead") % (repr(data),
+                            self.NOPICKLE_MIME_TYPE), RuntimeWarning)
                     self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
 
         else:
@@ -68,8 +71,16 @@ class PyMimeData(QtCore.QMimeData):
         if isinstance(md, cls):
             return md
 
-        # see if it is a QMimeData, and migrate all its data
-        if isinstance(md, QtCore.QMimeData):
+        if isinstance(md, PyMimeData):
+            # if it is a PyMimeData, migrate all its data, subclasses should
+            # override this method if it doesn't do thgs correctly for them
+            data = md.instance()
+            nmd = cls()
+            nmd._local_instance = data
+            for format in md.formats():
+                nmd.setData(format, md.data(format))
+        elif isinstance(md, QtCore.QMimeData):
+            # if it is a QMimeData, migrate all its data
             nmd = cls()
             for format in md.formats():
                 nmd.setData(format, md.data(format))
