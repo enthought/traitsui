@@ -1853,7 +1853,7 @@ class _TreeWidget(QtGui.QTreeWidget):
             if editor.factory.hide_root:
                 nid = self.invisibleRootItem()
             else:
-	        return (action, to_node, to_object, to_index, data)
+                return (action, to_node, to_object, to_index, data)
 
         # Check that the target is not the source of a child of the source.
         if self._dragging is not None:
@@ -1868,7 +1868,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         _, node, object = editor._get_node_data(nid)
         
         if event.proposedAction() == QtCore.Qt.MoveAction and \
-                editor._is_droppable(node, object, data, False ):
+                editor._is_droppable(node, object, data, False):
             # append to node being dropped on
             action = 'append'
             to_node = node
@@ -1876,14 +1876,14 @@ class _TreeWidget(QtGui.QTreeWidget):
             to_index = None
         else:
             # get parent of node being dropped on
-            to_node, to_object, to_index = editor._node_index( nid )
+            to_node, to_object, to_index = editor._node_index(nid)
             if to_node is None:
                 # no parent, can't do anything
                 action = None
-            if editor._is_droppable(to_node, to_object, data, True ):
+            if editor._is_droppable(to_node, to_object, data, True):
                 # insert into the parent of the node being dropped on
                 action = 'insert'
-            elif editor._is_droppable(to_node, to_object, data, False ):
+            elif editor._is_droppable(to_node, to_object, data, False):
                 # append to the parent of the node being dropped on
                 action = 'append'
             else:
