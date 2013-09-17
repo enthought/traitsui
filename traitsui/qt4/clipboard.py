@@ -93,7 +93,7 @@ class PyMimeData(QtCore.QMimeData):
             # track whether we should pickle.
             # XXX lists should suffice for now, but may want other containers
             if isinstance(md, list):
-                pickle = all(cls.NOPICKLE_MIME_TYPE not in item.formats()
+                pickle = not any(item.hasFormat(cls.NOPICKLE_MIME_TYPE)
                         for item in md if isinstance(item, QtCore.QMimeData))
                 md = [item.instance() if isinstance(item, PyMimeData) else item
                         for item in md]
