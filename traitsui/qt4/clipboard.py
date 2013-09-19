@@ -19,6 +19,7 @@ using pickle.
 
 from cPickle import dumps, load, loads, PickleError
 from cStringIO import StringIO
+import warnings
 
 from pyface.qt import QtCore, QtGui
 
@@ -51,8 +52,12 @@ class PyMimeData(QtCore.QMimeData):
                     # This format (as opposed to using a single sequence) allows
                     # the type to be extracted without unpickling the data.
                     self.setData(self.MIME_TYPE, dumps(data.__class__) + pdata)
-                except (PickleError, TypeError) as e:
-                    return
+                except (PickleError, TypeError):
+                    # if pickle fails, still try to create a draggable
+                    warnings.warn(("Could not pickle dragged object %s, " +
+                            "using %s mimetype instead") % (repr(data),
+                            self.NOPICKLE_MIME_TYPE), RuntimeWarning)
+                    self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
 
         else:
             self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
@@ -66,14 +71,35 @@ class PyMimeData(QtCore.QMimeData):
         if isinstance(md, cls):
             return md
 
-        # see if it is a QMimeData, and migrate all its data
-        if isinstance(md, QtCore.QMimeData):
+        if isinstance(md, PyMimeData):
+            # if it is a PyMimeData, migrate all its data, subclasses should
+            # override this method if it doesn't do thgs correctly for them
+            data = md.instance()
+            nmd = cls()
+            nmd._local_instance = data
+            for format in md.formats():
+                nmd.setData(format, md.data(format))
+        elif isinstance(md, QtCore.QMimeData):
+            # if it is a QMimeData, migrate all its data
             nmd = cls()
             for format in md.formats():
                 nmd.setData(format, md.data(format))
         else:
+            # by default, try to pickle the coerced object
+            pickle = True
+    
+            # See if the data is a list, if so check for any items which are
+            # themselves of the right type.  If so, extract the instance and
+            # track whether we should pickle.
+            # XXX lists should suffice for now, but may want other containers
+            if isinstance(md, list):
+                pickle = not any(item.hasFormat(cls.NOPICKLE_MIME_TYPE)
+                        for item in md if isinstance(item, QtCore.QMimeData))
+                md = [item.instance() if isinstance(item, PyMimeData) else item
+                        for item in md]
+    
             # Arbitrary python object, wrap it into PyMimeData
-            nmd = cls(md)
+            nmd = cls(md, pickle)
 
         return nmd
 
