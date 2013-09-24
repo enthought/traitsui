@@ -418,6 +418,7 @@ class SimpleEditor ( Editor ):
             cnid.setText(0, node.get_label(object))
         cnid.setIcon(0, self._get_icon(node, object))
         cnid.setToolTip(0, node.get_tooltip(object))
+        self._set_column_labels(cnid, node.get_column_labels(object))
 
         color = node.get_background(object)
         if color : cnid.setBackground(0, self._get_brush(color))
