@@ -353,10 +353,6 @@ class SimpleEditor ( Editor ):
                 nid.setText(i, label)
 
     #---------------------------------------------------------------------------
-        color = node.get_background(object)
-        if color : nid.setBackground(0, self._get_brush(color))
-        color = node.get_foreground(object)
-        if color : nid.setForeground(0, self._get_brush(color))
     #  Private Delegate class to do drawing in case of wrapped text labels
     #---------------------------------------------------------------------------
 
@@ -385,7 +381,6 @@ class SimpleEditor ( Editor ):
             item = self.editor._tree.itemFromIndex(index)
             expanded, node, object = self.editor._get_node_data(item)
             text = node.get_label(object)
-            textrect = option.rect
             if self.editor.factory.show_icons:
                 iconwidth = 24 # FIXME: get width from actual
             else:
@@ -423,6 +418,13 @@ class SimpleEditor ( Editor ):
             cnid.setText(0, node.get_label(object))
         cnid.setIcon(0, self._get_icon(node, object))
         cnid.setToolTip(0, node.get_tooltip(object))
+        self._set_column_labels(cnid, node.get_column_labels(object))
+
+        color = node.get_background(object)
+        if color : cnid.setBackground(0, self._get_brush(color))
+        color = node.get_foreground(object)
+        if color : cnid.setForeground(0, self._get_brush(color))
+
         return cnid
 
     def _set_label(self, nid, text, col=0):
@@ -1725,7 +1727,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         # Convert the item being dragged to MIME data.
         drag_object = node.get_drag_object(object)
         md = PyMimeData.coerce(drag_object)
-        
+
         # Render the item being dragged as a pixmap.
         nid_rect = self.visualItemRect(nid)
         rect = nid_rect.intersected(self.viewport().rect())
@@ -1779,7 +1781,7 @@ class _TreeWidget(QtGui.QTreeWidget):
 
         if action is not None:
             e.acceptProposedAction()
-                    
+
     def dropEvent(self, e):
         """ Reimplemented to update the model and tree.
         """
@@ -1832,7 +1834,7 @@ class _TreeWidget(QtGui.QTreeWidget):
                                             data, False )
         else:
             return
-            
+
         e.acceptProposedAction()
 
     def _get_action(self, event):
@@ -1846,7 +1848,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         data = None
 
         editor = self._editor
-        
+
         # Get the tree widget item under the cursor.
         nid = self.itemAt(event.pos())
         if nid is None:
@@ -1866,7 +1868,7 @@ class _TreeWidget(QtGui.QTreeWidget):
 
         data = PyMimeData.coerce(event.mimeData()).instance()
         _, node, object = editor._get_node_data(nid)
-        
+
         if event.proposedAction() == QtCore.Qt.MoveAction and \
                 editor._is_droppable(node, object, data, False):
             # append to node being dropped on
