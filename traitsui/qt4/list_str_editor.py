@@ -307,8 +307,8 @@ class _ListStrEditor(Editor):
         """
         if not self._no_update:
             try:
-                added = [ values.index(item) for item in event.added ]
-                removed = [ values.index(item) for item in event.removed ]
+                added = [ self.value.index(item) for item in event.added ]
+                removed = [ self.value.index(item) for item in event.removed ]
             except ValueError:
                 pass
             else:
