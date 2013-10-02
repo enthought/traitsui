@@ -133,6 +133,9 @@ class TabularModel(QtCore.QAbstractTableModel):
         editor = self._editor
         row = mi.row()
         column = mi.column()
+        
+        if not mi.isValid():
+            return QtCore.Qt.ItemIsDropEnabled
 
         flags = QtCore.Qt.ItemIsEnabled
         if editor.factory.selectable:
@@ -141,17 +144,19 @@ class TabularModel(QtCore.QAbstractTableModel):
         # If the adapter defines get_can_edit_cell(), use it to determine
         # editability over the row-wise get_can_edit().
         if (editor.factory.editable and 'edit' in editor.factory.operations and
-            hasattr(editor.adapter, 'get_can_edit_cell')):
+                hasattr(editor.adapter, 'get_can_edit_cell')):
             if editor.adapter.get_can_edit_cell(editor.object, editor.name,
-                row, column):
+                                                row, column):
                 flags |= QtCore.Qt.ItemIsEditable
         elif (editor.factory.editable and 'edit' in editor.factory.operations and
-            editor.adapter.get_can_edit(editor.object, editor.name, row)):
+                editor.adapter.get_can_edit(editor.object, editor.name, row)):
             flags |= QtCore.Qt.ItemIsEditable
 
-        if (editor.factory.editable and 'move' in editor.factory.operations and
-            editor.adapter.get_drag(editor.object, editor.name, row) is not None):
-            flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
+        if editor.adapter.get_drag(editor.object, editor.name, row) is not None:
+            flags |= QtCore.Qt.ItemIsDragEnabled
+            
+        if editor.factory.editable:
+            flags |=  QtCore.Qt.ItemIsDropEnabled
 
         return flags
 
@@ -257,15 +262,29 @@ class TabularModel(QtCore.QAbstractTableModel):
 
         # this is an internal drag
         data = mime_data.data(tabular_mime_type)
-        if not data.isNull():
+        if not data.isNull() and action == QtCore.Qt.MoveAction:
             current_rows = map(int, str(data).split(' '))
             self.moveRows(current_rows, parent.row())
             return True
         else:
             data = PyMimeData.coerce(mime_data).instance()
+            if not isinstance(data, list):
+                data = [data]
+            editor = self._editor
+            object = editor.object
+            name = editor.name
+            adapter = editor.adapter
+            
             if data is not None:
-                return self._editor.adapter.can_drop(self._editor.object,
-                    self._editor.name, row, data)
+                if row == -1 and adapter.len(object, name) == 0:
+                    # if empty list, target is after end of list
+                    row = 0
+                if row != -1 and all(adapter.can_drop(object, name, row, item)
+                                     for item in data):
+                    for item in reversed(data):
+                        self.dropItem(item, row)
+                else:
+                    return False
         return False
 
     def supportedDropActions(self):
@@ -276,6 +295,19 @@ class TabularModel(QtCore.QAbstractTableModel):
     #---------------------------------------------------------------------------
     #  TabularModel interface:
     #---------------------------------------------------------------------------
+
+    def dropItem(self, item, row):
+        """ Handle a Python object being dropped onto a row """
+        editor = self._editor
+        object = editor.object
+        name = editor.name
+        adapter = editor.adapter
+        destination = adapter.get_dropped(object, name, row, item)
+        
+        if destination == 'after':
+            row += 1
+        
+        adapter.insert(object, name, row, item)
 
     def moveRow(self, old_row, new_row):
         """ Convenience method to move a single row.
