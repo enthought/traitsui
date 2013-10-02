@@ -239,7 +239,8 @@ class TabularModel(QtCore.QAbstractTableModel):
             current selection.
         """
         items = [self._editor.adapter.get_drag(self._editor.object,
-            self._editor.name, index.row()) for index in indexes]
+                self._editor.name, row)
+                    for row in sorted(set(index.row() for index in indexes))]
         mime_data = PyMimeData.coerce(items)
         rows = list(set([ index.row() for index in indexes ]))
         data = QtCore.QByteArray(str(rows[0]))
