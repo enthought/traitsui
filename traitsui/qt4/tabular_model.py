@@ -237,19 +237,20 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to expose our internal MIME type for drag and drop
             operations.
         """
-        return [ tabular_mime_type ]
+        return [ tabular_mime_type, PyMimeData.MIME_TYPE,
+                PyMimeData.NOPICKLE_MIME_TYPE ]
 
     def mimeData(self, indexes):
         """ Reimplemented to generate MIME data containing the rows of the
             current selection.
         """
-        items = [self._editor.adapter.get_drag(self._editor.object,
-                self._editor.name, row)
-                    for row in sorted(set(index.row() for index in indexes))]
+        rows = sorted(set([ index.row() for index in indexes ]))
+        items = [self._editor.adapter.get_drag(
+                self._editor.object, self._editor.name, row)
+                for row in rows]
         mime_data = PyMimeData.coerce(items)
-        rows = list(set([ index.row() for index in indexes ]))
-        data = QtCore.QByteArray(str(rows[0]))
-        for row in rows[1:]:
+        data = QtCore.QByteArray(str(id(self)))
+        for row in rows:
             data.append(' %i' % row)
         mime_data.setData(tabular_mime_type, data)
         return mime_data
@@ -260,31 +261,37 @@ class TabularModel(QtCore.QAbstractTableModel):
         if action == QtCore.Qt.IgnoreAction:
             return False
 
-        # this is an internal drag
+        # this is a drag from a tabular model
         data = mime_data.data(tabular_mime_type)
         if not data.isNull() and action == QtCore.Qt.MoveAction:
-            current_rows = map(int, str(data).split(' '))
-            self.moveRows(current_rows, parent.row())
-            return True
-        else:
-            data = PyMimeData.coerce(mime_data).instance()
+            id_and_rows = map(int, str(data).split(' '))
+            table_id = id_and_rows[0]
+            # is it from ourself?
+            if table_id == id(self):
+                current_rows = id_and_rows[1:]
+                self.moveRows(current_rows, parent.row())
+                return True
+        
+        # this is an external drag
+        data = PyMimeData.coerce(mime_data).instance()
+        if data is not None:
             if not isinstance(data, list):
                 data = [data]
             editor = self._editor
             object = editor.object
             name = editor.name
             adapter = editor.adapter
-            
-            if data is not None:
-                if row == -1 and adapter.len(object, name) == 0:
-                    # if empty list, target is after end of list
-                    row = 0
-                if row != -1 and all(adapter.can_drop(object, name, row, item)
-                                     for item in data):
-                    for item in reversed(data):
-                        self.dropItem(item, row)
-                else:
-                    return False
+            if row == -1 and parent.isValid():
+                # find correct row number
+                row = parent.row()
+            if row == -1 and adapter.len(object, name) == 0:
+                # if empty list, target is after end of list
+                row = 0
+            if all(adapter.get_can_drop(object, name, row, item)
+                                    for item in data):
+                for item in reversed(data):
+                    self.dropItem(item, row)
+                return True
         return False
 
     def supportedDropActions(self):

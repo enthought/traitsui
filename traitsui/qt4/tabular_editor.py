@@ -635,6 +635,8 @@ class _TableView(QtGui.QTableView):
 
         # Configure drag and drop behavior
         self.setDragEnabled(True)
+        if factory.editable:
+            self.viewport().setAcceptDrops(True)
         if factory.drag_move:
             self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
         self.setDropIndicatorShown(True)
