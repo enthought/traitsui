@@ -826,6 +826,7 @@ class TableView(QtGui.QTableView):
         if ((factory.editable and (insertable or factory.deletable)) or
              factory.reorderable):
             vheader.installEventFilter(self)
+            vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
         else:
             vheader.hide()
         self.setAlternatingRowColors(factory.alternate_bg_color)
@@ -874,11 +875,16 @@ class TableView(QtGui.QTableView):
         self.setEditTriggers(triggers)
 
         # Configure the reordering and sorting behavior.
-        if factory.reorderable:
-            self.setDragEnabled(True)
-            self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
-            self.setDropIndicatorShown(True)
-        elif factory.sortable:
+        self.setDragEnabled(True)
+        self.viewport().setAcceptDrops(True)
+        #self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+        self.setDropIndicatorShown(True)
+
+        #if factory.reorderable:
+        #    self.setDragEnabled(True)
+        #    self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+        #    self.setDropIndicatorShown(True)
+        if factory.sortable:
             self.setSortingEnabled(True)
 
         if factory._qt_stylesheet is not None:
