@@ -41,6 +41,19 @@ from pyface.util.guisupport import is_event_loop_running_wx, \
 # File to redirect output to. If '', output goes to stdout.
 redirect_filename = ''
 
+KEEP_ALIVE_UIS = set()
+
+
+def on_ui_destroyed(object, name, old, destroyed):
+    """ Remove the UI object from KEEP_ALIVE_UIS.
+    """
+    assert name == 'destroyed'
+    if destroyed:
+        assert object in KEEP_ALIVE_UIS
+        KEEP_ALIVE_UIS.remove(object)
+        object.on_trait_change(on_ui_destroyed, 'destroyed', remove=True)
+
+
 #-------------------------------------------------------------------------------
 #  Creates a 'stand-alone' wx Application to display a specified traits UI View:
 #-------------------------------------------------------------------------------
@@ -79,12 +92,19 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
         return ViewApplication( context, view, kind, handler, id,
                                 scrollable, args ).ui.result
 
-    return view.ui( context,
-                    kind       = kind,
-                    handler    = handler,
-                    id         = id,
-                    scrollable = scrollable,
-                    args       = args ).result
+    ui = view.ui( context,
+                  kind       = kind,
+                  handler    = handler,
+                  id         = id,
+                  scrollable = scrollable,
+                  args       = args )
+
+    # If the UI has not been closed yet, we need to keep a reference to
+    # it until it does close.
+    if not ui.destroyed:
+        KEEP_ALIVE_UIS.add(ui)
+        ui.on_trait_change(on_ui_destroyed, 'destroyed')
+    return ui.result
 
 #-------------------------------------------------------------------------------
 #  'ViewApplication' class:

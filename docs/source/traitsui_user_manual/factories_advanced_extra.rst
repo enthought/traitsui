@@ -1336,7 +1336,8 @@ ImageEditor()
 :Default for:
     (none)
 :Optional parameters:
-    *image*
+    *image*, *scale*, *preserve_aspect_ratio*, *allow_upscaling*,
+    *allow_clipping*
     
 ImageEditor() generates a read-only display of an image. The image to be
 displayed is determined by the *image* parameter, or by the value of the trait
@@ -1344,6 +1345,10 @@ attribute being edited, if *image* is not specified. In either case, the value
 must be a PyFace ImageResource (pyface.api.ImageResource), or a string
 that can be converted to one. If *image* is specified, then the type and value
 of the trait attribute being edited are irrelevant and are ignored.
+
+For the Qt backend *scale*, *preserve_aspect_ratio*, *allow_upscaling*, and
+*allow_clipping* control whether the image should be scaled or not, and how
+to perform that scaling.
 
 LEDEditor()
 ```````````
