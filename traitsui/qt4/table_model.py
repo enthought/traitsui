@@ -90,6 +90,11 @@ class TableModel(QtCore.QAbstractTableModel):
             if text is not None:
                 return text
 
+        elif role == QtCore.Qt.DecorationRole:
+            image = self._editor._get_image(column.get_image(obj))
+            if image is not None:
+                return image
+
         elif role == QtCore.Qt.ToolTipRole:
             tooltip = column.get_tooltip(obj)
             if tooltip:
