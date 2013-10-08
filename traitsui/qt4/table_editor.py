@@ -913,13 +913,10 @@ class TableView(QtGui.QTableView):
         # Configure the reordering and sorting behavior.
         self.setDragEnabled(True)
         self.viewport().setAcceptDrops(True)
-        #self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
         self.setDropIndicatorShown(True)
 
-        #if factory.reorderable:
-        #    self.setDragEnabled(True)
-        #    self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
-        #    self.setDropIndicatorShown(True)
+        if factory.reorderable:
+            self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
         if factory.sortable:
             self.setSortingEnabled(True)
 
