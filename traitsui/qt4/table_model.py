@@ -148,6 +148,8 @@ class TableModel(QtCore.QAbstractTableModel):
         if not mi.isValid():
             if editor.factory.reorderable:
                 return QtCore.Qt.ItemIsDropEnabled
+            else:
+                return
 
         flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled | \
                 QtCore.Qt.ItemIsDragEnabled 
