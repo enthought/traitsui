@@ -20,6 +20,8 @@ from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
 
+from .clipboard import PyMimeData 
+
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------
@@ -88,6 +90,11 @@ class TableModel(QtCore.QAbstractTableModel):
             if text is not None:
                 return text
 
+        elif role == QtCore.Qt.DecorationRole:
+            image = self._editor._get_image(column.get_image(obj))
+            if image is not None:
+                return image
+
         elif role == QtCore.Qt.ToolTipRole:
             tooltip = column.get_tooltip(obj)
             if tooltip:
@@ -136,20 +143,25 @@ class TableModel(QtCore.QAbstractTableModel):
     def flags(self, mi):
         """Reimplemented to set editable and movable status."""
 
-        flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
+        editor = self._editor
 
         if not mi.isValid():
-            return flags
+            if editor.factory.reorderable:
+                return QtCore.Qt.ItemIsDropEnabled
+            else:
+                return
 
-        editor = self._editor
+        flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled | \
+                QtCore.Qt.ItemIsDragEnabled 
+
         obj = editor.items()[mi.row()]
         column = editor.columns[mi.column()]
 
         if editor.factory.editable and column.is_editable(obj):
-            flags |= QtCore.Qt.ItemIsEditable
+            flags |= QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsDropEnabled
 
         if editor.factory.reorderable:
-            flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
+            flags |= QtCore.Qt.ItemIsDropEnabled
 
         if column.get_type(obj) == "bool" and column.show_checkbox:
             flags |= QtCore.Qt.ItemIsUserCheckable
@@ -214,18 +226,34 @@ class TableModel(QtCore.QAbstractTableModel):
         """Reimplemented to expose our internal MIME type for drag and drop
         operations."""
 
-        return [mime_type]
+        return [mime_type, PyMimeData.MIME_TYPE, PyMimeData.NOPICKLE_MIME_TYPE]
 
     def mimeData(self, indexes):
         """Reimplemented to generate MIME data containing the rows of the
         current selection."""
-
-        mime_data = QtCore.QMimeData()
-        rows = list(set([ index.row() for index in indexes ]))
-        data = QtCore.QByteArray(str(rows[0]))
-        for row in rows[1:]:
-            data.append(' %i' % row)
-        mime_data.setData(mime_type, data)
+        
+        editor = self._editor
+        selection_mode = editor.factory.selection_mode
+        
+        if selection_mode.startswith("cell"):
+            data = [self._get_cell_drag_value(index.row(), index.column())
+                for index in indexes]
+        elif selection_mode.startswith("column"):
+            columns = sorted(set(index.column() for index in indexes))
+            data = self._get_columns_drag_value(columns)
+        else:
+            rows = sorted(set(index.row() for index in indexes))
+            data = self._get_rows_drag_value(rows)
+        
+        mime_data = PyMimeData.coerce(data)
+        
+        # handle re-ordering via internal drags
+        if editor.factory.reorderable:
+            rows = sorted(set([ index.row() for index in indexes ]))
+            data = QtCore.QByteArray(str(id(self)))
+            for row in rows:
+                data.append(' %i' % row)
+            mime_data.setData(mime_type, data)
         return mime_data
 
     def dropMimeData(self, mime_data, action, row, column, parent):
@@ -233,24 +261,82 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if action == QtCore.Qt.IgnoreAction:
             return False
-
+            
+        # this is a drag from a table model?
         data = mime_data.data(mime_type)
-        if data.isNull():
-            return False
+        if not data.isNull() and action == QtCore.Qt.MoveAction:
+            id_and_rows = map(int, str(data).split(' '))
+            table_id = id_and_rows[0]
+            # is it from ourself?
+            if table_id == id(self):
+                current_rows = id_and_rows[1:]
+                if not parent.isValid():
+                    row = len(self._editor.items())-1
+                else:
+                    row == parent.row()
+                    
+                self.moveRows(current_rows, row)
+                return True
 
-        current_rows = map(int, str(data).split(' '))
-        self.moveRows(current_rows, parent.row())
-        return True
+        data = PyMimeData.coerce(mime_data).instance()
+        if data is not None:
+            editor = self._editor
+            
+            if row == -1 and column == -1 and parent.isValid():
+                row = parent.row()
+                column = parent.column()
+            
+            if row != -1 and column != - 1:
+                object = editor.items()[row]
+                column = editor.columns[column]                
+                if column.is_droppable(object, data):
+                    column.set_value(object, data)
+                    return True
+            
+        return False
 
     def supportedDropActions(self):
         """Reimplemented to allow items to be moved."""
-
+    
         return QtCore.Qt.MoveAction
+
+    #---------------------------------------------------------------------------
+    #  Utility methods
+    #---------------------------------------------------------------------------
+    
+    def _get_columns_drag_value(self, columns):
+        """ Returns the value to use when the specified columns are dragged or
+            copied and pasted. The parameter *cols* is a list of column indexes.
+        """
+        return [self._get_column_data(column) for column in columns]
+
+    def _get_column_data(self, column):
+        """ Return the model data for the column as a list """
+        editor = self._editor
+        column_obj = editor.columns[column]
+        return [column_obj.get_value(item) for item in editor.items()]
+
+    def _get_rows_drag_value(self, rows):
+        """ Returns the value to use when the specified rows are dragged or
+            copied and pasted. The parameter *rows* is a list of row indexes.
+            Return a list of objects.
+        """
+        items = self._editor.items()
+        return [items[row] for row in rows]
+
+    def _get_cell_drag_value(self, row, column):
+        """ Returns the value to use when the specified cell is dragged or
+            copied and pasted.
+        """
+        editor = self._editor
+        item = editor.items()[row]
+        drag_value = editor.columns[column].get_drag_value(item)
+        return drag_value
 
     #---------------------------------------------------------------------------
     #  TableModel interface:
     #---------------------------------------------------------------------------
-
+    
     def moveRow(self, old_row, new_row):
         """Convenience method to move a single row."""
 

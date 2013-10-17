@@ -487,7 +487,6 @@ class TabularEditor(Editor):
         column, row = self.control.columnAt(pos.x()), self.control.rowAt(pos.y())
         menu = self.adapter.get_menu(self.object, self.name, row, column)
         if menu :
-            qmenu = menu.create_menu( self.control, self )
             self._menu_context = {'selection' : self.object,
                              'object':  self.object,
                              'editor':  self,
@@ -496,6 +495,7 @@ class TabularEditor(Editor):
                              'item':    self.adapter.get_item(self.object, self.name, row),
                              'info':    self.ui.info,
                              'handler': self.ui.handler }
+            qmenu = menu.create_menu( self.control, self )
             qmenu.exec_(self.control.mapToGlobal(pos))
             self._menu_context = None
 
@@ -503,12 +503,12 @@ class TabularEditor(Editor):
         column = self.control.columnAt(pos.x())
         menu = self.adapter.get_column_menu(self.object, self.name, -1, column)
         if menu :
-            qmenu = menu.create_menu( self.control, self )
             self._menu_context = {'selection' : self.object, 'object':  self.object,
                              'editor':  self,
                              'column':  column,
                              'info':    self.ui.info,
                              'handler': self.ui.handler }
+            qmenu = menu.create_menu( self.control, self )
             qmenu.exec_(self.control.mapToGlobal(pos))
             self._menu_context = None
         else:
@@ -635,7 +635,10 @@ class _TableView(QtGui.QTableView):
 
         # Configure drag and drop behavior
         self.setDragEnabled(True)
-        self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+        if factory.editable:
+            self.viewport().setAcceptDrops(True)
+        if factory.drag_move:
+            self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
         self.setDropIndicatorShown(True)
 
     def keyPressEvent(self, event):

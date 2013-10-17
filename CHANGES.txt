@@ -1,0 +1,30 @@
+Traits UI Changelog
+===================
+
+Since 4.3.0
+
+New Features
+
+ * Changes for new Traits adaptation mechanism support (#113)
+
+Enhancements
+   
+ * Remove the use of the deprecated PySimpleApp under Wx and several other
+   improvements. (#107)
+
+ * Improvements to Qt TabularEditor, TableEditor and TreeEditor drag and drop
+   support.  Should be roughly on par with Wx support.  No API changes.
+   (#124, #126, #129, #135)
+
+ * Improvements to PyMimeData coercion to better handle lists of items. (#127)
+
+Fixes
+ * Fix drag image location for Qt TreeEditor (#132)
+
+ * Qt TreeEditor supports bg and fg colors and column labels correctly. (#131)
+
+ * remove event handlers before window destruction in Wx.  Required for
+   Wx 2.9. (#108)
+
+There are currently some other unlisted changes going back some time
+before this file was created.
