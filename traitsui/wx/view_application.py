@@ -110,7 +110,7 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
 #  'ViewApplication' class:
 #-------------------------------------------------------------------------------
 
-class ViewApplication ( wx.PySimpleApp ):
+class ViewApplication ( wx.App ):
     """ Modal window that contains a stand-alone application.
     """
     #---------------------------------------------------------------------------
@@ -128,8 +128,6 @@ class ViewApplication ( wx.PySimpleApp ):
         self.scrollable = scrollable
         self.args       = args
 
-        wx.InitAllImageHandlers()
-
         if os.environ.get( 'ENABLE_FBI' ) is not None:
             try:
                 from etsdevtools.developer.helper.fbi import enable_fbi
@@ -140,7 +138,7 @@ class ViewApplication ( wx.PySimpleApp ):
         if redirect_filename.strip() != '':
             super( ViewApplication, self ).__init__( 1, redirect_filename )
         else:
-            super( ViewApplication, self ).__init__()
+            super( ViewApplication, self ).__init__(0)
 
         # Start the event loop in an IPython-conforming manner.
         start_event_loop_wx(self)
