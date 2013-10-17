@@ -32,7 +32,7 @@ import wx
 # Make sure a wx.App object is created early:
 _app = wx.GetApp()
 if _app is None:
-    _app = wx.PySimpleApp()
+    _app = wx.App(redirect=False)
 
 from traits.api \
     import HasPrivateTraits, Instance, Property, Category, cached_property
