@@ -1744,8 +1744,7 @@ class _TreeWidget(QtGui.QTreeWidget):
 
         # Calculate the hotspot so that the pixmap appears on top of the
         # original item.
-        rect.adjust(self.horizontalOffset(), self.verticalOffset(), 0, 0)
-        hspos = self.mapFromGlobal(QtGui.QCursor.pos()) - nid_rect.topLeft()
+        hspos = self.viewport().mapFromGlobal(QtGui.QCursor.pos()) - nid_rect.topLeft()
 
         # Start the drag.
         drag = QtGui.QDrag(self)
