@@ -1,0 +1,17 @@
+Traits UI Changelog
+===================
+
+Since 4.3.0
+
+New Features
+
+ * Changes for new Traits adaptation mechanism support (2e38403)
+
+Enhancements
+
+ * Improvements to Qt TabularEditor, TableEditor and TreeEditor drag and drop
+   support.  Should be roughly on par with Wx support.  No API changes.
+   (4fb1732, 9ea7b23, f3fc761, cd33e2d)
+
+There are currently some other unlisted changes going back some time
+before this file was created.
