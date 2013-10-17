@@ -19,6 +19,9 @@ Enhancements
  * Improvements to PyMimeData coercion to better handle lists of items. (#127)
 
 Fixes
+
+ * Revert to parsing exception messages to avoid asking for value of an Event (#123)
+
  * Fix drag image location for Qt TreeEditor (#132)
 
  * Qt TreeEditor supports bg and fg colors and column labels correctly. (#131)

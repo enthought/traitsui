@@ -131,12 +131,18 @@ class Editor ( HasPrivateTraits ):
         HasPrivateTraits.__init__( self, **traits )
         try:
             self.old_value = getattr( self.object, self.name )
-        except AttributeError:
-            ctrait = self.object.trait(self.name)
-            if ctrait.type == 'event' or self.name == 'spring':
+        except AttributeError, ex:
+            # We must examine the exception message to determine if it
+            # arises from trying to get an Event value or not. We cannot
+            # examine the trait, as it may just be a DelegatesTo around
+            # an Event.
+            # If the error message changes in ctraits.c, this must be
+            # updated.
+            event_msg = "instance is an 'event', which is write only."
+            if ex.args[0].endswith(event_msg) or self.name == 'spring' :
                 # Getting the attribute will fail for 'Event' traits:
                 self.old_value = Undefined
-            else:
+            else :
                 raise
 
         # Synchronize the application invalid state status with the editor's:
