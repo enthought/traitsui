@@ -9,7 +9,7 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #  Author: Corran Webster
-#  Date:   Jan 2013
+#  Date:   Oct 2013
 #
 #------------------------------------------------------------------------------
 
