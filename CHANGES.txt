@@ -20,6 +20,8 @@ Enhancements
 
 Fixes
 
+ * Fixes item selection issue #133 in ListStrEditor under Wx 2.9 (#137)
+
  * Revert to parsing exception messages to avoid asking for value of an Event (#123)
 
  * Fix drag image location for Qt TreeEditor (#132)
