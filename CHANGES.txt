@@ -8,6 +8,8 @@ New Features
  * Changes for new Traits adaptation mechanism support (#113)
 
 Enhancements
+
+ * Add Travis-CI support.
    
  * Remove the use of the deprecated PySimpleApp under Wx and several other
    improvements. (#107)
