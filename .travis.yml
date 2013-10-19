@@ -17,7 +17,7 @@ install:
   - python setup.py develop
 script:
   - nosetests traitsui.tests
-  - nosetests integrationtests
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then nosetests traitsui.qt.tests; fi
 notifications:
   email:
     - travis-ci@enthought.com
