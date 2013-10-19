@@ -16,7 +16,7 @@ install:
   - pip install git+http://github.com/enthought/traits.git#egg=traits
   - python setup.py develop
 script:
-  - nosetests traitsui
+  - nosetests traitsui/tests
 notifications:
   email:
     - travis-ci@enthought.com
