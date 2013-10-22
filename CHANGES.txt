@@ -30,6 +30,8 @@ Fixes
 
  * Qt TreeEditor supports bg and fg colors and column labels correctly. (#131)
 
+ * Fix ListEditor under PySide (#125)
+
  * remove event handlers before window destruction in Wx.  Required for
    Wx 2.9. (#108)
 
