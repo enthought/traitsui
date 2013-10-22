@@ -178,16 +178,16 @@ class MakeMenu:
                 if name:
                     self.names[name] = act
                     setattr(self.owner, name, MakeMenuItem(self, act))
+            else:
+                # Else must be the start of a sub menu:
+                submenu = QtGui.QMenu(line.strip())
 
-            # Else must be the start of a sub menu:
-            submenu = QtGui.QMenu(line.strip())
+                # Recursively parse the sub-menu:
+                self.parse(submenu, indented)
 
-            # Recursively parse the sub-menu:
-            self.parse(submenu, indented)
-
-            # Add the menu to its parent:
-            act = menu.addMenu(submenu)
-            act.setStatusTip(help)
+                # Add the menu to its parent:
+                act = menu.addMenu(submenu)
+                act.setStatusTip(help)
 
     #---------------------------------------------------------------------------
     #  Returns the body of an inline method:
