@@ -36,7 +36,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2011, Enthought'
+copyright = '2008-2013, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
