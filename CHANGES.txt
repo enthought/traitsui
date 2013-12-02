@@ -9,6 +9,9 @@ New Features
 
 Enhancements
 
+ * Add minimal support for the dock_styles option to the Qt tabbed List
+   Editor. (#143)
+
  * Add Travis-CI support.
    
  * Remove the use of the deprecated PySimpleApp under Wx and several other
