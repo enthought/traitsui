@@ -543,7 +543,7 @@ class NotebookEditor ( Editor ):
         signal = QtCore.SIGNAL( 'currentChanged(int)' )
         QtCore.QObject.connect( self.control, signal, self._tab_activated )
 
-        # if the dock_style is 'tab', use document style on OS X
+        # minimal dock_style handling
         if self.factory.dock_style == 'tab':
             self.control.setDocumentMode(True)
             self.control.tabBar().setDocumentMode(True)

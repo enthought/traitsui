@@ -18,6 +18,8 @@ New Features
 
 Enhancements
 
+ * Add minimal support for dock_styles for the Qt tabbed ListEditor. (#142)
+
  * Add Travis-CI support.
    
  * Remove the use of the deprecated PySimpleApp under Wx and several other
