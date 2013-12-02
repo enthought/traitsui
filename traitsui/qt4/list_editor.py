@@ -543,6 +543,13 @@ class NotebookEditor ( Editor ):
         signal = QtCore.SIGNAL( 'currentChanged(int)' )
         QtCore.QObject.connect( self.control, signal, self._tab_activated )
 
+        # if the dock_style is 'tab', use document style on OS X
+        if self.factory.dock_style == 'tab':
+            self.control.setDocumentMode(True)
+            self.control.tabBar().setDocumentMode(True)
+        elif self.factory.dock_style == 'vertical':
+            self.control.setTabPosition(QtGui.QTabWidget.West)
+
         # Create the button to close tabs, if necessary:
         if self.factory.deletable:
             button = QtGui.QToolButton()
