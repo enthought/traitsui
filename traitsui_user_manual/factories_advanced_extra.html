@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.2.1',
+        VERSION:     '4.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -1355,7 +1355,8 @@ from the URL represented by the attribute being edited.</li>
 <tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">(none)</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>image</em></td>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>image</em>, <em>scale</em>, <em>preserve_aspect_ratio</em>, <em>allow_upscaling</em>,
+<em>allow_clipping</em></td>
 </tr>
 </tbody>
 </table>
@@ -1365,6 +1366,9 @@ attribute being edited, if <em>image</em> is not specified. In either case, the 
 must be a PyFace ImageResource (pyface.api.ImageResource), or a string
 that can be converted to one. If <em>image</em> is specified, then the type and value
 of the trait attribute being edited are irrelevant and are ignored.</p>
+<p>For the Qt backend <em>scale</em>, <em>preserve_aspect_ratio</em>, <em>allow_upscaling</em>, and
+<em>allow_clipping</em> control whether the image should be scaled or not, and how
+to perform that scaling.</p>
 </div>
 <div class="section" id="lededitor">
 <h2>LEDEditor()<a class="headerlink" href="#lededitor" title="Permalink to this headline">¶</a></h2>
@@ -1660,8 +1664,8 @@ states of the tabs.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2008-2011, Enthought.
-      Last updated on Oct 02, 2012.
+        &copy; Copyright 2008-2013, Enthought.
+      Last updated on Oct 25, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
