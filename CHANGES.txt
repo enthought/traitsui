@@ -1,7 +1,16 @@
 Traits UI Changelog
 ===================
 
-Since 4.3.0
+Release 4.4.0
+-------------
+
+The biggest change in this release is support for the new adaptation mechanism
+in Traits 4.4.0.  Other than that, there are a number of other minor changes,
+improvements and bugfixes.
+
+Corran Webster (corranwebster on GitHub) is now maintainer of TraitsUI.
+
+Change summary since 4.3.0
 
 New Features
 
