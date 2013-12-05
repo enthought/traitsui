@@ -1,6 +1,11 @@
 Traits UI Changelog
 ===================
 
+What's new in TraitsUI 4.5.0
+----------------------------
+
+
+
 Release 4.4.0
 -------------
 
