@@ -37,27 +37,30 @@ class CodeView(ModelView):
         )
         return traits_view
 
+def verify_line_numbers_visibility(show=True):
+    from pyface import qt
+    with store_exceptions_on_all_threads():
+        code_model = CodeModel()
+        code_view = CodeView(model=code_model,
+                                show_line_numbers=show)
+        ui = code_view.edit_traits()
+        
+        # verify visibility of control
+        txt_ctrl = ui.control.findChild(qt.QtGui.QPlainTextEdit)
+        nose.tools.assert_equal(txt_ctrl.line_number_widget.isVisible(), show)
+
+        ui.control.close()
 
 @skip_if_not_qt4
-def test_code_editor_show_line_numbers():
+def test_code_editor_show_line_numbers_visible():
     """ CodeEditor should honor the `show_line_numbers` setting
     """
-    def is_line_numbers_visible(ui):
-        from pyface import qt
-        txt_ctrl = ui.control.findChild(qt.QtGui.QPlainTextEdit)
-        return txt_ctrl.line_number_widget.isVisible()
+    verify_line_numbers_visibility(True)
 
-    def test_line_numbers_visibility(show=True):
-        with store_exceptions_on_all_threads():
-            code_model = CodeModel()
-            code_view = CodeView(model=code_model,
-                                 show_line_numbers=show)
-            ui = code_view.edit_traits()
-            nose.tools.assert_equal(is_line_numbers_visible(ui), show)
-            ui.control.close()
+@skip_if_not_qt4
+def test_code_editor_show_line_numbers_hidden():
+    verify_line_numbers_visibility(False)
 
-    test_line_numbers_visibility(True)
-    test_line_numbers_visibility(False)
 
 @skip_if_not_qt4
 def test_code_editor_readonly():
