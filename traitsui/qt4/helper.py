@@ -198,7 +198,7 @@ class IconButton(QtGui.QPushButton):
         self.setFlat(True)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
 
-        QtCore.QObject.connect(self, QtCore.SIGNAL('clicked()'), slot)
+        self.clicked.connect(slot)
 
 #-------------------------------------------------------------------------------
 #  Dock-related stubs.

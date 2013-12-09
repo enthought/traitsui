@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 #
-#  Copyright (c) 2007, Enthought, Inc.
+#  Copyright (c) 2007-13, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -296,7 +296,8 @@ class _ListStrEditor ( Editor ):
 
         control.DeleteAllItems()
         control.SetItemCount( n )
-        control.RefreshItems( 0, n - 1 )
+        if control.GetItemCount() > 0:
+            control.RefreshItems( 0, control.GetItemCount()-1 )
         control.SetColumnWidth( 0, control.GetClientSizeTuple()[0]  )
 
         edit,  self.edit  = self.edit,  False
@@ -312,12 +313,21 @@ class _ListStrEditor ( Editor ):
             visible = top + pn - 2
             if visible >= 0 and visible < control.GetItemCount():
                 control.EnsureVisible( visible )
+            if self.factory.multi_select:
+                for index in self.multi_selected_indices:
+                    if 0 <= index < n:
+                        control.SetItemState( index, wx.LIST_STATE_SELECTED,
+                                                    wx.LIST_STATE_SELECTED )
+            else:
+                if 0 <= self.selected_index < n:
+                    control.SetItemState( self.selected_index,
+                        wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED )
             return
 
         if 0 <= (index - top) < pn:
-            control.EnsureVisible( top + pn - 2 )
+            control.EnsureVisible( max(0, top + pn - 2 ) )
         elif index < top:
-            control.EnsureVisible( index + pn - 1 )
+            control.EnsureVisible( min(n, index + pn - 1 ) )
         else:
             control.EnsureVisible( index )
 
@@ -349,15 +359,18 @@ class _ListStrEditor ( Editor ):
             try:
                 self.control.SetItemState( self.value.index( selected ),
                                 wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED )
-            except:
+            except Exception:
                 pass
 
     def _selected_index_changed ( self, selected_index ):
         """ Handles the editor's 'selected_index' trait being changed.
         """
         if not self._no_update:
-            self.control.SetItemState( selected_index, wx.LIST_STATE_SELECTED,
+            try:
+                self.control.SetItemState( selected_index, wx.LIST_STATE_SELECTED,
                                                        wx.LIST_STATE_SELECTED )
+            except Exception:
+                pass
 
     def _multi_selected_changed ( self, selected ):
         """ Handles the editor's 'multi_selected' trait being changed.
@@ -367,7 +380,7 @@ class _ListStrEditor ( Editor ):
             try:
                 self._multi_selected_indices_changed( [ values.index( item )
                                                         for item in selected ] )
-            except:
+            except Exception:
                 pass
 
     def _multi_selected_items_changed ( self, event ):
@@ -378,7 +391,7 @@ class _ListStrEditor ( Editor ):
             self._multi_selected_indices_items_changed( TraitListEvent( 0,
                 [ values.index( item ) for item in event.removed ],
                 [ values.index( item ) for item in event.added   ] ) )
-        except:
+        except Exception:
             pass
 
     def _multi_selected_indices_changed ( self, selected_indices ):
@@ -393,8 +406,11 @@ class _ListStrEditor ( Editor ):
                 if index in selected:
                     selected.remove( index )
                 else:
-                    control.SetItemState( index, wx.LIST_STATE_SELECTED,
-                                                 wx.LIST_STATE_SELECTED )
+                    try:
+                        control.SetItemState( index, wx.LIST_STATE_SELECTED,
+                                                    wx.LIST_STATE_SELECTED )
+                    except Exception:
+                        pass
 
             # Unselect all remaining selected items that aren't selected now:
             for index in selected:

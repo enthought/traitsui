@@ -242,11 +242,9 @@ def panel(ui):
             w.setLayout(panel)
             panel = w
 
-        size_policy =  panel.sizePolicy()
         sa = QtGui.QScrollArea()
         sa.setWidget(panel)
         sa.setWidgetResizable(True)
-        sa.setSizePolicy(size_policy)
         panel = sa
 
     return panel
