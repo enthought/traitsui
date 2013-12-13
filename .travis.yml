@@ -10,6 +10,7 @@ before_install:
 install:
   # nose is already installed
   - pip install unittest2
+  - pip install pygments
   - sudo apt-get install python-numpy
   # Test against the current master of traits, traitsui and enable
   - pip install git+http://github.com/enthought/traits.git#egg=traits
