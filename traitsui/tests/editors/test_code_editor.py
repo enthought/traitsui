@@ -17,6 +17,7 @@ from traitsui.view import View, Group
 from traitsui.item import Item
 from traitsui.editors.code_editor import CodeEditor
 
+from traitsui.qt4.code_editor import SimpleEditor, ReadonlyEditor
 
 from traitsui.tests._tools import *
 
@@ -38,15 +39,23 @@ class CodeView(ModelView):
         return traits_view
 
 def verify_line_numbers_visibility(show=True):
-    from pyface import qt
     with store_exceptions_on_all_threads():
         code_model = CodeModel()
         code_view = CodeView(model=code_model,
                                 show_line_numbers=show)
         ui = code_view.edit_traits()
-        
+        from pyface.qt import QtGui
+        for i in xrange(10000):
+            QtGui.QApplication.processEvents()
         # verify visibility of control
-        txt_ctrl = ui.control.findChild(qt.QtGui.QPlainTextEdit)
+        txt_ctrl = ui.control.findChild(QtGui.QPlainTextEdit)
+        #if txt_ctrl:
+        children = set([ui.control])
+        while children:
+            for child in list(children):
+                print('obj', child, child.children(), getattr(child, 'text', lambda:'')())
+                children.remove(child)
+                children.update(child.children())
         nose.tools.assert_equal(txt_ctrl.line_number_widget.isVisible(), show)
 
         ui.control.close()
@@ -66,13 +75,14 @@ def test_code_editor_show_line_numbers_hidden():
 def test_code_editor_readonly():
     """ Test readonly editor style for CodeEditor
     """
-    from pyface import qt
     with store_exceptions_on_all_threads():
         code_model = CodeModel()
         code_view = CodeView(model=code_model,
                              style='readonly')
         ui = code_view.edit_traits()
-        txt_ctrl = ui.control.findChild(qt.QtGui.QPlainTextEdit)
+        from pyface.qt import QtGui
+        for i in xrange(10000):
+            txt_ctrl = ui.control.findChild(QtGui.QPlainTextEdit)
         nose.tools.assert_true(txt_ctrl.isReadOnly())
 
         # Test changing the object's text
