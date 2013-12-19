@@ -10,7 +10,7 @@ import unittest
 from cPickle import dumps
 
 from pyface.qt import QtCore
-from traitsui.qt4.clipboard import PyMimeData
+from traitsui.qt4.clipboard import PyMimeData,str2bytes
 
 class PMDSubclass(PyMimeData):
     pass
@@ -31,7 +31,10 @@ class PyMimeDataTestCase(unittest.TestCase):
         self.assertEqual(md._local_instance, 0)
         self.assertTrue(md.hasFormat(PyMimeData.NOPICKLE_MIME_TYPE))
         self.assertFalse(md.hasFormat(PyMimeData.MIME_TYPE))
-        self.assertEqual(bytes(md.data(PyMimeData.NOPICKLE_MIME_TYPE)), str(id(0)))
+        self.assertEqual(
+            bytes(md.data(PyMimeData.NOPICKLE_MIME_TYPE)),
+            str2bytes(str(id(0)))
+        )
 
     def test_cant_pickle(self):
         unpicklable = lambda: None
@@ -39,7 +42,10 @@ class PyMimeDataTestCase(unittest.TestCase):
         self.assertEqual(md._local_instance, unpicklable)
         self.assertTrue(md.hasFormat(PyMimeData.NOPICKLE_MIME_TYPE))
         self.assertFalse(md.hasFormat(PyMimeData.MIME_TYPE))
-        self.assertEqual(bytes(md.data(PyMimeData.NOPICKLE_MIME_TYPE)), str(id(unpicklable)))
+        self.assertEqual(
+            bytes(md.data(PyMimeData.NOPICKLE_MIME_TYPE)),
+            str2bytes(str(id(unpicklable)))
+        )
 
     def test_coerce_pymimedata(self):
         md = PyMimeData(data=0)
