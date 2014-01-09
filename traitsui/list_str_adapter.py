@@ -25,7 +25,7 @@
 from __future__ import absolute_import
 
 from traits.api import (Any, Bool, Color, Enum, Event, HasPrivateTraits, Int,
-    Interface, List, Str, implements, on_trait_change)
+    Interface, List, Str, on_trait_change, provides)
 
 #-------------------------------------------------------------------------------
 #  'IListStrAdapter' interface:
@@ -52,9 +52,8 @@ class IListStrAdapter ( Interface ):
 #  'AnIListStrAdapter' class:
 #-------------------------------------------------------------------------------
 
+@provides(IListStrAdapter)
 class AnIListStrAdapter ( HasPrivateTraits ):
-
-    implements( IListStrAdapter )
 
     #-- Implementation of the IListStrAdapter Interface ------------------------
 
