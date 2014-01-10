@@ -7,6 +7,7 @@ What's new in TraitsUI 4.5.0
 Fixes
 
  * Qt CodeEditor now honors 'show_line_numbers' and the 'readonly' style (#137)
+ * Deprecated `implements` declaration removed, use `provides` instead (#152)
 
 
 Release 4.4.0
