@@ -147,7 +147,7 @@ ButtonEditor()
 :Default for:
     Button, ToolbarButton
 :Optional parameters:
-    *image*, *label*, *orientation*, *style*, *value*, *view*, *width_padding*
+    *height_padding*, *image*, *label*, *label_value*, *orientation*, *style*, *value*, *values_trait*, *view*, *width_padding*
 
 The ButtonEditor() factory is designed to be used with an Event or Button [16]_
 trait. When a user clicks a button editor, the associated event is fired.
@@ -164,9 +164,13 @@ By default, the label of the button is the name of the Button or Event trait to
 which it is linked. [17]_ However, this label can be set to any string by
 specifying the *label* parameter of ButtonEditor() as that string.
 
+Alternatively, use *label_value* to specify the name of the trait to use as the button label.
+
 You can specify a value for the trait to be set to, using the *value* parameter.
 If the trait is an Event, then the value is not stored, but might be useful to
 an event listener.
+
+Use *values_trait* to specify the name of the trait on the object that contains the list of possible values. If this is set, then the *value*, *label*, and *label_value* traits are ignored; instead, they will be set from this list. When this button is clicked, the value set will be the one selected from the drop-down.
 
 .. _checklisteditor:
 
