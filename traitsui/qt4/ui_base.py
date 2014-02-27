@@ -239,11 +239,15 @@ class BasePanel(object):
 
         return button
 
-    def _on_help(self):
+    def _on_help(self, event):
         """Handles the user clicking the Help button.
         """
-        # FIXME: Needs porting to PyQt.
-        self.ui.handler.show_help(self.ui.info, event.GetEventObject())
+        # FIXME: Needs porting to PyQt.  
+        if event:
+            control = event.GetEventObject()
+        else:
+            control = None
+        self.ui.handler.show_help(self.ui.info, control)
 
     def _on_undo(self):
         """Handles a request to undo a change.
@@ -336,10 +340,10 @@ class _StickyDialog(QtGui.QDialog):
         if e.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and \
                not self._ui.view.default_button:
             return
-        
+
         if e.key() == QtCore.Qt.Key_Escape and not self._ok_to_close():
             return
-        
+
         QtGui.QDialog.keyPressEvent(self, e)
 
     def sizeHint(self):
