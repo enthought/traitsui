@@ -239,7 +239,7 @@ class BasePanel(object):
 
         return button
 
-    def _on_help(self, event):
+    def _on_help(self, event=None):
         """Handles the user clicking the Help button.
         """
         # FIXME: Needs porting to PyQt.  
