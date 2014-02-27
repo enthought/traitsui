@@ -239,15 +239,10 @@ class BasePanel(object):
 
         return button
 
-    def _on_help(self, event=None):
+    def _on_help(self):
         """Handles the user clicking the Help button.
         """
-        # FIXME: Needs porting to PyQt.  
-        if event:
-            control = event.GetEventObject()
-        else:
-            control = None
-        self.ui.handler.show_help(self.ui.info, control)
+        self.ui.handler.show_help(self.ui.info)
 
     def _on_undo(self):
         """Handles a request to undo a change.
