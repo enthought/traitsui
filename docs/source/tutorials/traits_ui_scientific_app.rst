@@ -822,7 +822,9 @@ Toronto.
 The reason I am providing this code is to give an example to study of how
 a full-blown application can be built. This code can be found in the
 `tutorial's zip file <http://gael-varoquaux.info/computers/traits_tutorial/traits_tutorial.zip>`_ 
-(it is the file `application.py`).
+(it is the file `application.py`). An alternative version of this code
+using Qt instead of wx as widget toolbox can be found
+`here <https://github.com/FelixHartmann/traitsui-tutorial-qt>`_.
 
 * The camera will be built as an object. Its real attributes (exposure
   time, gain...) will be represented as the object's attributes, and
