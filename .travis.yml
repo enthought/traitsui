@@ -1,23 +1,25 @@
 language: python
 python:
   - 2.7
+  - 3.3
 virtualenv:
   # This allows installing PyQt using apt-get and being able to import it.
   system_site_packages: true
 before_install:
   # On Python 2.7 we install PyQt4 and run the UI tests.
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then source .travis_before_install; fi
+  - source .travis_before_install
 install:
   # nose is already installed
   - pip install unittest2
   - pip install pygments
   - sudo apt-get install python-numpy
+  - sudo apt-get install python3-numpy
   # Test against the current master of traits, traitsui and enable
   - pip install git+http://github.com/enthought/traits.git#egg=traits
   - python setup.py develop
 script:
   - nosetests traitsui.tests
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then nosetests traitsui.qt4.tests; fi
+  - nosetests traitsui.qt4.tests
 notifications:
   email:
-    - travis-ci@enthought.com
+    - pradyunsg@enthought.com
