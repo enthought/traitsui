@@ -28,7 +28,7 @@ from __future__ import absolute_import
 from traits.api import (Bool, Delegate, Float, Instance, List, Property, Range,
     ReadOnly, Str, TraitError, cached_property)
 
-from traits import _py2to3
+import traits._py2to3 as _py2to3
 
 from .view_element import ViewSubElement
 

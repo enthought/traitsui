@@ -28,7 +28,7 @@ from __future__ import absolute_import
 import re
 
 from traits.api import HasPrivateTraits, Trait, Bool
-from traits import _py2to3
+import traits._py2to3 as _py2to3
 
 from .ui_traits import (ATheme, AnObject, DockStyle, EditorStyle, ExportType,
     HelpId, Image)

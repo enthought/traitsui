@@ -31,7 +31,7 @@ from traits.api import (Bool, Callable, Constant, Delegate, Float, Instance,
     Range, Str, Undefined, Dict,)
 
 from traits.trait_base import user_name_for
-from traits import _py2to3
+import traits._py2to3 as _py2to3
 
 from .view_element import ViewSubElement
 
