@@ -33,7 +33,7 @@ from os.path import (basename, dirname, exists, getatime, getctime, getmtime,
 from time import localtime, strftime
 
 from traits.api import (Bool, Button, CList, Event, File, HasPrivateTraits,
-    Instance, Int, Interface, Property, Str, cached_property, implements)
+    Instance, Int, Interface, Property, Str, cached_property, provides)
 
 from traits.trait_base import user_name_for
 
@@ -95,9 +95,8 @@ class IFileDialogExtension ( IFileDialogModel, IFileDialogView ):
 #  'MFileDialogModel' mix-in class:
 #-------------------------------------------------------------------------------
 
+@provides(IFileDialogModel)
 class MFileDialogModel ( HasPrivateTraits ):
-
-    implements( IFileDialogModel )
 
     # The name of the currently selected file:
     file_name = File
