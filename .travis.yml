@@ -18,8 +18,10 @@ install:
   - pip install git+http://github.com/pradyun/pyface.git@python3#egg=pyface
   - python setup.py develop
 script:
+  - cd build
   - nosetests traitsui.tests
   - nosetests traitsui.qt4.tests
+  - cd ..
 notifications:
   email:
     - pradyunsg@enthought.com
