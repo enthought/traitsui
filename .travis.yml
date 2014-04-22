@@ -10,7 +10,6 @@ before_install:
   - source .travis_before_install
 install:
   # nose is already installed
-  - pip install unittest2
   - pip install pygments
   - sudo apt-get install python-numpy
   - sudo apt-get install python3-numpy
