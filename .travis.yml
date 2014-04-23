@@ -15,7 +15,7 @@ install:
     - sudo apt-get install python3-numpy
     # Test against the current master of traits
     - pip install git+http://github.com/enthought/traits.git#egg=traits
-    # Test against the current python3 of pyface
+    # Test against the current python3 branch of pyface
     - pip install git+http://github.com/pradyun/pyface.git@python3#egg=pyface
     - python setup.py develop
     - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then {envpython} setup.py build; fi
