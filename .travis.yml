@@ -20,5 +20,5 @@ install:
     - python setup.py develop
 
 script:
-    - python setup.py nosetests traitsui.tests
-    - python setup.py nosetests traitsui.qt4.tests
+    - python setup.py nosetests
+    - python setup.py nosetests

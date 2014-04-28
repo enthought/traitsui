@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 
 # pylint: disable=C0103,W0122
 info = {}
-traitsui_init = join('traitsui', '__init__.py')
+traitsui_init = join(__file__, '..', 'traitsui', '__init__.py')
 exec(compile(open(traitsui_init).read(), traitsui_init, 'exec'), info)
 
 
@@ -35,7 +35,7 @@ setup(
         Topic :: Software Development :: Libraries
         """.splitlines() if len(c.strip()) > 0],
     description = 'traitsui: traits-capable user interfaces',
-    long_description = open('README.rst').read(),
+    long_description = open(join(__file__, '..', 'README.rst')).read(),
     url = 'https://github.com/enthought/traitsui',
     download_url = ('http://www.enthought.com/repo/ets/traitsui-%s.tar.gz' %
                     info['__version__']),
