@@ -2,15 +2,18 @@ language: python
 python:
     - 2.7
     - 3.3
-virtualenv:
-    # This allows installing PyQt using apt-get and being able to import it.
-    system_site_packages: true
-
 before_install:
-    # Install PyQt4 for running the UI tests.
-    source .travis_before_install
+    # Set up for UI tests.
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+    - export ETS_TOOLKIT=qt4
+
 install:
+    # Basic dependencies
+    - pip install numpy
+    - pip install pyside
     - pip install pygments
+
     - sudo apt-get install python-numpy
     - sudo apt-get install python3-numpy
     # Test against the current master of traits
