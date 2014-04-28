@@ -18,12 +18,7 @@ install:
     # Test against the current python3 branch of pyface
     - pip install git+http://github.com/pradyun/pyface.git@python3#egg=pyface
     - python setup.py develop
-    - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then python setup.py build; fi
 
-before_script:
-    if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then cd build; fi
 script:
-    - nosetests traitsui.tests
-    - nosetests traitsui.qt4.tests
-after_script:
-    if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then cd ..; fi
+    - python setup.py nosetests traitsui.tests
+    - python setup.py nosetests traitsui.qt4.tests

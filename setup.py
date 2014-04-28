@@ -1,16 +1,19 @@
+#-------------------------------------------------------------------------------
 # Copyright (c) 2008-2013 by Enthought, Inc.
 # All rights reserved.
+#-------------------------------------------------------------------------------
 from os.path import join
 
 from setuptools import setup, find_packages
 
-
+# pylint: disable=C0103,W0122
 info = {}
 traitsui_init = join('traitsui', '__init__.py')
 exec(compile(open(traitsui_init).read(), traitsui_init, 'exec'), info)
 
 
 setup(
+    # pylint: disable=C0326
     name = 'traitsui',
     version = info['__version__'],
     author = 'David C. Morrill, et. al.',
@@ -40,8 +43,9 @@ setup(
     license = 'BSD',
     maintainer = 'ETS Developers',
     maintainer_email = 'enthought-dev@enthought.com',
-    package_data = dict(traitsui=['image/library/*.zip',
-                                  'wx/images/*', 'qt4/images/*']),
+    package_data = {
+        "traitsui": ['image/library/*.zip', 'wx/images/*', 'qt4/images/*']
+    },
     packages = find_packages(),
     platforms = ["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
     zip_safe = False,
