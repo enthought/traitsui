@@ -9,10 +9,14 @@ before_install:
     - export ETS_TOOLKIT=qt4
 
 install:
+    - pip install wheel
     # Basic dependencies
     - pip install numpy
-    - pip install pyside
     - pip install pygments
+
+    # PySide from a wheel
+    - git clone https://github.com/pradyun/travis-dependencies dependencies
+    - pip install -v -v -v --no-index --find-links=./dependencies PySide
 
     # Test against the current master of traits
     - pip install git+http://github.com/enthought/traits.git#egg=traits
