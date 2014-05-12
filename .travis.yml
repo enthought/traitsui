@@ -7,6 +7,8 @@ before_install:
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
     - export ETS_TOOLKIT=qt4
+    # For PySide
+    - 'export LD_LIBRARY_PATH=`python -c "import os,nose; print(os.path.dirname(os.path.dirname(nose.__file__)))"`/PySide'
 
 install:
     - pip install wheel
