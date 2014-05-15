@@ -7,8 +7,8 @@ What's new in TraitsUI 4.5.0
 Fixes
 
  * Application-modal Traits UI dialogs are correctly styled as
-   application-modal. On Macs, they will now appear as independent windows
-   rather than drop-down sheets. (#164)
+   application-modal under Qt. On Macs, they will now appear as independent
+   windows rather than drop-down sheets. (#164)
  * Qt CodeEditor now honors 'show_line_numbers' and the 'readonly' style (#137)
  * Deprecated `implements` declaration removed, use `provides` instead (#152)
 
