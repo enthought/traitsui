@@ -24,6 +24,7 @@ install:
     - pip install git+http://github.com/enthought/traits.git#egg=traits
     # Test against the current python3 branch of pyface
     - pip install git+http://github.com/pradyun/pyface.git@python3#egg=pyface
+    - python setup.py build
     - python setup.py develop
 
 script:
