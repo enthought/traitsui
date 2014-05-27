@@ -773,15 +773,18 @@ class ShadowGroup ( Group ):
         """ Creates a sub-group for any items contained in a specified list.
         """
         if len( items ) > 0:
-            content.append( ShadowGroup( shadow      = self.shadow,
-                                         groups      = 0,
-                                         label       = '',
-                                         show_border = False,
-                                         content     = items ).set(
-                                         show_labels = self.show_labels,
-                                         show_left   = self.show_left,
-                                         springy     = self.springy,
-                                         orientation = self.orientation ) )
+            content.append(
+                # Set shadow before hand to prevent delegation errors
+                ShadowGroup( shadow      = self.shadow).set(
+                             groups      = 0,
+                             label       = '',
+                             show_border = False,
+                             content     = items,
+                             show_labels = self.show_labels,
+                             show_left   = self.show_left,
+                             springy     = self.springy,
+                             orientation = self.orientation
+                ))
             del items[:]
 
     #---------------------------------------------------------------------------
