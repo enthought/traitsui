@@ -104,10 +104,9 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         """ Invokes the pop-up editor for an object trait.
         """
         color = self.factory.to_qt4_color(self)
-        if self.factory.use_native_dialog:
-            options = 0
-        else:
-            options = QtGui.QColorDialog.DontUseNativeDialog
+        options = QtGui.QColorDialog.ShowAlphaChannel
+        if not self.factory.use_native_dialog:
+            options |= QtGui.QColorDialog.DontUseNativeDialog
         color = QtGui.QColorDialog.getColor(
             color,
             self.control,
