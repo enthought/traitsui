@@ -104,7 +104,16 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         """ Invokes the pop-up editor for an object trait.
         """
         color = self.factory.to_qt4_color(self)
-        color = QtGui.QColorDialog.getColor(color, self.control)
+        if self.factory.use_native_dialog:
+            options = 0
+        else:
+            options = QtGui.QColorDialog.DontUseNativeDialog
+        color = QtGui.QColorDialog.getColor(
+            color,
+            self.control,
+            u'Select Color',
+            options,
+        )
 
         if color.isValid():
             self.value = self.factory.from_qt4_color(color)
@@ -169,7 +178,7 @@ class CustomColorEditor ( Editor ):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        pass
+        self._simple_field.update_editor()
 
     #---------------------------------------------------------------------------
     #  Updates the object trait when a color swatch is clicked:
