@@ -577,12 +577,8 @@ class TableEditor(Editor, BaseTableEditor):
     @cached_property
     def _get_selected_indices(self):
         """Gets the row,column indices which match the selected trait"""
-
-        if len(self.selected) == 0:
-            return []
-
         selection_items = self.table_view.selectionModel().selection()
-        indices = self.model.mapSelectionFromSource(selection_items).indexes()
+        indices = self.model.mapSelectionToSource(selection_items).indexes()
         return [(index.row(), index.column()) for index in indices]
 
 
