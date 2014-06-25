@@ -57,7 +57,12 @@ class CheckboxRenderer(TableDelegate):
         painter.save()
         row_brushes = [option.palette.base(), option.palette.alternateBase()]
         if option.state & QtGui.QStyle.State_Selected:
-            bg_brush = option.palette.highlight()
+            if option.state & QtGui.QStyle.State_Active:
+                color_group = QtGui.QPalette.Active
+            else:
+                color_group = QtGui.QPalette.Inactive
+            bg_brush = option.palette.brush(color_group,
+                                            QtGui.QPalette.Highlight)
         else:
             bg_brush = index.data(QtCore.Qt.BackgroundRole)
             if bg_brush == NotImplemented or bg_brush is None:
