@@ -211,10 +211,10 @@ class TableEditor(Editor, BaseTableEditor):
         if (factory.edit_view == ' ') or not mode in ('row', 'rows'):
             self.control = main_view
         else:
-            if factory.orientation == 'vertical':
-                self.control = QtGui.QSplitter(QtCore.Qt.Vertical)
-            else: 
+            if factory.orientation == 'horizontal':
                 self.control = QtGui.QSplitter(QtCore.Qt.Horizontal)
+            else: 
+                self.control = QtGui.QSplitter(QtCore.Qt.Vertical)
             self.control.setSizePolicy(QtGui.QSizePolicy.Expanding,
                                        QtGui.QSizePolicy.Expanding)
             self.control.addWidget(main_view)
