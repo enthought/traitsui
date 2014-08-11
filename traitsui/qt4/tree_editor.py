@@ -1802,7 +1802,7 @@ class _TreeWidget(QtGui.QTreeWidget):
                         editor._begin_undo()
                         editor._undoable_delete(
                                  *editor._node_index( dragging ) )
-                        editor._undoable_append( to_node, object, data, False )
+                        editor._undoable_append( to_node, to_object, data, False )
                     finally:
                         editor._end_undo()
             else:
