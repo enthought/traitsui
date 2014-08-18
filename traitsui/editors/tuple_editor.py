@@ -223,8 +223,8 @@ class TupleStructure ( HasTraits ):
         index = int( name[ 1: ] )
         value = self.editor.value
         if new != value[ index ]:
-            self.editor.value = tuple( [ getattr( self, 'f%d' % i )
-                                     for i in range( self.fields ) ] )
+            self.editor.value = tuple( 
+                [ getattr( self, 'f%d' % i ) for i in range( self.fields ) ] )
 
 
 # Define the TupleEditor class.
