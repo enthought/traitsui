@@ -12,6 +12,7 @@ Fixes
  * Qt CodeEditor now honors 'show_line_numbers' and the 'readonly' style (#137)
  * Deprecated `implements` declaration removed, use `provides` instead (#152)
  * Fix TableEditor so that Qt.QSplitter honors 'orientation' trait (#171)
+ * Fix TupleEditor so that multiple change events to are not fired (#179)
 
 
 Release 4.4.0
