@@ -862,7 +862,7 @@ class TableView(QtGui.QTableView):
              factory.reorderable):
             vheader.installEventFilter(self)
             vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
-        else:
+        elif not factory.show_row_labels:
             vheader.hide()
         self.setAlternatingRowColors(factory.alternate_bg_color)
         self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
