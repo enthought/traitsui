@@ -3,7 +3,16 @@ from __future__ import absolute_import
 
 from ..toolkit import toolkit
 
-from .array_editor import ArrayEditor
+
+try:
+    from .array_editor import ArrayEditor
+except ImportError as e:
+    if 'numpy' not in e.message:
+        raise
+    import warnings
+    warnings.warn('ArrayEditor is not available due to missing numpy',
+                  ImportWarning)
+
 from .boolean_editor import BooleanEditor
 from .button_editor import ButtonEditor
 from .check_list_editor import CheckListEditor

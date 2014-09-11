@@ -32,7 +32,13 @@ from .editor import Editor
 
 from .editor_factory import EditorFactory
 
-from .editors.api import (ArrayEditor, BooleanEditor, ButtonEditor,
+try:
+    from .editors.api import ArrayEditor
+except ImportError:
+    # ArrayEditor depends on numpy, so ignore if numpy is not present.
+    pass
+
+from .editors.api import (BooleanEditor, ButtonEditor,
     CheckListEditor, CodeEditor, ColorEditor, CompoundEditor, CustomEditor,
     CSVListEditor,
     DNDEditor, StyledDateEditor, DateEditor, DefaultOverride, DirectoryEditor, DropEditor,
