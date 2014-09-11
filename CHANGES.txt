@@ -14,6 +14,8 @@ Fixes
  * Fix TableEditor so that Qt.QSplitter honors 'orientation' trait (#171)
  * Show row labels in Qt TableEditor when requested (#176)
  * Fix TupleEditor so that multiple change events are not fired (#179)
+ * Numpy dependency is now optional. `ArrayEditor` will not be available
+   if numpy cannot be imported (#181)
 
 
 Release 4.4.0
