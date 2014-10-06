@@ -180,14 +180,27 @@ def get_dialog_size(ui_control):
 
 
 @contextmanager
-def dispose_ui(ui):
-    """ A context manager that will dispose the ui on exit.
+def dispose_ui(function, *args, **kwargs):
+    """ A context manager that will create a ui and dispose it on exit.
+
     """
+    ui = function(*args, **kwargs)
     try:
-        yield
+        yield ui
     finally:
         if ui is not None:
             ui.dispose()
+        if is_current_backend_qt4():
+            from pyface.qt import QtGui
+            QtGui.QApplication.instance().quit()
+        elif is_current_backend_wx():
+            import wx
+            for w in wx.GetTopLevelWindows():
+                wx.CallAfter(w.Close)
+            app = wx.GetApp()
+            wx.CallAfter(app.Exit)
+            app.MainLoop()
+
 
 
 def get_traitsui_editor(ui, path):
