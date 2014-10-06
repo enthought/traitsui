@@ -23,6 +23,7 @@ import traceback
 from traits.etsconfig.api import ETSConfig
 import traits.trait_notifiers
 
+
 # ######### Testing tools
 
 @contextmanager
@@ -73,6 +74,7 @@ def skip_if_not_backend(test_func, backend_name=''):
     if not _is_current_backend(backend_name):
         # preserve original name so that it appears in the report
         orig_name = test_func.__name__
+
         def test_func():
             raise nose.SkipTest
         test_func.__name__ = orig_name
@@ -110,6 +112,7 @@ def skip_if_null(test_func):
     if _is_current_backend('null'):
         # preserve original name so that it appears in the report
         orig_name = test_func.__name__
+
         def test_func():
             raise nose.SkipTest
         test_func.__name__ = orig_name
@@ -174,6 +177,38 @@ def get_dialog_size(ui_control):
 
     elif is_current_backend_qt4():
         return ui_control.size().width(), ui_control.size().height()
+
+
+@contextmanager
+def dispose_ui(ui):
+    """ A context manager that will dispose the ui on exit.
+    """
+    try:
+        yield
+    finally:
+        if ui is not None:
+            ui.dispose()
+
+
+def get_traitsui_editor(ui, path):
+    """ Get an editor from a UI using a '/' separated list of trait names.
+
+    '/' is used to access the editor of a trait in a sub-element of the
+    view.
+    """
+
+    names = path.split('/')
+
+    while True:
+        name = names.pop(0)
+        editor = ui.get_editors(name)[0]
+
+        if len(names) > 0:
+            ui = editor._ui
+        else:
+            break
+
+    return editor
 
 
 # ######### Debug tools
