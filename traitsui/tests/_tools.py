@@ -179,6 +179,16 @@ def get_dialog_size(ui_control):
     elif is_current_backend_qt4():
         return ui_control.size().width(), ui_control.size().height()
 
+def set_value(editor, value):
+    """ Set the value on the control managed by the editor.
+
+    """
+    if is_current_backend_wx():
+        editor.control.SetValue(value)
+
+    elif is_current_backend_qt4():
+        editor.control.setValue(value)
+
 
 @contextmanager
 def dispose_ui_after(function, timeout, *args, **kwargs):

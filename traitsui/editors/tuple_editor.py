@@ -74,8 +74,9 @@ class ToolkitEditorFactory(EditorFactory):
     # 'enter_set' metadata or an editor defined.
     enter_set = Bool(False)
 
-    # The validation function to use for the Tuple. This will override the
-    # validation function used when the editable Trait is a ValidatedTuple.
+    # The validation function to use for the Tuple. If the edited trait offers
+    # already a validation function then the value of this trait will be
+    # ignored.
     validation = Callable
 
 
@@ -164,7 +165,6 @@ class TupleStructure (HasTraits):
         labels = factory.labels
         editors = factory.editors
         cols = factory.cols
-        validation = factory.validation
 
         # Save the reference to the editor:
         self.editor = editor
@@ -181,8 +181,10 @@ class TupleStructure (HasTraits):
 
         # Get global validation function.
         type = editor.value_trait.handler
-        if hasattr(type, 'validation') and validation is None:
-            self.validation = validation = type.validation
+        validation = getattr(type, 'validation', None)
+        if validation is None:
+            validation = factory.validation
+        self.validation = validation
 
         # Get field types.
         if types is None:
@@ -201,8 +203,6 @@ class TupleStructure (HasTraits):
             type = types[i % len_types]
 
             auto_set = enter_set = None
-            # XXX: Should the trait auto_set and enter_set value override
-            #      the user option defined in the factory?
             if isinstance(type, TraitType):
                 auto_set = type.auto_set
                 enter_set = type.enter_set

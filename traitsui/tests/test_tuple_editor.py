@@ -21,7 +21,8 @@ import unittest
 from traits.api import Float, Int, HasStrictTraits, Str, Tuple, ValidatedTuple
 from traits.testing.api import UnittestTools
 
-from traitsui.tests._tools import dispose_ui, get_traitsui_editor
+from traitsui.tests._tools import (
+    dispose_ui_after, get_traitsui_editor, set_value)
 
 
 class DummyModel(HasStrictTraits):
@@ -42,20 +43,13 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
         # Regression test for #179
 
         dummy_model = DummyModel()
-        with dispose_ui(dummy_model.edit_traits):
+        with dispose_ui_after(dummy_model.edit_traits, 5):
             with self.assertTraitChanges(dummy_model, 'data', count=1):
                 dummy_model.data = (3, 4.6, 'nono')
 
     def test_ui_creation(self):
         dummy_model = DummyModel()
-        with dispose_ui(dummy_model.edit_traits) as ui:
-            editor = get_traitsui_editor(ui, 'value_range')
-            self.assertIsInstance(editor.factory, self.tuple_editor)
-            self.assertEqual(editor.value, (0, 1))
-            self.assertEqual(
-                editor._ts.trait_get(['f0', 'f1', 'invalid0', 'invalid1']),
-                {'f0': 0, 'f1': 1, 'invalid0': False, 'invalid1': False})
-
+        with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
             editor = get_traitsui_editor(ui, 'data')
             self.assertIsInstance(editor.factory, self.tuple_editor)
             self.assertEqual(editor.value, (0.0, 0.0, ''))
@@ -64,33 +58,66 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
                     ['f0', 'f1', 'f2', 'invalid0', 'invalid1', 'invalid2']),
                 {'f0': 0.0, 'f1': 0.0, 'f2': ''})
 
-    def test_ui_invalid_due_to_failing_custom_validate(self):
+            editor = get_traitsui_editor(ui, 'value_range')
+            self.assertIsInstance(editor.factory, self.tuple_editor)
+            self.assertEqual(editor.value, (0, 1))
+            self.assertEqual(
+                editor._ts.trait_get(['f0', 'f1', 'invalid0', 'invalid1']),
+                {'f0': 0, 'f1': 1, 'invalid0': False, 'invalid1': False})
+
+    def test_ui_invalid_due_to_custom_validation(self):
         dummy_model = DummyModel()
-        with dispose_ui(dummy_model.edit_traits) as ui:
+        with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
             editor = get_traitsui_editor(ui, 'value_range')
             fields_ui = editor._ui
             f0_editor = get_traitsui_editor(fields_ui, 'f0')
             f1_editor = get_traitsui_editor(fields_ui, 'f1')
 
-            f0_editor.value = 5  # 5 < 1 -> invalid
+            set_value(f0_editor, '5')  # 5 < 1 -> invalid
             self.assertTrue(f0_editor.invalid)
             self.assertFalse(f1_editor.invalid)
             self.assertEqual(editor.value, (0, 1))
 
-            f0_editor.value = -3  # -3 < 1 -> valid
+            set_value(f0_editor, '-3')  # -3 < 1 -> valid
             self.assertFalse(f0_editor.invalid)
             self.assertFalse(f1_editor.invalid)
             self.assertEqual(editor.value, (-3, 1))
 
-            f1_editor.value = -4  # -3 < -4 -> invalid
+            set_value(f1_editor, '-4')  # -3 < -4 -> invalid
             self.assertFalse(f0_editor.invalid)
             self.assertTrue(f1_editor.invalid)
             self.assertEqual(editor.value, (-3, 1))
 
-            f1_editor.value = 0  # -3 < 0 -> valid
+            set_value(f1_editor, '0')  # -3 < 0 -> valid
             self.assertFalse(f0_editor.invalid)
             self.assertFalse(f1_editor.invalid)
             self.assertEqual(editor.value, (-3, 0))
+
+    def test_ui_invalid_due_to_field_validation(self):
+        dummy_model = DummyModel()
+        with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
+            editor = get_traitsui_editor(ui, 'data')
+            fields_ui = editor._ui
+            f0_editor = get_traitsui_editor(fields_ui, 'f0')
+            f1_editor = get_traitsui_editor(fields_ui, 'f1')
+            f2_editor = get_traitsui_editor(fields_ui, 'f2')
+
+            set_value(f1_editor, 'nono')  # str -> invalid
+            self.assertFalse(f0_editor._error)
+            f1_editor.print_traits()
+            self.assertTrue(f1_editor._error)
+            self.assertFalse(f2_editor._error)
+            self.assertEqual(editor.value, (0.0, 0.0, ''))
+
+            editor = get_traitsui_editor(ui, 'value_range')
+            fields_ui = editor._ui
+            f0_editor = get_traitsui_editor(fields_ui, 'f0')
+            f1_editor = get_traitsui_editor(fields_ui, 'f1')
+
+            set_value(f1_editor, '0.2')  # float -> invalid
+            self.assertTrue(f1_editor._error)
+            self.assertFalse(f0_editor._error)
+            self.assertEqual(editor.value, (0, 1))
 
     def test_when_editor_is_used_with_vertical_layout(self):
 
@@ -100,7 +127,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
                 Int(0), Int(1), cols=1, validation=lambda x: x[0] < x[1])
 
         dummy_model = VSimple()
-        with dispose_ui(dummy_model.edit_traits) as ui:
+        with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
             editor = get_traitsui_editor(ui, 'value_range')
             self.assertIsInstance(editor.factory, self.tuple_editor)
             self.assertEqual(editor.value, (0, 1))
@@ -116,7 +143,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
                 Int(0), Int(1), cols=2, validation=lambda x: x[0] < x[1])
 
         dummy_model = HSimple()
-        with dispose_ui(dummy_model.edit_traits) as ui:
+        with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
             editor = get_traitsui_editor(ui, 'value_range')
             self.assertIsInstance(editor.factory, self.tuple_editor)
             self.assertEqual(editor.value, (0, 1))
@@ -132,12 +159,10 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             value_range = ValidatedTuple(
                 Int(0), Int(1), validation=lambda x: x[0] < x[1])
 
-            view = View(
-                Item('value_range', editor=self.tuple_editor())
-            )
+            view = View(Item('value_range', editor=self.tuple_editor()))
 
         dummy_model = SimpleWithView()
-        with dispose_ui(dummy_model.edit_traits) as ui:
+        with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
             editor = get_traitsui_editor(ui, 'value_range')
             self.assertIsInstance(editor.factory, self.tuple_editor)
             self.assertEqual(editor.value, (0, 1))
@@ -149,21 +174,84 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             f0_editor = get_traitsui_editor(fields_ui, 'f0')
             f1_editor = get_traitsui_editor(fields_ui, 'f1')
 
-            f1_editor.value = -4  # 0 < -4 -> invalid
+            set_value(f1_editor, '-4')  # 0 < -4 -> invalid
+            self.assertFalse(f0_editor.invalid)
+            self.assertTrue(f1_editor.invalid)
+            self.assertEqual(editor.value, (0, 1))
+
+    def test_when_validation_method_is_provided_in_the_view(self):
+        from traitsui.api import Item, View
+
+        class SimpleWithView(HasStrictTraits):
+
+            value_range = Tuple(Int(0), Int(1))
+
+            view = View(
+                Item(
+                    'value_range',
+                    editor=self.tuple_editor(
+                        validation=lambda x: x[0] < x[1])))
+
+        dummy_model = SimpleWithView()
+        with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
+            editor = get_traitsui_editor(ui, 'value_range')
+            self.assertIsInstance(editor.factory, self.tuple_editor)
+            self.assertEqual(editor.value, (0, 1))
+            self.assertEqual(
+                editor._ts.trait_get(['f0', 'f1', 'invalid0', 'invalid1']),
+                {'f0': 0, 'f1': 1, 'invalid0': False, 'invalid1': False})
+
+            fields_ui = editor._ui
+            f0_editor = get_traitsui_editor(fields_ui, 'f0')
+            f1_editor = get_traitsui_editor(fields_ui, 'f1')
+
+            set_value(f1_editor, '-4')  # 0 < -4 -> invalid
+            self.assertFalse(f0_editor.invalid)
+            self.assertTrue(f1_editor.invalid)
+            self.assertEqual(editor.value, (0, 1))
+
+    def test_when_validation_in_trait_validation_overrides_view(self):
+        from traitsui.api import Item, View
+
+        class SimpleWithView(HasStrictTraits):
+
+            value_range = ValidatedTuple(
+                Int(0), Int(1), validation=lambda x: x[0] < x[1])
+
+            view = View(
+                Item(
+                    'value_range',
+                    editor=self.tuple_editor(
+                        validation=lambda x: x[0] == x[1])))
+
+        dummy_model = SimpleWithView()
+        with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
+            editor = get_traitsui_editor(ui, 'value_range')
+            self.assertIsInstance(editor.factory, self.tuple_editor)
+            self.assertEqual(editor.value, (0, 1))
+            self.assertEqual(
+                editor._ts.trait_get(['f0', 'f1', 'invalid0', 'invalid1']),
+                {'f0': 0, 'f1': 1, 'invalid0': False, 'invalid1': False})
+
+            fields_ui = editor._ui
+            f0_editor = get_traitsui_editor(fields_ui, 'f0')
+            f1_editor = get_traitsui_editor(fields_ui, 'f1')
+
+            set_value(f1_editor, '-4')  # 0 < -4 -> invalid
             self.assertFalse(f0_editor.invalid)
             self.assertTrue(f1_editor.invalid)
             self.assertEqual(editor.value, (0, 1))
 
     def test_invalid_state_reset_on_model_change(self):
         dummy_model = DummyModel()
-        with dispose_ui(dummy_model.edit_traits) as ui:
+        with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
             editor = get_traitsui_editor(ui, 'value_range')
             fields_ui = editor._ui
             f0_editor = get_traitsui_editor(fields_ui, 'f0')
             f1_editor = get_traitsui_editor(fields_ui, 'f1')
 
             # given
-            f1_editor.value = -4  # 0 < -4 -> invalid
+            set_value(f1_editor, '-4')  # 0 < -4 -> invalid
             self.assertFalse(f0_editor.invalid)
             self.assertTrue(f1_editor.invalid)
             self.assertEqual(editor.value, (0, 1))
