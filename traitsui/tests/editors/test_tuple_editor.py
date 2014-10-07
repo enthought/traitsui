@@ -23,9 +23,6 @@ from traits.testing.api import UnittestTools
 from traitsui.tests._tools import (
     dispose_ui_after, get_traitsui_editor, set_value)
 
-from traits.etsconfig.api import ETSConfig
-
-ETSConfig.toolkit = 'qt4'
 
 class DummyModel(HasStrictTraits):
 
