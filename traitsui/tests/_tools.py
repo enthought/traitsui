@@ -15,10 +15,11 @@
 
 from functools import partial
 from contextlib import contextmanager
-import nose
-
 import sys
+import threading
 import traceback
+
+import nose
 
 from traits.etsconfig.api import ETSConfig
 import traits.trait_notifiers
@@ -180,27 +181,54 @@ def get_dialog_size(ui_control):
 
 
 @contextmanager
-def dispose_ui(function, *args, **kwargs):
+def dispose_ui_after(function, timeout, *args, **kwargs):
     """ A context manager that will create a ui and dispose it on exit.
 
     """
     ui = function(*args, **kwargs)
+
+    from pyface.gui import GUI
+
+    timeout_event = threading.Event()
+
+    def on_timeout(timeout_event):
+        timeout_event.set()
+        dispose_ui(ui)
+
+    gui = GUI()
+    gui.invoke_after(timeout * 1000, on_timeout, timeout_event)
+
     try:
         yield ui
     finally:
-        if ui is not None:
-            ui.dispose()
+        if timeout_event.is_set():
+            message = 'UI was forcibly destroyed after {0} sec'
+            raise AssertionError(message.format(timeout))
+        else:
+            dispose_ui(ui)
+
+
+def dispose_ui(ui):
+    """ Dispose the ui, by killing the application object.
+
+    """
+    from pyface.gui import GUI
+    if ui is not None or ui.control is None:
+        ui.dispose()
+        gui = GUI()
         if is_current_backend_qt4():
             from pyface.qt import QtGui
-            QtGui.QApplication.instance().quit()
+            app = QtGui.QApplication.instance()
+            gui.invoke_later(app.closeAllWindows)
+            gui.invoke_after(2, app.quit)
+            app.exec_()
         elif is_current_backend_wx():
             import wx
             for w in wx.GetTopLevelWindows():
                 wx.CallAfter(w.Close)
             app = wx.GetApp()
-            wx.CallAfter(app.Exit)
+            gui.invoke_later(app.Exit)
             app.MainLoop()
-
 
 
 def get_traitsui_editor(ui, path):
