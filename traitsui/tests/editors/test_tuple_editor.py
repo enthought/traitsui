@@ -15,7 +15,6 @@
 """
 Test cases for the TupleEditor object.
 """
-
 import unittest
 
 from traits.api import Float, Int, HasStrictTraits, Str, Tuple, ValidatedTuple
@@ -24,6 +23,9 @@ from traits.testing.api import UnittestTools
 from traitsui.tests._tools import (
     dispose_ui_after, get_traitsui_editor, set_value)
 
+from traits.etsconfig.api import ETSConfig
+
+ETSConfig.toolkit = 'qt4'
 
 class DummyModel(HasStrictTraits):
 
@@ -74,23 +76,23 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             f1_editor = get_traitsui_editor(fields_ui, 'f1')
 
             set_value(f0_editor, '5')  # 5 < 1 -> invalid
-            self.assertTrue(f0_editor.invalid)
-            self.assertFalse(f1_editor.invalid)
+            self.assertTrue(f0_editor.in_error_state())
+            self.assertIsNone(f1_editor.in_error_state())
             self.assertEqual(editor.value, (0, 1))
 
             set_value(f0_editor, '-3')  # -3 < 1 -> valid
-            self.assertFalse(f0_editor.invalid)
-            self.assertFalse(f1_editor.invalid)
+            self.assertIsNone(f0_editor.in_error_state())
+            self.assertIsNone(f1_editor.in_error_state())
             self.assertEqual(editor.value, (-3, 1))
 
             set_value(f1_editor, '-4')  # -3 < -4 -> invalid
-            self.assertFalse(f0_editor.invalid)
-            self.assertTrue(f1_editor.invalid)
+            self.assertIsNone(f0_editor.in_error_state())
+            self.assertTrue(f1_editor.in_error_state())
             self.assertEqual(editor.value, (-3, 1))
 
             set_value(f1_editor, '0')  # -3 < 0 -> valid
-            self.assertFalse(f0_editor.invalid)
-            self.assertFalse(f1_editor.invalid)
+            self.assertIsNone(f0_editor.in_error_state())
+            self.assertIsNone(f1_editor.in_error_state())
             self.assertEqual(editor.value, (-3, 0))
 
     def test_ui_invalid_due_to_field_validation(self):
@@ -103,10 +105,9 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             f2_editor = get_traitsui_editor(fields_ui, 'f2')
 
             set_value(f1_editor, 'nono')  # str -> invalid
-            self.assertFalse(f0_editor._error)
-            f1_editor.print_traits()
-            self.assertTrue(f1_editor._error)
-            self.assertFalse(f2_editor._error)
+            self.assertFalse(f0_editor.in_error_state())
+            self.assertTrue(f1_editor.in_error_state())
+            self.assertFalse(f2_editor.in_error_state())
             self.assertEqual(editor.value, (0.0, 0.0, ''))
 
             editor = get_traitsui_editor(ui, 'value_range')
@@ -115,8 +116,8 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             f1_editor = get_traitsui_editor(fields_ui, 'f1')
 
             set_value(f1_editor, '0.2')  # float -> invalid
-            self.assertTrue(f1_editor._error)
-            self.assertFalse(f0_editor._error)
+            self.assertTrue(f1_editor.in_error_state())
+            self.assertFalse(f0_editor.in_error_state())
             self.assertEqual(editor.value, (0, 1))
 
     def test_when_editor_is_used_with_vertical_layout(self):
@@ -252,8 +253,8 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
 
             # given
             set_value(f1_editor, '-4')  # 0 < -4 -> invalid
-            self.assertFalse(f0_editor.invalid)
-            self.assertTrue(f1_editor.invalid)
+            self.assertIsNone(f0_editor.in_error_state())
+            self.assertTrue(f1_editor.in_error_state())
             self.assertEqual(editor.value, (0, 1))
 
             # when

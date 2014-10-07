@@ -187,8 +187,8 @@ def set_value(editor, value):
         editor.control.SetValue(value)
 
     elif is_current_backend_qt4():
-        editor.control.setValue(value)
-
+        editor.control.setText(value)
+        editor.update_object()
 
 @contextmanager
 def dispose_ui_after(function, timeout, *args, **kwargs):
