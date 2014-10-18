@@ -160,7 +160,6 @@ class SimpleEditor ( Editor ):
             value = self.control.text()
         except AttributeError:
             value = self.control.toPlainText()
-
         value = unicode(value)
 
         try:

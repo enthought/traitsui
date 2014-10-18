@@ -27,7 +27,7 @@ from traitsui.tests._tools import (
 class DummyModel(HasStrictTraits):
 
     value_range = ValidatedTuple(
-        Int(0), Int(1), validation=lambda x: x[0] < x[1])
+        Int(0), Int(1), fvalidate=lambda x: x[0] < x[1])
 
     data = Tuple(Float, Float, Str)
 
@@ -122,7 +122,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
         class VSimple(HasStrictTraits):
 
             value_range = ValidatedTuple(
-                Int(0), Int(1), cols=1, validation=lambda x: x[0] < x[1])
+                Int(0), Int(1), cols=1, fvalidate=lambda x: x[0] < x[1])
 
         dummy_model = VSimple()
         with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
@@ -138,7 +138,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
         class HSimple(HasStrictTraits):
 
             value_range = ValidatedTuple(
-                Int(0), Int(1), cols=2, validation=lambda x: x[0] < x[1])
+                Int(0), Int(1), cols=2, fvalidate=lambda x: x[0] < x[1])
 
         dummy_model = HSimple()
         with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
@@ -155,7 +155,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
         class SimpleWithView(HasStrictTraits):
 
             value_range = ValidatedTuple(
-                Int(0), Int(1), validation=lambda x: x[0] < x[1])
+                Int(0), Int(1), fvalidate=lambda x: x[0] < x[1])
 
             view = View(Item('value_range', editor=self.tuple_editor()))
 
@@ -188,7 +188,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
                 Item(
                     'value_range',
                     editor=self.tuple_editor(
-                        validation=lambda x: x[0] < x[1])))
+                        fvalidate=lambda x: x[0] < x[1])))
 
         dummy_model = SimpleWithView()
         with dispose_ui_after(dummy_model.edit_traits, 5) as ui:
@@ -208,19 +208,19 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             self.assertTrue(f1_editor.invalid)
             self.assertEqual(editor.value, (0, 1))
 
-    def test_when_validation_in_trait_validation_overrides_view(self):
+    def test_when_validation_in_trait_overrides_view(self):
         from traitsui.api import Item, View
 
         class SimpleWithView(HasStrictTraits):
 
             value_range = ValidatedTuple(
-                Int(0), Int(1), validation=lambda x: x[0] < x[1])
+                Int(0), Int(1), fvalidate=lambda x: x[0] < x[1])
 
             view = View(
                 Item(
                     'value_range',
                     editor=self.tuple_editor(
-                        validation=lambda x: x[0] == x[1])))
+                        fvalidate=lambda x: x[0] == x[1])))
 
         dummy_model = SimpleWithView()
         with dispose_ui_after(dummy_model.edit_traits, 5) as ui:

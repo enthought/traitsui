@@ -77,7 +77,7 @@ class ToolkitEditorFactory(EditorFactory):
     # The validation function to use for the Tuple. If the edited trait offers
     # already a validation function then the value of this trait will be
     # ignored.
-    validation = Callable
+    fvalidate = Callable
 
 
 #------------------------------------------------------------------------------
@@ -117,7 +117,7 @@ class SimpleEditor(Editor):
 
         for i, value in enumerate(self.value):
             setattr(ts, 'f{0}'.format(i), value)
-            if ts.validation is not None:
+            if ts.fvalidate is not None:
                 setattr(ts, 'invalid{0}'.format(i), False)
 
     #--------------------------------------------------------------------------
@@ -151,7 +151,7 @@ class TupleStructure (HasTraits):
     fields = Int
 
     # The validation function to use for the Tuple.
-    validation = Callable
+    fvalidate = Callable
 
     #--------------------------------------------------------------------------
     #  Initializes the object:
@@ -181,10 +181,10 @@ class TupleStructure (HasTraits):
 
         # Get global validation function.
         type = editor.value_trait.handler
-        validation = getattr(type, 'validation', None)
-        if validation is None:
-            validation = factory.validation
-        self.validation = validation
+        fvalidate = getattr(type, 'fvalidate', None)
+        if fvalidate is None:
+            fvalidate = factory.fvalidate
+        self.fvalidate = fvalidate
 
         # Get field types.
         if types is None:
@@ -222,7 +222,7 @@ class TupleStructure (HasTraits):
             name = 'f{0}'.format(i)
             self.add_trait(name, type(
                 value, event='field', auto_set=auto_set, enter_set=enter_set))
-            if validation is not None:
+            if fvalidate is not None:
                 invalid = 'invalid{0}'.format(i)
                 self.add_trait(invalid, Bool)
             else:
@@ -255,8 +255,8 @@ class TupleStructure (HasTraits):
         if new != value[index]:
             new_value = tuple(
                 getattr(self, 'f{0}'.format(i)) for i in range(self.fields))
-            if self.validation is not None:
-                if self.validation(new_value):
+            if self.fvalidate is not None:
+                if self.fvalidate(new_value):
                     editor.value = new_value
                     for i in range(self.fields):
                         setattr(self, 'invalid{0}'.format(i), False)
