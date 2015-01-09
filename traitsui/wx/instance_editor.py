@@ -23,6 +23,8 @@ toolkit.
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import wingdbstub
+
 import wx
 
 from traits.api \
@@ -408,7 +410,10 @@ class CustomEditor ( Editor ):
                 self._ui.dispose()
                 self._ui = None
             else:
-                panel.DestroyChildren()
+                for child in panel.GetChildren():
+                    while child.GetEventHandler() is not child:
+                        child.PopEventHandler(True)
+                    child.Destroy()
 
             # Create the new content for the panel:
             sizer   = wx.BoxSizer( wx.VERTICAL )
