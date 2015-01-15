@@ -23,8 +23,6 @@ toolkit.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-import wingdbstub
-
 import wx
 
 from traits.api \
