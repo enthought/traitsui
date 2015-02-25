@@ -158,18 +158,35 @@ class _DataFrameEditor(UIEditor):
 
     #-- Private Methods ------------------------------------------------------
 
+    def _target_name(self, name):
+        if name:
+            return 'object.object.'+name
+        else:
+            return ''
+
     def _data_frame_view(self):
         """ Return the view used by the editor.
         """
         return View(
             Item(
-                'object.object.' + self.name,
+                self._target_name(self.name),
                 id = 'tabular_editor',
                 show_label = False,
                 editor = TabularEditor(
                     show_titles=self.show_titles,
                     editable=self.factory.editable,
                     adapter=self.adapter,
+                    selected=self._target_name(self.factory.selected),
+                    selected_row=self._target_name(self.factory.selected_row),
+                    selectable=self.factory.selectable,
+                    activated=self._target_name(self.factory.selected),
+                    activated_row=self._target_name(self.factory.activated_row),
+                    clicked=self._target_name(self.factory.clicked),
+                    dclicked=self._target_name(self.factory.dclicked),
+                    right_clicked=self._target_name(self.factory.right_clicked),
+                    right_dclicked=self._target_name(self.factory.right_dclicked),
+                    column_clicked=self._target_name(self.factory.column_clicked),
+                    column_right_clicked=self._target_name(self.factory.column_right_clicked),
                     operations=self.factory.operations,
                 )
             ),
@@ -233,6 +250,49 @@ class DataFrameEditor(BasicEditorFactory):
 
     #: The font for each element, or a mapping column ID to font.
     fonts = Either(Font, Dict, default='Courier 10')
+
+    # The optional extended name of the trait to synchronize the selection
+    # values with:
+    selected = Str
+
+    # The optional extended name of the trait to synchronize the selection rows
+    # with:
+    selected_row = Str
+
+    # Whether or not to allow selection.
+    selectable = Bool( True )
+
+    # The optional extended name of the trait to synchronize the activated value
+    # with:
+    activated = Str
+
+    # The optional extended name of the trait to synchronize the activated
+    # value's row with:
+    activated_row = Str
+
+    # The optional extended name of the trait to synchronize left click data
+    # with. The data is a TabularEditorEvent:
+    clicked = Str
+
+    # The optional extended name of the trait to synchronize left double click
+    # data with. The data is a TabularEditorEvent:
+    dclicked = Str
+
+    # The optional extended name of the trait to synchronize right click data
+    # with. The data is a TabularEditorEvent:
+    right_clicked = Str
+
+    # The optional extended name of the trait to synchronize right double
+    # clicked data with. The data is a TabularEditorEvent:
+    right_dclicked = Str
+
+    # The optional extended name of the trait to synchronize column
+    # clicked data with. The data is a TabularEditorEvent:
+    column_clicked = Str
+
+    # The optional extended name of the trait to synchronize column
+    # right clicked data with. The data is a TabularEditorEvent:
+    column_right_clicked = Str
 
     #: Whether or not the entries can be edited.
     editable = Bool(False)
