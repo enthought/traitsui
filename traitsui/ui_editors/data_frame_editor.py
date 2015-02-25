@@ -67,8 +67,7 @@ class DataFrameAdapter(TabularAdapter):
             return 'left'
 
     def _get_font(self):
-        TraitsFont = toolkit_object('font_trait:TraitsFont')
-        if isinstance(self._fonts, TraitsFont):
+        if isinstance(self._fonts, toolkit_object('font_trait:TraitsFont')):
             return self._fonts
         else:
             return self._fonts.get(self.column_id, 'Courier 10')
@@ -82,10 +81,10 @@ class DataFrameAdapter(TabularAdapter):
     def _get_content(self):
         return getattr(self.object, self.name)[self.column_id][self.row]
 
-    def _get_text ( self ):
+    def _get_text(self):
         format = self.get_format(self.object, self.name, self.row, self.column)
         return format % self.get_content(self.object, self.name, self.row,
-                                         self.column )
+                                         self.column)
 
     def _set_text(self, value):
         column = getattr(self.object, self.name)[self.column_id]
@@ -102,7 +101,7 @@ class DataFrameAdapter(TabularAdapter):
         value = dtype.type(value)
         index.values[self.row] = value
 
-    #-- Adapter methods that are not sensitive to item type --------------------
+    #---- Adapter methods that are not sensitive to item type ----------------
 
     def get_item(self, object, trait, row):
         """ Override the base implementation to work with DataFrames """
@@ -169,9 +168,9 @@ class _DataFrameEditor(UIEditor):
         return View(
             Item(
                 self._target_name(self.name),
-                id = 'tabular_editor',
-                show_label = False,
-                editor = TabularEditor(
+                id='tabular_editor',
+                show_label=False,
+                editor=TabularEditor(
                     show_titles=self.factory.show_titles,
                     editable=self.factory.editable,
                     adapter=self.adapter,
@@ -179,21 +178,21 @@ class _DataFrameEditor(UIEditor):
                     selected_row=self._target_name(self.factory.selected_row),
                     selectable=self.factory.selectable,
                     activated=self._target_name(self.factory.selected),
-                    activated_row=self._target_name(self.factory.activated_row),
+                    activated_row=self._target_name(self.factory.activated_row),  # noqa
                     clicked=self._target_name(self.factory.clicked),
                     dclicked=self._target_name(self.factory.dclicked),
-                    right_clicked=self._target_name(self.factory.right_clicked),
-                    right_dclicked=self._target_name(self.factory.right_dclicked),
-                    column_clicked=self._target_name(self.factory.column_clicked),
-                    column_right_clicked=self._target_name(self.factory.column_right_clicked),
+                    right_clicked=self._target_name(self.factory.right_clicked),  # noqa
+                    right_dclicked=self._target_name(self.factory.right_dclicked),  # noqa
+                    column_clicked=self._target_name(self.factory.column_clicked),  # noqa
+                    column_right_clicked=self._target_name(self.factory.column_right_clicked),  # noqa
                     operations=self.factory.operations,
                 )
             ),
-            id = 'array_view_editor',
-            resizable = True
+            id='array_view_editor',
+            resizable=True
         )
 
-    def init_ui ( self, parent ):
+    def init_ui(self, parent):
         """ Creates the Traits UI for displaying the array.
         """
         factory = self.factory
@@ -260,8 +259,8 @@ class DataFrameEditor(BasicEditorFactory):
     # Whether or not to allow selection.
     selectable = Bool(True)
 
-    # The optional extended name of the trait to synchronize the activated value
-    # with:
+    # The optional extended name of the trait to synchronize the activated
+    # value with:
     activated = Str
 
     # The optional extended name of the trait to synchronize the activated
