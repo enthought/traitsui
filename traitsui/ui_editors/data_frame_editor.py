@@ -8,13 +8,15 @@
 
 from __future__ import absolute_import
 
-from traits.api import Bool, Enum, Font, Instance, List, Property, Str, Tuple
+from traits.api import (Bool, Dict, Either, Enum, Font, Instance, List,
+                        Property, Str)
 
 from traitsui.basic_editor_factory import BasicEditorFactory
 from traitsui.editors.tabular_editor import TabularEditor
 from traitsui.item import Item
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.toolkit import toolkit_object
+from traitsui.toolkit_traits import FontTrait
 from traitsui.ui_editor import UIEditor
 from traitsui.view import View
 
@@ -35,6 +37,18 @@ class DataFrameAdapter(TabularAdapter):
     #: The alignment to use for a row index.
     index_alignment = Property
 
+    #: The font to use for each column
+    font = Property
+
+    #: The format to use for each column
+    format = Property
+
+    #: The format for each element, or a mapping column ID to format.
+    _formats = Either(Str, Dict, default='%s')
+
+    #: The font for each element, or a mapping column ID to font.
+    _fonts = Either(Font, Dict, default='Courier 10')
+
     def _get_index_alignment(self):
         import numpy as np
 
@@ -52,6 +66,19 @@ class DataFrameAdapter(TabularAdapter):
             return 'right'
         else:
             return 'left'
+
+    def _get_font(self):
+        TraitsFont = toolkit_object('font_trait:TraitsFont')
+        if isinstance(self._fonts, TraitsFont):
+            return self._fonts
+        else:
+            return self._fonts.get(self.column_id, 'Courier 10')
+
+    def _get_format(self):
+        if isinstance(self._formats, basestring):
+            return self._formats
+        else:
+            return self._formats.get(self.column_id, '%s')
 
     def _get_content(self):
         return getattr(self.object, self.name)[self.column_id][self.row]
@@ -141,9 +168,9 @@ class _DataFrameEditor(UIEditor):
                 show_label = False,
                 editor = TabularEditor(
                     show_titles=self.show_titles,
-                    editable=True,
+                    editable=self.factory.editable,
                     adapter=self.adapter,
-                    operations=['delete', 'insert', 'append', 'edit', 'move']
+                    operations=self.factory.operations,
                 )
             ),
             id = 'array_view_editor',
@@ -154,10 +181,10 @@ class _DataFrameEditor(UIEditor):
         """ Creates the Traits UI for displaying the array.
         """
         factory = self.factory
-        self.show_titles = (factory.title_map != [])
+        self.show_titles = (factory.columns != [])
         if self.show_titles:
             columns = []
-            for column in factory.title_map:
+            for column in factory.columns:
                 if isinstance(column, basestring):
                     title = column
                     column_id = column
@@ -175,8 +202,8 @@ class _DataFrameEditor(UIEditor):
 
         self.adapter = DataFrameAdapter(
             columns=columns,
-            format=factory.format,
-            font=factory.font
+            _formats=factory.formats,
+            _fonts=factory.fonts
         )
 
         return self.edit_traits(
@@ -195,17 +222,24 @@ class DataFrameEditor(BasicEditorFactory):
     #: Should an index column be displayed.
     show_index = Bool(True)
 
-    #: Optional list of either column ID or pairs of (column title, column ID).
-    title_map = List()
+    #: Should column headers be displayed.
+    show_titles = Bool(True)
 
-    #: The format used to display each array element.
-    format = Str('%s')
+    #: Optional list of either column ID or pairs of (column title, column ID).
+    columns = List()
+
+    #: The format for each element, or a mapping column ID to format.
+    formats = Either(Str, Dict, default='%s')
+
+    #: The font for each element, or a mapping column ID to font.
+    fonts = Either(Font, Dict, default='Courier 10')
 
     #: Whether or not the entries can be edited.
     editable = Bool(False)
 
-    #: The font to use for displaying each array element.
-    font = Font('Courier 10')
+    # What type of operations are allowed on the list:
+    operations = List(Enum('delete', 'insert', 'append', 'edit', 'move'),
+                      ['delete', 'insert', 'append', 'edit', 'move'])
 
     def _get_klass( self ):
         """ The class used to construct editor objects.
