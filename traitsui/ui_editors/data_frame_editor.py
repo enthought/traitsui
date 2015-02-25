@@ -16,7 +16,6 @@ from traitsui.editors.tabular_editor import TabularEditor
 from traitsui.item import Item
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.toolkit import toolkit_object
-from traitsui.toolkit_traits import FontTrait
 from traitsui.ui_editor import UIEditor
 from traitsui.view import View
 
@@ -173,7 +172,7 @@ class _DataFrameEditor(UIEditor):
                 id = 'tabular_editor',
                 show_label = False,
                 editor = TabularEditor(
-                    show_titles=self.show_titles,
+                    show_titles=self.factory.show_titles,
                     editable=self.factory.editable,
                     adapter=self.adapter,
                     selected=self._target_name(self.factory.selected),
@@ -198,8 +197,7 @@ class _DataFrameEditor(UIEditor):
         """ Creates the Traits UI for displaying the array.
         """
         factory = self.factory
-        self.show_titles = (factory.columns != [])
-        if self.show_titles:
+        if (factory.columns != []):
             columns = []
             for column in factory.columns:
                 if isinstance(column, basestring):
@@ -260,7 +258,7 @@ class DataFrameEditor(BasicEditorFactory):
     selected_row = Str
 
     # Whether or not to allow selection.
-    selectable = Bool( True )
+    selectable = Bool(True)
 
     # The optional extended name of the trait to synchronize the activated value
     # with:
@@ -301,7 +299,7 @@ class DataFrameEditor(BasicEditorFactory):
     operations = List(Enum('delete', 'insert', 'append', 'edit', 'move'),
                       ['delete', 'insert', 'append', 'edit', 'move'])
 
-    def _get_klass( self ):
+    def _get_klass(self):
         """ The class used to construct editor objects.
         """
         return toolkit_object('data_frame_editor:_DataFrameEditor')
