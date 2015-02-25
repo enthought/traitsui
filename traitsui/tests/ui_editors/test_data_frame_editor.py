@@ -7,6 +7,13 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 
 import nose
+from numpy.testing import assert_array_equal
+
+try:
+    from pandas import DataFrame
+except ImportError as exc:
+    print "Can't import Pandas: skipping"
+    raise nose.SkipTest
 
 from traits.api import HasTraits, Instance
 
@@ -26,24 +33,130 @@ class DataFrameViewer(HasTraits):
         Item('data', editor=DataFrameEditor())
     )
 
-
-def test_data_frame_editor():
-    """ Basic smoke test for data frame editor """
-    try:
-        from pandas import DataFrame
-    except ImportError as exc:
-        print "Can't import Pandas: skipping"
-        raise nose.SkipTest
-
+def sample_data():
     data = [[ 0,  1,  2],
             [ 3,  4,  5],
             [ 6,  7,  8],
             [ 9, 10, 11]]
     df = DataFrame(data, index=['one', 'two', 'three', 'four'],
                    columns=['X', 'Y', 'Z'])
-
     viewer = DataFrameViewer(data=df)
+    return viewer
 
+
+def test_adapter_get_item():
+    """ Test that get_item works """
+    viewer = sample_data()
+    adapter = DataFrameAdapter()
+
+    item = adapter.get_item(viewer, 'data', 0)
+
+    assert_array_equal(item.values, [[0,  1,  2]])
+    assert_array_equal(item.columns, ['X', 'Y', 'Z'])
+    assert item.index[0] == 'one'
+
+
+def test_adapter_delete_start():
+    viewer = sample_data()
+    adapter = DataFrameAdapter()
+
+    adapter.delete(viewer, 'data', 0)
+    data = viewer.data
+
+    assert_array_equal(data.values,
+                       [[ 3,  4,  5],
+                        [ 6,  7,  8],
+                        [ 9, 10, 11]])
+    assert_array_equal(data.columns, ['X', 'Y', 'Z'])
+    assert_array_equal(data.index, ['two', 'three', 'four'])
+
+
+def test_adapter_delete_middle():
+    viewer = sample_data()
+    adapter = DataFrameAdapter()
+
+    adapter.delete(viewer, 'data', 1)
+    data = viewer.data
+
+    assert_array_equal(data.values,
+                       [[ 0,  1,  2],
+                        [ 6,  7,  8],
+                        [ 9, 10, 11]])
+    assert_array_equal(data.columns, ['X', 'Y', 'Z'])
+    assert_array_equal(data.index, ['one', 'three', 'four'])
+
+
+def test_adapter_delete_end():
+    viewer = sample_data()
+    adapter = DataFrameAdapter()
+
+    adapter.delete(viewer, 'data', 3)
+    data = viewer.data
+
+    assert_array_equal(data.values,
+                       [[ 0,  1,  2],
+                        [ 3,  4,  5],
+                        [ 6,  7,  8]])
+    assert_array_equal(data.columns, ['X', 'Y', 'Z'])
+    assert_array_equal(data.index, ['one', 'two', 'three'])
+
+
+def test_adapter_insert_start():
+    viewer = sample_data()
+    adapter = DataFrameAdapter()
+    item = DataFrame([[-3, -2, -1]], index=['new'], columns=['X', 'Y', 'Z'])
+
+    adapter.insert(viewer, 'data', 0, item)
+    data = viewer.data
+
+    assert_array_equal(data.values,
+                       [[-3, -2, -1],
+                        [ 0,  1,  2],
+                        [ 3,  4,  5],
+                        [ 6,  7,  8],
+                        [ 9, 10, 11]])
+    assert_array_equal(data.columns, ['X', 'Y', 'Z'])
+    assert_array_equal(data.index, ['new', 'one', 'two', 'three', 'four'])
+
+
+def test_adapter_insert_middle():
+    viewer = sample_data()
+    adapter = DataFrameAdapter()
+    item = DataFrame([[-3, -2, -1]], index=['new'], columns=['X', 'Y', 'Z'])
+
+    adapter.insert(viewer, 'data', 1, item)
+    data = viewer.data
+
+    assert_array_equal(data.values,
+                       [[ 0,  1,  2],
+                        [-3, -2, -1],
+                        [ 3,  4,  5],
+                        [ 6,  7,  8],
+                        [ 9, 10, 11]])
+    assert_array_equal(data.columns, ['X', 'Y', 'Z'])
+    assert_array_equal(data.index, ['one', 'new', 'two', 'three', 'four'])
+
+
+def test_adapter_insert_end():
+    viewer = sample_data()
+    adapter = DataFrameAdapter()
+    item = DataFrame([[-3, -2, -1]], index=['new'], columns=['X', 'Y', 'Z'])
+
+    adapter.insert(viewer, 'data', 5, item)
+    data = viewer.data
+
+    assert_array_equal(data.values,
+                       [[ 0,  1,  2],
+                        [ 3,  4,  5],
+                        [ 6,  7,  8],
+                        [ 9, 10, 11],
+                        [-3, -2, -1]])
+    assert_array_equal(data.columns, ['X', 'Y', 'Z'])
+    assert_array_equal(data.index, ['one', 'two', 'three', 'four', 'new'])
+
+
+def test_data_frame_editor():
+    viewer = sample_data()
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits()
         ui.control.close()
