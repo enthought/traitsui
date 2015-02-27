@@ -16,7 +16,7 @@ from traitsui.editors.tabular_editor import TabularEditor
 from traitsui.item import Item
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.toolkit import toolkit_object
-from traitsui.ui_editor import UIEditor
+from traitsui.qt4.ui_editor import UIEditor
 from traitsui.view import View
 
 
@@ -60,7 +60,7 @@ class DataFrameAdapter(TabularAdapter):
     def _get_alignment(self):
         import numpy as np
 
-        column = getattr(self.object, self.name)[self.column_id]
+        column = self.item[self.column_id]
         if np.issubdtype(column.dtype, np.number):
             return 'right'
         else:
@@ -79,7 +79,7 @@ class DataFrameAdapter(TabularAdapter):
             return self._formats.get(self.column_id, '%s')
 
     def _get_content(self):
-        return getattr(self.object, self.name)[self.column_id][self.row]
+        return self.item[self.column_id].iloc[0]
 
     def _get_text(self):
         format = self.get_format(self.object, self.name, self.row, self.column)
@@ -87,10 +87,10 @@ class DataFrameAdapter(TabularAdapter):
                                          self.column)
 
     def _set_text(self, value):
-        column = getattr(self.object, self.name)[self.column_id]
+        column = self.item[self.column_id]
         dtype = column.dtype
         value = dtype.type(value)
-        column.iloc[self.row] = value
+        column.iloc[0] = value
 
     def _get_index_text(self):
         return str(self.item.index[0])
@@ -104,7 +104,12 @@ class DataFrameAdapter(TabularAdapter):
     #---- Adapter methods that are not sensitive to item type ----------------
 
     def get_item(self, object, trait, row):
-        """ Override the base implementation to work with DataFrames """
+        """ Override the base implementation to work with DataFrames
+
+        This returns a dataframe with one row, rather than a series, since
+        using a dataframe preserves dtypes.
+
+        """
         return getattr(object, trait).iloc[row:row+1]
 
     def delete(self, object, trait, row):
@@ -188,7 +193,7 @@ class _DataFrameEditor(UIEditor):
                     operations=self.factory.operations,
                 )
             ),
-            id='array_view_editor',
+            id='data_frame_editor',
             resizable=True
         )
 
