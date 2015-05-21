@@ -9,12 +9,8 @@ before_install:
   - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then source .travis_before_install; fi
 install:
   # nose is already installed
-  - pip install unittest2
-  - pip install pygments
   - sudo apt-get install python-numpy
-  # Test against the current master of traits and pyface
-  - pip install git+http://github.com/enthought/traits.git#egg=traits
-  - pip install git+http://github.com/enthought/pyface.git#egg=pyface
+  - pip install -r dev_requirements.txt
   - python setup.py develop
 script:
   - nosetests traitsui.tests

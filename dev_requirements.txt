@@ -1,0 +1,3 @@
+unittest2
+-e git+http://github.com/enthought/traits.git#egg=traits
+-e git+http://github.com/enthought/pyface.git#egg=pyface
