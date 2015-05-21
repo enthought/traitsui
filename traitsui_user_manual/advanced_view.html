@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -17,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.4.0',
+        VERSION:     '4.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -216,7 +214,8 @@ produces a window based on the default View (<strong>traits_view</strong>). In o
 the alternate View, use the same syntax as for an external view, except that the
 View name is specified in single quotes to indicate that it is associated with
 the object rather than being a module-level variable:</p>
-<div class="highlight-python"><pre>configure_traits(view='all_view').</pre>
+<div class="highlight-python"><div class="highlight"><pre>configure_traits(view=&#39;all_view&#39;).
+</pre></div>
 </div>
 <p>Note that if more than one View is defined for a model class, you must indicate
 which one is to be used as the default by naming it <tt class="docutils literal"><span class="pre">traits_view</span></tt>. Otherwise,
@@ -242,9 +241,10 @@ model and view prescribed by the <a class="reference internal" href="glossary.ht
 UI, you can define a named View wherever you can define a variable or class
 attribute. <a class="footnote-reference" href="#id17" id="id6">[7]</a> A View can even be defined in-line as a function or method
 argument, for example:</p>
-<div class="highlight-python"><pre>object.configure_traits(view=View(Group(Item(name='a'),
-                                        Item(name='b'),
-                                        Item(name='c')))</pre>
+<div class="highlight-python"><div class="highlight"><pre>object.configure_traits(view=View(Group(Item(name=&#39;a&#39;),
+                                        Item(name=&#39;b&#39;),
+                                        Item(name=&#39;c&#39;)))
+</pre></div>
 </div>
 <p>However, this approach is apt to obfuscate the code unless the View is very
 simple.</p>
@@ -427,22 +427,23 @@ considered unsupported pending redesign.</p>
 that is specified outside the Group or View in which it appears. For example,
 the following two definitions, taken together, are equivalent to the third:</p>
 <p class="rubric" id="example-8-using-an-include-object"><span id="index-19"></span>Example 8: Using an Include object</p>
-<div class="highlight-python"><pre># This fragment...
-my_view = View(Group(Item('a'),
-                     Item('b')),
-               Include('my_group'))
+<div class="highlight-python"><div class="highlight"><pre># This fragment...
+my_view = View(Group(Item(&#39;a&#39;),
+                     Item(&#39;b&#39;)),
+               Include(&#39;my_group&#39;))
 
 # ...plus this fragment...
-my_group = Group(Item('c'),
-                 Item('d'),
-                 Item('e'))
+my_group = Group(Item(&#39;c&#39;),
+                 Item(&#39;d&#39;),
+                 Item(&#39;e&#39;))
 
 #...are equivalent to this:
-my_view = View(Group(Item('a'),
-                     Item('b')),
-               Group(Item('c'),
-                     Item('d'),
-                     Item('e'))</pre>
+my_view = View(Group(Item(&#39;a&#39;),
+                     Item(&#39;b&#39;)),
+               Group(Item(&#39;c&#39;),
+                     Item(&#39;d&#39;),
+                     Item(&#39;e&#39;))
+</pre></div>
 </div>
 <p>This opens an interesting possibility when a View is part of a model class: any
 Include objects belonging to that View can be defined differently for different
@@ -569,9 +570,9 @@ configure_traits() was used instead.</td></tr>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2008-2013, Enthought.
-      Last updated on Oct 25, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+        &copy; Copyright 2008-2015, Enthought.
+      Last updated on May 21, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -17,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.4.0',
+        VERSION:     '4.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -366,16 +364,17 @@ created.</p>
 initialized and code that should be executed when the trait actually changes,
 use the <strong>initialized</strong> attribute of the UIInfo object (i.e., of the <em>info</em>
 argument):</p>
-<div class="highlight-python"><pre>def object_foo_changed(self, info):
+<div class="highlight-python"><div class="highlight"><pre>def object_foo_changed(self, info):
 
     if not info.initialized:
         #code to be executed only when the window is
         #created
     else:
-        #code to be executed only when 'foo' changes after
+        #code to be executed only when &#39;foo&#39; changes after
         #window initialization}
 
-    #code to be executed in either case</pre>
+    #code to be executed in either case
+</pre></div>
 </div>
 <p>The following script, which annotates its window&#8217;s title with an asterisk (&#8216;*&#8217;)
 the first time a data element is updated, demonstrates a simple use of both an
@@ -493,12 +492,13 @@ tooltip and an image to display on the toolbar. The image must be a Pyface
 ImageResource instance; if a path to the image file is not specified, it is
 assumed to be in an images subdirectory of the directory where ImageResource
 is used:</p>
-<div class="highlight-python"><pre>From pyface.api import ImageResource
+<div class="highlight-python"><div class="highlight"><pre>From pyface.api import ImageResource
 
-recalc = Action(name = "Recalculate",
-                action = "do_recalc",
-                toolip = "Recalculate the results",
-                image = ImageResource("recalc.png"))</pre>
+recalc = Action(name = &quot;Recalculate&quot;,
+                action = &quot;do_recalc&quot;,
+                toolip = &quot;Recalculate the results&quot;,
+                image = ImageResource(&quot;recalc.png&quot;))
+</pre></div>
 </div>
 </li>
 <li><p class="first">If the View does not already include a ToolBar, create one and assign it to
@@ -625,9 +625,9 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2008-2013, Enthought.
-      Last updated on Oct 25, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+        &copy; Copyright 2008-2015, Enthought.
+      Last updated on May 21, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>
