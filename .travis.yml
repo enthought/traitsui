@@ -14,7 +14,7 @@ install:
   - sudo apt-get install python-numpy
   # Test against the current master of traits and pyface
   - pip install git+http://github.com/enthought/traits.git#egg=traits
-  - pip install git+http://github.com/enthought/pyface.git#egg=traits
+  - pip install git+http://github.com/enthought/pyface.git#egg=pyface
   - python setup.py develop
 script:
   - nosetests traitsui.tests
