@@ -49,7 +49,7 @@ def git_version():
     return git_revision, git_count
 
 
-def write_version_py(filename='traits/_version.py'):
+def write_version_py(filename='traitsui/_version.py'):
     template = """\
 # THIS FILE IS GENERATED FROM TRAITS SETUP.PY
 version = '{version}'

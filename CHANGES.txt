@@ -16,6 +16,7 @@ Fixes
  * Fix TupleEditor so that multiple change events are not fired (#179)
  * Numpy dependency is now optional. `ArrayEditor` will not be available
    if numpy cannot be imported (#181)
+ * Add development versioning (#200)
 
 
 Release 4.4.0
@@ -36,7 +37,7 @@ New Features
 Enhancements
 
  * Add Travis-CI support.
-   
+
  * Remove the use of the deprecated PySimpleApp under Wx and several other
    improvements. (#107)
 
