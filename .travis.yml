@@ -12,8 +12,9 @@ install:
   - pip install unittest2
   - pip install pygments
   - sudo apt-get install python-numpy
-  # Test against the current master of traits, traitsui and enable
+  # Test against the current master of traits and pyface
   - pip install git+http://github.com/enthought/traits.git#egg=traits
+  - pip install git+http://github.com/enthought/pyface.git#egg=traits
   - python setup.py develop
 script:
   - nosetests traitsui.tests
