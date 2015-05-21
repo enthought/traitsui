@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -17,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.4.0',
+        VERSION:     '4.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -201,7 +199,7 @@ text input.</p>
 <tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">Button, ToolbarButton</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>image</em>, <em>label</em>, <em>orientation</em>, <em>style</em>, <em>value</em>, <em>view</em>, <em>width_padding</em></td>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><em>height_padding</em>, <em>image</em>, <em>label</em>, <em>label_value</em>, <em>orientation</em>, <em>style</em>, <em>value</em>, <em>values_trait</em>, <em>view</em>, <em>width_padding</em></td>
 </tr>
 </tbody>
 </table>
@@ -217,9 +215,11 @@ identical.</p>
 <p>By default, the label of the button is the name of the Button or Event trait to
 which it is linked. <a class="footnote-reference" href="#id13" id="id5">[17]</a> However, this label can be set to any string by
 specifying the <em>label</em> parameter of ButtonEditor() as that string.</p>
+<p>Alternatively, use <em>label_value</em> to specify the name of the trait to use as the button label.</p>
 <p>You can specify a value for the trait to be set to, using the <em>value</em> parameter.
 If the trait is an Event, then the value is not stored, but might be useful to
 an event listener.</p>
+<p>Use <em>values_trait</em> to specify the name of the trait on the object that contains the list of possible values. If this is set, then the <em>value</em>, <em>label</em>, and <em>label_value</em> traits are ignored; instead, they will be set from this list. When this button is clicked, the value set will be the one selected from the drop-down.</p>
 </div>
 <div class="section" id="checklisteditor">
 <span id="id6"></span><h3>CheckListEditor()<a class="headerlink" href="#checklisteditor" title="Permalink to this headline">¶</a></h3>
@@ -463,7 +463,8 @@ a default editor using some of its data, e.g. Range or Enum, and you want to
 tweak some of the other parameters without having recreate that data.</p>
 <p>For example, the default editor for Range(low=0, high=1500) has
 &#8216;1500&#8217; as the upper label.  To change it to &#8216;Max&#8217; instead, use:</p>
-<div class="highlight-python"><pre>View(Item('my_range', editor=DefaultOverride(high_label='Max'))</pre>
+<div class="highlight-python"><div class="highlight"><pre>View(Item(&#39;my_range&#39;, editor=DefaultOverride(high_label=&#39;Max&#39;))
+</pre></div>
 </div>
 </div>
 <div class="section" id="directoryeditor">
@@ -549,24 +550,25 @@ different order for the items, give it a mapping from the normal values to ones
 with a numeric tag. The enumeration editor sorts the values based on the numeric
 tags, and then strips out the tags.</p>
 <p class="rubric" id="example-15-enumeration-editor-with-mapped-values">Example 15: Enumeration editor with mapped values</p>
-<div class="highlight-python"><pre># enum_editor.py -- Example of using an enumeration editor
+<div class="highlight-python"><div class="highlight"><pre># enum_editor.py -- Example of using an enumeration editor
 from traits.api import HasTraits, Enum
 from traitsui.api import EnumEditor
 
 Class EnumExample(HasTraits):
-    priority = Enum('Medium', 'Highest',
-                              'High',
-                              'Medium',
-                              'Low',
-                              'Lowest')
+    priority = Enum(&#39;Medium&#39;, &#39;Highest&#39;,
+                              &#39;High&#39;,
+                              &#39;Medium&#39;,
+                              &#39;Low&#39;,
+                              &#39;Lowest&#39;)
 
-    view = View( Item(name='priority',
+    view = View( Item(name=&#39;priority&#39;,
                       editor=EnumEditor(values={
-                          'Highest' : '1:Highest',
-                          'High'    : '2:High',
-                          'Medium'  : '3:Medium',
-                          'Low'     : '4:Low',
-                          'Lowest'  : '5:Lowest', })))</pre>
+                          &#39;Highest&#39; : &#39;1:Highest&#39;,
+                          &#39;High&#39;    : &#39;2:High&#39;,
+                          &#39;Medium&#39;  : &#39;3:Medium&#39;,
+                          &#39;Low&#39;     : &#39;4:Low&#39;,
+                          &#39;Lowest&#39;  : &#39;5:Lowest&#39;, })))
+</pre></div>
 </div>
 <p>The enumeration editor strips the characters up to and including the colon. It
 assumes that all the items have the colon in the same position; therefore, if
@@ -705,10 +707,10 @@ blocks.</li>
 </ul>
 <p>The following text produces the same displayed HTML as in Figure 34, when
 <em>format_text</em> is True:</p>
-<div class="highlight-python"><pre>This is a code block:
+<div class="highlight-python"><div class="highlight"><pre>This is a code block:
 
     def foo ( bar ):
-        print 'bar:', bar
+        print &#39;bar:&#39;, bar
 
 This is an unordered list:
  - An
@@ -718,7 +720,8 @@ This is an unordered list:
 This is an ordered list:
  * One
  * Two
- * Three</pre>
+ * Three
+</pre></div>
 </div>
 </div>
 <div class="section" id="imageenumeditor">
@@ -1459,9 +1462,9 @@ instead; see <a class="reference internal" href="factories_advanced_extra.html#t
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2008-2013, Enthought.
-      Last updated on Oct 25, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+        &copy; Copyright 2008-2015, Enthought.
+      Last updated on May 21, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>
