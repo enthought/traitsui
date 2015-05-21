@@ -17,7 +17,7 @@
 
 from __future__ import absolute_import
 
-from traits._version import full_version as __version__
+from ._version import full_version as __version__
 
 __requires__ = [
     'traits',
