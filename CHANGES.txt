@@ -1,8 +1,13 @@
 Traits UI Changelog
 ===================
 
-What's new in TraitsUI 4.5.0
+What's new in TraitsUI 4.5.1
 ----------------------------
+
+* Fix installation issue #206
+
+Release 4.5.0
+-------------
 
 Fixes
 
