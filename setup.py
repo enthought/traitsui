@@ -69,29 +69,28 @@ if not is_released:
     elif os.path.exists('traitsui/_version.py'):
         # must be a source distribution, use existing version file
         try:
-            from traits._version import git_revision as git_rev
-            from traits._version import full_version as full_v
+            from traitsui._version import git_revision, full_version
         except ImportError:
             raise ImportError("Unable to import git_revision. Try removing "
                               "traitsui/_version.py and the build directory "
                               "before building.")
 
-        match = re.match(r'.*?\.dev(?P<dev_num>\d+)', full_v)
+        match = re.match(r'.*?\.dev(?P<dev_num>\d+)', full_version)
         if match is None:
             dev_num = '0'
         else:
             dev_num = match.group('dev_num')
     else:
-        git_rev = 'Unknown'
+        git_revision = 'Unknown'
         dev_num = '0'
 
     if not IS_RELEASED:
-        fullversion += '.dev{0}'.format(dev_num)
+        full_version += '.dev{0}'.format(dev_num)
 
     with open(filename, "wt") as fp:
         fp.write(template.format(version=VERSION,
-                                 full_version=fullversion,
-                                 git_revision=git_rev,
+                                 full_version=full_version,
+                                 git_revision=git_revision,
                                  is_released=IS_RELEASED))
 
 if __name__ == "__main__":
