@@ -69,8 +69,8 @@ if not is_released:
     elif os.path.exists('traitsui/_version.py'):
         # must be a source distribution, use existing version file
         try:
-            from traits._version import git_revision as git_rev
-            from traits._version import full_version as full_v
+            from traitsui._version import git_revision as git_rev
+            from traitsui._version import full_version as full_v
         except ImportError:
             raise ImportError("Unable to import git_revision. Try removing "
                               "traitsui/_version.py and the build directory "
