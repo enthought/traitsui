@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 
 MAJOR = 4
 MINOR = 5
-MICRO = 1
+MICRO = 2
 
 IS_RELEASED = False
 
