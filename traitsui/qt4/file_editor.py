@@ -141,6 +141,11 @@ class SimpleEditor ( SimpleTextEditor ):
         dlg = QtGui.QFileDialog(self.control)
         dlg.selectFile(self._file_name.text())
 
+        if self.factory.dialog_style == 'open':
+            dlg.setAcceptMode(dlg.AcceptOpen)
+        elif self.factory.dialog_style == 'save':
+            dlg.setAcceptMode(dlg.AcceptSave)
+
         if len(self.factory.filter) > 0:
             dlg.setNameFilters(self.factory.filter)
 

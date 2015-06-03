@@ -462,7 +462,7 @@ class BaseDialog(BasePanel):
         if style == BaseDialog.NONMODAL:
             ui.control.show()
         else:
-            ui.control.setWindowModality(QtCore.Qt.WindowModal)
+            ui.control.setWindowModality(QtCore.Qt.ApplicationModal)
             ui.control.exec_()
 
     def set_icon(self, icon=None):

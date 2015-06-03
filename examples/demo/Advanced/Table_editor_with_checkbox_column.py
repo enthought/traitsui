@@ -40,6 +40,7 @@ player_editor = TableEditor(
     sortable     = False,
     configurable = False,
     auto_size    = False,
+    selected_indices = 'selected_player_indices',
     columns  = [ CheckboxColumn( name  = 'in_lineup',  label = 'In Lineup',
                                  width = 0.12 ),
                  PlayerColumn( name = 'name', editable = False, width  = 0.24,
@@ -83,6 +84,8 @@ class Team ( HasStrictTraits ):
 
     # Trait definitions:
     players = List( Player )
+
+    selected_player_indices = List
 
     # Trait view definitions:
     traits_view = View(
