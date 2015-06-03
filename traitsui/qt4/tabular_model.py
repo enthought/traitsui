@@ -90,7 +90,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.TextAlignmentRole:
             string = adapter.get_alignment(obj, name, column)
             alignment = alignment_map.get(string, QtCore.Qt.AlignLeft)
-            return (alignment | QtCore.Qt.AlignVCenter)
+            return int(alignment | QtCore.Qt.AlignVCenter)
 
         elif role == QtCore.Qt.BackgroundRole:
             color = adapter.get_bg_color(obj, name, row, column)
@@ -133,7 +133,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         editor = self._editor
         row = mi.row()
         column = mi.column()
-        
+
         if not mi.isValid():
             return QtCore.Qt.ItemIsDropEnabled
 
@@ -154,7 +154,7 @@ class TabularModel(QtCore.QAbstractTableModel):
 
         if editor.adapter.get_drag(editor.object, editor.name, row) is not None:
             flags |= QtCore.Qt.ItemIsDragEnabled
-            
+
         if editor.factory.editable:
             flags |=  QtCore.Qt.ItemIsDropEnabled
 
@@ -271,7 +271,7 @@ class TabularModel(QtCore.QAbstractTableModel):
                 current_rows = id_and_rows[1:]
                 self.moveRows(current_rows, parent.row())
                 return True
-        
+
         # this is an external drag
         data = PyMimeData.coerce(mime_data).instance()
         if data is not None:
@@ -310,10 +310,10 @@ class TabularModel(QtCore.QAbstractTableModel):
         name = editor.name
         adapter = editor.adapter
         destination = adapter.get_dropped(object, name, row, item)
-        
+
         if destination == 'after':
             row += 1
-        
+
         adapter.insert(object, name, row, item)
 
     def moveRow(self, old_row, new_row):

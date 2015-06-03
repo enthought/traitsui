@@ -19,7 +19,12 @@
 
 from __future__ import absolute_import
 
-from .api import (toolkit, ArrayEditor, BooleanEditor, ButtonEditor,
+try:
+    from .api import ArrayEditor
+except ImportError:
+    pass
+
+from .api import (toolkit, BooleanEditor, ButtonEditor,
     CheckListEditor, CodeEditor, ColorEditor, CompoundEditor, CustomEditor,
     DateEditor, DefaultOverride, DirectoryEditor, DNDEditor, DropEditor,
     EnumEditor, FileEditor, FontEditor, KeyBindingEditor, ImageEditor,

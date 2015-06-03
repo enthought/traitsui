@@ -26,7 +26,7 @@ from __future__ import absolute_import
 
 from traits.api import (Any, Bool, Color, Either, Enum, Event, Float, Font,
     HasPrivateTraits, HasTraits, Instance, Int, Interface, List, Property,
-    Str, cached_property, implements, on_trait_change)
+    Str, cached_property, on_trait_change, provides)
 
 #-------------------------------------------------------------------------------
 #  'ITabularAdapter' interface:
@@ -62,9 +62,8 @@ class ITabularAdapter ( Interface ):
 #  'AnITabularAdapter' class:
 #-------------------------------------------------------------------------------
 
+@provides(ITabularAdapter)
 class AnITabularAdapter ( HasPrivateTraits ):
-
-    implements( ITabularAdapter )
 
     #-- Implementation of the ITabularAdapter Interface ------------------------
 

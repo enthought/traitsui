@@ -1670,6 +1670,8 @@ class _TreeWidget(QtGui.QTreeWidget):
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.setDragEnabled(True)
         self.setAcceptDrops(True)
+        self.setIconSize(QtCore.QSize(*editor.factory.icon_size))
+
         # Set up headers if necessary.
         column_count = len(editor.factory.column_headers)
         if column_count > 0:
@@ -1802,7 +1804,7 @@ class _TreeWidget(QtGui.QTreeWidget):
                         editor._begin_undo()
                         editor._undoable_delete(
                                  *editor._node_index( dragging ) )
-                        editor._undoable_append( to_node, object, data, False )
+                        editor._undoable_append( to_node, to_object, data, False )
                     finally:
                         editor._end_undo()
             else:

@@ -211,7 +211,10 @@ class TableEditor(Editor, BaseTableEditor):
         if (factory.edit_view == ' ') or not mode in ('row', 'rows'):
             self.control = main_view
         else:
-            self.control = QtGui.QSplitter(QtCore.Qt.Vertical)
+            if factory.orientation == 'horizontal':
+                self.control = QtGui.QSplitter(QtCore.Qt.Horizontal)
+            else: 
+                self.control = QtGui.QSplitter(QtCore.Qt.Vertical)
             self.control.setSizePolicy(QtGui.QSizePolicy.Expanding,
                                        QtGui.QSizePolicy.Expanding)
             self.control.addWidget(main_view)
@@ -577,12 +580,8 @@ class TableEditor(Editor, BaseTableEditor):
     @cached_property
     def _get_selected_indices(self):
         """Gets the row,column indices which match the selected trait"""
-
-        if len(self.selected) == 0:
-            return []
-
         selection_items = self.table_view.selectionModel().selection()
-        indices = self.model.mapSelectionFromSource(selection_items).indexes()
+        indices = self.model.mapSelectionToSource(selection_items).indexes()
         return [(index.row(), index.column()) for index in indices]
 
 
@@ -863,7 +862,7 @@ class TableView(QtGui.QTableView):
              factory.reorderable):
             vheader.installEventFilter(self)
             vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
-        else:
+        elif not factory.show_row_labels:
             vheader.hide()
         self.setAlternatingRowColors(factory.alternate_bg_color)
         self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)

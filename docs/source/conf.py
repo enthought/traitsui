@@ -36,15 +36,15 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2011, Enthought'
+copyright = '2008-2015, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
 #
 # Pull from the actual release number without imports
 d = {}
-execfile(os.path.join('..', '..', 'traitsui', '__init__.py'), d)
-version = release = d['__version__']
+execfile(os.path.join('..', '..', 'traitsui', '_version.py'), d)
+version = release = d['version']
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
