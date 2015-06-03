@@ -4,7 +4,13 @@ Traits UI Changelog
 What's new in Traits 4.6.0
 --------------------------
 
-* Default backend changed from wx to qt4
+Potentially breaking change
+
+* Default backend changed from wx to qt4. 
+
+  Application using the wx backend will have to formally set the ETS_TOOLKIT
+  environment variable set to 'wx' if they have the qt4 and wx backend
+  installed. 
 
 
 Release 4.5.1
