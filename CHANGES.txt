@@ -51,6 +51,8 @@ Fixes
 * Remove some old (TraitsUI 3.0-era) documentation (#214)
 * Help button now works on Qt (#160)
 
+* Default backend changed from wx to qt4
+
 
 Release 4.5.1
 -------------
