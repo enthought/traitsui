@@ -4,6 +4,8 @@ Traits UI Changelog
 What's new in Traits 4.6.0
 --------------------------
 
+* Default backend changed from wx to qt4
+
 
 Release 4.5.1
 -------------
