@@ -1,0 +1,15 @@
+include CHANGES.txt
+include LICENSE.txt
+include MANIFEST.in
+include README.rst
+include image_LICENSE.txt
+include image_LICENSE_Eclipse.txt
+include image_LICENSE_Nuvola.txt
+include TODO.txt
+graft docs
+prune docs/build
+recursive-exclude docs *.pyc
+graft examples
+recursive-exclude examples *.pyc
+recursive-include traitsui *.py *.zip *.png *.gif *.txt
+recursive-include integrationtests *.py  *.gif

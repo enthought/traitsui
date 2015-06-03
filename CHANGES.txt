@@ -1,9 +1,34 @@
 Traits UI Changelog
 ===================
 
-What's new in TraitsUI 4.5.0
-----------------------------
+What's new in Traits 4.6.0
+--------------------------
 
+
+Release 4.5.1
+-------------
+
+Fixes
+
+* Fix pypi installation problem (#206)
+
+
+Release 4.5.0
+-------------
+
+Fixes
+
+ * Application-modal Traits UI dialogs are correctly styled as
+   application-modal under Qt. On Macs, they will now appear as independent
+   windows rather than drop-down sheets. (#164)
+ * Qt CodeEditor now honors 'show_line_numbers' and the 'readonly' style (#137)
+ * Deprecated `implements` declaration removed, use `provides` instead (#152)
+ * Fix TableEditor so that Qt.QSplitter honors 'orientation' trait (#171)
+ * Show row labels in Qt TableEditor when requested (#176)
+ * Fix TupleEditor so that multiple change events are not fired (#179)
+ * Numpy dependency is now optional. `ArrayEditor` will not be available
+   if numpy cannot be imported (#181)
+ * Add development versioning (#200)
 
 
 Release 4.4.0
@@ -24,7 +49,7 @@ New Features
 Enhancements
 
  * Add Travis-CI support.
-   
+
  * Remove the use of the deprecated PySimpleApp under Wx and several other
    improvements. (#107)
 

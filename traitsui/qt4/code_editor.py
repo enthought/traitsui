@@ -121,14 +121,16 @@ class SourceEditor ( Editor ):
 
         # Set up listeners for the signals we care about
         code_editor = self._widget.code
-        if not self.readonly:
+        if self.readonly:
+            code_editor.setReadOnly(True)
+        else:
             code_editor.textChanged.connect(self.update_object)
-            if factory.auto_set:
-                code_editor.textChanged.connect(self.update_object)
         if factory.selected_text != '':
             code_editor.selectionChanged.connect(self._selection_changed)
         if (factory.line != '') or (factory.column != ''):
             code_editor.cursorPositionChanged.connect(self._position_changed)
+
+        code_editor.line_number_widget.setVisible(factory.show_line_numbers)
 
         # Make sure the editor has been initialized:
         self.update_editor()
@@ -205,9 +207,6 @@ class SourceEditor ( Editor ):
         control = self._widget
         if control.code.toPlainText() != new_value:
             control.code.setPlainText(new_value)
-
-            # TODO: check the readonly flag and make sure the editor
-            # is still readonly when we're done.
 
             if self.factory.selected_line:
                 # TODO: update the factory selected line
@@ -353,7 +352,6 @@ class SourceEditor ( Editor ):
     @on_trait_change('dim_lines, squiggle_lines')
     def _style_document(self):
         self._widget.set_warn_lines(self.squiggle_lines)
-
 
 
 
