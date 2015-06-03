@@ -12,6 +12,10 @@ Fixes
 Release 4.5.1
 -------------
 
+Enhancements
+
+* Links to demos in the documentation (#159)
+
 Fixes
 
 * Fix pypi installation problem (#206)
