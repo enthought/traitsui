@@ -1,8 +1,12 @@
 Traits UI Changelog
 ===================
 
-What's new in Traits 4.6.0
---------------------------
+What's new in Traits UI 4.6.0
+-----------------------------
+
+Fixes
+
+* Help button now works on Qt (#160)
 
 
 Release 4.5.1
