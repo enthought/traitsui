@@ -4,6 +4,11 @@ Traits UI Changelog
 What's new in Traits UI 4.6.0
 -----------------------------
 
+Enhancements
+
+* Add minimal support for the dock_styles option to the Qt tabbed List
+  Editor. (#143)
+
 Fixes
 
 * Help button now works on Qt (#160)
@@ -11,6 +16,10 @@ Fixes
 
 Release 4.5.1
 -------------
+
+Enhancements
+
+* Links to demos in the documentation (#159)
 
 Fixes
 
