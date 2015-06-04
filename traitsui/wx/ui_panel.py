@@ -183,15 +183,7 @@ class Panel ( BaseDialog ):
             cpanel.SetSizer( None )
             cpanel.DestroyChildren()
         else:
-            if is_mac:
-                # Groups with borders have a two-tone background, and the
-                # getter is picking the wrong color.  Set to transparent
-                # and hope that the parent has been painted.
-                bg_color = wx.Colour(224, 224, 224, 0)
-                self.control = cpanel = TraitsUIPanel( parent, -1,
-                                                       bg_color=bg_color )
-            else:
-                self.control = cpanel = TraitsUIPanel( parent, -1 )
+            self.control = cpanel = TraitsUIPanel( parent, -1 )
 
         # Create the actual trait sheet panel and embed it in a scrollable
         # window (if requested):
