@@ -1,8 +1,10 @@
-import wx
+import time
+
+from pyface.qt import QtGui, QtCore
 
 from traits.api import Instance, Int, Str
-from traitsui.wx.editor import Editor
-from pyface.ui.wx.progress_dialog import ProgressDialog
+from traitsui.qt4.editor import Editor
+from pyface.ui.qt4.progress_dialog import ProgressDialog
 
 class _ProgressDialog(ProgressDialog):
     def close(self):
@@ -10,13 +12,13 @@ class _ProgressDialog(ProgressDialog):
         """
         pass
 
+
 class SimpleEditor(Editor):
     """
     Show a progress bar with all the optional goodies
 
     """
-
-    progress = Instance(ProgressDialog)
+    progress = Instance(_ProgressDialog)
 
     # The message to be displayed along side the progress guage
     message = Str
@@ -41,6 +43,7 @@ class SimpleEditor(Editor):
         self.sync_value( factory.min_name,  'min',  'from' )
         self.sync_value( factory.max_name, 'max', 'from' )
         self.sync_value( factory.message_name, 'message', 'from' )
+        
         self.set_tooltip()
 
     def create_control (self, parent):
@@ -48,7 +51,7 @@ class SimpleEditor(Editor):
         Finishes initializing the editor by creating the underlying widget.
         """
 
-        self.progress = ProgressDialog( title=self.factory.title,
+        self.progress = _ProgressDialog( title=self.factory.title,
                                         message=self.factory.message,
                                         min=self.factory.min,
                                         max=self.factory.max,
@@ -56,27 +59,17 @@ class SimpleEditor(Editor):
                                         show_time=self.factory.show_time,
                                         show_percent=self.factory.show_percent)
 
-        panel = wx.Panel(parent, -1)
-
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        panel.SetSizer(sizer)
-        panel.SetAutoLayout(True)
-        panel.SetBackgroundColour(wx.NullColor)
-
-        self.progress.dialog_size = wx.Size()
+        control = QtGui.QWidget()
+        self.control = control
+        layout = QtGui.QVBoxLayout(self.control)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         # The 'guts' of the dialog.
-        self.progress._create_message(panel, sizer)
-        self.progress._create_gauge(panel, sizer)
-        self.progress._create_percent(panel, sizer)
-        self.progress._create_timer(panel, sizer)
-        self.progress._create_buttons(panel, sizer)
-
-        panel.SetClientSize(self.progress.dialog_size)
-
-        panel.CentreOnParent()
-
-        self.control = panel
+        self.progress._create_message(control, layout)
+        self.progress._create_gauge(control, layout)
+        self.progress._create_percent(control, layout)
+        self.progress._create_timer(control, layout)
+        self.progress._create_buttons(control, layout)
         return self.control
 
 
@@ -87,7 +80,7 @@ class SimpleEditor(Editor):
         """
         self.progress.min = self.min
         self.progress.max = self.max
-        self.progress.change_message(self.message)
+        self.progress.message = self.message
         if self.value:
             self.progress.update(self.value)
         return
