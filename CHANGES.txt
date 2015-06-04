@@ -5,7 +5,9 @@ What's new in Traits UI 4.6.0
 -----------------------------
 
 Enhancements
+~~~~~~~~~~~~
 
+* Add a Qt version of the ProgressEditor (#217)
 * Links to demos in the documentation (#159)
 * Add minimal support for the dock_styles option to the Qt tabbed List
   Editor. (#143)
@@ -13,6 +15,8 @@ Enhancements
 Fixes
 ~~~~~
 
+* Fix layout of TextEditors in some situations (#216)
+* Fix removal of _popEventHandlers not owned by TraitsUI in Wx (#215)
 * Remove some old (TraitsUI 3.0-era) documentation (#214)
 * Help button now works on Qt (#160)
 
@@ -32,17 +36,17 @@ Release 4.5.0
 Fixes
 ~~~~~
 
- * Application-modal Traits UI dialogs are correctly styled as
-   application-modal under Qt. On Macs, they will now appear as independent
-   windows rather than drop-down sheets. (#164)
- * Qt CodeEditor now honors 'show_line_numbers' and the 'readonly' style (#137)
- * Deprecated `implements` declaration removed, use `provides` instead (#152)
- * Fix TableEditor so that Qt.QSplitter honors 'orientation' trait (#171)
- * Show row labels in Qt TableEditor when requested (#176)
- * Fix TupleEditor so that multiple change events are not fired (#179)
- * Numpy dependency is now optional. `ArrayEditor` will not be available
+* Application-modal Traits UI dialogs are correctly styled as
+  application-modal under Qt. On Macs, they will now appear as independent
+  windows rather than drop-down sheets. (#164)
+* Qt CodeEditor now honors 'show_line_numbers' and the 'readonly' style (#137)
+* Deprecated `implements` declaration removed, use `provides` instead (#152)
+* Fix TableEditor so that Qt.QSplitter honors 'orientation' trait (#171)
+* Show row labels in Qt TableEditor when requested (#176)
+* Fix TupleEditor so that multiple change events are not fired (#179)
+* Numpy dependency is now optional. `ArrayEditor` will not be available
    if numpy cannot be imported (#181)
- * Add development versioning (#200)
+* Add development versioning (#200)
 
 
 Release 4.4.0
@@ -59,37 +63,37 @@ Change summary since 4.3.0
 New Features
 ~~~~~~~~~~~~
 
- * Changes for new Traits adaptation mechanism support (#113)
+* Changes for new Traits adaptation mechanism support (#113)
 
 Enhancements
 ~~~~~~~~~~~~
 
- * Add Travis-CI support.
+* Add Travis-CI support.
 
- * Remove the use of the deprecated PySimpleApp under Wx and several other
+* Remove the use of the deprecated PySimpleApp under Wx and several other
    improvements. (#107)
 
- * Improvements to Qt TabularEditor, TableEditor and TreeEditor drag and drop
+* Improvements to Qt TabularEditor, TableEditor and TreeEditor drag and drop
    support.  Should be roughly on par with Wx support.  No API changes.
    (#124, #126, #129, #135)
 
- * Improvements to PyMimeData coercion to better handle lists of items. (#127)
+* Improvements to PyMimeData coercion to better handle lists of items. (#127)
 
 Fixes
 ~~~~~
 
- * Fixes item selection issue #133 in ListStrEditor under Wx 2.9 (#137)
+* Fixes item selection issue #133 in ListStrEditor under Wx 2.9 (#137)
 
- * Fixes to avoid asking for value of a Delegated Event (#123 and #136)
+* Fixes to avoid asking for value of a Delegated Event (#123 and #136)
 
- * Fix drag image location for Qt TreeEditor (#132)
+* Fix drag image location for Qt TreeEditor (#132)
 
- * Qt TreeEditor supports bg and fg colors and column labels correctly. (#131)
+* Qt TreeEditor supports bg and fg colors and column labels correctly. (#131)
 
- * Fix ListEditor under PySide (#125)
+* Fix ListEditor under PySide (#125)
 
- * remove event handlers before window destruction in Wx.  Required for
-   Wx 2.9. (#108)
+* remove event handlers before window destruction in Wx.  Required for
+  Wx 2.9. (#108)
 
 There are currently some other unlisted changes going back some time
 before this file was created.
