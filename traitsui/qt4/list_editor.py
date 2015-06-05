@@ -543,6 +543,13 @@ class NotebookEditor ( Editor ):
         signal = QtCore.SIGNAL( 'currentChanged(int)' )
         QtCore.QObject.connect( self.control, signal, self._tab_activated )
 
+        # minimal dock_style handling
+        if self.factory.dock_style == 'tab':
+            self.control.setDocumentMode(True)
+            self.control.tabBar().setDocumentMode(True)
+        elif self.factory.dock_style == 'vertical':
+            self.control.setTabPosition(QtGui.QTabWidget.West)
+
         # Create the button to close tabs, if necessary:
         if self.factory.deletable:
             button = QtGui.QToolButton()
@@ -563,9 +570,13 @@ class NotebookEditor ( Editor ):
             self.control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
         # Set up the additional 'list items changed' event handler needed for
-        # a list based trait:
+        # a list based trait. Note that we want to fire the update_editor_item
+        # only when the items in the list change and not when intermediate
+        # traits change. Therefore, replace "." by ":" in the extended_name
+        # when setting up the listener.
+        extended_name = self.extended_name.replace('.', ':')
         self.context_object.on_trait_change( self.update_editor_item,
-                               self.extended_name + '_items?', dispatch = 'ui' )
+                               extended_name + '_items?', dispatch = 'ui' )
 
         # Set of selection synchronization:
         self.sync_value( self.factory.selected, 'selected' )
