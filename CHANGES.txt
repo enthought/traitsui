@@ -37,6 +37,7 @@ New Features
 Enhancements
 ~~~~~~~~~~~~
 
+* Change the default backend from Wx to Qt (#212)
 * Add a Qt version of the ProgressEditor (#217)
 * Links to demos in the documentation (#159)
 * Add minimal support for the dock_styles option to the Qt tabbed List
@@ -50,14 +51,6 @@ Fixes
 * Fix removal of _popEventHandlers not owned by TraitsUI in Wx (#215)
 * Remove some old (TraitsUI 3.0-era) documentation (#214)
 * Help button now works on Qt (#160)
-
-Potentially breaking change
-
-* Default backend changed from wx to qt4. 
-
-  Application using the wx backend will have to formally set the ETS_TOOLKIT
-  environment variable set to 'wx' if they have the qt4 and wx backend
-  installed. 
 
 
 Release 4.5.1
