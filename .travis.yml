@@ -1,20 +1,36 @@
 language: python
+sudo: false
 python:
   - 2.7
+addons:
+  apt:
+    packages:
+    - python-vtk
+    - python-qt4
+    - python-qt4-gl
+    - python-pip
+    - python-numpy
+    - ccache
+env:
+  - ETS_TOOLKIT=qt4
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - $HOME/.ccache
 virtualenv:
-  # This allows installing PyQt using apt-get and being able to import it.
   system_site_packages: true
 before_install:
-  # On Python 2.7 we install PyQt4 and run the UI tests.
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then source .travis_before_install; fi
+  - ccache -s
+  - pip install --upgrade pip
+  - export PATH=/usr/lib/ccache:${PATH}
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 install:
-  # nose is already installed
-  - sudo apt-get install python-numpy
   - pip install -r dev_requirements.txt
   - python setup.py develop
 script:
-  - nosetests traitsui.tests
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then nosetests traitsui.qt4.tests; fi
-notifications:
-  email:
-    - travis-ci@enthought.com
+  - coverage run -m nose.core traitsui.tests
+  - coverage run -a -m nose.core traitsui.qt4.tests
+after_success:
+  - pip install codecov
+  - codecov
