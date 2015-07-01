@@ -1,4 +1,5 @@
 unittest2
+coverage
 pygments
--e git+http://github.com/enthought/traits.git#egg=traits
--e git+http://github.com/enthought/pyface.git#egg=pyface
+git+http://github.com/enthought/traits.git#egg=traits
+git+http://github.com/enthought/pyface.git#egg=pyface
