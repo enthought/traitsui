@@ -22,6 +22,7 @@ from traits.api import Float, HasStrictTraits, Str, Tuple
 from traits.testing.api import UnittestTools
 
 from traitsui.api import Item, TupleEditor, View
+from traitsui.tests._tools import skip_if_null
 
 
 class DummyModel(HasStrictTraits):
@@ -33,6 +34,7 @@ class DummyModel(HasStrictTraits):
     traits_view = View(Item(name='data', editor=TupleEditor()))
 
 
+@skip_if_null
 class TestTupleEditor(UnittestTools, unittest.TestCase):
 
     def test_value_update(self):
