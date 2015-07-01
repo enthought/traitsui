@@ -9,9 +9,13 @@ addons:
     - python-qt4-gl
     - python-pip
     - python-numpy
+    - mesa-common-dev
+    - libgtk2.0-dev
     - ccache
 env:
   - ETS_TOOLKIT=qt4
+  - ETS_TOOLKIT=null
+  - ETS_TOOLKIT=wx
 cache:
   directories:
     - $HOME/.cache/pip
@@ -21,6 +25,7 @@ virtualenv:
 before_install:
   - ccache -s
   - pip install --upgrade pip
+  - if [[ ${ETS_TOOLKIT} == "wx" ]]; then sh travis-install-wx.sh; fi
   - export PATH=/usr/lib/ccache:${PATH}
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
@@ -29,7 +34,7 @@ install:
   - python setup.py develop
 script:
   - coverage run -m nose.core -v traitsui.tests
-  - coverage run -a -m nose.core -v traitsui.qt4.tests
+  - if [[ ${ETS_TOOLKIT} == "qt4" ]]; then coverage run -a -m nose.core -v traitsui.qt4.tests; fi
 after_success:
   - pip install codecov
   - codecov
