@@ -28,8 +28,8 @@ install:
   - pip install -r dev_requirements.txt
   - python setup.py develop
 script:
-  - coverage run -m nose.core traitsui.tests
-  - coverage run -a -m nose.core traitsui.qt4.tests
+  - coverage run -m nose.core -v traitsui.tests
+  - coverage run -a -m nose.core -v traitsui.qt4.tests
 after_success:
   - pip install codecov
   - codecov
