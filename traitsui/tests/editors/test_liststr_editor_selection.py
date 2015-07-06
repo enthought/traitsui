@@ -27,7 +27,7 @@ from traitsui.view import View
 from traitsui.editors.list_str_editor import ListStrEditor
 
 from traitsui.tests._tools import (
-    is_current_backend_qt4, press_ok_button, skip_if_not_qt4, skip_if_not_wx,
+    press_ok_button, skip_if_not_qt4, skip_if_not_wx,
     store_exceptions_on_all_threads)
 
 
