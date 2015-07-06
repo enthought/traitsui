@@ -15,6 +15,7 @@ Enhancements
 Fixes
 ~~~~~
 
+* Fix failure to disconnect selection listeners for ListStrEditor in Qt (#223)
 * Fix layout of TextEditors in some situations (#216)
 * Fix removal of _popEventHandlers not owned by TraitsUI in Wx (#215)
 * Remove some old (TraitsUI 3.0-era) documentation (#214)
