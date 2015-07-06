@@ -26,13 +26,16 @@ from traitsui.item import Item
 from traitsui.view import View
 from traitsui.editors.list_str_editor import ListStrEditor
 
-from traitsui.tests._tools import *
+from traitsui.tests._tools import (
+    is_current_backend_qt4, press_ok_button, skip_if_not_qt4, skip_if_not_wx,
+    store_exceptions_on_all_threads)
 
 
 class ListStrEditorWithSelectedIndex(HasTraits):
     values = List(Str())
     selected_index = Int()
     selected_indices = List(Int())
+    selected = Str()
 
 single_select_view = View(
     Item('values',
@@ -42,7 +45,7 @@ single_select_view = View(
             editable=False),
     ),
     buttons=['OK'])
-        
+
 multi_select_view = View(
     Item('values',
         show_label=False,
@@ -52,7 +55,17 @@ multi_select_view = View(
             editable=False),
     ),
     buttons=['OK'])
-        
+
+single_select_item_view = View(
+    Item('values',
+        show_label=False,
+        editor=ListStrEditor(
+            selected='selected',
+            editable=False),
+    ),
+    buttons=['OK'])
+
+
 def get_selected(control):
     """ Returns a list of the indices of all currently selected list items.
     """
@@ -66,6 +79,7 @@ def get_selected(control):
             break;
         selected.append(item)
     return selected
+
 
 @skip_if_not_wx
 def test_wx_list_str_selected_index():
@@ -82,7 +96,7 @@ def test_wx_list_str_selected_index():
 
         liststrctrl = ui.control.FindWindowByName('listCtrl')
         selected_1 = get_selected(liststrctrl)
-        
+
         obj.selected_index = 0
         selected_2 = get_selected(liststrctrl)
 
@@ -92,6 +106,7 @@ def test_wx_list_str_selected_index():
     # the number traits should be between 3 and 8
     assert selected_1 == [1]
     assert selected_2 == [0]
+
 
 @skip_if_not_wx
 def test_wx_list_str_multi_selected_index():
@@ -108,7 +123,7 @@ def test_wx_list_str_multi_selected_index():
 
         liststrctrl = ui.control.FindWindowByName('listCtrl')
         selected_1 = get_selected(liststrctrl)
-        
+
         obj.selected_indices = [0]
         selected_2 = get_selected(liststrctrl)
 
@@ -118,6 +133,39 @@ def test_wx_list_str_multi_selected_index():
     # the number traits should be between 3 and 8
     assert selected_1 == [1]
     assert selected_2 == [0]
+
+
+@skip_if_not_qt4
+def test_selection_listener_disconnected():
+    """ Check that selection listeners get correctly disconnected """
+    from pyface.api import GUI
+    from pyface.qt.QtGui import QApplication, QItemSelectionModel
+    from pyface.ui.qt4.util.event_loop_helper import EventLoopHelper
+    from pyface.ui.qt4.util.testing import event_loop
+
+    obj = ListStrEditorWithSelectedIndex(values=['value1', 'value2'])
+
+    with store_exceptions_on_all_threads():
+        qt_app = QApplication.instance()
+        if qt_app is None:
+            qt_app = QApplication([])
+        helper = EventLoopHelper(gui=GUI(), qt_app=qt_app)
+
+        # open the UI and run until the dialog is closed
+        ui = obj.edit_traits(view=single_select_item_view)
+        with helper.delete_widget(ui.control):
+            press_ok_button(ui)
+
+        # now run again and change the selection
+        ui = obj.edit_traits(view=single_select_item_view)
+        with event_loop():
+            editor = ui.get_editors('values')[0]
+
+            list_view = editor.list_view
+            mi = editor.model.index(1)
+            list_view.selectionModel().select(mi, QItemSelectionModel.ClearAndSelect)
+
+    obj.selected = 'value2'
 
 
 if __name__ == '__main__':
