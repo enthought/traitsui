@@ -409,7 +409,7 @@ class GUIToolkit ( Toolkit ):
             handler = ui.route_event
 
         id            = control.GetId()
-        event_handler = wx.EvtHandler()
+        event_handler = EventHandlerWrapper()
         connect       = event_handler.Connect
 
         for event in events:
@@ -781,11 +781,24 @@ class WXDockWindowTheme ( Category, DockWindowTheme ):
 
 
 #-------------------------------------------------------------------------------
+
+class EventHandlerWrapper(wx.EvtHandler):
+    """ Simple wrapper around wx.EvtHandler used to determine which event
+    handlers were added by traitui.
+    """
+    pass
+
 def _popEventHandlers(ctrl):
     """ Pop any event handlers that have been pushed on to a window and its
         children.
     """
+    
+    # Assume that all traitsui event handlers are on the top of the stack
     while ctrl is not ctrl.GetEventHandler():
-        ctrl.PopEventHandler(True)
+        handler = ctrl.GetEventHandler()
+        if isinstance(handler, EventHandlerWrapper):
+            ctrl.PopEventHandler(True)
+        else:
+            break
     for child in ctrl.GetChildren():
         _popEventHandlers(child)

@@ -23,7 +23,7 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = []
+extensions = ['sphinx.ext.extlinks']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -145,6 +145,11 @@ html_use_modindex = False
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'Traitsuidoc'
 
+# Useful aliases to avoid repeating long URLs.
+extlinks = {'github-demo': (
+    'https://github.com/enthought/traitsui/tree/master/examples/demo/%s',
+    'github-demo')
+}
 
 # Options for LaTeX output
 # ------------------------
