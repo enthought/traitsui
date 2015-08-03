@@ -25,6 +25,8 @@
 
 from __future__ import absolute_import
 
+import warnings
+
 from traits.api import HasPrivateTraits, TraitError
 
 from traits.trait_base import ETSConfig
@@ -110,6 +112,8 @@ def toolkit ( *toolkits ):
         return _toolkit
     else:
         if len( toolkits ) == 0:
+            warnings.warn(DeprecationWarning(
+                "Default toolkit will change to 'qt4' in TraitsUI 5.0"))
             toolkits = TraitUIToolkits
 
         for toolkit_name in toolkits:
@@ -529,4 +533,3 @@ class Toolkit ( HasPrivateTraits ):
 
     def value_editor ( self, *args, **traits ):
         raise NotImplementedError
-
