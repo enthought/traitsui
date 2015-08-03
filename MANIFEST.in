@@ -2,6 +2,7 @@ include CHANGES.txt
 include LICENSE.txt
 include MANIFEST.in
 include README.rst
+include README_example.png
 include image_LICENSE.txt
 include image_LICENSE_Eclipse.txt
 include image_LICENSE_Nuvola.txt
