@@ -113,16 +113,16 @@ application. The etsconfig package contains a singleton object, **ETSConfig**
 
 .. index:: ETSConfig.toolkit
 
-The values of **ETSConfig.toolkit** that are supported by TraitsUI version 3
+The values of **ETSConfig.toolkit** that are supported by TraitsUI version 4
 are:
 
 .. index:: wxPython toolkit, Qt toolkit, null toolkit
 
-* 'wx': `wxPython <http://www.wxpython.org>`_, which provides Python bindings 
+* 'wx': `wxPython <http://www.wxpython.org>`_, which provides Python bindings
   for the `wxWidgets <http://wxwidgets.org>`_ toolkit.
 * 'qt4': `PyQt <http://riverbankcomputing.co.uk/pyqt/>`_, which provides Python
   bindings for the `Qt <http://trolltech.com/products/qt>`_ framework version 4.
-* 'null': A do-nothing toolkit, for situations where neither of the other 
+* 'null': A do-nothing toolkit, for situations where neither of the other
   toolkits is installed, but Traits is needed for non-UI purposes.
 
 The default behavior of TraitsUI is to search for available toolkit-specific
@@ -136,13 +136,15 @@ order of precedence:
 #. The program can explicitly set **ETSConfig.toolkit**. It must do this before
    importing from any other Enthought Tool Suite component, including
    traits.  For example, at the beginning of a program::
-   
+
        from traits.etsconfig.api import ETSConfig
        ETSConfig.toolkit = 'wx'
 
-#. The user can specify a -toolkit flag on the command line of the program. 
+#. The user can specify a -toolkit flag on the command line of the program.
 #. The user can define a value for the ETS_TOOLKIT environment variable.
 
+.. warning:: The default order of toolkits will change in TraitsUI 5.0 to
+   prefer 'qt4' over 'wx'.
 
 .. _structure-of-this-guide:
 
@@ -151,30 +153,28 @@ Structure of this Manual
 
 The intent of this guide is to present the capabilities of the TraitsUI package
 in usable increments, so that you can create and display gradually more
-sophisticated interfaces from one chapter to the next. 
+sophisticated interfaces from one chapter to the next.
 
-* :ref:`the-view-and-its-building-blocks`, :ref:`customizing-a-view`, and 
-  :ref:`advanced-view-concepts` show how to construct and display views from 
-  the simple to the elaborate, while leaving such details as GUI logic and 
+* :ref:`the-view-and-its-building-blocks`, :ref:`customizing-a-view`, and
+  :ref:`advanced-view-concepts` show how to construct and display views from
+  the simple to the elaborate, while leaving such details as GUI logic and
   widget selection to system defaults.
-* :ref:`controlling-the-interface-the-handler` explains how to use the Handler 
-  class to implement custom GUI behaviors, as well as menus and toolbars. 
-* :ref:`traits-ui-themes` described how to customize the appearance of GUIs 
-  through *themes*. 
-* :ref:`introduction-to-trait-editor-factories` and 
+* :ref:`controlling-the-interface-the-handler` explains how to use the Handler
+  class to implement custom GUI behaviors, as well as menus and toolbars.
+* :ref:`traits-ui-themes` described how to customize the appearance of GUIs
+  through *themes*.
+* :ref:`introduction-to-trait-editor-factories` and
   :ref:`the-predefined-trait-editor-factories` show how to control GUI widget
-  selection by means of trait :term:`editor`\ s. 
+  selection by means of trait :term:`editor`\ s.
 * :ref:`tips-tricks-and-gotchas` covers miscellaneous additional topics.
-* Further reference materials, including a :ref:`glossary-of-terms` and an API 
+* Further reference materials, including a :ref:`glossary-of-terms` and an API
   summary for the TraitsUI classes covered in this Manual, are located in the
   Appendices.
 
 .. rubric:: Footnotes
 
-.. [1] A third type of content object, Include, is discussed briefly in 
+.. [1] A third type of content object, Include, is discussed briefly in
    :ref:`include-objects`, but presently is not commonly used.
 
-.. [2] Not to be confused with the TraitHandler class of the Traits package, 
-   which enforces type validation. 
-
-
+.. [2] Not to be confused with the TraitHandler class of the Traits package,
+   which enforces type validation.
