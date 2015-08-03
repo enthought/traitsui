@@ -110,7 +110,6 @@ def toolkit ( *toolkits ):
         return _toolkit
     else:
         if len( toolkits ) == 0:
-            print 'here'
             import warnings
             warnings.warn(
                 "Default toolkit will change to 'qt4' in TraitsUI 5.0",
