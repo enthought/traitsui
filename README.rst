@@ -16,11 +16,8 @@ The following GUI backends are supported:
 - PyQt
 - PySide
 
-Warning
-~~~~~~~
-
-In TraitsUI version 5.0 the default GUI backend will change from ``wx`` to
-``qt4``.
+**Warning:** In TraitsUI version 5.0 the default GUI backend will change from
+``wx`` to ``qt4``.
 
 Example
 -------
