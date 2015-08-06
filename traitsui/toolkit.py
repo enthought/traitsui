@@ -110,6 +110,11 @@ def toolkit ( *toolkits ):
         return _toolkit
     else:
         if len( toolkits ) == 0:
+            import warnings
+            warnings.warn(
+                "Default toolkit will change to 'qt4' in TraitsUI 5.0",
+                DeprecationWarning)
+
             toolkits = TraitUIToolkits
 
         for toolkit_name in toolkits:
@@ -529,4 +534,3 @@ class Toolkit ( HasPrivateTraits ):
 
     def value_editor ( self, *args, **traits ):
         raise NotImplementedError
-
