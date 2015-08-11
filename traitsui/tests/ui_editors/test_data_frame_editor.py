@@ -7,6 +7,7 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 
 import nose
+import numpy as np
 from numpy.testing import assert_array_equal
 
 try:
@@ -22,7 +23,7 @@ from traitsui.ui_editors.data_frame_editor import (
     DataFrameEditor, DataFrameAdapter)
 from traitsui.view import View
 
-from traitsui.tests._tools import *
+from traitsui.tests._tools import store_exceptions_on_all_threads
 
 
 class DataFrameViewer(HasTraits):
@@ -58,22 +59,44 @@ def test_adapter_get_item():
     viewer = sample_data()
     adapter = DataFrameAdapter()
 
-    item = adapter.get_item(viewer, 'data', 0)
+    item_0_df = adapter.get_item(viewer, 'data', 0)
 
-    assert_array_equal(item.values, [[0,  1,  2]])
-    assert_array_equal(item.columns, ['X', 'Y', 'Z'])
-    assert item.index[0] == 'one'
+    assert_array_equal(item_0_df.values, [[0,  1,  2]])
+    assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
+    assert item_0_df.index[0] == 'one'
+
+
+def test_adapter_empty_dataframe():
+    data = DataFrame()
+    viewer = DataFrameViewer(data=data)
+    adapter = DataFrameAdapter()
+
+    item_0_df = adapter.get_item(viewer, 'data', 0)
+
+    assert_array_equal(item_0_df.values, np.array([]).reshape(0, 0))
+    assert_array_equal(item_0_df.columns, [])
+
+
+def test_adapter_no_rows():
+    data = DataFrame(columns=['X', 'Y', 'Z'])
+    viewer = DataFrameViewer(data=data)
+    adapter = DataFrameAdapter()
+
+    item_0_df = adapter.get_item(viewer, 'data', 0)
+
+    assert_array_equal(item_0_df.values, np.array([]).reshape(0, 3))
+    assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
 
 
 def test_adapter_get_item_numerical():
     viewer = sample_data_numerical_index()
     adapter = DataFrameAdapter()
 
-    item = adapter.get_item(viewer, 'data', 0)
+    item_0_df = adapter.get_item(viewer, 'data', 0)
 
-    assert_array_equal(item.values, [[0,  1,  2]])
-    assert_array_equal(item.columns, ['X', 'Y', 'Z'])
-    assert item.index[0] == 1
+    assert_array_equal(item_0_df.values, [[0,  1,  2]])
+    assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
+    assert item_0_df.index[0] == 1
 
 
 def test_adapter_delete_start():
