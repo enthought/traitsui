@@ -2,7 +2,7 @@
 set -e
 
 if [ -f "${HOME}/.cache/PySide-1.2.2-cp32-cp32mu-linux_x86_64.whl" ]; then
-   echo "Pysidexs wheel found"
+   echo "PySide wheel found"
 else
    echo "Building PySide"
 
@@ -19,7 +19,7 @@ else
    git submodule sync
 
    # now it is time to build the pyside wheels
-   ${PYTHON} setup.py bdist_wheel --qmake=/usr/bin/qmake-qt4 --version=1.2.2
+   python setup.py bdist_wheel --qmake=/usr/bin/qmake-qt4 --version=1.2.2
 
 fi
 
