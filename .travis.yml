@@ -7,11 +7,13 @@ addons:
   apt:
     packages:
     - python-qt4
+    - pyhton-qt4-dev
     - python-qt4-gl
     - python-pip
     - python-numpy
     - python-wxtools
     - ccache
+    - cmake
 env:
   - ETS_TOOLKIT=qt4
   - ETS_TOOLKIT=null
@@ -20,8 +22,9 @@ matrix:
   allow_failures:
     - env: ETS_TOOLKIT=wx
 cache:
-  - pip
-  - ccache
+  directories:
+    - $HOME/.cache
+    - $HOME/.ccache
 before_install:
   - ccache -s
   - pip install --upgrade pip
