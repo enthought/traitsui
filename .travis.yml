@@ -20,9 +20,8 @@ matrix:
   allow_failures:
     - env: ETS_TOOLKIT=wx
 cache:
-  directories:
-    - $HOME/.cache/pip
-    - $HOME/.ccache
+  - pip
+  - ccache
 before_install:
   - ccache -s
   - pip install --upgrade pip
