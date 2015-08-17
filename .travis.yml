@@ -1,25 +1,42 @@
 language: python
+sudo: false
 python:
-    - 2.7
-    - 3.3
+  - 2.7
+  - 3.4
+addons:
+  apt:
+    packages:
+    - python-qt4
+    - python-qt4-gl
+    - python-pip
+    - python-numpy
+    - python-wxtools
+    - ccache
+env:
+  - ETS_TOOLKIT=qt4
+  - ETS_TOOLKIT=null
+  - ETS_TOOLKIT=wx
+matrix:
+  allow_failures:
+    - env: ETS_TOOLKIT=wx
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - $HOME/.ccache
+virtualenv:
+  system_site_packages: true
 before_install:
-    # Set up for UI tests.
-    - export DISPLAY=:99.0
-    - sh -e /etc/init.d/xvfb start
-    - export ETS_TOOLKIT=qt4
-    # For PySide
-    - 'export LD_LIBRARY_PATH=`python -c "import os,nose; print(os.path.dirname(os.path.dirname(nose.__file__)))"`/PySide'
-
+  - ccache -s
+  - pip install --upgrade pip
+  - export PATH=/usr/lib/ccache:${PATH}
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 install:
-  # nose is already installed
-  - sudo apt-get install python-numpy
   - pip install -r dev_requirements.txt
   - python setup.py develop
-  # Test against the current master of traits
-  - pip install git+http://github.com/enthought/traits.git#egg=traits
-  # Test against the current python3 branch of pyface
-  - pip install git+http://github.com/pradyun/pyface.git@python3#egg=pyface
-  - python setup.py build
-  - python setup.py develop
 script:
-    - python setup.py nosetests
+  - coverage run -m nose.core -v traitsui.tests
+  - if [[ ${ETS_TOOLKIT} == "qt4" ]]; then coverage run -a -m nose.core -v traitsui.qt4.tests; fi
+after_success:
+  - pip install codecov
+  - codecov
