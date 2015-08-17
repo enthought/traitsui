@@ -6,7 +6,7 @@ if [ -f "${HOME}/.cache/PySide-1.2.2-cp32-cp32mu-linux_x86_64.whl" ]; then
 else
    echo "Building PySide"
 
-   git clone git@github.com:PySide/pyside-setup
+   git clone https://github.com/PySide/pyside-setup.git
    cd pyside-setup
 
    # The normal pyside repos only have the right tags upto 1.1.1
@@ -14,8 +14,8 @@ else
    git submodule deinit .
    git rm sources/pyside
    git rm sources/shiboken
-   git submodule add --name sources/shiboken -- git@github.com:PySide/shiboken2 sources/shiboken
-   git submodule add --name sources/pyside -- git@github.com:PySide/pyside2 sources/pyside
+   git submodule add --name sources/shiboken -- https://github.com/PySide/shiboken2.git sources/shiboken
+   git submodule add --name sources/pyside -- https://github.com/PySide/pyside2.git sources/pyside
    git submodule sync
 
    # now it is time to build the pyside wheels
