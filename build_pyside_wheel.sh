@@ -23,4 +23,4 @@ else
 
 fi
 
-pip install "${HOME}/.cache/wxPython-2.8.12.1-cp27-none-linux_x86_64.whl"
+pip install "${HOME}/.cache/PySide-1.2.2-cp32-cp32mu-linux_x86_64.whl"
