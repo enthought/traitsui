@@ -490,7 +490,7 @@ class _GroupPanel(object):
             pass
 
         elif group.layout == 'flow':
-            raise NotImplementedError, "'the 'flow' layout isn't implemented"
+            raise NotImplementedError("'the 'flow' layout isn't implemented")
 
         elif group.layout == 'split':
             # Create the splitter.

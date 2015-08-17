@@ -93,7 +93,7 @@ def enum_values_changed ( values, strfunc=unicode ):
         if isinstance( handler, CTrait ):
             handler = handler.handler
         if not isinstance( handler, BaseTraitHandler ):
-            raise TraitError, "Invalid value for 'values' specified"
+            raise TraitError("Invalid value for 'values' specified")
         if handler.is_mapped:
             data = [ ( strfunc( n ), n ) for n in handler.map.keys() ]
             data.sort( lambda x, y: cmp( x[0], y[0] ) )

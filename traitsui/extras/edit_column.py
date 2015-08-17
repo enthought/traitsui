@@ -31,7 +31,7 @@ from ..table_column import ObjectColumn
 if ETSConfig.toolkit == 'wx':
     from pyface.ui.wx.grid.edit_renderer import EditRenderer
 else:
-    raise NotImplementedError, "No EditColumn implementation for backend"
+    raise NotImplementedError("No EditColumn implementation for backend")
 
 #-------------------------------------------------------------------------------
 #  'EditColumn' class:
@@ -61,4 +61,3 @@ class EditColumn ( ObjectColumn ):
         """ Returns whether the column is editable for a specified object.
         """
         return False
-
