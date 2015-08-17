@@ -19,7 +19,7 @@ else
    git submodule sync
 
    # now it is time to build the pyside wheels
-   python setup.py bdist_wheel --qmake=/usr/bin/qmake-qt4 --version=1.2.2
+   python setup.py bdist_wheel --qmake=/usr/bin/qmake-qt4 --version=1.2.2 --jobs=2
 
 fi
 
