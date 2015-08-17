@@ -16,7 +16,7 @@ from traitsui.editors.tabular_editor import TabularEditor
 from traitsui.item import Item
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.toolkit import toolkit_object
-from traitsui.qt4.ui_editor import UIEditor
+from traitsui.ui_editor import UIEditor
 from traitsui.view import View
 
 
