@@ -106,7 +106,7 @@ class TextEditor ( Editor ):
         """
         try:
             self.value = unicode(self.control.text())
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
 #-------------------------------------------------------------------------------

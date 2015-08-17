@@ -175,7 +175,7 @@ class DemoFileHandler ( Handler ):
             if demo is None:
                 locals['__name__'] = '__main__'
                 #do_later(self.execute_test, df, locals)
-        except Exception, excp:
+        except Exception as excp:
             demo = DemoError( msg = str( excp ) )
 
         # Clean up sys.path

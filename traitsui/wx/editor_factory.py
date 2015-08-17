@@ -147,7 +147,7 @@ class TextEditor ( Editor ):
         """
         try:
             self.value = self.control.GetValue()
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
 #-------------------------------------------------------------------------------

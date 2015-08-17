@@ -232,7 +232,7 @@ class Group ( ViewSubElement ):
                     # Else let the Item class try to make sense of it:
                     content.append( Item( value ) )
             else:
-                raise TypeError, "Unrecognized argument type: %s" % value
+                raise TypeError("Unrecognized argument type: %s" % value)
 
         # Make sure this Group is the container for all its children:
         self.set_container()
@@ -284,8 +284,8 @@ class Group ( ViewSubElement ):
             if item.is_includable():
                 id = item.id
                 if id in view_elements.content:
-                    raise TraitError, \
-                          "Duplicate definition for view element '%s'" % id
+                    raise TraitError(
+                        "Duplicate definition for view element '%s'" % id)
                 self.content[ i ] = Include( id )
                 view_elements.content[ id ] = item
             item.replace_include( view_elements )

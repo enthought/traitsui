@@ -387,7 +387,7 @@ class SimpleEditor ( Editor ):
             self.value = self._get_value()
             self.control.SetBackgroundColour( OKColor )
             self.control.Refresh()
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
     #---------------------------------------------------------------------------

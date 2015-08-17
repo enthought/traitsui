@@ -13,6 +13,8 @@
 #
 #------------------------------------------------------------------------------
 
+from __future__ import print_function
+
 from traits.has_traits import HasTraits
 from traits.trait_types import Float, List, Instance
 from traitsui.handler import ModelView
@@ -104,4 +106,4 @@ if __name__ == '__main__':
     # This is because the editor does not un-hook the traits notifications
     # after its disposal
     list_of_floats.data.append(2)
-    print list_of_floats.data
+    print(list_of_floats.data)

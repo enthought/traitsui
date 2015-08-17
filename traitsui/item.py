@@ -275,7 +275,7 @@ class Item ( ViewSubElement ):
             return
 
         if not isinstance( value, basestring ):
-            raise TypeError, ("The argument to Item must be a string of the "
+            raise TypeError("The argument to Item must be a string of the "
                  "form: [id:][object.[object.]*][name]['['label']']`tooltip`"
                  "[<width[,height]>][#^][$|@|*|~|;style]")
 
@@ -560,4 +560,3 @@ class Spring ( Item ):
 
 # A pre-defined spring for convenience
 spring = Spring()
-

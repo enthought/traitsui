@@ -285,7 +285,7 @@ def enum_values_changed ( values ):
         if isinstance( handler, CTrait ):
             handler = handler.handler
         if not isinstance( handler, BaseTraitHandler ):
-            raise TraitError, "Invalid value for 'values' specified"
+            raise TraitError("Invalid value for 'values' specified")
         if handler.is_mapped:
             data = [ ( unicode( n ), n ) for n in handler.map.keys() ]
             data.sort( lambda x, y: cmp( x[0], y[0] ) )
@@ -711,4 +711,3 @@ class Slider ( wx.Slider ):
 
     def _erase_background ( self, event ):
         pass
-
