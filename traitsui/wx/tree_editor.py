@@ -41,9 +41,6 @@ from pyface.image_list \
 from traits.api \
     import HasStrictTraits, Any, Str, Event, TraitError
 
-from traits.trait_base \
-    import enumerate
-
 from traitsui.api \
     import View, TreeNode, ObjectTreeNode, MultiTreeNode, Image
 

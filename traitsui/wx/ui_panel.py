@@ -35,9 +35,6 @@ from traits.api \
 from traitsui.api \
     import Group
 
-from traits.trait_base \
-    import enumerate
-
 from traitsui.undo \
     import UndoHistory
 

@@ -28,6 +28,7 @@ import sys
 import glob
 import token
 import tokenize
+import operator
 from StringIO import StringIO
 from configobj import ConfigObj
 
@@ -620,8 +621,9 @@ class DemoPath ( DemoTreeNodeObject ):
                 if (ext == '.py') and (name != '__init__'):
                     files.append( DemoFile( parent = self, name = name ) )
 
-        dirs.sort(  lambda l, r: cmp( l.name, r.name ) )
-        files.sort( lambda l, r: cmp( l.name, r.name ) )
+        sort_key = operator.attrgetter('name')
+        dirs.sort( key=sort_key )
+        files.sort( key=sort_key )
 
         return (dirs + files)
 
@@ -682,8 +684,9 @@ class DemoPath ( DemoTreeNodeObject ):
                         file.nice_name = keyword
                         files.append(file)
 
-        dirs.sort( lambda l, r: cmp( l.nice_name, r.nice_name ) )
-        files.sort( lambda l, r: cmp( l.nice_name, r.nice_name ) )
+        sort_key = operator.attrgetter('nice_name')
+        dirs.sort( key=sort_key )
+        files.sort( key=sort_key )
 
         return (dirs + files)
 

@@ -226,16 +226,6 @@ class CSVListEditor(TextEditor):
     The following will display a window containing a single input field.
     Entering, say, '0, .5, 1' in this field will result in the list
     x = [0.0, 0.5, 1.0].
-
-    >>> class Foo(HasTraits):
-    ....    x = List(Range(low=0.0, high=1.0))
-    ....    traits_view = View(Item('x', editor=CSVListEditor()))
-    ....    def _x_changed(self):
-    ....        print self.x
-    ....
-    >>> f = Foo()
-    >>> f.configure_traits()
-
     """
 
     # The separator of the element in the list.

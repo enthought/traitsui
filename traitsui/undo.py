@@ -25,12 +25,10 @@
 
 from __future__ import absolute_import
 
-from operator import isSequenceType
+import collections
 
 from traits.api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
     Instance, Int, List, Property, Str, Trait)
-
-from traits.trait_base import enumerate
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -169,12 +167,12 @@ class UndoItem ( AbstractUndoItem ):
                         self.new_value = v2
                         return True
 
-                elif isSequenceType( v1 ):
+                elif isinstance(v1, collections.Sequence):
                     # Merge sequence types only if a single element has changed
                     # from the 'original' value, and the element type is a
                     # simple Python type:
                     v1 = self.old_value
-                    if isSequenceType( v1 ):
+                    if isinstance(v1, collections.Sequence):
                         # Note: wxColour says it's a sequence type, but it
                         # doesn't support 'len', so we handle the exception
                         # just in case other classes have similar behavior:

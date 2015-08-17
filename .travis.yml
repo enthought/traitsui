@@ -1,20 +1,25 @@
 language: python
 python:
-  - 2.7
-virtualenv:
-  # This allows installing PyQt using apt-get and being able to import it.
-  system_site_packages: true
+    - 2.7
+    - 3.3
 before_install:
-  # On Python 2.7 we install PyQt4 and run the UI tests.
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then source .travis_before_install; fi
+    # Set up for UI tests.
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+    - export ETS_TOOLKIT=qt4
+    # For PySide
+    - 'export LD_LIBRARY_PATH=`python -c "import os,nose; print(os.path.dirname(os.path.dirname(nose.__file__)))"`/PySide'
+
 install:
   # nose is already installed
   - sudo apt-get install python-numpy
   - pip install -r dev_requirements.txt
   - python setup.py develop
+  # Test against the current master of traits
+  - pip install git+http://github.com/enthought/traits.git#egg=traits
+  # Test against the current python3 branch of pyface
+  - pip install git+http://github.com/pradyun/pyface.git@python3#egg=pyface
+  - python setup.py build
+  - python setup.py develop
 script:
-  - nosetests traitsui.tests
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then nosetests traitsui.qt4.tests; fi
-notifications:
-  email:
-    - travis-ci@enthought.com
+    - python setup.py nosetests

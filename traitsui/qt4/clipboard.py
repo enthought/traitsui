@@ -20,6 +20,8 @@ using pickle.
 from cPickle import dumps, load, loads, PickleError
 from cStringIO import StringIO
 import warnings
+import io
+import sys
 
 from pyface.qt import QtCore, QtGui
 
@@ -28,6 +30,14 @@ from traits.api import HasTraits, Instance, Property
 #-------------------------------------------------------------------------------
 #  'PyMimeData' class:
 #-------------------------------------------------------------------------------
+
+if sys.version_info[0] < 3:
+    def str2bytes(s):
+        return s
+else:
+    def str2bytes(s):
+        return bytes(s,'ascii')
+
 
 class PyMimeData(QtCore.QMimeData):
     """ The PyMimeData wraps a Python instance as MIME data.
@@ -57,10 +67,10 @@ class PyMimeData(QtCore.QMimeData):
                     warnings.warn(("Could not pickle dragged object %s, " +
                             "using %s mimetype instead") % (repr(data),
                             self.NOPICKLE_MIME_TYPE), RuntimeWarning)
-                    self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
+                    self.setData(self.NOPICKLE_MIME_TYPE, str2bytes(str(id(data))))
 
         else:
-            self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
+            self.setData(self.NOPICKLE_MIME_TYPE, str2bytes(str(id(data))))
 
     @classmethod
     def coerce(cls, md):
@@ -113,14 +123,14 @@ class PyMimeData(QtCore.QMimeData):
             # We have no pickled python data defined.
             return None
 
-        io = StringIO(str(self.data(self.MIME_TYPE)))
+        stream = io.BytesIO(bytes(self.data(self.MIME_TYPE)))
 
         try:
             # Skip the type.
-            load(io)
+            load(stream)
 
             # Recreate the instance.
-            return load(io)
+            return load(stream)
         except PickleError:
             pass
 
@@ -134,7 +144,7 @@ class PyMimeData(QtCore.QMimeData):
 
         try:
             if self.hasFormat(self.MIME_TYPE):
-                return loads(str(self.data(self.MIME_TYPE)))
+                return loads(bytes(self.data(self.MIME_TYPE)))
         except PickleError:
             pass
 
