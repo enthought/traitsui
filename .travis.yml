@@ -15,6 +15,9 @@ env:
   - ETS_TOOLKIT=qt4
   - ETS_TOOLKIT=null
   - ETS_TOOLKIT=wx
+matrix:
+  allow_failures:
+    - env: ETS_TOOLKIT=wx
 cache:
   directories:
     - $HOME/.cache/pip
