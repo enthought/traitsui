@@ -301,10 +301,10 @@ def test_data_frame_editor():
     viewer = sample_data()
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits()
-        ui.control.close()
+        ui.dispose()
 
 def test_data_frame_editor_numerical_index():
     viewer = sample_data_numerical_index()
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits()
-        ui.control.close()
+        ui.dispose()

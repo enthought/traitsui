@@ -217,7 +217,10 @@ class _DataFrameEditor(UIEditor):
                        for column_id in self.value.columns]
 
         if factory.show_index:
-            columns.insert(0, (self.value.index.name, 'index'))
+            index_name = self.value.index.name
+            if index_name is None:
+                index_name = ''
+            columns.insert(0, (index_name, 'index'))
 
         self.adapter = DataFrameAdapter(
             columns=columns,
