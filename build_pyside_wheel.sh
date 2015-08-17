@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [ -f "${HOME}/.cache/PySide-1.2.2-cp32-cp32mu-linux_x86_64.whl" ]; then
+if [ -f "${HOME}/.cache/PySide-1.2.2-cp34-cp34mu-linux_x86_64.whl" ]; then
    echo "PySide wheel found"
 else
    echo "Building PySide"
@@ -20,7 +20,7 @@ else
 
    # now it is time to build the pyside wheels
    python setup.py bdist_wheel --qmake=/usr/bin/qmake-qt4 --version=1.2.2 --jobs=2
-
+   cp ./dist/PySide-1.2.2-cp34-cp34mu-linux_x86_64.whl $HOME/.cache/
 fi
 
-pip install "${HOME}/.cache/PySide-1.2.2-cp32-cp32mu-linux_x86_64.whl"
+pip install "${HOME}/.cache/PySide-1.2.2-cp34-cp34mu-linux_x86_64.whl"
