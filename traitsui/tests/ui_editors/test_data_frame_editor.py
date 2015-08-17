@@ -31,8 +31,28 @@ class DataFrameViewer(HasTraits):
     data = Instance('pandas.core.frame.DataFrame')
 
     view = View(
-        Item('data', editor=DataFrameEditor())
+        Item('data', editor=DataFrameEditor(), width=400)
     )
+
+
+format_mapping_view = View(
+    Item('data', editor=DataFrameEditor(formats={'X': '%05d', 'Y': '%s'}),
+            width=400)
+)
+
+
+font_mapping_view = View(
+    Item('data', editor=DataFrameEditor(fonts={'X': 'Courier 10 bold',
+                                               'Y': 'Swiss'}),
+            width=400)
+)
+
+
+columns_view = View(
+    Item('data', editor=DataFrameEditor(columns=['X', ('Zed', 'Z'), 'missing']),  # noqa
+            width=400)
+)
+
 
 def sample_data():
     data = [[ 0,  1,  2],
@@ -44,12 +64,24 @@ def sample_data():
     viewer = DataFrameViewer(data=df)
     return viewer
 
+
 def sample_data_numerical_index():
     data = [[ 0,  1,  2],
             [ 3,  4,  5],
             [ 6,  7,  8],
             [ 9, 10, 11]]
     df = DataFrame(data, index=range(1,5),
+                   columns=['X', 'Y', 'Z'])
+    viewer = DataFrameViewer(data=df)
+    return viewer
+
+
+def sample_text_data():
+    data = [[ 0,  1,  'two'],
+            [ 3,  4,  'five'],
+            [ 6,  7,  'eight'],
+            [ 9, 10, 'eleven']]
+    df = DataFrame(data, index=['one', 'two', 'three', 'four'],
                    columns=['X', 'Y', 'Z'])
     viewer = DataFrameViewer(data=df)
     return viewer
@@ -303,8 +335,37 @@ def test_data_frame_editor():
         ui = viewer.edit_traits()
         ui.dispose()
 
+
 def test_data_frame_editor_numerical_index():
     viewer = sample_data_numerical_index()
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits()
+        ui.dispose()
+
+
+def test_data_frame_editor_text_data():
+    viewer = sample_text_data()
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits()
+        ui.dispose()
+
+
+def test_data_frame_editor_format_mapping():
+    viewer = sample_data()
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits(view=format_mapping_view)
+        ui.dispose()
+
+
+def test_data_frame_editor_font_mapping():
+    viewer = sample_data()
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits(view=font_mapping_view)
+        ui.dispose()
+
+
+def test_data_frame_editor_columns():
+    viewer = sample_data()
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits(view=columns_view)
         ui.dispose()
