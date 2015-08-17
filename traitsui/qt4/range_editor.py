@@ -203,7 +203,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         try:
             try:
                 value = eval(unicode(self.control.text.text()).strip())
-            except Exception, ex:
+            except Exception as ex:
                 # The entered something that didn't eval as a number, (e.g.,
                 # 'foo') pretend it didn't happen
                 value = self.value
@@ -214,7 +214,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
 
             self.value = value
             self.control.slider.setValue(self._convert_to_slider(self.value))
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
     #---------------------------------------------------------------------------
@@ -481,7 +481,7 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
         """
         try:
             self.value = eval(unicode(self.control.text.text()).strip())
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
     #---------------------------------------------------------------------------

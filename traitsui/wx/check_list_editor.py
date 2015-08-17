@@ -113,7 +113,7 @@ class SimpleEditor ( EditorWithList ):
                 try:
                     del cur_value[i]
                     modified = True
-                except TypeError, e:
+                except TypeError as e:
                     logger.warn('Unable to remove non-current value [%s] from '
                         'values %s', cur_value[i], values)
         if modified:
@@ -301,7 +301,7 @@ class TextEditor ( BaseTextEditor ):
             pass
         try:
             self.value = value
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
 #-------------------------------------------------------------------------------
