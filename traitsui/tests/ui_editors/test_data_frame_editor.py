@@ -23,7 +23,8 @@ from traitsui.ui_editors.data_frame_editor import (
     DataFrameEditor, DataFrameAdapter)
 from traitsui.view import View
 
-from traitsui.tests._tools import store_exceptions_on_all_threads
+from traitsui.tests._tools import store_exceptions_on_all_threads, skip_if_null
+
 
 
 class DataFrameViewer(HasTraits):
@@ -87,6 +88,7 @@ def sample_text_data():
     return viewer
 
 
+@skip_if_null
 def test_adapter_get_item():
     viewer = sample_data()
     adapter = DataFrameAdapter()
@@ -98,6 +100,7 @@ def test_adapter_get_item():
     assert item_0_df.index[0] == 'one'
 
 
+@skip_if_null
 def test_adapter_empty_dataframe():
     data = DataFrame()
     viewer = DataFrameViewer(data=data)
@@ -109,6 +112,7 @@ def test_adapter_empty_dataframe():
     assert_array_equal(item_0_df.columns, [])
 
 
+@skip_if_null
 def test_adapter_no_rows():
     data = DataFrame(columns=['X', 'Y', 'Z'])
     viewer = DataFrameViewer(data=data)
@@ -120,6 +124,7 @@ def test_adapter_no_rows():
     assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
 
 
+@skip_if_null
 def test_adapter_get_item_numerical():
     viewer = sample_data_numerical_index()
     adapter = DataFrameAdapter()
@@ -131,6 +136,7 @@ def test_adapter_get_item_numerical():
     assert item_0_df.index[0] == 1
 
 
+@skip_if_null
 def test_adapter_delete_start():
     viewer = sample_data()
     adapter = DataFrameAdapter()
@@ -146,6 +152,7 @@ def test_adapter_delete_start():
     assert_array_equal(data.index, ['two', 'three', 'four'])
 
 
+@skip_if_null
 def test_adapter_delete_start_numerical_index():
     viewer = sample_data_numerical_index()
     adapter = DataFrameAdapter()
@@ -161,6 +168,7 @@ def test_adapter_delete_start_numerical_index():
     assert_array_equal(data.index, [2, 3, 4])
 
 
+@skip_if_null
 def test_adapter_delete_middle():
     viewer = sample_data()
     adapter = DataFrameAdapter()
@@ -176,6 +184,7 @@ def test_adapter_delete_middle():
     assert_array_equal(data.index, ['one', 'three', 'four'])
 
 
+@skip_if_null
 def test_adapter_delete_middle_numerical_index():
     viewer = sample_data_numerical_index()
     adapter = DataFrameAdapter()
@@ -191,6 +200,7 @@ def test_adapter_delete_middle_numerical_index():
     assert_array_equal(data.index, [1, 3, 4])
 
 
+@skip_if_null
 def test_adapter_delete_end():
     viewer = sample_data()
     adapter = DataFrameAdapter()
@@ -206,6 +216,7 @@ def test_adapter_delete_end():
     assert_array_equal(data.index, ['one', 'two', 'three'])
 
 
+@skip_if_null
 def test_adapter_delete_end_numerical_index():
     viewer = sample_data_numerical_index()
     adapter = DataFrameAdapter()
@@ -221,6 +232,7 @@ def test_adapter_delete_end_numerical_index():
     assert_array_equal(data.index, [1, 2, 3])
 
 
+@skip_if_null
 def test_adapter_insert_start():
     viewer = sample_data()
     adapter = DataFrameAdapter()
@@ -239,6 +251,7 @@ def test_adapter_insert_start():
     assert_array_equal(data.index, ['new', 'one', 'two', 'three', 'four'])
 
 
+@skip_if_null
 def test_adapter_insert_start_numerical_index():
     viewer = sample_data_numerical_index()
     adapter = DataFrameAdapter()
@@ -257,6 +270,7 @@ def test_adapter_insert_start_numerical_index():
     assert_array_equal(data.index, [0, 1, 2, 3 ,4])
 
 
+@skip_if_null
 def test_adapter_insert_middle():
     viewer = sample_data()
     adapter = DataFrameAdapter()
@@ -275,6 +289,7 @@ def test_adapter_insert_middle():
     assert_array_equal(data.index, ['one', 'new', 'two', 'three', 'four'])
 
 
+@skip_if_null
 def test_adapter_insert_middle_numerical_index():
     viewer = sample_data_numerical_index()
     adapter = DataFrameAdapter()
@@ -293,6 +308,7 @@ def test_adapter_insert_middle_numerical_index():
     assert_array_equal(data.index, [1, 0, 2, 3, 4])
 
 
+@skip_if_null
 def test_adapter_insert_end():
     viewer = sample_data()
     adapter = DataFrameAdapter()
@@ -311,6 +327,7 @@ def test_adapter_insert_end():
     assert_array_equal(data.index, ['one', 'two', 'three', 'four', 'new'])
 
 
+@skip_if_null
 def test_adapter_insert_end_numerical_index():
     viewer = sample_data_numerical_index()
     adapter = DataFrameAdapter()
@@ -329,6 +346,7 @@ def test_adapter_insert_end_numerical_index():
     assert_array_equal(data.index, [1, 2, 3, 4, 0])
 
 
+@skip_if_null
 def test_data_frame_editor():
     viewer = sample_data()
     with store_exceptions_on_all_threads():
@@ -336,6 +354,7 @@ def test_data_frame_editor():
         ui.dispose()
 
 
+@skip_if_null
 def test_data_frame_editor_numerical_index():
     viewer = sample_data_numerical_index()
     with store_exceptions_on_all_threads():
@@ -343,6 +362,7 @@ def test_data_frame_editor_numerical_index():
         ui.dispose()
 
 
+@skip_if_null
 def test_data_frame_editor_text_data():
     viewer = sample_text_data()
     with store_exceptions_on_all_threads():
@@ -350,6 +370,7 @@ def test_data_frame_editor_text_data():
         ui.dispose()
 
 
+@skip_if_null
 def test_data_frame_editor_format_mapping():
     viewer = sample_data()
     with store_exceptions_on_all_threads():
@@ -357,6 +378,7 @@ def test_data_frame_editor_format_mapping():
         ui.dispose()
 
 
+@skip_if_null
 def test_data_frame_editor_font_mapping():
     viewer = sample_data()
     with store_exceptions_on_all_threads():
@@ -364,6 +386,7 @@ def test_data_frame_editor_font_mapping():
         ui.dispose()
 
 
+@skip_if_null
 def test_data_frame_editor_columns():
     viewer = sample_data()
     with store_exceptions_on_all_threads():
