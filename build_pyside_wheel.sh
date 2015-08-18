@@ -20,7 +20,8 @@ else
 
    # now it is time to build the pyside wheels
    python setup.py bdist_wheel --qmake=/usr/bin/qmake-qt4 --version=1.2.2 --jobs=2
-   cp ./dist/PySide-1.2.2-cp34-cp34mu-linux_x86_64.whl $HOME/.cache/
+   ls dist/
+   cp dist/PySide-1.2.2-cp34-cp34mu-linux_x86_64.whl $HOME/.cache/
 fi
 
 pip install "${HOME}/.cache/PySide-1.2.2-cp34-cp34mu-linux_x86_64.whl"
