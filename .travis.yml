@@ -11,7 +11,6 @@ addons:
     - python-qt4-gl
     - python-pip
     - python-numpy
-    - python-pandas
     - python-wxtools
     - ccache
     - cmake
