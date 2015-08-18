@@ -43,8 +43,8 @@ class PyMimeData(QtCore.QMimeData):
     """ The PyMimeData wraps a Python instance as MIME data.
     """
     # The MIME type for instances.
-    MIME_TYPE = 'application/x-ets-qt4-instance'
-    NOPICKLE_MIME_TYPE = 'application/x-ets-qt4-instance-no-pickle'
+    MIME_TYPE = u'application/x-ets-qt4-instance'
+    NOPICKLE_MIME_TYPE = u'application/x-ets-qt4-instance-no-pickle'
 
     def __init__(self, data=None, pickle=True):
         """ Initialise the instance.
@@ -97,7 +97,7 @@ class PyMimeData(QtCore.QMimeData):
         else:
             # by default, try to pickle the coerced object
             pickle = True
-    
+
             # See if the data is a list, if so check for any items which are
             # themselves of the right type.  If so, extract the instance and
             # track whether we should pickle.
@@ -107,7 +107,7 @@ class PyMimeData(QtCore.QMimeData):
                         for item in md if isinstance(item, QtCore.QMimeData))
                 md = [item.instance() if isinstance(item, PyMimeData) else item
                         for item in md]
-    
+
             # Arbitrary python object, wrap it into PyMimeData
             nmd = cls(md, pickle)
 
