@@ -418,7 +418,7 @@ class UI ( HasPrivateTraits ):
 
         # Invoke the handler's 'init' method, and abort if it indicates failure:
         if handler.init( info ) == False:
-            raise TraitError, 'User interface creation aborted'
+            raise TraitError('User interface creation aborted')
 
         # For each Handler method whose name is of the form
         # 'object_name_changed', where 'object' is the name of an object in the
@@ -1018,4 +1018,3 @@ class Dispatcher ( object ):
         """
         self.object.on_trait_change( self.dispatch, self.method_name,
                                      remove = True )
-

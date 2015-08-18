@@ -84,7 +84,7 @@ class _BoundsEditor(Editor):
                 low = eval(unicode(self._label_lo.text()).strip())
                 if self.evaluate is not None:
                     low = self.evaluate(low)
-            except Exception, ex:
+            except Exception as ex:
                 low = self.low
                 self._label_lo.setText(self.format % self.low)
 

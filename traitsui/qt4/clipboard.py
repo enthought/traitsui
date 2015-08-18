@@ -20,6 +20,8 @@ using pickle.
 from cPickle import dumps, load, loads, PickleError
 from cStringIO import StringIO
 import warnings
+import io
+import sys
 
 from pyface.qt import QtCore, QtGui
 
@@ -29,12 +31,20 @@ from traits.api import HasTraits, Instance, Property
 #  'PyMimeData' class:
 #-------------------------------------------------------------------------------
 
+if sys.version_info[0] < 3:
+    def str2bytes(s):
+        return s
+else:
+    def str2bytes(s):
+        return bytes(s,'ascii')
+
+
 class PyMimeData(QtCore.QMimeData):
     """ The PyMimeData wraps a Python instance as MIME data.
     """
     # The MIME type for instances.
-    MIME_TYPE = 'application/x-ets-qt4-instance'
-    NOPICKLE_MIME_TYPE = 'application/x-ets-qt4-instance-no-pickle'
+    MIME_TYPE = u'application/x-ets-qt4-instance'
+    NOPICKLE_MIME_TYPE = u'application/x-ets-qt4-instance-no-pickle'
 
     def __init__(self, data=None, pickle=True):
         """ Initialise the instance.
@@ -57,10 +67,10 @@ class PyMimeData(QtCore.QMimeData):
                     warnings.warn(("Could not pickle dragged object %s, " +
                             "using %s mimetype instead") % (repr(data),
                             self.NOPICKLE_MIME_TYPE), RuntimeWarning)
-                    self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
+                    self.setData(self.NOPICKLE_MIME_TYPE, str2bytes(str(id(data))))
 
         else:
-            self.setData(self.NOPICKLE_MIME_TYPE, str(id(data)))
+            self.setData(self.NOPICKLE_MIME_TYPE, str2bytes(str(id(data))))
 
     @classmethod
     def coerce(cls, md):
@@ -87,7 +97,7 @@ class PyMimeData(QtCore.QMimeData):
         else:
             # by default, try to pickle the coerced object
             pickle = True
-    
+
             # See if the data is a list, if so check for any items which are
             # themselves of the right type.  If so, extract the instance and
             # track whether we should pickle.
@@ -97,7 +107,7 @@ class PyMimeData(QtCore.QMimeData):
                         for item in md if isinstance(item, QtCore.QMimeData))
                 md = [item.instance() if isinstance(item, PyMimeData) else item
                         for item in md]
-    
+
             # Arbitrary python object, wrap it into PyMimeData
             nmd = cls(md, pickle)
 
@@ -113,14 +123,14 @@ class PyMimeData(QtCore.QMimeData):
             # We have no pickled python data defined.
             return None
 
-        io = StringIO(str(self.data(self.MIME_TYPE)))
+        stream = io.BytesIO(self.data(self.MIME_TYPE).data())
 
         try:
             # Skip the type.
-            load(io)
+            load(stream)
 
             # Recreate the instance.
-            return load(io)
+            return load(stream)
         except PickleError:
             pass
 
@@ -134,7 +144,7 @@ class PyMimeData(QtCore.QMimeData):
 
         try:
             if self.hasFormat(self.MIME_TYPE):
-                return loads(str(self.data(self.MIME_TYPE)))
+                return loads(self.data(self.MIME_TYPE).data())
         except PickleError:
             pass
 

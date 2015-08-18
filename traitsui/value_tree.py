@@ -598,7 +598,7 @@ class TraitsNode ( ObjectNode ):
         for name in names:
             try:
                 item_value = getattr( value, name, '<unknown>' )
-            except Exception, excp:
+            except Exception as excp:
                 item_value = '<%s>' % excp
             nodes.append( node_for( '.' + name, item_value ) )
 

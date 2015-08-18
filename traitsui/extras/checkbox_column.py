@@ -33,7 +33,7 @@ if ETSConfig.toolkit == 'wx':
 elif ETSConfig.toolkit == 'qt4':
     from ..qt4.extra.checkbox_renderer import CheckboxRenderer
 else:
-    raise NotImplementedError, "No checkbox renderer for backend"
+    raise NotImplementedError("No checkbox renderer for backend")
 
 #-------------------------------------------------------------------------------
 #  'CheckboxColumn' class:
@@ -77,4 +77,3 @@ class CheckboxColumn ( ObjectColumn ):
         # to keep a standard editor from appearing. The editing is handled
         # in the renderer's handlers.
         return False
-

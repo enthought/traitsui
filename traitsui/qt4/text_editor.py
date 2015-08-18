@@ -126,7 +126,7 @@ class SimpleEditor ( Editor ):
 
                 self.set_error_state( False )
 
-            except TraitError, excp:
+            except TraitError as excp:
                 pass
 
     #---------------------------------------------------------------------------

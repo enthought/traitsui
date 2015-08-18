@@ -22,7 +22,7 @@ from pyface.qt import QtCore, QtGui
 from pyface.api import ImageResource
 
 from traits.api import Str, Any, Bool, Dict, Instance
-from traits.trait_base import user_name_for, enumerate, xgetattr
+from traits.trait_base import user_name_for, xgetattr
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the

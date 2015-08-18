@@ -258,7 +258,7 @@ class SimpleEditor ( BaseEditor ):
             except:
                 try:
                     value = self.factory.evaluate(value)
-                except Exception, excp:
+                except Exception as excp:
                     self.error( excp )
                     return
 
