@@ -44,7 +44,7 @@ class PyMimeDataTestCase(unittest.TestCase):
         self.assertTrue(md.hasFormat(PyMimeData.NOPICKLE_MIME_TYPE))
         self.assertFalse(md.hasFormat(PyMimeData.MIME_TYPE))
         self.assertEqual(
-            bytes(md.data(PyMimeData.NOPICKLE_MIME_TYPE)),
+            md.data(PyMimeData.NOPICKLE_MIME_TYPE).data(),
             str2bytes(str(id(unpicklable)))
         )
 
@@ -70,7 +70,7 @@ class PyMimeDataTestCase(unittest.TestCase):
         self.assertEqual(md._local_instance, 0)
         self.assertTrue(md.hasFormat(PyMimeData.MIME_TYPE))
         self.assertFalse(md.hasFormat(PyMimeData.NOPICKLE_MIME_TYPE))
-        self.assertEqual(bytes(md.data(PyMimeData.MIME_TYPE)), dumps(int)+dumps(0))
+        self.assertEqual(md.data(PyMimeData.MIME_TYPE).data(), dumps(int)+dumps(0))
 
     def test_coerce_unpicklable(self):
         unpicklable = lambda: None
@@ -84,7 +84,7 @@ class PyMimeDataTestCase(unittest.TestCase):
         self.assertEqual(md._local_instance, [0])
         self.assertTrue(md.hasFormat(PyMimeData.MIME_TYPE))
         self.assertFalse(md.hasFormat(PyMimeData.NOPICKLE_MIME_TYPE))
-        self.assertEqual(bytes(md.data(PyMimeData.MIME_TYPE)), dumps(list)+dumps([0]))
+        self.assertEqual(md.data(PyMimeData).MIME_TYPE.data(), dumps(list)+dumps([0]))
 
     def test_coerce_list_pymimedata(self):
         md = PyMimeData(data=0)
