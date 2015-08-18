@@ -84,7 +84,7 @@ class PyMimeDataTestCase(unittest.TestCase):
         self.assertEqual(md._local_instance, [0])
         self.assertTrue(md.hasFormat(PyMimeData.MIME_TYPE))
         self.assertFalse(md.hasFormat(PyMimeData.NOPICKLE_MIME_TYPE))
-        self.assertEqual(md.data(PyMimeData).MIME_TYPE.data(), dumps(list)+dumps([0]))
+        self.assertEqual(md.data(PyMimeData.MIME_TYPE).data(), dumps(list)+dumps([0]))
 
     def test_coerce_list_pymimedata(self):
         md = PyMimeData(data=0)
@@ -116,7 +116,7 @@ class PyMimeDataTestCase(unittest.TestCase):
         self.assertTrue(isinstance(md2, PMDSubclass))
         self.assertTrue(md2.hasFormat(PyMimeData.MIME_TYPE))
         self.assertFalse(md2.hasFormat(PyMimeData.NOPICKLE_MIME_TYPE))
-        self.assertEqual(bytes(md2.data(PyMimeData.MIME_TYPE)), dumps(int)+dumps(0))
+        self.assertEqual(md2.data(PyMimeData.MIME_TYPE).data(), dumps(int)+dumps(0))
 
     def test_instance(self):
         md = PyMimeData(data=0)
