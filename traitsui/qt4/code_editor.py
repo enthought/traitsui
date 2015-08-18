@@ -189,7 +189,7 @@ class SourceEditor ( Editor ):
                 if isinstance( self.value, SequenceTypes ):
                     value = value.split()
                 self.value = value
-            except TraitError, excp:
+            except TraitError as excp:
                 pass
 
     #---------------------------------------------------------------------------

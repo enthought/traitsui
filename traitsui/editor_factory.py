@@ -186,7 +186,7 @@ class EditorFactory ( HasPrivateTraits ):
                                 sys.modules[factory_class.__module__].__file__)
                 return toolkit_object(':'.join([editor_file_name.split('.')[0],
                                              class_name]), True)
-            except Exception, e:
+            except Exception as e:
                 if index == len(editor_factory_classes)-1:
                     raise e
         return None

@@ -30,7 +30,7 @@ from traits.api \
     import Str, Any, Instance, Property, Bool, cached_property
 
 from traits.trait_base \
-    import user_name_for, enumerate, xgetattr
+    import user_name_for, xgetattr
 
 from traitsui.ui_traits \
     import Image, convert_bitmap
@@ -586,9 +586,13 @@ class NotebookEditor ( Editor ):
         self.control.SetSizer( self._sizer )
 
         # Set up the additional 'list items changed' event handler needed for
-        # a list based trait:
+        # a list based trait. Note that we want to fire the update_editor_item
+        # only when the items in the list change and not when intermediate
+        # traits change. Therefore, replace "." by ":" in the extended_name
+        # when setting up the listener.
+        extended_name = self.extended_name.replace('.', ':')
         self.context_object.on_trait_change( self.update_editor_item,
-                               self.extended_name + '_items?', dispatch = 'ui' )
+                               extended_name + '_items?', dispatch = 'ui' )
 
         # Set of selection synchronization:
         self.sync_value( self.factory.selected, 'selected' )

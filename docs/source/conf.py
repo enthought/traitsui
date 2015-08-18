@@ -23,7 +23,7 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = []
+extensions = ['sphinx.ext.extlinks']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -36,15 +36,15 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2013, Enthought'
+copyright = '2008-2015, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
 #
 # Pull from the actual release number without imports
 d = {}
-execfile(os.path.join('..', '..', 'traitsui', '__init__.py'), d)
-version = release = d['__version__']
+execfile(os.path.join('..', '..', 'traitsui', '_version.py'), d)
+version = release = d['version']
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -145,6 +145,11 @@ html_use_modindex = False
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'Traitsuidoc'
 
+# Useful aliases to avoid repeating long URLs.
+extlinks = {'github-demo': (
+    'https://github.com/enthought/traitsui/tree/master/examples/demo/%s',
+    'github-demo')
+}
 
 # Options for LaTeX output
 # ------------------------

@@ -16,7 +16,6 @@
 """
 Test that menu and toolbar actions are triggered.
 """
-
 import pyface
 
 from traits.has_traits import HasTraits
@@ -26,6 +25,11 @@ from traitsui.item import Item
 from traitsui.view import View
 
 from traitsui.tests._tools import *
+from traitsui.tests._tools import _is_current_backend
+
+if _is_current_backend('null'):
+    import nose
+    raise nose.SkipTest("Not supported using the null backend")
 
 
 TestAction = Action(
@@ -153,4 +157,3 @@ if __name__ == '__main__':
     # Execute from command line for manual testing
     vw = DialogWithToolbar()
     vw.configure_traits()
-

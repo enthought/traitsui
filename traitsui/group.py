@@ -25,13 +25,10 @@
 
 from __future__ import absolute_import
 
-from string \
-    import find
-
 from traits.api import (Bool, Delegate, Float, Instance, List, Property, Range,
     ReadOnly, Str, TraitError, cached_property)
 
-from traits.trait_base import enumerate
+import traits._py2to3 as _py2to3
 
 from .view_element import ViewSubElement
 
@@ -235,7 +232,7 @@ class Group ( ViewSubElement ):
                     # Else let the Item class try to make sense of it:
                     content.append( Item( value ) )
             else:
-                raise TypeError, "Unrecognized argument type: %s" % value
+                raise TypeError("Unrecognized argument type: %s" % value)
 
         # Make sure this Group is the container for all its children:
         self.set_container()
@@ -287,8 +284,8 @@ class Group ( ViewSubElement ):
             if item.is_includable():
                 id = item.id
                 if id in view_elements.content:
-                    raise TraitError, \
-                          "Duplicate definition for view element '%s'" % id
+                    raise TraitError(
+                        "Duplicate definition for view element '%s'" % id)
                 self.content[ i ] = Include( id )
                 view_elements.content[ id ] = item
             item.replace_include( view_elements )
@@ -376,7 +373,7 @@ class Group ( ViewSubElement ):
         self.show_labels = show_labels
 
         # Parse all of the punctuation based sub-string options:
-        value = self._split( 'id', value, ':', find,  0, 1 )
+        value = self._split( 'id', value, ':', _py2to3.str_find,  0, 1 )
         if value != '':
             self.object = value
 
@@ -782,15 +779,18 @@ class ShadowGroup ( Group ):
         """ Creates a sub-group for any items contained in a specified list.
         """
         if len( items ) > 0:
-            content.append( ShadowGroup( shadow      = self.shadow,
-                                         groups      = 0,
-                                         label       = '',
-                                         show_border = False,
-                                         content     = items ).set(
-                                         show_labels = self.show_labels,
-                                         show_left   = self.show_left,
-                                         springy     = self.springy,
-                                         orientation = self.orientation ) )
+            content.append(
+                # Set shadow before hand to prevent delegation errors
+                ShadowGroup( shadow      = self.shadow).set(
+                             groups      = 0,
+                             label       = '',
+                             show_border = False,
+                             content     = items,
+                             show_labels = self.show_labels,
+                             show_left   = self.show_left,
+                             springy     = self.springy,
+                             orientation = self.orientation
+                ))
             del items[:]
 
     #---------------------------------------------------------------------------

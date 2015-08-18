@@ -32,8 +32,6 @@ from __future__ import absolute_import
 
 from traits.api import HasStrictTraits, List, Dict, Str, Int, Any, TraitError
 
-from traits.trait_base import enumerate
-
 from .view_element import ViewElement
 
 #-------------------------------------------------------------------------------
@@ -168,7 +166,7 @@ class ViewElements ( HasStrictTraits ):
                 if len( [ s for s in seqs if candidate in s[1:] ] ) == 0:
                     break
             else:
-                raise TraitError, "Inconsistent ViewElements hierarchy"
+                raise TraitError("Inconsistent ViewElements hierarchy")
 
             # Add the candidate to the result:
             result.append( candidate )
@@ -209,4 +207,3 @@ class SearchStackItem ( HasStrictTraits ):
 
     # Index into the 'mro' list of ViewElements that the ID was found in
     context = Int
-
