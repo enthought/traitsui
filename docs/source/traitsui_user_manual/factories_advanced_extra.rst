@@ -20,7 +20,7 @@ CustomEditor()
     *factory*
 :Optional parameters:
     *args*
-    
+
 Use CustomEditor() to create an "editor" that is a non-Traits-based custom
 control. The *factory* parameter must be a function that generates the custom
 control. The function must have the following signature:
@@ -47,7 +47,7 @@ DropEditor()
     (none)
 :Optional parameters:
     *binding*, *klass*, *readonly*
-    
+
 DropEditor() generates an editor that is a text field containing a string
 representation of the trait attribute's value. The user can change the value
 assigned to the attribute by dragging and dropping an object on the text field,
@@ -80,7 +80,7 @@ DNDEditor()
     (none)
 :Optional parameters:
     *drag_target, drop_target, image*
-    
+
 DNDEditor() generates an editor that represents a file or a HasTraits instance
 as an image that supports dragging and dropping. Depending on the editor style,
 the editor can be a *drag source* (the user can set the value of the trait
@@ -122,7 +122,7 @@ associate that key press with a method.
 
 .. figure:: images/key_binding_editor.jpg
    :alt: Dialog box with fields for key presses corresponding to operations
-   
+
    Figure 50: Key binding editor dialog box
 
 The following code example creates a user interface containing a code editor
@@ -132,18 +132,18 @@ with associated key bindings, and a button that invokes the key binding editor.
 
 .. rubric:: Example 17: Code editor with key binding editor
 
-:: 
+::
 
-    # key_bindings.py -- Example of a code editor with a 
+    # key_bindings.py -- Example of a code editor with a
     #                    key bindings editor
-    
+
     from traits.api \
         import Button, Code, HasPrivateTraits, Str
     from traitsui.api \
         import View, Item, Group, Handler, CodeEditor
     from traitsui.key_bindings \
         import KeyBinding, KeyBindings
-    
+
     key_bindings = KeyBindings(
         KeyBinding( binding1    = 'Ctrl-s',
                     description = 'Save to a file',
@@ -153,30 +153,30 @@ with associated key bindings, and a button that invokes the key binding editor.
                     method_name = 'run_script' ),
         KeyBinding( binding1    = 'Ctrl-k',
                     description = 'Edit key bindings',
-                    method_name = 'edit_bindings' )  
-    )  
-                  
+                    method_name = 'edit_bindings' )
+    )
+
     # TraitsUI Handler class for bound methods
     class CodeHandler ( Handler ):
-        
+
         def save_file ( self, info ):
             info.object.status = "save file"
-            
+
         def run_script ( self, info ):
             info.object.status = "run script"
-            
+
         def edit_bindings ( self, info ):
             info.object.status = "edit bindings"
-            key_bindings.edit_traits()        
-                   
+            key_bindings.edit_traits()
+
     class KBCodeExample ( HasPrivateTraits ):
-        
+
         code   = Code
         status = Str
         kb    = Button(label='Edit Key Bindings')
-        
+
         view = View( Group (
-                     Item( 'code', 
+                     Item( 'code',
                            style     = 'custom',
                            resizable = True ),
                      Item('status', style='readonly'),
@@ -188,13 +188,13 @@ with associated key bindings, and a button that invokes the key binding editor.
                    key_bindings = key_bindings,
                    title = 'Code Editor With Key Bindings',
                    resizable = True,
-    
+
                    handler   = CodeHandler() )
-                   
+
         def _kb_fired( self, event ):
             key_bindings.edit_traits()
-              
-    
+
+
     if __name__ == '__main__':
         KBCodeExample().configure_traits()
 
@@ -210,9 +210,9 @@ TableEditor()
 :Required parameters:
     *columns* or *columns_name*
 :Optional parameters:
-    See *Traits API Reference*, 
+    See *Traits API Reference*,
     traitsui.wx.table_editor.ToolkitEditorFactory attributes.
-    
+
 TableEditor() generates an editor that displays instances in a list as rows in a
 table, with attributes of the instances as values in columns. You must specify
 the columns in the table. Optionally, you can provide filters for filtering the
@@ -221,7 +221,7 @@ interacting with and formatting the table.
 
 .. figure:: images/table_editor.jpg
    :alt: Table editor with toolbar and instance editor
-   
+
    Figure 51: Table editor
 
 To see the code that results in Figure 51, refer to :file:`TableEditor_demo.py`
@@ -270,10 +270,10 @@ parameter are listed in the left list box of this dialog box, and can be
 displayed by moving them into the right list box.
 
 .. |preferences_icon| image:: images/table_prefs.png
- 
+
 .. figure:: images/table_column_selection.jpg
    :alt: Dialog box with two list boxes for selecting column names
-   
+
    Figure 52: Column selection dialog box for a table editor
 
 .. _managing-items:
@@ -307,11 +307,11 @@ If the *sortable* parameter is True (the default), then the user can sort the
 items in the table based on the values in a column by Control-clicking the
 header of that column.
 
-- On the first click, the items are sorted in ascending order. The characters 
-  :guilabel:`>>` appear in the column header to indicate that the table is 
+- On the first click, the items are sorted in ascending order. The characters
+  :guilabel:`>>` appear in the column header to indicate that the table is
   sorted ascending on this column's values.
-- On the second click, the items are sorted descending order. The characters 
-  :guilabel:`<<` appear in the column header to indicate that the table is 
+- On the second click, the items are sorted descending order. The characters
+  :guilabel:`<<` appear in the column header to indicate that the table is
   sorted descending on this column's values.
 - On the third click, the items are restored to their original order, and the
   column header is undecorated.
@@ -320,9 +320,9 @@ If the *sort_model* parameter is true, the items in the list being edited are
 sorted when the table is sorted. The default value is False, in which case, the
 list order is not affected by sorting the table.
 
-If *sortable* is True and *sort_model* is False, then a 
-:guilabel:`Do not sort columns` icon (|no_sort_icon|) appears in the table 
-toolbar. Clicking this icon restores the original sort order. 
+If *sortable* is True and *sort_model* is False, then a
+:guilabel:`Do not sort columns` icon (|no_sort_icon|) appears in the table
+toolbar. Clicking this icon restores the original sort order.
 
 .. |no_sort_icon| image:: images/no_sort_icon.png
 
@@ -407,14 +407,14 @@ attribute in the current context to synchronize with the indices of the table
 editor selection. The content of the selection depends on the *selection_mode*
 value:
 
-- ``cell``: The selection is a tuple of the form (*object*, *column_name*), 
-   where *object* is the object contains the selected cell, and *column_name* 
-   is the name of the column the cell is in. If there is no selection, the 
+- ``cell``: The selection is a tuple of the form (*object*, *column_name*),
+   where *object* is the object contains the selected cell, and *column_name*
+   is the name of the column the cell is in. If there is no selection, the
    tuple is (None, '').
-- ``cells``: The selection is a list of tuples of the form (*object*, 
+- ``cells``: The selection is a list of tuples of the form (*object*,
   *column_name*), with one tuple for each selected cell, in order from top to
   bottom and left to right. If there is no selection, the list is empty.
-- ``column``: The selection is the name of the selected column, or the empty 
+- ``column``: The selection is the name of the selected column, or the empty
   string if there is no selection.
 - ``columns``: The selection is a list containing the names of the selected
   columns, in order from left to right. If there is no selection, the list is empty.
@@ -482,14 +482,14 @@ Modifying Items
 
 The user can modify items in two ways.
 
-- For columns that are editable, the user can change an item's value directly 
-  in the table. The editor used for each attribute in the table is the simple 
-  style of editor for the corresponding trait. 
+- For columns that are editable, the user can change an item's value directly
+  in the table. The editor used for each attribute in the table is the simple
+  style of editor for the corresponding trait.
 - Alternatively, you can specify a View for editing instances, using the
-  *edit_view* parameter. The resulting user interface appears in a 
-  :term:`subpanel` to the right or below the table (depending on the 
-  *orientation* parameter).  You can specify a handler to use with the view, 
-  using *edit_view_handler*. You can also specify the subpanel's height and 
+  *edit_view* parameter. The resulting user interface appears in a
+  :term:`subpanel` to the right or below the table (depending on the
+  *orientation* parameter).  You can specify a handler to use with the view,
+  using *edit_view_handler*. You can also specify the subpanel's height and
   width, with *edit_view_height* and *edit_view_width*.
 
 .. _defining-the-layout:
@@ -506,7 +506,7 @@ the display of the table.
   Can be 'horizontal' or 'vertical'.
 - *rows*: The number of visible rows in the table.
 - *show_column_labels*: If True (the default), displays labels for the columns.
-  You can specify the labels to use in the column definitions; otherwise, a 
+  You can specify the labels to use in the column definitions; otherwise, a
   "user friendly" version of the trait attribute name is used.
 - *show_toolbar*: If False, the table toolbar is not displayed, regardless of
   whether other settings would normally create a toolbar. The default is True.
@@ -536,17 +536,17 @@ controlled by the factory parameters.
   by clicking and dragging a column label to its new location. If you have
   enabled user preferences for the view and table editor (by specifying view
   and item IDs), the new column layout is persisted across user sessions.
-- Column resizing: The user can resize a column by dragging the column 
-  separator (in one of the data rows) to a new position. Because of the 
+- Column resizing: The user can resize a column by dragging the column
+  separator (in one of the data rows) to a new position. Because of the
   column-dragging support, clicking the column separator in the column label
   row does not work.
 - Data dragging: The user can drag the contents of any cell by clicking and
-  dragging. 
+  dragging.
 
 
 TabularEditor()
 ```````````````
-    
+
 :Suitable for:
     lists, arrays, and other large sequences of objects
 :Default for:
@@ -557,7 +557,7 @@ TabularEditor()
     *activated, clicked, column_clicked, dclicked, drag_move, editable,*
     *horizontal_lines, images, multi_select, operations, right_clicked,*
     *right_dclicked, selected, selected_row, show_titles, vertical_lines*
-    
+
 The TabularEditor() factory can be used for many of the same purposes as the
 TableEditor() factory, that is, for displaying a table of attributes of lists or
 arrays of objects. While similar in function, the tabular editor has advantages
@@ -568,12 +568,12 @@ and disadvantages relative to the table editor.
 Advantages
 ::::::::::
 
-- **Very fast**: The tabular editor uses a virtual model, which accesses data 
-  from the underlying model only as needed. For example, if you have a 
+- **Very fast**: The tabular editor uses a virtual model, which accesses data
+  from the underlying model only as needed. For example, if you have a
   million-element array, but can display only 50 rows at a time, the editor
   requests only 50 elements of data at a time.
-- **Very flexible data model**: The editor uses an adapter model to interface 
-  with the underlying data. This strategy allows it to easily deal with many 
+- **Very flexible data model**: The editor uses an adapter model to interface
+  with the underlying data. This strategy allows it to easily deal with many
   types  of data representation, from list of objects, to arrays of numbers, to
   tuples of tuples, and many other formats.
 - **Supports useful data operations**, including:
@@ -585,10 +585,10 @@ Advantages
   - Dragging and dropping of table items to and from the editor, including
     support for both copy and move operations for single and multiple items.
 
-- **Visually appealing**: The tabular editor, in general, uses the underlying 
+- **Visually appealing**: The tabular editor, in general, uses the underlying
   operating system's native table or grid control, and as a result often looks
   better than the control used by the table editor.
-- **Supports displaying text and images in any cell**. However, the images 
+- **Supports displaying text and images in any cell**. However, the images
   displayed must be all the same size for optimal results.
 
 .. _tabular-disadvantages:
@@ -597,11 +597,11 @@ Disadvantages
 :::::::::::::
 
 - **Not as full-featured**: The table editor includes support for arbitrary data
-  filters, searches, and different types of sorting. These differences may 
+  filters, searches, and different types of sorting. These differences may
   narrow as features are added to the tabular editor.
-- **Limited data editing capabilities**: The tabular editor supports editing 
-  only textual values, whereas the table editor supports a wide variety of 
-  column editors, and can be extended with more as needed. This is due to 
+- **Limited data editing capabilities**: The tabular editor supports editing
+  only textual values, whereas the table editor supports a wide variety of
+  column editors, and can be extended with more as needed. This is due to
   limitations of the underlying native control used by the tabular editor.
 
 .. _tabularadapter:
@@ -666,7 +666,7 @@ column that contains an image for files that meet certain conditions.
 
 .. figure:: images/tabular_editor.jpg
    :alt: Tabular editor with columns for file name, size, an icon, time, and date
-   
+
    Figure 53: Tabular editor on MS Windows
 
 Depending on how the tabular editor is configured, certain keyboard interactions
@@ -676,17 +676,17 @@ parameter of TabularEditor().
 
 - :kbd:`Up arrow`: Selects the row above the currently selected row.
 - :kbd:`Down arrow`: Selects the row below the currently selected row.
-- :kbd:`Page down`: Appends a new item to the end of the list ('append' 
+- :kbd:`Page down`: Appends a new item to the end of the list ('append'
   operation).
-- :kbd:`Left arrow`: Moves the currently selected row up one line ('move' 
+- :kbd:`Left arrow`: Moves the currently selected row up one line ('move'
   operation).
-- :kbd:`Right arrow`: Moves the currently selected row down one line ('move' 
-  operation). 
-- :kbd:`Backspace, Delete`: Deletes from the list all items in the current 
+- :kbd:`Right arrow`: Moves the currently selected row down one line ('move'
+  operation).
+- :kbd:`Backspace, Delete`: Deletes from the list all items in the current
   selection ('delete' operation).
-- :kbd:`Enter, Escape`: Initiates editing on the current selection ('edit' 
-  operation). 
-- :kbd:`Insert:`: Inserts a new item before the current selection ('insert' 
+- :kbd:`Enter, Escape`: Initiates editing on the current selection ('edit'
+  operation).
+- :kbd:`Insert:`: Inserts a new item before the current selection ('insert'
    operation).
 
 The 'append', 'move', 'edit', and 'insert' operations can occur only when a
@@ -717,7 +717,7 @@ TreeEditor()
 :Optional parameters:
     *auto_open, editable, editor, hide_root, icon_size, lines_mode,*
     *on_dclick, on_select, orientation, selected, shared_editor, show_icons*
-    
+
 TreeEditor() generates a hierarchical tree control, consisting of nodes. It is
 useful for cases where objects contain lists of other objects.
 
@@ -732,7 +732,7 @@ subclasses of TreeNode).
 
 .. figure:: images/tree_editor.png
    :alt: Tree control with instance editor pane
-   
+
    Figure 54: Tree editor
 
 The following example shows the code that produces the editor shown in Figure
@@ -745,7 +745,7 @@ The following example shows the code that produces the editor shown in Figure
 ::
 
     # tree_editor.py -- Example of a tree editor
-    
+
     from traits.api \
         import HasTraits, Str, Regex, List, Instance
     from traitsui.api \
@@ -756,113 +756,113 @@ The following example shows the code that produces the editor shown in Figure
     from traitsui.wx.tree_editor \
         import NewAction, CopyAction, CutAction, \
                PasteAction, DeleteAction, RenameAction
-    
+
     # DATA CLASSES
-    
+
     class Employee ( HasTraits ):
         name  = Str( '<unknown>' )
         title = Str
         phone = Regex( regex = r'\d\d\d-\d\d\d\d' )
-        
+
         def default_title ( self ):
             self.title = 'Senior Engineer'
-        
+
     class Department ( HasTraits ):
         name      = Str( '<unknown>' )
         employees = List( Employee )
-    
-    
+
+
     class Company ( HasTraits ):
         name        = Str( '<unknown>' )
         departments = List( Department )
         employees   = List( Employee )
-              
+
     class Owner ( HasTraits ):
         name    = Str( '<unknown>' )
         company = Instance( Company )
-    
+
     # INSTANCES
-    
-    jason = Employee( 
+
+    jason = Employee(
          name  = 'Jason',
-         title = 'Engineer', 
+         title = 'Engineer',
          phone = '536-1057' )
-         
-    mike = Employee( 
+
+    mike = Employee(
          name  = 'Mike',
-         title = 'Sr. Marketing Analyst', 
+         title = 'Sr. Marketing Analyst',
          phone = '536-1057' )
-         
+
     dave = Employee(
          name  = 'Dave',
          title = 'Sr. Engineer',
          phone = '536-1057' )
-         
+
     susan = Employee(
          name  = 'Susan',
          title = 'Engineer',
          phone = '536-1057' )
-         
+
     betty = Employee(
          name  = 'Betty',
          title = 'Marketing Analyst' )
-            
+
     owner = Owner(
         name    = 'wile',
-        company = Company( 
+        company = Company(
             name = 'Acme Labs, Inc.',
             departments = [
-                Department( 
+                Department(
                     name = 'Marketing',
                     employees = [ mike, betty ]
                 ),
                 Department(
                     name = 'Engineering',
-                    employees = [ dave, susan, jason ] 
+                    employees = [ dave, susan, jason ]
                 )
             ],
             employees = [ dave, susan, mike, betty, jason ]
         )
     )
-    
+
     # View for objects that aren't edited
     no_view = View()
-    
+
     # Actions used by tree editor context menu
-    
+
     def_title_action = Action(name='Default title',
                               action = 'object.default')
-    
+
     dept_action = Action(
         name='Department',
         action='handler.employee_department(editor,object)')
-    
+
     # View used by tree editor
-    employee_view = View( 
-        VSplit( 
+    employee_view = View(
+        VSplit(
             HGroup( '3', 'name' ),
-            HGroup( '9', 'title' ), 
+            HGroup( '9', 'title' ),
             HGroup( 'phone' ),
             id = 'vsplit' ),
         id = 'traits.doc.example.treeeditor',
-        dock = 'vertical' ) 
-    
+        dock = 'vertical' )
+
     class TreeHandler ( Handler ):
-        
+
         def employee_department ( self, editor, object ):
             dept = editor.get_parent( object )
             print '%s works in the %s department.' %\
                 ( object.name, dept.name )
-    
-    # Tree editor 
-    tree_editor = TreeEditor( 
+
+    # Tree editor
+    tree_editor = TreeEditor(
         nodes = [
             TreeNode( node_for  = [ Company ],
                       auto_open = True,
                       children  = '',
                       label     = 'name',
-                      view      = View( Group('name', 
-                                       orientation='vertical', 
+                      view      = View( Group('name',
+                                       orientation='vertical',
                                        show_left=True )) ),
             TreeNode( node_for  = [ Company ],
                       auto_open = True,
@@ -886,11 +886,11 @@ The following example shows the code that produces the editor shown in Figure
                                         Separator(),
                                         RenameAction,
                                         Separator(),
-                                        CopyAction, 
-                                        CutAction, 
+                                        CopyAction,
+                                        CutAction,
                                         PasteAction ),
-                      view      = View( Group ('name', 
-                                       orientation='vertical', 
+                      view      = View( Group ('name',
+                                       orientation='vertical',
                                        show_left=True )),
                       add       = [ Employee ] ),
             TreeNode( node_for  = [ Employee ],
@@ -901,8 +901,8 @@ The following example shows the code that produces the editor shown in Figure
                                  def_title_action,
                                  dept_action,
                                  Separator(),
-                                 CopyAction, 
-                                 CutAction, 
+                                 CopyAction,
+                                 CutAction,
                                  PasteAction,
                                  Separator(),
                                  DeleteAction,
@@ -911,15 +911,15 @@ The following example shows the code that produces the editor shown in Figure
                       view = employee_view )
         ]
     )
-    
+
     # The main view
-    view = View( 
-               Group( 
-                   Item( 
+    view = View(
+               Group(
+                   Item(
                         name = 'company',
                         id = 'company',
-                        editor = tree_editor, 
-                        resizable = True ), 
+                        editor = tree_editor,
+                        resizable = True ),
                     orientation = 'vertical',
                     show_labels = True,
                     show_left = True, ),
@@ -933,7 +933,7 @@ The following example shows the code that produces the editor shown in Figure
                 resizable = True,
                 width = .3,
                 height = .3 )
-                           
+
     if __name__ == '__main__':
         owner.configure_traits( view = view )
 
@@ -966,8 +966,8 @@ type for the node that displays the company name, with no children::
                   auto_open = True,
                   children  = '',
                   label     = 'name',
-                  view      = View( Group('name', 
-                                   orientation='vertical', 
+                  view      = View( Group('name',
+                                   orientation='vertical',
                                    show_left=True )) ),
 
 .. _a-node-type-with-children:
@@ -1001,7 +1001,7 @@ attribute name, or as a literal string.
 
 If the value is a simple string, it is interpreted as the extended trait name of
 an attribute on the object that the node is for, whose value is used as the
-label. This approach is used in the code snippet in 
+label. This approach is used in the code snippet in
 :ref:`a-node-type-without-children`.
 
 If the value is a string that begins with an equals sign ('='), the rest of the
@@ -1040,11 +1040,11 @@ nodes::
                                     Separator(),
                                     RenameAction,
                                     Separator(),
-                                    CopyAction, 
-                                    CutAction, 
+                                    CopyAction,
+                                    CutAction,
                                     PasteAction ),
-                  view      = View( Group ('name', 
-                                   orientation='vertical', 
+                  view      = View( Group ('name',
+                                   orientation='vertical',
                                    show_left=True )),
                   add       = [ Employee ] ),
 
@@ -1068,7 +1068,7 @@ also be created (and therefore are specified in the **add** value).
    Specifying the **add** attribute makes it possible for objects of the
    specified classes to be created, but by itself, it does not provide a way for
    the user to do so. In the code snippet in the preceding section
-   (:ref:`shortcut-menus-on-nodes`), 'NewAction' in the Menu constructor call 
+   (:ref:`shortcut-menus-on-nodes`), 'NewAction' in the Menu constructor call
    defines a :menuselection:`New > Employee` menu item that creates Employee
    objects.
 
@@ -1106,7 +1106,7 @@ actions to perform these operations.
 Behavior on Nodes
 ~~~~~~~~~~~~~~~~~
 
-As the user clicks in the tree, you may wish to enable certain program behavior. 
+As the user clicks in the tree, you may wish to enable certain program behavior.
 
 You can use the *selected* parameter to specify the name of a trait attribute on
 the current context object to synchronize with the user's current selection. For
@@ -1179,13 +1179,13 @@ following:
         shared_tree_1 = TreeEditor(shared_editor = True,
                                    editor = my_shared_editor_pane,
                                    nodes = [ TreeNode( # ...
-                                                     ) 
+                                                     )
                                            ]
                                    )
         shared_tree_2 = TreeEditor(shared_editor = True,
                                    editor = my_shared_editor_pane,
                                    nodes = [ TreeNode( # ...
-                                                      ) 
+                                                      )
                                            ]
                                    )
 
@@ -1198,23 +1198,23 @@ Several parameters to TreeEditor() affect the formatting of the tree control:
 
 - *show_icons*: If True (the default), icons are displayed for the nodes in the
   tree.
-- *icon_size*: A two-integer tuple indicating the size of the icons for the 
+- *icon_size*: A two-integer tuple indicating the size of the icons for the
   nodes.
-- *lines_mode*: Determines whether lines are displayed between related nodes. 
+- *lines_mode*: Determines whether lines are displayed between related nodes.
   The valid values are 'on', 'off', and 'appearance' (the default). When set to
   'appearance', lines are displayed except on Posix-based platforms.
-- *hide_root*: If True, the root node in the hierarchy is not displayed. If 
-  this parameter were specified as True in Example 16, the node in Figure 54 
+- *hide_root*: If True, the root node in the hierarchy is not displayed. If
+  this parameter were specified as True in Example 16, the node in Figure 54
   that is labeled "Acme Labs, Inc." would not appear.
 
-Additionally, several attributes of TreeNode also affect the display of the 
+Additionally, several attributes of TreeNode also affect the display of the
 tree:
 
 - **icon_path**: A directory path to search for icon files. This path can be
   relative to the module it is used in.
 - **icon_item**: The icon for a leaf node.
 - **icon_open**: The icon for a node with children whose children are displayed.
-- **icon_group**: The icon for a node with children whose children are not 
+- **icon_group**: The icon for a node with children whose children are not
   displayed.
 
 The wxWidgets implementation automatically detects the bitmap format of the
@@ -1239,7 +1239,7 @@ AnimatedGIFEditor()
     (none)
 :Optional parameters:
     *playing*
-    
+
 AnimatedGIFEditor() generates a display of the contents of an animated GIF image
 file. The Boolean *playing* parameter determines whether the image is animated
 or static.
@@ -1252,15 +1252,42 @@ ArrayViewEditor()
     (none)
 :Optional parameters:
     *format, show_index, titles, transpose*
-    
+
 ArrayViewEditor() generates a tabular display for an array. It is suitable for
 use with large arrays, which do not work well with the editors generated by
 ArrayEditor(). All styles of the editor have the same appearance.
 
 .. figure:: images/array_view_editor.jpg
    :alt: Tabular display of numeric data, with columns Index, x, y, and z
-   
+
    Figure 55: Array view editor
+
+DataFrameEditor()
+`````````````````
+:Suitable for:
+    Pandas DataFrames
+:Default for:
+    (none)
+:Optional parameters:
+    *formats, show_index, show_titles, columns, fonts, selected, selected_row,
+    selectable, activated, activated_row, clicked, dclicked, right_clicked,
+    right_dclicked, column_clicked, column_right_clicked, editable, operations*
+
+DataFrameEditor() generates a tabular display for a DataFrame. It is suitable
+for use with large DataFrames. All styles of the editor have the same
+appearance.  Many of the optional parameters are identical to those of the
+TabularEditor().
+
+The following have special meaning for the DataFrameEditor():
+
+- **formats**: either a %-style formatting string for all entries, or a
+  dictonary mapping DataFrame columns to formatting strings.
+
+- **show_index**: whether or not to show the index as a column in the table.
+
+- **show_titles**: whether or not to show column headers on the table.
+
+- **fonts**: either a font for all entries, or a mapping of column id to fonts.
 
 FlashEditor()
 `````````````
@@ -1286,7 +1313,7 @@ HistoryEditor()
     (none)
 :Optional parameters:
     *entries*
-    
+
 HistoryEditor() generates a combo box, which allows the user to either enter a
 text string or select a value from a list of previously-entered values. The same
 control is used for all editor styles. The *entries* parameter determines how
@@ -1304,7 +1331,7 @@ IEHTMLEditor()
 :Optional parameters:
     *back, forward, home, html, page_loaded, refresh, search, status, stop,*
     *title*
-    
+
 IEHTMLEditor() generates a display of a web page, using Microsoft Internet
 Explorer (IE) via ActiveX to render the page. This factory is available only on
 Microsoft Windows platforms. The attribute being edited must have value whose
@@ -1314,7 +1341,7 @@ only characters that are valid for URLs.
 The *back*, *forward*, *home*, *refresh*, *search* and *stop* parameters are
 extended names of event attributes that represent the user clicking on the
 corresponding buttons in the standard IE interface. The IE buttons are not
-displayed by the editor; you must create buttons separately in the View, 
+displayed by the editor; you must create buttons separately in the View,
 if you want the user to be able to actually click buttons.
 
 The *html*, *page_loaded*, *status*, and *title* parameters are the extended
@@ -1322,11 +1349,11 @@ names of string attributes, which the editor updates with values based on its
 own state. You can display these attributes elsewhere in the View.
 
 - *html*: The current page content as HTML (as would be displayed by the
-  :menuselection:`View > Source` command in IE). 
+  :menuselection:`View > Source` command in IE).
 - *page_loaded*: The URL of the currently displayed page; this may be different
-  from the URL represented by the attribute being edited. 
+  from the URL represented by the attribute being edited.
 - *status*: The text that would appear in the IE status bar.
-- *title*: The title of the currently displayed page. 
+- *title*: The title of the currently displayed page.
 
 ImageEditor()
 `````````````
@@ -1338,7 +1365,7 @@ ImageEditor()
 :Optional parameters:
     *image*, *scale*, *preserve_aspect_ratio*, *allow_upscaling*,
     *allow_clipping*
-    
+
 ImageEditor() generates a read-only display of an image. The image to be
 displayed is determined by the *image* parameter, or by the value of the trait
 attribute being edited, if *image* is not specified. In either case, the value
@@ -1359,7 +1386,7 @@ LEDEditor()
     (none)
 :Optional parameters:
     *alignment, format_str*
-    
+
 LEDEditor() generates a display that resembles a "digital" display using
 light-emitting diodes. All styles of this editor are the same, and are
 read-only.
@@ -1369,7 +1396,7 @@ the value should be aligned within the display. The default is right-alignment.
 
 .. figure:: images/led_editor.png
    :alt: LED-like display of 90452
-   
+
    Figure 56: LED Editor with right alignment
 
 ThemedButtonEditor()
@@ -1382,13 +1409,13 @@ ThemedButtonEditor()
 :Optional parameters:
     *label*, *theme, down_theme, hover_theme, disabled_theme, image, position,*
     *spacing, view*
-    
+
 The ThemedButtonEditor() factory generates a button that is formatted according
 to specified or default themes. All editor styles have the same appearance.
 
 .. figure:: images/themed_button_editor.png
    :alt: Themed buttons for normal, hover, down, and disabled states
-   
+
    Figure 57: Themed buttons in various states
 
 The theme-related parameters determine the appearance of the button in various
@@ -1404,14 +1431,14 @@ ThemedCheckboxEditor()
 :Optional parameters:
     *label*, *theme, hover_off_image,  hover_off_theme, hover_on_image,*
     *hover_on_theme,  image, on_image, on_theme, position, spacing*
-    
+
 The ThemedCheckboxEditor() factory generates a checkbox that is formatted
 according to specified or default themes. All editor styles have the same
 appearance.
 
 .. figure:: images/themed_checkbox_editor.png
    :alt: Themed checkbox for On, Off, Hover Off, and Hover On states
-   
+
    Figure 58: Themed checkbox in various states
 
 The theme-related parameters determine the appearance of the checkbox in the
@@ -1430,7 +1457,7 @@ ThemedSliderEditor()
 :Optional parameters:
     *alignment, bg_color,  high, increment, low, show_value, slider_color,*
     *text_color, tip_color*
-    
+
 The ThemedSliderEditor() factory generates a slider control that is formatted
 according to specified or default themes. All editor styles have the same
 appearance. The value is edited by modifying its textual representation. The
@@ -1441,10 +1468,10 @@ as shown in Figure 59.
 
 .. image:: images/themed_slider_no_focus.png
    :alt: Themed box with shading in the left half and a vertical orange bar in the middle
-   
+
 .. figure:: images/themed_slide_with_focus.png
    :alt: Themed box with the value 0 selected in the center
-   
+
    Figure 59: Themed slider without focus, and with focus
 
 ThemedTextEditor()
@@ -1455,9 +1482,9 @@ ThemedTextEditor()
 :Default for:
     (none)
 :Optional parameters:
-    *auto_set*, *enter_set*, *evaluate*, *evaluate_name*, *mapping*, 
+    *auto_set*, *enter_set*, *evaluate*, *evaluate_name*, *mapping*,
     *multi_line*, *password, theme*
-    
+
 The ThemedTextEditor() factory generates a text editor that is formatted
 according to a specified theme. If no theme is specified, the editor uses the
 theme, if any, specified by the surrounding Group or View. Thus, there is no
@@ -1466,10 +1493,10 @@ style, which is not editable.
 
 .. image:: images/themed_text_editor_no_focus.png
    :alt: Themed text editor, displaying text ``a*x*x-b*x``
-   
+
 .. figure:: images/themed_text_editor_with_focus.png
    :alt: Themed text editor, with text ``a*x*x-b*x`` selected
-   
+
    Figure 60: Themed text editor, without focus and with focus
 
 ThemedVerticalNotebookEditor()
@@ -1482,7 +1509,7 @@ ThemedVerticalNotebookEditor()
 :Optional parameters:
     *closed_theme, double_click, open_theme, page_name, multiple_open,*
     *scrollable, view*
-    
+
 The ThemedVerticalNotebookEditor() factory generates a "notebook" editor,
 containing tabs that can be vertically expanded or collapsed. It can be used for
 lists of instances, similarly to the ListEditor() factory, with the
@@ -1491,13 +1518,11 @@ states of the tabs.
 
 .. figure:: images/themed_notebook_closed.png
    :alt: Stacked boxes displaying names as labels
-   
+
    Figure 61: Themed vertical notebook, with tabs for Person instances closed
 
 
 .. figure:: images/themed_notebook_open.png
    :alt: Stacked boxes, with one expanded to show themed text editors
-   
+
    Figure 62: Themed vertical notebook, with one tab open
-
-
