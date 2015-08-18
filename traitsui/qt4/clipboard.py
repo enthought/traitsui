@@ -123,7 +123,7 @@ class PyMimeData(QtCore.QMimeData):
             # We have no pickled python data defined.
             return None
 
-        stream = io.BytesIO(bytes(self.data(self.MIME_TYPE)))
+        stream = io.BytesIO(self.data(self.MIME_TYPE).data())
 
         try:
             # Skip the type.
@@ -144,7 +144,7 @@ class PyMimeData(QtCore.QMimeData):
 
         try:
             if self.hasFormat(self.MIME_TYPE):
-                return loads(bytes(self.data(self.MIME_TYPE)))
+                return loads(self.data(self.MIME_TYPE).data())
         except PickleError:
             pass
 

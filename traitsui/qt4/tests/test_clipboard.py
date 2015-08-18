@@ -24,7 +24,7 @@ class PyMimeDataTestCase(unittest.TestCase):
         self.assertEqual(md._local_instance, 0)
         self.assertTrue(md.hasFormat(PyMimeData.MIME_TYPE))
         self.assertFalse(md.hasFormat(PyMimeData.NOPICKLE_MIME_TYPE))
-        self.assertEqual(bytes(md.data(PyMimeData.MIME_TYPE).data()),
+        self.assertEqual(md.data(PyMimeData.MIME_TYPE).data(),
                          dumps(int)+dumps(0))
 
     def test_nopickle(self):
@@ -33,7 +33,7 @@ class PyMimeDataTestCase(unittest.TestCase):
         self.assertTrue(md.hasFormat(PyMimeData.NOPICKLE_MIME_TYPE))
         self.assertFalse(md.hasFormat(PyMimeData.MIME_TYPE))
         self.assertEqual(
-            bytes(md.data(PyMimeData.NOPICKLE_MIME_TYPE)),
+            md.data(PyMimeData.NOPICKLE_MIME_TYPE).data(),
             str2bytes(str(id(0)))
         )
 
@@ -92,7 +92,7 @@ class PyMimeDataTestCase(unittest.TestCase):
         self.assertEqual(md2._local_instance, [0])
         self.assertTrue(md2.hasFormat(PyMimeData.MIME_TYPE))
         self.assertFalse(md2.hasFormat(PyMimeData.NOPICKLE_MIME_TYPE))
-        self.assertEqual(bytes(md2.data(PyMimeData.MIME_TYPE).data),
+        self.assertEqual(md2.data(PyMimeData.MIME_TYPE).data(),
                          dumps(list)+dumps([0]))
 
     def test_coerce_list_pymimedata_nopickle(self):
