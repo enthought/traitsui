@@ -7,7 +7,7 @@ from ..toolkit import toolkit
 try:
     from .array_editor import ArrayEditor
 except ImportError as e:
-    if 'numpy' not in e.message:
+    if 'numpy' not in e.args[0]:
         raise
     import warnings
     warnings.warn('ArrayEditor is not available due to missing numpy',
