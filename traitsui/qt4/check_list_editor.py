@@ -17,6 +17,8 @@ user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------------
 
+from __future__ import division
+
 import logging
 from string import capitalize
 
@@ -191,8 +193,8 @@ class CustomEditor ( SimpleEditor ):
         values = self.values
         n      = len( labels )
         cols   = self.factory.cols
-        rows   = (n + cols - 1) / cols
-        incr   = [ n / cols ] * cols
+        rows   = (n + cols - 1) // cols
+        incr   = [ n // cols ] * cols
         rem    = n % cols
         for i in range( cols ):
             incr[i] += (rem > i)
