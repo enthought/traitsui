@@ -25,6 +25,8 @@
 
 from __future__ import absolute_import
 
+import os
+
 from traits.api import (Any, Bool, Callable, Color, Constant, Either, Enum,
     Expression, Float, Font, HasPrivateTraits, Instance, Int, Property, Str)
 
@@ -38,6 +40,9 @@ from .view import View
 # Set up a logger:
 import logging
 logger = logging.getLogger( __name__ )
+
+
+TRAITS_DEBUG = (os.getenv('TRAITS_DEBUG') is not None)
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -457,7 +462,9 @@ class ObjectColumn ( TableColumn ):
         """
         try:
             return xgetattr( self.get_object( object ), self.name )
-        except:
+        except Exception as e:
+            if TRAITS_DEBUG:
+                print("Can't get raw value:", e)
             return None
 
     def get_value ( self, object ):
@@ -589,7 +596,7 @@ class ExpressionColumn ( ObjectColumn ):
         """
         try:
             return eval( self.expression_, self.globals, { 'object': object } )
-        except:
+        except Exception:
             logger.exception( 'Error evaluating table column expression: %s' %
                               self.expression )
             return None
@@ -874,4 +881,3 @@ class ListColumn ( TableColumn ):
         """ Returns the result of comparing the column of two different objects.
         """
         return cmp( object1[ self.index ], object2[ self.index ] )
-
