@@ -198,7 +198,7 @@ class CustomEditor ( SimpleEditor ):
         rem    = n % cols
         for i in range( cols ):
             incr[i] += (rem > i)
-        incr[-1] = -(reduce( lambda x, y: x + y, incr[:-1], 0 ) - 1)
+        incr[-1] = -sum(incr[:-1]) + 1
 
         # Add the set of all possible choices:
         layout = self.control.layout()
