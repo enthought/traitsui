@@ -25,6 +25,8 @@
 
 from __future__ import absolute_import
 
+from operator import itemgetter
+
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
 
 from .ui_traits import SequenceTypes
@@ -84,7 +86,7 @@ def enum_values_changed ( values, strfunc=unicode ):
     if isinstance( values, dict ):
         data = [ ( strfunc( v ), n ) for n, v in values.items() ]
         if len( data ) > 0:
-            data.sort( lambda x, y: cmp( x[0], y[0] ) )
+            data.sort(key=itemgetter(0))
             col = data[0][0].find( ':' ) + 1
             if col > 0:
                 data = [ ( n[ col: ], v ) for n, v in data ]
@@ -96,7 +98,7 @@ def enum_values_changed ( values, strfunc=unicode ):
             raise TraitError("Invalid value for 'values' specified")
         if handler.is_mapped:
             data = [ ( strfunc( n ), n ) for n in handler.map.keys() ]
-            data.sort( lambda x, y: cmp( x[0], y[0] ) )
+            data.sort(key=itemgetter(0))
         else:
             data = [ ( strfunc( v ), v ) for v in handler.values ]
     else:

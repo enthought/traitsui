@@ -230,9 +230,7 @@ class KeyBindings ( HasPrivateTraits ):
         """ Edits a possibly hierarchical set of KeyBindings.
         """
         bindings = list( set( self.root._get_bindings( [] ) ) )
-        bindings.sort( lambda l, r:
-            cmp( '%s%02d' % ( l.binding1[-1:], len( l.binding1 ) ),
-                 '%s%02d' % ( r.binding1[-1:], len( r.binding1 ) ) ) )
+        bindings.sort(key=lambda x: '%s%02d' % (x.binding1[-1:], x.binding1))
         KeyBindings( bindings ).edit_traits()
 
     #---------------------------------------------------------------------------
@@ -345,4 +343,3 @@ class KeyBindings ( HasPrivateTraits ):
 
         # Indicate no one processed the key:
         return False
-
