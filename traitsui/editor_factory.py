@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import sys, os
 
@@ -32,6 +32,9 @@ from traits.api import HasPrivateTraits, Callable, Str, Bool, Event, Any, Proper
 from .helper import enum_values_changed
 
 from .toolkit import toolkit_object
+
+
+TRAITS_DEBUG = (os.getenv('TRAITS_DEBUG') is not None)
 
 #-------------------------------------------------------------------------------
 #  'EditorFactory' abstract base class:
@@ -187,6 +190,8 @@ class EditorFactory ( HasPrivateTraits ):
                 return toolkit_object(':'.join([editor_file_name.split('.')[0],
                                              class_name]), True)
             except Exception as e:
+                if TRAITS_DEBUG:
+                    print(e)
                 if index == len(editor_factory_classes)-1:
                     raise e
         return None
@@ -205,7 +210,9 @@ class EditorFactory ( HasPrivateTraits ):
         """
         try:
             SimpleEditor = self._get_toolkit_editor('SimpleEditor')
-        except:
+        except Exception as e:
+            if TRAITS_DEBUG:
+                print(e)
             SimpleEditor = toolkit_object('editor_factory:SimpleEditor')
         return SimpleEditor
 
@@ -219,7 +226,9 @@ class EditorFactory ( HasPrivateTraits ):
         """
         try:
             CustomEditor = self._get_toolkit_editor('CustomEditor')
-        except:
+        except Exception as e:
+            if TRAITS_DEBUG:
+                print(e)
             CustomEditor = self.simple_editor_class
         return CustomEditor
 
@@ -234,7 +243,9 @@ class EditorFactory ( HasPrivateTraits ):
         """
         try:
             TextEditor = self._get_toolkit_editor('TextEditor')
-        except:
+        except Exception as e:
+            if TRAITS_DEBUG:
+                print(e)
             TextEditor = toolkit_object('editor_factory:TextEditor')
         return TextEditor
 
@@ -249,7 +260,9 @@ class EditorFactory ( HasPrivateTraits ):
         """
         try:
             ReadonlyEditor = self._get_toolkit_editor('ReadonlyEditor')
-        except:
+        except Exception as e:
+            if TRAITS_DEBUG:
+                print(e)
             ReadonlyEditor = toolkit_object('editor_factory:ReadonlyEditor')
         return ReadonlyEditor
 
