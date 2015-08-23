@@ -20,7 +20,6 @@ user interface toolkit.
 from __future__ import division
 
 import logging
-from string import capitalize
 
 from pyface.qt import QtCore, QtGui
 
@@ -40,6 +39,11 @@ from editor \
     import EditorWithList
 
 logger = logging.getLogger(__name__)
+
+
+# default formatting function (would import from string, but not in Python 3)
+capitalize = lambda s: s.capitalize()
+
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
