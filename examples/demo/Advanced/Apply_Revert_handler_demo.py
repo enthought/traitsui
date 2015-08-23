@@ -8,6 +8,7 @@ starting state (before any "Apply").
 Note that this does not automatically provide a full (multi-step incremental)
 Undo capability.
 """
+from __future__ import print_function
 
 from traits.api import HasTraits, Str, List
 from traitsui.api import Item, View, Handler, HGroup, VGroup
@@ -22,7 +23,7 @@ class ApplyRevert_Handler(Handler):
 
     def revert(self, info):
         # Do something exciting here...
-        print 'revert called...'
+        print('revert called...')
 
 # 'ApplyRevertDemo' class:
 class ApplyRevertDemo(HasTraits):

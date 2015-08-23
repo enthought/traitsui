@@ -6,6 +6,7 @@ In the demo, the path to the selected item is printed whenever the selection
 changes.  In order to run, a path to an existing HDF5 database must be given
 at the bottom of this file.
 """
+from __future__ import print_function
 
 from traits.api import HasTraits, Str, List, Instance
 from traitsui.api import TreeEditor, TreeNode, View, Item, Group
@@ -156,7 +157,7 @@ if __name__ == '__main__':
             )
 
         def _node_changed(self):
-            print self.node.path
+            print(self.node.path)
 
 
     a_tree = ATree( h5_tree = _hdf5_tree('/path/to/file.h5')  )

@@ -7,6 +7,7 @@ You can edit the time directly, or by using only the arrow keys (left & right
 to navigate, up & down to change).
 
 """
+from __future__ import print_function
 import datetime
 
 from traits.api import HasTraits, Time
@@ -26,7 +27,7 @@ class TimeEditorDemo(HasTraits):
 
     def _time_changed(self):
         """ Print each time the time value is changed in the editor. """
-        print self.time
+        print(self.time)
 
 
 #-- Set Up The Demo ------------------------------------------------------------
