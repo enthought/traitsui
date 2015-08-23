@@ -393,7 +393,7 @@ class SourceFile ( HasTraits ):
     @property_depends_on( 'full_name' )
     def _get_contents ( self ):
         try:
-            fh = open( self.full_name, 'rb' )
+            fh = open( self.full_name, 'rU' )
             contents = fh.readlines()
             fh.close()
             return contents
@@ -425,4 +425,3 @@ demo = LiveSearch()
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-
