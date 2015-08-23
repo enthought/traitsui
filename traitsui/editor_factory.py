@@ -187,11 +187,13 @@ class EditorFactory ( HasPrivateTraits ):
                 factory_class = editor_factory_classes[index]
                 editor_file_name = os.path.basename(
                                 sys.modules[factory_class.__module__].__file__)
-                return toolkit_object(':'.join([editor_file_name.split('.')[0],
-                                             class_name]), True)
+                object_ref = ':'.join([editor_file_name.split('.')[0],
+                                       class_name])
+                return toolkit_object(object_ref, True)
             except Exception as e:
                 if TRAITS_DEBUG:
-                    print(e)
+                    msg = "Can't import toolkit_object '{}': {}"
+                    print(msg.format(object_ref, e))
                 if index == len(editor_factory_classes)-1:
                     raise e
         return None
@@ -212,7 +214,8 @@ class EditorFactory ( HasPrivateTraits ):
             SimpleEditor = self._get_toolkit_editor('SimpleEditor')
         except Exception as e:
             if TRAITS_DEBUG:
-                print(e)
+                msg = "Can't import SimpleEditor for {}: {}"
+                print(msg.format(self.__class__, e))
             SimpleEditor = toolkit_object('editor_factory:SimpleEditor')
         return SimpleEditor
 
@@ -228,7 +231,8 @@ class EditorFactory ( HasPrivateTraits ):
             CustomEditor = self._get_toolkit_editor('CustomEditor')
         except Exception as e:
             if TRAITS_DEBUG:
-                print(e)
+                msg = "Can't import CustomEditor for {}: {}"
+                print(msg.format(self.__class__, e))
             CustomEditor = self.simple_editor_class
         return CustomEditor
 
@@ -245,7 +249,8 @@ class EditorFactory ( HasPrivateTraits ):
             TextEditor = self._get_toolkit_editor('TextEditor')
         except Exception as e:
             if TRAITS_DEBUG:
-                print(e)
+                msg = "Can't import TextEditor for {}: {}"
+                print(msg.format(self.__class__, e))
             TextEditor = toolkit_object('editor_factory:TextEditor')
         return TextEditor
 
@@ -262,7 +267,8 @@ class EditorFactory ( HasPrivateTraits ):
             ReadonlyEditor = self._get_toolkit_editor('ReadonlyEditor')
         except Exception as e:
             if TRAITS_DEBUG:
-                print(e)
+                msg = "Can't import ReadonlyEditor for {}: {}"
+                print(msg.format(self.__class__, e))
             ReadonlyEditor = toolkit_object('editor_factory:ReadonlyEditor')
         return ReadonlyEditor
 
