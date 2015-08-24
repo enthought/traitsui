@@ -23,6 +23,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+from operator import itemgetter
+
 import wx
 import wx.lib.scrolledpanel
 
@@ -276,7 +278,7 @@ def enum_values_changed ( values ):
     if isinstance( values, dict ):
         data = [ ( unicode( v ), n ) for n, v in values.items() ]
         if len( data ) > 0:
-            data.sort( lambda x, y: cmp( x[0], y[0] ) )
+            data.sort(key=itemgetter(0))
             col = data[0][0].find( ':' ) + 1
             if col > 0:
                 data = [ ( n[ col: ], v ) for n, v in data ]
@@ -288,7 +290,7 @@ def enum_values_changed ( values ):
             raise TraitError("Invalid value for 'values' specified")
         if handler.is_mapped:
             data = [ ( unicode( n ), n ) for n in handler.map.keys() ]
-            data.sort( lambda x, y: cmp( x[0], y[0] ) )
+            data.sort(key=itemgetter(0))
         else:
             data = [ ( unicode( v ), v ) for v in handler.values ]
     else:

@@ -22,6 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+from operator import itemgetter
+
 import wx
 
 from traits.api \
@@ -755,7 +757,7 @@ class TableEditor ( Editor, BaseTableEditor ):
 
         if len( values ) > 0:
             # Sort by increasing row index:
-            values.sort( lambda l, r: cmp( l[0], r[0] ) )
+            values.sort(key=itemgetter(0))
             index, row = values[0]
         else:
             index, row = -1, None
@@ -791,7 +793,7 @@ class TableEditor ( Editor, BaseTableEditor ):
                     values.append( ( rio( row ), gfi( row ) ) )
 
         # Sort by increasing row index:
-        values.sort( lambda l, r: cmp( l[0], r[0] ) )
+        values.sort(key=itemgetter(0))
 
         # Save the new selection information:
         self.trait_set( selected_row_indices = [ v[0] for v in values ],
@@ -821,7 +823,7 @@ class TableEditor ( Editor, BaseTableEditor ):
 
         if len( values ) > 0:
             # Sort by increasing column index:
-            values.sort( lambda l, r: cmp( l[0], r[0] ) )
+            values.sort(key=itemgetter(0))
             index, column = values[0]
         else:
             index, column = -1, ''
@@ -849,7 +851,7 @@ class TableEditor ( Editor, BaseTableEditor ):
                 values.append( ( col, cols[ col ].name ) )
 
         # Sort by increasing row index:
-        values.sort( lambda l, r: cmp( l[0], r[0] ) )
+        values.sort(key=itemgetter(0))
 
         # Save the new selection information:
         self.set( selected_column_indices = [ v[0] for v in values ],
@@ -884,7 +886,7 @@ class TableEditor ( Editor, BaseTableEditor ):
 
         if len( values ) > 0:
             # Sort by increasing row, column index:
-            values.sort( lambda l, r: cmp( l[0], r[0] ) )
+            values.sort(key=itemgetter(0))
             index, cell = values[0]
         else:
             index, cell = ( -1, -1 ), ( None, '' )
@@ -920,7 +922,7 @@ class TableEditor ( Editor, BaseTableEditor ):
                                      ( item, cols[ col ].name ) ) )
 
         # Sort by increasing row, column index:
-        values.sort( lambda l, r: cmp( l[0], r[0] ) )
+        values.sort(key=itemgetter(0))
 
         # Save the new selection information:
         self.setx( selected_cell_indices = [ v[0] for v in values ])

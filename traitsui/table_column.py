@@ -375,6 +375,18 @@ class TableColumn ( HasPrivateTraits ):
         pass
 
     #---------------------------------------------------------------------------
+    #  Returns the result of comparing the column of two different objects:
+    #---------------------------------------------------------------------------
+
+    def cmp(self, object1, object2):
+        """ Returns the result of comparing the column of two different objects.
+
+        This is deprecated.
+        """
+        return ((self.key(object1) > self.key(object2)) -
+                (self.key(object1) < self.key(object2)))
+
+    #---------------------------------------------------------------------------
     #  Returns the string representation of the table column:
     #---------------------------------------------------------------------------
 
@@ -523,14 +535,13 @@ class ObjectColumn ( TableColumn ):
         return self.style
 
     #---------------------------------------------------------------------------
-    #  Returns the result of comparing the column of two different objects:
+    #  Function that gets the value to sort by for a column
     #---------------------------------------------------------------------------
 
-    def cmp ( self, object1, object2 ):
-        """ Returns the result of comparing the column of two different objects.
+    def key(self, object):
+        """ Returns the value to use for sorting.
         """
-        return cmp( self.get_raw_value( object1 ),
-                    self.get_raw_value( object2 ) )
+        return self.get_raw_value(object)
 
     #---------------------------------------------------------------------------
     #  Returns whether a specified value is valid for dropping on the column
@@ -874,10 +885,10 @@ class ListColumn ( TableColumn ):
         return None
 
     #---------------------------------------------------------------------------
-    #  Returns the result of comparing the column of two different objects:
+    #  Function that gets the value to sort by for a column
     #---------------------------------------------------------------------------
 
-    def cmp ( self, object1, object2 ):
-        """ Returns the result of comparing the column of two different objects.
+    def key(self, object):
+        """ Returns the value to use for sorting.
         """
-        return cmp( object1[ self.index ], object2[ self.index ] )
+        return object[self.index]
