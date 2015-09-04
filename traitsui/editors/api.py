@@ -6,7 +6,7 @@ from ..toolkit import toolkit
 
 try:
     from .array_editor import ArrayEditor
-except ImportError as e:
+except ImportError:
     # check if failure is due to missing numpy, otherwise re-raise
     try:
         import numpy
