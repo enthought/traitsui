@@ -190,22 +190,15 @@ MP3Template = """<html>
 
 def read_file ( path, mode = 'rU' ):
     """ Returns the contents of a specified text file (or None).
-        """
-    fh = result = None
 
+    """
     try:
-        fh     = open( path, mode )
-        result = fh.read()
-    except:
-        pass
+        with open( path, mode ) as fh:
+            result = fh.read()
+        return result
+    except Exception:
+        return None
 
-    if fh is not None:
-        try:
-            fh.close()
-        except:
-            pass
-
-    return result
 
 #-------------------------------------------------------------------------------
 #  Creates a title from a specified string:
