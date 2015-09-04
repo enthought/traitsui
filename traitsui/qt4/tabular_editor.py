@@ -355,7 +355,8 @@ class TabularEditor(Editor):
                 selected_row = self.value.index(new)
             except Exception as e:
                 if TRAITS_DEBUG:
-                    print(e)
+                    from traits.api import raise_to_debug
+                    raise_to_debug()
             else:
                 self._selected_row_changed(selected_row)
 

@@ -476,7 +476,8 @@ class ObjectColumn ( TableColumn ):
             return xgetattr( self.get_object( object ), self.name )
         except Exception as e:
             if TRAITS_DEBUG:
-                print("Can't get raw value:", e)
+                from traits.api import raise_to_debug
+                raise_to_debug()
             return None
 
     def get_value ( self, object ):
