@@ -15,6 +15,7 @@ except ImportError:
         warnings.warn('ArrayEditor is not available due to missing numpy',
                       ImportWarning)
     else:
+        del numpy
         raise
 
 from .boolean_editor import BooleanEditor
