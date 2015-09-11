@@ -393,11 +393,10 @@ class SourceFile ( HasTraits ):
     @property_depends_on( 'full_name' )
     def _get_contents ( self ):
         try:
-            fh = open( self.full_name, 'rb' )
-            contents = fh.readlines()
-            fh.close()
-            return contents
-        except:
+            with open(self.full_name, 'rU') as fh:
+                contents = fh.readlines()
+                return contents
+        except Exception:
             return ''
 
     @property_depends_on( 'full_name, live_search.[search, case_sensitive]' )
@@ -425,4 +424,3 @@ demo = LiveSearch()
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

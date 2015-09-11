@@ -405,7 +405,7 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
         return True
 
     def lessThan(self, left_mi, right_mi):
-        """Reimplemented to sort according to the 'cmp' method defined for
+        """Reimplemented to sort according to the 'key' method defined for
         TableColumn."""
 
         editor = self._editor
@@ -413,7 +413,7 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
         items = editor.items()
         left, right = items[left_mi.row()], items[right_mi.row()]
 
-        return column.cmp(left, right) < 0
+        return column.key(left) < column.key(right)
 
     #---------------------------------------------------------------------------
     #  SortFilterTableModel interface:

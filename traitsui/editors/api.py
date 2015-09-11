@@ -6,12 +6,17 @@ from ..toolkit import toolkit
 
 try:
     from .array_editor import ArrayEditor
-except ImportError as e:
-    if 'numpy' not in e.message:
+except ImportError:
+    # check if failure is due to missing numpy, otherwise re-raise
+    try:
+        import numpy
+    except ImportError:
+        import warnings
+        warnings.warn('ArrayEditor is not available due to missing numpy',
+                      ImportWarning)
+    else:
+        del numpy
         raise
-    import warnings
-    warnings.warn('ArrayEditor is not available due to missing numpy',
-                  ImportWarning)
 
 from .boolean_editor import BooleanEditor
 from .button_editor import ButtonEditor

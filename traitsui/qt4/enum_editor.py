@@ -17,8 +17,6 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from string import capitalize
-
 from pyface.qt import QtCore, QtGui
 
 from traits.api \
@@ -38,6 +36,11 @@ from constants \
 
 from traitsui.helper \
     import enum_values_changed
+
+
+# default formatting function (would import from string, but not in Python 3)
+capitalize = lambda s: s.capitalize()
+
 
 #-------------------------------------------------------------------------------
 #  'BaseEditor' class:
