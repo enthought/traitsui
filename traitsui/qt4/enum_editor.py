@@ -413,7 +413,7 @@ class RadioEditor ( BaseEditor ):
         mapping = self.mapping
         n       = len( names )
         cols    = self.factory.cols
-        rows    = (n + cols - 1) / cols
+        rows    = (n + cols - 1) // cols
         if self.row_major:
             incr = [ 1 ] * cols
         else:
