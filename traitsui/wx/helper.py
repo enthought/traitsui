@@ -341,7 +341,9 @@ class TraitsUIPanel ( wx.Panel ):
         if bg_color:
             self.SetBackgroundColour(bg_color)
         else:
-            self.SetBackgroundColour( parent.GetBackgroundColour() )
+            # Mac/Win needs this, otherwise background color is black
+            attr = self.GetDefaultAttributes()
+            self.SetBackgroundColour(attr.colBg)
 
     def OnChildFocus ( self, event ):
         """ If the ChildFocusEvent contains one of the Panel's direct children,
