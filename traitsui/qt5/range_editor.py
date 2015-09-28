@@ -20,7 +20,7 @@ PyQt user interface toolkit.
 from math \
     import log10
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 from traits.api \
      import TraitError, Str, Float, Any, Bool
@@ -116,8 +116,8 @@ class SimpleSliderEditor ( BaseRangeEditor ):
         self.sync_value( factory.low_name,  'low',  'from' )
         self.sync_value( factory.high_name, 'high', 'from' )
 
-        self.control = QtGui.QWidget()
-        panel = QtGui.QHBoxLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        panel = QtWidgets.QHBoxLayout(self.control)
         panel.setContentsMargins(0, 0, 0, 0)
 
         fvalue = self.value
@@ -132,14 +132,14 @@ class SimpleSliderEditor ( BaseRangeEditor ):
 
         ivalue = self._convert_to_slider(fvalue)
 
-        self._label_lo = QtGui.QLabel()
+        self._label_lo = QtWidgets.QLabel()
         self._label_lo.setAlignment(QtCore.Qt.AlignRight |
                                     QtCore.Qt.AlignVCenter)
         if factory.label_width > 0:
             self._label_lo.setMinimumWidth(factory.label_width)
         panel.addWidget(self._label_lo)
 
-        self.control.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.control.slider = slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         slider.setTracking(factory.auto_set)
         slider.setMinimum(0)
         slider.setMaximum(10000)
@@ -150,12 +150,12 @@ class SimpleSliderEditor ( BaseRangeEditor ):
                 self.update_object_on_scroll)
         panel.addWidget(slider)
 
-        self._label_hi = QtGui.QLabel()
+        self._label_hi = QtWidgets.QLabel()
         panel.addWidget(self._label_hi)
         if factory.label_width > 0:
             self._label_hi.setMinimumWidth(factory.label_width)
 
-        self.control.text = text = QtGui.QLineEdit(fvalue_text)
+        self.control.text = text = QtWidgets.QLineEdit(fvalue_text)
         QtCore.QObject.connect(text, QtCore.SIGNAL('editingFinished()'),
                 self.update_object_on_enter)
 
@@ -385,8 +385,8 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
 
         self._set_format()
 
-        self.control = QtGui.QWidget()
-        panel = QtGui.QHBoxLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        panel = QtWidgets.QHBoxLayout(self.control)
         panel.setContentsMargins(0, 0, 0, 0)
 
         fvalue = self.value
@@ -404,17 +404,17 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
             ivalue = low
 
         # Lower limit label:
-        self.control.label_lo = label_lo = QtGui.QLabel()
+        self.control.label_lo = label_lo = QtWidgets.QLabel()
         label_lo.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         panel.addWidget(label_lo)
 
         # Lower limit button:
-        self.control.button_lo = IconButton(QtGui.QStyle.SP_ArrowLeft,
+        self.control.button_lo = IconButton(QtWidgets.QStyle.SP_ArrowLeft,
                 self.reduce_range)
         panel.addWidget(self.control.button_lo)
 
         # Slider:
-        self.control.slider = slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.control.slider = slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         slider.setTracking(factory.auto_set)
         slider.setMinimum(0)
         slider.setMaximum(10000)
@@ -426,16 +426,16 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
         panel.addWidget(slider)
 
         # Upper limit button:
-        self.control.button_hi = IconButton(QtGui.QStyle.SP_ArrowRight,
+        self.control.button_hi = IconButton(QtWidgets.QStyle.SP_ArrowRight,
                 self.increase_range)
         panel.addWidget(self.control.button_hi)
 
         # Upper limit label:
-        self.control.label_hi = label_hi = QtGui.QLabel()
+        self.control.label_hi = label_hi = QtWidgets.QLabel()
         panel.addWidget(label_hi)
 
         # Text entry:
-        self.control.text = text = QtGui.QLineEdit(fvalue_text)
+        self.control.text = text = QtWidgets.QLineEdit(fvalue_text)
         QtCore.QObject.connect(text, QtCore.SIGNAL('editingFinished()'),
                 self.update_object_on_enter)
 
@@ -671,7 +671,7 @@ class SimpleSpinEditor ( BaseRangeEditor ):
         low  = self.low
         high = self.high
 
-        self.control = QtGui.QSpinBox()
+        self.control = QtWidgets.QSpinBox()
         self.control.setMinimum(low)
         self.control.setMaximum(high)
         self.control.setValue(self.value)

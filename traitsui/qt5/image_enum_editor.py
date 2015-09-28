@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -71,7 +71,7 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QLabel()
+        self.control = QtWidgets.QLabel()
         self.control.setPixmap(self.get_pixmap(self.str_value))
         self.set_tooltip()
 
@@ -101,8 +101,8 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         """ Returns the QComboBox used for the editor control.
         """
         control = ImageEnumComboBox(self)
-        control.setSizePolicy(QtGui.QSizePolicy.Maximum,
-                              QtGui.QSizePolicy.Maximum)
+        control.setSizePolicy(QtWidgets.QSizePolicy.Maximum,
+                              QtWidgets.QSizePolicy.Maximum)
         return control
 
     #---------------------------------------------------------------------------
@@ -157,7 +157,7 @@ class CustomEditor(BaseEditor, CustomEnumEditor):
     def create_button(self, name):
         """ Returns the QAbstractButton used for the radio button.
         """
-        button = QtGui.QToolButton()
+        button = QtWidgets.QToolButton()
         button.setAutoExclusive(True)
         button.setCheckable(True)
 
@@ -171,7 +171,7 @@ class CustomEditor(BaseEditor, CustomEnumEditor):
 #  Custom Qt objects used in the SimpleEditor:
 #-------------------------------------------------------------------------------
 
-class ImageEnumComboBox(QtGui.QComboBox):
+class ImageEnumComboBox(QtWidgets.QComboBox):
     """ A combo box which displays images instead of text.
     """
 
@@ -180,7 +180,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
             items in the popup menu. If there is more than one column, use a
             TableView instead of ListView for the popup.
         """
-        QtGui.QComboBox.__init__(self, parent)
+        QtWidgets.QComboBox.__init__(self, parent)
         self._editor = editor
 
         model = ImageEnumModel(editor, self)
@@ -204,19 +204,19 @@ class ImageEnumComboBox(QtGui.QComboBox):
         """ Reimplemented to draw the ComboBox frame and paint the image
             centered in it.
         """
-        painter = QtGui.QStylePainter(self)
+        painter = QtWidgets.QStylePainter(self)
         painter.setPen(self.palette().color(QtGui.QPalette.Text))
 
-        option = QtGui.QStyleOptionComboBox()
+        option = QtWidgets.QStyleOptionComboBox()
         self.initStyleOption(option)
-        painter.drawComplexControl(QtGui.QStyle.CC_ComboBox, option)
+        painter.drawComplexControl(QtWidgets.QStyle.CC_ComboBox, option)
 
         editor = self._editor
         pixmap = editor.get_pixmap(editor.inverse_mapping[editor.value])
-        arrow = self.style().subControlRect(QtGui.QStyle.CC_ComboBox, option,
-                                            QtGui.QStyle.SC_ComboBoxArrow, None)
+        arrow = self.style().subControlRect(QtWidgets.QStyle.CC_ComboBox, option,
+                                            QtWidgets.QStyle.SC_ComboBoxArrow, None)
         option.rect.setWidth(option.rect.width() - arrow.width())
-        target = QtGui.QStyle.alignedRect(QtCore.Qt.LeftToRight,
+        target = QtWidgets.QStyle.alignedRect(QtCore.Qt.LeftToRight,
                                           QtCore.Qt.AlignCenter,
                                           pixmap.size(), option.rect)
         painter.drawPixmap(target, pixmap)
@@ -229,36 +229,36 @@ class ImageEnumComboBox(QtGui.QComboBox):
         for name in self._editor.names:
             size = size.expandedTo(self._editor.get_pixmap(name).size())
 
-        option = QtGui.QStyleOptionComboBox()
+        option = QtWidgets.QStyleOptionComboBox()
         self.initStyleOption(option)
-        size = self.style().sizeFromContents(QtGui.QStyle.CT_ComboBox, option,
+        size = self.style().sizeFromContents(QtWidgets.QStyle.CT_ComboBox, option,
                                              size, self)
         return size
 
 
-class ImageEnumTablePopupView(QtGui.QTableView):
+class ImageEnumTablePopupView(QtWidgets.QTableView):
 
     def __init__(self, parent):
         """ Configure the appearence of the table view.
         """
-        QtGui.QTableView.__init__(self, parent)
+        QtWidgets.QTableView.__init__(self, parent)
         hheader = self.horizontalHeader()
-        hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        hheader.setResizeMode(QtWidgets.QHeaderView.ResizeToContents)
         hheader.hide()
         vheader = self.verticalHeader()
-        vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        vheader.setResizeMode(QtWidgets.QHeaderView.ResizeToContents)
         vheader.hide()
         self.setShowGrid(False)
 
 
-class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
+class ImageEnumItemDelegate(QtWidgets.QStyledItemDelegate):
     """ An item delegate which draws only images.
     """
 
     def __init__(self, editor, parent):
         """ Reimplemented to store the editor.
         """
-        QtGui.QStyledItemDelegate.__init__(self, parent)
+        QtWidgets.QStyledItemDelegate.__init__(self, parent)
         self._editor = editor
 
     def displayText(self, value, locale):
@@ -270,13 +270,13 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
         """ Reimplemented to draw images.
         """
         # Delegate to our superclass to draw the background
-        QtGui.QStyledItemDelegate.paint(self, painter, option, mi)
+        QtWidgets.QStyledItemDelegate.paint(self, painter, option, mi)
 
         # Now draw the pixmap
         name = mi.data(QtCore.Qt.DisplayRole)
         pixmap = self._get_pixmap(name)
         if pixmap is not None:
-            target = QtGui.QStyle.alignedRect(QtCore.Qt.LeftToRight,
+            target = QtWidgets.QStyle.alignedRect(QtCore.Qt.LeftToRight,
                                               QtCore.Qt.AlignCenter,
                                               pixmap.size(), option.rect)
             painter.drawPixmap(target, pixmap)

@@ -376,14 +376,14 @@ class TableModel(QtCore.QAbstractTableModel):
 #  'SortFilterTableModel' class:
 #-------------------------------------------------------------------------------
 
-class SortFilterTableModel(QtGui.QSortFilterProxyModel):
+class SortFilterTableModel(QtCore.QSortFilterProxyModel):
     """A wrapper for the TableModel which provides sorting and filtering
     capability."""
 
     def __init__(self, editor, parent=None):
         """Initialise the object."""
 
-        QtGui.QSortFilterProxyModel.__init__(self, parent)
+        QtCore.QSortFilterProxyModel.__init__(self, parent)
 
         self._editor = editor
 

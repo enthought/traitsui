@@ -1,6 +1,6 @@
 import time
 
-from pyface.qt import QtGui, QtCore
+from pyface.qt import QtWidgets
 
 from traits.api import Instance, Int, Str
 from traitsui.qt4.editor import Editor
@@ -59,9 +59,9 @@ class SimpleEditor(Editor):
                                         show_time=self.factory.show_time,
                                         show_percent=self.factory.show_percent)
 
-        control = QtGui.QWidget()
+        control = QtWidgets.QWidget()
         self.control = control
-        layout = QtGui.QVBoxLayout(self.control)
+        layout = QtWidgets.QVBoxLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
 
         # The 'guts' of the dialog.

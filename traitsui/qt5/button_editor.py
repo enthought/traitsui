@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 
 from traits.api import Unicode, List, Str, on_trait_change
 
@@ -61,17 +61,17 @@ class SimpleEditor ( Editor ):
         label = self.factory.label or self.item.get_label(self.ui)
 
         if self.factory.values_trait:
-            self.control = QtGui.QToolButton()
+            self.control = QtWidgets.QToolButton()
             self.control.toolButtonStyle = QtCore.Qt.ToolButtonTextOnly
             self.control.setText(self.string_value(label))
             self.object.on_trait_change(self._update_menu, self.factory.values_trait)
             self.object.on_trait_change(self._update_menu, self.factory.values_trait + "_items")
-            self._menu = QtGui.QMenu()
+            self._menu = QtWidgets.QMenu()
             self._update_menu()
             self.control.setMenu(self._menu)
 
         else:
-            self.control = QtGui.QPushButton(self.string_value(label))
+            self.control = QtWidgets.QPushButton(self.string_value(label))
             self._menu = None
             self.control.setAutoDefault(False)
 
@@ -126,9 +126,9 @@ class CustomEditor ( SimpleEditor ):
 
     # The mapping of button styles to Qt classes.
     _STYLE_MAP = {
-        'checkbox': QtGui.QCheckBox,
-        'radio':    QtGui.QRadioButton,
-        'toolbar':  QtGui.QToolButton
+        'checkbox': QtWidgets.QCheckBox,
+        'radio':    QtWidgets.QRadioButton,
+        'toolbar':  QtWidgets.QToolButton
     }
 
     #---------------------------------------------------------------------------
@@ -144,7 +144,7 @@ class CustomEditor ( SimpleEditor ):
 
         factory = self.factory
 
-        btype = self._STYLE_MAP.get(factory.style, QtGui.QPushButton)
+        btype = self._STYLE_MAP.get(factory.style, QtWidgets.QPushButton)
         self.control = btype()
         self.control.setText(self.string_value(factory.label))
 

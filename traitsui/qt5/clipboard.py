@@ -23,7 +23,7 @@ import warnings
 import io
 import sys
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 from traits.api import HasTraits, Instance, Property
 
@@ -222,7 +222,7 @@ class _Clipboard(HasTraits):
     def _clipboard_default(self):
         """ Initialise the clipboard.
         """
-        return QtGui.QApplication.clipboard()
+        return QtWidgets.QApplication.clipboard()
 
 #-------------------------------------------------------------------------------
 #  The singleton clipboard instance.

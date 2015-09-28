@@ -19,7 +19,7 @@
 import logging
 
 # System library imports.
-from pyface.qt import QtGui
+from pyface.qt import QtWidgets
 
 # Enthought library imports.
 from traits.api import File, List, Str
@@ -67,7 +67,7 @@ class QtView(View):
             previous = self._get_editor_control(ui, self.tab_order[0])
             for i in xrange(1, len(self.tab_order)):
                 current = self._get_editor_control(ui, self.tab_order[i])
-                QtGui.QWidget.setTabOrder(previous, current)
+                QtWidgets.QWidget.setTabOrder(previous, current)
                 previous = current
 
         return ui

@@ -17,7 +17,7 @@ target editor handles drag and drop operations as a drop target.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtGui, QtCore
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -50,7 +50,7 @@ class SimpleEditor ( Editor ):
             widget.
         """
         if self.factory.readonly:
-            self.control = QtGui.QLineEdit(self.str_value)
+            self.control = QtWidgets.QLineEdit(self.str_value)
             self.control.setReadOnly(True)
             self.set_tooltip()
         else:

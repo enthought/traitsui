@@ -17,13 +17,13 @@ editors and text editor factories.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtGui
+from pyface.qt import QtGui, QtWidgets
 
 #-------------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------------
 
-_palette = QtGui.QApplication.palette()
+_palette = QtWidgets.QApplication.palette()
 
 # Default dialog title
 DefaultTitle = 'Edit properties'
@@ -50,7 +50,7 @@ del _palette
 
 # Screen size values:
 
-_geom = QtGui.QApplication.desktop().availableGeometry()
+_geom = QtWidgets.QApplication.desktop().availableGeometry()
 
 screen_dx = _geom.width()
 screen_dy = _geom.height()

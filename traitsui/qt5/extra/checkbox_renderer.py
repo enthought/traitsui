@@ -17,7 +17,7 @@
 """
 
 # System library imports
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 # ETS imports
 from traitsui.qt4.table_editor import TableDelegate
@@ -56,8 +56,8 @@ class CheckboxRenderer(TableDelegate):
         # First draw the background
         painter.save()
         row_brushes = [option.palette.base(), option.palette.alternateBase()]
-        if option.state & QtGui.QStyle.State_Selected:
-            if option.state & QtGui.QStyle.State_Active:
+        if option.state & QtWidgets.QStyle.State_Selected:
+            if option.state & QtWidgets.QStyle.State_Active:
                 color_group = QtGui.QPalette.Active
             else:
                 color_group = QtGui.QPalette.Inactive
@@ -73,16 +73,16 @@ class CheckboxRenderer(TableDelegate):
         painter.fillRect(option.rect, bg_brush)
 
         # Then draw the checkbox
-        style = QtGui.QApplication.instance().style()
-        box = QtGui.QStyleOptionButton()
+        style = QtWidgets.QApplication.instance().style()
+        box = QtWidgets.QStyleOptionButton()
         box.palette = option.palette
 
         # Align the checkbox appropriately.
         box.rect = option.rect
-        size = style.sizeFromContents(QtGui.QStyle.CT_CheckBox, box,
+        size = style.sizeFromContents(QtWidgets.QStyle.CT_CheckBox, box,
             QtCore.QSize(), None)
         box.rect.setWidth(size.width())
-        margin = style.pixelMetric(QtGui.QStyle.PM_ButtonMargin, box)
+        margin = style.pixelMetric(QtWidgets.QStyle.PM_ButtonMargin, box)
         alignment = column.horizontal_alignment
         if alignment == 'left':
             box.rect.setLeft(option.rect.left() + margin)
@@ -93,18 +93,18 @@ class CheckboxRenderer(TableDelegate):
             box.rect.setLeft(option.rect.left() + option.rect.width() // 2 -
                 size.width() // 2 + margin - 2)
 
-        box.state = QtGui.QStyle.State_Enabled
+        box.state = QtWidgets.QStyle.State_Enabled
         if checked:
-            box.state |= QtGui.QStyle.State_On
+            box.state |= QtWidgets.QStyle.State_On
         else:
-            box.state |= QtGui.QStyle.State_Off
-        style.drawControl(QtGui.QStyle.CE_CheckBox, box, painter)
+            box.state |= QtWidgets.QStyle.State_Off
+        style.drawControl(QtWidgets.QStyle.CE_CheckBox, box, painter)
         painter.restore()
 
     def sizeHint(self, option, index):
         """ Reimplemented to provide size hint based on a checkbox
         """
-        box = QtGui.QStyleOptionButton()
-        style = QtGui.QApplication.instance().style()
-        return style.sizeFromContents(QtGui.QStyle.CT_CheckBox, box,
+        box = QtWidgets.QStyleOptionButton()
+        style = QtWidgets.QApplication.instance().style()
+        return style.sizeFromContents(QtWidgets.QStyle.CT_CheckBox, box,
                                       QtCore.QSize(), None)

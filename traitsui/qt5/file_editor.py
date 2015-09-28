@@ -18,7 +18,7 @@
 
 from os.path import splitext, isfile, exists
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 from traits.api import List, Event, File, Unicode, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -54,11 +54,11 @@ class SimpleEditor ( SimpleTextEditor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QWidget()
-        layout = QtGui.QHBoxLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        layout = QtWidgets.QHBoxLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        self._file_name = control = QtGui.QLineEdit()
+        self._file_name = control = QtWidgets.QLineEdit()
         layout.addWidget(control)
 
         if self.factory.auto_set:
@@ -68,7 +68,7 @@ class SimpleEditor ( SimpleTextEditor ):
             signal = QtCore.SIGNAL('editingFinished()')
         QtCore.QObject.connect(control, signal, self.update_object)
 
-        button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
+        button = IconButton(QtWidgets.QStyle.SP_DirIcon, self.show_file_dialog)
         layout.addWidget(button)
 
         self.set_tooltip(control)
@@ -112,7 +112,7 @@ class SimpleEditor ( SimpleTextEditor ):
         # one to be created).
         dlg = self._create_file_dialog()
 
-        if dlg.exec_() == QtGui.QDialog.Accepted:
+        if dlg.exec_() == QtWidgets.QDialog.Accepted:
             files = dlg.selectedFiles()
 
             if len(files) > 0:
@@ -138,7 +138,7 @@ class SimpleEditor ( SimpleTextEditor ):
     def _create_file_dialog ( self ):
         """ Creates the correct type of file dialog.
         """
-        dlg = QtGui.QFileDialog(self.control)
+        dlg = QtWidgets.QFileDialog(self.control)
         dlg.selectFile(self._file_name.text())
 
         if self.factory.dialog_style == 'open':
@@ -185,7 +185,7 @@ class CustomEditor ( SimpleTextEditor ):
         """
         self.control = _TreeView(self)
 
-        self._model = model = QtGui.QFileSystemModel()
+        self._model = model = QtWidgets.QFileSystemModel()
         self.control.setModel(model)
 
         # Don't apply filters to directories and don't show "." and ".."
@@ -214,7 +214,7 @@ class CustomEditor ( SimpleTextEditor ):
         self.set_tooltip()
 
         # This is needed to enable horizontal scrollbar.
-        self.control.header().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        self.control.header().setResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
         self.control.header().setStretchLastSection(False)
 
     #---------------------------------------------------------------------------
@@ -290,7 +290,7 @@ class CustomEditor ( SimpleTextEditor ):
 #  '_TreeView' class:
 #-------------------------------------------------------------------------------
 
-class _TreeView(QtGui.QTreeView):
+class _TreeView(QtWidgets.QTreeView):
     """ This is an internal class needed because QAbstractItemView doesn't
         provide a signal for when the current index changes.
     """
@@ -304,9 +304,9 @@ class _TreeView(QtGui.QTreeView):
         if event.type() == QtCore.QEvent.ToolTip:
             index = self.indexAt(event.pos())
             if index and index.isValid():
-                QtGui.QToolTip.showText(event.globalPos(), index.data(), self)
+                QtWidgets.QToolTip.showText(event.globalPos(), index.data(), self)
             else:
-                QtGui.QToolTip.hideText()
+                QtWidgets.QToolTip.hideText()
                 event.ignore()
                                 
             return True
@@ -318,7 +318,7 @@ class _TreeView(QtGui.QTreeView):
         if key == QtCore.Qt.Key_Return or key == QtCore.Qt.Key_Enter:
             self._editor._on_dclick(self.selectedIndexes()[0])
             keyevent.accept()
-        QtGui.QTreeView.keyPressEvent(self, keyevent)
+        QtWidgets.QTreeView.keyPressEvent(self, keyevent)
 
     def currentChanged(self, current, previous):
         """ Reimplemented to tell the editor when the current index has changed.
