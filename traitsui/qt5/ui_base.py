@@ -232,7 +232,7 @@ class BasePanel(object):
                 method = editor.perform
 
         if method is not None:
-            button.connect(button, QtCore.SIGNAL('clicked()'), method)
+            button.clicked.connect(method)
 
         if action.tooltip != '':
             button.setToolTip(action.tooltip)

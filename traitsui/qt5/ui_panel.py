@@ -1226,8 +1226,7 @@ class HTMLHelpWindow ( QtWidgets.QDialog ):
         # Create the OK button
         bbox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok,
                                       QtCore.Qt.Horizontal)
-        QtCore.QObject.connect(bbox, QtCore.SIGNAL('accepted()'),
-                               self, QtCore.SLOT('accept()'))
+        bbox.accepted.connect(self.accept)
         layout.addWidget(bbox)
 
         # Position and show the dialog
