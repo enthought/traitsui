@@ -34,7 +34,7 @@ from traits.trait_base import ETSConfig
 #-------------------------------------------------------------------------------
 
 # List of implemented UI toolkits:
-TraitUIToolkits = [ 'wx', 'qt4', 'null' ]
+TraitUIToolkits = [ 'wx', 'qt5', 'qt4', 'null' ]
 
 #-------------------------------------------------------------------------------
 #  Data:
