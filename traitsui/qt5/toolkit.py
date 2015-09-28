@@ -19,7 +19,7 @@ the PyQt user interface toolkit.
 
 # Make sure that importing from this backend is OK:
 from traitsui.toolkit import assert_toolkit_import
-assert_toolkit_import('qt4')
+assert_toolkit_import('qt5')
 
 from pyface.qt import QtCore, QtGui, QtWidgets, qt_api
 
