@@ -78,7 +78,7 @@ def test_reset_with_destroy_qt():
 
     # but its children are scheduled for removal
     for c in ui.control.children():
-        if isinstance(c, qt.QtGui.QWidget):
+        if isinstance(c, qt.QtWidgets.QWidget):
             nose.tools.assert_equal(c.deleteLater._n_calls, 1)
 
 
@@ -126,7 +126,7 @@ def test_reset_without_destroy_qt():
     nose.tools.assert_is_instance(ui._editors[0],
                                   traitsui.qt4.text_editor.SimpleEditor)
     nose.tools.assert_is_instance(ui._editors[0].control,
-                                  qt.QtGui.QLineEdit)
+                                  qt.QtWidgets.QLineEdit)
 
     ui.reset(destroy=False)
 
@@ -136,7 +136,7 @@ def test_reset_without_destroy_qt():
     nose.tools.assert_is_none(ui._editors[0].control)
 
     # children are still there: check first text control
-    text_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
+    text_ctrl = ui.control.findChild(qt.QtWidgets.QLineEdit)
     nose.tools.assert_is_not_none(text_ctrl)
 
 
@@ -188,11 +188,11 @@ def test_destroy_after_ok_qt():
         ui_children.append(c)
 
     # press the OK button and close the dialog
-    okb = ui.control.findChild(qt.QtGui.QPushButton)
+    okb = ui.control.findChild(qt.QtWidgets.QPushButton)
     okb.click()
 
     nose.tools.assert_is_none(ui.control)
     # children are scheduled for removal
     for c in ui_children:
-        if isinstance(c, qt.QtGui.QWidget):
+        if isinstance(c, qt.QtWidgets.QWidget):
             nose.tools.assert_equal(c.deleteLater._n_calls, 1)

@@ -44,7 +44,7 @@ def test_code_editor_show_line_numbers():
     """
     def is_line_numbers_visible(ui):
         from pyface import qt
-        txt_ctrl = ui.control.findChild(qt.QtGui.QPlainTextEdit)
+        txt_ctrl = ui.control.findChild(qt.QtWidgets.QPlainTextEdit)
         return txt_ctrl.line_number_widget.isVisible()
 
     def test_line_numbers_visibility(show=True):
@@ -69,7 +69,7 @@ def test_code_editor_readonly():
         code_view = CodeView(model=code_model,
                              style='readonly')
         ui = code_view.edit_traits()
-        txt_ctrl = ui.control.findChild(qt.QtGui.QPlainTextEdit)
+        txt_ctrl = ui.control.findChild(qt.QtWidgets.QPlainTextEdit)
         nose.tools.assert_true(txt_ctrl.isReadOnly())
 
         # Test changing the object's text

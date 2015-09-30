@@ -139,16 +139,16 @@ def test_wx_list_str_multi_selected_index():
 def test_selection_listener_disconnected():
     """ Check that selection listeners get correctly disconnected """
     from pyface.api import GUI
-    from pyface.qt.QtGui import QApplication, QItemSelectionModel
+    from pyface.qt import QtCore, QtWidgets
     from pyface.ui.qt4.util.event_loop_helper import EventLoopHelper
     from pyface.ui.qt4.util.testing import event_loop
 
     obj = ListStrEditorWithSelectedIndex(values=['value1', 'value2'])
 
     with store_exceptions_on_all_threads():
-        qt_app = QApplication.instance()
+        qt_app = QtWidgets.QApplication.instance()
         if qt_app is None:
-            qt_app = QApplication([])
+            qt_app = QtWidgets.QApplication([])
         helper = EventLoopHelper(gui=GUI(), qt_app=qt_app)
 
         # open the UI and run until the dialog is closed
@@ -163,7 +163,7 @@ def test_selection_listener_disconnected():
 
             list_view = editor.list_view
             mi = editor.model.index(1)
-            list_view.selectionModel().select(mi, QItemSelectionModel.ClearAndSelect)
+            list_view.selectionModel().select(mi, QtCore.QItemSelectionModel.ClearAndSelect)
 
     obj.selected = 'value2'
 

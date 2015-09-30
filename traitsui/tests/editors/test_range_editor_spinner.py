@@ -129,7 +129,7 @@ def test_qt_spin_control_editing():
         # range editor, enter a number, and clicking ok without defocusing
 
         # text element inside the spin control
-        lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
+        lineedit = ui.control.findChild(qt.QtWidgets.QLineEdit)
         lineedit.setFocus()
         lineedit.setText('4')
 

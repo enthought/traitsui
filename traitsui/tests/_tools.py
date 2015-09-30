@@ -156,7 +156,7 @@ def press_ok_button(ui):
         from pyface import qt
 
         # press the OK button and close the dialog
-        ok_button = ui.control.findChild(qt.QtGui.QPushButton)
+        ok_button = ui.control.findChild(qt.QtWidgets.QPushButton)
         ok_button.click()
 
 
