@@ -59,9 +59,9 @@ def pixmap_cache(name, path=None):
             filename = os.path.join(path, name)
     filename = os.path.abspath(filename)
 
-    pm = QtGui.QPixmap()
-    if not QtGui.QPixmapCache.find(filename, pm):
-        pm.load(filename)
+    pm = QtGui.QPixmapCache.find(filename)
+    if pm is None:
+        pm = QtGui.QPixmap(filename)
         QtGui.QPixmapCache.insert(filename, pm)
     return pm
 
