@@ -171,8 +171,13 @@ class SourceEditor ( Editor ):
         """
         # Make sure that the editor does not try to update as the control is
         # being destroyed:
-        QtCore.QObject.disconnect(self._widget, QtCore.SIGNAL('lostFocus'),
-                                  self.update_object)
+        # TODO: lostFocus signal never connected ????
+        #QtCore.QObject.disconnect(self._widget, QtCore.SIGNAL('lostFocus'),
+        #                          self.update_object)
+
+        #TODO: next line gives error AttributeError: 'AdvancedCodeWidget' object has no attribute 'lostFocus'
+        #self._widget.lostFocus.disconnect(self.update_object)
+        
 
         super( SourceEditor, self ).dispose()
 
