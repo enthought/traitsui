@@ -18,7 +18,7 @@ key binding editor).
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 from traits.api \
     import Bool, Event
@@ -111,13 +111,13 @@ class KeyBindingEditor ( Editor ):
         key_name    = key_event_to_name( event )
         cur_binding = binding.owner.key_binding_for( binding, key_name )
         if cur_binding is not None:
-            if QtGui.QMessageBox.question(self.control,
+            if QtWidgets.QMessageBox.question(self.control,
                     "Duplicate Key Definition",
                     "'%s' has already been assigned to '%s'.\n"
                     "Do you wish to continue?" % (key_name,
                         cur_binding.description),
-                     QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
-                     QtGui.QMessageBox.No) != QtGui.QMessageBox.Yes:
+                     QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                     QtWidgets.QMessageBox.No) != QtWidgets.QMessageBox.Yes:
                 return
 
         self.value = key_name
@@ -135,7 +135,7 @@ class KeyBindingEditor ( Editor ):
 #  'KeyBindingCtrl' class:
 #-------------------------------------------------------------------------------
 
-class KeyBindingCtrl(QtGui.QLabel):
+class KeyBindingCtrl(QtWidgets.QLabel):
     """ PyQt control for editing key bindings.
     """
     #---------------------------------------------------------------------------
@@ -178,7 +178,7 @@ class KeyBindingCtrl(QtGui.QLabel):
     def paintEvent(self, event):
         """ Updates the screen.
         """
-        QtGui.QLabel.paintEvent(self, event)
+        QtWidgets.QLabel.paintEvent(self, event)
 
         w = self.width()
         h = self.height()

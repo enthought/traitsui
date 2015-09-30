@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 import collections
 
 from pyface.image_resource import ImageResource
@@ -112,16 +112,16 @@ class _ListStrEditor(Editor):
         # Create the list model and accompanying controls:
         self.model = ListStrModel(editor=self)
 
-        self.control = QtGui.QWidget()
-        layout = QtGui.QVBoxLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
         if factory.title or factory.title_name:
-            header_view = QtGui.QHeaderView(QtCore.Qt.Horizontal, self.control)
+            header_view = QtWidgets.QHeaderView(QtCore.Qt.Horizontal, self.control)
             header_view.setModel(self.model)
             header_view.setMaximumHeight(header_view.sizeHint().height())
-            header_view.setResizeMode(QtGui.QHeaderView.Stretch)
+            header_view.setResizeMode(QtWidgets.QHeaderView.Stretch)
             layout.addWidget(header_view)
 
         self.list_view = _ListView(self)
@@ -132,7 +132,7 @@ class _ListStrEditor(Editor):
             slot = self._on_rows_selection
         else:
             slot = self._on_row_selection
-        self.list_view.selectionModel().selectionChanged[QtGui.QItemSelection, QtGui.QItemSelection].connect(slot)
+        self.list_view.selectionModel().selectionChanged[QtCore.QItemSelection, QtCore.QItemSelection].connect(slot)
         self.list_view.activated[QtCore.QModelIndex].connect(self._on_activate)
 
         # Initialize the editor title:
@@ -285,7 +285,7 @@ class _ListStrEditor(Editor):
                 smodel.clearSelection()
             else:
                 mi = self.model.index(selected_index)
-                smodel.select(mi, QtGui.QItemSelectionModel.ClearAndSelect)
+                smodel.select(mi, QtCore.QItemSelectionModel.ClearAndSelect)
                 self.list_view.scrollTo(mi)
 
     def _multi_selected_changed(self, selected):
@@ -321,7 +321,7 @@ class _ListStrEditor(Editor):
             smodel.clearSelection()
             for selected_index in selected_indices:
                 smodel.select(self.model.index(selected_index),
-                              QtGui.QItemSelectionModel.Select)
+                              QtCore.QItemSelectionModel.Select)
             if selected_indices:
                 self.list_view.scrollTo(self.model.index(selected_indices[-1]))
 
@@ -332,10 +332,10 @@ class _ListStrEditor(Editor):
             smodel = self.list_view.selectionModel()
             for selected_index in event.removed:
                 smodel.select(self.model.index(selected_index),
-                              QtGui.QItemSelectionModel.Deselect)
+                              QtCore.QItemSelectionModel.Deselect)
             for selected_index in event.added:
                 smodel.select(self.model.index(selected_index),
-                              QtGui.QItemSelectionModel.Select)
+                              QtCore.QItemSelectionModel.Select)
 
     #-- List Control Event Handlers --------------------------------------------
 
@@ -412,7 +412,7 @@ class _ListStrEditor(Editor):
 #  Qt widgets that have been configured to behave as expected by Traits UI:
 #-------------------------------------------------------------------------------
 
-class _ItemDelegate(QtGui.QStyledItemDelegate):
+class _ItemDelegate(QtWidgets.QStyledItemDelegate):
     """ A QStyledItemDelegate which optionally draws horizontal gridlines.
         (QListView does not support gridlines).
     """
@@ -420,27 +420,27 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
     def __init__(self, editor, parent=None):
         """ Save the editor
         """
-        QtGui.QStyledItemDelegate.__init__(self, parent)
+        QtWidgets.QStyledItemDelegate.__init__(self, parent)
         self._editor = editor
 
     def paint(self, painter, option, index):
         """ Overrident to draw gridlines.
         """
-        QtGui.QStyledItemDelegate.paint(self, painter, option, index)
+        QtWidgets.QStyledItemDelegate.paint(self, painter, option, index)
         if self._editor.factory.horizontal_lines:
             painter.save()
             painter.setPen(option.palette.color(QtGui.QPalette.Dark))
             painter.drawLine(option.rect.bottomLeft(),option.rect.bottomRight())
             painter.restore()
 
-class _ListView(QtGui.QListView):
+class _ListView(QtWidgets.QListView):
     """ A QListView configured to behave as expected by TraitsUI.
     """
 
     def __init__(self, editor):
         """ Initialise the object.
         """
-        QtGui.QListView.__init__(self)
+        QtWidgets.QListView.__init__(self)
 
         self._editor = editor
         self.setItemDelegate(_ItemDelegate(editor, self))
@@ -449,15 +449,15 @@ class _ListView(QtGui.QListView):
 
         # Configure the selection behavior
         if factory.multi_select:
-            mode = QtGui.QAbstractItemView.ExtendedSelection
+            mode = QtWidgets.QAbstractItemView.ExtendedSelection
         else:
-            mode = QtGui.QAbstractItemView.SingleSelection
+            mode = QtWidgets.QAbstractItemView.SingleSelection
         self.setSelectionMode(mode)
 
         # Configure drag and drop behavior
         self.setDragEnabled(True)
         self.setDragDropOverwriteMode(True)
-        self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+        self.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
         self.setDropIndicatorShown(True)
 
         if editor.factory.menu is False :
@@ -479,7 +479,7 @@ class _ListView(QtGui.QListView):
         # Note that setting 'EditKeyPressed' as an edit trigger does not work on
         # most platforms, which is why we do this here.
         if (event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and
-            self.state() != QtGui.QAbstractItemView.EditingState and
+            self.state() != QtWidgets.QAbstractItemView.EditingState and
             factory.editable and 'edit' in factory.operations):
             if factory.multi_select:
                 indices = editor.multi_selected_indices
@@ -527,4 +527,4 @@ class _ListView(QtGui.QListView):
             self.setCurrentIndex(editor.model.index(row))
 
         else:
-            QtGui.QListView.keyPressEvent(self, event)
+            QtWidgets.QListView.keyPressEvent(self, event)

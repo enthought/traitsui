@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -52,7 +52,7 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
 
     # The top level QLayout for the editor:
-    root_layout = Instance(QtGui.QLayout)
+    root_layout = Instance(QtWidgets.QLayout)
 
     # Current set of enumeration names:
     names = Property
@@ -75,8 +75,8 @@ class SimpleEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QWidget()
-        self.root_layout = QtGui.QGridLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        self.root_layout = QtWidgets.QGridLayout(self.control)
         self.root_layout.setContentsMargins(0, 0, 0, 0)
 
         factory = self.factory
@@ -90,7 +90,7 @@ class SimpleEditor ( Editor ):
             factory.on_trait_change( self.update_editor, 'values_modified',
                                      dispatch = 'ui' )
 
-        blayout = QtGui.QVBoxLayout()
+        blayout = QtWidgets.QVBoxLayout()
 
         self._unused = self._create_listbox(0, self._on_unused, self._on_use,
                 factory.left_column_title)
@@ -165,7 +165,7 @@ class SimpleEditor ( Editor ):
         """Creates a list box.
         """
         # Add the column title in emphasized text:
-        title_widget = QtGui.QLabel(title)
+        title_widget = QtWidgets.QLabel(title)
         font = QtGui.QFont(title_widget.font())
         font.setBold(True)
         font.setPointSize(font.pointSize() + 1)
@@ -173,12 +173,12 @@ class SimpleEditor ( Editor ):
         self.root_layout.addWidget(title_widget, 0, col, QtCore.Qt.AlignLeft)
 
         # Create the list box and add it to the column:
-        list = QtGui.QListWidget()
-        list.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        list = QtWidgets.QListWidget()
+        list.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.root_layout.addWidget(list, 1, col)
 
-        list.itemClicked[QtGui.QListWidgetItem].connect(handler1)
-        list.itemDoubleClicked[QtGui.QListWidgetItem].connect(handler2)
+        list.itemClicked[QtWidgets.QListWidgetItem].connect(handler1)
+        list.itemDoubleClicked[QtWidgets.QListWidgetItem].connect(handler2)
 
         return list
 
@@ -189,7 +189,7 @@ class SimpleEditor ( Editor ):
     def _create_button(self, label, layout, handler):
         """ Creates a button.
         """
-        button = QtGui.QPushButton(label)
+        button = QtWidgets.QPushButton(label)
         button.clicked.connect(handler)
         layout.addWidget(button)
         return button

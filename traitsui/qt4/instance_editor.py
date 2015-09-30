@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtWidgets
 
 from traits.api \
     import HasTraits, Property
@@ -55,8 +55,8 @@ from helper \
 
 OrientationMap = {
     'default':    None,
-    'horizontal': QtGui.QBoxLayout.LeftToRight,
-    'vertical':   QtGui.QBoxLayout.TopToBottom
+    'horizontal': QtWidgets.QBoxLayout.LeftToRight,
+    'vertical':   QtWidgets.QBoxLayout.TopToBottom
 }
 
 #-------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ class CustomEditor ( Editor ):
     ok_color = DropColor
 
     # The orientation of the instance editor relative to the instance selector:
-    orientation = QtGui.QBoxLayout.TopToBottom
+    orientation = QtWidgets.QBoxLayout.TopToBottom
 
     # Class constant:
     extra = 0
@@ -105,7 +105,7 @@ class CustomEditor ( Editor ):
 
         # Create a panel to hold the object trait's view:
         if factory.editable:
-            self.control = self._panel = parent = QtGui.QWidget()
+            self.control = self._panel = parent = QtWidgets.QWidget()
 
         # Build the instance selector if needed:
         selectable = factory.selectable
@@ -121,7 +121,7 @@ class CustomEditor ( Editor ):
             if item is not None:
                 self._object_cache[ id( item ) ] = self.value
 
-            self._choice = QtGui.QComboBox()
+            self._choice = QtWidgets.QComboBox()
             self._choice.activated['QString'].connect(self.update_object)
 
             self.set_tooltip( self._choice )
@@ -140,7 +140,7 @@ class CustomEditor ( Editor ):
             self.rebuild_items()
 
         elif droppable:
-            self._choice = QtGui.QLineEdit()
+            self._choice = QtWidgets.QLineEdit()
             self._choice.setReadOnly(True)
             self.set_tooltip( self._choice )
 
@@ -152,26 +152,26 @@ class CustomEditor ( Editor ):
             orientation = self.orientation
 
         if (selectable or droppable) and factory.editable:
-            layout = QtGui.QBoxLayout(orientation, parent)
+            layout = QtWidgets.QBoxLayout(orientation, parent)
             layout.setContentsMargins(0, 0, 0, 0)
             layout.addWidget(self._choice)
 
-            if orientation == QtGui.QBoxLayout.TopToBottom:
-                hline = QtGui.QFrame()
-                hline.setFrameShape(QtGui.QFrame.HLine)
-                hline.setFrameShadow(QtGui.QFrame.Sunken)
+            if orientation == QtWidgets.QBoxLayout.TopToBottom:
+                hline = QtWidgets.QFrame()
+                hline.setFrameShape(QtWidgets.QFrame.HLine)
+                hline.setFrameShadow(QtWidgets.QFrame.Sunken)
 
                 layout.addWidget(hline)
 
             self.create_editor(parent, layout)
         elif self.control is None:
             if self._choice is None:
-                self._choice = QtGui.QComboBox()
+                self._choice = QtWidgets.QComboBox()
                 self._choice.activated['QString'].connect(self.update_object)
 
             self.control = self._choice
         else:
-            layout = QtGui.QBoxLayout(orientation, parent)
+            layout = QtWidgets.QBoxLayout(orientation, parent)
             layout.setContentsMargins(0, 0, 0, 0)
             self.create_editor(parent, layout)
 
@@ -188,7 +188,7 @@ class CustomEditor ( Editor ):
     def create_editor(self, parent, layout):
         """ Creates the editor control.
         """
-        self._panel = QtGui.QWidget()
+        self._panel = QtWidgets.QWidget()
         layout.addWidget(self._panel)
 
     #---------------------------------------------------------------------------
@@ -344,7 +344,7 @@ class CustomEditor ( Editor ):
             # Dispose of the previous contents of the panel:
             layout = panel.layout()
             if layout is None:
-                layout = QtGui.QVBoxLayout(panel)
+                layout = QtWidgets.QVBoxLayout(panel)
                 layout.setContentsMargins(0, 0, 0, 0)
             elif self._ui is not None:
                 self._ui.dispose()
@@ -363,7 +363,7 @@ class CustomEditor ( Editor ):
                 str_value = ''
                 if value is not None:
                     str_value = self.str_value
-                control = QtGui.QLabel(str_value)
+                control = QtWidgets.QLabel(str_value)
             else:
                 view    = self.view_for( value, self.item_for( value ) )
                 context = value.trait_context()
@@ -474,7 +474,7 @@ class SimpleEditor ( CustomEditor ):
     """
 
     # Class constants:
-    orientation = QtGui.QBoxLayout.LeftToRight
+    orientation = QtWidgets.QBoxLayout.LeftToRight
     extra       = 2
 
     #---------------------------------------------------------------------------
@@ -484,7 +484,7 @@ class SimpleEditor ( CustomEditor ):
     def create_editor(self, parent, layout):
         """ Creates the editor control (a button).
         """
-        self._button = QtGui.QPushButton()
+        self._button = QtWidgets.QPushButton()
         layout.addWidget(self._button)
         self._button.clicked.connect(self.edit_instance)
 

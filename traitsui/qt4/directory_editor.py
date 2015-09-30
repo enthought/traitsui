@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtGui
+from pyface.qt import QtWidgets
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -44,10 +44,10 @@ class SimpleEditor ( SimpleFileEditor ):
     def _create_file_dialog ( self ):
         """ Creates the correct type of file dialog.
         """
-        dlg = QtGui.QFileDialog(self.control)
+        dlg = QtWidgets.QFileDialog(self.control)
         dlg.selectFile(self._file_name.text())
-        dlg.setFileMode(QtGui.QFileDialog.Directory)
-        dlg.setOptions(QtGui.QFileDialog.ShowDirsOnly)
+        dlg.setFileMode(QtWidgets.QFileDialog.Directory)
+        dlg.setOptions(QtWidgets.QFileDialog.ShowDirsOnly)
 
         return dlg
 

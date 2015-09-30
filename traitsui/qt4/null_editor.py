@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtGui
+from pyface.qt import QtWidgets
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -49,7 +49,7 @@ class NullEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QWidget()
+        self.control = QtWidgets.QWidget()
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

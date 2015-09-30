@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -52,7 +52,7 @@ class SimpleEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QCheckBox()
+        self.control = QtWidgets.QCheckBox()
         self.control.stateChanged[int].connect(self.update_object)
         self.set_tooltip()
 
@@ -95,7 +95,7 @@ class ReadonlyEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QLineEdit()
+        self.control = QtWidgets.QLineEdit()
         self.control.setReadOnly(True)
 
         pal = QtGui.QPalette(self.control.palette())

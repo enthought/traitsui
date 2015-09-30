@@ -21,7 +21,7 @@ from __future__ import division
 
 import logging
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 
 from traits.api \
     import List, Unicode, TraitError
@@ -82,7 +82,7 @@ class SimpleEditor ( EditorWithList ):
     def create_control ( self, parent ):
         """ Creates the initial editor control.
         """
-        self.control = QtGui.QComboBox()
+        self.control = QtWidgets.QComboBox()
         self.control.activated['QString'].connect(self.update_object) # TODO: check
 
     #---------------------------------------------------------------------------
@@ -171,8 +171,8 @@ class CustomEditor ( SimpleEditor ):
     def create_control ( self, parent ):
         """ Creates the initial editor control.
         """
-        self.control = QtGui.QWidget()
-        layout = QtGui.QGridLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        layout = QtWidgets.QGridLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
@@ -208,7 +208,7 @@ class CustomEditor ( SimpleEditor ):
         for i in range( rows ):
             for j in range( cols ):
                 if n > 0:
-                    cb = QtGui.QCheckBox(labels[index])
+                    cb = QtWidgets.QCheckBox(labels[index])
                     cb.value = values[index]
 
                     if cb.value in cur_value:
@@ -252,7 +252,7 @@ class CustomEditor ( SimpleEditor ):
             editor.
         """
         new_values = parse_value( self.value )
-        for cb in self.control.findChildren(QtGui.QCheckBox, None):
+        for cb in self.control.findChildren(QtWidgets.QCheckBox, None):
             if cb.value in new_values:
                 cb.setCheckState(QtCore.Qt.Checked)
             else:

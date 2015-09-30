@@ -1,4 +1,4 @@
-from pyface.qt import QtGui, QtCore
+from pyface.qt import QtCore, QtWidgets
 
 from traits.api import Float, Any, Str, Trait
 from traitsui.editors.api import RangeEditor
@@ -37,11 +37,11 @@ class _BoundsEditor(Editor):
         self.sync_value( factory.low_name,  'low',  'both' )
         self.sync_value( factory.high_name, 'high', 'both' )
 
-        self.control = QtGui.QWidget()
-        panel = QtGui.QHBoxLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        panel = QtWidgets.QHBoxLayout(self.control)
         panel.setContentsMargins(0, 0, 0, 0)
 
-        self._label_lo = QtGui.QLineEdit(self.format % self.low)
+        self._label_lo = QtWidgets.QLineEdit(self.format % self.low)
         self._label_lo.editingFinished.connect(self.update_low_on_enter)
         panel.addWidget(self._label_lo)
 
@@ -62,7 +62,7 @@ class _BoundsEditor(Editor):
         slider.sliderMoved[int].connect(self.update_object_on_scroll)
         panel.addWidget(slider)
 
-        self._label_hi = QtGui.QLineEdit(self.format % self.high)
+        self._label_hi = QtWidgets.QLineEdit(self.format % self.high)
         self._label_hi.editingFinished.connect(self.update_high_on_enter)
         panel.addWidget(self._label_hi)
 

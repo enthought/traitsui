@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtGui, QtWidgets
 
 from traitsui.editors.font_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
@@ -98,7 +98,7 @@ class SimpleFontEditor ( BaseSimpleEditor ):
     def popup_editor(self):
         """ Invokes the pop-up editor for an object trait.
         """
-        fnt, ok = QtGui.QFontDialog.getFont(self.factory.to_qt4_font(self),
+        fnt, ok = QtWidgets.QFontDialog.getFont(self.factory.to_qt4_font(self),
                                             self.control)
 
         if ok:
@@ -146,24 +146,24 @@ class CustomFontEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QWidget()
-        layout = QtGui.QVBoxLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
 
         # Add the standard font control:
-        self._font = font = QtGui.QLineEdit(self.str_value)
+        self._font = font = QtWidgets.QLineEdit(self.str_value)
         font.editingFinished.connect(self.update_object)
         layout.addWidget(font)
 
         # Add all of the font choice controls:
-        layout2 = QtGui.QHBoxLayout()
+        layout2 = QtWidgets.QHBoxLayout()
 
-        self._facename = control = QtGui.QFontComboBox()
+        self._facename = control = QtWidgets.QFontComboBox()
         control.setEditable(False)
         control.currentFontChanged[QtGui.QFont].connect(self.update_object_parts)
         layout2.addWidget(control)
 
-        self._point_size = control = QtGui.QComboBox()
+        self._point_size = control = QtWidgets.QComboBox()
         control.addItems(PointSizes)
         control.currentIndexChanged[int].connect(self.update_object_parts)
         layout2.addWidget(control)

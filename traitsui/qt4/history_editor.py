@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtWidgets
 
 from editor import Editor
 
@@ -45,9 +45,9 @@ class _HistoryEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = control = QtGui.QComboBox()
+        self.control = control = QtWidgets.QComboBox()
         control.setEditable(True)
-        control.setInsertPolicy(QtGui.QComboBox.InsertAtTop)
+        control.setInsertPolicy(QtWidgets.QComboBox.InsertAtTop)
 
         if self.factory.entries > 0:
             control.model().rowsInserted.connect(self._truncate) #signal signature: QModelIndex&, int, int

@@ -13,13 +13,13 @@
 #-------------------------------------------------------------------------------
 
 # System library imports
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 # ETS imports
 from editor import Editor
 
 
-class SearchWidget(QtGui.QLineEdit):
+class SearchWidget(QtWidgets.QLineEdit):
 
     # FIXME: This widget needs a search button and a cancel button like the
     #        wxWidgets SearchControl.
@@ -37,7 +37,7 @@ class SearchWidget(QtGui.QLineEdit):
         If the text box contains the default description string, reset the text
         color and clear the box.
         """
-        palette = QtGui.QApplication.instance().palette()
+        palette = QtWidgets.QApplication.instance().palette()
         self.setPalette(palette)
 
         if self.text() == self._desc:
@@ -60,7 +60,7 @@ class SearchWidget(QtGui.QLineEdit):
     def _set_descriptive_text(self):
         """ Sets the greyed-out descriptive text.
         """
-        palette = QtGui.QApplication.instance().palette()
+        palette = QtWidgets.QApplication.instance().palette()
         palette.setColor(QtGui.QPalette.Text,
                          palette.color(QtGui.QPalette.Dark))
         self.setPalette(palette)
@@ -77,7 +77,7 @@ class SearchEditor(Editor):
         if QtCore.__version_info__ < (4, 7, 0):
             control = self.control = SearchWidget(self.factory.text)
         else:
-            control = self.control = QtGui.QLineEdit()
+            control = self.control = QtWidgets.QLineEdit()
             control.setPlaceholderText(self.factory.text)
 
         if self.factory.auto_set:

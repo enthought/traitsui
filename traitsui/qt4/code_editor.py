@@ -17,7 +17,7 @@ interface toolkit, useful for tools such as debuggers.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
 from traits.api import Str, Unicode, List, Int, Event, Bool, \
@@ -110,8 +110,8 @@ class SourceEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QWidget()
-        layout = QtGui.QVBoxLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._widget = control = AdvancedCodeWidget(None, lexer=self.factory.lexer)

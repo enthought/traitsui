@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 from traits.api \
     import Bool, Property
@@ -196,7 +196,7 @@ class SimpleEditor ( BaseEditor ):
                 control.editTextChanged['QString'].connect(self.update_text_object)
             else:
                 control.lineEdit().editingFinished.connect(self.update_autoset_text_object)
-            control.setInsertPolicy(QtGui.QComboBox.NoInsert)
+            control.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
 
         self._no_enum_update = 0
         self.set_tooltip()
@@ -208,10 +208,10 @@ class SimpleEditor ( BaseEditor ):
     def create_combo_box(self):
         """ Returns the QComboBox used for the editor control.
         """
-        control = QtGui.QComboBox()
-        control.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
-        control.setSizePolicy(QtGui.QSizePolicy.Maximum,
-                              QtGui.QSizePolicy.Fixed)
+        control = QtWidgets.QComboBox()
+        control.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        control.setSizePolicy(QtWidgets.QSizePolicy.Maximum,
+                              QtWidgets.QSizePolicy.Fixed)
         return control
 
     #---------------------------------------------------------------------------
@@ -221,9 +221,9 @@ class SimpleEditor ( BaseEditor ):
     def set_size_policy(self, direction, resizable, springy, stretch) :
         super(SimpleEditor, self).set_size_policy(direction, resizable, springy, stretch)
 
-        if ((direction == QtGui.QBoxLayout.LeftToRight and springy) or
-            (direction != QtGui.QBoxLayout.LeftToRight and resizable)) :
-            self.control.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContentsOnFirstShow)
+        if ((direction == QtWidgets.QBoxLayout.LeftToRight and springy) or
+            (direction != QtWidgets.QBoxLayout.LeftToRight and resizable)) :
+            self.control.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContentsOnFirstShow)
 
     #---------------------------------------------------------------------------
     #  Handles the user selecting a new value from the combo box:
@@ -351,8 +351,8 @@ class RadioEditor ( BaseEditor ):
         """
         super( RadioEditor, self ).init( parent )
 
-        self.control = QtGui.QWidget()
-        layout = QtGui.QGridLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        layout = QtWidgets.QGridLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
@@ -445,7 +445,7 @@ class RadioEditor ( BaseEditor ):
         """ Returns the QAbstractButton used for the radio button.
         """
         label = self.string_value(name, capitalize)
-        return QtGui.QRadioButton(label)
+        return QtWidgets.QRadioButton(label)
 
 #-------------------------------------------------------------------------------
 #  'ListEditor' class:
@@ -466,7 +466,7 @@ class ListEditor ( BaseEditor ):
         """
         super( ListEditor, self ).init( parent )
 
-        self.control = QtGui.QListWidget()
+        self.control = QtWidgets.QListWidget()
         self.control.currentTextChanged['QString'].connect(self.update_object)
 
         self.rebuild_editor()

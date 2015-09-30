@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 
 from traits.api \
     import TraitError
@@ -45,7 +45,7 @@ class SimpleEditor ( Editor ):
     """
 
     # Flag for window styles:
-    base_style = QtGui.QLineEdit
+    base_style = QtWidgets.QLineEdit
 
     # Background color when input is OK:
     ok_color = OKColor
@@ -72,9 +72,9 @@ class SimpleEditor ( Editor ):
         self.sync_value(factory.evaluate_name, 'evaluate', 'from')
 
         if not factory.multi_line or factory.is_grid_cell or factory.password:
-            wtype = QtGui.QLineEdit
+            wtype = QtWidgets.QLineEdit
 
-        multi_line = (wtype is not QtGui.QLineEdit)
+        multi_line = (wtype is not QtWidgets.QLineEdit)
         if multi_line:
             self.scrollable = True
 
@@ -84,10 +84,10 @@ class SimpleEditor ( Editor ):
             control.setReadOnly(True)
 
         if factory.password:
-            control.setEchoMode(QtGui.QLineEdit.Password)
+            control.setEchoMode(QtWidgets.QLineEdit.Password)
 
         if factory.auto_set and not factory.is_grid_cell:
-            if wtype == QtGui.QTextEdit:
+            if wtype == QtWidgets.QTextEdit:
                 control.textChanged.connect(self.update_object)
             else:
                 control.textEdited['QString'].connect(self.update_object)
@@ -101,7 +101,7 @@ class SimpleEditor ( Editor ):
         # default horizontal policy is Expand, set this to Minimum
         if not (self.item.resizable == True) and not self.item.springy:
             policy = self.control.sizePolicy()
-            policy.setHorizontalPolicy(QtGui.QSizePolicy.Minimum)
+            policy.setHorizontalPolicy(QtWidgets.QSizePolicy.Minimum)
             self.control.setSizePolicy(policy)
         self.set_error_state( False )
         self.set_tooltip()
@@ -210,7 +210,7 @@ class CustomEditor ( SimpleEditor ):
 
     # FIXME: The wx version exposes a wx constant.
     # Flag for window style. This value overrides the default.
-    base_style = QtGui.QTextEdit
+    base_style = QtWidgets.QTextEdit
 
 #-------------------------------------------------------------------------------
 #  'ReadonlyEditor' class:

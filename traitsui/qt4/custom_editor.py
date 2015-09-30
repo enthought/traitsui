@@ -17,7 +17,7 @@ based custom control.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtGui
+from pyface.qt import QtWidgets
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -48,7 +48,7 @@ class CustomEditor ( Editor ):
         if factory is not None:
             self.control = factory( *(( parent, self ) + self.factory.args ) )
         if self.control is None:
-            self.control = QtGui.QLabel(
+            self.control = QtWidgets.QLabel(
                 'An error occurred creating a custom editor.\n'
                 'Please contact the developer.')
             self.control.setStyleSheet("background-color: red; color: white")

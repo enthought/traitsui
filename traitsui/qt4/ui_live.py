@@ -14,7 +14,7 @@
 """
 
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtWidgets
 
 from traitsui.undo \
     import UndoHistory
@@ -107,7 +107,7 @@ class _LiveWindow(BaseDialog):
         ui.history = history
 
         if (not no_buttons) and (has_buttons or view.help):
-            bbox = QtGui.QDialogButtonBox()
+            bbox = QtWidgets.QDialogButtonBox()
 
             # Create the necessary special function buttons.
             if nr_buttons == 0:
@@ -127,7 +127,7 @@ class _LiveWindow(BaseDialog):
                 
                 if self.is_button(button, 'Undo'):
                     self.undo = self.add_button(button, bbox,
-                            QtGui.QDialogButtonBox.ActionRole, self._on_undo,
+                            QtWidgets.QDialogButtonBox.ActionRole, self._on_undo,
                             False, default=default)
                     history.on_trait_change(self._on_undoable, 'undoable',
                             dispatch='ui')
@@ -135,7 +135,7 @@ class _LiveWindow(BaseDialog):
                         self._on_undoable(True)
 
                     self.redo = self.add_button(button, bbox,
-                            QtGui.QDialogButtonBox.ActionRole, self._on_redo,
+                            QtWidgets.QDialogButtonBox.ActionRole, self._on_redo,
                             False, 'Redo')
                     history.on_trait_change(self._on_redoable, 'redoable',
                             dispatch='ui')
@@ -144,7 +144,7 @@ class _LiveWindow(BaseDialog):
 
                 elif self.is_button(button, 'Revert'):
                     self.revert = self.add_button(button, bbox,
-                            QtGui.QDialogButtonBox.ResetRole, self._on_revert,
+                            QtWidgets.QDialogButtonBox.ResetRole, self._on_revert,
                             False, default=default)
                     history.on_trait_change(self._on_revertable, 'undoable',
                             dispatch='ui')
@@ -153,23 +153,23 @@ class _LiveWindow(BaseDialog):
 
                 elif self.is_button(button, 'OK'):
                     self.ok = self.add_button(button, bbox,
-                            QtGui.QDialogButtonBox.AcceptRole,
+                            QtWidgets.QDialogButtonBox.AcceptRole,
                             self.control.accept, default=default)
                     ui.on_trait_change(self._on_error, 'errors', dispatch='ui')
 
                 elif self.is_button(button, 'Cancel'):
                     self.add_button(button, bbox,
-                            QtGui.QDialogButtonBox.RejectRole,
+                            QtWidgets.QDialogButtonBox.RejectRole,
                             self.control.reject, default=default)
 
                 elif self.is_button(button, 'Help'):
                     self.add_button(button, bbox,
-                            QtGui.QDialogButtonBox.HelpRole, self._on_help,
+                            QtWidgets.QDialogButtonBox.HelpRole, self._on_help,
                             default=default)
 
                 elif not self.is_button(button, ''):
                     self.add_button(button, bbox,
-                            QtGui.QDialogButtonBox.ActionRole, default=default)
+                            QtWidgets.QDialogButtonBox.ActionRole, default=default)
 
         else:
             bbox = None

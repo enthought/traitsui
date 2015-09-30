@@ -47,7 +47,7 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 
 import re
 
-from pyface.qt import QtGui
+from pyface.qt import QtWidgets
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -79,10 +79,10 @@ class MakeMenu:
         self.desc     = desc.split( '\n' )
         self.index    = 0
         if popup:
-            self.menu = menu = QtGui.QMenu()
+            self.menu = menu = QtWidgets.QMenu()
             self.parse( menu, -1 )
         else:
-            self.menu = menu = QtGui.QMenuBar()
+            self.menu = menu = QtWidgets.QMenuBar()
             self.parse( menu, -1 )
             window.setMenuBar( menu )
 
@@ -192,7 +192,7 @@ class MakeMenu:
                     setattr(self.owner, name, MakeMenuItem(self, act))
             else:
                 # Else must be the start of a sub menu:
-                submenu = QtGui.QMenu(line.strip())
+                submenu = QtWidgets.QMenu(line.strip())
 
                 # Recursively parse the sub-menu:
                 self.parse(submenu, indented)

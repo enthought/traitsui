@@ -18,7 +18,7 @@ from __future__ import division
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 from traitsui.editors.color_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
@@ -106,10 +106,10 @@ class SimpleColorEditor ( BaseSimpleEditor ):
         """ Invokes the pop-up editor for an object trait.
         """
         color = self.factory.to_qt4_color(self)
-        options = QtGui.QColorDialog.ShowAlphaChannel
+        options = QtWidgets.QColorDialog.ShowAlphaChannel
         if not self.factory.use_native_dialog:
-            options |= QtGui.QColorDialog.DontUseNativeDialog
-        color = QtGui.QColorDialog.getColor(
+            options |= QtWidgets.QColorDialog.DontUseNativeDialog
+        color = QtWidgets.QColorDialog.getColor(
             color,
             self.control,
             u'Select Color',
@@ -258,7 +258,7 @@ class ReadonlyColorEditor ( BaseReadonlyEditor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QLineEdit()
+        self.control = QtWidgets.QLineEdit()
         self.control.setReadOnly(True)
 
     #---------------------------------------------------------------------------
@@ -304,14 +304,14 @@ def set_color ( editor ):
 #  Creates a custom color editor panel for a specified editor:
 #----------------------------------------------------------------------------
 
-class FixedButton(QtGui.QPushButton):
+class FixedButton(QtWidgets.QPushButton):
     """ Override to work around a bug in Qt 4.7 on Macs.
 
     https://bugreports.qt-project.org/browse/QTBUG-15936
     """
 
     def hitButton(self, pos):
-        return QtGui.QAbstractButton.hitButton(self, pos)
+        return QtWidgets.QAbstractButton.hitButton(self, pos)
 
 
 def color_editor_for(editor, parent):
@@ -325,8 +325,8 @@ def color_editor_for(editor, parent):
                 for b in (0, 128, 255):
                     color_samples.append(QtGui.QColor(r, g, b))
 
-    root = QtGui.QWidget()
-    panel = QtGui.QHBoxLayout(root)
+    root = QtWidgets.QWidget()
+    panel = QtWidgets.QHBoxLayout(root)
     panel.setContentsMargins(0, 0, 0, 0)
 
     swatch_editor = editor.factory.simple_editor(editor.ui, editor.object,
@@ -335,7 +335,7 @@ def color_editor_for(editor, parent):
     panel.addWidget(swatch_editor.control)
 
     # Add all of the color choice buttons:
-    grid = QtGui.QGridLayout()
+    grid = QtWidgets.QGridLayout()
     grid.setSpacing(0)
 
     mapper = QtCore.QSignalMapper(panel)
