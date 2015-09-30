@@ -146,29 +146,26 @@ class TableEditor(Editor, BaseTableEditor):
 
         # Create the vertical header context menu and connect to its signals
         self.header_menu = QtGui.QMenu(self.table_view)
-        signal = QtCore.SIGNAL('triggered()')
         insertable = factory.row_factory is not None and not factory.auto_add
         if factory.editable:
             if insertable:
                 action = self.header_menu.addAction('Insert new item')
-                QtCore.QObject.connect(action, signal, self._on_context_insert)
+                action.triggered.connect(self._on_context_insert)
             if factory.deletable:
                 action = self.header_menu.addAction('Delete item')
-                QtCore.QObject.connect(action, signal, self._on_context_remove)
+                action.triggered.connect(self._on_context_remove)
         if factory.reorderable:
             if factory.editable and (insertable or factory.deletable):
                 self.header_menu.addSeparator()
             self.header_menu_up = self.header_menu.addAction('Move item up')
-            QtCore.QObject.connect(self.header_menu_up, signal,
-                                   self._on_context_move_up)
+            self.header_menu_up.triggered.connect(self._on_context_move_up)
             self.header_menu_down = self.header_menu.addAction('Move item down')
-            QtCore.QObject.connect(self.header_menu_down, signal,
-                                   self._on_context_move_down)
+            self.header_menu_down.triggered.connect(self._on_context_move_down)
 
         # Create the empty space context menu and connect its signals
         self.empty_menu = QtGui.QMenu(self.table_view)
         action = self.empty_menu.addAction('Add new item')
-        QtCore.QObject.connect(action, signal, self._on_context_append)
+        action.triggered.connect(self._on_context_append)
 
         # When sorting is enabled, the first column is initially displayed with
         # the triangle indicating it is the sort index, even though no sorting
@@ -180,9 +177,8 @@ class TableEditor(Editor, BaseTableEditor):
         # row/column/cell. Do this before creating the edit_view to make sure
         # that it has a valid item to use when constructing its view.
         smodel = self.table_view.selectionModel()
-        signal = QtCore.SIGNAL('selectionChanged(QItemSelection, QItemSelection)')
         mode_slot = getattr(self, '_on_%s_selection' % factory.selection_mode)
-        QtCore.QObject.connect(smodel, signal, mode_slot)
+        smodel.selectionChanged[QtGui.QItemSelection, QtGui.QItemSelection].connect(mode_slot)
         self.table_view.setCurrentIndex(self.model.index(0, 0))
 
         # Create the toolbar if necessary
@@ -239,10 +235,8 @@ class TableEditor(Editor, BaseTableEditor):
             self.control.setStretchFactor(1, 1)
 
         # Connect to the click and double click handlers
-        signal = QtCore.SIGNAL('clicked(QModelIndex)')
-        QtCore.QObject.connect(self.table_view, signal, self._on_click)
-        signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
-        QtCore.QObject.connect(self.table_view, signal, self._on_dclick)
+        self.table_view.clicked[QtCore.QModelIndex].connect(self._on_click)
+        self.table_view.doubleClicked[QtCore.QModelIndex].connect(self._on_dclick)
 
         # Make sure we listen for 'items' changes as well as complete list
         # replacements

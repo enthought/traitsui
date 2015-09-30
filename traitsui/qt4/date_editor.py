@@ -73,8 +73,7 @@ class SimpleEditor(Editor):
                                     self.factory.maximum_date.day)
             self.control.setMaximumDate(max_date)
 
-        signal = QtCore.SIGNAL('dateChanged(QDate)')
-        QtCore.QObject.connect(self.control, signal, self.update_object)
+        self.control.dateChanged[QtCore.QDate].connect(self.update_object)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -127,8 +126,7 @@ class CustomEditor(Editor):
         if not self.factory.allow_future:
             self.control.setMaximumDate(QtCore.QDate.currentDate())
 
-        signal = QtCore.SIGNAL('clicked(QDate)')
-        QtCore.QObject.connect(self.control, signal, self.update_object)
+        self.control.clicked[QtCore.QDate].connect(self.update_object)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

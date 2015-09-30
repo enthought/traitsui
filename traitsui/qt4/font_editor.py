@@ -152,8 +152,7 @@ class CustomFontEditor ( Editor ):
 
         # Add the standard font control:
         self._font = font = QtGui.QLineEdit(self.str_value)
-        QtCore.QObject.connect(font, QtCore.SIGNAL('editingFinished()'),
-                self.update_object)
+        font.editingFinished.connect(self.update_object)
         layout.addWidget(font)
 
         # Add all of the font choice controls:
@@ -161,16 +160,12 @@ class CustomFontEditor ( Editor ):
 
         self._facename = control = QtGui.QFontComboBox()
         control.setEditable(False)
-        QtCore.QObject.connect(control,
-                QtCore.SIGNAL('currentFontChanged(QFont)'),
-                self.update_object_parts)
+        control.currentFontChanged[QtGui.QFont].connect(self.update_object_parts)
         layout2.addWidget(control)
 
         self._point_size = control = QtGui.QComboBox()
         control.addItems(PointSizes)
-        QtCore.QObject.connect(control,
-                QtCore.SIGNAL('currentIndexChanged(int)'),
-                self.update_object_parts)
+        control.currentIndexChanged[int].connect(self.update_object_parts)
         layout2.addWidget(control)
 
         # These don't have explicit controls.

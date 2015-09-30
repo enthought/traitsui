@@ -188,20 +188,14 @@ class SimpleEditor ( BaseEditor ):
         self.control = control = self.create_combo_box()
         control.addItems(self.names)
 
-        QtCore.QObject.connect(control,
-                               QtCore.SIGNAL('currentIndexChanged(QString)'),
-                               self.update_object)
+        control.currentIndexChanged['QString'].connect(self.update_object)
 
         if self.factory.evaluate is not None:
             control.setEditable(True)
             if self.factory.auto_set:
-                QtCore.QObject.connect(control,
-                                       QtCore.SIGNAL('editTextChanged(QString)'),
-                                       self.update_text_object)
+                control.editTextChanged['QString'].connect(self.update_text_object)
             else:
-                QtCore.QObject.connect(control.lineEdit(),
-                                   QtCore.SIGNAL('editingFinished()'),
-                                   self.update_autoset_text_object)
+                control.lineEdit().editingFinished.connect(self.update_autoset_text_object)
             control.setInsertPolicy(QtGui.QComboBox.NoInsert)
 
         self._no_enum_update = 0
@@ -362,8 +356,7 @@ class RadioEditor ( BaseEditor ):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        QtCore.QObject.connect(self._mapper, QtCore.SIGNAL('mapped(int)'),
-                               self.update_object)
+        self._mapper.mapped[int].connect(self.update_object)
 
         self.rebuild_editor()
 
@@ -435,8 +428,7 @@ class RadioEditor ( BaseEditor ):
 
                     rb.setChecked(name == cur_name)
 
-                    QtCore.QObject.connect(rb, QtCore.SIGNAL('clicked()'),
-                                           self._mapper, QtCore.SLOT('map()'))
+                    rb.clicked.connect(self._mapper.map)
                     self._mapper.setMapping(rb, index)
 
                     self.set_tooltip(rb)
@@ -475,9 +467,7 @@ class ListEditor ( BaseEditor ):
         super( ListEditor, self ).init( parent )
 
         self.control = QtGui.QListWidget()
-        QtCore.QObject.connect(self.control,
-                QtCore.SIGNAL('currentTextChanged(QString)'),
-                self.update_object)
+        self.control.currentTextChanged['QString'].connect(self.update_object)
 
         self.rebuild_editor()
         self.set_tooltip()

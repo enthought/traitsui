@@ -88,17 +88,14 @@ class SimpleEditor ( Editor ):
 
         if factory.auto_set and not factory.is_grid_cell:
             if wtype == QtGui.QTextEdit:
-                QtCore.QObject.connect(control,
-                    QtCore.SIGNAL('textChanged()'), self.update_object)
+                control.textChanged.connect(self.update_object)
             else:
-                QtCore.QObject.connect(control,
-                    QtCore.SIGNAL('textEdited(QString)'), self.update_object)
+                control.textEdited['QString'].connect(self.update_object)
 
         else:
             # Assume enter_set is set, otherwise the value will never get
             # updated.
-            QtCore.QObject.connect(control, QtCore.SIGNAL('editingFinished()'),
-                    self.update_object)
+            control.editingFinished.connect(self.update_object)
 
         self.control = control
         # default horizontal policy is Expand, set this to Minimum

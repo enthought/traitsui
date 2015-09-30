@@ -232,7 +232,7 @@ class BasePanel(object):
                 method = editor.perform
 
         if method is not None:
-            button.connect(button, QtCore.SIGNAL('clicked()'), method)
+            button.clicked.connect(method)
 
         if action.tooltip != '':
             button.setToolTip(action.tooltip)
@@ -405,8 +405,7 @@ class BaseDialog(BasePanel):
         control.setModal(style == BaseDialog.MODAL)
         control.setWindowTitle(view.title or DefaultTitle)
 
-        QtCore.QObject.connect(control, QtCore.SIGNAL('finished(int)'),
-                self._on_finished)
+        control.finished[int].connect(self._on_finished)
 
     def add_contents(self, panel, buttons):
         """Add a panel (either a widget, layout or None) and optional buttons

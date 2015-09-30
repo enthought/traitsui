@@ -62,11 +62,10 @@ class SimpleEditor ( SimpleTextEditor ):
         layout.addWidget(control)
 
         if self.factory.auto_set:
-            signal = QtCore.SIGNAL('textEdited(QString)')
+            control.textEdited['QString'].connect(self.update_object)
         else:
             # Assume enter_set is set, or else the value will never get updated.
-            signal = QtCore.SIGNAL('editingFinished()')
-        QtCore.QObject.connect(control, signal, self.update_object)
+            control.editingFinished.connect(self.update_object)
 
         button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
         layout.addWidget(button)

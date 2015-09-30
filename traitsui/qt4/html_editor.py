@@ -63,8 +63,7 @@ class SimpleEditor ( Editor ):
         if self.factory.open_externally:
             page = self.control.page()
             page.setLinkDelegationPolicy( QtWebKit.QWebPage.DelegateAllLinks )
-            signal = QtCore.SIGNAL( 'linkClicked(QUrl)' )
-            QtCore.QObject.connect( page, signal, self._link_clicked )
+            page.linkClicked[QtCore.QUrl].connect(self._link_clicked) # TODO: untested (?)
 
         self.base_url = self.factory.base_url
         self.sync_value( self.factory.base_url_name, 'base_url', 'from' )

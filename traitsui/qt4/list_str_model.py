@@ -119,8 +119,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         """
         editor = self._editor
         editor.adapter.set_text(editor.object, editor.name, mi.row(), value)
-        signal = QtCore.SIGNAL('dataChanged(QModelIndex,QModelIndex)')
-        self.emit(signal, mi, mi)
+        self.dataChanged.emit(mi, mi)
         return True
 
     def setItemData(self, mi, roles):

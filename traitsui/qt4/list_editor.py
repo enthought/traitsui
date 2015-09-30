@@ -540,8 +540,7 @@ class NotebookEditor ( Editor ):
 
         # Create a tab widget to hold each separate object's view:
         self.control = QtGui.QTabWidget()
-        signal = QtCore.SIGNAL( 'currentChanged(int)' )
-        QtCore.QObject.connect( self.control, signal, self._tab_activated )
+        self.control.currentChanged[int].connect(self._tab_activated)
 
         # minimal dock_style handling
         if self.factory.dock_style == 'tab':
@@ -558,8 +557,7 @@ class NotebookEditor ( Editor ):
             button.setIcon ( ImageResource( 'closetab' ).create_icon() )
 
             self.control.setCornerWidget( button, QtCore.Qt.TopRightCorner )
-            signal = QtCore.SIGNAL( 'clicked()' )
-            QtCore.QObject.connect( button, signal, self.close_current )
+            button.clicked.connect(self.close_current)
             self.close_button = button
 
         if self.factory.show_notebook_menu:

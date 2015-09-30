@@ -48,8 +48,7 @@ class SimpleEditor(Editor):
         """
         self.control = QtGui.QTimeEdit()
 
-        signal = QtCore.SIGNAL('timeChanged(QTime)')
-        QtCore.QObject.connect(self.control, signal, self.update_object)
+        self.control.timeChanged[QtCore.QTime].connect(self.update_object)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

@@ -122,8 +122,7 @@ class CustomEditor ( Editor ):
                 self._object_cache[ id( item ) ] = self.value
 
             self._choice = QtGui.QComboBox()
-            QtCore.QObject.connect(self._choice,
-                    QtCore.SIGNAL('activated(QString)'), self.update_object)
+            self._choice.activated['QString'].connect(self.update_object)
 
             self.set_tooltip( self._choice )
 
@@ -168,9 +167,7 @@ class CustomEditor ( Editor ):
         elif self.control is None:
             if self._choice is None:
                 self._choice = QtGui.QComboBox()
-                QtCore.QObject.connect(self._choice,
-                        QtCore.SIGNAL('activated(QString)'),
-                        self.update_object)
+                self._choice.activated['QString'].connect(self.update_object)
 
             self.control = self._choice
         else:
@@ -489,8 +486,7 @@ class SimpleEditor ( CustomEditor ):
         """
         self._button = QtGui.QPushButton()
         layout.addWidget(self._button)
-        QtCore.QObject.connect(self._button, QtCore.SIGNAL('clicked()'),
-                self.edit_instance)
+        self._button.clicked.connect(self.edit_instance)
 
     #---------------------------------------------------------------------------
     #  Edit the contents of the object trait when the user clicks the button:
@@ -508,8 +504,7 @@ class SimpleEditor ( CustomEditor ):
         ui = self.value.edit_traits( view, kind=factory.kind, id=factory.id )
 
         # Make sure the editor is properly disposed
-        QtCore.QObject.connect( self._button, QtCore.SIGNAL( 'destroyed()' ),
-                                lambda: ui.dispose() )
+        self._button.destroyed.connect(lambda: ui.dispose() )
 
         # Check to see if the view was 'modal', in which case it will already
         # have been closed (i.e. is None) by the time we get control back:
