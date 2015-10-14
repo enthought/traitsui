@@ -6,8 +6,8 @@ import subprocess
 
 from setuptools import setup, find_packages
 
-MAJOR = 4
-MINOR = 6
+MAJOR = 5
+MINOR = 0
 MICRO = 0
 
 IS_RELEASED = False
@@ -121,8 +121,11 @@ if __name__ == "__main__":
             Operating System :: OS Independent
             Operating System :: POSIX
             Operating System :: Unix
-            Programming Language :: C
             Programming Language :: Python
+            Programming Language :: Python :: 2.6
+            Programming Language :: Python :: 2.7
+            Programming Language :: Python :: 3.4
+            Programming Language :: Python :: 3.5
             Topic :: Scientific/Engineering
             Topic :: Software Development
             Topic :: Software Development :: Libraries
