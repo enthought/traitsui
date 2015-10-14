@@ -113,7 +113,7 @@ application. The etsconfig package contains a singleton object, **ETSConfig**
 
 .. index:: ETSConfig.toolkit
 
-The values of **ETSConfig.toolkit** that are supported by TraitsUI version 3
+The values of **ETSConfig.toolkit** that are supported by TraitsUI version 4
 are:
 
 .. index:: wxPython toolkit, Qt toolkit, null toolkit
@@ -143,6 +143,8 @@ order of precedence:
 #. The user can specify a -toolkit flag on the command line of the program.
 #. The user can define a value for the ETS_TOOLKIT environment variable.
 
+.. warning:: The default order of toolkits will change in TraitsUI 5.0 to
+   prefer 'qt4' over 'wx'.
 
 .. _structure-of-this-guide:
 

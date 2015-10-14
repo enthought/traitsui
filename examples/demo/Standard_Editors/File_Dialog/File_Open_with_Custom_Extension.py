@@ -52,7 +52,7 @@ class LineCountInfo ( MFileDialogModel ):
             if getsize( self.file_name ) > 10000000:
                 return 'File too big...'
 
-            fh   = file( self.file_name, 'rb' )
+            fh   = file( self.file_name, 'rU' )
             data = fh.read()
             fh.close()
         except:
@@ -103,4 +103,3 @@ demo = FileDialogDemo()
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

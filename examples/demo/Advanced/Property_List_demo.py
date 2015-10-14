@@ -111,7 +111,7 @@ class PropertyListDemo ( HasPrivateTraits ):
                 choice( [ 'Thomas', 'Jones', 'Smith', 'Adams', 'Johnson' ] ) ),
             age    = randint( 21, 75 ),
             gender = choice( [ 'Male', 'Female' ] ) )
-            for i in xrange( randint( 10, 20 ) )
+            for i in range( randint( 10, 20 ) )
         ]
 
     #-- Default Value Implementations ------------------------------------------
@@ -141,4 +141,3 @@ demo.begin
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

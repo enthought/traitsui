@@ -280,7 +280,7 @@ class SimpleEditor ( SimpleTextEditor ):
                 file_name = splitext( file_name )[0]
 
             self.value = file_name
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
     def _get_value ( self ):

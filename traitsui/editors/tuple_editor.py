@@ -22,7 +22,7 @@
 
 from __future__ import absolute_import
 
-from traits.trait_base import SequenceTypes, enumerate
+from traits.trait_base import SequenceTypes
 
 from traits.api import Bool, HasTraits, List, Tuple, Unicode, Int, Any, TraitType
 

@@ -265,7 +265,7 @@ class Editor ( HasPrivateTraits ):
                             getattr( handler, '%s_setattr' % name, None ) or
                             getattr( handler, 'setattr' ))
                 method( self.ui.info, self.object, name, value )
-            except TraitError, excp:
+            except TraitError as excp:
                 self.error( excp )
                 raise
         finally:

@@ -30,7 +30,7 @@ from traits.api \
     import Str, Any, Instance, Property, Bool, cached_property
 
 from traits.trait_base \
-    import user_name_for, enumerate, xgetattr
+    import user_name_for, xgetattr
 
 from traitsui.ui_traits \
     import Image, convert_bitmap
