@@ -20,8 +20,7 @@ wxPython 2.6.  Thanks to Robin Dunn for providing these improvements.
 This release also introduces a DataFrameEditor which provides a tabular
 view of a Pandas DataFrame, similar to the existing ArrayViewEditor.
 
-This release also includes a number of bug fixes and minor improvements
-detailed below.
+There are also a number of bug fixes and minor improvements detailed below.
 
 Finally, this release changes the default GUI toolkit from Wx to Qt. This
 changes the behaviour of the library in the case where both WxPython and
