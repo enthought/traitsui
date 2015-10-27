@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -17,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.4.0',
+        VERSION:     '4.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,10 +28,14 @@
     <link rel="top" title="TraitsUI 4 User Manual" href="../index.html" />
     <link rel="up" title="TraitsUI 4 User Manual" href="index.html" />
     <link rel="next" title="Controlling the Interface: the Handler" href="handler.html" />
-    <link rel="prev" title="Customizing a View" href="custom_view.html" /> 
+    <link rel="prev" title="Customizing a View" href="custom_view.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,8 +47,8 @@
         <li class="right" >
           <a href="custom_view.html" title="Customizing a View"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
   
     <li><a href="#">Advanced View Concepts</a></li>
   
@@ -57,7 +59,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="advanced-view-concepts">
 <span id="index-0"></span><span id="id1"></span><h1>Advanced View Concepts<a class="headerlink" href="#advanced-view-concepts" title="Permalink to this headline">¶</a></h1>
@@ -70,7 +72,7 @@ the power and versatility of the View object.</p>
 one class can have multiple views. View attributes can be inherited by
 subclasses.</li>
 <li><em>External Views:</em> A view can be defined as a module variable, inline as a
-function or method argument, or as an attribute of a <a class="reference internal" href="glossary.html#term-handler"><em class="xref std std-term">Handler</em></a>.</li>
+function or method argument, or as an attribute of a <a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a>.</li>
 <li><em>Ways of displaying Views:</em> You can display a View by calling
 configure_traits() or edit_traits() on a HasTraits object, or by calling the
 ui() method on the View object.</li>
@@ -86,7 +88,7 @@ items defined elsewhere.</li>
 <p>In the examples thus far, the View objects have been external. That is to say,
 they have been defined outside the model (HasTraits object or objects) that they
 are used to display. This approach is in keeping with the separation of the two
-concepts prescribed by the <a class="reference internal" href="glossary.html#term-mvc"><em class="xref std std-term">MVC</em></a> design pattern.</p>
+concepts prescribed by the <a class="reference internal" href="glossary.html#term-mvc"><span class="xref std std-term">MVC</span></a> design pattern.</p>
 <p>There are cases in which it is useful to define a View within a HasTraits class.
 In particular, it can be useful to associate one or more Views with a particular
 type of object so that they can be incorporated into other parts of the
@@ -126,9 +128,9 @@ variation on Example 3:</p>
 <p>In this example, configure_traits() no longer requires a <em>view</em> keyword
 argument; the <strong>traits_view</strong> attribute is used by default, resulting in the
 same display as in Figure 3:</p>
-<div class="figure">
+<div class="figure" id="id21">
 <img alt="User interface showing three fields enclosed in a border" src="../_images/ui_for_ex3.jpg" />
-<p class="caption">Figure 5: User interface for Example 5</p>
+<p class="caption"><span class="caption-text">Figure 5: User interface for Example 5</span></p>
 </div>
 <p>It is not strictly necessary to call this View attribute <strong>traits_view</strong>. If
 exactly one View attribute is defined for a HasTraits class, that View is always
@@ -167,7 +169,7 @@ example above would be implemented as follows:</p>
 </div>
 <p>This pattern can be useful for situations where the layout of GUI elements
 depends on the state of the object. For instance, to populate the values of a
-<a class="reference internal" href="factories_basic.html#checklisteditor"><em>CheckListEditor()</em></a> with items read in from a file, it would be useful to build the
+<a class="reference internal" href="factories_basic.html#checklisteditor"><span>CheckListEditor()</span></a> with items read in from a file, it would be useful to build the
 default view this way.</p>
 </div>
 <div class="section" id="defining-multiple-views-within-the-model">
@@ -216,13 +218,14 @@ produces a window based on the default View (<strong>traits_view</strong>). In o
 the alternate View, use the same syntax as for an external view, except that the
 View name is specified in single quotes to indicate that it is associated with
 the object rather than being a module-level variable:</p>
-<div class="highlight-python"><pre>configure_traits(view='all_view').</pre>
+<div class="highlight-python"><div class="highlight"><pre>configure_traits(view=&#39;all_view&#39;).
+</pre></div>
 </div>
 <p>Note that if more than one View is defined for a model class, you must indicate
-which one is to be used as the default by naming it <tt class="docutils literal"><span class="pre">traits_view</span></tt>. Otherwise,
+which one is to be used as the default by naming it <code class="docutils literal"><span class="pre">traits_view</span></code>. Otherwise,
 TraitsUI gives preference to none of them, and instead tries to construct a
 default View, resulting in a simple alphabetized display as described in
-<a class="reference internal" href="view.html#the-view-and-its-building-blocks"><em>The View and Its Building Blocks</em></a>. For this reason, it is usually
+<a class="reference internal" href="view.html#the-view-and-its-building-blocks"><span>The View and Its Building Blocks</span></a>. For this reason, it is usually
 preferable to name a model&#8217;s default View traits_view even if there are no other
 Views; otherwise, simply defining additional Views, even if they are never
 used, can unexpectedly change the behavior of the GUI.</p>
@@ -232,30 +235,31 @@ used, can unexpectedly change the behavior of the GUI.</p>
 <span id="index-8"></span><span id="id5"></span><h2>Separating Model and View: External Views<a class="headerlink" href="#separating-model-and-view-external-views" title="Permalink to this headline">¶</a></h2>
 <p>In all the preceding examples in this guide, the concepts of model and view have
 remained closely coupled. In some cases the view has been defined in the model
-class, as in <a class="reference internal" href="#internal-views"><em>Internal Views</em></a>; in other cases the configure_traits() method
+class, as in <a class="reference internal" href="#internal-views"><span>Internal Views</span></a>; in other cases the configure_traits() method
 that produces a window from a View has been called from a HasTraits object.
 However, these strategies are simply conveniences; they are not an intrinsic
 part of the relationship between model and view in TraitsUI. This section
 begins to explore how the TraitsUI package truly supports the separation of
-model and view prescribed by the <a class="reference internal" href="glossary.html#term-mvc"><em class="xref std std-term">MVC</em></a> design pattern.</p>
+model and view prescribed by the <a class="reference internal" href="glossary.html#term-mvc"><span class="xref std std-term">MVC</span></a> design pattern.</p>
 <p>An <em>external</em> view is one that is defined outside the model classes. In Traits
 UI, you can define a named View wherever you can define a variable or class
 attribute. <a class="footnote-reference" href="#id17" id="id6">[7]</a> A View can even be defined in-line as a function or method
 argument, for example:</p>
-<div class="highlight-python"><pre>object.configure_traits(view=View(Group(Item(name='a'),
-                                        Item(name='b'),
-                                        Item(name='c')))</pre>
+<div class="highlight-python"><div class="highlight"><pre>object.configure_traits(view=View(Group(Item(name=&#39;a&#39;),
+                                        Item(name=&#39;b&#39;),
+                                        Item(name=&#39;c&#39;)))
+</pre></div>
 </div>
 <p>However, this approach is apt to obfuscate the code unless the View is very
 simple.</p>
-<p><a class="reference internal" href="view.html#example-2-using-configure-traits-with-a-view-object"><em>Example 2</em></a> through
-<a class="reference internal" href="custom_view.html#example-4-using-a-view-object-with-buttons"><em>Example 4</em></a> demonstrate
+<p><a class="reference internal" href="view.html#example-2-using-configure-traits-with-a-view-object"><span>Example 2</span></a> through
+<a class="reference internal" href="custom_view.html#example-4-using-a-view-object-with-buttons"><span>Example 4</span></a> demonstrate
 external Views defined as variables. One advantage of this convention is that
 the variable name provides an easily accessible &#8220;handle&#8221; for re-using the View.
 This technique does not, however, support visual inheritance.</p>
-<p>A powerful alternative is to define a View within the <a class="reference internal" href="glossary.html#term-controller"><em class="xref std std-term">controller</em></a>
+<p>A powerful alternative is to define a View within the <a class="reference internal" href="glossary.html#term-controller"><span class="xref std std-term">controller</span></a>
 (Handler) class that controls the window for that View. <a class="footnote-reference" href="#id18" id="id7">[8]</a> This technique is
-described in <a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><em>Controlling the Interface: the Handler</em></a>.</p>
+described in <a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span>Controlling the Interface: the Handler</span></a>.</p>
 </div>
 <div class="section" id="displaying-a-view">
 <span id="index-9"></span><span id="id8"></span><h2>Displaying a View<a class="headerlink" href="#displaying-a-view" title="Permalink to this headline">¶</a></h2>
@@ -271,7 +275,7 @@ object, i.e., it does not require an existing GUI to run in. It is therefore
 suitable for building command-line functions, as well as providing an accessible
 tool for the beginning TraitsUI programmer.</p>
 <p>The configure_traits() method also provides options for saving
-<a class="reference internal" href="glossary.html#term-trait-attribute"><em class="xref std std-term">trait attribute</em></a> values to and restoring them from a file. Refer to the
+<a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a> values to and restoring them from a file. Refer to the
 <em>Traits API Reference</em> for details.</p>
 </div>
 <div class="section" id="edit-traits">
@@ -303,14 +307,14 @@ explains why.</p>
 <p>The fifth argument, <em>view_elements</em>, is used only in the context of a call to
 ui() from a model object method, i.e., from configure_traits() or edit_traits(),
 Therefore it is irrelevant in the rare cases when ui() is used directly by
-client code. It contains a dictionary of the named <a class="reference internal" href="glossary.html#term-viewelement"><em class="xref std std-term">ViewElement</em></a> objects
+client code. It contains a dictionary of the named <a class="reference internal" href="glossary.html#term-viewelement"><span class="xref std std-term">ViewElement</span></a> objects
 defined for the object whose configure_traits() (or edit_traits()) method was
 called..</p>
 </div>
 </div>
 <div class="section" id="the-view-context">
 <span id="index-13"></span><span id="id13"></span><h2>The View Context<a class="headerlink" href="#the-view-context" title="Permalink to this headline">¶</a></h2>
-<p>All three of the methods described in <a class="reference internal" href="#displaying-a-view"><em>Displaying a View</em></a> have a <em>context</em>
+<p>All three of the methods described in <a class="reference internal" href="#displaying-a-view"><span>Displaying a View</span></a> have a <em>context</em>
 parameter. This parameter can be a single object or a dictionary of
 string/object pairs; the object or objects are the model objects whose traits
 attributes are to be edited. In general a &#8220;context&#8221; is a Python dictionary whose
@@ -386,9 +390,9 @@ example shows:</p>
 </pre></div>
 </div>
 <p>The resulting window has the desired appearance: <a class="footnote-reference" href="#id20" id="id15">[10]</a></p>
-<div class="figure">
+<div class="figure" id="id22">
 <img alt="UI showing side-by-side groups." src="../_images/ui_for_ex7.jpg" />
-<p class="caption">Figure 6: User interface for Example 7</p>
+<p class="caption"><span class="caption-text">Figure 6: User interface for Example 7</span></p>
 </div>
 <p>For the purposes of this particular example, it makes sense to create a separate
 Group for each model object, and to use two model objects of the same class.
@@ -406,7 +410,7 @@ For example:</p>
 viewed. (Note that <cite>&#8220;object&#8221;</cite> is <strong>not</strong> some user-defined attribute name like
 <cite>&#8220;axle&#8221;</cite> in this example.) More precisely, <cite>&#8220;object&#8221;</cite> is the default name, in
 the view&#8217;s <cite>context</cite> dictionary, of this top-level viewed object
-(see <a class="reference internal" href="#advanced-view-concepts"><em>Advanced View Concepts</em></a>).</p>
+(see <a class="reference internal" href="#advanced-view-concepts"><span>Advanced View Concepts</span></a>).</p>
 <p>Because an Item can refer only to a single trait, do not use extended trait
 references that refer to multiple traits, since the behavior of such references
 is not defined. Also, avoid extended trait references where one of the
@@ -427,22 +431,23 @@ considered unsupported pending redesign.</p>
 that is specified outside the Group or View in which it appears. For example,
 the following two definitions, taken together, are equivalent to the third:</p>
 <p class="rubric" id="example-8-using-an-include-object"><span id="index-19"></span>Example 8: Using an Include object</p>
-<div class="highlight-python"><pre># This fragment...
-my_view = View(Group(Item('a'),
-                     Item('b')),
-               Include('my_group'))
+<div class="highlight-python"><div class="highlight"><pre># This fragment...
+my_view = View(Group(Item(&#39;a&#39;),
+                     Item(&#39;b&#39;)),
+               Include(&#39;my_group&#39;))
 
 # ...plus this fragment...
-my_group = Group(Item('c'),
-                 Item('d'),
-                 Item('e'))
+my_group = Group(Item(&#39;c&#39;),
+                 Item(&#39;d&#39;),
+                 Item(&#39;e&#39;))
 
 #...are equivalent to this:
-my_view = View(Group(Item('a'),
-                     Item('b')),
-               Group(Item('c'),
-                     Item('d'),
-                     Item('e'))</pre>
+my_view = View(Group(Item(&#39;a&#39;),
+                     Item(&#39;b&#39;)),
+               Group(Item(&#39;c&#39;),
+                     Item(&#39;d&#39;),
+                     Item(&#39;e&#39;))
+</pre></div>
 </div>
 <p>This opens an interesting possibility when a View is part of a model class: any
 Include objects belonging to that View can be defined differently for different
@@ -470,7 +475,7 @@ Handler.</td></tr>
 <tr><td class="label"><a class="fn-backref" href="#id12">[9]</a></td><td>One possible exception is the case where a View object is defined as a
 variable (i.e., outside any class) or within a custom Handler, and is
 associated more or less equally with multiple model objects; see
-<a class="reference internal" href="#multi-object-views"><em>Multi-Object Views</em></a>.</td></tr>
+<a class="reference internal" href="#multi-object-views"><span>Multi-Object Views</span></a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id20" rules="none">
@@ -478,7 +483,7 @@ associated more or less equally with multiple model objects; see
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id15">[10]</a></td><td>If the script were designed to run within an existing GUI, it would make
 sense to replace the last line with
-<tt class="docutils literal"><span class="pre">comp_view.ui(context={'h1':</span> <span class="pre">house1,</span> <span class="pre">'h2':</span> <span class="pre">house2})</span></tt>, since neither object
+<code class="docutils literal"><span class="pre">comp_view.ui(context={'h1':</span> <span class="pre">house1,</span> <span class="pre">'h2':</span> <span class="pre">house2})</span></code>, since neither object
 particularly dominates the view. However, the examples in this Manual are
 designed to be fully executable from the Python command line, which is why
 configure_traits() was used instead.</td></tr>
@@ -491,7 +496,7 @@ configure_traits() was used instead.</td></tr>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/e-logo-rev.png" alt="Logo"/>
@@ -526,12 +531,14 @@ configure_traits() was used instead.</td></tr>
   <h4>Next topic</h4>
   <p class="topless"><a href="handler.html"
                         title="next chapter">Controlling the Interface: the Handler</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/traitsui_user_manual/advanced_view.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/traitsui_user_manual/advanced_view.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -548,30 +555,20 @@ configure_traits() was used instead.</td></tr>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="handler.html" title="Controlling the Interface: the Handler"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="custom_view.html" title="Customizing a View"
-             >previous</a> |</li>
-        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
-          <li><a href="index.html" >TraitsUI 4 User Manual</a> &raquo;</li>
-  
-    <li><a href="#">Advanced View Concepts</a></li>
-  
-
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2008-2013, Enthought.
-      Last updated on Oct 25, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      &copy;2008-2015, Enthought.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+      |
+      <a href="../_sources/traitsui_user_manual/advanced_view.txt"
+          rel="nofollow">Page source</a></li>
     </div>
+
+    
+
+    
   </body>
 </html>

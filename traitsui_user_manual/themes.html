@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -17,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.4.0',
+        VERSION:     '4.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,10 +28,14 @@
     <link rel="top" title="TraitsUI 4 User Manual" href="../index.html" />
     <link rel="up" title="TraitsUI 4 User Manual" href="index.html" />
     <link rel="next" title="Introduction to Trait Editor Factories" href="factory_intro.html" />
-    <link rel="prev" title="Controlling the Interface: the Handler" href="handler.html" /> 
+    <link rel="prev" title="Controlling the Interface: the Handler" href="handler.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,8 +47,8 @@
         <li class="right" >
           <a href="handler.html" title="Controlling the Interface: the Handler"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
   
     <li><a href="#">TraitsUI Themes</a></li>
   
@@ -57,26 +59,26 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="traitsui-themes">
 <span id="traits-ui-themes"></span><h1>TraitsUI Themes<a class="headerlink" href="#traitsui-themes" title="Permalink to this headline">¶</a></h1>
 <p>Beginning in Traits 3.0, TraitsUI supports using <em>themes</em> to customize the
 appearance of user interfaces, by applying graphical elements extracted from
 simple images. For example, Figure 8 shows an unthemed Traits user interface.</p>
-<div class="figure">
+<div class="figure" id="id5">
 <img alt="Dialog box with standard widgets" src="../_images/unthemed_ui.jpg" />
-<p class="caption">Figure 8: Unthemed Traits user interface</p>
+<p class="caption"><span class="caption-text">Figure 8: Unthemed Traits user interface</span></p>
 </div>
 <p>Figure 9 shows the same user interface with a theme applied to it.</p>
-<div class="figure">
+<div class="figure" id="id6">
 <img alt="Dialog box with blue labels and an orange-outlined heading" src="../_images/themed_ui1.jpg" />
-<p class="caption">Figure 9: Themed Traits user interface</p>
+<p class="caption"><span class="caption-text">Figure 9: Themed Traits user interface</span></p>
 </div>
 <p>Figure 10 shows the same user interface with a different theme applied.</p>
-<div class="figure">
+<div class="figure" id="id7">
 <img alt="Dialog box with tan background and raised widgets and labels" src="../_images/themed_ui2.jpg" />
-<p class="caption">Figure 10: Theme Traits user interface with alternate theme</p>
+<p class="caption"><span class="caption-text">Figure 10: Theme Traits user interface with alternate theme</span></p>
 </div>
 <div class="section" id="theme-data">
 <h2>Theme Data<a class="headerlink" href="#theme-data" title="Permalink to this headline">¶</a></h2>
@@ -84,9 +86,9 @@ simple images. For example, Figure 8 shows an unthemed Traits user interface.</p
 few examples of which are shown in Figure 11:</p>
 <img alt="Gray square with rounded, gray, shaded border" src="../_images/theme_image1.png" />
 <img alt="Yellow square with sharp-cornered, orange, raised border" src="../_images/theme_image2.png" />
-<div class="figure">
+<div class="figure" id="id8">
 <img alt="Green square, raised, with no border" src="../_images/theme_image3.png" />
-<p class="caption">Figure 11: Theme images</p>
+<p class="caption"><span class="caption-text">Figure 11: Theme images</span></p>
 </div>
 <p>Any type of JPEG or Portable Network Graphics (PNG) file is supported. In
 particular, PNG files with alpha information allow smooth compositing of
@@ -98,9 +100,9 @@ gray, but transparent, with a thin alpha gradient shadow around its edges.</p>
 <h2>Themeable TraitsUI Elements<a class="headerlink" href="#themeable-traitsui-elements" title="Permalink to this headline">¶</a></h2>
 <p>Theme information can be applied to the following classes of TraitsUI objects:</p>
 <ul class="simple">
-<li><a class="reference internal" href="glossary.html#term-group"><em class="xref std std-term">Group</em></a></li>
-<li><a class="reference internal" href="glossary.html#term-item"><em class="xref std std-term">Item</em></a></li>
-<li><a class="reference internal" href="glossary.html#term-29"><em class="xref std std-term">View</em></a></li>
+<li><a class="reference internal" href="glossary.html#term-group"><span class="xref std std-term">Group</span></a></li>
+<li><a class="reference internal" href="glossary.html#term-item"><span class="xref std std-term">Item</span></a></li>
+<li><a class="reference internal" href="glossary.html#term-29"><span class="xref std std-term">View</span></a></li>
 </ul>
 <p>All of these classes have <strong>item_theme</strong> and <strong>label_theme</strong> attributes, which
 specify the themes for an editor and its label, respectively; the Group class
@@ -109,7 +111,7 @@ itself. These attributes are defined to be Theme traits, which accept values
 which are either PyFace ImageResource objects, or strings that specify an image
 file to use. In the case of string values, no path information need be included.
 The path to the image file is assumed to be the images subdirectory or
-<tt class="file docutils literal"><span class="pre">images.zip</span></tt> file located in the same directory as the source file
+<code class="file docutils literal"><span class="pre">images.zip</span></code> file located in the same directory as the source file
 containing the string. <a class="footnote-reference" href="#id3" id="id1">[13]</a> However, if the string begins with an &#8216;&#64;&#8217;
 (at-sign), the string is assumed to be a reference to an image in the default
 image library provided with PyFace. <a class="footnote-reference" href="#id4" id="id2">[14]</a></p>
@@ -252,7 +254,7 @@ object. (Label is a subclass of Item.)</li>
 <li>The item for weight (line 20) uses a ThemedTextEditor factory; this isn&#8217;t
 strictly necessary, but illustrates the use of a themed editor factory. For
 more information on themed editor factories, refer to
-<a class="reference internal" href="factories_advanced_extra.html#extra-trait-editor-factories"><em>&#8220;Extra&#8221; Trait Editor Factories</em></a>, and to the <em>Traits API Reference</em>.</li>
+<a class="reference internal" href="factories_advanced_extra.html#extra-trait-editor-factories"><span>&#8220;Extra&#8221; Trait Editor Factories</span></a>, and to the <em>Traits API Reference</em>.</li>
 <li>The example contains an extra Group level (line 16), and shows the results of
 two nested <strong>group_theme</strong> values (&#8216;&#64;G&#8217; and <a class="reference external" href="mailto:'&#37;&#52;&#48;GD0">'<span>&#64;</span>GD0</a>&#8216;). The outermost
 <strong>group_theme</strong> value (&#8216;&#64;G&#8217;) specifies the gray background, while the
@@ -286,7 +288,7 @@ the subject of this document.)</td></tr>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/e-logo-rev.png" alt="Logo"/>
@@ -307,12 +309,14 @@ the subject of this document.)</td></tr>
   <h4>Next topic</h4>
   <p class="topless"><a href="factory_intro.html"
                         title="next chapter">Introduction to Trait Editor Factories</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/traitsui_user_manual/themes.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/traitsui_user_manual/themes.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -329,30 +333,20 @@ the subject of this document.)</td></tr>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="factory_intro.html" title="Introduction to Trait Editor Factories"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="handler.html" title="Controlling the Interface: the Handler"
-             >previous</a> |</li>
-        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
-          <li><a href="index.html" >TraitsUI 4 User Manual</a> &raquo;</li>
-  
-    <li><a href="#">TraitsUI Themes</a></li>
-  
-
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2008-2013, Enthought.
-      Last updated on Oct 25, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      &copy;2008-2015, Enthought.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+      |
+      <a href="../_sources/traitsui_user_manual/themes.txt"
+          rel="nofollow">Page source</a></li>
     </div>
+
+    
+
+    
   </body>
 </html>
