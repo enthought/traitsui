@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -17,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.4.0',
+        VERSION:     '4.5.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,10 +28,14 @@
     <link rel="top" title="TraitsUI 4 User Manual" href="../index.html" />
     <link rel="up" title="TraitsUI 4 User Manual" href="index.html" />
     <link rel="next" title="Customizing a View" href="custom_view.html" />
-    <link rel="prev" title="Introduction" href="intro.html" /> 
+    <link rel="prev" title="Introduction" href="intro.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,8 +47,8 @@
         <li class="right" >
           <a href="intro.html" title="Introduction"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
   
     <li><a href="#">The View and Its Building Blocks</a></li>
   
@@ -57,14 +59,14 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="the-view-and-its-building-blocks">
 <span id="id1"></span><h1>The View and Its Building Blocks<a class="headerlink" href="#the-view-and-its-building-blocks" title="Permalink to this headline">¶</a></h1>
 <p>A simple way to edit (or simply observe) the attribute values of a
-<a class="reference internal" href="glossary.html#term-hastraits"><em class="xref std std-term">HasTraits</em></a> object in a GUI window is to call the object&#8217;s
+<a class="reference internal" href="glossary.html#term-hastraits"><span class="xref std std-term">HasTraits</span></a> object in a GUI window is to call the object&#8217;s
 configure_traits() <a class="footnote-reference" href="#id13" id="id2">[3]</a> method. This method constructs and displays a window
-containing editable fields for each of the object&#8217;s <a class="reference internal" href="glossary.html#term-trait-attribute"><em class="xref std std-term">trait attribute</em></a>s.
+containing editable fields for each of the object&#8217;s <a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a>s.
 For example, the following sample code <a class="footnote-reference" href="#id14" id="id3">[4]</a> defines the SimpleEmployee class,
 creates an object of that class, and constructs and displays a GUI for the
 object:</p>
@@ -89,9 +91,9 @@ object:</p>
 <p>Unfortunately, the resulting form simply displays the attributes of the object
 <strong>sam</strong> in alphabetical order with little formatting, which is seldom what is
 wanted:</p>
-<div class="figure">
+<div class="figure" id="id16">
 <img alt="Dialog box showing all attributes of SimpleEmployee in alphabetical order" src="../_images/ui_for_ex1.jpg" />
-<p class="caption">Figure 1: User interface for Example 1</p>
+<p class="caption"><span class="caption-text">Figure 1: User interface for Example 1</span></p>
 </div>
 <div class="section" id="the-view-object">
 <span id="index-1"></span><span id="id4"></span><h2>The View Object<a class="headerlink" href="#the-view-object" title="Permalink to this headline">¶</a></h2>
@@ -128,18 +130,18 @@ View object and passing it to the configure_traits() method:</p>
 </pre></div>
 </div>
 <p>The resulting window has the desired appearance:</p>
-<div class="figure">
+<div class="figure" id="id17">
 <img alt="User interface showing only First name, Last name, and Department" src="../_images/ui_for_ex2.jpg" />
-<p class="caption">Figure 2: User interface for Example 2</p>
+<p class="caption"><span class="caption-text">Figure 2: User interface for Example 2</span></p>
 </div>
 <p>A View object can have a variety of attributes, which are set in the View
 definition, following any Group or Item objects.</p>
-<p>The sections on <a class="reference internal" href="#contents-of-a-view"><em>Contents of a View</em></a> through <a class="reference internal" href="advanced_view.html#advanced-view-concepts"><em>Advanced View Concepts</em></a>
+<p>The sections on <a class="reference internal" href="#contents-of-a-view"><span>Contents of a View</span></a> through <a class="reference internal" href="advanced_view.html#advanced-view-concepts"><span>Advanced View Concepts</span></a>
 explore the contents and capabilities of Views. Refer to
 the <em>Traits API Reference</em> for details of the View class.</p>
 <p>Except as noted, all example code uses the configure_traits() method; a detailed
 description of this and other techniques for creating GUI displays from Views
-can be found in <a class="reference internal" href="advanced_view.html#displaying-a-view"><em>Displaying a View</em></a>.</p>
+can be found in <a class="reference internal" href="advanced_view.html#displaying-a-view"><span>Displaying a View</span></a>.</p>
 </div>
 <div class="section" id="contents-of-a-view">
 <span id="index-3"></span><span id="id5"></span><h2>Contents of a View<a class="headerlink" href="#contents-of-a-view" title="Permalink to this headline">¶</a></h2>
@@ -152,8 +154,8 @@ arguments to the View constructor, as in the case of the three Items in Example
 <p>The remainder of this chapter describes the Item and Group classes.</p>
 <div class="section" id="the-item-object">
 <span id="index-4"></span><span id="id6"></span><h3>The Item Object<a class="headerlink" href="#the-item-object" title="Permalink to this headline">¶</a></h3>
-<p>The simplest building block of a View is the <a class="reference internal" href="glossary.html#term-item"><em class="xref std std-term">Item</em></a> object. An Item
-specifies a single interface <a class="reference internal" href="glossary.html#term-widget"><em class="xref std std-term">widget</em></a>, usually the display for a single
+<p>The simplest building block of a View is the <a class="reference internal" href="glossary.html#term-item"><span class="xref std std-term">Item</span></a> object. An Item
+specifies a single interface <a class="reference internal" href="glossary.html#term-widget"><span class="xref std std-term">widget</span></a>, usually the display for a single
 trait attribute of a HasTraits object. The content, appearance, and behavior of
 the widget are controlled by means of the Item object&#8217;s attributes, which are
 usually specified as keyword arguments to the Item constructor, as in the case
@@ -247,9 +249,9 @@ override</td>
 <td>These attributes override the widget that is
 automatically selected by TraitsUI. These
 options are discussed in
-<a class="reference internal" href="factory_intro.html#introduction-to-trait-editor-factories"><em>Introduction to Trait Editor Factories</em></a>
+<a class="reference internal" href="factory_intro.html#introduction-to-trait-editor-factories"><span>Introduction to Trait Editor Factories</span></a>
 and
-<a class="reference internal" href="factories_basic.html#the-predefined-trait-editor-factories"><em>The Predefined Trait Editor Factories</em></a>.</td>
+<a class="reference internal" href="factories_basic.html#the-predefined-trait-editor-factories"><span>The Predefined Trait Editor Factories</span></a>.</td>
 </tr>
 <tr class="row-even"><td>Visibility
 and status</td>
@@ -265,8 +267,8 @@ of a dynamic GUI, which alters the display
 in response to changes in the data it
 contains. More sophisticated dynamic behavior
 can be implemented using a custom
-<a class="reference internal" href="glossary.html#term-handler"><em class="xref std std-term">Handler</em></a> see
-<a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><em>Controlling the Interface: the Handler</em></a>
+<a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a> see
+<a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span>Controlling the Interface: the Handler</span></a>
 ).</td>
 </tr>
 <tr class="row-odd"><td>User help</td>
@@ -318,7 +320,7 @@ more sophisticated interfaces, though, it is often desirable to treat a group of
 data elements as a unit for reasons that might be visual (e.g., placing the
 widgets within a labeled border) or logical (activating or deactivating the
 widgets in response to a single condition, defining group-level help text). In
-TraitsUI, such grouping is accomplished by means of the <a class="reference internal" href="glossary.html#term-group"><em class="xref std std-term">Group</em></a> object.</p>
+TraitsUI, such grouping is accomplished by means of the <a class="reference internal" href="glossary.html#term-group"><span class="xref std std-term">Group</span></a> object.</p>
 <p>Consider the following enhancement to Example 2:</p>
 <blockquote>
 <div>pair: configure_traits(); examples
@@ -350,9 +352,9 @@ triple: View; Group; examples</div></blockquote>
 </div>
 <p>The resulting window shows the same widgets as before, but they are now enclosed
 in a visible border with a text label:</p>
-<div class="figure">
+<div class="figure" id="id18">
 <img alt="User interface showing three fields enclosed in a border" src="../_images/ui_for_ex3.jpg" />
-<p class="caption">Figure 3: User interface for Example 3</p>
+<p class="caption"><span class="caption-text">Figure 3: User interface for Example 3</span></p>
 </div>
 <div class="section" id="content-of-a-group">
 <span id="id9"></span><h4>Content of a Group<a class="headerlink" href="#content-of-a-group" title="Permalink to this headline">¶</a></h4>
@@ -497,60 +499,60 @@ API Reference</em> for details.</p>
 <tr class="row-even"><td>HGroup</td>
 <td>A group whose items are laid
 out horizontally.</td>
-<td><tt class="samp docutils literal"><span class="pre">Group(orientation='horizontal')</span></tt></td>
+<td><code class="samp docutils literal"><span class="pre">Group(orientation='horizontal')</span></code></td>
 </tr>
 <tr class="row-odd"><td>HFlow</td>
 <td>A horizontal group whose items
 &#8220;wrap&#8221; when they exceed the
 available horizontal space.</td>
-<td><tt class="samp docutils literal"><span class="pre">Group(orientation='horizontal',</span>
-<span class="pre">layout='flow',</span> <span class="pre">show_labels=False)</span></tt></td>
+<td><code class="samp docutils literal"><span class="pre">Group(orientation='horizontal',</span>
+<span class="pre">layout='flow',</span> <span class="pre">show_labels=False)</span></code></td>
 </tr>
 <tr class="row-even"><td>HSplit</td>
 <td>A horizontal group with
 splitter bars to separate it
 from other groups.</td>
-<td><tt class="samp docutils literal"><span class="pre">Group(orientation='horizontal',</span>
-<span class="pre">layout='split')</span></tt></td>
+<td><code class="samp docutils literal"><span class="pre">Group(orientation='horizontal',</span>
+<span class="pre">layout='split')</span></code></td>
 </tr>
 <tr class="row-odd"><td>Tabbed</td>
 <td>A group that is shown as a tab
 in a notebook.</td>
-<td><tt class="samp docutils literal"><span class="pre">Group(orientation='horizontal'</span>
-<span class="pre">layout='tabbed',</span> <span class="pre">springy=True)</span></tt></td>
+<td><code class="samp docutils literal"><span class="pre">Group(orientation='horizontal'</span>
+<span class="pre">layout='tabbed',</span> <span class="pre">springy=True)</span></code></td>
 </tr>
 <tr class="row-even"><td>VGroup</td>
 <td>A group whose items are laid
 out vertically.</td>
-<td><tt class="samp docutils literal"><span class="pre">Group(orientation='vertical')</span></tt></td>
+<td><code class="samp docutils literal"><span class="pre">Group(orientation='vertical')</span></code></td>
 </tr>
 <tr class="row-odd"><td>VFlow</td>
 <td>A vertical group whose items
 &#8220;wrap&#8221; when they exceed the
 available vertical space.</td>
-<td><tt class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
-<span class="pre">layout='flow',</span> <span class="pre">show_labels=False)</span></tt></td>
+<td><code class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
+<span class="pre">layout='flow',</span> <span class="pre">show_labels=False)</span></code></td>
 </tr>
 <tr class="row-even"><td>VFold</td>
 <td>A vertical group in which
 items can be collapsed (i.e.,
 folded) by clicking their
 titles.</td>
-<td><tt class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
-<span class="pre">layout='fold',</span> <span class="pre">show_labels=False)</span></tt></td>
+<td><code class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
+<span class="pre">layout='fold',</span> <span class="pre">show_labels=False)</span></code></td>
 </tr>
 <tr class="row-odd"><td>VGrid</td>
 <td>A vertical group whose items
 are laid out in two columns.</td>
-<td><tt class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
-<span class="pre">columns=2)</span></tt></td>
+<td><code class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
+<span class="pre">columns=2)</span></code></td>
 </tr>
 <tr class="row-even"><td>VSplit</td>
 <td>A vertical group with splitter
 bars to separate it from other
 groups.</td>
-<td><tt class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
-<span class="pre">layout='split')</span></tt></td>
+<td><code class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
+<span class="pre">layout='split')</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -560,17 +562,17 @@ groups.</td>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id2">[3]</a></td><td>If the code is being run from a program that already has a GUI defined,
 then use edit_traits() instead of configure_traits(). These methods are
-discussed in more detail in <a class="reference internal" href="advanced_view.html#displaying-a-view"><em>Displaying a View</em></a>.</td></tr>
+discussed in more detail in <a class="reference internal" href="advanced_view.html#displaying-a-view"><span>Displaying a View</span></a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id14" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id3">[4]</a></td><td>All code examples in this guide that include a file name are also
-available as examples in the <tt class="file docutils literal"><span class="pre">tutorials/doc_examples/examples</span></tt>
+available as examples in the <code class="file docutils literal"><span class="pre">tutorials/doc_examples/examples</span></code>
 subdirectory of the Traits docs directory. You can run them individually,
 or view them in a tutorial program by running:
-<strong class="program">python</strong> <tt class="file docutils literal"><em><span class="pre">Traits_dir</span></em><span class="pre">/tutorials/tutor.py</span></tt> <tt class="file docutils literal"><em><span class="pre">Traits_dir</span></em><span class="pre">/docs/tutorials/doc_examples</span></tt></td></tr>
+<strong class="program">python</strong> <code class="file docutils literal"><em><span class="pre">Traits_dir</span></em><span class="pre">/tutorials/tutor.py</span></code> <code class="file docutils literal"><em><span class="pre">Traits_dir</span></em><span class="pre">/docs/tutorials/doc_examples</span></code></td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id15" rules="none">
@@ -588,7 +590,7 @@ one type, but it is not recommended.</td></tr>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/e-logo-rev.png" alt="Logo"/>
@@ -618,12 +620,14 @@ one type, but it is not recommended.</td></tr>
   <h4>Next topic</h4>
   <p class="topless"><a href="custom_view.html"
                         title="next chapter">Customizing a View</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/traitsui_user_manual/view.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/traitsui_user_manual/view.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -640,30 +644,20 @@ one type, but it is not recommended.</td></tr>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="custom_view.html" title="Customizing a View"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="intro.html" title="Introduction"
-             >previous</a> |</li>
-        <li><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
-          <li><a href="index.html" >TraitsUI 4 User Manual</a> &raquo;</li>
-  
-    <li><a href="#">The View and Its Building Blocks</a></li>
-  
-
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2008-2013, Enthought.
-      Last updated on Oct 25, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      &copy;2008-2015, Enthought.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+      |
+      <a href="../_sources/traitsui_user_manual/view.txt"
+          rel="nofollow">Page source</a></li>
     </div>
+
+    
+
+    
   </body>
 </html>
