@@ -1521,9 +1521,14 @@ class SimpleEditor ( Editor ):
                     if child_node is not None:
                         self._append_node( nid, child_node, child )
             else:
-                # if model has children, but is not expanded, add dummy child
-                if len(children) > 0:
+                dummy = getattr(nid, '_dummy', None)
+                if dummy is None and len(children) > 0:
+                    # if model now has children add dummy child
                     nid._dummy = QtGui.QTreeWidgetItem(nid)
+                elif dummy is not None and len(children) == 0:
+                    # if model no longer has children remove dummy child
+                    nid.removeChild(dummy)
+                    del nid._dummy
 
             # Try to expand the node (if requested):
             if node.can_auto_open( object ):
@@ -1573,9 +1578,14 @@ class SimpleEditor ( Editor ):
                                         child )
                         child_index += 1
             else:
-                # if model has children, but is not expanded, add dummy child
-                if len(children) > 0:
+                dummy = getattr(nid, '_dummy', None)
+                if dummy is None and len(children) > 0:
+                    # if model now has children add dummy child
                     nid._dummy = QtGui.QTreeWidgetItem(nid)
+                elif dummy is not None and len(children) == 0:
+                    # if model no longer has children remove dummy child
+                    nid.removeChild(dummy)
+                    del nid._dummy
 
             # Try to expand the node (if requested):
             if node.can_auto_open( object ):
