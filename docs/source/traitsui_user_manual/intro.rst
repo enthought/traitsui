@@ -118,10 +118,10 @@ are:
 
 .. index:: wxPython toolkit, Qt toolkit, null toolkit
 
-* 'wx': `wxPython <http://www.wxpython.org>`_, which provides Python bindings
-  for the `wxWidgets <http://wxwidgets.org>`_ toolkit.
 * 'qt4': `PyQt <http://riverbankcomputing.co.uk/pyqt/>`_, which provides Python
   bindings for the `Qt <http://trolltech.com/products/qt>`_ framework version 4.
+* 'wx': `wxPython <http://www.wxpython.org>`_, which provides Python bindings
+  for the `wxWidgets <http://wxwidgets.org>`_ toolkit.
 * 'null': A do-nothing toolkit, for situations where neither of the other
   toolkits is installed, but Traits is needed for non-UI purposes.
 
