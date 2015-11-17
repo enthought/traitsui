@@ -1161,7 +1161,7 @@ class SplitterGroupEditor(GroupEditor):
         else:
             structure = prefs
 
-        self.splitter._resized = True
+        self.splitter._initialized = True
         self.splitter.restoreState(structure)
 
     def save_prefs(self):
