@@ -37,6 +37,7 @@ New Features
 Enhancements
 ~~~~~~~~~~~~
 
+* Change the default backend from Wx to Qt (#212)
 * Add a Qt version of the ProgressEditor (#217)
 * Links to demos in the documentation (#159)
 * Add minimal support for the dock_styles option to the Qt tabbed List
