@@ -23,7 +23,7 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = []
+extensions = ['sphinx.ext.extlinks']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -36,15 +36,15 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2013, Enthought'
+copyright = '2008-2015, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
 #
 # Pull from the actual release number without imports
 d = {}
-execfile(os.path.join('..', '..', 'traitsui', '__init__.py'), d)
-version = release = d['__version__']
+execfile(os.path.join('..', '..', 'traitsui', '_version.py'), d)
+version = release = d['version']
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -83,7 +83,7 @@ pygments_style = 'sphinx'
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
-html_style = 'default.css'
+#html_style = 'default.css'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -94,7 +94,7 @@ html_title = "TraitsUI 4 User Manual"
 
 # The name of an image file (within the static path) to place at the top of
 # the sidebar.
-html_logo = "e-logo-rev.png"
+#html_logo = "e-logo-rev.png"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -145,6 +145,26 @@ html_use_modindex = False
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'Traitsuidoc'
 
+# html theme information
+try:
+    import enthought_sphinx_theme
+
+    html_theme_path = [enthought_sphinx_theme.theme_path]
+    html_theme = 'enthought'
+except ImportError as exc:
+    import warnings
+    msg = "Can't find Enthought Sphinx Theme, using default.\nException was:\n{}"
+    warnings.warn(RuntimeWarning(msg.format(exc)))
+
+    # old defaults
+    html_logo = "e-logo-rev.png"
+    html_style = 'default.css'
+
+# Useful aliases to avoid repeating long URLs.
+extlinks = {'github-demo': (
+    'https://github.com/enthought/traitsui/tree/master/examples/demo/%s',
+    'github-demo')
+}
 
 # Options for LaTeX output
 # ------------------------

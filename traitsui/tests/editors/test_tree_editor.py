@@ -72,8 +72,11 @@ def _test_tree_editor_releases_listeners(hide_root):
         nose.tools.assert_equal(0, len(notifiers_list))
 
 
+@skip_if_null
 def test_tree_editor_listeners_with_shown_root():
     _test_tree_editor_releases_listeners(hide_root=False)
 
+
+@skip_if_null
 def test_tree_editor_listeners_with_hidden_root():
     _test_tree_editor_releases_listeners(hide_root=True)

@@ -230,7 +230,7 @@ class SourceEditor ( Editor ):
                 self.value = value
                 self.control.SetBackgroundColour( OKColor )
                 self.control.Refresh()
-            except TraitError, excp:
+            except TraitError as excp:
                 pass
 
     #---------------------------------------------------------------------------

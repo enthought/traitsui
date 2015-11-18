@@ -1,23 +1,47 @@
 language: python
+sudo: false
 python:
-  - 2.7
-virtualenv:
-  # This allows installing PyQt using apt-get and being able to import it.
-  system_site_packages: true
+  - 2.7_with_system_site_packages
+  - 3.4
+addons:
+  apt:
+    packages:
+    - python-qt4
+    - python-qt4-dev
+    - python-qt4-gl
+    - python-pip
+    - python-numpy
+    - python-wxtools
+    - ccache
+    - cmake
+env:
+  - ETS_TOOLKIT=qt4
+  - ETS_TOOLKIT=null
+  - ETS_TOOLKIT=wx
+matrix:
+  allow_failures:
+    - env: ETS_TOOLKIT=wx
+cache:
+  directories:
+    - $HOME/.cache
+    - $HOME/.ccache
 before_install:
-  # On Python 2.7 we install PyQt4 and run the UI tests.
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then source .travis_before_install; fi
+  - ccache -s
+  - pip install --upgrade pip
+  - export PATH=/usr/lib/ccache:${PATH}
+  - if [[ ${TRAVIS_PYTHON_VERSION} == "3.4" && ${ETS_TOOLKIT} == "qt4" ]]; then ./build_pyside_wheel.sh; fi
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 install:
-  # nose is already installed
-  - pip install unittest2
-  - pip install pygments
-  - sudo apt-get install python-numpy
-  # Test against the current master of traits, traitsui and enable
-  - pip install git+http://github.com/enthought/traits.git#egg=traits
+  - pip install -r travis-ci-requirements.txt
   - python setup.py develop
+before_script:
+  - mkdir testrun
+  - cp .coveragerc testrun/
+  - cd testrun
 script:
-  - nosetests traitsui.tests
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then nosetests traitsui.qt4.tests; fi
-notifications:
-  email:
-    - travis-ci@enthought.com
+  - coverage run -m nose.core -v traitsui.tests
+  - if [[ ${ETS_TOOLKIT} == "qt4" ]]; then coverage run -a -m nose.core -v traitsui.qt4.tests; fi
+after_success:
+  - pip install codecov
+  - codecov

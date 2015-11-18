@@ -57,7 +57,7 @@ def FontEditor(*args, **traits):
     try:
        return toolkit_object('font_editor:ToolkitEditorFactory', True)(*args,
                                                                     **traits)
-    except Exception, e:
+    except Exception as e:
        return ToolkitEditorFactory(*args, **traits)
 
 

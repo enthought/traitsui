@@ -391,7 +391,7 @@ class TableModel ( GridModel ):
         self._filtered_cache = None
 
         # Cache the sorting information for later:
-        self._sorter  = self.__get_column( col ).cmp
+        self._sorter  = self.__get_column(col).key
         self._reverse = reverse
 
         # If model sorting is requested, do it now:
@@ -788,7 +788,7 @@ class TableModel ( GridModel ):
         sorted = (editor.factory.sort_model and (self._sorter is not None))
         if sorted:
             items = self.__items( False )[:]
-            items.sort( self._sorter )
+            items.sort(key=self._sorter)
             if self.reverse ^ self._reverse:
                 items.reverse()
             editor.value = items
@@ -825,7 +825,7 @@ class TableModel ( GridModel ):
                                                            len( items ) )
             sorter = self._sorter
             if sorter is not None:
-                nitems.sort( lambda l, r: sorter( l[1], r[1] ) )
+                nitems.sort(key=lambda x: sorter(x[1]))
                 if self._reverse:
                     nitems.reverse()
 

@@ -27,6 +27,7 @@
 #-------------------------------------------------------------------------------
 
 import sys
+from operator import itemgetter
 import os
 import re
 
@@ -187,24 +188,17 @@ MP3Template = """<html>
 #  Returns the contents of a specified text file (or None):
 #-------------------------------------------------------------------------------
 
-def read_file ( path, mode = 'rb' ):
+def read_file ( path, mode = 'rU' ):
     """ Returns the contents of a specified text file (or None).
-        """
-    fh = result = None
 
+    """
     try:
-        fh     = file( path, mode )
-        result = fh.read()
-    except:
-        pass
+        with open( path, mode ) as fh:
+            result = fh.read()
+        return result
+    except Exception:
+        return None
 
-    if fh is not None:
-        try:
-            fh.close()
-        except:
-            pass
-
-    return result
 
 #-------------------------------------------------------------------------------
 #  Creates a title from a specified string:
@@ -607,7 +601,7 @@ class ASection ( HasPrivateTraits ):
                                       match.group(1), dir ) )
 
         # Sort the directories by their index value:
-        dirs.sort( lambda l, r: cmp( l[0], r[0] ) )
+        dirs.sort(key=itemgetter(0))
 
         # Create the appropriate type of section for each valid directory:
         self._subsections = [
@@ -1786,4 +1780,3 @@ where: tutorial_path = Path to the root of the traits tutorial.
 
 If tutorial_path is omitted, the current directory is assumed to be the root of
 the tutorial.""" % path
-

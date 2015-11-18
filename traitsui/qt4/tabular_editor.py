@@ -23,6 +23,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+import os
+
 from pyface.qt import QtCore, QtGui
 
 from pyface.image_resource import ImageResource
@@ -35,6 +37,9 @@ from traitsui.ui_traits import Image
 
 from editor import Editor
 from tabular_model import TabularModel
+
+
+TRAITS_DEBUG = (os.getenv('TRAITS_DEBUG') is not None)
 
 
 class HeaderEventFilter(QtCore.QObject) :
@@ -348,8 +353,10 @@ class TabularEditor(Editor):
         if not self._no_update:
             try:
                 selected_row = self.value.index(new)
-            except:
-                pass
+            except Exception as e:
+                if TRAITS_DEBUG:
+                    from traits.api import raise_to_debug
+                    raise_to_debug()
             else:
                 self._selected_row_changed(selected_row)
 
@@ -764,4 +771,3 @@ class _TableView(QtGui.QTableView):
             percent = percent_vals[i] / percent_total
             width = max(30, int(percent * available_space))
             hheader.resizeSection(column, width)
-

@@ -7,6 +7,7 @@ TraitsUI Documentation
       
     traitsui_user_manual/index
     tutorials/index
+    demos/index
       
 Indices and tables
 ==================

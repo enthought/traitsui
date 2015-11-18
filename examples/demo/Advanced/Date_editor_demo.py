@@ -4,6 +4,7 @@
 """
 A Traits UI editor that wraps a WX calendar panel.
 """
+from __future__ import print_function
 
 from traits.api import HasTraits, Date, List, Str
 from traitsui.api import View, Item, DateEditor, Group
@@ -52,15 +53,15 @@ class DateEditorDemo(HasTraits):
 
     def _multi_date_changed(self):
         """ Print each time the date value is changed in the editor. """
-        print self.multi_date
+        print(self.multi_date)
 
     def _simple_date_changed(self):
         """ Print each time the date value is changed in the editor. """
-        print self.simple_date, self.single_date
+        print(self.simple_date, self.single_date)
 
     def _single_date_changed(self):
         """ Print each time the date value is changed in the editor. """
-        print self.single_date
+        print(self.single_date)
 
 
 #-- Set Up The Demo ------------------------------------------------------------

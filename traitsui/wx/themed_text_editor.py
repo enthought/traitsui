@@ -267,7 +267,7 @@ class _ThemedTextEditor ( Editor ):
                     self.ui.errors -= 1
                 return True
 
-            except TraitError, excp:
+            except TraitError as excp:
                 return False
 
     #---------------------------------------------------------------------------

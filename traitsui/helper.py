@@ -25,7 +25,7 @@
 
 from __future__ import absolute_import
 
-from string import uppercase, lowercase
+from operator import itemgetter
 
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
 
@@ -53,9 +53,9 @@ def user_name_for ( name ):
     result     = ''
     last_lower = 0
     for c in name:
-        if (c in uppercase) and last_lower:
+        if c.isupper() and last_lower:
            result += ' '
-        last_lower = (c in lowercase)
+        last_lower = c.islower()
         result    += c
     return result
 
@@ -86,7 +86,7 @@ def enum_values_changed ( values, strfunc=unicode ):
     if isinstance( values, dict ):
         data = [ ( strfunc( v ), n ) for n, v in values.items() ]
         if len( data ) > 0:
-            data.sort( lambda x, y: cmp( x[0], y[0] ) )
+            data.sort(key=itemgetter(0))
             col = data[0][0].find( ':' ) + 1
             if col > 0:
                 data = [ ( n[ col: ], v ) for n, v in data ]
@@ -95,10 +95,10 @@ def enum_values_changed ( values, strfunc=unicode ):
         if isinstance( handler, CTrait ):
             handler = handler.handler
         if not isinstance( handler, BaseTraitHandler ):
-            raise TraitError, "Invalid value for 'values' specified"
+            raise TraitError("Invalid value for 'values' specified")
         if handler.is_mapped:
             data = [ ( strfunc( n ), n ) for n in handler.map.keys() ]
-            data.sort( lambda x, y: cmp( x[0], y[0] ) )
+            data.sort(key=itemgetter(0))
         else:
             data = [ ( strfunc( v ), v ) for v in handler.values ]
     else:

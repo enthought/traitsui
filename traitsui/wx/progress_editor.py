@@ -1,8 +1,14 @@
 import wx
 
-from traits.api import Instance
+from traits.api import Instance, Int, Str
 from traitsui.wx.editor import Editor
 from pyface.ui.wx.progress_dialog import ProgressDialog
+
+class _ProgressDialog(ProgressDialog):
+    def close(self):
+        """ Overwritten to disable closing.
+        """
+        pass
 
 class SimpleEditor(Editor):
     """
@@ -12,6 +18,15 @@ class SimpleEditor(Editor):
 
     progress = Instance(ProgressDialog)
 
+    # The message to be displayed along side the progress guage
+    message = Str
+
+    # The starting value
+    min = Int
+
+    # The ending value
+    max = Int
+
     #-- Editor interface ------------------------------------------------------
 
     def init ( self, parent ):
@@ -19,6 +34,13 @@ class SimpleEditor(Editor):
             widget.
         """
         self.control = self.create_control( parent )
+        factory = self.factory
+        self.min = factory.min
+        self.max = factory.max
+        self.message = factory.message
+        self.sync_value( factory.min_name,  'min',  'from' )
+        self.sync_value( factory.max_name, 'max', 'from' )
+        self.sync_value( factory.message_name, 'message', 'from' )
         self.set_tooltip()
 
     def create_control (self, parent):
@@ -63,6 +85,18 @@ class SimpleEditor(Editor):
         Updates the editor when the object trait changes externally to the
         editor.
         """
+        self.progress.min = self.min
+        self.progress.max = self.max
+        self.progress.change_message(self.message)
         if self.value:
             self.progress.update(self.value)
         return
+
+    def _min_changed ( self ):
+        self.update_editor()
+
+    def _max_changed ( self ):
+        self.update_editor()
+
+    def _message_changed ( self ):
+        self.update_editor()

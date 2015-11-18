@@ -136,14 +136,26 @@ class MakeMenu:
                         handler = self.indirect
                     else:
                         try:
-                            exec ('def handler(self=self.owner):\n %s\n' %
-                                  handler)
+                            _locl = dict(self=self)
+                            exec(
+                                'def handler(self=self.owner):\n %s\n' % handler,
+                                globals(),
+                                _locl
+                            )
+                            handler = _locl['handler']
                         except:
-                           handler = null_handler
+                            handler = null_handler
                 else:
                     try:
-                        exec 'def handler(self=self.owner):\n%s\n' % (
-                            self.get_body( indented ), ) in globals()
+                        _locl = dict(self=self)
+                        exec(
+                            'def handler(self=self.owner):\n%s\n' % (
+                                self.get_body( indented ),
+                            ),
+                            globals(),
+                            _locl
+                        )
+                        handler = _locl['handler']
                     except:
                         handler = null_handler
 

@@ -23,7 +23,9 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
+
+import os
 
 from traits.api import (Any, Bool, Callable, Color, Constant, Either, Enum,
     Expression, Float, Font, HasPrivateTraits, Instance, Int, Property, Str)
@@ -38,6 +40,9 @@ from .view import View
 # Set up a logger:
 import logging
 logger = logging.getLogger( __name__ )
+
+
+TRAITS_DEBUG = (os.getenv('TRAITS_DEBUG') is not None)
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -370,6 +375,18 @@ class TableColumn ( HasPrivateTraits ):
         pass
 
     #---------------------------------------------------------------------------
+    #  Returns the result of comparing the column of two different objects:
+    #---------------------------------------------------------------------------
+
+    def cmp(self, object1, object2):
+        """ Returns the result of comparing the column of two different objects.
+
+        This is deprecated.
+        """
+        return ((self.key(object1) > self.key(object2)) -
+                (self.key(object1) < self.key(object2)))
+
+    #---------------------------------------------------------------------------
     #  Returns the string representation of the table column:
     #---------------------------------------------------------------------------
 
@@ -457,7 +474,10 @@ class ObjectColumn ( TableColumn ):
         """
         try:
             return xgetattr( self.get_object( object ), self.name )
-        except:
+        except Exception as e:
+            if TRAITS_DEBUG:
+                from traits.api import raise_to_debug
+                raise_to_debug()
             return None
 
     def get_value ( self, object ):
@@ -516,14 +536,13 @@ class ObjectColumn ( TableColumn ):
         return self.style
 
     #---------------------------------------------------------------------------
-    #  Returns the result of comparing the column of two different objects:
+    #  Function that gets the value to sort by for a column
     #---------------------------------------------------------------------------
 
-    def cmp ( self, object1, object2 ):
-        """ Returns the result of comparing the column of two different objects.
+    def key(self, object):
+        """ Returns the value to use for sorting.
         """
-        return cmp( self.get_raw_value( object1 ),
-                    self.get_raw_value( object2 ) )
+        return self.get_raw_value(object)
 
     #---------------------------------------------------------------------------
     #  Returns whether a specified value is valid for dropping on the column
@@ -589,7 +608,7 @@ class ExpressionColumn ( ObjectColumn ):
         """
         try:
             return eval( self.expression_, self.globals, { 'object': object } )
-        except:
+        except Exception:
             logger.exception( 'Error evaluating table column expression: %s' %
                               self.expression )
             return None
@@ -867,11 +886,10 @@ class ListColumn ( TableColumn ):
         return None
 
     #---------------------------------------------------------------------------
-    #  Returns the result of comparing the column of two different objects:
+    #  Function that gets the value to sort by for a column
     #---------------------------------------------------------------------------
 
-    def cmp ( self, object1, object2 ):
-        """ Returns the result of comparing the column of two different objects.
+    def key(self, object):
+        """ Returns the value to use for sorting.
         """
-        return cmp( object1[ self.index ], object2[ self.index ] )
-
+        return object[self.index]

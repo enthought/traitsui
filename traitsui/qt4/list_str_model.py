@@ -229,7 +229,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         if data.isNull():
             return False
 
-        current_rows = map(int, str(data).split(' '))
+        current_rows = [int(s) for s in data.data().decode('utf8').split(' ')]
         self.moveRows(current_rows, parent.row())
         return True
 

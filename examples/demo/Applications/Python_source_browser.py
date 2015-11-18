@@ -19,8 +19,6 @@ As an extra <i>feature</i>, the <b>TabularEditor</b> also displays a:
  - Blue ball if the file size > 16KB.
 """
 
-import traits
-
 from time \
     import localtime, strftime
 
@@ -34,6 +32,8 @@ from traits.api \
     import HasPrivateTraits, Str, Float, List, Directory, File, Code, \
            Instance, Property, Font, cached_property
 
+import traitsui.api
+
 from traitsui.api \
     import View, Item, HSplit, VSplit, TabularEditor
 
@@ -46,8 +46,9 @@ from pyface.image_resource \
 #-- Constants ------------------------------------------------------------------
 
 # Necessary because of the dynamic way in which the demos are loaded:
-search_path = [ join( dirname( traits.api.__file__ ),
-                      '..', '..', 'examples', 'demo', 'Applications' ) ]
+search_path = [ join( dirname( traitsui.api.__file__ ),
+                      '..', 'examples', 'demo', 'Applications' ) ]
+
 
 #-- FileInfo Class Definition --------------------------------------------------
 
@@ -100,9 +101,9 @@ class FileInfoAdapter ( TabularAdapter ):
     def _get_big_image ( self ):
         size = self.item.size
         if size > 65536:
-            return 'red_ball'
+            return ImageResource('red_ball')
 
-        return ( None, 'blue_ball' )[ size > 16384 ]
+        return ( None, ImageResource('blue_ball') )[ size > 16384 ]
 
 #-- Tabular Editor Definition --------------------------------------------------
 
@@ -153,7 +154,7 @@ class PythonBrowser ( HasPrivateTraits ):
     def _file_info_changed ( self, file_info ):
         fh = None
         try:
-            fh = open( file_info.file_name, 'rb' )
+            fh = open( file_info.file_name, 'rU' )
             self.code = fh.read()
         except:
             pass
@@ -162,7 +163,7 @@ class PythonBrowser ( HasPrivateTraits ):
             fh.close()
 
 # Create the demo:
-demo = PythonBrowser( dir = dirname( traits.api.__file__ ) )
+demo = PythonBrowser( dir = dirname( traitsui.api.__file__ ) )
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

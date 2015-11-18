@@ -175,8 +175,8 @@ class TraitPyQtFont ( TraitHandler ):
         except:
             pass
 
-        raise TraitError, ( object, name, 'a font descriptor string',
-                            repr( value ) )
+        raise TraitError(object, name, 'a font descriptor string',
+                         repr(value))
 
     def info ( self ):
         return ( "a string describing a font (e.g. '12 pt bold italic "
