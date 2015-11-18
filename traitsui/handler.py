@@ -543,10 +543,10 @@ class Controller ( Handler ):
 
     #-- HasTraits Method Overrides ---------------------------------------------
 
-    def __init__ ( self, model=None, **metadata ):
+    def __init__ ( self, model = None, **metadata ):
         """ Initializes the object and sets the model (if supplied).
         """
-        super( Controller, self ).__init__(**metadata)
+        super( Controller, self ).__init__( **metadata )
         if model is not None:
             self.model = model
 
