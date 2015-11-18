@@ -543,10 +543,15 @@ class Controller ( Handler ):
 
     #-- HasTraits Method Overrides ---------------------------------------------
 
-    def __init__ ( self, **traits):
+    def __init__ ( self, model=None, **metadata ):
         """ Initializes the object and sets the model (if supplied).
         """
-        super( Controller, self ).__init__( **traits)
+        if model is not None:
+            traits = {'model': model}
+            traits.update(metadata)
+        else:
+            traits = metadata
+        super( Controller, self ).__init__(**traits)
 
     def trait_context ( self ):
         """ Returns the default context to use for editing or configuring
