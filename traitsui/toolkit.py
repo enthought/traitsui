@@ -34,7 +34,7 @@ from traits.trait_base import ETSConfig
 #-------------------------------------------------------------------------------
 
 # List of implemented UI toolkits:
-TraitUIToolkits = [ 'wx', 'qt4', 'null' ]
+TraitUIToolkits = [ 'qt4', 'wx', 'null' ]
 
 #-------------------------------------------------------------------------------
 #  Data:
@@ -56,8 +56,8 @@ def assert_toolkit_import(name):
     to be imported.
     """
     if ETSConfig.toolkit and ETSConfig.toolkit != name:
-        raise RuntimeError, "Importing from %s backend after selecting %s " \
-                "backend!" % (name, ETSConfig.toolkit)
+        raise RuntimeError("Importing from %s backend after selecting %s "
+                "backend!" % (name, ETSConfig.toolkit))
 
 
 def toolkit_object(name, raise_exceptions=False):
@@ -85,9 +85,9 @@ def toolkit_object(name, raise_exceptions=False):
         )
         try:
             be_obj = getattr(module, oname)
-        except AttributeError, e:
+        except AttributeError as e:
             if raise_exceptions: raise e
-    except ImportError, e:
+    except ImportError as e:
         if raise_exceptions: raise e
 
     return be_obj
@@ -110,6 +110,11 @@ def toolkit ( *toolkits ):
         return _toolkit
     else:
         if len( toolkits ) == 0:
+            import warnings
+            warnings.warn(
+                "Default toolkit will change to 'qt4' in TraitsUI 5.0",
+                DeprecationWarning)
+
             toolkits = TraitUIToolkits
 
         for toolkit_name in toolkits:
@@ -529,4 +534,3 @@ class Toolkit ( HasPrivateTraits ):
 
     def value_editor ( self, *args, **traits ):
         raise NotImplementedError
-

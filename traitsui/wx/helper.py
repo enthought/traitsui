@@ -23,6 +23,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+from operator import itemgetter
+
 import wx
 import wx.lib.scrolledpanel
 
@@ -276,7 +278,7 @@ def enum_values_changed ( values ):
     if isinstance( values, dict ):
         data = [ ( unicode( v ), n ) for n, v in values.items() ]
         if len( data ) > 0:
-            data.sort( lambda x, y: cmp( x[0], y[0] ) )
+            data.sort(key=itemgetter(0))
             col = data[0][0].find( ':' ) + 1
             if col > 0:
                 data = [ ( n[ col: ], v ) for n, v in data ]
@@ -285,10 +287,10 @@ def enum_values_changed ( values ):
         if isinstance( handler, CTrait ):
             handler = handler.handler
         if not isinstance( handler, BaseTraitHandler ):
-            raise TraitError, "Invalid value for 'values' specified"
+            raise TraitError("Invalid value for 'values' specified")
         if handler.is_mapped:
             data = [ ( unicode( n ), n ) for n in handler.map.keys() ]
-            data.sort( lambda x, y: cmp( x[0], y[0] ) )
+            data.sort(key=itemgetter(0))
         else:
             data = [ ( unicode( v ), v ) for v in handler.values ]
     else:
@@ -339,7 +341,9 @@ class TraitsUIPanel ( wx.Panel ):
         if bg_color:
             self.SetBackgroundColour(bg_color)
         else:
-            self.SetBackgroundColour( parent.GetBackgroundColour() )
+            # Mac/Win needs this, otherwise background color is black
+            attr = self.GetDefaultAttributes()
+            self.SetBackgroundColour(attr.colBg)
 
     def OnChildFocus ( self, event ):
         """ If the ChildFocusEvent contains one of the Panel's direct children,
@@ -711,4 +715,3 @@ class Slider ( wx.Slider ):
 
     def _erase_background ( self, event ):
         pass
-

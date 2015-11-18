@@ -27,9 +27,6 @@ import logging
 
 import wx
 
-from string \
-    import capitalize
-
 from traits.api \
     import List, Str, TraitError
 
@@ -49,6 +46,11 @@ from helper \
     import TraitsUIPanel
 
 logger = logging.getLogger(__name__)
+
+
+# default formatting function (would import from string, but not in Python 3)
+capitalize = lambda s: s.capitalize()
+
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -113,7 +115,7 @@ class SimpleEditor ( EditorWithList ):
                 try:
                     del cur_value[i]
                     modified = True
-                except TypeError, e:
+                except TypeError as e:
                     logger.warn('Unable to remove non-current value [%s] from '
                         'values %s', cur_value[i], values)
         if modified:
@@ -301,7 +303,7 @@ class TextEditor ( BaseTextEditor ):
             pass
         try:
             self.value = value
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
 #-------------------------------------------------------------------------------
@@ -320,4 +322,3 @@ def parse_value ( value ):
     return [ x.strip() for x in value.split( ',' ) ]
 
 ### EOF ########################################################################
-

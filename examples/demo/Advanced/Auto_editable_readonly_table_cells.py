@@ -27,6 +27,10 @@ trait.
 
 #-- Imports --------------------------------------------------------------------
 
+from __future__ import division
+
+from operator import attrgetter
+
 from traits.api \
     import HasTraits, Int, List, Range, Property, property_depends_on
 
@@ -60,14 +64,14 @@ class Factor ( HasTraits ):
         result = []
 
         while (i * i) <= n:
-            j = n / i
+            j = n // i
             if (i * j) == n:
                 result.append( Integer( n = i ) )
                 if i != j:
                     result.append( Integer( n = j ) )
             i += 1
 
-        result.sort( lambda l, r: cmp( l.n, r.n ) )
+        result.sort(key=attrgetter('n'))
 
         return result
 
@@ -152,7 +156,7 @@ class Factors ( HasTraits ):
 
     @property_depends_on( 'max_n' )
     def _get_factors ( self ):
-        return [ Factor( n = i + 1 ) for i in xrange( self.max_n ) ]
+        return [ Factor( n = i + 1 ) for i in range( self.max_n ) ]
 
 #-- Create and run the demo ----------------------------------------------------
 
@@ -162,4 +166,3 @@ demo = Factors()
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

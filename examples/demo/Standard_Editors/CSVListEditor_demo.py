@@ -5,6 +5,7 @@ This editor allows the user to enter a *single* line of input text, containing
 comma-separated values (or another separator may be specified). Your program
 specifies an element Trait type of Int, Float, Str, Enum, or Range.
 """
+from __future__ import print_function
 
 from traits.api import HasTraits, List, Int, Float, Enum, Range, Str, Button, \
                             Property
@@ -116,7 +117,7 @@ class Demo(HasTraits):
     def _pop1_fired(self):
         if len(self.list1) > 0:
             x = self.list1.pop()
-            print x
+            print(x)
 
     def _sort1_fired(self):
         self.list1.sort()

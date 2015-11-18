@@ -17,8 +17,9 @@ user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------------
 
+from __future__ import division
+
 import logging
-from string import capitalize
 
 from pyface.qt import QtCore, QtGui
 
@@ -38,6 +39,11 @@ from editor \
     import EditorWithList
 
 logger = logging.getLogger(__name__)
+
+
+# default formatting function (would import from string, but not in Python 3)
+capitalize = lambda s: s.capitalize()
+
 
 #-------------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -101,7 +107,7 @@ class SimpleEditor ( EditorWithList ):
                 try:
                     del cur_value[i]
                     modified = True
-                except TypeError, e:
+                except TypeError as e:
                     logger.warn('Unable to remove non-current value [%s] from '
                         'values %s', cur_value[i], values)
         if modified:
@@ -191,12 +197,12 @@ class CustomEditor ( SimpleEditor ):
         values = self.values
         n      = len( labels )
         cols   = self.factory.cols
-        rows   = (n + cols - 1) / cols
-        incr   = [ n / cols ] * cols
+        rows   = (n + cols - 1) // cols
+        incr   = [ n // cols ] * cols
         rem    = n % cols
         for i in range( cols ):
             incr[i] += (rem > i)
-        incr[-1] = -(reduce( lambda x, y: x + y, incr[:-1], 0 ) - 1)
+        incr[-1] = -sum(incr[:-1]) + 1
 
         # Add the set of all possible choices:
         layout = self.control.layout()
@@ -279,7 +285,7 @@ class TextEditor ( BaseTextEditor ):
             pass
         try:
             self.value = value
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
 #-------------------------------------------------------------------------------

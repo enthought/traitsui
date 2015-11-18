@@ -24,6 +24,7 @@ Traceback (most recent call last):
     self.value = self.control.GetValue()
 AttributeError: 'NoneType' object has no attribute 'GetValue'
 """
+from __future__ import print_function
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Int
@@ -143,4 +144,4 @@ if __name__ == '__main__':
     # Executing the file opens the dialog for manual testing
     num = NumberWithSpinnerEditor()
     num.configure_traits()
-    print num.number
+    print(num.number)

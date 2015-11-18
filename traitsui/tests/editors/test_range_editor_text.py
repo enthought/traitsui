@@ -19,6 +19,8 @@ Test case for bug (wx, Mac OS X)
 A RangeEditor in mode 'text' for an Int allows values out of range.
 """
 
+from __future__ import print_function
+
 from traits.has_traits import HasTraits
 from traits.trait_types import Int
 from traitsui.item import Item
@@ -68,4 +70,4 @@ if __name__ == '__main__':
     # Executing the file opens the dialog for manual testing
     num = NumberWithTextEditor()
     num.configure_traits()
-    print num.number
+    print(num.number)
