@@ -18,7 +18,7 @@ import nose
 
 from traits.api import Int
 from traitsui.api import Action, Group, Handler, HSplit, Item, View
-from traitsui.tests._tools import skip_if_null
+from traitsui.tests._tools import skip_if_not_qt4
 
 
 class TmpClass(Handler):
@@ -81,7 +81,7 @@ class TmpClass(Handler):
     )
 
 
-@skip_if_null
+@skip_if_not_qt4
 def test_splitter_prefs_are_restored():
     # the keys for the splitter prefs (i.e. prefs['h_split']['structure'])
     splitter_keys = ('h_split', 'structure')
