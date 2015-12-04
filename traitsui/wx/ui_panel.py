@@ -545,6 +545,7 @@ class FillPanel ( object ):
         # Assume our contents are not resizable:
         self.resizable = False
 
+        import ipdb; ipdb.set_trace(); 
         if is_dock_window and (is_splitter or is_tabbed):
             if is_splitter:
                 self.dock_contents = self.add_dock_window_splitter_items(
@@ -639,6 +640,7 @@ class FillPanel ( object ):
 
             dw.SetSizer( DockSizer( contents =
                    self.add_dock_window_splitter_items( dw, content, group ) ) )
+            import ipdb; ipdb.set_trace(); 
             self.sizer.Add( dw, 1, wx.EXPAND )
         elif len( content ) > 0:
             if is_tabbed:

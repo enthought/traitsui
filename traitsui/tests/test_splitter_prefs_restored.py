@@ -20,6 +20,42 @@ from traits.api import Int
 from traitsui.api import Action, Group, Handler, HSplit, Item, View
 from traitsui.tests._tools import skip_if_not_qt4
 
+from traits.etsconfig.api import ETSConfig
+
+if ETSConfig.toolkit == 'qt4':
+    def _collapse_split_left(control):
+        width = control.width()
+        control.moveSplitter(width, 1)
+
+    def _collapse_split_right(control):
+        control.moveSplitter(0, 1)
+
+    def _reset_split(control):
+        width = control.width()
+        control.moveSplitter(width/2, 1)
+
+elif ETSConfig.toolkit == 'wx':
+
+    def get_dock_item(control):
+        box_sizer = control.GetSizer()
+        dock_sizer = box_sizer.GetChildren()[0].GetWindow().GetSizer()
+        dock_item = dock_sizer.GetContent()[0]
+        return dock_item
+
+    def _collapse_split_left(control):
+        dock_item = get_dock_item(control)
+        dock_item.collapse(False)
+
+    def _collapse_split_right(control):
+        dock_item = get_dock_item(control)
+        dock_item.collapse(True)
+
+    def _reset_split(control):
+        width = control.GetSize()[0]
+
+else:
+    raise ValueError('Backend {!r} not supported'.format(ETSConfig.toolkit))
+
 
 class TmpClass(Handler):
     aa = Int(10)
@@ -33,8 +69,7 @@ class TmpClass(Handler):
         """ Reset the split to be equally wide.
         """
         control = getattr(ui_info, 'h_split').control
-        width = control.width()
-        control.moveSplitter(width/2, 1)
+        _reset_split(control)
 
     def restore_prefs(self, ui_info):
         """ Apply the last saved ui preferences.
@@ -50,14 +85,13 @@ class TmpClass(Handler):
         """ Collapse the split to the right.
         """
         control = getattr(ui_info, 'h_split').control
-        width = control.width()
-        control.moveSplitter(width, 1)
+        _collapse_split_left(control)
 
     def collapse_left(self, ui_info):
         """ Collapse the split to the left.
         """
         control = getattr(ui_info, 'h_split').control
-        control.moveSplitter(0, 1)
+        _collapse_split_right(control)
 
     view = View(
         HSplit(
@@ -143,4 +177,4 @@ if __name__ == '__main__':
 
     # check visually if the layout changes from the prev. session is
     # restored.
-    TmpClass().configure_traits()
+    #TmpClass().configure_traits()
