@@ -39,3 +39,13 @@ class TestToolkit(unittest.TestCase):
             self.assertEqual(ETSConfig.toolkit, 'null')
             from traitsui.null import toolkit
             self.assertIs(tk, toolkit)
+
+    def test_nonexistent_toolkit(self):
+        with clear_toolkit():
+            # try to import a non-existent toolkit
+            tk = traitsui.toolkit.toolkit('nosuchtoolkit')
+
+            # should fail, and give us 'null'
+            self.assertEqual(ETSConfig.toolkit, 'null')
+            from traitsui.null import toolkit
+            self.assertIs(tk, toolkit)
