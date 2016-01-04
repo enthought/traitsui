@@ -25,9 +25,16 @@
 
 from __future__ import absolute_import
 
-from traits.api import HasPrivateTraits, TraitError
+import logging
 
+from traits.api import HasPrivateTraits, TraitError
 from traits.trait_base import ETSConfig
+
+#-------------------------------------------------------------------------------
+#  Logging:
+#-------------------------------------------------------------------------------
+
+logger = logging.getLogger(__name__)
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -93,13 +100,24 @@ def toolkit_object(name, raise_exceptions=False):
     return be_obj
 
 
-def toolkit ( *toolkits ):
+def toolkit(*toolkits):
     """ Selects and returns a low-level GUI toolkit.
 
     Use this function to get a reference to the current toolkit.
-    """
 
+    Parameters
+    ----------
+    *toolkits : strings
+        Toolkit names to try if toolkit not already selected.  If not supplied,
+        defaults to order in TraitUIToolkits variable.
+
+    Returns
+    -------
+    toolkit
+        Appropriate concrete Toolkit subclass for selected toolkit.
+    """
     global _toolkit
+
     # If _toolkit has already been set, simply return it.
     if _toolkit is not None:
         return _toolkit
@@ -109,37 +127,49 @@ def toolkit ( *toolkits ):
         _toolkit = _import_toolkit(ETSConfig.toolkit)
         return _toolkit
     else:
-        if len( toolkits ) == 0:
-            import warnings
-            warnings.warn(
-                "Default toolkit will change to 'qt4' in TraitsUI 5.0",
-                DeprecationWarning)
-
+        if not toolkits:
             toolkits = TraitUIToolkits
 
         for toolkit_name in toolkits:
             try:
-                _toolkit = _import_toolkit( toolkit_name )
-
-                # In case we have just decided on a toolkit, tell everybody else:
+                # Signal to everyone else what the toolkit should be. If we
+                # fail here, we need to be careful to reset toolkit to none.
+                # XXX this is assuming too much knowledge of ETSConfig internals
                 ETSConfig.toolkit = toolkit_name
 
+                _toolkit = _import_toolkit(toolkit_name)
                 return _toolkit
 
-            except (AttributeError, ImportError):
-                pass
+            except (AttributeError, ImportError) as exc:
+                # import failed, reset toolkit to none, log error and try again
+                ETSConfig._toolkit = ''
+                logger.info("Could not import toolkit '{}'".format(toolkit_name))
+                if logger.getEffectiveLevel() <= logging.INFO:
+                    logger.exception(exc)
+            except:
+                # import failed, reset toolkit to none and raise
+                ETSConfig._toolkit = ''
+                raise
         else:
             # Try using the null toolkit and printing a warning
             try:
-                _toolkit = _import_toolkit( 'null' )
+                # signal to everyone else what the toolkit should be:
+                ETSConfig.toolkit = 'null'
+                _toolkit = _import_toolkit('null')
+
                 import warnings
-                warnings.warn( "Unable to import the '%s' backend for traits UI; "
-                               "using the 'null' toolkit instead." % toolkit_name )
+                warnings.warn("Unable to import the '%s' backend for traits UI; "
+                              "using the 'null' toolkit instead." % toolkit_name)
                 return _toolkit
 
             except ImportError:
-                raise TraitError( "Could not find any UI toolkit called '%s'" %
-                                  toolkit_name )
+                ETSConfig._toolkit = ''
+                raise TraitError("Could not import any UI toolkit. Tried:" +
+                                 ', '.join(toolkits))
+            except:
+                # import failed, reset toolkit to none and raise
+                ETSConfig._toolkit = ''
+                raise
 
 #-------------------------------------------------------------------------------
 #  'Toolkit' class (abstract base class):
