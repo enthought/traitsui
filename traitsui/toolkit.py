@@ -25,9 +25,16 @@
 
 from __future__ import absolute_import
 
-from traits.api import HasPrivateTraits, TraitError
+import logging
 
+from traits.api import HasPrivateTraits, TraitError
 from traits.trait_base import ETSConfig
+
+#-------------------------------------------------------------------------------
+#  Logging:
+#-------------------------------------------------------------------------------
+
+logger = logging.getLogger(__name__)
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -46,6 +53,31 @@ _toolkit = None
 #-------------------------------------------------------------------------------
 #  Low-level GUI toolkit selection function:
 #-------------------------------------------------------------------------------
+
+try:
+    provisional_toolkit = ETSConfig.provisional_toolkit
+except AttributeError:
+    from contextlib import contextmanager
+
+    # for backward compatibility
+    @contextmanager
+    def provisional_toolkit(toolkit_name):
+        """ Perform an operation with toolkit provisionally set
+
+        This sets the toolkit attribute of the ETSConfig object set to the
+        provided value. If the operation fails with an exception, the toolkit
+        is reset to nothing.
+        """
+        if ETSConfig.toolkit:
+            raise AttributeError("ETSConfig toolkit is already set")
+        ETSConfig.toolkit = toolkit_name
+        try:
+            yield
+        except:
+            # reset the toolkit state
+            ETSConfig._toolkit = ''
+            raise
+
 
 def _import_toolkit ( name ):
     return __import__( name, globals=globals(), level=1 ).toolkit
@@ -93,13 +125,24 @@ def toolkit_object(name, raise_exceptions=False):
     return be_obj
 
 
-def toolkit ( *toolkits ):
+def toolkit(*toolkits):
     """ Selects and returns a low-level GUI toolkit.
 
     Use this function to get a reference to the current toolkit.
-    """
 
+    Parameters
+    ----------
+    *toolkits : strings
+        Toolkit names to try if toolkit not already selected.  If not supplied,
+        defaults to order in TraitUIToolkits variable.
+
+    Returns
+    -------
+    toolkit
+        Appropriate concrete Toolkit subclass for selected toolkit.
+    """
     global _toolkit
+
     # If _toolkit has already been set, simply return it.
     if _toolkit is not None:
         return _toolkit
@@ -109,37 +152,35 @@ def toolkit ( *toolkits ):
         _toolkit = _import_toolkit(ETSConfig.toolkit)
         return _toolkit
     else:
-        if len( toolkits ) == 0:
-            import warnings
-            warnings.warn(
-                "Default toolkit will change to 'qt4' in TraitsUI 5.0",
-                DeprecationWarning)
-
+        if not toolkits:
             toolkits = TraitUIToolkits
 
         for toolkit_name in toolkits:
             try:
-                _toolkit = _import_toolkit( toolkit_name )
-
-                # In case we have just decided on a toolkit, tell everybody else:
-                ETSConfig.toolkit = toolkit_name
-
-                return _toolkit
-
-            except (AttributeError, ImportError):
-                pass
+                with provisional_toolkit(toolkit_name):
+                    _toolkit = _import_toolkit(toolkit_name)
+                    return _toolkit
+            except (AttributeError, ImportError) as exc:
+                # import failed, reset toolkit to none, log error and try again
+                msg = "Could not import traits UI backend '{0}'"
+                logger.info(msg.format(toolkit_name))
+                if logger.getEffectiveLevel() <= logging.INFO:
+                    logger.exception(exc)
         else:
             # Try using the null toolkit and printing a warning
             try:
-                _toolkit = _import_toolkit( 'null' )
-                import warnings
-                warnings.warn( "Unable to import the '%s' backend for traits UI; "
-                               "using the 'null' toolkit instead." % toolkit_name )
-                return _toolkit
+                with provisional_toolkit('null'):
+                    _toolkit = _import_toolkit('null')
+                    import warnings
+                    msg = ("Unable to import the '{0}' backend for traits UI; " +
+                           "using the 'null' backend instead.")
+                    warnings.warn(msg.format(toolkit_name), RuntimeWarning)
+                    return _toolkit
 
-            except ImportError:
-                raise TraitError( "Could not find any UI toolkit called '%s'" %
-                                  toolkit_name )
+            except ImportError as exc:
+                logger.exception(exc)
+                raise TraitError("Could not import any UI toolkit. Tried:" +
+                                 ', '.join(toolkits))
 
 #-------------------------------------------------------------------------------
 #  'Toolkit' class (abstract base class):
