@@ -205,8 +205,7 @@ class _Panel(BasePanel):
                 layout.addWidget(bbox)
 
         # If the UI has a toolbar, should add it to the panel too
-        if self.ui.view.toolbar:
-            self._add_toolbar(parent)
+        self._add_toolbar(parent)
 
         # Ensure the control has a size hint reflecting the View specification.
         # Yes, this is a hack, but it's too late to repair this convoluted
