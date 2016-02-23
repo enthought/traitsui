@@ -215,6 +215,10 @@ class _Panel(BasePanel):
     def _add_toolbar (self, parent):
         """ Adds a toolbar to the `parent` (QtWindow)
         """
+        if not isinstance(parent, QtGui.QMainWindow):
+            # toolbar cannot be added to non-MainWindow widget
+            return
+
         toolbar = self.ui.view.toolbar
         if toolbar is not None:
             self._last_group = self._last_parent = None
