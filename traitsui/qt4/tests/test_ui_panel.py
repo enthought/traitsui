@@ -41,7 +41,7 @@ class TestUIPanel_Qt4(unittest.TestCase):
     def test_panel_has_toolbar_buttons_qt4(self):
         from pyface.qt import QtGui
 
-        main_window, dock = self.setup_qt4_dock_window()
+        _, dock = self.setup_qt4_dock_window()
 
         # add panel
         panel = FooPanel()
@@ -56,7 +56,7 @@ class TestUIPanel_Qt4(unittest.TestCase):
     def test_subpanel_has_toolbar_no_buttons_qt4(self):
         from pyface.qt import QtGui
 
-        main_window, dock = self.setup_qt4_dock_window()
+        _, dock = self.setup_qt4_dock_window()
 
         # add panel
         panel = FooPanel()
