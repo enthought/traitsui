@@ -66,9 +66,9 @@ class TestUIPanel(unittest.TestCase):
         dock.widget().setCentralWidget(ui.control)
 
         # There should be a toolbar for the panel
-        self.assertIsNotNone(dock.findChild(QtGui.QToolBar))
+        self.assertIsNotNone(dock.widget().findChild(QtGui.QToolBar))
         # There should be buttons too
-        self.assertIsNotNone(dock.findChild(QtGui.QPushButton))
+        self.assertIsNotNone(ui.control.findChild(QtGui.QPushButton))
 
     def test_subpanel_has_toolbar_no_buttons_qt4(self):
         from pyface.qt import QtGui
@@ -81,9 +81,9 @@ class TestUIPanel(unittest.TestCase):
         dock.widget().setCentralWidget(ui.control)
 
         # There should be a toolbar for the subpanel
-        self.assertIsNotNone(dock.findChild(QtGui.QToolBar))
+        self.assertIsNotNone(dock.widget().findChild(QtGui.QToolBar))
         # Buttons should not be shown for subpanel
-        self.assertIsNone(dock.findChild(QtGui.QPushButton))
+        self.assertIsNone(ui.control.findChild(QtGui.QPushButton))
 
     def test_subpanel_no_toolbar_nor_button_in_widget(self):
         from pyface.qt import QtGui
