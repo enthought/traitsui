@@ -182,9 +182,8 @@ class ThemedWindow ( HasPrivateTraits ):
     def _left_up ( self, event ):
         """ Handles a left mouse button up event.
         """
-        if self.control.HasCapture():
-            self.control.ReleaseMouse()
-            self._mouse_event( 'left_up', event )
+        self.release_mouse()
+        self._mouse_event( 'left_up', event )
 
     def _left_dclick ( self, event ):
         """ Handles a left mouse button double click event.
