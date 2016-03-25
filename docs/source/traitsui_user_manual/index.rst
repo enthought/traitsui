@@ -2,7 +2,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-TraitsUI 4 User Manual
+TraitsUI 5 User Manual
 ======================
 
 .. toctree::

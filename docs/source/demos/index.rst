@@ -1,4 +1,4 @@
-TraitsUI 4 Demos
+TraitsUI 5 Demos
 ================
 
 .. toctree::
