@@ -213,7 +213,7 @@ class TableEditor(Editor, BaseTableEditor):
         else:
             if factory.orientation == 'horizontal':
                 self.control = QtGui.QSplitter(QtCore.Qt.Horizontal)
-            else: 
+            else:
                 self.control = QtGui.QSplitter(QtCore.Qt.Vertical)
             self.control.setSizePolicy(QtGui.QSizePolicy.Expanding,
                                        QtGui.QSizePolicy.Expanding)
@@ -273,6 +273,10 @@ class TableEditor(Editor, BaseTableEditor):
 
         # Initialize the ItemDelegates for each column
         self._update_columns()
+
+        # set the initial selection, if any
+        if factory.selected or factory.selected_indices:
+            self.set_selection(self.selected, notify=False)
 
     #---------------------------------------------------------------------------
     #  Disposes of the contents of an editor:
@@ -1078,7 +1082,7 @@ class TableView(QtGui.QTableView):
         # TODO: The proportional size specification approach found in the
         # TableColumns is not entirely compatible with the ability to
         # specify the resize_mode.  Namely, there are combinations of
-        # specifications that are redundant, and others which are 
+        # specifications that are redundant, and others which are
         # contradictory.  Rework this method so that the various values
         # for **width** have a well-defined, sensible meaning for each
         # of the possible values of resize_mode.
