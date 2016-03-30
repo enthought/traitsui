@@ -277,6 +277,45 @@ class BasePanel(object):
         """
         self.revert.setEnabled(state)
 
+    #---------------------------------------------------------------------------
+    #  Adds a menu item to the menu bar being constructed:
+    #---------------------------------------------------------------------------
+
+    def add_to_menu ( self, menu_item ):
+        """ Adds a menu item to the menu bar being constructed.
+        """
+        item   = menu_item.item
+        action = item.action
+
+        if action.id != '':
+            self.ui.info.bind( action.id, menu_item )
+
+        if action.style == 'radio':
+            if ((self._last_group is None) or
+                (self._last_parent is not item.parent)):
+                self._last_group = RadioGroup()
+                self._last_parent = item.parent
+            self._last_group.items.append( menu_item )
+            menu_item.group = self._last_group
+
+        if action.visible_when != '':
+            self.ui.add_visible( action.visible_when, menu_item )
+
+        if action.enabled_when != '':
+            self.ui.add_enabled( action.enabled_when, menu_item )
+
+        if action.checked_when != '':
+            self.ui.add_checked( action.checked_when, menu_item )
+
+    #---------------------------------------------------------------------------
+    #  Adds a tool bar item to the tool bar being constructed:
+    #---------------------------------------------------------------------------
+
+    def add_to_toolbar ( self, toolbar_item ):
+        """ Adds a toolbar item to the toolbar being constructed.
+        """
+        self.add_to_menu( toolbar_item )
+        
 
 class _StickyDialog(QtGui.QDialog):
     """A QDialog that will only close if the traits handler allows it."""
@@ -555,45 +594,6 @@ class BaseDialog(BasePanel):
             control.setText(text)
 
         return set_status_text
-
-    #---------------------------------------------------------------------------
-    #  Adds a menu item to the menu bar being constructed:
-    #---------------------------------------------------------------------------
-
-    def add_to_menu ( self, menu_item ):
-        """ Adds a menu item to the menu bar being constructed.
-        """
-        item   = menu_item.item
-        action = item.action
-
-        if action.id != '':
-            self.ui.info.bind( action.id, menu_item )
-
-        if action.style == 'radio':
-            if ((self._last_group is None) or
-                (self._last_parent is not item.parent)):
-                self._last_group = RadioGroup()
-                self._last_parent = item.parent
-            self._last_group.items.append( menu_item )
-            menu_item.group = self._last_group
-
-        if action.visible_when != '':
-            self.ui.add_visible( action.visible_when, menu_item )
-
-        if action.enabled_when != '':
-            self.ui.add_enabled( action.enabled_when, menu_item )
-
-        if action.checked_when != '':
-            self.ui.add_checked( action.checked_when, menu_item )
-
-    #---------------------------------------------------------------------------
-    #  Adds a tool bar item to the tool bar being constructed:
-    #---------------------------------------------------------------------------
-
-    def add_to_toolbar ( self, toolbar_item ):
-        """ Adds a toolbar item to the toolbar being constructed.
-        """
-        self.add_to_menu( toolbar_item )
 
     def can_add_to_menu(self, action, action_event=None):
         """Returns whether the action should be defined in the user interface.
