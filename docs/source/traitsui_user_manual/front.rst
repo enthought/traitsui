@@ -1,6 +1,6 @@
-======================
-TraitsUI 5 User Manual
-======================
+===============================
+TraitsUI |version| User Manual
+===============================
 
 :Authors: Lyn Pierce, Janet Swisher, and Enthought Developers
 :Version: Document Version 4

@@ -36,7 +36,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2015, Enthought'
+copyright = '2008-2016, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
@@ -45,7 +45,9 @@ copyright = '2008-2015, Enthought'
 d = {}
 try:
     execfile(os.path.join('..', '..', 'traitsui', '_version.py'), d)
-    version = release = d['version']
+    release = d['version']
+    version = '.'.join(d['version'].split('.', 2)[:2])
+
 except IOError as ioe:
     import warnings
     msg = '''_version.py seems to be missing!
@@ -95,7 +97,7 @@ pygments_style = 'sphinx'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "TraitsUI {} User Manual".format(version.strip('.')[0])
+html_title = "TraitsUI {} User Manual".format(version.split('.')[0])
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None

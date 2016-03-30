@@ -1,4 +1,4 @@
-TraitsUI 5 Tutorials
+TraitsUI |version| Tutorials
 ===================================
 
 .. toctree::

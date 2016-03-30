@@ -1,8 +1,8 @@
 .. _writing-a-graphical-application-for-scientific-programming-using-traitsui:
 
-===========================================================================
-Writing a graphical application for scientific programming using TraitsUI 5
-===========================================================================
+====================================================================================
+Writing a graphical application for scientific programming using TraitsUI |version|
+====================================================================================
 
 **A step by step guide for a non-programmer**
 

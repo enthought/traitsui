@@ -113,7 +113,7 @@ application. The etsconfig package contains a singleton object, **ETSConfig**
 
 .. index:: ETSConfig.toolkit
 
-The values of **ETSConfig.toolkit** that are supported by TraitsUI version 5
+The values of **ETSConfig.toolkit** that are supported by TraitsUI version |version|
 are:
 
 .. index:: wxPython toolkit, Qt toolkit, null toolkit
