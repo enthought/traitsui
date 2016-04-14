@@ -1,6 +1,29 @@
 Traits UI Changelog
 ===================
 
+Release 5.1.0
+-------------
+
+Enhancements
+~~~~~~~~~~~~
+
+* Enthought Sphinx Theme Support (#219)
+* Allow hiding groups in split layouts on Qt (#246)
+* Allow subclass of Controller to set a default model (#255)
+* Add toolbar in Qt UI panel (#263)
+
+Fixes
+~~~~~
+
+* Update tree nodes when adding children to am empty tree (#251)
+* Change default backend from Wx to Qt (#254, #256)
+* Improve toolkit selection (#259)
+* Fix capturing the mouse and click events on Wx (#265, #266)
+* Remove duplicated traits in NotebookEditor (#268)
+* Fix exception during disposal of ListStrEditor (#270)
+* Version number in documentation (#273)
+
+
 What's new in Traits UI 5.0.0
 -----------------------------
 
