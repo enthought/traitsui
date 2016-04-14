@@ -274,10 +274,6 @@ class TableEditor(Editor, BaseTableEditor):
         # Initialize the ItemDelegates for each column
         self._update_columns()
 
-        # set the initial selection, if any
-        if factory.selected or factory.selected_indices:
-            self.set_selection(self.selected, notify=False)
-
     #---------------------------------------------------------------------------
     #  Disposes of the contents of an editor:
     #---------------------------------------------------------------------------
@@ -430,8 +426,8 @@ class TableEditor(Editor, BaseTableEditor):
     def set_selection(self, objects=[], notify=True):
         """Sets the current selection to a set of specified objects."""
 
-        if not isinstance(objects, SequenceTypes):
-            objects = [ objects ]
+        if not isinstance(objects, list):
+            objects = [objects]
 
         mode = self.factory.selection_mode
         indexes = []
@@ -451,6 +447,8 @@ class TableEditor(Editor, BaseTableEditor):
                     row = items.index(obj)
                 except ValueError:
                     continue
+                if row == -1:
+                    continue
                 indexes.append(self.source_model.index(row, source_column))
 
         # Selection mode is 'column' or 'columns'
@@ -469,21 +467,25 @@ class TableEditor(Editor, BaseTableEditor):
                     row = items.index(obj)
                 except ValueError:
                     continue
+                if row == -1:
+                    continue
                 column = self._column_index_from_name(name)
                 if column != -1:
                     indexes.append(self.source_model.index(row, column))
 
         # Perform the selection so that only one signal is emitted
         selection = QtGui.QItemSelection()
+        smodel = self.table_view.selectionModel()
         for index in indexes:
             index = self.model.mapFromSource(index)
             if index.isValid():
-                self.table_view.setCurrentIndex(index)
+                smodel.setCurrentIndex(
+                    index, QtGui.QItemSelectionModel.NoUpdate)
                 selection.select(index, index)
-        smodel = self.table_view.selectionModel()
         try:
             smodel.blockSignals(not notify)
             if len(selection.indexes()):
+                smodel.clear()
                 smodel.select(selection, flags)
             else:
                 smodel.clear()
@@ -586,17 +588,36 @@ class TableEditor(Editor, BaseTableEditor):
         """Gets the row,column indices which match the selected trait"""
         selection_items = self.table_view.selectionModel().selection()
         indices = self.model.mapSelectionToSource(selection_items).indexes()
-        return [(index.row(), index.column()) for index in indices]
+        if self.factory.selection_mode.startswith('row'):
+            indices = sorted(set(index.row() for index in indices))
+        elif self.factory.selection_mode.startswith('column'):
+            indices = sorted(set(index.column() for index in indices))
+        else:
+            indices = [(index.row(), index.column()) for index in indices]
 
+        if self.factory.selection_mode.endswith('s'):
+            return indices
+        elif len(indices) > 0:
+            return indices[0]
+        else:
+            return -1
 
     def _set_selected_indices(self, indices):
+        if not isinstance(indices, list):
+            indices = [indices]
         selected = []
-        for row, col in indices:
-            selected.append((self.value[row], self.columns[col].name))
+        if self.factory.selection_mode.startswith('row'):
+            for row in indices:
+                selected.append(self.value[row])
+        elif self.factory.selection_mode.startswith('column'):
+            for col in indices:
+                selected.append(self.columns[col].name)
+        else:
+            for row, col in indices:
+                selected.append((self.value[row], self.columns[col].name))
 
         self.selected = selected
         self.set_selection(self.selected, False)
-        return
 
     #-- Trait Change Handlers --------------------------------------------------
 
@@ -619,7 +640,7 @@ class TableEditor(Editor, BaseTableEditor):
             if column.renderer:
                 self.table_view.setItemDelegateForColumn(i, column.renderer)
 
-        self.model.reset()
+        self.model.invalidate()
         self.table_view.resizeColumnsToContents()
         if self.auto_size:
             self.table_view.resizeRowsToContents()
@@ -652,7 +673,6 @@ class TableEditor(Editor, BaseTableEditor):
 
     def _on_rows_selection(self, added, removed):
         """Handle the rows selection being changed."""
-
         items = self.items()
         indexes = self.table_view.selectionModel().selectedRows()
         selected = [ items[self.model.mapToSource(index).row()]

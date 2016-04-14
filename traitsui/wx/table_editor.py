@@ -281,13 +281,6 @@ class TableEditor ( Editor, BaseTableEditor ):
             getattr( self, '_selection_%s_updated' % mode ),
             'selection_changed', dispatch = 'ui' )
 
-        # Make sure the selection is initialized:
-        if row_mode:
-            self.set_selection( items[0:1] )
-        else:
-            self.set_selection()
-
-
         # Set the min height of the grid panel to 0, this will provide
         # a scrollbar if the window is resized such that only the first row
         # is visible
@@ -968,7 +961,7 @@ class TableEditor ( Editor, BaseTableEditor ):
                 self.set_extended_selection()
             else:
                 self.set_extended_selection(
-                    ( None, self.model.get_column_name[ index ] ) )
+                    ( None, self.model.get_column_name(index) ) )
 
     def _selected_columns_changed ( self, names ):
         if not self._no_notify:
@@ -991,7 +984,7 @@ class TableEditor ( Editor, BaseTableEditor ):
             else:
                 self.set_extended_selection(
                     ( self.value[ row ],
-                      self.model.get_column_name[ column ] ) )
+                      self.model.get_column_name(column) ) )
 
     def _selected_cells_changed ( self, cells ):
         if not self._no_notify:
