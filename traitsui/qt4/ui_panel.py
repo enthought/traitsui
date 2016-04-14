@@ -228,8 +228,6 @@ def panel(ui):
         panel = _GroupPanel(content[0], ui).control
     elif nr_groups > 1:
         panel = QtGui.QTabWidget()
-        # Identify ourselves as being a Tabbed group so we can later
-        # distinguish this from other QTabWidgets.
         _fill_panel(panel, content, ui)
         panel.ui = ui
 
