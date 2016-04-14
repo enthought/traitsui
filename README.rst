@@ -61,7 +61,7 @@ we can use TraitsUI to specify a and display a GUI view::
 
 which creates a GUI which looks like this:
 
-.. image:: README_example.png
+.. image:: https://raw.github.com/enthought/traitsui/master/README_example.png
 
 Prerequisites
 -------------
