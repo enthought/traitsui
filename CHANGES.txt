@@ -15,6 +15,7 @@ Enhancements
 Fixes
 ~~~~~
 
+* Fix Qt TableEditor segfault on editing close (#277)
 * Update tree nodes when adding children to am empty tree (#251)
 * Change default backend from Wx to Qt (#254, #256)
 * Improve toolkit selection (#259)
