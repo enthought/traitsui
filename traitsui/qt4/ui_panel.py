@@ -204,10 +204,37 @@ class _Panel(BasePanel):
                         self.add_button(button, bbox, role)
                 layout.addWidget(bbox)
 
+        # If the UI has a toolbar, should add it to the panel too
+        self._add_toolbar(parent)
+
         # Ensure the control has a size hint reflecting the View specification.
         # Yes, this is a hack, but it's too late to repair this convoluted
         # control building process, so we do what we have to...
         self.control.sizeHint = _size_hint_wrapper(self.control.sizeHint, ui)
+
+    def _add_toolbar (self, parent):
+        """ Adds a toolbar to the `parent` (QtWindow)
+        """
+        if not isinstance(parent, QtGui.QMainWindow):
+            # toolbar cannot be added to non-MainWindow widget
+            return
+
+        toolbar = self.ui.view.toolbar
+        if toolbar is not None:
+            self._last_group = self._last_parent = None
+            qt_toolbar = toolbar.create_tool_bar(parent, self )
+            qt_toolbar.setMovable( False )
+            parent.addToolBar( qt_toolbar )
+            self._last_group = self._last_parent = None
+
+    def can_add_to_toolbar(self, action):
+        """Returns whether the toolbar action should be defined in the user
+           interface.
+        """
+        if action.defined_when == '':
+            return True
+
+        return self.ui.eval_when(action.defined_when)
 
 
 def panel(ui):
@@ -227,10 +254,14 @@ def panel(ui):
     if nr_groups == 1:
         panel = _GroupPanel(content[0], ui).control
     elif nr_groups > 1:
+<<<<<<< HEAD
         panel = QtWidgets.QTabWidget()
         # Identify ourselves as being a Tabbed group so we can later
         # distinguish this from other QTabWidgets.
         panel.setProperty("traits_tabbed_group", True)
+=======
+        panel = QtGui.QTabWidget()
+>>>>>>> e373e5c8879a4b3488fc0e43a3a5cf10c02f397c
         _fill_panel(panel, content, ui)
         panel.ui = ui
 
@@ -524,7 +555,6 @@ class _GroupPanel(object):
             # Create the TabWidget or ToolBox.
             if group.layout == 'tabbed':
                 sub = QtWidgets.QTabWidget()
-                sub.setProperty("traits_tabbed_group", True)
             else:
                 sub = QtWidgets.QToolBox()
 

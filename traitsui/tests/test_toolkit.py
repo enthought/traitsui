@@ -23,17 +23,29 @@ def clear_toolkit():
 
 class TestToolkit(unittest.TestCase):
 
-    def test_toolkit_warning(self):
-        # reset toolkit state
+    def test_default_toolkit(self):
         with clear_toolkit():
-            with warnings.catch_warnings(record=True) as ws:
-                # Cause all warnings to always be triggered.
-                warnings.simplefilter("always")
-                # Trigger a warning.
-                tk = traitsui.toolkit.toolkit()
-                # Verify some things
-                self.assertGreaterEqual(len(ws), 1)
-                self.assertTrue(any(issubclass(w.category, DeprecationWarning)
-                                    for w in ws))
-                self.assertTrue(any("Default toolkit" in str(w.message)
-                                    for w in ws))
+            # try to import default toolkit - this is just a smoke test
+            tk = traitsui.toolkit.toolkit()
+
+            self.assertNotEqual(ETSConfig.toolkit, '')
+            self.assertIsInstance(tk, traitsui.toolkit.Toolkit)
+
+    def test_nonstandard_toolkit(self):
+        with clear_toolkit():
+            # try to import a non-default toolkit
+            tk = traitsui.toolkit.toolkit('null')
+
+            self.assertEqual(ETSConfig.toolkit, 'null')
+            from traitsui.null import toolkit
+            self.assertIs(tk, toolkit)
+
+    def test_nonexistent_toolkit(self):
+        with clear_toolkit():
+            # try to import a non-existent toolkit
+            tk = traitsui.toolkit.toolkit('nosuchtoolkit')
+
+            # should fail, and give us 'null'
+            self.assertEqual(ETSConfig.toolkit, 'null')
+            from traitsui.null import toolkit
+            self.assertIs(tk, toolkit)

@@ -113,15 +113,15 @@ application. The etsconfig package contains a singleton object, **ETSConfig**
 
 .. index:: ETSConfig.toolkit
 
-The values of **ETSConfig.toolkit** that are supported by TraitsUI version 4
+The values of **ETSConfig.toolkit** that are supported by TraitsUI version |version|
 are:
 
 .. index:: wxPython toolkit, Qt toolkit, null toolkit
 
-* 'wx': `wxPython <http://www.wxpython.org>`_, which provides Python bindings
-  for the `wxWidgets <http://wxwidgets.org>`_ toolkit.
 * 'qt4': `PyQt <http://riverbankcomputing.co.uk/pyqt/>`_, which provides Python
   bindings for the `Qt <http://trolltech.com/products/qt>`_ framework version 4.
+* 'wx': `wxPython <http://www.wxpython.org>`_, which provides Python bindings
+  for the `wxWidgets <http://wxwidgets.org>`_ toolkit.
 * 'null': A do-nothing toolkit, for situations where neither of the other
   toolkits is installed, but Traits is needed for non-UI purposes.
 
@@ -143,7 +143,7 @@ order of precedence:
 #. The user can specify a -toolkit flag on the command line of the program.
 #. The user can define a value for the ETS_TOOLKIT environment variable.
 
-.. warning:: The default order of toolkits will change in TraitsUI 5.0 to
+.. warning:: The default order of toolkits changed in TraitsUI 5.0 to
    prefer 'qt4' over 'wx'.
 
 .. _structure-of-this-guide:

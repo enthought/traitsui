@@ -275,10 +275,6 @@ class TableEditor(Editor, BaseTableEditor):
     def dispose(self):
         """ Disposes of the contents of an editor."""
 
-        # Disconnect the table view from its model to ensure that they do not
-        # continue to interact (the control won't be deleted until later).
-        self.table_view.setModel(None)
-
         # Make sure that the auxillary UIs are properly disposed
         if self.toolbar_ui is not None:
             self.toolbar_ui.dispose()
@@ -296,7 +292,6 @@ class TableEditor(Editor, BaseTableEditor):
         # Remove listeners for column definition changes
         self.on_trait_change(self._update_columns, 'columns', remove=True)
         self.on_trait_change(self._update_columns, 'columns_items', remove=True)
-
 
         super(TableEditor, self).dispose()
 
@@ -381,7 +376,7 @@ class TableEditor(Editor, BaseTableEditor):
         if not isinstance(items, SequenceTypes):
             items = [ items ]
 
-        if self.factory.reverse:
+        if self.factory and self.factory.reverse:
             items = ReversedList(items)
 
         return items

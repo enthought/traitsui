@@ -518,15 +518,6 @@ class NotebookEditor ( Editor ):
     # The currently selected notebook page object:
     selected = Any
 
-    # Maps tab names to QWidgets representing the tab contents
-    # TODO: It would be nice to be able to reuse self._pages for this, but
-    # its keys are not quite what we want.
-    _pagewidgets = Dict
-
-    # Maps names of tabs to their menu QAction instances; used to toggle
-    # checkboxes
-    _action_dict = Dict
-
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:

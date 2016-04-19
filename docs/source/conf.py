@@ -36,15 +36,25 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2015, Enthought'
+copyright = '2008-2016, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
 #
 # Pull from the actual release number without imports
 d = {}
-execfile(os.path.join('..', '..', 'traitsui', '_version.py'), d)
-version = release = d['version']
+try:
+    execfile(os.path.join('..', '..', 'traitsui', '_version.py'), d)
+    release = d['version']
+    version = '.'.join(d['version'].split('.', 2)[:2])
+
+except IOError as ioe:
+    import warnings
+    msg = '''_version.py seems to be missing!
+            Please run 
+            $ python setup.py develop
+            to generate this file!'''
+    warnings.warn(RuntimeWarning(msg.format(ioe)))
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -83,18 +93,18 @@ pygments_style = 'sphinx'
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
-html_style = 'default.css'
+#html_style = 'default.css'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "TraitsUI 4 User Manual"
+html_title = "TraitsUI {} User Manual".format(version.split('.')[0])
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
 
 # The name of an image file (within the static path) to place at the top of
 # the sidebar.
-html_logo = "e-logo-rev.png"
+#html_logo = "e-logo-rev.png"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -144,6 +154,25 @@ html_use_modindex = False
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'Traitsuidoc'
+
+# html theme information
+try:
+    import enthought_sphinx_theme
+
+    html_theme_path = [enthought_sphinx_theme.theme_path]
+    html_theme = 'enthought'
+except ImportError as exc:
+    import warnings
+    msg = '''Can't find Enthought Sphinx Theme, using default.
+            Exception was: {}
+            Enthought Sphinx Theme can be downloaded from
+            https://github.com/enthought/enthought-sphinx-theme'''
+    warnings.warn(RuntimeWarning(msg.format(exc)))
+
+    # old defaults
+    html_logo = "e-logo-rev.png"
+    html_style = 'default.css'
+    html_theme = 'classic'
 
 # Useful aliases to avoid repeating long URLs.
 extlinks = {'github-demo': (

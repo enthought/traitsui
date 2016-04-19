@@ -504,7 +504,7 @@ class SimpleEditor ( CustomEditor ):
         ui = self.value.edit_traits( view, kind=factory.kind, id=factory.id )
 
         # Make sure the editor is properly disposed
-        self._button.destroyed.connect(lambda: ui.dispose() )
+        self._button.destroyed.connect( ui.dispose )
 
         # Check to see if the view was 'modal', in which case it will already
         # have been closed (i.e. is None) by the time we get control back:

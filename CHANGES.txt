@@ -1,12 +1,43 @@
 Traits UI Changelog
 ===================
 
-What's new in Traits UI 4.6.0
+What's new in Traits UI 5.0.0
 -----------------------------
+
+This release features experimental support for Python 3 with the Qt toolkit!
+
+This is based in large part on the work of Yves Delley and Pradyun Gedam, but
+also owes a lot to Ioannis Tziakos for implementing container-based continuous
+integration and Prabhu Ramachandran and Corran Webster for tracking down
+last-minute bugs. Python 3 support is probably not yet ready for production
+use, but feedback and bug reports are welcome, and all future pull requests
+will be expected to work with Python 3.4 and later.  Python 3 support requires
+Traits 4.5 or greater, and Pyface 5.0 or greater.
+
+In addition, this release includes fixes to support wxPython 3.0 and deprecates
+wxPython 2.6.  Thanks to Robin Dunn for providing these improvements.
+
+This release also introduces a DataFrameEditor which provides a tabular
+view of a Pandas DataFrame, similar to the existing ArrayViewEditor.
+
+There are also a number of bug fixes and minor improvements detailed below.
+
+Finally, this release changes the default GUI toolkit from Wx to Qt. This
+changes the behaviour of the library in the case where both WxPython and
+PyQt/PySide are installed and the user or code doesn't specify the toolkit to
+use explicitly.
+
+New Features
+~~~~~~~~~~~~
+
+* Experimental Python 3 support (#230)
+* A DataFrameEditor for Pandas DataFrames, similar to the ArrayViewEditor
+  (#196)
 
 Enhancements
 ~~~~~~~~~~~~
 
+* Change the default backend from Wx to Qt (#212)
 * Add a Qt version of the ProgressEditor (#217)
 * Links to demos in the documentation (#159)
 * Add minimal support for the dock_styles option to the Qt tabbed List
