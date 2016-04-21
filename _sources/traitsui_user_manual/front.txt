@@ -1,10 +1,10 @@
-======================
-TraitsUI 4 User Manual
-======================
+===============================
+TraitsUI |version| User Manual
+===============================
 
-:Authors: Lyn Pierce, Janet Swisher
+:Authors: Lyn Pierce, Janet Swisher, and Enthought Developers
 :Version: Document Version 4
-:Copyright: 2005, 2008 Enthought, Inc. All Rights Reserved.
+:Copyright: 2005, 2008-2016 Enthought, Inc. All Rights Reserved.
 
 Redistribution and use of this document in source and derived forms, with or
 without modification, are permitted provided that the following conditions are
@@ -15,7 +15,7 @@ met:
   this list of conditions and the following disclaimer.
 
 * Neither the name of Enthought, Inc., nor the names of contributors may be used
-  to endorse or promote products derived from this document without specific 
+  to endorse or promote products derived from this document without specific
   prior written permission.
 
 THIS DOCUMENT IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
@@ -39,5 +39,4 @@ owners.
 | 1.512.536.1057 (voice)
 | 1.512.536.1059 (fax)
 | http://www.enthought.com
-| info@enthought.com 
-
+| info@enthought.com

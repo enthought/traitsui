@@ -1,21 +1,21 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
     
-    <title>The View and Its Building Blocks &mdash; TraitsUI 4 User Manual</title>
+    <title>The View and Its Building Blocks &mdash; TraitsUI 5 User Manual</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.5.1',
+        VERSION:     '5.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,42 +24,64 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/et.ico"/>
-    <link rel="top" title="TraitsUI 4 User Manual" href="../index.html" />
-    <link rel="up" title="TraitsUI 4 User Manual" href="index.html" />
-    <link rel="next" title="Customizing a View" href="custom_view.html" />
-    <link rel="prev" title="Introduction" href="intro.html" />
-   
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
-
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/et.ico">
+    <link rel="top" title="TraitsUI 5 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 5.1 User Manual" href="index.html" >
+    <link rel="next" title="Customizing a View" href="custom_view.html" >
+    <link rel="prev" title="Introduction" href="intro.html" > 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="custom_view.html" title="Customizing a View"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="intro.html" title="Introduction"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">TraitsUI 4 User Manual</a> &raquo;</li>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 5 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 5.1 User Manual</a></li>
   
     <li><a href="#">The View and Its Building Blocks</a></li>
   
 
-      </ul>
-    </div>  
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="custom_view.html" title="Customizing a View"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="intro.html" title="Introduction"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
 
-    <div class="document">
-      <div class="documentwrapper">
+	<div class="row-fluid">
+          <div class="span9">
+            
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body" id="spc-section-body">
             
   <div class="section" id="the-view-and-its-building-blocks">
 <span id="id1"></span><h1>The View and Its Building Blocks<a class="headerlink" href="#the-view-and-its-building-blocks" title="Permalink to this headline">¶</a></h1>
@@ -71,9 +93,9 @@ For example, the following sample code <a class="footnote-reference" href="#id14
 creates an object of that class, and constructs and displays a GUI for the
 object:</p>
 <p class="rubric" id="example-1-using-configure-traits"><span id="index-0"></span>Example 1: Using configure_traits()</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># configure_traits.py -- Sample code to demonstrate</span>
-<span class="c">#                        configure_traits()</span>
-<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># configure_traits.py -- Sample code to demonstrate</span>
+<span class="c1">#                        configure_traits()</span>
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span>
 <span class="kn">import</span> <span class="nn">traitsui</span>
 
 <span class="k">class</span> <span class="nc">SimpleEmployee</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
@@ -107,11 +129,11 @@ and the employee number should not be edited). Furthermore, you would like to
 specify the order in which those fields appear. You can do this by defining a
 View object and passing it to the configure_traits() method:</p>
 <p class="rubric" id="example-2-using-configure-traits-with-a-view-object"><span id="index-2"></span>Example 2: Using configure_traits() with a View object</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># configure_traits_view.py -- Sample code to demonstrate</span>
-<span class="c">#                             configure_traits()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># configure_traits_view.py -- Sample code to demonstrate</span>
+<span class="c1">#                             configure_traits()</span>
 
-<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span>
-<span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span>
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span>
+<span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="k">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span>
 <span class="kn">import</span> <span class="nn">traitsui</span>
 
 <span class="k">class</span> <span class="nc">SimpleEmployee</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
@@ -121,9 +143,9 @@ View object and passing it to the configure_traits() method:</p>
     <span class="n">employee_number</span> <span class="o">=</span> <span class="n">Str</span>
     <span class="n">salary</span> <span class="o">=</span> <span class="n">Int</span>
 
-<span class="n">view1</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;first_name&#39;</span><span class="p">),</span>
-             <span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;last_name&#39;</span><span class="p">),</span>
-             <span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;department&#39;</span><span class="p">))</span>
+<span class="n">view1</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;first_name&#39;</span><span class="p">),</span>
+             <span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;last_name&#39;</span><span class="p">),</span>
+             <span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;department&#39;</span><span class="p">))</span>
 
 <span class="n">sam</span> <span class="o">=</span> <span class="n">SimpleEmployee</span><span class="p">()</span>
 <span class="n">sam</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="n">view1</span><span class="p">)</span>
@@ -136,12 +158,12 @@ View object and passing it to the configure_traits() method:</p>
 </div>
 <p>A View object can have a variety of attributes, which are set in the View
 definition, following any Group or Item objects.</p>
-<p>The sections on <a class="reference internal" href="#contents-of-a-view"><span>Contents of a View</span></a> through <a class="reference internal" href="advanced_view.html#advanced-view-concepts"><span>Advanced View Concepts</span></a>
+<p>The sections on <a class="reference internal" href="#contents-of-a-view"><span class="std std-ref">Contents of a View</span></a> through <a class="reference internal" href="advanced_view.html#advanced-view-concepts"><span class="std std-ref">Advanced View Concepts</span></a>
 explore the contents and capabilities of Views. Refer to
 the <em>Traits API Reference</em> for details of the View class.</p>
 <p>Except as noted, all example code uses the configure_traits() method; a detailed
 description of this and other techniques for creating GUI displays from Views
-can be found in <a class="reference internal" href="advanced_view.html#displaying-a-view"><span>Displaying a View</span></a>.</p>
+can be found in <a class="reference internal" href="advanced_view.html#displaying-a-view"><span class="std std-ref">Displaying a View</span></a>.</p>
 </div>
 <div class="section" id="contents-of-a-view">
 <span id="index-3"></span><span id="id5"></span><h2>Contents of a View<a class="headerlink" href="#contents-of-a-view" title="Permalink to this headline">¶</a></h2>
@@ -249,9 +271,9 @@ override</td>
 <td>These attributes override the widget that is
 automatically selected by TraitsUI. These
 options are discussed in
-<a class="reference internal" href="factory_intro.html#introduction-to-trait-editor-factories"><span>Introduction to Trait Editor Factories</span></a>
+<a class="reference internal" href="factory_intro.html#introduction-to-trait-editor-factories"><span class="std std-ref">Introduction to Trait Editor Factories</span></a>
 and
-<a class="reference internal" href="factories_basic.html#the-predefined-trait-editor-factories"><span>The Predefined Trait Editor Factories</span></a>.</td>
+<a class="reference internal" href="factories_basic.html#the-predefined-trait-editor-factories"><span class="std std-ref">The Predefined Trait Editor Factories</span></a>.</td>
 </tr>
 <tr class="row-even"><td>Visibility
 and status</td>
@@ -268,7 +290,7 @@ in response to changes in the data it
 contains. More sophisticated dynamic behavior
 can be implemented using a custom
 <a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a> see
-<a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span>Controlling the Interface: the Handler</span></a>
+<a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span class="std std-ref">Controlling the Interface: the Handler</span></a>
 ).</td>
 </tr>
 <tr class="row-odd"><td>User help</td>
@@ -326,10 +348,10 @@ TraitsUI, such grouping is accomplished by means of the <a class="reference inte
 <div>pair: configure_traits(); examples
 triple: View; Group; examples</div></blockquote>
 <p class="rubric" id="example-3-using-configure-traits-with-a-view-and-a-group-object">Example 3: Using configure_traits() with a View and a Group object</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># configure_traits_view_group.py -- Sample code to demonstrate</span>
-<span class="c">#                                   configure_traits()</span>
-<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span>
-<span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">Group</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># configure_traits_view_group.py -- Sample code to demonstrate</span>
+<span class="c1">#                                   configure_traits()</span>
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span>
+<span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="k">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">Group</span>
 <span class="kn">import</span> <span class="nn">traitsui</span>
 
 <span class="k">class</span> <span class="nc">SimpleEmployee</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
@@ -340,11 +362,11 @@ triple: View; Group; examples</div></blockquote>
     <span class="n">employee_number</span> <span class="o">=</span> <span class="n">Str</span>
     <span class="n">salary</span> <span class="o">=</span> <span class="n">Int</span>
 
-<span class="n">view1</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;first_name&#39;</span><span class="p">),</span>
-                   <span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;last_name&#39;</span><span class="p">),</span>
-                   <span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;department&#39;</span><span class="p">),</span>
-                   <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Personnel profile&#39;</span><span class="p">,</span>
-                   <span class="n">show_border</span> <span class="o">=</span> <span class="bp">True</span><span class="p">))</span>
+<span class="n">view1</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;first_name&#39;</span><span class="p">),</span>
+                   <span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;last_name&#39;</span><span class="p">),</span>
+                   <span class="n">Item</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;department&#39;</span><span class="p">),</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Personnel profile&#39;</span><span class="p">,</span>
+                   <span class="n">show_border</span> <span class="o">=</span> <span class="kc">True</span><span class="p">))</span>
 
 <span class="n">sam</span> <span class="o">=</span> <span class="n">SimpleEmployee</span><span class="p">()</span>
 <span class="n">sam</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">(</span><span class="n">view</span><span class="o">=</span><span class="n">view1</span><span class="p">)</span>
@@ -448,11 +470,11 @@ top-level group for the current View. For
 example, suppose help text is defined for a
 Group called <strong>group1</strong>. The following View
 shows this text in its help window:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">View</span><span class="p">(</span><span class="n">group1</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span><span class="p">(</span><span class="n">group1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The following two do  not:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">View</span><span class="p">(</span><span class="n">group1</span><span class="p">,</span> <span class="n">group2</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span><span class="p">(</span><span class="n">group1</span><span class="p">,</span> <span class="n">group2</span><span class="p">)</span>
 <span class="n">View</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">group1</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -562,7 +584,7 @@ groups.</td>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id2">[3]</a></td><td>If the code is being run from a program that already has a GUI defined,
 then use edit_traits() instead of configure_traits(). These methods are
-discussed in more detail in <a class="reference internal" href="advanced_view.html#displaying-a-view"><span>Displaying a View</span></a>.</td></tr>
+discussed in more detail in <a class="reference internal" href="advanced_view.html#displaying-a-view"><span class="std std-ref">Displaying a View</span></a>.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id14" rules="none">
@@ -589,11 +611,11 @@ one type, but it is not recommended.</td></tr>
 
           </div>
         </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+          </div>
+      <div class="spc-rightsidebar span3">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../index.html">
-              <img class="logo" src="../_static/e-logo-rev.png" alt="Logo"/>
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -620,13 +642,11 @@ one type, but it is not recommended.</td></tr>
   <h4>Next topic</h4>
   <p class="topless"><a href="custom_view.html"
                         title="next chapter">Customizing a View</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/traitsui_user_manual/view.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/traitsui_user_manual/view.txt"
+       rel="nofollow">Show Source</a>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -635,29 +655,35 @@ one type, but it is not recommended.</td></tr>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-      <div class="clearer"></div>
+        </div>
+      </div>
     </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
     <div class="footer">
-      &copy;2008-2015, Enthought.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
-      
-      |
-      <a href="../_sources/traitsui_user_manual/view.txt"
-          rel="nofollow">Page source</a></li>
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2016, Enthought
+      </li>
+      <li>
+      Last updated on Apr 14, 2016.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.
+      </li>
+    </ul>
     </div>
-
-    
-
-    
+    </div>
+    </div>
   </body>
 </html>

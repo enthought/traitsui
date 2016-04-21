@@ -1,21 +1,21 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
     
-    <title>Writing a graphical application for scientific programming using TraitsUI 4 &mdash; TraitsUI 4 User Manual</title>
+    <title>Writing a graphical application for scientific programming using TraitsUI 5.1 &mdash; TraitsUI 5 User Manual</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '4.5.1',
+        VERSION:     '5.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,41 +24,67 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/et.ico"/>
-    <link rel="top" title="TraitsUI 4 User Manual" href="../index.html" />
-    <link rel="up" title="TraitsUI 4 Tutorials" href="index.html" />
-    <link rel="prev" title="TraitsUI 4 Tutorials" href="index.html" />
-   
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
-
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/et.ico">
+    <link rel="top" title="TraitsUI 5 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 5.1 Tutorials" href="index.html" >
+    <link rel="next" title="TraitsUI 5.1 Demos" href="../demos/index.html" >
+    <link rel="prev" title="TraitsUI 5.1 Tutorials" href="index.html" > 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="index.html" title="TraitsUI 4 Tutorials"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">TraitsUI 4 User Manual</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">TraitsUI 4 Tutorials</a> &raquo;</li>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 5 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 5.1 Tutorials</a></li>
   
-    <li><a href="#">Writing a graphical application for scientific programming using TraitsUI 4</a></li>
+    <li><a href="#">Writing a graphical application for scientific programming using TraitsUI 5.1</a></li>
   
 
-      </ul>
-    </div>  
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../demos/index.html" title="TraitsUI 5.1 Demos"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="index.html" title="TraitsUI 5.1 Tutorials"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+	<div class="row-fluid">
+          <div class="span9">
             
-  <div class="section" id="writing-a-graphical-application-for-scientific-programming-using-traitsui-4">
-<span id="writing-a-graphical-application-for-scientific-programming-using-traitsui"></span><h1>Writing a graphical application for scientific programming using TraitsUI 4<a class="headerlink" href="#writing-a-graphical-application-for-scientific-programming-using-traitsui-4" title="Permalink to this headline">¶</a></h1>
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="writing-a-graphical-application-for-scientific-programming-using-traitsui-version">
+<span id="writing-a-graphical-application-for-scientific-programming-using-traitsui"></span><h1>Writing a graphical application for scientific programming using TraitsUI 5.1<a class="headerlink" href="#writing-a-graphical-application-for-scientific-programming-using-traitsui-version" title="Permalink to this headline">¶</a></h1>
 <p><strong>A step by step guide for a non-programmer</strong></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -66,7 +92,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Gael Varoquaux</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2015-05-27</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2016-04-14</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">License:</th><td class="field-body">BSD</td>
 </tr>
@@ -164,7 +190,7 @@ to be rotated.</p>
 <p>A point object could be implemented in python with:</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/code_block0.py">code snippet #0</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span>
 
 <span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; 3D Point objects &quot;&quot;&quot;</span>
@@ -184,7 +210,7 @@ to be rotated.</p>
 <p>This code creates a <em>Point</em> class. Points objects can be created as
 <cite>instances</cite> of the Point class:</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Point</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">rotate_z</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
@@ -218,9 +244,9 @@ of copy-and-pasting the <em>Point</em> class and adding a color attribute, you c
 define a new class <em>ColoredPoint</em> that inherits all of the <em>Point</em>
 class&#8217;s methods and attributes:</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">ColoredPoint</span><span class="p">(</span><span class="n">Point</span><span class="p">):</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ColoredPoint</span><span class="p">(</span><span class="n">Point</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Colored 3D point &quot;&quot;&quot;</span>
-    <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;white&quot;</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -255,26 +281,26 @@ camera interfaced to python through the ctypes <a class="footnote-reference" hre
 to open a dialog to edit its properties :</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/code_block1.py">code snippet #1</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Camera object &quot;&quot;&quot;</span>
 
     <span class="n">gain</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>
-        <span class="n">desc</span><span class="o">=</span><span class="s">&quot;the gain index of the camera&quot;</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s">&quot;gain&quot;</span><span class="p">,</span> <span class="p">)</span>
+        <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the gain index of the camera&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;gain&quot;</span><span class="p">,</span> <span class="p">)</span>
 
     <span class="n">exposure</span> <span class="o">=</span> <span class="n">CInt</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">desc</span><span class="o">=</span><span class="s">&quot;the exposure time, in ms&quot;</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s">&quot;Exposure&quot;</span><span class="p">,</span> <span class="p">)</span>
+        <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;the exposure time, in ms&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Exposure&quot;</span><span class="p">,</span> <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Captures an image on the camera and returns it &quot;&quot;&quot;</span>
-        <span class="k">print</span> <span class="s">&quot;capturing an image at </span><span class="si">%i</span><span class="s"> ms exposure, gain: </span><span class="si">%i</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="k">print</span> <span class="s2">&quot;capturing an image at </span><span class="si">%i</span><span class="s2"> ms exposure, gain: </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">exposure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gain</span> <span class="p">)</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">()</span>
     <span class="n">camera</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
     <span class="n">camera</span><span class="o">.</span><span class="n">capture</span><span class="p">()</span>
@@ -309,25 +335,25 @@ object, we can control how the representation generated by Traits looks
 like (see the TraitsUI manual):</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/container.py">code snippet #2</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="n">gain</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">)</span>
-    <span class="n">exposure</span> <span class="o">=</span> <span class="n">CInt</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Exposure&quot;</span><span class="p">,</span> <span class="p">)</span>
+    <span class="n">exposure</span> <span class="o">=</span> <span class="n">CInt</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Exposure&quot;</span><span class="p">,</span> <span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">TextDisplay</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="n">string</span> <span class="o">=</span> <span class="n">String</span><span class="p">()</span>
 
-    <span class="n">view</span><span class="o">=</span> <span class="n">View</span><span class="p">(</span> <span class="n">Item</span><span class="p">(</span><span class="s">&#39;string&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">springy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;custom&#39;</span> <span class="p">))</span>
+    <span class="n">view</span><span class="o">=</span> <span class="n">View</span><span class="p">(</span> <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">springy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span> <span class="p">))</span>
 
 <span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="n">camera</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Camera</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">TextDisplay</span><span class="p">)</span>
 
     <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span>
-                <span class="n">Item</span><span class="p">(</span><span class="s">&#39;camera&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;custom&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="p">),</span>
-                <span class="n">Item</span><span class="p">(</span><span class="s">&#39;display&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;custom&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="p">),</span>
+                <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;camera&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="p">),</span>
+                <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;display&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="p">),</span>
             <span class="p">)</span>
 
 <span class="n">container</span> <span class="o">=</span> <span class="n">Container</span><span class="p">(</span><span class="n">camera</span><span class="o">=</span><span class="n">Camera</span><span class="p">(),</span> <span class="n">display</span><span class="o">=</span><span class="n">TextDisplay</span><span class="p">())</span>
@@ -400,7 +426,7 @@ and displayed by starting a wx application, and its main loop (ie event
 loop in wx speech).</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/event_loop.py">code snippet #3</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">wx</span>
 
 <span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
@@ -439,7 +465,7 @@ but the execution order is chosen by the user, and not by the developer.</p>
 duplicated to output.</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/echo_box.py">code snippet #4</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">class</span> <span class="nc">EchoBox</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="nb">input</span> <span class="o">=</span>  <span class="n">Str</span><span class="p">()</span>
@@ -459,7 +485,7 @@ Here is an example of an interactive <cite>traitsUI</cite> application using a
 button:</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/interactive.py">code snippet #5</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">ButtonEditor</span>
 
 <span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
@@ -469,7 +495,7 @@ button:</p>
     <span class="k">def</span> <span class="nf">_add_one_fired</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span><span class="mi">1</span>
 
-    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">,</span> <span class="n">Item</span><span class="p">(</span><span class="s">&#39;add_one&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span> <span class="p">))</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;add_one&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span> <span class="p">))</span>
 
 <span class="n">Counter</span><span class="p">()</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
 </pre></div>
@@ -504,7 +530,7 @@ operations in the same time.</p>
 <p>A standard python program executes in a sequential way. Consider the
 following code snippet :</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="n">do_a</span><span class="p">()</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">do_a</span><span class="p">()</span>
 <span class="n">do_b</span><span class="p">()</span>
 <span class="n">do_c</span><span class="p">()</span>
 </pre></div>
@@ -536,24 +562,24 @@ thread in its <em>run</em> method. You can start your thread using its <em>start
 method:</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/thread_example.py">code snippet #6</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 
 <span class="k">class</span> <span class="nc">MyThread</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">print</span> <span class="s">&quot;MyThread done&quot;</span>
+        <span class="k">print</span> <span class="s2">&quot;MyThread done&quot;</span>
 
 <span class="n">my_thread</span> <span class="o">=</span> <span class="n">MyThread</span><span class="p">()</span>
 
 <span class="n">my_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<span class="k">print</span> <span class="s">&quot;Main thread done&quot;</span>
+<span class="k">print</span> <span class="s2">&quot;Main thread done&quot;</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>The above code yields the following output:</p>
-<div class="highlight-python"><div class="highlight"><pre>Main thread done
-MyThread done
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Main</span> <span class="n">thread</span> <span class="n">done</span>
+<span class="n">MyThread</span> <span class="n">done</span>
 </pre></div>
 </div>
 </div>
@@ -585,7 +611,7 @@ you are accessing it. Here is an example of code inserting the
 modification to traits objects by hand in the event loop:</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/traits_thread.py">code snippet #7</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">ButtonEditor</span>
@@ -593,26 +619,26 @@ modification to traits objects by hand in the event loop:</p>
 <span class="k">class</span> <span class="nc">TextDisplay</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="n">string</span> <span class="o">=</span>  <span class="n">String</span><span class="p">()</span>
 
-    <span class="n">view</span><span class="o">=</span> <span class="n">View</span><span class="p">(</span> <span class="n">Item</span><span class="p">(</span><span class="s">&#39;string&#39;</span><span class="p">,</span><span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">springy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;custom&#39;</span> <span class="p">))</span>
+    <span class="n">view</span><span class="o">=</span> <span class="n">View</span><span class="p">(</span> <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">,</span><span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">springy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span> <span class="p">))</span>
 
 
 <span class="k">class</span> <span class="nc">CaptureThread</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s">&#39;Camera started</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;Camera started</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span>
         <span class="n">n_img</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">wants_abort</span><span class="p">:</span>
             <span class="n">sleep</span><span class="p">(</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span>
             <span class="n">n_img</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%d</span><span class="s"> image captured</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">n_img</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> image captured</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">n_img</span> \
                                                     <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s">&#39;Camera stopped</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;Camera stopped</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">string</span>
 
 <span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="n">start_stop_capture</span> <span class="o">=</span> <span class="n">Button</span><span class="p">()</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">TextDisplay</span><span class="p">)</span>
     <span class="n">capture_thread</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">CaptureThread</span><span class="p">)</span>
 
-    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span> <span class="n">Item</span><span class="p">(</span><span class="s">&#39;start_stop_capture&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span> <span class="p">))</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span> <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;start_stop_capture&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span> <span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_start_stop_capture_fired</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture_thread</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture_thread</span><span class="o">.</span><span class="n">isAlive</span><span class="p">():</span>
@@ -631,10 +657,10 @@ modification to traits objects by hand in the event loop:</p>
     <span class="k">def</span> <span class="nf">_camera_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Camera</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">)</span>
 
-    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="s">&#39;display&#39;</span><span class="p">,</span> <span class="s">&#39;camera&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&quot;custom&quot;</span><span class="p">,</span> <span class="n">resizable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="s1">&#39;display&#39;</span><span class="p">,</span> <span class="s1">&#39;camera&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;custom&quot;</span><span class="p">,</span> <span class="n">resizable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">MainWindow</span><span class="p">()</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -707,11 +733,11 @@ control as the <em>control</em> attribute of the editor. TraitsUI takes care of
 displaying and positioning the editor.</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/mpl_figure_editor.py">code snippet #8</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">wx</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wx</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="c"># We want matplotlib to use a wxPython backend</span>
-<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;WXAgg&#39;</span><span class="p">)</span>
+<span class="c1"># We want matplotlib to use a wxPython backend</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;WXAgg&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_wxagg</span> <span class="kn">import</span> <span class="n">FigureCanvasWxAgg</span> <span class="k">as</span> <span class="n">FigureCanvas</span>
 <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
 <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_wx</span> <span class="kn">import</span> <span class="n">NavigationToolbar2Wx</span>
@@ -733,11 +759,11 @@ displaying and positioning the editor.</p>
 
     <span class="k">def</span> <span class="nf">_create_canvas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create the MPL canvas. &quot;&quot;&quot;</span>
-        <span class="c"># The panel lets us add additional controls.</span>
+        <span class="c1"># The panel lets us add additional controls.</span>
         <span class="n">panel</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">CLIP_CHILDREN</span><span class="p">)</span>
         <span class="n">sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
         <span class="n">panel</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span><span class="n">sizer</span><span class="p">)</span>
-        <span class="c"># matplotlib commands to create a canvas</span>
+        <span class="c1"># matplotlib commands to create a canvas</span>
         <span class="n">mpl_control</span> <span class="o">=</span> <span class="n">FigureCanvas</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">mpl_control</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">LEFT</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">TOP</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">GROW</span><span class="p">)</span>
         <span class="n">toolbar</span> <span class="o">=</span> <span class="n">NavigationToolbar2Wx</span><span class="p">(</span><span class="n">mpl_control</span><span class="p">)</span>
@@ -750,8 +776,8 @@ displaying and positioning the editor.</p>
     <span class="n">klass</span> <span class="o">=</span> <span class="n">_MPLFigureEditor</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="c"># Create a window to demo the editor</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Create a window to demo the editor</span>
     <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasTraits</span>
     <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span>
     <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">pi</span>
@@ -760,7 +786,7 @@ displaying and positioning the editor.</p>
 
         <span class="n">figure</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Figure</span><span class="p">,</span> <span class="p">())</span>
 
-        <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="s">&#39;figure&#39;</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">MPLFigureEditor</span><span class="p">(),</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="s1">&#39;figure&#39;</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">MPLFigureEditor</span><span class="p">(),</span>
                                 <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
                         <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
                         <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
@@ -816,7 +842,7 @@ by appropriate threads, as discussed in section 2.3.</li>
 <h3>The imports<a class="headerlink" href="#the-imports" title="Permalink to this headline">¶</a></h3>
 <p>The MPLFigureEditor is imported from the last example.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">Group</span><span class="p">,</span> <span class="n">HSplit</span><span class="p">,</span> <span class="n">Handler</span>
@@ -834,24 +860,24 @@ by appropriate threads, as discussed in section 2.3.</li>
 <p>These objects store information for the program to interact with the user
 via traitsUI.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Experiment</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Experiment</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Object that contains the parameters that control the experiment,</span>
 <span class="sd">    modified by the user.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">width</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Width&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;width of the cloud&quot;</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;X&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;X position of the center&quot;</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Y&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;Y position of the center&quot;</span><span class="p">)</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Width&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;width of the cloud&quot;</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;X position of the center&quot;</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Y position of the center&quot;</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">Results</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Object used to display the results.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">width</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Width&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;width of the cloud&quot;</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;X&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;X position of the center&quot;</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Y&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;Y position of the center&quot;</span><span class="p">)</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Width&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;width of the cloud&quot;</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;X position of the center&quot;</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Y position of the center&quot;</span><span class="p">)</span>
 
-    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span> <span class="n">Item</span><span class="p">(</span><span class="s">&#39;width&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;readonly&#39;</span><span class="p">),</span>
-                 <span class="n">Item</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;readonly&#39;</span><span class="p">),</span>
-                 <span class="n">Item</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;readonly&#39;</span><span class="p">),</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span> <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;readonly&#39;</span><span class="p">),</span>
+                 <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;readonly&#39;</span><span class="p">),</span>
+                 <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;readonly&#39;</span><span class="p">),</span>
                <span class="p">)</span>
 </pre></div>
 </div>
@@ -860,12 +886,12 @@ via traitsUI.</p>
 it has a method to acquire an image (or in our case simulate acquiring),
 using its attributes as parameters for the acquisition.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Camera objects. Implements both the camera parameters controls, and</span>
 <span class="sd">    the picture acquisition.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">exposure</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Exposure&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;exposure, in ms&quot;</span><span class="p">)</span>
-    <span class="n">gain</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Gain&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;gain&quot;</span><span class="p">)</span>
+    <span class="n">exposure</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Exposure&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;exposure, in ms&quot;</span><span class="p">)</span>
+    <span class="n">gain</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Gain&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;gain&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">acquire</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiment</span><span class="p">):</span>
         <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">indices</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
@@ -898,7 +924,7 @@ accumulation of threads in the case that the processing takes longer than
 the time lapse between two images, the acquisition thread checks that the
 processing thread is done before spawning a new one.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">results_obj</span><span class="p">):</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">results_obj</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Function called to do the processing &quot;&quot;&quot;</span>
     <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">indices</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">X</span><span class="o">*</span><span class="n">image</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
@@ -918,7 +944,7 @@ processing thread is done before spawning a new one.</p>
         <span class="sd">&quot;&quot;&quot; Spawns the processing job. &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">processing_job</span><span class="o">.</span><span class="n">isAlive</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="s">&quot;Processing too slow&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="s2">&quot;Processing too slow&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">pass</span>
@@ -928,16 +954,16 @@ processing thread is done before spawning a new one.</p>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Runs the acquisition loop. &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="s">&#39;Camera started&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="s1">&#39;Camera started&#39;</span><span class="p">)</span>
         <span class="n">n_img</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">wants_abort</span><span class="p">:</span>
             <span class="n">n_img</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">img</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%d</span><span class="s"> image captured&#39;</span> <span class="o">%</span> <span class="n">n_img</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> image captured&#39;</span> <span class="o">%</span> <span class="n">n_img</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">image_show</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
             <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="s">&#39;Camera stopped&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="s1">&#39;Camera stopped&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -957,7 +983,7 @@ also has an Button for starting or stopping the acquisition, and a string
 process. The view attribute is tweaked to produce a pleasant and usable
 dialog. Tabs are used to help the display to be light and clear.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">ControlPanel</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ControlPanel</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; This object is the core of the traitsUI interface. Its view is</span>
 <span class="sd">    the right panel of the application, and it hosts the method for</span>
 <span class="sd">    interaction between the objects and the GUI.</span>
@@ -966,25 +992,25 @@ dialog. Tabs are used to help the display to be light and clear.</p>
     <span class="n">camera</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Camera</span><span class="p">,</span> <span class="p">())</span>
     <span class="n">figure</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Figure</span><span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Results</span><span class="p">,</span> <span class="p">())</span>
-    <span class="n">start_stop_acquisition</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="s">&quot;Start/Stop acquisition&quot;</span><span class="p">)</span>
+    <span class="n">start_stop_acquisition</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Start/Stop acquisition&quot;</span><span class="p">)</span>
     <span class="n">results_string</span> <span class="o">=</span> <span class="n">String</span><span class="p">()</span>
     <span class="n">acquisition_thread</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">AcquisitionThread</span><span class="p">)</span>
     <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span>
                     <span class="n">Group</span><span class="p">(</span>
-                        <span class="n">Item</span><span class="p">(</span><span class="s">&#39;start_stop_acquisition&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span> <span class="p">),</span>
-                        <span class="n">Item</span><span class="p">(</span><span class="s">&#39;results_string&#39;</span><span class="p">,</span><span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                            <span class="n">springy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;custom&#39;</span> <span class="p">),</span>
-                        <span class="n">label</span><span class="o">=</span><span class="s">&quot;Control&quot;</span><span class="p">,</span> <span class="n">dock</span><span class="o">=</span><span class="s">&#39;tab&#39;</span><span class="p">,),</span>
+                        <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;start_stop_acquisition&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span> <span class="p">),</span>
+                        <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;results_string&#39;</span><span class="p">,</span><span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                            <span class="n">springy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span> <span class="p">),</span>
+                        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Control&quot;</span><span class="p">,</span> <span class="n">dock</span><span class="o">=</span><span class="s1">&#39;tab&#39;</span><span class="p">,),</span>
                     <span class="n">Group</span><span class="p">(</span>
                         <span class="n">Group</span><span class="p">(</span>
-                            <span class="n">Item</span><span class="p">(</span><span class="s">&#39;experiment&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;custom&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
-                            <span class="n">label</span><span class="o">=</span><span class="s">&quot;Input&quot;</span><span class="p">,),</span>
+                            <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;experiment&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+                            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Input&quot;</span><span class="p">,),</span>
                         <span class="n">Group</span><span class="p">(</span>
-                            <span class="n">Item</span><span class="p">(</span><span class="s">&#39;results&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;custom&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
-                            <span class="n">label</span><span class="o">=</span><span class="s">&quot;Results&quot;</span><span class="p">,),</span>
-                    <span class="n">label</span><span class="o">=</span><span class="s">&#39;Experiment&#39;</span><span class="p">,</span> <span class="n">dock</span><span class="o">=</span><span class="s">&quot;tab&quot;</span><span class="p">),</span>
-                <span class="n">Item</span><span class="p">(</span><span class="s">&#39;camera&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&#39;custom&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">dock</span><span class="o">=</span><span class="s">&quot;tab&quot;</span><span class="p">),</span>
-                <span class="n">layout</span><span class="o">=</span><span class="s">&#39;tabbed&#39;</span><span class="p">),</span>
+                            <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+                            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Results&quot;</span><span class="p">,),</span>
+                    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Experiment&#39;</span><span class="p">,</span> <span class="n">dock</span><span class="o">=</span><span class="s2">&quot;tab&quot;</span><span class="p">),</span>
+                <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;camera&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span><span class="p">,</span> <span class="n">show_label</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">dock</span><span class="o">=</span><span class="s2">&quot;tab&quot;</span><span class="p">),</span>
+                <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;tabbed&#39;</span><span class="p">),</span>
                 <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_start_stop_acquisition_fired</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1005,13 +1031,13 @@ dialog. Tabs are used to help the display to be light and clear.</p>
     <span class="k">def</span> <span class="nf">add_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Adds a line to the textbox display.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">results_string</span> <span class="o">=</span> <span class="p">(</span><span class="n">string</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_string</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results_string</span> <span class="o">=</span> <span class="p">(</span><span class="n">string</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_string</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1000</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">image_show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Plots an image on the canvas in a thread safe way.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">images</span><span class="o">=</span><span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s">&#39;auto&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
         <span class="n">wx</span><span class="o">.</span><span class="n">CallAfter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">MainWindowHandler</span><span class="p">(</span><span class="n">Handler</span><span class="p">):</span>
@@ -1038,9 +1064,9 @@ dialog. Tabs are used to help the display to be light and clear.</p>
     <span class="k">def</span> <span class="nf">_panel_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">ControlPanel</span><span class="p">(</span><span class="n">figure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
 
-    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">HSplit</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="s">&#39;figure&#39;</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">MPLFigureEditor</span><span class="p">(),</span>
-                            <span class="n">dock</span><span class="o">=</span><span class="s">&#39;vertical&#39;</span><span class="p">),</span>
-                       <span class="n">Item</span><span class="p">(</span><span class="s">&#39;panel&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s">&quot;custom&quot;</span><span class="p">),</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">HSplit</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="s1">&#39;figure&#39;</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">MPLFigureEditor</span><span class="p">(),</span>
+                            <span class="n">dock</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">),</span>
+                       <span class="n">Item</span><span class="p">(</span><span class="s1">&#39;panel&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;custom&quot;</span><span class="p">),</span>
                        <span class="n">show_labels</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                       <span class="p">),</span>
                 <span class="n">resizable</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
@@ -1048,7 +1074,7 @@ dialog. Tabs are used to help the display to be light and clear.</p>
                 <span class="n">handler</span><span class="o">=</span><span class="n">MainWindowHandler</span><span class="p">(),</span>
                 <span class="n">buttons</span><span class="o">=</span><span class="n">NoButtons</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">MainWindow</span><span class="p">()</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1135,15 +1161,15 @@ helpful on the mailing lists.</p>
 
           </div>
         </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+          </div>
+      <div class="spc-rightsidebar span3">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../index.html">
-              <img class="logo" src="../_static/e-logo-rev.png" alt="Logo"/>
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Writing a graphical application for scientific programming using TraitsUI 4</a><ul>
+<li><a class="reference internal" href="#">Writing a graphical application for scientific programming using TraitsUI 5.1</a><ul>
 <li><a class="reference internal" href="#from-objects-to-dialogs-using-traitsui">From objects to dialogs using traitsUI</a><ul>
 <li><a class="reference internal" href="#object-oriented-programming">Object-oriented programming</a><ul>
 <li><a class="reference internal" href="#objects-attributes-and-methods">Objects, attributes and methods</a></li>
@@ -1183,14 +1209,15 @@ helpful on the mailing lists.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">TraitsUI 4 Tutorials</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/tutorials/traits_ui_scientific_app.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+                        title="previous chapter">TraitsUI 5.1 Tutorials</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../demos/index.html"
+                        title="next chapter">TraitsUI 5.1 Demos</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/tutorials/traits_ui_scientific_app.txt"
+       rel="nofollow">Show Source</a>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -1199,29 +1226,35 @@ helpful on the mailing lists.</p>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-      <div class="clearer"></div>
+        </div>
+      </div>
     </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
     <div class="footer">
-      &copy;2008-2015, Enthought.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
-      
-      |
-      <a href="../_sources/tutorials/traits_ui_scientific_app.txt"
-          rel="nofollow">Page source</a></li>
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2016, Enthought
+      </li>
+      <li>
+      Last updated on Apr 14, 2016.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.
+      </li>
+    </ul>
     </div>
-
-    
-
-    
+    </div>
+    </div>
   </body>
 </html>
