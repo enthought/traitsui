@@ -254,14 +254,7 @@ def panel(ui):
     if nr_groups == 1:
         panel = _GroupPanel(content[0], ui).control
     elif nr_groups > 1:
-<<<<<<< HEAD
         panel = QtWidgets.QTabWidget()
-        # Identify ourselves as being a Tabbed group so we can later
-        # distinguish this from other QTabWidgets.
-        panel.setProperty("traits_tabbed_group", True)
-=======
-        panel = QtGui.QTabWidget()
->>>>>>> e373e5c8879a4b3488fc0e43a3a5cf10c02f397c
         _fill_panel(panel, content, ui)
         panel.ui = ui
 
