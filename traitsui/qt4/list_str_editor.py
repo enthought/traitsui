@@ -188,7 +188,8 @@ class _ListStrEditor(Editor):
             editor.
         """
         if not self._no_update:
-            self.model.reset()
+            self.model.beginResetModel()
+            self.model.endResetModel()
             # restore selection back
             if self.factory.multi_select :
                 self._multi_selected_changed(self.multi_selected)

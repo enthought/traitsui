@@ -47,16 +47,16 @@ class FooDialog(HasTraits):
 @skip_if_not_qt4
 class TestUIPanel(unittest.TestCase):
     def setup_qt4_dock_window(self):
-        from pyface.qt import QtGui
+        from pyface.qt import QtWidgets
 
         # set up the dock window for qt
-        main_window = QtGui.QMainWindow()
-        dock = QtGui.QDockWidget("testing", main_window)
-        dock.setWidget(QtGui.QMainWindow())
+        main_window = QtWidgets.QMainWindow()
+        dock = QtWidgets.QDockWidget("testing", main_window)
+        dock.setWidget(QtWidgets.QMainWindow())
         return main_window, dock
 
     def test_panel_has_toolbar_buttons_qt4(self):
-        from pyface.qt import QtGui
+        from pyface.qt import QtWidgets
 
         _, dock = self.setup_qt4_dock_window()
 
@@ -66,15 +66,15 @@ class TestUIPanel(unittest.TestCase):
         dock.widget().setCentralWidget(ui.control)
 
         # There should be a toolbar for the panel
-        self.assertIsNotNone(dock.findChild(QtGui.QToolBar))
+        self.assertIsNotNone(dock.findChild(QtWidgets.QToolBar))
 
         # There should be buttons too
         # Not searching from dock because the dock panel has buttons for
         # popping up and closing the panel
-        self.assertIsNotNone(ui.control.findChild(QtGui.QPushButton))
+        self.assertIsNotNone(ui.control.findChild(QtWidgets.QPushButton))
 
     def test_subpanel_has_toolbar_no_buttons_qt4(self):
-        from pyface.qt import QtGui
+        from pyface.qt import QtWidgets
 
         _, dock = self.setup_qt4_dock_window()
 
@@ -84,15 +84,15 @@ class TestUIPanel(unittest.TestCase):
         dock.widget().setCentralWidget(ui.control)
 
         # There should be a toolbar for the subpanel
-        self.assertIsNotNone(dock.findChild(QtGui.QToolBar))
+        self.assertIsNotNone(dock.findChild(QtWidgets.QToolBar))
 
         # Buttons should not be shown for subpanel
         # Not searching from dock because the dock panel has buttons for
         # popping up and closing the panel
-        self.assertIsNone(ui.control.findChild(QtGui.QPushButton))
+        self.assertIsNone(ui.control.findChild(QtWidgets.QPushButton))
 
     def test_subpanel_no_toolbar_nor_button_in_widget(self):
-        from pyface.qt import QtGui
+        from pyface.qt import QtWidgets
 
         # FooDialog uses a QWidget to contain the panels
         # No attempt should be made for adding the toolbars
@@ -100,7 +100,7 @@ class TestUIPanel(unittest.TestCase):
         ui = foo_window.edit_traits()
 
         # No toolbar for the dialog
-        self.assertIsNone(ui.control.findChild(QtGui.QToolBar))
+        self.assertIsNone(ui.control.findChild(QtWidgets.QToolBar))
 
         # No button
-        self.assertIsNone(ui.control.findChild(QtGui.QPushButton))
+        self.assertIsNone(ui.control.findChild(QtWidgets.QPushButton))

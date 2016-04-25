@@ -237,6 +237,12 @@ class ListStrModel(QtCore.QAbstractListModel):
         """
         return QtCore.Qt.MoveAction
 
+    def reset(self):
+        """ Reimplemented because removed in Qt5
+        """
+        self.beginResetModel()
+        self.endResetModel()
+
     #---------------------------------------------------------------------------
     #  ListStrModel interface:
     #---------------------------------------------------------------------------

@@ -298,6 +298,12 @@ class TabularModel(QtCore.QAbstractTableModel):
         """
         return QtCore.Qt.MoveAction
 
+    def reset(self):
+        """ Reimplemented because removed in Qt5
+        """
+        self.beginResetModel()
+        self.endResetModel()
+
     #---------------------------------------------------------------------------
     #  TabularModel interface:
     #---------------------------------------------------------------------------
