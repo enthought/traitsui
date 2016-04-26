@@ -23,6 +23,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+from traits.util.api import deprecated
+
 from pyface.qt import QtCore, QtGui, QtWidgets
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -30,11 +32,11 @@ from pyface.qt import QtCore, QtGui, QtWidgets
 # traitsui.editors.image_enum_editor file.
 from traitsui.editors.image_enum_editor  import ToolkitEditorFactory
 
-from editor import Editor
-from enum_editor import BaseEditor as BaseEnumEditor
-from enum_editor import SimpleEditor as SimpleEnumEditor
-from enum_editor import RadioEditor as CustomEnumEditor
-from helper import pixmap_cache
+from .editor import Editor
+from .enum_editor import BaseEditor as BaseEnumEditor
+from .enum_editor import SimpleEditor as SimpleEnumEditor
+from .enum_editor import RadioEditor as CustomEnumEditor
+from .helper import pixmap_cache
 
 #-------------------------------------------------------------------------------
 #  'BaseImageEnumEditor' class:
@@ -136,7 +138,9 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
         """
-        self.control.model().reset()
+        model = self.control.model()
+        model.beginResetModel()
+        model.endResetModel()
 
 #-------------------------------------------------------------------------------
 #  'CustomEditor' class:
@@ -325,3 +329,10 @@ class ImageEnumModel(QtCore.QAbstractTableModel):
                 return self._editor.names[index]
 
         return None
+
+    @deprecated('QAbstractItemModel.reset() obsoleted in Qt5. See Qt5 docs')
+    def reset(self):
+        """ Reimplemented because removed in Qt5
+        """
+        self.beginResetModel()
+        self.endResetModel()

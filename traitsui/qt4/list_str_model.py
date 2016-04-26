@@ -22,6 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+from traits.util.api import deprecated
+
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
@@ -237,6 +239,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         """
         return QtCore.Qt.MoveAction
 
+    @deprecated('QAbstractItemModel.reset() obsoleted in Qt5. See Qt5 docs')
     def reset(self):
         """ Reimplemented because removed in Qt5
         """

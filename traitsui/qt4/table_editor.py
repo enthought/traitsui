@@ -598,16 +598,16 @@ class TableEditor(Editor, BaseTableEditor):
 
     def _update_columns(self):
         """Handle the column list being changed."""
-
+        self.model.beginResetModel()
         self.table_view.setItemDelegate(TableDelegate(self.table_view))
         for i, column in enumerate(self.columns):
             if column.renderer:
                 self.table_view.setItemDelegateForColumn(i, column.renderer)
 
-        self.model.reset()
         self.table_view.resizeColumnsToContents()
         if self.auto_size:
             self.table_view.resizeRowsToContents()
+        self.model.endResetModel()
 
     def _selected_changed(self, new):
         """Handle the selected row/column/cell being changed externally."""
