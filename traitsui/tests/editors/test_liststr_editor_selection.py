@@ -163,7 +163,8 @@ def test_selection_listener_disconnected():
 
             list_view = editor.list_view
             mi = editor.model.index(1)
-            list_view.selectionModel().select(mi, QtCore.QItemSelectionModel.ClearAndSelect)
+            selection_model = list_view.selectionModel()
+            selection_model.select(mi, QtCore.QItemSelectionModel.ClearAndSelect)
 
     obj.selected = 'value2'
 
