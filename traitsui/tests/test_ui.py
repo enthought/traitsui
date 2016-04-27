@@ -150,10 +150,11 @@ def test_destroy_after_ok_wx():
     foo = FooDialog()
     ui = foo.edit_traits()
 
-    # keep references to the children of the ui to check that they were deleted
-    ui_children = []
-    for c in ui.control.GetChildren():
-        ui_children.append(c)
+    # keep reference to the control to check that it was destroyed
+    control = ui.control
+
+    # decorate control's `Destroy` function to check that it is called
+    control.Destroy = count_calls(control.Destroy)
 
     # press the OK button and close the dialog
     okbutton = ui.control.FindWindowByName('button')
@@ -162,10 +163,7 @@ def test_destroy_after_ok_wx():
     okbutton.ProcessEvent(click_event)
 
     nose.tools.assert_is_none(ui.control)
-    # and its children have been destroyed
-    for c in ui_children:
-        with nose.tools.assert_raises(wx._core.PyDeadObjectError):
-            c.GetName()
+    nose.tools.assert_equal(control.Destroy._n_calls, 1)
 
 
 @skip_if_not_qt4
@@ -189,5 +187,4 @@ def test_destroy_after_ok_qt():
     okb.click()
 
     nose.tools.assert_is_none(ui.control)
-    # children are scheduled for removal
     nose.tools.assert_equal(control.deleteLater._n_calls, 1)
