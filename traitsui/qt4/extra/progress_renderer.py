@@ -33,17 +33,17 @@ class ProgressRenderer(TableDelegate):
     def paint(self, painter, option, index):
         """ Reimplemented to paint the checkbox.
         """
-        # Get the progress value
+        # Get the column and object
         column = index.model()._editor.columns[index.column()]
         obj = index.data(QtCore.Qt.UserRole)
 
         # set up progress bar options
-        progress_bar_option = QtGui.QStyleOptionProgressBarV2()
+        progress_bar_option = QtGui.QStyleOptionProgressBar()
         progress_bar_option.rect = option.rect
         progress_bar_option.minimum = column.get_minimum(obj)
         progress_bar_option.maximum = column.get_maximum(obj)
-        progress_bar_option.progress = column.get_raw_value(obj)
-        progress_bar_option.textVisible = column.get_text_visible(obj)
+        progress_bar_option.progress = int(column.get_raw_value(obj))
+        progress_bar_option.textVisible = column.get_text_visible()
         progress_bar_option.text = column.get_value(obj)
 
         # Draw it
