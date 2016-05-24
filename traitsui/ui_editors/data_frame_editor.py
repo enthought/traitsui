@@ -172,7 +172,6 @@ class _DataFrameEditor(UIEditor):
     def _data_frame_view(self):
         """ Return the view used by the editor.
         """
-
         return View(
             Item(
                 self._target_name(self.name),
