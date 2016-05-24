@@ -61,8 +61,6 @@ class DataFrameAdapter(TabularAdapter):
         import numpy as np
 
         column = self.item[self.column_id]
-        print self.columns
-        print column.name, column.dtype
         if np.issubdtype(column.dtype, np.number):
             return 'right'
         else:
@@ -172,6 +170,7 @@ class _DataFrameEditor(UIEditor):
     def _data_frame_view(self):
         """ Return the view used by the editor.
         """
+
         return View(
             Item(
                 self._target_name(self.name),
@@ -226,11 +225,18 @@ class _DataFrameEditor(UIEditor):
                 index_name = ''
             columns.insert(0, (index_name, 'index'))
 
-        self.adapter = DataFrameAdapter(
-            columns=columns,
-            _formats=factory.formats,
-            _fonts=factory.fonts
-        )
+        if factory.adapter is not None:
+            self.adapter = factory.adapter
+            self.adapter._formats=factory.formats
+            self.adapter._fonts=factory.fonts
+            if not self.adapter.columns:
+                self.adapter.columns = columns
+        else:
+            self.adapter = DataFrameAdapter(
+                columns=columns,
+                _formats=factory.formats,
+                _fonts=factory.fonts
+            )
 
         return self.edit_traits(
             view='_data_frame_view',
@@ -317,6 +323,9 @@ class DataFrameEditor(BasicEditorFactory):
     # The optional extended name of the trait used to indicate that the table
     # just needs to be repainted.
     refresh = Str
+
+    # Set to override the default dataframe adapter
+    adapter = Instance(DataFrameAdapter)
 
     def _get_klass(self):
         """ The class used to construct editor objects.
