@@ -172,6 +172,7 @@ class _DataFrameEditor(UIEditor):
     def _data_frame_view(self):
         """ Return the view used by the editor.
         """
+
         return View(
             Item(
                 self._target_name(self.name),
@@ -193,6 +194,8 @@ class _DataFrameEditor(UIEditor):
                     column_clicked=self._target_name(self.factory.column_clicked),  # noqa
                     column_right_clicked=self._target_name(self.factory.column_right_clicked),  # noqa
                     operations=self.factory.operations,
+                    update=self._target_name(self.factory.update),
+                    refresh=self._target_name(self.factory.refresh),
                 )
             ),
             id='data_frame_editor',
@@ -307,6 +310,14 @@ class DataFrameEditor(BasicEditorFactory):
     # What type of operations are allowed on the list:
     operations = List(Enum('delete', 'insert', 'append', 'edit', 'move'),
                       ['delete', 'insert', 'append', 'edit', 'move'])
+
+    # The optional extended name of the trait used to indicate that a complete
+    # table update is needed:
+    update = Str
+
+    # The optional extended name of the trait used to indicate that the table
+    # just needs to be repainted.
+    refresh = Str
 
     def _get_klass(self):
         """ The class used to construct editor objects.
