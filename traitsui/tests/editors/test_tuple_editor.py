@@ -26,19 +26,6 @@ class DummyModel(HasStrictTraits):
     data = Tuple(Float, Float, Str)
 
 
-class TupleEditor(HasTraits):
-    """Dialog containing a Tuple of two Int's.
-    """
-
-    tup = Tuple(Int,Int)
-
-    traits_view = View(
-        Item(label="Enter 4 and 6, then press OK"),
-        Item('tup'),
-        buttons = ['OK']
-    )
-
-
 class TestTupleEditor(UnittestTools, unittest.TestCase):
 
     def setUp(self):
@@ -267,32 +254,3 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             self.assertEqual(
                 editor._ts.trait_get(['f0', 'f1', 'invalid0', 'invalid1']),
                 {'f0': 2, 'f1': 7, 'invalid0': False, 'invalid1': False})
-
-    @skip_if_not_qt4
-    def test_qt_tuple_editor():
-        # Behavior: when editing the text of a tuple editor,
-        # value get updated immediately.
-
-        from pyface import qt
-
-        with store_exceptions_on_all_threads():
-            val = TupleEditor()
-            ui = val.edit_traits()
-
-            # the following is equivalent to clicking in the text control of the
-            # range editor, enter a number, and clicking ok without defocusing
-
-            # text element inside the spin control
-            lineedits = ui.control.findChildren(qt.QtGui.QLineEdit)
-            lineedits[0].setFocus()
-            lineedits[0].clear()
-            lineedits[0].insert('4')
-            lineedits[1].setFocus()
-            lineedits[1].clear()
-            lineedits[1].insert('6')
-
-            # if all went well, the tuple trait has been updated and its value is 4
-            assert val.tup == (4,6)
-
-            # press the OK button and close the dialog
-            press_ok_button(ui)
