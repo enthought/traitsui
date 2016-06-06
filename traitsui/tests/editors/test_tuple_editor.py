@@ -15,7 +15,7 @@ from traits.api import Float, Int, HasStrictTraits, Str, Tuple, ValidatedTuple
 from traits.testing.api import UnittestTools
 
 from traitsui.tests._tools import (
-    dispose_ui_after, get_traitsui_editor, set_value)
+    dispose_ui_after, get_traitsui_editor, set_value, skip_if_null)
 
 
 class DummyModel(HasStrictTraits):
@@ -28,6 +28,7 @@ class DummyModel(HasStrictTraits):
 
 class TestTupleEditor(UnittestTools, unittest.TestCase):
 
+    @skip_if_null
     def setUp(self):
         from traitsui.api import TupleEditor
         self.tuple_editor = TupleEditor
