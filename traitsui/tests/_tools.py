@@ -114,7 +114,7 @@ def skip_if_null(test_func):
         # preserve original name so that it appears in the report
         orig_name = test_func.__name__
 
-        def test_func():
+        def test_func(self=None):
             raise nose.SkipTest
         test_func.__name__ = orig_name
 
