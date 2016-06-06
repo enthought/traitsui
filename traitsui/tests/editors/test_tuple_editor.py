@@ -254,3 +254,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             self.assertEqual(
                 editor._ts.trait_get(['f0', 'f1', 'invalid0', 'invalid1']),
                 {'f0': 2, 'f1': 7, 'invalid0': False, 'invalid1': False})
+
+
+if __name__ == '__main__':
+    unittest.main()
