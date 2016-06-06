@@ -101,6 +101,11 @@ class SimpleEditor ( Editor ):
                     self.update_object)
 
         self.control = control
+        # default horizontal policy is Expand, set this to Minimum
+        if not (self.item.resizable == True) and not self.item.springy:
+            policy = self.control.sizePolicy()
+            policy.setHorizontalPolicy(QtGui.QSizePolicy.Minimum)
+            self.control.setSizePolicy(policy)
         self.set_error_state( False )
         self.set_tooltip()
 
@@ -121,7 +126,7 @@ class SimpleEditor ( Editor ):
 
                 self.set_error_state( False )
 
-            except TraitError, excp:
+            except TraitError as excp:
                 pass
 
     #---------------------------------------------------------------------------

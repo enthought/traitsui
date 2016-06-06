@@ -11,3 +11,6 @@
 build/
 dist/
 docs/build/
+
+# Ignore the auto-generated version file
+traitsui/_version.py

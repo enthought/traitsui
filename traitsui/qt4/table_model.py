@@ -20,7 +20,7 @@ from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
 
-from .clipboard import PyMimeData 
+from .clipboard import PyMimeData
 
 #-------------------------------------------------------------------------------
 #  Constants:
@@ -110,7 +110,7 @@ class TableModel(QtCore.QAbstractTableModel):
             h_alignment = h_alignment_map.get(string, QtCore.Qt.AlignLeft)
             string = column.get_vertical_alignment(obj)
             v_alignment = v_alignment_map.get(string, QtCore.Qt.AlignVCenter)
-            return (h_alignment | v_alignment)
+            return int(h_alignment | v_alignment)
 
         elif role == QtCore.Qt.BackgroundRole:
             color = column.get_cell_color(obj)
@@ -152,7 +152,7 @@ class TableModel(QtCore.QAbstractTableModel):
                 return QtCore.Qt.NoItemFlags
 
         flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled | \
-                QtCore.Qt.ItemIsDragEnabled 
+                QtCore.Qt.ItemIsDragEnabled
 
         obj = editor.items()[mi.row()]
         column = editor.columns[mi.column()]
@@ -231,10 +231,10 @@ class TableModel(QtCore.QAbstractTableModel):
     def mimeData(self, indexes):
         """Reimplemented to generate MIME data containing the rows of the
         current selection."""
-        
+
         editor = self._editor
         selection_mode = editor.factory.selection_mode
-        
+
         if selection_mode.startswith("cell"):
             data = [self._get_cell_drag_value(index.row(), index.column())
                 for index in indexes]
@@ -244,9 +244,9 @@ class TableModel(QtCore.QAbstractTableModel):
         else:
             rows = sorted(set(index.row() for index in indexes))
             data = self._get_rows_drag_value(rows)
-        
+
         mime_data = PyMimeData.coerce(data)
-        
+
         # handle re-ordering via internal drags
         if editor.factory.reorderable:
             rows = sorted(set([ index.row() for index in indexes ]))
@@ -261,7 +261,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if action == QtCore.Qt.IgnoreAction:
             return False
-            
+
         # this is a drag from a table model?
         data = mime_data.data(mime_type)
         if not data.isNull() and action == QtCore.Qt.MoveAction:
@@ -274,36 +274,36 @@ class TableModel(QtCore.QAbstractTableModel):
                     row = len(self._editor.items())-1
                 else:
                     row == parent.row()
-                    
+
                 self.moveRows(current_rows, row)
                 return True
 
         data = PyMimeData.coerce(mime_data).instance()
         if data is not None:
             editor = self._editor
-            
+
             if row == -1 and column == -1 and parent.isValid():
                 row = parent.row()
                 column = parent.column()
-            
+
             if row != -1 and column != - 1:
                 object = editor.items()[row]
-                column = editor.columns[column]                
+                column = editor.columns[column]
                 if column.is_droppable(object, data):
                     column.set_value(object, data)
                     return True
-            
+
         return False
 
     def supportedDropActions(self):
         """Reimplemented to allow items to be moved."""
-    
+
         return QtCore.Qt.MoveAction
 
     #---------------------------------------------------------------------------
     #  Utility methods
     #---------------------------------------------------------------------------
-    
+
     def _get_columns_drag_value(self, columns):
         """ Returns the value to use when the specified columns are dragged or
             copied and pasted. The parameter *cols* is a list of column indexes.
@@ -336,7 +336,7 @@ class TableModel(QtCore.QAbstractTableModel):
     #---------------------------------------------------------------------------
     #  TableModel interface:
     #---------------------------------------------------------------------------
-    
+
     def moveRow(self, old_row, new_row):
         """Convenience method to move a single row."""
 
@@ -405,7 +405,7 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
         return True
 
     def lessThan(self, left_mi, right_mi):
-        """Reimplemented to sort according to the 'cmp' method defined for
+        """Reimplemented to sort according to the 'key' method defined for
         TableColumn."""
 
         editor = self._editor
@@ -413,7 +413,7 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
         items = editor.items()
         left, right = items[left_mi.row()], items[right_mi.row()]
 
-        return column.cmp(left, right) < 0
+        return column.key(left) < column.key(right)
 
     #---------------------------------------------------------------------------
     #  SortFilterTableModel interface:

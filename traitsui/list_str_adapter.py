@@ -201,7 +201,11 @@ class ListStrAdapter ( HasPrivateTraits ):
     def len ( self, object, trait ):
         """ Returns the number of items in the specified *object.trait* list.
         """
-        return len( getattr( object, trait ) )
+        # Sometimes, during shutdown, the object has been set to None.
+        if object is None:
+            return 0
+        else:
+            return len( getattr( object, trait ) )
 
     def get_default_value ( self, object, trait ):
         """ Returns a new default value for the specified *object.trait* list.

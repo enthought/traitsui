@@ -232,7 +232,7 @@ class BasePanel(object):
                 method = editor.perform
 
         if method is not None:
-            button.connect(button, QtCore.SIGNAL('clicked()'), method)
+            button.clicked.connect(method)
 
         if action.tooltip != '':
             button.setToolTip(action.tooltip)
@@ -242,8 +242,7 @@ class BasePanel(object):
     def _on_help(self):
         """Handles the user clicking the Help button.
         """
-        # FIXME: Needs porting to PyQt.
-        self.ui.handler.show_help(self.ui.info, event.GetEventObject())
+        self.ui.handler.show_help(self.ui.info)
 
     def _on_undo(self):
         """Handles a request to undo a change.
@@ -278,6 +277,45 @@ class BasePanel(object):
         """
         self.revert.setEnabled(state)
 
+    #---------------------------------------------------------------------------
+    #  Adds a menu item to the menu bar being constructed:
+    #---------------------------------------------------------------------------
+
+    def add_to_menu ( self, menu_item ):
+        """ Adds a menu item to the menu bar being constructed.
+        """
+        item   = menu_item.item
+        action = item.action
+
+        if action.id != '':
+            self.ui.info.bind( action.id, menu_item )
+
+        if action.style == 'radio':
+            if ((self._last_group is None) or
+                (self._last_parent is not item.parent)):
+                self._last_group = RadioGroup()
+                self._last_parent = item.parent
+            self._last_group.items.append( menu_item )
+            menu_item.group = self._last_group
+
+        if action.visible_when != '':
+            self.ui.add_visible( action.visible_when, menu_item )
+
+        if action.enabled_when != '':
+            self.ui.add_enabled( action.enabled_when, menu_item )
+
+        if action.checked_when != '':
+            self.ui.add_checked( action.checked_when, menu_item )
+
+    #---------------------------------------------------------------------------
+    #  Adds a tool bar item to the tool bar being constructed:
+    #---------------------------------------------------------------------------
+
+    def add_to_toolbar ( self, toolbar_item ):
+        """ Adds a toolbar item to the toolbar being constructed.
+        """
+        self.add_to_menu( toolbar_item )
+        
 
 class _StickyDialog(QtGui.QDialog):
     """A QDialog that will only close if the traits handler allows it."""
@@ -336,10 +374,10 @@ class _StickyDialog(QtGui.QDialog):
         if e.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and \
                not self._ui.view.default_button:
             return
-        
+
         if e.key() == QtCore.Qt.Key_Escape and not self._ok_to_close():
             return
-        
+
         QtGui.QDialog.keyPressEvent(self, e)
 
     def sizeHint(self):
@@ -406,8 +444,7 @@ class BaseDialog(BasePanel):
         control.setModal(style == BaseDialog.MODAL)
         control.setWindowTitle(view.title or DefaultTitle)
 
-        QtCore.QObject.connect(control, QtCore.SIGNAL('finished(int)'),
-                self._on_finished)
+        control.finished.connect(self._on_finished)
 
     def add_contents(self, panel, buttons):
         """Add a panel (either a widget, layout or None) and optional buttons
@@ -556,45 +593,6 @@ class BaseDialog(BasePanel):
             control.setText(text)
 
         return set_status_text
-
-    #---------------------------------------------------------------------------
-    #  Adds a menu item to the menu bar being constructed:
-    #---------------------------------------------------------------------------
-
-    def add_to_menu ( self, menu_item ):
-        """ Adds a menu item to the menu bar being constructed.
-        """
-        item   = menu_item.item
-        action = item.action
-
-        if action.id != '':
-            self.ui.info.bind( action.id, menu_item )
-
-        if action.style == 'radio':
-            if ((self._last_group is None) or
-                (self._last_parent is not item.parent)):
-                self._last_group = RadioGroup()
-                self._last_parent = item.parent
-            self._last_group.items.append( menu_item )
-            menu_item.group = self._last_group
-
-        if action.visible_when != '':
-            self.ui.add_visible( action.visible_when, menu_item )
-
-        if action.enabled_when != '':
-            self.ui.add_enabled( action.enabled_when, menu_item )
-
-        if action.checked_when != '':
-            self.ui.add_checked( action.checked_when, menu_item )
-
-    #---------------------------------------------------------------------------
-    #  Adds a tool bar item to the tool bar being constructed:
-    #---------------------------------------------------------------------------
-
-    def add_to_toolbar ( self, toolbar_item ):
-        """ Adds a toolbar item to the toolbar being constructed.
-        """
-        self.add_to_menu( toolbar_item )
 
     def can_add_to_menu(self, action, action_event=None):
         """Returns whether the action should be defined in the user interface.

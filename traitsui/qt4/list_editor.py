@@ -22,7 +22,7 @@ from pyface.qt import QtCore, QtGui
 from pyface.api import ImageResource
 
 from traits.api import Str, Any, Bool, Dict, Instance
-from traits.trait_base import user_name_for, enumerate, xgetattr
+from traits.trait_base import user_name_for, xgetattr
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -518,15 +518,6 @@ class NotebookEditor ( Editor ):
     # The currently selected notebook page object:
     selected = Any
 
-    # Maps tab names to QWidgets representing the tab contents
-    # TODO: It would be nice to be able to reuse self._pages for this, but
-    # its keys are not quite what we want.
-    _pagewidgets = Dict
-
-    # Maps names of tabs to their menu QAction instances; used to toggle
-    # checkboxes
-    _action_dict = Dict
-
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -542,6 +533,13 @@ class NotebookEditor ( Editor ):
         self.control = QtGui.QTabWidget()
         signal = QtCore.SIGNAL( 'currentChanged(int)' )
         QtCore.QObject.connect( self.control, signal, self._tab_activated )
+
+        # minimal dock_style handling
+        if self.factory.dock_style == 'tab':
+            self.control.setDocumentMode(True)
+            self.control.tabBar().setDocumentMode(True)
+        elif self.factory.dock_style == 'vertical':
+            self.control.setTabPosition(QtGui.QTabWidget.West)
 
         # Create the button to close tabs, if necessary:
         if self.factory.deletable:
@@ -563,9 +561,13 @@ class NotebookEditor ( Editor ):
             self.control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
         # Set up the additional 'list items changed' event handler needed for
-        # a list based trait:
+        # a list based trait. Note that we want to fire the update_editor_item
+        # only when the items in the list change and not when intermediate
+        # traits change. Therefore, replace "." by ":" in the extended_name
+        # when setting up the listener.
+        extended_name = self.extended_name.replace('.', ':')
         self.context_object.on_trait_change( self.update_editor_item,
-                               self.extended_name + '_items?', dispatch = 'ui' )
+                               extended_name + '_items?', dispatch = 'ui' )
 
         # Set of selection synchronization:
         self.sync_value( self.factory.selected, 'selected' )

@@ -98,7 +98,7 @@ class _BoundsEditor(Editor):
                 low = eval(unicode(self._label_lo.GetValue()).strip())
                 if self.evaluate is not None:
                     low = self.evaluate(low)
-            except Exception, ex:
+            except Exception as ex:
                 low = self.low
                 self._label_lo.SetValue(self.format % self.low)
 

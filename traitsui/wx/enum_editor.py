@@ -25,9 +25,6 @@ wxPython user interface toolkit.
 
 import wx
 
-from string \
-    import capitalize
-
 from traits.api \
     import Property
 
@@ -45,6 +42,11 @@ from constants \
 
 from helper \
     import enum_values_changed, TraitsUIPanel, disconnect, disconnect_no_id
+
+
+# default formatting function (would import from string, but not in Python 3)
+capitalize = lambda s: s.capitalize()
+
 
 #-------------------------------------------------------------------------------
 #  'BaseEditor' class:
@@ -264,7 +266,7 @@ class SimpleEditor ( BaseEditor ):
             except:
                 try:
                     value = self.factory.evaluate( value )
-                except Exception, excp:
+                except Exception as excp:
                     self.error( excp )
                     return
 

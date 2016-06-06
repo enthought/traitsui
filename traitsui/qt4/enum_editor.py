@@ -17,8 +17,6 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from string import capitalize
-
 from pyface.qt import QtCore, QtGui
 
 from traits.api \
@@ -38,6 +36,11 @@ from constants \
 
 from traitsui.helper \
     import enum_values_changed
+
+
+# default formatting function (would import from string, but not in Python 3)
+capitalize = lambda s: s.capitalize()
+
 
 #-------------------------------------------------------------------------------
 #  'BaseEditor' class:
@@ -258,7 +261,7 @@ class SimpleEditor ( BaseEditor ):
             except:
                 try:
                     value = self.factory.evaluate(value)
-                except Exception, excp:
+                except Exception as excp:
                     self.error( excp )
                     return
 
@@ -410,7 +413,7 @@ class RadioEditor ( BaseEditor ):
         mapping = self.mapping
         n       = len( names )
         cols    = self.factory.cols
-        rows    = (n + cols - 1) / cols
+        rows    = (n + cols - 1) // cols
         if self.row_major:
             incr = [ 1 ] * cols
         else:

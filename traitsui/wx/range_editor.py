@@ -225,7 +225,7 @@ class SimpleSliderEditor ( BaseRangeEditor ):
                     value = float(value)
                 else:
                     value = int(value)
-            except Exception, ex:
+            except Exception as ex:
                 # The user entered something that didn't eval as a number (e.g., 'foo').
                 # Pretend it didn't happen (i.e. do not change self.value).
                 value = self.value
@@ -530,7 +530,7 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
                     value = float(value)
                 else:
                     value = int(value)
-            except Exception, ex:
+            except Exception as ex:
                 # The user entered something that didn't eval as a number (e.g., 'foo').
                 # Pretend it didn't happen (i.e. do not change self.value).
                 value = self.value
@@ -551,7 +551,7 @@ class LargeRangeSliderEditor ( BaseRangeEditor ):
             if self._error is not None:
                 self._error     = None
                 self.ui.errors -= 1
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
     #---------------------------------------------------------------------------
@@ -889,7 +889,7 @@ class RangeTextEditor ( TextEditor ):
                     value = float(value)
                 else:
                     value = int(value)
-        except Exception, excp:
+        except Exception as excp:
             # The conversion failed.
             self.error(excp)
             return
@@ -903,7 +903,7 @@ class RangeTextEditor ( TextEditor ):
             if self._error is not None:
                 self._error     = None
                 self.ui.errors -= 1
-        except TraitError, excp:
+        except TraitError as excp:
             pass
 
     #---------------------------------------------------------------------------

@@ -25,6 +25,7 @@
 from __future__ import absolute_import
 
 import inspect
+from operator import itemgetter
 
 from types import FunctionType, MethodType
 
@@ -431,7 +432,7 @@ class DictNode ( TupleNode ):
         """
         node_for = self.node_for
         items    = [ ( repr( k ), v ) for k, v in self.value.items() ]
-        items.sort( lambda l, r: cmp( l[0], r[0] ) )
+        items.sort(key=itemgetter(0))
         if len( items ) > 500:
             return ([ node_for( '[%s]' % k, v ) for k, v in items[: 250 ] ] +
                     [ StringNode( value = '...', readonly = True ) ]        +
@@ -546,7 +547,7 @@ class ObjectNode ( MultiValueTreeNodeObject ):
         """ Gets the object's children.
         """
         items = [ ( k, v ) for k, v in self.value.__dict__.items() ]
-        items.sort( lambda l, r: cmp( l[0], r[0] ) )
+        items.sort(key=itemgetter(0))
         return [ self.node_for( '.' + k, v ) for k, v in items ]
 
 #-------------------------------------------------------------------------------
@@ -598,7 +599,7 @@ class TraitsNode ( ObjectNode ):
         for name in names:
             try:
                 item_value = getattr( value, name, '<unknown>' )
-            except Exception, excp:
+            except Exception as excp:
                 item_value = '<%s>' % excp
             nodes.append( node_for( '.' + name, item_value ) )
 
@@ -771,4 +772,3 @@ value_tree_editor_with_root = TreeEditor(
 
 # Trait for a value tree:
 ValueTree = Instance( _ValueTree, (), editor = value_tree_editor_with_root )
-

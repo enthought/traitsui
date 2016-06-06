@@ -121,10 +121,15 @@ class SourceEditor ( Editor ):
 
         # Set up listeners for the signals we care about
         code_editor = self._widget.code
+
         if self.readonly:
             code_editor.setReadOnly(True)
         else:
-            code_editor.textChanged.connect(self.update_object)
+            if factory.auto_set:
+                code_editor.textChanged.connect(self.update_object)
+            else:
+                code_editor.focus_lost.connect(self.update_object)
+
         if factory.selected_text != '':
             code_editor.selectionChanged.connect(self._selection_changed)
         if (factory.line != '') or (factory.column != ''):
@@ -189,7 +194,7 @@ class SourceEditor ( Editor ):
                 if isinstance( self.value, SequenceTypes ):
                     value = value.split()
                 self.value = value
-            except TraitError, excp:
+            except TraitError as excp:
                 pass
 
     #---------------------------------------------------------------------------

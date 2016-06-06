@@ -66,7 +66,7 @@ class Address(HasTraits):
     """
 
     street_address = Str
-    state          = Enum(cities.keys()[0], cities.keys())
+    state          = Enum(list(cities.keys())[0], list(cities.keys()))
     city           = Str
 
     view = View(
@@ -88,4 +88,3 @@ demo = Address(street_address="4743 Dudley Lane")
 # Run the demo (if invoked from the command line):
 if __name__== '__main__':
     demo.configure_traits()
-

@@ -89,7 +89,6 @@ class ToolkitEditorFactory ( EditorFactory ):
     auto_open = Int
 
     # Size of the tree node icons
-    # FIXME: Document as unimplemented or wx specific.
     icon_size = IconSize
 
     # Called when a node is selected
