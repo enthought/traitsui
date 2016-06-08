@@ -252,12 +252,13 @@ parameter.
 The items in the list must be instances of traitsui.api.TableColumn,
 or of a subclass of TableColumn. Some subclasses of TableColumn that are
 provided by the TraitsUI package include ObjectColumn, ListColumn,
-NumericColumn, and ExpressionColumn. (See the *Traits API Reference* for details
-about these classes.) In practice, most columns are derived from one of these
-subclasses, rather than from TableColumn. For the usual case of editing trait
-attributes on objects in the list, use ObjectColumn. You must specify the *name*
-parameter to the ObjectColumn() constructor, referencing the name of the trait
-attribute to be edited.
+NumericColumn, ExpressionColumn, CheckboxColumn and ProgressColumn.
+(See the *Traits API Reference* for details about these classes.) In practice,
+most columns are derived from one of these subclasses, rather than from
+TableColumn. For the usual case of editing trait attributes on objects in the
+list, use ObjectColumn. You must specify the *name* parameter to the
+ObjectColumn() constructor, referencing the name of the trait attribute to be
+edited.
 
 You can specify additional columns that are not initially displayed using the
 *other_columns* parameter. If the *configurable* parameter is True (the
