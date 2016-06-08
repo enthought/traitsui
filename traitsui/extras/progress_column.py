@@ -25,7 +25,7 @@ from traitsui.table_column import ObjectColumn
 if ETSConfig.toolkit == 'qt4':
     from traitsui.qt4.extra.progress_renderer import ProgressRenderer
 else:
-    raise NotImplementedError("No checkbox renderer for backend")
+    raise NotImplementedError("No pregress column renderer for backend")
 
 
 class ProgressColumn(ObjectColumn):

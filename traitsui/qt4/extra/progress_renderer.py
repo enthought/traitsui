@@ -11,8 +11,7 @@
 # Author: Corran Webster
 #------------------------------------------------------------------------------
 
-""" A renderer which displays a progress bar based on a 0.0 to 1.0 value.
-"""
+""" A renderer which displays a progress bar. """
 
 # System library imports
 from pyface.qt import QtCore, QtGui
@@ -22,8 +21,7 @@ from traitsui.qt4.table_editor import TableDelegate
 
 
 class ProgressRenderer(TableDelegate):
-    """ A renderer which displays a progress bar for a True value and an
-        unchecked box for a false value.
+    """ A renderer which displays a progress bar.
     """
 
     #---------------------------------------------------------------------------
@@ -31,8 +29,7 @@ class ProgressRenderer(TableDelegate):
     #---------------------------------------------------------------------------
 
     def paint(self, painter, option, index):
-        """ Reimplemented to paint the checkbox.
-        """
+        """ Paint the progressbar. """
         # Get the column and object
         column = index.model()._editor.columns[index.column()]
         obj = index.data(QtCore.Qt.UserRole)
