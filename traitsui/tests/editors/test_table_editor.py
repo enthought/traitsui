@@ -69,5 +69,6 @@ def test_progress_column():
 
     with store_exceptions_on_all_threads():
         ui = object_list.edit_traits(view=progress_view)
+        gui.process_events()
         press_ok_button(ui)
         gui.process_events()
