@@ -42,6 +42,7 @@ def test_table_editor():
 
     with store_exceptions_on_all_threads():
         ui = object_list.edit_traits(view=simple_view)
+        gui.process_events()
         press_ok_button(ui)
         gui.process_events()
 
