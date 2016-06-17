@@ -18,9 +18,9 @@
 """ Displays a message to the user as a modal window.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -34,25 +34,27 @@ from .item import Item, spring
 
 from pyface.timer.api import do_after
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'Message' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class Message ( HasPrivateTraits ):
 
-    #---------------------------------------------------------------------------
+class Message (HasPrivateTraits):
+
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # The message to be displayed
     message = Str
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Displays a user specified message:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def message ( message = '', title = 'Message', buttons = [ 'OK' ],
-              parent  = None ):
+
+def message(message='', title='Message', buttons=['OK'],
+            parent=None):
     """ Displays a message to the user as a model window with the specified
     title and buttons.
 
@@ -60,20 +62,21 @@ def message ( message = '', title = 'Message', buttons = [ 'OK' ],
     appropriate for notifications, where no further action or decision on the
     user's part is required.
     """
-    msg = Message( message = message )
-    ui  = msg.edit_traits( parent = parent,
-                           view   = View( [ 'message~', '|<>' ],
-                                          title   = title,
-                                          buttons = buttons,
-                                          kind    = 'modal' ) )
+    msg = Message(message=message)
+    ui = msg.edit_traits(parent=parent,
+                         view=View(['message~', '|<>'],
+                                   title=title,
+                                   buttons=buttons,
+                                   kind='modal'))
     return ui.result
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Displays a user specified error message:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def error ( message = '', title = 'Message', buttons = [ 'OK', 'Cancel' ],
-            parent  = None ):
+
+def error(message='', title='Message', buttons=['OK', 'Cancel'],
+          parent=None):
     """ Displays a message to the user as a modal window with the specified
     title and buttons.
 
@@ -82,56 +85,56 @@ def error ( message = '', title = 'Message', buttons = [ 'OK', 'Cancel' ],
     to proceed. Be sure to word the message so that it is clear that clicking
     **OK** continues the operation.
     """
-    msg = Message( message = message )
-    ui  = msg.edit_traits( parent = parent,
-                           view   = View( [ 'message~', '|<>' ],
-                                          title   = title,
-                                          buttons = buttons,
-                                          kind    = 'modal' ) )
+    msg = Message(message=message)
+    ui = msg.edit_traits(parent=parent,
+                         view=View(['message~', '|<>'],
+                                   title=title,
+                                   buttons=buttons,
+                                   kind='modal'))
     return ui.result
 
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'AutoCloseMessage' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class AutoCloseMessage ( HasPrivateTraits ):
+class AutoCloseMessage (HasPrivateTraits):
 
     # The message to be shown:
-    message = Str( 'Please wait' )
+    message = Str('Please wait')
 
     # The time (in seconds) to show the message:
-    time = Float( 2.0 )
+    time = Float(2.0)
 
-    def show ( self, parent = None, title = '' ):
+    def show(self, parent=None, title=''):
         """ Display the wait message for a limited duration.
         """
         view = View(
             HGroup(
                 spring,
-                Item( 'message',
-                      show_label = False,
-                      style      = 'readonly'
-                ),
+                Item('message',
+                     show_label=False,
+                     style='readonly'
+                     ),
                 spring
             ),
-            title = title
+            title=title
         )
 
-        do_after( int( 1000.0 * self.time ),
-                  self.edit_traits( parent = parent, view = view ).dispose )
+        do_after(int(1000.0 * self.time),
+                 self.edit_traits(parent=parent, view=view).dispose)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Displays a user specified message that closes automatically after a specified
 #  time interval:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def auto_close_message ( message = 'Please wait', time   = 2.0,
-                         title   = 'Please wait', parent = None ):
+
+def auto_close_message(message='Please wait', time=2.0,
+                       title='Please wait', parent=None):
     """ Displays a message to the user as a modal window with no buttons. The
         window closes automatically after a specified time interval (specified
         in seconds).
     """
-    msg = AutoCloseMessage( message = message, time = time )
-    msg.show( parent = parent, title = title )
-
+    msg = AutoCloseMessage(message=message, time=time)
+    msg.show(parent=parent, title=title)

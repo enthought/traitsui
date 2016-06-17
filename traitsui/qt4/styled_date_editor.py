@@ -51,7 +51,8 @@ class CustomEditor(DateCustomEditor):
         self._apply_styles(styles, groups_to_set)
 
         # Handle the removed items by resetting them
-        [map(self._reset_formatting, dates) for dates in event.removed.values()]
+        [map(self._reset_formatting, dates)
+         for dates in event.removed.values()]
 
     def _styles_changed(self, old, new):
         groups = getattr(self.object, self.factory.dates_trait, {})
@@ -67,7 +68,8 @@ class CustomEditor(DateCustomEditor):
         styles = getattr(self.object, self.factory.styles_trait)
 
         names_to_update = event.added.keys() + event.changed.keys()
-        modified_groups = dict((name, groups[name]) for name in names_to_update)
+        modified_groups = dict((name, groups[name])
+                               for name in names_to_update)
         self._apply_styles(styles, modified_groups)
 
         names_to_reset = event.removed.keys()
@@ -149,4 +151,3 @@ class CustomEditor(DateCustomEditor):
 
         brush.setColor(col)
         return brush
-

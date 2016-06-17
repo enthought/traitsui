@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,14 +13,14 @@
 #  Author: David C. Morrill
 #  Date:   03/11/2007
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Traits UI MS Internet Explorer editor.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 import re
 import webbrowser
@@ -45,24 +45,25 @@ from traitsui.wx.editor \
 from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-RELATIVE_OBJECTS_PATTERN = re.compile(r'src=["\'](?!https?:)([\s\w/\.]+?)["\']',
-                                      re.IGNORECASE)
+RELATIVE_OBJECTS_PATTERN = re.compile(
+    r'src=["\'](?!https?:)([\s\w/\.]+?)["\']', re.IGNORECASE)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  '_IEHTMLEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class _IEHTMLEditor ( Editor ):
+
+class _IEHTMLEditor (Editor):
     """ Traits UI MS Internet Explorer editor.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Is the table editor is scrollable? This value overrides the default.
     scrollable = True
@@ -100,44 +101,44 @@ class _IEHTMLEditor ( Editor ):
     # The current page content as HTML:
     html = Property
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = ie = iewin.IEHtmlWindow( parent, -1,
-                                      style = wx.NO_FULL_REPAINT_ON_RESIZE )
+        self.control = ie = iewin.IEHtmlWindow(
+            parent, -1, style=wx.NO_FULL_REPAINT_ON_RESIZE)
         self.set_tooltip()
 
         factory = self.factory
         self.base_url = factory.base_url
-        self.sync_value( factory.home,          'home',        'from' )
-        self.sync_value( factory.back,          'back',        'from' )
-        self.sync_value( factory.forward,       'forward',     'from' )
-        self.sync_value( factory.stop,          'stop',        'from' )
-        self.sync_value( factory.refresh,       'refresh',     'from' )
-        self.sync_value( factory.search,        'search',      'from' )
-        self.sync_value( factory.status,        'status',      'to' )
-        self.sync_value( factory.title,         'title',       'to' )
-        self.sync_value( factory.page_loaded,   'page_loaded', 'to' )
-        self.sync_value( factory.html,          'html',        'to' )
-        self.sync_value( factory.base_url_name, 'base_url',    'from' )
+        self.sync_value(factory.home, 'home', 'from')
+        self.sync_value(factory.back, 'back', 'from')
+        self.sync_value(factory.forward, 'forward', 'from')
+        self.sync_value(factory.stop, 'stop', 'from')
+        self.sync_value(factory.refresh, 'refresh', 'from')
+        self.sync_value(factory.search, 'search', 'from')
+        self.sync_value(factory.status, 'status', 'to')
+        self.sync_value(factory.title, 'title', 'to')
+        self.sync_value(factory.page_loaded, 'page_loaded', 'to')
+        self.sync_value(factory.html, 'html', 'to')
+        self.sync_value(factory.base_url_name, 'base_url', 'from')
 
-        parent.Bind( iewin.EVT_StatusTextChange, self._status_modified,     ie )
-        parent.Bind( iewin.EVT_TitleChange,      self._title_modified,      ie )
-        parent.Bind( iewin.EVT_DocumentComplete, self._page_loaded_modified,ie )
-        parent.Bind( iewin.EVT_NewWindow2,       self._new_window_modified, ie )
-        parent.Bind( iewin.EVT_BeforeNavigate2,  self._navigate_requested,  ie )
+        parent.Bind(iewin.EVT_StatusTextChange, self._status_modified, ie)
+        parent.Bind(iewin.EVT_TitleChange, self._title_modified, ie)
+        parent.Bind(iewin.EVT_DocumentComplete, self._page_loaded_modified, ie)
+        parent.Bind(iewin.EVT_NewWindow2, self._new_window_modified, ie)
+        parent.Bind(iewin.EVT_BeforeNavigate2, self._navigate_requested, ie)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
@@ -147,89 +148,91 @@ class _IEHTMLEditor ( Editor ):
         # interface provides no such option for images. Sadly, we are forced
         # to take a more brute force approach.
         if self.base_url:
-            rep = lambda m: r'src="%s%s"' % ( self.base_url, m.group( 1 ) )
-            value = re.sub( RELATIVE_OBJECTS_PATTERN, rep, value )
+            rep = lambda m: r'src="%s%s"' % (self.base_url, m.group(1))
+            value = re.sub(RELATIVE_OBJECTS_PATTERN, rep, value)
 
         if value == '':
-            self.control.LoadString( '<html><body></body></html>' )
+            self.control.LoadString('<html><body></body></html>')
 
         elif value[:1] == '<':
-            self.control.LoadString( value )
+            self.control.LoadString(value)
 
-        elif (value[:4] != 'http') or (value.find( '://' ) < 0):
+        elif (value[:4] != 'http') or (value.find('://') < 0):
             try:
-                file = open( value, 'rb' )
-                self.control.LoadStream( file )
+                file = open(value, 'rb')
+                self.control.LoadStream(file)
                 file.close()
             except:
                 pass
 
         else:
-            self.control.Navigate( value )
+            self.control.Navigate(value)
 
-    #-- Property Implementations -----------------------------------------------
+    #-- Property Implementations ---------------------------------------------
 
-    def _get_html ( self ):
+    def _get_html(self):
         return self.control.GetText()
 
-    def _set_html ( self, value ):
-        self.control.LoadString( value )
+    def _set_html(self, value):
+        self.control.LoadString(value)
 
-    #-- Event Handlers ---------------------------------------------------------
+    #-- Event Handlers -------------------------------------------------------
 
-    def _home_changed ( self ):
+    def _home_changed(self):
         self.control.GoHome()
 
-    def _back_changed ( self ):
+    def _back_changed(self):
         self.control.GoBack()
 
-    def _forward_changed ( self ):
+    def _forward_changed(self):
         self.control.GoForward()
 
-    def _stop_changed ( self ):
+    def _stop_changed(self):
         self.control.Stop()
 
-    def _search_changed ( self ):
+    def _search_changed(self):
         self.control.GoSearch()
 
-    def _refresh_changed ( self ):
-        self.control.Refresh( iewin.REFRESH_COMPLETELY )
+    def _refresh_changed(self):
+        self.control.Refresh(iewin.REFRESH_COMPLETELY)
 
-    def _status_modified ( self, event ):
+    def _status_modified(self, event):
         self.status = event.Text
 
-    def _title_modified ( self, event ):
+    def _title_modified(self, event):
         self.title = event.Text
 
-    def _page_loaded_modified ( self, event ):
+    def _page_loaded_modified(self, event):
         self.page_loaded = event.URL
-        self.trait_property_changed( 'html', '', self.html )
+        self.trait_property_changed('html', '', self.html)
 
-    def _new_window_modified ( self, event ):
+    def _new_window_modified(self, event):
         # If the event is cancelled, new windows can be disabled.
         # At this point we've opted to allow new windows
         pass
 
-    def _navigate_requested ( self, event ):
+    def _navigate_requested(self, event):
         # The way NavigateToString works is to navigate to about:blank then
         # load the supplied HTML into the document property. This borks
         # relative URLs.
-        if event.URL.startswith ( 'about:' ):
+        if event.URL.startswith('about:'):
             base = self.base_url
-            if not base.endswith( '/' ):
+            if not base.endswith('/'):
                 base += '/'
             event.URL = base + event.URL[6:]
 
         if self.factory.open_externally:
             event.Cancel = True
-            webbrowser.get( 'windows-default' ).open_new( event.URL )
+            webbrowser.get('windows-default').open_new(event.URL)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # wxPython editor factory for MS Internet Explorer editors:
-class IEHTMLEditor ( BasicEditorFactory ):
+
+
+class IEHTMLEditor (BasicEditorFactory):
 
     # The editor class to be created:
     klass = _IEHTMLEditor
@@ -273,4 +276,3 @@ class IEHTMLEditor ( BasicEditorFactory ):
 
     # Optional name of trait used to get/set the page content as HTML:
     html = Str
-

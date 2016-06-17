@@ -3,15 +3,16 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -27,30 +28,30 @@ from pyface.heading_text import HeadingText
 from ..editors.title_editor import TitleEditor
 
 
-class SimpleEditor ( Editor ):
+class SimpleEditor (Editor):
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self._control = HeadingText( None )
-        self.control  = self._control.control
+        self._control = HeadingText(None)
+        self.control = self._control.control
         if self.factory.allow_selection:
             flags = (self.control.textInteractionFlags() |
-                QtCore.Qt.TextSelectableByMouse)
+                     QtCore.Qt.TextSelectableByMouse)
             self.control.setTextInteractionFlags(flags)
         self.set_tooltip()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes external to the
             editor.
         """

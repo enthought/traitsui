@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,14 +13,14 @@
 #  Author: David C. Morrill
 #  Date:   07/14/2008
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Editor factory for scrubber-based integer or float value editors.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -32,12 +32,14 @@ from ..basic_editor_factory import BasicEditorFactory
 
 from ..toolkit import toolkit_object
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Editor factory for scrubber-based integer or float value editors.
-class ScrubberEditor ( BasicEditorFactory ):
+
+
+class ScrubberEditor (BasicEditorFactory):
 
     # The editor class to be instantiated:
     klass = Property
@@ -52,22 +54,22 @@ class ScrubberEditor ( BasicEditorFactory ):
     increment = Float
 
     # The alignment of the text within the scrubber:
-    alignment = Alignment( 'center' )
+    alignment = Alignment('center')
 
     # The background color for the scrubber:
-    color = Color( None )
+    color = Color(None)
 
     # The hover mode background color for the scrubber:
-    hover_color = Color( None )
+    hover_color = Color(None)
 
     # The active mode background color for the scrubber:
-    active_color = Color( None )
+    active_color = Color(None)
 
     # The scrubber border color:
-    border_color = Color( None )
+    border_color = Color(None)
 
     # The color to use for the value text:
-    text_color = Color( 'black' )
+    text_color = Color('black')
 
     def _get_klass(self):
         """ Returns the toolkit-specific editor class to be instantiated.

@@ -19,9 +19,9 @@
     of values previously entered into the control.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 import wx
 
@@ -34,142 +34,143 @@ from pyface.timer.api \
 from constants \
     import OKColor, ErrorColor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'HistoryControl' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class HistoryControl ( HasPrivateTraits ):
+
+class HistoryControl (HasPrivateTraits):
 
     # The UI control:
-    control = Instance( wx.Window )
+    control = Instance(wx.Window)
 
     # The current value of the control:
     value = Str
 
     # Should 'value' be updated on every keystroke?
-    auto_set = Bool( False )
+    auto_set = Bool(False)
 
     # The current history of the control:
-    history = List( Str )
+    history = List(Str)
 
     # The maximum number of history entries allowed:
-    entries = Int( 10 )
+    entries = Int(10)
 
     # Is the current value valid?
-    error = Bool( False )
+    error = Bool(False)
 
-    #-- Public Methods ---------------------------------------------------------
+    #-- Public Methods -------------------------------------------------------
 
-    def create_control ( self, parent ):
+    def create_control(self, parent):
         """ Creates the control.
         """
-        self.control = control = wx.ComboBox( parent, -1, self.value,
-                                          wx.Point( 0, 0 ), wx.Size( -1, -1 ),
-                                          self.history, style = wx.CB_DROPDOWN )
-        wx.EVT_COMBOBOX( parent, control.GetId(), self._update_value )
-        wx.EVT_KILL_FOCUS( control, self._kill_focus )
-        wx.EVT_TEXT_ENTER( parent, control.GetId(),
-                           self._update_text_value )
+        self.control = control = wx.ComboBox(parent, -1, self.value,
+                                             wx.Point(0, 0), wx.Size(-1, -1),
+                                             self.history, style=wx.CB_DROPDOWN)
+        wx.EVT_COMBOBOX(parent, control.GetId(), self._update_value)
+        wx.EVT_KILL_FOCUS(control, self._kill_focus)
+        wx.EVT_TEXT_ENTER(parent, control.GetId(),
+                          self._update_text_value)
         if self.auto_set:
-            wx.EVT_TEXT( parent, control.GetId(), self._update_value_only )
+            wx.EVT_TEXT(parent, control.GetId(), self._update_value_only)
 
         return control
 
-    def dispose ( self ):
+    def dispose(self):
         """ Disposes of the control at the end of its life cycle.
         """
         control, self.control = self.control, None
         parent = control.GetParent()
-        wx.EVT_COMBOBOX(   parent, control.GetId(), None )
-        wx.EVT_TEXT_ENTER( parent, control.GetId(), None )
-        wx.EVT_KILL_FOCUS( control, None )
+        wx.EVT_COMBOBOX(parent, control.GetId(), None)
+        wx.EVT_TEXT_ENTER(parent, control.GetId(), None)
+        wx.EVT_KILL_FOCUS(control, None)
 
-    def set_value ( self, value ):
+    def set_value(self, value):
         """ Sets the specified value and adds it to the history.
         """
-        self._update( value )
+        self._update(value)
 
-    #-- Traits Event Handlers --------------------------------------------------
+    #-- Traits Event Handlers ------------------------------------------------
 
-    def _value_changed ( self, value ):
+    def _value_changed(self, value):
         """ Handles the 'value' trait being changed.
         """
         if not self._no_update:
             control = self.control
             if control is not None:
-                control.SetValue( value )
+                control.SetValue(value)
                 self._restore = False
 
-    def _history_changed ( self ):
+    def _history_changed(self):
         """ Handles the 'history' being changed.
         """
         if not self._no_update:
             if self._first_time is None:
                 self._first_time = False
-                if (self.value == '') and (len( self.history ) > 0):
+                if (self.value == '') and (len(self.history) > 0):
                     self.value = self.history[0]
 
-            self._load_history( select = False )
+            self._load_history(select=False)
 
-    def _error_changed ( self, error ):
+    def _error_changed(self, error):
         """ Handles the 'error' trait being changed.
         """
         if error:
-            self.control.SetBackgroundColour( ErrorColor )
+            self.control.SetBackgroundColour(ErrorColor)
         else:
-            self.control.SetBackgroundColour( OKColor )
+            self.control.SetBackgroundColour(OKColor)
 
         self.control.Refresh()
 
-    #-- Wx Event Handlers ------------------------------------------------------
+    #-- Wx Event Handlers ----------------------------------------------------
 
-    def _update_value ( self, event ):
+    def _update_value(self, event):
         """ Handles the user selecting something from the drop-down list of the
             combobox.
         """
-        self._update( event.GetString() )
+        self._update(event.GetString())
 
-    def _update_value_only ( self, event ):
+    def _update_value_only(self, event):
         """ Handles the user typing into the text field in 'auto_set' mode.
         """
         self._no_update = True
-        self.value      = event.GetString()
+        self.value = event.GetString()
         self._no_update = False
 
-    def _update_text_value ( self, event, select = True ):
+    def _update_text_value(self, event, select=True):
         """ Handles the user typing something into the text field of the
             combobox.
         """
         if not self._no_update:
-            self._update( self.control.GetValue(), select )
+            self._update(self.control.GetValue(), select)
 
-    def _kill_focus ( self, event ):
+    def _kill_focus(self, event):
         """ Handles the combobox losing focus.
         """
-        self._update_text_value( event, False )
+        self._update_text_value(event, False)
         event.Skip()
 
-    #-- Private Methods --------------------------------------------------------
+    #-- Private Methods ------------------------------------------------------
 
-    def _update ( self, value, select = True ):
+    def _update(self, value, select=True):
         """ Updates the value and history list based on a specified value.
         """
         self._no_update = True
 
         if value.strip() != '':
             history = self.history
-            if (len( history ) == 0) or (value != history[0]):
+            if (len(history) == 0) or (value != history[0]):
                 if value in history:
-                    history.remove( value )
-                history.insert( 0, value )
-                del history[ self.entries: ]
-                self._load_history( value, select )
+                    history.remove(value)
+                history.insert(0, value)
+                del history[self.entries:]
+                self._load_history(value, select)
 
         self.value = value
 
         self._no_update = False
 
-    def _load_history ( self, restore = None, select = True ):
+    def _load_history(self, restore=None, select=True):
         """ Loads the current history list into the control.
         """
         control = self.control
@@ -180,21 +181,20 @@ class HistoryControl ( HasPrivateTraits ):
 
         control.Clear()
         for value in self.history:
-            control.Append( value )
+            control.Append(value)
 
         self._restore = True
-        do_later( self._thaw_value, restore, select )
+        do_later(self._thaw_value, restore, select)
 
-    def _thaw_value ( self, restore, select ):
+    def _thaw_value(self, restore, select):
         """ Restores the value of the combobox control.
         """
         control = self.control
         if control is not None:
-           if self._restore:
-               control.SetValue( restore )
+            if self._restore:
+                control.SetValue(restore)
 
-               if select:
-                   control.SetMark( 0, len( restore ) )
+                if select:
+                    control.SetMark(0, len(restore))
 
-           control.Thaw()
-
+            control.Thaw()

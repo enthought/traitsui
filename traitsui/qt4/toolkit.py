@@ -13,9 +13,9 @@
 the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Make sure that importing from this backend is OK:
 from traitsui.toolkit import assert_toolkit_import
@@ -40,12 +40,13 @@ from traitsui.toolkit import Toolkit
 
 from constants import screen_dx, screen_dy
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Handles UI notification handler requests that occur on a thread other than
 #  the UI thread:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 _QT_TRAITS_EVENT = QtCore.QEvent.Type(QtCore.QEvent.registerEventType())
+
 
 class _CallAfter(QtCore.QObject):
     """ This class dispatches a handler so that it executes in the main GUI
@@ -105,78 +106,80 @@ class _CallAfter(QtCore.QObject):
         del self._calls[self._calls.index(self)]
         self._calls_mutex.unlock()
 
-def ui_handler ( handler, *args, **kwds ):
+
+def ui_handler(handler, *args, **kwds):
     """ Handles UI notification handler requests that occur on a thread other
         than the UI thread.
     """
     _CallAfter(handler, *args, **kwds)
 
 # Tell the traits notification handlers to use this UI handler
-set_ui_handler( ui_handler )
+set_ui_handler(ui_handler)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'GUIToolkit' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class GUIToolkit ( Toolkit ):
+
+class GUIToolkit (Toolkit):
     """ Implementation class for PyQt toolkit.
     """
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Create PyQt specific user interfaces using information from the
     #  specified UI object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def ui_panel ( self, ui, parent ):
+    def ui_panel(self, ui, parent):
         """ Creates a PyQt panel-based user interface using information
             from the specified UI object.
         """
         import ui_panel
-        ui_panel.ui_panel( ui, parent )
+        ui_panel.ui_panel(ui, parent)
 
-    def ui_subpanel ( self, ui, parent ):
+    def ui_subpanel(self, ui, parent):
         """ Creates a PyQt subpanel-based user interface using information
             from the specified UI object.
         """
         import ui_panel
-        ui_panel.ui_subpanel( ui, parent )
+        ui_panel.ui_subpanel(ui, parent)
 
-    def ui_livemodal ( self, ui, parent ):
+    def ui_livemodal(self, ui, parent):
         """ Creates a PyQt modal "live update" dialog user interface using
             information from the specified UI object.
         """
         import ui_live
-        ui_live.ui_livemodal( ui, parent )
+        ui_live.ui_livemodal(ui, parent)
 
-    def ui_live ( self, ui, parent ):
+    def ui_live(self, ui, parent):
         """ Creates a PyQt non-modal "live update" window user interface
             using information from the specified UI object.
         """
         import ui_live
-        ui_live.ui_live( ui, parent )
+        ui_live.ui_live(ui, parent)
 
-    def ui_modal ( self, ui, parent ):
+    def ui_modal(self, ui, parent):
         """ Creates a PyQt modal dialog user interface using information
             from the specified UI object.
         """
         import ui_modal
-        ui_modal.ui_modal( ui, parent )
+        ui_modal.ui_modal(ui, parent)
 
-    def ui_nonmodal ( self, ui, parent ):
+    def ui_nonmodal(self, ui, parent):
         """ Creates a PyQt non-modal dialog user interface using
             information from the specified UI object.
         """
         import ui_modal
-        ui_modal.ui_nonmodal( ui, parent )
+        ui_modal.ui_nonmodal(ui, parent)
 
-    def ui_wizard ( self, ui, parent ):
+    def ui_wizard(self, ui, parent):
         """ Creates a PyQt wizard dialog user interface using information
             from the specified UI object.
         """
         import ui_wizard
-        ui_wizard.ui_wizard( ui, parent )
+        ui_wizard.ui_wizard(ui, parent)
 
-    def view_application ( self, context, view, kind = None, handler = None,
-                                     id = '', scrollable = None, args = None ):
+    def view_application(self, context, view, kind=None, handler=None,
+                         id='', scrollable=None, args=None):
         """ Creates a PyQt modal dialog user interface that
             runs as a complete application, using information from the
             specified View object.
@@ -209,17 +212,17 @@ class GUIToolkit ( Toolkit ):
 
         """
         import view_application
-        return view_application.view_application( context, view, kind, handler,
-                                                  id, scrollable, args )
+        return view_application.view_application(context, view, kind, handler,
+                                                 id, scrollable, args)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Positions the associated dialog window on the display:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def position ( self, ui ):
+    def position(self, ui):
         """ Positions the associated dialog window on the display.
         """
-        view   = ui.view
+        view = ui.view
         window = ui.control
 
         # Set up the default position of the window:
@@ -231,7 +234,7 @@ class GUIToolkit ( Toolkit ):
             pdy = screen_dy
         else:
             pos = parent.pos()
-            if int(parent.windowFlags()) & QtCore.Qt.Window == 0 :
+            if int(parent.windowFlags()) & QtCore.Qt.Window == 0:
                 pos = parent.mapToGlobal(pos)
             px = pos.x()
             py = pos.y()
@@ -244,22 +247,22 @@ class GUIToolkit ( Toolkit ):
         # Calculate the correct width and height for the window:
         cur_width = size_hint.width()
         cur_height = size_hint.height()
-        width  = view.width
+        width = view.width
         height = view.height
 
         if width < 0.0:
             width = cur_width
         elif width <= 1.0:
-            width = int( width * screen_dx )
+            width = int(width * screen_dx)
         else:
-            width = int( width )
+            width = int(width)
 
         if height < 0.0:
             height = cur_height
         elif height <= 1.0:
-            height = int( height * screen_dy )
+            height = int(height * screen_dy)
         else:
-            height = int( height )
+            height = int(height)
 
         # Calculate the correct position for the window:
         x = view.x
@@ -268,80 +271,80 @@ class GUIToolkit ( Toolkit ):
         if x < -99999.0:
             x = px + ((pdx - width) / 2)
         elif x <= -1.0:
-            x = px + pdx - width + int( x ) + 1
+            x = px + pdx - width + int(x) + 1
         elif x < 0.0:
-            x = px + pdx - width + int( x * pdx )
+            x = px + pdx - width + int(x * pdx)
         elif x <= 1.0:
-            x = px + int( x * pdx )
+            x = px + int(x * pdx)
         else:
-            x = int( x )
+            x = int(x)
 
         if y < -99999.0:
             y = py + ((pdy - height) / 2)
         elif y <= -1.0:
-            y = py + pdy - height + int( y ) + 1
+            y = py + pdy - height + int(y) + 1
         elif x < 0.0:
-            y = py + pdy - height + int( y * pdy )
+            y = py + pdy - height + int(y * pdy)
         elif y <= 1.0:
-            y = py + int( y * pdy )
+            y = py + int(y * pdy)
         else:
-            y = int( y )
+            y = int(y)
 
         # Position and size the window as requested:
         layout = window.layout()
         if layout.sizeConstraint() == QtGui.QLayout.SetFixedSize:
-            layout.setSizeConstraint( QtGui.QLayout.SetDefaultConstraint )
-            window.move( max( 0, x ), max( 0, y ) )
-            window.setFixedSize( QtCore.QSize ( width, height ) )
+            layout.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
+            window.move(max(0, x), max(0, y))
+            window.setFixedSize(QtCore.QSize(width, height))
         else:
-            window.setGeometry( max( 0, x ), max( 0, y ), width, height )
+            window.setGeometry(max(0, x), max(0, y), width, height)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Shows a 'Help' window for a specified UI and control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def show_help ( self, ui, control ):
+    def show_help(self, ui, control):
         """ Shows a help window for a specified UI and control.
         """
         import ui_panel
         ui_panel.show_help(ui, control)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Saves user preference information associated with a UI window:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def save_window ( self, ui ):
+    def save_window(self, ui):
         """ Saves user preference information associated with a UI window.
         """
         import helper
         helper.save_window(ui)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Rebuilds a UI after a change to the content of the UI:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def rebuild_ui ( self, ui ):
+    def rebuild_ui(self, ui):
         """ Rebuilds a UI after a change to the content of the UI.
         """
         if ui.control is not None:
             ui.recycle()
             ui.info.ui = ui
-        ui.rebuild( ui, ui.parent )
+        ui.rebuild(ui, ui.parent)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Sets the title for the UI window:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def set_title ( self, ui ):
+    def set_title(self, ui):
         """ Sets the title for the UI window.
         """
         ui.control.setWindowTitle(ui.title)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Sets the icon for the UI window:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def set_icon ( self, ui ):
+    def set_icon(self, ui):
         """ Sets the icon for the UI window.
         """
         from pyface.image_resource import ImageResource
@@ -349,22 +352,22 @@ class GUIToolkit ( Toolkit ):
         if isinstance(ui.icon, ImageResource):
             ui.control.setWindowIcon(ui.icon.create_icon())
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Converts a keystroke event into a corresponding key name:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def key_event_to_name ( self, event ):
+    def key_event_to_name(self, event):
         """ Converts a keystroke event into a corresponding key name.
         """
         import key_event_to_name
-        return key_event_to_name.key_event_to_name( event )
+        return key_event_to_name.key_event_to_name(event)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Hooks all specified events for all controls in a ui so that they can be
     #  routed to the correct event handler:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def hook_events ( self, ui, control, events = None, handler = None ):
+    def hook_events(self, ui, control, events=None, handler=None):
         """ Hooks all specified events for all controls in a UI so that they
             can be routed to the correct event handler.
         """
@@ -374,6 +377,7 @@ class GUIToolkit ( Toolkit ):
 
         elif events == 'keys':
             class KeyEventHook(QtCore.QObject):
+
                 def eventFilter(self, object, event):
                     if event.type() == QtCore.QEvent.KeyPress:
                         return handler(event)
@@ -386,21 +390,21 @@ class GUIToolkit ( Toolkit ):
             ui._key_event_hook = KeyEventHook()
             control.installEventFilter(ui._key_event_hook)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Indicates that an event should continue to be processed by the toolkit
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def skip_event ( self, event ):
+    def skip_event(self, event):
         """ Indicates that an event should continue to be processed by the
             toolkit.
         """
         event.ignore()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Destroys a specified GUI toolkit control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def destroy_control ( self, control ):
+    def destroy_control(self, control):
         """ Destroys a specified GUI toolkit control.
         """
         # Block signals to prevent any editors from being updated (the control
@@ -419,11 +423,11 @@ class GUIToolkit ( Toolkit ):
                 import sip
                 sip.transferto(control, None)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Destroys all of the child controls of a specified GUI toolkit control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def destroy_children ( self, control ):
+    def destroy_children(self, control):
         """ Destroys all of the child controls of a specified GUI toolkit
             control.
         """
@@ -434,22 +438,22 @@ class GUIToolkit ( Toolkit ):
                 # so we need to do the delete after the handler has returned.
                 w.deleteLater()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns a ( width, height ) tuple containing the size of a specified
     #  toolkit image:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def image_size ( self, image ):
+    def image_size(self, image):
         """ Returns a ( width, height ) tuple containing the size of a
             specified toolkit image.
         """
-        return ( image.width(), image.height() )
+        return (image.width(), image.height())
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns a dictionary of useful constants:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def constants ( self ):
+    def constants(self):
         """ Returns a dictionary of useful constants.
 
             Currently, the dictionary should have the following key/value pairs:
@@ -458,218 +462,218 @@ class GUIToolkit ( Toolkit ):
               specific color format.
         """
         return {
-            'WindowColor': QtGui.QApplication.palette().color(QtGui.QPalette.Window),
-        }
+            'WindowColor': QtGui.QApplication.palette().color(
+                QtGui.QPalette.Window), }
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  GUI toolkit dependent trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def color_trait ( self, *args, **traits ):
+    def color_trait(self, *args, **traits):
         import color_trait as ct
-        return ct.PyQtColor( *args, **traits )
+        return ct.PyQtColor(*args, **traits)
 
-    def rgb_color_trait ( self, *args, **traits ):
+    def rgb_color_trait(self, *args, **traits):
         import rgb_color_trait as rgbct
-        return rgbct.RGBColor( *args, **traits )
+        return rgbct.RGBColor(*args, **traits)
 
-    def font_trait ( self, *args, **traits ):
+    def font_trait(self, *args, **traits):
         import font_trait as ft
-        return ft.PyQtFont( *args, **traits )
+        return ft.PyQtFont(*args, **traits)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  'Editor' class methods:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Generic UI-base editor:
-    def ui_editor ( self ):
+    def ui_editor(self):
         import ui_editor
         return ui_editor.UIEditor
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  'EditorFactory' factory methods:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Array:
-    def array_editor ( self, *args, **traits ):
+    def array_editor(self, *args, **traits):
         import array_editor as ae
-        return ae.ToolkitEditorFactory( *args, **traits )
+        return ae.ToolkitEditorFactory(*args, **traits)
 
     # Boolean:
-    def boolean_editor ( self, *args, **traits ):
+    def boolean_editor(self, *args, **traits):
         import boolean_editor as be
-        return be.ToolkitEditorFactory( *args, **traits )
+        return be.ToolkitEditorFactory(*args, **traits)
 
     # Button:
-    def button_editor ( self, *args, **traits ):
+    def button_editor(self, *args, **traits):
         import button_editor as be
-        return be.ToolkitEditorFactory( *args, **traits )
+        return be.ToolkitEditorFactory(*args, **traits)
 
     # Check list:
-    def check_list_editor ( self, *args, **traits ):
+    def check_list_editor(self, *args, **traits):
         import check_list_editor as cle
-        return cle.ToolkitEditorFactory( *args, **traits )
+        return cle.ToolkitEditorFactory(*args, **traits)
 
     # Code:
-    def code_editor ( self, *args, **traits ):
+    def code_editor(self, *args, **traits):
         import code_editor as ce
-        return ce.ToolkitEditorFactory( *args, **traits )
+        return ce.ToolkitEditorFactory(*args, **traits)
 
     # Color:
-    def color_editor ( self, *args, **traits ):
+    def color_editor(self, *args, **traits):
         import color_editor as ce
-        return ce.ToolkitEditorFactory( *args, **traits )
+        return ce.ToolkitEditorFactory(*args, **traits)
 
     # Compound:
-    def compound_editor ( self, *args, **traits ):
+    def compound_editor(self, *args, **traits):
         import compound_editor as ce
-        return ce.ToolkitEditorFactory( *args, **traits )
+        return ce.ToolkitEditorFactory(*args, **traits)
 
-    def styled_date_editor ( self, *args, **traits ):
+    def styled_date_editor(self, *args, **traits):
         import styled_date_editor as sde
-        return sde.ToolkitEditorFactory( *args, **traits )
+        return sde.ToolkitEditorFactory(*args, **traits)
 
     # Custom:
-    def custom_editor ( self, *args, **traits ):
+    def custom_editor(self, *args, **traits):
         import custom_editor as ce
-        return ce.ToolkitEditorFactory( *args, **traits )
+        return ce.ToolkitEditorFactory(*args, **traits)
 
     # Directory:
-    def directory_editor ( self, *args, **traits ):
+    def directory_editor(self, *args, **traits):
         import directory_editor as de
-        return de.ToolkitEditorFactory( *args, **traits)
+        return de.ToolkitEditorFactory(*args, **traits)
 
     # Drop (drag and drop target):
-    def drop_editor ( self, *args, **traits ):
+    def drop_editor(self, *args, **traits):
         import drop_editor as de
-        return de.ToolkitEditorFactory( *args, **traits)
+        return de.ToolkitEditorFactory(*args, **traits)
 
     # Drag and drop:
-    def dnd_editor ( self, *args, **traits ):
+    def dnd_editor(self, *args, **traits):
         import dnd_editor as dnd
-        return dnd.ToolkitEditorFactory( *args, **traits)
+        return dnd.ToolkitEditorFactory(*args, **traits)
 
     # Enum(eration):
-    def enum_editor ( self, *args, **traits ):
+    def enum_editor(self, *args, **traits):
         import enum_editor as ee
-        return ee.ToolkitEditorFactory( *args, **traits )
+        return ee.ToolkitEditorFactory(*args, **traits)
 
     # File:
-    def file_editor ( self, *args, **traits ):
+    def file_editor(self, *args, **traits):
         import file_editor as fe
-        return fe.ToolkitEditorFactory( *args, **traits )
+        return fe.ToolkitEditorFactory(*args, **traits)
 
     # Font:
-    def font_editor ( self, *args, **traits ):
+    def font_editor(self, *args, **traits):
         import font_editor as fe
-        return fe.ToolkitEditorFactory( *args, **traits )
+        return fe.ToolkitEditorFactory(*args, **traits)
 
     # Key Binding:
-    def key_binding_editor ( self, *args, **traits ):
+    def key_binding_editor(self, *args, **traits):
         import key_binding_editor as kbe
-        return kbe.ToolkitEditorFactory( *args, **traits )
+        return kbe.ToolkitEditorFactory(*args, **traits)
 
     # History:
-    def history_editor ( self, *args, **traits ):
+    def history_editor(self, *args, **traits):
         import history_editor as he
-        return he.HistoryEditor( *args, **traits )
+        return he.HistoryEditor(*args, **traits)
 
     # HTML:
-    def html_editor ( self, *args, **traits ):
+    def html_editor(self, *args, **traits):
         import html_editor as he
-        return he.ToolkitEditorFactory( *args, **traits )
+        return he.ToolkitEditorFactory(*args, **traits)
 
     # Image:
-    def image_editor ( self, *args, **traits ):
+    def image_editor(self, *args, **traits):
         import image_editor as ie
-        return ie.ImageEditor( *args, **traits )
+        return ie.ImageEditor(*args, **traits)
 
     # Image enum(eration):
-    def image_enum_editor ( self, *args, **traits ):
+    def image_enum_editor(self, *args, **traits):
         import image_enum_editor as iee
-        return iee.ToolkitEditorFactory( *args, **traits )
+        return iee.ToolkitEditorFactory(*args, **traits)
 
     # Instance:
-    def instance_editor ( self, *args, **traits ):
+    def instance_editor(self, *args, **traits):
         import instance_editor as ie
-        return ie.ToolkitEditorFactory( *args, **traits )
+        return ie.ToolkitEditorFactory(*args, **traits)
 
     # List:
-    def list_editor ( self, *args, **traits ):
+    def list_editor(self, *args, **traits):
         import list_editor as le
-        return le.ToolkitEditorFactory( *args, **traits )
+        return le.ToolkitEditorFactory(*args, **traits)
 
     # ListStr:
-    def list_str_editor ( self, *args, **traits ):
+    def list_str_editor(self, *args, **traits):
         import list_str_editor as lse
-        return lse.ListStrEditor( *args, **traits )
+        return lse.ListStrEditor(*args, **traits)
 
     # Null:
-    def null_editor ( self, *args, **traits ):
+    def null_editor(self, *args, **traits):
         import null_editor as ne
-        return ne.ToolkitEditorFactory( *args, **traits )
+        return ne.ToolkitEditorFactory(*args, **traits)
 
     # Ordered set:
-    def ordered_set_editor ( self, *args, **traits ):
+    def ordered_set_editor(self, *args, **traits):
         import ordered_set_editor as ose
-        return ose.ToolkitEditorFactory( *args, **traits )
+        return ose.ToolkitEditorFactory(*args, **traits)
 
     # Plot:
-    def plot_editor ( self, *args, **traits ):
+    def plot_editor(self, *args, **traits):
         import plot_editor as pe
-        return pe.ToolkitEditorFactory( *args, **traits )
+        return pe.ToolkitEditorFactory(*args, **traits)
 
     # Range:
-    def range_editor ( self, *args, **traits ):
+    def range_editor(self, *args, **traits):
         import range_editor as re
-        return re.ToolkitEditorFactory( *args, **traits )
+        return re.ToolkitEditorFactory(*args, **traits)
 
     # RGB Color:
-    def rgb_color_editor ( self, *args, **traits ):
+    def rgb_color_editor(self, *args, **traits):
         import rgb_color_editor as rgbce
-        return rgbce.ToolkitEditorFactory( *args, **traits )
+        return rgbce.ToolkitEditorFactory(*args, **traits)
 
     # Set:
-    def set_editor ( self, *args, **traits ):
+    def set_editor(self, *args, **traits):
         import set_editor as se
-        return se.ToolkitEditorFactory( *args, **traits )
+        return se.ToolkitEditorFactory(*args, **traits)
 
     # Shell:
-    def shell_editor ( self, *args, **traits ):
+    def shell_editor(self, *args, **traits):
         import shell_editor as se
-        return se.ToolkitEditorFactory( *args, **traits )
+        return se.ToolkitEditorFactory(*args, **traits)
 
     # Table:
-    def table_editor ( self, *args, **traits ):
+    def table_editor(self, *args, **traits):
         import table_editor as te
-        return te.ToolkitEditorFactory( *args, **traits )
+        return te.ToolkitEditorFactory(*args, **traits)
 
     # Tabular:
-    def tabular_editor ( self, *args, **traits ):
+    def tabular_editor(self, *args, **traits):
         import tabular_editor as te
-        return te.TabularEditor( *args, **traits )
+        return te.TabularEditor(*args, **traits)
 
     # Text:
-    def text_editor ( self, *args, **traits ):
+    def text_editor(self, *args, **traits):
         import text_editor as te
-        return te.ToolkitEditorFactory( *args, **traits )
+        return te.ToolkitEditorFactory(*args, **traits)
 
     # Title:
-    def title_editor ( self, *args, **traits ):
+    def title_editor(self, *args, **traits):
         import title_editor
-        return title_editor.TitleEditor( *args, **traits )
+        return title_editor.TitleEditor(*args, **traits)
 
     # Tree:
-    def tree_editor ( self, *args, **traits ):
+    def tree_editor(self, *args, **traits):
         import tree_editor as te
-        return te.ToolkitEditorFactory( *args, **traits )
+        return te.ToolkitEditorFactory(*args, **traits)
 
     # Tuple:
-    def tuple_editor ( self, *args, **traits ):
+    def tuple_editor(self, *args, **traits):
         import tuple_editor as te
-        return te.ToolkitEditorFactory( *args, **traits )
+        return te.ToolkitEditorFactory(*args, **traits)
 
     # Value:
-    def value_editor ( self, *args, **traits ):
+    def value_editor(self, *args, **traits):
         import value_editor as ve
-        return ve.ToolkitEditorFactory( *args, **traits )
+        return ve.ToolkitEditorFactory(*args, **traits)

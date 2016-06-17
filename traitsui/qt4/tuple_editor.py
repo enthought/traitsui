@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -12,9 +13,9 @@
 """ Defines the tuple editor for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -26,11 +27,12 @@ from traitsui.editors.tuple_editor \
 from editor \
     import Editor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class SimpleEditor ( BaseSimpleEditor, Editor ):
+
+class SimpleEditor (BaseSimpleEditor, Editor):
     """ Simple style of editor for tuples.
 
     The editor displays an editor for each of the fields in the tuple, based on

@@ -2,6 +2,7 @@
 from traits.api import Bool, List, Str
 from .date_editor import DateEditor
 
+
 class CellFormat(object):
     """ Encapsulates some common visual attributes to set on the cells of a
     calendar widget.  All attributes default to None, which means that they
@@ -23,7 +24,7 @@ class CellFormat(object):
     fgcolor = None
 
     def __init__(self, **args):
-        for key,val in args.items():
+        for key, val in args.items():
             setattr(self, key, val)
 
 

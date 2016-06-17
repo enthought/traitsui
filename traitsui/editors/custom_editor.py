@@ -18,9 +18,9 @@
 """ Defines the editor factory used to wrap a non-Traits based custom control.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -30,11 +30,12 @@ from ..basic_editor_factory import BasicEditorFactory
 
 from ..toolkit import toolkit_object
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ToolkitEditorFactory ( BasicEditorFactory ):
+
+class ToolkitEditorFactory (BasicEditorFactory):
     """ Editor factory for custom editors.
     """
     # Editor class to be instantiated.
@@ -44,21 +45,21 @@ class ToolkitEditorFactory ( BasicEditorFactory ):
     factory = Callable
 
     # Arguments to be passed to the user's custom editor factory
-    args    = Tuple
+    args = Tuple
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Initializes the object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __init__ ( self, *args, **traits ):
-        if len( args ) >= 1:
+    def __init__(self, *args, **traits):
+        if len(args) >= 1:
             self.factory = args[0]
-            self.args    = args[1:]
-        super( ToolkitEditorFactory, self ).__init__( **traits )
+            self.args = args[1:]
+        super(ToolkitEditorFactory, self).__init__(**traits)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Property getters
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     def _get_klass(self):
         """ Returns the editor class to be created.
         """

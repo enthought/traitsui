@@ -20,10 +20,11 @@ import warnings
 from traitsui.basic_editor_factory \
     import BasicEditorFactory as AbstractBasicEditorFactory
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'BasicEditorFactory' class
 #   Deprecated alias for traitsui.editor_factory.EditorFactory
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class BasicEditorFactory(AbstractBasicEditorFactory):
     """ Deprecated alias for
@@ -33,6 +34,6 @@ class BasicEditorFactory(AbstractBasicEditorFactory):
     def __init__(self, *args, **kwds):
         super(BasicEditorFactory, self).__init__(*args, **kwds)
         warnings.warn("DEPRECATED: Use traitsui.basic_editor_factory"
-            ".BasicEditorFactory instead.", DeprecationWarning)
+                      ".BasicEditorFactory instead.", DeprecationWarning)
 
-#---EOF-------------------------------------------------------------------------
+#---EOF-------------------------------------------------------------------

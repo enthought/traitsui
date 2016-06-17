@@ -33,9 +33,9 @@ if _is_current_backend('null'):
 
 
 TestAction = Action(
-    name        = 'Test',
-    action      = 'test_clicked',
-    tooltip     = 'Click to test'
+    name='Test',
+    action='test_clicked',
+    tooltip='Click to test'
 )
 
 
@@ -62,9 +62,9 @@ class DialogWithToolbar(HasTraits):
         Item(label="Click the button on the toolbar or the menu item.\n"
                    "The 'Action successful' element should turn to True."),
         Item('action_successful', style='readonly'),
-        menubar = menubar,
-        toolbar = toolbar,
-        buttons = ['OK']
+        menubar=menubar,
+        toolbar=toolbar,
+        buttons=['OK']
     )
 
 

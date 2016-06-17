@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,12 @@
 #  Author: David C. Morrill
 #  Date:   08/29/2007
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Defines an ArrayViewEditor for displaying 1-d or 2-d arrays of values.
 """
 
-#-- Imports --------------------------------------------------------------------
+#-- Imports --------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -32,152 +32,156 @@ from ..toolkit import toolkit_object
 
 from ..ui_editor import UIEditor
 
-#-- Tabular Adapter Definition -------------------------------------------------
+#-- Tabular Adapter Definition -------------------------------------------
 
-class ArrayViewAdapter ( TabularAdapter ):
+
+class ArrayViewAdapter (TabularAdapter):
 
     # Is the array 1D or 2D?
-    is_2d = Bool( True )
+    is_2d = Bool(True)
 
     # Should array rows and columns be transposed:
-    transpose  = Bool( False )
+    transpose = Bool(False)
 
-    alignment  = 'right'
+    alignment = 'right'
     index_text = Property
 
-    def _get_index_text ( self ):
-        return str( self.row )
+    def _get_index_text(self):
+        return str(self.row)
 
-    def _get_content ( self ):
+    def _get_content(self):
         if self.is_2d:
-            return self.item[ self.column_id ]
+            return self.item[self.column_id]
 
         return self.item
 
-    def get_item ( self, object, trait, row ):
+    def get_item(self, object, trait, row):
         """ Returns the value of the *object.trait[row]* item.
         """
         if self.is_2d:
             if self.transpose:
-                return getattr( object, trait )[:,row]
+                return getattr(object, trait)[:, row]
 
-            return super( ArrayViewAdapter, self ).get_item( object, trait,
-                                                             row )
+            return super(ArrayViewAdapter, self).get_item(object, trait,
+                                                          row)
 
-        return getattr( object, trait )[ row ]
+        return getattr(object, trait)[row]
 
-    def len ( self, object, trait ):
+    def len(self, object, trait):
         """ Returns the number of items in the specified *object.trait* list.
         """
         if self.transpose:
-            return getattr( object, trait ).shape[1]
+            return getattr(object, trait).shape[1]
 
-        return super( ArrayViewAdapter, self ).len( object, trait )
+        return super(ArrayViewAdapter, self).len(object, trait)
 
 # Define the actual abstract Traits UI array view editor (each backend should
 # implement its own editor that inherits from this class.
-class _ArrayViewEditor ( UIEditor ):
+
+
+class _ArrayViewEditor (UIEditor):
 
     # Indicate that the editor is scrollable/resizable:
     scrollable = True
 
     # Should column titles be displayed:
-    show_titles = Bool( False )
+    show_titles = Bool(False)
 
     # The tabular adapter being used for the editor view:
-    adapter = Instance( ArrayViewAdapter )
+    adapter = Instance(ArrayViewAdapter)
 
-    #-- Private Methods --------------------------------------------------------
+    #-- Private Methods ------------------------------------------------------
 
-    def _array_view ( self ):
+    def _array_view(self):
         """ Return the view used by the editor.
         """
         return View(
-            Item( 'object.object.' + self.name,
-                  id         = 'tabular_editor',
-                  show_label = False,
-                  editor     = TabularEditor( show_titles = self.show_titles,
-                                              editable    = False,
-                                              adapter     = self.adapter )
-        ),
-        id        = 'array_view_editor',
-        resizable = True
-    )
+            Item('object.object.' + self.name,
+                 id='tabular_editor',
+                 show_label=False,
+                 editor=TabularEditor(show_titles=self.show_titles,
+                                      editable=False,
+                                      adapter=self.adapter)
+                 ),
+            id='array_view_editor',
+            resizable=True
+        )
 
-    def init_ui ( self, parent ):
+    def init_ui(self, parent):
         """ Creates the Traits UI for displaying the array.
         """
         # Make sure that the value is an array of the correct shape:
         shape = self.value.shape
-        len_shape = len( shape )
+        len_shape = len(shape)
         if (len_shape == 0) or (len_shape > 2):
-            raise ValueError( "ArrayViewEditor can only display 1D or 2D "
-                              "arrays" )
+            raise ValueError("ArrayViewEditor can only display 1D or 2D "
+                             "arrays")
 
-        factory          = self.factory
-        cols             = 1
-        titles           = factory.titles
-        n                = len( titles )
+        factory = self.factory
+        cols = 1
+        titles = factory.titles
+        n = len(titles)
         self.show_titles = (n > 0)
-        is_2d            = (len_shape == 2)
+        is_2d = (len_shape == 2)
         if is_2d:
             index = 1
             if factory.transpose:
                 index = 0
-            cols = shape[ index ]
+            cols = shape[index]
             if self.show_titles:
                 if n > cols:
                     titles = titles[:cols]
                 elif n < cols:
                     if (cols % n) == 0:
                         titles, old_titles, i = [], titles, 0
-                        while len( titles ) < cols:
-                            titles.extend( '%s%d' % ( title, i )
-                                           for title in old_titles )
+                        while len(titles) < cols:
+                            titles.extend('%s%d' % (title, i)
+                                          for title in old_titles)
                             i += 1
                     else:
-                        titles.extend( [ '' ] * (cols - n) )
+                        titles.extend([''] * (cols - n))
             else:
-                titles = [ 'Data %d' % i for i in range( cols ) ]
+                titles = ['Data %d' % i for i in range(cols)]
 
-        columns = [ ( title, i ) for i, title in enumerate( titles ) ]
+        columns = [(title, i) for i, title in enumerate(titles)]
 
         if factory.show_index:
-            columns.insert( 0, ( 'Index', 'index' ) )
+            columns.insert(0, ('Index', 'index'))
 
-        self.adapter = ArrayViewAdapter( is_2d     = is_2d,
-                                         columns   = columns,
-                                         transpose = factory.transpose,
-                                         format    = factory.format,
-                                         font      = factory.font )
+        self.adapter = ArrayViewAdapter(is_2d=is_2d,
+                                        columns=columns,
+                                        transpose=factory.transpose,
+                                        format=factory.format,
+                                        font=factory.font)
 
-        return self.edit_traits( view   = '_array_view',
-                                 parent = parent,
-                                 kind   = 'subpanel' )
+        return self.edit_traits(view='_array_view',
+                                parent=parent,
+                                kind='subpanel')
 
 # Define the ArrayViewEditor class used by client code:
-class ArrayViewEditor ( BasicEditorFactory ):
+
+
+class ArrayViewEditor (BasicEditorFactory):
 
     # The editor implementation class:
     klass = Property
 
     # Should an index column be displayed:
-    show_index = Bool( True )
+    show_index = Bool(True)
 
     # List of (optional) column titles:
-    titles = List( Str )
+    titles = List(Str)
 
     # Should the array be logically transposed:
-    transpose = Bool( False )
+    transpose = Bool(False)
 
     # The format used to display each array element:
-    format = Str( '%s' )
+    format = Str('%s')
 
     # The font to use for displaying each array element:
-    font = Font( 'Courier 10' )
+    font = Font('Courier 10')
 
-    def _get_klass( self ):
+    def _get_klass(self):
         """ The class used to construct editor objects.
         """
         return toolkit_object('array_view_editor:_ArrayViewEditor')
-

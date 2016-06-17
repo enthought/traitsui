@@ -19,9 +19,9 @@
     complete application, using information from the specified UI object.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Standard library imports.
 import os
@@ -34,9 +34,9 @@ import wx
 from pyface.util.guisupport import is_event_loop_running_wx, \
     start_event_loop_wx
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # File to redirect output to. If '', output goes to stdout.
 redirect_filename = ''
@@ -54,11 +54,11 @@ def on_ui_destroyed(object, name, old, destroyed):
         object.on_trait_change(on_ui_destroyed, 'destroyed', remove=True)
 
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Creates a 'stand-alone' wx Application to display a specified traits UI View:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def view_application ( context, view, kind, handler, id, scrollable, args ):
+def view_application(context, view, kind, handler, id, scrollable, args):
     """ Creates a stand-alone wx Application to display a specified traits UI
         View.
 
@@ -89,15 +89,15 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
 
     app = wx.GetApp()
     if app is None or not is_event_loop_running_wx(app):
-        return ViewApplication( context, view, kind, handler, id,
-                                scrollable, args ).ui.result
+        return ViewApplication(context, view, kind, handler, id,
+                               scrollable, args).ui.result
 
-    ui = view.ui( context,
-                  kind       = kind,
-                  handler    = handler,
-                  id         = id,
-                  scrollable = scrollable,
-                  args       = args )
+    ui = view.ui(context,
+                 kind=kind,
+                 handler=handler,
+                 id=id,
+                 scrollable=scrollable,
+                 args=args)
 
     # If the UI has not been closed yet, we need to keep a reference to
     # it until it does close.
@@ -106,29 +106,30 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
         ui.on_trait_change(on_ui_destroyed, 'destroyed')
     return ui.result
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ViewApplication' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ViewApplication ( wx.App ):
+
+class ViewApplication (wx.App):
     """ Modal window that contains a stand-alone application.
     """
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Initializes the object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __init__ ( self, context, view, kind, handler, id, scrollable, args ):
+    def __init__(self, context, view, kind, handler, id, scrollable, args):
         """ Initializes the object.
         """
-        self.context    = context
-        self.view       = view
-        self.kind       = kind
-        self.handler    = handler
-        self.id         = id
+        self.context = context
+        self.view = view
+        self.kind = kind
+        self.handler = handler
+        self.id = id
         self.scrollable = scrollable
-        self.args       = args
+        self.args = args
 
-        if os.environ.get( 'ENABLE_FBI' ) is not None:
+        if os.environ.get('ENABLE_FBI') is not None:
             try:
                 from etsdevtools.developer.helper.fbi import enable_fbi
                 enable_fbi()
@@ -136,25 +137,24 @@ class ViewApplication ( wx.App ):
                 pass
 
         if redirect_filename.strip() != '':
-            super( ViewApplication, self ).__init__( 1, redirect_filename )
+            super(ViewApplication, self).__init__(1, redirect_filename)
         else:
-            super( ViewApplication, self ).__init__(0)
+            super(ViewApplication, self).__init__(0)
 
         # Start the event loop in an IPython-conforming manner.
         start_event_loop_wx(self)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles application initialization:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def OnInit ( self ):
+    def OnInit(self):
         """ Handles application initialization.
         """
-        self.ui = self.view.ui( self.context,
-                                kind       = self.kind,
-                                handler    = self.handler,
-                                id         = self.id,
-                                scrollable = self.scrollable,
-                                args       = self.args )
+        self.ui = self.view.ui(self.context,
+                               kind=self.kind,
+                               handler=self.handler,
+                               id=self.id,
+                               scrollable=self.scrollable,
+                               args=self.args)
         return True
-

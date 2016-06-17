@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -13,9 +14,9 @@
 using pickle.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from cPickle import dumps, load, loads, PickleError
 from cStringIO import StringIO
@@ -27,16 +28,16 @@ from pyface.qt import QtCore, QtGui
 
 from traits.api import HasTraits, Instance, Property
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'PyMimeData' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 if sys.version_info[0] < 3:
     def str2bytes(s):
         return s
 else:
     def str2bytes(s):
-        return bytes(s,'ascii')
+        return bytes(s, 'ascii')
 
 
 class PyMimeData(QtCore.QMimeData):
@@ -64,10 +65,11 @@ class PyMimeData(QtCore.QMimeData):
                     self.setData(self.MIME_TYPE, dumps(data.__class__) + pdata)
                 except (PickleError, TypeError):
                     # if pickle fails, still try to create a draggable
-                    warnings.warn(("Could not pickle dragged object %s, " +
-                            "using %s mimetype instead") % (repr(data),
-                            self.NOPICKLE_MIME_TYPE), RuntimeWarning)
-                    self.setData(self.NOPICKLE_MIME_TYPE, str2bytes(str(id(data))))
+                    warnings.warn(
+                        ("Could not pickle dragged object %s, " + "using %s mimetype instead") %
+                        (repr(data), self.NOPICKLE_MIME_TYPE), RuntimeWarning)
+                    self.setData(self.NOPICKLE_MIME_TYPE,
+                                 str2bytes(str(id(data))))
 
         else:
             self.setData(self.NOPICKLE_MIME_TYPE, str2bytes(str(id(data))))
@@ -103,10 +105,12 @@ class PyMimeData(QtCore.QMimeData):
             # track whether we should pickle.
             # XXX lists should suffice for now, but may want other containers
             if isinstance(md, list):
-                pickle = not any(item.hasFormat(cls.NOPICKLE_MIME_TYPE)
-                        for item in md if isinstance(item, QtCore.QMimeData))
+                pickle = not any(
+                    item.hasFormat(
+                        cls.NOPICKLE_MIME_TYPE) for item in md if isinstance(
+                        item, QtCore.QMimeData))
                 md = [item.instance() if isinstance(item, PyMimeData) else item
-                        for item in md]
+                      for item in md]
 
             # Arbitrary python object, wrap it into PyMimeData
             nmd = cls(md, pickle)
@@ -159,17 +163,18 @@ class PyMimeData(QtCore.QMimeData):
                 ret.append(url.toLocalFile())
         return ret
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  '_Clipboard' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class _Clipboard(HasTraits):
     """ The _Clipboard class provides a wrapper around the PyQt clipboard.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # The instance on the clipboard (if any).
     instance = Property
@@ -183,9 +188,9 @@ class _Clipboard(HasTraits):
     # The application clipboard.
     clipboard = Instance(QtGui.QClipboard)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Instance property methods:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _get_instance(self):
         """ The instance getter.
@@ -215,17 +220,17 @@ class _Clipboard(HasTraits):
 
         return md.instanceType()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Other trait handlers:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _clipboard_default(self):
         """ Initialise the clipboard.
         """
         return QtGui.QApplication.clipboard()
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  The singleton clipboard instance.
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 clipboard = _Clipboard()

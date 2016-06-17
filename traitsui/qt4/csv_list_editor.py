@@ -20,7 +20,7 @@
     been augmented to also listen to changes in the items of the list object.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
 #------------------------------------------------------------------------------
 
@@ -29,15 +29,18 @@ from .text_editor import CustomEditor as QtCustomEditor
 from .text_editor import ReadonlyEditor as QtReadonlyEditor
 from ..editors.csv_list_editor import _prepare_method, _dispose_method
 
+
 class SimpleEditor(QtSimpleEditor):
     """ Simple Editor style for CSVListEditor. """
     prepare = _prepare_method
     dispose = _dispose_method
 
+
 class CustomEditor(QtCustomEditor):
     """ Custom Editor style for CSVListEditor. """
     prepare = _prepare_method
     dispose = _dispose_method
+
 
 class ReadonlyEditor(QtReadonlyEditor):
     """ Readonly Editor style for CSVListEditor. """

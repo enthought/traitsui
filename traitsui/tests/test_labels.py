@@ -67,9 +67,9 @@ class HResizeTestDialog(HasTraits):
                 Item('txt_item', resizable=True),
                 show_left=False
             ),
-            ),
-        width  = _DIALOG_WIDTH,
-        height = 100,
+        ),
+        width=_DIALOG_WIDTH,
+        height=100,
         resizable=True
     )
 
@@ -92,9 +92,9 @@ class VResizeTestDialog(HasTraits):
                 Item('txt_item', resizable=True),
                 show_left=False
             ),
-            ),
-        width  = _DIALOG_WIDTH,
-        height = 100,
+        ),
+        width=_DIALOG_WIDTH,
+        height=100,
         resizable=True
     )
 
@@ -173,7 +173,7 @@ def _test_qt_labels_right_resizing(dialog_class):
         h_space = text_label.x() - text.x()
         nose.tools.assert_less(h_space, 100)
         # and the text item size should be large
-        nose.tools.assert_greater(text.width(), _DIALOG_WIDTH-200)
+        nose.tools.assert_greater(text.width(), _DIALOG_WIDTH - 200)
 
         # the size of the window should still be 500
         nose.tools.assert_equal(ui.control.width(), _DIALOG_WIDTH)
@@ -198,7 +198,6 @@ def test_qt_no_labels_on_the_right_bug():
     with store_exceptions_on_all_threads():
         dialog = NoLabelResizeTestDialog()
         ui = dialog.edit_traits()
-
 
 
 if __name__ == "__main__":
