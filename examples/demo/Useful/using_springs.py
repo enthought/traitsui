@@ -11,7 +11,7 @@ placed confusingly, or have been unattractively stretched to fill available
 space.
 
 When you place a *spring* in a horizontal group, Traits UI will not try to fill
-that space with an adjacent widget, instead allowing empty space which varies 
+that space with an adjacent widget, instead allowing empty space which varies
 depending on the overall size of the containing group.
 """
 
@@ -19,46 +19,47 @@ from traits.api import HasTraits, Button
 from traitsui.api import View, VGroup, HGroup, Item, spring, Label
 
 # dummy button which will be used repeatedly to demonstrate widget spacing:
-button = Item( 'ignore', show_label = False )
+button = Item('ignore', show_label=False)
+
 
 class SpringDemo(HasTraits):
 
     ignore = Button('Ignore')
 
     view = View(
-               VGroup(
-                   '10',
-                   Label(label='Spring in a horizontal group moves widget right:'),
-                   '10',
-                   HGroup(button, button,
-                        show_border = True,
-                        label = 'Left justified (no springs)' ),
-                   HGroup(spring, button, button,
-                        show_border = True,
-                        label = 'Right justified with a spring '
-                                'before any buttons'),
-                   HGroup(button, spring, button,
-                        show_border = True,
-                        label = 'Left and right justified with a '
-                                         'spring between buttons'),
-                   HGroup(button, button, spring,
-                        button, button, spring,
-                        button, button,
-                        show_border = True,
-                        label = 'Left, center and right justified '
-                                'with springs after the 2nd and 4th '
-                                'buttons'),
-                   spring,
-                   Label('But spring in vertical group does not move '
-                         'widget down at present.'),
-                   button
-               ),
-               width=600,
-               height=600,
-               resizable=True,
-               title   = 'Spring Demo',
-               buttons = [ 'OK' ]
-           )
+        VGroup(
+            '10',
+            Label(label='Spring in a horizontal group moves widget right:'),
+            '10',
+            HGroup(button, button,
+                   show_border=True,
+                   label='Left justified (no springs)'),
+            HGroup(spring, button, button,
+                   show_border=True,
+                   label='Right justified with a spring '
+                   'before any buttons'),
+            HGroup(button, spring, button,
+                   show_border=True,
+                   label='Left and right justified with a '
+                   'spring between buttons'),
+            HGroup(button, button, spring,
+                   button, button, spring,
+                   button, button,
+                   show_border=True,
+                   label='Left, center and right justified '
+                   'with springs after the 2nd and 4th '
+                   'buttons'),
+            spring,
+            Label('But spring in vertical group does not move '
+                  'widget down at present.'),
+            button
+        ),
+        width=600,
+        height=600,
+        resizable=True,
+        title='Spring Demo',
+        buttons=['OK']
+    )
 
 demo = SpringDemo()
 

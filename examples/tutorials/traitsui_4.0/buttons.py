@@ -1,7 +1,7 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
-#--(View Default Button Changes)------------------------------------------------
+#--(View Default Button Changes)------------------------------------------
 """
 View Default Button Changes
 ===========================
@@ -45,34 +45,35 @@ Note that in a future release, the deprecated view traits will actually be
 removed from the **View** class.
 """
 
-#--<Imports>--------------------------------------------------------------------
+#--<Imports>--------------------------------------------------------------
 
 from traits.api import *
 from traitsui.api import *
 
-#--[Adder Class]----------------------------------------------------------------
+#--[Adder Class]----------------------------------------------------------
 
 # Click the run button to view the pop-up dialog...
 
-class Adder ( HasTraits ):
+
+class Adder (HasTraits):
 
     value_1 = Float
     value_2 = Float
-    sum     = Property( depends_on = [ 'value_1', 'value_2' ] )
+    sum = Property(depends_on=['value_1', 'value_2'])
 
     view = View(
-        Item( 'value_1' ),
-        Item( 'value_2' ),
+        Item('value_1'),
+        Item('value_2'),
         '_',
-        Item( 'sum', style = 'readonly' ),
-        title   = 'Adding Machine',
-        buttons = [ 'OK' ]
+        Item('sum', style='readonly'),
+        title='Adding Machine',
+        buttons=['OK']
     )
 
-    def _get_sum ( self ):
+    def _get_sum(self):
         return (self.value_1 + self.value_2)
 
-#--<Example>--------------------------------------------------------------------
+#--<Example>--------------------------------------------------------------
 
 popup = Adder()
 

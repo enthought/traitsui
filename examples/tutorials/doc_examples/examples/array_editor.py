@@ -3,35 +3,36 @@
 
 # array_editor.py -- Example of using array editors
 
-#--[Imports]--------------------------------------------------------------------
+#--[Imports]--------------------------------------------------------------
 from numpy.numarray import Int, Float
 
 from traits.api import HasPrivateTraits, Array
 from traitsui.api import View, ArrayEditor, Item
 from traitsui.menu import NoButtons
 
-#--[Code]-----------------------------------------------------------------------
+#--[Code]-----------------------------------------------------------------
 
-class ArrayEditorTest ( HasPrivateTraits ):
 
-    three = Array(Int, (3,3))
-    four  = Array(Float,
-                  (4,4),
-                  editor = ArrayEditor(width = -50))
+class ArrayEditorTest (HasPrivateTraits):
 
-    view = View( Item('three', label='3x3 Integer'),
-                 '_',
-                 Item('three',
-                      label='Integer Read-only',
-                      style='readonly'),
-                 '_',
-                 Item('four', label='4x4 Float'),
-                 '_',
-                 Item('four',
-                      label='Float Read-only',
-                      style='readonly'),
-                 buttons   = NoButtons,
-                 resizable = True )
+    three = Array(Int, (3, 3))
+    four = Array(Float,
+                 (4, 4),
+                 editor=ArrayEditor(width=-50))
+
+    view = View(Item('three', label='3x3 Integer'),
+                '_',
+                Item('three',
+                     label='Integer Read-only',
+                     style='readonly'),
+                '_',
+                Item('four', label='4x4 Float'),
+                '_',
+                Item('four',
+                     label='Float Read-only',
+                     style='readonly'),
+                buttons=NoButtons,
+                resizable=True)
 
 
 if __name__ == '__main__':

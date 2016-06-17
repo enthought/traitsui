@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  TableEditor test case for Traits UI
 #
@@ -9,11 +9,11 @@
 #  (c) Copyright 2005 by Enthought, Inc.
 #  License: BSD Style.
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from traits.api \
     import HasTraits, List
@@ -27,65 +27,66 @@ from traitsui.color_column \
 from enable.api \
     import ColorTrait
 
-class Thingy ( HasTraits ):
-    color = ColorTrait( 'black' )
 
-#-------------------------------------------------------------------------------
+class Thingy (HasTraits):
+    color = ColorTrait('black')
+
+#-------------------------------------------------------------------------
 #  Sample data:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 colors = [
-   Thingy( color = 'red'),
-   Thingy( color = 'orange'),
-   Thingy( color = 'yellow'),
-   Thingy( color = 'green'),
-   Thingy( color = 'blue'),
-   Thingy( color = 'indigo'),
-   Thingy( color = 'violet'),
-   Thingy( color = 'black'),
-   Thingy( color = 'white'),
+    Thingy(color='red'),
+    Thingy(color='orange'),
+    Thingy(color='yellow'),
+    Thingy(color='green'),
+    Thingy(color='blue'),
+    Thingy(color='indigo'),
+    Thingy(color='violet'),
+    Thingy(color='black'),
+    Thingy(color='white'),
 ]
 
-class TableTest ( HasTraits ):
 
-    #---------------------------------------------------------------------------
+class TableTest (HasTraits):
+
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    colors = List( Thingy )
+    colors = List(Thingy)
 
     table_editor = TableEditor(
-        columns            = [ ColorColumn( name = 'color' ),
-                             ],
+        columns=[ColorColumn(name='color'),
+                 ],
 
-        editable           = True,
-        deletable          = True,
-        sortable           = True,        #
-        sort_model         = True,
-        show_lines         = True,        #
-        orientation        = 'vertical',
-        show_column_labels = True,        #
-        row_factory        = Thingy
+        editable=True,
+        deletable=True,
+        sortable=True,        #
+        sort_model=True,
+        show_lines=True,        #
+        orientation='vertical',
+        show_column_labels=True,        #
+        row_factory=Thingy
     )
 
-
     traits_view = View(
-        [ Item( 'colors',
-                id     = 'colors',
-                editor = table_editor ),
-          '|[]<>' ],
-        title     = 'Table Editor Test',
-        id        = 'traitsui.tests.table_editor_color_test',
-        dock      = 'horizontal',
-        width     = .4,
-        height    = .3,
-        resizable = True,
-        kind      = 'live' )
+        [Item('colors',
+              id='colors',
+              editor=table_editor),
+         '|[]<>'],
+        title='Table Editor Test',
+        id='traitsui.tests.table_editor_color_test',
+        dock='horizontal',
+        width=.4,
+        height=.3,
+        resizable=True,
+        kind='live')
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Run the tests:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    tt = TableTest( colors = colors )
+    tt = TableTest(colors=colors)
     tt.configure_traits()

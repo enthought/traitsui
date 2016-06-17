@@ -21,7 +21,8 @@ from traits.api import HasTraits, Font
 
 from traitsui.api import Item, Group, View
 
-class FontEditorDemo ( HasTraits ):
+
+class FontEditorDemo (HasTraits):
     """ Defines the main FontEditor demo class. """
 
     # Define a Font trait to view:
@@ -29,21 +30,21 @@ class FontEditorDemo ( HasTraits ):
 
     # Display specification (one Item per editor style):
     font_group = Group(
-        Item( 'my_font_trait', style = 'simple',   label = 'Simple' ),
-        Item( '_' ),
-        Item( 'my_font_trait', style = 'custom',   label = 'Custom' ),
-        Item( '_' ),
-        Item( 'my_font_trait', style = 'text',     label = 'Text' ),
-        Item( '_' ),
-        Item( 'my_font_trait', style = 'readonly', label = 'ReadOnly' )
+        Item('my_font_trait', style='simple', label='Simple'),
+        Item('_'),
+        Item('my_font_trait', style='custom', label='Custom'),
+        Item('_'),
+        Item('my_font_trait', style='text', label='Text'),
+        Item('_'),
+        Item('my_font_trait', style='readonly', label='ReadOnly')
     )
 
     # Demo view:
     view = View(
         font_group,
-        title     = 'FontEditor',
-        buttons   = ['OK'],
-        resizable = True
+        title='FontEditor',
+        buttons=['OK'],
+        resizable=True
     )
 
 # Create the demo:
@@ -53,4 +54,3 @@ demo = FontEditorDemo()
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

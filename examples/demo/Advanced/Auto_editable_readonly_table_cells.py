@@ -25,7 +25,7 @@ activated on mouse over, rather than the pop-up view specified by the 'view'
 trait.
 """
 
-#-- Imports --------------------------------------------------------------------
+#-- Imports --------------------------------------------------------------
 
 from __future__ import division
 
@@ -40,125 +40,128 @@ from traitsui.api \
 from traitsui.table_column \
     import ObjectColumn
 
-#-- Integer Class --------------------------------------------------------------
+#-- Integer Class --------------------------------------------------------
 
-class Integer ( HasTraits ):
+
+class Integer (HasTraits):
 
     # The value:
     n = Int
 
-#-- Factor Class ---------------------------------------------------------------
+#-- Factor Class ---------------------------------------------------------
 
-class Factor ( HasTraits ):
+
+class Factor (HasTraits):
 
     # The number being factored:
     n = Int
 
     # The list of factors of 'n':
-    factors = Property( List )
+    factors = Property(List)
 
-    @property_depends_on( 'n' )
-    def _get_factors ( self ):
-        n      = self.n
-        i      = 1
+    @property_depends_on('n')
+    def _get_factors(self):
+        n = self.n
+        i = 1
         result = []
 
         while (i * i) <= n:
             j = n // i
             if (i * j) == n:
-                result.append( Integer( n = i ) )
+                result.append(Integer(n=i))
                 if i != j:
-                    result.append( Integer( n = j ) )
+                    result.append(Integer(n=j))
             i += 1
 
         result.sort(key=attrgetter('n'))
 
         return result
 
-#-- The table editor used for the pop-up view ----------------------------------
+#-- The table editor used for the pop-up view ----------------------------
 
 factor_table_editor = TableEditor(
-    columns = [
-        ObjectColumn( name                 = 'n',
-                      width                = 1.0,
-                      editable             = False,
-                      horizontal_alignment = 'center' )
+    columns=[
+        ObjectColumn(name='n',
+                     width=1.0,
+                     editable=False,
+                     horizontal_alignment='center')
     ],
-    sortable           = False,
-    auto_size          = False,
-    show_toolbar       = False,
-    show_column_labels = False
+    sortable=False,
+    auto_size=False,
+    show_toolbar=False,
+    show_column_labels=False
 )
 
-#-- The table editor used for the main view ------------------------------------
+#-- The table editor used for the main view ------------------------------
 
 factors_view = View(
-    Item( 'factors',
-          id         = 'factors',
-          show_label = False,
-          editor     = factor_table_editor
-    ),
-    id     = 'traits.examples.demo.Advanced.factors_view',
-    kind   = 'info',
-    height = 0.30,
+    Item('factors',
+         id='factors',
+         show_label=False,
+         editor=factor_table_editor
+         ),
+    id='traits.examples.demo.Advanced.factors_view',
+    kind='info',
+    height=0.30,
 )
 
 factors_table_editor = TableEditor(
-    columns = [
-        ObjectColumn( name                 = 'n',
-                      width                = 0.5,
-                      editable             = False,
-                      horizontal_alignment = 'center' ),
-        ObjectColumn( name                 = 'factors',
-                      width                = 0.5,
-                      editable             = False,
-                      horizontal_alignment = 'center',
-                      auto_editable        = True,
-                      format_func          = lambda f: '%s factors' % len( f ),
-                      view                 = factors_view ),
+    columns=[
+        ObjectColumn(name='n',
+                     width=0.5,
+                     editable=False,
+                     horizontal_alignment='center'),
+        ObjectColumn(name='factors',
+                     width=0.5,
+                     editable=False,
+                     horizontal_alignment='center',
+                     auto_editable=True,
+                     format_func=lambda f: '%s factors' % len(f),
+                     view=factors_view),
     ],
-    sortable     = False,
-    auto_size    = False,
-    show_toolbar = False
+    sortable=False,
+    auto_size=False,
+    show_toolbar=False
 )
 
-#-- Factors Class --------------------------------------------------------------
+#-- Factors Class --------------------------------------------------------
 
-class Factors ( HasTraits ):
+
+class Factors (HasTraits):
 
     # The maximum number to include in the table:
-    max_n = Range( 1, 1000, 20, mode = 'slider' )
+    max_n = Range(1, 1000, 20, mode='slider')
 
     # The list of Factor objects:
-    factors = Property( List )
+    factors = Property(List)
 
     # The view of the list of Factor objects:
     view = View(
         VGroup(
             VGroup(
-                Item( 'max_n' ),
-                show_labels = False,
-                show_border = True,
-                label       = 'Maximum Number'
+                Item('max_n'),
+                show_labels=False,
+                show_border=True,
+                label='Maximum Number'
             ),
             VGroup(
-                Item( 'factors',
-                      show_label = False,
-                      editor     = factors_table_editor
-                ),
+                Item('factors',
+                     show_label=False,
+                     editor=factors_table_editor
+                     ),
             )
         ),
-        title     = 'List of numbers and their factors',
-        width     = 0.2,
-        height    = 0.4,
-        resizable = True
+        title='List of numbers and their factors',
+        width=0.2,
+        height=0.4,
+        resizable=True
     )
 
-    @property_depends_on( 'max_n' )
-    def _get_factors ( self ):
-        return [ Factor( n = i + 1 ) for i in range( self.max_n ) ]
+    @property_depends_on('max_n')
+    def _get_factors(self):
+        return [Factor(n=i + 1) for i in range(self.max_n)]
 
-#-- Create and run the demo ----------------------------------------------------
+#-- Create and run the demo ----------------------------------------------
 
 # Create the demo:
 demo = Factors()

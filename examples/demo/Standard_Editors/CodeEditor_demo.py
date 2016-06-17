@@ -15,29 +15,31 @@ from traitsui.api \
     import Item, Group, View
 
 # The main demo class:
-class CodeEditorDemo ( HasTraits ):
+
+
+class CodeEditorDemo (HasTraits):
     """ Defines the CodeEditor demo class.
     """
 
     # Define a trait to view:
-    code_sample = Code( 'import sys\n\nsys.print("hello world!")' )
+    code_sample = Code('import sys\n\nsys.print("hello world!")')
 
     # Display specification:
     code_group = Group(
-        Item( 'code_sample', style = 'simple',   label = 'Simple' ),
-        Item( '_' ),
-        Item( 'code_sample', style = 'custom',   label = 'Custom' ),
-        Item( '_' ),
-        Item( 'code_sample', style = 'text',     label = 'Text' ),
-        Item( '_' ),
-        Item( 'code_sample', style = 'readonly', label = 'ReadOnly' )
+        Item('code_sample', style='simple', label='Simple'),
+        Item('_'),
+        Item('code_sample', style='custom', label='Custom'),
+        Item('_'),
+        Item('code_sample', style='text', label='Text'),
+        Item('_'),
+        Item('code_sample', style='readonly', label='ReadOnly')
     )
 
     # Demo view:
     view = View(
         code_group,
-        title   = 'CodeEditor',
-        buttons = [ 'OK' ] )
+        title='CodeEditor',
+        buttons=['OK'])
 
 
 # Create the demo:

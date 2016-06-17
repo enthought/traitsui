@@ -28,20 +28,20 @@ method to perform the expensive generation of a new list of people only when
 the <i>ticker</i> event fires, not every time it is accessed.
 """
 
-#-- Imports --------------------------------------------------------------------
+#-- Imports --------------------------------------------------------------
 
 from random \
     import randint, choice
 
 from threading \
-   import Thread
+    import Thread
 
 from time \
     import sleep
 
 from traits.api \
     import HasStrictTraits, HasPrivateTraits, Str, Int, Enum, List, Event, \
-           Property, cached_property
+    Property, cached_property
 
 from traitsui.api \
     import View, Item, TableEditor
@@ -49,19 +49,21 @@ from traitsui.api \
 from traitsui.table_column \
     import ObjectColumn
 
-#-- Person Class ---------------------------------------------------------------
+#-- Person Class ---------------------------------------------------------
 
-class Person ( HasStrictTraits ):
+
+class Person (HasStrictTraits):
     """ Defines some sample data to display in the TableEditor.
     """
 
-    name   = Str
-    age    = Int
-    gender = Enum( 'Male', 'Female' )
+    name = Str
+    age = Int
+    gender = Enum('Male', 'Female')
 
-#-- PropertyListDemo Class -----------------------------------------------------
+#-- PropertyListDemo Class -----------------------------------------------
 
-class PropertyListDemo ( HasPrivateTraits ):
+
+class PropertyListDemo (HasPrivateTraits):
     """ Displays a random list of Person objects in a TableEditor that is
         refreshed every 3 seconds by a background thread.
      """
@@ -70,68 +72,68 @@ class PropertyListDemo ( HasPrivateTraits ):
     ticker = Event
 
     # The property being display in the TableEditor:
-    people = Property( List, depends_on = 'ticker' )
+    people = Property(List, depends_on='ticker')
 
     # Tiny hack to allow starting the background thread easily:
     begin = Int
 
-    #-- Traits View Definitions ------------------------------------------------
+    #-- Traits View Definitions ----------------------------------------------
 
     view = View(
-        Item( 'people',
-              show_label = False,
-              editor = TableEditor(
-                  columns = [
-                      ObjectColumn( name = 'name',   editable = False,
-                                    width = 0.50 ),
-                      ObjectColumn( name = 'age',    editable = False,
-                                    width = 0.15 ),
-                      ObjectColumn( name = 'gender', editable = False,
-                                    width = 0.35 )
-                  ],
-                  auto_size    = False,
-                  show_toolbar = False
-              )
-        ),
-        title     = 'Property List Demo',
-        width     = 0.25,
-        height    = 0.33,
-        resizable = True
+        Item('people',
+             show_label=False,
+             editor=TableEditor(
+                 columns=[
+                     ObjectColumn(name='name', editable=False,
+                                  width=0.50),
+                     ObjectColumn(name='age', editable=False,
+                                  width=0.15),
+                     ObjectColumn(name='gender', editable=False,
+                                  width=0.35)
+                 ],
+                 auto_size=False,
+                 show_toolbar=False
+             )
+             ),
+        title='Property List Demo',
+        width=0.25,
+        height=0.33,
+        resizable=True
     )
 
-    #-- Property Implementations -----------------------------------------------
+    #-- Property Implementations ---------------------------------------------
 
     @cached_property
-    def _get_people ( self ):
+    def _get_people(self):
         """ Returns the value for the 'people' property.
         """
-        return [ Person(
-            name = '%s %s' % (
-                choice( [ 'Tom', 'Dick', 'Harry', 'Alice', 'Lia', 'Vibha' ] ),
-                choice( [ 'Thomas', 'Jones', 'Smith', 'Adams', 'Johnson' ] ) ),
-            age    = randint( 21, 75 ),
-            gender = choice( [ 'Male', 'Female' ] ) )
-            for i in range( randint( 10, 20 ) )
+        return [Person(
+            name='%s %s' % (
+                choice(['Tom', 'Dick', 'Harry', 'Alice', 'Lia', 'Vibha']),
+                choice(['Thomas', 'Jones', 'Smith', 'Adams', 'Johnson'])),
+            age=randint(21, 75),
+            gender=choice(['Male', 'Female']))
+            for i in range(randint(10, 20))
         ]
 
-    #-- Default Value Implementations ------------------------------------------
+    #-- Default Value Implementations ----------------------------------------
 
-    def _begin_default ( self ):
+    def _begin_default(self):
         """ Starts the background thread running.
         """
-        thread = Thread( target = self._timer )
-        thread.setDaemon( True )
+        thread = Thread(target=self._timer)
+        thread.setDaemon(True)
         thread.start()
 
         return 0
 
-    #-- Private Methods --------------------------------------------------------
+    #-- Private Methods ------------------------------------------------------
 
-    def _timer ( self ):
+    def _timer(self):
         """ Triggers a property update every 3 seconds for 30 seconds.
         """
-        for i in range( 10 ):
-            sleep( 3 )
+        for i in range(10):
+            sleep(3)
             self.ticker = True
 
 # Create the demo:

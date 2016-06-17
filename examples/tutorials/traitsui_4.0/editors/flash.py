@@ -1,4 +1,4 @@
-#--(Flash Editor (Windows Only))------------------------------------------------
+#--(Flash Editor (Windows Only))------------------------------------------
 """
 Flash Editor (Windows Only)
 ===========================
@@ -21,7 +21,7 @@ is not modified by the editor. Changing the value causes the editor to display
 the Flash file defined by the new value of the trait.
 """
 
-#--[Imports]--------------------------------------------------------------------
+#--[Imports]--------------------------------------------------------------
 
 from traitsui.wx.extra.windows.flash_editor \
     import FlashEditor
@@ -32,9 +32,10 @@ from traits.api \
 from traitsui.api \
     import View, HGroup, Item
 
-#--[FlashDemo Class]------------------------------------------------------------
+#--[FlashDemo Class]------------------------------------------------------
 
-class FlashDemo ( HasTraits ):
+
+class FlashDemo (HasTraits):
 
     # The Flash file to display:
     flash = Enum(
@@ -47,22 +48,20 @@ class FlashDemo ( HasTraits ):
         'http://www.ianag.com/arcade/swf/f-1416.swf',
         'http://www.ianag.com/arcade/swf/mah_jongg.swf',
         'http://www.ianag.com/arcade/swf/game_e4fe4e55fedc2f502be627ee6df716c5.swf',
-        'http://www.ianag.com/arcade/swf/rhumb.swf'
-    )
+        'http://www.ianag.com/arcade/swf/rhumb.swf')
 
     # The view to display:
     view = View(
         HGroup(
-            Item( 'flash', label = 'Pick a game to play' )
+            Item('flash', label='Pick a game to play')
         ),
         '_',
-        Item( 'flash',
-              show_label = False,
-              editor     = FlashEditor()
-        )
+        Item('flash',
+             show_label=False,
+             editor=FlashEditor()
+             )
     )
 
-#--<Example*>-------------------------------------------------------------------
+#--<Example*>-------------------------------------------------------------
 
 demo = FlashDemo()
-

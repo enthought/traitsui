@@ -1,7 +1,7 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
-#--(ModelView and Controller Classes)-------------------------------------------
+#--(ModelView and Controller Classes)-------------------------------------
 """
 ModelView and Controller Classes
 ================================
@@ -95,60 +95,63 @@ The code portion of this lesson provides a complete example of using a
 for an example of a related **Controller** based design.
 """
 
-#--<Imports>--------------------------------------------------------------------
+#--<Imports>--------------------------------------------------------------
 
 from traits.api import *
 from traitsui.api import *
 from traitsui.table_column import *
 
-#--[Parent Class]---------------------------------------------------------------
+#--[Parent Class]---------------------------------------------------------
 
-class Parent ( HasTraits ):
 
-    first_name = Str
-    last_name  = Str
-
-#--[Child Class]----------------------------------------------------------------
-
-class Child ( HasTraits ):
-
-    mother = Instance( Parent )
-    father = Instance( Parent )
+class Parent (HasTraits):
 
     first_name = Str
-    last_name  = Delegate( 'father' )
+    last_name = Str
 
-#--[ChildModelView Class]-------------------------------------------------------
+#--[Child Class]----------------------------------------------------------
 
-class ChildModelView ( ModelView ):
+
+class Child (HasTraits):
+
+    mother = Instance(Parent)
+    father = Instance(Parent)
+
+    first_name = Str
+    last_name = Delegate('father')
+
+#--[ChildModelView Class]-------------------------------------------------
+
+
+class ChildModelView (ModelView):
 
     # Define the 'family' ModelView property that maps the child and its
     # parents into a list of objects that can be viewed as a table:
-    family = Property( List )
+    family = Property(List)
 
     # Define a view showing the family as a table:
     view = View(
-        Item( 'family',
-              show_label = False,
-              editor = TableEditor(
-                  columns = [ ObjectColumn( name = 'first_name' ),
-                              ObjectColumn( name = 'last_name' ) ] ) ),
-        resizable = True
+        Item('family',
+             show_label=False,
+             editor=TableEditor(
+                 columns=[ObjectColumn(name='first_name'),
+                          ObjectColumn(name='last_name')])),
+        resizable=True
     )
 
     # Implementation of the 'family' property:
-    def _get_family ( self ):
-        return [ self.model.father, self.model.mother, self.model ]
+    def _get_family(self):
+        return [self.model.father, self.model.mother, self.model]
 
-#--[Example*]-------------------------------------------------------------------
+#--[Example*]-------------------------------------------------------------
 
 # Create a sample family:
-mom = Parent( first_name = 'Julia', last_name = 'Wilson' )
-dad = Parent( first_name = 'William', last_name = 'Chase' )
-son = Child( mother = mom, father = dad, first_name = 'John' )
+mom = Parent(first_name='Julia', last_name='Wilson')
+dad = Parent(first_name='William', last_name='Chase')
+son = Child(mother=mom, father=dad, first_name='John')
 
 # Create the controller for the model:
-demo = ChildModelView( model = son )
+demo = ChildModelView(model=son)
 
 
 if __name__ == '__main__':
