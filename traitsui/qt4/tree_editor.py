@@ -1885,7 +1885,14 @@ class _TreeWidget(QtGui.QTreeWidget):
                 pnid = pnid.parent()
 
         data = PyMimeData.coerce(event.mimeData()).instance()
-        _, node, object = editor._get_node_data(nid)
+
+        # HACK: The `_get_node_data` method throws an error for a hidden root
+        # node as it doesen't seem to have the attribute `_py_data` !!
+        # Just ignore for now.
+        try:
+            _, node, object = editor._get_node_data(nid)
+        except Exception:
+            return (None, None, None, None, None)
 
         if event.proposedAction() == QtCore.Qt.MoveAction and \
                 editor._is_droppable(node, object, data, False):
