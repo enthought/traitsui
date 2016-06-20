@@ -445,6 +445,8 @@ class _ThemedTextEditor ( Editor ):
     def _text_completed ( self, event ):
         """ Handles the user transferring focus out of the text control.
         """
+        if isinstance(event, wx.FocusEvent):
+            event.Skip()
         if self.update_object( event ):
             self._destroy_text()
 

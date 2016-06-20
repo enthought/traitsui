@@ -248,6 +248,7 @@ class CustomColorEditor(BaseSimpleEditor):
         """ Handles the user changing the contents of the edit control.
         """
         if not isinstance(event, wx._core.CommandEvent):
+            event.Skip()
             return
         try:
             # The TextCtrl object was saved as self._text_control in init().
