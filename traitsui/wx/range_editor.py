@@ -215,6 +215,8 @@ class SimpleSliderEditor(BaseRangeEditor):
     def update_object_on_enter(self, event):
         """ Handles the user pressing the Enter key in the text field.
         """
+        if isinstance(event, wx.FocusEvent):
+            event.Skip()
 
         # There are cases where this method is called with self.control ==
         # None.
@@ -527,6 +529,8 @@ class LargeRangeSliderEditor(BaseRangeEditor):
     def update_object_on_enter(self, event):
         """ Handles the user pressing the Enter key in the text field.
         """
+        if isinstance(event, wx.FocusEvent):
+            event.Skip()
         try:
             value = self.control.text.GetValue().strip()
             try:
@@ -879,6 +883,8 @@ class RangeTextEditor(TextEditor):
     def update_object(self, event):
         """ Handles the user entering input data in the edit control.
         """
+        if isinstance(event, wx.FocusEvent):
+            event.Skip()
 
         # There are cases where this method is called with self.control ==
         # None.

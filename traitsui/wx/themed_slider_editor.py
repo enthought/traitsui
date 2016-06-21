@@ -432,6 +432,8 @@ class _ThemedSliderEditor(Editor):
     def _text_completed(self, event):
         """ Handles the user pressing the 'Enter' key in the text control.
         """
+        if isinstance(event, wx.FocusEvent):
+            event.Skip()
         if self._update_value(event):
             self._destroy_text()
 

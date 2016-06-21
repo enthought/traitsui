@@ -154,6 +154,8 @@ class SimpleEditor(SimpleTextEditor):
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.
         """
+        if isinstance(event, wx.FocusEvent):
+            event.Skip()
         self._update(self._file_name.GetValue())
 
     #-------------------------------------------------------------------------

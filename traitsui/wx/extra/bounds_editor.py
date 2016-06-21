@@ -97,7 +97,9 @@ class _BoundsEditor(Editor):
         # Set-up the layout:
         panel.SetSizerAndFit(sizer)
 
-    def update_low_on_enter(self, value):
+    def update_low_on_enter(self, event):
+        if isinstance(event, wx.FocusEvent):
+            event.Skip()
         try:
             try:
                 low = eval(unicode(self._label_lo.GetValue()).strip())
@@ -119,7 +121,9 @@ class _BoundsEditor(Editor):
         except:
             pass
 
-    def update_high_on_enter(self, value):
+    def update_high_on_enter(self, event):
+        if isinstance(event, wx.FocusEvent):
+            event.Skip()
         try:
             try:
                 high = eval(unicode(self._label_hi.GetValue()).strip())
