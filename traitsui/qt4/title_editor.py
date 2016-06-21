@@ -28,7 +28,7 @@ from pyface.heading_text import HeadingText
 from ..editors.title_editor import TitleEditor
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
 
     #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit

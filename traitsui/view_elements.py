@@ -46,7 +46,7 @@ content_trait = Dict(str, ViewElement)
 #-------------------------------------------------------------------------
 
 
-class ViewElements (HasStrictTraits):
+class ViewElements(HasStrictTraits):
     """ Defines a hierarchical name space of related ViewElement objects.
     """
     #-------------------------------------------------------------------------
@@ -198,7 +198,7 @@ ViewElements.add_class_trait('_search_order', Any)
 #-------------------------------------------------------------------------
 
 
-class SearchStackItem (HasStrictTraits):
+class SearchStackItem(HasStrictTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

@@ -55,7 +55,7 @@ Padding = Range(0, 15, desc='amount of padding to add around each item')
 #-------------------------------------------------------------------------
 
 
-class Group (ViewSubElement):
+class Group(ViewSubElement):
     """ Represents a grouping of items in a user interface view.
     """
 
@@ -464,7 +464,7 @@ class Group (ViewSubElement):
 #-------------------------------------------------------------------------
 
 
-class HGroup (Group):
+class HGroup(Group):
     """ A group whose items are laid out horizontally.
     """
 
@@ -481,7 +481,7 @@ class HGroup (Group):
 #-------------------------------------------------------------------------
 
 
-class VGroup (Group):
+class VGroup(Group):
     """ A group whose items are laid out vertically.
     """
 
@@ -498,7 +498,7 @@ class VGroup (Group):
 #-------------------------------------------------------------------------
 
 
-class VGrid (VGroup):
+class VGrid(VGroup):
     """ A group whose items are laid out in 2 columns.
     """
 
@@ -514,7 +514,7 @@ class VGrid (VGroup):
 #-------------------------------------------------------------------------
 
 
-class HFlow (HGroup):
+class HFlow(HGroup):
     """ A group in which items are laid out horizontally, and "wrap" when
     they exceed the available horizontal space..
     """
@@ -533,7 +533,7 @@ class HFlow (HGroup):
 #-------------------------------------------------------------------------
 
 
-class VFlow (VGroup):
+class VFlow(VGroup):
     """ A group in which items are laid out vertically, and "wrap" when they
     exceed the available vertical space.
     """
@@ -551,7 +551,7 @@ class VFlow (VGroup):
 #-------------------------------------------------------------------------
 
 
-class VFold (VGroup):
+class VFold(VGroup):
     """ A group in which items are laid out vertically and can be collapsed
         (i.e. 'folded') by clicking their title.
     """
@@ -570,7 +570,7 @@ class VFold (VGroup):
 #-------------------------------------------------------------------------
 
 
-class HSplit (Group):
+class HSplit(Group):
     """ A horizontal group with splitter bars to separate it from other groups.
     """
 
@@ -588,7 +588,7 @@ class HSplit (Group):
 #-------------------------------------------------------------------------
 
 
-class VSplit (Group):
+class VSplit(Group):
     """ A vertical group with splitter bars to separate it from other groups.
     """
 
@@ -606,7 +606,7 @@ class VSplit (Group):
 #-------------------------------------------------------------------------
 
 
-class Tabbed (Group):
+class Tabbed(Group):
     """ A group that is shown as a tabbed notebook.
     """
 
@@ -624,7 +624,7 @@ class Tabbed (Group):
 #-------------------------------------------------------------------------
 
 
-class ShadowGroup (Group):
+class ShadowGroup(Group):
     """ Corresponds to a Group object, but with all embedded Include
         objects resolved, and with all embedded Group objects replaced by
         corresponding ShadowGroup objects.

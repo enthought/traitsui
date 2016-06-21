@@ -54,7 +54,7 @@ Binding = Str(event='binding', editor=KeyBindingEditor())
 #-------------------------------------------------------------------------
 
 
-class KeyBinding (HasStrictTraits):
+class KeyBinding(HasStrictTraits):
     """ Binds one or two keystrokes to a method.
     """
 
@@ -103,7 +103,7 @@ class KeyBinding (HasStrictTraits):
 #-------------------------------------------------------------------------
 
 
-class KeyBindings (HasPrivateTraits):
+class KeyBindings(HasPrivateTraits):
     """ A set of key bindings.
     """
 

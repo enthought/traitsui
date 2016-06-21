@@ -44,7 +44,7 @@ filter_trait = List(Unicode)
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for file editors.
     """
 

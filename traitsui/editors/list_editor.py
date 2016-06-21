@@ -75,7 +75,7 @@ editor_trait = Instance(EditorFactory)
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for list editors.
     """
 
@@ -177,7 +177,7 @@ class ToolkitEditorFactory (EditorFactory):
 #-------------------------------------------------------------------------
 
 
-class ListItemProxy (HasTraits):
+class ListItemProxy(HasTraits):
 
     # The list proxy:
     list = Property

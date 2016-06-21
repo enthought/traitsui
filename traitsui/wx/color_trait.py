@@ -30,7 +30,7 @@ from traits.api \
 try:
     ColourPtr = wx.ColourPtr
 except:
-    class ColourPtr (object):
+    class ColourPtr(object):
         pass
 
 

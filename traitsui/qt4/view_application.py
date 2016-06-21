@@ -102,7 +102,7 @@ def view_application(context, view, kind, handler, id, scrollable, args):
 #-------------------------------------------------------------------------
 
 
-class ViewApplication (object):
+class ViewApplication(object):
     """ Modal window that contains a stand-alone application.
     """
     #-------------------------------------------------------------------------

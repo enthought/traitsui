@@ -28,7 +28,7 @@ from ..editor_factory import EditorFactory
 from ..toolkit import toolkit_object
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for Title editors.
     """
 

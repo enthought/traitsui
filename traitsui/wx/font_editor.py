@@ -128,7 +128,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 #-------------------------------------------------------------------------
 
 
-class SimpleFontEditor (BaseSimpleEditor):
+class SimpleFontEditor(BaseSimpleEditor):
     """ Simple style of font editor, which displays a text field that contains
         a text representation of the font value (using that font if possible).
         Clicking the field displays a font selection dialog box.
@@ -176,7 +176,7 @@ class SimpleFontEditor (BaseSimpleEditor):
 #-------------------------------------------------------------------------
 
 
-class CustomFontEditor (Editor):
+class CustomFontEditor(Editor):
     """ Custom style of font editor, which displays the following:
 
         * A combo box containing all available type face names.
@@ -305,7 +305,7 @@ class CustomFontEditor (Editor):
 #  'TextFontEditor' class:
 #-------------------------------------------------------------------------
 
-class TextFontEditor (BaseTextEditor):
+class TextFontEditor(BaseTextEditor):
     """ Text style of font editor, which displays an editable text field
         containing a text representation of the font value (using that font if
         possible).
@@ -345,7 +345,7 @@ class TextFontEditor (BaseTextEditor):
 #-------------------------------------------------------------------------
 
 
-class ReadonlyFontEditor (BaseReadonlyEditor):
+class ReadonlyFontEditor(BaseReadonlyEditor):
     """ Read-only style of font editor, which displays a read-only text field
         containing a text representation of the font value (using that font if
         possible).
@@ -388,7 +388,7 @@ def set_font(editor):
 #-------------------------------------------------------------------------
 
 
-class FontEnumerator (wx.FontEnumerator):
+class FontEnumerator(wx.FontEnumerator):
     """ An enumeration of fonts.
     """
     #-------------------------------------------------------------------------

@@ -54,7 +54,7 @@ from helper \
 #-------------------------------------------------------------------------
 
 
-class BaseRangeEditor (Editor):
+class BaseRangeEditor(Editor):
     """ The base class for Range editors. Using an evaluate trait, if specified,
         when assigning numbers the object trait.
     """
@@ -80,7 +80,7 @@ class BaseRangeEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class SimpleSliderEditor (BaseRangeEditor):
+class SimpleSliderEditor(BaseRangeEditor):
     """ Simple style of range editor that displays a slider and a text field.
 
     The user can set a value either by moving the slider or by typing a value
@@ -336,7 +336,7 @@ class SimpleSliderEditor (BaseRangeEditor):
 
 
 #-------------------------------------------------------------------------
-class LogRangeSliderEditor (SimpleSliderEditor):
+class LogRangeSliderEditor(SimpleSliderEditor):
     #-------------------------------------------------------------------------
     """ A slider editor for log-spaced values
     """
@@ -366,7 +366,7 @@ class LogRangeSliderEditor (SimpleSliderEditor):
 #-------------------------------------------------------------------------
 
 
-class LargeRangeSliderEditor (BaseRangeEditor):
+class LargeRangeSliderEditor(BaseRangeEditor):
     """ A slider editor for large ranges.
 
        The editor displays a slider and a text field. A subset of the total
@@ -733,7 +733,7 @@ class LargeRangeSliderEditor (BaseRangeEditor):
 #-------------------------------------------------------------------------
 
 
-class SimpleSpinEditor (BaseRangeEditor):
+class SimpleSpinEditor(BaseRangeEditor):
     """ A simple style of range editor that displays a spin box control.
     """
 
@@ -831,7 +831,7 @@ class SimpleSpinEditor (BaseRangeEditor):
 #-------------------------------------------------------------------------
 
 
-class RangeTextEditor (TextEditor):
+class RangeTextEditor(TextEditor):
     """ Editor for ranges that displays a text field. If the user enters a
         value that is outside the allowed range, the background of the field
         changes color to indicate an error.

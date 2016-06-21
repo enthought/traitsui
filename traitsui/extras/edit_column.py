@@ -38,7 +38,7 @@ else:
 #-------------------------------------------------------------------------
 
 
-class EditColumn (ObjectColumn):
+class EditColumn(ObjectColumn):
 
     def __init__(self, **traits):
         """ Initializes the object.

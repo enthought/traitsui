@@ -50,7 +50,7 @@ from .ui_traits import AView
 #-------------------------------------------------------------------------
 
 
-class TreeNode (HasPrivateTraits):
+class TreeNode(HasPrivateTraits):
     """ Represents a tree node. Used by the tree editor and tree editor factory
         classes.
     """
@@ -691,7 +691,7 @@ class TreeNode (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class ITreeNode (Interface):
+class ITreeNode(Interface):
 
     def allows_children(self):
         """ Returns whether this object can have children.
@@ -866,7 +866,7 @@ class ITreeNode (Interface):
 #-------------------------------------------------------------------------
 
 
-class ITreeNodeAdapter (Adapter):
+class ITreeNodeAdapter(Adapter):
     """ Abstract base class for an adapter that implements the ITreeNode
         interface.
 
@@ -1106,7 +1106,7 @@ class ITreeNodeAdapter (Adapter):
 #-------------------------------------------------------------------------
 
 
-class ITreeNodeAdapterBridge (HasPrivateTraits):
+class ITreeNodeAdapterBridge(HasPrivateTraits):
     """ Private class for use by a toolkit-specific implementation of the
         TreeEditor to allow bridging the TreeNode interface used by the editor
         to the ITreeNode interface used by object adapters.
@@ -1340,7 +1340,7 @@ class ITreeNodeAdapterBridge (HasPrivateTraits):
 #  'ObjectTreeNode' class
 #-------------------------------------------------------------------------
 
-class ObjectTreeNode (TreeNode):
+class ObjectTreeNode(TreeNode):
 
     #-------------------------------------------------------------------------
     #  Returns whether chidren of this object are allowed or not:
@@ -1697,7 +1697,7 @@ class ObjectTreeNode (TreeNode):
 #-------------------------------------------------------------------------
 
 
-class TreeNodeObject (HasPrivateTraits):
+class TreeNodeObject(HasPrivateTraits):
     """ Represents the object that corresponds to a tree node.
     """
 
@@ -2123,7 +2123,7 @@ class TreeNodeObject (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class MultiTreeNode (TreeNode):
+class MultiTreeNode(TreeNode):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

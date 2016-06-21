@@ -41,7 +41,7 @@ from ..editor import Editor
 #-------------------------------------------------------------------------
 
 
-class _ValueEditor (Editor):
+class _ValueEditor(Editor):
     """ Simple style of editor for values, which displays a tree.
     """
 
@@ -122,7 +122,7 @@ class _ValueEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for tree-based value editors.
     """
 

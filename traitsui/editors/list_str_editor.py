@@ -37,7 +37,7 @@ from pyface.image_resource import ImageResource
 #-------------------------------------------------------------------------
 
 
-class ListStrEditor (BasicEditorFactory):
+class ListStrEditor(BasicEditorFactory):
     """ Editor factory for list of string editors.
     """
 

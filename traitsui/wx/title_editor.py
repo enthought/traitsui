@@ -39,7 +39,7 @@ from traitsui.editors.title_editor \
 #  '_TitleEditor' class:
 #-------------------------------------------------------------------------
 
-class _TitleEditor (Editor):
+class _TitleEditor(Editor):
 
     #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit

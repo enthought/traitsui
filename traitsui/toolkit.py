@@ -100,7 +100,7 @@ def toolkit_object(name, raise_exceptions=False):
 
     mname, oname = name.split(':')
 
-    class Unimplemented (object):
+    class Unimplemented(object):
         """ This is returned if an object isn't implemented by the selected
         toolkit.  It raises an exception if it is ever instantiated.
         """
@@ -192,7 +192,7 @@ def toolkit(*toolkits):
 #-------------------------------------------------------------------------
 
 
-class Toolkit (HasPrivateTraits):
+class Toolkit(HasPrivateTraits):
     """ Abstract base class for GUI toolkits.
     """
 

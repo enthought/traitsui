@@ -57,7 +57,7 @@ RELATIVE_OBJECTS_PATTERN = re.compile(
 #-------------------------------------------------------------------------
 
 
-class _IEHTMLEditor (Editor):
+class _IEHTMLEditor(Editor):
     """ Traits UI MS Internet Explorer editor.
     """
 
@@ -232,7 +232,7 @@ class _IEHTMLEditor (Editor):
 # wxPython editor factory for MS Internet Explorer editors:
 
 
-class IEHTMLEditor (BasicEditorFactory):
+class IEHTMLEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = _IEHTMLEditor

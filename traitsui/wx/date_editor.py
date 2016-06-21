@@ -38,7 +38,7 @@ from traitsui.wx.text_editor \
 #--  Simple Editor
 #------------------------------------------------------------------------------
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """
     Simple Traits UI date editor.  Shows a text box, and a date-picker widget.
     """
@@ -830,7 +830,7 @@ class CustomEditor(Editor):
 #------------------------------------------------------------------------------
 # TODO: Write me.  Possibly use TextEditor as a model to show a string
 # representation of the date, and have enter-set do a date evaluation.
-class TextEditor (SimpleEditor):
+class TextEditor(SimpleEditor):
     pass
 #-- end TextEditor definition -------------------------------------------------
 
@@ -839,7 +839,7 @@ class TextEditor (SimpleEditor):
 #--  Readonly Editor
 #------------------------------------------------------------------------------
 
-class ReadonlyEditor (TextReadonlyEditor):
+class ReadonlyEditor(TextReadonlyEditor):
     """ Use a TextEditor for the view. """
 
     def _get_str_value(self):

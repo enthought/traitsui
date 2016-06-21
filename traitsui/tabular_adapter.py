@@ -50,7 +50,7 @@ from traits.api import (
 #-------------------------------------------------------------------------
 
 
-class ITabularAdapter (Interface):
+class ITabularAdapter(Interface):
 
     # The row index of the current item being adapted:
     row = Int
@@ -82,7 +82,7 @@ class ITabularAdapter (Interface):
 
 
 @provides(ITabularAdapter)
-class AnITabularAdapter (HasPrivateTraits):
+class AnITabularAdapter(HasPrivateTraits):
 
     #-- Implementation of the ITabularAdapter Interface ----------------------
 
@@ -115,7 +115,7 @@ class AnITabularAdapter (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class TabularAdapter (HasPrivateTraits):
+class TabularAdapter(HasPrivateTraits):
     """ The base class for adapting list items to values that can be edited
         by a TabularEditor.
     """

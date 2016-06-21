@@ -46,7 +46,7 @@ SEARCH_MARKER = 1  # Marks a line matching the current search
 SELECTED_MARKER = 2  # Marks the currently selected line
 
 
-class SourceEditor (Editor):
+class SourceEditor(Editor):
     """ Editor for source code which uses the advanced code widget.
     """
 

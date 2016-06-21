@@ -39,7 +39,7 @@ from pyface.action.api import Action as PyFaceAction
 #-------------------------------------------------------------------------
 
 
-class Action (PyFaceAction):
+class Action(PyFaceAction):
     """ An action on a menu bar in a Traits UI window or panel.
     """
 

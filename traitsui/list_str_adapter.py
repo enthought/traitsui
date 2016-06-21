@@ -32,7 +32,7 @@ from traits.api import (Any, Bool, Color, Enum, Event, HasPrivateTraits, Int,
 #-------------------------------------------------------------------------
 
 
-class IListStrAdapter (Interface):
+class IListStrAdapter(Interface):
 
     # The index of the current item being adapted:
     index = Int
@@ -55,7 +55,7 @@ class IListStrAdapter (Interface):
 
 
 @provides(IListStrAdapter)
-class AnIListStrAdapter (HasPrivateTraits):
+class AnIListStrAdapter(HasPrivateTraits):
 
     #-- Implementation of the IListStrAdapter Interface ----------------------
 
@@ -79,7 +79,7 @@ class AnIListStrAdapter (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class ListStrAdapter (HasPrivateTraits):
+class ListStrAdapter(HasPrivateTraits):
     """ The base class for adapting list items to values that can be edited
         by a ListStrEditor.
     """

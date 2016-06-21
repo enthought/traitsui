@@ -38,7 +38,7 @@ from traitsui.basic_editor_factory \
 #-------------------------------------------------------------------------
 
 
-class _FlashEditor (Editor):
+class _FlashEditor(Editor):
     """ Traits UI Flash editor.
     """
 
@@ -84,7 +84,7 @@ class _FlashEditor (Editor):
 # wxPython editor factory for Flash editors:
 
 
-class FlashEditor (BasicEditorFactory):
+class FlashEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = _FlashEditor

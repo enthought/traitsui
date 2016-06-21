@@ -44,7 +44,7 @@ from ..editor import Editor
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for tuple editors.
     """
     #-------------------------------------------------------------------------
@@ -78,7 +78,7 @@ class ToolkitEditorFactory (EditorFactory):
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style of editor for tuples.
 
     The editor displays an editor for each of the fields in the tuple, based on
@@ -125,7 +125,7 @@ class SimpleEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class TupleStructure (HasTraits):
+class TupleStructure(HasTraits):
     """ Creates a view containing items for each field in a tuple.
     """
     #-------------------------------------------------------------------------

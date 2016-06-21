@@ -60,7 +60,7 @@ from helper \
 #-------------------------------------------------------------------------
 
 
-class _ScrubberEditor (Editor):
+class _ScrubberEditor(Editor):
     """ Traits UI simple, scrubber-based integer or float value editor.
     """
 

@@ -43,7 +43,7 @@ logger = logging.getLogger(__name__)
 #-------------------------------------------------------------------------
 
 
-class EditorFactory (HasPrivateTraits):
+class EditorFactory(HasPrivateTraits):
     """ Represents a factory for creating the Editor objects in a Traits-based
         user interface.
     """
@@ -272,7 +272,7 @@ class EditorFactory (HasPrivateTraits):
 #  'EditorWithListFactory' abstract base class:
 #-------------------------------------------------------------------------
 
-class EditorWithListFactory (EditorFactory):
+class EditorWithListFactory(EditorFactory):
     """ Base class for factories of editors for objects that contain lists.
     """
 

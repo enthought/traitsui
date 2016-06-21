@@ -124,7 +124,7 @@ def parse_source(file_name):
 #  'DemoFileHandler' class:
 #-------------------------------------------------------------------------
 
-class DemoFileHandler (Handler):
+class DemoFileHandler(Handler):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -233,7 +233,7 @@ demo_file_handler = DemoFileHandler()
 #-------------------------------------------------------------------------
 
 
-class DemoError (HasPrivateTraits):
+class DemoError(HasPrivateTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -258,7 +258,7 @@ class DemoError (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class DemoButton (HasPrivateTraits):
+class DemoButton(HasPrivateTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -297,7 +297,7 @@ class DemoButton (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class ModalDemoButton (DemoButton):
+class ModalDemoButton(DemoButton):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -314,7 +314,7 @@ class ModalDemoButton (DemoButton):
 #-------------------------------------------------------------------------
 
 
-class DemoTreeNodeObject (TreeNodeObject):
+class DemoTreeNodeObject(TreeNodeObject):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -382,7 +382,7 @@ class DemoTreeNodeObject (TreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class DemoFile (DemoTreeNodeObject):
+class DemoFile(DemoTreeNodeObject):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -451,7 +451,7 @@ class DemoFile (DemoTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class DemoPath (DemoTreeNodeObject):
+class DemoPath(DemoTreeNodeObject):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -803,7 +803,7 @@ demo_tree_editor = TreeEditor(
 #-------------------------------------------------------------------------
 
 
-class Demo (HasPrivateTraits):
+class Demo(HasPrivateTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

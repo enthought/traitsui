@@ -55,7 +55,7 @@ list_template = """<%s>
 #------------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (BasicEditorFactory):
+class ToolkitEditorFactory(BasicEditorFactory):
     """ Editor factory for HTML editors.
     """
     #--------------------------------------------------------------------------

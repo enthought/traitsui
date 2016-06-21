@@ -49,7 +49,7 @@ class EditorFactory(BaseEditorFactory):
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Base class for simple style editors, which displays a text field
     containing the text representation of the object trait value. Clicking in
     the text field displays an editor-specific dialog box for changing the
@@ -83,7 +83,7 @@ class SimpleEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class TextEditor (Editor):
+class TextEditor(Editor):
     """ Base class for text style editors, which displays an editable text
     field, containing a text representation of the object trait value.
     """
@@ -120,7 +120,7 @@ class TextEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class ReadonlyEditor (Editor):
+class ReadonlyEditor(Editor):
     """ Base class for read-only style editors, which displays a read-only text
     field, containing a text representation of the object trait value.
     """

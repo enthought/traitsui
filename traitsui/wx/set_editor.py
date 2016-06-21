@@ -47,7 +47,7 @@ from helper \
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style of editor for sets.
 
         The editor displays two list boxes, with buttons for moving the selected

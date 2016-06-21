@@ -60,7 +60,7 @@ TheControl = 2
 #-------------------------------------------------------------------------
 
 
-class ThemedControl (ThemedWindow):
+class ThemedControl(ThemedWindow):
 
     #-- Public Traits --------------------------------------------------------
 

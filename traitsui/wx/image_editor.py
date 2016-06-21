@@ -45,7 +45,7 @@ from image_control \
 #-------------------------------------------------------------------------
 
 
-class _ImageEditor (Editor):
+class _ImageEditor(Editor):
     """ Traits UI 'display only' image editor.
     """
 

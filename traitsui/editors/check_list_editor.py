@@ -32,7 +32,7 @@ from ..editor_factory import EditorWithListFactory
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorWithListFactory):
+class ToolkitEditorFactory(EditorWithListFactory):
     """ Editor factory for checklists.
     """
 

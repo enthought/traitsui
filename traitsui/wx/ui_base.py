@@ -52,7 +52,7 @@ PerformHandlers = ('object', 'model')
 #-------------------------------------------------------------------------
 
 
-class RadioGroup (HasStrictTraits):
+class RadioGroup(HasStrictTraits):
     """ A group of mutually-exclusive menu or toolbar actions.
     """
     # List of menu or tool bar items
@@ -87,7 +87,7 @@ class RadioGroup (HasStrictTraits):
 #-------------------------------------------------------------------------
 
 
-class ButtonEditor (Editor):
+class ButtonEditor(Editor):
     """ Editor for buttons.
     """
     #-------------------------------------------------------------------------
@@ -128,7 +128,7 @@ class ButtonEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class BaseDialog (object):
+class BaseDialog(object):
     """ Base class for Traits UI dialog boxes.
     """
     #-------------------------------------------------------------------------

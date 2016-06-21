@@ -35,7 +35,7 @@ from helper \
 #-------------------------------------------------------------------------
 
 
-class ImageText (wx.PyWindow):
+class ImageText(wx.PyWindow):
     """ Defines a text control that displays an ImageSlice in its background.
     """
 

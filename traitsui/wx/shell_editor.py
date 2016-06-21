@@ -36,7 +36,7 @@ from editor \
 #-------------------------------------------------------------------------
 
 
-class _ShellEditor (BaseShellEditor, Editor):
+class _ShellEditor(BaseShellEditor, Editor):
     """ Editor that displays an interactive Python shell.
     """
     pass

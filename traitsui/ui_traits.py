@@ -105,7 +105,7 @@ AView = Any
 #-------------------------------------------------------------------------
 
 
-class StatusItem (HasStrictTraits):
+class StatusItem(HasStrictTraits):
 
     # The name of the trait the status information will be synched with:
     name = Str('status')
@@ -130,7 +130,7 @@ class StatusItem (HasStrictTraits):
 #-------------------------------------------------------------------------
 
 
-class ViewStatus (TraitType):
+class ViewStatus(TraitType):
     """ Defines a trait whose value must be a single StatusItem instance or a
         list of StatusItem instances.
     """
@@ -224,7 +224,7 @@ def convert_bitmap(image_resource):
     return bitmap
 
 
-class Image (TraitType):
+class Image(TraitType):
     """ Defines a trait whose value must be a PyFace ImageResource or a string
         that can be converted to one.
     """
@@ -292,7 +292,7 @@ def convert_theme(value, level=3):
     return Theme(image=convert_image(value, level + 1))
 
 
-class ATheme (TraitType):
+class ATheme(TraitType):
     """ Defines a trait whose value must be a traits UI Theme or a string that
         can be converted to one.
     """
@@ -333,7 +333,7 @@ class ATheme (TraitType):
 #-------------------------------------------------------------------------
 
 
-class BaseMB (HasStrictTraits):
+class BaseMB(HasStrictTraits):
 
     def __init__(self, *args, **traits):
         """ Initializes the object.
@@ -359,7 +359,7 @@ class BaseMB (HasStrictTraits):
 #-------------------------------------------------------------------------
 
 
-class Margin (BaseMB):
+class Margin(BaseMB):
 
     # The amount of padding/margin at the top:
     top = Range(-32, 32, 0)
@@ -378,7 +378,7 @@ class Margin (BaseMB):
 #-------------------------------------------------------------------------
 
 
-class Border (BaseMB):
+class Border(BaseMB):
 
     # The amount of border at the top:
     top = Range(0, 32, 0)
@@ -397,7 +397,7 @@ class Border (BaseMB):
 #-------------------------------------------------------------------------
 
 
-class HasMargin (TraitType):
+class HasMargin(TraitType):
     """ Defines a trait whose value must be a Margin object or an integer or
         tuple value that can be converted to one.
     """
@@ -458,7 +458,7 @@ class HasMargin (TraitType):
 #-------------------------------------------------------------------------
 
 
-class HasBorder (HasMargin):
+class HasBorder(HasMargin):
     """ Defines a trait whose value must be a Border object or an integer
         or tuple value that can be converted to one.
     """

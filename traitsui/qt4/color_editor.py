@@ -97,7 +97,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 #-------------------------------------------------------------------------
 
 
-class SimpleColorEditor (BaseSimpleEditor):
+class SimpleColorEditor(BaseSimpleEditor):
     """ Simple style of color editor, which displays a text field whose
     background color is the color value. Selecting the text field displays
     a dialog box for selecting a new color value.
@@ -150,7 +150,7 @@ class SimpleColorEditor (BaseSimpleEditor):
 #-------------------------------------------------------------------------
 
 
-class CustomColorEditor (Editor):
+class CustomColorEditor(Editor):
     """ Custom style of color editor, which displays a color editor panel.
     """
 
@@ -212,7 +212,7 @@ class CustomColorEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class TextColorEditor (BaseTextEditor):
+class TextColorEditor(BaseTextEditor):
     """ Text style of color editor, which displays a text field whose
     background color is the color value.
     """
@@ -252,7 +252,7 @@ class TextColorEditor (BaseTextEditor):
 #-------------------------------------------------------------------------
 
 
-class ReadonlyColorEditor (BaseReadonlyEditor):
+class ReadonlyColorEditor(BaseReadonlyEditor):
     """ Read-only style of color editor, which displays a read-only text field
     whose background color is the color value.
     """

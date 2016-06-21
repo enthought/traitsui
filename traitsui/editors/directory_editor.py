@@ -28,7 +28,7 @@ from .file_editor import ToolkitEditorFactory as EditorFactory
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for directory editors.
     """
     pass

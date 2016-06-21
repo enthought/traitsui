@@ -40,7 +40,7 @@ from .enum_editor import ToolkitEditorFactory as EditorFactory
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for image enumeration editors.
     """
     #-------------------------------------------------------------------------

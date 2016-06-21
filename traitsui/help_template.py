@@ -89,7 +89,7 @@ GroupHelp = """
 #-------------------------------------------------------------------------
 
 
-class HelpTemplate (HasStrictTraits):
+class HelpTemplate(HasStrictTraits):
     """ Contains HTML templates for displaying help.
     """
     item_html = Str(ItemHTML)  # Item popup help window HTML document

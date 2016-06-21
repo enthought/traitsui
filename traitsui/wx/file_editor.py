@@ -54,7 +54,7 @@ filter_trait = List(Str)
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (SimpleTextEditor):
+class SimpleEditor(SimpleTextEditor):
     """ Simple style of file editor, consisting of a text field and a **Browse**
         button that opens a file-selection dialog box. The user can also drag
         and drop a file onto this control.
@@ -297,7 +297,7 @@ class SimpleEditor (SimpleTextEditor):
 #-------------------------------------------------------------------------
 
 
-class CustomEditor (SimpleTextEditor):
+class CustomEditor(SimpleTextEditor):
     """ Custom style of file editor, consisting of a file system tree view.
     """
 
@@ -438,7 +438,7 @@ class CustomEditor (SimpleTextEditor):
 #-------------------------------------------------------------------------
 
 
-class PopupFile (PopupControl):
+class PopupFile(PopupControl):
 
     # The initially specified file name:
     file_name = Str
@@ -505,7 +505,7 @@ class PopupFile (PopupControl):
 #-------------------------------------------------------------------------
 
 
-class FileDropTarget (wx.FileDropTarget):
+class FileDropTarget(wx.FileDropTarget):
     """ A target for a drag and drop operation, which accepts a file.
     """
 

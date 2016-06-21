@@ -50,7 +50,7 @@ capitalize = lambda s: s.capitalize()
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------
 
-class SimpleEditor (EditorWithList):
+class SimpleEditor(EditorWithList):
     """ Simple style of editor for checklists, which displays a combo box.
     """
 
@@ -164,7 +164,7 @@ class SimpleEditor (EditorWithList):
 #-------------------------------------------------------------------------
 
 
-class CustomEditor (SimpleEditor):
+class CustomEditor(SimpleEditor):
     """ Custom style of editor for checklists, which displays a set of check
         boxes.
     """
@@ -272,7 +272,7 @@ class CustomEditor (SimpleEditor):
 #-------------------------------------------------------------------------
 
 
-class TextEditor (BaseTextEditor):
+class TextEditor(BaseTextEditor):
     """ Text style of editor for checklists, which displays a text field.
     """
 

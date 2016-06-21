@@ -42,7 +42,7 @@ SimpleTypes = (str, unicode, int, long, float, complex)
 #-------------------------------------------------------------------------
 
 
-class AbstractUndoItem (HasPrivateTraits):
+class AbstractUndoItem(HasPrivateTraits):
     """ Abstract base class for undo items.
     """
     #-------------------------------------------------------------------------
@@ -77,7 +77,7 @@ class AbstractUndoItem (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class UndoItem (AbstractUndoItem):
+class UndoItem(AbstractUndoItem):
     """ A change to an object trait, which can be undone.
     """
     #-------------------------------------------------------------------------
@@ -220,7 +220,7 @@ class UndoItem (AbstractUndoItem):
 #-------------------------------------------------------------------------
 
 
-class ListUndoItem (AbstractUndoItem):
+class ListUndoItem(AbstractUndoItem):
     """ A change to a list, which can be undone.
     """
     #-------------------------------------------------------------------------
@@ -309,7 +309,7 @@ class ListUndoItem (AbstractUndoItem):
 #-------------------------------------------------------------------------
 
 
-class UndoHistory (HasStrictTraits):
+class UndoHistory(HasStrictTraits):
     """ Manages a list of undoable changes.
     """
     #-------------------------------------------------------------------------
@@ -457,7 +457,7 @@ class UndoHistory (HasStrictTraits):
 #-------------------------------------------------------------------------
 
 
-class UndoHistoryUndoItem (AbstractUndoItem):
+class UndoHistoryUndoItem(AbstractUndoItem):
     """ An undo item for the undo history.
     """
     #-------------------------------------------------------------------------

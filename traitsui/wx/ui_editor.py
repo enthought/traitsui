@@ -34,7 +34,7 @@ from editor \
 #-------------------------------------------------------------------------
 
 
-class UIEditor (BaseUIEditor, Editor):
+class UIEditor(BaseUIEditor, Editor):
     """ An editor that creates an embedded Traits UI.
     """
     pass

@@ -35,7 +35,7 @@ from ..ui_editor import UIEditor
 #-- Tabular Adapter Definition -------------------------------------------
 
 
-class ArrayViewAdapter (TabularAdapter):
+class ArrayViewAdapter(TabularAdapter):
 
     # Is the array 1D or 2D?
     is_2d = Bool(True)
@@ -79,7 +79,7 @@ class ArrayViewAdapter (TabularAdapter):
 # implement its own editor that inherits from this class.
 
 
-class _ArrayViewEditor (UIEditor):
+class _ArrayViewEditor(UIEditor):
 
     # Indicate that the editor is scrollable/resizable:
     scrollable = True
@@ -161,7 +161,7 @@ class _ArrayViewEditor (UIEditor):
 # Define the ArrayViewEditor class used by client code:
 
 
-class ArrayViewEditor (BasicEditorFactory):
+class ArrayViewEditor(BasicEditorFactory):
 
     # The editor implementation class:
     klass = Property

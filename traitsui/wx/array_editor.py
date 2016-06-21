@@ -36,7 +36,7 @@ from editor \
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (BaseSimpleEditor, Editor):
+class SimpleEditor(BaseSimpleEditor, Editor):
     """ Simple style of editor for arrays.
     """
     # FIXME: This class has been re-defined here simply so it inherits from the

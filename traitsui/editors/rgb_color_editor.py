@@ -35,7 +35,7 @@ from ..toolkit import toolkit_object
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Factory for editors for RGB colors.
     """
     pass

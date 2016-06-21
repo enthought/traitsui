@@ -41,7 +41,7 @@ null_editor_factory = EditorFactory()
 #-------------------------------------------------------------------------
 
 
-class GUIToolkit (Toolkit):
+class GUIToolkit(Toolkit):
 
     #-------------------------------------------------------------------------
     #  GUI toolkit dependent trait definitions:

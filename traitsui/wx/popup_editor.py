@@ -17,6 +17,6 @@ from ui_editor \
 #-------------------------------------------------------------------------
 
 
-class _PopupEditor (BasePopupEditor, UIEditor):
+class _PopupEditor(BasePopupEditor, UIEditor):
     pass
 #--EOF-------------------------------------------------------------------------

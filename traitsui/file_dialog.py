@@ -87,7 +87,7 @@ MAX_SIZE = 16 * 1024 * 1024
 #-------------------------------------------------------------------------
 
 
-class IFileDialogModel (Interface):
+class IFileDialogModel(Interface):
     """ Defines a model extension to a file dialog.
     """
 
@@ -99,7 +99,7 @@ class IFileDialogModel (Interface):
 #-------------------------------------------------------------------------
 
 
-class IFileDialogView (Interface):
+class IFileDialogView(Interface):
     """ Defines a visual extension to a file dialog.
     """
 
@@ -114,7 +114,7 @@ class IFileDialogView (Interface):
 #-------------------------------------------------------------------------
 
 
-class IFileDialogExtension (IFileDialogModel, IFileDialogView):
+class IFileDialogExtension(IFileDialogModel, IFileDialogView):
     """ Defines a (convenience) union of the IFileDialogModel and
         IFileDialogView interfaces.
     """
@@ -125,7 +125,7 @@ class IFileDialogExtension (IFileDialogModel, IFileDialogView):
 
 
 @provides(IFileDialogModel)
-class MFileDialogModel (HasPrivateTraits):
+class MFileDialogModel(HasPrivateTraits):
 
     # The name of the currently selected file:
     file_name = File
@@ -135,7 +135,7 @@ class MFileDialogModel (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class MFileDialogView (HasPrivateTraits):
+class MFileDialogView(HasPrivateTraits):
     """ Defines a visual extension to a file dialog.
     """
 
@@ -153,7 +153,7 @@ default_view = MFileDialogView()
 #-------------------------------------------------------------------------
 
 
-class MFileDialogExtension (MFileDialogModel, MFileDialogView):
+class MFileDialogExtension(MFileDialogModel, MFileDialogView):
     """ Defines a (convenience) union of the MFileDialogModel and
         MFileDialogView mix-in classes.
     """
@@ -163,7 +163,7 @@ class MFileDialogExtension (MFileDialogModel, MFileDialogView):
 #-------------------------------------------------------------------------
 
 
-class FileInfo (MFileDialogModel):
+class FileInfo(MFileDialogModel):
     """ Defines a file dialog extension that display various file information.
     """
 
@@ -230,7 +230,7 @@ class FileInfo (MFileDialogModel):
 #-------------------------------------------------------------------------
 
 
-class TextInfo (MFileDialogModel):
+class TextInfo(MFileDialogModel):
     """ Defines a file dialog extension that displays a file's contents as text.
     """
 
@@ -271,7 +271,7 @@ class TextInfo (MFileDialogModel):
 #-------------------------------------------------------------------------
 
 
-class ImageInfo (MFileDialogModel):
+class ImageInfo(MFileDialogModel):
     """ Defines a file dialog extension that display an image file's dimensions
         and content.
     """
@@ -338,7 +338,7 @@ class ImageInfo (MFileDialogModel):
 #-------------------------------------------------------------------------
 
 
-class CreateDirHandler (Handler):
+class CreateDirHandler(Handler):
     """ Controller for the 'create new directory' popup.
     """
 
@@ -415,7 +415,7 @@ class CreateDirHandler (Handler):
 #-------------------------------------------------------------------------
 
 
-class FileExistsHandler (Handler):
+class FileExistsHandler(Handler):
     """ Controller for the 'file already exists' popup.
     """
     # The current status message:
@@ -465,7 +465,7 @@ class FileExistsHandler (Handler):
 #-------------------------------------------------------------------------
 
 
-class OpenFileDialog (Handler):
+class OpenFileDialog(Handler):
     """ Defines the model and handler for the open file dialog.
     """
 

@@ -43,7 +43,7 @@ Mode = Enum('radio', 'list')
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorWithListFactory):
+class ToolkitEditorFactory(EditorWithListFactory):
     """ Editor factory for enumeration editors.
     """
 

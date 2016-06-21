@@ -38,7 +38,7 @@ from editor \
 #-------------------------------------------------------------------------
 
 
-class NullEditor (Editor):
+class NullEditor(Editor):
     """ A completely empty editor.
     """
 

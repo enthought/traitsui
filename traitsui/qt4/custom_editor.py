@@ -34,7 +34,7 @@ from editor \
 #-------------------------------------------------------------------------
 
 
-class CustomEditor (Editor):
+class CustomEditor(Editor):
     """ Wrapper for a custom editor control
     """
     #-------------------------------------------------------------------------

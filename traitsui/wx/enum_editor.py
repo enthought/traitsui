@@ -53,7 +53,7 @@ capitalize = lambda s: s.capitalize()
 #  'BaseEditor' class:
 #-------------------------------------------------------------------------
 
-class BaseEditor (Editor):
+class BaseEditor(Editor):
     """ Base class for enumeration editors.
     """
 
@@ -178,7 +178,7 @@ class BaseEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (BaseEditor):
+class SimpleEditor(BaseEditor):
     """ Simple style of enumeration editor, which displays a combo box.
     """
 
@@ -378,7 +378,7 @@ class SimpleEditor (BaseEditor):
 #-------------------------------------------------------------------------
 
 
-class RadioEditor (BaseEditor):
+class RadioEditor(BaseEditor):
     """ Enumeration editor, used for the "custom" style, that displays radio
         buttons.
     """
@@ -489,7 +489,7 @@ class RadioEditor (BaseEditor):
 #-------------------------------------------------------------------------
 
 
-class ListEditor (BaseEditor):
+class ListEditor(BaseEditor):
     """ Enumeration editor, used for the "custom" style, that displays a list
         box.
     """

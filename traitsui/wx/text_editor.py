@@ -55,7 +55,7 @@ DownColor = wx.WHITE
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style text editor, which displays a text field.
     """
 
@@ -205,7 +205,7 @@ class SimpleEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class CustomEditor (SimpleEditor):
+class CustomEditor(SimpleEditor):
     """ Custom style of text editor, which displays a multi-line text field.
     """
 
@@ -217,7 +217,7 @@ class CustomEditor (SimpleEditor):
 #-------------------------------------------------------------------------
 
 
-class ReadonlyEditor (BaseReadonlyEditor):
+class ReadonlyEditor(BaseReadonlyEditor):
     """ Read-only style of text editor, which displays a read-only text field.
     """
 

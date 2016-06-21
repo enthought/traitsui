@@ -136,7 +136,7 @@ def ui_dialog(ui, parent, style):
 #-------------------------------------------------------------------------
 
 
-class LiveWindow (BaseDialog):
+class LiveWindow(BaseDialog):
     """ User interface window that immediately updates its underlying object(s).
     """
 
@@ -471,7 +471,7 @@ class LiveWindow (BaseDialog):
 #-------------------------------------------------------------------------
 
 
-class MouseMonitor (wx.Timer):
+class MouseMonitor(wx.Timer):
     """ Monitors a specified window and closes it the first time the mouse
         pointer leaves the window.
     """

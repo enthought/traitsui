@@ -39,7 +39,7 @@ from ..toolkit import toolkit_object
 # Editor factory for scrubber-based integer or float value editors.
 
 
-class ScrubberEditor (BasicEditorFactory):
+class ScrubberEditor(BasicEditorFactory):
 
     # The editor class to be instantiated:
     klass = Property

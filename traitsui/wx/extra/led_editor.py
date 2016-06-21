@@ -50,7 +50,7 @@ LEDStyles = {
 #-------------------------------------------------------------------------
 
 
-class _LEDEditor (Editor):
+class _LEDEditor(Editor):
     """ Traits UI 'display only' LED numeric editor.
     """
 
@@ -84,7 +84,7 @@ class _LEDEditor (Editor):
 # wxPython editor factory for LED editors:
 
 
-class LEDEditor (BasicEditorFactory):
+class LEDEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = _LEDEditor

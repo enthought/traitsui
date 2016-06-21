@@ -42,7 +42,7 @@ from constants \
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style of editor for Boolean values, which displays a check box.
     """
     #-------------------------------------------------------------------------
@@ -86,7 +86,7 @@ class SimpleEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class ReadonlyEditor (Editor):
+class ReadonlyEditor(Editor):
     """ Read-only style of editor for Boolean values, which displays static text
     of either "True" or "False".
     """

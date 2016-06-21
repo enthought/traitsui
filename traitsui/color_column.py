@@ -29,7 +29,7 @@ from traitsui.table_column \
 #-------------------------------------------------------------------------
 
 
-class ColorColumn (ObjectColumn):
+class ColorColumn(ObjectColumn):
     """ Table column object for Color traits. """
 
 #-- ObjectColumn Overrides -----------------------------------------------

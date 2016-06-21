@@ -73,7 +73,7 @@ OrientationMap = {
 #-------------------------------------------------------------------------
 
 
-class CustomEditor (Editor):
+class CustomEditor(Editor):
     """ Custom style of editor for instances. If selection among instances is
     allowed, the editor displays a combo box listing instances that can be
     selected. If the current instance is editable, the editor displays a panel
@@ -558,7 +558,7 @@ class CustomEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (CustomEditor):
+class SimpleEditor(CustomEditor):
     """ Simple style of editor for instances, which displays a button. Clicking
     the button displays a dialog box in which the instance can be edited.
     """

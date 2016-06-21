@@ -34,7 +34,7 @@ from editor import Editor
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style editor for HTML.
     """
 

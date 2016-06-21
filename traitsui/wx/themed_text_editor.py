@@ -61,7 +61,7 @@ default_image_slice = ImageSlice()
 #  Define a simple identity mapping:
 #-------------------------------------------------------------------------
 
-class _Identity (object):
+class _Identity(object):
     """ A simple indentity mapping.
     """
 
@@ -73,7 +73,7 @@ class _Identity (object):
 #-------------------------------------------------------------------------
 
 
-class ThemedTextEditor (EditorFactory):
+class ThemedTextEditor(EditorFactory):
     """ Traits UI simple, single line text editor with a themed (i.e. image)
         background.
     """
@@ -144,7 +144,7 @@ class ThemedTextEditor (EditorFactory):
 #-------------------------------------------------------------------------
 
 
-class _ThemedTextEditor (Editor):
+class _ThemedTextEditor(Editor):
     """ Traits UI simple, single line text editor with a themed (i.e. image
         background).
     """
@@ -492,7 +492,7 @@ class _ThemedTextEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class _ReadonlyTextEditor (Editor):
+class _ReadonlyTextEditor(Editor):
     """ Traits UI simple, read-only single line text view with a themed (i.e.
         image background).
     """

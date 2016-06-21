@@ -158,7 +158,7 @@ class TraitsFont(QtGui.QFont):
 #-------------------------------------------------------------------------
 
 
-class TraitPyQtFont (TraitHandler):
+class TraitPyQtFont(TraitHandler):
     """ Ensures that values assigned to a trait attribute are valid font
     descriptor strings; the value actually assigned is the corresponding
     TraitsFont.

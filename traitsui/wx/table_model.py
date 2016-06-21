@@ -62,7 +62,7 @@ logger = logging.getLogger(__name__)
 #-------------------------------------------------------------------------
 
 
-class TraitGridSelection (HasPrivateTraits):
+class TraitGridSelection(HasPrivateTraits):
     """ Structure for holding specification information.
     """
 
@@ -77,7 +77,7 @@ class TraitGridSelection (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class TableModel (GridModel):
+class TableModel(GridModel):
     """ Model for table data.
     """
 

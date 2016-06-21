@@ -81,7 +81,7 @@ string_type = (str, unicode)
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simply style of editor for a drag-and-drop editor, which is both a drag
         source and a drop target.
     """
@@ -319,7 +319,7 @@ class SimpleEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class CustomEditor (SimpleEditor):
+class CustomEditor(SimpleEditor):
     """ Custom style of drag-and-drop editor, which is not a drag source.
     """
     #-------------------------------------------------------------------------
@@ -334,7 +334,7 @@ class CustomEditor (SimpleEditor):
 #-------------------------------------------------------------------------
 
 
-class ReadonlyEditor (SimpleEditor):
+class ReadonlyEditor(SimpleEditor):
     """ Read-only style of drag-and-drop editor, which is not a drop target.
     """
     #-------------------------------------------------------------------------
@@ -349,7 +349,7 @@ class ReadonlyEditor (SimpleEditor):
 #-------------------------------------------------------------------------
 
 
-class FileDropSource (wx.DropSource):
+class FileDropSource(wx.DropSource):
     """ Represents a draggable file.
     """
     #-------------------------------------------------------------------------

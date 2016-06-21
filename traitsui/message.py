@@ -39,7 +39,7 @@ from pyface.timer.api import do_after
 #-------------------------------------------------------------------------
 
 
-class Message (HasPrivateTraits):
+class Message(HasPrivateTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -98,7 +98,7 @@ def error(message='', title='Message', buttons=['OK', 'Cancel'],
 #  'AutoCloseMessage' class:
 #-------------------------------------------------------------------------
 
-class AutoCloseMessage (HasPrivateTraits):
+class AutoCloseMessage(HasPrivateTraits):
 
     # The message to be shown:
     message = Str('Please wait')

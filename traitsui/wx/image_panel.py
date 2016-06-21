@@ -42,7 +42,7 @@ ZeroTextSize = (0, 0, 0, 0)
 #-------------------------------------------------------------------------
 
 
-class ImagePanel (ThemedWindow):
+class ImagePanel(ThemedWindow):
 
     # The optional text to display in the top or bottom of the image slice:
     text = Str(event='updated')
@@ -253,7 +253,7 @@ class ImagePanel (ThemedWindow):
 #-------------------------------------------------------------------------
 
 
-class ImageSizer (wx.PySizer):
+class ImageSizer(wx.PySizer):
     """ Defines a sizer that correctly sizes a window's children to fit within
         the borders implicitly defined by a background ImageSlice object,
     """

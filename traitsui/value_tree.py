@@ -40,7 +40,7 @@ from .editors.tree_editor import TreeEditor
 #-------------------------------------------------------------------------
 
 
-class SingleValueTreeNodeObject (TreeNodeObject):
+class SingleValueTreeNodeObject(TreeNodeObject):
     """ A tree node for objects of types that have a single value.
     """
 
@@ -195,7 +195,7 @@ class SingleValueTreeNodeObject (TreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class MultiValueTreeNodeObject (SingleValueTreeNodeObject):
+class MultiValueTreeNodeObject(SingleValueTreeNodeObject):
     """ A tree node for objects of types that have multiple values.
     """
 
@@ -222,7 +222,7 @@ class MultiValueTreeNodeObject (SingleValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class StringNode (SingleValueTreeNodeObject):
+class StringNode(SingleValueTreeNodeObject):
     """ A tree node for strings.
     """
 
@@ -244,7 +244,7 @@ class StringNode (SingleValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class NoneNode (SingleValueTreeNodeObject):
+class NoneNode(SingleValueTreeNodeObject):
     """ A tree node for None values.
     """
     pass
@@ -254,7 +254,7 @@ class NoneNode (SingleValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class BoolNode (SingleValueTreeNodeObject):
+class BoolNode(SingleValueTreeNodeObject):
     """ A tree node for Boolean values.
     """
     pass
@@ -264,7 +264,7 @@ class BoolNode (SingleValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class IntNode (SingleValueTreeNodeObject):
+class IntNode(SingleValueTreeNodeObject):
     """ A tree node for integer values.
     """
     pass
@@ -274,7 +274,7 @@ class IntNode (SingleValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class FloatNode (SingleValueTreeNodeObject):
+class FloatNode(SingleValueTreeNodeObject):
     """ A tree node for floating point values.
     """
     pass
@@ -284,7 +284,7 @@ class FloatNode (SingleValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class ComplexNode (SingleValueTreeNodeObject):
+class ComplexNode(SingleValueTreeNodeObject):
     """ A tree node for complex number values.
     """
     pass
@@ -294,7 +294,7 @@ class ComplexNode (SingleValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class OtherNode (SingleValueTreeNodeObject):
+class OtherNode(SingleValueTreeNodeObject):
     """ A tree node for single-value types for which there is not another
     node type.
     """
@@ -305,7 +305,7 @@ class OtherNode (SingleValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class TupleNode (MultiValueTreeNodeObject):
+class TupleNode(MultiValueTreeNodeObject):
     """ A tree node for tuples.
     """
     #-------------------------------------------------------------------------
@@ -350,7 +350,7 @@ class TupleNode (MultiValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class ListNode (TupleNode):
+class ListNode(TupleNode):
     """ A tree node for lists.
     """
 
@@ -388,7 +388,7 @@ class ListNode (TupleNode):
 #-------------------------------------------------------------------------
 
 
-class SetNode (ListNode):
+class SetNode(ListNode):
     """ A tree node for sets.
     """
 
@@ -406,7 +406,7 @@ class SetNode (ListNode):
 #-------------------------------------------------------------------------
 
 
-class ArrayNode (TupleNode):
+class ArrayNode(TupleNode):
     """ A tree node for arrays.
     """
 
@@ -424,7 +424,7 @@ class ArrayNode (TupleNode):
 #-------------------------------------------------------------------------
 
 
-class DictNode (TupleNode):
+class DictNode(TupleNode):
     """ A tree node for dictionaries.
     """
 
@@ -468,7 +468,7 @@ class DictNode (TupleNode):
 #-------------------------------------------------------------------------
 
 
-class FunctionNode (SingleValueTreeNodeObject):
+class FunctionNode(SingleValueTreeNodeObject):
     """ A tree node for functions
     """
 
@@ -486,7 +486,7 @@ class FunctionNode (SingleValueTreeNodeObject):
 #---------------------------------------------------------------------------
 
 
-class MethodNode (MultiValueTreeNodeObject):
+class MethodNode(MultiValueTreeNodeObject):
 
     #-------------------------------------------------------------------------
     #  Returns the formatted version of the value:
@@ -527,7 +527,7 @@ class MethodNode (MultiValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class ObjectNode (MultiValueTreeNodeObject):
+class ObjectNode(MultiValueTreeNodeObject):
     """ A tree node for objects.
     """
 
@@ -572,7 +572,7 @@ class ObjectNode (MultiValueTreeNodeObject):
 #-------------------------------------------------------------------------
 
 
-class ClassNode (ObjectNode):
+class ClassNode(ObjectNode):
     """ A tree node for classes.
     """
 
@@ -590,7 +590,7 @@ class ClassNode (ObjectNode):
 #-------------------------------------------------------------------------
 
 
-class TraitsNode (ObjectNode):
+class TraitsNode(ObjectNode):
     """ A tree node for traits.
     """
 
@@ -670,7 +670,7 @@ class TraitsNode (ObjectNode):
 #-------------------------------------------------------------------------
 
 
-class RootNode (MultiValueTreeNodeObject):
+class RootNode(MultiValueTreeNodeObject):
     """ A root node.
     """
 
@@ -735,7 +735,7 @@ def basic_types():
 #-------------------------------------------------------------------------
 
 
-class _ValueTree (HasPrivateTraits):
+class _ValueTree(HasPrivateTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

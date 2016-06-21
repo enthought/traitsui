@@ -110,7 +110,7 @@ RenameAction = Action(name='Rename',
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style of tree editor.
     """
 
@@ -2015,7 +2015,7 @@ class SimpleEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class ObjectLabel (HasStrictTraits):
+class ObjectLabel(HasStrictTraits):
     """ An editable label for an object.
     """
 

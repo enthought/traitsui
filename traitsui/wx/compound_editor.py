@@ -45,7 +45,7 @@ from helper \
 #-------------------------------------------------------------------------
 
 
-class CompoundEditor (Editor):
+class CompoundEditor(Editor):
     """ Editor for compound traits, which displays editors for each of the
     combined traits, in the appropriate style.
     """

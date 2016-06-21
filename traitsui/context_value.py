@@ -32,7 +32,7 @@ from traits.api import HasPrivateTraits, Instance, Str, Int, Float, Either
 #-------------------------------------------------------------------------
 
 
-class ContextValue (HasPrivateTraits):
+class ContextValue(HasPrivateTraits):
     """ Defines the name of a context value that can be bound to some editor
         value.
     """

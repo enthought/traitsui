@@ -33,7 +33,7 @@ from constants \
 #-------------------------------------------------------------------------
 
 
-class Editor (UIEditor):
+class Editor(UIEditor):
     """ Base class for PyQt editors for Traits-based UIs.
     """
 
@@ -404,7 +404,7 @@ class Editor (UIEditor):
 #-------------------------------------------------------------------------
 
 
-class EditorWithList (Editor):
+class EditorWithList(Editor):
     """ Editor for an object that contains a list.
     """
     #-------------------------------------------------------------------------
@@ -484,7 +484,7 @@ class EditorWithList (Editor):
 #-------------------------------------------------------------------------
 
 
-class EditorFromView (Editor):
+class EditorFromView(Editor):
     """ An editor generated from a View object.
     """
 

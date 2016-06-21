@@ -100,7 +100,7 @@ def ui_dialog(ui, parent, is_modal):
 #-------------------------------------------------------------------------
 
 
-class ModalDialog (BaseDialog):
+class ModalDialog(BaseDialog):
     """ Modal dialog box for Traits-based user interfaces.
     """
     #-------------------------------------------------------------------------

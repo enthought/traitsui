@@ -111,7 +111,7 @@ def view_application(context, view, kind, handler, id, scrollable, args):
 #-------------------------------------------------------------------------
 
 
-class ViewApplication (wx.App):
+class ViewApplication(wx.App):
     """ Modal window that contains a stand-alone application.
     """
     #-------------------------------------------------------------------------

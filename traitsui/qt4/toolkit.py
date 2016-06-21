@@ -121,7 +121,7 @@ set_ui_handler(ui_handler)
 #-------------------------------------------------------------------------
 
 
-class GUIToolkit (Toolkit):
+class GUIToolkit(Toolkit):
     """ Implementation class for PyQt toolkit.
     """
     #-------------------------------------------------------------------------

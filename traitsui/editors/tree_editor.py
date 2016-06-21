@@ -44,7 +44,7 @@ IconSize = Tuple((16, 16), Int, Int)
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for tree editors.
     """
     #-------------------------------------------------------------------------

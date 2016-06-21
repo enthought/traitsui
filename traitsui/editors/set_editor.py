@@ -32,7 +32,7 @@ from traits.api import Bool, Str
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorWithListFactory):
+class ToolkitEditorFactory(EditorWithListFactory):
     """ Editor factory for editors for sets.
     """
     #-------------------------------------------------------------------------

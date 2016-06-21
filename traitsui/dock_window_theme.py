@@ -33,7 +33,7 @@ from .ui_traits import Image, ATheme
 #-------------------------------------------------------------------------
 
 
-class DockWindowTheme (HasPrivateTraits):
+class DockWindowTheme(HasPrivateTraits):
     """ Defines the theme style information for a DockWindow and its components.
     """
 

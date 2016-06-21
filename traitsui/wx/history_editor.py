@@ -40,7 +40,7 @@ from history_control \
 #-------------------------------------------------------------------------
 
 
-class _HistoryEditor (Editor):
+class _HistoryEditor(Editor):
     """ Simple style text editor, which displays a text field and maintains a
         history of previously entered values, the maximum number of which is
         specified by the 'entries' trait of the HistoryEditor factory.

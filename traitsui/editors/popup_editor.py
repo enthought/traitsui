@@ -27,7 +27,7 @@ from ..toolkit import toolkit_object
 #-------------------------------------------------------------------------
 
 
-class _PopupEditor (UIEditor):
+class _PopupEditor(UIEditor):
 
     #-------------------------------------------------------------------------
     #  Creates the traits UI for the editor:
@@ -76,7 +76,7 @@ class _PopupEditor (UIEditor):
 #-------------------------------------------------------------------------
 
 
-class PopupEditor (BasicEditorFactory):
+class PopupEditor(BasicEditorFactory):
 
     # The class used to construct editor objects:
     klass = Property

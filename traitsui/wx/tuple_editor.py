@@ -37,7 +37,7 @@ from editor \
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (BaseSimpleEditor, Editor):
+class SimpleEditor(BaseSimpleEditor, Editor):
     """ Simple style of editor for tuples.
 
         The editor displays an editor for each of the fields in the tuple,

@@ -40,7 +40,7 @@ else:
 #-------------------------------------------------------------------------
 
 
-class CheckboxColumn (ObjectColumn):
+class CheckboxColumn(ObjectColumn):
 
     #-------------------------------------------------------------------------
     #  Initializes the object:

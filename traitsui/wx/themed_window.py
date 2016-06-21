@@ -38,7 +38,7 @@ from helper \
 #-------------------------------------------------------------------------
 
 
-class ThemedWindow (HasPrivateTraits):
+class ThemedWindow(HasPrivateTraits):
 
     #-- Public Traits --------------------------------------------------------
 

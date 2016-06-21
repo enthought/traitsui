@@ -89,7 +89,7 @@ GridModes = {
 #-------------------------------------------------------------------------
 
 
-class TableEditor (Editor, BaseTableEditor):
+class TableEditor(Editor, BaseTableEditor):
     """ Editor that presents data in a table. Optionally, tables can have
         a set of filters that reduce the set of data displayed, according to
         their criteria.
@@ -1309,7 +1309,7 @@ class TableEditor (Editor, BaseTableEditor):
 #-------------------------------------------------------------------------
 
 
-class TableFilterEditor (Handler):
+class TableFilterEditor(Handler):
     """ Editor that manages table filters.
     """
 
@@ -1463,7 +1463,7 @@ class TableFilterEditor (Handler):
 #-------------------------------------------------------------------------
 
 
-class TableEditorToolbar (HasPrivateTraits):
+class TableEditorToolbar(HasPrivateTraits):
     """ Toolbar displayed in table editors.
     """
 
@@ -1608,7 +1608,7 @@ class TableEditorToolbar (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class TableSearchHandler (Handler):
+class TableSearchHandler(Handler):
     """ Handler for saerching a table.
     """
 

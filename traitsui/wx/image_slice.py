@@ -78,7 +78,7 @@ def paint_parent(dc, window):
 #-------------------------------------------------------------------------
 
 
-class ImageSlice (HasPrivateTraits):
+class ImageSlice(HasPrivateTraits):
 
     #-- Trait Definitions ----------------------------------------------------
 

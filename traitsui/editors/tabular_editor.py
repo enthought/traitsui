@@ -38,7 +38,7 @@ from ..toolkit import toolkit_object
 #-------------------------------------------------------------------------
 
 
-class TabularEditor (BasicEditorFactory):
+class TabularEditor(BasicEditorFactory):
     """ Editor factory for tabular editors.
     """
 

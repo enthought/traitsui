@@ -150,7 +150,7 @@ AKeyBindings = Instance('traitsui.key_bindings.KeyBindings',
 #-------------------------------------------------------------------------
 
 
-class View (ViewElement):
+class View(ViewElement):
     """ A Traits-based user interface for one or more objects.
 
         The attributes of the View object determine the contents and layout of

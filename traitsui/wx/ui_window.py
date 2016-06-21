@@ -35,7 +35,7 @@ from helper \
 #-------------------------------------------------------------------------
 
 
-class UIWindow (HasPrivateTraits):
+class UIWindow(HasPrivateTraits):
     """ A base class for creating custom Traits UI windows.
     """
 

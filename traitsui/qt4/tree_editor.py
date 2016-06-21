@@ -65,7 +65,7 @@ RenameAction = Action(name='Rename',
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style of tree editor.
     """
     #-------------------------------------------------------------------------

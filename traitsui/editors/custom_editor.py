@@ -35,7 +35,7 @@ from ..toolkit import toolkit_object
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (BasicEditorFactory):
+class ToolkitEditorFactory(BasicEditorFactory):
     """ Editor factory for custom editors.
     """
     # Editor class to be instantiated.

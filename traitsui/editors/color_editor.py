@@ -40,7 +40,7 @@ from ..editor_factory import EditorFactory
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for color editors.
     """
 

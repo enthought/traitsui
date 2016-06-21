@@ -39,7 +39,7 @@ from constants \
 #-------------------------------------------------------------------------
 
 
-class HistoryControl (HasPrivateTraits):
+class HistoryControl(HasPrivateTraits):
 
     # The UI control:
     control = Instance(wx.Window)

@@ -133,7 +133,7 @@ def ui_panel_for(ui, parent, buttons):
 #-------------------------------------------------------------------------
 
 
-class Panel (BaseDialog):
+class Panel(BaseDialog):
     """ wxPython user interface panel for Traits-based user interfaces.
     """
 
@@ -529,7 +529,7 @@ def fill_panel_for_group(panel, group, ui, suppress_label=False,
 #-------------------------------------------------------------------------
 
 
-class FillPanel (object):
+class FillPanel(object):
     """ A subpanel for a single group of items.
     """
 
@@ -1247,7 +1247,7 @@ class FillPanel (object):
 #-------------------------------------------------------------------------
 
 
-class DockWindowGroupEditor (GroupEditor):
+class DockWindowGroupEditor(GroupEditor):
     """ Editor for a group which displays a DockWindow.
     """
 
@@ -1292,7 +1292,7 @@ class DockWindowGroupEditor (GroupEditor):
 #-------------------------------------------------------------------------
 
 
-class HTMLHelpWindow (wx.Frame):
+class HTMLHelpWindow(wx.Frame):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 

@@ -40,7 +40,7 @@ from ..toolkit import toolkit_object
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for range editors.
     """
     #-------------------------------------------------------------------------

@@ -67,7 +67,7 @@ GenericTableFilterRuleOperation = Trait('=', {
 #-------------------------------------------------------------------------
 
 
-class TableFilter (HasPrivateTraits):
+class TableFilter(HasPrivateTraits):
     """ Filter for items displayed in a table.
     """
 
@@ -198,7 +198,7 @@ class TableFilter (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class EvalTableFilter (TableFilter):
+class EvalTableFilter(TableFilter):
     """ A table filter based on evaluating an expression.
     """
 
@@ -252,7 +252,7 @@ class EvalTableFilter (TableFilter):
 #-------------------------------------------------------------------------
 
 
-class GenericTableFilterRule (HasPrivateTraits):
+class GenericTableFilterRule(HasPrivateTraits):
     """ A general rule used by a table filter.
     """
 
@@ -400,7 +400,7 @@ class GenericTableFilterRule (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class GenericTableFilterRuleEnabledColumn (ObjectColumn):
+class GenericTableFilterRuleEnabledColumn(ObjectColumn):
     """ Table column that indicates whether a filter rule is enabled.
     """
 
@@ -418,7 +418,7 @@ class GenericTableFilterRuleEnabledColumn (ObjectColumn):
 #-------------------------------------------------------------------------
 
 
-class GenericTableFilterRuleAndOrColumn (ObjectColumn):
+class GenericTableFilterRuleAndOrColumn(ObjectColumn):
     """ Table column that displays whether a filter rule is conjoining ('and')
         or disjoining ('or').
     """
@@ -439,7 +439,7 @@ class GenericTableFilterRuleAndOrColumn (ObjectColumn):
 #-------------------------------------------------------------------------
 
 
-class GenericTableFilterRuleNameColumn (ObjectColumn):
+class GenericTableFilterRuleNameColumn(ObjectColumn):
     """ Table column for the name of an object trait.
     """
 
@@ -457,7 +457,7 @@ class GenericTableFilterRuleNameColumn (ObjectColumn):
 #-------------------------------------------------------------------------
 
 
-class GenericTableFilterRuleValueColumn (ObjectColumn):
+class GenericTableFilterRuleValueColumn(ObjectColumn):
     """ Table column for the value of an object trait.
     """
 
@@ -487,7 +487,7 @@ generic_table_filter_rule_columns = [
 #-------------------------------------------------------------------------
 
 
-class RuleTableFilter (TableFilter):
+class RuleTableFilter(TableFilter):
     """ A table filter based on rules.
     """
 
@@ -673,7 +673,7 @@ menu_table_filter_rule_columns = [
 #-------------------------------------------------------------------------
 
 
-class MenuTableFilter (RuleTableFilter):
+class MenuTableFilter(RuleTableFilter):
     """ A table filter based on a menu of rules.
     """
 

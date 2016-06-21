@@ -34,7 +34,7 @@ from file_editor \
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (SimpleFileEditor):
+class SimpleEditor(SimpleFileEditor):
     """ Simple style of editor for directories, which displays a text field
         and a **Browse** button that opens a directory-selection dialog box.
     """
@@ -58,7 +58,7 @@ class SimpleEditor (SimpleFileEditor):
 #-------------------------------------------------------------------------
 
 
-class CustomEditor (CustomFileEditor):
+class CustomEditor(CustomFileEditor):
     """ Custom style of editor for directories, which displays a tree view of
         the file system.
     """

@@ -1228,7 +1228,7 @@ class TabbedFoldGroupEditor(GroupEditor):
 #  'HTMLHelpWindow' class:
 #-------------------------------------------------------------------------
 
-class HTMLHelpWindow (QtGui.QDialog):
+class HTMLHelpWindow(QtGui.QDialog):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 

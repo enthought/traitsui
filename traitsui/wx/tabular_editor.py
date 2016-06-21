@@ -92,7 +92,7 @@ class TextEditMixin(listmix.TextEditMixin):
 #-------------------------------------------------------------------------
 
 
-class wxListCtrl (wx.ListCtrl, TextEditMixin):
+class wxListCtrl(wx.ListCtrl, TextEditMixin):
     """ Subclass of wx.ListCtrl to provide correct virtual list behavior.
     """
 
@@ -175,7 +175,7 @@ class wxListCtrl (wx.ListCtrl, TextEditMixin):
 #-------------------------------------------------------------------------
 
 
-class TabularEditor (Editor):
+class TabularEditor(Editor):
     """ A traits UI editor for editing tabular data (arrays, list of tuples,
         lists of objects, etc).
     """
@@ -1157,7 +1157,7 @@ class TabularEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class TabularEditorEvent (HasStrictTraits):
+class TabularEditorEvent(HasStrictTraits):
 
     # The index of the row:
     row = Int

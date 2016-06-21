@@ -34,7 +34,7 @@ from editor import Editor
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style editor for a button.
     """
 
@@ -126,7 +126,7 @@ class SimpleEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class CustomEditor (SimpleEditor):
+class CustomEditor(SimpleEditor):
     """ Custom style editor for a button, which can contain an image.
     """
 

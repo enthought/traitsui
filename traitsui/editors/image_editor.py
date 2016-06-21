@@ -37,7 +37,7 @@ from ..toolkit import toolkit_object
 #-------------------------------------------------------------------------
 
 
-class ImageEditor (BasicEditorFactory):
+class ImageEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = Property

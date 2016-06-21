@@ -36,7 +36,7 @@ from .helper import user_name_for
 #-------------------------------------------------------------------------
 
 
-class InstanceChoiceItem (HasPrivateTraits):
+class InstanceChoiceItem(HasPrivateTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -110,7 +110,7 @@ class InstanceChoiceItem (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class InstanceChoice (InstanceChoiceItem):
+class InstanceChoice(InstanceChoiceItem):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -161,7 +161,7 @@ class InstanceChoice (InstanceChoiceItem):
 #-------------------------------------------------------------------------
 
 
-class InstanceFactoryChoice (InstanceChoiceItem):
+class InstanceFactoryChoice(InstanceChoiceItem):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -251,7 +251,7 @@ class InstanceFactoryChoice (InstanceChoiceItem):
 #-------------------------------------------------------------------------
 
 
-class InstanceDropChoice (InstanceFactoryChoice):
+class InstanceDropChoice(InstanceFactoryChoice):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

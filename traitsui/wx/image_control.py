@@ -30,7 +30,7 @@ import wx
 #-------------------------------------------------------------------------
 
 
-class ImageControl (wx.Window):
+class ImageControl(wx.Window):
     """ A wxPython control that displays an image, which can be selected or
         unselected by mouse clicks.
     """

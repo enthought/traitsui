@@ -41,7 +41,7 @@ from key_event_to_name \
 #-------------------------------------------------------------------------
 
 
-class KeyBindingEditor (Editor):
+class KeyBindingEditor(Editor):
     """ An editor for modifying bindings of keys to controls.
     """
     #-------------------------------------------------------------------------

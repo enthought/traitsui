@@ -70,7 +70,7 @@ UndefinedLabel = '???'
 #-------------------------------------------------------------------------
 
 
-class TableColumn (HasPrivateTraits):
+class TableColumn(HasPrivateTraits):
     """ Represents a column in a table editor.
     """
 
@@ -416,7 +416,7 @@ class TableColumn (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class ObjectColumn (TableColumn):
+class ObjectColumn(TableColumn):
     """ A column for editing objects.
     """
 
@@ -600,7 +600,7 @@ class ObjectColumn (TableColumn):
 #-------------------------------------------------------------------------
 
 
-class ExpressionColumn (ObjectColumn):
+class ExpressionColumn(ObjectColumn):
     """ A column for displaying computed values.
     """
 
@@ -637,7 +637,7 @@ class ExpressionColumn (ObjectColumn):
 #-------------------------------------------------------------------------
 
 
-class NumericColumn (ObjectColumn):
+class NumericColumn(ObjectColumn):
     """ A column for editing Numeric arrays.
     """
 
@@ -839,7 +839,7 @@ class NumericColumn (ObjectColumn):
 #-------------------------------------------------------------------------
 
 
-class ListColumn (TableColumn):
+class ListColumn(TableColumn):
     """ A column for editing lists.
     """
 

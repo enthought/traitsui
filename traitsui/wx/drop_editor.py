@@ -45,7 +45,7 @@ from constants \
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style of drop editor, which displays a read-only text field that
     contains the string representation of the object trait's value.
     """

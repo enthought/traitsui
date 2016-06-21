@@ -57,7 +57,7 @@ except:
 #-------------------------------------------------------------------------
 
 
-class wxListCtrl (wx.ListCtrl):
+class wxListCtrl(wx.ListCtrl):
     """ Subclass of wx.ListCtrl to provide correct virtual list behavior.
     """
 
@@ -120,7 +120,7 @@ class wxListCtrl (wx.ListCtrl):
 #-------------------------------------------------------------------------
 
 
-class _ListStrEditor (Editor):
+class _ListStrEditor(Editor):
     """ Traits UI editor for editing lists of strings.
     """
 

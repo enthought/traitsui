@@ -32,7 +32,7 @@ from .text_editor import ToolkitEditorFactory as EditorFactory
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for drop editors.
     """
 

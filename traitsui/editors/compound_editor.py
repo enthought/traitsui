@@ -38,7 +38,7 @@ editors_trait = List(EditorFactory)
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for compound editors.
     """
     #-------------------------------------------------------------------------

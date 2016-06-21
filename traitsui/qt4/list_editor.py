@@ -39,7 +39,7 @@ from menu import MakeMenu
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style of editor for lists, which displays a scrolling list box
     with only one item visible at a time. A icon next to the list box displays
     a menu of operations on the list.
@@ -451,7 +451,7 @@ class SimpleEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class CustomEditor (SimpleEditor):
+class CustomEditor(SimpleEditor):
     """ Custom style of editor for lists, which displays the items as a series
     of text fields. If the list is editable, an icon next to each item displays
     a menu of operations on the list.
@@ -499,7 +499,7 @@ class ReadonlyEditor(CustomEditor):
 #-------------------------------------------------------------------------
 
 
-class NotebookEditor (Editor):
+class NotebookEditor(Editor):
     """ An editor for lists that displays the list as a "notebook" of tabbed
     pages.
     """

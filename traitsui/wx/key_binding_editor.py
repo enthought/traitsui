@@ -49,7 +49,7 @@ from key_event_to_name \
 #-------------------------------------------------------------------------
 
 
-class KeyBindingEditor (Editor):
+class KeyBindingEditor(Editor):
     """ An editor for modifying bindings of keys to controls.
     """
 
@@ -145,7 +145,7 @@ class KeyBindingEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class KeyBindingCtrl (wx.Window):
+class KeyBindingCtrl(wx.Window):
     """ wxPython control for editing key bindings.
     """
 

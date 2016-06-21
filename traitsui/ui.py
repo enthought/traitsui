@@ -72,7 +72,7 @@ kind_must_have_parent = ('panel', 'subpanel')
 #-------------------------------------------------------------------------
 
 
-class UI (HasPrivateTraits):
+class UI(HasPrivateTraits):
     """ Information about the user interface for a View.
     """
 
@@ -998,7 +998,7 @@ class UI (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class Dispatcher (object):
+class Dispatcher(object):
 
     #-------------------------------------------------------------------------
     #  Initializes the object:

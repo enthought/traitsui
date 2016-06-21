@@ -77,7 +77,7 @@ BoolOrCallable = Trait(False, Bool, Callable)
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for table editors.
     """
 
@@ -553,7 +553,7 @@ class BaseTableEditor(object):
 #-------------------------------------------------------------------------
 
 
-class ReversedList (object):
+class ReversedList(object):
     """ A list whose order is the reverse of its input.
     """
 

@@ -105,7 +105,7 @@ set_ui_handler(ui_handler)
 #-------------------------------------------------------------------------
 
 
-class GUIToolkit (Toolkit):
+class GUIToolkit(Toolkit):
     """ Implementation class for wxPython toolkit.
     """
     #-------------------------------------------------------------------------
@@ -626,7 +626,7 @@ class GUIToolkit (Toolkit):
 #-------------------------------------------------------------------------
 
 
-class DragHandler (HasPrivateTraits):
+class DragHandler(HasPrivateTraits):
     """ Handler for drag events.
     """
     #-------------------------------------------------------------------------
@@ -705,7 +705,7 @@ class DragHandler (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class WXTheme (Category, Theme):
+class WXTheme(Category, Theme):
     """ Defines the extensions needed to make the generic Theme class specific
         to wxPython.
     """
@@ -764,7 +764,7 @@ class WXTheme (Category, Theme):
 #-------------------------------------------------------------------------
 
 
-class WXDockWindowTheme (Category, DockWindowTheme):
+class WXDockWindowTheme(Category, DockWindowTheme):
     """ Defines the extensions needed to make the generic DockWindowTheme class
         specific to wxPython.
     """

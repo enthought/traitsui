@@ -117,7 +117,7 @@ def create_traitsfont(value):
 #-------------------------------------------------------------------------
 
 
-class TraitsFont (wx.Font):
+class TraitsFont(wx.Font):
     """ A Traits-specific wx.Font.
     """
     #-------------------------------------------------------------------------
@@ -143,7 +143,7 @@ class TraitsFont (wx.Font):
 #-------------------------------------------------------------------------
 
 
-class TraitWXFont (TraitHandler):
+class TraitWXFont(TraitHandler):
     """ Ensures that values assigned to a trait attribute are valid font
     descriptor strings; the value actually assigned is the corresponding
     TraitsFont.

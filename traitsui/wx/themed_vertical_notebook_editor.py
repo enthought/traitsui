@@ -45,7 +45,7 @@ from themed_vertical_notebook \
 #-------------------------------------------------------------------------
 
 
-class _ThemedVerticalNotebookEditor (Editor):
+class _ThemedVerticalNotebookEditor(Editor):
     """ Traits UI vertical notebook editor for editing lists of objects with
         traits.
     """
@@ -215,7 +215,7 @@ class _ThemedVerticalNotebookEditor (Editor):
 # wxPython editor factory for themed slider editors:
 
 
-class ThemedVerticalNotebookEditor (BasicEditorFactory):
+class ThemedVerticalNotebookEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = _ThemedVerticalNotebookEditor

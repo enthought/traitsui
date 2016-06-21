@@ -50,7 +50,7 @@ from image_control \
 #-------------------------------------------------------------------------
 
 
-class ReadonlyEditor (Editor):
+class ReadonlyEditor(Editor):
     """ Read-only style of image enumeration editor, which displays a single
     ImageControl, representing the object trait's value.
     """
@@ -95,7 +95,7 @@ class ReadonlyEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (ReadonlyEditor):
+class SimpleEditor(ReadonlyEditor):
     """ Simple style of image enumeration editor, which displays an
     ImageControl, representing the object trait's value. Clicking an image
     displays a dialog box for selecting an image corresponding to a different
@@ -130,7 +130,7 @@ class SimpleEditor (ReadonlyEditor):
 #-------------------------------------------------------------------------
 
 
-class CustomEditor (Editor):
+class CustomEditor(Editor):
     """ Custom style of image enumeration editor, which displays a grid of
     ImageControls. The user can click an image to select the corresponding
     value.
@@ -220,7 +220,7 @@ class CustomEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class ImageEnumDialog (wx.Frame):
+class ImageEnumDialog(wx.Frame):
     """ Dialog box for selecting an ImageControl
     """
     #-------------------------------------------------------------------------

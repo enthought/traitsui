@@ -39,7 +39,7 @@ from helper \
 #-------------------------------------------------------------------------
 
 
-class ThemedCellRenderer (PyGridCellRenderer):
+class ThemedCellRenderer(PyGridCellRenderer):
     """ Defines the ThemedCellRenderer class used to render theme-based cells
         for the TableEditor.
     """

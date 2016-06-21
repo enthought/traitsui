@@ -33,7 +33,7 @@ from .ui_traits import Image, HasBorder, HasMargin, Alignment
 #-------------------------------------------------------------------------
 
 
-class Theme (HasPrivateTraits):
+class Theme(HasPrivateTraits):
 
     #-- Public Traits --------------------------------------------------------
 

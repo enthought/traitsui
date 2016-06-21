@@ -205,7 +205,7 @@ def page_changing(event):
 #-------------------------------------------------------------------------
 
 
-class UIWizardPage (wz.PyWizardPage):
+class UIWizardPage(wz.PyWizardPage):
     """ A page within a wizard interface.
     """
     #-------------------------------------------------------------------------
@@ -274,7 +274,7 @@ class UIWizardPage (wz.PyWizardPage):
 #-------------------------------------------------------------------------
 
 
-class PageGroupEditor (GroupEditor):
+class PageGroupEditor(GroupEditor):
     """ Editor for a group, which displays a page.
     """
     #-------------------------------------------------------------------------

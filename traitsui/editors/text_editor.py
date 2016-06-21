@@ -42,7 +42,7 @@ from ..editor_factory import EditorFactory
 #-------------------------------------------------------------------------
 
 
-class _Identity (object):
+class _Identity(object):
     """ A simple identity mapping.
     """
 
@@ -64,7 +64,7 @@ evaluate_trait = Any(_Identity())
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for text editors.
     """
 

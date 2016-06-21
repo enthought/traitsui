@@ -34,7 +34,7 @@ from .view_element import ViewSubElement
 #-------------------------------------------------------------------------
 
 
-class Include (ViewSubElement):
+class Include(ViewSubElement):
     """ A substitutable user interface element, i.e., a placeholder in a view
     definition.
 

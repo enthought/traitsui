@@ -33,7 +33,7 @@ from traitsui.wx.text_editor \
     import ReadonlyEditor as TextReadonlyEditor
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """
     Traits UI time editor.
     """
@@ -79,7 +79,7 @@ class SimpleEditor (Editor):
 #------------------------------------------------------------------------------
 # TODO: Write me.  Possibly use TextEditor as a model to show a string
 # representation of the time, and have enter-set do a time evaluation.
-class TextEditor (SimpleEditor):
+class TextEditor(SimpleEditor):
     pass
 #-- end TextEditor definition -------------------------------------------------
 
@@ -88,7 +88,7 @@ class TextEditor (SimpleEditor):
 #--  Custom Editor
 #------------------------------------------------------------------------------
 # TODO: Write me.
-class CustomEditor (SimpleEditor):
+class CustomEditor(SimpleEditor):
     pass
 #-- end TextEditor definition -------------------------------------------------
 
@@ -97,7 +97,7 @@ class CustomEditor (SimpleEditor):
 #--  Readonly Editor
 #------------------------------------------------------------------------------
 
-class ReadonlyEditor (TextReadonlyEditor):
+class ReadonlyEditor(TextReadonlyEditor):
     """ Use a TextEditor for the view. """
 
     def _get_str_value(self):

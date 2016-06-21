@@ -64,7 +64,7 @@ def close_dock_control(dock_control):
 #-------------------------------------------------------------------------
 
 
-class Handler (HasPrivateTraits):
+class Handler(HasPrivateTraits):
     """ Provides access to and control over the run-time workings of a
     Traits-based user interface.
     """
@@ -534,7 +534,7 @@ def default_handler(handler=None):
 #-------------------------------------------------------------------------
 
 
-class Controller (Handler):
+class Controller(Handler):
     """ Defines a handler class which provides a view and controller for a
         specified model.
 
@@ -583,7 +583,7 @@ class Controller (Handler):
 #-------------------------------------------------------------------------
 
 
-class ModelView (Controller):
+class ModelView(Controller):
     """ Defines a handler class which provides a view and controller for a
         specified model.
 
@@ -613,6 +613,6 @@ class ModelView (Controller):
 #-------------------------------------------------------------------------
 
 
-class ViewHandler (Handler):
+class ViewHandler(Handler):
 
     pass

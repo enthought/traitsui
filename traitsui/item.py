@@ -67,7 +67,7 @@ Padding = Range(-15, 15, 0, desc='amount of padding to add around item')
 #-------------------------------------------------------------------------
 
 
-class Item (ViewSubElement):
+class Item(ViewSubElement):
     """ An element in a Traits-based user interface.
 
     Magic:
@@ -461,7 +461,7 @@ class Item (ViewSubElement):
 #-------------------------------------------------------------------------
 
 
-class UItem (Item):
+class UItem(Item):
     """ An Item that has no label.
     """
 
@@ -472,7 +472,7 @@ class UItem (Item):
 #-------------------------------------------------------------------------
 
 
-class Custom (Item):
+class Custom(Item):
     """ An Item using a 'custom' style.
     """
 
@@ -483,7 +483,7 @@ class Custom (Item):
 #-------------------------------------------------------------------------
 
 
-class UCustom (Custom):
+class UCustom(Custom):
     """ An Item using a 'custom' style with no label.
     """
 
@@ -494,7 +494,7 @@ class UCustom (Custom):
 #-------------------------------------------------------------------------
 
 
-class Readonly (Item):
+class Readonly(Item):
     """ An Item using a 'readonly' style.
     """
 
@@ -505,7 +505,7 @@ class Readonly (Item):
 #-------------------------------------------------------------------------
 
 
-class UReadonly (Readonly):
+class UReadonly(Readonly):
     """ An Item using a 'readonly' style with no label.
     """
 
@@ -516,7 +516,7 @@ class UReadonly (Readonly):
 #-------------------------------------------------------------------------
 
 
-class Label (Item):
+class Label(Item):
     """ An item that is a label.
     """
 
@@ -536,7 +536,7 @@ class Label (Item):
 #-------------------------------------------------------------------------
 
 
-class Heading (Label):
+class Heading(Label):
     """ An item that is a fancy label.
     """
 
@@ -548,7 +548,7 @@ class Heading (Label):
 #-------------------------------------------------------------------------
 
 
-class Spring (Item):
+class Spring(Item):
     """ An item that is a layout "spring".
     """
 

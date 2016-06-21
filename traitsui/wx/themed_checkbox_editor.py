@@ -44,7 +44,7 @@ from themed_control \
 #-------------------------------------------------------------------------
 
 
-class _ThemedCheckboxEditor (Editor):
+class _ThemedCheckboxEditor(Editor):
     """ Traits UI themed checkbox editor.
     """
 
@@ -165,7 +165,7 @@ class _ThemedCheckboxEditor (Editor):
 # wxPython editor factory for themed checkbox editors:
 
 
-class ThemedCheckboxEditor (BasicEditorFactory):
+class ThemedCheckboxEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = _ThemedCheckboxEditor

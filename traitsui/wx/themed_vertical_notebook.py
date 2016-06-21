@@ -58,7 +58,7 @@ from helper \
 #-------------------------------------------------------------------------
 
 
-class ThemedPage (HasPrivateTraits):
+class ThemedPage(HasPrivateTraits):
     """ A class representing a themed page within a notebook.
     """
 
@@ -294,7 +294,7 @@ class ThemedPage (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class ThemedVerticalNotebook (HasPrivateTraits):
+class ThemedVerticalNotebook(HasPrivateTraits):
     """ Defines a ThemedVerticalNotebook class for displaying a series of pages
         organized vertically, as opposed to horizontally like a standard
         notebook.
@@ -441,7 +441,7 @@ class ThemedVerticalNotebook (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class ThemedVerticalNotebookSizer (wx.PySizer):
+class ThemedVerticalNotebookSizer(wx.PySizer):
     """ Defines a sizer that correctly sizes a themed vertical notebook's
         children to implement the vertical notebook UI model.
     """

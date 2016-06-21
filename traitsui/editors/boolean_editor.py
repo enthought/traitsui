@@ -56,7 +56,7 @@ mapping_trait = Dict(Str, Any, {'True': True,
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for Boolean editors.
     """
     #-------------------------------------------------------------------------

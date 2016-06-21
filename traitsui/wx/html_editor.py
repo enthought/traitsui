@@ -82,7 +82,7 @@ class URLResolvingHtmlWindow(wh.HtmlWindow):
 #-------------------------------------------------------------------------
 
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style of editor for HTML, which displays interpreted HTML.
     """
     #-------------------------------------------------------------------------

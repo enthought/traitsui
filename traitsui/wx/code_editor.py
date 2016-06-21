@@ -70,7 +70,7 @@ SELECTED_MARKER = 2
 #-------------------------------------------------------------------------
 
 
-class SourceEditor (Editor):
+class SourceEditor(Editor):
     """ Editor for source code, which displays a PyFace PythonEditor.
     """
 

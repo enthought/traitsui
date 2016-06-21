@@ -34,7 +34,7 @@ from .editor_factory import EditorFactory
 #-------------------------------------------------------------------------
 
 
-class BasicEditorFactory (EditorFactory):
+class BasicEditorFactory(EditorFactory):
     """ Base class for editor factories that use the same class for creating
         all editor styles.
     """

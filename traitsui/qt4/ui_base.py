@@ -56,7 +56,7 @@ def default_icon():
 #-------------------------------------------------------------------------
 
 
-class RadioGroup (HasStrictTraits):
+class RadioGroup(HasStrictTraits):
     """ A group of mutually-exclusive menu or toolbar actions.
     """
     # List of menu or tool bar items

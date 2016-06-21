@@ -45,7 +45,7 @@ label_pat2 = re.compile(r"^(.*){(.*)}(.*)$", re.MULTILINE | re.DOTALL)
 #-------------------------------------------------------------------------
 
 
-class ViewElement (HasPrivateTraits):
+class ViewElement(HasPrivateTraits):
     """ An element of a view.
     """
 
@@ -82,7 +82,7 @@ class ViewElement (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class DefaultViewElement (ViewElement):
+class DefaultViewElement(ViewElement):
     """ A view element that can be used as a default value for traits whose
         value is a view element.
     """
@@ -127,7 +127,7 @@ Container = Trait(DefaultViewElement(), ViewElement)
 #-------------------------------------------------------------------------
 
 
-class ViewSubElement (ViewElement):
+class ViewSubElement(ViewElement):
     """ Abstract class representing elements that can be contained in a view.
     """
 

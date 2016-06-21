@@ -47,7 +47,7 @@ from themed_control \
 #-------------------------------------------------------------------------
 
 
-class _ThemedButtonEditor (Editor):
+class _ThemedButtonEditor(Editor):
     """ Traits UI themed button editor.
     """
 
@@ -159,7 +159,7 @@ class _ThemedButtonEditor (Editor):
 # wxPython editor factory for themed button editors:
 
 
-class ThemedButtonEditor (BasicEditorFactory):
+class ThemedButtonEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = _ThemedButtonEditor

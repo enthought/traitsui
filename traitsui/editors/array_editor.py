@@ -46,7 +46,7 @@ from ..item import Item
 #-------------------------------------------------------------------------
 
 
-class ToolkitEditorFactory (EditorFactory):
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for array editors.
     """
 
@@ -68,7 +68,7 @@ class ToolkitEditorFactory (EditorFactory):
 #-------------------------------------------------------------------------
 
 
-class ArrayStructure (HasTraits):
+class ArrayStructure(HasTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -210,7 +210,7 @@ class ArrayStructure (HasTraits):
 #  Toolkit-independent 'SimpleEditor' class:
 #-------------------------------------------------------------------------
 
-class SimpleEditor (Editor):
+class SimpleEditor(Editor):
     """ Simple style of editor for arrays.
     """
 

@@ -32,7 +32,7 @@ from traits.api import HasPrivateTraits, Instance, Constant, Bool
 #-------------------------------------------------------------------------
 
 
-class UIInfo (HasPrivateTraits):
+class UIInfo(HasPrivateTraits):
     """ Represents the object and editor content of an active Traits-based
     user interface
     """

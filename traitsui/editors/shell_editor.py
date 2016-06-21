@@ -37,7 +37,7 @@ from ..toolkit import toolkit_object
 #  'ShellEditor' class:
 #-------------------------------------------------------------------------
 
-class _ShellEditor (Editor):
+class _ShellEditor(Editor):
     """ Base class for an editor that displays an interactive Python shell.
     """
 
@@ -219,7 +219,7 @@ class _ShellEditor (Editor):
 # Editor factory for shell editors.
 
 
-class ToolkitEditorFactory (BasicEditorFactory):
+class ToolkitEditorFactory(BasicEditorFactory):
 
     # The editor class to be instantiated.
     klass = Property

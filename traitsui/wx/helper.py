@@ -338,7 +338,7 @@ def disconnect_no_id(control, *events):
 #-------------------------------------------------------------------------
 
 
-class TraitsUIPanel (wx.Panel):
+class TraitsUIPanel(wx.Panel):
 
     def __init__(self, parent, *args, **kw):
         """ Creates a wx.Panel that correctly sets its background color to be
@@ -378,7 +378,7 @@ class TraitsUIPanel (wx.Panel):
 # necessary in wxPython 2.8.8.
 if wx.__version__ < '2.8.8':
 
-    class ChildFocusOverride (object):
+    class ChildFocusOverride(object):
 
         def __init__(self, window):
             # Set up the event listener.
@@ -386,7 +386,7 @@ if wx.__version__ < '2.8.8':
 
 else:
 
-    class ChildFocusOverride (wx.PyEvtHandler):
+    class ChildFocusOverride(wx.PyEvtHandler):
         """ Override the scroll-to-focus behaviour in wx 2.8.8's ScrolledWindow
             C++ implementation for ScrolledPanel.
 
@@ -416,7 +416,7 @@ else:
 #-------------------------------------------------------------------------
 
 
-class TraitsUIScrolledPanel (wx.lib.scrolledpanel.ScrolledPanel):
+class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
 
     def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.TAB_TRAVERSAL,
@@ -555,7 +555,7 @@ def open_fbi():
 #-------------------------------------------------------------------------
 
 
-class GroupEditor (Editor):
+class GroupEditor(Editor):
 
     #-------------------------------------------------------------------------
     #  Initializes the object:
@@ -571,7 +571,7 @@ class GroupEditor (Editor):
 #-------------------------------------------------------------------------
 
 
-class PopupControl (HasPrivateTraits):
+class PopupControl(HasPrivateTraits):
 
     #-- Constructor Traits ---------------------------------------------------
 
@@ -684,7 +684,7 @@ class PopupControl (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class BufferDC (wx.MemoryDC):
+class BufferDC(wx.MemoryDC):
     """ An off-screen buffer class.
 
         This class implements a off-screen output buffer. Data is meant to
@@ -721,7 +721,7 @@ class BufferDC (wx.MemoryDC):
 #-------------------------------------------------------------------------
 
 
-class Slider (wx.Slider):
+class Slider(wx.Slider):
     """ This is a 'fixed' version of the wx.Slider control which does not
         erase its background, which can cause a lot of update flicker and is
         completely unnecessary.

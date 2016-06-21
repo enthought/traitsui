@@ -33,7 +33,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class DelegatingHandler (Handler):
+class DelegatingHandler(Handler):
     """ A handler that delegates the handling of events to a set of
         sub-handlers.
     """

@@ -36,7 +36,7 @@ from .editor import Editor
 #-------------------------------------------------------------------------
 
 
-class UIEditor (Editor):
+class UIEditor(Editor):
     """ An editor that creates an embedded Traits UI.
     """
 

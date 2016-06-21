@@ -54,7 +54,7 @@ from helper \
 #-------------------------------------------------------------------------
 
 
-class _ThemedSliderEditor (Editor):
+class _ThemedSliderEditor(Editor):
     """ Traits UI simple, themed slider-based integer or float value editor.
     """
 
@@ -460,7 +460,7 @@ class _ThemedSliderEditor (Editor):
 # wxPython editor factory for themed slider editors:
 
 
-class ThemedSliderEditor (BasicEditorFactory):
+class ThemedSliderEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = _ThemedSliderEditor

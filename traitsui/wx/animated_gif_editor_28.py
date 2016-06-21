@@ -39,7 +39,7 @@ from traitsui.basic_editor_factory \
 #-------------------------------------------------------------------------
 
 
-class _AnimatedGIFEditor (Editor):
+class _AnimatedGIFEditor(Editor):
     """ Editor that displays an animated GIF file.
     """
 
@@ -100,7 +100,7 @@ class _AnimatedGIFEditor (Editor):
 # wxPython editor factory for animated GIF editors:
 
 
-class AnimatedGIFEditor (BasicEditorFactory):
+class AnimatedGIFEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = _AnimatedGIFEditor
