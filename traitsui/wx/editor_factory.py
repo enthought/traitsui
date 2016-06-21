@@ -145,6 +145,8 @@ class TextEditor ( Editor ):
     def update_object ( self, event ):
         """ Handles the user changing the contents of the edit control.
         """
+        if isinstance(event, wx.FocusEvent):
+            event.Skip()
         try:
             self.value = self.control.GetValue()
         except TraitError as excp:

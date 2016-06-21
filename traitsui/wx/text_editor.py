@@ -118,6 +118,11 @@ class SimpleEditor ( Editor ):
     def update_object ( self, event ):
         """ Handles the user entering input data in the edit control.
         """
+        if isinstance(event, wx.FocusEvent):
+            # Ensure that the base class' focus event handlers are run, some
+            # built-in behavior may break on some platforms otherwise.
+            event.Skip()
+
         if (not self._no_update) and (self.control is not None):
             try:
                 self.value = self._get_user_value()
