@@ -62,7 +62,7 @@ factory_trait = Trait(EditorFactory)
 #-------------------------------------------------------------------------
 
 
-class Editor (HasPrivateTraits):
+class Editor(HasPrivateTraits):
     """ Represents an editing control for an object trait in a Traits-based
         user interface.
     """
