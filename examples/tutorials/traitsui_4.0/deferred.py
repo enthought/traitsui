@@ -40,7 +40,7 @@ from traitsui.api import *
 #--[Count Class]----------------------------------------------------------
 
 
-class Count (HasTraits):
+class Count(HasTraits):
 
     count = Int
     go = Button('Count')

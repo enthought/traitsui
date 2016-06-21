@@ -90,7 +90,7 @@ from traitsui.api \
 #--[WebPage Class]--------------------------------------------------------
 
 
-class WebPage (HasTraits):
+class WebPage(HasTraits):
 
     # The URL to display:
     url = Str('http://code.enthought.com')
@@ -128,7 +128,7 @@ class WebPage (HasTraits):
 #--[InternetExplorerDemo Class]-------------------------------------------
 
 
-class InternetExplorerDemo (HasTraits):
+class InternetExplorerDemo(HasTraits):
 
     # A URL to display:
     url = Str('http://')

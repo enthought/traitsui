@@ -32,7 +32,7 @@ from traitsui.api \
 #-- HistoryDemo Class ----------------------------------------------------
 
 
-class HistoryDemo (HasTraits):
+class HistoryDemo(HasTraits):
 
     name = Str
     file = File

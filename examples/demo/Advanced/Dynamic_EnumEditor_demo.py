@@ -62,7 +62,7 @@ possible_entrees = [
 #-- The KitchenCapabilities class ----------------------------------------
 
 
-class KitchenCapabilities (HasPrivateTraits):
+class KitchenCapabilities(HasPrivateTraits):
 
     # The current set of entrees the kitchen can make (based on its larder):
     available = List(possible_entrees)
@@ -73,7 +73,7 @@ kitchen_capabilities = KitchenCapabilities()
 #-- The OrderMenu class --------------------------------------------------
 
 
-class OrderMenu (HasPrivateTraits):
+class OrderMenu(HasPrivateTraits):
 
     # The person's entree order:
     entree = Str

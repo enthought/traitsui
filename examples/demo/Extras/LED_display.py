@@ -24,7 +24,7 @@ from traitsui.wx.extra.led_editor \
 # Handler class for the LEDDemo class view:
 
 
-class LEDDemoHandler (Handler):
+class LEDDemoHandler(Handler):
 
     # The UIInfo object associated with the UI:
     info = Instance(UIInfo)
@@ -54,7 +54,7 @@ class LEDDemoHandler (Handler):
 # The main demo class:
 
 
-class LEDDemo (HasTraits):
+class LEDDemo(HasTraits):
 
     # A counter to display:
     counter1 = Int

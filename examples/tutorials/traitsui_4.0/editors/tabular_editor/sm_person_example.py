@@ -75,7 +75,7 @@ search_path = [join(dirname(traitsui.api.__file__),
 #--[Person Class]---------------------------------------------------------
 
 
-class Person (HasTraits):
+class Person(HasTraits):
 
     name = Str
     address = Str
@@ -84,14 +84,14 @@ class Person (HasTraits):
 #--[MarriedPerson Class]--------------------------------------------------
 
 
-class MarriedPerson (Person):
+class MarriedPerson(Person):
 
     partner = Instance(Person)
 
 #--[Tabular Adapter Definition]-------------------------------------------
 
 
-class ReportAdapter (TabularAdapter):
+class ReportAdapter(TabularAdapter):
 
     columns = [('Name', 'name'),
                ('Age', 'age'),
@@ -124,7 +124,7 @@ tabular_editor = TabularEditor(
 #--[Report Class]---------------------------------------------------------
 
 
-class Report (HasTraits):
+class Report(HasTraits):
 
     people = List(Person)
 

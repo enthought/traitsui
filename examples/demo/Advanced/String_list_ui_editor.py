@@ -30,7 +30,7 @@ else:
 # Define the tabular adapter used by the Traits UI string list editor:
 
 
-class MultiSelectAdapter (TabularAdapter):
+class MultiSelectAdapter(TabularAdapter):
 
     # The columns in the table (just the string value):
     columns = [('Value', 'value')]
@@ -44,7 +44,7 @@ class MultiSelectAdapter (TabularAdapter):
 # Define the actual Traits UI string list editor:
 
 
-class _StringListEditor (UIEditor):
+class _StringListEditor(UIEditor):
 
     # Indicate that the editor is scrollable/resizable:
     scrollable = True
@@ -85,7 +85,7 @@ class _StringListEditor (UIEditor):
 # Define the StringListEditor class used by client code:
 
 
-class StringListEditor (BasicEditorFactory):
+class StringListEditor(BasicEditorFactory):
 
     # The editor implementation class:
     klass = _StringListEditor
@@ -96,7 +96,7 @@ class StringListEditor (BasicEditorFactory):
 #-- Define the demo class ----------------------------------------------------
 
 
-class MultiSelect (HasPrivateTraits):
+class MultiSelect(HasPrivateTraits):
     """ This class demonstrates using the StringListEditor to select a set
         of string values from a set of choices.
     """

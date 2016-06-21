@@ -26,7 +26,7 @@ from traitsui.api \
 #-------------------------------------------------------------------------
 
 
-class Person (HasStrictTraits):
+class Person(HasStrictTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -50,7 +50,7 @@ class Person (HasStrictTraits):
 #-------------------------------------------------------------------------
 
 
-class WorkingPerson (Person):
+class WorkingPerson(Person):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -87,7 +87,7 @@ people = [
 #-------------------------------------------------------------------------
 
 
-class TableTest (HasStrictTraits):
+class TableTest(HasStrictTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

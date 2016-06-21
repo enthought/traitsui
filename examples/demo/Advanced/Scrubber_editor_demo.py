@@ -107,14 +107,14 @@ from traitsui.ui_traits \
 #-- Shared Themed Item Definition ----------------------------------------
 
 
-class TItem (Item):
+class TItem(Item):
     editor = ScrubberEditor()
     item_theme = ATheme('@std:LG')
 
 #-- ScrubberDemo Class ---------------------------------------------------
 
 
-class ScrubberDemo (HasTraits):
+class ScrubberDemo(HasTraits):
 
     # Define some sample ranges and values:
     simple_integer = Range(0, 100)

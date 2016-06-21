@@ -775,13 +775,13 @@ user interfaces using both the <strong>TabularEditor</strong> and <strong>Tabula
 combination.</p>
 <p>For this example, let's assume we have the following two classes:</p>
 <pre class="literal-block">
-class Person ( HasTraits ):
+class Person( HasTraits ):
 
     name    = Str
     age     = Int
     address = Str
 
-class MarriedPerson ( Person ):
+class MarriedPerson( Person ):
 
     partner = Instance( Person )
 </pre>
@@ -790,7 +790,7 @@ a married person and is derived from <strong>Person</strong> but adds the <em>pa
 reference the person they are married to.</p>
 <p>Now, assume we also have the following additional class:</p>
 <pre class="literal-block">
-class Report ( HasTraits ):
+class Report( HasTraits ):
 
     people = List( Person )
 </pre>
@@ -815,7 +815,7 @@ a light blue.</li>
 <p>Given this set of requirements, we can now define the following
 <strong>TabularAdapter</strong> subclass:</p>
 <pre class="literal-block">
-class ReportAdapter ( TabularAdapter ):
+class ReportAdapter( TabularAdapter ):
 
     columns = [ ( 'Name',    'name' ),
                 ( 'Age',     'age' ),

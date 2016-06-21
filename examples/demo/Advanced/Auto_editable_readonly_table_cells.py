@@ -43,7 +43,7 @@ from traitsui.table_column \
 #-- Integer Class --------------------------------------------------------
 
 
-class Integer (HasTraits):
+class Integer(HasTraits):
 
     # The value:
     n = Int
@@ -51,7 +51,7 @@ class Integer (HasTraits):
 #-- Factor Class ---------------------------------------------------------
 
 
-class Factor (HasTraits):
+class Factor(HasTraits):
 
     # The number being factored:
     n = Int
@@ -127,7 +127,7 @@ factors_table_editor = TableEditor(
 #-- Factors Class --------------------------------------------------------
 
 
-class Factors (HasTraits):
+class Factors(HasTraits):
 
     # The maximum number to include in the table:
     max_n = Range(1, 1000, 20, mode='slider')

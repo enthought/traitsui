@@ -25,7 +25,7 @@ from traitsui.extras.checkbox_column \
 
 # Create a specialized column to set the text color differently based upon
 # whether or not the player is in the lineup:
-class PlayerColumn (ObjectColumn):
+class PlayerColumn(ObjectColumn):
 
     # Override some default settings for the column:
     width = 0.08
@@ -58,7 +58,7 @@ player_editor = TableEditor(
 # 'Player' class:
 
 
-class Player (HasStrictTraits):
+class Player(HasStrictTraits):
 
     # Trait definitions:
     in_lineup = Bool(True)
@@ -82,7 +82,7 @@ class Player (HasStrictTraits):
                      self.triples + self.home_runs) / self.at_bats
 
 
-class Team (HasStrictTraits):
+class Team(HasStrictTraits):
 
     # Trait definitions:
     players = List(Player)

@@ -17,7 +17,7 @@ from traitsui.api \
 # The web page class:
 
 
-class WebPage (HasTraits):
+class WebPage(HasTraits):
 
     # The URL to display:
     url = Str('http://code.enthought.com')
@@ -55,7 +55,7 @@ class WebPage (HasTraits):
 # The demo class:
 
 
-class InternetExplorerDemo (HasTraits):
+class InternetExplorerDemo(HasTraits):
 
     # A URL to display:
     url = Str('http://')

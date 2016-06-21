@@ -13,7 +13,7 @@ from traits.api import HasTraits, Bool
 from traitsui.api import Item, Group, View
 
 
-class BooleanEditorDemo (HasTraits):
+class BooleanEditorDemo(HasTraits):
     """ This class specifies the details of the BooleanEditor demo.
     """
 

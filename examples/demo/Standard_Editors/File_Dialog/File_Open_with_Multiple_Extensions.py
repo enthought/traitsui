@@ -36,7 +36,7 @@ demo_id = 'traitsui.demo.standard_editors.file_dialog.multiple_info'
 extensions = [FileInfo(), TextInfo(), ImageInfo()]
 
 
-class FileDialogDemo (HasTraits):
+class FileDialogDemo(HasTraits):
 
     # The name of the selected file:
     file_name = File

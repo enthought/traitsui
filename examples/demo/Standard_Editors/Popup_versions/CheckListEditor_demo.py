@@ -13,7 +13,7 @@ from traitsui.api import Item, Group, View, CheckListEditor
 #-------------------------------------------------------------------------
 
 
-class CheckListEditorDemo (HasTraits):
+class CheckListEditorDemo(HasTraits):
     """ This class specifies the details of the CheckListEditor demo.
     """
 

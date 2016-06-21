@@ -68,7 +68,7 @@ from traitsui.api \
 #-- System Class ---------------------------------------------------------
 
 
-class System (HasTraits):
+class System(HasTraits):
 
     # The mass of the system:
     mass = Range(0.0, 100.0)

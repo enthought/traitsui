@@ -35,7 +35,7 @@ numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
 #-------------------------------------------------------------------------
 
 
-class CheckListTest (Handler):
+class CheckListTest(Handler):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

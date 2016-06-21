@@ -28,7 +28,7 @@ from enable.api \
     import ColorTrait
 
 
-class Thingy (HasTraits):
+class Thingy(HasTraits):
     color = ColorTrait('black')
 
 #-------------------------------------------------------------------------
@@ -48,7 +48,7 @@ colors = [
 ]
 
 
-class TableTest (HasTraits):
+class TableTest(HasTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

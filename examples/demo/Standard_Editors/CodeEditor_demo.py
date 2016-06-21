@@ -17,7 +17,7 @@ from traitsui.api \
 # The main demo class:
 
 
-class CodeEditorDemo (HasTraits):
+class CodeEditorDemo(HasTraits):
     """ Defines the CodeEditor demo class.
     """
 

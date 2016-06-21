@@ -19,7 +19,7 @@ from traitsui.api \
 image_list = ['top left', 'top right', 'bottom left', 'bottom right']
 
 
-class Dummy (HasTraits):
+class Dummy(HasTraits):
     """ Dummy class for ImageEnumEditor
     """
     x = Str
@@ -27,7 +27,7 @@ class Dummy (HasTraits):
     view = View()
 
 
-class ImageEnumEditorDemo (HasTraits):
+class ImageEnumEditorDemo(HasTraits):
     """ Defines the ImageEnumEditor demo class.
     """
 

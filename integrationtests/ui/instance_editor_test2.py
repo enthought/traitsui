@@ -11,7 +11,7 @@ from traitsui.instance_choice \
 #-------------------------------------------------------------------------
 
 
-class Person (HasStrictTraits):
+class Person(HasStrictTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -47,7 +47,7 @@ people = [
 #-------------------------------------------------------------------------
 
 
-class Team (HasStrictTraits):
+class Team(HasStrictTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

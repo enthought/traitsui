@@ -14,7 +14,7 @@ from traitsui.api import Item, Group, View
 #-------------------------------------------------------------------------
 
 
-class EnumEditorDemo (HasTraits):
+class EnumEditorDemo(HasTraits):
     """ This class specifies the details of the BooleanEditor demo.
     """
 

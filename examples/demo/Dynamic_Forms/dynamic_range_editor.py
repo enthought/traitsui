@@ -35,7 +35,7 @@ from traits.api import HasPrivateTraits, Float, Range, Int
 from traitsui.api import View, Group, Item, Label, RangeEditor
 
 
-class DynamicRangeEditor (HasPrivateTraits):
+class DynamicRangeEditor(HasPrivateTraits):
     """ Defines an editor for dynamic ranges (i.e. ranges whose bounds can be
         changed at run time).
     """

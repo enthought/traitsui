@@ -13,7 +13,7 @@ from traitsui.api import Item, Group, View
 #-------------------------------------------------------------------------
 
 
-class TextEditorDemo (HasTraits):
+class TextEditorDemo(HasTraits):
     """ This class specifies the details of the TextEditor demo.
     """
 

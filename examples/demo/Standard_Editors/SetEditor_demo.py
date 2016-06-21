@@ -22,7 +22,7 @@ from traitsui.api \
 # Define the main demo class:
 
 
-class SetEditorDemo (HasTraits):
+class SetEditorDemo(HasTraits):
     """ Defines the SetEditor demo class.
     """
 

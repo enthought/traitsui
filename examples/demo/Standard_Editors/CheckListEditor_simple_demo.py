@@ -22,7 +22,7 @@ from traits.api import HasTraits, List
 from traitsui.api import UItem, Group, View, CheckListEditor, Label
 
 
-class CheckListEditorDemo (HasTraits):
+class CheckListEditorDemo(HasTraits):
     """ Define the main CheckListEditor simple demo class. """
 
     # Specify the strings to be displayed in the checklist:

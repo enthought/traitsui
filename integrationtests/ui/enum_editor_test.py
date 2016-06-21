@@ -36,7 +36,7 @@ range = Range(1, 4)
 #-------------------------------------------------------------------------
 
 
-class TestEnumEditor (HasTraits):
+class TestEnumEditor(HasTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

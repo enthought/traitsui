@@ -26,7 +26,7 @@ from traitsui.api \
 #-------------------------------------------------------------------------
 
 
-class Test (HasPrivateTraits):
+class Test(HasPrivateTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

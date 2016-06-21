@@ -26,7 +26,7 @@ from traitsui.api \
 #-------------------------------------------------------------------------
 
 
-class CheckListTest (Handler):
+class CheckListTest(Handler):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

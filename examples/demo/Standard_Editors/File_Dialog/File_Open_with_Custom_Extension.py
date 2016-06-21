@@ -27,7 +27,7 @@ from traitsui.helper \
 #-- LineCountInfo Class --------------------------------------------------
 
 
-class LineCountInfo (MFileDialogModel):
+class LineCountInfo(MFileDialogModel):
     """ Defines a file dialog extension that displays the number of text lines
         in the currently selected file.
     """
@@ -71,7 +71,7 @@ demo_id = ('traitsui.demo.standard_editors.file_dialog.'
            'line_count_info')
 
 
-class FileDialogDemo (HasTraits):
+class FileDialogDemo(HasTraits):
 
     # The name of the selected file:
     file_name = File

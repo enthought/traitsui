@@ -10,7 +10,7 @@ def evaluate_value(v):
     return str(v)
 
 
-class Team (HasTraits):
+class Team(HasTraits):
 
     captain = Str('Dick')
     players = List(['Tom', 'Dick', 'Harry', 'Sally'], Str)

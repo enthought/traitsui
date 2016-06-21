@@ -12,7 +12,7 @@ from traitsui.api import Item, Group, View
 #-------------------------------------------------------------------------
 
 
-class CodeEditorDemo (HasTraits):
+class CodeEditorDemo(HasTraits):
     """ This class specifies the details of the CodeEditor demo.
     """
 

@@ -17,7 +17,7 @@ from traitsui.api import Item, Group, View, SetEditor
 #-------------------------------------------------------------------------
 
 
-class SetEditorDemo (HasTraits):
+class SetEditorDemo(HasTraits):
     """ This class specifies the details of the SetEditor demo.
     """
 

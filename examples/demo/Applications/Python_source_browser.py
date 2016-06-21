@@ -52,7 +52,7 @@ search_path = [join(dirname(traitsui.api.__file__),
 
 #-- FileInfo Class Definition --------------------------------------------
 
-class FileInfo (HasPrivateTraits):
+class FileInfo(HasPrivateTraits):
 
     file_name = File
     name = Property
@@ -81,7 +81,7 @@ class FileInfo (HasPrivateTraits):
 #-- Tabular Adapter Definition -------------------------------------------
 
 
-class FileInfoAdapter (TabularAdapter):
+class FileInfoAdapter(TabularAdapter):
 
     columns = [('File Name', 'name'),
                ('Size', 'size'),
@@ -120,7 +120,7 @@ tabular_editor = TabularEditor(
 #-- PythonBrowser Class Definition ---------------------------------------
 
 
-class PythonBrowser (HasPrivateTraits):
+class PythonBrowser(HasPrivateTraits):
 
     #-- Trait Definitions ----------------------------------------------------
 

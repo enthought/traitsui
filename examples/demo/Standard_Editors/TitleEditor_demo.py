@@ -28,7 +28,7 @@ from traitsui.api \
     import View, VGroup, HGroup, Item, TitleEditor
 
 
-class TitleEditorDemo (HasTraits):
+class TitleEditorDemo(HasTraits):
 
     # Define the selection of titles that can be displayed:
     title = Enum(

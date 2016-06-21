@@ -27,7 +27,7 @@ from traits.api import HasTraits, Enum
 from traitsui.api import Item, Group, View, EnumEditor
 
 
-class EnumEditorDemo (HasTraits):
+class EnumEditorDemo(HasTraits):
     """ Defines the main EnumEditor demo class. """
 
     # Define an Enum trait to view.

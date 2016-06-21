@@ -12,7 +12,7 @@ from traitsui.api import Item, Group, View
 #  Demo Class
 #-------------------------------------------------------------------------
 
-class DirectoryEditorDemo (HasTraits):
+class DirectoryEditorDemo(HasTraits):
     """ This class specifies the details of the DirectoryEditor demo.
     """
 

@@ -14,7 +14,7 @@ from traits.has_dynamic_views \
     import DynamicView, HasDynamicViews
 
 
-class HasFooView (HasDynamicViews):
+class HasFooView(HasDynamicViews):
     """ A base class declaring the existence of the 'foo' dynamic view.
     """
 
@@ -42,13 +42,13 @@ class HasFooView (HasDynamicViews):
         self.declare_dynamic_view(declaration)
 
 
-class MyInfoHandler (Handler):
+class MyInfoHandler(Handler):
 
     def object_first_changed(self, info):
         info.object.derived = info.object.first
 
 
-class BaseFoo (HasFooView):
+class BaseFoo(HasFooView):
     """ A base class that puts some content in the 'foo' dynamic view.
     """
 
@@ -77,13 +77,13 @@ class BaseFoo (HasFooView):
     )
 
 
-class FatherInfoHandler (Handler):
+class FatherInfoHandler(Handler):
 
     def object_father_first_name_changed(self, info):
         info.object.father_derived = info.object.father_first_name
 
 
-class DerivedFoo (BaseFoo):
+class DerivedFoo(BaseFoo):
     """ A derived class that puts additional content in the 'foo' dynamic view.
         Note that the additional content could also have been added via a traits
         category contribution, or even dynamic manipulation of metadata on a UI
@@ -141,7 +141,7 @@ class DerivedFoo (BaseFoo):
             del ui_father._foo_order
 
 
-class FooDemo (HasTraits):
+class FooDemo(HasTraits):
     """ Defines a class to run the demo.
     """
 

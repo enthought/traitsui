@@ -17,7 +17,7 @@ from traitsui.api \
 # Define the demo class:
 
 
-class CompoundEditorDemo (HasTraits):
+class CompoundEditorDemo(HasTraits):
     """ Defines the main CompoundEditor demo class.
     """
 

@@ -70,7 +70,7 @@ from traitsui.api \
 #-- The Hotel class ------------------------------------------------------
 
 
-class Hotel (HasPrivateTraits):
+class Hotel(HasPrivateTraits):
 
     # The season of the year:
     season = Enum('Winter', 'Spring', 'Summer', 'Fall')
@@ -138,7 +138,7 @@ class Hotel (HasPrivateTraits):
 #-- The Guest class ------------------------------------------------------
 
 
-class Guest (HasPrivateTraits):
+class Guest(HasPrivateTraits):
 
     # The name of the guest:
     name = Str

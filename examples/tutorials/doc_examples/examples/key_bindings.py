@@ -30,7 +30,7 @@ key_bindings = KeyBindings(
 # Traits UI Handler class for bound methods
 
 
-class CodeHandler (Handler):
+class CodeHandler(Handler):
 
     def save_file(self, info):
         info.object.status = "save file"
@@ -43,7 +43,7 @@ class CodeHandler (Handler):
         key_bindings.edit_traits()
 
 
-class KBCodeExample (HasPrivateTraits):
+class KBCodeExample(HasPrivateTraits):
 
     code = Code
     status = Str

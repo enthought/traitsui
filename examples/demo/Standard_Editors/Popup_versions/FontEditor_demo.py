@@ -12,7 +12,7 @@ from traitsui.api import Item, Group, View
 #-------------------------------------------------------------------------
 
 
-class FontEditorDemo (HasTraits):
+class FontEditorDemo(HasTraits):
     """ This class specifies the details of the FontEditor demo.
     """
 

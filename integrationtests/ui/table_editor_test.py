@@ -34,7 +34,7 @@ from traitsui.table_filter \
 #-------------------------------------------------------------------------
 
 
-class Person (HasStrictTraits):
+class Person(HasStrictTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -74,7 +74,7 @@ people = [
 #-------------------------------------------------------------------------
 
 
-class AgeFilter (TableFilter):
+class AgeFilter(TableFilter):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -118,7 +118,7 @@ class AgeFilter (TableFilter):
 #-------------------------------------------------------------------------
 
 
-class NameFilter (TableFilter):
+class NameFilter(TableFilter):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -173,7 +173,7 @@ def evaluate_value(v):
 #-------------------------------------------------------------------------
 
 
-class TableTest (HasStrictTraits):
+class TableTest(HasStrictTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

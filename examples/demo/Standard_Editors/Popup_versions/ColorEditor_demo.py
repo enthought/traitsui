@@ -12,7 +12,7 @@ from traitsui.api import Item, Group, View
 #-------------------------------------------------------------------------
 
 
-class ColorEditorDemo (HasTraits):
+class ColorEditorDemo(HasTraits):
     """ This class specifies the details of the ColorEditor demo.
     """
 

@@ -37,7 +37,7 @@ origin_values = ['top left', 'top right', 'bottom left', 'bottom right']
 #-------------------------------------------------------------------------
 
 
-class Instance (HasTraits):
+class Instance(HasTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -58,7 +58,7 @@ class Instance (HasTraits):
 #-------------------------------------------------------------------------
 
 
-class TraitsTest (HasTraits):
+class TraitsTest(HasTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -182,7 +182,7 @@ class TraitsTest (HasTraits):
 #-------------------------------------------------------------------------
 
 
-class TraitSheetApp (wx.App):
+class TraitSheetApp(wx.App):
 
     #-------------------------------------------------------------------------
     #  Initialize the object:

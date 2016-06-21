@@ -21,7 +21,7 @@ person_view = View('first_name', 'last_name', 'age', 'gender')
 bill = Person()
 
 
-class TraitApp (wx.App):
+class TraitApp(wx.App):
 
     def __init__(self, object, view):
         self.object = object

@@ -106,7 +106,7 @@ FileTypes = {
 #-- The Live Search table editor definition ------------------------------
 
 
-class MatchesColumn1 (ObjectColumn):
+class MatchesColumn1(ObjectColumn):
 
     def get_value(self, object):
         n = len(self.get_raw_value(object))
@@ -116,13 +116,13 @@ class MatchesColumn1 (ObjectColumn):
         return str(n)
 
 
-class MatchesColumn2 (ObjectColumn):
+class MatchesColumn2(ObjectColumn):
 
     def is_editable(self, object):
         return (len(object.matches) > 0)
 
 
-class FileColumn (ObjectColumn):
+class FileColumn(ObjectColumn):
 
     def get_drag_value(self, object):
         return object.full_name
@@ -167,7 +167,7 @@ table_editor = TableEditor(
 #-- LiveSearch class -----------------------------------------------------
 
 
-class LiveSearch (HasTraits):
+class LiveSearch(HasTraits):
 
     # The currenty root directory being searched:
     root = Directory(getcwd(), entries=10)
@@ -368,7 +368,7 @@ class LiveSearch (HasTraits):
 #-- SourceFile class -----------------------------------------------------
 
 
-class SourceFile (HasTraits):
+class SourceFile(HasTraits):
 
     # The search object this source file is associated with:
     live_search = Instance(LiveSearch)

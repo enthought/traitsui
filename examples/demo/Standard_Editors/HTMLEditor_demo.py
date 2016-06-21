@@ -44,7 +44,7 @@ Bulleted list:
 """)
 
 
-class HTMLEditorDemo (HasTraits):
+class HTMLEditorDemo(HasTraits):
     """ Defines the main HTMLEditor demo class. """
 
     # Define a HTML trait to view

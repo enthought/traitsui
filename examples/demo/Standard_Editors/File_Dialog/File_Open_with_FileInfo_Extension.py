@@ -31,7 +31,7 @@ from traitsui.file_dialog  \
 demo_id = 'traitsui.demo.standard_editors.file_dialog.file_info'
 
 
-class FileDialogDemo (HasTraits):
+class FileDialogDemo(HasTraits):
 
     # The name of the selected file:
     file_name = File

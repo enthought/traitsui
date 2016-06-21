@@ -33,7 +33,7 @@ search_path = [join(dirname(traits.api.__file__),
 # Define the demo class:
 
 
-class Employee (HasTraits):
+class Employee(HasTraits):
 
     # Define the traits:
     name = Str

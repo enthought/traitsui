@@ -28,28 +28,28 @@ from traits.api import Color
 #-------------------------------------------------------------------------
 
 
-class Employer (HasTraits):
+class Employer(HasTraits):
     company = Str
     boss = Str
 
     view = View('company', 'boss')
 
 
-class Person (HasTraits):
+class Person(HasTraits):
     name = Str('David Morrill')
     age = Int(39)
 
     view = View('name', '<extra>', 'age', kind='modal')
 
 
-class ExtraPerson (Person):
+class ExtraPerson(Person):
     sex = Trait('Male', 'Female')
     eye_color = Color
 
     extra = Group('sex', 'eye_color')
 
 
-class LocatedPerson (Person):
+class LocatedPerson(Person):
     street = Str
     city = Str
     state = Str
@@ -58,7 +58,7 @@ class LocatedPerson (Person):
     extra = Group('street', 'city', 'state', 'zip')
 
 
-class EmployedPerson (LocatedPerson):
+class EmployedPerson(LocatedPerson):
     employer = Trait(Employer(company='Enthought, Inc.', boss='eric'))
 
     extra = Group('employer', '<extra>')
@@ -68,7 +68,7 @@ class EmployedPerson (LocatedPerson):
 #-------------------------------------------------------------------------
 
 
-class TraitSheetApp (wx.App):
+class TraitSheetApp(wx.App):
 
     #-------------------------------------------------------------------------
     #  Initialize the object:

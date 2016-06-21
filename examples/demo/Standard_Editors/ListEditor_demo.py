@@ -17,7 +17,7 @@ from traitsui.api \
 # Define the demo class:
 
 
-class ListEditorDemo (HasTraits):
+class ListEditorDemo(HasTraits):
     """ Defines the main ListEditor demo class. """
 
     # Define a List trait to display:

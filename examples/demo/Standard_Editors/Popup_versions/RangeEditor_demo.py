@@ -14,7 +14,7 @@ from traitsui.api import Item, Group, View
 #-------------------------------------------------------------------------
 
 
-class RangeEditorDemo (HasTraits):
+class RangeEditorDemo(HasTraits):
     """ This class specifies the details of the RangeEditor demo.
     """
 

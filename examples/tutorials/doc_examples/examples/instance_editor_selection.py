@@ -14,7 +14,7 @@ from traitsui.api \
 #--[Code]-----------------------------------------------------------------
 
 
-class Person (HasStrictTraits):
+class Person(HasStrictTraits):
     name = Str
     age = Int
     phone = Regex(value='000-0000',
@@ -34,7 +34,7 @@ people = [
 ]
 
 
-class Team (HasStrictTraits):
+class Team(HasStrictTraits):
 
     name = Str
     captain = Instance(Person)

@@ -55,7 +55,7 @@ from traitsui.api import *
 # Click the run button to view the pop-up dialog...
 
 
-class Adder (HasTraits):
+class Adder(HasTraits):
 
     value_1 = Float
     value_2 = Float

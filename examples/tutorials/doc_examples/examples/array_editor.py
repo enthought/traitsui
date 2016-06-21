@@ -13,7 +13,7 @@ from traitsui.menu import NoButtons
 #--[Code]-----------------------------------------------------------------
 
 
-class ArrayEditorTest (HasPrivateTraits):
+class ArrayEditorTest(HasPrivateTraits):
 
     three = Array(Int, (3, 3))
     four = Array(Float,

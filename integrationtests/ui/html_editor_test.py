@@ -54,7 +54,7 @@ Lists can be nested:
 #-------------------------------------------------------------------------
 
 
-class TestHTML (HasPrivateTraits):
+class TestHTML(HasPrivateTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

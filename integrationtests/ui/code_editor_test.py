@@ -48,7 +48,7 @@ key_bindings = KeyBindings(
 #-------------------------------------------------------------------------
 
 
-class CodeHandler (Handler):
+class CodeHandler(Handler):
 
     def save_file(self, info):
         info.object.status = "save file"
@@ -65,7 +65,7 @@ class CodeHandler (Handler):
 #-------------------------------------------------------------------------
 
 
-class TestCode (HasPrivateTraits):
+class TestCode(HasPrivateTraits):
 
     code = Code
     status = Str

@@ -24,7 +24,7 @@ except RuntimeError:
 # DATA CLASSES
 
 
-class Employee (HasTraits):
+class Employee(HasTraits):
     name = Str('<unknown>')
     title = Str
     phone = Regex(regex=r'\d\d\d-\d\d\d\d')
@@ -33,18 +33,18 @@ class Employee (HasTraits):
         self.title = 'Senior Engineer'
 
 
-class Department (HasTraits):
+class Department(HasTraits):
     name = Str('<unknown>')
     employees = List(Employee)
 
 
-class Company (HasTraits):
+class Company(HasTraits):
     name = Str('<unknown>')
     departments = List(Department)
     employees = List(Employee)
 
 
-class Owner (HasTraits):
+class Owner(HasTraits):
     name = Str('<unknown>')
     company = Instance(Company)
 
@@ -115,7 +115,7 @@ employee_view = View(
     dock='vertical')
 
 
-class TreeHandler (Handler):
+class TreeHandler(Handler):
 
     def employee_department(self, editor, object):
         dept = editor.get_parent(object)

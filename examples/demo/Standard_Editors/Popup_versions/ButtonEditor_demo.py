@@ -14,7 +14,7 @@ from traitsui.message import message
 #  Demo Class
 #-------------------------------------------------------------------------
 
-class ButtonEditorDemo (HasTraits):
+class ButtonEditorDemo(HasTraits):
     """ This class specifies the details of the ButtonEditor demo.
     """
 

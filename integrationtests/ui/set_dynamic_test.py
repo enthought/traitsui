@@ -5,7 +5,7 @@ from traits.api import *
 from traitsui.api import *
 
 
-class Team (HasTraits):
+class Team(HasTraits):
 
     batting_order = List(Str)
     roster = List(['Tom', 'Dick', 'Harry', 'Sally'], Str)

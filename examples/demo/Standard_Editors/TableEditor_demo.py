@@ -25,7 +25,7 @@ from traitsui.table_filter \
 # A helper class for the 'Department' class below:
 
 
-class Employee (HasTraits):
+class Employee(HasTraits):
     first_name = Str
     last_name = Str
     age = Int
@@ -68,7 +68,7 @@ table_editor = TableEditor(
 # The class to be edited with the TableEditor:
 
 
-class Department (HasStrictTraits):
+class Department(HasStrictTraits):
 
     employees = List(Employee)
 

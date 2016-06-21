@@ -34,14 +34,14 @@ from traits.api import HasTraits, Str, Range, Enum, Bool, Instance
 from traitsui.api import Item, Group, View, Handler, Label
 
 
-class Spec (HasTraits):
+class Spec(HasTraits):
     """ An empty class from which all age-specific trait list classes are
         derived.
     """
     pass
 
 
-class ChildSpec (Spec):
+class ChildSpec(Spec):
     """ Trait list for children (assigned to 'misc' for a Person when age < 18).
     """
     legal_guardian = Str
@@ -53,7 +53,7 @@ class ChildSpec (Spec):
                        'grade')
 
 
-class AdultSpec (Spec):
+class AdultSpec(Spec):
     """ Trait list for adults (assigned to 'misc' for a Person when age >= 18).
     """
 
@@ -66,7 +66,7 @@ class AdultSpec (Spec):
                        'military_service')
 
 
-class PersonHandler (Handler):
+class PersonHandler(Handler):
     """ Handler class to perform restructuring action when conditions are met.
     The restructuring consists of replacing a ChildSpec instance by an
     AdultSpec instance, or vice-versa. We would not need a handler to listen
@@ -84,7 +84,7 @@ class PersonHandler (Handler):
             info.object.misc = ChildSpec()
 
 
-class Person (HasTraits):
+class Person(HasTraits):
     """ Demo class for demonstrating dynamic interface restructuring.
     """
     first_name = Str

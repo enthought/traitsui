@@ -61,7 +61,7 @@ table_editor = TableEditor(
 #-------------------------------------------------------------------------
 
 
-class TableTest (HasStrictTraits):
+class TableTest(HasStrictTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

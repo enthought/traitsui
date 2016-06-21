@@ -38,7 +38,7 @@ from traitsui.api \
 #-- The PersonHandler class ----------------------------------------------
 
 
-class PersonHandler (Handler):
+class PersonHandler(Handler):
 
     # The UIInfo object associated with the view:
     info = Instance(UIInfo)
@@ -69,7 +69,7 @@ class PersonHandler (Handler):
 #-- The Person class -----------------------------------------------------
 
 
-class Person (HasPrivateTraits):
+class Person(HasPrivateTraits):
 
     # The person's name, age and gender:
     name = Str

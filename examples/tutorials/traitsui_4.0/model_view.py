@@ -104,7 +104,7 @@ from traitsui.table_column import *
 #--[Parent Class]---------------------------------------------------------
 
 
-class Parent (HasTraits):
+class Parent(HasTraits):
 
     first_name = Str
     last_name = Str
@@ -112,7 +112,7 @@ class Parent (HasTraits):
 #--[Child Class]----------------------------------------------------------
 
 
-class Child (HasTraits):
+class Child(HasTraits):
 
     mother = Instance(Parent)
     father = Instance(Parent)
@@ -123,7 +123,7 @@ class Child (HasTraits):
 #--[ChildModelView Class]-------------------------------------------------
 
 
-class ChildModelView (ModelView):
+class ChildModelView(ModelView):
 
     # Define the 'family' ModelView property that maps the child and its
     # parents into a list of objects that can be viewed as a table:

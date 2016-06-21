@@ -12,7 +12,7 @@ from traitsui.api import Item, Group, View
 #-------------------------------------------------------------------------
 
 
-class ListEditorDemo (HasTraits):
+class ListEditorDemo(HasTraits):
     """ This class specifies the details of the BooleanEditor demo.
     """
 

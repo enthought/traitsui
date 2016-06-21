@@ -40,7 +40,7 @@ filters = [
 ]
 
 
-class FileDialogDemo (HasTraits):
+class FileDialogDemo(HasTraits):
 
     # The name of the selected file:
     file_name = File

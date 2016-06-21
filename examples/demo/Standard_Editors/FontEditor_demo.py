@@ -22,7 +22,7 @@ from traits.api import HasTraits, Font
 from traitsui.api import Item, Group, View
 
 
-class FontEditorDemo (HasTraits):
+class FontEditorDemo(HasTraits):
     """ Defines the main FontEditor demo class. """
 
     # Define a Font trait to view:

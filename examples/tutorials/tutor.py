@@ -238,7 +238,7 @@ def css_path_for(path, parent):
 #-------------------------------------------------------------------------
 
 
-class StdOut (object):
+class StdOut(object):
     """ Simulate stdout, but redirect the output to the 'output' string
         supplied by some 'owner' object.
     """
@@ -261,7 +261,7 @@ class StdOut (object):
 #-------------------------------------------------------------------------
 
 
-class NoDemo (HasPrivateTraits):
+class NoDemo(HasPrivateTraits):
 
     #-- Traits View Definitions ----------------------------------------------
 
@@ -275,7 +275,7 @@ class NoDemo (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class DemoPane (HasPrivateTraits):
+class DemoPane(HasPrivateTraits):
     """ Displays the contents of a Python lab's *demo* value.
     """
 
@@ -301,7 +301,7 @@ class DemoPane (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class ATutorialItem (HasPrivateTraits):
+class ATutorialItem(HasPrivateTraits):
     """ Defines the abstract base class for each type of item (HTML, Flash,
         text, code) displayed within the tutor.
     """
@@ -322,7 +322,7 @@ class ATutorialItem (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class ADescriptionItem (ATutorialItem):
+class ADescriptionItem(ATutorialItem):
     """ Defines a common base class for all description items.
     """
 
@@ -339,7 +339,7 @@ class ADescriptionItem (ATutorialItem):
 #-------------------------------------------------------------------------
 
 
-class HTMLItem (ADescriptionItem):
+class HTMLItem(ADescriptionItem):
     """ Defines a class used for displaying a single HTML page within the tutor
         using the default Traits HTML editor.
     """
@@ -400,7 +400,7 @@ class HTMLItem (ADescriptionItem):
 #-------------------------------------------------------------------------
 
 
-class HTMLStrItem (HTMLItem):
+class HTMLStrItem(HTMLItem):
     """ Defines a class used for displaying a single HTML text string within
         the tutor using the default Traits HTML editor.
     """
@@ -413,7 +413,7 @@ class HTMLStrItem (HTMLItem):
 #-------------------------------------------------------------------------
 
 
-class IEHTMLItem (HTMLItem):
+class IEHTMLItem(HTMLItem):
     """ Defines a class used for displaying a single HTML page within the tutor
         using the Traits Internet Explorer HTML editor.
     """
@@ -433,7 +433,7 @@ class IEHTMLItem (HTMLItem):
 #-------------------------------------------------------------------------
 
 
-class IEHTMLStrItem (IEHTMLItem):
+class IEHTMLStrItem(IEHTMLItem):
     """ Defines a class used for displaying a single HTML text string within
         the tutor using the Traits Internet Explorer HTML editor.
     """
@@ -446,7 +446,7 @@ class IEHTMLStrItem (IEHTMLItem):
 #-------------------------------------------------------------------------
 
 
-class FlashItem (HTMLItem):
+class FlashItem(HTMLItem):
     """ Defines a class used for displaying a Flash-based animation or video
         within the tutor.
     """
@@ -466,7 +466,7 @@ class FlashItem (HTMLItem):
 #-------------------------------------------------------------------------
 
 
-class TextItem (ADescriptionItem):
+class TextItem(ADescriptionItem):
     """ Defines a class used for displaying a text file within the tutor.
     """
 
@@ -494,7 +494,7 @@ class TextItem (ADescriptionItem):
 #-------------------------------------------------------------------------
 
 
-class TextStrItem (TextItem):
+class TextStrItem(TextItem):
     """ Defines a class used for displaying a text file within the tutor.
     """
 
@@ -506,7 +506,7 @@ class TextStrItem (TextItem):
 #-------------------------------------------------------------------------
 
 
-class CodeItem (ATutorialItem):
+class CodeItem(ATutorialItem):
     """ Defines a class used for displaying a Python source code fragment
         within the tutor.
     """
@@ -540,7 +540,7 @@ class CodeItem (ATutorialItem):
 #-------------------------------------------------------------------------
 
 
-class ASection (HasPrivateTraits):
+class ASection(HasPrivateTraits):
     """ Defines an abstract base class for a single section of a tutorial.
     """
 
@@ -691,7 +691,7 @@ class ASection (HasPrivateTraits):
 #-------------------------------------------------------------------------
 
 
-class Lecture (ASection):
+class Lecture(ASection):
     """ Defines a lecture, which is a section of a tutorial with descriptive
         information, but no associated Python code. Can be used to provide
         course overviews, introductory sections, or lead-ins to follow-on
@@ -722,7 +722,7 @@ class Lecture (ASection):
 #-------------------------------------------------------------------------
 
 
-class LabHandler (Handler):
+class LabHandler(Handler):
     """ Defines the controller functions for the Lab view.
     """
 
@@ -738,7 +738,7 @@ class LabHandler (Handler):
 #-------------------------------------------------------------------------
 
 
-class Lab (ASection):
+class Lab(ASection):
     """ Defines a lab, which is a section of a tutorial with only Python code.
         This type of section might typically follow a lecture which introduced
         the code being worked on in the lab.
@@ -942,7 +942,7 @@ class Lab (ASection):
 #-------------------------------------------------------------------------
 
 
-class Lesson (Lab):
+class Lesson(Lab):
     """ Defines a lesson, which is a section of a tutorial with both descriptive
         information and associated Python code.
     """
@@ -1035,7 +1035,7 @@ class Lesson (Lab):
 #-------------------------------------------------------------------------
 
 
-class Demo (Lesson):
+class Demo(Lesson):
     """ Defines a demo, which is a section of a tutorial with both descriptive
         information and associated Python code which is executed but not
         shown.
@@ -1071,7 +1071,7 @@ class Demo (Lesson):
 #-------------------------------------------------------------------------
 
 
-class SectionFactory (HasPrivateTraits):
+class SectionFactory(HasPrivateTraits):
     """ Defines a class that creates Lecture, Lesson or Lab sections (or None),
         based on the content of a specified directory. None is returned if the
         directory does not contain any recognized files.
@@ -1584,7 +1584,7 @@ tree_editor = TreeEditor(
 #-------------------------------------------------------------------------
 
 
-class Tutor (HasPrivateTraits):
+class Tutor(HasPrivateTraits):
     """ The main tutorial class which manages the presentation and navigation
         of the entire tutorial.
     """

@@ -12,7 +12,7 @@ from traitsui.api import Item, Group, View
 #-------------------------------------------------------------------------
 
 
-class TupleEditorDemo (HasTraits):
+class TupleEditorDemo(HasTraits):
     """ This class specifies the details of the TupleEditor demo.
     """
 

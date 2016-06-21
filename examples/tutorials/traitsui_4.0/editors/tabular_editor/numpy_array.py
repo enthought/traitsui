@@ -57,7 +57,7 @@ search_path = [join(dirname(traitsui.api.__file__),
 #--[Tabular Adapter Definition]-------------------------------------------
 
 
-class ArrayAdapter (TabularAdapter):
+class ArrayAdapter(TabularAdapter):
 
     columns = [('i', 'index'), ('x', 0), ('y', 1), ('z', 2)]
 
@@ -86,7 +86,7 @@ tabular_editor = TabularEditor(
 #--[ShowArray Class]------------------------------------------------------
 
 
-class ShowArray (HasTraits):
+class ShowArray(HasTraits):
 
     data = Array
 

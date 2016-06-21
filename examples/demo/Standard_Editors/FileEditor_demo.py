@@ -17,7 +17,7 @@ from traitsui.api \
 # Define the demo class:
 
 
-class FileEditorDemo (HasTraits):
+class FileEditorDemo(HasTraits):
     """ Defines the main FileEditor demo class. """
 
     # Define a File trait to view:

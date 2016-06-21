@@ -99,7 +99,7 @@ from functools import reduce
 # Define a baseball player:
 
 
-class Player (HasTraits):
+class Player(HasTraits):
 
     # The name of the player:
     name = Str('<new player>')
@@ -112,7 +112,7 @@ class Player (HasTraits):
 # Define a baseball team:
 
 
-class Team (HasTraits):
+class Team(HasTraits):
 
     # The name of the team:
     name = Str('<new team>')
@@ -133,7 +133,7 @@ class Team (HasTraits):
 # Define a baseball league model:
 
 
-class League (HasTraits):
+class League(HasTraits):
 
     # The name of the league:
     name = Str('<new league>')
@@ -146,7 +146,7 @@ class League (HasTraits):
 # Define a ModelView for a League model:
 
 
-class LeagueModelView (ModelView):
+class LeagueModelView(ModelView):
 
     # The currently selected team:
     team = Instance(Team)

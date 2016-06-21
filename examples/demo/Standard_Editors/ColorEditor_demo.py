@@ -17,7 +17,7 @@ from traitsui.api \
 # Demo class definition:
 
 
-class ColorEditorDemo (HasTraits):
+class ColorEditorDemo(HasTraits):
     """ Defines the main ColorEditor demo. """
 
     # Define a Color trait to view:

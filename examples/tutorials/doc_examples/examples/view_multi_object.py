@@ -25,7 +25,7 @@ bill = Person(first_name='Bill')
 acme = Company(company_name='Acme Products')
 
 
-class TraitApp (wx.App):
+class TraitApp(wx.App):
 
     def __init__(self, obj1, obj2, view):
         self.obj1 = obj1

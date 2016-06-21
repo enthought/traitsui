@@ -17,7 +17,7 @@ from traitsui.api \
 # The main demo class:
 
 
-class TupleEditorDemo (HasTraits):
+class TupleEditorDemo(HasTraits):
     """ Defines the TupleEditor demo class.
     """
 

@@ -18,7 +18,7 @@ from traitsui.api \
 # Define the demo class:
 
 
-class CheckListEditorDemo (HasTraits):
+class CheckListEditorDemo(HasTraits):
     """ Define the main CheckListEditor demo class. """
 
     # Define a trait for each of three formations:

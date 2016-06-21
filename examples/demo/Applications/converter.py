@@ -46,7 +46,7 @@ Units = Trait('inches', {'inches': 2.54,
 # Converter Class:
 
 
-class Converter (HasStrictTraits):
+class Converter(HasStrictTraits):
 
     # Trait definitions:
     input_amount = CFloat(12.0, desc="the input quantity")

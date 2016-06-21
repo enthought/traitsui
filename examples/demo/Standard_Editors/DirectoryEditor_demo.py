@@ -17,7 +17,7 @@ from traitsui.api \
 # Define the demo class:
 
 
-class DirectoryEditorDemo (HasTraits):
+class DirectoryEditorDemo(HasTraits):
     """ Define the main DirectoryEditor demo class. """
 
     # Define a Directory trait to view:

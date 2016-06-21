@@ -17,7 +17,7 @@ from traitsui.api \
 # The demo class:
 
 
-class FlashDemo (HasTraits):
+class FlashDemo(HasTraits):
 
     # The Flash file to display:
     flash = Enum(

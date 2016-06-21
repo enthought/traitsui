@@ -22,7 +22,7 @@ from traitsui.table_filter \
 # A helper class for 'Department' below:
 
 
-class Employee (HasTraits):
+class Employee(HasTraits):
     name = Str
     age = Int
     gender = Enum('Male', 'Female')
@@ -55,7 +55,7 @@ table_editor = TableEditor(
 # The class to be edited with the TableEditor:
 
 
-class Department (HasStrictTraits):
+class Department(HasStrictTraits):
     employees = List(Employee)
     traits_view = View(Group(Item('employees',
                                   editor=table_editor),

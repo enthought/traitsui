@@ -20,7 +20,7 @@ from traitsui.menu import *
 #-------------------------------------------------------------------------
 
 
-class ShellTest (HasPrivateTraits):
+class ShellTest(HasPrivateTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

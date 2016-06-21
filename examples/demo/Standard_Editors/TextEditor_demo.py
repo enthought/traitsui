@@ -21,7 +21,7 @@ from traitsui.api import Item, Group, View
 # The main demo class:
 
 
-class TextEditorDemo (HasTraits):
+class TextEditorDemo(HasTraits):
     """ Defines the TextEditor demo class.
     """
 

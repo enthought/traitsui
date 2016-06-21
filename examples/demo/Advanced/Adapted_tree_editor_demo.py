@@ -43,7 +43,7 @@ from apptools.io.api \
 #-- FileAdapter Class ----------------------------------------------------
 
 
-class FileAdapter (ITreeNodeAdapter):
+class FileAdapter(ITreeNodeAdapter):
 
     adapts(File, ITreeNode)
 
@@ -95,7 +95,7 @@ class FileAdapter (ITreeNodeAdapter):
 #-- FileTreeDemo Class ---------------------------------------------------
 
 
-class FileTreeDemo (HasTraits):
+class FileTreeDemo(HasTraits):
 
     # The path to the file tree root:
     root_path = Directory(entries=10)

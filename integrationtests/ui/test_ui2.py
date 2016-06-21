@@ -42,7 +42,7 @@ origin_values = ['top left', 'top right', 'bottom left', 'bottom right']
 #-------------------------------------------------------------------------
 
 
-class PersonHandler (Handler):
+class PersonHandler(Handler):
 
     def object_zip_changed(self, info):
         obj = info.object
@@ -63,7 +63,7 @@ class PersonHandler (Handler):
 #-------------------------------------------------------------------------
 
 
-class WizardHandler (Handler):
+class WizardHandler(Handler):
 
     def object_sex_changed(self, info):
         if info.object.sex == 'Female':
@@ -82,7 +82,7 @@ class WizardHandler (Handler):
 #-------------------------------------------------------------------------
 
 
-class Employer (HasTraits):
+class Employer(HasTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -98,7 +98,7 @@ class Employer (HasTraits):
 #-------------------------------------------------------------------------
 
 
-class Person (HasTraits):
+class Person(HasTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -166,7 +166,7 @@ class Person (HasTraits):
 #-------------------------------------------------------------------------
 
 
-class TraitSheetApp (wx.App):
+class TraitSheetApp(wx.App):
 
     #-------------------------------------------------------------------------
     #  Initialize the object:

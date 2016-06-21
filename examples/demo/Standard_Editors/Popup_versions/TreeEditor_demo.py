@@ -16,7 +16,7 @@ from traitsui.api \
     import Item, View, TreeEditor, TreeNode
 
 
-class Employee (HasTraits):
+class Employee(HasTraits):
     name = Str('<unknown>')
     title = Str
     phone = Regex(regex=r'\d\d\d-\d\d\d\d')
@@ -25,12 +25,12 @@ class Employee (HasTraits):
         self.title = 'Senior Engineer'
 
 
-class Department (HasTraits):
+class Department(HasTraits):
     name = Str('<unknown>')
     employees = List(Employee)
 
 
-class Company (HasTraits):
+class Company(HasTraits):
     name = Str('<unknown>')
     departments = List(Department)
     employees = List(Employee)
@@ -77,7 +77,7 @@ tree_editor = TreeEditor(
 )
 
 
-class Partner (HasTraits):
+class Partner(HasTraits):
     name = Str('<unknown>')
     company = Instance(Company)
 

@@ -15,7 +15,7 @@ from traitsui.api import Item, Group, View
 #-------------------------------------------------------------------------
 
 
-class SampleClass (HasTraits):
+class SampleClass(HasTraits):
     """ This Sample class is used to demonstrate the InstanceEditor demo.
     """
 
@@ -38,7 +38,7 @@ class SampleClass (HasTraits):
     view = View('name', 'occupation', 'age', 'registered_voter')
 
 
-class InstanceEditorDemo (HasTraits):
+class InstanceEditorDemo(HasTraits):
     """ This class specifies the details of the InstanceEditor demo.
     """
 

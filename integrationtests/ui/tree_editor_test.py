@@ -29,7 +29,7 @@ from traitsui.wx.tree_editor import NewAction, CopyAction, \
 #-------------------------------------------------------------------------
 
 
-class Employee (HasTraits):
+class Employee(HasTraits):
     name = Str('<unknown>')
     title = Str
     phone = Regex(regex=r'\d\d\d-\d\d\d\d')
@@ -42,7 +42,7 @@ class Employee (HasTraits):
 #-------------------------------------------------------------------------
 
 
-class Department (HasTraits):
+class Department(HasTraits):
     name = Str('<unknown>')
     employees = List(Employee)
 
@@ -51,7 +51,7 @@ class Department (HasTraits):
 #-------------------------------------------------------------------------
 
 
-class Company (HasTraits):
+class Company(HasTraits):
     name = Str('<unknown>')
     departments = List(Department)
     employees = List(Employee)
@@ -61,7 +61,7 @@ class Company (HasTraits):
 #-------------------------------------------------------------------------
 
 
-class Partner (HasTraits):
+class Partner(HasTraits):
     name = Str('<unknown>')
     company = Instance(Company)
 
@@ -182,7 +182,7 @@ tree_editor = TreeEditor(
 #-------------------------------------------------------------------------
 
 
-class TreeHandler (Handler):
+class TreeHandler(Handler):
 
     def employee_department(self, editor, object):
         dept = editor.get_parent(object)

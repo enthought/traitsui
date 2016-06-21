@@ -93,7 +93,7 @@ number_editor = NumericEditor(
 #-------------------------------------------------------------------------
 
 
-class BunchANumbersApp (HasPrivateTraits):
+class BunchANumbersApp(HasPrivateTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

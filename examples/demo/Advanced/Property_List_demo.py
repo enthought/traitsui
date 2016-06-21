@@ -52,7 +52,7 @@ from traitsui.table_column \
 #-- Person Class ---------------------------------------------------------
 
 
-class Person (HasStrictTraits):
+class Person(HasStrictTraits):
     """ Defines some sample data to display in the TableEditor.
     """
 
@@ -63,7 +63,7 @@ class Person (HasStrictTraits):
 #-- PropertyListDemo Class -----------------------------------------------
 
 
-class PropertyListDemo (HasPrivateTraits):
+class PropertyListDemo(HasPrivateTraits):
     """ Displays a random list of Person objects in a TableEditor that is
         refreshed every 3 seconds by a background thread.
      """

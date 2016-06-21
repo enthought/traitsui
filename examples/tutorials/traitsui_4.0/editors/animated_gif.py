@@ -50,7 +50,7 @@ files = [
 #--[AnimatedGIFDemo Class]------------------------------------------------
 
 
-class AnimatedGIFDemo (HasTraits):
+class AnimatedGIFDemo(HasTraits):
 
     # The animated GIF file to display:
     gif_file = File(files[0])

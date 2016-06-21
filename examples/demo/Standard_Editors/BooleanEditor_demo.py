@@ -16,7 +16,7 @@ from traits.api import HasTraits, Bool, Int
 from traitsui.api import Item, Label, Group, View
 
 
-class BooleanEditorDemo (HasTraits):
+class BooleanEditorDemo(HasTraits):
     """ Defines the main BooleanEditor demo class. """
 
     # a boolean trait to view:

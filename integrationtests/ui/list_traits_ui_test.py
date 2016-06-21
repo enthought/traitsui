@@ -33,7 +33,7 @@ from traitsui.table_filter \
 #-------------------------------------------------------------------------
 
 
-class Person (HasStrictTraits):
+class Person(HasStrictTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
@@ -90,7 +90,7 @@ table_editor = TableEditor(
 #-------------------------------------------------------------------------
 
 
-class ListTraitTest (HasStrictTraits):
+class ListTraitTest(HasStrictTraits):
 
     #-------------------------------------------------------------------------
     #  Trait definitions:

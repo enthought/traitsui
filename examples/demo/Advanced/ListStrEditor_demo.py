@@ -12,7 +12,7 @@ from traitsui.api import View, Item, ListStrEditor
 #-- ShoppingListDemo Class -----------------------------------------------
 
 
-class ShoppingListDemo (HasTraits):
+class ShoppingListDemo(HasTraits):
 
     # The list of things to buy at the store:
     shopping_list = List(Str)
