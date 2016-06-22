@@ -72,7 +72,7 @@ def test_csv_editor_external_append():
 
     def _qt_get_text_value(ui):
         from pyface import qt
-        txt_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
+        txt_ctrl = ui.control.findChild(qt.QtWidgets.QLineEdit)
         return txt_ctrl.text()
 
     with store_exceptions_on_all_threads():

@@ -19,7 +19,7 @@
 
 import os.path
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 from traits.api \
     import Enum, CTrait, BaseTraitHandler, TraitError
@@ -59,9 +59,9 @@ def pixmap_cache(name, path=None):
             filename = os.path.join(path, name)
     filename = os.path.abspath(filename)
 
-    pm = QtGui.QPixmap()
-    if not QtGui.QPixmapCache.find(filename, pm):
-        pm.load(filename)
+    pm = QtGui.QPixmapCache.find(filename)
+    if pm is None:
+        pm = QtGui.QPixmap(filename)
         QtGui.QPixmapCache.insert(filename, pm)
     return pm
 
@@ -75,7 +75,7 @@ def position_window ( window, width = None, height = None, parent = None ):
         that the window completely fits on the screen if possible.
     """
     # Get the available geometry of the screen containing the window.
-    sgeom = QtGui.QApplication.desktop().availableGeometry(window)
+    sgeom = QtWidgets.QApplication.desktop().availableGeometry(window)
     screen_dx = sgeom.width()
     screen_dy = sgeom.height()
 
@@ -94,7 +94,7 @@ def position_window ( window, width = None, height = None, parent = None ):
         return
 
     # Calculate the desired size of the popup control:
-    if isinstance(parent, QtGui.QWidget):
+    if isinstance(parent, QtWidgets.QWidget):
         gpos = parent.mapToGlobal(QtCore.QPoint())
         x = gpos.x()
         y = gpos.y()
@@ -158,22 +158,22 @@ def open_fbi():
 #  'IconButton' class:
 #-------------------------------------------------------------------------------
 
-class IconButton(QtGui.QPushButton):
+class IconButton(QtWidgets.QPushButton):
     """ The IconButton class is a push button that contains a small image or a
         standard icon provided by the current style.
     """
 
     def __init__(self, icon, slot):
         """ Initialise the button.  icon is either the name of an image file or
-            one of the QtGui.QStyle.SP_* values.
+            one of the QtWidgets.QStyle.SP_* values.
         """
-        QtGui.QPushButton.__init__(self)
+        QtWidgets.QPushButton.__init__(self)
 
         # Get the current style.
-        sty = QtGui.QApplication.instance().style()
+        sty = QtWidgets.QApplication.instance().style()
 
         # Get the minimum icon size to use.
-        ico_sz = sty.pixelMetric(QtGui.QStyle.PM_ButtonIconSize)
+        ico_sz = sty.pixelMetric(QtWidgets.QStyle.PM_ButtonIconSize)
 
         if isinstance(icon, basestring):
             pm = pixmap_cache(icon)

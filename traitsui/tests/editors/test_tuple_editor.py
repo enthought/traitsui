@@ -44,7 +44,7 @@ def test_qt_tuple_editor():
         # range editor, enter a number, and clicking ok without defocusing
 
         # text element inside the spin control
-        lineedits = ui.control.findChildren(qt.QtGui.QLineEdit)
+        lineedits = ui.control.findChildren(qt.QtWidgets.QLineEdit)
         lineedits[0].setFocus()
         lineedits[0].clear()
         lineedits[0].insert('4')

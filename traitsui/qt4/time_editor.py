@@ -24,7 +24,7 @@
 
 import datetime
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 
 from editor import Editor
 from editor_factory import ReadonlyEditor as BaseReadonlyEditor
@@ -46,10 +46,9 @@ class SimpleEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QTimeEdit()
+        self.control = QtWidgets.QTimeEdit()
 
-        signal = QtCore.SIGNAL('timeChanged(QTime)')
-        QtCore.QObject.connect(self.control, signal, self.update_object)
+        self.control.timeChanged[QtCore.QTime].connect(self.update_object)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

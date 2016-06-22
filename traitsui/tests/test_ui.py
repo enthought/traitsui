@@ -78,7 +78,7 @@ def test_reset_with_destroy_qt():
 
     # but its children are scheduled for removal
     for c in ui.control.children():
-        if isinstance(c, qt.QtGui.QWidget):
+        if isinstance(c, qt.QtWidgets.QWidget):
             nose.tools.assert_equal(c.deleteLater._n_calls, 1)
 
 
@@ -126,7 +126,7 @@ def test_reset_without_destroy_qt():
     nose.tools.assert_is_instance(ui._editors[0],
                                   traitsui.qt4.text_editor.SimpleEditor)
     nose.tools.assert_is_instance(ui._editors[0].control,
-                                  qt.QtGui.QLineEdit)
+                                  qt.QtWidgets.QLineEdit)
 
     ui.reset(destroy=False)
 
@@ -136,7 +136,7 @@ def test_reset_without_destroy_qt():
     nose.tools.assert_is_none(ui._editors[0].control)
 
     # children are still there: check first text control
-    text_ctrl = ui.control.findChild(qt.QtGui.QLineEdit)
+    text_ctrl = ui.control.findChild(qt.QtWidgets.QLineEdit)
     nose.tools.assert_is_not_none(text_ctrl)
 
 
@@ -150,10 +150,11 @@ def test_destroy_after_ok_wx():
     foo = FooDialog()
     ui = foo.edit_traits()
 
-    # keep references to the children of the ui to check that they were deleted
-    ui_children = []
-    for c in ui.control.GetChildren():
-        ui_children.append(c)
+    # keep reference to the control to check that it was destroyed
+    control = ui.control
+
+    # decorate control's `Destroy` function to check that it is called
+    control.Destroy = count_calls(control.Destroy)
 
     # press the OK button and close the dialog
     okbutton = ui.control.FindWindowByName('button')
@@ -162,10 +163,7 @@ def test_destroy_after_ok_wx():
     okbutton.ProcessEvent(click_event)
 
     nose.tools.assert_is_none(ui.control)
-    # and its children have been destroyed
-    for c in ui_children:
-        with nose.tools.assert_raises(wx._core.PyDeadObjectError):
-            c.GetName()
+    nose.tools.assert_equal(control.Destroy._n_calls, 1)
 
 
 @skip_if_not_qt4
@@ -178,21 +176,15 @@ def test_destroy_after_ok_qt():
     foo = FooDialog()
     ui = foo.edit_traits()
 
-    # decorate children's `deleteLater` function to check that it is called
-    for c in ui.control.children():
-        c.deleteLater = count_calls(c.deleteLater)
+    # keep reference to the control to check that it was deleted
+    control = ui.control
 
-    # keep references to the children of the ui to check that they were deleted
-    ui_children = []
-    for c in ui.control.children():
-        ui_children.append(c)
+    # decorate control's `deleteLater` function to check that it is called
+    control.deleteLater = count_calls(control.deleteLater)
 
     # press the OK button and close the dialog
-    okb = ui.control.findChild(qt.QtGui.QPushButton)
+    okb = control.findChild(qt.QtWidgets.QPushButton)
     okb.click()
 
     nose.tools.assert_is_none(ui.control)
-    # children are scheduled for removal
-    for c in ui_children:
-        if isinstance(c, qt.QtGui.QWidget):
-            nose.tools.assert_equal(c.deleteLater._n_calls, 1)
+    nose.tools.assert_equal(control.deleteLater._n_calls, 1)

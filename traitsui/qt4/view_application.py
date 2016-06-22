@@ -21,7 +21,7 @@ complete application, using information from the specified UI object.
 import os
 
 # System library imports.
-from pyface.qt import QtGui
+from pyface.qt import QtWidgets
 
 # ETS imports.
 from pyface.util.guisupport import is_event_loop_running_qt4, \
@@ -77,7 +77,7 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
     if (kind == 'panel') or ((kind is None) and (view.kind == 'panel')):
         kind = 'modal'
 
-    app = QtGui.QApplication.instance()
+    app = QtWidgets.QApplication.instance()
     if app is None or not is_event_loop_running_qt4(app):
         return ViewApplication( context, view, kind, handler, id,
                                 scrollable, args ).ui.result

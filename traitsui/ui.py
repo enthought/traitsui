@@ -264,7 +264,7 @@ class UI ( HasPrivateTraits ):
         """
 
         # Reset the contents of the user interface
-        self.reset( destroy = True )
+        self.reset( destroy = False )
 
         # Make sure that 'visible', 'enabled', and 'checked' handlers are not
         # called after the editor has been disposed:

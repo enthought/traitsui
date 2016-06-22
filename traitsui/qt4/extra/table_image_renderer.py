@@ -17,7 +17,7 @@
 """
 
 # System library imports
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 
 # ETS imports
 from traits.api import Bool
@@ -50,7 +50,7 @@ class TableImageRenderer(TableDelegate):
         """ Overriden to draw images.
         """
         # First draw any text/background by delegating to our superclass
-        QtGui.QStyledItemDelegate.paint(self, painter, option, index)
+        QtWidgets.QStyledItemDelegate.paint(self, painter, option, index)
 
         # Now draw the image, if possible
         value = index.data(QtCore.Qt.UserRole)
@@ -74,7 +74,7 @@ class TableImageRenderer(TableDelegate):
         """ Overriden to take image size into account when providing a size
             hint.
         """
-        size = QtGui.QStyledItemDelegate.sizeHint(self, option, index)
+        size = QtWidgets.QStyledItemDelegate.sizeHint(self, option, index)
 
         value = index.data(QtCore.Qt.UserRole)
         image = self.get_image_for_obj(value, index.row(), index.column())

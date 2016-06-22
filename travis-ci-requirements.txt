@@ -3,4 +3,4 @@ pygments
 numpy ; python_version >= '3.2'
 pandas
 git+http://github.com/enthought/traits.git#egg=traits
-git+http://github.com/enthought/pyface.git#egg=pyface
+git+http://github.com/enthought/pyface.git@feature/qt5#egg=pyface

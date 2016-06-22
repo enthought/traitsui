@@ -25,7 +25,7 @@
 
 import os
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 from pyface.image_resource import ImageResource
 
@@ -160,9 +160,7 @@ class TabularEditor(Editor):
             slot = self._on_rows_selection
         else:
             slot = self._on_row_selection
-        signal = 'selectionChanged(QItemSelection,QItemSelection)'
-        QtCore.QObject.connect(self.control.selectionModel(),
-                               QtCore.SIGNAL(signal), slot)
+        self.control.selectionModel().selectionChanged[QtCore.QItemSelection, QtCore.QItemSelection].connect(slot)
 
         # Synchronize other interesting traits as necessary:
         self.sync_value(factory.update, 'update', 'from')
@@ -178,20 +176,14 @@ class TabularEditor(Editor):
         self.sync_value(factory.scroll_to_row, 'scroll_to_row', 'from')
 
         # Connect other signals as necessary
-        signal = QtCore.SIGNAL('activated(QModelIndex)')
-        QtCore.QObject.connect(control, signal, self._on_activate)
-        signal = QtCore.SIGNAL('clicked(QModelIndex)')
-        QtCore.QObject.connect(control, signal, self._on_click)
-        signal = QtCore.SIGNAL('clicked(QModelIndex)')
-        QtCore.QObject.connect(control, signal, self._on_right_click)
-        signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
-        QtCore.QObject.connect(control, signal, self._on_dclick)
-        signal = QtCore.SIGNAL('sectionClicked(int)')
-        QtCore.QObject.connect(control.horizontalHeader(), signal, self._on_column_click)
+        control.activated[QtCore.QModelIndex].connect(self._on_activate)
+        control.clicked[QtCore.QModelIndex].connect(self._on_click)
+        control.clicked[QtCore.QModelIndex].connect(self._on_right_click)
+        control.doubleClicked[QtCore.QModelIndex].connect(self._on_dclick)
+        control.horizontalHeader().sectionClicked[int].connect(self._on_column_click)
 
         control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        signal = QtCore.SIGNAL('customContextMenuRequested(QPoint)')
-        QtCore.QObject.connect(control, signal, self._on_context_menu)
+        control.customContextMenuRequested[QtCore.QPoint].connect(self._on_context_menu)
 
         self.header_event_filter = HeaderEventFilter(self)
         control.horizontalHeader().installEventFilter(self.header_event_filter)
@@ -247,7 +239,8 @@ class TabularEditor(Editor):
             editor.
         """
         if not self._no_update:
-            self.model.reset()
+            self.model.beginResetModel()
+            self.model.endResetModel()
             if self.factory.multi_select:
                 self._multi_selected_changed(self.multi_selected)
             else :
@@ -367,8 +360,8 @@ class TabularEditor(Editor):
                 smodel.clearSelection()
             else:
                 smodel.select(self.model.index(selected_row, 0),
-                              QtGui.QItemSelectionModel.ClearAndSelect |
-                              QtGui.QItemSelectionModel.Rows)
+                              QtCore.QItemSelectionModel.ClearAndSelect |
+                              QtCore.QItemSelectionModel.Rows)
 
     def _multi_selected_changed(self, new):
         if not self._no_update:
@@ -394,30 +387,30 @@ class TabularEditor(Editor):
     def _multi_selected_rows_changed(self, selected_rows):
         if not self._no_update:
             smodel = self.control.selectionModel()
-            selection = QtGui.QItemSelection()
+            selection = QtCore.QItemSelection()
             for row in selected_rows:
                 selection.select(self.model.index(row, 0), self.model.index(row, 0))
             smodel.clearSelection()
             smodel.select(selection,
-                QtGui.QItemSelectionModel.Select |
-                QtGui.QItemSelectionModel.Rows)
+                QtCore.QItemSelectionModel.Select |
+                QtCore.QItemSelectionModel.Rows)
 
     def _multi_selected_rows_items_changed(self, event):
         smodel = self.control.selectionModel()
         for row in event.removed:
             smodel.select(self.model.index(row, 0),
-                          QtGui.QItemSelectionModel.Deselect |
-                          QtGui.QItemSelectionModel.Rows)
+                          QtCore.QItemSelectionModel.Deselect |
+                          QtCore.QItemSelectionModel.Rows)
         for row in event.added:
             smodel.select(self.model.index(row, 0),
-                          QtGui.QItemSelectionModel.Select |
-                          QtGui.QItemSelectionModel.Rows)
+                          QtCore.QItemSelectionModel.Select |
+                          QtCore.QItemSelectionModel.Rows)
 
     scroll_to_row_hint_map = {
-        'center'  : QtGui.QTableView.PositionAtCenter,
-        'top'     : QtGui.QTableView.PositionAtTop,
-        'bottom'  : QtGui.QTableView.PositionAtBottom,
-        'visible' : QtGui.QTableView.EnsureVisible,
+        'center'  : QtWidgets.QTableView.PositionAtCenter,
+        'top'     : QtWidgets.QTableView.PositionAtTop,
+        'bottom'  : QtWidgets.QTableView.PositionAtBottom,
+        'visible' : QtWidgets.QTableView.EnsureVisible,
     }
 
     def _scroll_to_row_changed(self, row):
@@ -553,7 +546,7 @@ class TabularEditorEvent(HasStrictTraits):
 #  Qt widgets that have been configured to behave as expected by Traits UI:
 #-------------------------------------------------------------------------------
 
-class _ItemDelegate(QtGui.QStyledItemDelegate):
+class _ItemDelegate(QtWidgets.QStyledItemDelegate):
     """ A QStyledItemDelegate which draws its owns gridlines so that we can
         choose to draw only the horizontal or only the vertical gridlines if
         appropriate.
@@ -562,19 +555,19 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
     def __init__(self, table_view):
         """ Store which grid lines to draw.
         """
-        QtGui.QStyledItemDelegate.__init__(self, table_view)
+        QtWidgets.QStyledItemDelegate.__init__(self, table_view)
         self._horizontal_lines = table_view._editor.factory.horizontal_lines
         self._vertical_lines = table_view._editor.factory.vertical_lines
 
     def paint(self, painter, option, index):
         """ Overrident to draw gridlines.
         """
-        QtGui.QStyledItemDelegate.paint(self, painter, option, index)
+        QtWidgets.QStyledItemDelegate.paint(self, painter, option, index)
         painter.save()
 
         # FIXME: 'styleHint' is returning bogus (negative) values. Why?
-        #style = QtGui.QApplication.instance().style()
-        #color = style.styleHint(QtGui.QStyle.SH_Table_GridLineColor, option)
+        #style = QtWidgets.QApplication.instance().style()
+        #color = style.styleHint(QtWidgets.QStyle.SH_Table_GridLineColor, option)
         #painter.setPen(QtGui.QColor(color))
         painter.setPen(option.palette.color(QtGui.QPalette.Dark))
 
@@ -585,14 +578,14 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
 
         painter.restore()
 
-class _TableView(QtGui.QTableView):
+class _TableView(QtWidgets.QTableView):
     """ A QTableView configured to behave as expected by TraitsUI.
     """
 
     def __init__(self, editor):
         """ Initialise the object.
         """
-        QtGui.QTableView.__init__(self)
+        QtWidgets.QTableView.__init__(self)
 
         self._initial_size = False
         self._editor = editor
@@ -607,7 +600,7 @@ class _TableView(QtGui.QTableView):
             vheader.hide()
 
         if factory.show_row_titles and factory.auto_resize_rows:
-            vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+            vheader.setResizeMode(QtWidgets.QHeaderView.ResizeToContents)
         else:
             # Set a default height for rows. Although setting the resize mode to
             # ResizeToContents would provide the best sizes, this is far too
@@ -633,11 +626,11 @@ class _TableView(QtGui.QTableView):
         self.setItemDelegate(_ItemDelegate(self))
 
         # Configure the selection behaviour.
-        self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         if factory.multi_select:
-            mode = QtGui.QAbstractItemView.ExtendedSelection
+            mode = QtWidgets.QAbstractItemView.ExtendedSelection
         else:
-            mode = QtGui.QAbstractItemView.SingleSelection
+            mode = QtWidgets.QAbstractItemView.SingleSelection
         self.setSelectionMode(mode)
 
         # Configure drag and drop behavior
@@ -645,7 +638,7 @@ class _TableView(QtGui.QTableView):
         if factory.editable:
             self.viewport().setAcceptDrops(True)
         if factory.drag_move:
-            self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+            self.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
         self.setDropIndicatorShown(True)
 
     def keyPressEvent(self, event):
@@ -657,7 +650,7 @@ class _TableView(QtGui.QTableView):
         # Note that setting 'EditKeyPressed' as an edit trigger does not work on
         # most platforms, which is why we do this here.
         if (event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and
-            self.state() != QtGui.QAbstractItemView.EditingState and
+            self.state() != QtWidgets.QAbstractItemView.EditingState and
             factory.editable and 'edit' in factory.operations):
             if factory.multi_select:
                 rows = editor.multi_selected_rows
@@ -694,12 +687,12 @@ class _TableView(QtGui.QTableView):
             self.setCurrentIndex(editor.model.index(row, 0))
 
         else:
-            QtGui.QTableView.keyPressEvent(self, event)
+            QtWidgets.QTableView.keyPressEvent(self, event)
 
     def sizeHint(self):
         """ Reimplemented to define a reasonable size hint.
         """
-        sh = QtGui.QTableView.sizeHint(self)
+        sh = QtWidgets.QTableView.sizeHint(self)
 
         width = 0
         for column in xrange(len(self._editor.adapter.columns)):
@@ -714,11 +707,11 @@ class _TableView(QtGui.QTableView):
             space be known, we have to wait until the UI that contains this
             table gives it its initial size.
         """
-        QtGui.QTableView.resizeEvent(self, event)
+        QtWidgets.QTableView.resizeEvent(self, event)
 
         parent = self.parent()
         if (not self._initial_size and parent and
-            (self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
+            (self.isVisible() or isinstance(parent, QtWidgets.QMainWindow))):
             self._initial_size = True
             self.resizeColumnsToContents()
 

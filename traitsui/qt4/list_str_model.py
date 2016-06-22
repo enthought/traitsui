@@ -22,6 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+from traits.util.api import deprecated
+
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
@@ -119,8 +121,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         """
         editor = self._editor
         editor.adapter.set_text(editor.object, editor.name, mi.row(), value)
-        signal = QtCore.SIGNAL('dataChanged(QModelIndex,QModelIndex)')
-        self.emit(signal, mi, mi)
+        self.dataChanged.emit(mi, mi)
         return True
 
     def setItemData(self, mi, roles):
@@ -237,6 +238,13 @@ class ListStrModel(QtCore.QAbstractListModel):
         """ Reimplemented to allow items to be moved.
         """
         return QtCore.Qt.MoveAction
+
+    @deprecated('QAbstractItemModel.reset() obsoleted in Qt5. See Qt5 docs')
+    def reset(self):
+        """ Reimplemented because removed in Qt5
+        """
+        self.beginResetModel()
+        self.endResetModel()
 
     #---------------------------------------------------------------------------
     #  ListStrModel interface:

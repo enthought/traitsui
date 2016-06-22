@@ -1,5 +1,5 @@
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 from pyface.qt.QtGui import QFont
 
 from traits.api import Dict
@@ -17,7 +17,7 @@ class CustomEditor(DateCustomEditor):
     styles = Dict()
 
     def init(self, parent):
-        self.control = QtGui.QCalendarWidget()
+        self.control = QtWidgets.QCalendarWidget()
 
         if not self.factory.allow_future:
             self.control.setMaximumDate(QtCore.QDate.currentDate())

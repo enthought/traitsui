@@ -71,7 +71,7 @@ def test_qt_resizable_in_vgroup():
         dialog = VResizeDialog()
         ui = dialog.edit_traits()
 
-        text = ui.control.findChild(qt.QtGui.QLineEdit)
+        text = ui.control.findChild(qt.QtWidgets.QLineEdit)
 
         # horizontal size should be large
         nose.tools.assert_greater(text.width(), _DIALOG_WIDTH-100)
@@ -92,7 +92,7 @@ def test_qt_resizable_in_hgroup():
         dialog = HResizeDialog()
         ui = dialog.edit_traits()
 
-        text = ui.control.findChild(qt.QtGui.QLineEdit)
+        text = ui.control.findChild(qt.QtWidgets.QLineEdit)
 
         # vertical size should be large
         nose.tools.assert_greater(text.height(), _DIALOG_HEIGHT-100)

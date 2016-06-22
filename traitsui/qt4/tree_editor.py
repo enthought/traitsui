@@ -20,7 +20,7 @@ import copy
 import collections
 import logging
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 from pyface.resource_manager import resource_manager
 from pyface.timer.api import do_later
@@ -120,8 +120,8 @@ class SimpleEditor ( Editor ):
                     factory._editor = self
 
                     # Create the trait editor panel:
-                    self.control = sa = QtGui.QScrollArea()
-                    sa.setFrameShape(QtGui.QFrame.NoFrame)
+                    self.control = sa = QtWidgets.QScrollArea()
+                    sa.setFrameShape(QtWidgets.QFrame.NoFrame)
                     sa.setWidgetResizable(True)
                     self.control._node_ui = self.control._editor_nid = None
 
@@ -162,8 +162,8 @@ class SimpleEditor ( Editor ):
                 # If editable, create a tree control and an editor panel:
                 self._tree = _TreeWidget(self)
 
-                self._editor = sa = QtGui.QScrollArea()
-                sa.setFrameShape(QtGui.QFrame.NoFrame)
+                self._editor = sa = QtWidgets.QScrollArea()
+                sa.setFrameShape(QtWidgets.QFrame.NoFrame)
                 sa.setWidgetResizable(True)
                 sa._node_ui = sa._editor_nid = None
 
@@ -172,9 +172,9 @@ class SimpleEditor ( Editor ):
                 else:
                     orient = QtCore.Qt.Vertical
 
-                self.control = splitter = QtGui.QSplitter(orient)
-                splitter.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                                       QtGui.QSizePolicy.Expanding)
+                self.control = splitter = QtWidgets.QSplitter(orient)
+                splitter.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                       QtWidgets.QSizePolicy.Expanding)
                 splitter.addWidget(self._tree)
                 splitter.addWidget(sa)
         else:
@@ -207,14 +207,14 @@ class SimpleEditor ( Editor ):
             if (not isinstance(selection, basestring) and
                 isinstance(selection, collections.Iterable)):
 
-                item_selection = QtGui.QItemSelection()
+                item_selection = QtCore.QItemSelection()
                 for sel in selection:
                     item = self._object_info(sel)[2]
                     idx = tree.indexFromItem(item)
-                    item_selection.append(QtGui.QItemSelectionRange(idx))
+                    item_selection.append(QtCore.QItemSelectionRange(idx))
 
                 tree.selectionModel().select(item_selection,
-                    QtGui.QItemSelectionModel.ClearAndSelect)
+                    QtCore.QItemSelectionModel.ClearAndSelect)
             else:
                 tree.setCurrentItem(self._object_info(selection)[2])
         except:
@@ -355,7 +355,7 @@ class SimpleEditor ( Editor ):
     #  Private Delegate class to do drawing in case of wrapped text labels
     #---------------------------------------------------------------------------
 
-    class ItemDelegate(QtGui.QStyledItemDelegate):
+    class ItemDelegate(QtWidgets.QStyledItemDelegate):
         """ A delegate class to draw wrapped text labels """
         # FIXME: sizeHint() should return the size required by the label,
         # which is dependent on the width available, which is different for
@@ -366,7 +366,7 @@ class SimpleEditor ( Editor ):
 
         def __init__(self, *args, **kwargs):
             self.size_map = collections.defaultdict(lambda:QtCore.QSize(1,21))
-            QtGui.QStyledItemDelegate.__init__(self, *args, **kwargs)
+            QtWidgets.QStyledItemDelegate.__init__(self, *args, **kwargs)
 
         def sizeHint(self, option, index):
             """ returns area taken by the text. """
@@ -405,9 +405,9 @@ class SimpleEditor ( Editor ):
         Index is the index of the new node in the parent:
             None implies append the child to the end. """
         if index is None:
-            cnid = QtGui.QTreeWidgetItem(nid)
+            cnid = QtWidgets.QTreeWidgetItem(nid)
         else:
-            cnid = QtGui.QTreeWidgetItem()
+            cnid = QtWidgets.QTreeWidgetItem()
             nid.insertChild(index, cnid)
         if self.factory.word_wrap:
             item = self.ItemDelegate()
@@ -467,7 +467,7 @@ class SimpleEditor ( Editor ):
                 # child.  As the tree is being populated lazily we create a
                 # dummy that will be removed when the node is expanded for the
                 # first time.
-                cnid._dummy = QtGui.QTreeWidgetItem(cnid)
+                cnid._dummy = QtWidgets.QTreeWidgetItem(cnid)
 
         # Return the newly created node:
         return cnid
@@ -586,9 +586,9 @@ class SimpleEditor ( Editor ):
     #---------------------------------------------------------------------------
 
     STD_ICON_MAP = {
-        '<item>':   QtGui.QStyle.SP_FileIcon,
-        '<group>':  QtGui.QStyle.SP_DirClosedIcon,
-        '<open>':   QtGui.QStyle.SP_DirOpenIcon
+        '<item>':   QtWidgets.QStyle.SP_FileIcon,
+        '<group>':  QtWidgets.QStyle.SP_DirClosedIcon,
+        '<open>':   QtWidgets.QStyle.SP_DirOpenIcon
     }
 
     def _get_icon ( self, node, object, is_expanded = False ):
@@ -1437,12 +1437,12 @@ class SimpleEditor ( Editor ):
             if rc is not True:
                 if self.ui.history is None:
                     # If no undo history, ask user to confirm the delete:
-                    butn = QtGui.QMessageBox.question(
+                    butn = QtWidgets.QMessageBox.question(
                                 self._tree,
                                 "Confirm Deletion",
                                 "Are you sure you want to delete %s?" % node.get_label( object ),
-                                QtGui.QMessageBox.Yes|QtGui.QMessageBox.No)
-                    if butn != QtGui.QMessageBox.Yes:
+                                QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+                    if butn != QtWidgets.QMessageBox.Yes:
                         return
 
             self._undoable_delete( *self._node_index( nid ) )
@@ -1639,7 +1639,7 @@ class SimpleEditor ( Editor ):
         """ Restores any saved user preference information associated with the
             editor.
         """
-        if isinstance(self.control, QtGui.QSplitter):
+        if isinstance(self.control, QtWidgets.QSplitter):
             if isinstance(prefs, dict):
                 structure = prefs.get('structure')
             else:
@@ -1660,7 +1660,7 @@ class SimpleEditor ( Editor ):
         """ Returns any user preference information associated with the editor.
         """
         prefs = {}
-        if isinstance(self.control, QtGui.QSplitter):
+        if isinstance(self.control, QtWidgets.QSplitter):
             prefs['structure'] = str(self.control.saveState())
         header = self._tree.header()
         if header is not None:
@@ -1674,7 +1674,7 @@ class SimpleEditor ( Editor ):
 #  '_TreeWidget' class:
 #-------------------------------------------------------------------------------
 
-class _TreeWidget(QtGui.QTreeWidget):
+class _TreeWidget(QtWidgets.QTreeWidget):
     """ The _TreeWidget class is a specialised QTreeWidget that reimplements
         the drag'n'drop support so that it hooks into the provided Traits
         support.
@@ -1682,7 +1682,7 @@ class _TreeWidget(QtGui.QTreeWidget):
     def __init__(self, editor, parent=None):
         """ Initialise the tree widget.
         """
-        QtGui.QTreeWidget.__init__(self, parent)
+        QtWidgets.QTreeWidget.__init__(self, parent)
 
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.setDragEnabled(True)
@@ -1709,7 +1709,7 @@ class _TreeWidget(QtGui.QTreeWidget):
             """ % (padding, padding))
 
         if editor.factory.selection_mode == 'extended':
-            self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+            self.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
 
         self.itemExpanded.connect(editor._on_item_expanded)
         self.itemCollapsed.connect(editor._on_item_collapsed)
@@ -1755,7 +1755,7 @@ class _TreeWidget(QtGui.QTreeWidget):
         painter = QtGui.QPainter(pm)
 
         option = self.viewOptions()
-        option.state |= QtGui.QStyle.State_Selected
+        option.state |= QtWidgets.QStyle.State_Selected
         option.rect = QtCore.QRect(nid_rect.topLeft() - rect.topLeft(), nid_rect.size())
         self.itemDelegate().paint(painter, option, self.indexFromItem(nid))
 

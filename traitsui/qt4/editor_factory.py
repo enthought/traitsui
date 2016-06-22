@@ -17,7 +17,7 @@ Traits-based user interface.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 
 from traits.api \
     import TraitError
@@ -92,9 +92,8 @@ class TextEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QLineEdit(self.str_value)
-        QtCore.QObject.connect(self.control,
-                QtCore.SIGNAL('editingFinished()'), self.update_object)
+        self.control = QtWidgets.QLineEdit(self.str_value)
+        self.control.editingFinished.connect(self.update_object)
         self.set_tooltip()
 
     #---------------------------------------------------------------------------
@@ -137,11 +136,11 @@ class ReadonlyEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QLabel(self.str_value)
+        self.control = QtWidgets.QLabel(self.str_value)
 
         if self.item.resizable is True or self.item.height != -1.0:
-            self.control.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                                       QtGui.QSizePolicy.Expanding)
+            self.control.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                       QtWidgets.QSizePolicy.Expanding)
             self.control.setWordWrap(True)
 
         alignment = None
@@ -172,16 +171,16 @@ class ReadonlyEditor ( Editor ):
 #  '_SimpleField' class:
 #-------------------------------------------------------------------------------
 
-class _SimpleField(QtGui.QLineEdit):
+class _SimpleField(QtWidgets.QLineEdit):
 
     def __init__(self, editor):
-        QtGui.QLineEdit.__init__(self, editor.str_value)
+        QtWidgets.QLineEdit.__init__(self, editor.str_value)
 
         self.setReadOnly(True)
         self._editor = editor
 
     def mouseReleaseEvent(self, e):
-        QtGui.QLineEdit.mouseReleaseEvent(self, e)
+        QtWidgets.QLineEdit.mouseReleaseEvent(self, e)
 
         if e.button() == QtCore.Qt.LeftButton:
             self._editor.popup_editor()

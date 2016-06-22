@@ -22,6 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
+from traits.util.api import deprecated
+
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
@@ -123,8 +125,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         row, column = mi.row(), mi.column()
 
         editor.adapter.set_text(obj, name, row, column, value)
-        signal = QtCore.SIGNAL('dataChanged(QModelIndex,QModelIndex)')
-        self.emit(signal, mi, mi)
+        self.dataChanged.emit(mi, mi)
         return True
 
     def flags(self, mi):
@@ -298,6 +299,13 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to allow items to be moved.
         """
         return QtCore.Qt.MoveAction
+
+    @deprecated('QAbstractItemModel.reset() obsoleted in Qt5. See Qt5 docs.')
+    def reset(self):
+        """ Reimplemented because removed in Qt5
+        """
+        self.beginResetModel()
+        self.endResetModel()
 
     #---------------------------------------------------------------------------
     #  TabularModel interface:

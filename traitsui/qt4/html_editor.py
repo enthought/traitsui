@@ -23,7 +23,7 @@
 
 import webbrowser
 
-from pyface.qt import QtCore, QtGui, QtWebKit
+from pyface.qt import QtCore, QtWidgets, QtWebKitWidgets
 
 from traits.api import Str
 
@@ -56,15 +56,14 @@ class SimpleEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtWebKit.QWebView()
-        self.control.setSizePolicy( QtGui.QSizePolicy.Expanding,
-                                    QtGui.QSizePolicy.Expanding )
+        self.control = QtWebKitWidgets.QWebView()
+        self.control.setSizePolicy( QtWidgets.QSizePolicy.Expanding,
+                                    QtWidgets.QSizePolicy.Expanding )
 
         if self.factory.open_externally:
             page = self.control.page()
-            page.setLinkDelegationPolicy( QtWebKit.QWebPage.DelegateAllLinks )
-            signal = QtCore.SIGNAL( 'linkClicked(QUrl)' )
-            QtCore.QObject.connect( page, signal, self._link_clicked )
+            page.setLinkDelegationPolicy( QtWebKitWidgets.QWebPage.DelegateAllLinks )
+            page.linkClicked[QtCore.QUrl].connect(self._link_clicked) # TODO: untested (?)
 
         self.base_url = self.factory.base_url
         self.sync_value( self.factory.base_url_name, 'base_url', 'from' )

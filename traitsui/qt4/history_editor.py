@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtWidgets
 
 from editor import Editor
 
@@ -45,19 +45,18 @@ class _HistoryEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = control = QtGui.QComboBox()
+        self.control = control = QtWidgets.QComboBox()
         control.setEditable(True)
-        control.setInsertPolicy(QtGui.QComboBox.InsertAtTop)
+        control.setInsertPolicy(QtWidgets.QComboBox.InsertAtTop)
 
         if self.factory.entries > 0:
-            signal = QtCore.SIGNAL('rowsInserted(const QModelIndex&, int, int)')
-            QtCore.QObject.connect(control.model(), signal, self._truncate)
+            control.model().rowsInserted.connect(self._truncate) #signal signature: QModelIndex&, int, int
 
         if self.factory.auto_set:
-            signal = QtCore.SIGNAL('editTextChanged(QString)')
+            signal = control.editTextChanged['QString']
         else:
-            signal = QtCore.SIGNAL('activated(QString)')
-        QtCore.QObject.connect(control, signal, self.update_object)
+            signal = control.activated['QString']
+        signal.connect(self.update_object)
 
         self.set_tooltip()
 

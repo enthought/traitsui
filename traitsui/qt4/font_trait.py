@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtGui
+from pyface.qt import QtGui, QtWidgets
 
 from traits.api \
     import Trait, TraitHandler, TraitError
@@ -118,7 +118,7 @@ def create_traitsfont(value):
     fnt.setUnderline(underline)
 
     if point_size is None:
-        fnt.setPointSize(QtGui.QApplication.font().pointSize())
+        fnt.setPointSize(QtWidgets.QApplication.font().pointSize())
     else:
         fnt.setPointSize(point_size)
 

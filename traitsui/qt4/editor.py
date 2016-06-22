@@ -16,7 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtGui
+from pyface.qt import QtGui, QtWidgets
 
 from traits.api \
     import HasTraits, Instance, Str, Callable
@@ -87,12 +87,12 @@ class Editor ( UIEditor ):
         """ Handles an error that occurs while setting the object's trait value.
         """
         # Make sure the control is a widget rather than a layout.
-        if isinstance(self.control, QtGui.QLayout):
+        if isinstance(self.control, QtWidgets.QLayout):
             control = self.control.parentWidget()
         else:
             control = self.control
 
-        QtGui.QMessageBox.information(control,
+        QtWidgets.QMessageBox.information(control,
                 self.description + ' value error', str(excp))
 
     #---------------------------------------------------------------------------
@@ -131,7 +131,7 @@ class Editor ( UIEditor ):
         """A helper that allows the control to be a layout and recursively
            manages all its widgets.
         """
-        if isinstance(control, QtGui.QWidget):
+        if isinstance(control, QtWidgets.QWidget):
             control.setEnabled(enabled)
         else:
             for i in range(control.count()):
@@ -166,7 +166,7 @@ class Editor ( UIEditor ):
         stack_widget = page.parent()
         notebook = stack_widget.parent()
         is_tabbed_group = notebook.property("traits_tabbed_group")
-        if notebook is None or not isinstance(notebook, QtGui.QTabWidget) or not is_tabbed_group:
+        if notebook is None or not isinstance(notebook, QtWidgets.QTabWidget) or not is_tabbed_group:
             return
 
         if not visible:
@@ -191,7 +191,7 @@ class Editor ( UIEditor ):
         """A helper that allows the control to be a layout and recursively
            manages all its widgets.
         """
-        if isinstance(control, QtGui.QWidget):
+        if isinstance(control, QtWidgets.QWidget):
             control.setVisible(visible)
         else:
             for i in range(control.count()):
@@ -351,9 +351,9 @@ class Editor ( UIEditor ):
 
         Parameters
         ----------
-        direction : QtGui.QBoxLayout.Direction
+        direction : QtWidgets.QBoxLayout.Direction
             Directionality of the group that contains this edito. Either
-            QtGui.QBoxLayout.LeftToRight or QtGui.QBoxLayout.TopToBottom
+            QtWidgets.QBoxLayout.LeftToRight or QtWidgets.QBoxLayout.TopToBottom
 
         resizable : bool
             True if control should be resizable in the orientation opposite
@@ -370,21 +370,21 @@ class Editor ( UIEditor ):
 
         policy = self.control.sizePolicy()
 
-        if direction == QtGui.QBoxLayout.LeftToRight:
+        if direction == QtWidgets.QBoxLayout.LeftToRight:
             if springy:
                 policy.setHorizontalStretch(stretch)
-                policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setHorizontalPolicy(QtWidgets.QSizePolicy.Expanding)
             if resizable:
                 policy.setVerticalStretch(stretch)
-                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setVerticalPolicy(QtWidgets.QSizePolicy.Expanding)
 
         else: # TopToBottom
             if springy:
                 policy.setVerticalStretch(stretch)
-                policy.setVerticalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setVerticalPolicy(QtWidgets.QSizePolicy.Expanding)
             if resizable:
                 policy.setHorizontalStretch(stretch)
-                policy.setHorizontalPolicy(QtGui.QSizePolicy.Expanding)
+                policy.setHorizontalPolicy(QtWidgets.QSizePolicy.Expanding)
 
         self.control.setSizePolicy(policy)
 

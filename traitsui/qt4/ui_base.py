@@ -14,7 +14,7 @@
 """
 
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 
 from traits.api \
     import HasStrictTraits, HasPrivateTraits, Instance, List, Event
@@ -317,17 +317,17 @@ class BasePanel(object):
         self.add_to_menu( toolbar_item )
         
 
-class _StickyDialog(QtGui.QDialog):
+class _StickyDialog(QtWidgets.QDialog):
     """A QDialog that will only close if the traits handler allows it."""
 
     def __init__(self, ui, parent):
         """Initialise the dialog."""
 
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         # Create the main window so we can add toolbars etc.
-        self._mw = QtGui.QMainWindow()
-        layout = QtGui.QVBoxLayout()
+        self._mw = QtWidgets.QMainWindow()
+        layout = QtWidgets.QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._mw)
         self.setLayout(layout)
@@ -337,7 +337,7 @@ class _StickyDialog(QtGui.QDialog):
             flags = QtCore.Qt.Window
         else:
             flags = QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint
-            layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+            layout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
             if ui.view.resizable:
                 flags |= QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowMaximizeButtonHint
         try:
@@ -362,7 +362,7 @@ class _StickyDialog(QtGui.QDialog):
         in any other way.)"""
 
         if self._ok_to_close():
-            QtGui.QDialog.closeEvent(self, e)
+            QtWidgets.QDialog.closeEvent(self, e)
         else:
             # Ignore the event thereby keeping the dialog open.
             e.ignore()
@@ -378,12 +378,12 @@ class _StickyDialog(QtGui.QDialog):
         if e.key() == QtCore.Qt.Key_Escape and not self._ok_to_close():
             return
 
-        QtGui.QDialog.keyPressEvent(self, e)
+        QtWidgets.QDialog.keyPressEvent(self, e)
 
     def sizeHint(self):
         """Reimplemented to provide an appropriate size hint for the window.
         """
-        size = QtGui.QDialog.sizeHint(self)
+        size = QtWidgets.QDialog.sizeHint(self)
         view = self._ui.view
         if view.width > 0:
             size.setWidth(view.width)
@@ -397,9 +397,9 @@ class _StickyDialog(QtGui.QDialog):
 
         # If we already have a result then we already know that we are done.
         if self._result is not None:
-            QtGui.QDialog.done(self, self._result)
+            QtWidgets.QDialog.done(self, self._result)
         elif self._ok_to_close(bool(r)):
-            QtGui.QDialog.done(self, r)
+            QtWidgets.QDialog.done(self, r)
 
     def _ok_to_close(self, is_ok=None):
         """Let the handler decide if the dialog should be closed."""
@@ -444,15 +444,15 @@ class BaseDialog(BasePanel):
         control.setModal(style == BaseDialog.MODAL)
         control.setWindowTitle(view.title or DefaultTitle)
 
-        control.finished.connect(self._on_finished)
+        control.finished[int].connect(self._on_finished)
 
     def add_contents(self, panel, buttons):
         """Add a panel (either a widget, layout or None) and optional buttons
         to the dialog."""
 
         # If the panel is a layout then provide a widget for it.
-        if isinstance(panel, QtGui.QLayout):
-            w = QtGui.QWidget()
+        if isinstance(panel, QtWidgets.QLayout):
+            w = QtWidgets.QWidget()
             panel.setContentsMargins(0, 0, 0, 0)
             w.setLayout(panel)
             panel = w
@@ -554,13 +554,13 @@ class BaseDialog(BasePanel):
         """ Adds a statusbar to the dialog.
         """
         if self.ui.view.statusbar is not None:
-            control = QtGui.QStatusBar()
+            control = QtWidgets.QStatusBar()
             control.setSizeGripEnabled(self.ui.view.resizable)
             listeners = []
             for item in self.ui.view.statusbar:
                 # Create the status widget with initial text
                 name = item.name
-                item_control = QtGui.QLabel()
+                item_control = QtWidgets.QLabel()
                 item_control.setText(self.ui.get_extended_value(name))
 
                 # Add the widget to the control with correct size

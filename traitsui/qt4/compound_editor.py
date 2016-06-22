@@ -17,7 +17,7 @@ PyQt user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtGui
+from pyface.qt import QtWidgets
 
 from traits.api \
     import Str
@@ -55,8 +55,8 @@ class CompoundEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QWidget()
-        layout = QtGui.QVBoxLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
 
         # Add all of the component trait editors:

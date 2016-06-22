@@ -21,7 +21,7 @@ the PyQt user interface toolkit.
 from traitsui.toolkit import assert_toolkit_import
 assert_toolkit_import('qt4')
 
-from pyface.qt import QtCore, QtGui, qt_api
+from pyface.qt import QtCore, QtGui, QtWidgets, qt_api
 
 if qt_api == 'pyqt':
     # Check the version numbers are late enough:
@@ -31,8 +31,8 @@ if qt_api == 'pyqt':
 
 # Make sure a QApplication object is created early:
 import sys
-if QtGui.QApplication.startingUp():
-    _app = QtGui.QApplication(sys.argv)
+if QtWidgets.QApplication.startingUp():
+    _app = QtWidgets.QApplication(sys.argv)
 
 from traits.trait_notifiers import set_ui_handler
 
@@ -74,13 +74,13 @@ class _CallAfter(QtCore.QObject):
         self._calls_mutex.unlock()
 
         # Move to the main GUI thread.
-        self.moveToThread(QtGui.QApplication.instance().thread())
+        self.moveToThread(QtWidgets.QApplication.instance().thread())
 
         # Post an event to be dispatched on the main GUI thread. Note that
         # we do not call QTimer.singleShot, which would be simpler, because
         # that only works on QThreads. We want regular Python threads to work.
         event = QtCore.QEvent(_QT_TRAITS_EVENT)
-        QtGui.QApplication.instance().postEvent(self, event)
+        QtWidgets.QApplication.instance().postEvent(self, event)
 
     def event(self, event):
         """ QObject event handler.
@@ -289,8 +289,8 @@ class GUIToolkit ( Toolkit ):
 
         # Position and size the window as requested:
         layout = window.layout()
-        if layout.sizeConstraint() == QtGui.QLayout.SetFixedSize:
-            layout.setSizeConstraint( QtGui.QLayout.SetDefaultConstraint )
+        if layout.sizeConstraint() == QtWidgets.QLayout.SetFixedSize:
+            layout.setSizeConstraint( QtWidgets.QLayout.SetDefaultConstraint )
             window.move( max( 0, x ), max( 0, y ) )
             window.setFixedSize( QtCore.QSize ( width, height ) )
         else:
@@ -429,7 +429,7 @@ class GUIToolkit ( Toolkit ):
         """
         for w in control.children():
             # Only destroy widgets.
-            if isinstance(w, QtGui.QWidget):
+            if isinstance(w, QtWidgets.QWidget):
                 # This may be called from within the finished() signal handler
                 # so we need to do the delete after the handler has returned.
                 w.deleteLater()
@@ -458,7 +458,7 @@ class GUIToolkit ( Toolkit ):
               specific color format.
         """
         return {
-            'WindowColor': QtGui.QApplication.palette().color(QtGui.QPalette.Window),
+            'WindowColor': QtWidgets.QApplication.palette().color(QtGui.QPalette.Window),
         }
 
     #---------------------------------------------------------------------------

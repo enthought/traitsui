@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 
 from pyface.api import ImageResource
 
@@ -106,18 +106,18 @@ class SimpleEditor ( Editor ):
         self._trait_handler = trait_handler
 
         # Create a scrolled window to hold all of the list item controls:
-        self.control = QtGui.QScrollArea()
-        self.control.setFrameShape(QtGui.QFrame.NoFrame)
+        self.control = QtWidgets.QScrollArea()
+        self.control.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.control.setWidgetResizable(True)
 
         #Create a mapper to identify which icon button requested a contextmenu
         self.mapper = QtCore.QSignalMapper(self.control)
 
         # Create a widget with a grid layout as the container.
-        self._list_pane = QtGui.QWidget()
-        self._list_pane.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                                      QtGui.QSizePolicy.Expanding)
-        layout = QtGui.QGridLayout(self._list_pane)
+        self._list_pane = QtWidgets.QWidget()
+        self._list_pane.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                      QtWidgets.QSizePolicy.Expanding)
+        layout = QtWidgets.QGridLayout(self._list_pane)
         layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         layout.setContentsMargins(0, 0, 0, 0)
 
@@ -207,7 +207,7 @@ class SimpleEditor ( Editor ):
             pcontrol = peditor.control
             pcontrol.proxy = proxy
 
-            if isinstance(pcontrol, QtGui.QWidget):
+            if isinstance(pcontrol, QtWidgets.QWidget):
                 layout.addWidget(pcontrol, row, column+1)
             else:
                 layout.addLayout(pcontrol, row, column+1)
@@ -234,7 +234,7 @@ class SimpleEditor ( Editor ):
         # Otherwise, find the proxy for this index and update it with the
         # changed value:
         for control in self.control.widget().children():
-            if isinstance(control, QtGui.QLayout):
+            if isinstance(control, QtWidgets.QLayout):
                 continue
 
             proxy = control.proxy
@@ -259,7 +259,7 @@ class SimpleEditor ( Editor ):
         self._cur_control = control
 
         proxy    = ListItemProxy( self.object, self.name, -1, None, None )
-        pcontrol = QtGui.QLabel('   (Empty List)')
+        pcontrol = QtWidgets.QLabel('   (Empty List)')
         pcontrol.proxy = control.proxy = proxy
 
         layout = self._list_pane.layout()
@@ -530,33 +530,31 @@ class NotebookEditor ( Editor ):
         self._uis = []
 
         # Create a tab widget to hold each separate object's view:
-        self.control = QtGui.QTabWidget()
-        signal = QtCore.SIGNAL( 'currentChanged(int)' )
-        QtCore.QObject.connect( self.control, signal, self._tab_activated )
+        self.control = QtWidgets.QTabWidget()
+        self.control.currentChanged[int].connect(self._tab_activated)
 
         # minimal dock_style handling
         if self.factory.dock_style == 'tab':
             self.control.setDocumentMode(True)
             self.control.tabBar().setDocumentMode(True)
         elif self.factory.dock_style == 'vertical':
-            self.control.setTabPosition(QtGui.QTabWidget.West)
+            self.control.setTabPosition(QtWidgets.QTabWidget.West)
 
         # Create the button to close tabs, if necessary:
         if self.factory.deletable:
-            button = QtGui.QToolButton()
+            button = QtWidgets.QToolButton()
             button.setAutoRaise( True )
             button.setToolTip( 'Remove current tab ')
             button.setIcon ( ImageResource( 'closetab' ).create_icon() )
 
             self.control.setCornerWidget( button, QtCore.Qt.TopRightCorner )
-            signal = QtCore.SIGNAL( 'clicked()' )
-            QtCore.QObject.connect( button, signal, self.close_current )
+            button.clicked.connect(self.close_current)
             self.close_button = button
 
         if self.factory.show_notebook_menu:
             # Create the necessary attributes to manage hiding and revealing of
             # tabs via a context menu
-            self._context_menu = QtGui.QMenu()
+            self._context_menu = QtWidgets.QMenu()
             self.control.customContextMenuRequested.connect(self._context_menu_requested)
             self.control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 

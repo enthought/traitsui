@@ -21,7 +21,7 @@ from __future__ import division
 
 import logging
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 
 from traits.api \
     import List, Unicode, TraitError
@@ -82,9 +82,8 @@ class SimpleEditor ( EditorWithList ):
     def create_control ( self, parent ):
         """ Creates the initial editor control.
         """
-        self.control = QtGui.QComboBox()
-        QtCore.QObject.connect(self.control,
-                QtCore.SIGNAL('activated(QString)'), self.update_object)
+        self.control = QtWidgets.QComboBox()
+        self.control.activated['QString'].connect(self.update_object) # TODO: check
 
     #---------------------------------------------------------------------------
     #  Handles the list of legal check list values being updated:
@@ -172,13 +171,12 @@ class CustomEditor ( SimpleEditor ):
     def create_control ( self, parent ):
         """ Creates the initial editor control.
         """
-        self.control = QtGui.QWidget()
-        layout = QtGui.QGridLayout(self.control)
+        self.control = QtWidgets.QWidget()
+        layout = QtWidgets.QGridLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        QtCore.QObject.connect(self._mapper,
-                QtCore.SIGNAL('mapped(const QString &)'), self.update_object)
+        self._mapper.mapped['QString'].connect(self.update_object)
 
     #---------------------------------------------------------------------------
     #  Rebuilds the editor after its definition is modified:
@@ -210,7 +208,7 @@ class CustomEditor ( SimpleEditor ):
         for i in range( rows ):
             for j in range( cols ):
                 if n > 0:
-                    cb = QtGui.QCheckBox(labels[index])
+                    cb = QtWidgets.QCheckBox(labels[index])
                     cb.value = values[index]
 
                     if cb.value in cur_value:
@@ -218,10 +216,7 @@ class CustomEditor ( SimpleEditor ):
                     else:
                         cb.setCheckState(QtCore.Qt.Unchecked)
 
-                    QtCore.QObject.connect(cb,
-                                           QtCore.SIGNAL('clicked()'),
-                                           self._mapper,
-                                           QtCore.SLOT('map()'))
+                    cb.clicked.connect(self._mapper.map)
                     self._mapper.setMapping(cb, labels[index])
 
                     layout.addWidget(cb, i, j)
@@ -257,7 +252,7 @@ class CustomEditor ( SimpleEditor ):
             editor.
         """
         new_values = parse_value( self.value )
-        for cb in self.control.findChildren(QtGui.QCheckBox, None):
+        for cb in self.control.findChildren(QtWidgets.QCheckBox, None):
             if cb.value in new_values:
                 cb.setCheckState(QtCore.Qt.Checked)
             else:

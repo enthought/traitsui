@@ -24,7 +24,7 @@
 
 import datetime
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtWidgets
 
 from editor import Editor
 from editor_factory import ReadonlyEditor as BaseReadonlyEditor
@@ -46,7 +46,7 @@ class SimpleEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QDateEdit()
+        self.control = QtWidgets.QDateEdit()
         if hasattr(self.factory, 'qt_date_format'):
             self.control.setDisplayFormat(self.factory.qt_date_format)
 
@@ -73,8 +73,7 @@ class SimpleEditor(Editor):
                                     self.factory.maximum_date.day)
             self.control.setMaximumDate(max_date)
 
-        signal = QtCore.SIGNAL('dateChanged(QDate)')
-        QtCore.QObject.connect(self.control, signal, self.update_object)
+        self.control.dateChanged[QtCore.QDate].connect(self.update_object)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
@@ -122,13 +121,12 @@ class CustomEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = QtGui.QCalendarWidget()
+        self.control = QtWidgets.QCalendarWidget()
 
         if not self.factory.allow_future:
             self.control.setMaximumDate(QtCore.QDate.currentDate())
 
-        signal = QtCore.SIGNAL('clicked(QDate)')
-        QtCore.QObject.connect(self.control, signal, self.update_object)
+        self.control.clicked[QtCore.QDate].connect(self.update_object)
 
     #---------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
