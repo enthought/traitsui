@@ -30,7 +30,7 @@ class TimeEditorDemo(HasTraits):
         print(self.time)
 
 
-#-- Set Up The Demo ------------------------------------------------------------
+#-- Set Up The Demo ------------------------------------------------------
 
 demo = TimeEditorDemo()
 

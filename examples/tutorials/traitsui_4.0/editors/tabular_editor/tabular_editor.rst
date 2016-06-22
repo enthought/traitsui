@@ -815,13 +815,13 @@ combination.
 
 For this example, let's assume we have the following two classes::
 
-    class Person ( HasTraits ):
+    class Person( HasTraits ):
     
         name    = Str
         age     = Int
         address = Str
         
-    class MarriedPerson ( Person ):
+    class MarriedPerson( Person ):
     
         partner = Instance( Person )
     
@@ -831,7 +831,7 @@ reference the person they are married to.
 
 Now, assume we also have the following additional class::
 
-    class Report ( HasTraits ):
+    class Report( HasTraits ):
     
         people = List( Person )
     
@@ -856,7 +856,7 @@ In addition:
 Given this set of requirements, we can now define the following
 **TabularAdapter** subclass::
 
-    class ReportAdapter ( TabularAdapter ):
+    class ReportAdapter( TabularAdapter ):
     
         columns = [ ( 'Name',    'name' ), 
                     ( 'Age',     'age' ), 

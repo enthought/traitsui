@@ -28,7 +28,7 @@ class JobManager(HasTraits):
     def process(self):
         for job in self.jobs:
             job.percent_complete = min(
-                job.percent_complete+random.randint(0, 3), 100)
+                job.percent_complete + random.randint(0, 3), 100)
 
         if any(job.percent_complete < 100 for job in self.jobs):
             GUI.invoke_after(100, self.process)

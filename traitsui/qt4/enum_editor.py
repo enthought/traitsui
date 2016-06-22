@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -13,9 +14,9 @@
     enumerations, for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from pyface.qt import QtCore, QtGui
 
@@ -36,23 +37,24 @@ from constants \
 
 from traitsui.helper \
     import enum_values_changed
+from functools import reduce
 
 
 # default formatting function (would import from string, but not in Python 3)
 capitalize = lambda s: s.capitalize()
 
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'BaseEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class BaseEditor ( Editor ):
+class BaseEditor(Editor):
     """ Base class for enumeration editors.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Current set of enumeration names:
     names = Property
@@ -63,31 +65,31 @@ class BaseEditor ( Editor ):
     # Current inverse mapping from values to names:
     inverse_mapping = Property
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         factory = self.factory
         if factory.name != '':
             self._object, self._name, self._value = \
-                self.parse_extended_name( factory.name )
+                self.parse_extended_name(factory.name)
             self.values_changed()
-            self._object.on_trait_change( self._values_changed,
-                                          ' ' + self._name, dispatch = 'ui' )
+            self._object.on_trait_change(self._values_changed,
+                                         ' ' + self._name, dispatch='ui')
         else:
-            factory.on_trait_change( self.rebuild_editor, 'values_modified',
-                                     dispatch = 'ui' )
+            factory.on_trait_change(self.rebuild_editor, 'values_modified',
+                                    dispatch='ui')
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Gets the current set of enumeration names:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _get_names ( self ):
+    def _get_names(self):
         """ Gets the current set of enumeration names.
         """
         if self._object is None:
@@ -95,11 +97,11 @@ class BaseEditor ( Editor ):
 
         return self._names
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Gets the current mapping:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _get_mapping ( self ):
+    def _get_mapping(self):
         """ Gets the current mapping.
         """
         if self._object is None:
@@ -107,11 +109,11 @@ class BaseEditor ( Editor ):
 
         return self._mapping
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Gets the current inverse mapping:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _get_inverse_mapping ( self ):
+    def _get_inverse_mapping(self):
         """ Gets the current inverse mapping.
         """
         if self._object is None:
@@ -119,71 +121,72 @@ class BaseEditor ( Editor ):
 
         return self._inverse_mapping
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Rebuilds the contents of the editor whenever the original factory
     #  object's 'values' trait changes:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def rebuild_editor ( self ):
+    def rebuild_editor(self):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Recomputes the cached data based on the underlying enumeration model:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def values_changed ( self ):
+    def values_changed(self):
         """ Recomputes the cached data based on the underlying enumeration model.
         """
         self._names, self._mapping, self._inverse_mapping = \
-            enum_values_changed( self._value(), self.string_value )
+            enum_values_changed(self._value(), self.string_value)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the underlying object model's enumeration set being changed:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _values_changed ( self ):
+    def _values_changed(self):
         """ Handles the underlying object model's enumeration set being changed.
         """
         self.values_changed()
         self.rebuild_editor()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Disposes of the contents of an editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def dispose ( self ):
+    def dispose(self):
         """ Disposes of the contents of an editor.
         """
         if self._object is not None:
-            self._object.on_trait_change( self._values_changed,
-                                          ' ' + self._name, remove = True )
+            self._object.on_trait_change(self._values_changed,
+                                         ' ' + self._name, remove=True)
         else:
-            self.factory.on_trait_change( self.rebuild_editor,
-                                          'values_modified', remove = True )
+            self.factory.on_trait_change(self.rebuild_editor,
+                                         'values_modified', remove=True)
 
-        super( BaseEditor, self ).dispose()
+        super(BaseEditor, self).dispose()
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class SimpleEditor ( BaseEditor ):
+
+class SimpleEditor(BaseEditor):
     """ Simple style of enumeration editor, which displays a combo box.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super( SimpleEditor, self ).init( parent )
+        super(SimpleEditor, self).init(parent)
 
         self.control = control = self.create_combo_box()
         control.addItems(self.names)
@@ -195,21 +198,22 @@ class SimpleEditor ( BaseEditor ):
         if self.factory.evaluate is not None:
             control.setEditable(True)
             if self.factory.auto_set:
-                QtCore.QObject.connect(control,
-                                       QtCore.SIGNAL('editTextChanged(QString)'),
-                                       self.update_text_object)
+                QtCore.QObject.connect(
+                    control,
+                    QtCore.SIGNAL('editTextChanged(QString)'),
+                    self.update_text_object)
             else:
                 QtCore.QObject.connect(control.lineEdit(),
-                                   QtCore.SIGNAL('editingFinished()'),
-                                   self.update_autoset_text_object)
+                                       QtCore.SIGNAL('editingFinished()'),
+                                       self.update_autoset_text_object)
             control.setInsertPolicy(QtGui.QComboBox.NoInsert)
 
         self._no_enum_update = 0
         self.set_tooltip()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the QComboBox used for the editor control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def create_combo_box(self):
         """ Returns the QComboBox used for the editor control.
@@ -220,22 +224,29 @@ class SimpleEditor ( BaseEditor ):
                               QtGui.QSizePolicy.Fixed)
         return control
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Adjust size policy to behave properly in group
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def set_size_policy(self, direction, resizable, springy, stretch) :
-        super(SimpleEditor, self).set_size_policy(direction, resizable, springy, stretch)
+    def set_size_policy(self, direction, resizable, springy, stretch):
+        super(
+            SimpleEditor,
+            self).set_size_policy(
+            direction,
+            resizable,
+            springy,
+            stretch)
 
         if ((direction == QtGui.QBoxLayout.LeftToRight and springy) or
-            (direction != QtGui.QBoxLayout.LeftToRight and resizable)) :
-            self.control.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContentsOnFirstShow)
+                (direction != QtGui.QBoxLayout.LeftToRight and resizable)):
+            self.control.setSizeAdjustPolicy(
+                QtGui.QComboBox.AdjustToContentsOnFirstShow)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the user selecting a new value from the combo box:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_object (self, text):
+    def update_object(self, text):
         """ Handles the user selecting a new value from the combo box.
         """
         if self._no_enum_update == 0:
@@ -247,9 +258,9 @@ class SimpleEditor ( BaseEditor ):
                 raise_to_debug()
             self._no_enum_update -= 1
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the user typing text into the combo box text entry field:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def update_text_object(self, text):
         """ Handles the user typing text into the combo box text entry field.
@@ -262,7 +273,7 @@ class SimpleEditor ( BaseEditor ):
                 try:
                     value = self.factory.evaluate(value)
                 except Exception as excp:
-                    self.error( excp )
+                    self.error(excp)
                     return
 
             self._no_enum_update += 1
@@ -276,11 +287,11 @@ class SimpleEditor ( BaseEditor ):
             text = self.control.lineEdit().text()
             return self.update_text_object(text)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
@@ -299,18 +310,18 @@ class SimpleEditor ( BaseEditor ):
                     self.control.setEditText('')
             self._no_enum_update -= 1
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def error ( self, excp ):
+    def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         self._set_background(ErrorColor)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Sets the background color of the QLineEdit of the QComboBox.
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _set_background(self, col):
         le = self.control.lineEdit()
@@ -318,12 +329,12 @@ class SimpleEditor ( BaseEditor ):
         pal.setColor(QtGui.QPalette.Base, col)
         le.setPalette(pal)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Rebuilds the contents of the editor whenever the original factory
     #  object's 'values' trait changes:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def rebuild_editor ( self ):
+    def rebuild_editor(self):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
         """
@@ -334,28 +345,29 @@ class SimpleEditor ( BaseEditor ):
 
         self.update_editor()
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'RadioEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class RadioEditor ( BaseEditor ):
+
+class RadioEditor(BaseEditor):
     """ Enumeration editor, used for the "custom" style, that displays radio
         buttons.
     """
 
     # Is the button layout row-major or column-major?
-    row_major = Bool( False )
+    row_major = Bool(False)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super( RadioEditor, self ).init( parent )
+        super(RadioEditor, self).init(parent)
 
         self.control = QtGui.QWidget()
         layout = QtGui.QGridLayout(self.control)
@@ -367,11 +379,11 @@ class RadioEditor ( BaseEditor ):
 
         self.rebuild_editor()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the user clicking one of the 'custom' radio buttons:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_object ( self, index ):
+    def update_object(self, index):
         """ Handles the user clicking one of the custom radio buttons.
         """
         try:
@@ -379,11 +391,11 @@ class RadioEditor ( BaseEditor ):
         except:
             pass
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
@@ -393,12 +405,12 @@ class RadioEditor ( BaseEditor ):
             rb = layout.itemAt(i).widget()
             rb.setChecked(rb.value == value)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Rebuilds the contents of the editor whenever the original factory
     #  object's 'values' trait changes:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def rebuild_editor ( self ):
+    def rebuild_editor(self):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
         """
@@ -409,25 +421,25 @@ class RadioEditor ( BaseEditor ):
         cur_name = self.str_value
 
         # Create a sizer to manage the radio buttons:
-        names   = self.names
+        names = self.names
         mapping = self.mapping
-        n       = len( names )
-        cols    = self.factory.cols
-        rows    = (n + cols - 1) // cols
+        n = len(names)
+        cols = self.factory.cols
+        rows = (n + cols - 1) // cols
         if self.row_major:
-            incr = [ 1 ] * cols
+            incr = [1] * cols
         else:
-            incr = [ n / cols ] * cols
-            rem  = n % cols
-            for i in range( cols ):
+            incr = [n / cols] * cols
+            rem = n % cols
+            for i in range(cols):
                 incr[i] += (rem > i)
-            incr[-1] = -(reduce( lambda x, y: x + y, incr[:-1], 0 ) - 1)
+            incr[-1] = -(reduce(lambda x, y: x + y, incr[:-1], 0) - 1)
 
         # Add the set of all possible choices:
         layout = self.control.layout()
         index = 0
-        for i in range( rows ):
-            for j in range( cols ):
+        for i in range(rows):
+            for j in range(cols):
                 if n > 0:
                     name = names[index]
                     rb = self.create_button(name)
@@ -445,9 +457,9 @@ class RadioEditor ( BaseEditor ):
                     index += incr[j]
                     n -= 1
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the QAbstractButton used for the radio button:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def create_button(self, name):
         """ Returns the QAbstractButton used for the radio button.
@@ -455,46 +467,47 @@ class RadioEditor ( BaseEditor ):
         label = self.string_value(name, capitalize)
         return QtGui.QRadioButton(label)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ListEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ListEditor ( BaseEditor ):
+
+class ListEditor(BaseEditor):
     """ Enumeration editor, used for the "custom" style, that displays a list
         box.
     """
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        super( ListEditor, self ).init( parent )
+        super(ListEditor, self).init(parent)
 
         self.control = QtGui.QListWidget()
         QtCore.QObject.connect(self.control,
-                QtCore.SIGNAL('currentTextChanged(QString)'),
-                self.update_object)
+                               QtCore.SIGNAL('currentTextChanged(QString)'),
+                               self.update_object)
 
         self.rebuild_editor()
         self.set_tooltip()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the user selecting a list box item:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def update_object(self, text):
         """ Handles the user selecting a list box item.
         """
         value = unicode(text)
         try:
-            value = self.mapping[ value ]
+            value = self.mapping[value]
         except:
             try:
-                value = self.factory.evaluate( value )
+                value = self.factory.evaluate(value)
             except:
                 pass
         try:
@@ -502,11 +515,11 @@ class ListEditor ( BaseEditor ):
         except:
             pass
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
@@ -524,12 +537,12 @@ class ListEditor ( BaseEditor ):
         except:
             pass
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Rebuilds the contents of the editor whenever the original factory
     #  object's 'values' trait changes:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def rebuild_editor ( self ):
+    def rebuild_editor(self):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
         """

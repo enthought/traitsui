@@ -44,7 +44,7 @@ class BogusTreeView(HasTraits):
 
         traits_view = View(
             Item(name='bogus', id='engine', editor=tree_editor),
-            buttons = ['OK'],
+            buttons=['OK'],
         )
 
         return traits_view

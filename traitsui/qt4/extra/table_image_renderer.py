@@ -32,9 +32,9 @@ class TableImageRenderer(TableDelegate):
     # Should the image be scaled to the size of the cell
     scale_to_cell = Bool(True)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  TableImageRenderer interface
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def get_image_for_obj(self, value, row, col):
         """ Return the image for the cell given the raw cell value and the row
@@ -42,9 +42,9 @@ class TableImageRenderer(TableDelegate):
         """
         return None
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  QAbstractItemDelegate interface
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def paint(self, painter, option, index):
         """ Overriden to draw images.
@@ -65,7 +65,7 @@ class TableImageRenderer(TableDelegate):
                 h = image.height()
 
             x = option.rect.x()
-            y = option.rect.y() + (option.rect.height()-h)/2
+            y = option.rect.y() + (option.rect.height() - h) / 2
 
             target = QtCore.QRect(x, y, w, h)
             painter.drawPixmap(target, image)
