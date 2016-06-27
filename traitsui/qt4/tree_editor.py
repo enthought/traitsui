@@ -1753,6 +1753,11 @@ class _TreeWidget(QtGui.QTreeWidget):
 
         self._dragging = nid
 
+        # Calculate the hotspot so that the pixmap appears on top of the
+        # original item.
+        nid_rect = self.visualItemRect(nid)
+        hspos = self.viewport().mapFromGlobal(QtGui.QCursor.pos()) - nid_rect.topLeft()
+
         _, node, object = self._editor._get_node_data(nid)
 
         # Convert the item being dragged to MIME data.
@@ -1760,7 +1765,6 @@ class _TreeWidget(QtGui.QTreeWidget):
         md = PyMimeData.coerce(drag_object)
 
         # Render the item being dragged as a pixmap.
-        nid_rect = self.visualItemRect(nid)
         rect = nid_rect.intersected(self.viewport().rect())
         pm = QtGui.QPixmap(rect.size())
         pm.fill(self.palette().base().color())
@@ -1775,10 +1779,6 @@ class _TreeWidget(QtGui.QTreeWidget):
         self.itemDelegate().paint(painter, option, self.indexFromItem(nid))
 
         painter.end()
-
-        # Calculate the hotspot so that the pixmap appears on top of the
-        # original item.
-        hspos = self.viewport().mapFromGlobal(QtGui.QCursor.pos()) - nid_rect.topLeft()
 
         # Start the drag.
         drag = QtGui.QDrag(self)
