@@ -275,7 +275,7 @@ class TableModel(QtCore.QAbstractTableModel):
                 if not parent.isValid():
                     row = len(self._editor.items()) - 1
                 else:
-                    row == parent.row()
+                    row = parent.row()
 
                 self.moveRows(current_rows, row)
                 return True
