@@ -222,7 +222,7 @@ class SimpleEditor(Editor):
         """
         fh = None
         try:
-            fh = file(file_name, 'rb')
+            fh = open(file_name, 'rb')
             object = load(fh)
         except:
             object = None
