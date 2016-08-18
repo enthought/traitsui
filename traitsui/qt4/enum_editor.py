@@ -454,7 +454,7 @@ class RadioEditor(BaseEditor):
                     self.set_tooltip(rb)
                     layout.addWidget(rb, i, j)
 
-                    index += incr[j]
+                    index += int(round(incr[j]))
                     n -= 1
 
     #-------------------------------------------------------------------------
