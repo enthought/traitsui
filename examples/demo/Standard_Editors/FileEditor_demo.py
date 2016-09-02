@@ -15,7 +15,9 @@ from traitsui.api \
     import Item, Group, View
 
 # Define the demo class:
-class FileEditorDemo ( HasTraits ):
+
+
+class FileEditorDemo(HasTraits):
     """ Defines the main FileEditor demo class. """
 
     # Define a File trait to view:
@@ -23,21 +25,21 @@ class FileEditorDemo ( HasTraits ):
 
     # Display specification (one Item per editor style):
     file_group = Group(
-        Item( 'file_name', style = 'simple',   label = 'Simple' ),
-        Item( '_' ),
-        Item( 'file_name', style = 'custom',   label = 'Custom' ),
-        Item( '_' ),
-        Item( 'file_name', style = 'text',     label = 'Text' ),
-        Item( '_' ),
-        Item( 'file_name', style = 'readonly', label = 'ReadOnly' )
+        Item('file_name', style='simple', label='Simple'),
+        Item('_'),
+        Item('file_name', style='custom', label='Custom'),
+        Item('_'),
+        Item('file_name', style='text', label='Text'),
+        Item('_'),
+        Item('file_name', style='readonly', label='ReadOnly')
     )
 
     # Demo view:
     view = View(
         file_group,
-        title     = 'FileEditor',
-        buttons   = ['OK'],
-        resizable = True
+        title='FileEditor',
+        buttons=['OK'],
+        resizable=True
     )
 
 # Create the demo:

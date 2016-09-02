@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -13,15 +14,15 @@
 editors and text editor factories.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from pyface.qt import QtGui
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 _palette = QtGui.QApplication.palette()
 
@@ -32,13 +33,13 @@ DefaultTitle = 'Edit properties'
 OKColor = _palette.color(QtGui.QPalette.Base)
 
 # Color to highlight input errors
-ErrorColor = QtGui.QColor( 255, 192, 192 )
+ErrorColor = QtGui.QColor(255, 192, 192)
 
 # Color for background of read-only fields
-ReadonlyColor = QtGui.QColor( 244, 243, 238 )
+ReadonlyColor = QtGui.QColor(244, 243, 238)
 
 # Color for background of fields where objects can be dropped
-DropColor = QtGui.QColor( 215, 242, 255 )
+DropColor = QtGui.QColor(215, 242, 255)
 
 # Color for an editable field
 EditableColor = _palette.color(QtGui.QPalette.Base)

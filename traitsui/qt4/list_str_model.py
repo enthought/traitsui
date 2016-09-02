@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,29 +13,30 @@
 #  Author: Evan Patterson
 #  Date:   08/05/2009
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Defines the table model used by the tabular editor.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # MIME type for internal table drag/drop operations
 mime_type = 'traits-ui-list-str-editor'
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ListStrModel' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class ListStrModel(QtCore.QAbstractListModel):
     """ A model for lists of strings.
@@ -48,9 +49,9 @@ class ListStrModel(QtCore.QAbstractListModel):
 
         self._editor = editor
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  QAbstractItemModel interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def rowCount(self, mi):
         """ Reimplemented to return items in the list.
@@ -88,7 +89,8 @@ class ListStrModel(QtCore.QAbstractListModel):
 
         elif role == QtCore.Qt.BackgroundRole:
             if editor.is_auto_add(index):
-                color = adapter.get_default_bg_color(editor.object, editor.name)
+                color = adapter.get_default_bg_color(
+                    editor.object, editor.name)
             else:
                 color = adapter.get_bg_color(editor.object, editor.name, index)
             if color is not None:
@@ -143,11 +145,11 @@ class ListStrModel(QtCore.QAbstractListModel):
         flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
 
         if (editor.factory.editable and 'edit' in editor.factory.operations and
-            editor.adapter.get_can_edit(editor.object, editor.name, index)):
+                editor.adapter.get_can_edit(editor.object, editor.name, index)):
             flags |= QtCore.Qt.ItemIsEditable
 
         if (editor.factory.editable and 'move' in editor.factory.operations and
-            editor.adapter.get_drag(editor.object, editor.name, index) is not None):
+                editor.adapter.get_drag(editor.object, editor.name, index) is not None):
             flags |= QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsDropEnabled
 
         return flags
@@ -184,7 +186,12 @@ class ListStrModel(QtCore.QAbstractListModel):
         self.beginInsertRows(parent, row, row + count - 1)
         for i in xrange(count):
             value = adapter.get_default_value(editor.object, editor.name)
-            editor.callx(adapter.insert, editor.object, editor.name, row, value)
+            editor.callx(
+                adapter.insert,
+                editor.object,
+                editor.name,
+                row,
+                value)
         self.endInsertRows()
         return True
 
@@ -212,7 +219,7 @@ class ListStrModel(QtCore.QAbstractListModel):
             current selection.
         """
         mime_data = QtCore.QMimeData()
-        rows = list(set([ index.row() for index in indexes ]))
+        rows = list(set([index.row() for index in indexes]))
         data = QtCore.QByteArray(str(rows[0]))
         for row in rows[1:]:
             data.append(' %i' % row)
@@ -238,9 +245,9 @@ class ListStrModel(QtCore.QAbstractListModel):
         """
         return QtCore.Qt.MoveAction
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  ListStrModel interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def moveRow(self, old_row, new_row):
         """ Convenience method to move a single row.
@@ -278,8 +285,9 @@ class ListStrModel(QtCore.QAbstractListModel):
 
         # Update the selection for the new location.
         if editor.factory.multi_select:
-            editor.setx(multi_selected = objects)
-            editor.multi_selected_indices = range(new_row, new_row+len(objects))
+            editor.setx(multi_selected=objects)
+            editor.multi_selected_indices = range(
+                new_row, new_row + len(objects))
         else:
-            editor.setx(selected = objects[0])
+            editor.setx(selected=objects[0])
             editor.selected_index = new_row

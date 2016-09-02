@@ -23,7 +23,8 @@ from threading import Thread
 from traits.api import HasPrivateTraits, Str, Property
 from traitsui.api import View, Item, StatusItem, Label
 
-#-- The demo class -------------------------------------------------------------
+#-- The demo class -------------------------------------------------------
+
 
 class TextEditor(HasPrivateTraits):
 
@@ -31,7 +32,7 @@ class TextEditor(HasPrivateTraits):
     text = Str
 
     # The current length of the text being edited:
-    length = Property(depends_on = 'text')
+    length = Property(depends_on='text')
 
     # The current time:
     time = Str
@@ -39,31 +40,31 @@ class TextEditor(HasPrivateTraits):
     # The view definition:
     view = View(
         Label('Type into the text editor box:'),
-        Item('text', style = 'custom', show_label = False),
-        title     = 'Text Editor',
-        id        = 'traitsui.demo.advanced.statusbar_demo',
-        width     = 0.4,
-        height    = 0.4,
-        resizable = True,
-        statusbar = [ StatusItem(name = 'length', width = 0.5),
-                      StatusItem(name = 'time',   width = 85) ]
+        Item('text', style='custom', show_label=False),
+        title='Text Editor',
+        id='traitsui.demo.advanced.statusbar_demo',
+        width=0.4,
+        height=0.4,
+        resizable=True,
+        statusbar=[StatusItem(name='length', width=0.5),
+                   StatusItem(name='time', width=85)]
     )
 
-    #-- Property Implementations -----------------------------------------------
+    #-- Property Implementations ---------------------------------------------
 
     def _get_length(self):
         return ('Length: %d characters' % len(self.text))
 
-    #-- Default Trait Values ---------------------------------------------------
+    #-- Default Trait Values -------------------------------------------------
 
     def _time_default(self):
-        thread = Thread(target = self._clock)
+        thread = Thread(target=self._clock)
         thread.setDaemon(True)
         thread.start()
 
         return ''
 
-    #-- Private Methods --------------------------------------------------------
+    #-- Private Methods ------------------------------------------------------
 
     def _clock(self):
         """ Update the statusbar time once every second.
@@ -78,4 +79,3 @@ popup = TextEditor()
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     popup.configure_traits()
-

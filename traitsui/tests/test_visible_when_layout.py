@@ -30,25 +30,26 @@ from traitsui.tests._tools import *
 _TEXT_WIDTH = 200
 _TEXT_HEIGHT = 100
 
+
 class VisibleWhenProblem(HasTraits):
 
     which = Enum('one', 'two')
 
-    on  = Bool
+    on = Bool
     txt = Str
 
     onoff_group = HGroup(
         VGroup(
             Item('on', resizable=False, width=-100, height=-70),
-            show_left = False,
-            show_border = True, visible_when='which == "one"'
+            show_left=False,
+            show_border=True, visible_when='which == "one"'
         ),
     )
 
     text_group = VGroup(
         Item('txt', width=-_TEXT_WIDTH, height=-_TEXT_HEIGHT),
         visible_when='which == "two"',
-        show_border = True,
+        show_border=True,
     )
 
     traits_view = View(
@@ -56,9 +57,9 @@ class VisibleWhenProblem(HasTraits):
         VGroup(
             Include('onoff_group'),
             Include('text_group'),
-            ),
-        resizable = True,
-        buttons = ['OK', 'Cancel']
+        ),
+        resizable=True,
+        buttons=['OK', 'Cancel']
     )
 
 
@@ -83,8 +84,8 @@ def test_visible_when_layout():
         # combination (in this case, the `text_group` plus the `which` item
         size = get_dialog_size(ui.control)
         # leave some margin for labels, dropbox, etc
-        nose.tools.assert_less(size[0], _TEXT_WIDTH+100)
-        nose.tools.assert_less(size[1], _TEXT_HEIGHT+150)
+        nose.tools.assert_less(size[0], _TEXT_WIDTH + 100)
+        nose.tools.assert_less(size[1], _TEXT_HEIGHT + 150)
 
 
 if __name__ == '__main__':

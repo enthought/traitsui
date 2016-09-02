@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,14 +13,14 @@
 #  Author: David C. Morrill
 #  Date:   05/08/2007
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Traits UI editor factory for editing lists of strings.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -32,15 +32,16 @@ from ..toolkit import toolkit_object
 
 from pyface.image_resource import ImageResource
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ListStrEditor' editor factory class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ListStrEditor ( BasicEditorFactory ):
+
+class ListStrEditor(BasicEditorFactory):
     """ Editor factory for list of string editors.
     """
 
-    #-- Trait Definitions ------------------------------------------------------
+    #-- Trait Definitions ----------------------------------------------------
 
     # The editor class to be created:
     klass = Property
@@ -70,13 +71,13 @@ class ListStrEditor ( BasicEditorFactory ):
     right_clicked_index = Str
 
     # Can the user edit the values?
-    editable = Bool( True )
+    editable = Bool(True)
 
     # Are multiple selected items allowed?
-    multi_select = Bool( False )
+    multi_select = Bool(False)
 
     # Should horizontal lines be drawn between items?
-    horizontal_lines = Bool( False )
+    horizontal_lines = Bool(False)
 
     # The title for the editor:
     title = Str
@@ -86,25 +87,25 @@ class ListStrEditor ( BasicEditorFactory ):
 
     # Should a new item automatically be added to the end of the list to allow
     # the user to create new entries?
-    auto_add = Bool( False )
+    auto_add = Bool(False)
 
     # The adapter from list items to editor values:
-    adapter = Instance( 'traitsui.list_str_adapter.ListStrAdapter',
-                        () )
+    adapter = Instance('traitsui.list_str_adapter.ListStrAdapter',
+                       ())
 
     # The optional extended name of the trait containing the adapter:
     adapter_name = Str
 
     # What type of operations are allowed on the list:
-    operations = List( Enum( 'delete', 'insert', 'append', 'edit', 'move' ),
-                       [ 'delete', 'insert', 'append', 'edit', 'move' ] )
+    operations = List(Enum('delete', 'insert', 'append', 'edit', 'move'),
+                      ['delete', 'insert', 'append', 'edit', 'move'])
 
     # Are 'drag_move' operations allowed (i.e. True), or should they always be
     # treated as 'drag_copy' operations (i.e. False):
-    drag_move = Bool( False )
+    drag_move = Bool(False)
 
     # The set of images that can be used:
-    images = List( ImageResource )
+    images = List(ImageResource)
 
     # Right-click context menu (Qt4 only). The value can be one of:
     #

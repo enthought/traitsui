@@ -18,6 +18,7 @@ from __future__ import absolute_import
 from traits.api import Dict
 from ..editor_factory import EditorFactory
 
+
 class DefaultOverride(EditorFactory):
     """Editor factory for selectively overriding certain parameters
     of the default editor.

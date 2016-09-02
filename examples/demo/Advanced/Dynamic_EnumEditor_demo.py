@@ -37,7 +37,7 @@ Notes:
    updating of the Entree list.
 """
 
-#-- Imports --------------------------------------------------------------------
+#-- Imports --------------------------------------------------------------
 
 from traits.api \
     import HasPrivateTraits, Str, List, Constant
@@ -45,7 +45,7 @@ from traits.api \
 from traitsui.api \
     import View, Item, VGroup, HSplit, EnumEditor, CheckListEditor
 
-#-- The list of possible entrees -----------------------------------------------
+#-- The list of possible entrees -----------------------------------------
 
 possible_entrees = [
     'Chicken Fried Steak',
@@ -59,53 +59,55 @@ possible_entrees = [
     'Cobb Salad'
 ]
 
-#-- The KitchenCapabilities class ----------------------------------------------
+#-- The KitchenCapabilities class ----------------------------------------
 
-class KitchenCapabilities ( HasPrivateTraits ):
+
+class KitchenCapabilities(HasPrivateTraits):
 
     # The current set of entrees the kitchen can make (based on its larder):
-    available = List( possible_entrees )
+    available = List(possible_entrees)
 
 # The KitchenCapabilities are shared by all waitstaff taking orders:
 kitchen_capabilities = KitchenCapabilities()
 
-#-- The OrderMenu class --------------------------------------------------------
+#-- The OrderMenu class --------------------------------------------------
 
-class OrderMenu ( HasPrivateTraits ):
+
+class OrderMenu(HasPrivateTraits):
 
     # The person's entree order:
     entree = Str
 
     # Reference to the restaurant's current entree capabilities:
-    capabilities = Constant( kitchen_capabilities )
+    capabilities = Constant(kitchen_capabilities)
 
     # The user interface view:
     view = View(
         HSplit(
             VGroup(
-                Item( 'entree',
-                      editor = EnumEditor(
-                                   name = 'object.capabilities.available' )
-                ),
-                label       = 'Order',
-                show_border = True,
-                dock        = 'tab'
+                Item('entree',
+                     editor=EnumEditor(
+                         name='object.capabilities.available')
+                     ),
+                label='Order',
+                show_border=True,
+                dock='tab'
             ),
             VGroup(
-                Item( 'object.capabilities.available',
-                      show_label = False,
-                      style      = 'custom',
-                      editor     = CheckListEditor( values = possible_entrees )
-                ),
-                label       = 'Kitchen',
-                show_border = True,
-                dock        = 'tab'
+                Item('object.capabilities.available',
+                     show_label=False,
+                     style='custom',
+                     editor=CheckListEditor(values=possible_entrees)
+                     ),
+                label='Kitchen',
+                show_border=True,
+                dock='tab'
             )
         ),
-        title = 'Dynamic EnumEditor Demo',
+        title='Dynamic EnumEditor Demo',
     )
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Create the demo:
 demo = OrderMenu()
@@ -113,4 +115,3 @@ demo = OrderMenu()
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

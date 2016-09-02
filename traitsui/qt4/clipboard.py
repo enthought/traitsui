@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -18,17 +19,17 @@ from pyface.ui.qt4.mimedata import PyMimeData
 from traits.api import HasTraits, Instance, Property
 
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  '_Clipboard' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 class _Clipboard(HasTraits):
     """ The _Clipboard class provides a wrapper around the PyQt clipboard.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # The instance on the clipboard (if any).
     instance = Property
@@ -42,9 +43,9 @@ class _Clipboard(HasTraits):
     # The application clipboard.
     clipboard = Instance(QtGui.QClipboard)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Instance property methods:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _get_instance(self):
         """ The instance getter.
@@ -74,17 +75,17 @@ class _Clipboard(HasTraits):
 
         return md.instanceType()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Other trait handlers:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _clipboard_default(self):
         """ Initialise the clipboard.
         """
         return QtGui.QApplication.clipboard()
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  The singleton clipboard instance.
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 clipboard = _Clipboard()

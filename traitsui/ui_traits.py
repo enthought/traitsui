@@ -18,59 +18,63 @@
 """ Defines common traits used within the traits.ui package.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
 from pyface.ui_traits import (Alignment, Border, HasBorder, HasMargin, Image,
                              Margin, Position, convert_bitmap, convert_image)
-
 from traits.api import (Any, Delegate, Enum, Expression, Float, HasStrictTraits,
     List, Range, Str, Trait, TraitError, TraitPrefixList, TraitType)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Orientation trait:
-Orientation = Trait( 'vertical',
-                     TraitPrefixList( 'vertical', 'horizontal' ) )
+Orientation = Trait('vertical',
+                    TraitPrefixList('vertical', 'horizontal'))
 
 # Styles for user interface elements:
-EditorStyle = style_trait = Trait( 'simple',
-                     TraitPrefixList( 'simple', 'custom', 'text', 'readonly' ),
-                     cols = 4 )
+EditorStyle = style_trait = Trait(
+    'simple',
+    TraitPrefixList(
+        'simple',
+        'custom',
+        'text',
+        'readonly'),
+    cols=4)
 
 # Group layout trait:
-Layout = Trait( 'normal',
-                TraitPrefixList( 'normal', 'split', 'tabbed', 'flow', 'fold' ) )
+Layout = Trait('normal',
+               TraitPrefixList('normal', 'split', 'tabbed', 'flow', 'fold'))
 
 # Trait for the default object being edited:
-AnObject = Expression( 'object' )
+AnObject = Expression('object')
 
 # The default dock style to use:
-DockStyle = dock_style_trait = Enum( 'fixed', 'horizontal', 'vertical', 'tab',
-                                     desc = "the default docking style to use" )
+DockStyle = dock_style_trait = Enum('fixed', 'horizontal', 'vertical', 'tab',
+                                    desc="the default docking style to use")
 
 # The category of elements dragged out of the view:
-ExportType = Str( desc = 'the category of elements dragged out of the view' )
+ExportType = Str(desc='the category of elements dragged out of the view')
 
 # Delegate a trait value to the object's **container** trait:
-ContainerDelegate = container_delegate = Delegate( 'container',
-                                                   listenable = False )
+ContainerDelegate = container_delegate = Delegate('container',
+                                                  listenable=False)
 
 # An identifier for the external help context:
-HelpId = help_id_trait = Str( desc = "the external help context identifier" )
+HelpId = help_id_trait = Str(desc="the external help context identifier")
 
 # A button to add to a view:
 AButton = Any
 #AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
 
 # The set of buttons to add to the view:
-Buttons = List( AButton,
-                desc = 'the action buttons to add to the bottom of the view' )
+Buttons = List(AButton,
+               desc='the action buttons to add to the bottom of the view')
 
 # View trait specified by name or instance:
 AView = Any
@@ -83,35 +87,37 @@ AView = Any
 # fast_validate table is not updated although the TraitCompound's slow_validates
 # table is modified.
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'StatusItem' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class StatusItem ( HasStrictTraits ):
+
+class StatusItem(HasStrictTraits):
 
     # The name of the trait the status information will be synched with:
-    name = Str( 'status' )
+    name = Str('status')
 
     # The width of the status field. The possible values are:
     #
     #   - abs( width )  > 1.0: Width of the field in pixels = abs( width )
     #   - abs( width ) <= 1.0: Relative width of the field when compared to
     #                          the other relative width fields.
-    width = Float( 0.5 )
+    width = Float(0.5)
 
-    def __init__ ( self, value = None, **traits ):
+    def __init__(self, value=None, **traits):
         """ Initializes the item object.
         """
-        super( StatusItem, self ).__init__( **traits )
+        super(StatusItem, self).__init__(**traits)
 
         if value is not None:
             self.name = value
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ViewStatus' trait:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ViewStatus ( TraitType ):
+
+class ViewStatus(TraitType):
     """ Defines a trait whose value must be a single StatusItem instance or a
         list of StatusItem instances.
     """
@@ -123,48 +129,49 @@ class ViewStatus ( TraitType ):
     info_text = ('None, a string, a single StatusItem instance, or a list or '
                  'tuple of strings and/or StatusItem instances')
 
-    def validate ( self, object, name, value ):
+    def validate(self, object, name, value):
         """ Validates that a specified value is valid for this trait.
         """
-        if isinstance( value, basestring ):
-            return [ StatusItem( name = value ) ]
+        if isinstance(value, basestring):
+            return [StatusItem(name=value)]
 
-        if isinstance( value, StatusItem ):
-            return [ value ]
+        if isinstance(value, StatusItem):
+            return [value]
 
         if value is None:
             return value
 
         result = []
-        if isinstance( value, SequenceTypes ):
+        if isinstance(value, SequenceTypes):
             for item in value:
-                if isinstance( item, basestring ):
-                    result.append( StatusItem( name = item ) )
-                elif isinstance( item, StatusItem ):
-                    result.append( item )
+                if isinstance(item, basestring):
+                    result.append(StatusItem(name=item))
+                elif isinstance(item, StatusItem):
+                    result.append(item)
                 else:
                     break
             else:
                 return result
 
-        self.error( object, name, value )
+        self.error(object, name, value)
 
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ATheme' trait:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def convert_theme ( value, level = 3 ):
+
+def convert_theme(value, level=3):
     """ Converts a specified value to a Theme if possible.
     """
-    if not isinstance( value, basestring ):
+    if not isinstance(value, basestring):
         return value
 
-    if (value[:1] == '@') and (value.find( ':' ) >= 2):
+    if (value[:1] == '@') and (value.find(':') >= 2):
         try:
             from .image.image import ImageLibrary
 
-            info = ImageLibrary.image_info( value )
+            info = ImageLibrary.image_info(value)
         except:
             info = None
 
@@ -172,9 +179,10 @@ def convert_theme ( value, level = 3 ):
             return info.theme
 
     from .theme import Theme
-    return Theme( image = convert_image( value, level + 1 ) )
+    return Theme(image=convert_image(value, level + 1))
 
-class ATheme ( TraitType ):
+
+class ATheme(TraitType):
     """ Defines a trait whose value must be a traits UI Theme or a string that
         can be converted to one.
     """
@@ -185,7 +193,7 @@ class ATheme ( TraitType ):
     # A description of the type of value this trait accepts:
     info_text = 'a Theme or string that can be used to define one'
 
-    def __init__ ( self, value = None, **metadata ):
+    def __init__(self, value=None, **metadata):
         """ Creates an ATheme trait.
 
         Parameters
@@ -194,9 +202,9 @@ class ATheme ( TraitType ):
             The default value for the ATheme, either a Theme object, or a
             string from which a Theme object can be derived.
         """
-        super( ATheme, self ).__init__( convert_theme( value ), **metadata )
+        super(ATheme, self).__init__(convert_theme(value), **metadata)
 
-    def validate ( self, object, name, value ):
+    def validate(self, object, name, value):
         """ Validates that a specified value is valid for this trait.
         """
         from .theme import Theme
@@ -204,22 +212,21 @@ class ATheme ( TraitType ):
         if value is None:
             return None
 
-        new_value = convert_theme( value, 4 )
-        if isinstance( new_value, Theme ):
+        new_value = convert_theme(value, 4)
+        if isinstance(new_value, Theme):
             return new_value
 
-        self.error( object, name, value )
+        self.error(object, name, value)
 
 #-------------------------------------------------------------------------------
 #  Other trait definitions:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # The spacing between two items:
-Spacing = Range( -32, 32, 3 )
+Spacing = Range(-32, 32, 3)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Other definitions:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-# Types that represent sequences:
-SequenceTypes = ( tuple, list )
+SequenceTypes = (tuple, list)

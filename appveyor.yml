@@ -25,7 +25,7 @@ init:
 
 install:
   - ps: if ((Test-Path "c:/temp") -eq 0) { mkdir c:/temp }
-  - ps: python -m pip install --upgrade --no-use-wheel pip
+  - ps: python -m pip install --upgrade --no-binary wheel pip
   - ps: pip install --upgrade wheel
   - ps: pip --version
   - cmd /v:on /e:on /c ".\appveyor-install.cmd"

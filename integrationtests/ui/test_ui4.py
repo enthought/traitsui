@@ -13,88 +13,97 @@
 # Description: Test case for Traits User Interface
 #------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 import wx
 
-from traits.api    import Trait, HasTraits, Str, Int
+from traits.api import Trait, HasTraits, Str, Int
 from traitsui.api import View, Group
 from traits.api import Color
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Model classes:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class Employer ( HasTraits ):
-    company = Str( 'Enthought, Inc.' )
-    boss    = Str( 'eric' )
 
-    view    = View( 'company', 'boss' )
+class Employer(HasTraits):
+    company = Str('Enthought, Inc.')
+    boss = Str('eric')
 
-class Person ( HasTraits ):
-    name = Str( 'David Morrill' )
-    age  = Int( 39 )
+    view = View('company', 'boss')
 
-class ExtraPerson ( Person ):
-    sex       = Trait( 'Male', 'Female' )
+
+class Person(HasTraits):
+    name = Str('David Morrill')
+    age = Int(39)
+
+
+class ExtraPerson(Person):
+    sex = Trait('Male', 'Female')
     eye_color = Color
 
-class LocatedPerson ( Person ):
+
+class LocatedPerson(Person):
     street = Str
-    city   = Str
-    state  = Str
-    zip    = Int( 78663 )
+    city = Str
+    state = Str
+    zip = Int(78663)
 
-class EmployedPerson ( LocatedPerson ):
-    employer = Trait( Employer() )
 
-#-------------------------------------------------------------------------------
+class EmployedPerson(LocatedPerson):
+    employer = Trait(Employer())
+
+#-------------------------------------------------------------------------
 #  View classes:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class PersonView ( HasTraits ):
-    view = View( 'name', '<extra>', 'age', kind = 'modal' )
 
-class ExtraPersonView ( PersonView ):
-    extra = Group( 'sex', 'eye_color' )
+class PersonView(HasTraits):
+    view = View('name', '<extra>', 'age', kind='modal')
 
-class LocatedPersonView ( PersonView ):
-    extra = Group( 'street', 'city', 'state', 'zip' )
 
-class EmployedPersonView ( LocatedPersonView ):
-    extra = Group( 'employer', '<extra>' )
+class ExtraPersonView(PersonView):
+    extra = Group('sex', 'eye_color')
 
-#-------------------------------------------------------------------------------
+
+class LocatedPersonView(PersonView):
+    extra = Group('street', 'city', 'state', 'zip')
+
+
+class EmployedPersonView(LocatedPersonView):
+    extra = Group('employer', '<extra>')
+
+#-------------------------------------------------------------------------
 #  'TraitSheetApp' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class TraitSheetApp ( wx.App ):
 
-    #---------------------------------------------------------------------------
+class TraitSheetApp(wx.App):
+
+    #-------------------------------------------------------------------------
     #  Initialize the object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __init__ ( self ):
+    def __init__(self):
         wx.InitAllImageHandlers()
-        wx.App.__init__( self, 1, 'debug.log' )
+        wx.App.__init__(self, 1, 'debug.log')
         self.MainLoop()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handle application initialization:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def OnInit ( self ):
-        PersonView().edit_traits( context = Person() )
-        ExtraPersonView().edit_traits( context = ExtraPerson() )
-        LocatedPersonView().edit_traits( context = LocatedPerson() )
-        EmployedPersonView().edit_traits( context = EmployedPerson() )
+    def OnInit(self):
+        PersonView().edit_traits(context=Person())
+        ExtraPersonView().edit_traits(context=ExtraPerson())
+        LocatedPersonView().edit_traits(context=LocatedPerson())
+        EmployedPersonView().edit_traits(context=EmployedPerson())
         return True
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Main program:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 TraitSheetApp()
-
