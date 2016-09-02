@@ -255,7 +255,7 @@ class TextInfo(MFileDialogModel):
             if getsize(self.file_name) > MAX_SIZE:
                 return 'File too big...'
 
-            fh = file(self.file_name, 'rb')
+            fh = open(self.file_name, 'rb')
             data = fh.read()
             fh.close()
         except:

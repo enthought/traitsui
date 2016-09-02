@@ -124,7 +124,7 @@ ImageInfoTemplate = \
 def read_file(file_name):
     """ Returns the contents of the specified *file_name*.
     """
-    fh = file(file_name, 'rb')
+    fh = open(file_name, 'rb')
     try:
         return fh.read()
     finally:
@@ -138,7 +138,7 @@ def read_file(file_name):
 def write_file(file_name, data):
     """ Writes the specified data to the specified file.
     """
-    fh = file(file_name, 'wb')
+    fh = open(file_name, 'wb')
     try:
         fh.write(data)
     finally:
@@ -914,7 +914,7 @@ class ZipFileReference(ResourceReference):
 
             # Write the image data to the cache file:
             cache_file = join(cache_dir, self.file_name)
-            fh = file(cache_file, 'wb')
+            fh = open(cache_file, 'wb')
             try:
                 fh.write(data)
             finally:
