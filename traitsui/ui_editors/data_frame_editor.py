@@ -61,8 +61,6 @@ class DataFrameAdapter(TabularAdapter):
         import numpy as np
 
         column = self.item[self.column_id]
-        print self.columns
-        print column.name, column.dtype
         if np.issubdtype(column.dtype, np.number):
             return 'right'
         else:
