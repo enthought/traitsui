@@ -1,4 +1,4 @@
-#--(LED Editor)-----------------------------------------------------------------
+#--(LED Editor)-----------------------------------------------------------
 """
 LED Editor
 ==========
@@ -23,7 +23,7 @@ or a string value containing only characters that would be found in an interger
 or float value.
 """
 
-#--[Imports]--------------------------------------------------------------------
+#--[Imports]--------------------------------------------------------------
 
 from threading \
     import Thread
@@ -40,40 +40,44 @@ from traitsui.api \
 from traitsui.wx.extra.led_editor \
     import LEDEditor
 
-#--[LEDDemoHandler Class]-------------------------------------------------------
+#--[LEDDemoHandler Class]-------------------------------------------------
 
 # Handler class for the LEDDemo class view:
-class LEDDemoHandler ( Handler ):
+
+
+class LEDDemoHandler(Handler):
 
     # The UIInfo object associated with the UI:
-    info = Instance( UIInfo )
+    info = Instance(UIInfo)
 
     # Is the demo currently running:
-    running = Bool( True )
+    running = Bool(True)
 
     # Is the thread still alive?
-    alive = Bool( True )
+    alive = Bool(True)
 
-    def init ( self, info ):
+    def init(self, info):
         self.info = info
-        Thread( target = self._update_counter ).start()
+        Thread(target=self._update_counter).start()
 
-    def closed ( self, info, is_ok ):
+    def closed(self, info, is_ok):
         self.running = False
         while self.alive:
-            sleep( .05 )
+            sleep(.05)
 
-    def _update_counter ( self ):
+    def _update_counter(self):
         while self.running:
             self.info.object.counter1 += 1
             self.info.object.counter2 += .001
-            sleep( .01 )
+            sleep(.01)
         self.alive = False
 
-#--[LEDDemo Class]--------------------------------------------------------------
+#--[LEDDemo Class]--------------------------------------------------------
 
 # The main demo class:
-class LEDDemo ( HasTraits ):
+
+
+class LEDDemo(HasTraits):
 
     # A counter to display:
     counter1 = Int
@@ -83,58 +87,57 @@ class LEDDemo ( HasTraits ):
 
     # The traits view:
     view = View(
-        Item( 'counter1',
-              label  = 'Left aligned',
-              editor = LEDEditor( alignment = 'left' )
-        ),
-        Item( 'counter1',
-              label  = 'Center aligned',
-              editor = LEDEditor( alignment = 'center' )
-        ),
-        Item( 'counter1',
-              label  = 'Right aligned',
-              editor = LEDEditor()  # default = 'right' aligned
-        ),
-        Item( 'counter2',
-              label  = 'Float value',
-              editor = LEDEditor( format_str = '%.3f' )
-        ),
+        Item('counter1',
+             label='Left aligned',
+             editor=LEDEditor(alignment='left')
+             ),
+        Item('counter1',
+             label='Center aligned',
+             editor=LEDEditor(alignment='center')
+             ),
+        Item('counter1',
+             label='Right aligned',
+             editor=LEDEditor()  # default = 'right' aligned
+             ),
+        Item('counter2',
+             label='Float value',
+             editor=LEDEditor(format_str='%.3f')
+             ),
         '_',
         HGroup(
-            Item( 'counter1',
-                  label  = 'Left',
-                  height = -40,
-                  width  = 120,
-                  editor = LEDEditor( alignment = 'left' )
-            ),
+            Item('counter1',
+                 label='Left',
+                 height=-40,
+                 width=120,
+                 editor=LEDEditor(alignment='left')
+                 ),
             spring,
-            Item( 'counter1',
-                  label  = 'Center',
-                  height = -40,
-                  width  = 120,
-                  editor = LEDEditor( alignment = 'center' )
-            ),
+            Item('counter1',
+                 label='Center',
+                 height=-40,
+                 width=120,
+                 editor=LEDEditor(alignment='center')
+                 ),
             spring,
-            Item( 'counter1',
-                  label  = 'Right',
-                  height = -40,
-                  width  = 120,
-                  editor = LEDEditor()  # default = 'right' aligned
-            ),
+            Item('counter1',
+                 label='Right',
+                 height=-40,
+                 width=120,
+                 editor=LEDEditor()  # default = 'right' aligned
+                 ),
             spring,
-            Item( 'counter2',
-                  label  = 'Float',
-                  height = -40,
-                  width  = 120,
-                  editor = LEDEditor( format_str = '%.3f' )
-            )
+            Item('counter2',
+                 label='Float',
+                 height=-40,
+                 width=120,
+                 editor=LEDEditor(format_str='%.3f')
+                 )
         ),
-        title   = 'LED Editor Demo',
-        buttons = [ 'OK' ],
-        handler = LEDDemoHandler
+        title='LED Editor Demo',
+        buttons=['OK'],
+        handler=LEDDemoHandler
     )
 
-#--<Example*>-------------------------------------------------------------------
+#--<Example*>-------------------------------------------------------------
 
 demo = LEDDemo()
-

@@ -24,6 +24,7 @@ from traitsui.tests._tools import *
 class CodeModel(HasTraits):
     code = Str('world domination code')
 
+
 class CodeView(ModelView):
     model = Instance(CodeModel)
     show_line_numbers = Bool(True)
@@ -59,6 +60,7 @@ def test_code_editor_show_line_numbers():
     test_line_numbers_visibility(True)
     test_line_numbers_visibility(False)
 
+
 @skip_if_not_qt4
 def test_code_editor_readonly():
     """ Test readonly editor style for CodeEditor
@@ -79,7 +81,7 @@ def test_code_editor_readonly():
         nose.tools.assert_equal(txt_ctrl.toPlainText(), code_model.code)
 
         # Test changing the underlying object
-        code_model2 = CodeModel(code=code_model.code*2)
+        code_model2 = CodeModel(code=code_model.code * 2)
         code_view.model = code_model2
         nose.tools.assert_true(txt_ctrl.isReadOnly())
         nose.tools.assert_equal(txt_ctrl.toPlainText(), code_model.code)

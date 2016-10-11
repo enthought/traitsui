@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,14 +13,14 @@
 #  Author: Evan Patterson
 #  Date:   07/21/2009
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Traits UI 'display only' image editor.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from pyface.qt.QtGui import QFrame, QPainter, QPalette
 
@@ -39,11 +39,12 @@ from traitsui.editors.image_editor \
 from editor \
     import Editor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'QImageView' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # backported and modified from Enaml ImageView
+
 
 class QImageView(QFrame):
     """ A custom QFrame that will paint a QPixmap as an image. The
@@ -51,6 +52,7 @@ class QImageView(QFrame):
     how the image scales.
 
     """
+
     def __init__(self, parent=None):
         """ Initialize a QImageView.
 
@@ -66,7 +68,7 @@ class QImageView(QFrame):
         self._allow_upscaling = False
         self._preserve_aspect_ratio = False
         self._allow_clipping = False
-        
+
         self.setBackgroundRole(QPalette.Window)
 
     #--------------------------------------------------------------------------
@@ -170,7 +172,7 @@ class QImageView(QFrame):
             The QPixmap to use as the image in the widget.
 
         """
-        self._pixmap  = pixmap
+        self._pixmap = pixmap
         self.update()
 
     def scaledContents(self):
@@ -258,20 +260,20 @@ class QImageView(QFrame):
         self.update()
 
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  '_ImageEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class _ImageEditor ( Editor ):
+class _ImageEditor(Editor):
     """ Traits UI 'display only' image editor.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
@@ -280,7 +282,7 @@ class _ImageEditor ( Editor ):
             image = self.value
 
         self.control = QImageView()
-        self.control.setPixmap( convert_bitmap( image ) )
+        self.control.setPixmap(convert_bitmap(image))
         self.control.setScaledContents(self.factory.scale)
         self.control.setAllowUpscaling(self.factory.allow_upscaling)
         self.control.setPreserveAspectRatio(self.factory.preserve_aspect_ratio)
@@ -288,18 +290,18 @@ class _ImageEditor ( Editor ):
 
         self.set_tooltip()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         if self.factory.image is None:
             value = self.value
-            if isinstance( value, ImageResource ):
-                self.control.setPixmap( convert_bitmap( value ) )
+            if isinstance(value, ImageResource):
+                self.control.setPixmap(convert_bitmap(value))
         self.control.setScaledContents(self.factory.scale)
         self.control.setAllowUpscaling(self.factory.allow_upscaling)
         self.control.setPreserveAspectRatio(self.factory.preserve_aspect_ratio)

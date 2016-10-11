@@ -14,7 +14,7 @@ This example also shows setting a file name filter which only allows Python
 source (i.e. *.py) files to be viewed and selected.
 """
 
-#-- Imports --------------------------------------------------------------------
+#-- Imports --------------------------------------------------------------
 
 from traits.api \
     import HasTraits, File, Button
@@ -25,38 +25,39 @@ from traitsui.api \
 from traitsui.file_dialog  \
     import open_file, TextInfo
 
-#-- FileDialogDemo Class -------------------------------------------------------
+#-- FileDialogDemo Class -------------------------------------------------
 
 # Demo specific file dialig id:
 demo_id = 'traitsui.demo.standard_editors.file_dialog.text_info'
 
-class FileDialogDemo ( HasTraits ):
+
+class FileDialogDemo(HasTraits):
 
     # The name of the selected file:
     file_name = File
 
     # The button used to display the file dialog:
-    open = Button( 'Open...' )
+    open = Button('Open...')
 
-    #-- Traits View Definitions ------------------------------------------------
+    #-- Traits View Definitions ----------------------------------------------
 
     view = View(
         HGroup(
-            Item( 'open', show_label = False ),
+            Item('open', show_label=False),
             '_',
-            Item( 'file_name', style = 'readonly', springy = True )
+            Item('file_name', style='readonly', springy=True)
         ),
-        width = 0.5
+        width=0.5
     )
 
-    #-- Traits Event Handlers --------------------------------------------------
+    #-- Traits Event Handlers ------------------------------------------------
 
-    def _open_changed ( self ):
+    def _open_changed(self):
         """ Handles the user clicking the 'Open...' button.
         """
-        file_name = open_file( extensions = TextInfo(),
-                               filter     = 'Python file (*.py)|*.py',
-                               id         = demo_id )
+        file_name = open_file(extensions=TextInfo(),
+                              filter='Python file (*.py)|*.py',
+                              id=demo_id)
         if file_name != '':
             self.file_name = file_name
 
@@ -66,4 +67,3 @@ demo = FileDialogDemo()
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

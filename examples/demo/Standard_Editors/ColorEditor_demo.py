@@ -15,7 +15,9 @@ from traitsui.api \
     import Item, Group, View
 
 # Demo class definition:
-class ColorEditorDemo ( HasTraits ):
+
+
+class ColorEditorDemo(HasTraits):
     """ Defines the main ColorEditor demo. """
 
     # Define a Color trait to view:
@@ -23,21 +25,21 @@ class ColorEditorDemo ( HasTraits ):
 
     # Items are used to define the demo display, one item per editor style:
     color_group = Group(
-        Item( 'color_trait', style = 'simple',   label = 'Simple' ),
-        Item(  '_' ),
-        Item( 'color_trait', style = 'custom',   label = 'Custom' ),
-        Item( '_'),
-        Item( 'color_trait', style = 'text',     label = 'Text' ),
-        Item( '_'),
-        Item( 'color_trait', style = 'readonly', label = 'ReadOnly' )
+        Item('color_trait', style='simple', label='Simple'),
+        Item('_'),
+        Item('color_trait', style='custom', label='Custom'),
+        Item('_'),
+        Item('color_trait', style='text', label='Text'),
+        Item('_'),
+        Item('color_trait', style='readonly', label='ReadOnly')
     )
 
     # Demo view
     view1 = View(
         color_group,
-        title     = 'ColorEditor',
-        buttons   = ['OK'],
-        resizable = True
+        title='ColorEditor',
+        buttons=['OK'],
+        resizable=True
     )
 
 # Create the demo:

@@ -28,7 +28,7 @@ from ..helper import enum_values_changed
 
 
 def _eval_list_str(s, sep=',', item_eval=None,
-                                ignore_trailing_sep=True):
+                   ignore_trailing_sep=True):
     """Convert a string into a list.
 
     Parameters
@@ -139,11 +139,15 @@ def _validate_range_value(range_object, object, name, value):
     else:
         new_value = range_object._typed_value(value, low, high)
 
-        satisfies_low = (low is None or low < new_value or
-            ((not range_object._exclude_low) and (low == new_value)))
+        satisfies_low = (
+            low is None or low < new_value or (
+                (not range_object._exclude_low) and (
+                    low == new_value)))
 
-        satisfies_high = (high is None or high > new_value or
-            ((not range_object._exclude_high) and (high == new_value)))
+        satisfies_high = (
+            high is None or high > new_value or (
+                (not range_object._exclude_high) and (
+                    high == new_value)))
 
         if satisfies_low and satisfies_high:
             return value
@@ -153,33 +157,35 @@ def _validate_range_value(range_object, object, name, value):
 
 
 def _prepare_method(cls, parent):
-        """ Unbound implementation of the prepare editor method to add a
-        change notification hook in the items of the list before calling
-        the parent prepare method of the parent class.
+    """ Unbound implementation of the prepare editor method to add a
+    change notification hook in the items of the list before calling
+    the parent prepare method of the parent class.
 
-        """
-        name = cls.extended_name
-        if name != 'None':
-            cls.context_object.on_trait_change(cls._update_editor,
-                                                name + '[]',
-                                                dispatch='ui')
-        super(cls.__class__, cls).prepare(parent)
+    """
+    name = cls.extended_name
+    if name != 'None':
+        cls.context_object.on_trait_change(cls._update_editor,
+                                           name + '[]',
+                                           dispatch='ui')
+    super(cls.__class__, cls).prepare(parent)
+
 
 def _dispose_method(cls):
-        """ Unbound implementation of the dispose editor method to remove
-        the change notification hook in the items of the list before calling
-        the parent dispose method of the parent class.
+    """ Unbound implementation of the dispose editor method to remove
+    the change notification hook in the items of the list before calling
+    the parent dispose method of the parent class.
 
-        """
-        if cls.ui is None:
-            return
+    """
+    if cls.ui is None:
+        return
 
-        name = cls.extended_name
-        if name != 'None':
-            cls.context_object.on_trait_change(cls._update_editor,
-                                                name + '[]',
-                                                remove=True)
-        super(cls.__class__, cls).dispose()
+    name = cls.extended_name
+    if name != 'None':
+        cls.context_object.on_trait_change(cls._update_editor,
+                                           name + '[]',
+                                           remove=True)
+    super(cls.__class__, cls).dispose()
+
 
 class CSVListEditor(TextEditor):
     """A text editor for a List.
@@ -231,7 +237,7 @@ class CSVListEditor(TextEditor):
     # The separator of the element in the list.
     sep = Trait(',', None, Str)
 
-     # If False, it is an error to have a trailing separator.
+    # If False, it is an error to have a trailing separator.
     ignore_trailing_sep = Bool(True)
 
     # Include some of the TextEditor API:
@@ -277,23 +283,25 @@ class CSVListEditor(TextEditor):
         # function (evaluate) and formatting function (fmt_func) for the
         # given inner trait.
         if it.is_trait_type(Int) or it.is_trait_type(Float) or \
-                                                it.is_trait_type(Str):
-            evaluate = \
-                lambda s: _eval_list_str(s, sep=self.sep,
-                                item_eval=it.trait_type.evaluate,
-                                ignore_trailing_sep=self.ignore_trailing_sep)
+                it.is_trait_type(Str):
+            evaluate = lambda s: _eval_list_str(
+                s,
+                sep=self.sep,
+                item_eval=it.trait_type.evaluate,
+                ignore_trailing_sep=self.ignore_trailing_sep)
             fmt_func = lambda vals: _format_list_str(vals,
-                                                    sep=self.sep)
+                                                     sep=self.sep)
         elif it.is_trait_type(Enum):
             values, mapping, inverse_mapping = enum_values_changed(it)
-            evaluate = \
-                lambda s: _eval_list_str(s, sep=self.sep,
-                                item_eval=mapping.__getitem__,
-                                ignore_trailing_sep=self.ignore_trailing_sep)
+            evaluate = lambda s: _eval_list_str(
+                s,
+                sep=self.sep,
+                item_eval=mapping.__getitem__,
+                ignore_trailing_sep=self.ignore_trailing_sep)
             fmt_func = \
                 lambda vals: \
-                    _format_list_str(vals, sep=self.sep,
-                                     item_format=inverse_mapping.__getitem__)
+                _format_list_str(vals, sep=self.sep,
+                                 item_format=inverse_mapping.__getitem__)
         elif it.is_trait_type(Range):
             # Get the type of the values from the default value.
             # range_object will be an instance of traits.trait_types.Range.
@@ -309,16 +317,17 @@ class CSVListEditor(TextEditor):
             if range_object.validate is None:
                 # This will be the case for dynamic ranges.
                 item_eval = lambda s: _validate_range_value(
-                                        range_object, object, name, typ(s))
+                    range_object, object, name, typ(s))
             else:
                 # Static ranges have a validate method.
                 item_eval = lambda s: range_object.validate(
-                                                    object, name, typ(s))
+                    object, name, typ(s))
 
-            evaluate = \
-                lambda s: _eval_list_str(s, sep=self.sep,
-                                item_eval=item_eval,
-                                ignore_trailing_sep=self.ignore_trailing_sep)
+            evaluate = lambda s: _eval_list_str(
+                s,
+                sep=self.sep,
+                item_eval=item_eval,
+                ignore_trailing_sep=self.ignore_trailing_sep)
             fmt_func = lambda vals: _format_list_str(vals,
                                                      sep=self.sep)
         else:
@@ -327,51 +336,50 @@ class CSVListEditor(TextEditor):
 
         return evaluate, fmt_func
 
-
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Methods that generate backend toolkit-specific editors.
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def simple_editor ( self, ui, object, name, description, parent ):
+    def simple_editor(self, ui, object, name, description, parent):
         """ Generates an editor using the "simple" style.
         """
         self.evaluate, self.format_func = self._funcs(object, name)
-        return self.simple_editor_class( parent,
-                                         factory     = self,
-                                         ui          = ui,
-                                         object      = object,
-                                         name        = name,
-                                         description = description )
+        return self.simple_editor_class(parent,
+                                        factory=self,
+                                        ui=ui,
+                                        object=object,
+                                        name=name,
+                                        description=description)
 
-    def custom_editor ( self, ui, object, name, description, parent ):
+    def custom_editor(self, ui, object, name, description, parent):
         """ Generates an editor using the "custom" style.
         """
         self.evaluate, self.format_func = self._funcs(object, name)
-        return self.custom_editor_class( parent,
-                                         factory     = self,
-                                         ui          = ui,
-                                         object      = object,
-                                         name        = name,
-                                         description = description )
+        return self.custom_editor_class(parent,
+                                        factory=self,
+                                        ui=ui,
+                                        object=object,
+                                        name=name,
+                                        description=description)
 
-    def text_editor ( self, ui, object, name, description, parent ):
+    def text_editor(self, ui, object, name, description, parent):
         """ Generates an editor using the "text" style.
         """
         self.evaluate, self.format_func = self._funcs(object, name)
-        return self.text_editor_class( parent,
-                                       factory     = self,
-                                       ui          = ui,
-                                       object      = object,
-                                       name        = name,
-                                       description = description )
+        return self.text_editor_class(parent,
+                                      factory=self,
+                                      ui=ui,
+                                      object=object,
+                                      name=name,
+                                      description=description)
 
-    def readonly_editor ( self, ui, object, name, description, parent ):
+    def readonly_editor(self, ui, object, name, description, parent):
         """ Generates an "editor" that is read-only.
         """
         self.evaluate, self.format_func = self._funcs(object, name)
-        return self.readonly_editor_class( parent,
-                                           factory     = self,
-                                           ui          = ui,
-                                           object      = object,
-                                           name        = name,
-                                           description = description )
+        return self.readonly_editor_class(parent,
+                                          factory=self,
+                                          ui=ui,
+                                          object=object,
+                                          name=name,
+                                          description=description)

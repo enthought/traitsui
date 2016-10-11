@@ -9,13 +9,17 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
 #------------------------------------------------------------------------------
+from __future__ import (
+    division, print_function, unicode_literals, absolute_import)
+
 import unittest
 
 from traits.api import Float, Int, HasStrictTraits, Str, Tuple, ValidatedTuple
 from traits.testing.api import UnittestTools
-
 from traitsui.tests._tools import (
     dispose_ui_after, get_traitsui_editor, set_value, skip_if_null)
+from traitsui.item import Item
+from traitsui.view import View
 
 
 class DummyModel(HasStrictTraits):
@@ -144,7 +148,6 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
                 {'f0': 0, 'f1': 1, 'invalid0': False, 'invalid1': False})
 
     def test_when_editor_is_used_in_the_view(self):
-        from traitsui.api import Item, View
 
         class SimpleWithView(HasStrictTraits):
 

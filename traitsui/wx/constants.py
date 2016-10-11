@@ -19,21 +19,21 @@
     editors and text editor factories.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 import sys
 
 import wx
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Define platform and wx version constants:
-is_mac  = (sys.platform == 'darwin')
-is_wx26 = (float( '.'.join( wx.__version__.split( '.' )[0:2] ) ) < 2.8)
+is_mac = (sys.platform == 'darwin')
+is_wx26 = (float('.'.join(wx.__version__.split('.')[0:2])) < 2.8)
 
 # Default dialog title
 DefaultTitle = 'Edit properties'
@@ -42,31 +42,30 @@ DefaultTitle = 'Edit properties'
 OKColor = wx.WHITE
 
 # Color to highlight input errors
-ErrorColor = wx.Colour( 255, 192, 192 )
+ErrorColor = wx.Colour(255, 192, 192)
 
 # Color for background of read-only fields
-ReadonlyColor = wx.Colour( 244, 243, 238 )
+ReadonlyColor = wx.Colour(244, 243, 238)
 
 # Color for background of fields where objects can be dropped
-DropColor = wx.Colour( 215, 242, 255 )
+DropColor = wx.Colour(215, 242, 255)
 
 # Color for an editable field
 EditableColor = wx.WHITE
 
 # Color for background of windows (like dialog background color)
 if is_mac:
-    WindowColor = wx.Colour( 232, 232, 232 )
-    BorderedGroupColor = wx.Colour( 224, 224, 224 )
+    WindowColor = wx.Colour(232, 232, 232)
+    BorderedGroupColor = wx.Colour(224, 224, 224)
 else:
-    WindowColor = wx.SystemSettings_GetColour( wx.SYS_COLOUR_MENUBAR )
+    WindowColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_MENUBAR)
 
 # Standard width of an image bitmap
 standard_bitmap_width = 120
 
 # Width of a scrollbar
-scrollbar_dx = wx.SystemSettings_GetMetric( wx.SYS_VSCROLL_X )
+scrollbar_dx = wx.SystemSettings_GetMetric(wx.SYS_VSCROLL_X)
 
 # Screen size values:
-screen_dx = wx.SystemSettings_GetMetric( wx.SYS_SCREEN_X )
-screen_dy = wx.SystemSettings_GetMetric( wx.SYS_SCREEN_Y )
-
+screen_dx = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_X)
+screen_dy = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_Y)

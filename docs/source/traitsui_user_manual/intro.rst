@@ -140,7 +140,6 @@ order of precedence:
        from traits.etsconfig.api import ETSConfig
        ETSConfig.toolkit = 'wx'
 
-#. The user can specify a -toolkit flag on the command line of the program.
 #. The user can define a value for the ETS_TOOLKIT environment variable.
 
 .. warning:: The default order of toolkits changed in TraitsUI 5.0 to

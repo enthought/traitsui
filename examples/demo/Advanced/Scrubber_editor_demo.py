@@ -93,7 +93,7 @@ For comparison purposes, the example also shows the same traits displayed using
 their default editors.
 """
 
-#-- Imports --------------------------------------------------------------------
+#-- Imports --------------------------------------------------------------
 
 from traits.api \
     import HasTraits, Range, Float
@@ -104,60 +104,62 @@ from traitsui.api \
 from traitsui.ui_traits \
     import ATheme
 
-#-- Shared Themed Item Definition ----------------------------------------------
+#-- Shared Themed Item Definition ----------------------------------------
 
-class TItem ( Item ):
-    editor     = ScrubberEditor()
-    item_theme = ATheme( '@std:LG' )
 
-#-- ScrubberDemo Class ---------------------------------------------------------
+class TItem(Item):
+    editor = ScrubberEditor()
+    item_theme = ATheme('@std:LG')
 
-class ScrubberDemo ( HasTraits ):
+#-- ScrubberDemo Class ---------------------------------------------------
+
+
+class ScrubberDemo(HasTraits):
 
     # Define some sample ranges and values:
-    simple_integer       = Range( 0, 100 )
-    rollover_float       = Range( -10.0, 10.0 )
-    bordered_unbounded   = Float
-    themed_dynamic_low   = Range( high = -0.01, value = -10.0 )
-    themed_dynamic_high  = Range( low  =  0.01, value =  10.0 )
-    themed_dynamic_value = Range( 'themed_dynamic_low', 'themed_dynamic_high',
-                                  0.0 )
+    simple_integer = Range(0, 100)
+    rollover_float = Range(-10.0, 10.0)
+    bordered_unbounded = Float
+    themed_dynamic_low = Range(high=-0.01, value=-10.0)
+    themed_dynamic_high = Range(low=0.01, value=10.0)
+    themed_dynamic_value = Range('themed_dynamic_low', 'themed_dynamic_high',
+                                 0.0)
 
     # Define the demo view:
     view = View(
         HGroup(
             VGroup(
-                Item( 'simple_integer',
-                      editor = ScrubberEditor() ),
-                Item( 'rollover_float',
-                      editor = ScrubberEditor( hover_color  = 0xFFFFFF,
-                                               active_color = 0xA0CD9E ) ),
-                Item( 'bordered_unbounded',
-                      editor = ScrubberEditor( hover_color  = 0xFFFFFF,
-                                               active_color = 0xA0CD9E,
-                                               border_color = 0x808080 ) ),
-                TItem( 'themed_dynamic_low' ),
-                TItem( 'themed_dynamic_high' ),
-                TItem( 'themed_dynamic_value' ),
-                show_border = True,
-                label       = 'Scrubber Editors'
+                Item('simple_integer',
+                     editor=ScrubberEditor()),
+                Item('rollover_float',
+                     editor=ScrubberEditor(hover_color=0xFFFFFF,
+                                           active_color=0xA0CD9E)),
+                Item('bordered_unbounded',
+                     editor=ScrubberEditor(hover_color=0xFFFFFF,
+                                           active_color=0xA0CD9E,
+                                           border_color=0x808080)),
+                TItem('themed_dynamic_low'),
+                TItem('themed_dynamic_high'),
+                TItem('themed_dynamic_value'),
+                show_border=True,
+                label='Scrubber Editors'
             ),
             VGroup(
-                Item( 'simple_integer' ),
-                Item( 'rollover_float' ),
-                Item( 'bordered_unbounded' ),
-                Item( 'themed_dynamic_low' ),
-                Item( 'themed_dynamic_high' ),
-                Item( 'themed_dynamic_value' ),
-                show_border = True,
-                label       = 'Default Editors'
+                Item('simple_integer'),
+                Item('rollover_float'),
+                Item('bordered_unbounded'),
+                Item('themed_dynamic_low'),
+                Item('themed_dynamic_high'),
+                Item('themed_dynamic_value'),
+                show_border=True,
+                label='Default Editors'
             ),
             spring
         ),
-        title = 'Scrubber Editor Demo'
+        title='Scrubber Editor Demo'
     )
 
-#-- Create and run the demo ----------------------------------------------------
+#-- Create and run the demo ----------------------------------------------
 
 # Create the demo:
 demo = ScrubberDemo()

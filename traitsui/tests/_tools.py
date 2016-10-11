@@ -27,6 +27,7 @@ import traits.trait_notifiers
 
 # ######### Testing tools
 
+
 @contextmanager
 def store_exceptions_on_all_threads():
     """Context manager that captures all exceptions, even those coming from
@@ -179,6 +180,7 @@ def get_dialog_size(ui_control):
     elif is_current_backend_qt4():
         return ui_control.size().width(), ui_control.size().height()
 
+
 def set_value(editor, value):
     """ Set the value on the control managed by the editor.
 
@@ -189,6 +191,7 @@ def set_value(editor, value):
     elif is_current_backend_qt4():
         editor.control.setText(value)
         editor.update_object()
+
 
 @contextmanager
 def dispose_ui_after(function, timeout, *args, **kwargs):
@@ -267,10 +270,10 @@ def get_traitsui_editor(ui, path):
 def apply_on_children(func, node, _level=0):
     """Print the result of applying a function on `node` and its children.
     """
-    print '-'*_level + str(node)
-    print ' '*_level + str(func(node)) + '\n'
+    print '-' * _level + str(node)
+    print ' ' * _level + str(func(node)) + '\n'
     for child in get_children(node):
-        apply_on_children(func, child, _level+1)
+        apply_on_children(func, child, _level + 1)
 
 
 def wx_print_names(node):

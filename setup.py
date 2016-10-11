@@ -107,11 +107,11 @@ if __name__ == "__main__":
             return {'documentation': BuildDoc}
 
     setup(
-        name = 'traitsui',
-        version = __version__,
-        author = 'David C. Morrill, et. al.',
-        author_email = 'dmorrill@enthought.com',
-        classifiers = [c.strip() for c in """\
+        name='traitsui',
+        version=__version__,
+        author='David C. Morrill, et. al.',
+        author_email='dmorrill@enthought.com',
+        classifiers=[c.strip() for c in """\
             Development Status :: 5 - Production/Stable
             Intended Audience :: Developers
             Intended Audience :: Science/Research
@@ -130,18 +130,18 @@ if __name__ == "__main__":
             Topic :: Software Development
             Topic :: Software Development :: Libraries
             """.splitlines() if len(c.strip()) > 0],
-        description = 'traitsui: traits-capable user interfaces',
-        long_description = open('README.rst').read(),
-        url = 'https://docs.enthought.com/traitsui',
-        download_url = 'https://github.com/enthought/traitsui',
+        description='traitsui: traits-capable user interfaces',
+        long_description=open('README.rst').read(),
+        url='https://docs.enthought.com/traitsui',
+        download_url='https://github.com/enthought/traitsui',
         install_requires=__requires__,
-        license = 'BSD',
-        maintainer = 'ETS Developers',
-        maintainer_email = 'enthought-dev@enthought.com',
-        package_data = dict(traitsui=['image/library/*.zip',
-                                      'wx/images/*', 'qt4/images/*']),
-        packages = find_packages(),
-        platforms = ["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
-        zip_safe = False,
-        use_2to3 = True,
+        license='BSD',
+        maintainer='ETS Developers',
+        maintainer_email='enthought-dev@enthought.com',
+        package_data=dict(traitsui=['image/library/*.zip',
+                                    'wx/images/*', 'qt4/images/*']),
+        packages=find_packages(),
+        platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
+        zip_safe=False,
+        use_2to3=True,
     )
