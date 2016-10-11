@@ -37,6 +37,9 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
         from traitsui.api import TupleEditor
         self.tuple_editor = TupleEditor
 
+    def tearDown(self):
+        self.tuple_editor = None
+
     def test_value_update(self):
         # Regression test for #179
         dummy_model = DummyModel()
@@ -72,7 +75,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
 
             set_value(f0_editor, '5')  # 5 < 1 -> invalid
             self.assertTrue(f0_editor.in_error_state())
-            self.assertIsNone(f1_editor.in_error_state())
+            self.assertTrue(f1_editor.in_error_state())
             self.assertEqual(editor.value, (0, 1))
 
             set_value(f0_editor, '-3')  # -3 < 1 -> valid
@@ -81,7 +84,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             self.assertEqual(editor.value, (-3, 1))
 
             set_value(f1_editor, '-4')  # -3 < -4 -> invalid
-            self.assertIsNone(f0_editor.in_error_state())
+            self.assertTrue(f0_editor.in_error_state())
             self.assertTrue(f1_editor.in_error_state())
             self.assertEqual(editor.value, (-3, 1))
 
@@ -170,7 +173,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             f1_editor = get_traitsui_editor(fields_ui, 'f1')
 
             set_value(f1_editor, '-4')  # 0 < -4 -> invalid
-            self.assertFalse(f0_editor.invalid)
+            self.assertTrue(f0_editor.invalid)
             self.assertTrue(f1_editor.invalid)
             self.assertEqual(editor.value, (0, 1))
 
@@ -201,7 +204,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             f1_editor = get_traitsui_editor(fields_ui, 'f1')
 
             set_value(f1_editor, '-4')  # 0 < -4 -> invalid
-            self.assertFalse(f0_editor.invalid)
+            self.assertTrue(f0_editor.invalid)
             self.assertTrue(f1_editor.invalid)
             self.assertEqual(editor.value, (0, 1))
 
@@ -233,7 +236,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
             f1_editor = get_traitsui_editor(fields_ui, 'f1')
 
             set_value(f1_editor, '-4')  # 0 < -4 -> invalid
-            self.assertFalse(f0_editor.invalid)
+            self.assertTrue(f0_editor.invalid)
             self.assertTrue(f1_editor.invalid)
             self.assertEqual(editor.value, (0, 1))
 
@@ -247,7 +250,7 @@ class TestTupleEditor(UnittestTools, unittest.TestCase):
 
             # given
             set_value(f1_editor, '-4')  # 0 < -4 -> invalid
-            self.assertIsNone(f0_editor.in_error_state())
+            self.assertTrue(f0_editor.in_error_state())
             self.assertTrue(f1_editor.in_error_state())
             self.assertEqual(editor.value, (0, 1))
 

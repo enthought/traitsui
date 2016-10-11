@@ -214,7 +214,8 @@ class TupleStructure(HasTraits):
                     for i in range(self.fields):
                         setattr(self, 'invalid{0}'.format(i), False)
                 else:
-                    setattr(self, 'invalid{0}'.format(index), True)
+                    for i in range(self.fields):
+                        setattr(self, 'invalid{0}'.format(i), True)
             else:
                 editor.value = new_value
 
