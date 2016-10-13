@@ -429,7 +429,7 @@ class RadioEditor(BaseEditor):
         if self.row_major:
             incr = [1] * cols
         else:
-            incr = [n / cols] * cols
+            incr = [n // cols] * cols
             rem = n % cols
             for i in range(cols):
                 incr[i] += (rem > i)
