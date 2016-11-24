@@ -303,6 +303,6 @@ def parse_value(value):
     """
     if value is None:
         return []
-    if not isinstance(value, str):
+    if not isinstance(value, basestring):
         return value[:]
     return [x.strip() for x in value.split(',')]
