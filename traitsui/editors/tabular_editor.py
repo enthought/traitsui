@@ -25,9 +25,8 @@
 
 from __future__ import absolute_import
 
+from pyface.ui_traits import Image
 from traits.api import Str, Bool, Property, List, Enum, Instance
-
-from ..ui_traits import Image
 
 from ..basic_editor_factory import BasicEditorFactory
 

@@ -23,20 +23,20 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
+
 import os
 
 from pyface.qt import QtCore, QtGui
-
 from pyface.image_resource import ImageResource
+from pyface.traitsui.ui_traits import Image
 
 from traits.api import (Any, Bool, Callable, Event, HasStrictTraits, Instance,
                         Int, List, NO_COMPARE, Property, TraitListEvent)
 
 from traitsui.tabular_adapter import TabularAdapter
-from traitsui.ui_traits import Image
-
-from editor import Editor
-from tabular_model import TabularModel
+from .editor import Editor
+from .tabular_model import TabularModel
 
 
 TRAITS_DEBUG = (os.getenv('TRAITS_DEBUG') is not None)

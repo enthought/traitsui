@@ -24,9 +24,8 @@
 
 from __future__ import absolute_import
 
+from pyface.ui_traits import Alignment
 from traits.api import Float, Color, Property
-
-from ..ui_traits import Alignment
 
 from ..basic_editor_factory import BasicEditorFactory
 

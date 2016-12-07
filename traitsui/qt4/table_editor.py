@@ -16,12 +16,12 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
+
 from pyface.qt import QtCore, QtGui
-
-from pyface.image_resource import ImageResource
-
+from pyface.image_resource import ImageResourc
 from pyface.timer.api import do_later
-
+from pyface.ui_traits import Image
 from traits.api import Any, Bool, Button, Event, List, HasTraits, \
     Instance, Int, Property, Str, cached_property, on_trait_change
 
@@ -30,10 +30,10 @@ from traitsui.api import EnumEditor, InstanceEditor, Group, \
     spring
 from traitsui.editors.table_editor import BaseTableEditor, \
     ReversedList, ToolkitEditorFactory, customize_filter
-from traitsui.ui_traits import SequenceTypes, Image
+from traitsui.ui_traits import SequenceTypes
 
-from editor import Editor
-from table_model import TableModel, SortFilterTableModel
+from .editor import Editor
+from .table_model import TableModel, SortFilterTableModel
 
 #-------------------------------------------------------------------------
 #  'TableEditor' class:
