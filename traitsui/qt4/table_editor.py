@@ -19,7 +19,7 @@
 from __future__ import absolute_import
 
 from pyface.qt import QtCore, QtGui
-from pyface.image_resource import ImageResourc
+from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
 from pyface.ui_traits import Image
 from traits.api import Any, Bool, Button, Event, List, HasTraits, \
