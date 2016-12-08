@@ -22,22 +22,19 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
+
 from pyface.qt.QtGui import QFrame, QPainter, QPalette
 
-from pyface.image_resource \
-    import ImageResource
-
-from traitsui.ui_traits \
-    import convert_bitmap
+from pyface.image_resource import ImageResource
+from pyface.ui_traits import convert_bitmap
 
 # FIXME: ImageEditor is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.image_editor file.
-from traitsui.editors.image_editor \
-    import ImageEditor
+from traitsui.editors.image_editor import ImageEditor
 
-from editor \
-    import Editor
+from .editor import Editor
 
 #-------------------------------------------------------------------------
 #  'QImageView' class:

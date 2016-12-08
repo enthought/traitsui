@@ -24,17 +24,12 @@
 
 from __future__ import absolute_import
 
+from pyface.ui_traits import Image
 from traits.api import Str, Range, Enum, Property, Trait
 
-# CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
-# to avoid circular imports, as this EditorFactory will be part of
-# traits.ui.api as well.
-
-from ..view import View
-
-from ..ui_traits import AView, Image
-
 from ..editor_factory import EditorFactory
+from ..ui_traits import AView
+from ..view import View
 
 #-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:

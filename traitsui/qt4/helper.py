@@ -21,12 +21,10 @@
 import os.path
 
 from pyface.qt import QtCore, QtGui
+from pyface.ui_traits import convert_image
+from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
-from traits.api \
-    import Enum, CTrait, BaseTraitHandler, TraitError
-
-from traitsui.ui_traits \
-    import convert_image, SequenceTypes
+from traitsui.ui_traits import SequenceTypes
 
 #-------------------------------------------------------------------------
 #  Trait definitions:
