@@ -29,7 +29,7 @@ import os
 
 from pyface.qt import QtCore, QtGui
 from pyface.image_resource import ImageResource
-from pyface.traitsui.ui_traits import Image
+from pyface.ui_traits import Image
 
 from traits.api import (Any, Bool, Callable, Event, HasStrictTraits, Instance,
                         Int, List, NO_COMPARE, Property, TraitListEvent)
