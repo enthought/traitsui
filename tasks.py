@@ -23,7 +23,7 @@ supported_combinations = {
 }
 
 @task
-def test(ctx, runtime='3.5', toolkit='null', environment=None):
+def test(ctx, runtime='3.5', toolkit='null', environment=None, edm='edm'):
     """ Run the test suite in a given runtime with the specified toolkit """
     if toolkit not in supported_combinations.get(runtime, set()):
         msg = "Python {} and toolkit {} not supported by test environments"
@@ -47,14 +47,14 @@ def test(ctx, runtime='3.5', toolkit='null', environment=None):
         ets_toolkit = 'null'
 
     print("Creating environment '{}'".format(environment))
-    ctx.run("edm install -y -e '{}' --version '{}' {}".format(
-        environment, runtime, ' '.join(packages)))
+    ctx.run("{} install -y -e '{}' --version '{}' {}".format(
+        edm, environment, runtime, ' '.join(packages)))
     try:
         # use current master of pyface
-        clone_into_env(ctx, environment, 'pyface')
+        clone_into_env(ctx, environment, 'pyface', edm=edm)
 
         # install install traitsui
-        run_in_env(ctx, environment, "python setup.py install")
+        run_in_env(ctx, environment, "python setup.py install", edm=edm)
 
         envvar = {
             "ETS_TOOLKIT": ets_toolkit,
@@ -64,15 +64,16 @@ def test(ctx, runtime='3.5', toolkit='null', environment=None):
         with do_in_tempdir():
             run_in_env(
                 ctx, environment,
-                "coverage run -m nose.core -v traitsui.tests", envvar)
+                "coverage run -m nose.core -v traitsui.tests", envvar, edm)
             if ets_toolkit == 'qt4':
                 run_in_env(
                     ctx, environment,
-                    "coverage run -m nose.core -v traitsui.qt4.tests", envvar)
+                    "coverage run -m nose.core -v traitsui.qt4.tests", envvar,
+                    edm)
     finally:
         try:
-            env_path = ctx.run("edm prefix -e '{}'".format(environment)).stdout
-            ctx.run("edm environments remove --purge -y '{}'".format(environment))
+            env_path = ctx.run("{} prefix -e '{}'".format(edm, environment)).stdout
+            ctx.run("{} environments remove --purge -y '{}'".format(edm,environment))
         except Failure:
             print("Force removing environment dir: {}".format(env_path))
             ctx.run("rm -rf {}".format(env_path))
@@ -110,7 +111,7 @@ def do_in_tempdir():
         rmtree(path)
 
 
-def run_in_env(ctx, environment, command, envvars={}):
+def run_in_env(ctx, environment, command, envvars={}, edm='edm'):
     """ Run a shell command in an edm environment
 
     Parameters
@@ -124,12 +125,12 @@ def run_in_env(ctx, environment, command, envvars={}):
     envvars : dict
         Optional additional environment variables for running the command.
     """
-    ctx.run("edm run -e '{}' -- {}".format(environment, command),
+    ctx.run("{} run -e '{}' -- {}".format(edm, environment, command),
             env=envvars)
 
 
 def clone_into_env(ctx, environment, project, organization='enthought',
-                   branch='master'):
+                   branch='master', edm='edm'):
     """ Clone a Python github repo and isntall into an edm environment.
 
     This is very simplistic.  It assumes that the repo is public and that the
@@ -155,4 +156,4 @@ def clone_into_env(ctx, environment, project, organization='enthought',
         if branch != "master":
             ctx.run("git checkout '{}'".format(branch))
         os.chdir(project)
-        run_in_env(ctx, environment, 'python setup.py install')
+        run_in_env(ctx, environment, 'python setup.py install', edm=edm)
