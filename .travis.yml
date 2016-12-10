@@ -20,7 +20,7 @@ before_install:
   - ./edm_1.3.0_linux_x86_64.sh -b
   - pip install invoke
 script:
-  - invoke test --runtime={$RUNTIME} -- toolkit={$TOOLKIT}
+  - invoke test --runtime=${RUNTIME} -- toolkit=${TOOLKIT}
 after_success:
   - pip install codecov
   - codecov
