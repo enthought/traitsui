@@ -17,8 +17,8 @@ before_install:
   - sh -e /etc/init.d/xvfb start
   - wget https://package-data.enthought.com/edm/rh5_x86_64/1.3/edm_1.3.0_linux_x86_64.sh
   - chmod u+x edm_1.3.0_linux_x86_64.sh
-  - ./edm_1.3.0_linux_x86_64.sh -b
-  - export PATH=~/edm/bin:${PATH}
+  - ./edm_1.3.0_linux_x86_64.sh -b -p ~
+  - export PATH="~/bin:${PATH}"
   - pip install invoke
 script:
   - invoke test --runtime=${RUNTIME} --toolkit=${TOOLKIT}
