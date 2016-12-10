@@ -27,7 +27,7 @@
 
 from __future__ import absolute_import
 
-from ..ui_traits import Image
+from pyface.ui_traits import Image
 
 from ..editor_factory import EditorFactory
 
