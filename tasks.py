@@ -35,8 +35,10 @@ def do_in_tempdir():
         rmtree(path)
 
 
-def run_in_env(ctx, environment, command):
-    ctx.run("edm run -e '{}' -- {}".format(environment, command))
+def run_in_env(ctx, environment, command, envvars={}):
+
+    ctx.run("edm run -e '{}' -- {}".format(environment, command),
+            env=envvars)
 
 
 def clone_into_env(ctx, environment, project, organization='enthought',
@@ -84,22 +86,24 @@ def test(ctx, runtime='3.5', toolkit='null', environment=None):
         # install install traitsui
         run_in_env(ctx, environment, "python setup.py install")
 
-        os.environ.update({
+        envvar = {
             "ETS_TOOLKIT": ets_toolkit,
             "COVERAGE_FILE": os.path.join(os.getcwd(), '.coverage')
-        })
+        }
         # run tests
         with do_in_tempdir():
             run_in_env(ctx, environment,
-                       "coverage run -m nose.core -v traitsui.tests")
+                       "coverage run -m nose.core -v traitsui.tests",
+                       envvar)
             if ets_toolkit == 'qt4':
                 run_in_env(ctx, environment,
                            "coverage run -m nose.core -v traitsui.qt4.tests")
     finally:
         try:
+            env_path = ctx.run("edm prefix -e '{}'".format(environment)).stdout
+            print env_path
             ctx.run("edm environments remove --purge -y '{}'".format(environment))
         except Failure as exc:
-            env_path = os.path.join('~', '.edm', 'envs', environment)
             print("Removing {}".format(env_path))
             ctx.run("rm -rf {}".format(env_path))
 
