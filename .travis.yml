@@ -3,18 +3,12 @@ sudo: false
 python:
   - 2.7_with_system_site_packages
 env:
-  - TOOLKIT=pyqt
-  - TOOLKIT=pyside
-  - TOOLKIT=null
-  - TOOLKIT=wx
-  - RUNTIME=2.7
-  - RUNTIME=3.5
-matrix:
-  exclude:
-    - RUNTIME=3.5
-      TOOLKIT=wx
-    - RUNTIME=3.5
-      TOOLKIT=pyside
+  - RUNTIME=2.7 TOOLKIT=null
+  - RUNTIME=2.7 TOOLKIT=pyqt
+  - RUNTIME=2.7 TOOLKIT=pyside
+  - RUNTIME=2.7 TOOLKIT=wxpython
+  - RUNTIME=3.5 TOOLKIT=null
+  - RUNTIME=3.5 TOOLKIT=pyqt
 cache:
   directories:
     - $HOME/.edm
