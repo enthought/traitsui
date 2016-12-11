@@ -27,8 +27,7 @@ install:
   - invoke install --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 script:
   - invoke test --runtime=${RUNTIME} --toolkit=${TOOLKIT}
+  - invoke cleanup --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 after_success:
   - pip install codecov
   - codecov
-after_script:
-  - invoke cleanup --runtime=${RUNTIME} --toolkit=${TOOLKIT}
