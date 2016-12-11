@@ -42,7 +42,7 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - ./install_edm.sh
-  - edm install invoke
+  - edm install invoke -y
 install:
   - edm run -- invoke install --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 script:
