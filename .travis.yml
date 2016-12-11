@@ -6,7 +6,7 @@ env:
   - RUNTIME=2.7 TOOLKIT=null
   - RUNTIME=2.7 TOOLKIT=pyqt
   - RUNTIME=2.7 TOOLKIT=pyside
-  - RUNTIME=2.7 TOOLKIT=wxpython
+  - RUNTIME=2.7 TOOLKIT=wx
   - RUNTIME=3.5 TOOLKIT=null
   - RUNTIME=3.5 TOOLKIT=pyqt
 cache:
@@ -20,8 +20,12 @@ before_install:
   - ./edm_1.3.0_linux_x86_64.sh -b -p ~
   - export PATH="~/bin:${PATH}"
   - pip install invoke
+install:
+  - invoke install --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 script:
   - invoke test --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 after_success:
   - pip install codecov
   - codecov
+after_script:
+  - invoke cleanup --runtime=${RUNTIME} --toolkit=${TOOLKIT}

@@ -1,20 +1,10 @@
 from contextlib import contextmanager
 import os
-from shutil import rmtree
+from shutil import rmtree, copytree, copy as copyfile
 from tempfile import mkdtemp
 
 from invoke import task
 from invoke.exceptions import Failure
-
-
-DEPENDENCIES = [
-    "numpy",
-    "pandas",
-    "pygments",
-    "traits",
-    "nose",
-    "coverage",
-]
 
 
 supported_combinations = {
@@ -22,9 +12,33 @@ supported_combinations = {
     '3.5': {'pyqt', 'null'},
 }
 
+dependencies = {
+    "numpy",
+    "pandas",
+    "pygments",
+    "traits",
+    "nose",
+    "coverage",
+}
+
+extra_dependencies = {
+    'pyside': {'pyside'},
+    'pyqt': {'pyqt'},
+    'wx': {'wxpython'},
+    'null': set()
+}
+
+environment_vars = {
+    'pyside': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside'},
+    'pyqt': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt4'},
+    'wx': {'ETS_TOOLKIT': 'wx'},
+    'null': {'ETS_TOOLKIT': 'null'},
+}
+
+
 @task
-def test(ctx, runtime='3.5', toolkit='null', environment=None, edm='edm'):
-    """ Run the test suite in a given runtime with the specified toolkit """
+def install(ctx, runtime='3.5', toolkit='null', environment=None, edm='edm'):
+    """ Install traitsui and dependencies into a clean EDM environment. """
     if toolkit not in supported_combinations.get(runtime, set()):
         msg = "Python {} and toolkit {} not supported by test environments"
         raise RuntimeError(msg.format(runtime, toolkit))
@@ -32,60 +46,88 @@ def test(ctx, runtime='3.5', toolkit='null', environment=None, edm='edm'):
     if environment is None:
         environment = 'traitsui-test-{}-{}'.format(runtime, toolkit)
 
-    packages = DEPENDENCIES[:]
-
-    if toolkit == 'pyqt':
-        packages.append('pyqt')
-        ets_toolkit = 'qt4'
-    elif toolkit == 'pyside':
-        packages.append('pyside')
-        ets_toolkit = 'qt4'
-    elif toolkit == 'wx':
-        packages.append('wxpython')
-        ets_toolkit = 'wx'
-    else:
-        ets_toolkit = 'null'
+    packages = dependencies | extra_dependencies.get(toolkit, set())
 
     print("Creating environment '{}'".format(environment))
     ctx.run("{} install -y -e '{}' --version '{}' {}".format(
         edm, environment, runtime, ' '.join(packages)))
+
+    # use current master of pyface
+    clone_into_env(ctx, environment, 'pyface', edm=edm)
+
+    # install traitsui from this directory
+    run_in_env(ctx, environment, "python setup.py install", edm=edm)
+
+
+@task
+def test(ctx, runtime='3.5', toolkit='null', environment=None, edm='edm'):
+    """ Run the test suite in a given environment with the specified toolkit """
+    if toolkit not in supported_combinations.get(runtime, set()):
+        msg = "Python {} and toolkit {} not supported by test environments"
+        raise RuntimeError(msg.format(runtime, toolkit))
+
+    if environment is None:
+        environment = 'traitsui-test-{}-{}'.format(runtime, toolkit)
+
     try:
-        # use current master of pyface
-        clone_into_env(ctx, environment, 'pyface', edm=edm)
+        # simple test to see if designated environment exists
+        ctx.run("{} prefix -e '{}'".format(edm, environment))
+    except Failure:
+        # environment doesn't exist, so create it and populate
+        print("Environment not found, creating...")
+        install(ctx, runtime, toolkit, environment, edm)
 
-        # install install traitsui
-        run_in_env(ctx, environment, "python setup.py install", edm=edm)
+    envvars = environment_vars.get(toolkit, {}).copy()
 
-        envvar = {
-            "ETS_TOOLKIT": ets_toolkit,
-            "COVERAGE_FILE": os.path.join(os.getcwd(), '.coverage')
-        }
-        # run tests
-        with do_in_tempdir():
-            run_in_env(
-                ctx, environment,
-                "coverage run -m nose.core -v traitsui.tests", envvar, edm)
-            if ets_toolkit == 'qt4':
-                run_in_env(
-                    ctx, environment,
-                    "coverage run -m nose.core -v traitsui.qt4.tests", envvar,
-                    edm)
+    # run tests
+    with do_in_tempdir(files=['.coveragerc'], capture_files=['.coverage']):
+        run_in_env(ctx, environment,
+                   "coverage run -m nose.core -v traitsui.tests",
+                   envvars, edm)
+        if toolkit in {'pyqt', 'pyside'}:
+            run_in_env(ctx, environment,
+                       "coverage run -m nose.core -v traitsui.qt4.tests",
+                       envvars, edm)
+    print('Done')
+
+
+@task
+def cleanup(ctx, runtime='3.5', toolkit='null', environment=None, edm='edm'):
+    if toolkit not in supported_combinations.get(runtime, set()):
+        msg = "Python {} and toolkit {} not supported by test environments"
+        raise RuntimeError(msg.format(runtime, toolkit))
+
+    if environment is None:
+        environment = 'traitsui-test-{}-{}'.format(runtime, toolkit)
+
+    env_path = ctx.run("{} prefix -e '{}'".format(edm, environment)).stdout
+    try:
+        ctx.run("{} environments remove --purge -y '{}'".format(
+            edm, environment))
+    except Failure:
+        print("Force removing environment dir: {}".format(env_path))
+        ctx.run("rm -rf {}".format(env_path))
+
+    print('Done')
+
+
+@task
+def test_clean(ctx, runtime='3.5', toolkit='null', edm='edm'):
+    """ Run tests in a clean environment, cleaning up afterwards """
+    try:
+        install(ctx, runtime, toolkit, edm=edm)
+        test(ctx, runtime, toolkit, edm=edm)
     finally:
-        try:
-            env_path = ctx.run("{} prefix -e '{}'".format(edm, environment)).stdout
-            ctx.run("{} environments remove --purge -y '{}'".format(edm,environment))
-        except Failure:
-            print("Force removing environment dir: {}".format(env_path))
-            ctx.run("rm -rf {}".format(env_path))
+        cleanup(ctx, runtime, toolkit, edm=edm)
 
-        print('Done')
 
 @task
 def test_all(ctx):
+
     for runtime, toolkits in supported_combinations.items():
         for toolkit in toolkits:
             try:
-                test(ctx, runtime, toolkit)
+                test_clean(ctx, runtime, toolkit)
             except Exception as exc:
                 # continue to next runtime
                 print(exc)
@@ -95,17 +137,33 @@ def test_all(ctx):
 # ----------------------------------------------------------------------------
 
 @contextmanager
-def do_in_tempdir():
+def do_in_tempdir(files=(), capture_files=()):
     """ Create a temporary directory, cleaning up after done.
 
     Creates the temporary directory, and changes into it.  On exit returns to
     original directory and removes temporary dir.
+
+    Parameters
+    ----------
+    files : sequence of filenames
+        Files to be copied across to temporary directory.
+    capture_files : sequence of filenames
+        Files to be copied back from temporary directory.
     """
     path = mkdtemp()
     old_path = os.getcwd()
+
+    # send across any files we need
+    for filepath in files:
+        copyfile(filepath, path)
+
     os.chdir(path)
     try:
         yield path
+
+        # retrieve any result files we want
+        for filepath in capture_files:
+            copyfile(filepath, old_path)
     finally:
         os.chdir(old_path)
         rmtree(path)
