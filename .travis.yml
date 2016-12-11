@@ -12,6 +12,7 @@ env:
 matrix:
   allow_failures:
     - env: RUNTIME=2.7 TOOLKIT=wx
+  fast_finish: true
 cache:
   directories:
     - $HOME/.edm
