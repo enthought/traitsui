@@ -5,7 +5,6 @@ then
     sudo installer -pkg edm_1.3.0.pkg -target /
 else
     # set up XVFB for GUI tests
-    export DISPLAY=:99.0
     sh -e /etc/init.d/xvfb start
 
     # download and install EDM

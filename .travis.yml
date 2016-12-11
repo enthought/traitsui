@@ -39,6 +39,7 @@ cache:
   directories:
     - $HOME/.edm
 before_install:
+  - export DISPLAY=:99.0
   - ./travis_ci_install.sh
 install:
   - edm run -- invoke install --runtime=${RUNTIME} --toolkit=${TOOLKIT}
