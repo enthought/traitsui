@@ -14,22 +14,22 @@ matrix:
       env: RUNTIME=3.5 TOOLKIT=null
     - python: 2.7
       env: RUNTIME=3.5 TOOLKIT=pyqt
-    - langauge: generic
+    - language: generic
       os: osx
       env: RUNTIME=2.7 TOOLKIT=null
-    - langauge: generic
+    - language: generic
       os: osx
       env: RUNTIME=2.7 TOOLKIT=pyqt
-    - langauge: generic
+    - language: generic
       os: osx
       env: RUNTIME=2.7 TOOLKIT=pyside
-    - langauge: generic
+    - language: generic
       os: osx
       env: RUNTIME=2.7 TOOLKIT=wx
-    - langauge: generic
+    - language: generic
       os: osx
       env: RUNTIME=3.5 TOOLKIT=null
-    - langauge: generic
+    - language: generic
       os: osx
       env: RUNTIME=3.5 TOOLKIT=pyqt
   allow_failures:
