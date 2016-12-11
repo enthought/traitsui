@@ -8,7 +8,7 @@ from invoke.exceptions import Failure
 
 
 supported_combinations = {
-    '2.7': {'pyside', 'pyqt', 'wxpython', 'null'},
+    '2.7': {'pyside', 'pyqt', 'wx', 'null'},
     '3.5': {'pyqt', 'null'},
 }
 
@@ -30,7 +30,7 @@ extra_dependencies = {
 
 environment_vars = {
     'pyside': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside'},
-    'pyqt': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt4'},
+    'pyqt': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt'},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
 }
