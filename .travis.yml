@@ -11,7 +11,7 @@ env:
   - RUNTIME=3.5 TOOLKIT=pyqt
 matrix:
   allow_failures:
-    - env: TOOLKIT=wx
+    - env: RUNTIME=2.7 TOOLKIT=wx
 cache:
   directories:
     - $HOME/.edm
