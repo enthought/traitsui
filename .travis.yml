@@ -39,10 +39,7 @@ cache:
   directories:
     - $HOME/.edm
 before_install:
-  - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then export DISPLAY=:99.0; fi
-  - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then sh -e /etc/init.d/xvfb start; fi
-  - ./install_edm.sh
-  - edm install invoke -y
+  - ./travis_ci_install.sh
 install:
   - edm run -- invoke install --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 script:
