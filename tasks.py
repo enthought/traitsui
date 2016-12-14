@@ -1,10 +1,9 @@
 from contextlib import contextmanager
 import os
-from shutil import rmtree, copytree, copy as copyfile
+from shutil import rmtree, copy as copyfile
 from tempfile import mkdtemp
 
 from invoke import task
-from invoke.exceptions import Failure
 
 
 supported_combinations = {
@@ -17,6 +16,7 @@ dependencies = {
     "pandas",
     "pygments",
     "traits",
+    "pip",
     "nose",
     "coverage",
 }
@@ -36,94 +36,91 @@ environment_vars = {
 }
 
 
-@task
-def install(ctx, runtime='3.5', toolkit='null', environment=None, edm='edm'):
-    """ Install traitsui and dependencies into a clean EDM environment. """
-    if toolkit not in supported_combinations.get(runtime, set()):
-        msg = "Python {} and toolkit {} not supported by test environments"
-        raise RuntimeError(msg.format(runtime, toolkit))
-
-    if environment is None:
-        environment = 'traitsui-test-{}-{}'.format(runtime, toolkit)
-
-    packages = dependencies | extra_dependencies.get(toolkit, set())
-
-    print("Creating environment '{}'".format(environment))
-    ctx.run("{} install -y -e '{}' --version '{}' {}".format(
-        edm, environment, runtime, ' '.join(packages)))
-
-    # use current master of pyface
-    clone_into_env(ctx, environment, 'pyface', edm=edm)
-
-    # install traitsui from this directory
-    run_in_env(ctx, environment, "python setup.py install", edm=edm)
-
 
 @task
-def test(ctx, runtime='3.5', toolkit='null', environment=None, edm='edm'):
+def install(ctx, runtime='3.5', toolkit='null', environment=None):
+    """ Install project and dependencies into a clean EDM environment. """
+    parameters = _get_parameters(runtime, toolkit, environment)
+
+    parameters['packages'] = ' '.join(dependencies |
+                                      extra_dependencies.get(toolkit, set()))
+
+    commands = [
+        # create environment with dependencies
+        "edm install -y -e '{environment}' --version '{runtime}' {packages}",
+        # install any source dependencies from github using pip
+        "edm run -e '{environment}' -- pip install -r ci-src-requirements.txt",
+        # install the project
+        "edm run -e '{environment}' -- python setup.py install",
+    ]
+
+    print("Creating environment '{environment}'".format(**parameters))
+    for command in commands:
+        ctx.run(command.format(**parameters))
+
+    print('Done install')
+
+
+@task
+def test(ctx, runtime='3.5', toolkit='null', environment=None):
     """ Run the test suite in a given environment with the specified toolkit """
-    if toolkit not in supported_combinations.get(runtime, set()):
-        msg = "Python {} and toolkit {} not supported by test environments"
-        raise RuntimeError(msg.format(runtime, toolkit))
+    parameters = _get_parameters(runtime, toolkit, environment)
 
-    if environment is None:
-        environment = 'traitsui-test-{}-{}'.format(runtime, toolkit)
+    environ = environment_vars.get(toolkit, {}).copy()
+    environ['PYTHONUNBUFFERED'] = "1"
 
-    try:
-        # simple test to see if designated environment exists
-        ctx.run("{} prefix -e '{}'".format(edm, environment))
-    except Failure:
-        # environment doesn't exist, so create it and populate
-        print("Environment not found, creating...")
-        install(ctx, runtime, toolkit, environment, edm)
+    commands = [
+        # run the main test suite
+        "coverage run -m nose.core -v traitsui.tests",
+    ]
+    if toolkit in {'pyqt', 'pyside'}:
+        commands += [
+            # run the qt4 toolkit test suite
+            "coverage run -m nose.core -v traitsui.qt4.tests"
+        ]
 
-    envvars = environment_vars.get(toolkit, {}).copy()
+    # run tests & coverage
+    print("Running tests in '{environment}'".format(**parameters))
 
-    # run tests
+    # We run in a tempdir to avoid accidentally picking up wrong traitsui
+    # code from a local dir.  We need to ensure a good .coveragerc is in
+    # that directory, plus coverage has a bug that means a non-local coverage
+    # file doesn't get populated correctly.
     with do_in_tempdir(files=['.coveragerc'], capture_files=['.coverage']):
-        run_in_env(ctx, environment,
-                   "coverage run -m nose.core -v traitsui.tests",
-                   envvars, edm)
-        if toolkit in {'pyqt', 'pyside'}:
-            run_in_env(ctx, environment,
-                       "coverage run -m nose.core -v traitsui.qt4.tests",
-                       envvars, edm)
-    print('Done')
+        for command in commands:
+            ctx.run(command.format(**parameters), env=environ)
+
+    print('Done test')
 
 
 @task
-def cleanup(ctx, runtime='3.5', toolkit='null', environment=None, edm='edm'):
-    if toolkit not in supported_combinations.get(runtime, set()):
-        msg = "Python {} and toolkit {} not supported by test environments"
-        raise RuntimeError(msg.format(runtime, toolkit))
+def cleanup(ctx, runtime='3.5', toolkit='null', environment=None):
+    parameters = _get_parameters(runtime, toolkit, environment)
 
-    if environment is None:
-        environment = 'traitsui-test-{}-{}'.format(runtime, toolkit)
+    commands = [
+        "edm environments remove '{environment}' --purge -y",
+    ]
 
-    env_path = ctx.run("{} prefix -e '{}'".format(edm, environment)).stdout
-    try:
-        ctx.run("{} environments remove --purge -y '{}'".format(
-            edm, environment))
-    except Failure:
-        print("Force removing environment dir: {}".format(env_path))
-        ctx.run("rm -rf {}".format(env_path))
+    print("Cleaning up environment '{environment}'".format(**parameters))
+    for command in commands:
+        ctx.run(command.format(**parameters))
 
-    print('Done')
+    print('Done cleanup')
 
 
 @task
-def test_clean(ctx, runtime='3.5', toolkit='null', edm='edm'):
+def test_clean(ctx, runtime='3.5', toolkit='null'):
     """ Run tests in a clean environment, cleaning up afterwards """
     try:
-        install(ctx, runtime, toolkit, edm=edm)
-        test(ctx, runtime, toolkit, edm=edm)
+        install(ctx, runtime, toolkit)
+        test(ctx, runtime, toolkit)
     finally:
-        cleanup(ctx, runtime, toolkit, edm=edm)
+        cleanup(ctx, runtime, toolkit)
 
 
 @task
 def test_all(ctx):
-
+    """ Run test_clean across all supported environments """
     for runtime, toolkits in supported_combinations.items():
         for toolkit in toolkits:
             try:
@@ -135,6 +132,22 @@ def test_all(ctx):
 # ----------------------------------------------------------------------------
 # Utility routines
 # ----------------------------------------------------------------------------
+
+def _get_parameters(runtime, toolkit, environment):
+    """ Set up parameters dictionary for format() substitution """
+    parameters = {'runtime': runtime, 'toolkit': toolkit}
+
+    if toolkit not in supported_combinations.get(runtime, set()):
+        msg = ("Python {runtime} and toolkit {toolkit} not supported by " +
+               "test environments")
+        raise RuntimeError(msg.format(**parameters))
+
+    if environment is None:
+        environment = 'traitsui-test-{runtime}-{toolkit}'.format(**parameters)
+    parameters['environment'] = environment
+
+    return parameters
+
 
 @contextmanager
 def do_in_tempdir(files=(), capture_files=()):
@@ -167,51 +180,3 @@ def do_in_tempdir(files=(), capture_files=()):
     finally:
         os.chdir(old_path)
         rmtree(path)
-
-
-def run_in_env(ctx, environment, command, envvars={}, edm='edm'):
-    """ Run a shell command in an edm environment
-
-    Parameters
-    ----------
-    ctx : Invoke context
-        The Invoke context with the run command.
-    environment : str
-        The name of the edm environment to run the command in.
-    command : str
-        The command to run.
-    envvars : dict
-        Optional additional environment variables for running the command.
-    """
-    ctx.run("{} run -e '{}' -- {}".format(edm, environment, command),
-            env=envvars)
-
-
-def clone_into_env(ctx, environment, project, organization='enthought',
-                   branch='master', edm='edm'):
-    """ Clone a Python github repo and isntall into an edm environment.
-
-    This is very simplistic.  It assumes that the repo is public and that the
-    project has a top-level setup.py that we can invoke with the "install"
-    command.
-
-    Parameters
-    ----------
-    ctx : Invoke context
-        The Invoke context with the run command.
-    environment : str
-        The name of the edm environment to run the command in.
-    project : str
-        The name of the project we wish to clone.
-    organization : str
-        The organization that owns the repo.
-    branch: str
-        The branch to check-out.
-    """
-    with do_in_tempdir():
-        ctx.run("git clone 'https://github.com/{}/{}.git'".format(
-            organization, project))
-        if branch != "master":
-            ctx.run("git checkout '{}'".format(branch))
-        os.chdir(project)
-        run_in_env(ctx, environment, 'python setup.py install', edm=edm)

@@ -14,5 +14,5 @@ else
     export PATH="~/bin:${PATH}"
 fi
 
-# install invoke into default EDM environment
-edm install invoke -y
+# install pip and invoke into default EDM environment
+edm install pip invoke -y

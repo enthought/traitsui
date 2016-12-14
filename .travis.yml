@@ -1,51 +1,38 @@
-language: python
+language: generic
 sudo: false
 matrix:
   include:
-    - python: 2.7
+    - env: RUNTIME=2.7 TOOLKIT=null
+    - env: RUNTIME=2.7 TOOLKIT=pyqt
+    - env: RUNTIME=2.7 TOOLKIT=pyside
+    - env: RUNTIME=2.7 TOOLKIT=wx
+    - env: RUNTIME=3.5 TOOLKIT=null
+    - env: RUNTIME=3.5 TOOLKIT=pyqt
+    - os: osx
       env: RUNTIME=2.7 TOOLKIT=null
-    - python: 2.7
+    - os: osx
       env: RUNTIME=2.7 TOOLKIT=pyqt
-    - python: 2.7
+    - os: osx
       env: RUNTIME=2.7 TOOLKIT=pyside
-    - python: 2.7
+    - os: osx
       env: RUNTIME=2.7 TOOLKIT=wx
-    - python: 2.7
+    - os: osx
       env: RUNTIME=3.5 TOOLKIT=null
-    - python: 2.7
-      env: RUNTIME=3.5 TOOLKIT=pyqt
-    - language: generic
-      os: osx
-      env: RUNTIME=2.7 TOOLKIT=null
-    - language: generic
-      os: osx
-      env: RUNTIME=2.7 TOOLKIT=pyqt
-    - language: generic
-      os: osx
-      env: RUNTIME=2.7 TOOLKIT=pyside
-    - language: generic
-      os: osx
-      env: RUNTIME=2.7 TOOLKIT=wx
-    - language: generic
-      os: osx
-      env: RUNTIME=3.5 TOOLKIT=null
-    - language: generic
-      os: osx
+    - os: osx
       env: RUNTIME=3.5 TOOLKIT=pyqt
   allow_failures:
     - env: RUNTIME=2.7 TOOLKIT=wx
   fast_finish: true
 cache:
   directories:
-    - $HOME/.edm
+    - $HOME/.cache
 before_install:
   - export DISPLAY=:99.0
-  - ./travis_ci_install.sh
+  - ./travis_ci_bootstrap.sh
 install:
   - edm run -- invoke install --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 script:
   - edm run -- invoke test --runtime=${RUNTIME} --toolkit=${TOOLKIT}
-  - edm run -- invoke cleanup --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 after_success:
-  - pip install codecov
-  - codecov
+  - edm run -- pip install codecov
+  - edm run -- codecov
