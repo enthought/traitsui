@@ -49,7 +49,7 @@ def install(ctx, runtime='3.5', toolkit='null', environment=None):
         # create environment with dependencies
         "edm install -y -e '{environment}' --version '{runtime}' {packages}",
         # install any source dependencies from github using pip
-        "edm run -e '{environment}' -- pip install -r ci-src-requirements.txt",
+        "edm run -e '{environment}' -- pip install -r ci-src-requirements.txt --no-dependencies",
         # install the project
         "edm run -e '{environment}' -- python setup.py install",
     ]
@@ -98,6 +98,7 @@ def cleanup(ctx, runtime='3.5', toolkit='null', environment=None):
     parameters = _get_parameters(runtime, toolkit, environment)
 
     commands = [
+        "edm run -e '{environment}' -- python setup.py clean",
         "edm environments remove '{environment}' --purge -y",
     ]
 
