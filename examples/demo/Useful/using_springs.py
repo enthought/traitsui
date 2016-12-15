@@ -50,7 +50,8 @@ class SpringDemo(HasTraits):
                    'with springs after the 2nd and 4th '
                    'buttons'),
             spring,
-            Label('A spring in a vertical group moves widget down.'),
+            Label('Spring in vertical group moves widget down '
+                  '(does not work on Wx backend).'),
             button
         ),
         width=600,
