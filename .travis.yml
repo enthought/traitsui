@@ -28,7 +28,8 @@ cache:
     - $HOME/.cache
 before_install:
   - export DISPLAY=:99.0
-  - ./travis_ci_bootstrap.sh
+  - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then sh -e /etc/init.d/xvfb start ; fi
+  - ./travis_ci_bootstrap_edm.sh
 install:
   - edm run -- invoke install --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 script:
