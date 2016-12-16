@@ -1,3 +1,64 @@
+"""
+Invoke Tasks for Test Runs
+==========================
+
+This file is intended to be used with `Invoke http://www.pyinvoke.org/`_ to
+automate the process of setting up test environments and running the test
+within them.  This improves repeatability and reliability of tests be removing
+many of the variables around the developer's particular Python environment.
+Test environment setup and package management is performed using
+`EDM http://docs.enthought.com/edm/`_
+
+To use this to run you tests, you will need to install EDM and Invoke into
+your working environment.  You will also need to have git installed to access
+required source code from github repositories.  You can then do::
+
+    invoke install --runtime=... --toolkit=... --environment=...
+
+to create a test environment from the current codebase and::
+
+    invoke test --environment=...
+
+to run tests in that environment.  You can remove the environment with::
+
+    invoke cleanup --environment=...
+
+If you make changes you will need to remove and re-install the environment, as
+the install performs a ``python setup.py install`` rather than a ``develop``,
+so changes in your code will not be automatically mirrored in the test
+environment.
+
+You can run all three tasks at once with::
+
+    invoke test_clean --runtime=... --toolkit=... --environment=...
+
+which will create, install, run tests, and then clean-up the environment.  And
+you can run tests in all supported runtimes and toolkits with::
+
+    invoke test_all --runtime=... --toolkit=...
+
+Currently supported runtime values are ``2.7`` and ``3.5``, and currently
+supported toolkits are ``null``, ``pyqt``, ``pyside`` and ``wx``.  Not all
+combinations of toolkits and runtimes will work, but the tasks will fail with
+a clear error if that is the case.
+
+Tests can still be run via the usual means in other environments if that suits
+a developer's purpose.
+
+Changing This File
+------------------
+
+To change the packages installed during a test run, change the dependencies
+variable below.  To install a package from github, or one which is not yet
+available via EDM, add it to the `ci-src-requirements.txt` file (these will be
+installed by `pip`).
+
+Other changes to commands should be a straightforward change to the listed
+commands for each task. See the EDM documentation for more information about
+how to run commands within an EDM enviornment.
+
+"""
+
 from contextlib import contextmanager
 import os
 from shutil import rmtree, copy as copyfile
