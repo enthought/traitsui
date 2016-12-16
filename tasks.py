@@ -23,19 +23,23 @@ to run tests in that environment.  You can remove the environment with::
 
     invoke cleanup --environment=...
 
-If you make changes you will need to remove and re-install the environment, as
+If you make changes you will either need to remove and re-install the
+environment or manually update the environment using ``edm``, as
 the install performs a ``python setup.py install`` rather than a ``develop``,
 so changes in your code will not be automatically mirrored in the test
-environment.
+environment.  You can update with a command like::
+
+    edm run --environment ... -- python setup.py install
 
 You can run all three tasks at once with::
 
     invoke test_clean --runtime=... --toolkit=... --environment=...
 
 which will create, install, run tests, and then clean-up the environment.  And
-you can run tests in all supported runtimes and toolkits with::
+you can run tests in all supported runtimes and toolkits (with cleanup)
+using::
 
-    invoke test_all --runtime=... --toolkit=...
+    invoke test_all
 
 Currently supported runtime values are ``2.7`` and ``3.5``, and currently
 supported toolkits are ``null``, ``pyqt``, ``pyside`` and ``wx``.  Not all
