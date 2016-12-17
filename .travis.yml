@@ -1,47 +1,41 @@
-language: python
+language: generic
 sudo: false
-python:
-  - 2.7_with_system_site_packages
-  - 3.4
-addons:
-  apt:
-    packages:
-    - python-qt4
-    - python-qt4-dev
-    - python-qt4-gl
-    - python-pip
-    - python-numpy
-    - python-wxtools
-    - ccache
-    - cmake
-env:
-  - ETS_TOOLKIT=qt4
-  - ETS_TOOLKIT=null
-  - ETS_TOOLKIT=wx
 matrix:
+  include:
+    - env: RUNTIME=2.7 TOOLKIT=null
+    - env: RUNTIME=2.7 TOOLKIT=pyqt
+    - env: RUNTIME=2.7 TOOLKIT=pyside
+    - env: RUNTIME=2.7 TOOLKIT=wx
+    - env: RUNTIME=3.5 TOOLKIT=null
+    - env: RUNTIME=3.5 TOOLKIT=pyqt
+    - os: osx
+      env: RUNTIME=2.7 TOOLKIT=null
+    - os: osx
+      env: RUNTIME=2.7 TOOLKIT=pyqt
+    - os: osx
+      env: RUNTIME=2.7 TOOLKIT=pyside
+    - os: osx
+      env: RUNTIME=2.7 TOOLKIT=wx
+    - os: osx
+      env: RUNTIME=3.5 TOOLKIT=null
+    - os: osx
+      env: RUNTIME=3.5 TOOLKIT=pyqt
   allow_failures:
-    - env: ETS_TOOLKIT=wx
+    - env: RUNTIME=2.7 TOOLKIT=wx
+    - os: osx
+      env: RUNTIME=2.7 TOOLKIT=pyqt
+  fast_finish: true
 cache:
   directories:
     - $HOME/.cache
-    - $HOME/.ccache
 before_install:
-  - ccache -s
-  - pip install --upgrade pip
-  - export PATH=/usr/lib/ccache:${PATH}
-  - if [[ ${TRAVIS_PYTHON_VERSION} == "3.4" && ${ETS_TOOLKIT} == "qt4" ]]; then ./build_pyside_wheel.sh; fi
   - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+  - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then sh -e /etc/init.d/xvfb start ; fi
+  - ./travis_ci_bootstrap_edm.sh
 install:
-  - pip install -r travis-ci-requirements.txt
-  - python setup.py develop
-before_script:
-  - mkdir testrun
-  - cp .coveragerc testrun/
-  - cd testrun
+  - edm run -- invoke install --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 script:
-  - coverage run -m nose.core -v traitsui.tests
-  - if [[ ${ETS_TOOLKIT} == "qt4" ]]; then coverage run -a -m nose.core -v traitsui.qt4.tests; fi
+  - edm run -- invoke test --runtime=${RUNTIME} --toolkit=${TOOLKIT}
 after_success:
-  - pip install codecov
-  - codecov
+  - edm run -- pip install codecov
+  - edm run -- codecov
