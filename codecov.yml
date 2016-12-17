@@ -4,10 +4,11 @@ codecov:
 
 coverage:
   precision: 1
-  round : up
+  round: up
 
   status:
     patch:
-      only_pulls: yes
+      default:
+        only_pulls: yes
 
 comment : off
