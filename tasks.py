@@ -42,9 +42,9 @@ using::
     invoke test_all
 
 Currently supported runtime values are ``2.7`` and ``3.5``, and currently
-supported toolkits are ``null``, ``pyqt``, ``pyside`` and ``wx``.  Not all
-combinations of toolkits and runtimes will work, but the tasks will fail with
-a clear error if that is the case.
+supported toolkits are ``null``, ``pyqt``, ``pyside``, ``wx``and ``wx2``.  Not
+all combinations of toolkits and runtimes will work, but the tasks will fail
+with a clear error if that is the case.
 
 Tests can still be run via the usual means in other environments if that suits
 a developer's purpose.
@@ -72,7 +72,7 @@ from invoke import task
 
 
 supported_combinations = {
-    '2.7': {'pyside', 'pyqt', 'wx', 'null'},
+    '2.7': {'pyside', 'pyqt', 'wx', 'wx2', 'null'},
     '3.5': {'pyqt', 'null'},
 }
 
@@ -90,6 +90,7 @@ extra_dependencies = {
     'pyside': {'pyside'},
     'pyqt': {'pyqt'},
     'wx': {'wxpython'},
+    'wx2': {'"wxpython < 3"'},
     'null': set()
 }
 
@@ -97,6 +98,7 @@ environment_vars = {
     'pyside': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside'},
     'pyqt': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt'},
     'wx': {'ETS_TOOLKIT': 'wx'},
+    'wx2': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
 }
 
