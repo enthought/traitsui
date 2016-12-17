@@ -44,7 +44,7 @@ class NumberWithTextEditor(HasTraits):
 
 
 @skip_if_not_wx
-def test_wx_spin_control_editing():
+def test_wx_range_control_editing():
     # behavior: when editing the text part of a spin control box, pressing
     # the OK button should update the value of the HasTraits class
     # (tests a bug where this fails with an AttributeError)
@@ -63,7 +63,8 @@ def test_wx_spin_control_editing():
         press_ok_button(ui)
 
     # the number traits should be between 3 and 8
-    assert num.number >= 3 and num.number <= 8
+    print("Actual value:", num.number)
+    assert 3 <= num.number <= 8
 
 
 if __name__ == '__main__':
