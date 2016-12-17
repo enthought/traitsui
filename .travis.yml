@@ -21,7 +21,6 @@ matrix:
     - os: osx
       env: RUNTIME=3.5 TOOLKIT=pyqt
   allow_failures:
-    - env: RUNTIME=2.7 TOOLKIT=wx
     - os: osx
       env: RUNTIME=2.7 TOOLKIT=pyqt
   fast_finish: true
