@@ -13,15 +13,15 @@ To use this to run you tests, you will need to install EDM and Invoke into
 your working environment.  You will also need to have git installed to access
 required source code from github repositories.  You can then do::
 
-    invoke install --runtime=... --toolkit=... --environment=...
+    invoke install --runtime=... --toolkit=...
 
 to create a test environment from the current codebase and::
 
-    invoke test --environment=...
+    invoke test --runtime=... --toolkit=...
 
 to run tests in that environment.  You can remove the environment with::
 
-    invoke cleanup --environment=...
+    invoke cleanup --runtime=... --toolkit=...
 
 If you make changes you will either need to remove and re-install the
 environment or manually update the environment using ``edm``, as
@@ -33,7 +33,7 @@ environment.  You can update with a command like::
 
 You can run all three tasks at once with::
 
-    invoke test_clean --runtime=... --toolkit=... --environment=...
+    invoke test_clean --runtime=... --toolkit=...
 
 which will create, install, run tests, and then clean-up the environment.  And
 you can run tests in all supported runtimes and toolkits (with cleanup)
