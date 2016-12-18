@@ -88,6 +88,7 @@ def test_wx_spin_control_editing_does_not_update():
     # on Mac OS X
 
     # But under wx >= 3.0 this has been resolved
+    import wx
     if wx.VERSION >= (3, 0):
         return
 
