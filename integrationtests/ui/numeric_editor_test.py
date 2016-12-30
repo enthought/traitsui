@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  NumericEditor test case for Traits UI
 #
@@ -9,11 +9,11 @@
 #  (c) Copyright 2005 by Enthought, Inc.
 #  License: BSD Style.
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from traits.api \
     import HasPrivateTraits, Array, Instance
@@ -29,49 +29,49 @@ from traitsui.wx.numeric_editor \
 
 from blockcanvas.model.api \
     import ANumericModel, NumericArrayModel, ReductionModel, SelectionModel, \
-           NumericItem, ExpressionFilter, IndexFilter
+    NumericItem, ExpressionFilter, IndexFilter
 
 from numpy \
     import array, sin, arange
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Defines the numeric editor:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 number_editor = NumericEditor(
-    extendable              = True,
-    new_columns             = 'last',
-    configurable            = True,
-    columns                 = [ NumericColumn( name   = 'model_indices',
-                                               label  = 'i' ),
-                                NumericColumn( name   = 'x',
-                                               label  = 'x',
-                                               format = '%.2f' ),
-                                NumericColumn( name   = 'sinx',
-                                               label  = 'sin(x)',
-                                               format = '%.3f' ),
-                                NumericColumn( name   = 'xsinx',
-                                               label  = 'x*sin(x)',
-                                               format = '%.3f' ) ],
-    other_columns           = [],
-    choose_selection_filter = True,
-    edit_selection_filter   = True,
-    edit_selection_colors   = False,
-    selection_filter        = None,
-    selection_filter_name   = '',
-    user_selection_filter   = IndexFilter(),
-    choose_reduction_filter = True,
-    edit_reduction_filter   = True,
-    reduction_filter        = None,
-    reduction_filter_name   = '',
-    deletable               = True,
-    sortable                = True,
-    sort_model              = False,
-    editable                = True,
-    auto_size               = False,
-    show_lines              = True,
-    menu                    = None,
-    show_column_labels      = True,
+    extendable=True,
+    new_columns='last',
+    configurable=True,
+    columns=[NumericColumn(name='model_indices',
+                           label='i'),
+             NumericColumn(name='x',
+                           label='x',
+                           format='%.2f'),
+             NumericColumn(name='sinx',
+                           label='sin(x)',
+                           format='%.3f'),
+             NumericColumn(name='xsinx',
+                           label='x*sin(x)',
+                           format='%.3f')],
+    other_columns=[],
+    choose_selection_filter=True,
+    edit_selection_filter=True,
+    edit_selection_colors=False,
+    selection_filter=None,
+    selection_filter_name='',
+    user_selection_filter=IndexFilter(),
+    choose_reduction_filter=True,
+    edit_reduction_filter=True,
+    reduction_filter=None,
+    reduction_filter_name='',
+    deletable=True,
+    sortable=True,
+    sort_model=False,
+    editable=True,
+    auto_size=False,
+    show_lines=True,
+    menu=None,
+    show_column_labels=True,
     #line_color              = 0xC4C0A9,
     #cell_font              = Font,
     #cell_color              = Color( 'black' )
@@ -88,39 +88,39 @@ number_editor = NumericEditor(
     #on_dclick               = Callable
 )
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'BunchANumbersApp' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class BunchANumbersApp ( HasPrivateTraits ):
 
-    #---------------------------------------------------------------------------
+class BunchANumbersApp(HasPrivateTraits):
+
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    model = Instance( ANumericModel )
+    model = Instance(ANumericModel)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Traits view definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     view = View(
-               HGroup( Item( 'model', editor = number_editor,
-                                      id     = 'model' ),
-#                       Item( 'model', editor = number_editor ),
-                       show_labels = False ),
-                 title     = 'Numeric Editor Test',
-                 id        = 'traitsui.tests.numeric_editor_test',
-                 width     = 0.28,
-                 height    = 0.6,
-                 resizable = True )
+        HGroup(Item('model', editor=number_editor,
+                    id='model'),
+               #                       Item( 'model', editor = number_editor ),
+               show_labels=False),
+        title='Numeric Editor Test',
+        id='traitsui.tests.numeric_editor_test',
+        width=0.28,
+        height=0.6,
+        resizable=True)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Run the test:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    x     = arange( 0.0, 20.005, 0.1 )
-    model = NumericArrayModel( x = x, sinx = sin( x ), xsinx = x * sin( x ) )
-    BunchANumbersApp( model = model ).configure_traits()
-
+    x = arange(0.0, 20.005, 0.1)
+    model = NumericArrayModel(x=x, sinx=sin(x), xsinx=x * sin(x))
+    BunchANumbersApp(model=model).configure_traits()

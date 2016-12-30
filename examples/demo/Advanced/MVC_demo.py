@@ -20,12 +20,14 @@ A few key points:
 from traits.api import HasTraits, Str, Bool, TraitError
 from traitsui.api import View, VGroup, HGroup, Item, Controller
 
+
 class MyModel(HasTraits):
     """ Define a simple model containing a single string, 'myname'
     """
 
     # Simple model data:
     myname = Str
+
 
 class MyViewController(Controller):
     """ Define a combined controller/view class that validates that
@@ -42,18 +44,18 @@ class MyViewController(Controller):
     view = View(
         VGroup(
             HGroup(
-                Item('myname', springy = True), '10',
-                Item('controller.allow_empty_string', label = 'Allow Empty')
+                Item('myname', springy=True), '10',
+                Item('controller.allow_empty_string', label='Allow Empty')
             ),
 
             # Add an empty vertical group so the above items don't end up
             # centered vertically:
             VGroup()
         ),
-        resizable = True
+        resizable=True
     )
 
-    #-- Handler Interface ------------------------------------------------------
+    #-- Handler Interface ----------------------------------------------------
 
     def myname_setattr(self, info, object, traitname, value):
         """ Validate the request to change the named trait on object to the
@@ -67,9 +69,9 @@ class MyViewController(Controller):
             raise TraitError('Empty string not allowed.')
 
         return super(MyViewController, self).setattr(info, object, traitname,
-                                                         value)
+                                                     value)
 
-    #-- Event handlers ---------------------------------------------------------
+    #-- Event handlers -------------------------------------------------------
 
     def controller_allow_empty_string_changed(self, info):
         """ 'allow_empty_string' has changed, check the myname trait to ensure
@@ -86,4 +88,3 @@ demo = MyViewController(MyModel())
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

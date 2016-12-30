@@ -110,7 +110,7 @@ class DataFrameAdapter(TabularAdapter):
         using a dataframe preserves dtypes.
 
         """
-        return getattr(object, trait).iloc[row:row+1]
+        return getattr(object, trait).iloc[row:row + 1]
 
     def delete(self, object, trait, row):
         """ Override the base implementation to work with DataFrames
@@ -121,10 +121,10 @@ class DataFrameAdapter(TabularAdapter):
         import pandas as pd
 
         df = getattr(object, trait)
-        if 0 < row < len(df)-1:
-            new_df = pd.concat([df.iloc[:row, :], df.iloc[row+1:, :]])
+        if 0 < row < len(df) - 1:
+            new_df = pd.concat([df.iloc[:row, :], df.iloc[row + 1:, :]])
         elif row == 0:
-            new_df = df.iloc[row+1:, :]
+            new_df = df.iloc[row + 1:, :]
         else:
             new_df = df.iloc[:row, :]
         setattr(object, trait, new_df)
@@ -138,7 +138,7 @@ class DataFrameAdapter(TabularAdapter):
         import pandas as pd
 
         df = getattr(object, trait)
-        if 0 < row < len(df)-1:
+        if 0 < row < len(df) - 1:
             new_df = pd.concat([df.iloc[:row, :], value, df.iloc[row:, :]])
         elif row == 0:
             new_df = pd.concat([value, df])
@@ -163,7 +163,7 @@ class _DataFrameEditor(UIEditor):
 
     def _target_name(self, name):
         if name:
-            return 'object.object.'+name
+            return 'object.object.' + name
         else:
             return ''
 

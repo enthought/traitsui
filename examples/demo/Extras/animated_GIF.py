@@ -45,7 +45,7 @@ class AnimatedGIFDemo(HasTraits):
             Item('gif_file',
                  label='GIF File',
                  editor=EnumEditor(values=files)
-            )
+                 )
         ),
         title='Animated GIF Demo',
         buttons=['OK']

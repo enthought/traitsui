@@ -18,17 +18,17 @@
 """ Defines the HTML help templates used for formatting Traits UI help pages.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
 from traits.api import HasStrictTraits, Str
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Default HTML for a single Item's help window
 ItemHTML = """
@@ -84,26 +84,28 @@ GroupHelp = """
   </TR>
 </TABLE>"""
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'HelpTemplate' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class HelpTemplate ( HasStrictTraits ):
+
+class HelpTemplate(HasStrictTraits):
     """ Contains HTML templates for displaying help.
     """
-    item_html     = Str( ItemHTML )  # Item popup help window HTML document
-    group_html    = Str( GroupHTML ) # Group help window HTML document
-    item_help     = Str( ItemHelp )  # Single group item HTML
-    group_help    = Str( GroupHelp ) # Group level help HTML
-    no_group_help = Str( '' )        # Missing group level help HTML
+    item_html = Str(ItemHTML)  # Item popup help window HTML document
+    group_html = Str(GroupHTML)  # Group help window HTML document
+    item_help = Str(ItemHelp)  # Single group item HTML
+    group_help = Str(GroupHelp)  # Group level help HTML
+    no_group_help = Str('')        # Missing group level help HTML
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Gets/Sets the current HelpTemplate in use:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 _help_template = HelpTemplate()
 
-def help_template ( template = None ):
+
+def help_template(template=None):
     """ Gets or sets the current HelpTemplate in use.
     """
     global _help_template
@@ -111,4 +113,3 @@ def help_template ( template = None ):
     if template is not None:
         _help_template = template
     return _help_template
-

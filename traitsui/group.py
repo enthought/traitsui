@@ -19,14 +19,14 @@
     Traits-based user interface.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
 from traits.api import (Bool, Delegate, Float, Instance, List, Property, Range,
-    ReadOnly, Str, TraitError, cached_property)
+                        ReadOnly, Str, TraitError, cached_property)
 
 import traits._py2to3 as _py2to3
 
@@ -40,30 +40,31 @@ from .ui_traits import SequenceTypes, ATheme, ContainerDelegate, Orientation, La
 
 from .dock_window_theme import dock_window_theme, DockWindowTheme
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Delegate trait to the object being "shadowed"
-ShadowDelegate = Delegate( 'shadow' )
+ShadowDelegate = Delegate('shadow')
 
 # Amount of padding to add around item
-Padding = Range( 0, 15, desc = 'amount of padding to add around each item' )
+Padding = Range(0, 15, desc='amount of padding to add around each item')
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'Group' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class Group ( ViewSubElement ):
+
+class Group(ViewSubElement):
     """ Represents a grouping of items in a user interface view.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     # Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # A list of Group, Item, and Include objects in this group.
-    content = List( ViewSubElement )
+    content = List(ViewSubElement)
 
     # A unique identifier for the group.
     id = Str
@@ -88,7 +89,7 @@ class Group ( ViewSubElement ):
     image = ContainerDelegate
 
     # The theme to use for a DockWindow:
-    dock_theme = Instance( DockWindowTheme, allow_none = False )
+    dock_theme = Instance(DockWindowTheme, allow_none=False)
 
     # The theme to use for the group itself:
     group_theme = ATheme
@@ -123,37 +124,37 @@ class Group ( ViewSubElement ):
     layout = Layout
 
     # Should the group be scrollable along the direction of orientation?
-    scrollable = Bool( False )
+    scrollable = Bool(False)
 
     # The number of columns in the group
-    columns = Range( 1, 50 )
+    columns = Range(1, 50)
 
     # Should a border be drawn around group? If set to True, the **label** text
     # is embedded in the border. If set to False, the label appears as a banner
     # above the elements of the group.
-    show_border = Bool( False )
+    show_border = Bool(False)
 
     # Should labels be added to items in group? Only items that are directly
     # contained in the group are affected. That is, if the group contains
     # a sub-group, the display of labels in the sub-group is not affected by
     # the attribute on this group.
-    show_labels = Bool( True )
+    show_labels = Bool(True)
 
     # Should labels be shown to the left of items (True) or the right (False)?
     # Only items that are directly contained in the group are affected. That is,
     # if the group contains a sub-group, the display of labels in the sub-group
     # is not affected by the attribute in this group. If **show_labels** is
     # False, this attribute is irrelevant.
-    show_left = Bool( True )
+    show_left = Bool(True)
 
     # Is this group the tab that is initially selected? If True, the group's
     # tab is displayed when the view is opened. If the **layout** of the group's
     # parent is not 'tabbed', this attribute is ignored.
-    selected = Bool( False )
+    selected = Bool(False)
 
     # Should the group use extra space along its parent group's layout
     # orientation?
-    springy = Bool( False )
+    springy = Bool(False)
 
     # Optional help text (for top-level group). This help text appears in the
     # View-level help window (created by the default help handler), for any
@@ -192,19 +193,19 @@ class Group ( ViewSubElement ):
     padding = Padding
 
     # Requested width of the group (calculated from widths of contents)
-    width = Property( Float, depends_on='content' )
+    width = Property(Float, depends_on='content')
 
     # Requested height of the group (calculated from heights of contents)
-    height = Property( Float, depends_on='content' )
+    height = Property(Float, depends_on='content')
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Initializes the object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __init__ ( self, *values, **traits ):
+    def __init__(self, *values, **traits):
         """ Initializes the group object.
         """
-        super( ViewSubElement, self ).__init__( **traits )
+        super(ViewSubElement, self).__init__(**traits)
 
         content = self.content
 
@@ -212,41 +213,41 @@ class Group ( ViewSubElement ):
         for value in values:
             if (isinstance(value, basestring)) and (value[0:1] in '-|'):
                 # Parse Group trait options if specified as a string:
-                self._parse( value )
+                self._parse(value)
 
         # Process all of the data passed to the constructor:
         for value in values:
-            if isinstance( value, ViewSubElement ):
-                content.append( value )
-            elif type( value ) in SequenceTypes:
+            if isinstance(value, ViewSubElement):
+                content.append(value)
+            elif type(value) in SequenceTypes:
                 # Map (...) or [...] to a Group():
-                content.append( Group( *value ) )
-            elif isinstance( value, basestring ):
+                content.append(Group(*value))
+            elif isinstance(value, basestring):
                 if value[0:1] in '-|':
                     # We've already parsed Group trait options above:
                     pass
                 elif (value[:1] == '<') and (value[-1:] == '>'):
                     # Convert string to an Include value:
-                    content.append( Include( value[1:-1].strip() ) )
+                    content.append(Include(value[1:-1].strip()))
                 else:
                     # Else let the Item class try to make sense of it:
-                    content.append( Item( value ) )
+                    content.append(Item(value))
             else:
                 raise TypeError("Unrecognized argument type: %s" % value)
 
         # Make sure this Group is the container for all its children:
         self.set_container()
 
-    #-- Default Trait Values ---------------------------------------------------
+    #-- Default Trait Values -------------------------------------------------
 
-    def _dock_theme_default ( self ):
+    def _dock_theme_default(self):
         return dock_window_theme()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Gets the label to use for a specified Group in a specified UI:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def get_label ( self, ui ):
+    def get_label(self, ui):
         """ Gets the label to use this group.
         """
         if self.label != '':
@@ -254,23 +255,23 @@ class Group ( ViewSubElement ):
 
         return 'Group'
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns whether or not the object is replacable by an Include object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def is_includable ( self ):
+    def is_includable(self):
         """ Returns a Boolean value indicating whether the object is replacable
         by an Include object.
         """
         return (self.id != '')
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Replaces any items which have an 'id' with an Include object with the
     #  same 'id', and puts the object with the 'id' into the specified
     #  ViewElements object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def replace_include ( self, view_elements ):
+    def replace_include(self, view_elements):
         """ Replaces any items that have an **id** attribute with an Include
         object with the same ID value, and puts the object with the ID
         into the specified ViewElements object.
@@ -280,77 +281,77 @@ class Group ( ViewSubElement ):
         view_elements : ViewElements object
             A set of Group, Item, and Include objects
         """
-        for i, item in enumerate( self.content ):
+        for i, item in enumerate(self.content):
             if item.is_includable():
                 id = item.id
                 if id in view_elements.content:
                     raise TraitError(
                         "Duplicate definition for view element '%s'" % id)
-                self.content[ i ] = Include( id )
-                view_elements.content[ id ] = item
-            item.replace_include( view_elements )
+                self.content[i] = Include(id)
+                view_elements.content[id] = item
+            item.replace_include(view_elements)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns a ShadowGroup for the Group which recursively resolves all
     #  imbedded Include objects and which replaces all imbedded Group objects
     #  with a corresponding ShadowGroup:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def get_shadow ( self, ui ):
+    def get_shadow(self, ui):
         """ Returns a ShadowGroup object for the current Group object, which
         recursively resolves all embedded Include objects and which replaces
         each embedded Group object with a corresponding ShadowGroup.
         """
         content = []
-        groups  = 0
-        level   = ui.push_level()
+        groups = 0
+        level = ui.push_level()
         for value in self.content:
             # Recursively replace Include objects:
-            while isinstance( value, Include ):
-                value = ui.find( value )
+            while isinstance(value, Include):
+                value = ui.find(value)
 
             # Convert Group objects to ShadowGroup objects, but include Item
             # objects as is (ignore any 'None' values caused by a failed
             # Include):
-            if isinstance( value, Group ):
-                if self._defined_when( ui, value ):
-                    content.append( value.get_shadow( ui ) )
+            if isinstance(value, Group):
+                if self._defined_when(ui, value):
+                    content.append(value.get_shadow(ui))
                     groups += 1
-            elif isinstance( value, Item ):
-                if self._defined_when( ui, value ):
-                    content.append( value )
+            elif isinstance(value, Item):
+                if self._defined_when(ui, value):
+                    content.append(value)
 
-            ui.pop_level( level )
+            ui.pop_level(level)
 
         # Return the ShadowGroup:
-        return ShadowGroup( shadow = self, content = content, groups = groups )
+        return ShadowGroup(shadow=self, content=content, groups=groups)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Sets the correct container for the content:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def set_container ( self ):
+    def set_container(self):
         """ Sets the correct container for the content.
         """
         for item in self.content:
             item.container = self
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns whether the object should be defined in the user interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _defined_when ( self, ui, value ):
+    def _defined_when(self, ui, value):
         """ Should the object be defined in the user interface?
         """
         if value.defined_when == '':
             return True
-        return ui.eval_when( value.defined_when )
+        return ui.eval_when(value.defined_when)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Parses Group options specified as a string:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _parse ( self, value ):
+    def _parse(self, value):
         """ Parses Group options specified as a string.
         """
         # Override the defaults, since we only allow 'True' values to be
@@ -358,65 +359,74 @@ class Group ( ViewSubElement ):
         self.show_border = self.show_labels = self.show_left = False
 
         # Parse all of the single or multi-character options:
-        value, empty = self._parse_label( value )
-        value = self._parse_style( value )
-        value = self._option( value, '-', 'orientation', 'horizontal' )
-        value = self._option( value, '|', 'orientation', 'vertical' )
-        value = self._option( value, '=', 'layout',      'split' )
-        value = self._option( value, '^', 'layout',      'tabbed' )
-        value = self._option( value, '>', 'show_labels',  True )
-        value = self._option( value, '<', 'show_left',    True )
-        value = self._option( value, '!', 'selected',     True )
+        value, empty = self._parse_label(value)
+        value = self._parse_style(value)
+        value = self._option(value, '-', 'orientation', 'horizontal')
+        value = self._option(value, '|', 'orientation', 'vertical')
+        value = self._option(value, '=', 'layout', 'split')
+        value = self._option(value, '^', 'layout', 'tabbed')
+        value = self._option(value, '>', 'show_labels', True)
+        value = self._option(value, '<', 'show_left', True)
+        value = self._option(value, '!', 'selected', True)
 
-        show_labels      = not (self.show_labels and self.show_left)
-        self.show_left   = not self.show_labels
+        show_labels = not (self.show_labels and self.show_left)
+        self.show_left = not self.show_labels
         self.show_labels = show_labels
 
         # Parse all of the punctuation based sub-string options:
-        value = self._split( 'id', value, ':', _py2to3.str_find,  0, 1 )
+        value = self._split('id', value, ':', _py2to3.str_find, 0, 1)
         if value != '':
             self.object = value
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles a label being found in the string definition:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _parsed_label ( self ):
+    def _parsed_label(self):
         """ Handles a label being found in the string definition.
         """
         self.show_border = True
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns a 'pretty print' version of the Group:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __repr__ ( self ):
+    def __repr__(self):
         """ Returns a "pretty print" version of the Group.
         """
-        result  = []
-        items   = ',\n'.join( [ item.__repr__() for item in self.content ] )
-        if len( items ) > 0:
-            result.append( items )
+        result = []
+        items = ',\n'.join([item.__repr__() for item in self.content])
+        if len(items) > 0:
+            result.append(items)
 
-        options = self._repr_options( 'orientation', 'show_border',
-                      'show_labels', 'show_left', 'selected', 'id', 'object',
-                      'label', 'style', 'layout', 'style_sheet' )
+        options = self._repr_options(
+            'orientation',
+            'show_border',
+            'show_labels',
+            'show_left',
+            'selected',
+            'id',
+            'object',
+            'label',
+            'style',
+            'layout',
+            'style_sheet')
         if options is not None:
-            result.append( options )
+            result.append(options)
 
-        content = ',\n'.join( result )
-        if len( content ) == 0:
+        content = ',\n'.join(result)
+        if len(content) == 0:
             return self.__class__.__name__ + '()'
 
         return '%s(\n%s\n)' % (
-               self.__class__.__name__, self._indent( content ) )
+               self.__class__.__name__, self._indent(content))
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Property getters/setters for width/height attributes
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     @cached_property
-    def _get_width ( self ):
+    def _get_width(self):
         """ Returns the requested width of the Group.
         """
         width = 0.0
@@ -425,7 +435,7 @@ class Group ( ViewSubElement ):
                 if self.orientation == 'horizontal':
                     width += item.width
                 elif self.orientation == 'vertical':
-                    width = max( width, item.width )
+                    width = max(width, item.width)
 
         if width == 0:
             width = -1.0
@@ -433,14 +443,14 @@ class Group ( ViewSubElement ):
         return width
 
     @cached_property
-    def _get_height ( self ):
+    def _get_height(self):
         """ Returns the requested height of the Group.
         """
         height = 0.0
         for item in self.content:
             if item.height >= 1:
                 if self.orientation == 'horizontal':
-                    height = max( height, item.height )
+                    height = max(height, item.height)
                 elif self.orientation == 'vertical':
                     height += item.height
 
@@ -449,175 +459,186 @@ class Group ( ViewSubElement ):
 
         return height
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'HGroup' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class HGroup ( Group ):
+
+class HGroup(Group):
     """ A group whose items are laid out horizontally.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Override standard Group trait defaults to give it horizontal group
     # behavior:
     orientation = 'horizontal'
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'VGroup' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class VGroup ( Group ):
+
+class VGroup(Group):
     """ A group whose items are laid out vertically.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    # Override standard Group trait defaults to give it vertical group behavior:
+    # Override standard Group trait defaults to give it vertical group
+    # behavior:
     orientation = 'vertical'
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'VGrid' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class VGrid ( VGroup ):
+
+class VGrid(VGroup):
     """ A group whose items are laid out in 2 columns.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Override standard Group trait defaults to give it grid behavior:
     columns = 2
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'HFlow' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class HFlow ( HGroup ):
+
+class HFlow(HGroup):
     """ A group in which items are laid out horizontally, and "wrap" when
     they exceed the available horizontal space..
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Override standard Group trait defaults to give it horizontal flow
     # behavior:
-    layout      = 'flow'
+    layout = 'flow'
     show_labels = False
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'VFlow' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class VFlow ( VGroup ):
+
+class VFlow(VGroup):
     """ A group in which items are laid out vertically, and "wrap" when they
     exceed the available vertical space.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Override standard Group trait defaults to give it vertical flow behavior:
-    layout      = 'flow'
+    layout = 'flow'
     show_labels = False
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'VFold' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class VFold ( VGroup ):
+
+class VFold(VGroup):
     """ A group in which items are laid out vertically and can be collapsed
         (i.e. 'folded') by clicking their title.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Override standard Group trait defaults to give it vertical folding group
     # behavior:
-    layout      = 'fold'
+    layout = 'fold'
     show_labels = False
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'HSplit' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class HSplit ( Group ):
+
+class HSplit(Group):
     """ A horizontal group with splitter bars to separate it from other groups.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Override standard Group trait defaults to give it horizontal splitter
     # behavior:
-    layout      = 'split'
+    layout = 'split'
     orientation = 'horizontal'
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'VSplit' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class VSplit ( Group ):
+
+class VSplit(Group):
     """ A vertical group with splitter bars to separate it from other groups.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Override standard Group trait defaults to give it vertical splitter
     # behavior:
-    layout      = 'split'
+    layout = 'split'
     orientation = 'vertical'
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'Tabbed' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class Tabbed ( Group ):
+
+class Tabbed(Group):
     """ A group that is shown as a tabbed notebook.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Override standard Group trait defaults to give it tabbed notebook
     # behavior:
-    layout  = 'tabbed'
+    layout = 'tabbed'
     springy = True
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ShadowGroup' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ShadowGroup ( Group ):
+
+class ShadowGroup(Group):
     """ Corresponds to a Group object, but with all embedded Include
         objects resolved, and with all embedded Group objects replaced by
         corresponding ShadowGroup objects.
     """
 
-    def __init__( self, shadow, **traits ):
+    def __init__(self, shadow, **traits):
         # Set the 'shadow' trait before all others, to avoid exceptions
         # when setting those other traits.
         self.shadow = shadow
-        super( ShadowGroup, self ).__init__( **traits )
+        super(ShadowGroup, self).__init__(**traits)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     # Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Group object this is a "shadow" for
     shadow = ReadOnly
@@ -704,14 +725,14 @@ class ShadowGroup ( Group ):
     # Style sheet for the panel
     style_sheet = ShadowDelegate
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the contents of the ShadowGroup within a specified user interface
     #  building context. This makes sure that all Group types are of the same
     #  type (i.e. Group or Item) and that all Include objects have been replaced
     #  by their substituted values:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def get_content ( self, allow_groups = True ):
+    def get_content(self, allow_groups=True):
         """ Returns the contents of the Group within a specified context for
         building a user interface.
 
@@ -727,77 +748,77 @@ class ShadowGroup ( Group ):
         if self.groups != 0:
             if not allow_groups:
                 i = 0
-                while i < len( result ):
+                while i < len(result):
                     value = result[i]
-                    if isinstance( value, ShadowGroup ):
-                        items         = value.get_content( False )
-                        result[i:i+1] = items
-                        i += len( items )
+                    if isinstance(value, ShadowGroup):
+                        items = value.get_content(False)
+                        result[i:i + 1] = items
+                        i += len(items)
                     else:
                         i += 1
-            elif (self.groups != len( result )) and (self.layout == 'normal'):
-                items   = []
+            elif (self.groups != len(result)) and (self.layout == 'normal'):
+                items = []
                 content = []
                 for item in result:
-                    if isinstance( item, ShadowGroup ):
-                        self._flush_items( content, items )
-                        content.append( item )
+                    if isinstance(item, ShadowGroup):
+                        self._flush_items(content, items)
+                        content.append(item)
                     else:
-                        items.append( item )
-                self._flush_items( content, items )
+                        items.append(item)
+                self._flush_items(content, items)
                 result = content
 
         # Return the resulting list of objects:
         return result
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns an id used to identify the group:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def get_id ( self ):
+    def get_id(self):
         """ Returns an ID for the group.
         """
         if self.id != '':
             return self.id
 
-        return ':'.join( [ item.get_id() for item in self.get_content() ] )
+        return ':'.join([item.get_id() for item in self.get_content()])
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Sets the correct container for the content:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def set_container ( self ):
+    def set_container(self):
         """ Sets the correct container for the content.
         """
         pass
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Creates a sub-Group for any items contained in a specified list:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _flush_items ( self, content, items ):
+    def _flush_items(self, content, items):
         """ Creates a sub-group for any items contained in a specified list.
         """
-        if len( items ) > 0:
+        if len(items) > 0:
             content.append(
                 # Set shadow before hand to prevent delegation errors
-                ShadowGroup( shadow      = self.shadow).set(
-                             groups      = 0,
-                             label       = '',
-                             show_border = False,
-                             content     = items,
-                             show_labels = self.show_labels,
-                             show_left   = self.show_left,
-                             springy     = self.springy,
-                             orientation = self.orientation
+                ShadowGroup(shadow=self.shadow).set(
+                    groups=0,
+                    label='',
+                    show_border=False,
+                    content=items,
+                    show_labels=self.show_labels,
+                    show_left=self.show_left,
+                    springy=self.springy,
+                    orientation=self.orientation
                 ))
             del items[:]
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns a 'pretty print' version of the Group:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __repr__ ( self ):
+    def __repr__(self):
         """ Returns a "pretty print" version of the Group.
         """
-        return repr( self.shadow )
+        return repr(self.shadow)

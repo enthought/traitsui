@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -13,9 +14,9 @@
 interface toolkit, useful for tools such as debuggers.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from pyface.qt import QtCore, QtGui
 
@@ -35,39 +36,40 @@ from constants import OKColor, ErrorColor
 from editor import Editor
 from helper import pixmap_cache
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Marker line constants:
-MARK_MARKER = 0 # Marks a marked line
-SEARCH_MARKER = 1 # Marks a line matching the current search
-SELECTED_MARKER = 2 # Marks the currently selected line
+MARK_MARKER = 0  # Marks a marked line
+SEARCH_MARKER = 1  # Marks a line matching the current search
+SELECTED_MARKER = 2  # Marks the currently selected line
 
-class SourceEditor ( Editor ):
+
+class SourceEditor(Editor):
     """ Editor for source code which uses the advanced code widget.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  PyFace PythonEditor interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Event that is fired on keypresses:
     key_pressed = Event(KeyPressedEvent)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Editor interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # The code editor is scrollable. This value overrides the default.
     scrollable = True
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  SoureEditor interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Is the editor read only?
-    readonly = Bool( False )
+    readonly = Bool(False)
 
     # The currently selected line
     selected_line = Int
@@ -82,7 +84,7 @@ class SourceEditor ( Editor ):
     selected_text = Unicode
 
     # The list of line numbers to mark
-    mark_lines = List( Int )
+    mark_lines = List(Int)
 
     # The current line number
     line = Event
@@ -93,7 +95,7 @@ class SourceEditor ( Editor ):
     # The lines to be dimmed
     dim_lines = List(Int)
     dim_color = Str
-    dim_style_number = Int(16) # 0-15 are reserved for the python lexer
+    dim_style_number = Int(16)  # 0-15 are reserved for the python lexer
 
     # The lines to have squiggles drawn under them
     squiggle_lines = List(Int)
@@ -102,11 +104,11 @@ class SourceEditor ( Editor ):
     # The lexer to use.
     lexer = Str
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
-    def init ( self, parent ):
+    #-------------------------------------------------------------------------
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
@@ -114,7 +116,8 @@ class SourceEditor ( Editor ):
         layout = QtGui.QVBoxLayout(self.control)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        self._widget = control = AdvancedCodeWidget(None, lexer=self.factory.lexer)
+        self._widget = control = AdvancedCodeWidget(
+            None, lexer=self.factory.lexer)
         layout.addWidget(control)
 
         factory = self.factory
@@ -141,15 +144,15 @@ class SourceEditor ( Editor ):
         self.update_editor()
 
         # Set up any event listeners:
-        self.sync_value( factory.mark_lines, 'mark_lines', 'from',
-                         is_list = True )
-        self.sync_value( factory.selected_line, 'selected_line', 'from' )
-        self.sync_value( factory.selected_text, 'selected_text', 'to' )
-        self.sync_value( factory.line, 'line' )
-        self.sync_value( factory.column, 'column' )
+        self.sync_value(factory.mark_lines, 'mark_lines', 'from',
+                        is_list=True)
+        self.sync_value(factory.selected_line, 'selected_line', 'from')
+        self.sync_value(factory.selected_text, 'selected_text', 'to')
+        self.sync_value(factory.line, 'line')
+        self.sync_value(factory.column, 'column')
 
-        self.sync_value( factory.selected_start_pos, 'selected_start_pos', 'to')
-        self.sync_value( factory.selected_end_pos, 'selected_end_pos', 'to')
+        self.sync_value(factory.selected_start_pos, 'selected_start_pos', 'to')
+        self.sync_value(factory.selected_end_pos, 'selected_end_pos', 'to')
 
         self.sync_value(factory.dim_lines, 'dim_lines', 'from', is_list=True)
         if self.factory.dim_color == '':
@@ -167,11 +170,11 @@ class SourceEditor ( Editor ):
         # Set the control tooltip:
         self.set_tooltip()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Disposes of the contents of an editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def dispose ( self ):
+    def dispose(self):
         """ Disposes of the contents of an editor.
         """
         # Make sure that the editor does not try to update as the control is
@@ -179,36 +182,36 @@ class SourceEditor ( Editor ):
         QtCore.QObject.disconnect(self._widget, QtCore.SIGNAL('lostFocus'),
                                   self.update_object)
 
-        super( SourceEditor, self ).dispose()
+        super(SourceEditor, self).dispose()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_object ( self ):
+    def update_object(self):
         """ Handles the user entering input data in the edit control.
         """
         if not self._locked:
             try:
                 value = unicode(self._widget.code.toPlainText())
-                if isinstance( self.value, SequenceTypes ):
+                if isinstance(self.value, SequenceTypes):
                     value = value.split()
                 self.value = value
             except TraitError as excp:
                 pass
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self._locked = True
         new_value = self.value
-        if isinstance( new_value, SequenceTypes ):
-            new_value = '\n'.join( [ line.rstrip() for line in new_value ] )
+        if isinstance(new_value, SequenceTypes):
+            new_value = '\n'.join([line.rstrip() for line in new_value])
         control = self._widget
         if control.code.toPlainText() != new_value:
             control.code.setPlainText(new_value)
@@ -221,59 +224,60 @@ class SourceEditor ( Editor ):
 
         self._locked = False
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def error ( self, excp ):
+    def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
 
-    #-- UI preference save/restore interface -----------------------------------
+    #-- UI preference save/restore interface ---------------------------------
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Restores any saved user preference information associated with the
     #  editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def restore_prefs ( self, prefs ):
+    def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
         if self.factory.key_bindings is not None:
-            key_bindings = prefs.get( 'key_bindings' )
+            key_bindings = prefs.get('key_bindings')
             if key_bindings is not None:
-                self.factory.key_bindings.merge( key_bindings )
+                self.factory.key_bindings.merge(key_bindings)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns any user preference information associated with the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def save_prefs ( self ):
+    def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
-        return { 'key_bindings': self.factory.key_bindings }
+        return {'key_bindings': self.factory.key_bindings}
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the set of 'marked lines' being changed:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _mark_lines_changed ( self ):
+    def _mark_lines_changed(self):
         """ Handles the set of marked lines being changed.
         """
         # FIXME: Not implemented at this time.
         return
 
-    def _mark_lines_items_changed ( self ):
+    def _mark_lines_items_changed(self):
         self._mark_lines_changed()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the currently 'selected line' being changed:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _selection_changed(self):
-        self.selected_text = unicode(self._widget.code.textCursor().selectedText())
+        self.selected_text = unicode(
+            self._widget.code.textCursor().selectedText())
         start = self._widget.code.textCursor().selectionStart()
         end = self._widget.code.textCursor().selectionEnd()
 
@@ -283,7 +287,7 @@ class SourceEditor ( Editor ):
         self.selected_start_pos = start
         self.selected_end_pos = end
 
-    def _selected_line_changed ( self ):
+    def _selected_line_changed(self):
         """ Handles a change in which line is currently selected.
         """
         control = self._widget
@@ -293,29 +297,29 @@ class SourceEditor ( Editor ):
         if self.factory.auto_scroll:
             control.centerCursor()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the 'line' trait being changed:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _line_changed ( self, line ):
+    def _line_changed(self, line):
         if not self._locked:
             _, column = self._widget.get_line_column()
             self._widget.set_line_column(line, column)
             if self.factory.auto_scroll:
                 self._widget.centerCursor()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the 'column' trait being changed:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _column_changed ( self, column ):
+    def _column_changed(self, column):
         if not self._locked:
             line, _ = self._widget.get_line_column()
             self._widget.set_line_column(line, column)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the cursor position being changed:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _position_changed(self):
         """ Handles the cursor position being changed.
@@ -328,11 +332,11 @@ class SourceEditor ( Editor ):
         if self.factory.auto_scroll:
             self._widget.centerCursor()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles a key being pressed within the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _key_pressed_changed ( self, event ):
+    def _key_pressed_changed(self, event):
         """ Handles a key being pressed within the editor.
         """
         key_bindings = self.factory.key_bindings
@@ -344,9 +348,9 @@ class SourceEditor ( Editor ):
         if not processed and event.event.matches(QtGui.QKeySequence.Find):
             self._find_widget.show()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the styling of the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _dim_color_changed(self):
         pass
@@ -359,11 +363,11 @@ class SourceEditor ( Editor ):
         self._widget.set_warn_lines(self.squiggle_lines)
 
 
-
 # Define the simple, custom, text and readonly editors, which will be accessed
 # by the editor factory for code editors.
 
 CustomEditor = SimpleEditor = TextEditor = SourceEditor
+
 
 class ReadonlyEditor(SourceEditor):
 
