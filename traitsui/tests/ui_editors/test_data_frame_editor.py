@@ -350,6 +350,21 @@ def test_data_frame_editor():
 
 
 @skip_if_null
+def test_data_frame_editor_alternate_adapter():
+    class AlternateAdapter(DataFrameAdapter):
+        pass
+
+    alternate_adapter_view = View(
+        Item('data', editor=DataFrameEditor(adapter=AlternateAdapter()),
+                width=400)
+    )
+    viewer = sample_data()
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits(view=alternate_adapter_view)
+        ui.dispose()
+
+
+@skip_if_null
 def test_data_frame_editor_numerical_index():
     viewer = sample_data_numerical_index()
     with store_exceptions_on_all_threads():
@@ -404,6 +419,7 @@ def test_data_frame_editor_with_update_refresh():
     viewer = DataFrameViewer(data=df)
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits()
+        viewer.df_updated = True
         ui.dispose()
 
 
@@ -421,4 +437,5 @@ def test_data_frame_editor_with_refresh():
     viewer = DataFrameViewer(data=df)
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits()
+        viewer.df_updated = True
         ui.dispose()
