@@ -19,56 +19,56 @@
     an active Traits-based user interface.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
 from traits.api import HasPrivateTraits, Instance, Constant, Bool
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'UIInfo' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class UIInfo ( HasPrivateTraits ):
+
+class UIInfo(HasPrivateTraits):
     """ Represents the object and editor content of an active Traits-based
     user interface
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Bound to a UI object at UIInfo construction time
-    ui = Instance( 'traitsui.ui.UI', allow_none = True )
+    ui = Instance('traitsui.ui.UI', allow_none=True)
 
     # Indicates whether the UI has finished initialization
-    initialized = Bool( False )
+    initialized = Bool(False)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Bind's all of the associated context objects as traits of the object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def bind_context ( self ):
+    def bind_context(self):
         """ Binds all of the associated context objects as traits of the
             object.
         """
         for name, value in self.ui.context.items():
-            self.bind( name, value )
+            self.bind(name, value)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Binds a name to a value if it is not already bound:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def bind ( self, name, value, id = None ):
+    def bind(self, name, value, id=None):
         """ Binds a name to a value if it is not already bound.
         """
         if id is None:
             id = name
 
-        if not hasattr( self, name ):
-            self.add_trait( name, Constant( value ) )
+        if not hasattr(self, name):
+            self.add_trait(name, Constant(value))
             if id != '':
-                self.ui._names.append( id )
-
+                self.ui._names.append(id)

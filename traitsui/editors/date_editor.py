@@ -29,22 +29,23 @@ class DateEditor(EditorFactory):
     """ Editor factory for date/time editors.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    #-- ReadonlyEditor traits --------------------------------------------------
+    #-- ReadonlyEditor traits ------------------------------------------------
 
     # Message to show when Date is None.
     message = Str('Undefined')
 
-    # The string representation of the date to show.  Uses time.strftime format.
+    # The string representation of the date to show.  Uses time.strftime
+    # format.
     strftime = Str('%B %d %Y (%a)')
 
     # An optional view to display when a read-only text editor is clicked:
     view = AView
 
-    #-- CustomEditor traits ----------------------------------------------------
+    #-- CustomEditor traits --------------------------------------------------
 
     # Should users be able to pick future dates when using the CustomEditor?
     allow_future = Bool(True)

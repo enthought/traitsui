@@ -46,6 +46,7 @@ class FooDialog(HasTraits):
 
 @skip_if_not_qt4
 class TestUIPanel(unittest.TestCase):
+
     def setup_qt4_dock_window(self):
         from pyface.qt import QtGui
 

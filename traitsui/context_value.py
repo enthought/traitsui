@@ -19,19 +19,20 @@
     values.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
 from traits.api import HasPrivateTraits, Instance, Str, Int, Float, Either
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ContextValue' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ContextValue ( HasPrivateTraits ):
+
+class ContextValue(HasPrivateTraits):
     """ Defines the name of a context value that can be bound to some editor
         value.
     """
@@ -40,9 +41,9 @@ class ContextValue ( HasPrivateTraits ):
     # (e.g. 'selection' or 'handler.selection'):
     name = Str
 
-    #-- object Interface -------------------------------------------------------
+    #-- object Interface -----------------------------------------------------
 
-    def __init__ ( self, name ):
+    def __init__(self, name):
         """ Initializes the object.
         """
         self.name = name
@@ -50,16 +51,16 @@ class ContextValue ( HasPrivateTraits ):
 # Define a shorthand name for a ContextValue:
 CV = ContextValue
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Trait definitions useful in defining bindable editor traits:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-InstanceOfContextValue = Instance( ContextValue, allow_none = False )
+InstanceOfContextValue = Instance(ContextValue, allow_none=False)
 
-def CVType( type ):
-    return Either( type, InstanceOfContextValue, sync_value = 'to' )
 
-CVInt   = CVType( Int )
-CVFloat = CVType( Float )
-CVStr   = CVType( Str )
+def CVType(type):
+    return Either(type, InstanceOfContextValue, sync_value='to')
 
+CVInt = CVType(Int)
+CVFloat = CVType(Float)
+CVStr = CVType(Str)

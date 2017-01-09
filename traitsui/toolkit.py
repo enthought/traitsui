@@ -19,9 +19,9 @@
     the standard EditorFactory subclasses supplied with the Traits package.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -30,29 +30,29 @@ import logging
 from traits.api import HasPrivateTraits, TraitError
 from traits.trait_base import ETSConfig
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Logging:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 logger = logging.getLogger(__name__)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # List of implemented UI toolkits:
-TraitUIToolkits = [ 'qt4', 'wx', 'null' ]
+TraitUIToolkits = ['qt4', 'wx', 'null']
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Data:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # The current GUI toolkit object being used:
 _toolkit = None
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Low-level GUI toolkit selection function:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 try:
     provisional_toolkit = ETSConfig.provisional_toolkit
@@ -79,8 +79,8 @@ except AttributeError:
             raise
 
 
-def _import_toolkit ( name ):
-    return __import__( name, globals=globals(), level=1 ).toolkit
+def _import_toolkit(name):
+    return __import__(name, globals=globals(), level=1).toolkit
 
 
 def assert_toolkit_import(name):
@@ -89,7 +89,7 @@ def assert_toolkit_import(name):
     """
     if ETSConfig.toolkit and ETSConfig.toolkit != name:
         raise RuntimeError("Importing from %s backend after selecting %s "
-                "backend!" % (name, ETSConfig.toolkit))
+                           "backend!" % (name, ETSConfig.toolkit))
 
 
 def toolkit_object(name, raise_exceptions=False):
@@ -100,16 +100,18 @@ def toolkit_object(name, raise_exceptions=False):
 
     mname, oname = name.split(':')
 
-    class Unimplemented ( object ):
+    class Unimplemented(object):
         """ This is returned if an object isn't implemented by the selected
         toolkit.  It raises an exception if it is ever instantiated.
         """
 
-        def __init__( self, *args, **kwargs ):
-            raise NotImplementedError( "The %s traits backend doesn't "
-                "implement %s" % ( ETSConfig.toolkit, oname ) )
+        def __init__(self, *args, **kwargs):
+            raise NotImplementedError(
+                "The %s traits backend doesn't "
+                "implement %s" %
+                (ETSConfig.toolkit, oname))
 
-    be_obj   = Unimplemented
+    be_obj = Unimplemented
     be_mname = toolkit().__module__.split('.')[-2] + '.' + mname
     try:
         module = __import__(
@@ -118,9 +120,11 @@ def toolkit_object(name, raise_exceptions=False):
         try:
             be_obj = getattr(module, oname)
         except AttributeError as e:
-            if raise_exceptions: raise e
+            if raise_exceptions:
+                raise e
     except ImportError as e:
-        if raise_exceptions: raise e
+        if raise_exceptions:
+            raise e
 
     return be_obj
 
@@ -172,8 +176,9 @@ def toolkit(*toolkits):
                 with provisional_toolkit('null'):
                     _toolkit = _import_toolkit('null')
                     import warnings
-                    msg = ("Unable to import the '{0}' backend for traits UI; " +
-                           "using the 'null' backend instead.")
+                    msg = (
+                        "Unable to import the '{0}' backend for traits UI; " +
+                        "using the 'null' backend instead.")
                     warnings.warn(msg.format(toolkit_name), RuntimeWarning)
                     return _toolkit
 
@@ -182,81 +187,82 @@ def toolkit(*toolkits):
                 raise TraitError("Could not import any UI toolkit. Tried:" +
                                  ', '.join(toolkits))
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'Toolkit' class (abstract base class):
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class Toolkit ( HasPrivateTraits ):
+
+class Toolkit(HasPrivateTraits):
     """ Abstract base class for GUI toolkits.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Create GUI toolkit specific user interfaces using information from the
     #  specified UI object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def ui_panel ( self, ui, parent ):
+    def ui_panel(self, ui, parent):
         """ Creates a GUI-toolkit-specific panel-based user interface using
             information from the specified UI object.
         """
         raise NotImplementedError
 
-    def ui_subpanel ( self, ui, parent ):
+    def ui_subpanel(self, ui, parent):
         """ Creates a GUI-toolkit-specific subpanel-based user interface using
             information from the specified UI object.
         """
         raise NotImplementedError
 
-    def ui_livemodal ( self, ui, parent ):
+    def ui_livemodal(self, ui, parent):
         """ Creates a GUI-toolkit-specific modal "live update" dialog user
             interface using information from the specified UI object.
         """
         raise NotImplementedError
 
-    def ui_live ( self, ui, parent ):
+    def ui_live(self, ui, parent):
         """ Creates a GUI-toolkit-specific non-modal "live update" window user
             interface using information from the specified UI object.
         """
         raise NotImplementedError
 
-    def ui_modal ( self, ui, parent ):
+    def ui_modal(self, ui, parent):
         """ Creates a GUI-toolkit-specific modal dialog user interface using
             information from the specified UI object.
         """
         raise NotImplementedError
 
-    def ui_nonmodal ( self, ui, parent ):
+    def ui_nonmodal(self, ui, parent):
         """ Creates a GUI-toolkit-specific non-modal dialog user interface using
             information from the specified UI object.
         """
         raise NotImplementedError
 
-    def ui_popup ( self, ui, parent ):
+    def ui_popup(self, ui, parent):
         """ Creates a GUI-toolkit-specific temporary "live update" popup dialog
             user interface using information from the specified UI object.
         """
         raise NotImplementedError
 
-    def ui_popover ( self, ui, parent ):
+    def ui_popover(self, ui, parent):
         """ Creates a GUI-toolkit-specific temporary "live update" popup dialog
             user interface using information from the specified UI object.
         """
         raise NotImplementedError
 
-    def ui_info ( self, ui, parent ):
+    def ui_info(self, ui, parent):
         """ Creates a GUI-toolkit-specific temporary "live update" popup dialog
             user interface using information from the specified UI object.
         """
         raise NotImplementedError
 
-    def ui_wizard ( self, ui, parent ):
+    def ui_wizard(self, ui, parent):
         """ Creates a GUI-toolkit-specific wizard dialog user interface using
             information from the specified UI object.
         """
         raise NotImplementedError
 
-    def view_application ( self, context, view, kind = None, handler = None,
-                                      id = '', scrollable = None, args = None ):
+    def view_application(self, context, view, kind=None, handler=None,
+                         id='', scrollable=None, args=None):
         """ Creates a GUI-toolkit-specific modal dialog user interface that
             runs as a complete application using information from the
             specified View object.
@@ -290,134 +296,134 @@ class Toolkit ( HasPrivateTraits ):
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Positions the associated dialog window on the display:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def position ( self, ui ):
+    def position(self, ui):
         """ Positions the associated dialog window on the display.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Shows a 'Help' window for a specified UI and control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def show_help ( self, ui, control ):
+    def show_help(self, ui, control):
         """ Shows a Help window for a specified UI and control.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Sets the title for the UI window:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def set_title ( self, ui ):
+    def set_title(self, ui):
         """ Sets the title for the UI window.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Sets the icon for the UI window:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def set_icon ( self, ui ):
+    def set_icon(self, ui):
         """ Sets the icon for the UI window.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Saves user preference information associated with a UI window:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def save_window ( self, ui ):
+    def save_window(self, ui):
         """ Saves user preference information associated with a UI window.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Rebuilds a UI after a change to the content of the UI:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def rebuild_ui ( self, ui ):
+    def rebuild_ui(self, ui):
         """ Rebuilds a UI after a change to the content of the UI.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Converts a keystroke event into a corresponding key name:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def key_event_to_name ( self, event ):
+    def key_event_to_name(self, event):
         """ Converts a keystroke event into a corresponding key name.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Hooks all specified events for all controls in a ui so that they can be
     #  routed to the corrent event handler:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def hook_events ( self, ui, control, events = None, handler = None ):
+    def hook_events(self, ui, control, events=None, handler=None):
         """ Hooks all specified events for all controls in a UI so that they
             can be routed to the correct event handler.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Routes a 'hooked' event to the corrent handler method:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def route_event ( self, ui, event ):
+    def route_event(self, ui, event):
         """ Routes a "hooked" event to the corrent handler method.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Indicates that an event should continue to be processed by the toolkit
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def skip_event ( self, event ):
+    def skip_event(self, event):
         """ Indicates that an event should continue to be processed by the
             toolkit.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Destroys a specified GUI toolkit control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def destroy_control ( self, control ):
+    def destroy_control(self, control):
         """ Destroys a specified GUI toolkit control.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Destroys all of the child controls of a specified GUI toolkit control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def destroy_children ( self, control ):
+    def destroy_children(self, control):
         """ Destroys all of the child controls of a specified GUI toolkit
             control.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns a ( width, height ) tuple containing the size of a specified
     #  toolkit image:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def image_size ( self, image ):
+    def image_size(self, image):
         """ Returns a ( width, height ) tuple containing the size of a
             specified toolkit image.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns a dictionary of useful constants:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def constants ( self ):
+    def constants(self):
         """ Returns a dictionary of useful constants.
 
             Currently, the dictionary should have the following key/value pairs:
@@ -427,151 +433,151 @@ class Toolkit ( HasPrivateTraits ):
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns a renderer used to render 'themed' table cells for a specified
     #  TableColumn object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def themed_cell_renderer ( self, column ):
+    def themed_cell_renderer(self, column):
         """ Returns a renderer used to render 'themed' table cells for a
             specified TableColum object.
         """
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  GUI toolkit dependent trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def color_trait ( self, *args, **traits ):
+    def color_trait(self, *args, **traits):
         raise NotImplementedError
 
-    def rgb_color_trait ( self, *args, **traits ):
+    def rgb_color_trait(self, *args, **traits):
         raise NotImplementedError
 
-    def rgba_color_trait ( self, *args, **traits ):
+    def rgba_color_trait(self, *args, **traits):
         raise NotImplementedError
 
-    def font_trait ( self, *args, **traits ):
+    def font_trait(self, *args, **traits):
         raise NotImplementedError
 
-    def kiva_font_trait ( self, *args, **traits ):
+    def kiva_font_trait(self, *args, **traits):
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  'Editor' class methods:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def ui_editor ( self ):
+    def ui_editor(self):
         raise NotImplementedError
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  'EditorFactory' factory methods:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def array_editor ( self, *args, **traits ):
+    def array_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def boolean_editor ( self, *args, **traits ):
+    def boolean_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def button_editor ( self, *args, **traits ):
+    def button_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def check_list_editor ( self, *args, **traits ):
+    def check_list_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def code_editor ( self, *args, **traits ):
+    def code_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def color_editor ( self, *args, **traits ):
+    def color_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def compound_editor ( self, *args, **traits ):
+    def compound_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def custom_editor ( self, *args, **traits ):
+    def custom_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def directory_editor ( self, *args, **traits ):
+    def directory_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def drop_editor ( self, *args, **traits ):
+    def drop_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def dnd_editor ( self, *args, **traits ):
+    def dnd_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def enum_editor ( self, *args, **traits ):
+    def enum_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def file_editor ( self, *args, **traits ):
+    def file_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def font_editor ( self, *args, **traits ):
+    def font_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def key_binding_editor ( self, *args, **traits ):
+    def key_binding_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def history_editor ( self, *args, **traits ):
+    def history_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def html_editor ( self, *args, **traits ):
+    def html_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def image_editor ( self, *args, **traits ):
+    def image_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def image_enum_editor ( self, *args, **traits ):
+    def image_enum_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def instance_editor ( self, *args, **traits ):
+    def instance_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def list_editor ( self, *args, **traits ):
+    def list_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def list_str_editor ( self, *args, **traits ):
+    def list_str_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def null_editor ( self, *args, **traits ):
+    def null_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def ordered_set_editor ( self, *args, **traits ):
+    def ordered_set_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def plot_editor ( self, *args, **traits ):
+    def plot_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def range_editor ( self, *args, **traits ):
+    def range_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def rgb_color_editor ( self, *args, **traits ):
+    def rgb_color_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def rgba_color_editor ( self, *args, **traits ):
+    def rgba_color_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def shell_editor ( self, *args, **traits ):
+    def shell_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def table_editor ( self, *args, **traits ):
+    def table_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def tabular_editor ( self, *args, **traits ):
+    def tabular_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def text_editor ( self, *args, **traits ):
+    def text_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def title_editor ( self, *args, **traits ):
+    def title_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def tree_editor ( self, *args, **traits ):
+    def tree_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def tuple_editor ( self, *args, **traits ):
+    def tuple_editor(self, *args, **traits):
         raise NotImplementedError
 
-    def value_editor ( self, *args, **traits ):
+    def value_editor(self, *args, **traits):
         raise NotImplementedError

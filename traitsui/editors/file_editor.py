@@ -15,9 +15,9 @@
 """ Defines the file editor factory for all traits toolkit backends.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -32,24 +32,25 @@ from ..group import Group
 
 from .text_editor import ToolkitEditorFactory as EditorFactory
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Wildcard filter:
 filter_trait = List(Unicode)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ToolkitEditorFactory ( EditorFactory ):
+
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for file editors.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Wildcard filter to apply to the file dialog:
     filter = filter_trait
@@ -58,10 +59,10 @@ class ToolkitEditorFactory ( EditorFactory ):
     filter_name = Str
 
     # Should file extension be truncated?
-    truncate_ext = Bool( False )
+    truncate_ext = Bool(False)
 
     # Can the user select directories as well as files?
-    allow_dir = Bool( False )
+    allow_dir = Bool(False)
 
     # Is user input set on every keystroke? (Overrides the default) ('simple'
     # style only):
@@ -73,7 +74,7 @@ class ToolkitEditorFactory ( EditorFactory ):
 
     # The number of history entries to maintain:
     # FIXME: add support
-    entries = Int( 10 )
+    entries = Int(10)
 
     # The root path of the file tree view ('custom' style only, not supported
     # under wx). If not specified, the filesystem root is used.
@@ -94,14 +95,14 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Should be one of 'open' or 'save'
     dialog_style = Str('open')
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Traits view definition:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    traits_view = View( [ [ '<options>',
-                        'truncate_ext{Automatically truncate file extension?}',
-                        '|options:[Options]>' ],
-                          [ 'filter', '|[Wildcard filters]<>' ] ] )
+    traits_view = View([['<options>',
+                         'truncate_ext{Automatically truncate file extension?}',
+                         '|options:[Options]>'],
+                        ['filter', '|[Wildcard filters]<>']])
 
     extras = Group()
 

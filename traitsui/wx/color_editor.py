@@ -80,10 +80,10 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
             alpha = color.Alpha()
             if alpha == 255:
                 return "rgb(%d,%d,%d)" % (
-                        color.Red(), color.Green(), color.Blue())
+                    color.Red(), color.Green(), color.Blue())
 
             return "rgb(%d,%d,%d,%d)" % (
-                    color.Red(), color.Green(), color.Blue(), alpha)
+                color.Red(), color.Green(), color.Blue(), alpha)
 
         return str(color)
 
@@ -93,6 +93,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 #------------------------------------------------------------------------------
 
 class ColorComboBox(wx.combo.OwnerDrawnComboBox):
+
     def OnDrawItem(self, dc, rect, item, flags):
 
         r = wx.Rect(rect.x, rect.y, rect.width, rect.height)
@@ -148,9 +149,9 @@ class SimpleColorEditor(BaseSimpleEditor):
         current_color = self.factory.to_wx_color(self)
         current_color_name = current_color.GetAsString()
 
-        self.control = ColorComboBox(parent, -1, current_color_name,
-                                wx.Point(0, 0), wx.Size(40, -1), self.choices,
-                                style=wx.wx.CB_READONLY)
+        self.control = ColorComboBox(parent, -
+                                     1, current_color_name, wx.Point(0, 0), wx.Size(40, -
+                                                                                    1), self.choices, style=wx.wx.CB_READONLY)
 
         self.control.Bind(wx.EVT_COMBOBOX, self.color_selected)
         return
@@ -248,6 +249,7 @@ class CustomColorEditor(BaseSimpleEditor):
         """ Handles the user changing the contents of the edit control.
         """
         if not isinstance(event, wx._core.CommandEvent):
+            event.Skip()
             return
         try:
             # The TextCtrl object was saved as self._text_control in init().

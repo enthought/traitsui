@@ -21,31 +21,32 @@ We do *not* demonstrate two styles which are not as useful for this editor:
 from traits.api import HasTraits, List
 from traitsui.api import UItem, Group, View, CheckListEditor, Label
 
-class CheckListEditorDemo ( HasTraits ):
+
+class CheckListEditorDemo(HasTraits):
     """ Define the main CheckListEditor simple demo class. """
 
     # Specify the strings to be displayed in the checklist:
-    checklist = List( editor = CheckListEditor(
-                           values = [ 'one', 'two', 'three', 'four',
-                                      'five', 'six'],
-                           cols   = 2 ) )
+    checklist = List(editor=CheckListEditor(
+        values=['one', 'two', 'three', 'four',
+                'five', 'six'],
+        cols=2))
 
     # CheckListEditor display with two columns:
     checklist_group = Group(
-        '10', # insert vertical space
+        '10',  # insert vertical space
         Label('The custom style lets you select items from a checklist:'),
-        UItem( 'checklist', style = 'custom'),
-        '10','_','10',  # a horizontal line with 10 empty pixels above and below
+        UItem('checklist', style='custom'),
+        '10', '_', '10',  # a horizontal line with 10 empty pixels above and below
         Label('The readonly style shows you which items are selected, '
               'as a Python list:'),
-        UItem( 'checklist', style = 'readonly'),
+        UItem('checklist', style='readonly'),
     )
 
     traits_view = View(
         checklist_group,
-        title     = 'CheckListEditor',
-        buttons   = [ 'OK' ],
-        resizable = True
+        title='CheckListEditor',
+        buttons=['OK'],
+        resizable=True
     )
 
 # Create the demo:
@@ -54,4 +55,3 @@ demo = CheckListEditorDemo()
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

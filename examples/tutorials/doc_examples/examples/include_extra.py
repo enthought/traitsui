@@ -6,11 +6,13 @@
 from traits.api import HasTraits, Int, Str
 from traitsui.api import Group, Include, View
 
+
 class Person(HasTraits):
     name = Str
     age = Int
 
     person_view = View('name', Include('extra'), 'age')
+
 
 class LocatedPerson(Person):
     street = Str

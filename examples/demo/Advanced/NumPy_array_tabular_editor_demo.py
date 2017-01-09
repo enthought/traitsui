@@ -9,7 +9,7 @@ index of each point in the array, as well as a red flag if the point lies within
 0.25 of the center of the cube.
 """
 
-#-- Imports --------------------------------------------------------------------
+#-- Imports --------------------------------------------------------------
 
 from numpy import sqrt
 from numpy.random import random
@@ -17,17 +17,18 @@ from traits.api import HasTraits, Property, Array, Font
 from traitsui.api import View, Item, TabularEditor
 from traitsui.tabular_adapter import TabularAdapter
 
-#-- Tabular Adapter Definition -------------------------------------------------
+#-- Tabular Adapter Definition -------------------------------------------
+
 
 class ArrayAdapter(TabularAdapter):
 
-    columns = [('i', 'index'), ('x', 0), ('y', 1),  ('z', 2)]
+    columns = [('i', 'index'), ('x', 0), ('y', 1), ('z', 2)]
 
     # Font fails with wx in OSX; see traitsui issue #13:
     # font        = Font('Courier 10')
-    alignment   = 'right'
-    format      = '%.4f'
-    index_text  = Property
+    alignment = 'right'
+    format = '%.4f'
+    index_text = Property
     index_image = Property
 
     def _get_index_text(self):
@@ -40,7 +41,8 @@ class ArrayAdapter(TabularAdapter):
 
         return None
 
-#-- ShowArray Class Definition -------------------------------------------------
+#-- ShowArray Class Definition -------------------------------------------
+
 
 class ShowArray(HasTraits):
 
@@ -48,20 +50,19 @@ class ShowArray(HasTraits):
 
     view = View(
         Item('data',
-              show_label = False,
-              style      = 'readonly',
-              editor     = TabularEditor(adapter = ArrayAdapter())
-        ),
-        title     = 'Array Viewer',
-        width     = 0.3,
-        height    = 0.8,
-        resizable = True
+             show_label=False,
+             style='readonly',
+             editor=TabularEditor(adapter=ArrayAdapter())
+             ),
+        title='Array Viewer',
+        width=0.3,
+        height=0.8,
+        resizable=True
     )
 
 # Create the demo:
-demo = ShowArray(data = random((100000, 3)))
+demo = ShowArray(data=random((100000, 3)))
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

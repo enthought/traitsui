@@ -18,9 +18,9 @@
 """ Defines the tuple editor for the wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -32,11 +32,12 @@ from traitsui.editors.tuple_editor \
 from editor \
     import Editor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class SimpleEditor ( BaseSimpleEditor, Editor ):
+
+class SimpleEditor(BaseSimpleEditor, Editor):
     """ Simple style of editor for tuples.
 
         The editor displays an editor for each of the fields in the tuple,
