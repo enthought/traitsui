@@ -179,7 +179,7 @@ class SourceEditor(Editor):
         """
         # Make sure that the editor does not try to update as the control is
         # being destroyed:
-        self._widget.lostFocus.disconnect(self.update_object)
+        self._widget.focus_lost.disconnect(self.update_object)
 
         super(SourceEditor, self).dispose()
 

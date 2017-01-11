@@ -135,7 +135,7 @@ class _ListStrEditor(Editor):
             slot = self._on_row_selection
         self.list_view.selectionModel().selectionChanged.connect(slot)
 
-        self.list_view.activated(self._on_activate)
+        self.list_view.activated.connect(self._on_activate)
 
         # Initialize the editor title:
         self.title = factory.title
