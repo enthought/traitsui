@@ -51,15 +51,12 @@ class _HistoryEditor(Editor):
         control.setInsertPolicy(QtGui.QComboBox.InsertAtTop)
 
         if self.factory.entries > 0:
-            signal = QtCore.SIGNAL(
-                'rowsInserted(const QModelIndex&, int, int)')
-            QtCore.QObject.connect(control.model(), signal, self._truncate)
+            control.model().rowsInserted.connect(self._truncate)
 
         if self.factory.auto_set:
-            signal = QtCore.SIGNAL('editTextChanged(QString)')
+            control.editTextChanged.connect(self.update_object)
         else:
-            signal = QtCore.SIGNAL('activated(QString)')
-        QtCore.QObject.connect(control, signal, self.update_object)
+            control.activated.connect(self.update_object)
 
         self.set_tooltip()
 

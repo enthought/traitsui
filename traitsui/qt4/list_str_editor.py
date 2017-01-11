@@ -133,12 +133,9 @@ class _ListStrEditor(Editor):
             slot = self._on_rows_selection
         else:
             slot = self._on_row_selection
-        signal = 'selectionChanged(QItemSelection,QItemSelection)'
-        QtCore.QObject.connect(self.list_view.selectionModel(),
-                               QtCore.SIGNAL(signal), slot)
+        self.list_view.selectionModel().selectionChanged.connect(slot)
 
-        signal = QtCore.SIGNAL('activated(QModelIndex)')
-        QtCore.QObject.connect(self.list_view, signal, self._on_activate)
+        self.list_view.activated(self._on_activate)
 
         # Initialize the editor title:
         self.title = factory.title
@@ -477,8 +474,7 @@ class _ListView(QtGui.QListView):
         elif editor.factory.menu is not False:
             self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
-        self.connect(self, QtCore.SIGNAL('customContextMenuRequested(QPoint)'),
-                     editor._on_context_menu)
+        self.customContextMenuRequested.connect(editor._on_context_menu)
 
         # Configure context menu behavior
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
