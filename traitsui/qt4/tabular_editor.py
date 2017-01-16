@@ -164,7 +164,8 @@ class TabularEditor(Editor):
             slot = self._on_rows_selection
         else:
             slot = self._on_row_selection
-        self.control.selectionModel().selectionChanged.connect(slot)
+        selection_model = self.control.selectionModel()
+        selection_model.selectionChanged.connect(slot)
 
         # Synchronize other interesting traits as necessary:
         self.sync_value(factory.update, 'update', 'from')

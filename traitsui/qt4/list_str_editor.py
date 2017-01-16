@@ -133,7 +133,8 @@ class _ListStrEditor(Editor):
             slot = self._on_rows_selection
         else:
             slot = self._on_row_selection
-        self.list_view.selectionModel().selectionChanged.connect(slot)
+        selection_model = self.list_view.selectionModel()
+        selection_model.selectionChanged.connect(slot)
 
         self.list_view.activated.connect(self._on_activate)
 
