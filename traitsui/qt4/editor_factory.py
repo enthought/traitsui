@@ -97,10 +97,7 @@ class TextEditor(Editor):
             widget.
         """
         self.control = QtGui.QLineEdit(self.str_value)
-        QtCore.QObject.connect(
-            self.control,
-            QtCore.SIGNAL('editingFinished()'),
-            self.update_object)
+        self.control.editingFinished.connect(self.update_object)
         self.set_tooltip()
 
     #-------------------------------------------------------------------------

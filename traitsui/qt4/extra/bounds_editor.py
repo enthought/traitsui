@@ -43,10 +43,7 @@ class _BoundsEditor(Editor):
         panel.setContentsMargins(0, 0, 0, 0)
 
         self._label_lo = QtGui.QLineEdit(self.format % self.low)
-        QtCore.QObject.connect(
-            self._label_lo,
-            QtCore.SIGNAL('editingFinished()'),
-            self.update_low_on_enter)
+        self._label_lo.editingFinished.connect(self.update_low_on_enter)
         panel.addWidget(self._label_lo)
 
         # The default size is a bit too big and probably doesn't need to grow.
@@ -63,15 +60,11 @@ class _BoundsEditor(Editor):
         slider.setLow(self._convert_to_slider(self.low))
         slider.setHigh(self._convert_to_slider(self.high))
 
-        QtCore.QObject.connect(slider, QtCore.SIGNAL('sliderMoved(int)'),
-                               self.update_object_on_scroll)
+        slider.sliderMoved.connect(self.update_object_on_scroll)
         panel.addWidget(slider)
 
         self._label_hi = QtGui.QLineEdit(self.format % self.high)
-        QtCore.QObject.connect(
-            self._label_hi,
-            QtCore.SIGNAL('editingFinished()'),
-            self.update_high_on_enter)
+        self._label_hi.editingFinished.connect(self.update_high_on_enter)
         panel.addWidget(self._label_hi)
 
         # The default size is a bit too big and probably doesn't need to grow.
