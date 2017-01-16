@@ -17,8 +17,6 @@ class NonmodalInstanceEditor(HasTraits):
 
 @skip_if_not_qt4
 def test_simple_editor():
-    from pyface import qt
-
     with store_exceptions_on_all_threads():
         obj = NonmodalInstanceEditor()
         ui = obj.edit_traits()
@@ -36,8 +34,6 @@ def test_simple_editor():
 
 @skip_if_not_qt4
 def test_simple_editor_parent_closed():
-    from pyface import qt
-
     with store_exceptions_on_all_threads():
         obj = NonmodalInstanceEditor()
         ui = obj.edit_traits()
