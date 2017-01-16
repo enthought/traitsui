@@ -529,7 +529,6 @@ class SimpleEditor(CustomEditor):
                 self._dialog_ui.history = self.ui.history
 
         else:
-            self._button.destroyed.disconnect(self._parent_closed)
             self._dialog_ui = None
 
     #-------------------------------------------------------------------------
