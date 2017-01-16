@@ -515,7 +515,8 @@ class SimpleEditor(CustomEditor):
         view = self.ui.handler.trait_view_for(self.ui.info, factory.view,
                                               self.value, self.object_name,
                                               self.name)
-        self._dialog_ui = self.value.edit_traits(view, kind=factory.kind, id=factory.id)
+        self._dialog_ui = self.value.edit_traits(view, kind=factory.kind,
+                                                 id=factory.id)
 
         # Check to see if the view was 'modal', in which case it will already
         # have been closed (i.e. is None) by the time we get control back:
