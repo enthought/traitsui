@@ -21,7 +21,7 @@
 from pyface.qt import QtCore, QtGui
 
 from traits.api \
-    import HasTraits, Property
+    import HasTraits, Instance, Property
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -476,6 +476,9 @@ class SimpleEditor(CustomEditor):
     the button displays a dialog box in which the instance can be edited.
     """
 
+    #: The ui instance for the currently open editor dialog
+    _dialog_ui = Instance('traitsui.ui.UI')
+
     # Class constants:
     orientation = QtGui.QBoxLayout.LeftToRight
     extra = 2
@@ -490,6 +493,8 @@ class SimpleEditor(CustomEditor):
         self._button = QtGui.QPushButton()
         layout.addWidget(self._button)
         self._button.clicked.connect(self.edit_instance)
+        # Make sure the editor is properly disposed if parent UI is closed
+        self._button.destroyed.connect(self._parent_closed)
 
     #-------------------------------------------------------------------------
     #  Edit the contents of the object trait when the user clicks the button:
@@ -504,21 +509,22 @@ class SimpleEditor(CustomEditor):
         view = self.ui.handler.trait_view_for(self.ui.info, factory.view,
                                               self.value, self.object_name,
                                               self.name)
-        ui = self.value.edit_traits(view, kind=factory.kind, id=factory.id)
-
-        # Make sure the editor is properly disposed
-        self._button.destroyed.connect(ui.dispose)
+        self._dialog_ui = self.value.edit_traits(view, kind=factory.kind,
+                                                 id=factory.id)
 
         # Check to see if the view was 'modal', in which case it will already
         # have been closed (i.e. is None) by the time we get control back:
-        if ui.control is not None:
+        if self._dialog_ui.control is not None:
             # Position the window on the display:
-            position_window(ui.control)
+            position_window(self._dialog_ui.control)
 
             # Chain our undo history to the new user interface if it does not
             # have its own:
-            if ui.history is None:
-                ui.history = self.ui.history
+            if self._dialog_ui.history is None:
+                self._dialog_ui.history = self.ui.history
+
+        else:
+            self._dialog_ui = None
 
     #-------------------------------------------------------------------------
     #  Resynchronizes the contents of the editor when the object trait changes
@@ -537,3 +543,10 @@ class SimpleEditor(CustomEditor):
 
             button.setText(label)
             button.setEnabled(isinstance(self.value, HasTraits))
+
+    def _parent_closed(self):
+        if self._dialog_ui is not None:
+            if self._dialog_ui.control is not None:
+                self._dialog_ui.control.close()
+            self._dialog_ui.dispose()
+            self._dialog_ui = None
