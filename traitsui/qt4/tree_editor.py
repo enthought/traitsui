@@ -1610,16 +1610,20 @@ class SimpleEditor(Editor):
         """
         # Prevent the itemChanged() signal from being emitted.
         blk = self._tree.blockSignals(True)
-
-        nids = {}
-        for name2, nid in self._map[id(object)]:
-            if nid not in nids:
-                nids[nid] = None
-                node = self._get_node_data(nid)[1]
-                self._set_label(nid, node.get_label(object), 0)
-                self._update_icon(nid)
-
-        self._tree.blockSignals(blk)
+        try:
+            # Have to use a list rather than a set because nids for PyQt
+            # on Python 3 (QTreeWidgetItem instances) aren't hashable.
+            # This means potentially quadratic behaviour, but the number of
+            # nodes for a particular object shouldn't be high
+            nids = []
+            for name2, nid in self._map[id(object)]:
+                if nid not in nids:
+                    nids.append(nid)
+                    node = self._get_node_data(nid)[1]
+                    self._set_label(nid, node.get_label(object), 0)
+                    self._update_icon(nid)
+        finally:
+            self._tree.blockSignals(blk)
 
     def _column_labels_updated(self, object, name, new):
         """  Handles the column labels of an object being changed.
