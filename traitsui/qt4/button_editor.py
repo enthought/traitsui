@@ -157,6 +157,5 @@ class CustomEditor(SimpleEditor):
         if factory.image is not None:
             self.control.setIcon(factory.image.create_icon())
 
-        QtCore.QObject.connect(self.control, QtCore.SIGNAL('clicked()'),
-                               self.update_object)
+        self.control.clicked.connect(self.update_object)
         self.set_tooltip()

@@ -124,10 +124,7 @@ class CustomEditor(Editor):
                 self._object_cache[id(item)] = self.value
 
             self._choice = QtGui.QComboBox()
-            QtCore.QObject.connect(
-                self._choice,
-                QtCore.SIGNAL('activated(QString)'),
-                self.update_object)
+            self._choice.activated.connect(self.update_object)
 
             self.set_tooltip(self._choice)
 
@@ -172,9 +169,7 @@ class CustomEditor(Editor):
         elif self.control is None:
             if self._choice is None:
                 self._choice = QtGui.QComboBox()
-                QtCore.QObject.connect(self._choice,
-                                       QtCore.SIGNAL('activated(QString)'),
-                                       self.update_object)
+                self._choice.activated.connect(self.update_object)
 
             self.control = self._choice
         else:
@@ -497,8 +492,7 @@ class SimpleEditor(CustomEditor):
         """
         self._button = QtGui.QPushButton()
         layout.addWidget(self._button)
-        QtCore.QObject.connect(self._button, QtCore.SIGNAL('clicked()'),
-                               self.edit_instance)
+        self._button.clicked.connect(self.edit_instance)
         # Make sure the editor is properly disposed if parent UI is closed
         self._button.destroyed.connect(self._parent_closed)
 

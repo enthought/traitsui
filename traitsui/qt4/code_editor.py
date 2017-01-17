@@ -179,8 +179,8 @@ class SourceEditor(Editor):
         """
         # Make sure that the editor does not try to update as the control is
         # being destroyed:
-        QtCore.QObject.disconnect(self._widget, QtCore.SIGNAL('lostFocus'),
-                                  self.update_object)
+        if not self.factory.auto_set:
+            self._widget.code.focus_lost.disconnect(self.update_object)
 
         super(SourceEditor, self).dispose()
 
