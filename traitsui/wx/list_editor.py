@@ -193,7 +193,7 @@ class SimpleEditor(Editor):
         factory = self.factory
         list_sizer = wx.FlexGridSizer(
             len(self.value), (1 + resizable) * factory.columns, 0, 0)
-        j = resizable
+        j = 0
         for i in range(factory.columns):
             list_sizer.AddGrowableCol(j)
             j += (1 + resizable)
@@ -239,10 +239,11 @@ class SimpleEditor(Editor):
             height = max(height, height2)
             panel_height += height
 
+            list_sizer.Add(pcontrol, 0, wx.EXPAND)
+
             if resizable:
                 list_sizer.Add(control, 0, wx.LEFT | wx.RIGHT, 2)
 
-            list_sizer.Add(pcontrol, 0, wx.EXPAND)
             index += 1
 
         list_pane.SetSizer(list_sizer)
@@ -326,8 +327,8 @@ class SimpleEditor(Editor):
             sizer.Remove(0)
         index = 0
         for control, pcontrol in controls:
-            sizer.Add(control, 0, wx.LEFT | wx.RIGHT, 2)
             sizer.Add(pcontrol, 1, wx.EXPAND)
+            sizer.Add(control, 0, wx.LEFT | wx.RIGHT, 2)
             control.proxy.index = index
             index += 1
         sizer.Layout()
@@ -378,7 +379,9 @@ class SimpleEditor(Editor):
         self._menu_top.enabled(index > 0)
         self._menu_down.enabled(index < (len_list - 1))
         self._menu_bottom.enabled(index < (len_list - 1))
-        self.control.PopupMenu(menu, control.GetPosition())
+        x, y = control.GetPosition()
+
+        self.control.PopupMenu(menu, (x + 8, y + 32))
         menu.Destroy()
 
     #-------------------------------------------------------------------------
