@@ -119,6 +119,9 @@ being viewed isn't a HasTraits object, or where you may need some
 UI state in the node that doesn't belong on the underlying model object (for
 example, caching quantities which are expensive to compute).
 
+Before using this approach, you should make sure that you understand the way
+that traits adaptation works.
+
 To make writing code which satisfies the ITreeNode interface easier, there is
 an ITreeNodeAdapter class which provides basic functionality and which can be
 subclassed to provide an adapter class for your own nodes.  This adapter is
@@ -130,4 +133,82 @@ similar to the ones for TreeNode, but they don't expect to be passed the object
 as a parameter.
 
 Once you have written the ITreeNodeAdapter subclass, you have to register the
-adapter with trai
+adapter with traits using the `adapts()` function.  Note that you don't have to
+use ITreeNodeAdapter.  You can instead write a class which `@provides` the
+ITreeNode interface directly, or create an alternative adapter class.
+
+Note that currently the tree editor infrastructure uses the default traits
+adapter registry which means that you can have mulitple different ITreeNode
+adapters for a given object to use in different editors within a given
+application.  You can work around this somehat by having the trait being
+edited and/or the `get_children` method return pre-adapted objects, rather
+than relying on traits adaptation machinery to find and adapt the object.
+
+ObjectTreeNodes and TreeNodeObjects
+-----------------------------------
+
+Another approach to adapting objects, particularly non-HasTraits objects is
+used by the ValueEditor, but is available for general tree editors to use as
+well.  In this approach you write one or more TreeNodeObject classes that wrap
+the model objects that you want to display, and then use instances of the
+TreeNodeObject classes within the tree editor, both as the root node being
+edited, and the objects returned by the `tno_get_children` methods.  To fit
+these with the expected TreeNode classes used by the TreeEditor, there is the
+ObjectTreeNode class which knows how to call the appropriate TreeNodeObjects
+and which can be given a list of TreeNodeObject classes that it understands.
+
+For example, it is possible to represent a tree structure in Python using
+nested dictionaries.  A TreeNodeObject for such a structure might look like
+this::
+
+    class DictNode(TreeNodeObject):
+
+        #: The parent of the node
+        parent = Instance('DictNode')
+
+        #: The label for the node
+        label = Str
+
+        #: The value for this node
+        value = Any
+
+        def tno_get_label(self, node):
+            return self.label
+
+        def tno_allows_children(self, node):
+            return isinstance(self.value, dict)
+
+        def tno_has_children(self, node):
+            return bool(self.value)
+
+        def tno_get_children(self, node):
+            return [DictNode(parent=self, label=key, value=value)
+                    for key, value in sorted(self.value.items())]
+
+and so forth.  There is additional work if you want to be able to modify
+the structure of the tree, for example.  In addition to this, you then need to
+specify the editor for the node something like this::
+
+    dict_tree_editor = TreeEditor(
+        editable=False,
+        nodes=[
+            ObjectTreeNode(
+                node_for=[DictNode],
+                rename=False,
+                rename_me=False,
+                copy=False,
+                delete=False,
+                delete_me=False,
+            )
+        ]
+    )
+
+The ObjectTreeNode is a TreeNode subclass that delegates operations to the
+TreeNodeObject, but the default TreeNodeObject methods try to behave in the
+same way as the base TreeNode, so you can specify global behaviour on the
+ObjectTreeNode in the same way that you can for a TreeNode.
+
+The last piece is that the root node when editing has to be a DictNode
+instance, so you may need to provide a property that wraps the raw tree
+structure in a DictNode to get started: unlike the ITreeNodeAdapter methods
+this wrapping not automatically provided for you.
