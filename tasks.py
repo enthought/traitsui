@@ -142,7 +142,7 @@ def test(ctx, runtime='3.5', toolkit='null', environment=None):
     if toolkit in {'pyqt', 'pyside'}:
         commands += [
             # run the qt4 toolkit test suite
-            "edm run -e '{environment}' -- coverage run -m nose.core -v traitsui.qt4.tests"
+            "edm run -e '{environment}' -- coverage run -p -m nose.core -v traitsui.qt4.tests"
         ]
 
     # run tests & coverage
