@@ -40,6 +40,8 @@ from traits.api \
 from traits.trait_notifiers \
     import set_ui_handler
 
+from traitsui.theme import Theme
+
 from traitsui.ui \
     import UI
 
@@ -685,6 +687,64 @@ class DragHandler(HasPrivateTraits):
         return result
 
 
+#-------------------------------------------------------------------------
+#  Defines the extensions needed to make the generic Theme class specific to
+#  wxPython:
+#-------------------------------------------------------------------------
+
+
+class WXTheme(Category, Theme):
+    """ Defines the extensions needed to make the generic Theme class specific
+        to wxPython.
+    """
+
+    # The color to use for content text:
+    content_color = Property
+
+    # The color to use for label text:
+    label_color = Property
+
+    # The image slice used to draw the theme:
+    image_slice = Property(depends_on='image')
+
+    #-- Property Implementations ---------------------------------------------
+
+    def _get_content_color(self):
+        if self._content_color is None:
+            color = wx.BLACK
+            islice = self.image_slice
+            if islice is not None:
+                color = islice.content_color
+
+            self._content_color = color
+
+        return self._content_color
+
+    def _set_content_color(self, color):
+        self._content_color = color
+
+    def _get_label_color(self):
+        if self._label_color is None:
+            color = wx.BLACK
+            islice = self.image_slice
+            if islice is not None:
+                color = islice.label_color
+
+            self._label_color = color
+
+        return self._label_color
+
+    def _set_label_color(self, color):
+        self._label_color = color
+
+    @cached_property
+    def _get_image_slice(self):
+        from image_slice import image_slice_for
+
+        if self.image is None:
+            return None
+
+        return image_slice_for(self.image)
 #-------------------------------------------------------------------------
 #  Defines the extensions needed to make the generic DockWindowTheme class
 #  specific to wxPython:
