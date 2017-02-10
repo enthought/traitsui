@@ -6,7 +6,7 @@ matrix:
     - env: RUNTIME=2.7 TOOLKITS="wx"
     - env: RUNTIME=3.5 TOOLKITS="null pyqt"
     - os: osx
-      env: RUNTIME=2.7 TOOLKITS="null pyqt pyside wx"
+      env: RUNTIME=2.7 TOOLKITS="null pyside wx"
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="pyqt"
     - os: osx
