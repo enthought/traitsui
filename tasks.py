@@ -242,7 +242,7 @@ def do_in_tempdir(files=(), capture_files=()):
     try:
         yield path
 
-        retrieve any result files we want
+        # retrieve any result files we want
         for pattern in capture_files:
             for filepath in glob.iglob(pattern):
                 print('copying file back: {}'.format(filepath))
