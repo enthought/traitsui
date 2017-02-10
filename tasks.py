@@ -136,7 +136,7 @@ def test(ctx, runtime='3.5', toolkit='null', environment=None):
 
     commands = [
         # run the main test suite
-        "edm run -e '{environment}' -- coverage run -m nose.core -v traitsui.tests",
+        "edm run -e '{environment}' -- coverage run -p -m nose.core -v traitsui.tests",
     ]
     if toolkit in {'pyqt', 'pyside'}:
         commands += [
@@ -151,7 +151,7 @@ def test(ctx, runtime='3.5', toolkit='null', environment=None):
     # code from a local dir.  We need to ensure a good .coveragerc is in
     # that directory, plus coverage has a bug that means a non-local coverage
     # file doesn't get populated correctly.
-    with do_in_tempdir(files=['.coveragerc'], capture_files=['.coverage']):
+    with do_in_tempdir(files=['.coveragerc'], capture_files=['.coverage*']):
         for command in commands:
             ctx.run(command.format(**parameters), env=environ)
 
