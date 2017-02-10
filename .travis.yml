@@ -10,11 +10,11 @@ matrix:
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="pyqt"
     - os: osx
-      env: RUNTIME=3.5 TOOLKIT="null pyqt wx"
+      env: RUNTIME=3.5 TOOLKITS="null pyqt wx"
   allow_failures:
-    - env: RUNTIME=2.7 TOOLKIT="wx"
+    - env: RUNTIME=2.7 TOOLKITS="wx"
     - os: osx
-      env: RUNTIME=2.7 TOOLKIT="pyqt"
+      env: RUNTIME=2.7 TOOLKITS="pyqt"
   fast_finish: true
 cache:
   directories:
