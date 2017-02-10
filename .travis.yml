@@ -25,9 +25,9 @@ before_install:
 install:
   - ./travis_ci_bootstrap_edm.sh
   - for toolkit in ${TOOLKITS}; do edm run -- invoke install --runtime=${RUNTIME} --toolkit=${toolkit}; done
-
 script:
   - for toolkit in ${TOOLKITS}; do edm run -- invoke test --runtime=${RUNTIME} --toolkit=${toolkit}; done
 after_success:
+  - edm run -- coverage combine
   - edm run -- pip install codecov
   - edm run -- codecov
