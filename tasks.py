@@ -235,15 +235,17 @@ def do_in_tempdir(files=(), capture_files=()):
 
     # send across any files we need
     for filepath in files:
+        print('copying file to tempdir: {}'.format(filepath))
         copyfile(filepath, path)
 
     os.chdir(path)
     try:
         yield path
 
-        # retrieve any result files we want
+        retrieve any result files we want
         for pattern in capture_files:
             for filepath in glob.iglob(pattern):
+                print('copying file back: {}'.format(filepath))
                 copyfile(filepath, old_path)
     finally:
         os.chdir(old_path)
