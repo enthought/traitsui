@@ -14,11 +14,9 @@ TraitsUI |version| User Manual
    custom_view.rst
    advanced_view.rst
    handler.rst
-   themes.rst
    factory_intro.rst
    factories_basic.rst
    factories_advanced_extra.rst
    tips.rst
    glossary.rst
    predefined_traits.rst
-   
