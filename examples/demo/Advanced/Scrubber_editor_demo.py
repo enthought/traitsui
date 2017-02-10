@@ -85,7 +85,7 @@ In this example, several of the variations described above are shown:
 
   - An unbounded range with a 'border_color' value specified.
 
-  - A dynamic range using an Item theme. This consists of three scrubbers: one
+  - A dynamic range. This consists of three scrubbers: one
     to control the low end of the range, one to control the high end, and one
     that uses the high and low values to determine its range.
 
@@ -101,15 +101,12 @@ from traits.api \
 from traitsui.api \
     import View, VGroup, HGroup, Item, ScrubberEditor, spring
 
-from traitsui.ui_traits \
-    import ATheme
 
-#-- Shared Themed Item Definition ----------------------------------------
+#-- Shared Item Definition ----------------------------------------
 
 
 class TItem(Item):
     editor = ScrubberEditor()
-    item_theme = ATheme('@std:LG')
 
 #-- ScrubberDemo Class ---------------------------------------------------
 
@@ -120,10 +117,9 @@ class ScrubberDemo(HasTraits):
     simple_integer = Range(0, 100)
     rollover_float = Range(-10.0, 10.0)
     bordered_unbounded = Float
-    themed_dynamic_low = Range(high=-0.01, value=-10.0)
-    themed_dynamic_high = Range(low=0.01, value=10.0)
-    themed_dynamic_value = Range('themed_dynamic_low', 'themed_dynamic_high',
-                                 0.0)
+    dynamic_low = Range(high=-0.01, value=-10.0)
+    dynamic_high = Range(low=0.01, value=10.0)
+    dynamic_value = Range('dynamic_low', 'dynamic_high', 0.0)
 
     # Define the demo view:
     view = View(
@@ -138,9 +134,9 @@ class ScrubberDemo(HasTraits):
                      editor=ScrubberEditor(hover_color=0xFFFFFF,
                                            active_color=0xA0CD9E,
                                            border_color=0x808080)),
-                TItem('themed_dynamic_low'),
-                TItem('themed_dynamic_high'),
-                TItem('themed_dynamic_value'),
+                Item('dynamic_low', editor=ScrubberEditor()),
+                Item('dynamic_high', editor=ScrubberEditor()),
+                Item('dynamic_value', editor=ScrubberEditor()),
                 show_border=True,
                 label='Scrubber Editors'
             ),
@@ -148,9 +144,9 @@ class ScrubberDemo(HasTraits):
                 Item('simple_integer'),
                 Item('rollover_float'),
                 Item('bordered_unbounded'),
-                Item('themed_dynamic_low'),
-                Item('themed_dynamic_high'),
-                Item('themed_dynamic_value'),
+                Item('dynamic_low'),
+                Item('dynamic_high'),
+                Item('dynamic_value'),
                 show_border=True,
                 label='Default Editors'
             ),
