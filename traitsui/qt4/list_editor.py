@@ -121,6 +121,7 @@ class SimpleEditor(Editor):
         layout = QtGui.QGridLayout(self._list_pane)
         layout.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
         # Remember the editor to use for each individual list item:
         editor = self.factory.editor
@@ -200,7 +201,7 @@ class SimpleEditor(Editor):
                 # sender to the callback method
                 self.mapper.setMapping(control, control)
 
-                layout.addWidget(control, row, column)
+                layout.addWidget(control, row, column+1)
 
             proxy = ListItemProxy(self.object, self.name, index, item_trait,
                                   value)
@@ -213,9 +214,9 @@ class SimpleEditor(Editor):
             pcontrol.proxy = proxy
 
             if isinstance(pcontrol, QtGui.QWidget):
-                layout.addWidget(pcontrol, row, column + 1)
+                layout.addWidget(pcontrol, row, column)
             else:
-                layout.addLayout(pcontrol, row, column + 1)
+                layout.addLayout(pcontrol, row, column)
 
         # QScrollArea can have problems if the widget being scrolled is set too
         # early (ie. before it contains something).
@@ -268,8 +269,8 @@ class SimpleEditor(Editor):
         pcontrol.proxy = control.proxy = proxy
 
         layout = self._list_pane.layout()
-        layout.addWidget(control, 0, 0)
-        layout.addWidget(pcontrol, 0, 1)
+        layout.addWidget(control, 0, 1)
+        layout.addWidget(pcontrol, 0, 0)
 
     #-------------------------------------------------------------------------
     #  Returns the associated object list and current item index:
@@ -290,7 +291,7 @@ class SimpleEditor(Editor):
         """
         self._cur_control = control = sender
         menu = MakeMenu(self.empty_list_menu, self, True, control).menu
-        menu.exec_(control.mapToGlobal(QtCore.QPoint(0, 0)))
+        menu.exec_(control.mapToGlobal(QtCore.QPoint(4, 24)))
 
     #-------------------------------------------------------------------------
     #  Displays the list editor popup menu:
@@ -315,7 +316,7 @@ class SimpleEditor(Editor):
         self._menu_down.enabled(index < (len_list - 1))
         self._menu_bottom.enabled(index < (len_list - 1))
 
-        menu.exec_(sender.mapToGlobal(QtCore.QPoint(0, 0)))
+        menu.exec_(sender.mapToGlobal(QtCore.QPoint(4, 24)))
 
     #-------------------------------------------------------------------------
     #  Adds a new value at the specified list index:
