@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -12,9 +13,9 @@
 """ Defines various directory editor for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from pyface.qt import QtWidgets
 
@@ -26,22 +27,23 @@ from traitsui.editors.directory_editor \
 
 from file_editor \
     import SimpleEditor as SimpleFileEditor, \
-           CustomEditor as CustomFileEditor
+    CustomEditor as CustomFileEditor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class SimpleEditor ( SimpleFileEditor ):
+
+class SimpleEditor(SimpleFileEditor):
     """ Simple style of editor for directories, which displays a text field
         and a **Browse** button that opens a directory-selection dialog box.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Creates the correct type of file dialog:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _create_file_dialog ( self ):
+    def _create_file_dialog(self):
         """ Creates the correct type of file dialog.
         """
         dlg = QtWidgets.QFileDialog(self.control)
@@ -51,18 +53,19 @@ class SimpleEditor ( SimpleFileEditor ):
 
         return dlg
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'CustomEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class CustomEditor ( CustomFileEditor ):
+
+class CustomEditor(CustomFileEditor):
     """ Custom style of editor for directories, which displays a tree view of
         the file system.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the user changing the contents of the edit control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def update_object(self, idx):
         """ Handles the user changing the contents of the edit control.

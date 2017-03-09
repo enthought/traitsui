@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -41,69 +42,71 @@ Menu Description Syntax::
 A line beginning with a hyphen (-) is interpreted as a menu separator.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 import re
 
 from pyface.qt import QtWidgets
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-help_pat    = re.compile( r'(.*){(.*)}(.*)' )
-options_pat = re.compile( r'(.*)\[(.*)\](.*)' )
+help_pat = re.compile(r'(.*){(.*)}(.*)')
+options_pat = re.compile(r'(.*)\[(.*)\](.*)')
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'MakeMenu' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class MakeMenu:
     """ Manages creation of menus.
     """
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Initializes the object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __init__ ( self, desc, owner, popup = False, window = None ):
+    def __init__(self, desc, owner, popup=False, window=None):
         """ Initializes the object.
         """
         self.owner = owner
         if window is None:
             window = owner
-        self.window   = window
-        self.indirect = getattr( owner, 'call_menu', None )
-        self.names    = {}
-        self.desc     = desc.split( '\n' )
-        self.index    = 0
+        self.window = window
+        self.indirect = getattr(owner, 'call_menu', None)
+        self.names = {}
+        self.desc = desc.split('\n')
+        self.index = 0
         if popup:
             self.menu = menu = QtWidgets.QMenu()
-            self.parse( menu, -1 )
+            self.parse(menu, -1)
         else:
             self.menu = menu = QtWidgets.QMenuBar()
-            self.parse( menu, -1 )
-            window.setMenuBar( menu )
+            self.parse(menu, -1)
+            window.setMenuBar(menu)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Recursively parses menu items from the description:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def parse ( self, menu, indent ):
+    def parse(self, menu, indent):
         """ Recursively parses menu items from the description.
         """
 
         while True:
 
-            # Make sure we have not reached the end of the menu description yet:
-            if self.index >= len( self.desc ):
+            # Make sure we have not reached the end of the menu description
+            # yet:
+            if self.index >= len(self.desc):
                 return
 
             # Get the next menu description line and check its indentation:
-            dline    = self.desc[ self.index ]
-            line     = dline.lstrip()
-            indented = len( dline ) - len( line )
+            dline = self.desc[self.index]
+            line = dline.lstrip()
+            indented = len(dline) - len(line)
             if indented <= indent:
                 return
 
@@ -120,28 +123,26 @@ class MakeMenu:
                 continue
 
             # Extract the help string (if any):
-            help  = ''
-            match = help_pat.search( line )
+            help = ''
+            match = help_pat.search(line)
             if match:
                 help = ' ' + match.group(2).strip()
                 line = match.group(1) + match.group(3)
 
             # Check for a menu item:
-            col = line.find( ':' )
+            col = line.find(':')
             if col >= 0:
-                handler = line[ col + 1: ].strip()
+                handler = line[col + 1:].strip()
                 if handler != '':
                     if self.indirect:
-                        self.indirect( cur_id, handler )
+                        self.indirect(cur_id, handler)
                         handler = self.indirect
                     else:
                         try:
                             _locl = dict(self=self)
                             exec(
-                                'def handler(self=self.owner):\n %s\n' % handler,
-                                globals(),
-                                _locl
-                            )
+                                'def handler(self=self.owner):\n %s\n' %
+                                handler, globals(), _locl)
                             handler = _locl['handler']
                         except:
                             handler = null_handler
@@ -150,7 +151,7 @@ class MakeMenu:
                         _locl = dict(self=self)
                         exec(
                             'def handler(self=self.owner):\n%s\n' % (
-                                self.get_body( indented ),
+                                self.get_body(indented),
                             ),
                             globals(),
                             _locl
@@ -165,13 +166,13 @@ class MakeMenu:
                 match = options_pat.search(line)
                 if match:
                     line = match.group(1) + match.group(3)
-                    not_checked, checked, disabled, name = option_check( '~/-',
-                             match.group(2).strip() )
+                    not_checked, checked, disabled, name = option_check(
+                        '~/-', match.group(2).strip())
 
                 label = line.strip()
-                col   = label.find( '|' )
+                col = label.find('|')
                 if col >= 0:
-                    key   = label[col + 1:].strip()
+                    key = label[col + 1:].strip()
                     label = label[:col].strip()
 
                 act = menu.addAction(label, handler)
@@ -201,28 +202,28 @@ class MakeMenu:
                 act = menu.addMenu(submenu)
                 act.setStatusTip(help)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the body of an inline method:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def get_body ( self, indent ):
+    def get_body(self, indent):
         """ Returns the body of an inline method.
         """
         result = []
-        while self.index < len( self.desc ):
-            line = self.desc[ self.index ]
-            if (len( line ) - len( line.lstrip() )) <= indent:
+        while self.index < len(self.desc):
+            line = self.desc[self.index]
+            if (len(line) - len(line.lstrip())) <= indent:
                 break
-            result.append( line )
+            result.append(line)
             self.index += 1
-        result = '\n'.join( result ).rstrip()
+        result = '\n'.join(result).rstrip()
         if result != '':
             return result
         return '  pass'
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the QAction associated with a specified name:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def get_action(self, name):
         """ Returns the QAction associated with a specified name.
@@ -232,9 +233,9 @@ class MakeMenu:
 
         return name
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Checks (or unchecks) a menu item specified by name:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def checked(self, name, check=None):
         """ Checks (or unchecks) a menu item specified by name.
@@ -246,9 +247,9 @@ class MakeMenu:
 
         act.setChecked(check)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Enables (or disables) a menu item specified by name:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def enabled(self, name, enable=None):
         """ Enables (or disables) a menu item specified by name.
@@ -260,9 +261,9 @@ class MakeMenu:
 
         act.setEnabled(enable)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Gets/Sets the label for a menu item:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def label(self, name, label=None):
         """ Gets or sets the label for a menu item.
@@ -274,13 +275,15 @@ class MakeMenu:
 
         act.setText(label)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'MakeMenuItem' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class MakeMenuItem:
     """ A menu item for a menu managed by MakeMenu.
     """
+
     def __init__(self, menu, act):
         self.menu = menu
         self.act = act
@@ -299,26 +302,28 @@ class MakeMenuItem:
     def label(self, label=None):
         return self.menu.label(self.act, label)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Determine whether a string contains any specified option characters, and
 #  remove them if it does:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def option_check ( test, string ):
+
+def option_check(test, string):
     """ Determines whether a string contains any specified option characters,
     and removes them if it does.
     """
     result = []
     for char in test:
-        col = string.find( char )
-        result.append( col >= 0 )
+        col = string.find(char)
+        result.append(col >= 0)
         if col >= 0:
-            string = string[ : col ] + string[ col + 1: ]
-    return result + [ string.strip() ]
+            string = string[: col] + string[col + 1:]
+    return result + [string.strip()]
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Null menu option selection handler:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def null_handler ( event ):
+
+def null_handler(event):
     print 'null_handler invoked'

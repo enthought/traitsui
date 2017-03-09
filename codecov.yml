@@ -1,0 +1,14 @@
+codecov:
+  notify:
+    require_ci_to_pass: yes
+
+coverage:
+  precision: 1
+  round: up
+
+  status:
+    patch:
+      default:
+        only_pulls: yes
+
+comment : off

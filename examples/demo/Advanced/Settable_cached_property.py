@@ -64,7 +64,8 @@ normal 'cached' trait that has no 'setter' method defined.
 from traits.api import HasTraits, Int, Range, Property, property_depends_on
 from traitsui.api import View, Item, RangeEditor
 
-#-- Demo Class -----------------------------------------------------------------
+#-- Demo Class -----------------------------------------------------------
+
 
 class SettableCachedProperty(HasTraits):
 
@@ -78,16 +79,16 @@ class SettableCachedProperty(HasTraits):
         Item('b'),
         '_',
         Item('c',
-              editor = RangeEditor(low = 1, high = 100, mode = 'slider')),
+             editor=RangeEditor(low=1, high=100, mode='slider')),
         Item('c'),
         '_',
         Item('d',
-              editor = RangeEditor(low = 1, high = 400, mode = 'slider')),
+             editor=RangeEditor(low=1, high=400, mode='slider')),
         Item('d'),
-        width = 0.3
+        width=0.3
     )
 
-    @property_depends_on('a,b', settable = True)
+    @property_depends_on('a,b', settable=True)
     def _get_c(self):
         return (self.a * self.b)
 
@@ -95,7 +96,7 @@ class SettableCachedProperty(HasTraits):
     def _get_d(self):
         return (self.c + self.c)
 
-#-- Run the demo ---------------------------------------------------------------
+#-- Run the demo ---------------------------------------------------------
 
 # Create the demo:
 demo = SettableCachedProperty()

@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -13,30 +14,28 @@
     editors and trait editor factories.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 import os.path
 
 from pyface.qt import QtCore, QtGui, QtWidgets
+from pyface.ui_traits import convert_image
+from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
-from traits.api \
-    import Enum, CTrait, BaseTraitHandler, TraitError
 
-from traitsui.ui_traits \
-    import convert_image, SequenceTypes
-
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Layout orientation for a control and its associated editor
-Orientation = Enum( 'horizontal', 'vertical' )
+Orientation = Enum('horizontal', 'vertical')
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Convert an image file name to a cached QPixmap:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 def pixmap_cache(name, path=None):
     """ Return the QPixmap corresponding to a filename. If the filename does not
@@ -65,12 +64,13 @@ def pixmap_cache(name, path=None):
         QtGui.QPixmapCache.insert(filename, pm)
     return pm
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Positions a window on the screen with a specified width and height so that
 #  the window completely fits on the screen if possible:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def position_window ( window, width = None, height = None, parent = None ):
+
+def position_window(window, width=None, height=None, parent=None):
     """ Positions a window on the screen with a specified width and height so
         that the window completely fits on the screen if possible.
     """
@@ -120,30 +120,33 @@ def position_window ( window, width = None, height = None, parent = None ):
     window.move(max(0, min(x, screen_dx - width)),
                 max(0, min(y, screen_dy - height)))
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Restores the user preference items for a specified UI:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def restore_window ( ui ):
+
+def restore_window(ui):
     """ Restores the user preference items for a specified UI.
     """
     prefs = ui.restore_prefs()
     if prefs is not None:
-        ui.control.setGeometry( *prefs )
+        ui.control.setGeometry(*prefs)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Saves the user preference items for a specified UI:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def save_window ( ui ):
+
+def save_window(ui):
     """ Saves the user preference items for a specified UI.
     """
     geom = ui.control.geometry()
-    ui.save_prefs( (geom.x(), geom.y(), geom.width(), geom.height()) )
+    ui.save_prefs((geom.x(), geom.y(), geom.width(), geom.height()))
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Safely tries to pop up an FBI window if etsdevtools.debug is installed
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 def open_fbi():
     try:
@@ -154,9 +157,10 @@ def open_fbi():
     except ImportError:
         pass
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'IconButton' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class IconButton(QtWidgets.QPushButton):
     """ The IconButton class is a push button that contains a small image or a
@@ -200,8 +204,8 @@ class IconButton(QtWidgets.QPushButton):
 
         self.clicked.connect(slot)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Dock-related stubs.
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 DockStyle = Enum('horizontal', 'vertical', 'tab', 'fixed')

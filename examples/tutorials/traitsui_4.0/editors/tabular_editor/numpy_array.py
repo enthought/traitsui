@@ -1,4 +1,4 @@
-#--(NumPy Array Example)--------------------------------------------------------
+#--(NumPy Array Example)--------------------------------------------------
 """
 This lesson demonstrates how the **TabularEditor** can be used to display
 (large) NumPy arrays. In this example, the array consists of 100,000 random 3D
@@ -20,7 +20,7 @@ In this case, it also shows:
   cube's center (the *index_image* property).
 """
 
-#--<Imports>--------------------------------------------------------------------
+#--<Imports>--------------------------------------------------------------
 
 from os.path \
     import join, dirname
@@ -46,58 +46,59 @@ from traitsui.menu \
 from pyface.image_resource \
     import ImageResource
 
-#--<Constants>------------------------------------------------------------------
+#--<Constants>------------------------------------------------------------
 
 # Necessary because of the dynamic way in which the demos are loaded:
 import traitsui.api
 
-search_path = [ join( dirname( traitsui.api.__file__ ),
-                      'demo', 'Advanced' ) ]
+search_path = [join(dirname(traitsui.api.__file__),
+                    'demo', 'Advanced')]
 
-#--[Tabular Adapter Definition]-------------------------------------------------
+#--[Tabular Adapter Definition]-------------------------------------------
 
-class ArrayAdapter ( TabularAdapter ):
 
-    columns = [ ( 'i', 'index' ), ( 'x', 0 ), ( 'y', 1 ),  ( 'z', 2 ) ]
+class ArrayAdapter(TabularAdapter):
 
-    font        = 'Courier 10'
-    alignment   = 'right'
-    format      = '%.4f'
-    index_text  = Property
+    columns = [('i', 'index'), ('x', 0), ('y', 1), ('z', 2)]
+
+    font = 'Courier 10'
+    alignment = 'right'
+    format = '%.4f'
+    index_text = Property
     index_image = Property
 
-    def _get_index_text ( self ):
-        return str( self.row )
+    def _get_index_text(self):
+        return str(self.row)
 
-    def _get_index_image ( self ):
+    def _get_index_image(self):
         x, y, z = self.item
-        if sqrt( (x - 0.5) ** 2 + (y - 0.5) ** 2 + (z - 0.5) ** 2 ) <= 0.25:
+        if sqrt((x - 0.5) ** 2 + (y - 0.5) ** 2 + (z - 0.5) ** 2) <= 0.25:
             return 'red_flag'
         return None
 
-#--[Tabular Editor Definition]--------------------------------------------------
+#--[Tabular Editor Definition]--------------------------------------------
 
 tabular_editor = TabularEditor(
-    adapter = ArrayAdapter(),
-    images  = [ ImageResource( 'red_flag', search_path = search_path ) ]
+    adapter=ArrayAdapter(),
+    images=[ImageResource('red_flag', search_path=search_path)]
 )
 
-#--[ShowArray Class]------------------------------------------------------------
+#--[ShowArray Class]------------------------------------------------------
 
-class ShowArray ( HasTraits ):
+
+class ShowArray(HasTraits):
 
     data = Array
 
     view = View(
-        Item( 'data', editor = tabular_editor, show_label = False ),
-        title     = 'Array Viewer',
-        width     = 0.3,
-        height    = 0.8,
-        resizable = True,
-        buttons   = NoButtons
+        Item('data', editor=tabular_editor, show_label=False),
+        title='Array Viewer',
+        width=0.3,
+        height=0.8,
+        resizable=True,
+        buttons=NoButtons
     )
 
-#--[Example Code*]--------------------------------------------------------------
+#--[Example Code*]--------------------------------------------------------
 
-demo = ShowArray( data = random( ( 100000, 3 ) ) )
-
+demo = ShowArray(data=random((100000, 3)))

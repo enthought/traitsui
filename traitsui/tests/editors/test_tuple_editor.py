@@ -5,12 +5,12 @@ Created on Fri Sep 20 13:17:20 2013
 @author: yves
 """
 
-from __future__ import division,print_function,unicode_literals,absolute_import
+from __future__ import division, print_function, unicode_literals, absolute_import
 
 from contextlib import contextmanager
 
 from traits.has_traits import HasTraits
-from traits.trait_types import Int,Tuple
+from traits.trait_types import Int, Tuple
 from traitsui.item import Item
 from traitsui.view import View
 
@@ -21,13 +21,14 @@ class TupleEditor(HasTraits):
     """Dialog containing a Tuple of two Int's.
     """
 
-    tup = Tuple(Int,Int)
+    tup = Tuple(Int, Int)
 
     traits_view = View(
         Item(label="Enter 4 and 6, then press OK"),
         Item('tup'),
-        buttons = ['OK']
+        buttons=['OK']
     )
+
 
 @skip_if_not_qt4
 def test_qt_tuple_editor():
@@ -53,7 +54,7 @@ def test_qt_tuple_editor():
         lineedits[1].insert('6')
 
         # if all went well, the tuple trait has been updated and its value is 4
-        assert val.tup == (4,6)
+        assert val.tup == (4, 6)
 
         # press the OK button and close the dialog
         press_ok_button(ui)

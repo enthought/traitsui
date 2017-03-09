@@ -35,7 +35,7 @@ class FooDialog(HasTraits):
     traits_view = View(
         Item('my_int'),
         Item('my_str'),
-        buttons = ['OK']
+        buttons=['OK']
     )
 
 

@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -13,9 +14,9 @@
 target editor handles drag and drop operations as a drop target.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from pyface.qt import QtCore, QtGui, QtWidgets
 
@@ -28,11 +29,12 @@ from text_editor import SimpleEditor as Editor
 from constants import DropColor
 from clipboard import PyMimeData, clipboard
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class SimpleEditor ( Editor ):
+
+class SimpleEditor(Editor):
     """ Simple style of drop editor, which displays a read-only text field that
     contains the string representation of the object trait's value.
     """
@@ -40,12 +42,12 @@ class SimpleEditor ( Editor ):
     # Background color when it is OK to drop objects.
     ok_color = DropColor
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
@@ -54,7 +56,7 @@ class SimpleEditor ( Editor ):
             self.control.setReadOnly(True)
             self.set_tooltip()
         else:
-            super( SimpleEditor, self ).init( parent )
+            super(SimpleEditor, self).init(parent)
 
         pal = QtGui.QPalette(self.control.palette())
         pal.setColor(QtGui.QPalette.Base, self.ok_color)
@@ -66,22 +68,22 @@ class SimpleEditor ( Editor ):
 
         self.control._qt4_editor = self
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the text representation of a specified object trait value:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def string_value ( self, value ):
+    def string_value(self, value):
         """ Returns the text representation of a specified object trait value.
         """
         if value is None:
             return ''
-        return str( value )
+        return str(value)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def error ( self, excp ):
+    def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
@@ -97,9 +99,9 @@ class _DropEventFilter(QtCore.QObject):
             self.dragEnterEvent(event)
         return super(_DropEventFilter, self).eventFilter(source, event)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles a Python object being dropped on the control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def dropEvent(self, e):
         """ Handles a Python object being dropped on the tree.
@@ -116,11 +118,11 @@ class _DropEventFilter(QtCore.QObject):
         if (klass is None) or isinstance(value, klass):
             editor._no_update = True
             try:
-                if hasattr( value, 'drop_editor_value' ):
+                if hasattr(value, 'drop_editor_value'):
                     editor.value = value.drop_editor_value()
                 else:
                     editor.value = value
-                if hasattr( value, 'drop_editor_update' ):
+                if hasattr(value, 'drop_editor_update'):
                     value.drop_editor_update(self)
                 else:
                     self.setText(editor.str_value)
@@ -129,9 +131,9 @@ class _DropEventFilter(QtCore.QObject):
 
             e.acceptProposedAction()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles a Python object being dragged over the control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def dragEnterEvent(self, e):
         """ Handles a Python object being dragged over the tree.
@@ -150,7 +152,7 @@ class _DropEventFilter(QtCore.QObject):
 
         try:
             editor.object.base_trait(editor.name).validate(editor.object,
-                    editor.name, data)
+                                                           editor.name, data)
             e.acceptProposedAction()
         except:
             pass

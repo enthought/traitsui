@@ -28,9 +28,9 @@ class CheckboxRenderer(TableDelegate):
         unchecked box for a false value.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  QAbstractItemDelegate interface
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def editorEvent(self, event, model, option, index):
         """ Reimplemented to handle mouse button clicks.
@@ -80,7 +80,7 @@ class CheckboxRenderer(TableDelegate):
         # Align the checkbox appropriately.
         box.rect = option.rect
         size = style.sizeFromContents(QtWidgets.QStyle.CT_CheckBox, box,
-            QtCore.QSize(), None)
+                                      QtCore.QSize(), None)
         box.rect.setWidth(size.width())
         margin = style.pixelMetric(QtWidgets.QStyle.PM_ButtonMargin, box)
         alignment = column.horizontal_alignment
@@ -91,7 +91,7 @@ class CheckboxRenderer(TableDelegate):
         else:
             # FIXME: I don't know why I need the 2 pixels, but I do.
             box.rect.setLeft(option.rect.left() + option.rect.width() // 2 -
-                size.width() // 2 + margin - 2)
+                             size.width() // 2 + margin - 2)
 
         box.state = QtWidgets.QStyle.State_Enabled
         if checked:

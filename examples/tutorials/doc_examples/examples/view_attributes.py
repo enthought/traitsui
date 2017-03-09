@@ -6,6 +6,7 @@
 from traits.api import HasTraits, Int, Str, Trait
 from traitsui.api import View
 
+
 class Person(HasTraits):
     first_name = Str
     last_name = Str

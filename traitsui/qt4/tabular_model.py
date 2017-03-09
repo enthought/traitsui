@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,14 +13,14 @@
 #  Author: Evan Patterson
 #  Date:   06/22/2009
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Defines the table model used by the tabular editor.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from traits.util.api import deprecated
 
@@ -30,24 +30,25 @@ from traitsui.ui_traits import SequenceTypes
 
 from .clipboard import PyMimeData
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Mapping for trait alignment values to qt4 alignment values:
 alignment_map = {
-    'left':    QtCore.Qt.AlignLeft,
-    'right':   QtCore.Qt.AlignRight,
-    'center':  QtCore.Qt.AlignHCenter,
+    'left': QtCore.Qt.AlignLeft,
+    'right': QtCore.Qt.AlignRight,
+    'center': QtCore.Qt.AlignHCenter,
     'justify': QtCore.Qt.AlignJustify
 }
 
 # MIME type for internal table drag/drop operations
 tabular_mime_type = 'traits-ui-tabular-editor'
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'TabularModel' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class TabularModel(QtCore.QAbstractTableModel):
     """ The model for tabular data."""
@@ -59,9 +60,9 @@ class TabularModel(QtCore.QAbstractTableModel):
 
         self._editor = editor
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  QAbstractItemModel interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def data(self, mi, role):
         """ Reimplemented to return the data.
@@ -75,7 +76,9 @@ class TabularModel(QtCore.QAbstractTableModel):
             return adapter.get_text(obj, name, row, column)
 
         elif role == QtCore.Qt.DecorationRole:
-            image = editor._get_image(adapter.get_image(obj, name, row, column))
+            image = editor._get_image(
+                adapter.get_image(
+                    obj, name, row, column))
             if image is not None:
                 return image
 
@@ -153,11 +156,14 @@ class TabularModel(QtCore.QAbstractTableModel):
                 editor.adapter.get_can_edit(editor.object, editor.name, row)):
             flags |= QtCore.Qt.ItemIsEditable
 
-        if editor.adapter.get_drag(editor.object, editor.name, row) is not None:
+        if editor.adapter.get_drag(
+                editor.object,
+                editor.name,
+                row) is not None:
             flags |= QtCore.Qt.ItemIsDragEnabled
 
         if editor.factory.editable:
-            flags |=  QtCore.Qt.ItemIsDropEnabled
+            flags |= QtCore.Qt.ItemIsDropEnabled
 
         return flags
 
@@ -199,7 +205,12 @@ class TabularModel(QtCore.QAbstractTableModel):
         if obj is None:
             obj = adapter.get_default_value(editor.object, editor.name)
         self.beginInsertRows(parent, row, row)
-        editor.callx(editor.adapter.insert, editor.object, editor.name, row, obj)
+        editor.callx(
+            editor.adapter.insert,
+            editor.object,
+            editor.name,
+            row,
+            obj)
         self.endInsertRows()
         return True
 
@@ -212,7 +223,12 @@ class TabularModel(QtCore.QAbstractTableModel):
         self.beginInsertRows(parent, row, row + count - 1)
         for i in xrange(count):
             value = adapter.get_default_value(editor.object, editor.name)
-            editor.callx(adapter.insert, editor.object, editor.name, row, value)
+            editor.callx(
+                adapter.insert,
+                editor.object,
+                editor.name,
+                row,
+                value)
         self.endInsertRows()
         return True
 
@@ -228,7 +244,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         self.endRemoveRows()
         n = self.rowCount(None)
         if not editor.factory.multi_select:
-            editor.selected_row = row if row < n else row-1
+            editor.selected_row = row if row < n else row - 1
         else:
             #FIXME: what should the selection be?
             editor.multi_selected_rows = []
@@ -238,17 +254,17 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to expose our internal MIME type for drag and drop
             operations.
         """
-        return [ tabular_mime_type, PyMimeData.MIME_TYPE,
-                PyMimeData.NOPICKLE_MIME_TYPE ]
+        return [tabular_mime_type, PyMimeData.MIME_TYPE,
+                PyMimeData.NOPICKLE_MIME_TYPE]
 
     def mimeData(self, indexes):
         """ Reimplemented to generate MIME data containing the rows of the
             current selection.
         """
-        rows = sorted(set([ index.row() for index in indexes ]))
+        rows = sorted(set([index.row() for index in indexes]))
         items = [self._editor.adapter.get_drag(
-                self._editor.object, self._editor.name, row)
-                for row in rows]
+            self._editor.object, self._editor.name, row)
+            for row in rows]
         mime_data = PyMimeData.coerce(items)
         data = QtCore.QByteArray(str(id(self)))
         for row in rows:
@@ -289,7 +305,7 @@ class TabularModel(QtCore.QAbstractTableModel):
                 # if empty list, target is after end of list
                 row = 0
             if all(adapter.get_can_drop(object, name, row, item)
-                                    for item in data):
+                   for item in data):
                 for item in reversed(data):
                     self.dropItem(item, row)
                 return True
@@ -307,9 +323,9 @@ class TabularModel(QtCore.QAbstractTableModel):
         self.beginResetModel()
         self.endResetModel()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  TabularModel interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def dropItem(self, item, row):
         """ Handle a Python object being dropped onto a row """
@@ -360,8 +376,8 @@ class TabularModel(QtCore.QAbstractTableModel):
 
         # Update the selection for the new location.
         if editor.factory.multi_select:
-            editor.setx(multi_selected = objects)
+            editor.setx(multi_selected=objects)
             editor.multi_selected_rows = range(new_row, new_row + len(objects))
         else:
-            editor.setx(selected = objects[0])
+            editor.setx(selected=objects[0])
             editor.selected_row = new_row

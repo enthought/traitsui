@@ -10,6 +10,7 @@ In this example, the listener just increments a click counter.
 from traits.api import HasTraits, Button, Int
 from traitsui.api import View
 
+
 class ButtonEditorDemo(HasTraits):
     """ Defines the main ButtonEditor demo class. """
 
@@ -27,9 +28,9 @@ class ButtonEditorDemo(HasTraits):
     traits_view = View(
         'my_button_trait',
         'click_counter',
-        title     = 'ButtonEditor',
-        buttons   = [ 'OK' ],
-        resizable = True
+        title='ButtonEditor',
+        buttons=['OK'],
+        resizable=True
     )
 
 # Create the demo:

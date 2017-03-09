@@ -18,9 +18,9 @@
 """ A Traits UI editor for datetime.time objects.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 import datetime
 
@@ -29,18 +29,19 @@ from pyface.qt import QtCore, QtWidgets
 from editor import Editor
 from editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class SimpleEditor(Editor):
     """ Simple Traits UI time editor that wraps QTimeEdit.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -48,11 +49,11 @@ class SimpleEditor(Editor):
         """
         self.control = QtWidgets.QTimeEdit()
 
-        self.control.timeChanged[QtCore.QTime].connect(self.update_object)
+        self.control.timeChanged.connect(self.update_object)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -63,9 +64,9 @@ class SimpleEditor(Editor):
             q_date = QtCore.QTime(value.hour, value.minute, value.second)
             self.control.setTime(q_date)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the user entering input data in the edit control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def update_object(self, q_time):
         """ Handles the user entering input data in the edit control.
@@ -82,6 +83,7 @@ class SimpleEditor(Editor):
 #------------------------------------------------------------------------------
 # 'ReadonlyEditor' class:
 #------------------------------------------------------------------------------
+
 
 class ReadonlyEditor(BaseReadonlyEditor):
     """ Readonly Traits UI time editor that uses a QLabel for the view.

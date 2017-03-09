@@ -44,7 +44,7 @@ class NumberWithSpinnerEditor(HasTraits):
     traits_view = View(
         Item(label="Enter 4, then press OK without defocusing"),
         Item('number', editor=RangeEditor(low=3, high=8, mode='spinner')),
-        buttons = ['OK']
+        buttons=['OK']
     )
 
 
@@ -110,7 +110,8 @@ def test_wx_spin_control_editing_does_not_update():
         # press the OK button and close the dialog
         press_ok_button(ui)
 
-        # if all went well, the number traits has been updated and its value is 4
+        # if all went well, the number traits has been updated and its value is
+        # 4
         assert num.number == 4
 
 

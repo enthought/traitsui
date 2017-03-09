@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -25,14 +26,15 @@ from ui_panel \
     import panel
 
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Create the different modal PyQt user interfaces.
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 def ui_modal(ui, parent):
     """Creates a modal PyQt user interface for a specified UI object.
     """
     _ui_dialog(ui, parent, BaseDialog.MODAL)
+
 
 def ui_nonmodal(ui, parent):
     """Creates a non-modal PyQt user interface for a specified UI object.
@@ -107,38 +109,55 @@ class _ModalDialog(BaseDialog):
 
             for raw_button, button in zip(view.buttons, buttons):
                 default = raw_button == view.default_button
-                
+
                 if self.is_button(button, 'Apply'):
-                    self.apply = self.add_button(button, bbox,
-                            QtWidgets.QDialogButtonBox.ApplyRole, self._on_apply,
-                            enabled=apply, default=default)
+                    self.apply = self.add_button(
+                        button,
+                        bbox,
+                        QtWidgets.QDialogButtonBox.ApplyRole,
+                        self._on_apply,
+                        enabled=apply,
+                        default=default)
                     ui.on_trait_change(self._on_applyable, 'modified',
-                            dispatch='ui')
+                                       dispatch='ui')
 
                 elif self.is_button(button, 'Revert'):
-                    self.revert = self.add_button(button, bbox,
-                            QtWidgets.QDialogButtonBox.ResetRole, self._on_revert,
-                            enabled=revert, default=default)
+                    self.revert = self.add_button(
+                        button,
+                        bbox,
+                        QtWidgets.QDialogButtonBox.ResetRole,
+                        self._on_revert,
+                        enabled=revert,
+                        default=default)
 
                 elif self.is_button(button, 'OK'):
-                    self.ok = self.add_button(button, bbox,
-                            QtWidgets.QDialogButtonBox.AcceptRole,
-                            self.control.accept, default=default)
+                    self.ok = self.add_button(
+                        button,
+                        bbox,
+                        QtWidgets.QDialogButtonBox.AcceptRole,
+                        self.control.accept,
+                        default=default)
                     ui.on_trait_change(self._on_error, 'errors', dispatch='ui')
 
                 elif self.is_button(button, 'Cancel'):
                     self.add_button(button, bbox,
-                            QtWidgets.QDialogButtonBox.RejectRole,
-                            self.control.reject, default=default)
+                                    QtWidgets.QDialogButtonBox.RejectRole,
+                                    self.control.reject, default=default)
 
                 elif self.is_button(button, 'Help'):
-                    self.add_button(button, bbox,
-                            QtWidgets.QDialogButtonBox.HelpRole, self._on_help,
-                            default=default)
+                    self.add_button(
+                        button,
+                        bbox,
+                        QtWidgets.QDialogButtonBox.HelpRole,
+                        self._on_help,
+                        default=default)
 
                 elif not self.is_button(button, ''):
-                    self.add_button(button, bbox,
-                            QtWidgets.QDialogButtonBox.ActionRole, default=default)
+                    self.add_button(
+                        button,
+                        bbox,
+                        QtWidgets.QDialogButtonBox.ActionRole,
+                        default=default)
 
         else:
             bbox = None
@@ -202,7 +221,7 @@ class _ModalDialog(BaseDialog):
     def _on_applyable(self, state):
         """Handles a change to the "modified" state of the user interface .
         """
-        self.apply.setEnabled( state )
+        self.apply.setEnabled(state)
 
     def _on_revert(self):
         """Handles a request to revert changes.

@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,42 +13,43 @@
 #  Author: Evan Patterson
 #  Date:   06/22/2009
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ A traits UI editor for editing tabular data (arrays, list of tuples, lists
     of objects, etc).
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
+from __future__ import absolute_import
 
 import os
 
 from pyface.qt import QtCore, QtGui, QtWidgets
-
 from pyface.image_resource import ImageResource
+from pyface.ui_traits import Image
 
 from traits.api import (Any, Bool, Callable, Event, HasStrictTraits, Instance,
-    Int, List, NO_COMPARE, Property, TraitListEvent)
+                        Int, List, NO_COMPARE, Property, TraitListEvent)
 
 from traitsui.tabular_adapter import TabularAdapter
-from traitsui.ui_traits import Image
-
-from editor import Editor
-from tabular_model import TabularModel
+from .editor import Editor
+from .tabular_model import TabularModel
 
 
 TRAITS_DEBUG = (os.getenv('TRAITS_DEBUG') is not None)
 
 
-class HeaderEventFilter(QtCore.QObject) :
-    def __init__(self, editor) :
+class HeaderEventFilter(QtCore.QObject):
+
+    def __init__(self, editor):
         super(HeaderEventFilter, self).__init__()
         self.editor = editor
 
-    def eventFilter(self, obj, event) :
-        if event.type() == QtCore.QEvent.ContextMenu :
+    def eventFilter(self, obj, event):
+        if event.type() == QtCore.QEvent.ContextMenu:
             self.editor._on_column_context_menu(event.pos())
             return True
         return False
@@ -59,7 +60,7 @@ class TabularEditor(Editor):
         lists of objects, etc).
     """
 
-    #-- Trait Definitions ------------------------------------------------------
+    #-- Trait Definitions ----------------------------------------------------
 
     # The event fired when a table update is needed:
     update = Event
@@ -69,16 +70,16 @@ class TabularEditor(Editor):
 
     # The current set of selected items (which one is used depends upon the
     # initial state of the editor factory 'multi_select' trait):
-    selected       = Any
+    selected = Any
     multi_selected = List
 
     # The current set of selected item indices (which one is used depends upon
     # the initial state of the editor factory 'multi_select' trait):
-    selected_row        = Int(-1)
+    selected_row = Int(-1)
     multi_selected_rows = List(Int)
 
     # The most recently actived item and its index:
-    activated     = Any(comparison_mode=NO_COMPARE)
+    activated = Any(comparison_mode=NO_COMPARE)
     activated_row = Int(comparison_mode=NO_COMPARE)
 
     # The most recent left click data:
@@ -130,11 +131,11 @@ class TabularEditor(Editor):
 
     widget_factory = Callable(lambda *args, **kwds: _TableView(*args, **kwds))
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Editor interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init (self, parent):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
@@ -149,8 +150,11 @@ class TabularEditor(Editor):
         if factory.multi_select:
             self.sync_value(factory.selected, 'multi_selected', 'both',
                             is_list=True)
-            self.sync_value(factory.selected_row, 'multi_selected_rows','both',
-                            is_list=True)
+            self.sync_value(
+                factory.selected_row,
+                'multi_selected_rows',
+                'both',
+                is_list=True)
         else:
             self.sync_value(factory.selected, 'selected', 'both')
             self.sync_value(factory.selected_row, 'selected_row', 'both')
@@ -160,30 +164,35 @@ class TabularEditor(Editor):
             slot = self._on_rows_selection
         else:
             slot = self._on_row_selection
-        self.control.selectionModel().selectionChanged[QtCore.QItemSelection, QtCore.QItemSelection].connect(slot)
+        selection_model = self.control.selectionModel()
+        selection_model.selectionChanged.connect(slot)
 
         # Synchronize other interesting traits as necessary:
         self.sync_value(factory.update, 'update', 'from')
         self.sync_value(factory.refresh, 'refresh', 'from')
-        self.sync_value(factory.activated,     'activated',     'to')
+        self.sync_value(factory.activated, 'activated', 'to')
         self.sync_value(factory.activated_row, 'activated_row', 'to')
-        self.sync_value(factory.clicked,  'clicked',  'to')
+        self.sync_value(factory.clicked, 'clicked', 'to')
         self.sync_value(factory.dclicked, 'dclicked', 'to')
-        self.sync_value(factory.right_clicked,  'right_clicked',  'to')
+        self.sync_value(factory.right_clicked, 'right_clicked', 'to')
         self.sync_value(factory.right_dclicked, 'right_dclicked', 'to')
         self.sync_value(factory.column_clicked, 'column_clicked', 'to')
-        self.sync_value(factory.column_right_clicked, 'column_right_clicked', 'to')
+        self.sync_value(
+            factory.column_right_clicked,
+            'column_right_clicked',
+            'to')
         self.sync_value(factory.scroll_to_row, 'scroll_to_row', 'from')
 
         # Connect other signals as necessary
-        control.activated[QtCore.QModelIndex].connect(self._on_activate)
-        control.clicked[QtCore.QModelIndex].connect(self._on_click)
-        control.clicked[QtCore.QModelIndex].connect(self._on_right_click)
-        control.doubleClicked[QtCore.QModelIndex].connect(self._on_dclick)
-        control.horizontalHeader().sectionClicked[int].connect(self._on_column_click)
+        control.activated.connect(self._on_activate)
+        control.clicked.connect(self._on_click)
+        control.clicked.connect(self._on_right_click)
+        control.doubleClicked.connect(self._on_dclick)
+        control.horizontalHeader().sectionClicked.connect(
+            self._on_column_click)
 
         control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        control.customContextMenuRequested[QtCore.QPoint].connect(self._on_context_menu)
+        control.customContextMenuRequested.connect(self._on_context_menu)
 
         self.header_event_filter = HeaderEventFilter(self)
         control.horizontalHeader().installEventFilter(self.header_event_filter)
@@ -192,7 +201,7 @@ class TabularEditor(Editor):
         # replacements:
         try:
             self.context_object.on_trait_change(
-                self.update_editor, self.extended_name+'_items', dispatch='ui')
+                self.update_editor, self.extended_name + '_items', dispatch='ui')
         except:
             pass
 
@@ -215,7 +224,7 @@ class TabularEditor(Editor):
         self.on_trait_change(self.update_editor, 'adapter.columns',
                              dispatch='ui')
 
-    def dispose (self):
+    def dispose(self):
         """ Disposes of the contents of an editor.
         """
         self.context_object.on_trait_change(
@@ -243,12 +252,12 @@ class TabularEditor(Editor):
             self.model.endResetModel()
             if self.factory.multi_select:
                 self._multi_selected_changed(self.multi_selected)
-            else :
+            else:
                 self._selected_changed(self.selected)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  TabularEditor interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def refresh_editor(self):
         """ Requests the table view to redraw itself.
@@ -276,9 +285,9 @@ class TabularEditor(Editor):
         finally:
             self._no_notify = old
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  UI preference save/restore interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
@@ -293,13 +302,13 @@ class TabularEditor(Editor):
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
-        widths = [ self.control.columnWidth(column)
-                   for column in xrange(len(self.adapter.columns)) ]
-        return { 'cached_widths': widths }
+        widths = [self.control.columnWidth(column)
+                  for column in xrange(len(self.adapter.columns))]
+        return {'cached_widths': widths}
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Private methods:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _add_image(self, image_resource):
         """ Adds a new image to the image map.
@@ -334,7 +343,7 @@ class TabularEditor(Editor):
                                    column=index.column())
         setattr(self, trait, event)
 
-    #-- Trait Event Handlers ---------------------------------------------------
+    #-- Trait Event Handlers -------------------------------------------------
 
     def _update_changed(self):
         self.update_editor()
@@ -367,7 +376,7 @@ class TabularEditor(Editor):
         if not self._no_update:
             values = self.value
             try:
-                rows = [ values.index(i) for i in new]
+                rows = [values.index(i) for i in new]
             except:
                 pass
             else:
@@ -376,8 +385,8 @@ class TabularEditor(Editor):
     def _multi_selected_items_changed(self, event):
         values = self.value
         try:
-            added = [ values.index(item) for item in event.added ]
-            removed = [ values.index(item) for item in event.removed ]
+            added = [values.index(item) for item in event.added]
+            removed = [values.index(item) for item in event.removed]
         except:
             pass
         else:
@@ -389,7 +398,10 @@ class TabularEditor(Editor):
             smodel = self.control.selectionModel()
             selection = QtCore.QItemSelection()
             for row in selected_rows:
-                selection.select(self.model.index(row, 0), self.model.index(row, 0))
+                selection.select(
+                    self.model.index(
+                        row, 0), self.model.index(
+                        row, 0))
             smodel.clearSelection()
             smodel.select(selection,
                 QtCore.QItemSelectionModel.Select |
@@ -407,19 +419,20 @@ class TabularEditor(Editor):
                           QtCore.QItemSelectionModel.Rows)
 
     scroll_to_row_hint_map = {
-        'center'  : QtWidgets.QTableView.PositionAtCenter,
-        'top'     : QtWidgets.QTableView.PositionAtTop,
-        'bottom'  : QtWidgets.QTableView.PositionAtBottom,
-        'visible' : QtWidgets.QTableView.EnsureVisible,
+        'center': QtWidgets.QTableView.PositionAtCenter,
+        'top': QtWidgets.QTableView.PositionAtTop,
+        'bottom': QtWidgets.QTableView.PositionAtBottom,
+        'visible': QtWidgets.QTableView.EnsureVisible,
     }
 
     def _scroll_to_row_changed(self, row):
         """ Scroll to the given row.
         """
-        scroll_hint = self.scroll_to_row_hint_map.get(self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
+        scroll_hint = self.scroll_to_row_hint_map.get(
+            self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
         self.control.scrollTo(self.model.index(row, 0), scroll_hint)
 
-    #-- Table Control Event Handlers -------------------------------------------
+    #-- Table Control Event Handlers -----------------------------------------
 
     def _on_activate(self, index):
         """ Handle a cell being activated.
@@ -483,32 +496,40 @@ class TabularEditor(Editor):
         finally:
             self._no_update = False
 
-    def _on_context_menu(self, pos) :
-        column, row = self.control.columnAt(pos.x()), self.control.rowAt(pos.y())
+    def _on_context_menu(self, pos):
+        column, row = self.control.columnAt(
+            pos.x()), self.control.rowAt(
+            pos.y())
         menu = self.adapter.get_menu(self.object, self.name, row, column)
-        if menu :
-            self._menu_context = {'selection' : self.object,
-                             'object':  self.object,
-                             'editor':  self,
-                             'column':  column,
-                             'row':     row,
-                             'item':    self.adapter.get_item(self.object, self.name, row),
-                             'info':    self.ui.info,
-                             'handler': self.ui.handler }
-            qmenu = menu.create_menu( self.control, self )
+        if menu:
+            self._menu_context = {
+                'selection': self.object,
+                'object': self.object,
+                'editor': self,
+                'column': column,
+                'row': row,
+                'item': self.adapter.get_item(
+                    self.object,
+                    self.name,
+                    row),
+                'info': self.ui.info,
+                'handler': self.ui.handler}
+            qmenu = menu.create_menu(self.control, self)
             qmenu.exec_(self.control.mapToGlobal(pos))
             self._menu_context = None
 
-    def _on_column_context_menu(self, pos) :
+    def _on_column_context_menu(self, pos):
         column = self.control.columnAt(pos.x())
         menu = self.adapter.get_column_menu(self.object, self.name, -1, column)
-        if menu :
-            self._menu_context = {'selection' : self.object, 'object':  self.object,
-                             'editor':  self,
-                             'column':  column,
-                             'info':    self.ui.info,
-                             'handler': self.ui.handler }
-            qmenu = menu.create_menu( self.control, self )
+        if menu:
+            self._menu_context = {
+                'selection': self.object,
+                'object': self.object,
+                'editor': self,
+                'column': column,
+                'info': self.ui.info,
+                'handler': self.ui.handler}
+            qmenu = menu.create_menu(self.control, self)
             qmenu.exec_(self.control.mapToGlobal(pos))
             self._menu_context = None
         else:
@@ -516,9 +537,9 @@ class TabularEditor(Editor):
             self._on_column_right_click(column)
 
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'TabularEditorEvent' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 class TabularEditorEvent(HasStrictTraits):
 
@@ -531,20 +552,21 @@ class TabularEditorEvent(HasStrictTraits):
     # The row item:
     item = Property
 
-    #-- Private Traits ---------------------------------------------------------
+    #-- Private Traits -------------------------------------------------------
 
     # The editor the event is associated with:
     editor = Instance(TabularEditor)
 
-    #-- Property Implementations -----------------------------------------------
+    #-- Property Implementations ---------------------------------------------
 
     def _get_item(self):
         editor = self.editor
         return editor.adapter.get_item(editor.object, editor.name, self.row)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Qt widgets that have been configured to behave as expected by Traits UI:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class _ItemDelegate(QtWidgets.QStyledItemDelegate):
     """ A QStyledItemDelegate which draws its owns gridlines so that we can
@@ -572,11 +594,14 @@ class _ItemDelegate(QtWidgets.QStyledItemDelegate):
         painter.setPen(option.palette.color(QtGui.QPalette.Dark))
 
         if self._horizontal_lines:
-            painter.drawLine(option.rect.bottomLeft(),option.rect.bottomRight())
+            painter.drawLine(
+                option.rect.bottomLeft(),
+                option.rect.bottomRight())
         if self._vertical_lines:
             painter.drawLine(option.rect.topRight(), option.rect.bottomRight())
 
         painter.restore()
+
 
 class _TableView(QtWidgets.QTableView):
     """ A QTableView configured to behave as expected by TraitsUI.
@@ -610,7 +635,9 @@ class _TableView(QtWidgets.QTableView):
             size = vheader.minimumSectionSize()
             font = editor.adapter.get_font(editor.object, editor.name, 0)
             if font is not None:
-                size = max(size, QtGui.QFontMetrics(QtGui.QFont(font)).height())
+                size = max(
+                    size, QtGui.QFontMetrics(
+                        QtGui.QFont(font)).height())
             vheader.setDefaultSectionSize(size)
 
         # Configure the column headings.
@@ -651,7 +678,7 @@ class _TableView(QtWidgets.QTableView):
         # most platforms, which is why we do this here.
         if (event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and
             self.state() != QtWidgets.QAbstractItemView.EditingState and
-            factory.editable and 'edit' in factory.operations):
+                factory.editable and 'edit' in factory.operations):
             if factory.multi_select:
                 rows = editor.multi_selected_rows
                 row = rows[0] if len(rows) == 1 else -1
@@ -711,7 +738,7 @@ class _TableView(QtWidgets.QTableView):
 
         parent = self.parent()
         if (not self._initial_size and parent and
-            (self.isVisible() or isinstance(parent, QtWidgets.QMainWindow))):
+                (self.isVisible() or isinstance(parent, QtWidgets.QMainWindow))):
             self._initial_size = True
             self.resizeColumnsToContents()
 
@@ -747,7 +774,8 @@ class _TableView(QtWidgets.QTableView):
         # Assign sizes for columns with absolute size requests
         percent_vals, percent_cols = [], []
         for column in xrange(len(editor.adapter.columns)):
-            width = editor.adapter.get_width(editor.object, editor.name, column)
+            width = editor.adapter.get_width(
+                editor.object, editor.name, column)
             if width > 1:
                 available_space -= width
                 hheader.resizeSection(column, width)
