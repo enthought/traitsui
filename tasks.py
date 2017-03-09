@@ -74,7 +74,7 @@ from invoke import task
 
 supported_combinations = {
     '2.7': {'pyside', 'pyqt', 'wx', 'null'},
-    '3.5': {'pyqt', 'null'},
+    '3.5': {'pyqt', 'pyqt5', 'null'},
 }
 
 dependencies = {
@@ -97,6 +97,7 @@ extra_dependencies = {
 environment_vars = {
     'pyside': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside'},
     'pyqt': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt'},
+    'pyqt5': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt5'},
     'wx': {'ETS_TOOLKIT': 'wx'},
     'null': {'ETS_TOOLKIT': 'null'},
 }
@@ -119,6 +120,9 @@ def install(ctx, runtime='3.5', toolkit='null', environment=None):
         # install the project
         "edm run -e '{environment}' -- python setup.py install",
     ]
+
+    if toolkit == 'pyqt5':
+        commands.append("edm run -e '{environment}' -- pip install pyqt5")
 
     print("Creating environment '{environment}'".format(**parameters))
     for command in commands:
