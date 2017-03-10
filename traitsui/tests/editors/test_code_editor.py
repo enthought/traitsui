@@ -44,8 +44,8 @@ def test_code_editor_show_line_numbers():
     """ CodeEditor should honor the `show_line_numbers` setting
     """
     def is_line_numbers_visible(ui):
-        from pyface import qt
-        txt_ctrl = ui.control.findChild(qt.QtWidgets.QPlainTextEdit)
+        from pyface.qt import QtWidgets
+        txt_ctrl = ui.control.findChild(QtWidgets.QPlainTextEdit)
         return txt_ctrl.line_number_widget.isVisible()
 
     def test_line_numbers_visibility(show=True):
@@ -65,13 +65,13 @@ def test_code_editor_show_line_numbers():
 def test_code_editor_readonly():
     """ Test readonly editor style for CodeEditor
     """
-    from pyface import qt
+    from pyface.qt import QtWidgets
     with store_exceptions_on_all_threads():
         code_model = CodeModel()
         code_view = CodeView(model=code_model,
                              style='readonly')
         ui = code_view.edit_traits()
-        txt_ctrl = ui.control.findChild(qt.QtWidgets.QPlainTextEdit)
+        txt_ctrl = ui.control.findChild(QtWidgets.QPlainTextEdit)
         nose.tools.assert_true(txt_ctrl.isReadOnly())
 
         # Test changing the object's text

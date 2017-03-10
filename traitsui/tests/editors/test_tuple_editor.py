@@ -33,7 +33,7 @@ def test_qt_tuple_editor():
     # Behavior: when editing the text of a tuple editor,
     # value get updated immediately.
 
-    from pyface import qt
+    from pyface.qt import QtWidgets
 
     with store_exceptions_on_all_threads():
         val = TupleEditor()
@@ -43,7 +43,7 @@ def test_qt_tuple_editor():
         # range editor, enter a number, and clicking ok without defocusing
 
         # text element inside the spin control
-        lineedits = ui.control.findChildren(qt.QtWidgets.QLineEdit)
+        lineedits = ui.control.findChildren(QtWidgets.QLineEdit)
         lineedits[0].setFocus()
         lineedits[0].clear()
         lineedits[0].insert('4')

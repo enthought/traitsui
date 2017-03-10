@@ -21,9 +21,9 @@ the PyQt user interface toolkit.
 from traitsui.toolkit import assert_toolkit_import
 assert_toolkit_import('qt4')
 
-from qtpy import QtCore, QtGui, QtWidgets, qt_api
+from qtpy import QtCore, QtGui, QtWidgets, PYQT4
 
-if qt_api == 'pyqt':
+if PYQT4:
     # Check the version numbers are late enough:
     if QtCore.QT_VERSION < 0x040200:
         raise RuntimeError("Need Qt v4.2 or higher, but got v%s" %
@@ -418,7 +418,7 @@ class GUIToolkit(Toolkit):
 
         # PyQt v4.3.1 and earlier deleteLater() didn't transfer ownership to
         # C++, which is necessary for the QObject system to garbage collect it.
-        if qt_api == 'pyqt':
+        if PYQT4:
             if QtCore.PYQT_VERSION < 0x040302:
                 import sip
                 sip.transferto(control, None)

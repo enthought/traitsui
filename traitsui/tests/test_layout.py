@@ -66,13 +66,13 @@ def test_qt_resizable_in_vgroup():
     # the non-layout axis of its group. In a VGroup, resizing should work
     # only in the horizontal direction.
 
-    from pyface import qt
+    from pyface.qt import QtWidgets
 
     with store_exceptions_on_all_threads():
         dialog = VResizeDialog()
         ui = dialog.edit_traits()
 
-        text = ui.control.findChild(qt.QtWidgets.QLineEdit)
+        text = ui.control.findChild(QtWidgets.QLineEdit)
 
         # horizontal size should be large
         nose.tools.assert_greater(text.width(), _DIALOG_WIDTH - 100)
@@ -87,13 +87,13 @@ def test_qt_resizable_in_hgroup():
     # the non-layout axis of its group. In a HGroup, resizing should work
     # only in the vertical direction.
 
-    from pyface import qt
+    from pyface.qt import QtWidgets
 
     with store_exceptions_on_all_threads():
         dialog = HResizeDialog()
         ui = dialog.edit_traits()
 
-        text = ui.control.findChild(qt.QtWidgets.QLineEdit)
+        text = ui.control.findChild(QtWidgets.QLineEdit)
 
         # vertical size should be large
         nose.tools.assert_greater(text.height(), _DIALOG_HEIGHT - 100)

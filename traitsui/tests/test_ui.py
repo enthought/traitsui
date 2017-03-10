@@ -60,7 +60,7 @@ def test_reset_with_destroy_qt():
     # Characterization test:
     # UI.reset(destroy=True) destroys all ui children of the top control
 
-    from pyface import qt
+    from pyface.qt import QtWidgets
 
     foo = FooDialog()
     ui = foo.edit_traits()
@@ -78,7 +78,7 @@ def test_reset_with_destroy_qt():
 
     # but its children are scheduled for removal
     for c in ui.control.children():
-        if isinstance(c, qt.QtWidgets.QWidget):
+        if isinstance(c, QtWidgets.QWidget):
             nose.tools.assert_equal(c.deleteLater._n_calls, 1)
 
 
@@ -117,7 +117,7 @@ def test_reset_without_destroy_qt():
     # UI.reset(destroy=False) destroys all editor controls, but leaves editors
     # and ui children intact
 
-    from pyface import qt
+    from pyface.qt import QtWidgets
 
     foo = FooDialog()
     ui = foo.edit_traits()
@@ -126,7 +126,7 @@ def test_reset_without_destroy_qt():
     nose.tools.assert_is_instance(ui._editors[0],
                                   traitsui.qt4.text_editor.SimpleEditor)
     nose.tools.assert_is_instance(ui._editors[0].control,
-                                  qt.QtWidgets.QLineEdit)
+                                  QtWidgets.QLineEdit)
 
     ui.reset(destroy=False)
 
@@ -136,7 +136,7 @@ def test_reset_without_destroy_qt():
     nose.tools.assert_is_none(ui._editors[0].control)
 
     # children are still there: check first text control
-    text_ctrl = ui.control.findChild(qt.QtWidgets.QLineEdit)
+    text_ctrl = ui.control.findChild(QtWidgets.QLineEdit)
     nose.tools.assert_is_not_none(text_ctrl)
 
 
@@ -171,7 +171,7 @@ def test_destroy_after_ok_qt():
     # Behavior: after pressing 'OK' in a dialog, the method UI.finish is
     # called and the view control and its children are destroyed
 
-    from pyface import qt
+    from pyface.qt import QtWidgets
 
     foo = FooDialog()
     ui = foo.edit_traits()
@@ -183,7 +183,7 @@ def test_destroy_after_ok_qt():
     control.deleteLater = count_calls(control.deleteLater)
 
     # press the OK button and close the dialog
-    okb = control.findChild(qt.QtWidgets.QPushButton)
+    okb = control.findChild(QtWidgets.QPushButton)
     okb.click()
 
     nose.tools.assert_is_none(ui.control)

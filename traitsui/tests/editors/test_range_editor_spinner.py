@@ -120,7 +120,7 @@ def test_qt_spin_control_editing():
     # Behavior: when editing the text part of a spin control box, pressing
     # the OK button updates the value of the HasTraits class
 
-    from pyface import qt
+    from pyface.qt import QtWidgets
 
     with store_exceptions_on_all_threads():
         num = NumberWithSpinnerEditor()
@@ -130,7 +130,7 @@ def test_qt_spin_control_editing():
         # range editor, enter a number, and clicking ok without defocusing
 
         # text element inside the spin control
-        lineedit = ui.control.findChild(qt.QtWidgets.QLineEdit)
+        lineedit = ui.control.findChild(QtWidgets.QLineEdit)
         lineedit.setFocus()
         lineedit.setText('4')
 

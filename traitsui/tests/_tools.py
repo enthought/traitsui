@@ -157,10 +157,10 @@ def press_ok_button(ui):
         ok_button.ProcessEvent(click_event)
 
     elif is_current_backend_qt4():
-        from pyface import qt
+        from pyface.qt import QtWidgets
 
         # press the OK button and close the dialog
-        ok_button = ui.control.findChild(qt.QtWidgets.QPushButton)
+        ok_button = ui.control.findChild(QtWidgets.QPushButton)
         ok_button.click()
 
 
