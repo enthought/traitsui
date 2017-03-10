@@ -14,7 +14,7 @@
 """
 
 
-from pyface.qt import QtWidgets
+from qtpy import QtWidgets
 
 from traitsui.menu \
     import ApplyButton, RevertButton, OKButton, CancelButton, HelpButton

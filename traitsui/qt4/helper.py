@@ -20,7 +20,7 @@
 
 import os.path
 
-from pyface.qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 from pyface.ui_traits import convert_image
 from traits.api import Enum
 from pyface._py2to3 import str_types

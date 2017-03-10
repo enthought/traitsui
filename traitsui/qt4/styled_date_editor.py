@@ -1,5 +1,5 @@
 
-from pyface.qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 from pyface.qt.QtGui import QFont
 
 from traits.api import Dict

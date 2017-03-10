@@ -15,7 +15,7 @@
 """
 
 
-from pyface.qt import QtWidgets
+from qtpy import QtWidgets
 
 from traitsui.undo \
     import UndoHistory

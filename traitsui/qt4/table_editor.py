@@ -18,7 +18,7 @@
 
 from __future__ import absolute_import
 
-from pyface.qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 from pyface._py2to3 import str_types
 from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later

@@ -17,7 +17,7 @@
 """
 
 # System library imports
-from pyface.qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 # ETS imports
 from traits.api import Bool

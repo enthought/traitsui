@@ -22,7 +22,7 @@ complete application, using information from the specified UI object.
 import os
 
 # System library imports.
-from pyface.qt import QtWidgets
+from qtpy import QtWidgets
 
 # ETS imports.
 from pyface.util.guisupport import is_event_loop_running_qt4, \

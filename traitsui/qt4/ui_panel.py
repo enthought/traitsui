@@ -19,7 +19,7 @@
 import cgi
 import re
 
-from pyface.qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 from traits.api \
     import Any, Instance, Undefined
@@ -1238,7 +1238,7 @@ class HTMLHelpWindow(QtWidgets.QDialog):
         """ Initializes the object.
         """
         # Local import to avoid a WebKit dependency when one isn't needed.
-        from pyface.qt import QtWebKitWidgets
+        from qtpy import QtWebKitWidgets
 
         QtWidgets.QDialog.__init__(self, parent)
         layout = QtWidgets.QVBoxLayout(self)

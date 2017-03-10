@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from traits.api import Unicode, List, Str, on_trait_change
 

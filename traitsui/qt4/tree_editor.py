@@ -21,7 +21,7 @@ import copy
 import collections
 import logging
 
-from pyface.qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 from pyface._py2to3 import str_types, text_type
 
 from pyface.resource_manager import resource_manager

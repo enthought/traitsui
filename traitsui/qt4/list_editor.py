@@ -16,7 +16,7 @@
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
-from pyface.qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from pyface.api import ImageResource
 from pyface._py2to3 import xrange

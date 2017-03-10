@@ -1,4 +1,4 @@
-from pyface.qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 
 class RangeSlider(QtWidgets.QSlider):

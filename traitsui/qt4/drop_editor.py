@@ -18,7 +18,7 @@ target editor handles drag and drop operations as a drop target.
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the

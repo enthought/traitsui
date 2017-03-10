@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 
 from pyface._py2to3 import text_type
 

@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtGui, QtWidgets
+from qtpy import QtGui, QtWidgets
 
 from traits.api \
     import HasTraits, Instance, Str, Callable

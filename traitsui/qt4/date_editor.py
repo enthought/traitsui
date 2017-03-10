@@ -25,7 +25,7 @@ from __future__ import print_function
 
 import datetime
 
-from pyface.qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor

@@ -19,7 +19,7 @@
 import logging
 
 # System library imports.
-from pyface.qt import QtWidgets
+from qtpy import QtWidgets
 
 # Enthought library imports.
 from traits.api import File, List, Str

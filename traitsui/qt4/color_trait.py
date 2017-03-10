@@ -17,7 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtGui
+from qtpy import QtGui
 
 from traits.api \
     import Trait, TraitError

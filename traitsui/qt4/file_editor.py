@@ -19,7 +19,7 @@
 
 from os.path import splitext, isfile, exists
 
-from pyface.qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 from traits.api import List, Event, File, Unicode, TraitError
 
 from pyface._py2to3 import text_type

@@ -48,7 +48,7 @@ class FooDialog(HasTraits):
 class TestUIPanel(unittest.TestCase):
 
     def setup_qt4_dock_window(self):
-        from pyface.qt import QtWidgets
+        from qtpy import QtWidgets
 
         # set up the dock window for qt
         main_window = QtWidgets.QMainWindow()
@@ -57,7 +57,7 @@ class TestUIPanel(unittest.TestCase):
         return main_window, dock
 
     def test_panel_has_toolbar_buttons_qt4(self):
-        from pyface.qt import QtWidgets
+        from qtpy import QtWidgets
 
         _, dock = self.setup_qt4_dock_window()
 
@@ -75,7 +75,7 @@ class TestUIPanel(unittest.TestCase):
         self.assertIsNotNone(ui.control.findChild(QtWidgets.QPushButton))
 
     def test_subpanel_has_toolbar_no_buttons_qt4(self):
-        from pyface.qt import QtWidgets
+        from qtpy import QtWidgets
 
         _, dock = self.setup_qt4_dock_window()
 
@@ -93,7 +93,7 @@ class TestUIPanel(unittest.TestCase):
         self.assertIsNone(ui.control.findChild(QtWidgets.QPushButton))
 
     def test_subpanel_no_toolbar_nor_button_in_widget(self):
-        from pyface.qt import QtWidgets
+        from qtpy import QtWidgets
 
         # FooDialog uses a QWidget to contain the panels
         # No attempt should be made for adding the toolbars

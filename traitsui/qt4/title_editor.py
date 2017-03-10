@@ -16,7 +16,7 @@
 
 from __future__ import absolute_import
 
-from pyface.qt import QtCore
+from qtpy import QtCore
 
 from .editor import Editor
 

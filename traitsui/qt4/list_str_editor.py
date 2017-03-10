@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui, QtWidgets
+from qtpy import QtCore, QtGui, QtWidgets
 import collections
 
 from pyface.image_resource import ImageResource

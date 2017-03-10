@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtWidgets
+from qtpy import QtWidgets
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the

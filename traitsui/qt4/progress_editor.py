@@ -1,6 +1,6 @@
 import time
 
-from pyface.qt import QtWidgets
+from qtpy import QtWidgets
 
 from traits.api import Instance, Int, Str
 from traitsui.qt4.editor import Editor

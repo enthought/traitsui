@@ -18,7 +18,7 @@ editors and text editor factories.
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtGui, QtWidgets
+from qtpy import QtGui, QtWidgets
 
 #-------------------------------------------------------------------------
 #  Constants:

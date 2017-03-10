@@ -139,7 +139,7 @@ def test_wx_list_str_multi_selected_index():
 def test_selection_listener_disconnected():
     """ Check that selection listeners get correctly disconnected """
     from pyface.api import GUI
-    from pyface.qt import QtCore, QtWidgets
+    from qtpy import QtCore, QtWidgets
     from pyface.ui.qt4.util.event_loop_helper import EventLoopHelper
     from pyface.ui.qt4.util.testing import event_loop
 

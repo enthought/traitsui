@@ -14,7 +14,7 @@
 """ A renderer which displays a progress bar. """
 
 # System library imports
-from pyface.qt import QtCore, QtGui
+from qtpy import QtCore, QtGui
 
 # ETS imports
 from traitsui.qt4.table_editor import TableDelegate

@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtWidgets
+from qtpy import QtWidgets
 
 from pyface._py2to3 import text_type, xrange
 

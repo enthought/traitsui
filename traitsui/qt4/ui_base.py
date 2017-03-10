@@ -15,7 +15,7 @@
 """
 
 
-from pyface.qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from pyface._py2to3 import str_types
 

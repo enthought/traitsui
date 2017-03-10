@@ -18,7 +18,7 @@ Traits-based user interface.
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from traits.api \
     import TraitError

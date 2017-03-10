@@ -48,7 +48,7 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 
 import re
 
-from pyface.qt import QtWidgets
+from qtpy import QtWidgets
 from pyface._py2to3 import str_types, text_type
 
 #-------------------------------------------------------------------------

@@ -19,7 +19,7 @@ that are represented as tuples of the form ( *red*, *green*, *blue* ), where
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtGui
+from qtpy import QtGui
 
 from traits.trait_base \
     import SequenceTypes

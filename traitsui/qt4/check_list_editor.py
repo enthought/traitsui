@@ -22,7 +22,7 @@ from __future__ import division
 
 import logging
 
-from pyface.qt import QtCore, QtWidgets
+from qtpy import QtCore, QtWidgets
 
 from traits.api \
     import List, Unicode, TraitError
