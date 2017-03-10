@@ -1,2 +1,2 @@
-git+http://github.com/enthought/pyface.git#egg=pyface
+git+http://github.com/enthought/pyface.git@feature/qtpy#egg=pyface
 qtpy
