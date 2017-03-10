@@ -87,7 +87,7 @@ for name, color in standard_colors.items():
 
 
 def get_rgb_color_editor(*args, **traits):
-    from rgb_color_editor import ToolkitEditorFactory
+    from .rgb_color_editor import ToolkitEditorFactory
     return ToolkitEditorFactory(*args, **traits)
 
 # Trait whose value must be an RGB color:

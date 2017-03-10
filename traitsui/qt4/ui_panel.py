@@ -19,7 +19,7 @@
 import cgi
 import re
 
-from pyface.qt import QtCore, QtGui, QtWidgets, QtWebKitWidgets
+from pyface.qt import QtCore, QtGui, QtWidgets
 
 from traits.api \
     import Any, Instance, Undefined
@@ -36,13 +36,13 @@ from traitsui.help_template \
 from traitsui.menu \
     import UndoButton, RevertButton, HelpButton
 
-from helper \
+from .helper \
     import position_window
 
-from ui_base \
+from .ui_base \
     import BasePanel
 
-from editor \
+from .editor \
     import Editor
 
 
@@ -839,7 +839,7 @@ class _GroupPanel(object):
 
                 # If still no editor factory found, use a default text editor:
                 if editor_factory is None:
-                    from text_editor import ToolkitEditorFactory
+                    from .text_editor import ToolkitEditorFactory
                     editor_factory = ToolkitEditorFactory()
 
                 # If the item has formatting traits set them in the editor
@@ -1238,7 +1238,7 @@ class HTMLHelpWindow(QtWidgets.QDialog):
         """ Initializes the object.
         """
         # Local import to avoid a WebKit dependency when one isn't needed.
-        from pyface.qt import QtWebKit
+        from pyface.qt import QtWebKitWidgets
 
         QtWidgets.QDialog.__init__(self, parent)
         layout = QtWidgets.QVBoxLayout(self)

@@ -43,10 +43,10 @@ from traitsui.basic_editor_factory \
 from pyface.timer.api \
     import do_after
 
-from constants \
+from .constants \
     import ErrorColor
 
-from helper \
+from .helper \
     import disconnect, disconnect_no_id, BufferDC
 
 #-------------------------------------------------------------------------

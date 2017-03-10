@@ -1,5 +1,7 @@
 from pyface.qt import QtCore, QtWidgets
 
+from pyface._py2to3 import text_type
+
 from traits.api import Float, Any, Str, Trait
 from traitsui.editors.api import RangeEditor
 from traitsui.qt4.editor import Editor
@@ -79,7 +81,7 @@ class _BoundsEditor(Editor):
     def update_low_on_enter(self):
         try:
             try:
-                low = eval(unicode(self._label_lo.text()).strip())
+                low = eval(text_type(self._label_lo.text()).strip())
                 if self.evaluate is not None:
                     low = self.evaluate(low)
             except Exception as ex:
@@ -101,7 +103,7 @@ class _BoundsEditor(Editor):
     def update_high_on_enter(self):
         try:
             try:
-                high = eval(unicode(self._label_hi.text()).strip())
+                high = eval(text_type(self._label_hi.text()).strip())
                 if self.evaluate is not None:
                     high = self.evaluate(high)
             except:

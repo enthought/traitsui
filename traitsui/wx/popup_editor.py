@@ -9,7 +9,7 @@
 from traitsui.editors.popup_editor \
     import _PopupEditor as BasePopupEditor, PopupEditor
 
-from ui_editor \
+from .ui_editor \
     import UIEditor
 
 #-------------------------------------------------------------------------

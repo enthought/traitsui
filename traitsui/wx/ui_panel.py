@@ -53,15 +53,15 @@ from pyface.dock.api \
 from pyface.sizers.flow \
     import FlowSizer
 
-from helper \
+from .helper \
     import position_window, TraitsUIPanel, TraitsUIScrolledPanel, GroupEditor
 
-from constants \
+from .constants \
     import screen_dx, screen_dy, WindowColor
 
-from ui_base \
+from .ui_base \
     import BaseDialog
-from constants import is_mac
+from .constants import is_mac
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -452,7 +452,7 @@ def create_notebook_for_items(content, ui, parent, group,
 def add_image_panel(window, group):
     """ Creates a themed ImagePanel for the specified group and parent window.
     """
-    from image_panel import ImagePanel
+    from .image_panel import ImagePanel
 
     image_panel = ImagePanel(theme=group.group_theme, text=group.label)
     panel = image_panel.create_control(window)
@@ -765,7 +765,7 @@ class FillPanel(object):
         """ Adds a set of groups or items as vertical notebook pages to a
             vertical notebook.
         """
-        from themed_vertical_notebook import ThemedVerticalNotebook
+        from .themed_vertical_notebook import ThemedVerticalNotebook
 
         # Create the vertical notebook:
         nb = ThemedVerticalNotebook(scrollable=True)
@@ -914,7 +914,7 @@ class FillPanel(object):
                         item_sizer.Add((1, 1))
 
                     if theme is not None:
-                        from image_text import ImageText
+                        from .image_text import ImageText
 
                         label = ImageText(panel, theme, label)
                         item_sizer.Add(label, 0, wx.EXPAND)
@@ -1000,7 +1000,7 @@ class FillPanel(object):
 
                 # If still no editor factory found, use a default text editor:
                 if editor_factory is None:
-                    from text_editor import ToolkitEditorFactory
+                    from .text_editor import ToolkitEditorFactory
                     editor_factory = ToolkitEditorFactory()
 
                 # If the item has formatting traits set them in the editor
@@ -1019,7 +1019,7 @@ class FillPanel(object):
             # Set up the background image (if used):
             item_panel = panel
             if theme is not None:
-                from image_panel import ImagePanel
+                from .image_panel import ImagePanel
 
                 text = ''
                 if item.show_label:
@@ -1178,7 +1178,7 @@ class FillPanel(object):
                      pad_side=wx.LEFT, border=False):
         """ Creates an item label.
         """
-        from image_text import ImageText
+        from .image_text import ImageText
 
         label = item.get_label(ui)
         if (label == '') or (label[-1:] in '?=:;,.<>/\\"\'-+#|'):

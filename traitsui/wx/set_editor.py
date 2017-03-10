@@ -36,10 +36,10 @@ from traits.api \
 from traitsui.editors.set_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from helper \
+from .helper \
     import enum_values_changed, TraitsUIPanel
 
 #-------------------------------------------------------------------------

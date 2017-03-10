@@ -41,15 +41,15 @@ from traitsui.wx.editor_factory \
 from pyface.image_resource \
     import ImageResource
 
-from image_slice import paint_parent, ImageSlice
+from .image_slice import paint_parent, ImageSlice
 
-from constants \
+from .constants \
     import OKColor, ErrorColor
 
-from helper \
+from .helper \
     import disconnect_no_id, BufferDC
 
-from themed_control \
+from .themed_control \
     import ThemedControl
 
 

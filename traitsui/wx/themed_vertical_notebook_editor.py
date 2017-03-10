@@ -37,7 +37,7 @@ from traitsui.basic_editor_factory \
 from traitsui.ui_traits \
     import AView, ATheme
 
-from themed_vertical_notebook \
+from .themed_vertical_notebook \
     import ThemedVerticalNotebook
 
 #-------------------------------------------------------------------------

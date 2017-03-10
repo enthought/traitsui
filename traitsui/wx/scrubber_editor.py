@@ -46,13 +46,13 @@ from traitsui.wx.editor \
 from pyface.timer.api \
     import do_after
 
-from constants \
+from .constants \
     import ErrorColor
 
-from image_slice \
+from .image_slice \
     import paint_parent
 
-from helper \
+from .helper \
     import disconnect, disconnect_no_id, BufferDC
 
 #-------------------------------------------------------------------------

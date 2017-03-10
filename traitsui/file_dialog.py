@@ -721,5 +721,5 @@ def save_file(**traits):
 #-- Test Case ------------------------------------------------------------
 
 if __name__ == '__main__':
-    print save_file(extensions=[FileInfo(), TextInfo(), ImageInfo()],
-                    filter='Python file (*.py)|*.py')
+    print(save_file(extensions=[FileInfo(), TextInfo(), ImageInfo()],
+                    filter='Python file (*.py)|*.py'))

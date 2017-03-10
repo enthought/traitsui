@@ -12,6 +12,7 @@
 #  Date:   Jan 2012
 #
 #------------------------------------------------------------------------------
+from __future__ import print_function
 
 from functools import partial
 from contextlib import contextmanager
@@ -41,7 +42,7 @@ def store_exceptions_on_all_threads():
     def _print_uncaught_exception(type, value, tb):
         message = 'Uncaught exception:\n'
         message += ''.join(traceback.format_exception(type, value, tb))
-        print message
+        print(message)
 
     def excepthook(type, value, tb):
         exceptions.append(value)
@@ -184,8 +185,8 @@ def get_dialog_size(ui_control):
 def apply_on_children(func, node, _level=0):
     """Print the result of applying a function on `node` and its children.
     """
-    print '-' * _level + str(node)
-    print ' ' * _level + str(func(node)) + '\n'
+    print('-' * _level + str(node))
+    print(' ' * _level + str(func(node)) + '\n')
     for child in get_children(node):
         apply_on_children(func, child, _level + 1)
 
@@ -224,11 +225,11 @@ def wx_announce_when_destroyed(node):
     _destroy_method = node.Destroy
 
     def destroy_wrapped():
-        print 'Destroying:', node
+        print('Destroying:', node)
         #print 'Stack is'
         #traceback.print_stack()
         _destroy_method()
-        print 'Destroyed:', node
+        print('Destroyed:', node)
 
     node.Destroy = destroy_wrapped
     return 'Node {} decorated'.format(node.GetName())

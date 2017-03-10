@@ -29,11 +29,13 @@
 import wx
 import numpy
 
-from cPickle \
+from pickle \
     import load
 
 from traits.api \
     import Bool
+
+from pyface._py2to3 import str_types
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -57,7 +59,7 @@ except ImportError:
 from pyface.image_resource \
     import ImageResource
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------
@@ -73,8 +75,6 @@ object_image = ImageResource('object').create_image()
 # The image to use when the editor is disabled:
 inactive_image = ImageResource('inactive').create_image()
 
-# String types:
-string_type = (str, unicode)
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -108,9 +108,9 @@ class SimpleEditor(Editor):
         # Determine the drag/drop type:
         value = self.value
         self._is_list = isinstance(value, list)
-        self._is_file = (isinstance(value, string_type) or
+        self._is_file = (isinstance(value, str_types) or
                          (self._is_list and (len(value) > 0) and
-                          isinstance(value[0], string_type)))
+                          isinstance(value[0], str_types)))
 
         # Get the right image to use:
         image = self.factory.image
@@ -368,7 +368,7 @@ class FileDropSource(wx.DropSource):
         clipboard.drop_source = self
 
         data_object = wx.FileDataObject()
-        if isinstance(files, string_type):
+        if isinstance(files, str_types):
             files = [files]
 
         for file in files:

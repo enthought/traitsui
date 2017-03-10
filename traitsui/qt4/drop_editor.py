@@ -25,9 +25,9 @@ from pyface.qt import QtCore, QtGui, QtWidgets
 # traitsui.editors.drop_editor file.
 from traitsui.editors.drop_editor import ToolkitEditorFactory
 
-from text_editor import SimpleEditor as Editor
-from constants import DropColor
-from clipboard import PyMimeData, clipboard
+from .text_editor import SimpleEditor as Editor
+from .constants import DropColor
+from .clipboard import PyMimeData, clipboard
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

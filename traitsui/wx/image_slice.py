@@ -38,10 +38,10 @@ from traits.api \
 from pyface.image_resource \
     import ImageResource
 
-from constants \
+from .constants \
     import WindowColor
 
-from constants import is_mac
+from .constants import is_mac
 import traitsui.wx.constants
 
 #-------------------------------------------------------------------------
@@ -261,7 +261,7 @@ class ImageSlice(HasPrivateTraits):
         max_diff = 0.10 * dx
         while y < last:
             y_data = data[y]
-            for y2 in xrange(y + 1, dy):
+            for y2 in range(y + 1, dy):
                 if abs(y_data - data[y2]).sum() > max_diff:
                     break
 
@@ -278,7 +278,7 @@ class ImageSlice(HasPrivateTraits):
             else:
                 matches = [(dy / 2, 1)]
         elif n > self.stretch_rows:
-            matches.sort(lambda l, r: cmp(r[1], l[1]))
+            matches.sort(key=lambda i: i[1])
             matches = matches[: self.stretch_rows]
 
         # Calculate and save the horizontal slice sizes:
@@ -290,7 +290,7 @@ class ImageSlice(HasPrivateTraits):
         max_diff = 0.10 * dy
         while x < last:
             x_data = data[:, x]
-            for x2 in xrange(x + 1, dx):
+            for x2 in range(x + 1, dx):
                 if abs(x_data - data[:, x2]).sum() > max_diff:
                     break
 

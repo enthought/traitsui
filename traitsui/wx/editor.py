@@ -39,7 +39,7 @@ from traits.api \
 from traitsui.editor \
     import Editor as UIEditor
 
-from constants \
+from .constants \
     import WindowColor, OKColor, ErrorColor
 
 #-------------------------------------------------------------------------

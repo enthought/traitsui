@@ -28,7 +28,7 @@ from traits.trait_base \
 # subclass of the abstract ToolkitEditorFactory class
 # (in traitsui.api) with qt4-specific methods defined.
 # We need to override the implementations of the qt4-specific methods here.
-from color_editor \
+from .color_editor \
     import ToolkitEditorFactory as BaseColorToolkitEditorFactory
 
 #-------------------------------------------------------------------------

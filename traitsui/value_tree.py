@@ -31,6 +31,8 @@ from types import FunctionType, MethodType
 
 from traits.api import Any, Bool, HasPrivateTraits, HasTraits, Instance, List, Str
 
+from pyface._py2to3 import text_type
+
 from .tree_node import ObjectTreeNode, TreeNode, TreeNodeObject
 
 from .editors.tree_editor import TreeEditor
@@ -479,7 +481,7 @@ class FunctionNode(SingleValueTreeNodeObject):
     def format_value(self, value):
         """ Returns the formatted version of the value.
         """
-        return 'Function %s()' % (value.func_code.co_name)
+        return 'Function %s()' % (value.__code__.co_name)
 
 #---------------------------------------------------------------------------
 #  'MethodNode' class:
@@ -496,13 +498,13 @@ class MethodNode(MultiValueTreeNodeObject):
         """ Returns the formatted version of the value.
         """
         type = 'B'
-        if value.im_self is None:
+        if value.__self__ is None:
             type = 'Unb'
 
         return '%sound method %s.%s()' % (
             type,
-            value.im_class.__name__,
-            value.im_func.func_code.co_name)
+            value.__self__.__class__.__name__,
+            value.__func__.__code__.co_name)
 
     #-------------------------------------------------------------------------
     #  Returns whether or not the object has children:
@@ -511,7 +513,7 @@ class MethodNode(MultiValueTreeNodeObject):
     def tno_has_children(self, node):
         """ Returns whether the object has children.
         """
-        return (self.value.im_func is not None)
+        return (self.value.__func__ is not None)
 
     #-------------------------------------------------------------------------
     #  Gets the object's children:
@@ -520,7 +522,7 @@ class MethodNode(MultiValueTreeNodeObject):
     def tno_get_children(self, node):
         """ Gets the object's children.
         """
-        return [self.node_for('Object', self.value.im_self)]
+        return [self.node_for('Object', self.value.__self__)]
 
 #-------------------------------------------------------------------------
 #  'ObjectNode' class:
@@ -636,7 +638,7 @@ class TraitsNode(ObjectNode):
             names[name] = None
         for name in value.__dict__.keys():
             names[name] = None
-        return names.keys()
+        return list(names.keys())
 
     #-------------------------------------------------------------------------
     #  Sets up/Tears down a listener for 'children replaced' on a specified
@@ -707,7 +709,7 @@ def basic_types():
         _basic_types = [
             (type(None), NoneNode),
             (str, StringNode),
-            (unicode, StringNode),
+            (text_type, StringNode),
             (bool, BoolNode),
             (int, IntNode),
             (float, FloatNode),

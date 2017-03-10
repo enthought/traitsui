@@ -17,6 +17,8 @@
 
 from pyface.qt import QtCore, QtWidgets
 
+from pyface._py2to3 import str_types
+
 from traits.api \
     import HasStrictTraits, HasPrivateTraits, Instance, List, Event
 
@@ -26,13 +28,13 @@ from traitsui.api \
 from traitsui.menu \
     import Action
 
-from constants \
+from .constants \
     import DefaultTitle
 
-from editor \
+from .editor \
     import Editor
 
-from helper \
+from .helper \
     import restore_window, save_window
 
 
@@ -186,7 +188,7 @@ class BasePanel(object):
     def is_button(self, action, name):
         """ Returns whether a specified action button is a system button.
         """
-        if isinstance(action, basestring):
+        if isinstance(action, str_types):
             return (action == name)
         return (action.name == name)
 
@@ -197,7 +199,7 @@ class BasePanel(object):
     def coerce_button(self, action):
         """ Coerces a string to an Action if necessary.
         """
-        if isinstance(action, basestring):
+        if isinstance(action, str_types):
             return Action(name=action,
                           action='?'[(not action in SystemButtons):])
         return action
@@ -431,7 +433,7 @@ class BaseDialog(BasePanel):
     """Base class for Traits UI dialog boxes."""
 
     # The different dialog styles.
-    NONMODAL, MODAL, POPUP = range(3)
+    NONMODAL, MODAL, POPUP = list(range(3))
 
     def init(self, ui, parent, style):
         """Initialise the dialog by creating the controls."""

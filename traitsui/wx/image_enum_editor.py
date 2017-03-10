@@ -33,16 +33,16 @@ from traits.api \
 from traitsui.editors.image_enum_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from helper \
+from .helper \
     import bitmap_cache, position_window, TraitsUIPanel
 
-from constants \
+from .constants \
     import WindowColor
 
-from image_control \
+from .image_control \
     import ImageControl
 
 #-------------------------------------------------------------------------

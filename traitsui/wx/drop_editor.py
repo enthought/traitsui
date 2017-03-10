@@ -34,10 +34,10 @@ from traitsui.editors.drop_editor \
 from pyface.wx.drag_and_drop \
     import PythonDropTarget, clipboard
 
-from text_editor \
+from .text_editor \
     import SimpleEditor as Editor
 
-from constants \
+from .constants \
     import DropColor
 
 #-------------------------------------------------------------------------

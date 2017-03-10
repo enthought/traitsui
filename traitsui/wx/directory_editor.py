@@ -33,7 +33,7 @@ from os.path \
 from traitsui.editors.directory_editor \
     import ToolkitEditorFactory
 
-from file_editor \
+from .file_editor \
     import SimpleEditor as SimpleFileEditor, \
     CustomEditor as CustomFileEditor, \
     PopupFile

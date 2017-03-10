@@ -19,7 +19,7 @@
 from traitsui.ui_editors.array_view_editor \
     import _ArrayViewEditor as BaseArrayViewEditor
 
-from ui_editor import UIEditor
+from .ui_editor import UIEditor
 
 #-------------------------------------------------------------------------
 #  '_ArrayViewEditor' class:

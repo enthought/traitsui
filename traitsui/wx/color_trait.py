@@ -178,7 +178,7 @@ for name in ['aquamarine', 'black', 'blue', 'blue violet', 'brown',
 
 
 def get_color_editor(*args, **traits):
-    from color_editor import ToolkitEditorFactory
+    from .color_editor import ToolkitEditorFactory
     return ToolkitEditorFactory(*args, **traits)
 
 

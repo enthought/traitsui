@@ -23,10 +23,12 @@ from pyface.qt import QtCore, QtWidgets
 from traits.api \
     import TraitError
 
+from pyface._py2to3 import text_type
+
 from traitsui.editor_factory \
     import EditorFactory as BaseEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------
@@ -108,7 +110,7 @@ class TextEditor(Editor):
         """ Handles the user changing the contents of the edit control.
         """
         try:
-            self.value = unicode(self.control.text())
+            self.value = text_type(self.control.text())
         except TraitError as excp:
             pass
 

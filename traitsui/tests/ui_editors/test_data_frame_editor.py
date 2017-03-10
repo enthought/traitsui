@@ -13,7 +13,7 @@ from numpy.testing import assert_array_equal
 try:
     from pandas import DataFrame
 except ImportError as exc:
-    print "Can't import Pandas: skipping"
+    print("Can't import Pandas: skipping")
     raise nose.SkipTest
 
 from traits.api import Event, HasTraits, Instance
@@ -67,7 +67,7 @@ def sample_data():
 
 
 def sample_data_numerical_index():
-    df = DataFrame(DATA, index=range(1,5), columns=['X', 'Y', 'Z'])
+    df = DataFrame(DATA, index=list(range(1,5)), columns=['X', 'Y', 'Z'])
     viewer = DataFrameViewer(data=df)
     return viewer
 

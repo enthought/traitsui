@@ -30,6 +30,8 @@ from traits.api import (Bool, Delegate, Float, Instance, List, Property, Range,
 
 import traits._py2to3 as _py2to3
 
+from pyface._py2to3 import str_types
+
 from .view_element import ViewSubElement
 
 from .item import Item
@@ -211,7 +213,7 @@ class Group(ViewSubElement):
 
         # Process any embedded Group options first:
         for value in values:
-            if (isinstance(value, basestring)) and (value[0:1] in '-|'):
+            if (isinstance(value, str_types)) and (value[0:1] in '-|'):
                 # Parse Group trait options if specified as a string:
                 self._parse(value)
 
@@ -222,7 +224,7 @@ class Group(ViewSubElement):
             elif type(value) in SequenceTypes:
                 # Map (...) or [...] to a Group():
                 content.append(Group(*value))
-            elif isinstance(value, basestring):
+            elif isinstance(value, str_types):
                 if value[0:1] in '-|':
                     # We've already parsed Group trait options above:
                     pass

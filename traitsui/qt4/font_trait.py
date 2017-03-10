@@ -22,6 +22,8 @@ from pyface.qt import QtGui, QtWidgets
 from traits.api \
     import Trait, TraitHandler, TraitError
 
+from pyface._py2to3 import text_type
+
 #-------------------------------------------------------------------------
 #  Convert a string into a valid QFont object (if possible):
 #-------------------------------------------------------------------------
@@ -67,7 +69,7 @@ def font_to_str(font):
     if font.underline():
         underline = ' underline'
     return '%s point %s%s%s%s' % (
-           font.pointSize(), unicode(font.family()), style, weight, underline)
+           font.pointSize(), text_type(font.family()), style, weight, underline)
 
 #-------------------------------------------------------------------------
 #  Create a TraitFont object from a string description:

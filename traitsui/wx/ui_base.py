@@ -28,13 +28,15 @@ import wx
 from traits.api \
     import HasStrictTraits, HasPrivateTraits, Instance, List, Event
 
+from pyface._py2to3 import str_types
+
 from traitsui.api \
     import UI
 
 from traitsui.menu \
     import Action
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------
@@ -322,7 +324,7 @@ class BaseDialog(object):
     def is_button(self, action, name):
         """ Returns whether a specified action button is a system button.
         """
-        if isinstance(action, basestring):
+        if isinstance(action, str_types):
             return (action == name)
         return (action.name == name)
 
@@ -333,7 +335,7 @@ class BaseDialog(object):
     def coerce_button(self, action):
         """ Coerces a string to an Action if necessary.
         """
-        if isinstance(action, basestring):
+        if isinstance(action, str_types):
             return Action(name=action,
                           action='?'[(not action in SystemButtons):])
         return action

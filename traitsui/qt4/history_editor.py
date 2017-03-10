@@ -25,7 +25,9 @@
 
 from pyface.qt import QtWidgets
 
-from editor import Editor
+from pyface._py2to3 import text_type, xrange
+
+from .editor import Editor
 
 #-------------------------------------------------------------------------
 #  '_HistoryEditor' class:
@@ -64,7 +66,7 @@ class _HistoryEditor(Editor):
         """ Handles the user entering input data in the edit control.
         """
         if not self._no_update:
-            self.value = unicode(text)
+            self.value = text_type(text)
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

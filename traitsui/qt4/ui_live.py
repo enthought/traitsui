@@ -23,10 +23,10 @@ from traitsui.undo \
 from traitsui.menu \
     import UndoButton, RevertButton, OKButton, CancelButton, HelpButton
 
-from ui_base \
+from .ui_base \
     import BaseDialog
 
-from ui_panel \
+from .ui_panel \
     import panel
 
 

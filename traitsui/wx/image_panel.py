@@ -27,7 +27,7 @@ import wx
 from traits.api \
     import Str, Property, Instance, Bool, cached_property
 
-from themed_window \
+from .themed_window \
     import ThemedWindow
 
 #-------------------------------------------------------------------------

@@ -22,7 +22,8 @@ import os.path
 
 from pyface.qt import QtCore, QtGui, QtWidgets
 from pyface.ui_traits import convert_image
-from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
+from traits.api import Enum
+from pyface._py2to3 import str_types
 
 
 #-------------------------------------------------------------------------
@@ -179,7 +180,7 @@ class IconButton(QtWidgets.QPushButton):
         # Get the minimum icon size to use.
         ico_sz = sty.pixelMetric(QtWidgets.QStyle.PM_ButtonIconSize)
 
-        if isinstance(icon, basestring):
+        if isinstance(icon, str_types):
             pm = pixmap_cache(icon)
 
             # Increase the icon size to accomodate the image if needed.

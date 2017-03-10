@@ -29,10 +29,10 @@ from traits.api \
 from pyface.timer.api \
     import do_later
 
-from editor \
+from .editor \
     import Editor
 
-from history_control \
+from .history_control \
     import HistoryControl
 
 #-------------------------------------------------------------------------

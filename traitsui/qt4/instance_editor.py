@@ -23,6 +23,8 @@ from pyface.qt import QtWidgets
 from traits.api \
     import HasTraits, Instance, Property
 
+from pyface._py2to3 import text_type
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.instance_editor file.
@@ -41,13 +43,13 @@ from traitsui.handler \
 from traitsui.instance_choice \
     import InstanceChoiceItem
 
-from editor \
+from .editor \
     import Editor
 
-from constants \
+from .constants \
     import DropColor
 
-from helper \
+from .helper \
     import position_window
 
 #-------------------------------------------------------------------------
@@ -288,7 +290,7 @@ class CustomEditor(Editor):
     def update_object(self, text):
         """ Handles the user selecting a new value from the combo box.
         """
-        name = unicode(text)
+        name = text_type(text)
         for item in self.items:
             if name == item.get_name():
                 id_item = id(item)

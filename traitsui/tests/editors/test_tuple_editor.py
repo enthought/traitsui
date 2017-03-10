@@ -7,8 +7,6 @@ Created on Fri Sep 20 13:17:20 2013
 
 from __future__ import division, print_function, unicode_literals, absolute_import
 
-from contextlib import contextmanager
-
 from traits.has_traits import HasTraits
 from traits.trait_types import Int, Tuple
 from traitsui.item import Item

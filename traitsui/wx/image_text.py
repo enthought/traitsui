@@ -24,10 +24,10 @@
 
 import wx
 
-from image_slice \
+from .image_slice \
     import paint_parent
 
-from helper \
+from .helper \
     import BufferDC
 
 #-------------------------------------------------------------------------

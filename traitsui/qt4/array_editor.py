@@ -27,7 +27,7 @@
 from traitsui.editors.array_editor \
     import SimpleEditor as BaseSimpleEditor, ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------

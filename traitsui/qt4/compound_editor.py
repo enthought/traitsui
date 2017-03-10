@@ -29,7 +29,7 @@ from traits.api \
 from traitsui.editors.compound_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------

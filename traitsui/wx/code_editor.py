@@ -32,6 +32,8 @@ from traits.api \
 from traits.trait_base \
     import SequenceTypes
 
+from pyface._py2to3 import xrange
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.code_editor file.
@@ -44,10 +46,10 @@ from pyface.api \
 from pyface.util.python_stc \
     import faces
 
-from editor \
+from .editor \
     import Editor
 
-from constants \
+from .constants \
     import OKColor, ErrorColor
 
 #-------------------------------------------------------------------------

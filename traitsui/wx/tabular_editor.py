@@ -31,6 +31,8 @@ from traits.api \
     List, Bool, Instance, Any, Event, \
     Property, TraitListEvent
 
+from pyface._py2to3 import str_types, xrange
+
 # FIXME: TabularEditor (the editor factory for tabular editors) is a proxy class
 # defined here just for backward compatibility. The class has been moved to the
 # traitsui.editors.tabular_editor file.
@@ -52,7 +54,7 @@ from pyface.image_resource \
 from pyface.timer.api \
     import do_later
 
-from constants \
+from .constants \
     import is_mac, scrollbar_dx
 
 try:
@@ -983,7 +985,7 @@ class TabularEditor(Editor):
     def _get_image(self, image):
         """ Converts a user specified image to a wx.ListCtrl image index.
         """
-        if isinstance(image, basestring):
+        if isinstance(image, str_types):
             self.image = image
             image = self.image
 

@@ -183,7 +183,7 @@ if __name__ == "__main__":
     import sys
 
     def echo(value):
-        print value
+        print(value)
     app = QtWidgets.QApplication(sys.argv)
     slider = RangeSlider()
     slider.setMinimum(0)

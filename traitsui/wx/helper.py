@@ -37,16 +37,18 @@ from traits.api \
     import HasPrivateTraits, Enum, CTrait, Instance, Any, Int, \
     Event, Bool, BaseTraitHandler, TraitError
 
+from pyface._py2to3 import text_type
+
 from traitsui.ui_traits \
     import convert_image, SequenceTypes
 
 from pyface.timer.api \
     import do_later
 
-from constants \
+from .constants \
     import standard_bitmap_width, screen_dx, screen_dy
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------
@@ -284,7 +286,7 @@ def enum_values_changed(values):
     """
 
     if isinstance(values, dict):
-        data = [(unicode(v), n) for n, v in values.items()]
+        data = [(text_type(v), n) for n, v in values.items()]
         if len(data) > 0:
             data.sort(key=itemgetter(0))
             col = data[0][0].find(':') + 1
@@ -297,12 +299,12 @@ def enum_values_changed(values):
         if not isinstance(handler, BaseTraitHandler):
             raise TraitError("Invalid value for 'values' specified")
         if handler.is_mapped:
-            data = [(unicode(n), n) for n in handler.map.keys()]
+            data = [(text_type(n), n) for n in handler.map.keys()]
             data.sort(key=itemgetter(0))
         else:
-            data = [(unicode(v), v) for v in handler.values]
+            data = [(text_type(v), v) for v in handler.values]
     else:
-        data = [(unicode(v), v) for v in values]
+        data = [(text_type(v), v) for v in values]
 
     names = [x[0] for x in data]
     mapping = {}

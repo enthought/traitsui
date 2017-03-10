@@ -49,6 +49,7 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 import re
 
 from pyface.qt import QtWidgets
+from pyface._py2to3 import str_types, text_type
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -228,7 +229,7 @@ class MakeMenu:
     def get_action(self, name):
         """ Returns the QAction associated with a specified name.
         """
-        if isinstance(name, basestring):
+        if isinstance(name, str_types):
             return self.names[name]
 
         return name
@@ -271,7 +272,7 @@ class MakeMenu:
         act = self.get_action(name)
 
         if label is None:
-            return unicode(act.text())
+            return text_type(act.text())
 
         act.setText(label)
 
@@ -326,4 +327,4 @@ def option_check(test, string):
 
 
 def null_handler(event):
-    print 'null_handler invoked'
+    print('null_handler invoked')

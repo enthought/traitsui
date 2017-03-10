@@ -19,6 +19,7 @@
 from __future__ import absolute_import
 
 from pyface.qt import QtCore, QtGui, QtWidgets
+from pyface._py2to3 import str_types
 from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
 from pyface.ui_traits import Image
@@ -520,7 +521,7 @@ class TableEditor(Editor, BaseTableEditor):
         f = self.filter
         if f is None:
             self._filtered_cache = None
-            self.filtered_indices = range(num_items)
+            self.filtered_indices = list(range(num_items))
             self.filter_summary = 'All %i items' % num_items
         else:
             if not callable(f):
@@ -542,7 +543,7 @@ class TableEditor(Editor, BaseTableEditor):
     def _get_image(self, image):
         """ Converts a user specified image to a QIcon.
         """
-        if isinstance(image, basestring):
+        if isinstance(image, str_types):
             self.image = image
             image = self.image
 
@@ -1056,7 +1057,7 @@ class TableView(QtWidgets.QTableView):
 
         # Compute sizes for columns with absolute or no size requests
         proportional = []
-        for column_index in xrange(len(editor.columns)):
+        for column_index in range(len(editor.columns)):
             column = editor.columns[column_index]
             requested_width = column.get_width()
             if column.resize_mode in ("interactive", "stretch") \

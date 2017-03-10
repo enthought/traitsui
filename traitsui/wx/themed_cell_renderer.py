@@ -31,7 +31,7 @@ from wx.grid \
 from traitsui.ui_traits \
     import convert_bitmap
 
-from helper \
+from .helper \
     import BufferDC
 
 #-------------------------------------------------------------------------

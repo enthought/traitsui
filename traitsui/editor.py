@@ -42,6 +42,8 @@ from traits.api import (
 
 from traits.trait_base import not_none
 
+from pyface._py2to3 import str_types, text_type
+
 from .editor_factory import EditorFactory
 
 from .context_value import ContextValue
@@ -307,7 +309,7 @@ class Editor(HasPrivateTraits):
         if format_func is not None:
             return format_func(value)
 
-        return unicode(value)
+        return text_type(value)
 
     #-------------------------------------------------------------------------
     #  Returns the text representation of the object trait:
@@ -326,7 +328,7 @@ class Editor(HasPrivateTraits):
         """ Returns the text representation of a specified value.
         """
         # In Unicode!
-        return unicode(value)
+        return text_type(value)
 
     #-------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:

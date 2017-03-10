@@ -21,13 +21,14 @@
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
+from __future__ import print_function
 
 import datetime
 
 from pyface.qt import QtCore, QtWidgets
 
-from editor import Editor
-from editor_factory import ReadonlyEditor as BaseReadonlyEditor
+from .editor import Editor
+from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -104,7 +105,7 @@ class SimpleEditor(Editor):
         try:
             self.value = datetime.date(year, month, day)
         except ValueError:
-            print 'Invalid date:', year, month, day
+            print('Invalid date:', year, month, day)
             raise
 
 #-------------------------------------------------------------------------
@@ -158,7 +159,7 @@ class CustomEditor(Editor):
         try:
             self.value = datetime.date(year, month, day)
         except ValueError:
-            print 'Invalid date:', year, month, day
+            print('Invalid date:', year, month, day)
             raise
 
 #------------------------------------------------------------------------------

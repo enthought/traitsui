@@ -27,6 +27,8 @@ from __future__ import absolute_import
 from traits.api import (Any, Bool, Color, Enum, Event, HasPrivateTraits, Int,
                         Interface, List, Str, on_trait_change, provides)
 
+from pyface._py2to3 import str_types, text_type
+
 #-------------------------------------------------------------------------
 #  'IListStrAdapter' interface:
 #-------------------------------------------------------------------------
@@ -260,10 +262,10 @@ class ListStrAdapter(HasPrivateTraits):
         return self.can_edit
 
     def _get_drag(self):
-        return unicode(self.item)
+        return text_type(self.item)
 
     def _get_can_drop(self):
-        return isinstance(self.value, basestring)
+        return isinstance(self.value, str_types)
 
     def _get_dropped(self):
         return self.dropped
@@ -287,7 +289,7 @@ class ListStrAdapter(HasPrivateTraits):
         return self.item
 
     def _get_text(self):
-        return unicode(self.item)
+        return text_type(self.item)
 
     #-- Private Methods ------------------------------------------------------
 

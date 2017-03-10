@@ -46,6 +46,8 @@ from traits.api import (
 
 from traits.trait_base import user_name_for, xgetattr
 
+from pyface._py2to3 import text_type
+
 from .editor_factory import EditorFactory
 from .menu import Menu
 from .ui_traits import Image, AView, EditorStyle
@@ -886,7 +888,7 @@ class ListColumn(TableColumn):
     def get_value(self, object):
         """ Gets the value of the column for a specified object.
         """
-        return unicode(object[self.index])
+        return text_type(object[self.index])
 
     #-------------------------------------------------------------------------
     #  Sets the value of the column for a specified object:

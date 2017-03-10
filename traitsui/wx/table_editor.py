@@ -30,6 +30,8 @@ from traits.api \
     import Int, List, Instance, Str, Any, Button, Tuple, \
     HasPrivateTraits, Bool, Event, Property
 
+from pyface._py2to3 import xrange
+
 from traitsui.api \
     import View, Item, UI, InstanceEditor, EnumEditor, Handler, SetEditor, \
     ListUndoItem
@@ -61,13 +63,13 @@ from pyface.image_resource \
 from pyface.timer.api \
     import do_later
 
-from editor \
+from .editor \
     import Editor
 
-from table_model \
+from .table_model \
     import TableModel, TraitGridSelection
 
-from helper import TraitsUIPanel
+from .helper import TraitsUIPanel
 from functools import reduce
 
 #-------------------------------------------------------------------------
@@ -756,7 +758,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the row items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for row in xrange(row0, row1 + 1):
                 if row < rows:
                     values.append((rio(row), gfi(row)))
@@ -793,7 +795,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the row items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for row in xrange(row0, row1 + 1):
                 if row < rows:
                     values.append((rio(row), gfi(row)))
@@ -823,7 +825,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for col in xrange(col0, col1 + 1):
                 values.append((col, cols[col].name))
 
@@ -852,7 +854,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for col in xrange(col0, col1 + 1):
                 values.append((col, cols[col].name))
 
@@ -883,7 +885,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for row in xrange(row0, row1 + 1):
                 item = gfi(row)
                 for col in xrange(col0, col1 + 1):
@@ -920,7 +922,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for row in xrange(row0, row1 + 1):
                 item = gfi(row)
                 for col in xrange(col0, col1 + 1):

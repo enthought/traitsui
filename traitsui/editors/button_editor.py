@@ -24,6 +24,7 @@
 
 from __future__ import absolute_import
 
+from pyface._py2to3 import str_types
 from pyface.ui_traits import Image
 from traits.api import Str, Range, Enum, Property, Trait
 
@@ -92,7 +93,7 @@ class ToolkitEditorFactory(EditorFactory):
 
     def _set_value(self, value):
         self._value = value
-        if isinstance(value, basestring):
+        if isinstance(value, str_types):
             try:
                 self._value = int(value)
             except:

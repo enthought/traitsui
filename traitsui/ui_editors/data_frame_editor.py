@@ -11,6 +11,8 @@ from __future__ import absolute_import
 from traits.api import (Bool, Dict, Either, Enum, Font, Instance, List,
                         Property, Str)
 
+from pyface._py2to3 import str_types
+
 from traitsui.basic_editor_factory import BasicEditorFactory
 from traitsui.editors.tabular_editor import TabularEditor
 from traitsui.item import Item
@@ -73,7 +75,7 @@ class DataFrameAdapter(TabularAdapter):
             return self._fonts.get(self.column_id, 'Courier 10')
 
     def _get_format(self):
-        if isinstance(self._formats, basestring):
+        if isinstance(self._formats, str_types):
             return self._formats
         else:
             return self._formats.get(self.column_id, '%s')
@@ -207,7 +209,7 @@ class _DataFrameEditor(UIEditor):
         if (factory.columns != []):
             columns = []
             for column in factory.columns:
-                if isinstance(column, basestring):
+                if isinstance(column, str_types):
                     title = column
                     column_id = column
                 else:

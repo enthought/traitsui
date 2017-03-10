@@ -26,6 +26,8 @@ from __future__ import absolute_import
 from traits.api import (CTrait, Property, Range, Enum, Str, Int, Any, Unicode,
                         Bool, Undefined)
 
+from pyface._py2to3 import str_types, text_type
+
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
 # to avoid circular imports, as this EditorFactory will be part of
 # traits.ui.api as well.
@@ -155,8 +157,8 @@ class ToolkitEditorFactory(EditorFactory):
         if self.is_float is Undefined:
             self.is_float = isinstance(low, float)
 
-        if (self.low_label == '') or (self.low_label == unicode(old_low)):
-            self.low_label = unicode(low)
+        if (self.low_label == '') or (self.low_label == text_type(old_low)):
+            self.low_label = text_type(low)
 
     def _get_high(self):
         return self._high
@@ -167,11 +169,11 @@ class ToolkitEditorFactory(EditorFactory):
         if self.is_float is Undefined:
             self.is_float = isinstance(high, float)
 
-        if (self.high_label == '') or (self.high_label == unicode(old_high)):
-            self.high_label = unicode(high)
+        if (self.high_label == '') or (self.high_label == text_type(old_high)):
+            self.high_label = text_type(high)
 
     def _cast(self, value):
-        if not isinstance(value, basestring):
+        if not isinstance(value, str_types):
             return value
 
         try:

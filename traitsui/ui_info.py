@@ -55,7 +55,7 @@ class UIInfo(HasPrivateTraits):
         """ Binds all of the associated context objects as traits of the
             object.
         """
-        for name, value in self.ui.context.items():
+        for name, value in list(self.ui.context.items()):
             self.bind(name, value)
 
     #-------------------------------------------------------------------------

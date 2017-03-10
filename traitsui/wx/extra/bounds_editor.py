@@ -1,6 +1,7 @@
 import wx
 
 from traits.api import Float, Any, Str, Trait
+from pyface._py2to3 import text_type
 from traitsui.editors.api import RangeEditor
 from traitsui.wx.editor import Editor
 from traitsui.wx.helper import TraitsUIPanel, Slider
@@ -102,7 +103,7 @@ class _BoundsEditor(Editor):
             event.Skip()
         try:
             try:
-                low = eval(unicode(self._label_lo.GetValue()).strip())
+                low = eval(text_type(self._label_lo.GetValue()).strip())
                 if self.evaluate is not None:
                     low = self.evaluate(low)
             except Exception as ex:
@@ -126,7 +127,7 @@ class _BoundsEditor(Editor):
             event.Skip()
         try:
             try:
-                high = eval(unicode(self._label_hi.GetValue()).strip())
+                high = eval(text_type(self._label_hi.GetValue()).strip())
                 if self.evaluate is not None:
                     high = self.evaluate(high)
             except:

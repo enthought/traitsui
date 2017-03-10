@@ -21,15 +21,17 @@ from __future__ import division
 
 from pyface.qt import QtCore, QtGui, QtWidgets
 
+from pyface._py2to3 import text_type
+
 from traitsui.editors.color_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
 
-from editor_factory \
+from .editor_factory \
     import SimpleEditor as BaseSimpleEditor, \
     TextEditor as BaseTextEditor, \
     ReadonlyEditor as BaseReadonlyEditor
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------
@@ -117,7 +119,7 @@ class SimpleColorEditor(BaseSimpleEditor):
         color = QtWidgets.QColorDialog.getColor(
             color,
             self.control,
-            u'Select Color',
+            'Select Color',
             options,
         )
 
@@ -224,7 +226,7 @@ class TextColorEditor(BaseTextEditor):
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
-        self.value = unicode(self.control.text())
+        self.value = text_type(self.control.text())
         set_color(self)
 
     #-------------------------------------------------------------------------
@@ -380,7 +382,7 @@ def color_editor_for(editor, parent):
 
             i += 1
 
-    mapper.mapped[unicode].connect(editor.update_object_from_swatch)
+    mapper.mapped[text_type].connect(editor.update_object_from_swatch)
 
     panel.addLayout(grid)
 

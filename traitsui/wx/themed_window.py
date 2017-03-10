@@ -30,7 +30,7 @@ from traits.api \
 from traitsui.ui_traits \
     import ATheme
 
-from helper \
+from .helper \
     import init_wx_handlers, BufferDC
 
 #-------------------------------------------------------------------------
@@ -116,7 +116,7 @@ class ThemedWindow(HasPrivateTraits):
             associated ImageSlice object and returns the image slice used (if
             any).
         """
-        from image_slice import paint_parent
+        from .image_slice import paint_parent
 
         # Repaint the parent's theme (if necessary):
         paint_parent(dc, self.control)

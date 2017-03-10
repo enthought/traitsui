@@ -28,7 +28,7 @@
 from traitsui.editors.shell_editor \
     import _ShellEditor as BaseShellEditor, ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------

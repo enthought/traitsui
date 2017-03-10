@@ -25,7 +25,7 @@ from traits.api \
 from traitsui.api \
     import Editor as UIEditor
 
-from constants \
+from .constants \
     import OKColor, ErrorColor
 
 #-------------------------------------------------------------------------

@@ -203,7 +203,7 @@ class ImageEnumComboBox(QtWidgets.QComboBox):
             # Unless we force it, the popup for a combo box will not be wider
             # than the box itself, so we set a high minimum width.
             width = 0
-            for col in xrange(self._editor.factory.cols):
+            for col in range(self._editor.factory.cols):
                 width += view.sizeHintForColumn(col)
             view.setMinimumWidth(width)
         else:

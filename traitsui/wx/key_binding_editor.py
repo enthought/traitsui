@@ -38,10 +38,10 @@ from traitsui.editors.key_binding_editor \
 from pyface.wx.dialog \
     import confirmation
 
-from editor \
+from .editor \
     import Editor
 
-from key_event_to_name \
+from .key_event_to_name \
     import key_event_to_name
 
 #-------------------------------------------------------------------------

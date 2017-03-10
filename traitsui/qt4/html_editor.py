@@ -27,7 +27,7 @@ from pyface.qt import QtCore, QtWidgets, QtWebKitWidgets
 
 from traits.api import Str
 
-from editor import Editor
+from .editor import Editor
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

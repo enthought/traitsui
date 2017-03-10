@@ -33,13 +33,13 @@ from traits.api \
 from traitsui.editors.text_editor \
     import ToolkitEditorFactory, evaluate_trait
 
-from editor \
+from .editor \
     import Editor
 
-from editor_factory \
+from .editor_factory \
     import ReadonlyEditor as BaseReadonlyEditor
 
-from constants \
+from .constants \
     import OKColor
 
 #-------------------------------------------------------------------------

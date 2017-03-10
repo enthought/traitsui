@@ -27,7 +27,7 @@ from traits.api import Unicode, List, Str, on_trait_change
 from traitsui.editors.button_editor \
     import ToolkitEditorFactory
 
-from editor import Editor
+from .editor import Editor
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

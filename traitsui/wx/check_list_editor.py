@@ -30,19 +30,21 @@ import wx
 from traits.api \
     import List, Str, TraitError
 
+from pyface._py2to3 import str_types
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.check_list_editor file.
 from traitsui.editors.check_list_editor \
     import ToolkitEditorFactory
 
-from editor_factory \
+from .editor_factory \
     import TextEditor as BaseTextEditor
 
-from editor \
+from .editor \
     import EditorWithList
 
-from helper \
+from .helper \
     import TraitsUIPanel
 from functools import reduce
 
@@ -103,7 +105,7 @@ class SimpleEditor(EditorWithList):
         """ Handles updates to the list of legal checklist values.
         """
         sv = self.string_value
-        if (len(values) > 0) and isinstance(values[0], basestring):
+        if (len(values) > 0) and isinstance(values[0], str_types):
             values = [(x, sv(x, capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
@@ -120,7 +122,7 @@ class SimpleEditor(EditorWithList):
                     logger.warn('Unable to remove non-current value [%s] from '
                                 'values %s', cur_value[i], values)
         if modified:
-            if isinstance(self.value, basestring):
+            if isinstance(self.value, str_types):
                 cur_value = ','.join(cur_value)
             self.value = cur_value
 
@@ -266,7 +268,7 @@ class CustomEditor(SimpleEditor):
             cur_value.append(control.value)
         else:
             cur_value.remove(control.value)
-        if isinstance(self.value, basestring):
+        if isinstance(self.value, str_types):
             cur_value = ','.join(cur_value)
         self.value = cur_value
 

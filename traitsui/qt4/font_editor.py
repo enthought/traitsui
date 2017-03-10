@@ -20,15 +20,17 @@
 
 from pyface.qt import QtGui, QtWidgets
 
+from pyface._py2to3 import text_type
+
 from traitsui.editors.font_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
 
-from editor_factory \
+from .editor_factory \
     import SimpleEditor as BaseSimpleEditor, \
     TextEditor as BaseTextEditor, \
     ReadonlyEditor as BaseReadonlyEditor
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------
@@ -184,7 +186,7 @@ class CustomFontEditor(Editor):
     def update_object(self):
         """ Handles the user changing the contents of the font text control.
         """
-        self.value = unicode(self._font.text())
+        self.value = text_type(self._font.text())
         self._set_font(self.factory.to_qt4_font(self))
         self.update_editor()
 
@@ -273,7 +275,7 @@ class TextFontEditor(BaseTextEditor):
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
-        self.value = unicode(self.control.text())
+        self.value = text_type(self.control.text())
 
     #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

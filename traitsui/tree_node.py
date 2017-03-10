@@ -43,6 +43,8 @@ from traits.api import (
 
 from traits.trait_base import SequenceTypes, get_resource_path, xgetattr, xsetattr
 
+from pyface._py2to3 import str_types
+
 from .ui_traits import AView
 
 #-------------------------------------------------------------------------
@@ -452,13 +454,13 @@ class TreeNode(HasPrivateTraits):
 
     def get_background(self, object):
         background = self.background
-        if isinstance(background, basestring):
+        if isinstance(background, str_types):
             background = getattr(object, background, background)
         return background
 
     def get_foreground(self, object):
         foreground = self.foreground
-        if isinstance(foreground, basestring):
+        if isinstance(foreground, str_types):
             foreground = getattr(object, foreground, foreground)
         return foreground
 

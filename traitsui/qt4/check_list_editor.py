@@ -27,16 +27,18 @@ from pyface.qt import QtCore, QtWidgets
 from traits.api \
     import List, Unicode, TraitError
 
+from pyface._py2to3 import str_types, text_type
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.check_list_editor file.
 from traitsui.editors.check_list_editor \
     import ToolkitEditorFactory
 
-from editor_factory \
+from .editor_factory \
     import TextEditor as BaseTextEditor
 
-from editor \
+from .editor \
     import EditorWithList
 
 logger = logging.getLogger(__name__)
@@ -94,7 +96,7 @@ class SimpleEditor(EditorWithList):
         """ Handles updates to the list of legal checklist values.
         """
         sv = self.string_value
-        if (len(values) > 0) and isinstance(values[0], basestring):
+        if (len(values) > 0) and isinstance(values[0], str_types):
             values = [(x, sv(x, capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
@@ -111,7 +113,7 @@ class SimpleEditor(EditorWithList):
                     logger.warn('Unable to remove non-current value [%s] from '
                                 'values %s', cur_value[i], values)
         if modified:
-            if isinstance(self.value, basestring):
+            if isinstance(self.value, str_types):
                 cur_value = ','.join(cur_value)
             self.value = cur_value
 
@@ -137,8 +139,8 @@ class SimpleEditor(EditorWithList):
     def update_object(self, text):
         """ Handles the user selecting a new value from the combo box.
         """
-        value = self.values[self.names.index(unicode(text))]
-        if not isinstance(self.value, basestring):
+        value = self.values[self.names.index(text_type(text))]
+        if not isinstance(self.value, str_types):
             value = [value]
         self.value = value
 
@@ -240,7 +242,7 @@ class CustomEditor(SimpleEditor):
         elif cb.value in cur_value:
             cur_value.remove(cb.value)
 
-        if isinstance(self.value, basestring):
+        if isinstance(self.value, str_types):
             cur_value = ','.join(cur_value)
 
         self.value = cur_value
@@ -277,7 +279,7 @@ class TextEditor(BaseTextEditor):
         """ Handles the user changing the contents of the edit control.
         """
         try:
-            value = unicode(self.control.text())
+            value = text_type(self.control.text())
             value = eval(value)
         except:
             pass
@@ -296,6 +298,6 @@ def parse_value(value):
     """
     if value is None:
         return []
-    if not isinstance(value, basestring):
+    if not isinstance(value, str_types):
         return value[:]
     return [x.strip() for x in value.split(',')]

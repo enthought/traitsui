@@ -19,13 +19,15 @@
 
 from pyface.qt import QtWidgets
 
+from pyface._py2to3 import text_type
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.custom_editor file.
 from traitsui.editors.directory_editor \
     import ToolkitEditorFactory
 
-from file_editor \
+from .file_editor \
     import SimpleEditor as SimpleFileEditor, \
     CustomEditor as CustomFileEditor
 
@@ -71,4 +73,4 @@ class CustomEditor(CustomFileEditor):
         """ Handles the user changing the contents of the edit control.
         """
         if self._model.isDir(idx):
-            self.value = unicode(self._model.filePath(idx))
+            self.value = text_type(self._model.filePath(idx))

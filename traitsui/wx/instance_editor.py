@@ -46,13 +46,13 @@ from traitsui.handler \
 from traitsui.instance_choice \
     import InstanceChoiceItem
 
-from editor \
+from .editor \
     import Editor
 
-from constants \
+from .constants \
     import DropColor, is_wx26
 
-from helper \
+from .helper \
     import TraitsUIPanel, position_window
 
 from pyface.wx.drag_and_drop \

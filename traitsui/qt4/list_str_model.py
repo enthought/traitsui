@@ -25,6 +25,7 @@
 from traits.util.api import deprecated
 
 from pyface.qt import QtCore, QtGui
+from pyface._py2to3 import xrange
 
 from traitsui.ui_traits import SequenceTypes
 
@@ -294,8 +295,8 @@ class ListStrModel(QtCore.QAbstractListModel):
         # Update the selection for the new location.
         if editor.factory.multi_select:
             editor.setx(multi_selected=objects)
-            editor.multi_selected_indices = range(
-                new_row, new_row + len(objects))
+            editor.multi_selected_indices = list(xrange(
+                new_row, new_row + len(objects)))
         else:
             editor.setx(selected=objects[0])
             editor.selected_index = new_row

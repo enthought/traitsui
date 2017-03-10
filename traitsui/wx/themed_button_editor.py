@@ -39,7 +39,7 @@ from traitsui.wx.editor \
 from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
-from themed_control \
+from .themed_control \
     import ThemedControl
 
 #-------------------------------------------------------------------------

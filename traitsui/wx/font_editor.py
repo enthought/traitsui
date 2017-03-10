@@ -30,15 +30,15 @@ from traits.api import Bool
 from traitsui.editors.font_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
 
-from editor_factory \
+from .editor_factory \
     import SimpleEditor as BaseSimpleEditor, \
     TextEditor as BaseTextEditor, \
     ReadonlyEditor as BaseReadonlyEditor
 
-from editor \
+from .editor \
     import Editor
 
-from helper \
+from .helper \
     import TraitsUIPanel, disconnect
 
 #-------------------------------------------------------------------------

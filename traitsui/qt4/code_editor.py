@@ -18,12 +18,14 @@ interface toolkit, useful for tools such as debuggers.
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui, QtWidgets
+from pyface.qt import QtGui, QtWidgets
 
 from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
 from traits.api import Str, Unicode, List, Int, Event, Bool, \
     TraitError, on_trait_change
 from traits.trait_base import SequenceTypes
+
+from pyface._py2to3 import text_type
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -32,9 +34,7 @@ from traitsui.editors.code_editor import ToolkitEditorFactory
 
 from pyface.key_pressed_event import KeyPressedEvent
 
-from constants import OKColor, ErrorColor
-from editor import Editor
-from helper import pixmap_cache
+from .editor import Editor
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -193,7 +193,7 @@ class SourceEditor(Editor):
         """
         if not self._locked:
             try:
-                value = unicode(self._widget.code.toPlainText())
+                value = text_type(self._widget.code.toPlainText())
                 if isinstance(self.value, SequenceTypes):
                     value = value.split()
                 self.value = value
@@ -276,7 +276,7 @@ class SourceEditor(Editor):
     #-------------------------------------------------------------------------
 
     def _selection_changed(self):
-        self.selected_text = unicode(
+        self.selected_text = text_type(
             self._widget.code.textCursor().selectedText())
         start = self._widget.code.textCursor().selectionStart()
         end = self._widget.code.textCursor().selectionEnd()

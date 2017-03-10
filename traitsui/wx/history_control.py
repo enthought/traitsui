@@ -31,7 +31,7 @@ from traits.api \
 from pyface.timer.api \
     import do_later
 
-from constants \
+from .constants \
     import OKColor, ErrorColor
 
 #-------------------------------------------------------------------------

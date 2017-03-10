@@ -19,7 +19,7 @@
 import wx
 
 # Local imports
-from editor import Editor
+from .editor import Editor
 
 
 class SearchEditor(Editor):

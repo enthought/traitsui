@@ -31,10 +31,10 @@ import wx
 from traitsui.editors.custom_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from helper \
+from .helper \
     import open_fbi
 
 #-------------------------------------------------------------------------

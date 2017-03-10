@@ -22,7 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from editor \
+from .editor \
     import Editor
 
 from pyface.heading_text \

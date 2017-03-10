@@ -29,7 +29,7 @@
 from traitsui.editors.tuple_editor \
     import SimpleEditor as BaseSimpleEditor, ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------

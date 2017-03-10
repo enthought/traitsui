@@ -44,6 +44,8 @@ from traits.api \
 from traitsui.api \
     import View, TreeNode, ObjectTreeNode, MultiTreeNode, Image
 
+from pyface._py2to3 import str_types
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.tree_editor file.
@@ -68,13 +70,13 @@ from pyface.api \
 from pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
-from constants \
+from .constants \
     import OKColor
 
-from editor \
+from .editor \
     import Editor
 
-from helper \
+from .helper \
     import open_fbi, TraitsUIPanel, TraitsUIScrolledPanel
 
 #-------------------------------------------------------------------------
@@ -697,7 +699,7 @@ class SimpleEditor(Editor):
             return -1
 
         icon_name = node.get_icon(object, is_expanded)
-        if isinstance(icon_name, basestring):
+        if isinstance(icon_name, str_types):
             if icon_name[:1] == '@':
                 self._icon = icon_name
                 icon_name = self._icon
@@ -707,7 +709,7 @@ class SimpleEditor(Editor):
                     path = self
                 else:
                     path = node.get_icon_path(object)
-                    if isinstance(path, basestring):
+                    if isinstance(path, str_types):
                         path = [path, node]
                     else:
                         path.append(node)

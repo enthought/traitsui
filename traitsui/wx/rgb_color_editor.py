@@ -33,7 +33,7 @@ from traits.trait_base \
 # abstract ToolkitEditorFactory class (in traitsui.api) along with
 # wx-specific methods added via a category. We need to override the
 # implementations of the wx-specific methods here.
-from color_editor \
+from .color_editor \
     import ToolkitEditorFactory as BaseColorToolkitEditorFactory
 
 #---------------------------------------------------------------------------

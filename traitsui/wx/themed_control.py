@@ -35,9 +35,9 @@ from traitsui.api \
 from traitsui.ui_traits \
     import Image, Position, Alignment, Spacing
 
-from image_slice import ImageSlice
+from .image_slice import ImageSlice
 
-from themed_window \
+from .themed_window \
     import ThemedWindow
 
 #-------------------------------------------------------------------------

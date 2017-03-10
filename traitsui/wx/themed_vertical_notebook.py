@@ -38,19 +38,19 @@ from traitsui.ui_traits \
 from traitsui.editor \
     import Editor
 
-from constants \
+from .constants \
     import WindowColor, screen_dy
 
-from image_slice \
+from .image_slice \
     import paint_parent
 
-from image_panel \
+from .image_panel \
     import ImagePanel
 
-from themed_control \
+from .themed_control \
     import ThemedControl
 
-from helper \
+from .helper \
     import TraitsUIPanel, TraitsUIScrolledPanel
 
 #-------------------------------------------------------------------------

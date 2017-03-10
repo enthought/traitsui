@@ -29,7 +29,7 @@
 from traitsui.editors.value_editor \
     import _ValueEditor, ToolkitEditorFactory
 
-from editor import Editor
+from .editor import Editor
 
 
 class SimpleEditor(_ValueEditor, Editor):

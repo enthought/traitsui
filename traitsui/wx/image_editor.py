@@ -34,10 +34,10 @@ from traitsui.ui_traits \
 from traitsui.editors.image_editor \
     import ImageEditor
 
-from editor \
+from .editor \
     import Editor
 
-from image_control \
+from .image_control \
     import ImageControl
 
 #-------------------------------------------------------------------------

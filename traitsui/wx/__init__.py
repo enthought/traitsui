@@ -23,7 +23,7 @@
 #  Define the reference to the exported GUIToolkit object:
 #-------------------------------------------------------------------------
 
-import toolkit
+from . import toolkit
 
 # Reference to the GUIToolkit object for wxPython
 toolkit = toolkit.GUIToolkit()

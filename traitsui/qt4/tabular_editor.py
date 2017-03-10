@@ -28,6 +28,7 @@ from __future__ import absolute_import
 import os
 
 from pyface.qt import QtCore, QtGui, QtWidgets
+from pyface._py2to3 import str_types
 from pyface.image_resource import ImageResource
 from pyface.ui_traits import Image
 
@@ -296,14 +297,14 @@ class TabularEditor(Editor):
         cws = prefs.get('cached_widths')
         num_columns = len(self.adapter.columns)
         if cws is not None and num_columns == len(cws):
-            for column in xrange(num_columns):
+            for column in range(num_columns):
                 self.control.setColumnWidth(column, cws[column])
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
         widths = [self.control.columnWidth(column)
-                  for column in xrange(len(self.adapter.columns))]
+                  for column in range(len(self.adapter.columns))]
         return {'cached_widths': widths}
 
     #-------------------------------------------------------------------------
@@ -323,7 +324,7 @@ class TabularEditor(Editor):
     def _get_image(self, image):
         """ Converts a user specified image to a QIcon.
         """
-        if isinstance(image, basestring):
+        if isinstance(image, str_types):
             self.image = image
             image = self.image
 
@@ -722,7 +723,7 @@ class _TableView(QtWidgets.QTableView):
         sh = QtWidgets.QTableView.sizeHint(self)
 
         width = 0
-        for column in xrange(len(self._editor.adapter.columns)):
+        for column in range(len(self._editor.adapter.columns)):
             width += self.sizeHintForColumn(column)
         sh.setWidth(width)
 
@@ -773,7 +774,7 @@ class _TableView(QtWidgets.QTableView):
 
         # Assign sizes for columns with absolute size requests
         percent_vals, percent_cols = [], []
-        for column in xrange(len(editor.adapter.columns)):
+        for column in range(len(editor.adapter.columns)):
             width = editor.adapter.get_width(
                 editor.object, editor.name, column)
             if width > 1:

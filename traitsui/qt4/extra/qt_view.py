@@ -65,7 +65,7 @@ class QtView(View):
 
         if len(self.tab_order) >= 2:
             previous = self._get_editor_control(ui, self.tab_order[0])
-            for i in xrange(1, len(self.tab_order)):
+            for i in range(1, len(self.tab_order)):
                 current = self._get_editor_control(ui, self.tab_order[i])
                 QtWidgets.QWidget.setTabOrder(previous, current)
                 previous = current

@@ -36,7 +36,7 @@ from traits.api import Str
 # traitsui.editors.html_editor file.
 from traitsui.editors.html_editor import ToolkitEditorFactory
 
-from editor import Editor
+from .editor import Editor
 
 #-------------------------------------------------------------------------
 #  URLResolvingHtmlWindow class:

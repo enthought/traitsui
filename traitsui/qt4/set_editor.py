@@ -19,6 +19,8 @@
 
 from pyface.qt import QtCore, QtGui, QtWidgets
 
+from pyface._py2to3 import text_type
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.set_editor file.
@@ -28,7 +30,7 @@ from traitsui.editors.set_editor \
 from traitsui.helper \
     import enum_values_changed
 
-from editor \
+from .editor \
     import Editor
 
 from traits.api \
@@ -510,7 +512,7 @@ class SimpleEditor(Editor):
     def _get_selected_strings(self, listbox):
         """ Returns a list of the selected strings in the given *listbox*.
         """
-        return [unicode(itm.text()) for itm in listbox.selectedItems()]
+        return [text_type(itm.text()) for itm in listbox.selectedItems()]
 
     #-------------------------------------------------------------------------
     # Returns the index of the first (or only) selected item.

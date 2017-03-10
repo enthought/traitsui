@@ -38,6 +38,8 @@ from traits.api import (
     Trait,
     TraitPrefixList)
 
+from pyface._py2to3 import str_types
+
 from .view_element import ViewElement, ViewSubElement
 
 from .ui import UI
@@ -359,7 +361,7 @@ class View(ViewElement):
                 content.append(value)
             elif type(value) in SequenceTypes:
                 content.append(Group(*value))
-            elif (isinstance(value, basestring) and
+            elif (isinstance(value, str_types) and
                   (value[:1] == '<') and (value[-1:] == '>')):
                 # Convert string to an Include value:
                 content.append(Include(value[1:-1].strip()))

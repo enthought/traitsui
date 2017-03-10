@@ -33,6 +33,8 @@ from traits.api import (Bool, Callable, Constant, Delegate, Float, Instance,
 from traits.trait_base import user_name_for
 import traits._py2to3 as _py2to3
 
+from pyface._py2to3 import str_types
+
 from .view_element import ViewSubElement
 
 from .ui_traits import convert_theme, ContainerDelegate, EditorStyle
@@ -275,7 +277,7 @@ class Item(ViewSubElement):
         if value is None:
             return
 
-        if not isinstance(value, basestring):
+        if not isinstance(value, str_types):
             raise TypeError(
                 "The argument to Item must be a string of the "
                 "form: [id:][object.[object.]*][name]['['label']']`tooltip`"
@@ -372,7 +374,7 @@ class Item(ViewSubElement):
         if tlabel is None:
             return label
 
-        if isinstance(tlabel, basestring):
+        if isinstance(tlabel, str_types):
             if tlabel[0:3] == '...':
                 return label + tlabel[3:]
             if tlabel[-3:] == '...':

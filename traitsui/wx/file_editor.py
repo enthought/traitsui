@@ -36,10 +36,10 @@ from traits.api \
 from traitsui.editors.file_editor \
     import ToolkitEditorFactory
 
-from text_editor \
+from .text_editor \
     import SimpleEditor as SimpleTextEditor
 
-from helper \
+from .helper \
     import TraitsUIPanel, PopupControl
 
 #-------------------------------------------------------------------------
@@ -80,7 +80,7 @@ class SimpleEditor(SimpleTextEditor):
         factory = self.factory
 
         if factory.entries > 0:
-            from history_control import HistoryControl
+            from .history_control import HistoryControl
 
             self.history = HistoryControl(entries=factory.entries,
                                           auto_set=factory.auto_set)

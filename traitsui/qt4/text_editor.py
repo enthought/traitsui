@@ -22,19 +22,21 @@ from pyface.qt import QtCore, QtWidgets
 from traits.api \
     import TraitError
 
+from pyface._py2to3 import text_type
+
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.text_editor file.
 from traitsui.editors.text_editor \
     import evaluate_trait, ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from editor_factory \
+from .editor_factory \
     import ReadonlyEditor as BaseReadonlyEditor
 
-from constants \
+from .constants \
     import OKColor
 
 #-------------------------------------------------------------------------
@@ -165,7 +167,7 @@ class SimpleEditor(Editor):
         except AttributeError:
             value = self.control.toPlainText()
 
-        value = unicode(value)
+        value = text_type(value)
 
         try:
             value = self.evaluate(value)

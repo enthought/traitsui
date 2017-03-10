@@ -45,7 +45,7 @@ def convert_to_color(object, name, value):
         else:
             raise TraitError
     else:
-        if isinstance(value, basestring):
+        if isinstance(value, str_types):
             # Allow for spaces in the string value.
             value = value.replace(' ', '')
 

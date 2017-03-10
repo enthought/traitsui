@@ -24,6 +24,7 @@
 
 from __future__ import absolute_import
 
+from pyface._py2to3 import str_types
 from pyface.ui_traits import (Alignment, Border, HasBorder, HasMargin, Image,
                              Margin, Position, convert_bitmap, convert_image)
 from traits.api import (Any, Delegate, Enum, Expression, Float, HasStrictTraits,
@@ -132,7 +133,7 @@ class ViewStatus(TraitType):
     def validate(self, object, name, value):
         """ Validates that a specified value is valid for this trait.
         """
-        if isinstance(value, basestring):
+        if isinstance(value, str_types):
             return [StatusItem(name=value)]
 
         if isinstance(value, StatusItem):
@@ -144,7 +145,7 @@ class ViewStatus(TraitType):
         result = []
         if isinstance(value, SequenceTypes):
             for item in value:
-                if isinstance(item, basestring):
+                if isinstance(item, str_types):
                     result.append(StatusItem(name=item))
                 elif isinstance(item, StatusItem):
                     result.append(item)
@@ -164,7 +165,7 @@ class ViewStatus(TraitType):
 def convert_theme(value, level=3):
     """ Converts a specified value to a Theme if possible.
     """
-    if not isinstance(value, basestring):
+    if not isinstance(value, str_types):
         return value
 
     if (value[:1] == '@') and (value.find(':') >= 2):
