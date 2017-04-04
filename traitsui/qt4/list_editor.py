@@ -540,7 +540,7 @@ class NotebookEditor(Editor):
 
         # Create a tab widget to hold each separate object's view:
         self.control = QtGui.QTabWidget()
-        self.control.currentChanged(self._tab_activated)
+        self.control.currentChanged.connect(self._tab_activated)
 
         # minimal dock_style handling
         if self.factory.dock_style == 'tab':
