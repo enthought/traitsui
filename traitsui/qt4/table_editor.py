@@ -615,7 +615,8 @@ class TableEditor(Editor, BaseTableEditor):
             if column.renderer:
                 self.table_view.setItemDelegateForColumn(i, column.renderer)
 
-        self.model.reset()
+        self.model.beginResetModel()
+        self.model.endResetModel()
         self.table_view.resizeColumnsToContents()
         if self.auto_size:
             self.table_view.resizeRowsToContents()
@@ -857,46 +858,6 @@ class TableView(QtGui.QTableView):
         self._editor = editor
         factory = editor.factory
 
-        # Configure the row headings.
-        vheader = self.verticalHeader()
-        insertable = factory.row_factory is not None and not factory.auto_add
-        if ((factory.editable and (insertable or factory.deletable)) or
-                factory.reorderable):
-            vheader.installEventFilter(self)
-            vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
-        elif not factory.show_row_labels:
-            vheader.hide()
-        self.setAlternatingRowColors(factory.alternate_bg_color)
-        self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-
-        # Configure the column headings.
-        # We detect if there are any stretchy sections at all; if not, then
-        # we make the last non-fixed-size column stretchy.
-        hheader = self.horizontalHeader()
-        resize_mode_map = dict(
-            interactive=QtGui.QHeaderView.Interactive,
-            fixed=QtGui.QHeaderView.Fixed,
-            stretch=QtGui.QHeaderView.Stretch,
-            resize_to_contents=QtGui.QHeaderView.ResizeToContents)
-        stretchable_columns = []
-        for i, column in enumerate(editor.columns):
-            hheader.setResizeMode(i, resize_mode_map[column.resize_mode])
-            if column.resize_mode in ("stretch", "interactive"):
-                stretchable_columns.append(i)
-        if not stretchable_columns:
-            # Use the behavior from before the "resize_mode" trait was added
-            # to TableColumn
-            hheader.setStretchLastSection(True)
-        else:
-            hheader.setResizeMode(
-                stretchable_columns[-1], QtGui.QHeaderView.Stretch)
-            hheader.setStretchLastSection(False)
-
-        if factory.show_column_labels:
-            hheader.setHighlightSections(False)
-        else:
-            hheader.hide()
-
         # Configure the grid lines.
         self.setShowGrid(factory.show_lines)
 
@@ -927,6 +888,10 @@ class TableView(QtGui.QTableView):
             self.setStyleSheet(factory._qt_stylesheet)
 
         self.resizeColumnsToContents()
+
+    def setModel(self, model):
+        super(TableView, self).setModel(model)
+        self._update_header_sizing()
 
     def contextMenuEvent(self, event):
         """Reimplemented to create context menus for cells and empty space."""
@@ -1123,6 +1088,49 @@ class TableView(QtGui.QTableView):
             delattr(control, "_editor")
 
         return super(TableView, self).closeEditor(control, hint)
+
+    def _update_header_sizing(self):
+        """ Header section sizing can be done only after a valid model is set.
+        Otherwise results in segfault with Qt5.
+        """
+        editor = self._editor
+        factory = editor.factory
+        # Configure the row headings.
+        vheader = self.verticalHeader()
+        insertable = factory.row_factory is not None and not factory.auto_add
+        if ((factory.editable and (insertable or factory.deletable)) or
+                factory.reorderable):
+            vheader.installEventFilter(self)
+            vheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
+        elif not factory.show_row_labels:
+            vheader.hide()
+        self.setAlternatingRowColors(factory.alternate_bg_color)
+        self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        # Configure the column headings.
+        # We detect if there are any stretchy sections at all; if not, then
+        # we make the last non-fixed-size column stretchy.
+        hheader = self.horizontalHeader()
+        resize_mode_map = dict(interactive=QtGui.QHeaderView.Interactive,
+                               fixed=QtGui.QHeaderView.Fixed,
+                               stretch=QtGui.QHeaderView.Stretch,
+                               resize_to_contents=QtGui.QHeaderView.ResizeToContents)
+        stretchable_columns = []
+        for i, column in enumerate(editor.columns):
+            hheader.setSectionResizeMode(i, resize_mode_map[column.resize_mode])
+            if column.resize_mode in ("stretch", "interactive"):
+                stretchable_columns.append(i)
+        if not stretchable_columns:
+            # Use the behavior from before the "resize_mode" trait was added
+            # to TableColumn
+            hheader.setStretchLastSection(True)
+        else:
+            # hheader.setSectionResizeMode(
+            #     stretchable_columns[-1], QtGui.QHeaderView.Stretch)
+            hheader.setStretchLastSection(False)
+        if factory.show_column_labels:
+            hheader.setHighlightSections(False)
+        else:
+            hheader.hide()
 
 #-------------------------------------------------------------------------
 #  Editor for configuring the filters available to a TableEditor:
