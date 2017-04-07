@@ -38,6 +38,12 @@ from .table_model import TableModel, SortFilterTableModel
 
 is_qt5 = QtCore.__version_info__ >= (5,)
 
+if is_qt5:
+    def set_qheader_section_resize_mode(header):
+        return header.setSectionResizeMode
+else:
+    def set_qheader_section_resize_mode(header):
+        return header.setResizeMode
 
 #-------------------------------------------------------------------------
 #  'TableEditor' class:
@@ -1265,11 +1271,3 @@ class TableFilterEditor(HasTraits):
         filters = self.filters
         self.filters = []
         self.filters = filters
-
-if is_qt5:
-    def set_qheader_section_resize_mode(header):
-        return header.setSectionResizeMode
-
-else:
-    def set_qheader_section_resize_mode(header):
-        return header.setResizeMode
