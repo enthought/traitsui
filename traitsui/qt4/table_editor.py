@@ -26,14 +26,18 @@ from traits.api import Any, Bool, Button, Event, List, HasTraits, \
     Instance, Int, Property, Str, cached_property, on_trait_change
 
 from traitsui.api import EnumEditor, InstanceEditor, Group, \
-    Handler, Item, Label, TableColumn, TableFilter, UI, View, default_handler, \
+    Item, Label, TableColumn, TableFilter, UI, View, default_handler, \
     spring
 from traitsui.editors.table_editor import BaseTableEditor, \
-    ReversedList, ToolkitEditorFactory, customize_filter
+    ReversedList, customize_filter
 from traitsui.ui_traits import SequenceTypes
 
 from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
+
+
+is_qt5 = QtCore.__version_info__ >= (5,)
+
 
 #-------------------------------------------------------------------------
 #  'TableEditor' class:
@@ -1097,11 +1101,12 @@ class TableView(QtGui.QTableView):
         factory = editor.factory
         # Configure the row headings.
         vheader = self.verticalHeader()
+        set_resize_mode = set_qheader_section_resize_mode(vheader)
         insertable = factory.row_factory is not None and not factory.auto_add
         if ((factory.editable and (insertable or factory.deletable)) or
                 factory.reorderable):
             vheader.installEventFilter(self)
-            vheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
+            set_resize_mode(QtGui.QHeaderView.ResizeToContents)
         elif not factory.show_row_labels:
             vheader.hide()
         self.setAlternatingRowColors(factory.alternate_bg_color)
@@ -1110,13 +1115,14 @@ class TableView(QtGui.QTableView):
         # We detect if there are any stretchy sections at all; if not, then
         # we make the last non-fixed-size column stretchy.
         hheader = self.horizontalHeader()
+        set_resize_mode = set_qheader_section_resize_mode(hheader)
         resize_mode_map = dict(interactive=QtGui.QHeaderView.Interactive,
                                fixed=QtGui.QHeaderView.Fixed,
                                stretch=QtGui.QHeaderView.Stretch,
                                resize_to_contents=QtGui.QHeaderView.ResizeToContents)
         stretchable_columns = []
         for i, column in enumerate(editor.columns):
-            hheader.setSectionResizeMode(i, resize_mode_map[column.resize_mode])
+            set_resize_mode(i, resize_mode_map[column.resize_mode])
             if column.resize_mode in ("stretch", "interactive"):
                 stretchable_columns.append(i)
         if not stretchable_columns:
@@ -1259,3 +1265,11 @@ class TableFilterEditor(HasTraits):
         filters = self.filters
         self.filters = []
         self.filters = filters
+
+if is_qt5:
+    def set_qheader_section_resize_mode(header):
+        return header.setSectionResizeMode
+
+else:
+    def set_qheader_section_resize_mode(header):
+        return header.setResizeMode
