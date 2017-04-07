@@ -4,6 +4,7 @@ matrix:
   include:
     - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside"
     - env: RUNTIME=3.5 TOOLKITS="null pyqt"
+    - env: RUNTIME=3.5 TOOLKITS="pyqt5"
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="null pyside"
     - os: osx
@@ -13,6 +14,7 @@ matrix:
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
   allow_failures:
     - env: RUNTIME=2.7 TOOLKITS="wx"
+    - env: RUNTIME=3.5 TOOLKITS="pyqt5"
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
   fast_finish: true
