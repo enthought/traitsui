@@ -77,6 +77,8 @@ def view_application(context, view, kind, handler, id, scrollable, args):
     """
     if (kind == 'panel') or ((kind is None) and (view.kind == 'panel')):
         kind = 'modal'
+    if (kind is None) and (view.kind == 'live'):
+        kind = 'livemodal'
 
     app = QtGui.QApplication.instance()
     if app is None or not is_event_loop_running_qt4(app):
