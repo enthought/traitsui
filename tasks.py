@@ -137,11 +137,11 @@ def install(runtime, toolkit, environment):
             "edm run -e '{environment}' -- pip install pyqt5",
         ]
 
-    print("Creating environment '{environment}'".format(**parameters))
+    click.echo("Creating environment '{environment}'".format(**parameters))
     for command in commands:
         subprocess.check_call(command.format(**parameters).split())
 
-    print('Done install')
+    click.echo('Done install')
 
 
 @cli.command()
@@ -166,7 +166,7 @@ def test(runtime, toolkit, environment):
         ]
 
     # run tests & coverage
-    print("Running tests in '{environment}'".format(**parameters))
+    click.echo("Running tests in '{environment}'".format(**parameters))
 
     # We run in a tempdir to avoid accidentally picking up wrong traitsui
     # code from a local dir.  We need to ensure a good .coveragerc is in
@@ -176,7 +176,7 @@ def test(runtime, toolkit, environment):
         for command in commands:
             subprocess.check_call(command.format(**parameters).split())
 
-    print('Done test')
+    click.echo('Done test')
 
 @cli.command()
 @click.option('--runtime', default='3.5')
@@ -190,11 +190,11 @@ def cleanup(runtime, toolkit, environment):
         "edm environments remove '{environment}' --purge -y",
     ]
 
-    print("Cleaning up environment '{environment}'".format(**parameters))
+    click.echo("Cleaning up environment '{environment}'".format(**parameters))
     for command in commands:
         subprocess.check_call([command.format(**parameters)])
 
-    print('Done cleanup')
+    click.echo('Done cleanup')
 
 
 @cli.command()
@@ -218,7 +218,7 @@ def test_all():
                 test_clean(runtime, toolkit)
             except Exception as exc:
                 # continue to next runtime
-                print(exc)
+                click.echo(exc)
 
 # ----------------------------------------------------------------------------
 # Utility routines
@@ -259,7 +259,7 @@ def do_in_tempdir(files=(), capture_files=()):
 
     # send across any files we need
     for filepath in files:
-        print('copying file to tempdir: {}'.format(filepath))
+        click.echo('copying file to tempdir: {}'.format(filepath))
         copyfile(filepath, path)
 
     os.chdir(path)
@@ -269,7 +269,7 @@ def do_in_tempdir(files=(), capture_files=()):
         # retrieve any result files we want
         for pattern in capture_files:
             for filepath in glob.iglob(pattern):
-                print('copying file back: {}'.format(filepath))
+                click.echo('copying file back: {}'.format(filepath))
                 copyfile(filepath, old_path)
     finally:
         os.chdir(old_path)
