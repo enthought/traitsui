@@ -144,7 +144,7 @@ def install(runtime, toolkit, environment):
     print('Done install')
 
 
-@cil.command()
+@cli.command()
 @click.option('--runtime', default='3.5')
 @click.option('--toolkit', default='null')
 @click.option('--environment', default=None)
@@ -209,7 +209,7 @@ def test_clean(runtime, toolkit):
         cleanup(ctx, runtime, toolkit)
 
 
-@clicommand()
+@cli.command()
 def test_all():
     """ Run test_clean across all supported environments """
     for runtime, toolkits in supported_combinations.items():
