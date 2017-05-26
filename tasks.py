@@ -186,13 +186,13 @@ def cleanup(runtime, toolkit, environment):
     parameters = _get_parameters(runtime, toolkit, environment)
 
     commands = [
-        "edm run -e '{environment}' -- python setup.py clean",
-        "edm environments remove '{environment}' --purge -y",
+        "edm run -e {environment} -- python setup.py clean",
+        "edm environments remove {environment} --purge -y",
     ]
 
     click.echo("Cleaning up environment '{environment}'".format(**parameters))
     for command in commands:
-        subprocess.check_call([command.format(**parameters)])
+        subprocess.check_call(command.format(**parameters).split())
 
     click.echo('Done cleanup')
 
