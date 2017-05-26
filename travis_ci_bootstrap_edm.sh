@@ -12,4 +12,4 @@ else
 fi
 
 # install pip and invoke into default EDM environment
-edm install -y pip invoke coverage
+edm install -y pip click coverage
