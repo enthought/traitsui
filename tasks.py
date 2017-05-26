@@ -124,11 +124,11 @@ def install(runtime, toolkit, environment):
 
     commands = [
         # create environment with dependencies
-        "edm install -y -e '{environment}' --version '{runtime}' {packages}",
+        "edm install -y -e {environment} --version={runtime} {packages}",
         # install any source dependencies from github using pip
-        "edm run -e '{environment}' -- pip install -r ci-src-requirements.txt --no-dependencies",
+        "edm run -e {environment} -- pip install -r ci-src-requirements.txt --no-dependencies",
         # install the project
-        "edm run -e '{environment}' -- python setup.py install",
+        "edm run -e {environment} -- python setup.py install",
     ]
     if toolkit == 'pyqt5':
         commands += [
@@ -139,7 +139,7 @@ def install(runtime, toolkit, environment):
 
     print("Creating environment '{environment}'".format(**parameters))
     for command in commands:
-        subprocess.check_call([command.format(**parameters)])
+        subprocess.check_call(command.format(**parameters).split())
 
     print('Done install')
 
