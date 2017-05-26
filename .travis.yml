@@ -2,7 +2,7 @@ language: generic
 sudo: false
 env:
   global:
-    - INSTALL_EDM_VERSION=1.3.0
+    - INSTALL_EDM_VERSION=1.6.1
       PYTHONUNBUFFERED="1"
 matrix:
   include:
@@ -26,14 +26,15 @@ branches:
     - master
 cache:
   directories:
-    - $HOME/.cache
+    - "$(HOME)/.cache"
 before_install:
+  - mkdir -p "${HOME}/.cache/download"
   - export DISPLAY=:99.0
-  - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then sh -e /etc/init.d/xvfb start ; fi
-install:
   - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then ./install-edm-linux.sh; fi
   - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ./install-edm-osx.sh; fi
   - edm install wheel click
+  - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then sh -e /etc/init.d/xvfb start ; fi
+install:
   - for toolkit in ${TOOLKITS}; do edm run -- python -m tasks install --runtime=${RUNTIME} --toolkit=${toolkit}; done
 script:
   - for toolkit in ${TOOLKITS}; do edm run -- python -m tasks test --runtime=${RUNTIME} --toolkit=${toolkit}; done
