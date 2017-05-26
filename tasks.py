@@ -119,8 +119,8 @@ def install(runtime, toolkit, environment):
     """ Install project and dependencies into a clean EDM environment. """
     parameters = _get_parameters(runtime, toolkit, environment)
 
-    parameters['packages'] = ' '.join(dependencies |
-                                      extra_dependencies.get(toolkit, set()))
+    parameters['packages'] = ' '.join(
+        dependencies | extra_dependencies.get(toolkit, set()))
 
     commands = [
         # create environment with dependencies
