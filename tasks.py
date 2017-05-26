@@ -204,9 +204,9 @@ def test_clean(runtime, toolkit):
     """ Run tests in a clean environment, cleaning up afterwards """
     try:
         install(runtime, toolkit)
-        test(ctx, runtime, toolkit)
+        test(runtime, toolkit)
     finally:
-        cleanup(ctx, runtime, toolkit)
+        cleanup(runtime, toolkit)
 
 
 @cli.command()
