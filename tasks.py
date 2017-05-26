@@ -139,7 +139,7 @@ def install(runtime, toolkit, environment):
 
     print("Creating environment '{environment}'".format(**parameters))
     for command in commands:
-        subprocess.check_call(command.format(**parameters))
+        subprocess.check_call([command.format(**parameters)])
 
     print('Done install')
 
@@ -174,7 +174,7 @@ def test(runtime, toolkit, environment):
     # file doesn't get populated correctly.
     with do_in_tempdir(files=['.coveragerc'], capture_files=['./.coverage*']):
         for command in commands:
-            subprocess.check_call(command.format(**parameters))
+            subprocess.check_call([command.format(**parameters)])
 
     print('Done test')
 
@@ -192,7 +192,7 @@ def cleanup(runtime, toolkit, environment):
 
     print("Cleaning up environment '{environment}'".format(**parameters))
     for command in commands:
-        ctx.run(command.format(**parameters))
+        subprocess.check_call([command.format(**parameters)])
 
     print('Done cleanup')
 
