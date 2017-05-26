@@ -157,12 +157,12 @@ def test(runtime, toolkit, environment):
 
     commands = [
         # run the main test suite
-        "edm run -e '{environment}' -- coverage run -p -m nose.core -v traitsui.tests",
+        "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.tests",
     ]
     if toolkit in {'pyqt', 'pyside'}:
         commands += [
             # run the qt4 toolkit test suite
-            "edm run -e '{environment}' -- coverage run -p -m nose.core -v traitsui.qt4.tests"
+            "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.qt4.tests"
         ]
 
     # run tests & coverage
@@ -174,7 +174,7 @@ def test(runtime, toolkit, environment):
     # file doesn't get populated correctly.
     with do_in_tempdir(files=['.coveragerc'], capture_files=['./.coverage*']):
         for command in commands:
-            subprocess.check_call([command.format(**parameters)])
+            subprocess.check_call(command.format(**parameters).split())
 
     print('Done test')
 
