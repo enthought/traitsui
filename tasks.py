@@ -202,11 +202,12 @@ def cleanup(runtime, toolkit, environment):
 @click.option('--toolkit', default='null')
 def test_clean(runtime, toolkit):
     """ Run tests in a clean environment, cleaning up afterwards """
+    args = ['--toolkit={}'.format(toolkit), '--runtime={}'.format(runtime)]
     try:
-        install(runtime, toolkit)
-        test(runtime, toolkit)
+        install(args=args, standalone_mode=False)
+        test(args=args, standalone_mode=False)
     finally:
-        cleanup(runtime, toolkit)
+        cleanup(args=args, standalone_mode=False)
 
 
 @cli.command()
@@ -214,8 +215,9 @@ def test_all():
     """ Run test_clean across all supported environments """
     for runtime, toolkits in supported_combinations.items():
         for toolkit in toolkits:
+            args = ['--toolkit={}'.format(toolkit), '--runtime={}'.format(runtime)]
             try:
-                test_clean(runtime, toolkit)
+                test_clean(args, standalone_mode=True)
             except Exception as exc:
                 # continue to next runtime
                 click.echo(exc)
