@@ -133,9 +133,11 @@ class CustomEditor(SimpleEditor):
         from pyface.image_button import ImageButton
 
         factory = self.factory
+        label = self.factory.label or self.item.get_label(self.ui)
+
         self._control = ImageButton(
             parent,
-            label=self.string_value(factory.label),
+            label=self.string_value(label),
             image=factory.image,
             style=factory.style,
             orientation=factory.orientation,
@@ -145,6 +147,8 @@ class CustomEditor(SimpleEditor):
         self.control = self._control.control
         self._control.on_trait_change(self.update_object, 'clicked',
                                       dispatch='ui')
+        self.sync_value(self.factory.label_value, 'label', 'from')
+
         self.set_tooltip()
 
     #-------------------------------------------------------------------------
