@@ -1,5 +1,9 @@
 language: generic
 sudo: false
+env:
+  global:
+    - INSTALL_EDM_VERSION=1.3.0
+      PYTHONUNBUFFERED="1"
 matrix:
   include:
     - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside"
@@ -27,7 +31,9 @@ before_install:
   - export DISPLAY=:99.0
   - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then sh -e /etc/init.d/xvfb start ; fi
 install:
-  - ./travis_ci_bootstrap_edm.sh
+  - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then ./install-edm-linux.sh; fi
+  - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ./install-edm-osx.sh; fi
+  - edm install wheel click
   - for toolkit in ${TOOLKITS}; do edm run -- python -m tasks install --runtime=${RUNTIME} --toolkit=${toolkit}; done
 script:
   - for toolkit in ${TOOLKITS}; do edm run -- python -m tasks test --runtime=${RUNTIME} --toolkit=${toolkit}; done
