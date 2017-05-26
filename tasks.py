@@ -1,27 +1,28 @@
-"""
-Invoke Tasks for Test Runs
-==========================
+"""Tasks for Test Runs
+===================
 
-This file is intended to be used with `Invoke http://www.pyinvoke.org/`_ to
-automate the process of setting up test environments and running the test
-within them.  This improves repeatability and reliability of tests be removing
-many of the variables around the developer's particular Python environment.
-Test environment setup and package management is performed using
-`EDM http://docs.enthought.com/edm/`_
+This file is intended to be used with a python environment with the
+click library to automate the process of setting up test environments
+and running the test within them.  This improves repeatability and
+reliability of tests be removing many of the variables around the
+developer's particular Python environment.  Test environment setup and
+package management is performed using `EDM
+http://docs.enthought.com/edm/`_
 
-To use this to run you tests, you will need to install EDM and Invoke into
-your working environment.  You will also need to have git installed to access
-required source code from github repositories.  You can then do::
+To use this to run you tests, you will need to install EDM and click
+into your working environment.  You will also need to have git
+installed to access required source code from github repositories.
+You can then do::
 
-    invoke install --runtime=... --toolkit=...
+    python -m tasks install --runtime=... --toolkit=...
 
 to create a test environment from the current codebase and::
 
-    invoke test --runtime=... --toolkit=...
+    python -m tasks test --runtime=... --toolkit=...
 
 to run tests in that environment.  You can remove the environment with::
 
-    invoke cleanup --runtime=... --toolkit=...
+    python -m tasks cleanup --runtime=... --toolkit=...
 
 If you make changes you will either need to remove and re-install the
 environment or manually update the environment using ``edm``, as
@@ -33,13 +34,13 @@ environment.  You can update with a command like::
 
 You can run all three tasks at once with::
 
-    invoke test_clean --runtime=... --toolkit=...
+    python -m tasks test_clean --runtime=... --toolkit=...
 
 which will create, install, run tests, and then clean-up the environment.  And
 you can run tests in all supported runtimes and toolkits (with cleanup)
 using::
 
-    invoke test_all
+    python -m tasks test_all
 
 Currently supported runtime values are ``2.7`` and ``3.5``, and currently
 supported toolkits are ``null``, ``pyqt``, ``pyside`` and ``wx``.  Not all
@@ -68,9 +69,9 @@ import glob
 import os
 from shutil import rmtree, copy as copyfile
 from tempfile import mkdtemp
+import subprocess
 
-from invoke import task
-
+import click
 
 supported_combinations = {
     '2.7': {'pyside', 'pyqt', 'wx', 'null'},
@@ -105,9 +106,16 @@ environment_vars = {
 }
 
 
+@click.group()
+def cli():
+    pass
 
-@task
-def install(ctx, runtime='3.5', toolkit='null', environment=None):
+
+@cli.command()
+@click.option('--runtime', default='3.5')
+@click.option('--toolkit', default='null')
+@click.option('--environment', default=None)
+def install(runtime, toolkit, environment):
     """ Install project and dependencies into a clean EDM environment. """
     parameters = _get_parameters(runtime, toolkit, environment)
 
@@ -131,13 +139,16 @@ def install(ctx, runtime='3.5', toolkit='null', environment=None):
 
     print("Creating environment '{environment}'".format(**parameters))
     for command in commands:
-        ctx.run(command.format(**parameters))
+        subprocess.check_call(command.format(**parameters))
 
     print('Done install')
 
 
-@task
-def test(ctx, runtime='3.5', toolkit='null', environment=None):
+@main.command()
+@click.option('--runtime', default='3.5')
+@click.option('--toolkit', default='null')
+@click.option('--environment', default=None)
+def test(runtime, toolkit, environment):
     """ Run the test suite in a given environment with the specified toolkit """
     parameters = _get_parameters(runtime, toolkit, environment)
 
@@ -163,13 +174,15 @@ def test(ctx, runtime='3.5', toolkit='null', environment=None):
     # file doesn't get populated correctly.
     with do_in_tempdir(files=['.coveragerc'], capture_files=['./.coverage*']):
         for command in commands:
-            ctx.run(command.format(**parameters), env=environ)
+            subprocess.check_call(command.format(**parameters))
 
     print('Done test')
 
-
-@task
-def cleanup(ctx, runtime='3.5', toolkit='null', environment=None):
+@main.command()
+@click.option('--runtime', default='3.5')
+@click.option('--toolkit', default='null')
+@click.option('--environment', default=None)
+def cleanup(runtime, toolkit, environment):
     parameters = _get_parameters(runtime, toolkit, environment)
 
     commands = [
@@ -184,23 +197,25 @@ def cleanup(ctx, runtime='3.5', toolkit='null', environment=None):
     print('Done cleanup')
 
 
-@task
-def test_clean(ctx, runtime='3.5', toolkit='null'):
+@main.command()
+@click.option('--runtime', default='3.5')
+@click.option('--toolkit', default='null')
+def test_clean(runtime, toolkit):
     """ Run tests in a clean environment, cleaning up afterwards """
     try:
-        install(ctx, runtime, toolkit)
+        install(runtime, toolkit)
         test(ctx, runtime, toolkit)
     finally:
         cleanup(ctx, runtime, toolkit)
 
 
-@task
-def test_all(ctx):
+@main.command()
+def test_all():
     """ Run test_clean across all supported environments """
     for runtime, toolkits in supported_combinations.items():
         for toolkit in toolkits:
             try:
-                test_clean(ctx, runtime, toolkit)
+                test_clean(runtime, toolkit)
             except Exception as exc:
                 # continue to next runtime
                 print(exc)
@@ -259,3 +274,7 @@ def do_in_tempdir(files=(), capture_files=()):
     finally:
         os.chdir(old_path)
         rmtree(path)
+
+
+if __name__ == '__main__':
+    cli()
