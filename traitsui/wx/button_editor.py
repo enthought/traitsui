@@ -133,7 +133,10 @@ class CustomEditor(SimpleEditor):
         from pyface.image_button import ImageButton
 
         factory = self.factory
-        label = self.factory.label or self.item.get_label(self.ui)
+        if self.factory.label:
+            label = self.factory.label
+        else:
+            label = self.item.get_label(self.ui)
 
         self._control = ImageButton(
             parent,

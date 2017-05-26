@@ -149,7 +149,10 @@ class CustomEditor(SimpleEditor):
         # FIXME: We ignore orientation, width_padding and height_padding.
 
         factory = self.factory
-        label  = factory.label or self.item.get_label(self.ui)
+        if factory.label:
+            label = factory.label
+        else:
+            label = self.item.get_label(self.ui)
         btype = self._STYLE_MAP.get(factory.style, QtGui.QPushButton)
         self.control = btype()
         self.control.setText(self.string_value(label))
