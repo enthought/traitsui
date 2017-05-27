@@ -149,13 +149,17 @@ class CustomEditor(SimpleEditor):
         # FIXME: We ignore orientation, width_padding and height_padding.
 
         factory = self.factory
-
+        if factory.label:
+            label = factory.label
+        else:
+            label = self.item.get_label(self.ui)
         btype = self._STYLE_MAP.get(factory.style, QtGui.QPushButton)
         self.control = btype()
-        self.control.setText(self.string_value(factory.label))
+        self.control.setText(self.string_value(label))
 
         if factory.image is not None:
             self.control.setIcon(factory.image.create_icon())
 
+        self.sync_value(self.factory.label_value, 'label', 'from')
         self.control.clicked.connect(self.update_object)
         self.set_tooltip()
