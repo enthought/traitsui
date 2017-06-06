@@ -2,7 +2,7 @@ language: generic
 sudo: false
 env:
   global:
-    - INSTALL_EDM_VERSION=1.6.1
+    - INSTALL_EDM_VERSION=1.5.0
       PYTHONUNBUFFERED="1"
 matrix:
   include:
