@@ -9,11 +9,11 @@ matrix:
     - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside"
     - env: RUNTIME=3.5 TOOLKITS="null pyqt"
     - env: RUNTIME=3.5 TOOLKITS="pyqt5"
-    - os: osx
-      env: RUNTIME=2.7 TOOLKITS="null pyside"
+    - env: RUNTIME=2.7 TOOLKITS="wx"
     - os: osx
       env: RUNTIME=3.5 TOOLKITS="null pyqt"
-    - env: RUNTIME=2.7 TOOLKITS="wx"
+    - os: osx
+      env: RUNTIME=2.7 TOOLKITS="null pyside"
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
   allow_failures:
@@ -25,8 +25,9 @@ branches:
   only:
     - master
 cache:
+  - pip
   directories:
-    - "$(HOME)/.cache"
+    - "${HOME}/.cache"
 before_install:
   - mkdir -p "${HOME}/.cache/download"
   - export DISPLAY=:99.0
