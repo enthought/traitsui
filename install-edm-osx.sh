@@ -15,3 +15,4 @@ install_edm() {
 }
 
 install_edm
+export PATH="${PATH}:/usr/local/bin"
