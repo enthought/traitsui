@@ -25,7 +25,6 @@ branches:
   only:
     - master
 cache:
-  - pip
   directories:
     - "~/.cache"
 before_install:
