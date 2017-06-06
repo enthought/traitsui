@@ -119,7 +119,6 @@ def cli():
 def install(runtime, toolkit, environment):
     """ Install project and dependencies into a clean EDM environment. """
     parameters = _get_parameters(runtime, toolkit, environment)
-
     parameters['packages'] = ' '.join(
         dependencies | extra_dependencies.get(toolkit, set()))
 
@@ -279,7 +278,7 @@ def check_call(*args, **kwargs):
     try:
         subprocess.check_call(*args, **kwargs)
     except subprocess.CalledProcessError:
-        raise click.Abort()
+        sys.exit(1)
 
 
 if __name__ == '__main__':
