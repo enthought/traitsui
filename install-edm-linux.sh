@@ -15,4 +15,3 @@ install_edm() {
 }
 
 install_edm
-export PATH="${HOME}/edm/bin:${PATH}"
