@@ -27,7 +27,7 @@ branches:
 cache:
   - pip
   directories:
-    - "${HOME}/.cache"
+    - "~/.cache"
 before_install:
   - mkdir -p "${HOME}/.cache/download"
   - export DISPLAY=:99.0
