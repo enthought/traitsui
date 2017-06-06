@@ -64,12 +64,13 @@ how to run commands within an EDM enviornment.
 
 """
 
-from contextlib import contextmanager
 import glob
 import os
+import subprocess
+import sys
 from shutil import rmtree, copy as copyfile
 from tempfile import mkdtemp
-import subprocess
+from contextlib import contextmanager
 
 import click
 
@@ -139,7 +140,7 @@ def install(runtime, toolkit, environment):
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     for command in commands:
-        subprocess.check_call(command.format(**parameters).split())
+        check_call(command.format(**parameters).split())
 
     click.echo('Done install')
 
@@ -174,7 +175,7 @@ def test(runtime, toolkit, environment):
     # file doesn't get populated correctly.
     with do_in_tempdir(files=['.coveragerc'], capture_files=['./.coverage*']):
         for command in commands:
-            subprocess.check_call(command.format(**parameters).split())
+            check_call(command.format(**parameters).split())
 
     click.echo('Done test')
 
@@ -216,11 +217,7 @@ def test_all():
     for runtime, toolkits in supported_combinations.items():
         for toolkit in toolkits:
             args = ['--toolkit={}'.format(toolkit), '--runtime={}'.format(runtime)]
-            try:
-                test_clean(args, standalone_mode=True)
-            except Exception as exc:
-                # continue to next runtime
-                click.echo(exc)
+            test_clean(args, standalone_mode=True)
 
 # ----------------------------------------------------------------------------
 # Utility routines
@@ -276,6 +273,13 @@ def do_in_tempdir(files=(), capture_files=()):
     finally:
         os.chdir(old_path)
         rmtree(path)
+
+
+def check_call(*args, **kwargs):
+    try:
+        subprocess.check_call(*args, **kwargs)
+    except subprocess.CalledProcessError:
+        raise click.Abort()
 
 
 if __name__ == '__main__':
