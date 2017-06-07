@@ -37,7 +37,7 @@ init:
 
 install:
   - cmd: install-edm-windows.cmd
-  - ps: edm install wheel click
+  - ps: edm install -y wheel click
   - ps: ForEach (toolkit in $env:TOOLKITS) { edm run -- python -m tasks install --runtime=$env:RUNTIME --toolkit=$toolkit}
 test_script:
   - ps: ForEach (toolkit in $env:TOOLKITS) { edm run -- python -m tasks test --runtime=$env:RUNTIME --toolkit=$toolkit}
