@@ -36,11 +36,11 @@ init:
   - ps: md C:/Users/appveyor/.cache -Force
 
 install:
-  - cmd: install-edm-windows.cmd
+  - install-edm-windows.cmd
   - edm install -y wheel click
-  - For %t in (%TOOLKITS%) do (edm run -- python -m tasks install --runtime=%RUNTIME% --toolkit=%t)
+  - ForEach ($t in $Env:TOOLKITS.split(" ")) {edm run -- python -m tasks install --runtime=%RUNTIME% --toolkit=%t}
 test_script:
-  - For %t in (%TOOLKITS%) do (edm run -- python -m tasks test --runtime=%RUNTIME% --toolkit=%t)
+  - ForEach ($t in $Env:TOOLKITS.split(" ")) {edm run -- python -m tasks test --runtime=%RUNTIME% --toolkit=%t}
 on_success:
   - edm run -- coverage combine
   - edm run -- pip install codecov
