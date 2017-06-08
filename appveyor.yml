@@ -38,9 +38,9 @@ init:
 install:
   - install-edm-windows.cmd
   - edm install -y wheel click
-  - ForEach ($t in $Env:TOOLKITS.split(" ")) {edm run -- python -m tasks install --runtime=%RUNTIME% --toolkit=%t}
+  - ps: ForEach ($t in $Env:TOOLKITS.split(" ")) {edm run -- python -m tasks install --runtime=$Env:RUNTIME --toolkit=$t}
 test_script:
-  - ForEach ($t in $Env:TOOLKITS.split(" ")) {edm run -- python -m tasks test --runtime=%RUNTIME% --toolkit=%t}
+  - ps: ForEach ($t in $Env:TOOLKITS.split(" ")) {edm run -- python -m tasks test --runtime=$Env:RUNTIME --toolkit=$t}
 on_success:
   - edm run -- coverage combine
   - edm run -- pip install codecov
