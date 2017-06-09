@@ -15,6 +15,7 @@
 
 import sys
 import traceback
+import inspect
 from functools import partial, wraps
 from contextlib import contextmanager
 
@@ -67,15 +68,25 @@ def _is_current_backend(backend_name=''):
     return ETSConfig.toolkit == backend_name
 
 
-def skip_if_not_backend(test_func, backend_name=''):
+def skip_if_not_backend(item, backend_name=''):
     """Decorator that skip tests if the backend is not the desired one."""
-    @wraps(test_func)
-    def wrapper(*args, **kwargs):
-        if not _is_current_backend(backend_name):
-            message = '' if backend_name != '' else 'Test only for {}'
-            raise SkipTest(message.format(backend_name))
-        else:
-            return test_func(*args, **kwargs)
+
+    if inspect.isclass(item):
+        @wraps(item.setUp)
+        def wrapper(self, *args, **kwargs):
+            if not _is_current_backend(backend_name):
+                message = '' if backend_name != '' else 'Test only for {}'
+                raise SkipTest(message.format(backend_name))
+            else:
+                return item.setUp(self, *args, **kwargs)
+    else:
+        @wraps(item)
+        def wrapper(*args, **kwargs):
+            if not _is_current_backend(backend_name):
+                message = '' if backend_name != '' else 'Test only for {}'
+                raise SkipTest(message.format(backend_name))
+            else:
+                return item(*args, **kwargs)
     return wrapper
 
 
