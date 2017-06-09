@@ -209,6 +209,23 @@ def test_clean(runtime, toolkit):
     finally:
         cleanup(args=args, standalone_mode=False)
 
+@cli.command()
+@click.option('--runtime', default='3.5')
+@click.option('--toolkit', default='null')
+@click.option('--environment', default=None)
+def update(runtime, toolkit, environment):
+    parameters = _get_parameters(runtime, toolkit, environment)
+
+    commands = [
+        "edm run -e {environment} -- python setup.py install",
+    ]
+
+    click.echo("Re-installing in  '{environment}'".format(**parameters))
+    for command in commands:
+        subprocess.check_call(command.format(**parameters).split())
+
+    click.echo('Done update')
+
 
 @cli.command()
 def test_all():
