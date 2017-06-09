@@ -15,6 +15,8 @@
 
 from __future__ import print_function
 
+import nose
+
 from traits.has_traits import HasTraits
 from traits.trait_types import Float, List, Instance
 from traitsui.handler import ModelView
