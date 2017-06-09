@@ -125,7 +125,8 @@ def install(runtime, toolkit, environment):
 
     commands = [
         # create environment with dependencies
-        "edm install -y -e {environment} --version={runtime} {packages}",
+        "edm environments create {environment} --force --version={runtime}",
+        "edm install -y -e {environment} {packages}",
         # install any source dependencies from github using pip
         "edm run -e {environment} -- pip install -r ci-src-requirements.txt --no-dependencies",
         # install the project
