@@ -160,7 +160,7 @@ def test(runtime, toolkit, environment):
         # run the main test suite
         "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.tests --nologcapture",
     ]
-    if toolkit in {'pyqt', 'pyside'}:
+    if toolkit in {'pyqt', 'pyside', 'pyqt5'}:
         commands += [
             # run the qt4 toolkit test suite
             "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.qt4.tests --nologcapture"
