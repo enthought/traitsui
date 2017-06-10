@@ -39,7 +39,7 @@ before_install:
   - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then sh -e /etc/init.d/xvfb start; fi
   - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then ./install-edm-linux.sh; export PATH="${HOME}/edm/bin:${PATH}"; fi
   - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ./install-edm-osx.sh; export PATH="${PATH}:/usr/local/bin"; fi
-  - edm install -y wheel click
+  - edm install -y wheel click coverage
 
 install:
   - for toolkit in ${TOOLKITS}; do edm run -- python -m tasks install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
