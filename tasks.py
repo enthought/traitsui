@@ -135,8 +135,7 @@ def install(runtime, toolkit, environment):
         commands.append("edm run -e {environment} -- pip install pyqt5")
 
     click.echo("Creating environment '{environment}'".format(**parameters))
-    for command in commands:
-        check_call(command.format(**parameters).split())
+    execute(commands, parameters)
     click.echo('Done install')
 
 
@@ -232,7 +231,7 @@ def test_all():
 def get_parameters(runtime, toolkit, environment):
     """ Set up parameters dictionary for format() substitution """
     parameters = {'runtime': runtime, 'toolkit': toolkit, 'environment': environment}
-    if toolkit not in supported_combinations['runtime']:
+    if toolkit not in supported_combinations[runtime] :
         msg = ("Python {runtime} and toolkit {toolkit} not supported by " +
                "test environments")
         raise RuntimeError(msg.format(**parameters))
