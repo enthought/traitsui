@@ -12,5 +12,5 @@ prune docs/build
 recursive-exclude docs *.pyc
 graft examples
 recursive-exclude examples *.pyc
-recursive-include traitsui *.py *.zip *.png *.gif *.txt
-recursive-include integrationtests *.py  *.gif
+recursive-include traitsui *.py *.zip *.png *.txt
+recursive-include integrationtests *.py *.gif
