@@ -118,29 +118,25 @@ def cli():
 @click.option('--toolkit', default='null')
 @click.option('--environment', default=None)
 def install(runtime, toolkit, environment):
-    """ Install project and dependencies into a clean EDM environment. """
-    parameters = _get_parameters(runtime, toolkit, environment)
+    """ Install project and dependencies into a clean EDM environment.
+
+    """
+    parameters = get_parameters(runtime, toolkit, environment)
     parameters['packages'] = ' '.join(
         dependencies | extra_dependencies.get(toolkit, set()))
-
+    # edm commands to setup the development environment
     commands = [
-        # create environment with dependencies
         "edm environments create {environment} --force --version={runtime}",
         "edm install -y -e {environment} {packages}",
-        # install any source dependencies from github using pip
         "edm run -e {environment} -- pip install -r ci-src-requirements.txt --no-dependencies",
-        # install the project
-        "edm run -e {environment} -- python setup.py install",
-    ]
+        "edm run -e {environment} -- python setup.py install"]
     if toolkit == 'pyqt5':
-        # pip install pyqt5, because we don't have in EDM yet
-        # this assumes Qt5 is available, which implies Linux, for now
+        # pip install pyqt5, because we don't have it in EDM yet
         commands.append("edm run -e {environment} -- pip install pyqt5")
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     for command in commands:
         check_call(command.format(**parameters).split())
-
     click.echo('Done install')
 
 
@@ -149,33 +145,27 @@ def install(runtime, toolkit, environment):
 @click.option('--toolkit', default='null')
 @click.option('--environment', default=None)
 def test(runtime, toolkit, environment):
-    """ Run the test suite in a given environment with the specified toolkit """
-    parameters = _get_parameters(runtime, toolkit, environment)
+    """ Run the test suite in a given environment with the specified toolkit.
 
+    """
+    parameters = get_parameters(runtime, toolkit, environment)
     environ = environment_vars.get(toolkit, {}).copy()
     environ['PYTHONUNBUFFERED'] = "1"
-
     commands = [
-        # run the main test suite
-        "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.tests --nologcapture",
-    ]
+        "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.tests --nologcapture"]
+    # extra tests for qt
     if toolkit in {'pyqt', 'pyside', 'pyqt5'}:
-        commands += [
-            # run the qt4 toolkit test suite
-            "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.qt4.tests --nologcapture"
-        ]
-
-    # run tests & coverage
-    click.echo("Running tests in '{environment}'".format(**parameters))
+        commands.append(
+            "edm run -e {environment} -- coverage run -p -m nose.core -v traitsui.qt4.tests --nologcapture")
 
     # We run in a tempdir to avoid accidentally picking up wrong traitsui
     # code from a local dir.  We need to ensure a good .coveragerc is in
     # that directory, plus coverage has a bug that means a non-local coverage
     # file doesn't get populated correctly.
+    click.echo("Running tests in '{environment}'".format(**parameters))
     with do_in_tempdir(files=['.coveragerc'], capture_files=['./.coverage*']):
-        for command in commands:
-            check_call(command.format(**parameters).split())
-
+        os.environ.update(environ)
+        execute(commands, parameters)
     click.echo('Done test')
 
 @cli.command()
@@ -183,17 +173,15 @@ def test(runtime, toolkit, environment):
 @click.option('--toolkit', default='null')
 @click.option('--environment', default=None)
 def cleanup(runtime, toolkit, environment):
-    parameters = _get_parameters(runtime, toolkit, environment)
+    """ Remove a development environment.
 
+    """
+    parameters = get_parameters(runtime, toolkit, environment)
     commands = [
         "edm run -e {environment} -- python setup.py clean",
-        "edm environments remove {environment} --purge -y",
-    ]
-
+        "edm environments remove {environment} --purge -y"]
     click.echo("Cleaning up environment '{environment}'".format(**parameters))
-    for command in commands:
-        subprocess.check_call(command.format(**parameters).split())
-
+    execute(commands, parameters)
     click.echo('Done cleanup')
 
 
@@ -201,7 +189,9 @@ def cleanup(runtime, toolkit, environment):
 @click.option('--runtime', default='3.5')
 @click.option('--toolkit', default='null')
 def test_clean(runtime, toolkit):
-    """ Run tests in a clean environment, cleaning up afterwards """
+    """ Run tests in a clean environment, cleaning up afterwards
+
+    """
     args = ['--toolkit={}'.format(toolkit), '--runtime={}'.format(runtime)]
     try:
         install(args=args, standalone_mode=False)
@@ -214,22 +204,22 @@ def test_clean(runtime, toolkit):
 @click.option('--toolkit', default='null')
 @click.option('--environment', default=None)
 def update(runtime, toolkit, environment):
-    parameters = _get_parameters(runtime, toolkit, environment)
+    """ Update/Reinstall package into environment.
 
+    """
+    parameters = get_parameters(runtime, toolkit, environment)
     commands = [
-        "edm run -e {environment} -- python setup.py install",
-    ]
-
+        "edm run -e {environment} -- python setup.py install"]
     click.echo("Re-installing in  '{environment}'".format(**parameters))
-    for command in commands:
-        subprocess.check_call(command.format(**parameters).split())
-
+    execute(commands, parameters)
     click.echo('Done update')
 
 
 @cli.command()
 def test_all():
-    """ Run test_clean across all supported environments """
+    """ Run test_clean across all supported environment combinations.
+
+    """
     for runtime, toolkits in supported_combinations.items():
         for toolkit in toolkits:
             args = ['--toolkit={}'.format(toolkit), '--runtime={}'.format(runtime)]
@@ -239,19 +229,15 @@ def test_all():
 # Utility routines
 # ----------------------------------------------------------------------------
 
-def _get_parameters(runtime, toolkit, environment):
+def get_parameters(runtime, toolkit, environment):
     """ Set up parameters dictionary for format() substitution """
-    parameters = {'runtime': runtime, 'toolkit': toolkit}
-
-    if toolkit not in supported_combinations.get(runtime, set()):
+    parameters = {'runtime': runtime, 'toolkit': toolkit, 'environment': environment}
+    if toolkit not in supported_combinations['runtime']:
         msg = ("Python {runtime} and toolkit {toolkit} not supported by " +
                "test environments")
         raise RuntimeError(msg.format(**parameters))
-
     if environment is None:
-        environment = 'traitsui-test-{runtime}-{toolkit}'.format(**parameters)
-    parameters['environment'] = environment
-
+        parameters['environment'] = 'traitsui-test-{runtime}-{toolkit}'.format(**parameters)
     return parameters
 
 
@@ -280,7 +266,6 @@ def do_in_tempdir(files=(), capture_files=()):
     os.chdir(path)
     try:
         yield path
-
         # retrieve any result files we want
         for pattern in capture_files:
             for filepath in glob.iglob(pattern):
@@ -291,11 +276,12 @@ def do_in_tempdir(files=(), capture_files=()):
         rmtree(path)
 
 
-def check_call(*args, **kwargs):
-    try:
-        subprocess.check_call(*args, **kwargs)
-    except subprocess.CalledProcessError:
-        sys.exit(1)
+def execute(commands, parameters):
+    for command in commands:
+        try:
+            subprocess.check_call(command.format(**parameters).split())
+        except subprocess.CalledProcessError:
+            sys.exit(1)
 
 
 if __name__ == '__main__':
