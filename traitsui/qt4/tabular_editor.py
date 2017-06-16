@@ -39,9 +39,6 @@ from .editor import Editor
 from .tabular_model import TabularModel
 
 
-TRAITS_DEBUG = (os.getenv('TRAITS_DEBUG') is not None)
-
-
 class HeaderEventFilter(QtCore.QObject):
 
     def __init__(self, editor):
@@ -356,9 +353,8 @@ class TabularEditor(Editor):
             try:
                 selected_row = self.value.index(new)
             except Exception as e:
-                if TRAITS_DEBUG:
-                    from traits.api import raise_to_debug
-                    raise_to_debug()
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
             else:
                 self._selected_row_changed(selected_row)
 
