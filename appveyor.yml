@@ -37,7 +37,7 @@ init:
 install:
   - install-edm-windows.cmd
   - edm install -y wheel click coverage
-  - cmd /v:on /c "FOR %t IN (%TOOLKITS%) DO (edm run -- echo %t)"
+  - appveyor-run.cmd install $env:runtime $env:toolkits
 test_script:
   - python -v
 on_success:
