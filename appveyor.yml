@@ -33,7 +33,7 @@ cache:
 init:
   - ps: $Env:path = "C:/Enthought/edm;" + $Env:path
   - ps: md C:/Users/appveyor/.cache -Force
-  - ps: $WarningPreference = 'SilentlyContinue'
+  - ps: $WarningPreference = 'Continue'
   - ps: $ErrorActionPreference = "SilentlyContinue"
 
 install:
