@@ -39,7 +39,7 @@ install:
   - edm install -y wheel click coverage
   - appveyor-run.cmd install %runtime% %toolkits%
 test_script:
-  - python -v
+  - appveyor-run.cmd test %runtime% %toolkits%
 on_success:
   - edm run -- coverage combine
   - edm run -- pip install codecov
