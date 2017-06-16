@@ -37,7 +37,7 @@ init:
 install:
   - install-edm-windows.cmd
   - edm install -y wheel click coverage
-  - FOR %t IN (%TOOLKITS%) DO edm run -- echo %t
+  - cmd /v:on /c "FOR %t IN (%TOOLKITS) DO edm run -- echo %t"
 test_script:
   - FOR %t IN ("%TOOLKITS%") DO edm run -- python etstool.py test "--runtime=%RUNTIME%" "--toolkit=%t"
 on_success:
