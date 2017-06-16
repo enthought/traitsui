@@ -37,9 +37,9 @@ init:
 install:
   - install-edm-windows.cmd
   - edm install -y wheel click coverage
-  - FOR %t IN ("%TOOLKITS%") DO (edm run -- python etstool.py install --runtime="%RUNTIME%" --toolkit="%t")
+  - FOR %t IN ("%TOOLKITS%") DO edm run -- python etstool.py install --runtime="%RUNTIME%" --toolkit="%t"
 test_script:
-  - FOR %t IN ("%TOOLKITS%") DO (edm run -- python etstool.py test --runtime="%RUNTIME%" --toolkit=%t)
+  - FOR %t IN ("%TOOLKITS%") DO edm run -- python etstool.py test --runtime="%RUNTIME%" --toolkit=%t
 on_success:
   - edm run -- coverage combine
   - edm run -- pip install codecov
