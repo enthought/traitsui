@@ -4,7 +4,6 @@
 :: %2 -- runtime
 :: %3... -- tookits
 ::
-:: Note: The repo is unpacked in a subfolder named `scratch`
 ::
 SETLOCAL EnableDelayedExpansion
 
@@ -12,10 +11,9 @@ SET counter=0
 
 FOR %%x IN (%*) DO (
 SET /A counter=!counter! + 1
-echo "!counter!":"%%x"
 IF !counter! EQU 1 SET operation=%%x
 IF !counter! EQU 2 SET runtime=%%x
-IF !counter! GTR 2 CALL edm run -- python etstool.py !operation! --runtime=!runtime! --toolkit=%%x
+IF !counter! GTR 2 CALL edm run -- python etstool.py !operation! --runtime=!runtime! --toolkit=%%x || GOTO error
 )
 GOTO end
 
