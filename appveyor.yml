@@ -39,8 +39,8 @@ init:
 install:
   - install-edm-windows.cmd
   - edm install -y wheel click coverage
-  - ps: ForEach ($t in $Env:TOOLKITS.split(" ")) { edm run -- python etstool.py install "--runtime=$Env:RUNTIME" "--toolkit=$t" 2>&1; if ($lastexitcode -ne 0) {break} }
 test_script:
+  - ps: ForEach ($t in $Env:TOOLKITS.split(" ")) { edm run -- python etstool.py install "--runtime=$Env:RUNTIME" "--toolkit=$t" 2>&1; if ($lastexitcode -ne 0) {break} }
   - ps: ForEach ($t in $Env:TOOLKITS.split(" ")) { edm run -- python etstool.py test "--runtime=$Env:RUNTIME" "--toolkit=$t" 2>&1; if ($lastexitcode -ne 0) {break} }
 on_success:
   - edm run -- coverage combine
