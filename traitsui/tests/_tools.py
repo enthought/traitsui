@@ -18,6 +18,7 @@ import traceback
 import inspect
 from functools import partial, wraps
 from contextlib import contextmanager
+from unittest import skip
 
 from nose import SkipTest
 from traits.etsconfig.api import ETSConfig
@@ -72,13 +73,11 @@ def skip_if_not_backend(item, backend_name=''):
     """Decorator that skip tests if the backend is not the desired one."""
 
     if inspect.isclass(item):
-        @wraps(item.setUp)
-        def wrapper(self, *args, **kwargs):
-            if not _is_current_backend(backend_name):
-                message = '' if backend_name != '' else 'Test only for {}'
-                raise SkipTest(message.format(backend_name))
-            else:
-                return item.setUp(self, *args, **kwargs)
+        if not _is_current_backend(backend_name):
+            message = '' if backend_name != '' else 'Test only for {}'
+            wrapper = skip(item, message)
+        else:
+            wrapper = item
     else:
         @wraps(item)
         def wrapper(*args, **kwargs):
