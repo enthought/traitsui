@@ -40,9 +40,9 @@ before_install:
   - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then ./install-edm-linux.sh; export PATH="${HOME}/edm/bin:${PATH}"; fi
   - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ./install-edm-osx.sh; export PATH="${PATH}:/usr/local/bin"; fi
   - edm install -y wheel click coverage
-
-script:
+install:
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
+script:
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py tasks test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
 
 after_success:
