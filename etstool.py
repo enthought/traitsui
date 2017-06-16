@@ -26,15 +26,15 @@ into your working environment.  You will also need to have git
 installed to access required source code from github repositories.
 You can then do::
 
-    python -m tasks install --runtime=... --toolkit=...
+    python etstool.py install --runtime=... --toolkit=...
 
 to create a test environment from the current codebase and::
 
-    python -m tasks test --runtime=... --toolkit=...
+    python etstool.py test --runtime=... --toolkit=...
 
 to run tests in that environment.  You can remove the environment with::
 
-    python -m tasks cleanup --runtime=... --toolkit=...
+    python etstool.py cleanup --runtime=... --toolkit=...
 
 If you make changes you will either need to remove and re-install the
 environment or manually update the environment using ``edm``, as
@@ -46,13 +46,13 @@ environment.  You can update with a command like::
 
 You can run all three tasks at once with::
 
-    python -m tasks test_clean --runtime=... --toolkit=...
+    python etstool.py test_clean --runtime=... --toolkit=...
 
 which will create, install, run tests, and then clean-up the environment.  And
 you can run tests in all supported runtimes and toolkits (with cleanup)
 using::
 
-    python -m tasks test_all
+    python etstool.py test_all
 
 Currently supported runtime values are ``2.7`` and ``3.5``, and currently
 supported toolkits are ``null``, ``pyqt``, ``pyside`` and ``wx``.  Not all
