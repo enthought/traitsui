@@ -126,6 +126,7 @@ def install(runtime, toolkit, environment):
         dependencies | extra_dependencies.get(toolkit, set()))
     # edm commands to setup the development environment
     commands = [
+        "edm environments remove {environment} -y --purge",
         "edm environments create {environment} --force --version={runtime}",
         "edm install -y -e {environment} {packages}",
         "edm run -e {environment} -- pip install -r ci-src-requirements.txt --no-dependencies",
