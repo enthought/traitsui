@@ -130,8 +130,8 @@ def install(runtime, toolkit, environment):
         "edm install -y -e {environment} {packages}",
         "edm run -e {environment} -- pip install -r ci-src-requirements.txt --no-dependencies",
         "edm run -e {environment} -- python setup.py install"]
+    # pip install pyqt5, because we don't have it in EDM yet
     if toolkit == 'pyqt5':
-        # pip install pyqt5, because we don't have it in EDM yet
         commands.append("edm run -e {environment} -- pip install pyqt5")
 
     click.echo("Creating environment '{environment}'".format(**parameters))
@@ -277,6 +277,7 @@ def do_in_tempdir(files=(), capture_files=()):
 
 def execute(commands, parameters):
     for command in commands:
+        print "[EXECUTING]", command.format(**parameters)
         try:
             subprocess.check_call(command.format(**parameters).split())
         except subprocess.CalledProcessError:
