@@ -666,6 +666,8 @@ class _TableView(QtGui.QTableView):
             self.viewport().setAcceptDrops(True)
         if factory.drag_move:
             self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+        else:
+            self.setDragDropMode(QtGui.QAbstractItemView.DragDrop)
         self.setDropIndicatorShown(True)
 
     def keyPressEvent(self, event):
