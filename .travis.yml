@@ -43,7 +43,7 @@ before_install:
 install:
   - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
 script:
-  - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py tasks test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
+  - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
 
 after_success:
   - edm run -- coverage combine
