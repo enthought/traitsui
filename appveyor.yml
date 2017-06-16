@@ -33,15 +33,13 @@ cache:
 init:
   - ps: $Env:path = "C:/Enthought/edm;" + $Env:path
   - ps: md C:/Users/appveyor/.cache -Force
-  - ps: $WarningPreference = 'Continue'
-  - ps: $ErrorActionPreference = "SilentlyContinue"
 
 install:
   - install-edm-windows.cmd
   - edm install -y wheel click coverage
+  - FOR %t IN (%TOOLKITS%) DO (edm run -- python etstool.py install --runtime=2.7 --toolkit=%t)
 test_script:
-  - ps: ForEach ($t in $Env:TOOLKITS.split(" ")) { edm run -- python etstool.py install "--runtime=$Env:RUNTIME" "--toolkit=$t" 2>&1; if ($lastexitcode -ne 0) {break} }
-  - ps: ForEach ($t in $Env:TOOLKITS.split(" ")) { edm run -- python etstool.py test "--runtime=$Env:RUNTIME" "--toolkit=$t" 2>&1; if ($lastexitcode -ne 0) {break} }
+  - FOR %t IN (%TOOLKITS%) DO (edm run -- python etstool.py test --runtime=2.7 --toolkit=%t)
 on_success:
   - edm run -- coverage combine
   - edm run -- pip install codecov
