@@ -119,7 +119,7 @@ def skip_if_null(test_func):
     @wraps(test_func)
     def wrapper(*args, **kwargs):
         if _is_current_backend('null'):
-            raise SkipTest("Test only for the 'null' backend")
+            raise SkipTest("Test not working on the 'null' backend")
         else:
             return test_func(*args, **kwargs)
     return wrapper
