@@ -5,8 +5,8 @@ TraitsUI: Traits-capable windowing framework
 .. image:: https://travis-ci.org/enthought/traitsui.svg?branch=master
    :target: https://travis-ci.org/enthought/traitsui
 
-.. image:: https://ci.appveyor.com/api/projects/status/gkcirica40xx2qyk/branch/master?svg=true
-   :target: https://ci.appveyor.com/project/itziakos/traitsui/branch/master
+.. image:: https://ci.appveyor.com/api/projects/status/n2qy8kcwh8ibi9g3/branch/master?svg=true
+   :target: https://ci.appveyor.com/project/EnthoughtOSS/traitsui/branch/master
 
 .. image:: https://codecov.io/github/enthought/traitsui/coverage.svg?branch=master
    :target: https://codecov.io/github/enthought/traitsui?branch=master
