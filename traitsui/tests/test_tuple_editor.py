@@ -34,9 +34,9 @@ class DummyModel(HasStrictTraits):
     traits_view = View(Item(name='data', editor=TupleEditor()))
 
 
-@skip_if_null
 class TestTupleEditor(UnittestTools, unittest.TestCase):
 
+    @skip_if_null
     def test_value_update(self):
         # Regression test for #179
         model = DummyModel()
