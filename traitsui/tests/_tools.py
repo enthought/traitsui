@@ -75,7 +75,7 @@ def skip_if_not_backend(item, backend_name=''):
     if inspect.isclass(item):
         if not _is_current_backend(backend_name):
             message = '' if backend_name != '' else 'Test only for {}'
-            wrapper = skip(item, message)
+            wrapper = skip(message)(item)
         else:
             wrapper = item
     else:
