@@ -165,8 +165,8 @@ class TabularEditor(Editor):
         selection_model.selectionChanged.connect(slot)
 
         # Synchronize other interesting traits as necessary:
-        self.sync_value(factory.update, 'update', 'from')
-        self.sync_value(factory.refresh, 'refresh', 'from')
+        self.sync_value(factory.update, 'update', 'from', is_event=True)
+        self.sync_value(factory.refresh, 'refresh', 'from', is_event=True)
         self.sync_value(factory.activated, 'activated', 'to')
         self.sync_value(factory.activated_row, 'activated_row', 'to')
         self.sync_value(factory.clicked, 'clicked', 'to')
@@ -178,7 +178,8 @@ class TabularEditor(Editor):
             factory.column_right_clicked,
             'column_right_clicked',
             'to')
-        self.sync_value(factory.scroll_to_row, 'scroll_to_row', 'from')
+        self.sync_value(factory.scroll_to_row, 'scroll_to_row', 'from',
+                        is_event=True)
 
         # Connect other signals as necessary
         control.activated.connect(self._on_activate)
