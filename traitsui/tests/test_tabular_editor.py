@@ -15,6 +15,7 @@ import unittest
 from traits.api import HasTraits, Instance, Int, List, Unicode
 from traitsui.api import Item, TabularEditor, View
 from traitsui.tabular_adapter import TabularAdapter
+from traitsui.tests._tools import skip_if_null
 
 
 class Person(HasTraits):
@@ -51,6 +52,8 @@ class Report(HasTraits):
 
 
 class TestTabularEditor(unittest.TestCase):
+
+    @skip_if_null
     def test_selected_reacts_to_model_changes(self):
         with self.report_and_ui() as (report, ui):
             people = report.people
