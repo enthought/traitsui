@@ -353,8 +353,10 @@ class TabularEditor(Editor):
             try:
                 selected_row = self.value.index(new)
             except Exception as e:
-                from traitsui.api import raise_to_debug
-                raise_to_debug()
+                # It's not exceptional for new to be None
+                if new is not None:
+                    from traitsui.api import raise_to_debug
+                    raise_to_debug()
             else:
                 self._selected_row_changed(selected_row)
 
