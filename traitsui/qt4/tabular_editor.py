@@ -350,13 +350,16 @@ class TabularEditor(Editor):
 
     def _selected_changed(self, new):
         if not self._no_update:
-            try:
-                selected_row = self.value.index(new)
-            except Exception as e:
-                from traitsui.api import raise_to_debug
-                raise_to_debug()
+            if new is None:
+                self._selected_row_changed(-1)
             else:
-                self._selected_row_changed(selected_row)
+                try:
+                    selected_row = self.value.index(new)
+                except Exception:
+                    from traitsui.api import raise_to_debug
+                    raise_to_debug()
+                else:
+                    self._selected_row_changed(selected_row)
 
     def _selected_row_changed(self, selected_row):
         if not self._no_update:
