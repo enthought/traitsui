@@ -12,7 +12,9 @@
 import contextlib
 import unittest
 
-from traits.api import HasTraits, Instance, Int, List, Unicode
+from traits.api import Event, HasTraits, Instance, Int, List, Unicode
+from traits.testing.api import UnittestTools
+
 from traitsui.api import Item, TabularEditor, View
 from traitsui.tabular_adapter import TabularAdapter
 from traitsui.tests._tools import skip_if_null
@@ -39,6 +41,12 @@ class Report(HasTraits):
 
     selected_row = Int(-1)
 
+    # Event for triggering a UI repaint.
+    refresh = Event
+
+    # Event for triggering a UI table update.
+    update = Event
+
     traits_view = View(
         Item(
             name='people',
@@ -46,16 +54,18 @@ class Report(HasTraits):
                 adapter=ReportAdapter(),
                 selected='selected',
                 selected_row='selected_row',
+                refresh='refresh',
+                update='update',
             ),
         ),
     )
 
 
-class TestTabularEditor(unittest.TestCase):
+class TestTabularEditor(UnittestTools, unittest.TestCase):
 
     @skip_if_null
     def test_selected_reacts_to_model_changes(self):
-        with self.report_and_ui() as (report, ui):
+        with self.report_and_editor() as (report, editor):
             people = report.people
 
             self.assertIsNone(report.selected)
@@ -77,11 +87,25 @@ class TestTabularEditor(unittest.TestCase):
             self.assertIsNone(report.selected)
             self.assertEqual(report.selected_row, -1)
 
+    @skip_if_null
+    def test_event_synchronization(self):
+        with self.report_and_editor() as (report, editor):
+            with self.assertTraitChanges(editor, 'refresh', count=1):
+                report.refresh = True
+            # Should happen every time.
+            with self.assertTraitChanges(editor, 'refresh', count=1):
+                report.refresh = True
+
+            with self.assertTraitChanges(editor, 'update', count=1):
+                report.update = True
+            with self.assertTraitChanges(editor, 'update', count=1):
+                report.update = True
+
     @contextlib.contextmanager
-    def report_and_ui(self):
+    def report_and_editor(self):
         """
-        Context manager to temporarily create and clean up
-        a Report and corresponding traitsui.ui.UI object.
+        Context manager to temporarily create and clean up a Report model object
+        and the corresponding TabularEditor.
         """
         report = Report(
             people=[
@@ -91,6 +115,7 @@ class TestTabularEditor(unittest.TestCase):
         )
         ui = report.edit_traits()
         try:
-            yield report, ui
+            editor, = ui.get_editors('people')
+            yield report, editor
         finally:
             ui.dispose()
