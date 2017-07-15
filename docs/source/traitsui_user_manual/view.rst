@@ -172,66 +172,109 @@ Item class.
 
 .. rubric:: Attributes of Item, by category
 
-+----------+---------------------+---------------------------------------------+
-|Category  |Attributes           |Description                                  |
-+==========+=====================+=============================================+
-|Content   | * **name**          |These attributes specify the actual data to  |
-|          |                     |be displayed by an item. Because an Item is  |
-|          |                     |essentially a template for displaying a      |
-|          |                     |single trait, its **name** attribute is      |
-|          |                     |nearly always specified.                     |
-+----------+---------------------+---------------------------------------------+
-|Display   |* **dock**           |In addition to specifying which trait        |
-|format    |* **emphasized**     |attributes are to be displayed, you might    |
-|          |* **export**         |need to adjust the format of one or more of  |
-|          |* **height**         |the resulting widgets.                       |
-|          |* **image**          |                                             |
-|          |* **item_theme**     |If an Item's **label** attribute is specified|
-|          |* **label**          |but not its name, the value of  **label** is |
-|          |* **label_theme**    |displayed as a simple, non-editable string.  |
-|          |* **padding**        |(This feature can be useful for displaying   |
-|          |* **resizable**      |comments or instructions in a TraitsUI       |
-|          |* **show_label**     |window.)                                     |
-|          |* **springy**        |                                             |
-|          |* **width**          |                                             |
-+----------+---------------------+---------------------------------------------+
-|Content   |* **format_str**     |In some cases it can be desirable to apply   |
-|format    |* **format_func**    |special formatting to a widget's contents    |
-|          |                     |rather than to the widget itself. Examples of|
-|          |                     |such formatting might include rounding a     |
-|          |                     |floating-point value to two decimal places,  |
-|          |                     |or capitalizing all letter characters in a   |
-|          |                     |license plate number.                        |
-+----------+---------------------+---------------------------------------------+
-|Widget    |* **editor**         |These attributes override the widget that is |
-|override  |* **style**          |automatically selected by TraitsUI. These    |
-|          |                     |options are discussed in                     |
-|          |                     |:ref:`introduction-to-trait-editor-factories`|
-|          |                     |and                                          |
-|          |                     |:ref:`the-predefined-trait-editor-factories`.|
-+----------+---------------------+---------------------------------------------+
-|Visibility|* **enabled_when**   |Use these attributes to create a simple form |
-|and status|* **visible_when**   |of a dynamic GUI, which alters the display   |
-|          |* **defined_when**   |in response to changes in the data it        |
-|          |* **has_focus**      |contains. More sophisticated dynamic behavior|
-|          |                     |can be implemented using a custom            |
-|          |.. TODO: Add examples|:term:`Handler` see                          |
-|          |   here              |:ref:`controlling-the-interface-the-handler` |
-|          |                     |).                                           |
-+----------+---------------------+---------------------------------------------+
-|User help |* **tooltip**        |These attributes provide guidance to the user|
-|          |* **help**           |in using the user interface. If the **help** |
-|          |* **help_id**        |attribute is not defined for an Item, a      |
-|          |                     |system-generated message is used instead. The|
-|          |.. TODO: Add sample  |**help_id** attribute is ignored by the      |
-|          |   help screen       |default help handler, but can be used by a   |
-|          |                     |custom help handler.                         |
-+----------+---------------------+---------------------------------------------+
-|Unique    |* **id**             |The **id** attribute is used as a key for    |
-|identifier|                     |saving user preferences about the widget. If |
-|          |                     |**id** is not specified, the value of the    |
-|          |                     |**name** attribute is used.                  |
-+----------+---------------------+---------------------------------------------+
+Content
+    These attributes specify the actual data to be displayed by an item.
+    Because an Item is essentially a template for displaying a single trait,
+    its **name** attribute is nearly always specified.
+
+    name: str
+        The name of the trait being edited.
+
+Display format
+   In addition to specifying which trait attributes are to be displayed, you
+   might need to adjust the format of one or more of the resulting widgets.
+
+   If an Item's **label** attribute is specified but not its name, the value
+   of **label** is displayed as a simple, non-editable string. (This feature
+   can be useful for displaying comments or instructions in a TraitsUI
+   window.)
+
+   dock:
+      Docking style for the item.
+   emphasized: bool
+      Should label text be emphasized?
+   export:
+      Category of elements dragged from view.
+   height:
+      Requested height as pixels (height > 1) or proportion of screen (0 <
+      height < 1)
+   image:
+      Image to show on tabs.
+   item_theme:
+      The theme to use for the item itself.
+   label: str
+      The label to display on the item.
+   label_theme:
+      The theme to use for the item's label.
+   padding: int
+      Amount of extra space, in pixels, to add around the item. Values must be
+      integers between -15 and 15. Use negative values to subtract from the
+      default spacing.
+   resizable: bool
+      Can the item be resized to use extra space. The default is False.
+   show_label: bool
+      Whether to show the label or not (defaults to True).
+   springy: bool
+      Use extra space in the parent layout? The default is False.
+   width: float
+      Requested width as pixels (width > 1) or proportion of screen (0 < width
+      < 1).
+
+Content format
+   In some cases it can be desirable to apply special formatting to a widget's
+   contents rather than to the widget itself. Examples of such formatting
+   might include rounding a floating-point value to two decimal places, or
+   capitalizing all letter characters in a license plate number.
+
+   format_str: str
+      '% format' string for text.
+   format_func: func
+      Format function for text.
+
+Widget override
+   These attributes override the widget that is automatically
+   selected by TraitsUI. These options are discussed in
+   :ref:`introduction-to-trait-editor-factories` and
+   :ref:`the-predefined-trait-editor-factories`.
+
+   editor: ItemEditor
+      Editor to use.
+   style: {'simple', 'custom', 'text', 'readonly'}
+      The editor style (see :ref:`specifying-an-editor-style`).
+
+Visibility and status
+   Use these attributes to create a simple form of a dynamic GUI, which
+   alters the display in response to changes in the data it contains.
+   More sophisticated dynamic behavior can be implemented using a custom
+   :term:`Handler` (see :ref:`controlling-the-interface-the-handler`).
+
+   enabled_when: str
+      Expression that determines whether of group can be edited.
+   visible_when: str
+      Expression that determines visibility of group.
+   defined_when: str
+      Expression that determines inclusion of group in parent.
+   has_focus: bool
+      Should this item get initial focus?
+
+User help
+   These attributes provide guidance to the user in using the user interface.
+
+   tooltip: str
+      Tooltip to display on mouse-over.
+   help:
+      If the **help** attribute is not defined for an Item, a system-generated
+      message is used instead.
+   help_id:
+      It is ignored by the default help handler, but can be used by a custom
+      help handler.
+
+   .. TODO: Add sample help screen
+
+Unique identifier
+   id:
+      Used as a key for saving user preferences about the widget. If **id** is
+      not specified, the value of the **name** attribute is used.
 
 .. index:: Custom class, Label class, Heading class, Readonly class,
    Spring class, UCustom class, UItem class, UReadonly class
