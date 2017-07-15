@@ -233,7 +233,8 @@ Item class.
 |          |                     |**name** attribute is used.                  |
 +----------+---------------------+---------------------------------------------+
 
-.. index:: Label class, Heading class, Spring class
+.. index:: Custom class, Label class, Heading class, Readonly class,
+   Spring class, UCustom class, UItem class, UReadonly class
    pair: Item; subclasses
 
 .. _subclasses-of-item:
@@ -241,15 +242,38 @@ Item class.
 Subclasses of Item
 ``````````````````
    
-The TraitsUI package defines the following subclasses of Item:
+The TraitsUI package defines the following subclasses of Item, which are helpful
+shorthands for defining certain types of items. Label, Heading and Spring are
+intended to help with the layout of a TraitsUI View, and need not have a trait
+attribute associated with them. For example, ``Spring()`` and
+``Label("This is a label")`` are valid code.
 
-* Label
-* Heading
-* Spring
-
-These classes are intended to help with the layout of a TraitsUI View, and need
-not have a trait attribute associated with them. See the *Traits API Reference*
-for details.
++-----------+------------------------------+-----------------------------------------+
+| Subclass  | Description                  | Equivalent To                           |
++===========+==============================+=========================================+
+| Label     | An item that is just a label |                                         |
+|           | and doesn't require a trait  |                                         |
+|           | name associated with it      |                                         |
++-----------+------------------------------+-----------------------------------------+
+| Heading   | A fancy label                |                                         |
++-----------+------------------------------+-----------------------------------------+
+| Spring    | A item that expands to  take | :samp:`Item(name='spring',              |
+|           | as much space as necessary   | springy=True, show_label=False)`        |
++-----------+------------------------------+-----------------------------------------+
+| Custom    | An item with a custom editor | :samp:`Item(style='custom')`            |
+|           | style                        |                                         |
++-----------+------------------------------+-----------------------------------------+
+| Readonly  | An item with a readonly      | :samp:`Item(style='readonly')`          |
+|           | editor style                 |                                         |
++-----------+------------------------------+-----------------------------------------+
+| UItem     | An item with no label        | :samp:`Item(show_label=False)`          |
++-----------+------------------------------+-----------------------------------------+
+| UCustom   | A Custom item with no label  | :samp:`Item(style='custom',             |
+|           |                              | show_label=False)`                      |
++-----------+------------------------------+-----------------------------------------+
+| UReadonly | A Readonly item  with no     | :samp:`Item(style='readonly',           |
+|           | label                        | show_label=False)`                      |
++-----------+------------------------------+-----------------------------------------+
 
 .. index:
    object: Group
