@@ -397,11 +397,11 @@ nested to any level.
 
 Group Attributes
 ::::::::::::::::
- 
-The following table lists the attributes of the Group class, organized by 
-functional categories. As with Item attributes, many of these attributes can 
+
+The following table lists the attributes of the Group class, organized by
+functional categories. As with Item attributes, many of these attributes can
 be left unspecified for any given Group, as the default values usually lead to
-acceptable displays and behavior. 
+acceptable displays and behavior.
 
 See the *Traits API Reference* for details of the Group class.
 
@@ -419,72 +419,118 @@ See the *Traits API Reference* for details of the Group class.
 
 .. rubric:: Attributes of Group, by category
 
-+----------+---------------------+---------------------------------------------+
-|Category  |Attributes           |Description                                  |
-+==========+=====================+=============================================+
-|Content   |* **object**         |The **object** attribute references the      |
-|          |* **content**        |object whose traits are being edited by      |
-|          |                     |members of the group; by default this is     |
-|          |                     |'object', but could be another object in the |
-|          |                     |current context. The **content** attribute is|
-|          |                     |a list of elements in the group.             |
-+----------+---------------------+---------------------------------------------+
-|Display   |* **columns**        |These attributes define display options for  |
-|format    |* **dock**           |the group as a whole.                        |       
-|          |* **dock_theme**     |                                             |
-|          |* **export**         |                                             |
-|          |* **group_theme**    |.. index:: enabled_when attribute; Group     |
-|          |* **image**          |.. index:: visible_when attribute; Group     |
-|          |* **item_theme**     |.. index:: defined_when attribute; Group     |
-|          |* **label**          |.. index:: help attribute; Group             |
-|          |* **label_theme**    |.. index:: help_id attribute; Group          |
-|          |* **layout**         |.. index:: id attribute; Group               |
-|          |* **orientation**    |                                             |
-|          |* **padding**        |                                             |
-|          |* **selected**       |                                             |
-|          |* **show_border**    |                                             |
-|          |* **show_labels**    |                                             |
-|          |* **show_left**      |                                             |
-|          |* **springy**        |                                             |
-|          |* **style**          |                                             |
-+----------+---------------------+---------------------------------------------+
-|Visibility|* **enabled_when**   |These attributes work similarly to the       |
-|and status|* **visible_when**   |attributes of the same names on the Item     |
-|          |* **defined_when**   |class.                                       |
-|          |                     |                                             |
-|          |                     |.. TODO: Does Item-level or Group-level take |
-|          |                     |   precedence? Find out and document.        |
-+----------+---------------------+---------------------------------------------+
-|User help |* **help**           |The help text is used by the default help    |
-|          |* **help_id**        |handler only if the group is the only        |
-|          |                     |top-level group for the current View. For    |
-|          |                     |example, suppose help text is defined for a  |
-|          |                     |Group called **group1**. The following View  |
-|          |                     |shows this text in its help window::         |
-|          |                     |                                             |
-|          |                     |  View(group1)                               |
-|          |                     |                                             |
-|          |                     |The following two do  not::                  |
-|          |                     |                                             |
-|          |                     |  View(group1, group2)                       |
-|          |                     |  View(Group(group1))                        |
-|          |                     |                                             |
-|          |                     |The **help_id** attribute is ignored by the  |
-|          |                     |default help handler, but can be used by a   |
-|          |                     |custom help handler.                         |
-|          |                     |                                             |
-|          |                     |.. TODO: The document needs to include       |
-|          |                     |   material on organizing Views via Groups,  |
-|          |                     |   including the implied top-level group of  |
-|          |                     |   every View. If we do this earlier in the  |
-|          |                     |   document, it will probably simplify this. |
-+----------+---------------------+---------------------------------------------+
-|Unique    |* **id**             |The **id** attribute is used as a key for    |
-|identifier|                     |saving user preferences about the widget. If |
-|          |                     |**id** is not specified, the **id** values   |
-|          |                     |of the elements of the group are concatenated|
-|          |                     |and used as the group identifier.            |
-+----------+---------------------+---------------------------------------------+
+Content
+   object:
+      References the object whose traits are being edited by members of the
+      group; by default this is 'object', but could be another object in the
+      current context.
+   content: list
+      List of elements in the group.
+
+Display format
+   These attributes define display options for the group as a whole.
+
+   columns:
+      The number of columns in the group.
+   dock:
+      Dock style of sub-groups.
+   dock_theme:
+      The theme to use for the dock.
+   export:
+      Category of elements dragged from view.
+   group_theme:
+      The theme to use for the group.
+   image:
+      Image to show on tabs.
+   item_theme:
+      The theme to use for items contained in the group.
+   label:
+      The label to display on the group.
+   label_theme:
+      The theme to use for the group's label.
+   layout: {'normal', 'flow', 'split', 'tabbed'}
+      Layout style of the group, which can be one of the following:
+
+      * 'normal' (default): Sub-groups are displayed sequentially in a single
+        panel.
+      * 'flow': Sub-groups are displayed sequentially, and then "wrap" when
+        they exceed the available space in the **orientation** direction.
+      * 'split': Sub-groups are displayed in a single panel, separated by
+        "splitter bars", which the user can drag to adjust the amount of space
+        for each sub-group.
+      * 'tabbed': Each sub-group appears on a separate tab, labeled with the
+        sub-group's *label* text, if any.
+
+      This attribute is ignored for groups that contain only items, or contain
+      only one sub-group.
+   orientation: {'vertical', 'horizontal'}
+      The orientation of the subgroups.
+   padding: int
+      Amount of extra space, in pixels, to add around the item. Values must be
+      integers between -15 and 15. Use negative values to subtract from the
+      default spacing.
+   selected:
+      In a tabbed layout, should this be the visible tab?
+   show_border: bool
+      Should a border be shown or not
+   show_labels:
+      Show the labels of items?
+   show_left: bool
+      Show labels on the left or the right.
+   springy: bool
+      Use extra space in the parent layout? The default is False.
+   style: {'simple', 'custom', 'text', 'readonly'}
+      Default editor style of items in the group.
+
+   .. index:: enabled_when attribute; Group
+   .. index:: visible_when attribute; Group
+   .. index:: defined_when attribute; Group
+   .. index:: help attribute; Group
+   .. index:: help_id attribute; Group
+   .. index:: id attribute; Group
+
+Visibility and status
+   These attributes work similarly to the attributes of the same names on the Item class.
+
+   enabled_when: str
+      Expression that determines whether of group can be edited.
+   visible_when: str
+      Expression that determines visibility of group.
+   defined_when: str
+      Expression that determines inclusion of group in parent.
+
+   .. TODO: Does Item-level or Group-level take precedence? Find out and document.
+
+User help
+   The help text is used by the default help handler only if the group is the
+   only top-level group for the current View. For example, suppose help text
+   is defined for a Group called **group1**. The following View shows this
+   text in its help window::
+
+     View(group1)
+
+   The following two do not::
+
+     View(group1, group2)
+     View(Group(group1))
+
+   help: str
+      Help message. If the **help** attribute is not defined, a
+      system-generated message is used instead.
+   help_id:
+      The **help_id** attribute is ignored by the default help handler, but can be
+      used by a custom help handler.
+
+   .. TODO: The document needs to include material on organizing Views via
+      Groups, including the implied top-level group of every View. If we do
+      thiss earlier in the document, it will probably simplify this.
+
+Unique identifier
+   id: str
+      The **id** attribute is used as a key for saving user preferences about
+      the widget. If **id** is not specified, the **id** values of the elements
+      of the group are concatenated and used as the group identifier.
+
 
 .. index::
    pair: subclasses; Group
