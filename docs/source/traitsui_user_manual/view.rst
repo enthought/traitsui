@@ -336,6 +336,7 @@ TraitsUI, such grouping is accomplished by means of the :term:`Group` object.
 
 Consider the following enhancement to Example 2:
 
+.. index::
    pair: configure_traits(); examples
    triple: View; Group; examples
    
