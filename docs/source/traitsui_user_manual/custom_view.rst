@@ -329,6 +329,15 @@ Command
    TraitsUI menus and toolbars are generally implemented in conjunction with
    custom :term:`Handler`\ s; see :ref:`menus-and-menu-bars` for details.
 
+   buttons:
+      List of button actions to add to the view. The **traitsui.menu**
+      module defines standard buttons, such as **OKButton**, and standard sets
+      of buttons, such as **ModalButtons**, which can be used to define a value
+      for this attribute. This value can also be a list of button name strings,
+      such as ``['OK', 'Cancel', 'Help']``. If set to the empty list, the
+      view contains a default set of buttons (equivalent to **LiveButtons**:
+      Undo/Redo, Revert, OK, Cancel, Help). To suppress buttons in the view,
+      use the **NoButtons** variable, defined in **traitsui.menu**.
    close_result:
       What result should be returned if the user clicks the window or dialog
       close button or icon?
