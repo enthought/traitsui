@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 #-------------------------------------------------------------------------
 
 # List of implemented UI toolkits:
-TraitUIToolkits = ['qt4', 'wx', 'null']
+TraitUIToolkits = ['ipy', 'qt4', 'wx', 'null']
 
 #-------------------------------------------------------------------------
 #  Data:

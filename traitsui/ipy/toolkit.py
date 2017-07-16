@@ -17,16 +17,18 @@ class GUIToolkit(Toolkit):
     #  specified UI object:
     #--------------------------------------------------------------------------
     def ui_panel(self, ui, parent):
-        """ Creates a GUI-toolkit-specific panel-based user interface using
-            information from the specified UI object.
+        """ Creates an ipywidgets panel-based user interface using information
+        from the specified UI object.
         """
-        raise NotImplementedError
+        from .ui_panel import ui_panel
+        ui_panel(ui, parent)
 
     def ui_subpanel(self, ui, parent):
-        """ Creates a GUI-toolkit-specific subpanel-based user interface using
-            information from the specified UI object.
+        """ Creates a ipywidgets subpanel-based user interface using
+        information from the specified UI object.
         """
-        raise NotImplementedError
+        from .ui_panel import ui_subpanel
+        ui_subpanel(ui, parent)
 
     def ui_livemodal(self, ui, parent):
         """ Creates a GUI-toolkit-specific modal "live update" dialog user
