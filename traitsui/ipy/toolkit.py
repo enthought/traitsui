@@ -1,5 +1,5 @@
 """ Defines the concrete implementations of the traits Toolkit interface for
-the PyQt user interface toolkit.
+the ipywidgets user interface toolkit.
 """
 
 # Make sure that importing from this backend is OK:
@@ -266,16 +266,16 @@ class GUIToolkit(Toolkit):
     #-------------------------------------------------------------------------
 
     def color_trait(self, *args, **traits):
-        raise NotImplementedError
+        from traits.api import Color
+        return Color(*args, **traits)
 
     def rgb_color_trait(self, *args, **traits):
-        raise NotImplementedError
-
-    def rgba_color_trait(self, *args, **traits):
-        raise NotImplementedError
+        from traits.api import RGBColor
+        return RGBColor(*args, **traits)
 
     def font_trait(self, *args, **traits):
-        raise NotImplementedError
+        import font_trait as ft
+        return ft.PyQtFont(*args, **traits)
 
     def kiva_font_trait(self, *args, **traits):
         raise NotImplementedError

@@ -48,14 +48,14 @@ all_digits = re.compile(r'\d+')
 #-------------------------------------------------------------------------
 
 def ui_panel(ui, parent):
-    """Creates a panel-based IPyWidgets user interface for a specified UI
+    """Creates a panel-based ipywidgets user interface for a specified UI
     object.
     """
     _ui_panel_for(ui, parent, False)
 
 
 def ui_subpanel(ui, parent):
-    """ Creates a subpanel-based IPyWidgets user interface for a specified UI
+    """ Creates a subpanel-based ipywidgets user interface for a specified UI
     object.
 
     A subpanel does not allow control buttons (other than those specified in
@@ -65,29 +65,35 @@ def ui_subpanel(ui, parent):
 
 
 def _ui_panel_for(ui, parent, is_subpanel):
-    """Creates a panel-based PyQt user interface for a specified UI object.
+    """Creates a panel-based ipywidgets user interface for a specified UI
+    object.
     """
-    ui.control = control = _Panel(ui, parent, is_subpanel).control
+    from ipywidgets import Box
+
+    ui.control = Box()
+
+    # ui.control = control = _Panel(ui, parent, is_subpanel).control
 
     control._parent = parent
     control._object = ui.context.get('object')
     control._ui = ui
 
-    try:
-        ui.prepare_ui()
-    except:
-        control.setParent(None)
-        del control
-        ui.control = None
-        ui.result = False
-        raise
+    # try:
+    #     ui.prepare_ui()
+    # except:
+    #     control.setParent(None)
+    #     del control
+    #     ui.control = None
+    #     ui.result = False
+    #     raise
+    #
+    # ui.restore_prefs()
 
-    ui.restore_prefs()
     ui.result = True
 
 
 class _Panel(BasePanel):
-    """PyQt user interface panel for Traits-based user interfaces.
+    """ ipywidgets user interface panel for Traits-based user interfaces.
     """
 
     def __init__(self, ui, parent, is_subpanel):

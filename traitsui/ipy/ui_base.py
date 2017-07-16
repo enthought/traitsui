@@ -129,7 +129,7 @@ class ButtonEditor(Editor):
 
 
 class BasePanel(object):
-    """Base class for Traits UI panels.
+    """ Base class for Traits UI panels in the ipywidgets toolkit.
     """
 
     #-------------------------------------------------------------------------

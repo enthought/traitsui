@@ -29,7 +29,7 @@ from .constants import OKColor, ErrorColor
 
 
 class Editor(UIEditor):
-    """ Base class for PyQt editors for Traits-based UIs.
+    """ Base class for ipywidgets editors for Traits-based UIs.
     """
 
     def clear_layout(self):
