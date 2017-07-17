@@ -126,6 +126,10 @@ doc_dependencies = {
     "enthought_sphinx_theme",
 }
 
+doc_pip_dependencies = {
+    "doc2dash",
+}
+
 environment_vars = {
     'pyside': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside'},
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
@@ -269,8 +273,10 @@ def docs(runtime, toolkit, environment):
     """
     parameters = get_parameters(runtime, toolkit, environment)
     packages = ' '.join(doc_dependencies)
+    packages_pip = ' '.join(doc_pip_dependencies)
     commands = [
         "edm install -y -e {environment} " + packages,
+        "edm run -e {environment} -- pip install " + packages_pip,
     ]
     click.echo("Installing documentation tools in  '{environment}'".format(
         **parameters))
@@ -280,6 +286,7 @@ def docs(runtime, toolkit, environment):
     os.chdir('docs')
     commands = [
         "edm run -e {environment} -- make html",
+        "edm run -e {environment} -- make docset",
     ]
     click.echo("Building documentation in  '{environment}'".format(**parameters))
     try:

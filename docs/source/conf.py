@@ -23,8 +23,12 @@ base_path = os.path.dirname(__file__)
 # absolute, like shown here.
 #sys.path.append(os.path.abspath('some/directory'))
 
+# The docset build will use slightly different formatting rules
+BUILD_DOCSET = bool(os.environ.get('BUILD_DOCSET'))
+
 # General configuration
 # ---------------------
+
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
@@ -33,6 +37,10 @@ extensions = [
     'sphinx.ext.intersphinx', 'traits.util.trait_documenter'
 ]
 
+if BUILD_DOCSET:
+  extensions.extend([
+                     'sphinx.ext.autosummary',
+                     ])
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -100,6 +108,12 @@ pygments_style = 'sphinx'
 # Options for HTML output
 # -----------------------
 
+# When using docset browsers like Dash and Zeal the side bar is redundant.
+if BUILD_DOCSET:
+    html_theme_options = {
+        'nosidebar': 'true'
+    }
+
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
@@ -143,10 +157,10 @@ html_use_smartypants = True
 #html_additional_pages = {}
 
 # If false, no module index is generated.
-html_use_modindex = False
+html_use_modindex = BUILD_DOCSET
 
 # If false, no index is generated.
-#html_use_index = False
+html_use_index = BUILD_DOCSET
 
 # If true, the index is split into individual pages for each letter.
 #html_split_index = False

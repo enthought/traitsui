@@ -128,3 +128,9 @@ doctest:
 	$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."
+
+docset:
+	BUILD_DOCSET=1 $(SPHINXBUILD) -b html -c source/ $(ALLSPHINXOPTS) $(BUILDDIR)/docset_html
+	@echo "Creating docset with doc2dash"
+	doc2dash --force --destination $(BUILDDIR) --icon $(BUILDDIR)/docset_html/_static/et.png --name TraitsUI --online-redirect-url http://docs.enthought.com/traitsui/ --index-page index.html $(BUILDDIR)/docset_html
+	@echo "TraitsUI docset is available in $(BUILDDIR)/TraitsUI.docset"
