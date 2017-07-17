@@ -1,40 +1,14 @@
-#------------------------------------------------------------------------------
-# Copyright (c) 2007, Riverbank Computing Limited
-# All rights reserved.
-#
-# This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms
-# described in the PyQt GPL exception also apply
-
-#
-# Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
-
-"""Defines the base class for the PyQt-based Traits UI modal and non-modal
-   dialogs.
+""" Defines the base class for the ipywidgets-based Traits UI modal and
+non-modal dialogs.
 """
 
+from traits.api import HasStrictTraits, HasPrivateTraits, Instance, List, Event
+from traitsui.api import UI
+from traitsui.menu import Action
 
-from pyface.qt import QtCore, QtGui
+from ipywidgets import Box
 
-from traits.api \
-    import HasStrictTraits, HasPrivateTraits, Instance, List, Event
-
-from traitsui.api \
-    import UI
-
-from traitsui.menu \
-    import Action
-
-from constants \
-    import DefaultTitle
-
-from editor \
-    import Editor
-
-from helper \
-    import restore_window, save_window
-
+# from .editor import Editor
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -91,41 +65,41 @@ class RadioGroup(HasStrictTraits):
 #-------------------------------------------------------------------------
 
 
-class ButtonEditor(Editor):
-    """ Editor for buttons.
-    """
-    #-------------------------------------------------------------------------
-    #  Trait definitions:
-    #-------------------------------------------------------------------------
-
-    # Action associated with the button
-    action = Instance(Action)
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
-    def __init__(self, **traits):
-        self.set(**traits)
-
-    #-------------------------------------------------------------------------
-    #  Handles the associated button being clicked:
-    #-------------------------------------------------------------------------
-
-    def perform(self):
-        """Handles the associated button being clicked."""
-        self.ui.do_undoable(self._perform, None)
-
-    def _perform(self, event):
-        method_name = self.action.action
-        if method_name == '':
-            method_name = '_%s_clicked' % self.action.name.lower()
-
-        method = getattr(self.ui.handler, method_name, None)
-        if method is not None:
-            method(self.ui.info)
-        else:
-            self.action.perform(event)
+# class ButtonEditor(Editor):
+#     """ Editor for buttons.
+#     """
+#     #-------------------------------------------------------------------------
+#     #  Trait definitions:
+#     #-------------------------------------------------------------------------
+#
+#     # Action associated with the button
+#     action = Instance(Action)
+#
+#     #-------------------------------------------------------------------------
+#     #  Initializes the object:
+#     #-------------------------------------------------------------------------
+#
+#     def __init__(self, **traits):
+#         self.set(**traits)
+#
+#     #-------------------------------------------------------------------------
+#     #  Handles the associated button being clicked:
+#     #-------------------------------------------------------------------------
+#
+#     def perform(self):
+#         """Handles the associated button being clicked."""
+#         self.ui.do_undoable(self._perform, None)
+#
+#     def _perform(self, event):
+#         method_name = self.action.action
+#         if method_name == '':
+#             method_name = '_%s_clicked' % self.action.name.lower()
+#
+#         method = getattr(self.ui.handler, method_name, None)
+#         if method is not None:
+#             method(self.ui.info)
+#         else:
+#             self.action.perform(event)
 
 
 class BasePanel(object):
@@ -321,110 +295,112 @@ class BasePanel(object):
         self.add_to_menu(toolbar_item)
 
 
-class _StickyDialog(QtGui.QDialog):
-    """A QDialog that will only close if the traits handler allows it."""
-
-    def __init__(self, ui, parent):
-        """Initialise the dialog."""
-
-        QtGui.QDialog.__init__(self, parent)
-
-        # Create the main window so we can add toolbars etc.
-        self._mw = QtGui.QMainWindow()
-        layout = QtGui.QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self._mw)
-        self.setLayout(layout)
-
-        # Set the dialog's window flags and properties.
-        if ui.view.resizable:
-            flags = QtCore.Qt.Window
-        else:
-            flags = QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint
-            layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
-            if ui.view.resizable:
-                flags |= QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowMaximizeButtonHint
-        try:
-            flags |= QtCore.Qt.WindowCloseButtonHint
-            if ui.view.resizable:
-                flags |= (QtCore.Qt.WindowMinimizeButtonHint |
-                          QtCore.Qt.WindowMaximizeButtonHint)
-        except AttributeError:
-            # Either PyQt or Qt is too old.
-            pass
-        self.setWindowFlags(flags)
-
-        self._ui = ui
-        self._result = None
-
-    def showEvent(self, e):
-        self.raise_()
-
-    def closeEvent(self, e):
-        """Reimplemented to check when the clicks the window close button.
-        (Note that QDialog doesn't get a close event when the dialog is closed
-        in any other way.)"""
-
-        if self._ok_to_close():
-            QtGui.QDialog.closeEvent(self, e)
-        else:
-            # Ignore the event thereby keeping the dialog open.
-            e.ignore()
-
-    def keyPressEvent(self, e):
-        """Reimplemented to ignore the Escape key if appropriate, and to ignore
-        the Enter key if no default button has been explicitly set."""
-
-        if e.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and \
-                not self._ui.view.default_button:
-            return
-
-        if e.key() == QtCore.Qt.Key_Escape and not self._ok_to_close():
-            return
-
-        QtGui.QDialog.keyPressEvent(self, e)
-
-    def sizeHint(self):
-        """Reimplemented to provide an appropriate size hint for the window.
-        """
-        size = QtGui.QDialog.sizeHint(self)
-        view = self._ui.view
-        if view.width > 0:
-            size.setWidth(view.width)
-        if view.height > 0:
-            size.setHeight(view.height)
-        return size
-
-    def done(self, r):
-        """Reimplemented to ignore calls to accept() or reject() if
-        appropriate."""
-
-        # If we already have a result then we already know that we are done.
-        if self._result is not None:
-            QtGui.QDialog.done(self, self._result)
-        elif self._ok_to_close(bool(r)):
-            QtGui.QDialog.done(self, r)
-
-    def _ok_to_close(self, is_ok=None):
-        """Let the handler decide if the dialog should be closed."""
-
-        # The is_ok flag is also the dialog result.  If we don't know it then
-        # the the user closed the dialog other than by an 'Ok' or 'Cancel'
-        # button.
-        if is_ok is None:
-            # Use the view's default, if there is one.
-            is_ok = self._ui.view.close_result
-            if is_ok is None:
-                # There is no default, so use False for a modal dialog and True
-                # for a non-modal one.
-                is_ok = not self.isModal()
-
-        ok_to_close = self._ui.handler.close(self._ui.info, is_ok)
-        if ok_to_close:
-            # Save the result now.
-            self._result = is_ok
-
-        return ok_to_close
+# class _StickyDialog(QtGui.QDialog):
+#     """A QDialog that will only close if the traits handler allows it."""
+#
+#     def __init__(self, ui, parent):
+#         """Initialise the dialog."""
+#
+#         import pdb ; pdb.set_trace()
+#
+#         QtGui.QDialog.__init__(self, parent)
+#
+#         # Create the main window so we can add toolbars etc.
+#         self._mw = QtGui.QMainWindow()
+#         layout = QtGui.QVBoxLayout()
+#         layout.setContentsMargins(0, 0, 0, 0)
+#         layout.addWidget(self._mw)
+#         self.setLayout(layout)
+#
+#         # Set the dialog's window flags and properties.
+#         if ui.view.resizable:
+#             flags = QtCore.Qt.Window
+#         else:
+#             flags = QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint
+#             layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+#             if ui.view.resizable:
+#                 flags |= QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowMaximizeButtonHint
+#         try:
+#             flags |= QtCore.Qt.WindowCloseButtonHint
+#             if ui.view.resizable:
+#                 flags |= (QtCore.Qt.WindowMinimizeButtonHint |
+#                           QtCore.Qt.WindowMaximizeButtonHint)
+#         except AttributeError:
+#             # Either PyQt or Qt is too old.
+#             pass
+#         self.setWindowFlags(flags)
+#
+#         self._ui = ui
+#         self._result = None
+#
+#     def showEvent(self, e):
+#         self.raise_()
+#
+#     def closeEvent(self, e):
+#         """Reimplemented to check when the clicks the window close button.
+#         (Note that QDialog doesn't get a close event when the dialog is closed
+#         in any other way.)"""
+#
+#         if self._ok_to_close():
+#             QtGui.QDialog.closeEvent(self, e)
+#         else:
+#             # Ignore the event thereby keeping the dialog open.
+#             e.ignore()
+#
+#     def keyPressEvent(self, e):
+#         """Reimplemented to ignore the Escape key if appropriate, and to ignore
+#         the Enter key if no default button has been explicitly set."""
+#
+#         if e.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and \
+#                 not self._ui.view.default_button:
+#             return
+#
+#         if e.key() == QtCore.Qt.Key_Escape and not self._ok_to_close():
+#             return
+#
+#         QtGui.QDialog.keyPressEvent(self, e)
+#
+#     def sizeHint(self):
+#         """Reimplemented to provide an appropriate size hint for the window.
+#         """
+#         size = QtGui.QDialog.sizeHint(self)
+#         view = self._ui.view
+#         if view.width > 0:
+#             size.setWidth(view.width)
+#         if view.height > 0:
+#             size.setHeight(view.height)
+#         return size
+#
+#     def done(self, r):
+#         """Reimplemented to ignore calls to accept() or reject() if
+#         appropriate."""
+#
+#         # If we already have a result then we already know that we are done.
+#         if self._result is not None:
+#             QtGui.QDialog.done(self, self._result)
+#         elif self._ok_to_close(bool(r)):
+#             QtGui.QDialog.done(self, r)
+#
+#     def _ok_to_close(self, is_ok=None):
+#         """Let the handler decide if the dialog should be closed."""
+#
+#         # The is_ok flag is also the dialog result.  If we don't know it then
+#         # the the user closed the dialog other than by an 'Ok' or 'Cancel'
+#         # button.
+#         if is_ok is None:
+#             # Use the view's default, if there is one.
+#             is_ok = self._ui.view.close_result
+#             if is_ok is None:
+#                 # There is no default, so use False for a modal dialog and True
+#                 # for a non-modal one.
+#                 is_ok = not self.isModal()
+#
+#         ok_to_close = self._ui.handler.close(self._ui.info, is_ok)
+#         if ok_to_close:
+#             # Save the result now.
+#             self._result = is_ok
+#
+#         return ok_to_close
 
 
 class BaseDialog(BasePanel):
@@ -438,21 +414,23 @@ class BaseDialog(BasePanel):
 
         raise NotImplementedError
 
-    def create_dialog(self, parent, style):
+    def create_dialog(self, parent, style=None):
         """Create the dialog control."""
 
         self.control = control = _StickyDialog(self.ui, parent)
 
         view = self.ui.view
 
-        control.setModal(style == BaseDialog.MODAL)
-        control.setWindowTitle(view.title or DefaultTitle)
-
-        control.finished.connect(self._on_finished)
+        # control.setModal(style == BaseDialog.MODAL)
+        # control.setWindowTitle(view.title or DefaultTitle)
+        #
+        # control.finished.connect(self._on_finished)
 
     def add_contents(self, panel, buttons):
         """Add a panel (either a widget, layout or None) and optional buttons
         to the dialog."""
+
+        import pdb ; pdb.set_trace()
 
         # If the panel is a layout then provide a widget for it.
         if isinstance(panel, QtGui.QLayout):
@@ -480,31 +458,33 @@ class BaseDialog(BasePanel):
         self.ui = self.control = None
 
     @staticmethod
-    def display_ui(ui, parent, style):
+    def display_ui(ui, parent, style=None):
         """Display the UI."""
 
-        ui.owner.init(ui, parent, style)
-        ui.control = ui.owner.control
-        ui.control._parent = parent
+        ui.control = Box()
+
+        # ui.owner.init(ui, parent, style)
+        # ui.control = ui.owner.control
+        ui.control.parent = parent
 
         try:
             ui.prepare_ui()
         except:
-            ui.control.setParent(None)
+            ui.control.parent = None
             ui.control.ui = None
             ui.control = None
             ui.owner = None
             ui.result = False
             raise
 
-        ui.handler.position(ui.info)
-        restore_window(ui)
+        # ui.handler.position(ui.info)
+        # restore_window(ui)
 
-        if style == BaseDialog.NONMODAL:
-            ui.control.show()
-        else:
-            ui.control.setWindowModality(QtCore.Qt.ApplicationModal)
-            ui.control.exec_()
+        # if style == BaseDialog.NONMODAL:
+        #     ui.control.show()
+        # else:
+        #     ui.control.setWindowModality(QtCore.Qt.ApplicationModal)
+        #     ui.control.exec_()
 
     def set_icon(self, icon=None):
         """Sets the dialog's icon."""

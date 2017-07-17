@@ -40,7 +40,8 @@ class GUIToolkit(Toolkit):
         """ Creates a GUI-toolkit-specific non-modal "live update" window user
             interface using information from the specified UI object.
         """
-        raise NotImplementedError
+        from .ui_live import ui_live
+        ui_live(ui, parent)
 
     def ui_modal(self, ui, parent):
         """ Creates a GUI-toolkit-specific modal dialog user interface using
@@ -183,9 +184,9 @@ class GUIToolkit(Toolkit):
 
     def hook_events(self, ui, control, events=None, handler=None):
         """ Hooks all specified events for all controls in a UI so that they
-            can be routed to the correct event handler.
+        can be routed to the correct event handler.
         """
-        raise NotImplementedError
+        pass
 
     #-------------------------------------------------------------------------
     #  Routes a 'hooked' event to the corrent handler method:
@@ -194,7 +195,7 @@ class GUIToolkit(Toolkit):
     def route_event(self, ui, event):
         """ Routes a "hooked" event to the corrent handler method.
         """
-        raise NotImplementedError
+        pass
 
     #-------------------------------------------------------------------------
     #  Indicates that an event should continue to be processed by the toolkit
@@ -248,7 +249,7 @@ class GUIToolkit(Toolkit):
             - WindowColor': the standard window background color in the toolkit
               specific color format.
         """
-        raise NotImplementedError
+        return {}
 
     #-------------------------------------------------------------------------
     #  Returns a renderer used to render 'themed' table cells for a specified
@@ -266,16 +267,16 @@ class GUIToolkit(Toolkit):
     #-------------------------------------------------------------------------
 
     def color_trait(self, *args, **traits):
-        from traits.api import Color
-        return Color(*args, **traits)
+        from .color_trait import IPyWidgetColor
+        return IPyWidgetColor(*args, **traits)
 
     def rgb_color_trait(self, *args, **traits):
-        from traits.api import RGBColor
-        return RGBColor(*args, **traits)
+        from .color_trait import IPyWidgetColor
+        return IPyWidgetColor(*args, **traits)
 
     def font_trait(self, *args, **traits):
         import font_trait as ft
-        return ft.PyQtFont(*args, **traits)
+        return ft.NullFont(*args, **traits)
 
     def kiva_font_trait(self, *args, **traits):
         raise NotImplementedError
