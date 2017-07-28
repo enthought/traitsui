@@ -133,17 +133,19 @@ similar to the ones for TreeNode, but they don't expect to be passed the object
 as a parameter.
 
 Once you have written the ITreeNodeAdapter subclass, you have to register the
-adapter with traits using the Traits `register_factory()` function.  Note that
-you don't have to use ITreeNodeAdapter.  You can instead write a class which
+adapter with traits using the Traits `adapts()` function.  You are not required
+to use ITreeNodeAdapter if you don't wish to.  You can instead write a class which
 `@provides` the ITreeNode interface directly, or create an alternative adapter
 class.
 
-Note that currently the tree editor infrastructure uses the default traits
-adapter registry which means that you can have mulitple different ITreeNode
-adapters for a given object to use in different editors within a given
-application.  You can work around this somehat by having the trait being
-edited and/or the `get_children` method return pre-adapted objects, rather
-than relying on traits adaptation machinery to find and adapt the object.
+Note that currently the tree editor infrastructure uses the deprecated Traits
+`adapts()` class advisor and the default traits adapter registry which means
+that you can't have mulitple different ITreeNode adapters for a given object
+to use in different editors within a given application.  This is likely to be
+fixed in a future release of TraitsUI.  In the mean-time you can work around
+this somehat by having the trait being edited and/or the `get_children` method
+return pre-adapted objects, rather than relying on traits adaptation machinery
+to find and adapt the object.
 
 ObjectTreeNodes and TreeNodeObjects
 -----------------------------------
