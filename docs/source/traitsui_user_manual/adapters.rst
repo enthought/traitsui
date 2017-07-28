@@ -133,9 +133,10 @@ similar to the ones for TreeNode, but they don't expect to be passed the object
 as a parameter.
 
 Once you have written the ITreeNodeAdapter subclass, you have to register the
-adapter with traits using the `adapts()` function.  Note that you don't have to
-use ITreeNodeAdapter.  You can instead write a class which `@provides` the
-ITreeNode interface directly, or create an alternative adapter class.
+adapter with traits using the Traits `register_factory()` function.  Note that
+you don't have to use ITreeNodeAdapter.  You can instead write a class which
+`@provides` the ITreeNode interface directly, or create an alternative adapter
+class.
 
 Note that currently the tree editor infrastructure uses the default traits
 adapter registry which means that you can have mulitple different ITreeNode
