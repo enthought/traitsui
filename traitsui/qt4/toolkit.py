@@ -121,6 +121,21 @@ set_ui_handler(ui_handler)
 #-------------------------------------------------------------------------
 
 
+class _KeyEventHook(QtCore.QObject):
+    """
+    Event hook for handling Qt key events.
+    """
+    def __init__(self, handler):
+        super(_KeyEventHook, self).__init__()
+        self._handler = handler
+
+    def eventFilter(self, object, event):
+        if event.type() == QtCore.QEvent.KeyPress:
+            return self._handler(event)
+        else:
+            return QtCore.QObject.eventFilter(self, object, event)
+
+
 class GUIToolkit(Toolkit):
     """ Implementation class for PyQt toolkit.
     """
@@ -376,18 +391,10 @@ class GUIToolkit(Toolkit):
             return
 
         elif events == 'keys':
-            class KeyEventHook(QtCore.QObject):
-
-                def eventFilter(self, object, event):
-                    if event.type() == QtCore.QEvent.KeyPress:
-                        return handler(event)
-                    else:
-                        return QtCore.QObject.eventFilter(self, object, event)
-
             # It's unsafe to parent the event filter with the object it's
             # filtering, so we store a reference to it here to ensure that it's
             # not garbage collected prematurely.
-            ui._key_event_hook = KeyEventHook()
+            ui._key_event_hook = _KeyEventHook(handler=handler)
             control.installEventFilter(ui._key_event_hook)
 
     #-------------------------------------------------------------------------

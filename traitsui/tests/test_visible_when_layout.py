@@ -17,6 +17,8 @@
 Test the layout when element appear and disappear with visible_when.
 """
 
+import nose
+
 from traits.has_traits import HasTraits
 from traits.trait_types import Enum, Bool, Str
 

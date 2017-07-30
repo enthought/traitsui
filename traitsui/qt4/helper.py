@@ -26,6 +26,8 @@ from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
 
+is_qt5 = QtCore.__version_info__ >= (5,)
+
 #-------------------------------------------------------------------------
 #  Trait definitions:
 #-------------------------------------------------------------------------
@@ -59,10 +61,16 @@ def pixmap_cache(name, path=None):
             filename = os.path.join(path, name)
     filename = os.path.abspath(filename)
 
-    pm = QtGui.QPixmap()
-    if not QtGui.QPixmapCache.find(filename, pm):
-        pm.load(filename)
-        QtGui.QPixmapCache.insert(filename, pm)
+    if is_qt5:
+        pm = QtGui.QPixmapCache.find(filename)
+        if pm is None:
+            pm = QtGui.QPixmap(filename)
+            QtGui.QPixmapCache.insert(filename, pm)
+    else:
+        pm = QtGui.QPixmap()
+        if not QtGui.QPixmapCache.find(filename, pm):
+            pm.load(filename)
+            QtGui.QPixmapCache.insert(filename, pm)
     return pm
 
 #-------------------------------------------------------------------------
