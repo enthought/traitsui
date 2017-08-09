@@ -44,9 +44,6 @@ from editor \
 # List of all predefined system button names:
 SystemButtons = ['Undo', 'Redo', 'Apply', 'Revert', 'OK', 'Cancel', 'Help']
 
-# List of alternative context items that might handle an Action 'perform':
-PerformHandlers = ('object', 'model')
-
 #-------------------------------------------------------------------------
 #  'RadioGroup' class:
 #-------------------------------------------------------------------------
