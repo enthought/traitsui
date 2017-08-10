@@ -172,68 +172,112 @@ Item class.
 
 .. rubric:: Attributes of Item, by category
 
-+----------+---------------------+---------------------------------------------+
-|Category  |Attributes           |Description                                  |
-+==========+=====================+=============================================+
-|Content   | * **name**          |These attributes specify the actual data to  |
-|          |                     |be displayed by an item. Because an Item is  |
-|          |                     |essentially a template for displaying a      |
-|          |                     |single trait, its **name** attribute is      |
-|          |                     |nearly always specified.                     |
-+----------+---------------------+---------------------------------------------+
-|Display   |* **dock**           |In addition to specifying which trait        |
-|format    |* **emphasized**     |attributes are to be displayed, you might    |
-|          |* **export**         |need to adjust the format of one or more of  |
-|          |* **height**         |the resulting widgets.                       |
-|          |* **image**          |                                             |
-|          |* **item_theme**     |If an Item's **label** attribute is specified|
-|          |* **label**          |but not its name, the value of  **label** is |
-|          |* **label_theme**    |displayed as a simple, non-editable string.  |
-|          |* **padding**        |(This feature can be useful for displaying   |
-|          |* **resizable**      |comments or instructions in a TraitsUI       |
-|          |* **show_label**     |window.)                                     |
-|          |* **springy**        |                                             |
-|          |* **width**          |                                             |
-+----------+---------------------+---------------------------------------------+
-|Content   |* **format_str**     |In some cases it can be desirable to apply   |
-|format    |* **format_func**    |special formatting to a widget's contents    |
-|          |                     |rather than to the widget itself. Examples of|
-|          |                     |such formatting might include rounding a     |
-|          |                     |floating-point value to two decimal places,  |
-|          |                     |or capitalizing all letter characters in a   |
-|          |                     |license plate number.                        |
-+----------+---------------------+---------------------------------------------+
-|Widget    |* **editor**         |These attributes override the widget that is |
-|override  |* **style**          |automatically selected by TraitsUI. These    |
-|          |                     |options are discussed in                     |
-|          |                     |:ref:`introduction-to-trait-editor-factories`|
-|          |                     |and                                          |
-|          |                     |:ref:`the-predefined-trait-editor-factories`.|
-+----------+---------------------+---------------------------------------------+
-|Visibility|* **enabled_when**   |Use these attributes to create a simple form |
-|and status|* **visible_when**   |of a dynamic GUI, which alters the display   |
-|          |* **defined_when**   |in response to changes in the data it        |
-|          |* **has_focus**      |contains. More sophisticated dynamic behavior|
-|          |                     |can be implemented using a custom            |
-|          |.. TODO: Add examples|:term:`Handler` see                          |
-|          |   here              |:ref:`controlling-the-interface-the-handler` |
-|          |                     |).                                           |
-+----------+---------------------+---------------------------------------------+
-|User help |* **tooltip**        |These attributes provide guidance to the user|
-|          |* **help**           |in using the user interface. If the **help** |
-|          |* **help_id**        |attribute is not defined for an Item, a      |
-|          |                     |system-generated message is used instead. The|
-|          |.. TODO: Add sample  |**help_id** attribute is ignored by the      |
-|          |   help screen       |default help handler, but can be used by a   |
-|          |                     |custom help handler.                         |
-+----------+---------------------+---------------------------------------------+
-|Unique    |* **id**             |The **id** attribute is used as a key for    |
-|identifier|                     |saving user preferences about the widget. If |
-|          |                     |**id** is not specified, the value of the    |
-|          |                     |**name** attribute is used.                  |
-+----------+---------------------+---------------------------------------------+
+Content
+    These attributes specify the actual data to be displayed by an item.
+    Because an Item is essentially a template for displaying a single trait,
+    its **name** attribute is nearly always specified.
 
-.. index:: Label class, Heading class, Spring class
+    name: str
+        The name of the trait being edited.
+
+Display format
+   In addition to specifying which trait attributes are to be displayed, you
+   might need to adjust the format of one or more of the resulting widgets.
+
+   If an Item's **label** attribute is specified but not its name, the value
+   of **label** is displayed as a simple, non-editable string. (This feature
+   can be useful for displaying comments or instructions in a TraitsUI
+   window.)
+
+   dock:
+      Docking style for the item.
+   emphasized: bool
+      Should label text be emphasized?
+   export:
+      Category of elements dragged from view.
+   height:
+      Requested height as pixels (height > 1) or proportion of screen (0 <
+      height < 1)
+   image:
+      Image to show on tabs.
+   item_theme:
+      The theme to use for the item itself.
+   label: str
+      The label to display on the item.
+   label_theme:
+      The theme to use for the item's label.
+   padding: int
+      Amount of extra space, in pixels, to add around the item. Values must be
+      integers between -15 and 15. Use negative values to subtract from the
+      default spacing.
+   resizable: bool
+      Can the item be resized to use extra space. The default is False.
+   show_label: bool
+      Whether to show the label or not (defaults to True).
+   springy: bool
+      Use extra space in the parent layout? The default is False.
+   width: float
+      Requested width as pixels (width > 1) or proportion of screen (0 < width
+      < 1).
+
+Content format
+   In some cases it can be desirable to apply special formatting to a widget's
+   contents rather than to the widget itself. Examples of such formatting
+   might include rounding a floating-point value to two decimal places, or
+   capitalizing all letter characters in a license plate number.
+
+   format_str: str
+      '% format' string for text.
+   format_func: func
+      Format function for text.
+
+Widget override
+   These attributes override the widget that is automatically
+   selected by TraitsUI. These options are discussed in
+   :ref:`introduction-to-trait-editor-factories` and
+   :ref:`the-predefined-trait-editor-factories`.
+
+   editor: ItemEditor
+      Editor to use.
+   style: {'simple', 'custom', 'text', 'readonly'}
+      The editor style (see :ref:`specifying-an-editor-style`).
+
+Visibility and status
+   Use these attributes to create a simple form of a dynamic GUI, which
+   alters the display in response to changes in the data it contains.
+   More sophisticated dynamic behavior can be implemented using a custom
+   :term:`Handler` (see :ref:`controlling-the-interface-the-handler`).
+
+   enabled_when: str
+      Expression that determines whether of group can be edited.
+   visible_when: str
+      Expression that determines visibility of group.
+   defined_when: str
+      Expression that determines inclusion of group in parent.
+   has_focus: bool
+      Should this item get initial focus?
+
+User help
+   These attributes provide guidance to the user in using the user interface.
+
+   tooltip: str
+      Tooltip to display on mouse-over.
+   help:
+      If the **help** attribute is not defined for an Item, a system-generated
+      message is used instead.
+   help_id:
+      It is ignored by the default help handler, but can be used by a custom
+      help handler.
+
+   .. TODO: Add sample help screen
+
+Unique identifier
+   id:
+      Used as a key for saving user preferences about the widget. If **id** is
+      not specified, the value of the **name** attribute is used.
+
+.. index:: Custom class, Label class, Heading class, Readonly class,
+   Spring class, UCustom class, UItem class, UReadonly class
    pair: Item; subclasses
 
 .. _subclasses-of-item:
@@ -241,15 +285,38 @@ Item class.
 Subclasses of Item
 ``````````````````
    
-The TraitsUI package defines the following subclasses of Item:
+The TraitsUI package defines the following subclasses of Item, which are helpful
+shorthands for defining certain types of items. Label, Heading and Spring are
+intended to help with the layout of a TraitsUI View, and need not have a trait
+attribute associated with them. For example, ``Spring()`` and
+``Label("This is a label")`` are valid code.
 
-* Label
-* Heading
-* Spring
-
-These classes are intended to help with the layout of a TraitsUI View, and need
-not have a trait attribute associated with them. See the *Traits API Reference*
-for details.
++-----------+------------------------------+-----------------------------------------+
+| Subclass  | Description                  | Equivalent To                           |
++===========+==============================+=========================================+
+| Label     | An item that is just a label |                                         |
+|           | and doesn't require a trait  |                                         |
+|           | name associated with it      |                                         |
++-----------+------------------------------+-----------------------------------------+
+| Heading   | A fancy label                |                                         |
++-----------+------------------------------+-----------------------------------------+
+| Spring    | A item that expands to  take | :samp:`Item(name='spring',              |
+|           | as much space as necessary   | springy=True, show_label=False)`        |
++-----------+------------------------------+-----------------------------------------+
+| Custom    | An item with a custom editor | :samp:`Item(style='custom')`            |
+|           | style                        |                                         |
++-----------+------------------------------+-----------------------------------------+
+| Readonly  | An item with a readonly      | :samp:`Item(style='readonly')`          |
+|           | editor style                 |                                         |
++-----------+------------------------------+-----------------------------------------+
+| UItem     | An item with no label        | :samp:`Item(show_label=False)`          |
++-----------+------------------------------+-----------------------------------------+
+| UCustom   | A Custom item with no label  | :samp:`Item(style='custom',             |
+|           |                              | show_label=False)`                      |
++-----------+------------------------------+-----------------------------------------+
+| UReadonly | A Readonly item  with no     | :samp:`Item(style='readonly',           |
+|           | label                        | show_label=False)`                      |
++-----------+------------------------------+-----------------------------------------+
 
 .. index:
    object: Group
@@ -269,6 +336,7 @@ TraitsUI, such grouping is accomplished by means of the :term:`Group` object.
 
 Consider the following enhancement to Example 2:
 
+.. index::
    pair: configure_traits(); examples
    triple: View; Group; examples
    
@@ -330,11 +398,11 @@ nested to any level.
 
 Group Attributes
 ::::::::::::::::
- 
-The following table lists the attributes of the Group class, organized by 
-functional categories. As with Item attributes, many of these attributes can 
+
+The following table lists the attributes of the Group class, organized by
+functional categories. As with Item attributes, many of these attributes can
 be left unspecified for any given Group, as the default values usually lead to
-acceptable displays and behavior. 
+acceptable displays and behavior.
 
 See the *Traits API Reference* for details of the Group class.
 
@@ -352,72 +420,118 @@ See the *Traits API Reference* for details of the Group class.
 
 .. rubric:: Attributes of Group, by category
 
-+----------+---------------------+---------------------------------------------+
-|Category  |Attributes           |Description                                  |
-+==========+=====================+=============================================+
-|Content   |* **object**         |The **object** attribute references the      |
-|          |* **content**        |object whose traits are being edited by      |
-|          |                     |members of the group; by default this is     |
-|          |                     |'object', but could be another object in the |
-|          |                     |current context. The **content** attribute is|
-|          |                     |a list of elements in the group.             |
-+----------+---------------------+---------------------------------------------+
-|Display   |* **columns**        |These attributes define display options for  |
-|format    |* **dock**           |the group as a whole.                        |       
-|          |* **dock_theme**     |                                             |
-|          |* **export**         |                                             |
-|          |* **group_theme**    |.. index:: enabled_when attribute; Group     |
-|          |* **image**          |.. index:: visible_when attribute; Group     |
-|          |* **item_theme**     |.. index:: defined_when attribute; Group     |
-|          |* **label**          |.. index:: help attribute; Group             |
-|          |* **label_theme**    |.. index:: help_id attribute; Group          |
-|          |* **layout**         |.. index:: id attribute; Group               |
-|          |* **orientation**    |                                             |
-|          |* **padding**        |                                             |
-|          |* **selected**       |                                             |
-|          |* **show_border**    |                                             |
-|          |* **show_labels**    |                                             |
-|          |* **show_left**      |                                             |
-|          |* **springy**        |                                             |
-|          |* **style**          |                                             |
-+----------+---------------------+---------------------------------------------+
-|Visibility|* **enabled_when**   |These attributes work similarly to the       |
-|and status|* **visible_when**   |attributes of the same names on the Item     |
-|          |* **defined_when**   |class.                                       |
-|          |                     |                                             |
-|          |                     |.. TODO: Does Item-level or Group-level take |
-|          |                     |   precedence? Find out and document.        |
-+----------+---------------------+---------------------------------------------+
-|User help |* **help**           |The help text is used by the default help    |
-|          |* **help_id**        |handler only if the group is the only        |
-|          |                     |top-level group for the current View. For    |
-|          |                     |example, suppose help text is defined for a  |
-|          |                     |Group called **group1**. The following View  |
-|          |                     |shows this text in its help window::         |
-|          |                     |                                             |
-|          |                     |  View(group1)                               |
-|          |                     |                                             |
-|          |                     |The following two do  not::                  |
-|          |                     |                                             |
-|          |                     |  View(group1, group2)                       |
-|          |                     |  View(Group(group1))                        |
-|          |                     |                                             |
-|          |                     |The **help_id** attribute is ignored by the  |
-|          |                     |default help handler, but can be used by a   |
-|          |                     |custom help handler.                         |
-|          |                     |                                             |
-|          |                     |.. TODO: The document needs to include       |
-|          |                     |   material on organizing Views via Groups,  |
-|          |                     |   including the implied top-level group of  |
-|          |                     |   every View. If we do this earlier in the  |
-|          |                     |   document, it will probably simplify this. |
-+----------+---------------------+---------------------------------------------+
-|Unique    |* **id**             |The **id** attribute is used as a key for    |
-|identifier|                     |saving user preferences about the widget. If |
-|          |                     |**id** is not specified, the **id** values   |
-|          |                     |of the elements of the group are concatenated|
-|          |                     |and used as the group identifier.            |
-+----------+---------------------+---------------------------------------------+
+Content
+   object:
+      References the object whose traits are being edited by members of the
+      group; by default this is 'object', but could be another object in the
+      current context.
+   content: list
+      List of elements in the group.
+
+Display format
+   These attributes define display options for the group as a whole.
+
+   columns:
+      The number of columns in the group.
+   dock:
+      Dock style of sub-groups.
+   dock_theme:
+      The theme to use for the dock.
+   export:
+      Category of elements dragged from view.
+   group_theme:
+      The theme to use for the group.
+   image:
+      Image to show on tabs.
+   item_theme:
+      The theme to use for items contained in the group.
+   label:
+      The label to display on the group.
+   label_theme:
+      The theme to use for the group's label.
+   layout: {'normal', 'flow', 'split', 'tabbed'}
+      Layout style of the group, which can be one of the following:
+
+      * 'normal' (default): Sub-groups are displayed sequentially in a single
+        panel.
+      * 'flow': Sub-groups are displayed sequentially, and then "wrap" when
+        they exceed the available space in the **orientation** direction.
+      * 'split': Sub-groups are displayed in a single panel, separated by
+        "splitter bars", which the user can drag to adjust the amount of space
+        for each sub-group.
+      * 'tabbed': Each sub-group appears on a separate tab, labeled with the
+        sub-group's *label* text, if any.
+
+      This attribute is ignored for groups that contain only items, or contain
+      only one sub-group.
+   orientation: {'vertical', 'horizontal'}
+      The orientation of the subgroups.
+   padding: int
+      Amount of extra space, in pixels, to add around the item. Values must be
+      integers between -15 and 15. Use negative values to subtract from the
+      default spacing.
+   selected:
+      In a tabbed layout, should this be the visible tab?
+   show_border: bool
+      Should a border be shown or not
+   show_labels:
+      Show the labels of items?
+   show_left: bool
+      Show labels on the left or the right.
+   springy: bool
+      Use extra space in the parent layout? The default is False.
+   style: {'simple', 'custom', 'text', 'readonly'}
+      Default editor style of items in the group.
+
+   .. index:: enabled_when attribute; Group
+   .. index:: visible_when attribute; Group
+   .. index:: defined_when attribute; Group
+   .. index:: help attribute; Group
+   .. index:: help_id attribute; Group
+   .. index:: id attribute; Group
+
+Visibility and status
+   These attributes work similarly to the attributes of the same names on the Item class.
+
+   enabled_when: str
+      Expression that determines whether of group can be edited.
+   visible_when: str
+      Expression that determines visibility of group.
+   defined_when: str
+      Expression that determines inclusion of group in parent.
+
+   .. TODO: Does Item-level or Group-level take precedence? Find out and document.
+
+User help
+   The help text is used by the default help handler only if the group is the
+   only top-level group for the current View. For example, suppose help text
+   is defined for a Group called **group1**. The following View shows this
+   text in its help window::
+
+     View(group1)
+
+   The following two do not::
+
+     View(group1, group2)
+     View(Group(group1))
+
+   help: str
+      Help message. If the **help** attribute is not defined, a
+      system-generated message is used instead.
+   help_id:
+      The **help_id** attribute is ignored by the default help handler, but can be
+      used by a custom help handler.
+
+   .. TODO: The document needs to include material on organizing Views via
+      Groups, including the implied top-level group of every View. If we do
+      thiss earlier in the document, it will probably simplify this.
+
+Unique identifier
+   id: str
+      The **id** attribute is used as a key for saving user preferences about
+      the widget. If **id** is not specified, the **id** values of the elements
+      of the group are concatenated and used as the group identifier.
+
 
 .. index::
    pair: subclasses; Group
