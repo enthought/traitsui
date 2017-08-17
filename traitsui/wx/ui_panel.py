@@ -237,44 +237,6 @@ class Panel(BaseDialog):
 
         cpanel.SetSizerAndFit(sw_sizer)
 
-    #-------------------------------------------------------------------------
-    #  Handles an 'Undo' change request:
-    #-------------------------------------------------------------------------
-
-    def _on_undo(self, event):
-        """ Handles a request to undo a change.
-        """
-        self.ui.history.undo()
-
-    #-------------------------------------------------------------------------
-    #  Handles a 'Redo' change request:
-    #-------------------------------------------------------------------------
-
-    def _on_redo(self, event):
-        """ Handles a request to redo a change.
-        """
-        self.ui.history.redo()
-
-    #-------------------------------------------------------------------------
-    #  Handles a 'Revert' all changes request:
-    #-------------------------------------------------------------------------
-
-    def _on_revert(self, event):
-        """ Handles a request to revert all changes.
-        """
-        ui = self.ui
-        ui.history.revert()
-        ui.handler.revert(ui.info)
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'Help' button being clicked:
-    #-------------------------------------------------------------------------
-
-    def _on_help(self, event):
-        """ Handles the **Help** button being clicked.
-        """
-        self.ui.handler.show_help(self.ui.info, event.GetEventObject())
-
     #-----------------------------------------------------------------------
     #  Handles the undo history 'undoable' state changing:
     #-----------------------------------------------------------------------
