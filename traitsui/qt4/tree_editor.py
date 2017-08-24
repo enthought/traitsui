@@ -23,7 +23,8 @@ import logging
 
 from pyface.qt import QtCore, QtGui
 
-from pyface.resource_manager import resource_manager
+from pyface.api import ImageResource
+from pyface.ui_traits import convert_image
 from pyface.timer.api import do_later
 from traits.api import Any, Event
 from traitsui.api import TreeNode, ObjectTreeNode, MultiTreeNode
@@ -605,23 +606,25 @@ class SimpleEditor(Editor):
 
         icon_name = node.get_icon(object, is_expanded)
         if isinstance(icon_name, basestring):
-            icon = self.STD_ICON_MAP.get(icon_name)
-
-            if icon is not None:
+            if icon_name.startswith('@'):
+                image_resource = convert_image(icon_name, 4)
+                return image_resource.create_icon()
+            elif icon_name in self.STD_ICON_MAP:
+                icon = self.STD_ICON_MAP[icon_name]
                 return self._tree.style().standardIcon(icon)
-
-            path = node.get_icon_path(object)
-            if isinstance(path, basestring):
-                path = [path, node]
             else:
-                path.append(node)
-            reference = resource_manager.locate_image(icon_name, path)
-            if reference is None:
-                return QtGui.QIcon()
-            file_name = reference.filename
+                path = node.get_icon_path(object)
+                if isinstance(path, basestring):
+                    path = [path, node]
+                else:
+                    path = path + [node]
+
+                image_resource = ImageResource(icon_name, path)
         else:
             # Assume it is an ImageResource, and get its file name directly:
-            file_name = icon_name.absolute_path
+            image_resource = icon_name
+
+        file_name = image_resource.absolute_path
 
         return QtGui.QIcon(pixmap_cache(file_name))
 
