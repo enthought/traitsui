@@ -612,20 +612,25 @@ class SimpleEditor(Editor):
             elif icon_name in self.STD_ICON_MAP:
                 icon = self.STD_ICON_MAP[icon_name]
                 return self._tree.style().standardIcon(icon)
-            else:
-                path = node.get_icon_path(object)
-                if isinstance(path, basestring):
-                    path = [path, node]
-                else:
-                    path = path + [node]
 
-                image_resource = ImageResource(icon_name, path)
-        else:
-            # Assume it is an ImageResource, and get its file name directly:
+            path = node.get_icon_path(object)
+            if isinstance(path, basestring):
+                path = [path, node]
+            else:
+                path = path + [node]
+
+            image_resource = ImageResource(icon_name, path)
+
+        elif isinstance(icon_name, ImageResource):
             image_resource = icon_name
 
-        file_name = image_resource.absolute_path
+        else:
+            raise ValueError(
+                "Icon value must be a string or IImageResource instance: " +
+                "given {!r}".format(icon_name)
+            )
 
+        file_name = image_resource.absolute_path
         return QtGui.QIcon(pixmap_cache(file_name))
 
     #-------------------------------------------------------------------------
