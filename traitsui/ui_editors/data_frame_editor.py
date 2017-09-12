@@ -170,6 +170,7 @@ class _DataFrameEditor(UIEditor):
     def _data_frame_view(self):
         """ Return the view used by the editor.
         """
+
         return View(
             Item(
                 self._target_name(self.name),
@@ -191,6 +192,8 @@ class _DataFrameEditor(UIEditor):
                     column_clicked=self._target_name(self.factory.column_clicked),  # noqa
                     column_right_clicked=self._target_name(self.factory.column_right_clicked),  # noqa
                     operations=self.factory.operations,
+                    update=self._target_name(self.factory.update),
+                    refresh=self._target_name(self.factory.refresh),
                 )
             ),
             id='data_frame_editor',
@@ -222,11 +225,18 @@ class _DataFrameEditor(UIEditor):
                 index_name = ''
             columns.insert(0, (index_name, 'index'))
 
-        self.adapter = DataFrameAdapter(
-            columns=columns,
-            _formats=factory.formats,
-            _fonts=factory.fonts
-        )
+        if factory.adapter is not None:
+            self.adapter = factory.adapter
+            self.adapter._formats=factory.formats
+            self.adapter._fonts=factory.fonts
+            if not self.adapter.columns:
+                self.adapter.columns = columns
+        else:
+            self.adapter = DataFrameAdapter(
+                columns=columns,
+                _formats=factory.formats,
+                _fonts=factory.fonts
+            )
 
         return self.edit_traits(
             view='_data_frame_view',
@@ -305,6 +315,17 @@ class DataFrameEditor(BasicEditorFactory):
     # What type of operations are allowed on the list:
     operations = List(Enum('delete', 'insert', 'append', 'edit', 'move'),
                       ['delete', 'insert', 'append', 'edit', 'move'])
+
+    # The optional extended name of the trait used to indicate that a complete
+    # table update is needed:
+    update = Str
+
+    # The optional extended name of the trait used to indicate that the table
+    # just needs to be repainted.
+    refresh = Str
+
+    # Set to override the default dataframe adapter
+    adapter = Instance(DataFrameAdapter)
 
     def _get_klass(self):
         """ The class used to construct editor objects.

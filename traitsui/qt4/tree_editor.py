@@ -23,7 +23,8 @@ import logging
 
 from pyface.qt import QtCore, QtGui
 
-from pyface.resource_manager import resource_manager
+from pyface.api import ImageResource
+from pyface.ui_traits import convert_image
 from pyface.timer.api import do_later
 from traits.api import Any, Event
 from traitsui.api import TreeNode, ObjectTreeNode, MultiTreeNode
@@ -605,24 +606,31 @@ class SimpleEditor(Editor):
 
         icon_name = node.get_icon(object, is_expanded)
         if isinstance(icon_name, basestring):
-            icon = self.STD_ICON_MAP.get(icon_name)
-
-            if icon is not None:
+            if icon_name.startswith('@'):
+                image_resource = convert_image(icon_name, 4)
+                return image_resource.create_icon()
+            elif icon_name in self.STD_ICON_MAP:
+                icon = self.STD_ICON_MAP[icon_name]
                 return self._tree.style().standardIcon(icon)
 
             path = node.get_icon_path(object)
             if isinstance(path, basestring):
                 path = [path, node]
             else:
-                path.append(node)
-            reference = resource_manager.locate_image(icon_name, path)
-            if reference is None:
-                return QtGui.QIcon()
-            file_name = reference.filename
-        else:
-            # Assume it is an ImageResource, and get its file name directly:
-            file_name = icon_name.absolute_path
+                path = path + [node]
 
+            image_resource = ImageResource(icon_name, path)
+
+        elif isinstance(icon_name, ImageResource):
+            image_resource = icon_name
+
+        else:
+            raise ValueError(
+                "Icon value must be a string or IImageResource instance: " +
+                "given {!r}".format(icon_name)
+            )
+
+        file_name = image_resource.absolute_path
         return QtGui.QIcon(pixmap_cache(file_name))
 
     #-------------------------------------------------------------------------
@@ -1610,16 +1618,20 @@ class SimpleEditor(Editor):
         """
         # Prevent the itemChanged() signal from being emitted.
         blk = self._tree.blockSignals(True)
-
-        nids = {}
-        for name2, nid in self._map[id(object)]:
-            if nid not in nids:
-                nids[nid] = None
-                node = self._get_node_data(nid)[1]
-                self._set_label(nid, node.get_label(object), 0)
-                self._update_icon(nid)
-
-        self._tree.blockSignals(blk)
+        try:
+            # Have to use a list rather than a set because nids for PyQt
+            # on Python 3 (QTreeWidgetItem instances) aren't hashable.
+            # This means potentially quadratic behaviour, but the number of
+            # nodes for a particular object shouldn't be high
+            nids = []
+            for name2, nid in self._map[id(object)]:
+                if nid not in nids:
+                    nids.append(nid)
+                    node = self._get_node_data(nid)[1]
+                    self._set_label(nid, node.get_label(object), 0)
+                    self._update_icon(nid)
+        finally:
+            self._tree.blockSignals(blk)
 
     def _column_labels_updated(self, object, name, new):
         """  Handles the column labels of an object being changed.

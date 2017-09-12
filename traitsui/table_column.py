@@ -56,8 +56,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-TRAITS_DEBUG = (os.getenv('TRAITS_DEBUG') is not None)
-
 #-------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------
@@ -492,9 +490,8 @@ class ObjectColumn(TableColumn):
         try:
             return xgetattr(self.get_object(object), self.name)
         except Exception as e:
-            if TRAITS_DEBUG:
-                from traits.api import raise_to_debug
-                raise_to_debug()
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
             return None
 
     def get_value(self, object):

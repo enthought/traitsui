@@ -469,14 +469,40 @@ class Editor(HasPrivateTraits):
                 setattr(self, name, value)
 
     #-------------------------------------------------------------------------
-    #  Sets/Unsets synchronization between an editor trait and a user object
-    #  trait:
+    #  Sets synchronization between an editor trait and a user object trait:
     #-------------------------------------------------------------------------
 
     def sync_value(self, user_name, editor_name, mode='both',
-                   is_list=False):
-        """ Sets or unsets synchronization between an editor trait and a user
-            object trait.
+                   is_list=False, is_event=False):
+        """
+        Set up synchronization between an editor trait and a user object
+        trait.
+
+        Also sets the initial value of the editor trait from the
+        user object trait (for modes 'from' and 'both'), and the initial
+        value of the user object trait from the editor trait (for mode
+        'to').
+
+        Parameters
+        ----------
+        user_name : string
+            The name of the trait to be used on the user object. If empty, no
+            synchronization will be set up.
+        editor_name : string
+            The name of the relevant editor trait.
+        mode : string, optional; one of 'to', 'from' or 'both'
+            The direction of synchronization. 'from' means that trait changes
+            in the user object should be propagated to the editor. 'to' means
+            that trait changes in the editor should be propagated to the user
+            object. 'both' means changes should be propagated in both
+            directions. The default is 'both'.
+        is_list : bool, optional
+            If true, synchronization for item events will be set up in
+            addition to the synchronization for the object itself.
+            The default is False.
+        is_event : bool, optional
+            If true, this method won't attempt to initialize the user
+            object or editor trait values. The default is False.
         """
         if user_name != '':
             key = '%s:%s' % (user_name, editor_name)
@@ -542,11 +568,12 @@ class Editor(HasPrivateTraits):
                     self._user_to.append((user_object, xuser_name + '_items',
                                           user_list_modified))
 
-                try:
-                    setattr(self, editor_name, eval(user_value))
-                except:
-                    from traitsui.api import raise_to_debug
-                    raise_to_debug()
+                if not is_event:
+                    try:
+                        setattr(self, editor_name, eval(user_value))
+                    except:
+                        from traitsui.api import raise_to_debug
+                        raise_to_debug()
 
             if mode in ('to', 'both'):
 
@@ -589,7 +616,7 @@ class Editor(HasPrivateTraits):
                     self._user_from.append((editor_name + '_items',
                                             editor_list_modified))
 
-                if mode == 'to':
+                if mode == 'to' and not is_event:
                     try:
                         setattr(eval(user_ref), user_name,
                                 getattr(self, editor_name))

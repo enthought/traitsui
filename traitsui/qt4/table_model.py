@@ -159,14 +159,15 @@ class TableModel(QtCore.QAbstractTableModel):
         obj = editor.items()[mi.row()]
         column = editor.columns[mi.column()]
 
-        if editor.factory.editable and column.is_editable(obj):
-            flags |= QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsDropEnabled
+        if editor.factory:
+            if editor.factory.editable and column.is_editable(obj):
+                flags |= QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsDropEnabled
 
-        if editor.factory.reorderable:
-            flags |= QtCore.Qt.ItemIsDropEnabled
+            if editor.factory.reorderable:
+                flags |= QtCore.Qt.ItemIsDropEnabled
 
-        if column.get_type(obj) == "bool" and column.show_checkbox:
-            flags |= QtCore.Qt.ItemIsUserCheckable
+            if column.get_type(obj) == "bool" and column.show_checkbox:
+                flags |= QtCore.Qt.ItemIsUserCheckable
 
         return flags
 

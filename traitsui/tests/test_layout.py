@@ -17,6 +17,8 @@
 Test the layout of elements is consistent with the layout parameters.
 """
 
+import nose
+
 from traits.has_traits import HasTraits
 from traits.trait_types import Str
 
