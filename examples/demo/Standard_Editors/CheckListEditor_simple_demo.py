@@ -18,17 +18,18 @@ We do *not* demonstrate two styles which are not as useful for this editor:
     drop-down widget.
 """
 
-from traits.api import HasTraits, List
+from traits.api import HasTraits, List, Str
 from traitsui.api import UItem, Group, View, CheckListEditor, Label
 
 
 class CheckListEditorDemo(HasTraits):
     """ Define the main CheckListEditor simple demo class. """
 
+    values = List(Str, ['None'])
+
     # Specify the strings to be displayed in the checklist:
     checklist = List(editor=CheckListEditor(
-        values=['one', 'two', 'three', 'four',
-                'five', 'six'],
+        name='values',
         cols=2))
 
     # CheckListEditor display with two columns:
@@ -49,8 +50,10 @@ class CheckListEditorDemo(HasTraits):
         resizable=True
     )
 
+
 # Create the demo:
-demo = CheckListEditorDemo()
+values=['one', 'two', 'three', 'four', 'five', 'six']
+demo = CheckListEditorDemo(values=values)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
