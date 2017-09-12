@@ -28,7 +28,12 @@ class CheckListEditorDemo(HasTraits):
     values = List(Str, ['None'])
 
     # Specify the strings to be displayed in the checklist:
-    checklist = List(editor=CheckListEditor(
+    checklist_static = List(editor=CheckListEditor(
+        values=['one', 'two', 'three', 'four', 'five', 'six'],
+        cols=2))
+
+    # Specify the strings to be displayed in the checklist:
+    checklist_dynamic = List(editor=CheckListEditor(
         name='values',
         cols=2))
 
@@ -36,11 +41,18 @@ class CheckListEditorDemo(HasTraits):
     checklist_group = Group(
         '10',  # insert vertical space
         Label('The custom style lets you select items from a checklist:'),
-        UItem('checklist', style='custom'),
+        UItem('checklist_static', style='custom'),
         '10', '_', '10',  # a horizontal line with 10 empty pixels above and below
         Label('The readonly style shows you which items are selected, '
               'as a Python list:'),
-        UItem('checklist', style='readonly'),
+        UItem('checklist_static', style='readonly'),
+        '10',  # insert vertical space
+        Label('The custom style lets you select items from a checklist:'),
+        UItem('checklist_dynamic', style='custom'),
+        '10', '_', '10',  # a horizontal line with 10 empty pixels above and below
+        Label('The readonly style shows you which items are selected, '
+              'as a Python list:'),
+        UItem('checklist_dynamic', style='readonly'),
     )
 
     traits_view = View(
@@ -52,7 +64,7 @@ class CheckListEditorDemo(HasTraits):
 
 
 # Create the demo:
-values=['one', 'two', 'three', 'four', 'five', 'six']
+values=['1', '2', '3', '4', '5', '6']
 demo = CheckListEditorDemo(values=values)
 
 # Run the demo (if invoked from the command line):
