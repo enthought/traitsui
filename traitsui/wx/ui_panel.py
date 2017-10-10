@@ -727,17 +727,6 @@ class FillPanel(object):
             vertical notebook.
         """
         raise NotImplementedError('VFold is not implemented for Wx backend')
-        #from themed_vertical_notebook import ThemedVerticalNotebook
-
-        # Create the vertical notebook:
-        #nb = ThemedVerticalNotebook(scrollable=True)
-        #result = nb.create_control(window)
-
-        # Create the notebook pages:
-        #nb.pages = [self.create_fold_for_item(nb, item) for item in content]
-
-        # Return the notebook we created:
-        #return result
 
     #-------------------------------------------------------------------------
     #  Adds a single group or item to a vertical notebook:
