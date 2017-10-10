@@ -32,50 +32,26 @@ try:
 except:
     PythonDropSource = PythonDropTarget = None
 
-from pyface.resource_manager \
-    import resource_manager
-
-from pyface.image_list \
-    import ImageList
-
-from traits.api \
-    import HasStrictTraits, Any, Str, Event, TraitError
-
-from traitsui.api \
-    import View, TreeNode, ObjectTreeNode, MultiTreeNode, Image
+from pyface.ui.wx.image_list import ImageList
+from traits.api import HasStrictTraits, Any, Str, Event, TraitError
+from traitsui.api import View, TreeNode, ObjectTreeNode, MultiTreeNode
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.tree_editor file.
-from traitsui.editors.tree_editor \
-    import ToolkitEditorFactory
-
-from traitsui.undo \
-    import ListUndoItem
-
-from traitsui.tree_node \
-    import ITreeNodeAdapterBridge
-
-from traitsui.tree_node \
-    import ITreeNodeAdapterBridge
-
+from traitsui.editors.tree_editor import ToolkitEditorFactory
+from traitsui.undo import ListUndoItem
+from traitsui.tree_node import ITreeNodeAdapterBridge
 from traitsui.menu \
     import Menu, Action, Separator
 
-from pyface.api \
-    import ImageResource
+from pyface.api import ImageResource
+from pyface.ui_traits import convert_image
+from pyface.dock.api import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
-from pyface.dock.api \
-    import DockWindow, DockSizer, DockSection, DockRegion, DockControl
-
-from constants \
-    import OKColor
-
-from editor \
-    import Editor
-
-from helper \
-    import open_fbi, TraitsUIPanel, TraitsUIScrolledPanel
+from .constants import OKColor
+from .editor import Editor
+from .helper import open_fbi, TraitsUIPanel, TraitsUIScrolledPanel
 
 #-------------------------------------------------------------------------
 #  Global data:
@@ -139,11 +115,6 @@ class SimpleEditor(Editor):
 
     # The event fired when the application wants to veto an operation:
     veto = Event
-
-    #-- Private Traits -------------------------------------------------------
-
-    # An icon used by a TreeNode:
-    _icon = Image
 
     #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
@@ -387,7 +358,7 @@ class SimpleEditor(Editor):
             self.value = self._get_value()
             self.control.SetBackgroundColour(OKColor)
             self.control.Refresh()
-        except TraitError as excp:
+        except TraitError:
             pass
 
     #-------------------------------------------------------------------------
@@ -698,9 +669,10 @@ class SimpleEditor(Editor):
 
         icon_name = node.get_icon(object, is_expanded)
         if isinstance(icon_name, basestring):
-            if icon_name[:1] == '@':
-                self._icon = icon_name
-                icon_name = self._icon
+            if icon_name.startswith('@'):
+                image = convert_image(icon_name, 3)
+                if image is None:
+                    return -1
             else:
                 if icon_name[:1] == '<':
                     icon_name = icon_name[1:-1]
@@ -711,18 +683,16 @@ class SimpleEditor(Editor):
                         path = [path, node]
                     else:
                         path.append(node)
+                image = ImageResource(icon_name, path).absolute_path
+        elif isinstance(icon_name, ImageResource):
+            image = icon_name.absolute_path
+        else:
+            raise ValueError(
+                "Icon value must be a string or IImageResource instance: " +
+                "given {!r}".format(icon_name)
+            )
 
-                reference = resource_manager.locate_image(icon_name, path)
-                if reference is None:
-                    return -1
-
-                file_name = reference.filename
-
-        # If it is an ImageResource, get its file name directly:
-        if isinstance(icon_name, ImageResource):
-            file_name = icon_name
-
-        return self._image_list.GetIndex(file_name)
+        return self._image_list.GetIndex(image)
 
     #-------------------------------------------------------------------------
     #  Adds the event listeners for a specified object:

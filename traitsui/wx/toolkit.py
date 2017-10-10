@@ -388,8 +388,7 @@ class GUIToolkit(Toolkit):
     #  routed to the correct event handler:
     #-------------------------------------------------------------------------
 
-    def hook_events(self, ui, control, events=None, handler=None,
-                    drop_target=None):
+    def hook_events(self, ui, control, events=None, handler=None):
         """ Hooks all specified events for all controls in a UI so that they
             can be routed to the correct event handler.
         """
@@ -427,7 +426,7 @@ class GUIToolkit(Toolkit):
         control.PushEventHandler(event_handler)
 
         for child in control.GetChildren():
-            self.hook_events(ui, child, events, handler, drop_target)
+            self.hook_events(ui, child, events, handler)
 
     #-------------------------------------------------------------------------
     #  Routes a 'hooked' event to the correct handler method:

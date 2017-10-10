@@ -15,12 +15,12 @@ GUI events, i.e., for events that are generated through or by the program
 interface. Such events can require changes to one or more model objects (e.g.,
 because a data value has been updated) or manipulation of the interface itself
 (e.g., window closure, dynamic interface behavior). In TraitsUI, such actions
-are performed by a Handler object. 
+are performed by a Handler object.
 
 In the preceding examples in this guide, the Handler object has been implicit:
 TraitsUI provides a default Handler that takes care of a common set of GUI
 events including window initialization and closure, data value updates, and
-button press events for the standard TraitsUI window buttons (see 
+button press events for the standard TraitsUI window buttons (see
 :ref:`command-buttons-the-buttons-attribute`).
 
 This chapter explains the features of the TraitsUI Handler, and shows how to
@@ -45,14 +45,14 @@ means of the UIInfo object.
 
 Whenever TraitsUI creates a window or panel from a View, a UIInfo object is
 created to act as the Handler's reference to that window and to the objects
-whose :term:`trait attribute`\ s are displayed in it. Each entry in the View's 
-context (see :ref:`the-view-context`) becomes an attribute of the UIInfo 
-object. [12]_ For example, the UIInfo object created in 
-:ref:`Example 7 <example-7-using-a-multi-object-view-with-a-context>` 
+whose :term:`trait attribute`\ s are displayed in it. Each entry in the View's
+context (see :ref:`the-view-context`) becomes an attribute of the UIInfo
+object. [12]_ For example, the UIInfo object created in
+:ref:`Example 7 <example-7-using-a-multi-object-view-with-a-context>`
 has attributes **h1** and **h2** whose values are the objects **house1** and
 **house2** respectively. In :ref:`Example 1 <example-1-using-configure-traits>`
-through 
-:ref:`Example 6 <example-6-defining-multiple-view-objects-in-a-hastraits-class>`, 
+through
+:ref:`Example 6 <example-6-defining-multiple-view-objects-in-a-hastraits-class>`,
 the created UIInfo object has an attribute **object** whose value is the object
 **sam**.
 
@@ -81,8 +81,8 @@ Binding a Singleton Handler to a View
 
 To associate a given custom Handler with all windows produced from a given View,
 assign an instance of the custom Handler class to the View's **handler**
-attribute. The result of this technique, as shown in 
-:ref:`Example 9 <example-9-using-a-handler-that-reacts-to-trait-changes>`, is 
+attribute. The result of this technique, as shown in
+:ref:`Example 9 <example-9-using-a-handler-that-reacts-to-trait-changes>`, is
 that the window created by the View object is automatically controlled by the
 specified handler instance.
 
@@ -131,9 +131,9 @@ application.
 Both ModelView and Controller extend the Handler class by adding the following
 trait attributes:
 
-- **model**: The model object for which this handler defines a view and 
+- **model**: The model object for which this handler defines a view and
   controller.
-- **info**: The UIInfo object associated with the actual user interface window 
+- **info**: The UIInfo object associated with the actual user interface window
   or panel for the model object.
 
 The **model** attribute provides convenient access to the model object
@@ -223,12 +223,12 @@ are called.
 
 1. A UIInfo object is created
 2. The Handler's init_info() method is called. Override this method if the
-   handler needs access to viewable traits on the UIInfo object whose values 
+   handler needs access to viewable traits on the UIInfo object whose values
    are properties that depend on items in the context being edited.
 3. The UI object is created, and generates the actual window.
 4. The init() method is called. Override this method if you need to initialize
-   or customize the window. 
-   
+   or customize the window.
+
 .. TODO: Add a non-trivial example here.
 
 5. The position() method is called. Override this method to modify the position
@@ -278,6 +278,11 @@ are called.
 |                           |                          |global help handler,   |
 |                           |                          |for this window.       |
 +---------------------------+--------------------------+-----------------------+
+|perform(info, action,      |The user clicks a button  |To change the way that |
+|event)                     |or toolbar item, or       |actions are handled,   |
+|                           |selects a menu item.      |eg. to pass more info  |
+|                           |                          |to a method.           |
++---------------------------+--------------------------+-----------------------+
 
 .. _reacting-to-trait-changes:
 
@@ -303,30 +308,30 @@ have been replaced by underscores. For example, for a method to handle changes
 on the **salary** attribute of the object whose context key is 'object' (the
 default object), the method name should be object_salary_changed().
 
-By contrast, a subclass of Handler for 
-:ref:`Example 7 <example-7-using-a-multi-object-view-with-a-context>` might 
+By contrast, a subclass of Handler for
+:ref:`Example 7 <example-7-using-a-multi-object-view-with-a-context>` might
 include a method called h2_price_changed() to be called whenever the price of
-the second house is edited. 
+the second house is edited.
 
 .. note:: These methods are called on window creation.
 
-   User interface notification methods are called when the window is first 
-   created. 
+   User interface notification methods are called when the window is first
+   created.
 
 To differentiate between code that should be executed when the window is first
 initialized and code that should be executed when the trait actually changes,
-use the **initialized** attribute of the UIInfo object (i.e., of the *info* 
+use the **initialized** attribute of the UIInfo object (i.e., of the *info*
 argument)::
 
     def object_foo_changed(self, info):
-    
+
         if not info.initialized:
-            #code to be executed only when the window is 
+            #code to be executed only when the window is
             #created
         else:
-            #code to be executed only when 'foo' changes after    
+            #code to be executed only when 'foo' changes after
             #window initialization}
-    
+
         #code to be executed in either case
 
 The following script, which annotates its window's title with an asterisk ('*')
@@ -339,43 +344,43 @@ overridden setattr() method and user interface notification method.
 
 ::
 
-    # handler_override.py -- Example of a Handler that overrides 
-    #                        setattr(), and that has a user interface 
+    # handler_override.py -- Example of a Handler that overrides
+    #                        setattr(), and that has a user interface
     #                        notification method
-    
+
     from traits.api import HasTraits, Bool
     from traitsui.api import View, Handler
-    
+
     class TC_Handler(Handler):
-    
+
         def setattr(self, info, object, name, value):
             Handler.setattr(self, info, object, name, value)
             info.object._updated = True
-    
+
         def object__updated_changed(self, info):
             if info.initialized:
                 info.ui.title += "*"
-    
+
     class TestClass(HasTraits):
         b1 = Bool
         b2 = Bool
         b3 = Bool
         _updated = Bool(False)
-    
-    view1 = View('b1', 'b2', 'b3', 
-                 title="Alter Title", 
+
+    view1 = View('b1', 'b2', 'b3',
+                 title="Alter Title",
                  handler=TC_Handler(),
                  buttons = ['OK', 'Cancel'])
-    
+
     tc = TestClass()
     tc.configure_traits(view=view1)
 
 .. image:: images/alter_title_before.png
    :alt: Dialog box with empty checkboxes and a title of "Alter Title"
-   
+
 .. figure:: images/alter_title_after.png
    :alt: Dialog box with one filled checkbox and a title of "Alter Title*"
-     
+
    Figure 7: Before and after views of Example 9
 
 .. _implementing-custom-window-commands:
@@ -403,7 +408,7 @@ the logic for the window. To create the action:
    UIInfo object.
 #. Create an Action instance using the name of the new method, e.g.::
 
-        recalc = Action(name = "Recalculate", 
+        recalc = Action(name = "Recalculate",
                         action = "do_recalc")
 
 .. _custom-command-buttons:
@@ -445,7 +450,7 @@ following code::
            menubar = MenuBar(
               Menu( my_action,
                     name = 'My Special Menu')))
-                    
+
 .. _toolbars:
 
 Toolbars
@@ -462,13 +467,13 @@ except that toolbars do not contain menus; they directly contain actions.
    is used::
 
     From pyface.api import ImageResource
-    
-    recalc = Action(name = "Recalculate", 
+
+    recalc = Action(name = "Recalculate",
                     action = "do_recalc",
                     toolip = "Recalculate the results",
                     image = ImageResource("recalc.png"))
 
-2. If the View does not already include a ToolBar, create one and assign it to 
+2. If the View does not already include a ToolBar, create one and assign it to
    the View's **toolbar** attribute.
 3. Add the Action to the ToolBar.
 
@@ -477,16 +482,14 @@ created, as in the following code::
 
     View ( #view contents,
            # ...,
-           toolbar = ToolBar( my_action))
+           toolbar = ToolBar(my_action))
 
 .. rubric:: Footnotes
 
-.. [11] Except those implemented via the **enabled_when**, **visible_when**, 
-   and **defined_when** attributes of Items and Groups. 
-   
-.. [12] Other attributes of the UIInfo object include a UI object and any 
-   *trait editors* contained in the window (see 
-   :ref:`introduction-to-trait-editor-factories` and 
-   :ref:`the-predefined-trait-editor-factories`).   
-   
+.. [11] Except those implemented via the **enabled_when**, **visible_when**,
+   and **defined_when** attributes of Items and Groups.
 
+.. [12] Other attributes of the UIInfo object include a UI object and any
+   *trait editors* contained in the window (see
+   :ref:`introduction-to-trait-editor-factories` and
+   :ref:`the-predefined-trait-editor-factories`).

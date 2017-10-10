@@ -43,9 +43,6 @@ from helper \
 # List of all predefined system button names:
 SystemButtons = ['Undo', 'Redo', 'Apply', 'Revert', 'OK', 'Cancel', 'Help']
 
-# List of alternative context items that might handle an Action 'perform':
-PerformHandlers = ('object', 'model')
-
 
 def default_icon():
     from pyface.image_resource import ImageResource
@@ -106,26 +103,18 @@ class ButtonEditor(Editor):
     #-------------------------------------------------------------------------
 
     def __init__(self, **traits):
-        self.set(**traits)
+        # XXX Why does this need to be an Editor subclass? -- CJW
+        HasPrivateTraits.__init__(self, **traits)
 
     #-------------------------------------------------------------------------
     #  Handles the associated button being clicked:
     #-------------------------------------------------------------------------
 
-    def perform(self):
-        """Handles the associated button being clicked."""
-        self.ui.do_undoable(self._perform, None)
-
-    def _perform(self, event):
-        method_name = self.action.action
-        if method_name == '':
-            method_name = '_%s_clicked' % self.action.name.lower()
-
-        method = getattr(self.ui.handler, method_name, None)
-        if method is not None:
-            method(self.ui.info)
-        else:
-            self.action.perform(event)
+    def perform(self, event):
+        """ Handles the associated button being clicked.
+        """
+        handler = self.ui.handler
+        self.ui.do_undoable(handler.perform, self.ui.info, self.action, event)
 
 
 class BasePanel(object):
@@ -136,33 +125,11 @@ class BasePanel(object):
     #  Performs the action described by a specified Action object:
     #-------------------------------------------------------------------------
 
-    def perform(self, action):
+    def perform(self, action, event):
         """ Performs the action described by a specified Action object.
         """
-        self.ui.do_undoable(self._perform, action)
-
-    def _perform(self, action):
-        method = getattr(self.ui.handler, action.action, None)
-        if method is not None:
-            method(self.ui.info)
-        else:
-            # TODO extract to common superclass for wx and qt4
-
-            # cf. commit cdf76eb5965c0184114c4674e06b28beee04af36
-            # (July 28, 2008, dmorrill) that fixes this issue for the
-            # wx backend
-
-            # look for the method in the context of the handler
-            context = self.ui.context
-            for item in PerformHandlers:
-                handler = context.get(item, None)
-                if handler is not None:
-                    method = getattr(handler, action.action, None)
-                    if method is not None:
-                        method()
-                        break
-            else:
-                action.perform()
+        handler = self.ui.handler
+        self.ui.do_undoable(handler.perform, self.ui.info, action, event)
 
     #-------------------------------------------------------------------------
     #  Check to see if a specified 'system' button is in the buttons list, and
