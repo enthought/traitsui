@@ -160,8 +160,6 @@ sophisticated interfaces from one chapter to the next.
   widget selection to system defaults.
 * :ref:`controlling-the-interface-the-handler` explains how to use the Handler
   class to implement custom GUI behaviors, as well as menus and toolbars.
-* :ref:`traits-ui-themes` described how to customize the appearance of GUIs
-  through *themes*.
 * :ref:`introduction-to-trait-editor-factories` and
   :ref:`the-predefined-trait-editor-factories` show how to control GUI widget
   selection by means of trait :term:`editor`\ s.

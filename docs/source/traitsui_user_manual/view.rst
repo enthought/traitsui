@@ -14,28 +14,28 @@ object:
 
 .. index::
    pair: examples; configure_traits()
-   
+
 .. _example-1-using-configure-traits:
 
 .. rubric:: Example 1: Using configure_traits()
 
 ::
 
-    # configure_traits.py -- Sample code to demonstrate 
+    # configure_traits.py -- Sample code to demonstrate
     #                        configure_traits()
     from traits.api import HasTraits, Str, Int
     import traitsui
-    
+
     class SimpleEmployee(HasTraits):
         first_name = Str
         last_name = Str
         department = Str
-    
+
         employee_number = Str
         salary = Int
-    
+
     sam = SimpleEmployee()
-    sam.configure_traits()    
+    sam.configure_traits()
 
 Unfortunately, the resulting form simply displays the attributes of the object
 **sam** in alphabetical order with little formatting, which is seldom what is
@@ -43,10 +43,10 @@ wanted:
 
 .. figure:: images/ui_for_ex1.jpg
    :alt: Dialog box showing all attributes of SimpleEmployee in alphabetical order
-   
+
    Figure 1: User interface for Example 1
 
-.. index:: 
+.. index::
    object: View
 
 .. _the-view-object:
@@ -66,40 +66,40 @@ specify the order in which those fields appear. You can do this by defining a
 View object and passing it to the configure_traits() method:
 
 .. index:: configure_traits(); view parameter, examples; View object
-   
-   
+
+
 .. _example-2-using-configure-traits-with-a-view-object:
 
 .. rubric:: Example 2: Using configure_traits() with a View object
 
 ::
 
-    # configure_traits_view.py -- Sample code to demonstrate 
+    # configure_traits_view.py -- Sample code to demonstrate
     #                             configure_traits()
-    
+
     from traits.api import HasTraits, Str, Int
     from traitsui.api import View, Item
     import traitsui
-    
+
     class SimpleEmployee(HasTraits):
         first_name = Str
         last_name = Str
         department = Str
         employee_number = Str
         salary = Int
-    
+
     view1 = View(Item(name = 'first_name'),
                  Item(name = 'last_name'),
                  Item(name = 'department'))
-    
+
     sam = SimpleEmployee()
-    sam.configure_traits(view=view1)    
+    sam.configure_traits(view=view1)
 
 The resulting window has the desired appearance:
 
 .. figure:: images/ui_for_ex2.jpg
    :alt: User interface showing only First name, Last name, and Department
-   
+
    Figure 2: User interface for Example 2
 
 A View object can have a variety of attributes, which are set in the View
@@ -128,7 +128,7 @@ contain one or more objects of either of these types, which are specified as
 arguments to the View constructor, as in the case of the three Items in Example
 2.
 
-The remainder of this chapter describes the Item and Group classes. 
+The remainder of this chapter describes the Item and Group classes.
 
 .. index:: widget, control
    object: Item
@@ -158,16 +158,15 @@ Item class.
 
 .. index:: attributes; Item, Item; attributes
 .. index:: name attribute, dock attribute; Item, emphasized attribute
-.. index:: export attribute; Item, height attribute; Item, image attribute; Item
-.. index:: item_theme attribute; Item, label attribute; Item
-.. index:: label_theme attribute; Item, padding attribute; Item
+.. index:: export attribute; Item, height attribute; Item, image attribute;
+.. index:: Item, label attribute; Item, padding attribute; Item
 .. index:: resizable attribute, show_label attribute, springy attribute; Item
 .. index:: width attribute; Item, format_str attribute, format_func attribute
 .. index:: editor attribute, style attribute; Item, enabled_when attribute; Item
 .. index:: visible_when attribute; Item, defined_when attribute; Item
 .. index:: has_focus attribute, tooltip attribute, help attribute; Item
 .. index:: help_id attribute; Item, id attribute; Item
-   
+
 .. _attributes-of-item-by-category-table:
 
 .. rubric:: Attributes of Item, by category
@@ -200,12 +199,8 @@ Display format
       height < 1)
    image:
       Image to show on tabs.
-   item_theme:
-      The theme to use for the item itself.
    label: str
       The label to display on the item.
-   label_theme:
-      The theme to use for the item's label.
    padding: int
       Amount of extra space, in pixels, to add around the item. Values must be
       integers between -15 and 15. Use negative values to subtract from the
@@ -284,7 +279,7 @@ Unique identifier
 
 Subclasses of Item
 ``````````````````
-   
+
 The TraitsUI package defines the following subclasses of Item, which are helpful
 shorthands for defining certain types of items. Label, Heading and Spring are
 intended to help with the layout of a TraitsUI View, and need not have a trait
@@ -325,7 +320,7 @@ attribute associated with them. For example, ``Spring()`` and
 
 The Group Object
 ````````````````
-   
+
 The preceding sections have shown how to construct windows that display a simple
 vertical sequence of widgets using instances of the View and Item classes. For
 more sophisticated interfaces, though, it is often desirable to treat a group of
@@ -339,59 +334,59 @@ Consider the following enhancement to Example 2:
 .. index::
    pair: configure_traits(); examples
    triple: View; Group; examples
-   
+
 .. _example-3-using-configure-traits-with-a-view-and-a-group-object:
 
 .. rubric:: Example 3: Using configure_traits() with a View and a Group object
 
 ::
 
-    # configure_traits_view_group.py -- Sample code to demonstrate 
+    # configure_traits_view_group.py -- Sample code to demonstrate
     #                                   configure_traits()
     from traits.api import HasTraits, Str, Int
     from traitsui.api import View, Item, Group
     import traitsui
-    
+
     class SimpleEmployee(HasTraits):
         first_name = Str
         last_name = Str
         department = Str
-    
+
         employee_number = Str
         salary = Int
-    
+
     view1 = View(Group(Item(name = 'first_name'),
                        Item(name = 'last_name'),
                        Item(name = 'department'),
                        label = 'Personnel profile',
                        show_border = True))
-    
+
     sam = SimpleEmployee()
-    sam.configure_traits(view=view1)    
+    sam.configure_traits(view=view1)
 
 The resulting window shows the same widgets as before, but they are now enclosed
 in a visible border with a text label:
 
 .. figure:: images/ui_for_ex3.jpg
    :alt: User interface showing three fields enclosed in a border
-   
+
    Figure 3: User interface for Example 3
 
-.. indexx: 
+.. indexx:
    pair: contents; Group
 
 .. _content-of-a-group:
 
 Content of a Group
 ::::::::::::::::::
-   
+
 The content of a Group object is specified exactly like that of a View object.
 In other words, one or more Item or Group objects are given as arguments to the
 Group constructor, e.g., the three Items in Example 3. [5]_ The objects
 contained in a Group are called the *elements* of that Group. Groups can be
 nested to any level.
 
-.. index:: 
+.. index::
    pair: attributes; Group
 
 .. _group-attributes:
@@ -410,12 +405,11 @@ See the *Traits API Reference* for details of the Group class.
 .. index:: label attribute; Group, show_border attribute, show_labels attribute
 .. index:: show_left attribute, padding attribute; Group, layout attribute
 .. index:: selected attribute, orientation attribute, style attribute; Group
-.. index:: columns attribute, dock attribute; Group, dock_theme attribute
-.. index:: group_theme attribute, item_theme attribute; Group
-.. index:: label_theme attribute; Group, image attribute; Group
-.. index:: export attribute; Group, springy attribute; Group
-   
-   
+.. index:: columns attribute, dock attribute; Group, dock_theme attribute;
+.. index:: Group, image attribute; Group export attribute; Group,
+.. index:: springy attribute; Group
+
+
 .. _attributes-of-group-by-category-table:
 
 .. rubric:: Attributes of Group, by category
@@ -439,16 +433,10 @@ Display format
       The theme to use for the dock.
    export:
       Category of elements dragged from view.
-   group_theme:
-      The theme to use for the group.
    image:
       Image to show on tabs.
-   item_theme:
-      The theme to use for items contained in the group.
    label:
       The label to display on the group.
-   label_theme:
-      The theme to use for the group's label.
    layout: {'normal', 'flow', 'split', 'tabbed'}
       Layout style of the group, which can be one of the following:
 
@@ -540,7 +528,7 @@ Unique identifier
 
 Subclasses of Group
 ```````````````````
-   
+
 The TraitsUI package defines the following subclasses of Group, which are
 helpful shorthands for defining certain types of groups. Refer to the *Traits
 API Reference* for details.
@@ -588,18 +576,18 @@ API Reference* for details.
 |           |groups.                       |                                         |
 +-----------+------------------------------+-----------------------------------------+
 
- 
+
 .. rubric:: Footnotes
 
 .. [3] If the code is being run from a program that already has a GUI defined,
    then use edit_traits() instead of configure_traits(). These methods are
    discussed in more detail in :ref:`displaying-a-view`.
-   
+
 .. [4] All code examples in this guide that include a file name are also
-   available as examples in the :file:`tutorials/doc_examples/examples` 
+   available as examples in the :file:`tutorials/doc_examples/examples`
    subdirectory of the Traits docs directory. You can run them individually,
-   or view them in a tutorial program by running: 
+   or view them in a tutorial program by running:
    :program:`python` :file:`{Traits_dir}/tutorials/tutor.py` :file:`{Traits_dir}/docs/tutorials/doc_examples`
-   
+
 .. [5] As with Views, it is possible for a Group to contain objects of more than
    one type, but it is not recommended.

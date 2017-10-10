@@ -460,18 +460,6 @@ class Toolkit(HasPrivateTraits):
             not_implemented_message.format(ETSConfig.toolkit))
 
     #-------------------------------------------------------------------------
-    #  Returns a renderer used to render 'themed' table cells for a specified
-    #  TableColumn object:
-    #-------------------------------------------------------------------------
-
-    def themed_cell_renderer(self, column):
-        """ Returns a renderer used to render 'themed' table cells for a
-            specified TableColum object.
-        """
-        raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
-
-    #-------------------------------------------------------------------------
     #  GUI toolkit dependent trait definitions:
     #-------------------------------------------------------------------------
 

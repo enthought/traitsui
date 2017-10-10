@@ -130,8 +130,6 @@ from .table_column import (ExpressionColumn, ListColumn, NumericColumn,
 from .table_filter import (EvalTableFilter, MenuTableFilter, RuleTableFilter,
                            TableFilter)
 
-from .theme import Theme, default_theme
-
 from .toolkit import toolkit
 
 from .toolkit_traits import ColorTrait, FontTrait, RGBColorTrait
@@ -143,7 +141,7 @@ from .ui import UI
 
 from .ui_info import UIInfo
 
-from .ui_traits import (ATheme, Border, HasBorder, HasMargin, Image, Margin,
+from .ui_traits import (Border, HasBorder, HasMargin, Image, Margin,
                         StatusItem)
 
 from .undo import (AbstractUndoItem, ListUndoItem, UndoHistory,

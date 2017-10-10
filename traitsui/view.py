@@ -44,7 +44,6 @@ from .ui import UI
 
 from .ui_traits import (
     AButton,
-    ATheme,
     AnObject,
     Buttons,
     DockStyle,
@@ -315,12 +314,6 @@ class View(ViewElement):
     # What result should be returned if the user clicks the window or dialog
     # close button or icon?
     close_result = CloseResult
-
-    # The default theme to use for a contained item:
-    item_theme = ATheme
-
-    # The default theme to use for a contained item's label:
-    label_theme = ATheme
 
     # Note: Group objects delegate their 'object' and 'style' traits to the
     # View
