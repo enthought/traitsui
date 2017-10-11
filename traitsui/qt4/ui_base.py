@@ -203,7 +203,6 @@ class BasePanel(object):
                 method = editor.perform
 
         if method is not None:
-            print(method)
             button.clicked.connect(method)
 
         if action.tooltip != '':
