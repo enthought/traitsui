@@ -48,11 +48,11 @@ class ButtonEditor(Editor):
     #  Handles the associated button being clicked:
     #-------------------------------------------------------------------------
 
-    def perform(self, event):
+    def perform(self):
         """ Handles the associated button being clicked.
         """
         handler = self.ui.handler
-        self.ui.do_undoable(handler.perform, self.ui.info, self.action, event)
+        self.ui.do_undoable(handler.perform, self.ui.info, self.action, None)
 
 
 class BasePanel(_BasePanel):
