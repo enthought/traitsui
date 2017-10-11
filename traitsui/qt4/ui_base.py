@@ -110,11 +110,11 @@ class ButtonEditor(Editor):
     #  Handles the associated button being clicked:
     #-------------------------------------------------------------------------
 
-    def perform(self, event):
+    def perform(self):
         """ Handles the associated button being clicked.
         """
         handler = self.ui.handler
-        self.ui.do_undoable(handler.perform, self.ui.info, self.action, event)
+        self.ui.do_undoable(handler.perform, self.ui.info, self.action, None)
 
 
 class BasePanel(object):
@@ -153,7 +153,7 @@ class BasePanel(object):
     def is_button(self, action, name):
         """ Returns whether a specified action button is a system button.
         """
-        if isinstance(action, basestring):
+        if isinstance(action, str):
             return (action == name)
         return (action.name == name)
 
@@ -164,7 +164,7 @@ class BasePanel(object):
     def coerce_button(self, action):
         """ Coerces a string to an Action if necessary.
         """
-        if isinstance(action, basestring):
+        if isinstance(action, str):
             return Action(name=action,
                           action='?'[(not action in SystemButtons):])
         return action
@@ -203,6 +203,7 @@ class BasePanel(object):
                 method = editor.perform
 
         if method is not None:
+            print(method)
             button.clicked.connect(method)
 
         if action.tooltip != '':
