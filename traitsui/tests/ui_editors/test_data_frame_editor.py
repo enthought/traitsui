@@ -16,7 +16,7 @@ except ImportError as exc:
     print "Can't import Pandas: skipping"
     raise nose.SkipTest
 
-from traits.api import HasTraits, Instance
+from traits.api import Event, HasTraits, Instance
 
 from traitsui.item import Item
 from traitsui.ui_editors.data_frame_editor import (
@@ -53,25 +53,21 @@ columns_view = View(
             width=400)
 )
 
+DATA = [[ 0,  1,  2],
+        [ 3,  4,  5],
+        [ 6,  7,  8],
+        [ 9, 10, 11]]
+
 
 def sample_data():
-    data = [[0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [9, 10, 11]]
-    df = DataFrame(data, index=['one', 'two', 'three', 'four'],
+    df = DataFrame(DATA, index=['one', 'two', 'three', 'four'],
                    columns=['X', 'Y', 'Z'])
     viewer = DataFrameViewer(data=df)
     return viewer
 
 
 def sample_data_numerical_index():
-    data = [[0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [9, 10, 11]]
-    df = DataFrame(data, index=range(1, 5),
-                   columns=['X', 'Y', 'Z'])
+    df = DataFrame(DATA, index=range(1,5), columns=['X', 'Y', 'Z'])
     viewer = DataFrameViewer(data=df)
     return viewer
 
@@ -354,6 +350,21 @@ def test_data_frame_editor():
 
 
 @skip_if_null
+def test_data_frame_editor_alternate_adapter():
+    class AlternateAdapter(DataFrameAdapter):
+        pass
+
+    alternate_adapter_view = View(
+        Item('data', editor=DataFrameEditor(adapter=AlternateAdapter()),
+                width=400)
+    )
+    viewer = sample_data()
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits(view=alternate_adapter_view)
+        ui.dispose()
+
+
+@skip_if_null
 def test_data_frame_editor_numerical_index():
     viewer = sample_data_numerical_index()
     with store_exceptions_on_all_threads():
@@ -390,4 +401,41 @@ def test_data_frame_editor_columns():
     viewer = sample_data()
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits(view=columns_view)
+        ui.dispose()
+
+
+@skip_if_null
+def test_data_frame_editor_with_update_refresh():
+
+    class DataFrameViewer(HasTraits):
+        data = Instance(DataFrame)
+        df_updated = Event
+        view = View(
+            Item('data', editor=DataFrameEditor(update="df_updated"))
+        )
+
+    df = DataFrame(DATA, index=['one', 'two', 'three', 'four'],
+                   columns=['X', 'Y', 'Z'])
+    viewer = DataFrameViewer(data=df)
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits()
+        viewer.df_updated = True
+        ui.dispose()
+
+
+@skip_if_null
+def test_data_frame_editor_with_refresh():
+    class DataFrameViewer(HasTraits):
+        data = Instance(DataFrame)
+        df_updated = Event
+        view = View(
+            Item('data', editor=DataFrameEditor())
+        )
+
+    df = DataFrame(DATA, index=['one', 'two', 'three', 'four'],
+                   columns=['X', 'Y', 'Z'])
+    viewer = DataFrameViewer(data=df)
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits()
+        viewer.df_updated = True
         ui.dispose()

@@ -146,7 +146,7 @@ class RangeSlider(QtGui.QSlider):
 
         self.update()
 
-        self.emit(QtCore.SIGNAL('sliderMoved(int)'), new_pos)
+        self.sliderMoved.emit(new_pos)
 
     def __pick(self, pt):
         if self.orientation() == QtCore.Qt.Horizontal:
@@ -191,6 +191,6 @@ if __name__ == "__main__":
     slider.setMaximum(10000)
     slider.setLow(0)
     slider.setHigh(10000)
-    QtCore.QObject.connect(slider, QtCore.SIGNAL('sliderMoved(int)'), echo)
+    slider.sliderMoved.connect(echo)
     slider.show()
     app.exec_()

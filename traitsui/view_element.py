@@ -30,7 +30,7 @@ import re
 from traits.api import HasPrivateTraits, Trait, Bool
 import traits._py2to3 as _py2to3
 
-from .ui_traits import (ATheme, AnObject, DockStyle, EditorStyle, ExportType,
+from .ui_traits import (AnObject, DockStyle, EditorStyle, ExportType,
                         HelpId, Image)
 
 #-------------------------------------------------------------------------
@@ -108,12 +108,6 @@ class DefaultViewElement(ViewElement):
 
     # Should labels be added to items in a group?
     show_labels = Bool(True)
-
-    # The default theme to use for a contained item:
-    item_theme = ATheme
-
-    # The default theme to use for a contained item's label:
-    label_theme = ATheme
 
 #-------------------------------------------------------------------------
 #  Trait definitions:

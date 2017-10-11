@@ -84,10 +84,7 @@ class SimpleEditor(EditorWithList):
         """ Creates the initial editor control.
         """
         self.control = QtGui.QComboBox()
-        QtCore.QObject.connect(
-            self.control,
-            QtCore.SIGNAL('activated(QString)'),
-            self.update_object)
+        self.control.activated.connect(self.update_object)
 
     #-------------------------------------------------------------------------
     #  Handles the list of legal check list values being updated:
@@ -101,6 +98,7 @@ class SimpleEditor(EditorWithList):
             values = [(x, sv(x, capitalize)) for x in values]
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
+
 
         # Make sure the current value is still legal:
         modified = False
@@ -140,7 +138,7 @@ class SimpleEditor(EditorWithList):
     def update_object(self, text):
         """ Handles the user selecting a new value from the combo box.
         """
-        value = self.values[self.names.index(unicode(text))]
+        value = self.values[text]
         if not isinstance(self.value, basestring):
             value = [value]
         self.value = value
@@ -181,8 +179,7 @@ class CustomEditor(SimpleEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        QtCore.QObject.connect(self._mapper, QtCore.SIGNAL(
-            'mapped(const QString &)'), self.update_object)
+        self._mapper.mapped.connect(self.update_object)
 
     #-------------------------------------------------------------------------
     #  Rebuilds the editor after its definition is modified:
@@ -222,10 +219,7 @@ class CustomEditor(SimpleEditor):
                     else:
                         cb.setCheckState(QtCore.Qt.Unchecked)
 
-                    QtCore.QObject.connect(cb,
-                                           QtCore.SIGNAL('clicked()'),
-                                           self._mapper,
-                                           QtCore.SLOT('map()'))
+                    cb.clicked.connect(self._mapper.map)
                     self._mapper.setMapping(cb, labels[index])
 
                     layout.addWidget(cb, i, j)

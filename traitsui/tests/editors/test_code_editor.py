@@ -10,6 +10,8 @@
 #
 #------------------------------------------------------------------------------
 
+import nose
+
 from traits.has_traits import HasTraits
 from traits.trait_types import Bool, Enum, Instance, Str
 from traitsui.handler import ModelView

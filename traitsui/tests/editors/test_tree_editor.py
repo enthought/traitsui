@@ -13,6 +13,7 @@
 #
 #------------------------------------------------------------------------------
 
+import nose
 
 from traits.api import Bool, HasTraits, Instance, Int, List
 from traitsui.api import Item, TreeEditor, TreeNode, View

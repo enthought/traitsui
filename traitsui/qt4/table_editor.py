@@ -26,14 +26,24 @@ from traits.api import Any, Bool, Button, Event, List, HasTraits, \
     Instance, Int, Property, Str, cached_property, on_trait_change
 
 from traitsui.api import EnumEditor, InstanceEditor, Group, \
-    Handler, Item, Label, TableColumn, TableFilter, UI, View, default_handler, \
+    Item, Label, TableColumn, TableFilter, UI, View, default_handler, \
     spring
 from traitsui.editors.table_editor import BaseTableEditor, \
-    ReversedList, ToolkitEditorFactory, customize_filter
+    ReversedList, customize_filter
 from traitsui.ui_traits import SequenceTypes
 
 from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
+
+
+is_qt5 = QtCore.__version_info__ >= (5,)
+
+if is_qt5:
+    def set_qheader_section_resize_mode(header):
+        return header.setSectionResizeMode
+else:
+    def set_qheader_section_resize_mode(header):
+        return header.setResizeMode
 
 #-------------------------------------------------------------------------
 #  'TableEditor' class:
@@ -150,30 +160,27 @@ class TableEditor(Editor, BaseTableEditor):
 
         # Create the vertical header context menu and connect to its signals
         self.header_menu = QtGui.QMenu(self.table_view)
-        signal = QtCore.SIGNAL('triggered()')
         insertable = factory.row_factory is not None and not factory.auto_add
         if factory.editable:
             if insertable:
                 action = self.header_menu.addAction('Insert new item')
-                QtCore.QObject.connect(action, signal, self._on_context_insert)
+                action.triggered.connect(self._on_context_insert)
             if factory.deletable:
                 action = self.header_menu.addAction('Delete item')
-                QtCore.QObject.connect(action, signal, self._on_context_remove)
+                action.triggered.connect(self._on_context_remove)
         if factory.reorderable:
             if factory.editable and (insertable or factory.deletable):
                 self.header_menu.addSeparator()
             self.header_menu_up = self.header_menu.addAction('Move item up')
-            QtCore.QObject.connect(self.header_menu_up, signal,
-                                   self._on_context_move_up)
+            self.header_menu_up.triggered.connect(self._on_context_move_up)
             self.header_menu_down = self.header_menu.addAction(
                 'Move item down')
-            QtCore.QObject.connect(self.header_menu_down, signal,
-                                   self._on_context_move_down)
+            self.header_menu_down.triggered.connect(self._on_context_move_down)
 
         # Create the empty space context menu and connect its signals
         self.empty_menu = QtGui.QMenu(self.table_view)
         action = self.empty_menu.addAction('Add new item')
-        QtCore.QObject.connect(action, signal, self._on_context_append)
+        action.triggered.connect(self._on_context_append)
 
         # When sorting is enabled, the first column is initially displayed with
         # the triangle indicating it is the sort index, even though no sorting
@@ -185,10 +192,8 @@ class TableEditor(Editor, BaseTableEditor):
         # row/column/cell. Do this before creating the edit_view to make sure
         # that it has a valid item to use when constructing its view.
         smodel = self.table_view.selectionModel()
-        signal = QtCore.SIGNAL(
-            'selectionChanged(QItemSelection, QItemSelection)')
         mode_slot = getattr(self, '_on_%s_selection' % factory.selection_mode)
-        QtCore.QObject.connect(smodel, signal, mode_slot)
+        smodel.selectionChanged.connect(mode_slot)
         self.table_view.setCurrentIndex(self.model.index(0, 0))
 
         # Create the toolbar if necessary
@@ -245,10 +250,8 @@ class TableEditor(Editor, BaseTableEditor):
             self.control.setStretchFactor(1, 1)
 
         # Connect to the click and double click handlers
-        signal = QtCore.SIGNAL('clicked(QModelIndex)')
-        QtCore.QObject.connect(self.table_view, signal, self._on_click)
-        signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
-        QtCore.QObject.connect(self.table_view, signal, self._on_dclick)
+        self.table_view.clicked.connect(self._on_click)
+        self.table_view.doubleClicked.connect(self._on_dclick)
 
         # Make sure we listen for 'items' changes as well as complete list
         # replacements
@@ -622,7 +625,8 @@ class TableEditor(Editor, BaseTableEditor):
             if column.renderer:
                 self.table_view.setItemDelegateForColumn(i, column.renderer)
 
-        self.model.reset()
+        self.model.beginResetModel()
+        self.model.endResetModel()
         self.table_view.resizeColumnsToContents()
         if self.auto_size:
             self.table_view.resizeRowsToContents()
@@ -864,46 +868,6 @@ class TableView(QtGui.QTableView):
         self._editor = editor
         factory = editor.factory
 
-        # Configure the row headings.
-        vheader = self.verticalHeader()
-        insertable = factory.row_factory is not None and not factory.auto_add
-        if ((factory.editable and (insertable or factory.deletable)) or
-                factory.reorderable):
-            vheader.installEventFilter(self)
-            vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
-        elif not factory.show_row_labels:
-            vheader.hide()
-        self.setAlternatingRowColors(factory.alternate_bg_color)
-        self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-
-        # Configure the column headings.
-        # We detect if there are any stretchy sections at all; if not, then
-        # we make the last non-fixed-size column stretchy.
-        hheader = self.horizontalHeader()
-        resize_mode_map = dict(
-            interactive=QtGui.QHeaderView.Interactive,
-            fixed=QtGui.QHeaderView.Fixed,
-            stretch=QtGui.QHeaderView.Stretch,
-            resize_to_contents=QtGui.QHeaderView.ResizeToContents)
-        stretchable_columns = []
-        for i, column in enumerate(editor.columns):
-            hheader.setResizeMode(i, resize_mode_map[column.resize_mode])
-            if column.resize_mode in ("stretch", "interactive"):
-                stretchable_columns.append(i)
-        if not stretchable_columns:
-            # Use the behavior from before the "resize_mode" trait was added
-            # to TableColumn
-            hheader.setStretchLastSection(True)
-        else:
-            hheader.setResizeMode(
-                stretchable_columns[-1], QtGui.QHeaderView.Stretch)
-            hheader.setStretchLastSection(False)
-
-        if factory.show_column_labels:
-            hheader.setHighlightSections(False)
-        else:
-            hheader.hide()
-
         # Configure the grid lines.
         self.setShowGrid(factory.show_lines)
 
@@ -934,6 +898,10 @@ class TableView(QtGui.QTableView):
             self.setStyleSheet(factory._qt_stylesheet)
 
         self.resizeColumnsToContents()
+
+    def setModel(self, model):
+        super(TableView, self).setModel(model)
+        self._update_header_sizing()
 
     def contextMenuEvent(self, event):
         """Reimplemented to create context menus for cells and empty space."""
@@ -1130,6 +1098,51 @@ class TableView(QtGui.QTableView):
             delattr(control, "_editor")
 
         return super(TableView, self).closeEditor(control, hint)
+
+    def _update_header_sizing(self):
+        """ Header section sizing can be done only after a valid model is set.
+        Otherwise results in segfault with Qt5.
+        """
+        editor = self._editor
+        factory = editor.factory
+        # Configure the row headings.
+        vheader = self.verticalHeader()
+        set_resize_mode = set_qheader_section_resize_mode(vheader)
+        insertable = factory.row_factory is not None and not factory.auto_add
+        if ((factory.editable and (insertable or factory.deletable)) or
+                factory.reorderable):
+            vheader.installEventFilter(self)
+            set_resize_mode(QtGui.QHeaderView.ResizeToContents)
+        elif not factory.show_row_labels:
+            vheader.hide()
+        self.setAlternatingRowColors(factory.alternate_bg_color)
+        self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        # Configure the column headings.
+        # We detect if there are any stretchy sections at all; if not, then
+        # we make the last non-fixed-size column stretchy.
+        hheader = self.horizontalHeader()
+        set_resize_mode = set_qheader_section_resize_mode(hheader)
+        resize_mode_map = dict(interactive=QtGui.QHeaderView.Interactive,
+                               fixed=QtGui.QHeaderView.Fixed,
+                               stretch=QtGui.QHeaderView.Stretch,
+                               resize_to_contents=QtGui.QHeaderView.ResizeToContents)
+        stretchable_columns = []
+        for i, column in enumerate(editor.columns):
+            set_resize_mode(i, resize_mode_map[column.resize_mode])
+            if column.resize_mode in ("stretch", "interactive"):
+                stretchable_columns.append(i)
+        if not stretchable_columns:
+            # Use the behavior from before the "resize_mode" trait was added
+            # to TableColumn
+            hheader.setStretchLastSection(True)
+        else:
+            # hheader.setSectionResizeMode(
+            #     stretchable_columns[-1], QtGui.QHeaderView.Stretch)
+            hheader.setStretchLastSection(False)
+        if factory.show_column_labels:
+            hheader.setHighlightSections(False)
+        else:
+            hheader.hide()
 
 #-------------------------------------------------------------------------
 #  Editor for configuring the filters available to a TableEditor:

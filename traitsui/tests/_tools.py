@@ -13,13 +13,14 @@
 #
 #------------------------------------------------------------------------------
 
-from functools import partial
-from contextlib import contextmanager
-import nose
-
 import sys
 import traceback
+import inspect
+from functools import partial, wraps
+from contextlib import contextmanager
+from unittest import skip
 
+from nose import SkipTest
 from traits.etsconfig.api import ETSConfig
 import traits.trait_notifiers
 
@@ -68,18 +69,24 @@ def _is_current_backend(backend_name=''):
     return ETSConfig.toolkit == backend_name
 
 
-def skip_if_not_backend(test_func, backend_name=''):
+def skip_if_not_backend(item, backend_name=''):
     """Decorator that skip tests if the backend is not the desired one."""
 
-    if not _is_current_backend(backend_name):
-        # preserve original name so that it appears in the report
-        orig_name = test_func.__name__
-
-        def test_func():
-            raise nose.SkipTest
-        test_func.__name__ = orig_name
-
-    return test_func
+    if inspect.isclass(item):
+        if not _is_current_backend(backend_name):
+            message = '' if backend_name != '' else 'Test only for {}'
+            wrapper = skip(message)(item)
+        else:
+            wrapper = item
+    else:
+        @wraps(item)
+        def wrapper(*args, **kwargs):
+            if not _is_current_backend(backend_name):
+                message = '' if backend_name != '' else 'Test only for {}'
+                raise SkipTest(message.format(backend_name))
+            else:
+                return item(*args, **kwargs)
+    return wrapper
 
 
 #: Return True if current backend is 'wx'
@@ -108,16 +115,13 @@ def skip_if_null(test_func):
     Some tests handle both wx and Qt in one go, but many things are not
     defined in the null backend. Use this decorator to skip the test.
     """
-
-    if _is_current_backend('null'):
-        # preserve original name so that it appears in the report
-        orig_name = test_func.__name__
-
-        def test_func():
-            raise nose.SkipTest
-        test_func.__name__ = orig_name
-
-    return test_func
+    @wraps(test_func)
+    def wrapper(*args, **kwargs):
+        if _is_current_backend('null'):
+            raise SkipTest("Test not working on the 'null' backend")
+        else:
+            return test_func(*args, **kwargs)
+    return wrapper
 
 
 def count_calls(func):

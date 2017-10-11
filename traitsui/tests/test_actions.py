@@ -16,6 +16,7 @@
 """
 Test that menu and toolbar actions are triggered.
 """
+import nose
 import pyface
 
 from traits.has_traits import HasTraits
@@ -28,7 +29,6 @@ from traitsui.tests._tools import *
 from traitsui.tests._tools import _is_current_backend
 
 if _is_current_backend('null'):
-    import nose
     raise nose.SkipTest("Not supported using the null backend")
 
 

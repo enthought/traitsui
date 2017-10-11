@@ -39,9 +39,6 @@ from .editor import Editor
 from .tabular_model import TabularModel
 
 
-TRAITS_DEBUG = (os.getenv('TRAITS_DEBUG') is not None)
-
-
 class HeaderEventFilter(QtCore.QObject):
 
     def __init__(self, editor):
@@ -164,13 +161,12 @@ class TabularEditor(Editor):
             slot = self._on_rows_selection
         else:
             slot = self._on_row_selection
-        signal = 'selectionChanged(QItemSelection,QItemSelection)'
-        QtCore.QObject.connect(self.control.selectionModel(),
-                               QtCore.SIGNAL(signal), slot)
+        selection_model = self.control.selectionModel()
+        selection_model.selectionChanged.connect(slot)
 
         # Synchronize other interesting traits as necessary:
-        self.sync_value(factory.update, 'update', 'from')
-        self.sync_value(factory.refresh, 'refresh', 'from')
+        self.sync_value(factory.update, 'update', 'from', is_event=True)
+        self.sync_value(factory.refresh, 'refresh', 'from', is_event=True)
         self.sync_value(factory.activated, 'activated', 'to')
         self.sync_value(factory.activated_row, 'activated_row', 'to')
         self.sync_value(factory.clicked, 'clicked', 'to')
@@ -182,26 +178,19 @@ class TabularEditor(Editor):
             factory.column_right_clicked,
             'column_right_clicked',
             'to')
-        self.sync_value(factory.scroll_to_row, 'scroll_to_row', 'from')
+        self.sync_value(factory.scroll_to_row, 'scroll_to_row', 'from',
+                        is_event=True)
 
         # Connect other signals as necessary
-        signal = QtCore.SIGNAL('activated(QModelIndex)')
-        QtCore.QObject.connect(control, signal, self._on_activate)
-        signal = QtCore.SIGNAL('clicked(QModelIndex)')
-        QtCore.QObject.connect(control, signal, self._on_click)
-        signal = QtCore.SIGNAL('clicked(QModelIndex)')
-        QtCore.QObject.connect(control, signal, self._on_right_click)
-        signal = QtCore.SIGNAL('doubleClicked(QModelIndex)')
-        QtCore.QObject.connect(control, signal, self._on_dclick)
-        signal = QtCore.SIGNAL('sectionClicked(int)')
-        QtCore.QObject.connect(
-            control.horizontalHeader(),
-            signal,
+        control.activated.connect(self._on_activate)
+        control.clicked.connect(self._on_click)
+        control.clicked.connect(self._on_right_click)
+        control.doubleClicked.connect(self._on_dclick)
+        control.horizontalHeader().sectionClicked.connect(
             self._on_column_click)
 
         control.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        signal = QtCore.SIGNAL('customContextMenuRequested(QPoint)')
-        QtCore.QObject.connect(control, signal, self._on_context_menu)
+        control.customContextMenuRequested.connect(self._on_context_menu)
 
         self.header_event_filter = HeaderEventFilter(self)
         control.horizontalHeader().installEventFilter(self.header_event_filter)
@@ -257,7 +246,8 @@ class TabularEditor(Editor):
             editor.
         """
         if not self._no_update:
-            self.model.reset()
+            self.model.beginResetModel()
+            self.model.endResetModel()
             if self.factory.multi_select:
                 self._multi_selected_changed(self.multi_selected)
             else:
@@ -361,14 +351,16 @@ class TabularEditor(Editor):
 
     def _selected_changed(self, new):
         if not self._no_update:
-            try:
-                selected_row = self.value.index(new)
-            except Exception as e:
-                if TRAITS_DEBUG:
-                    from traits.api import raise_to_debug
-                    raise_to_debug()
+            if new is None:
+                self._selected_row_changed(-1)
             else:
-                self._selected_row_changed(selected_row)
+                try:
+                    selected_row = self.value.index(new)
+                except Exception:
+                    from traitsui.api import raise_to_debug
+                    raise_to_debug()
+                else:
+                    self._selected_row_changed(selected_row)
 
     def _selected_row_changed(self, selected_row):
         if not self._no_update:

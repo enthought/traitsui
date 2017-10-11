@@ -16,6 +16,7 @@
 """
 Test the creation and layout of labels.
 """
+import nose
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Bool, Str

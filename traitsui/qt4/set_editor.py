@@ -181,12 +181,8 @@ class SimpleEditor(Editor):
         list.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
         self.root_layout.addWidget(list, 1, col)
 
-        list.connect(list,
-                     QtCore.SIGNAL('itemClicked(QListWidgetItem *)'), handler1)
-        list.connect(
-            list,
-            QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem *)'),
-            handler2)
+        list.itemClicked.connect(handler1)
+        list.itemDoubleClicked.connect(handler2)
 
         return list
 
@@ -198,7 +194,7 @@ class SimpleEditor(Editor):
         """ Creates a button.
         """
         button = QtGui.QPushButton(label)
-        button.connect(button, QtCore.SIGNAL('clicked()'), handler)
+        button.clicked.connect(handler)
         layout.addWidget(button)
         return button
 

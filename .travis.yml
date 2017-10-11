@@ -1,43 +1,48 @@
 language: generic
 sudo: false
+
+env:
+  global:
+    - INSTALL_EDM_VERSION=1.5.2
+      PYTHONUNBUFFERED="1"
+
 matrix:
   include:
-    - env: RUNTIME=2.7 TOOLKIT=null
-    - env: RUNTIME=2.7 TOOLKIT=pyqt
-    - env: RUNTIME=2.7 TOOLKIT=pyside
-    - env: RUNTIME=2.7 TOOLKIT=wx
-    - env: RUNTIME=2.7 TOOLKIT=wx2
-    - env: RUNTIME=3.5 TOOLKIT=null
-    - env: RUNTIME=3.5 TOOLKIT=pyqt
+    - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside"
+    - env: RUNTIME=3.5 TOOLKITS="null pyqt"
+    - env: RUNTIME=3.5 TOOLKITS="pyqt5"
+    - env: RUNTIME=2.7 TOOLKITS="wx"
     - os: osx
-      env: RUNTIME=2.7 TOOLKIT=null
+      env: RUNTIME=3.5 TOOLKITS="null pyqt"
     - os: osx
-      env: RUNTIME=2.7 TOOLKIT=pyqt
+      env: RUNTIME=2.7 TOOLKITS="null pyside"
     - os: osx
-      env: RUNTIME=2.7 TOOLKIT=pyside
-    - os: osx
-      env: RUNTIME=2.7 TOOLKIT=wx
-    - os: osx
-      env: RUNTIME=2.7 TOOLKIT=wx2
-    - os: osx
-      env: RUNTIME=3.5 TOOLKIT=null
-    - os: osx
-      env: RUNTIME=3.5 TOOLKIT=pyqt
+      env: RUNTIME=2.7 TOOLKITS="pyqt wx"
   allow_failures:
-    - os: osx
-      env: RUNTIME=2.7 TOOLKIT=pyqt
+    - env: RUNTIME=3.5 TOOLKITS="pyqt5"
   fast_finish: true
+
+branches:
+  only:
+    - master
+
 cache:
   directories:
-    - $HOME/.cache
+    - "~/.cache"
+
 before_install:
+  - mkdir -p "${HOME}/.cache/download"
   - export DISPLAY=:99.0
-  - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then sh -e /etc/init.d/xvfb start ; fi
-  - ./travis_ci_bootstrap_edm.sh
+  - if [[ ${TRAVIS_OS_NAME} == "linux" ]] ; then sh -e /etc/init.d/xvfb start; fi
+  - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then ./install-edm-linux.sh; export PATH="${HOME}/edm/bin:${PATH}"; fi
+  - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ./install-edm-osx.sh; export PATH="${PATH}:/usr/local/bin"; fi
+  - edm install -y wheel click coverage
 install:
-  - edm run -- invoke install --runtime=${RUNTIME} --toolkit=${TOOLKIT}
+  - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py install --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
 script:
-  - edm run -- invoke test --runtime=${RUNTIME} --toolkit=${TOOLKIT}
+  - for toolkit in ${TOOLKITS}; do edm run -- python etstool.py test --runtime=${RUNTIME} --toolkit=${toolkit} || exit; done
+
 after_success:
+  - edm run -- coverage combine
   - edm run -- pip install codecov
   - edm run -- codecov
