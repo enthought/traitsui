@@ -32,13 +32,13 @@ from traitsui.table_column \
 class ColorColumn(ObjectColumn):
     """ Table column object for Color traits. """
 
-#-- ObjectColumn Overrides -----------------------------------------------
+    #-- ObjectColumn Overrides -----------------------------------------------
 
     def get_cell_color(self, object):
         """ Returns the cell background color for the column for a specified
             object.
         """
-        color_values = getattr(object, self.name + '_')
+        color_values = getattr(object, self.name + '_', (1.0, 1.0, 1.0))
         if isinstance(color_values, tuple):
             tk_color = self._as_int_rgb_tuple(color_values)
         else:
@@ -48,18 +48,19 @@ class ColorColumn(ObjectColumn):
     def get_value(self, object):
         """ Gets the value of the column for a specified object.
         """
-        value = getattr(self.get_object(object), self.name)
+        value = getattr(self.get_object(object), self.name, '')
         if isinstance(value, tuple):
-            value = "(%3d, %3d, %3d)" % self._as_int_rgb_tuple(value[:-1])
+            value = self._int_rgb_tuple_to_str(value)
         elif not isinstance(value, str):
             value = str(value)
-
         return value
 
-#-- Private Methods ------------------------------------------------------
+    #-- Private Methods ------------------------------------------------------
 
     def _as_int_rgb_tuple(self, color_values):
         """ Returns object color as RGB integers. """
-        return (int(255 * color_values[0]),
-                int(255 * color_values[1]),
-                int(255 * color_values[2]))
+        return tuple(int(255 * v) for v in color_values)
+
+    def _int_rgb_tuple_to_str(self, color_values):
+        """ Returns object color as RGB integers. """
+        return '(' + ', '.join('%3d' % x for x in color_values) + ')'
