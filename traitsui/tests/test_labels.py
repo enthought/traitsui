@@ -115,6 +115,26 @@ class NoLabelResizeTestDialog(HasTraits):
     )
 
 
+class EnableWhenDialog(HasTraits):
+    """ Test labels for enable when. """
+
+    bool_item = Bool(True)
+
+    labelled_item = Str('test')
+
+    unlabelled_item = Str('test')
+
+    traits_view = View(
+        VGroup(
+            Item('bool_item',),
+            Item('labelled_item', enabled_when='bool_item'),
+            Item('unlabelled_item', enabled_when='bool_item', show_label=False),
+        ),
+        resizable=True
+    )
+
+
+
 @skip_if_not_qt4
 def test_qt_show_labels_right_without_colon():
     # Behavior: traitsui should not append a colon ':' to labels
@@ -199,6 +219,50 @@ def test_qt_no_labels_on_the_right_bug():
     with store_exceptions_on_all_threads():
         dialog = NoLabelResizeTestDialog()
         ui = dialog.edit_traits()
+
+@skip_if_not_qt4
+def test_qt_labels_enabled_when():
+    # Behaviour: label should enable/disable along with editor
+
+    with store_exceptions_on_all_threads():
+        dialog = EnableWhenDialog()
+        ui = dialog.edit_traits()
+
+        labelled_editor  = ui.get_editors('labelled_item')[0]
+        unlabelled_editor  = ui.get_editors('unlabelled_item')[0]
+        nose.tools.assert_is_none(unlabelled_editor.label_control)
+
+        nose.tools.assert_true(labelled_editor.label_control.isEnabled())
+
+        dialog.bool_item = False
+
+        nose.tools.assert_false(labelled_editor.label_control.isEnabled())
+
+        dialog.bool_item = True
+
+        ui.dispose()
+
+@skip_if_not_wx
+def test_wx_labels_enabled_when():
+    # Behaviour: label should enable/disable along with editor
+
+    with store_exceptions_on_all_threads():
+        dialog = EnableWhenDialog()
+        ui = dialog.edit_traits()
+
+        labelled_editor  = ui.get_editors('labelled_item')[0]
+        unlabelled_editor  = ui.get_editors('unlabelled_item')[0]
+        #nose.tools.assert_is_none(unlabelled_editor.label_control)
+
+        nose.tools.assert_true(labelled_editor.label_control.IsEnabled())
+
+        dialog.bool_item = False
+
+        nose.tools.assert_false(labelled_editor.label_control.IsEnabled())
+
+        dialog.bool_item = True
+
+        ui.dispose()
 
 
 if __name__ == "__main__":
