@@ -214,7 +214,12 @@ class SimpleSliderEditor(BaseRangeEditor):
                 value = int(value)
 
             self.value = value
-            self.control.slider.setValue(self._convert_to_slider(self.value))
+            blocked = self.control.slider.blockSignals(True)
+            try:
+                self.control.slider.setValue(
+                    self._convert_to_slider(self.value))
+            finally:
+                self.control.slider.blockSignals(blocked)
         except TraitError as excp:
             pass
 
@@ -241,8 +246,10 @@ class SimpleSliderEditor(BaseRangeEditor):
         self.control.text.setText(text)
 
         blocked = self.control.slider.blockSignals(True)
-        self.control.slider.setValue(ivalue)
-        self.control.slider.blockSignals(blocked)
+        try:
+            self.control.slider.setValue(ivalue)
+        finally:
+            self.control.slider.blockSignals(blocked)
 
     #-------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
