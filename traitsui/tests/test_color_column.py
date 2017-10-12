@@ -2,7 +2,7 @@ from traits.api import HasTraits, Str, Int, RGBColor, List
 from traitsui.api import View, Group, Item, TableEditor, ObjectColumn
 from traitsui.color_column import ColorColumn
 
-from traitsui.tests._tools import store_exceptions_on_all_threads
+from traitsui.tests._tools import skip_if_null, store_exceptions_on_all_threads
 
 class MyEntry(HasTraits):
     name= Str()
@@ -40,6 +40,7 @@ class MyData(HasTraits):
 
     )
 
+@skip_if_null
 def test_color_column():
     # Behaviour: column ui should display without error
 
