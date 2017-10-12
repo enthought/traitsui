@@ -251,8 +251,6 @@ def test_wx_labels_enabled_when():
         ui = dialog.edit_traits()
 
         labelled_editor  = ui.get_editors('labelled_item')[0]
-        unlabelled_editor  = ui.get_editors('unlabelled_item')[0]
-        #nose.tools.assert_is_none(unlabelled_editor.label_control)
 
         nose.tools.assert_true(labelled_editor.label_control.IsEnabled())
 
