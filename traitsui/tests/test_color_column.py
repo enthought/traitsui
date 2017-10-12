@@ -50,3 +50,5 @@ def test_color_column():
         data = MyData(data_list=[d1, d2])
 
         ui = data.edit_traits()
+
+        ui.dispose()
