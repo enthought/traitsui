@@ -139,6 +139,9 @@ class Editor(UIEditor):
         if control is not None:
             control.Enable(enabled)
             control.Refresh()
+        if self.label_control is not None:
+            self.label_control.Enable(enabled)
+            self.label_control.Refresh()
 
     #-------------------------------------------------------------------------
     #  Handles the 'visible' state of the editor being changed:

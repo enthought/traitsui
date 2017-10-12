@@ -128,6 +128,8 @@ class Editor(UIEditor):
         """
         if self.control is not None:
             self._enabled_changed_helper(self.control, enabled)
+        if self.label_control is not None:
+            self.label_control.setEnabled(enabled)
 
     def _enabled_changed_helper(self, control, enabled):
         """A helper that allows the control to be a layout and recursively
