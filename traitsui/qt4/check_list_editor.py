@@ -179,7 +179,7 @@ class CustomEditor(SimpleEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        self._mapper.mapped.connect(self.update_object)
+        self._mapper.mapped[unicode].connect(self.update_object)
 
     #-------------------------------------------------------------------------
     #  Rebuilds the editor after its definition is modified:
