@@ -1,3 +1,5 @@
+from unittest import TestCase
+
 from traits.api import HasTraits, Str, Int, RGBColor, List
 from traitsui.api import View, Group, Item, TableEditor, ObjectColumn
 from traitsui.color_column import ColorColumn
@@ -40,15 +42,18 @@ class MyData(HasTraits):
 
     )
 
-@skip_if_null
-def test_color_column():
-    # Behaviour: column ui should display without error
 
-    with store_exceptions_on_all_threads():
-        d1 = MyEntry(name='a', value=2, color=(1.0, 0.3, 0.1))
-        d2 = MyEntry(name='b', value=3, color=(0.1, 0.0, 0.9))
-        data = MyData(data_list=[d1, d2])
+class TestColorColumn(TestCase):
 
-        ui = data.edit_traits()
+    @skip_if_null
+    def test_color_column(self):
+        # Behaviour: column ui should display without error
 
-        ui.dispose()
+        with store_exceptions_on_all_threads():
+            d1 = MyEntry(name='a', value=2, color=(1.0, 0.3, 0.1))
+            d2 = MyEntry(name='b', value=3, color=(0.1, 0.0, 0.9))
+            data = MyData(data_list=[d1, d2])
+
+            ui = data.edit_traits()
+
+            ui.dispose()
