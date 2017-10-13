@@ -21,7 +21,7 @@ from pyface.qt import QtCore, QtGui
 
 from pyface.api import ImageResource
 
-from traits.api import Str, Any, Bool, Dict, Instance
+from traits.api import Str, Any, Bool, Dict, Instance, List
 from traits.trait_base import user_name_for, xgetattr
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -58,6 +58,8 @@ class SimpleEditor(Editor):
     # Signal mapper allowing to identify which icon button requested a context
     # menu
     mapper = Instance(QtCore.QSignalMapper)
+
+    buttons = List([])
 
     #-------------------------------------------------------------------------
     #  Class constants:
@@ -183,8 +185,9 @@ class SimpleEditor(Editor):
         if is_fake:
             self.empty_list()
         else:
+            self.buttons = []
             # Asking the mapper to send the sender to the callback method
-            self.mapper.mapped[QtCore.QObject].connect(self.popup_menu)
+            self.mapper.mapped.connect(self.popup_menu)
 
         editor = self._editor
         for index, value in enumerate(self.value):
@@ -197,9 +200,11 @@ class SimpleEditor(Editor):
             if resizable:
                 # Connecting the new button to the mapper
                 control = IconButton('list_editor.png', self.mapper.map)
+                self.buttons.append(control)
                 # Setting the mapping and asking it to send the index of the
-                # sender to the callback method
-                self.mapper.setMapping(control, control)
+                # sender to the callback method.  Unfortunately just sending
+                # the control does not work for PyQt (tested on 4.11)
+                self.mapper.setMapping(control, index)
 
                 layout.addWidget(control, row, column+1)
 
@@ -257,12 +262,14 @@ class SimpleEditor(Editor):
         """
         # Connecting the new button to the mapper
         control = IconButton('list_editor.png', self.mapper.map)
-        # Setting the mapping and asking it to send the sender to the
-        # callback method
-        self.mapper.setMapping(control, control)
-        self.mapper.mapped[QtCore.QObject].connect(self.popup_empty_menu)
+        # Setting the mapping and asking it to send the index of the sender to
+        # callback method. Unfortunately just sending the control does not
+        # work for PyQt (tested on 4.11)
+        self.mapper.setMapping(control, 0)
+        self.mapper.mapped.connect(self.popup_empty_menu)
         control.is_empty = True
         self._cur_control = control
+        self.buttons = [control]
 
         proxy = ListItemProxy(self.object, self.name, -1, None, None)
         pcontrol = QtGui.QLabel('   (Empty List)')
@@ -286,10 +293,10 @@ class SimpleEditor(Editor):
     #  Displays the empty list editor popup menu:
     #-------------------------------------------------------------------------
 
-    def popup_empty_menu(self, sender):
+    def popup_empty_menu(self, index):
         """ Displays the empty list editor popup menu.
         """
-        self._cur_control = control = sender
+        self._cur_control = control = self.buttons[index]
         menu = MakeMenu(self.empty_list_menu, self, True, control).menu
         menu.exec_(control.mapToGlobal(QtCore.QPoint(4, 24)))
 
@@ -297,13 +304,12 @@ class SimpleEditor(Editor):
     #  Displays the list editor popup menu:
     #-------------------------------------------------------------------------
 
-    def popup_menu(self, sender):
+    def popup_menu(self, index):
         """ Displays the list editor popup menu.
         """
-        self._cur_control = sender
+        self._cur_control = sender = self.buttons[index]
 
         proxy = sender.proxy
-        index = proxy.index
         menu = MakeMenu(self.list_menu, self, True, sender).menu
         len_list = len(proxy.list)
         not_full = (len_list < self._trait_handler.maxlen)
