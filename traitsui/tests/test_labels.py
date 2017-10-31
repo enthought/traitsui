@@ -220,30 +220,17 @@ def test_qt_no_labels_on_the_right_bug():
         dialog = NoLabelResizeTestDialog()
         ui = dialog.edit_traits()
 
-@skip_if_not_qt4
-def test_qt_labels_enabled_when():
-    # Behaviour: label should enable/disable along with editor
 
-    with store_exceptions_on_all_threads():
-        dialog = EnableWhenDialog()
-        ui = dialog.edit_traits()
+def is_enabled(control):
+    if is_current_backend_qt4():
+        return control.isEnabled()
+    elif is_current_backend_wx():
+        return control.IsEnabled()
+    else:
+        raise NotImplementedError()
 
-        labelled_editor  = ui.get_editors('labelled_item')[0]
-        unlabelled_editor  = ui.get_editors('unlabelled_item')[0]
-        nose.tools.assert_is_none(unlabelled_editor.label_control)
-
-        nose.tools.assert_true(labelled_editor.label_control.isEnabled())
-
-        dialog.bool_item = False
-
-        nose.tools.assert_false(labelled_editor.label_control.isEnabled())
-
-        dialog.bool_item = True
-
-        ui.dispose()
-
-@skip_if_not_wx
-def test_wx_labels_enabled_when():
+@skip_if_null
+def test_labels_enabled_when():
     # Behaviour: label should enable/disable along with editor
 
     with store_exceptions_on_all_threads():
@@ -252,11 +239,15 @@ def test_wx_labels_enabled_when():
 
         labelled_editor  = ui.get_editors('labelled_item')[0]
 
-        nose.tools.assert_true(labelled_editor.label_control.IsEnabled())
+        if is_current_backend_qt4():
+            unlabelled_editor  = ui.get_editors('unlabelled_item')[0]
+            nose.tools.assert_is_none(unlabelled_editor.label_control)
+
+        nose.tools.assert_true(is_enabled(labelled_editor.label_control))
 
         dialog.bool_item = False
 
-        nose.tools.assert_false(labelled_editor.label_control.IsEnabled())
+        nose.tools.assert_false(is_enabled(labelled_editor.label_control))
 
         dialog.bool_item = True
 
