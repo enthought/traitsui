@@ -1683,10 +1683,10 @@ class SimpleEditor(Editor):
         """
         prefs = {}
         if isinstance(self.control, QtGui.QSplitter):
-            prefs['structure'] = str(self.control.saveState())
+            prefs['structure'] = self.control.saveState().data()
         header = self._tree.header()
         if header is not None:
-            prefs['column_state'] = str(header.saveState())
+            prefs['column_state'] = header.saveState().data()
 
         return prefs
 
