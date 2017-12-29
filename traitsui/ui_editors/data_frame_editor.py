@@ -183,7 +183,7 @@ class _DataFrameEditor(UIEditor):
                     selected=self._target_name(self.factory.selected),
                     selected_row=self._target_name(self.factory.selected_row),
                     selectable=self.factory.selectable,
-                    activated=self._target_name(self.factory.selected),
+                    activated=self._target_name(self.factory.activated),
                     activated_row=self._target_name(self.factory.activated_row),  # noqa
                     clicked=self._target_name(self.factory.clicked),
                     dclicked=self._target_name(self.factory.dclicked),
