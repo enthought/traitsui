@@ -33,24 +33,24 @@ from traits.api \
 
 # Mapping of strings to valid wxFont families
 font_families = {
-    'default': wx.DEFAULT,
-    'decorative': wx.DECORATIVE,
-    'roman': wx.ROMAN,
-    'script': wx.SCRIPT,
-    'swiss': wx.SWISS,
-    'modern': wx.MODERN
+    'default': wx.FONTFAMILY_DEFAULT,
+    'decorative': wx.FONTFAMILY_DECORATIVE,
+    'roman': wx.FONTFAMILY_ROMAN,
+    'script': wx.FONTFAMILY_SCRIPT,
+    'swiss': wx.FONTFAMILY_SWISS,
+    'modern': wx.FONTFAMILY_MODERN
 }
 
 # Mapping of strings to wxFont styles
 font_styles = {
-    'slant': wx.SLANT,
-    'italic': wx.ITALIC
+    'slant': wx.FONTSTYLE_SLANT,
+    'italic': wx.FONTSTYLE_ITALIC
 }
 
 # Mapping of strings wxFont weights
 font_weights = {
-    'light': wx.LIGHT,
-    'bold': wx.BOLD
+    'light': wx.FONTWEIGHT_LIGHT,
+    'bold': wx.FONTWEIGHT_BOLD
 }
 
 # Strings to ignore in text representations of fonts
@@ -64,10 +64,10 @@ font_noise = ['pt', 'point', 'family']
 def font_to_str(font):
     """ Converts a wx.Font into a string description of itself.
     """
-    weight = {wx.LIGHT: ' Light',
-              wx.BOLD: ' Bold'}.get(font.GetWeight(), '')
-    style = {wx.SLANT: ' Slant',
-             wx.ITALIC: ' Italic'}.get(font.GetStyle(), '')
+    weight = {wx.FONTWEIGHT_LIGHT: ' Light',
+              wx.FONTWEIGHT_BOLD: ' Bold'}.get(font.GetWeight(), '')
+    style = {wx.FONTSTYLE_SLANT: ' Slant',
+             wx.FONTSTYLE_ITALIC: ' Italic'}.get(font.GetStyle(), '')
     underline = ''
     if font.GetUnderlined():
         underline = ' underline'
@@ -86,9 +86,9 @@ def create_traitsfont(value):
         value = font_to_str(value)
 
     point_size = None
-    family = wx.DEFAULT
-    style = wx.NORMAL
-    weight = wx.NORMAL
+    family = wx.FONTFAMILY_DEFAULT
+    style = wx.FONTSTYLE_NORMAL
+    weight = wx.FONTWEIGHT_NORMAL
     underline = 0
     facename = []
     for word in value.split():
@@ -190,7 +190,7 @@ def get_font_editor(*args, **traits):
 
 fh = TraitWXFont()
 WxFont = Trait(
-    wx.SystemSettings_GetFont(
+    wx.SystemSettings.GetFont(
         wx.SYS_DEFAULT_GUI_FONT),
     fh,
     editor=get_font_editor)

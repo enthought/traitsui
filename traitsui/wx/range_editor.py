@@ -49,6 +49,12 @@ from constants \
 from helper \
     import TraitsUIPanel, Slider
 
+if not hasattr(wx, 'wx.wxEVT_SCROLL_ENDSCROLL'):
+    wxEVT_SCROLL_ENDSCROLL = wx.wxEVT_SCROLL_CHANGED
+else:
+    wxEVT_SCROLL_ENDSCROLL = wx.wxEVT_SCROLL_ENDSCROLL
+
+
 #-------------------------------------------------------------------------
 #  'BaseRangeEditor' class:
 #-------------------------------------------------------------------------
@@ -151,7 +157,8 @@ class SimpleSliderEditor(BaseRangeEditor):
         panel.slider = slider = Slider(panel, -1, ivalue, 0, 10000,
                                        size=wx.Size(80, 20),
                                        style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
-        slider.SetTickFreq(1000, 1)
+        slider.SetTickFreq(1000)
+        slider.SetValue(1)
         slider.SetPageSize(1000)
         slider.SetLineSize(100)
         wx.EVT_SCROLL(slider, self.update_object_on_scroll)
@@ -194,7 +201,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         """
         value = self._convert_from_slider(event.GetPosition())
         event_type = event.GetEventType()
-        if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
+        if ((event_type == wxEVT_SCROLL_ENDSCROLL) or
             (self.factory.auto_set and
              (event_type == wx.wxEVT_SCROLL_THUMBTRACK)) or
             (self.factory.enter_set and
@@ -454,7 +461,8 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         panel.slider = slider = Slider(panel, -1, ivalue, 0, 10000,
                                        size=wx.Size(80, 20),
                                        style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
-        slider.SetTickFreq(1000, 1)
+        slider.SetTickFreq(1000)
+        slider.SetValue(1)
         slider.SetPageSize(1000)
         slider.SetLineSize(100)
         wx.EVT_SCROLL(slider, self.update_object_on_scroll)
@@ -510,7 +518,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         event_type = event.GetEventType()
         try:
             self.ui_changing = True
-            if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
+            if ((event_type == wxEVT_SCROLL_ENDSCROLL) or
                 (self.factory.auto_set and
                  (event_type == wx.wxEVT_SCROLL_THUMBTRACK)) or
                 (self.factory.enter_set and
