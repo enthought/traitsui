@@ -1194,7 +1194,7 @@ class SplitterGroupEditor(GroupEditor):
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
-        return {'structure': str(self.splitter.saveState())}
+        return {'structure': self.splitter.saveState().data()}
 
 
 class TabbedFoldGroupEditor(GroupEditor):

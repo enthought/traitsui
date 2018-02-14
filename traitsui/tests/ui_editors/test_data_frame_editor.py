@@ -427,9 +427,9 @@ def test_data_frame_editor_with_update_refresh():
 def test_data_frame_editor_with_refresh():
     class DataFrameViewer(HasTraits):
         data = Instance(DataFrame)
-        df_updated = Event
+        df_refreshed = Event
         view = View(
-            Item('data', editor=DataFrameEditor())
+            Item('data', editor=DataFrameEditor(refresh="df_refreshed"))
         )
 
     df = DataFrame(DATA, index=['one', 'two', 'three', 'four'],
@@ -437,7 +437,7 @@ def test_data_frame_editor_with_refresh():
     viewer = DataFrameViewer(data=df)
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits()
-        viewer.df_updated = True
+        viewer.df_refreshed = True
         ui.dispose()
 
 
