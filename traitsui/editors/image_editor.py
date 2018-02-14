@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,30 +13,30 @@
 #  Author: David C. Morrill
 #  Date:   06/05/2007
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Traits UI 'display only' image editor.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
+from pyface.ui_traits import Image
 from traits.api import Bool, Property
-
-from ..ui_traits import Image
 
 from ..basic_editor_factory import BasicEditorFactory
 
 from ..toolkit import toolkit_object
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ImageEditor' editor factory class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ImageEditor ( BasicEditorFactory ):
+
+class ImageEditor(BasicEditorFactory):
 
     # The editor class to be created:
     klass = Property
@@ -50,16 +50,15 @@ class ImageEditor ( BasicEditorFactory ):
 
     # Whether or not to scale the image to fit the available space
     scale = Bool
-    
+
     # Whether or not to scale the image larger than the original when scaling
     allow_upscaling = Bool
-    
+
     # Whether or not to preserve the aspect ratio when scaling
     preserve_aspect_ratio = Bool
-    
+
     # Whether or not to allow the image to be clipped when not scaling
     allow_clipping = Bool
-
 
     def _get_klass(self):
         """ Returns the editor class to be instantiated.

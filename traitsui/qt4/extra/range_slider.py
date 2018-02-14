@@ -1,5 +1,6 @@
 from pyface.qt import QtGui, QtCore
 
+
 class RangeSlider(QtGui.QSlider):
     """ A slider for ranges.
 
@@ -10,6 +11,7 @@ class RangeSlider(QtGui.QSlider):
         This class emits the same signals as the QSlider base class, with the
         exception of valueChanged
     """
+
     def __init__(self, *args):
         super(RangeSlider, self).__init__(*args)
 
@@ -37,9 +39,9 @@ class RangeSlider(QtGui.QSlider):
         self._high = high
         self.update()
 
-
     def paintEvent(self, event):
-        # based on http://qt.gitorious.org/qt/qt/blobs/master/src/gui/widgets/qslider.cpp
+        # based on
+        # http://qt.gitorious.org/qt/qt/blobs/master/src/gui/widgets/qslider.cpp
 
         painter = QtGui.QPainter(self)
         style = QtGui.QApplication.style()
@@ -66,8 +68,8 @@ class RangeSlider(QtGui.QSlider):
 
             opt.sliderPosition = value
             opt.sliderValue = value
-            style.drawComplexControl(QtGui.QStyle.CC_Slider, opt, painter, self)
-
+            style.drawComplexControl(
+                QtGui.QStyle.CC_Slider, opt, painter, self)
 
     def mousePressEvent(self, event):
         event.accept()
@@ -89,7 +91,8 @@ class RangeSlider(QtGui.QSlider):
 
             for i, value in enumerate([self._low, self._high]):
                 opt.sliderPosition = value
-                hit = style.hitTestComplexControl(style.CC_Slider, opt, event.pos(), self)
+                hit = style.hitTestComplexControl(
+                    style.CC_Slider, opt, event.pos(), self)
                 if hit == style.SC_SliderHandle:
                     self.active_slider = i
                     self.pressed_control = hit
@@ -101,7 +104,8 @@ class RangeSlider(QtGui.QSlider):
 
             if self.active_slider < 0:
                 self.pressed_control = QtGui.QStyle.SC_SliderHandle
-                self.click_offset = self.__pixelPosToRangeValue(self.__pick(event.pos()))
+                self.click_offset = self.__pixelPosToRangeValue(
+                    self.__pick(event.pos()))
                 self.triggerAction(self.SliderMove)
                 self.setRepeatAction(self.SliderNoAction)
         else:
@@ -142,7 +146,7 @@ class RangeSlider(QtGui.QSlider):
 
         self.update()
 
-        self.emit(QtCore.SIGNAL('sliderMoved(int)'), new_pos)
+        self.sliderMoved.emit(new_pos)
 
     def __pick(self, pt):
         if self.orientation() == QtCore.Qt.Horizontal:
@@ -150,14 +154,15 @@ class RangeSlider(QtGui.QSlider):
         else:
             return pt.y()
 
-
     def __pixelPosToRangeValue(self, pos):
         opt = QtGui.QStyleOptionSlider()
         self.initStyleOption(opt)
         style = QtGui.QApplication.style()
 
-        gr = style.subControlRect(style.CC_Slider, opt, style.SC_SliderGroove, self)
-        sr = style.subControlRect(style.CC_Slider, opt, style.SC_SliderHandle, self)
+        gr = style.subControlRect(
+            style.CC_Slider, opt, style.SC_SliderGroove, self)
+        sr = style.subControlRect(
+            style.CC_Slider, opt, style.SC_SliderHandle, self)
 
         if self.orientation() == QtCore.Qt.Horizontal:
             slider_length = sr.width()
@@ -168,12 +173,16 @@ class RangeSlider(QtGui.QSlider):
             slider_min = gr.y()
             slider_max = gr.bottom() - slider_length + 1
 
-        return style.sliderValueFromPosition(self.minimum(), self.maximum(),
-                                             pos-slider_min, slider_max-slider_min,
-                                             opt.upsideDown)
+        return style.sliderValueFromPosition(
+            self.minimum(),
+            self.maximum(),
+            pos - slider_min,
+            slider_max - slider_min,
+            opt.upsideDown)
 
 if __name__ == "__main__":
     import sys
+
     def echo(value):
         print value
     app = QtGui.QApplication(sys.argv)
@@ -182,6 +191,6 @@ if __name__ == "__main__":
     slider.setMaximum(10000)
     slider.setLow(0)
     slider.setHigh(10000)
-    QtCore.QObject.connect(slider, QtCore.SIGNAL('sliderMoved(int)'), echo)
+    slider.sliderMoved.connect(echo)
     slider.show()
     app.exec_()

@@ -17,6 +17,8 @@
 Test the layout of elements is consistent with the layout parameters.
 """
 
+import nose
+
 from traits.has_traits import HasTraits
 from traits.trait_types import Str
 
@@ -31,6 +33,7 @@ _DIALOG_WIDTH = 500
 _DIALOG_HEIGHT = 500
 _TXT_WIDTH = 100
 
+
 class VResizeDialog(HasTraits):
 
     txt = Str('hallo')
@@ -39,8 +42,8 @@ class VResizeDialog(HasTraits):
         VGroup(
             Item('txt', width=_TXT_WIDTH, resizable=True),
         ),
-        width  = _DIALOG_WIDTH,
-        height = _DIALOG_HEIGHT,
+        width=_DIALOG_WIDTH,
+        height=_DIALOG_HEIGHT,
         resizable=True
     )
 
@@ -53,8 +56,8 @@ class HResizeDialog(HasTraits):
         HGroup(
             Item('txt', width=_TXT_WIDTH, resizable=True),
         ),
-        width  = _DIALOG_WIDTH,
-        height = _DIALOG_HEIGHT,
+        width=_DIALOG_WIDTH,
+        height=_DIALOG_HEIGHT,
         resizable=True
     )
 
@@ -74,7 +77,7 @@ def test_qt_resizable_in_vgroup():
         text = ui.control.findChild(qt.QtGui.QLineEdit)
 
         # horizontal size should be large
-        nose.tools.assert_greater(text.width(), _DIALOG_WIDTH-100)
+        nose.tools.assert_greater(text.width(), _DIALOG_WIDTH - 100)
 
         # vertical size should be unchanged
         nose.tools.assert_less(text.height(), 100)
@@ -95,7 +98,7 @@ def test_qt_resizable_in_hgroup():
         text = ui.control.findChild(qt.QtGui.QLineEdit)
 
         # vertical size should be large
-        nose.tools.assert_greater(text.height(), _DIALOG_HEIGHT-100)
+        nose.tools.assert_greater(text.height(), _DIALOG_HEIGHT - 100)
 
         # horizontal size should be unchanged
         # ??? maybe not: some elements (e.g., the text field) have

@@ -6,7 +6,9 @@ from traits.api import Instance, Int, Str
 from traitsui.qt4.editor import Editor
 from pyface.ui.qt4.progress_dialog import ProgressDialog
 
+
 class _ProgressDialog(ProgressDialog):
+
     def close(self):
         """ Overwritten to disable closing.
         """
@@ -31,27 +33,27 @@ class SimpleEditor(Editor):
 
     #-- Editor interface ------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = self.create_control( parent )
+        self.control = self.create_control(parent)
         factory = self.factory
         self.min = factory.min
         self.max = factory.max
         self.message = factory.message
-        self.sync_value( factory.min_name,  'min',  'from' )
-        self.sync_value( factory.max_name, 'max', 'from' )
-        self.sync_value( factory.message_name, 'message', 'from' )
-        
+        self.sync_value(factory.min_name, 'min', 'from')
+        self.sync_value(factory.max_name, 'max', 'from')
+        self.sync_value(factory.message_name, 'message', 'from')
+
         self.set_tooltip()
 
-    def create_control (self, parent):
+    def create_control(self, parent):
         """
         Finishes initializing the editor by creating the underlying widget.
         """
 
-        self.progress = _ProgressDialog( title=self.factory.title,
+        self.progress = _ProgressDialog(title=self.factory.title,
                                         message=self.factory.message,
                                         min=self.factory.min,
                                         max=self.factory.max,
@@ -72,8 +74,7 @@ class SimpleEditor(Editor):
         self.progress._create_buttons(control, layout)
         return self.control
 
-
-    def update_editor ( self ):
+    def update_editor(self):
         """
         Updates the editor when the object trait changes externally to the
         editor.
@@ -85,11 +86,11 @@ class SimpleEditor(Editor):
             self.progress.update(self.value)
         return
 
-    def _min_changed ( self ):
+    def _min_changed(self):
         self.update_editor()
 
-    def _max_changed ( self ):
+    def _max_changed(self):
         self.update_editor()
 
-    def _message_changed ( self ):
+    def _message_changed(self):
         self.update_editor()

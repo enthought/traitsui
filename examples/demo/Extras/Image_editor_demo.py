@@ -27,50 +27,51 @@ from pyface.image_resource \
 # Constants:
 
 # Necessary because of the dynamic way in which the demos are loaded:
-search_path = [ join( dirname( traits.api.__file__ ),
-                      '..', '..', 'examples', 'demo', 'Extras' ) ]
+search_path = [join(dirname(traits.api.__file__),
+                    '..', '..', 'examples', 'demo', 'Extras')]
 
 # Define the demo class:
-class Employee ( HasTraits ):
+
+
+class Employee(HasTraits):
 
     # Define the traits:
-    name  = Str
-    dept  = Str
+    name = Str
+    dept = Str
     email = Str
 
     # Define the view:
     view = View(
         VGroup(
             VGroup(
-                Item( 'name',
-                      show_label = False,
-                      editor = ImageEditor(
-                          image = ImageResource( 'info',
-                                                 search_path = search_path) ) )
+                Item('name',
+                     show_label=False,
+                     editor=ImageEditor(
+                         image=ImageResource('info',
+                                             search_path=search_path)))
             ),
             VGroup(
-                Item( 'name' ),
-                Item( 'dept' ),
-                Item( 'email' ),
-                Item( 'picture',
-                        editor = ImageEditor(
-                            scale=True,
-                            preserve_aspect_ratio=True,
-                            allow_upscaling=True ),
-                        springy = True ),
+                Item('name'),
+                Item('dept'),
+                Item('email'),
+                Item('picture',
+                     editor=ImageEditor(
+                         scale=True,
+                         preserve_aspect_ratio=True,
+                         allow_upscaling=True),
+                     springy=True),
             )
         ),
         resizable=True
     )
 
 # Create the demo:
-popup = Employee( name  = 'William Murchison',
-                  dept  = 'Receiving',
-                  email = 'wmurchison@acme.com',
-                  picture = ImageResource('e-logo-rev',
-                                            search_path=search_path) )
+popup = Employee(name='William Murchison',
+                 dept='Receiving',
+                 email='wmurchison@acme.com',
+                 picture=ImageResource('e-logo-rev',
+                                       search_path=search_path))
 
 # Run the demo (if invoked form the command line):
 if __name__ == '__main__':
     popup.configure_traits()
-

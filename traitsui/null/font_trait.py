@@ -91,13 +91,19 @@ class TraitFont(TraitHandler):
                         point_size = lword + ' pt'
                     except:
                         facename.append(word)
-            fontstr = ('%s%s%s%s%s%s' % (point_size, family, style, weight,
-                        underline, ' '.join(facename))).strip()
+            fontstr = (
+                '%s%s%s%s%s%s' %
+                (point_size,
+                 family,
+                 style,
+                 weight,
+                 underline,
+                 ' '.join(facename))).strip()
             return fontstr
         except Exception:
             pass
         raise TraitError(object, name, 'a font descriptor string',
-                            repr(value))
+                         repr(value))
 
     def info(self):
         return ("a string describing a font (e.g. '12 pt bold italic "
@@ -120,4 +126,4 @@ def get_font_editor(*args, **traits):
 
 fh = TraitFont()
 NullFont = Trait(fh.validate(None, None, 'Arial 10'), fh,
-                editor=get_font_editor)
+                 editor=get_font_editor)

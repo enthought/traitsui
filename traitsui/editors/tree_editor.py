@@ -16,9 +16,9 @@
 """ Defines the tree editor factory for all traits user interface toolkits.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -32,26 +32,27 @@ from ..editor_factory import EditorFactory
 
 from ..helper import Orientation
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Size of each tree node icon
-IconSize = Tuple( ( 16, 16 ), Int, Int )
+IconSize = Tuple((16, 16), Int, Int)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ToolkitEditorFactory ( EditorFactory ):
+
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for tree editors.
     """
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Supported TreeNode objects
-    nodes = List( TreeNode )
+    nodes = List(TreeNode)
 
     # Mapping from TreeNode tuples to MultiTreeNodes
     multi_nodes = Dict
@@ -69,11 +70,11 @@ class ToolkitEditorFactory ( EditorFactory ):
     shared_editor = Bool(False)
 
     # Reference to a shared object editor
-    editor = Instance( EditorFactory )
+    editor = Instance(EditorFactory)
 
     # The DockWindow graphical theme
     # FIXME: Implemented only in wx backend.
-    dock_theme = Instance( DockWindowTheme )
+    dock_theme = Instance(DockWindowTheme)
 
     # Show icons for tree nodes?
     show_icons = Bool(True)
@@ -148,7 +149,7 @@ class ToolkitEditorFactory ( EditorFactory ):
     # * 'appearance': Show lines only when they look good.
     # * 'on': Always show lines.
     # * 'off': Don't show lines.
-    lines_mode = Enum ( 'appearance', 'on', 'off' )
+    lines_mode = Enum('appearance', 'on', 'off')
     # FIXME: Document as unimplemented or wx specific.
     # Whether to alternate row colors or not.
     alternating_row_colors = Bool(False)
@@ -159,7 +160,6 @@ class ToolkitEditorFactory ( EditorFactory ):
     # Whether or not to expand on a double-click.
     expands_on_dclick = Bool(True)
 
-
     # Whether the labels should be wrapped around, if not an ellipsis is shown
     # This works only in the qt backend and if there is only one column in tree
     word_wrap = Bool(False)
@@ -168,5 +168,3 @@ class ToolkitEditorFactory ( EditorFactory ):
 TreeEditor = ToolkitEditorFactory
 
 ### EOF #######################################################################
-
-

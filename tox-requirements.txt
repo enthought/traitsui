@@ -1,6 +1,7 @@
+nose
 coverage
 pygments
 numpy ; python_version >= '3.2'
 pandas
-git+http://github.com/enthought/traits.git#egg=traits
+traits
 git+http://github.com/enthought/pyface.git#egg=pyface

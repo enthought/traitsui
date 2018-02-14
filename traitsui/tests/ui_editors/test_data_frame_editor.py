@@ -16,7 +16,7 @@ except ImportError as exc:
     print "Can't import Pandas: skipping"
     raise nose.SkipTest
 
-from traits.api import HasTraits, Instance
+from traits.api import Event, HasTraits, Instance
 
 from traitsui.item import Item
 from traitsui.ui_editors.data_frame_editor import (
@@ -24,7 +24,6 @@ from traitsui.ui_editors.data_frame_editor import (
 from traitsui.view import View
 
 from traitsui.tests._tools import store_exceptions_on_all_threads, skip_if_null
-
 
 
 class DataFrameViewer(HasTraits):
@@ -38,14 +37,14 @@ class DataFrameViewer(HasTraits):
 
 format_mapping_view = View(
     Item('data', editor=DataFrameEditor(formats={'X': '%05d', 'Y': '%s'}),
-            width=400)
+         width=400)
 )
 
 
 font_mapping_view = View(
     Item('data', editor=DataFrameEditor(fonts={'X': 'Courier 10 bold',
                                                'Y': 'Swiss'}),
-            width=400)
+         width=400)
 )
 
 
@@ -54,34 +53,30 @@ columns_view = View(
             width=400)
 )
 
+DATA = [[ 0,  1,  2],
+        [ 3,  4,  5],
+        [ 6,  7,  8],
+        [ 9, 10, 11]]
+
 
 def sample_data():
-    data = [[ 0,  1,  2],
-            [ 3,  4,  5],
-            [ 6,  7,  8],
-            [ 9, 10, 11]]
-    df = DataFrame(data, index=['one', 'two', 'three', 'four'],
+    df = DataFrame(DATA, index=['one', 'two', 'three', 'four'],
                    columns=['X', 'Y', 'Z'])
     viewer = DataFrameViewer(data=df)
     return viewer
 
 
 def sample_data_numerical_index():
-    data = [[ 0,  1,  2],
-            [ 3,  4,  5],
-            [ 6,  7,  8],
-            [ 9, 10, 11]]
-    df = DataFrame(data, index=range(1,5),
-                   columns=['X', 'Y', 'Z'])
+    df = DataFrame(DATA, index=range(1,5), columns=['X', 'Y', 'Z'])
     viewer = DataFrameViewer(data=df)
     return viewer
 
 
 def sample_text_data():
-    data = [[ 0,  1,  'two'],
-            [ 3,  4,  'five'],
-            [ 6,  7,  'eight'],
-            [ 9, 10, 'eleven']]
+    data = [[0, 1, 'two'],
+            [3, 4, 'five'],
+            [6, 7, 'eight'],
+            [9, 10, 'eleven']]
     df = DataFrame(data, index=['one', 'two', 'three', 'four'],
                    columns=['X', 'Y', 'Z'])
     viewer = DataFrameViewer(data=df)
@@ -95,7 +90,7 @@ def test_adapter_get_item():
 
     item_0_df = adapter.get_item(viewer, 'data', 0)
 
-    assert_array_equal(item_0_df.values, [[0,  1,  2]])
+    assert_array_equal(item_0_df.values, [[0, 1, 2]])
     assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
     assert item_0_df.index[0] == 'one'
 
@@ -131,7 +126,7 @@ def test_adapter_get_item_numerical():
 
     item_0_df = adapter.get_item(viewer, 'data', 0)
 
-    assert_array_equal(item_0_df.values, [[0,  1,  2]])
+    assert_array_equal(item_0_df.values, [[0, 1, 2]])
     assert_array_equal(item_0_df.columns, ['X', 'Y', 'Z'])
     assert item_0_df.index[0] == 1
 
@@ -145,9 +140,9 @@ def test_adapter_delete_start():
     data = viewer.data
 
     assert_array_equal(data.values,
-                       [[ 3,  4,  5],
-                        [ 6,  7,  8],
-                        [ 9, 10, 11]])
+                       [[3, 4, 5],
+                        [6, 7, 8],
+                        [9, 10, 11]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, ['two', 'three', 'four'])
 
@@ -161,9 +156,9 @@ def test_adapter_delete_start_numerical_index():
     data = viewer.data
 
     assert_array_equal(data.values,
-                       [[ 3,  4,  5],
-                        [ 6,  7,  8],
-                        [ 9, 10, 11]])
+                       [[3, 4, 5],
+                        [6, 7, 8],
+                        [9, 10, 11]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, [2, 3, 4])
 
@@ -177,9 +172,9 @@ def test_adapter_delete_middle():
     data = viewer.data
 
     assert_array_equal(data.values,
-                       [[ 0,  1,  2],
-                        [ 6,  7,  8],
-                        [ 9, 10, 11]])
+                       [[0, 1, 2],
+                        [6, 7, 8],
+                        [9, 10, 11]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, ['one', 'three', 'four'])
 
@@ -193,9 +188,9 @@ def test_adapter_delete_middle_numerical_index():
     data = viewer.data
 
     assert_array_equal(data.values,
-                       [[ 0,  1,  2],
-                        [ 6,  7,  8],
-                        [ 9, 10, 11]])
+                       [[0, 1, 2],
+                        [6, 7, 8],
+                        [9, 10, 11]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, [1, 3, 4])
 
@@ -209,9 +204,9 @@ def test_adapter_delete_end():
     data = viewer.data
 
     assert_array_equal(data.values,
-                       [[ 0,  1,  2],
-                        [ 3,  4,  5],
-                        [ 6,  7,  8]])
+                       [[0, 1, 2],
+                        [3, 4, 5],
+                        [6, 7, 8]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, ['one', 'two', 'three'])
 
@@ -225,9 +220,9 @@ def test_adapter_delete_end_numerical_index():
     data = viewer.data
 
     assert_array_equal(data.values,
-                       [[ 0,  1,  2],
-                        [ 3,  4,  5],
-                        [ 6,  7,  8]])
+                       [[0, 1, 2],
+                        [3, 4, 5],
+                        [6, 7, 8]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, [1, 2, 3])
 
@@ -243,10 +238,10 @@ def test_adapter_insert_start():
 
     assert_array_equal(data.values,
                        [[-3, -2, -1],
-                        [ 0,  1,  2],
-                        [ 3,  4,  5],
-                        [ 6,  7,  8],
-                        [ 9, 10, 11]])
+                        [0, 1, 2],
+                        [3, 4, 5],
+                        [6, 7, 8],
+                        [9, 10, 11]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, ['new', 'one', 'two', 'three', 'four'])
 
@@ -262,12 +257,12 @@ def test_adapter_insert_start_numerical_index():
 
     assert_array_equal(data.values,
                        [[-3, -2, -1],
-                        [ 0,  1,  2],
-                        [ 3,  4,  5],
-                        [ 6,  7,  8],
-                        [ 9, 10, 11]])
+                        [0, 1, 2],
+                        [3, 4, 5],
+                        [6, 7, 8],
+                        [9, 10, 11]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
-    assert_array_equal(data.index, [0, 1, 2, 3 ,4])
+    assert_array_equal(data.index, [0, 1, 2, 3, 4])
 
 
 @skip_if_null
@@ -280,11 +275,11 @@ def test_adapter_insert_middle():
     data = viewer.data
 
     assert_array_equal(data.values,
-                       [[ 0,  1,  2],
+                       [[0, 1, 2],
                         [-3, -2, -1],
-                        [ 3,  4,  5],
-                        [ 6,  7,  8],
-                        [ 9, 10, 11]])
+                        [3, 4, 5],
+                        [6, 7, 8],
+                        [9, 10, 11]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, ['one', 'new', 'two', 'three', 'four'])
 
@@ -299,11 +294,11 @@ def test_adapter_insert_middle_numerical_index():
     data = viewer.data
 
     assert_array_equal(data.values,
-                       [[ 0,  1,  2],
+                       [[0, 1, 2],
                         [-3, -2, -1],
-                        [ 3,  4,  5],
-                        [ 6,  7,  8],
-                        [ 9, 10, 11]])
+                        [3, 4, 5],
+                        [6, 7, 8],
+                        [9, 10, 11]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, [1, 0, 2, 3, 4])
 
@@ -318,10 +313,10 @@ def test_adapter_insert_end():
     data = viewer.data
 
     assert_array_equal(data.values,
-                       [[ 0,  1,  2],
-                        [ 3,  4,  5],
-                        [ 6,  7,  8],
-                        [ 9, 10, 11],
+                       [[0, 1, 2],
+                        [3, 4, 5],
+                        [6, 7, 8],
+                        [9, 10, 11],
                         [-3, -2, -1]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, ['one', 'two', 'three', 'four', 'new'])
@@ -337,10 +332,10 @@ def test_adapter_insert_end_numerical_index():
     data = viewer.data
 
     assert_array_equal(data.values,
-                       [[ 0,  1,  2],
-                        [ 3,  4,  5],
-                        [ 6,  7,  8],
-                        [ 9, 10, 11],
+                       [[0, 1, 2],
+                        [3, 4, 5],
+                        [6, 7, 8],
+                        [9, 10, 11],
                         [-3, -2, -1]])
     assert_array_equal(data.columns, ['X', 'Y', 'Z'])
     assert_array_equal(data.index, [1, 2, 3, 4, 0])
@@ -351,6 +346,21 @@ def test_data_frame_editor():
     viewer = sample_data()
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits()
+        ui.dispose()
+
+
+@skip_if_null
+def test_data_frame_editor_alternate_adapter():
+    class AlternateAdapter(DataFrameAdapter):
+        pass
+
+    alternate_adapter_view = View(
+        Item('data', editor=DataFrameEditor(adapter=AlternateAdapter()),
+                width=400)
+    )
+    viewer = sample_data()
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits(view=alternate_adapter_view)
         ui.dispose()
 
 
@@ -391,4 +401,41 @@ def test_data_frame_editor_columns():
     viewer = sample_data()
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits(view=columns_view)
+        ui.dispose()
+
+
+@skip_if_null
+def test_data_frame_editor_with_update_refresh():
+
+    class DataFrameViewer(HasTraits):
+        data = Instance(DataFrame)
+        df_updated = Event
+        view = View(
+            Item('data', editor=DataFrameEditor(update="df_updated"))
+        )
+
+    df = DataFrame(DATA, index=['one', 'two', 'three', 'four'],
+                   columns=['X', 'Y', 'Z'])
+    viewer = DataFrameViewer(data=df)
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits()
+        viewer.df_updated = True
+        ui.dispose()
+
+
+@skip_if_null
+def test_data_frame_editor_with_refresh():
+    class DataFrameViewer(HasTraits):
+        data = Instance(DataFrame)
+        df_refreshed = Event
+        view = View(
+            Item('data', editor=DataFrameEditor(refresh="df_refreshed"))
+        )
+
+    df = DataFrame(DATA, index=['one', 'two', 'three', 'four'],
+                   columns=['X', 'Y', 'Z'])
+    viewer = DataFrameViewer(data=df)
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits()
+        viewer.df_refreshed = True
         ui.dispose()

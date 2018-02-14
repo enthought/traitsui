@@ -17,9 +17,9 @@
     modify it.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 import webbrowser
 
@@ -29,17 +29,18 @@ from traits.api import Str
 
 from editor import Editor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class SimpleEditor ( Editor ):
+
+class SimpleEditor(Editor):
     """ Simple style editor for HTML.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Is the HTML editor scrollable? This values override the default.
     scrollable = True
@@ -47,53 +48,52 @@ class SimpleEditor ( Editor ):
     # External objects referenced in the HTML are relative to this URL
     base_url = Str
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.control = QtWebKit.QWebView()
-        self.control.setSizePolicy( QtGui.QSizePolicy.Expanding,
-                                    QtGui.QSizePolicy.Expanding )
+        self.control.setSizePolicy(QtGui.QSizePolicy.Expanding,
+                                   QtGui.QSizePolicy.Expanding)
 
         if self.factory.open_externally:
             page = self.control.page()
-            page.setLinkDelegationPolicy( QtWebKit.QWebPage.DelegateAllLinks )
-            signal = QtCore.SIGNAL( 'linkClicked(QUrl)' )
-            QtCore.QObject.connect( page, signal, self._link_clicked )
+            page.setLinkDelegationPolicy(QtWebKit.QWebPage.DelegateAllLinks)
+            page.linkClicked.connect(self._link_clicked)
 
         self.base_url = self.factory.base_url
-        self.sync_value( self.factory.base_url_name, 'base_url', 'from' )
+        self.sync_value(self.factory.base_url_name, 'base_url', 'from')
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes external to the
             editor.
         """
         text = self.str_value
         if self.factory.format_text:
-            text = self.factory.parse_text( text )
+            text = self.factory.parse_text(text)
         if self.base_url:
             url = self.base_url
             if not url.endswith("/"):
                 url += "/"
-            self.control.setHtml( text , QtCore.QUrl.fromLocalFile ( url ) )
+            self.control.setHtml(text, QtCore.QUrl.fromLocalFile(url))
         else:
-            self.control.setHtml( text )
+            self.control.setHtml(text)
 
-    #-- Event Handlers ---------------------------------------------------------
+    #-- Event Handlers -------------------------------------------------------
 
-    def _base_url_changed ( self ):
+    def _base_url_changed(self):
         self.update_editor()
 
-    def _link_clicked ( self, url ):
-        webbrowser.open_new( url.toString() )
+    def _link_clicked(self, url):
+        webbrowser.open_new(url.toString())
 
 #-EOF--------------------------------------------------------------------------
