@@ -360,7 +360,7 @@ class TableEditor(Editor, BaseTableEditor):
         prefs = {}
         header = self.table_view.horizontalHeader()
         if header is not None:
-            prefs['column_state'] = str(header.saveState())
+            prefs['column_state'] = header.saveState().data()
         return prefs
 
     #-------------------------------------------------------------------------
