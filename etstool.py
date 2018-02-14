@@ -143,7 +143,7 @@ def install(runtime, toolkit, environment):
         "edm run -e {environment} -- python setup.py install"]
     # pip install pyqt5, because we don't have it in EDM yet
     if toolkit == 'pyqt5':
-        commands.append("edm run -e {environment} -- pip install pyqt5")
+        commands.append("edm run -e {environment} -- pip install pyqt5<=5.9.2")
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)
