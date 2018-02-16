@@ -25,6 +25,8 @@
 
 from __future__ import absolute_import
 
+from inspect import getargspec
+
 from .toolkit import toolkit
 
 from .help import on_help_call
@@ -238,6 +240,80 @@ class Handler(HasPrivateTraits):
         if control is None:
             control = info.ui.control
         on_help_call()(info, control)
+
+    #-------------------------------------------------------------------------
+    #  Dispatches generic menu and toolbar events:
+    #-------------------------------------------------------------------------
+
+    def perform(self, info, action, event):
+        """ Perform computation for an action.
+
+        The default method looks for a method matching ``action.action`` and
+        calls it (sniffing the signature to determine how to call it for
+        historical reasons).  If this is not found, then it calls the
+        :py:meth:`perform` method of the action.
+
+        Parameters
+        ----------
+        info : UIInfo instance
+            The UIInfo assicated with the view, if available.
+        action : Action instance
+            The Action that the user invoked.
+        event : ActionEvent instance
+            The ActionEvent associated with the user action.
+
+        Notes
+        -----
+        If overriding in a subclass, the method needs to ensure that any
+        standard menu action items that are needed (eg. "Close", "Undo",
+        "Redo", "Help", etc.) get dispatched correctly.
+        """
+        if action.action != '':
+            method_name = action.action
+        else:
+            method_name = '_{}_clicked'.format(action.name.lower())
+
+        for object in self.get_perform_handlers(info):
+            method = getattr(object, method_name, None)
+            if method is not None:
+                # call the action method
+                specification = getargspec(method)
+                if len(specification.args) == 1:
+                    method()
+                else:
+                    method(info)
+                # and we are done
+                return
+
+        # otherwise, call the perform method of the action
+        specification = getargspec(action.perform)
+        if len(specification.args) == 1:
+            action.perform()
+        else:
+            action.perform(event)
+
+    def get_perform_handlers(self, info):
+        """ Return a list of objects which can handle actions.
+
+        This method may be overridden by sub-classes to return a more relevant
+        set of objects.
+
+        Parameters
+        ----------
+        info : UIInfo instance or None
+            The UIInfo associated with the view, or None.
+
+        Returns
+        -------
+        handlers : list
+            A list of objects that may potentially have action methods on them.
+        """
+        handlers = [self]
+        if info is not None:
+            additional_objects = ['object', 'model']
+            handlers += [info.ui.context[name] for name in additional_objects
+                         if name in info.ui.context]
+        return handlers
 
     #-------------------------------------------------------------------------
     #  Handles setting a specified object trait's value:
@@ -568,6 +644,23 @@ class Controller(Handler):
         return {'object': self.model, 'controller': self, 'handler': self}
 
     #-- Handler Method Overrides ---------------------------------------------
+
+    def get_perform_handlers(self, info):
+        """ Return a list of objects which can handle actions.
+
+        By default this returns the Controller instance and the model.
+
+        Parameters
+        ----------
+        info : UIInfo instance or None
+            The UIInfo associated with the view, or None.
+
+        Returns
+        -------
+        handlers : list
+            A list of objects that may potentially have action methods on them.
+        """
+        return [self, self.model]
 
     #-------------------------------------------------------------------------
     #  Informs the handler what the UIInfo object for a View will be:

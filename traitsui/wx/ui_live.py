@@ -380,35 +380,6 @@ class LiveWindow(BaseDialog):
         if event.GetKeyCode() == 0x1B:
             self._on_close_page(event)
 
-    #-------------------------------------------------------------------------
-    #  Handles an 'Undo' change request:
-    #-------------------------------------------------------------------------
-
-    def _on_undo(self, event):
-        """ Handles an "Undo" change request.
-        """
-        self.ui.history.undo()
-
-    #-------------------------------------------------------------------------
-    #  Handles a 'Redo' change request:
-    #-------------------------------------------------------------------------
-
-    def _on_redo(self, event):
-        """ Handles a "Redo" change request.
-        """
-        self.ui.history.redo()
-
-    #-------------------------------------------------------------------------
-    #  Handles a 'Revert' all changes request:
-    #-------------------------------------------------------------------------
-
-    def _on_revert(self, event):
-        """ Handles a request to revert all changes.
-        """
-        ui = self.ui
-        if ui.history is not None:
-            ui.history.revert()
-        ui.handler.revert(ui.info)
 
     #-------------------------------------------------------------------------
     #  Handles a 'Cancel' all changes request:
@@ -429,15 +400,6 @@ class LiveWindow(BaseDialog):
         """ Handles editing errors.
         """
         self.ok.Enable(errors == 0)
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'Help' button being clicked:
-    #-------------------------------------------------------------------------
-
-    def _on_help(self, event):
-        """ Handles the 'user clicking the Help button.
-        """
-        self.ui.handler.show_help(self.ui.info, event.GetEventObject())
 
     #-------------------------------------------------------------------------
     #  Handles the undo history 'undoable' state changing:

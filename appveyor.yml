@@ -1,33 +1,46 @@
 build: false
-shallow_clone: true
-
+shallow_clone: false
+skip_branch_with_pr: true
 environment:
 
   global:
-    distutils_use_sdk: 1
-    ets_toolkit: "qt4"
+    PYTHONUNBUFFERED: "1"
+    INSTALL_EDM_VERSION: "1.9.1"
 
   matrix:
 
-    - python: "C:/Python27-x64"
-      sdkver: "v7.0"
+    - RUNTIME: '2.7'
+      TOOLKITS: "null pyqt pyside"
+    - RUNTIME: '3.5'
+      TOOLKITS: "null pyqt pyqt5"
+    - RUNTIME: '2.7'
+      TOOLKITS: "wx"
 
-    - python: "C:/Python34-x64"
-      sdkver: "v7.1"
+matrix:
+  fast_finish: True
+  allow_failures:
+    - RUNTIME: '2.7'
+      TOOLKITS: "wx"
+
+branches:
+  only:
+    - master
 
 cache:
-  - c:\temp
+  - C:\Users\appveyor\.cache -> appveyor-clean-cache.txt
+  - C:\Users\appveyor\AppData\Local\pip\Cache -> appveyor-clean-cache.txt
 
 init:
-  - ps: $Env:sdkbin = "C:\Program Files\Microsoft SDKs\Windows\" + $Env:sdkver + "\Bin"
-  - ps: $Env:sdkverpath = "C:/Program Files/Microsoft SDKs/Windows/" + $Env:sdkver + "/Setup/WindowsSdkVer.exe"
-  - ps: $Env:path = $Env:python + ";" + $Env:python + "\scripts;" + $Env:sdkbin + ";" + $Env:path
+  - ps: $Env:path = "C:/Enthought/edm;" + $Env:path
+  - ps: md C:/Users/appveyor/.cache -Force
 
 install:
-  - ps: if ((Test-Path "c:/temp") -eq 0) { mkdir c:/temp }
-  - ps: python -m pip install --upgrade --no-binary wheel pip
-  - ps: pip install --upgrade wheel
-  - ps: pip --version
-  - cmd /v:on /e:on /c ".\appveyor-install.cmd"
+  - install-edm-windows.cmd
+  - edm install -y wheel click coverage
+  - appveyor-run.cmd install %runtime% %toolkits%
 test_script:
-  - cmd /v:on /e:on /c ".\appveyor-test.cmd"
+  - appveyor-run.cmd test %runtime% %toolkits%
+on_success:
+  - edm run -- coverage combine
+  - edm run -- pip install codecov
+  - edm run -- codecov

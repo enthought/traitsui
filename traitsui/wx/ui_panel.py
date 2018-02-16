@@ -237,44 +237,6 @@ class Panel(BaseDialog):
 
         cpanel.SetSizerAndFit(sw_sizer)
 
-    #-------------------------------------------------------------------------
-    #  Handles an 'Undo' change request:
-    #-------------------------------------------------------------------------
-
-    def _on_undo(self, event):
-        """ Handles a request to undo a change.
-        """
-        self.ui.history.undo()
-
-    #-------------------------------------------------------------------------
-    #  Handles a 'Redo' change request:
-    #-------------------------------------------------------------------------
-
-    def _on_redo(self, event):
-        """ Handles a request to redo a change.
-        """
-        self.ui.history.redo()
-
-    #-------------------------------------------------------------------------
-    #  Handles a 'Revert' all changes request:
-    #-------------------------------------------------------------------------
-
-    def _on_revert(self, event):
-        """ Handles a request to revert all changes.
-        """
-        ui = self.ui
-        ui.history.revert()
-        ui.handler.revert(ui.info)
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'Help' button being clicked:
-    #-------------------------------------------------------------------------
-
-    def _on_help(self, event):
-        """ Handles the **Help** button being clicked.
-        """
-        self.ui.handler.show_help(self.ui.info, event.GetEventObject())
-
     #-----------------------------------------------------------------------
     #  Handles the undo history 'undoable' state changing:
     #-----------------------------------------------------------------------
@@ -384,7 +346,6 @@ def create_notebook_for_items(content, ui, parent, group,
         nb = dw.control
     pages = []
     count = 0
-    has_theme = ((group is not None) and (group.group_theme is not None))
 
     # Create a notebook page for each group or item in the content:
     active = 0
@@ -414,13 +375,9 @@ def create_notebook_for_items(content, ui, parent, group,
                 page_name = 'Page %d' % count
 
             sizer = wx.BoxSizer(wx.VERTICAL)
-            if has_theme:
-                image_panel, image_sizer = add_image_panel(nb, group)
-                panel = image_panel.control
-                image_sizer.Add(sizer, 1, wx.EXPAND)
-            else:
-                panel = TraitsUIPanel(nb, -1)
-                panel.SetSizer(sizer)
+
+            panel = TraitsUIPanel(nb, -1)
+            panel.SetSizer(sizer)
 
             pages.append(DockControl(name=page_name,
                                      image=item.image,
@@ -443,21 +400,6 @@ def create_notebook_for_items(content, ui, parent, group,
 
     # Return the notebook as the result:
     return nb
-
-#-------------------------------------------------------------------------
-#  Creates a themed ImagePanel for the specified group and parent window:
-#-------------------------------------------------------------------------
-
-
-def add_image_panel(window, group):
-    """ Creates a themed ImagePanel for the specified group and parent window.
-    """
-    from image_panel import ImagePanel
-
-    image_panel = ImagePanel(theme=group.group_theme, text=group.label)
-    panel = image_panel.create_control(window)
-
-    return (image_panel, panel.GetSizer())
 
 #-------------------------------------------------------------------------
 #  Handles a notebook page being 'turned':
@@ -568,19 +510,10 @@ class FillPanel(object):
                     content, ui, panel, group, self.add_notebook_item, True)
             return
 
-        theme = group.group_theme
-        if (is_dock_window or
-            create_panel or
-            is_scrolled_panel or
-            (id != '') or
-            (theme is not None) or
-            (group.visible_when != '') or
+        if (is_dock_window or create_panel or is_scrolled_panel or
+                (id != '') or (group.visible_when != '') or
                 (group.enabled_when != '')):
-            if theme is not None:
-                image_panel, image_sizer = add_image_panel(panel, group)
-                new_panel = image_panel.control
-                suppress_label |= image_panel.can_show_text
-            elif is_scrolled_panel:
+            if is_scrolled_panel:
                 new_panel = TraitsUIScrolledPanel(panel)
                 new_panel.SetMinSize(panel.GetMinSize())
                 self.resizable = True
@@ -690,11 +623,6 @@ class FillPanel(object):
                             export=group.export,
                             control=panel)])
 
-        # If we are using an background image, add the sizer to the image
-        # sizer:
-        if theme is not None:
-            image_sizer.Add(self.sizer, 1, wx.EXPAND)
-
     #-------------------------------------------------------------------------
     #  Adds a set of groups or items separated by splitter bars to a DockWindow:
     #-------------------------------------------------------------------------
@@ -736,13 +664,8 @@ class FillPanel(object):
             orientation = wx.HORIZONTAL
         sizer = wx.BoxSizer(orientation)
 
-        if group.group_theme is not None:
-            image_panel, image_sizer = add_image_panel(window, group)
-            panel = image_panel.control
-            image_sizer.Add(sizer, 1, wx.EXPAND)
-        else:
-            panel = TraitsUIPanel(window, -1)
-            panel.SetSizer(sizer)
+        panel = TraitsUIPanel(window, -1)
+        panel.SetSizer(sizer)
 
         self.add_items([item], panel, sizer)
 
@@ -765,17 +688,7 @@ class FillPanel(object):
         """ Adds a set of groups or items as vertical notebook pages to a
             vertical notebook.
         """
-        from themed_vertical_notebook import ThemedVerticalNotebook
-
-        # Create the vertical notebook:
-        nb = ThemedVerticalNotebook(scrollable=True)
-        result = nb.create_control(window)
-
-        # Create the notebook pages:
-        nb.pages = [self.create_fold_for_item(nb, item) for item in content]
-
-        # Return the notebook we created:
-        return result
+        raise NotImplementedError('VFold is not implemented for Wx backend')
 
     #-------------------------------------------------------------------------
     #  Adds a single group or item to a vertical notebook:
@@ -895,9 +808,6 @@ class FillPanel(object):
         # Process each Item in the list:
         for item in content:
 
-            # Get the item theme (if any):
-            theme = item.item_theme
-
             # Get the name in order to determine its type:
             name = item.name
 
@@ -913,12 +823,7 @@ class FillPanel(object):
                     if (cols > 1) and show_labels:
                         item_sizer.Add((1, 1))
 
-                    if theme is not None:
-                        from image_text import ImageText
-
-                        label = ImageText(panel, theme, label)
-                        item_sizer.Add(label, 0, wx.EXPAND)
-                    elif item.style == 'simple':
+                    if item.style == 'simple':
                         # Add a simple text label:
                         label = wx.StaticText(panel, -1, label,
                                               style=wx.ALIGN_LEFT)
@@ -1018,14 +923,6 @@ class FillPanel(object):
 
             # Set up the background image (if used):
             item_panel = panel
-            if theme is not None:
-                from image_panel import ImagePanel
-
-                text = ''
-                if item.show_label:
-                    text = item.get_label(ui)
-                image_panel = ImagePanel(theme=theme, text=text)
-                item_panel = image_panel.create_control(panel)
 
             # Create the requested type of editor from the editor factory:
             factory_method = getattr(editor_factory, item.style + '_editor')
@@ -1055,12 +952,7 @@ class FillPanel(object):
             # following section, depending upon whether we have wrapped an
             # ImagePanel around the editor control or not:
             control = editor.control
-            if theme is None:
-                width, height = control.GetSizeTuple()
-            else:
-                item_panel.GetSizer().Add(control, 1, wx.EXPAND)
-                control = item_panel
-                width, height = image_panel.adjusted_size
+            width, height = control.GetSizeTuple()
 
             # Set the correct size on the control, as specified by the user:
             scrollable = editor.scrollable
@@ -1178,14 +1070,12 @@ class FillPanel(object):
                      pad_side=wx.LEFT, border=False):
         """ Creates an item label.
         """
-        from image_text import ImageText
-
         label = item.get_label(ui)
         if (label == '') or (label[-1:] in '?=:;,.<>/\\"\'-+#|'):
             suffix = ''
 
-        control = ImageText(parent, item.label_theme, label + suffix,
-                            border=border)
+        control = wx.StaticText(parent, -1, label+suffix,
+            style=wx.ALIGN_LEFT | wx.SIMPLE_BORDER if border else wx.NO_BORDER)
 
         self._set_owner(control, item)
 
@@ -1196,7 +1086,8 @@ class FillPanel(object):
         #wx.EVT_LEFT_UP( control, show_help_popup )
 
         control.help = item.get_help(ui)
-        sizer.Add(control, 0, self.label_flags | wx.ALIGN_CENTER_VERTICAL |
+        control.SetToolTip(wx.ToolTip(item.get_help(ui)))
+        sizer.Add(control, 0, self.label_flags | wx.ALIGN_TOP |
                   pad_side, self.label_pad)
 
         if desc != '':

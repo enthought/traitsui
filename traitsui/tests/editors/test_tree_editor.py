@@ -13,6 +13,7 @@
 #
 #------------------------------------------------------------------------------
 
+import nose
 
 from traits.api import Bool, HasTraits, Instance, Int, List
 from traitsui.api import Item, TreeEditor, TreeNode, View
@@ -80,3 +81,12 @@ def test_tree_editor_listeners_with_shown_root():
 @skip_if_null
 def test_tree_editor_listeners_with_hidden_root():
     _test_tree_editor_releases_listeners(hide_root=True)
+
+
+@skip_if_null
+def test_smoke_save_restore_prefs():
+        bogus = Bogus(bogus_list=[Bogus()])
+        tree_editor_view = BogusTreeView(bogus=bogus)
+        ui = tree_editor_view.edit_traits()
+        prefs = ui.get_prefs()
+        ui.set_prefs(prefs)

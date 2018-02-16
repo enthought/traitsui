@@ -99,6 +99,7 @@ class SimpleEditor(EditorWithList):
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
 
+
         # Make sure the current value is still legal:
         modified = False
         cur_value = parse_value(self.value)
@@ -137,7 +138,7 @@ class SimpleEditor(EditorWithList):
     def update_object(self, text):
         """ Handles the user selecting a new value from the combo box.
         """
-        value = self.values[self.names.index(unicode(text))]
+        value = self.values[text]
         if not isinstance(self.value, basestring):
             value = [value]
         self.value = value
@@ -178,7 +179,7 @@ class CustomEditor(SimpleEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        self._mapper.mapped.connect(self.update_object)
+        self._mapper.mapped[unicode].connect(self.update_object)
 
     #-------------------------------------------------------------------------
     #  Rebuilds the editor after its definition is modified:

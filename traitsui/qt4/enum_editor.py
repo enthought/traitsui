@@ -191,7 +191,7 @@ class SimpleEditor(BaseEditor):
         self.control = control = self.create_combo_box()
         control.addItems(self.names)
 
-        control.currentIndexChanged.connect(self.update_object)
+        control.currentIndexChanged[str].connect(self.update_object)
 
         if self.factory.evaluate is not None:
             control.setEditable(True)

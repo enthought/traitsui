@@ -1,11 +1,11 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
+# Copyright (c) 2017, Enthought Inc.
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
 # However, when used with the GPL version of PyQt the additional terms
 # described in the PyQt GPL exception also apply
-
 #
 # Author: Riverbank Computing Limited
 #------------------------------------------------------------------------------
@@ -17,78 +17,13 @@
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api \
-    import HasStrictTraits, HasPrivateTraits, Instance, List, Event
+from traits.api import HasPrivateTraits, Instance
 
-from traitsui.api \
-    import UI
-
-from traitsui.menu \
-    import Action
-
-from constants \
-    import DefaultTitle
-
-from editor \
-    import Editor
-
-from helper \
-    import restore_window, save_window
-
-
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
-
-# List of all predefined system button names:
-SystemButtons = ['Undo', 'Redo', 'Apply', 'Revert', 'OK', 'Cancel', 'Help']
-
-# List of alternative context items that might handle an Action 'perform':
-PerformHandlers = ('object', 'model')
-
-
-def default_icon():
-    from pyface.image_resource import ImageResource
-    return ImageResource('frame.png')
-
-#-------------------------------------------------------------------------
-#  'RadioGroup' class:
-#-------------------------------------------------------------------------
-
-
-class RadioGroup(HasStrictTraits):
-    """ A group of mutually-exclusive menu or toolbar actions.
-    """
-    # List of menu or tool bar items
-    items = List
-
-    #-------------------------------------------------------------------------
-    #  Handles a menu item in the group being checked:
-    #-------------------------------------------------------------------------
-
-    def menu_checked(self, menu_item):
-        """ Handles a menu item in the group being checked.
-        """
-        for item in self.items:
-            if item is not menu_item:
-                item.control.Check(False)
-                item.item.action.checked = False
-
-    #-------------------------------------------------------------------------
-    #  Handles a tool bar item in the group being checked:
-    #-------------------------------------------------------------------------
-
-    def toolbar_checked(self, toolbar_item):
-        """ Handles a tool bar item in the group being checked.
-        """
-        for item in self.items:
-            if item is not toolbar_item:
-                item.tool_bar.ToggleTool(item.control_id, False)
-                item.item.action.checked = False
-
-#-------------------------------------------------------------------------
-#  'ButtonEditor' class:
-#-------------------------------------------------------------------------
+from traitsui.base_panel import BasePanel as _BasePanel
+from traitsui.menu import Action
+from .constants import DefaultTitle
+from .editor import Editor
+from .helper import restore_window, save_window
 
 
 class ButtonEditor(Editor):
@@ -106,105 +41,23 @@ class ButtonEditor(Editor):
     #-------------------------------------------------------------------------
 
     def __init__(self, **traits):
-        self.set(**traits)
+        # XXX Why does this need to be an Editor subclass? -- CJW
+        HasPrivateTraits.__init__(self, **traits)
 
     #-------------------------------------------------------------------------
     #  Handles the associated button being clicked:
     #-------------------------------------------------------------------------
 
     def perform(self):
-        """Handles the associated button being clicked."""
-        self.ui.do_undoable(self._perform, None)
-
-    def _perform(self, event):
-        method_name = self.action.action
-        if method_name == '':
-            method_name = '_%s_clicked' % self.action.name.lower()
-
-        method = getattr(self.ui.handler, method_name, None)
-        if method is not None:
-            method(self.ui.info)
-        else:
-            self.action.perform(event)
+        """ Handles the associated button being clicked.
+        """
+        handler = self.ui.handler
+        self.ui.do_undoable(handler.perform, self.ui.info, self.action, None)
 
 
-class BasePanel(object):
+class BasePanel(_BasePanel):
     """Base class for Traits UI panels.
     """
-
-    #-------------------------------------------------------------------------
-    #  Performs the action described by a specified Action object:
-    #-------------------------------------------------------------------------
-
-    def perform(self, action):
-        """ Performs the action described by a specified Action object.
-        """
-        self.ui.do_undoable(self._perform, action)
-
-    def _perform(self, action):
-        method = getattr(self.ui.handler, action.action, None)
-        if method is not None:
-            method(self.ui.info)
-        else:
-            # TODO extract to common superclass for wx and qt4
-
-            # cf. commit cdf76eb5965c0184114c4674e06b28beee04af36
-            # (July 28, 2008, dmorrill) that fixes this issue for the
-            # wx backend
-
-            # look for the method in the context of the handler
-            context = self.ui.context
-            for item in PerformHandlers:
-                handler = context.get(item, None)
-                if handler is not None:
-                    method = getattr(handler, action.action, None)
-                    if method is not None:
-                        method()
-                        break
-            else:
-                action.perform()
-
-    #-------------------------------------------------------------------------
-    #  Check to see if a specified 'system' button is in the buttons list, and
-    # add it if it is not:
-    #-------------------------------------------------------------------------
-
-    def check_button(self, buttons, action):
-        """ Adds *action* to the system buttons list for this dialog, if it is
-        not already in the list.
-        """
-        name = action.name
-        for button in buttons:
-            if self.is_button(button, name):
-                return
-        buttons.append(action)
-
-    #-------------------------------------------------------------------------
-    #  Check to see if a specified Action button is a 'system' button:
-    #-------------------------------------------------------------------------
-
-    def is_button(self, action, name):
-        """ Returns whether a specified action button is a system button.
-        """
-        if isinstance(action, basestring):
-            return (action == name)
-        return (action.name == name)
-
-    #-------------------------------------------------------------------------
-    #  Coerces a string to an Action if necessary:
-    #-------------------------------------------------------------------------
-
-    def coerce_button(self, action):
-        """ Coerces a string to an Action if necessary.
-        """
-        if isinstance(action, basestring):
-            return Action(name=action,
-                          action='?'[(not action in SystemButtons):])
-        return action
-
-    #-------------------------------------------------------------------------
-    #  Creates a user specified button:
-    #-------------------------------------------------------------------------
 
     def add_button(self, action, bbox, role, method=None, enabled=True,
                    name=None, default=False):
@@ -243,82 +96,20 @@ class BasePanel(object):
 
         return button
 
-    def _on_help(self):
-        """Handles the user clicking the Help button.
-        """
-        self.ui.handler.show_help(self.ui.info)
-
-    def _on_undo(self):
-        """Handles a request to undo a change.
-        """
-        self.ui.history.undo()
-
     def _on_undoable(self, state):
         """Handles a change to the "undoable" state of the undo history
         """
         self.undo.setEnabled(state)
-
-    def _on_redo(self):
-        """Handles a request to redo a change.
-        """
-        self.ui.history.redo()
 
     def _on_redoable(self, state):
         """Handles a change to the "redoable" state of the undo history.
         """
         self.redo.setEnabled(state)
 
-    def _on_revert(self):
-        """Handles a request to revert all changes.
-        """
-        ui = self.ui
-        if ui.history is not None:
-            ui.history.revert()
-        ui.handler.revert(ui.info)
-
     def _on_revertable(self, state):
         """ Handles a change to the "revert" state.
         """
         self.revert.setEnabled(state)
-
-    #-------------------------------------------------------------------------
-    #  Adds a menu item to the menu bar being constructed:
-    #-------------------------------------------------------------------------
-
-    def add_to_menu(self, menu_item):
-        """ Adds a menu item to the menu bar being constructed.
-        """
-        item = menu_item.item
-        action = item.action
-
-        if action.id != '':
-            self.ui.info.bind(action.id, menu_item)
-
-        if action.style == 'radio':
-            if ((self._last_group is None) or
-                    (self._last_parent is not item.parent)):
-                self._last_group = RadioGroup()
-                self._last_parent = item.parent
-            self._last_group.items.append(menu_item)
-            menu_item.group = self._last_group
-
-        if action.visible_when != '':
-            self.ui.add_visible(action.visible_when, menu_item)
-
-        if action.enabled_when != '':
-            self.ui.add_enabled(action.enabled_when, menu_item)
-
-        if action.checked_when != '':
-            self.ui.add_checked(action.checked_when, menu_item)
-
-    #-------------------------------------------------------------------------
-    #  Adds a tool bar item to the tool bar being constructed:
-    #-------------------------------------------------------------------------
-
-    def add_to_toolbar(self, toolbar_item):
-        """ Adds a toolbar item to the toolbar being constructed.
-        """
-        self.add_to_menu(toolbar_item)
 
 
 class _StickyDialog(QtGui.QDialog):
@@ -512,7 +303,7 @@ class BaseDialog(BasePanel):
         from pyface.image_resource import ImageResource
 
         if not isinstance(icon, ImageResource):
-            icon = default_icon()
+            icon = self.default_icon()
 
         self.control.setWindowIcon(icon.create_icon())
 
@@ -597,17 +388,3 @@ class BaseDialog(BasePanel):
             control.setText(text)
 
         return set_status_text
-
-    def can_add_to_menu(self, action, action_event=None):
-        """Returns whether the action should be defined in the user interface.
-        """
-        if action.defined_when == '':
-            return True
-
-        return self.ui.eval_when(action.defined_when)
-
-    def can_add_to_toolbar(self, action):
-        """Returns whether the toolbar action should be defined in the user
-           interface.
-        """
-        return self.can_add_to_menu(action)
