@@ -28,4 +28,4 @@
 from __future__ import absolute_import
 
 from . import toolkit
-toolkit = toolkit.GUIToolkit()
+toolkit = toolkit.GUIToolkit('traitsui', 'null', 'traitsui.qt4')

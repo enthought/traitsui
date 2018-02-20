@@ -25,10 +25,12 @@
 
 from __future__ import absolute_import
 
+import pkg_resources
 import logging
 
 from traits.api import HasPrivateTraits, TraitError
 from traits.trait_base import ETSConfig
+from pyface.base_toolkit import Toolkit as BaseToolkit
 
 #-------------------------------------------------------------------------
 #  Logging:
@@ -84,13 +86,13 @@ def _import_toolkit(name):
     return __import__(name, globals=globals(), level=1).toolkit
 
 
-def assert_toolkit_import(name):
+def assert_toolkit_import(names):
     """ Raise an error if a toolkit with the given name should not be allowed
     to be imported.
     """
-    if ETSConfig.toolkit and ETSConfig.toolkit != name:
+    if ETSConfig.toolkit and ETSConfig.toolkit not in names:
         raise RuntimeError("Importing from %s backend after selecting %s "
-                           "backend!" % (name, ETSConfig.toolkit))
+                           "backend!" % (names[0], ETSConfig.toolkit))
 
 
 def toolkit_object(name, raise_exceptions=False):
@@ -98,36 +100,8 @@ def toolkit_object(name, raise_exceptions=False):
     consists of the relative module path and the object name separated by a
     colon.
     """
-
-    mname, oname = name.split(':')
-
-    class Unimplemented(object):
-        """ This is returned if an object isn't implemented by the selected
-        toolkit.  It raises an exception if it is ever instantiated.
-        """
-
-        def __init__(self, *args, **kwargs):
-            raise NotImplementedError(
-                "The %s traits backend doesn't "
-                "implement %s" %
-                (ETSConfig.toolkit, oname))
-
-    be_obj = Unimplemented
-    be_mname = toolkit().__module__.split('.')[-2] + '.' + mname
-    try:
-        module = __import__(
-            be_mname, globals=globals(), fromlist=[oname], level=1
-        )
-        try:
-            be_obj = getattr(module, oname)
-        except AttributeError as e:
-            if raise_exceptions:
-                raise e
-    except ImportError as e:
-        if raise_exceptions:
-            raise e
-
-    return be_obj
+    tk = toolkit()
+    return tk(name)
 
 
 def toolkit(*toolkits):
@@ -148,52 +122,85 @@ def toolkit(*toolkits):
     """
     global _toolkit
 
+    def import_toolkit(tk):
+        plugins = list(pkg_resources.iter_entry_points('traitsui.toolkits', tk))
+        if len(plugins) == 0:
+            msg = "no TraitsUI plugin found for toolkit '{}'"
+            raise RuntimeError(msg.format(tk))
+        elif len(plugins) > 1:
+            msg = ("multiple TraitsUI plugins found for toolkit %r: %s")
+            modules = ', '.join(plugin.module_name for plugin in plugins)
+            logger.warning(msg, tk, modules)
+
+        for plugin in plugins:
+            try:
+                tk_object = plugin.load()
+            except ImportError as exception:
+                logger.debug(exception, exc_info=True)
+                msg = "Could not load plugin %r from %r"
+                logger.warning(msg, plugin.name, plugin.module_name)
+            else:
+                return tk_object
+        else:
+            logger.debug('Could not load any plugin for %s', tk)
+            raise RuntimeError("No plugin could be loaded for {}.".format(tk))
+
     # If _toolkit has already been set, simply return it.
     if _toolkit is not None:
         return _toolkit
 
     if ETSConfig.toolkit:
         # If a toolkit has already been set for ETSConfig, then use it:
-        _toolkit = _import_toolkit(ETSConfig.toolkit)
+        _toolkit = import_toolkit(ETSConfig.toolkit)
         return _toolkit
-    else:
-        if not toolkits:
-            toolkits = TraitUIToolkits
 
-        for toolkit_name in toolkits:
-            try:
-                with provisional_toolkit(toolkit_name):
-                    _toolkit = _import_toolkit(toolkit_name)
-                    return _toolkit
-            except (AttributeError, ImportError) as exc:
-                # import failed, reset toolkit to none, log error and try again
-                msg = "Could not import traits UI backend '{0}'"
-                logger.info(msg.format(toolkit_name))
-                if logger.getEffectiveLevel() <= logging.INFO:
-                    logger.exception(exc)
-        else:
-            # Try using the null toolkit and printing a warning
-            try:
-                with provisional_toolkit('null'):
-                    _toolkit = _import_toolkit('null')
-                    import warnings
-                    msg = (
-                        "Unable to import the '{0}' backend for traits UI; " +
-                        "using the 'null' backend instead.")
-                    warnings.warn(msg.format(toolkit_name), RuntimeWarning)
-                    return _toolkit
-
-            except ImportError as exc:
+    # Try known toolkits first.
+    for toolkit_name in ('qt4', 'wx'):
+        try:
+            with provisional_toolkit(toolkit_name):
+                _toolkit = _import_toolkit(toolkit_name)
+                return _toolkit
+        except (AttributeError, ImportError) as exc:
+            # import failed, reset toolkit to none, log error and try again
+            msg = "Could not import traits UI backend '{0}'"
+            logger.info(msg.format(toolkit_name))
+            if logger.getEffectiveLevel() <= logging.INFO:
                 logger.exception(exc)
-                raise TraitError("Could not import any UI toolkit. Tried:" +
-                                 ', '.join(toolkits))
+
+    # Try all non-null plugins we can find until success.
+    for plugin in pkg_resources.iter_entry_points('traitsui.toolkits'):
+        if plugin.name == 'null':
+            continue
+        try:
+            with provisional_toolkit(plugin.name):
+                _toolkit = plugin.load()
+                return _toolkit
+        except ImportError as exception:
+            logger.debug(exception, exc_info=True)
+            msg = "Could not load plugin %r from %r"
+            logger.warning(msg, plugin.name, plugin.module_name)
+
+    # Try using the null toolkit and printing a warning
+    try:
+        with provisional_toolkit('null'):
+            _toolkit = _import_toolkit('null')
+            import warnings
+            msg = (
+                "Unable to import the '{0}' backend for traits UI; " +
+                "using the 'null' backend instead.")
+            warnings.warn(msg.format(toolkit_name), RuntimeWarning)
+            return _toolkit
+
+    except ImportError as exc:
+        logger.exception(exc)
+        raise TraitError("Could not import any UI toolkit.")
+
 
 #-------------------------------------------------------------------------
 #  'Toolkit' class (abstract base class):
 #-------------------------------------------------------------------------
 
-
-class Toolkit(HasPrivateTraits):
+class Toolkit(BaseToolkit):
     """ Abstract base class for GUI toolkits.
     """
 

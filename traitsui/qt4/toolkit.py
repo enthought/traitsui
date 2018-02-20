@@ -19,26 +19,17 @@ the PyQt user interface toolkit.
 
 # Make sure that importing from this backend is OK:
 from traitsui.toolkit import assert_toolkit_import
-assert_toolkit_import('qt4')
+assert_toolkit_import(['qt4', 'qt'])
 
-from pyface.qt import QtCore, QtGui, qt_api
-
-if qt_api == 'pyqt':
-    # Check the version numbers are late enough:
-    if QtCore.QT_VERSION < 0x040200:
-        raise RuntimeError("Need Qt v4.2 or higher, but got v%s" %
-                           QtCore.QT_VERSION_STR)
-
-# Make sure a QApplication object is created early:
-import sys
-if QtGui.QApplication.startingUp():
-    _app = QtGui.QApplication(sys.argv)
+# Ensure that we can import Pyface backend.  This starts App as a side-effect.
+from pyface.toolkit import toolkit_object as pyface_toolkit
+_app = pyface_toolkit('init:_app')
 
 from traits.trait_notifiers import set_ui_handler
+from pyface.qt import QtCore, QtGui
 
 from traitsui.toolkit import Toolkit
-
-from constants import screen_dx, screen_dy
+from .constants import screen_dx, screen_dy
 
 #-------------------------------------------------------------------------
 #  Handles UI notification handler requests that occur on a thread other than
