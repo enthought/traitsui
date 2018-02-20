@@ -154,8 +154,11 @@ def toolkit(*toolkits):
         _toolkit = import_toolkit(ETSConfig.toolkit)
         return _toolkit
 
+    if not toolkits:
+        toolkits = ('qt4', 'wx')
+
     # Try known toolkits first.
-    for toolkit_name in ('qt4', 'wx'):
+    for toolkit_name in toolkits:
         try:
             with provisional_toolkit(toolkit_name):
                 _toolkit = _import_toolkit(toolkit_name)

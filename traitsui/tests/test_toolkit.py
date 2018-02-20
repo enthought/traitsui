@@ -45,7 +45,8 @@ class TestToolkit(unittest.TestCase):
             # try to import a non-existent toolkit
             tk = traitsui.toolkit.toolkit('nosuchtoolkit')
 
-            # should fail, and give us 'null'
-            self.assertEqual(ETSConfig.toolkit, 'null')
-            from traitsui.null import toolkit
-            self.assertIs(tk, toolkit)
+            # should fail, and give us a standard toolkit, but don't know which
+            # exactly we get what depends on what is installed in test
+            # environment
+            self.assertTrue(ETSConfig.toolkit in {'null', 'qt4', 'wx'})
+            self.assertTrue(tk.toolkit in {'null', 'qt4', 'wx'})
