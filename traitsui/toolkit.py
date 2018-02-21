@@ -42,8 +42,6 @@ logger = logging.getLogger(__name__)
 #  Constants:
 #-------------------------------------------------------------------------
 
-# List of implemented UI toolkits:
-TraitUIToolkits = ['qt4', 'wx', 'null']
 not_implemented_message = "the '{}' toolkit does not implement this method"
 
 #-------------------------------------------------------------------------
@@ -105,7 +103,6 @@ except AttributeError:
             If no toolkit is found, or if the toolkit cannot be loaded for some
             reason.
         """
-        print(entry_point, toolkit_name)
         plugins = list(pkg_resources.iter_entry_points(entry_point, toolkit_name))
         if len(plugins) == 0:
             msg = 'No {} plugin found for toolkit {}'
@@ -131,6 +128,73 @@ except AttributeError:
             msg = msg.format(entry_point, toolkit_name)
             logger.info(msg)
             raise RuntimeError(msg)
+try:
+    import_name = pyface.base_toolkit.import_toolkit
+except:
+    from math import inf
+
+    TOOLKIT_PRIORITIES = {
+        'qt4': -2,
+        'wx': -1,
+        'null': inf
+    }
+    default_priorities = lambda plugin: TOOLKIT_PRIORITIES.get(plugin.name, 0)
+
+def find_toolkit(entry_point, toolkits=None, priorities=default_priorities):
+    """ Find a toolkit that works.
+
+    If ETSConfig is set, then attempt to find a matching toolkit.  Otherwise
+    try every plugin for the entry_point until one works.  The ordering of the
+    plugins is supplied via the priorities function which should be suitable
+    for use as a sorting key function.
+
+    Parameters
+    ----------
+    entry_point : str
+        The name of the entry point that holds our toolkits.
+    toolkits : collection of strings
+        Only consider toolkits which match the given strings, ignore other
+        ones.
+    priorities : callable
+        A callable function that returns an priority for each plugin.
+
+    Returns
+    -------
+    toolkit : Toolkit instance
+        A callable object that implements the Toolkit interface.
+
+    Raises
+    ------
+    TraitError
+        If no working toolkit is found.
+    RuntimeError
+        If no ETSConfig.toolkit is set but the toolkit cannot be loaded for
+        some reason.
+    """
+    if ETSConfig.toolkit:
+        return import_toolkit(ETSConfig.toolkit, entry_point)
+
+    entry_points = [
+        plugin for plugin in pkg_resources.iter_entry_points(entry_point)
+        if toolkits is None or plugin.name in toolkits
+    ]
+    for plugin in sorted(entry_points, key=priorities):
+        if plugin.name not in toolkits:
+            continue
+        try:
+            with ETSConfig.provisional_toolkit(plugin.name):
+                toolkit = plugin.load()
+                return toolkit
+        except (ImportError, AttributeError) as exc:
+            msg = "Could not load %s plugin %r from %r"
+            logger.info(msg, entry_point, plugin.name, plugin.module_name)
+            logger.debug(exc, exc_info=True)
+
+    # if all else fails, try to import the null toolkit.
+    with ETSConfig.provisional_toolkit('null'):
+        return import_toolkit('null', entry_point)
+
+    raise TraitError("Could not import any {} toolkit.".format(entry_point))
 
 
 def assert_toolkit_import(names):
@@ -143,14 +207,30 @@ def assert_toolkit_import(names):
 
 
 def toolkit_object(name, raise_exceptions=False):
-    """ Return the toolkit specific object with the given name.  The name
-    consists of the relative module path and the object name separated by a
-    colon.
+    """ Return the toolkit specific object with the given name.
+
+    Paramters
+    ---------
+    name : str
+        The relative module path and the object name separated by a colon.
+
+
+    Raises
+    ------
+    TraitError
+        If no working toolkit is found.
+    RuntimeError
+        If no ETSConfig.toolkit is set but the toolkit cannot be loaded for
+        some reason.
     """
     global _toolkit
-    if _toolkit is None:
-        toolkit()
-    return _toolkit(name)
+    try:
+        if _toolkit is None:
+            toolkit()
+        return _toolkit(name)
+    except Exception as exc:
+        if raise_exceptions:
+            raise
 
 
 def toolkit(*toolkits):
@@ -162,69 +242,28 @@ def toolkit(*toolkits):
     ----------
     *toolkits : strings
         Toolkit names to try if toolkit not already selected.  If not supplied,
-        defaults to order in TraitUIToolkits variable.
+        will try all 'traitsui.toolkits' entry points until a match is found.
 
     Returns
     -------
     toolkit
         Appropriate concrete Toolkit subclass for selected toolkit.
+
+    Raises
+    ------
+    TraitError
+        If no working toolkit is found.
+    RuntimeError
+        If no ETSConfig.toolkit is set but the toolkit cannot be loaded for
+        some reason.
     """
     global _toolkit
 
     # If _toolkit has already been set, simply return it.
-    if _toolkit is not None:
-        return _toolkit
+    if _toolkit is None:
+        _toolkit = find_toolkit('traitsui.toolkits', toolkits)
 
-    if ETSConfig.toolkit:
-        # If a toolkit has already been set for ETSConfig, then use it:
-        _toolkit = import_toolkit(ETSConfig.toolkit)
-        return _toolkit
-
-    if not toolkits:
-        toolkits = ('qt4', 'wx')
-
-    # Try known toolkits first.
-    for toolkit_name in toolkits:
-        try:
-            with provisional_toolkit(toolkit_name):
-                _toolkit = import_toolkit(toolkit_name, 'traitsui.toolkits')
-                return _toolkit
-        except RuntimeError as exc:
-            # not found or import failed, log exception and try again
-            msg = "Could not import traits UI backend '{0}'"
-            logger.info(msg.format(toolkit_name))
-            if logger.getEffectiveLevel() <= logging.INFO:
-                logger.exception(exc)
-
-    # Try all non-null plugins we can find until success.
-    for plugin in pkg_resources.iter_entry_points('traitsui.toolkits'):
-        if plugin.name == 'null':
-            continue
-        try:
-            with provisional_toolkit(plugin.name):
-                _toolkit = plugin.load()
-                return _toolkit
-        except ImportError as exc:
-            # not found or import failed, log exception and try again
-            msg = "Could not import traits UI backend '{0}'"
-            logger.info(msg.format(toolkit_name))
-            if logger.getEffectiveLevel() <= logging.INFO:
-                logger.exception(exc)
-
-    # Try using the null toolkit and printing a warning
-    try:
-        with provisional_toolkit('null'):
-            _toolkit = import_toolkit('null', 'traitsui.toolkits')
-            import warnings
-            msg = (
-                "Unable to import the '{0}' backend for traits UI; " +
-                "using the 'null' backend instead.")
-            warnings.warn(msg.format(toolkit_name), RuntimeWarning)
-            return _toolkit
-
-    except ImportError as exc:
-        logger.exception(exc)
-        raise TraitError("Could not import any UI toolkit.")
+    return _toolkit
 
 
 #-------------------------------------------------------------------------
