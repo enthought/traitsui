@@ -30,7 +30,7 @@ import logging
 
 from traits.api import HasPrivateTraits, TraitError
 from traits.trait_base import ETSConfig
-from pyface.base_toolkit import Toolkit as BaseToolkit
+import pyface.base_toolkit
 
 #-------------------------------------------------------------------------
 #  Logging:
@@ -81,6 +81,57 @@ except AttributeError:
             ETSConfig._toolkit = ''
             raise
 
+try:
+    import_name = pyface.base_toolkit.import_toolkit
+except AttributeError:
+    def import_toolkit(toolkit_name, entry_point='traitsui.toolkits'):
+        """ Attempt to import an toolkit specified by an entry point.
+
+        Parameters
+        ----------
+        toolkit_name : str
+            The name of the toolkit we would like to load.
+        entry_point : str
+            The name of the entry point that holds our toolkits.
+
+        Returns
+        -------
+        toolkit_object : callable
+            A callable object that implements the Toolkit interface.
+
+        Raises
+        ------
+        RuntimeError
+            If no toolkit is found, or if the toolkit cannot be loaded for some
+            reason.
+        """
+        print(entry_point, toolkit_name)
+        plugins = list(pkg_resources.iter_entry_points(entry_point, toolkit_name))
+        if len(plugins) == 0:
+            msg = 'No {} plugin found for toolkit {}'
+            msg = msg.format(entry_point, toolkit_name)
+            logger.debug(msg)
+            raise RuntimeError(msg)
+        elif len(plugins) > 1:
+            msg = ("multiple %r plugins found for toolkit %r: %s")
+            modules = ', '.join(plugin.module_name for plugin in plugins)
+            logger.warning(msg, entry_point, toolkit_name, modules)
+
+        for plugin in plugins:
+            try:
+                toolkit_object = plugin.load()
+            except (ImportError, AttributeError) as exc:
+                msg = "Could not load plugin %r from %r"
+                logger.info(msg, plugin.name, plugin.module_name)
+                logger.debug(exc, exc_info=True)
+            else:
+                return toolkit_object
+        else:
+            msg = 'No {} plugin could be loaded for {}'
+            msg = msg.format(entry_point, toolkit_name)
+            logger.info(msg)
+            raise RuntimeError(msg)
+
 
 def assert_toolkit_import(names):
     """ Raise an error if a toolkit with the given name should not be allowed
@@ -96,8 +147,10 @@ def toolkit_object(name, raise_exceptions=False):
     consists of the relative module path and the object name separated by a
     colon.
     """
-    tk = toolkit()
-    return tk(name)
+    global _toolkit
+    if _toolkit is None:
+        toolkit()
+    return _toolkit(name)
 
 
 def toolkit(*toolkits):
@@ -118,29 +171,6 @@ def toolkit(*toolkits):
     """
     global _toolkit
 
-    def import_toolkit(tk):
-        plugins = list(pkg_resources.iter_entry_points('traitsui.toolkits', tk))
-        if len(plugins) == 0:
-            msg = "no TraitsUI plugin found for toolkit '{}'"
-            raise RuntimeError(msg.format(tk))
-        elif len(plugins) > 1:
-            msg = ("multiple TraitsUI plugins found for toolkit %r: %s")
-            modules = ', '.join(plugin.module_name for plugin in plugins)
-            logger.warning(msg, tk, modules)
-
-        for plugin in plugins:
-            try:
-                tk_object = plugin.load()
-            except ImportError as exception:
-                logger.debug(exception, exc_info=True)
-                msg = "Could not load plugin %r from %r"
-                logger.warning(msg, plugin.name, plugin.module_name)
-            else:
-                return tk_object
-        else:
-            logger.debug('Could not load any plugin for %s', tk)
-            raise RuntimeError("No plugin could be loaded for {}.".format(tk))
-
     # If _toolkit has already been set, simply return it.
     if _toolkit is not None:
         return _toolkit
@@ -157,10 +187,10 @@ def toolkit(*toolkits):
     for toolkit_name in toolkits:
         try:
             with provisional_toolkit(toolkit_name):
-                _toolkit = import_toolkit(toolkit_name)
+                _toolkit = import_toolkit(toolkit_name, 'traitsui.toolkits')
                 return _toolkit
-        except (AttributeError, ImportError) as exc:
-            # import failed, reset toolkit to none, log error and try again
+        except RuntimeError as exc:
+            # not found or import failed, log exception and try again
             msg = "Could not import traits UI backend '{0}'"
             logger.info(msg.format(toolkit_name))
             if logger.getEffectiveLevel() <= logging.INFO:
@@ -174,15 +204,17 @@ def toolkit(*toolkits):
             with provisional_toolkit(plugin.name):
                 _toolkit = plugin.load()
                 return _toolkit
-        except ImportError as exception:
-            logger.debug(exception, exc_info=True)
-            msg = "Could not load plugin %r from %r"
-            logger.warning(msg, plugin.name, plugin.module_name)
+        except ImportError as exc:
+            # not found or import failed, log exception and try again
+            msg = "Could not import traits UI backend '{0}'"
+            logger.info(msg.format(toolkit_name))
+            if logger.getEffectiveLevel() <= logging.INFO:
+                logger.exception(exc)
 
     # Try using the null toolkit and printing a warning
     try:
         with provisional_toolkit('null'):
-            _toolkit = import_toolkit('null')
+            _toolkit = import_toolkit('null', 'traitsui.toolkits')
             import warnings
             msg = (
                 "Unable to import the '{0}' backend for traits UI; " +
@@ -199,7 +231,7 @@ def toolkit(*toolkits):
 #  'Toolkit' class (abstract base class):
 #-------------------------------------------------------------------------
 
-class Toolkit(BaseToolkit):
+class Toolkit(pyface.base_toolkit.Toolkit):
     """ Abstract base class for GUI toolkits.
     """
 
