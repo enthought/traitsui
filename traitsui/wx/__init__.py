@@ -26,4 +26,4 @@
 import toolkit
 
 # Reference to the GUIToolkit object for wxPython
-toolkit = toolkit.GUIToolkit()
+toolkit = toolkit.GUIToolkit('traitsui', 'wx', 'traitsui.wx')

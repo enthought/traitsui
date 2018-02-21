@@ -141,6 +141,14 @@ if __name__ == "__main__":
         package_data=dict(traitsui=['image/library/*.zip', 'images/*',
                                     'wx/images/*', 'qt4/images/*']),
         packages=find_packages(),
+        entry_points = {
+            'traitsui.toolkits': [
+                'qt4 = traitsui.qt4:toolkit',
+                'wx = traitsui.wx:toolkit',
+                'qt = traitsui.qt4:toolkit',
+                'null = traitsui.null:toolkit',
+            ],
+        },
         platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
         zip_safe=False,
         use_2to3=True,
