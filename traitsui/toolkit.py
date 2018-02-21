@@ -140,61 +140,61 @@ except:
     }
     default_priorities = lambda plugin: TOOLKIT_PRIORITIES.get(plugin.name, 0)
 
-def find_toolkit(entry_point, toolkits=None, priorities=default_priorities):
-    """ Find a toolkit that works.
+    def find_toolkit(entry_point, toolkits=None, priorities=default_priorities):
+        """ Find a toolkit that works.
 
-    If ETSConfig is set, then attempt to find a matching toolkit.  Otherwise
-    try every plugin for the entry_point until one works.  The ordering of the
-    plugins is supplied via the priorities function which should be suitable
-    for use as a sorting key function.
+        If ETSConfig is set, then attempt to find a matching toolkit.  Otherwise
+        try every plugin for the entry_point until one works.  The ordering of the
+        plugins is supplied via the priorities function which should be suitable
+        for use as a sorting key function.
 
-    Parameters
-    ----------
-    entry_point : str
-        The name of the entry point that holds our toolkits.
-    toolkits : collection of strings
-        Only consider toolkits which match the given strings, ignore other
-        ones.
-    priorities : callable
-        A callable function that returns an priority for each plugin.
+        Parameters
+        ----------
+        entry_point : str
+            The name of the entry point that holds our toolkits.
+        toolkits : collection of strings
+            Only consider toolkits which match the given strings, ignore other
+            ones.
+        priorities : callable
+            A callable function that returns an priority for each plugin.
 
-    Returns
-    -------
-    toolkit : Toolkit instance
-        A callable object that implements the Toolkit interface.
+        Returns
+        -------
+        toolkit : Toolkit instance
+            A callable object that implements the Toolkit interface.
 
-    Raises
-    ------
-    TraitError
-        If no working toolkit is found.
-    RuntimeError
-        If no ETSConfig.toolkit is set but the toolkit cannot be loaded for
-        some reason.
-    """
-    if ETSConfig.toolkit:
-        return import_toolkit(ETSConfig.toolkit, entry_point)
+        Raises
+        ------
+        TraitError
+            If no working toolkit is found.
+        RuntimeError
+            If no ETSConfig.toolkit is set but the toolkit cannot be loaded for
+            some reason.
+        """
+        if ETSConfig.toolkit:
+            return import_toolkit(ETSConfig.toolkit, entry_point)
 
-    entry_points = [
-        plugin for plugin in pkg_resources.iter_entry_points(entry_point)
-        if toolkits is None or plugin.name in toolkits
-    ]
-    for plugin in sorted(entry_points, key=priorities):
-        if plugin.name not in toolkits:
-            continue
-        try:
-            with ETSConfig.provisional_toolkit(plugin.name):
-                toolkit = plugin.load()
-                return toolkit
-        except (ImportError, AttributeError) as exc:
-            msg = "Could not load %s plugin %r from %r"
-            logger.info(msg, entry_point, plugin.name, plugin.module_name)
-            logger.debug(exc, exc_info=True)
+        entry_points = [
+            plugin for plugin in pkg_resources.iter_entry_points(entry_point)
+            if toolkits is None or plugin.name in toolkits
+        ]
+        for plugin in sorted(entry_points, key=priorities):
+            if plugin.name not in toolkits:
+                continue
+            try:
+                with ETSConfig.provisional_toolkit(plugin.name):
+                    toolkit = plugin.load()
+                    return toolkit
+            except (ImportError, AttributeError) as exc:
+                msg = "Could not load %s plugin %r from %r"
+                logger.info(msg, entry_point, plugin.name, plugin.module_name)
+                logger.debug(exc, exc_info=True)
 
-    # if all else fails, try to import the null toolkit.
-    with ETSConfig.provisional_toolkit('null'):
-        return import_toolkit('null', entry_point)
+        # if all else fails, try to import the null toolkit.
+        with ETSConfig.provisional_toolkit('null'):
+            return import_toolkit('null', entry_point)
 
-    raise TraitError("Could not import any {} toolkit.".format(entry_point))
+        raise TraitError("Could not import any {} toolkit.".format(entry_point))
 
 
 def assert_toolkit_import(names):
