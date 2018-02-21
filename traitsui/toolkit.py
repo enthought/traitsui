@@ -82,10 +82,6 @@ except AttributeError:
             raise
 
 
-def _import_toolkit(name):
-    return __import__(name, globals=globals(), level=1).toolkit
-
-
 def assert_toolkit_import(names):
     """ Raise an error if a toolkit with the given name should not be allowed
     to be imported.

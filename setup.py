@@ -144,8 +144,8 @@ if __name__ == "__main__":
         entry_points = {
             'traitsui.toolkits': [
                 'qt4 = traitsui.qt4:toolkit',
-                'qt = traitsui.qt4:toolkit',
                 'wx = traitsui.wx:toolkit',
+                'qt = traitsui.qt4:toolkit',
                 'null = traitsui.null:toolkit',
             ],
         },
