@@ -157,7 +157,7 @@ def toolkit(*toolkits):
     for toolkit_name in toolkits:
         try:
             with provisional_toolkit(toolkit_name):
-                _toolkit = _import_toolkit(toolkit_name)
+                _toolkit = import_toolkit(toolkit_name)
                 return _toolkit
         except (AttributeError, ImportError) as exc:
             # import failed, reset toolkit to none, log error and try again
@@ -182,7 +182,7 @@ def toolkit(*toolkits):
     # Try using the null toolkit and printing a warning
     try:
         with provisional_toolkit('null'):
-            _toolkit = _import_toolkit('null')
+            _toolkit = import_toolkit('null')
             import warnings
             msg = (
                 "Unable to import the '{0}' backend for traits UI; " +
