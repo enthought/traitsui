@@ -787,6 +787,8 @@ class SimpleSpinEditor(BaseRangeEditor):
     def update_object(self, event):
         """ Handles the user selecting a new value in the spin box.
         """
+        if self.control is None:
+            return
         self._locked = True
         try:
             self.value = self.control.GetValue()
