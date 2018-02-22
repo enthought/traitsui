@@ -25,7 +25,7 @@
 import wx
 
 from os.path \
-    import abspath, splitext, isfile, exists
+    import abspath, split, splitext, isfile, exists
 
 from traits.api \
     import List, Str, Event, Any, on_trait_change, TraitError
@@ -258,12 +258,16 @@ class SimpleEditor(SimpleTextEditor):
         else:
             style = wx.FD_DEFAULT_STYLE
 
-        dlg = wx.FileDialog(self.control,
-                            message='Select a File',
-                            wildcard=wildcard,
-                            style=style)
+        directory, filename = split(self._get_value())
 
-        dlg.SetFilename(self._get_value())
+        dlg = wx.FileDialog(
+            self.control,
+            defaultDir=directory,
+            defaultFile=filename,
+            message='Select a File',
+            wildcard=wildcard,
+            style=style
+        )
 
         return dlg
 
