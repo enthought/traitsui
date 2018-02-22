@@ -8,7 +8,6 @@ environment:
     INSTALL_EDM_VERSION: "1.9.1"
 
   matrix:
-
     - RUNTIME: '2.7'
       TOOLKITS: "null pyqt pyside"
     - RUNTIME: '3.5'
