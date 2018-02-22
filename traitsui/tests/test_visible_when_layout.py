@@ -65,7 +65,14 @@ class VisibleWhenProblem(HasTraits):
     )
 
 
-@skip_if_null
+# XXX Not fixing on wx - CJW
+# This layout issue was fixed for Qt, but not for Wx.
+# See https://github.com/enthought/traitsui/pull/56
+# This is cosmetic, not trivial to fix, and the Wx backend is currently low
+# priority.  Patches which make this work on Wx will be gladly accepted, but
+# there are no current plans to work on this.
+
+@skip_if_not_qt4
 def test_visible_when_layout():
     # Bug: The size of a dialog that contains elements that are activated
     # by "visible_when" can end up being the *sum* of the sizes of the

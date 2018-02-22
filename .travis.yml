@@ -20,9 +20,6 @@ matrix:
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
   allow_failures:
     - env: RUNTIME=3.5 TOOLKITS="pyqt5"
-    - env: RUNTIME=2.7 TOOLKITS="wx"
-    - os: osx
-      env: RUNTIME=2.7 TOOLKITS="pyqt wx"
   fast_finish: true
 
 branches:
