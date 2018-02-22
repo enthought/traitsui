@@ -1,6 +1,15 @@
 Traits UI Changelog
 ===================
 
+
+Release 5.2.0
+-------------
+
+Enhancements
+~~~~~~~~~~~~
+* Add support for multi-select in the DataFrameEditor (#413).
+
+
 Release 5.1.0
 -------------
 
