@@ -98,7 +98,10 @@ def toolkit(*toolkits):
     global _toolkit
 
     if _toolkit is None:
-        _toolkit = find_toolkit('traitsui.toolkits', toolkits)
+        if len(toolkits) > 0:
+            _toolkit = find_toolkit('traitsui.toolkits', toolkits)
+        else:
+            _toolkit = find_toolkit('traitsui.toolkits')
 
     return _toolkit
 
