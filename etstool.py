@@ -89,6 +89,7 @@ import click
 supported_combinations = {
     '2.7': {'pyside', 'pyqt', 'wx', 'null'},
     '3.5': {'pyqt', 'pyqt5', 'null'},
+    '3.6': {'pyqt', 'pyqt5', 'null'},
 }
 
 dependencies = {
@@ -133,14 +134,16 @@ def install(runtime, toolkit, environment):
 
     """
     parameters = get_parameters(runtime, toolkit, environment)
-    parameters['packages'] = ' '.join(
+    packages = ' '.join(
         dependencies | extra_dependencies.get(toolkit, set()))
     # edm commands to setup the development environment
     commands = [
         "edm environments create {environment} --force --version={runtime}",
-        "edm install -y -e {environment} {packages}",
+        "edm install -y -e {environment} " + packages,
         "edm run -e {environment} -- pip install -r ci-src-requirements.txt --no-dependencies",
-        "edm run -e {environment} -- python setup.py install"]
+        "edm run -e {environment} -- python setup.py clean --all",
+        "edm run -e {environment} -- python setup.py install"
+    ]
     # pip install pyqt5, because we don't have it in EDM yet
     if toolkit == 'pyqt5':
         commands.append("edm run -e {environment} -- pip install pyqt5==5.9.2")
@@ -230,10 +233,19 @@ def test_all():
     """ Run test_clean across all supported environment combinations.
 
     """
+    failed_command = False
     for runtime, toolkits in supported_combinations.items():
         for toolkit in toolkits:
-            args = ['--toolkit={}'.format(toolkit), '--runtime={}'.format(runtime)]
-            test_clean(args, standalone_mode=True)
+            args = [
+                '--toolkit={}'.format(toolkit),
+                '--runtime={}'.format(runtime)
+            ]
+            try:
+                test_clean(args, standalone_mode=True)
+            except SystemExit:
+                failed_command = True
+    if failed_command:
+        sys.exit(1)
 
 # ----------------------------------------------------------------------------
 # Utility routines
@@ -288,10 +300,12 @@ def do_in_tempdir(files=(), capture_files=()):
 
 def execute(commands, parameters):
     for command in commands:
-        print "[EXECUTING]", command.format(**parameters)
+        click.echo("[EXECUTING] {}".format(command.format(**parameters)))
         try:
-            subprocess.check_call(command.format(**parameters).split())
-        except subprocess.CalledProcessError:
+            subprocess.check_call([arg.format(**parameters)
+                                   for arg in command.split()])
+        except subprocess.CalledProcessError as exc:
+            click.echo(str(exc))
             sys.exit(1)
 
 

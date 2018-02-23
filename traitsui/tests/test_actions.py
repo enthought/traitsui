@@ -18,6 +18,7 @@ Test that menu and toolbar actions are triggered.
 """
 import nose
 import pyface
+import unittest
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Bool
@@ -45,6 +46,7 @@ class DialogWithToolbar(HasTraits):
     action_successful = Bool(False)
 
     def test_clicked(self):
+        print('perform action')
         self.action_successful = True
 
     menubar = MenuBar(
@@ -146,6 +148,10 @@ def test_qt_button_action():
 
 # ----- wx tests
 
+@unittest.skipIf(
+    not is_mac_os,
+    "Problem with triggering toolbar actions on Linux and Windows. Issue #428."
+)
 @skip_if_not_wx
 def test_wx_toolbar_action():
     # Behavior: when clicking on a toolbar action, the corresponding function
