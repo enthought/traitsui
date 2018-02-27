@@ -58,14 +58,14 @@ if is_mac:
     WindowColor = wx.Colour(232, 232, 232)
     BorderedGroupColor = wx.Colour(224, 224, 224)
 else:
-    WindowColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_MENUBAR)
+    WindowColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENUBAR)
 
 # Standard width of an image bitmap
 standard_bitmap_width = 120
 
 # Width of a scrollbar
-scrollbar_dx = wx.SystemSettings_GetMetric(wx.SYS_VSCROLL_X)
+scrollbar_dx = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X)
 
 # Screen size values:
-screen_dx = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_X)
-screen_dy = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_Y)
+screen_dx = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_X)
+screen_dy = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
