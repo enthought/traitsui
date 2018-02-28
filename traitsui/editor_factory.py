@@ -183,20 +183,18 @@ class EditorFactory(HasPrivateTraits):
         """
         Returns the editor by name class_name in the backend package.
         """
-        editor_factory_classes = [factory_class for factory_class in cls.mro()
+        editor_factory_modules = [factory_class.__module__
+                                  for factory_class in cls.mro()
                                   if issubclass(factory_class, EditorFactory)]
-        for index in range(len(editor_factory_classes)):
+        for index, editor_module in enumerate(editor_factory_modules):
             try:
-                factory_class = editor_factory_classes[index]
-                editor_file_name = os.path.basename(
-                    sys.modules[factory_class.__module__].__file__)
-                object_ref = ':'.join([editor_file_name.split('.')[0],
-                                       class_name])
+                editor_module_name = editor_module.split('.')[-1]
+                object_ref = ':'.join([editor_module_name, class_name])
                 return toolkit_object(object_ref, True)
-            except Exception as e:
+            except RuntimeError as e:
                 msg = "Can't import toolkit_object '{}': {}"
                 logger.debug(msg.format(object_ref, e))
-                if index == len(editor_factory_classes) - 1:
+                if index == len(editor_factory_modules) - 1:
                     raise e
         return None
 
