@@ -87,10 +87,6 @@ class TextEditor(Editor):
     """ Base class for text style editors, which displays an editable text
     field, containing a text representation of the object trait value.
     """
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -100,13 +96,18 @@ class TextEditor(Editor):
         self.control.editingFinished.connect(self.update_object)
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.editingFinished.disconnect(self.update_object)
+        super(TextEditor, self).dispose()
 
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
+        if self.control is None:
+            return
         try:
             self.value = unicode(self.control.text())
         except TraitError as excp:

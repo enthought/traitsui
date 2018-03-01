@@ -51,7 +51,8 @@ def toolkit_object(name, raise_exceptions=False):
     ---------
     name : str
         The relative module path and the object name separated by a colon.
-
+    raise_exceptions : bool
+        Whether or not to raise an exception if the name cannot be imported.
 
     Raises
     ------
@@ -59,16 +60,20 @@ def toolkit_object(name, raise_exceptions=False):
         If no working toolkit is found.
     RuntimeError
         If no ETSConfig.toolkit is set but the toolkit cannot be loaded for
-        some reason.
+        some reason.  This is also raised if raise_exceptions is True the
+        backend does not implement the desired object.
     """
     global _toolkit
-    try:
-        if _toolkit is None:
-            toolkit()
-        return _toolkit(name)
-    except Exception as exc:
-        if raise_exceptions:
-            raise
+
+    if _toolkit is None:
+        toolkit()
+    obj = _toolkit(name)
+
+    if raise_exceptions and obj.__name__ == 'Unimplemented':
+        raise RuntimeError("Can't import {} for backend {}".format(
+            repr(name), _toolkit.toolkit))
+
+    return obj
 
 
 def toolkit(*toolkits):
