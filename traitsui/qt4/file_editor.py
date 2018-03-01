@@ -217,8 +217,12 @@ class CustomEditor(SimpleTextEditor):
         self.set_tooltip()
 
         # This is needed to enable horizontal scrollbar.
-        self.control.header().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
-        self.control.header().setStretchLastSection(False)
+        header = self.control.header()
+        if QtCore.__version_info__[0] >= 5:
+            header.setSectionResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        else:
+            header.setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        header.setStretchLastSection(False)
 
     #-------------------------------------------------------------------------
     #  Handles the user changing the contents of the edit control:
