@@ -15,6 +15,8 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import print_function
+
 from traits.api \
     import Enum, List
 
@@ -62,7 +64,7 @@ if __name__ == '__main__':
     clt = CheckListTest()
     clt.configure_traits(
         view=View('case', '_', Item('value', id='value')))
-    print 'value:', clt.value
+    print('value:', clt.value)
     clt.configure_traits(
         view=View('case', '_', Item('value@', id='value')))
-    print 'value:', clt.value
+    print('value:', clt.value)

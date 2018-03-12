@@ -15,6 +15,7 @@
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
+from __future__ import print_function
 
 import wx
 
@@ -56,7 +57,7 @@ class PersonHandler(Handler):
             obj.state = 'Texas'
 
     def object_call_changed(self, info):
-        print 'You called?'
+        print('You called?')
 
 #-------------------------------------------------------------------------
 #  'WizardHandler' class:

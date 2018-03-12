@@ -16,6 +16,7 @@
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
+from __future__ import print_function
 
 from traits.api \
     import HasTraits, Str, Regex, List, Instance
@@ -29,7 +30,7 @@ from traitsui.instance_choice \
 from traitsui.menu \
     import Menu, Action, Separator
 
-from traitsui.wx.tree_editor \
+from traitsui.editors.tree_editor \
     import NewAction, CopyAction, CutAction, PasteAction, DeleteAction, \
     RenameAction
 
@@ -197,7 +198,7 @@ class TreeHandler(Handler):
 
     def employee_department(self, editor, object):
         dept = editor.get_parent(object)
-        print '%s works in the %s department.' % (object.name, dept.name)
+        print('%s works in the %s department.' % (object.name, dept.name))
 
 #-------------------------------------------------------------------------
 #  Define the View to use:

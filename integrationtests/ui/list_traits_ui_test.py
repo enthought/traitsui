@@ -116,6 +116,7 @@ class ListTraitTest(HasStrictTraits):
                  editor=ListEditor(use_notebook=True,
                                    deletable=True,
                                    export='DockShellWindow',
+                                   dock_style='tab',
                                    page_name='.name')),
             id='splitter',
             show_labels=False),

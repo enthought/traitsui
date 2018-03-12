@@ -55,7 +55,7 @@ class Team(HasStrictTraits):
 
     name = Str
     captain = Instance(Person)
-    roster = List(Person)
+    roster = List(Instance(Person))
 
     #-------------------------------------------------------------------------
     #  Traits view definitions:
