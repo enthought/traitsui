@@ -209,6 +209,9 @@ class SimpleSliderEditor(BaseRangeEditor):
                 # 'foo') pretend it didn't happen
                 value = self.value
                 self.control.text.setText(unicode(value))
+                # for compound editor, value may be non-numeric
+                if not isinstance(value, (int, float)):
+                    return
 
             if not self.factory.is_float:
                 value = int(value)
