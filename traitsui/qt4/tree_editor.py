@@ -1097,7 +1097,8 @@ class SimpleEditor(Editor):
                 editor._editor_nid = nid
 
                 # Finish setting up the editor:
-                ui.control.layout().setContentsMargins(0, 0, 0, 0)
+                if ui.control.layout() is not None:
+                    ui.control.layout().setContentsMargins(0, 0, 0, 0)
                 editor.setWidget(ui.control)
 
             # Allow the editor view to show any changes that have occurred:
