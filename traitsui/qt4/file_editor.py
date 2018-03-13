@@ -1,23 +1,17 @@
-#------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
+# Copyright (c) 2018, Enthought, Inc
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
 # However, when used with the GPL version of PyQt the additional terms
 # described in the PyQt GPL exception also apply
-
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
 
 """ Defines file editors for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
-
-from os.path import splitext, isfile, exists
+from os.path import abspath, splitext, isfile, exists
 
 from pyface.qt import QtCore, QtGui
 from traits.api import List, Event, File, Unicode, TraitError
@@ -29,16 +23,9 @@ from traitsui.editors.file_editor import ToolkitEditorFactory
 from text_editor import SimpleEditor as SimpleTextEditor
 from helper import IconButton
 
-#-------------------------------------------------------------------------
-#  Trait definitions:
-#-------------------------------------------------------------------------
 
 # Wildcard filter:
 filter_trait = List(Unicode)
-
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
 
 
 class SimpleEditor(SimpleTextEditor):
@@ -46,11 +33,6 @@ class SimpleEditor(SimpleTextEditor):
         button that opens a file-selection dialog box. The user can also drag
         and drop a file onto this control.
     """
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -75,10 +57,6 @@ class SimpleEditor(SimpleTextEditor):
 
         self.set_tooltip(control)
 
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
-
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
@@ -92,19 +70,11 @@ class SimpleEditor(SimpleTextEditor):
             except TraitError as excp:
                 self._file_name.setText(self.value)
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self._file_name.setText(self.str_value)
-
-    #-------------------------------------------------------------------------
-    #  Displays the pop-up file dialog:
-    #-------------------------------------------------------------------------
 
     def show_file_dialog(self):
         """ Displays the pop-up file dialog.
@@ -126,9 +96,6 @@ class SimpleEditor(SimpleTextEditor):
                 self.value = file_name
                 self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
@@ -153,10 +120,6 @@ class SimpleEditor(SimpleTextEditor):
 
         return dlg
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleTextEditor):
     """ Custom style of file editor, consisting of a file system tree view.
@@ -177,19 +140,14 @@ class CustomEditor(SimpleTextEditor):
     # Event fired when the user double-clicks a file:
     dclick = Event
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = _TreeView(self)
-
+        control = _TreeView(self)
         self._model = model = QtGui.QFileSystemModel()
-        self.control.setModel(model)
+
+        current_path = abspath(self.str_value)
 
         # Don't apply filters to directories and don't show "." and ".."
         model.setFilter(QtCore.QDir.AllDirs | QtCore.QDir.Files |
@@ -198,8 +156,19 @@ class CustomEditor(SimpleTextEditor):
         # Hide filtered out files instead of only disabling them
         self._model.setNameFilterDisables(False)
 
-        # Show the full filesystem by default.
-        model.setRootPath(QtCore.QDir.rootPath())
+        # Show the user's home directory by default.
+        model.setRootPath(QtCore.QDir.homePath())
+
+        control.setModel(model)
+        control.setRootIndex(model.index(QtCore.QDir.homePath()))
+
+        self.control = control
+
+        # set the current item
+        if current_path:
+            index = model.index(current_path)
+            control.expand(index)
+            control.setCurrentIndex(index)
 
         # Hide the labels at the top and only show the column for the file name
         self.control.header().hide()
@@ -224,10 +193,6 @@ class CustomEditor(SimpleTextEditor):
             header.setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
         header.setStretchLastSection(False)
 
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
-
     def update_object(self, idx):
         """ Handles the user changing the contents of the edit control.
         """
@@ -240,62 +205,42 @@ class CustomEditor(SimpleTextEditor):
 
                 self.value = path
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         if exists(self.str_value):
-            index = self._model.index(self.str_value)
+            index = self._model.index(abspath(self.str_value))
             self.control.expand(index)
             self.control.setCurrentIndex(index)
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'filter' trait being changed:
-    #-------------------------------------------------------------------------
-
-    def _filter_changed(self):
-        """ Handles the 'filter' trait being changed.
-        """
-        self._model.setNameFilters(self.filter)
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'root_path' trait being changed:
-    #-------------------------------------------------------------------------
-
-    def _root_path_changed(self):
-        """ Handles the 'root_path' trait being changed.
-        """
-        path = self.root_path
-        if not path:
-            path = QtCore.QDir.rootPath()
-        self._model.setRootPath(path)
-        self.control.setRootIndex(self._model.index(path))
-
-    #-------------------------------------------------------------------------
-    #  Handles the user double-clicking on a file name:
-    #-------------------------------------------------------------------------
+    #-- Private Methods ------------------------------------------------------
 
     def _on_dclick(self, idx):
         """ Handles the user double-clicking on a file name.
         """
         self.dclick = unicode(self._model.filePath(idx))
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'reload' trait being changed:
-    #-------------------------------------------------------------------------
+    # Trait change handlers --------------------------------------------------
+
+    def _filter_changed(self):
+        """ Handles the 'filter' trait being changed.
+        """
+        self._model.setNameFilters(self.filter)
+
+    def _root_path_changed(self):
+        """ Handles the 'root_path' trait being changed.
+        """
+        path = self.root_path
+        if not path:
+            path = QtCore.QDir.homePath()
+        self._model.setRootPath(path)
+        self.control.setRootIndex(self._model.index(path))
 
     def _reload_changed(self):
         """ Handles the 'reload' trait being changed.
         """
         self._model.refresh()
-
-#-------------------------------------------------------------------------
-#  '_TreeView' class:
-#-------------------------------------------------------------------------
 
 
 class _TreeView(QtGui.QTreeView):
