@@ -47,8 +47,8 @@ def assert_toolkit_import(names):
 def toolkit_object(name, raise_exceptions=False):
     """ Return the toolkit specific object with the given name.
 
-    Paramters
-    ---------
+    Parameters
+    ----------
     name : str
         The relative module path and the object name separated by a colon.
     raise_exceptions : bool

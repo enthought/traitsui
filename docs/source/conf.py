@@ -23,7 +23,7 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.extlinks']
+extensions = ['sphinx.ext.extlinks', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -51,7 +51,7 @@ try:
 except IOError as ioe:
     import warnings
     msg = '''_version.py seems to be missing!
-            Please run 
+            Please run
             $ python setup.py develop
             to generate this file!'''
     warnings.warn(RuntimeWarning(msg.format(ioe)))
