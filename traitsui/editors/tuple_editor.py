@@ -16,40 +16,25 @@
 """ Defines the tuple editor factory for all traits user interface toolkits.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
-
 from __future__ import absolute_import
 
 from traits.trait_base import SequenceTypes
-
-from traits.api import Bool, HasTraits, List, Tuple, Unicode, Int, Any, TraitType
+from traits.api import (
+    Bool, Callable, HasTraits, List, BaseTuple, Unicode, Int, Any, TraitType)
 
 # CIRCULAR IMPORT FIXME: Importing from the source rather than traits.ui.api
 # to avoid circular imports, as this EditorFactory will be part of
 # traits.ui.api as well.
 from ..view import View
-
 from ..group import Group
-
 from ..item import Item
-
 from ..editor_factory import EditorFactory
-
 from ..editor import Editor
-
-#-------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for tuple editors.
     """
-    #-------------------------------------------------------------------------
-    #  Trait definitions:
-    #-------------------------------------------------------------------------
 
     # Trait definitions for each tuple field
     types = Any
@@ -73,9 +58,10 @@ class ToolkitEditorFactory(EditorFactory):
     # 'enter_set' metadata or an editor defined.
     enter_set = Bool(False)
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+    # The validation function to use for the Tuple. If the edited trait offers
+    # already a validation function then the value of this trait will be
+    # ignored.
+    fvalidate = Callable
 
 
 class SimpleEditor(Editor):
@@ -84,53 +70,37 @@ class SimpleEditor(Editor):
     The editor displays an editor for each of the fields in the tuple, based on
     the type of each field.
     """
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self._ts = ts = TupleStructure(self)
-        self._ui = ui = ts.view.ui(ts, parent, kind='subpanel').set(
-            parent=self.ui)
+        self._ui = ui = ts.view.ui(
+            ts, parent, kind='subpanel').set(parent=self.ui)
         self.control = ui.control
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the
             editor.
         """
         ts = self._ts
-        for i, value in enumerate(self.value):
-            setattr(ts, 'f%d' % i, value)
 
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
+        for i, value in enumerate(self.value):
+            setattr(ts, 'f{0}'.format(i), value)
+            if ts.fvalidate is not None:
+                setattr(ts, 'invalid{0}'.format(i), False)
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self._ui.get_error_controls()
 
-#-------------------------------------------------------------------------
-#  'TupleStructure' class:
-#-------------------------------------------------------------------------
-
 
 class TupleStructure(HasTraits):
     """ Creates a view containing items for each field in a tuple.
     """
-    #-------------------------------------------------------------------------
-    #  Trait definitions:
-    #-------------------------------------------------------------------------
 
     # Editor this structure is linked to
     editor = Any
@@ -141,9 +111,8 @@ class TupleStructure(HasTraits):
     # Number of tuple fields
     fields = Int
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
+    # The validation function to use for the Tuple.
+    fvalidate = Callable
 
     def __init__(self, editor):
         """ Initializes the object.
@@ -157,7 +126,7 @@ class TupleStructure(HasTraits):
         # Save the reference to the editor:
         self.editor = editor
 
-        # Get the tuple we are mirroring:
+        # Get the tuple we are mirroring.
         object = editor.value
 
         # For each tuple field, add a trait with the appropriate trait
@@ -167,9 +136,16 @@ class TupleStructure(HasTraits):
         len_labels = len(labels)
         len_editors = len(editors)
 
+        # Get global validation function.
+        type = editor.value_trait.handler
+        fvalidate = getattr(type, 'fvalidate', None)
+        if fvalidate is None:
+            fvalidate = factory.fvalidate
+        self.fvalidate = fvalidate
+
+        # Get field types.
         if types is None:
-            type = editor.value_trait.handler
-            if isinstance(type, Tuple):
+            if isinstance(type, BaseTuple):
                 types = type.types
 
         if not isinstance(types, SequenceTypes):
@@ -200,11 +176,17 @@ class TupleStructure(HasTraits):
             if i < len_editors:
                 field_editor = editors[i]
 
-            name = 'f%d' % i
-            self.add_trait(name, type(value, event='field',
-                                      auto_set=auto_set,
-                                      enter_set=enter_set))
-            item = Item(name=name, label=label, editor=field_editor)
+            name = 'f{0}'.format(i)
+            self.add_trait(name, type(
+                value, event='field', auto_set=auto_set, enter_set=enter_set))
+            if fvalidate is not None:
+                invalid = 'invalid{0}'.format(i)
+                self.add_trait(invalid, Bool)
+            else:
+                invalid = ''
+
+            item = Item(
+                name, label=label, editor=field_editor, invalid=invalid)
             if cols <= 1:
                 content.append(item)
             else:
@@ -216,21 +198,27 @@ class TupleStructure(HasTraits):
 
         self.view = View(Group(show_labels=(len_labels != 0), *content))
 
-    #-------------------------------------------------------------------------
-    #  Updates the underlying tuple when any field changes value:
-    #-------------------------------------------------------------------------
-
     def _field_changed(self, name, old, new):
         """ Updates the underlying tuple when any field changes value.
         """
+        editor = self.editor
+        value = editor.value
         index = int(name[1:])
         value = self.editor.value
         if new != value[index]:
-            self.editor.value = tuple(
-                [getattr(self, 'f%d' % i) for i in range(self.fields)])
+            new_value = tuple(
+                getattr(self, 'f{0}'.format(i)) for i in range(self.fields))
+            if self.fvalidate is not None:
+                if self.fvalidate(new_value):
+                    editor.value = new_value
+                    for i in range(self.fields):
+                        setattr(self, 'invalid{0}'.format(i), False)
+                else:
+                    for i in range(self.fields):
+                        setattr(self, 'invalid{0}'.format(i), True)
+            else:
+                editor.value = new_value
 
 
 # Define the TupleEditor class.
 TupleEditor = ToolkitEditorFactory
-
-### EOF #######################################################################

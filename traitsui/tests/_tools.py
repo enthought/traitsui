@@ -14,6 +14,7 @@
 #------------------------------------------------------------------------------
 
 import sys
+import threading
 import traceback
 import inspect
 from functools import partial, wraps
@@ -23,6 +24,7 @@ from unittest import skip
 from nose import SkipTest
 from traits.etsconfig.api import ETSConfig
 import traits.trait_notifiers
+
 
 # ######### Testing tools
 
@@ -119,6 +121,7 @@ def skip_if_null(test_func):
     Some tests handle both wx and Qt in one go, but many things are not
     defined in the null backend. Use this decorator to skip the test.
     """
+
     @wraps(test_func)
     def wrapper(*args, **kwargs):
         if _is_current_backend('null'):
@@ -187,6 +190,90 @@ def get_dialog_size(ui_control):
         return ui_control.size().width(), ui_control.size().height()
 
 
+def set_value(editor, value):
+    """ Set the value on the control managed by the editor.
+
+    """
+    if is_current_backend_wx():
+        editor.control.SetValue(value)
+
+    elif is_current_backend_qt4():
+        editor.control.setText(value)
+        editor.update_object()
+
+
+@contextmanager
+def dispose_ui_after(function, timeout, *args, **kwargs):
+    """ A context manager that will create a ui and dispose it on exit.
+
+    """
+    ui = function(*args, **kwargs)
+
+    from pyface.gui import GUI
+
+    timeout_event = threading.Event()
+
+    def on_timeout(timeout_event):
+        timeout_event.set()
+        dispose_ui(ui)
+
+    gui = GUI()
+    gui.invoke_after(timeout * 1000, on_timeout, timeout_event)
+
+    try:
+        yield ui
+    finally:
+        if timeout_event.is_set():
+            message = 'UI was forcibly destroyed after {0} sec'
+            raise AssertionError(message.format(timeout))
+        else:
+            dispose_ui(ui)
+
+
+def dispose_ui(ui):
+    """ Dispose the ui, by killing the application object.
+
+    """
+    from pyface.gui import GUI
+    if ui is not None or ui.control is None:
+        ui.dispose()
+        gui = GUI()
+        if is_current_backend_qt4():
+            from pyface.qt import QtGui
+            app = QtGui.QApplication.instance()
+            gui.invoke_later(app.closeAllWindows)
+            gui.invoke_after(2, app.quit)
+            app.exec_()
+        elif is_current_backend_wx():
+            import wx
+            for w in wx.GetTopLevelWindows():
+                wx.CallAfter(w.Close)
+            app = wx.GetApp()
+            gui.invoke_later(app.Exit)
+            app.MainLoop()
+
+
+def get_traitsui_editor(ui, path):
+    """ Get an editor from a UI using a '/' separated list of trait names.
+
+    '/' is used to access the editor of a trait in a sub-element of the
+    view.
+    """
+
+    names = path.split('/')
+
+    while True:
+        name = names.pop(0)
+        editor = ui.get_editors(name)[0]
+
+        if len(names) > 0:
+            ui = editor._ui
+        else:
+            break
+
+    return editor
+
+
 # ######### Debug tools
 
 def apply_on_children(func, node, _level=0):
@@ -233,8 +320,6 @@ def wx_announce_when_destroyed(node):
 
     def destroy_wrapped():
         print 'Destroying:', node
-        #print 'Stack is'
-        #traceback.print_stack()
         _destroy_method()
         print 'Destroyed:', node
 
