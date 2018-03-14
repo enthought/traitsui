@@ -192,7 +192,11 @@ class SimpleSliderEditor(BaseRangeEditor):
         """
         value = self._convert_from_slider(pos)
         self.control.text.setText(self.format % value)
-        self.value = value
+        try:
+            self.value = value
+        except Exception as exc:
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
 
     #-------------------------------------------------------------------------
     #  Handle the user pressing the 'Enter' key in the edit control:
@@ -712,10 +716,14 @@ class SimpleSpinEditor(BaseRangeEditor):
             editor.
         """
         if not self._locked:
+            blocked = self.control.blockSignals(True)
             try:
                 self.control.setValue(int(self.value))
-            except:
-                pass
+            except Exception:
+                from traitsui.api import raise_to_debug
+                raise_to_debug()
+            finally:
+                self.control.blockSignals(blocked)
 
     #-------------------------------------------------------------------------
     #  Handles the 'low'/'high' traits being changed:

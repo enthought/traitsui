@@ -223,7 +223,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         rows = list(set([index.row() for index in indexes]))
         data = QtCore.QByteArray(unicode(rows[0]).encode('utf8'))
         for row in rows[1:]:
-            data.append(' %i' % row)
+            data.append((' %i' % row).encode('utf8'))
         mime_data.setData(mime_type, data)
         return mime_data
 

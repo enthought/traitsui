@@ -22,6 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import unicode_literals
+
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
@@ -264,9 +266,9 @@ class TabularModel(QtCore.QAbstractTableModel):
             self._editor.object, self._editor.name, row)
             for row in rows]
         mime_data = PyMimeData.coerce(items)
-        data = QtCore.QByteArray(str(id(self)))
+        data = QtCore.QByteArray(unicode(id(self)).encode('utf8'))
         for row in rows:
-            data.append(' %i' % row)
+            data.append((' %i' % row).encode('utf8'))
         mime_data.setData(tabular_mime_type, data)
         return mime_data
 
@@ -279,7 +281,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         # this is a drag from a tabular model
         data = mime_data.data(tabular_mime_type)
         if not data.isNull() and action == QtCore.Qt.MoveAction:
-            id_and_rows = map(int, str(data).split(' '))
+            id_and_rows = map(int, data.data().decode('utf8').split(' '))
             table_id = id_and_rows[0]
             # is it from ourself?
             if table_id == id(self):
