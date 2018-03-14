@@ -148,10 +148,13 @@ class PythonBrowser(HasPrivateTraits):
     #-- Event Handlers -------------------------------------------------------
 
     def _dir_changed(self, dir):
-        self.files = [FileInfo(file_name=join(dir, name))
-                      for name in listdir(dir)
-                      if ((splitext(name)[1] == '.py') and
-                          isfile(join(dir, name)))]
+        if dir != '':
+            self.files = [FileInfo(file_name=join(dir, name))
+                        for name in listdir(dir)
+                        if ((splitext(name)[1] == '.py') and
+                            isfile(join(dir, name)))]
+        else:
+            self.files = []
 
     def _file_info_changed(self, file_info):
         fh = None
@@ -165,7 +168,7 @@ class PythonBrowser(HasPrivateTraits):
             fh.close()
 
 # Create the demo:
-demo = PythonBrowser(dir=dirname(traitsui.api.__file__))
+demo = PythonBrowser(dir=dirname(dirname(__file__)))
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':

@@ -17,11 +17,13 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import print_function
+
 from traits.api import HasTraits, Str, Regex, List, Instance
-from traitsui.api      import TreeEditor, TreeNode, View, Item, VSplit, \
-    HGroup, Handler
+from traitsui.api import TreeEditor, TreeNode, View, Item, VSplit, \
+    HGroup, Handler, spring
 from traitsui.menu import Menu, Action, Separator
-from traitsui.wx.tree_editor import NewAction, CopyAction, \
+from traitsui.editors.tree_editor import NewAction, CopyAction, \
     CutAction, PasteAction, DeleteAction, RenameAction
 
 #-------------------------------------------------------------------------
@@ -171,6 +173,7 @@ tree_editor = TreeEditor(
                  view=View(VSplit(HGroup('3', 'name'),
                                   HGroup('9', 'title'),
                                   HGroup('phone'),
+                                  spring,
                                   id='vsplit'),
                            id='traitsui.test.tree_editor_test.employee',
                            dock='vertical'))
@@ -186,7 +189,7 @@ class TreeHandler(Handler):
 
     def employee_department(self, editor, object):
         dept = editor.get_parent(object)
-        print '%s works in the %s department.' % (object.name, dept.name)
+        print('%s works in the %s department.' % (object.name, dept.name))
 
 #-------------------------------------------------------------------------
 #  Define the View to use:

@@ -39,7 +39,10 @@ from traitsui.api import View, TreeNode, ObjectTreeNode, MultiTreeNode
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.tree_editor file.
-from traitsui.editors.tree_editor import ToolkitEditorFactory
+from traitsui.editors.tree_editor import (
+    CopyAction, CutAction, DeleteAction, NewAction, PasteAction, RenameAction,
+    ToolkitEditorFactory
+)
 from traitsui.undo import ListUndoItem
 from traitsui.tree_node import ITreeNodeAdapterBridge
 from traitsui.menu \
@@ -60,26 +63,6 @@ from .helper import open_fbi, TraitsUIPanel, TraitsUIScrolledPanel
 # Paste buffer for copy/cut/paste operations
 paste_buffer = None
 
-#-------------------------------------------------------------------------
-#  The core tree node menu actions:
-#-------------------------------------------------------------------------
-
-NewAction = 'NewAction'
-CopyAction = Action(name='Copy',
-                    action='editor._menu_copy_node',
-                    enabled_when='editor._is_copyable(object)')
-CutAction = Action(name='Cut',
-                   action='editor._menu_cut_node',
-                   enabled_when='editor._is_cutable(object)')
-PasteAction = Action(name='Paste',
-                     action='editor._menu_paste_node',
-                     enabled_when='editor._is_pasteable(object)')
-DeleteAction = Action(name='Delete',
-                      action='editor._menu_delete_node',
-                      enabled_when='editor._is_deletable(object)')
-RenameAction = Action(name='Rename',
-                      action='editor._menu_rename_node',
-                      enabled_when='editor._is_renameable(object)')
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

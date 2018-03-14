@@ -26,8 +26,8 @@ from traits.api import Any, Bool, Button, Event, List, HasTraits, \
     Instance, Int, Property, Str, cached_property, on_trait_change
 
 from traitsui.api import EnumEditor, InstanceEditor, Group, \
-    Item, Label, TableColumn, TableFilter, UI, View, default_handler, \
-    spring
+    Item, Label, ObjectColumn, TableColumn, TableFilter, UI, View, \
+    default_handler, spring
 from traitsui.editors.table_editor import BaseTableEditor, \
     ReversedList, customize_filter
 from traitsui.ui_traits import SequenceTypes
@@ -145,7 +145,11 @@ class TableEditor(Editor, BaseTableEditor):
         widget."""
 
         factory = self.factory
-        self.columns = factory.columns[:]
+        columns = factory.columns[:]
+        if (len(columns) == 0) and (len(self.value) > 0):
+            columns = [ObjectColumn(name=name)
+                       for name in self.value[0].editable_traits()]
+        self.columns = columns
         if factory.table_view_factory is not None:
             self.table_view = factory.table_view_factory(editor=self)
         if factory.source_model_factory is not None:

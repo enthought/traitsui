@@ -42,7 +42,7 @@ class ThreadDemo(HasTraits):
     counters = List(Counter)
 
     view = View(
-        Item('create', show_label=False, width=-100),
+        Item('create', show_label=False),
         '_',
         Item('counters', style='custom',
              show_label=False,

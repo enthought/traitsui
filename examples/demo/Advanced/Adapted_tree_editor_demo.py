@@ -28,24 +28,22 @@ tree view.
 
 #-- Imports --------------------------------------------------------------
 
-from os \
-    import getcwd
+from os import getcwd
 
-from traits.api \
-    import HasTraits, Property, Directory, adapts, property_depends_on
+from traits.api import (
+    HasTraits, Property, Directory, property_depends_on, register_factory
+)
 
-from traitsui.api \
-    import View, VGroup, Item, TreeEditor, ITreeNode, ITreeNodeAdapter
+from traitsui.api import (
+    View, VGroup, Item, TreeEditor, ITreeNode, ITreeNodeAdapter
+)
 
-from apptools.io.api \
-    import File
+from apptools.io.api import File
+
 
 #-- FileAdapter Class ----------------------------------------------------
 
-
 class FileAdapter(ITreeNodeAdapter):
-
-    adapts(File, ITreeNode)
 
     #-- ITreeNodeAdapter Method Overrides ------------------------------------
 
@@ -130,6 +128,8 @@ class FileTreeDemo(HasTraits):
 
 #-- Create and run the demo ----------------------------------------------
 
+
+register_factory(FileAdapter, File, ITreeNode)
 demo = FileTreeDemo()
 
 # Run the demo (if invoked form the command line):

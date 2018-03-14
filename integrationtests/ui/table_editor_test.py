@@ -15,6 +15,7 @@
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
+from __future__ import print_function
 
 from traits.api \
     import HasStrictTraits, Str, Int, Regex, List, Instance
@@ -111,7 +112,7 @@ class AgeFilter(TableFilter):
 
     def _age_changed(self, old, new):
         self.name = self.description()
-        print 'AgeFilter _age_changed', self.name
+        print('AgeFilter _age_changed', self.name)
 
 #-------------------------------------------------------------------------
 #  'NameFilter' class:
@@ -166,7 +167,7 @@ filters = [
 
 
 def evaluate_value(v):
-    print 'evaluate_value', v
+    print('evaluate_value', v)
     return str(v)
 #-------------------------------------------------------------------------
 #  'TableTest' class:
@@ -237,4 +238,4 @@ if __name__ == '__main__':
     tt.configure_traits()
     for p in tt.people:
         p.print_traits()
-        print '--------------'
+        print('--------------')

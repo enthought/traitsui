@@ -24,12 +24,10 @@ from __future__ import absolute_import
 
 from traits.api import Any, Dict, Bool, Tuple, Int, List, Instance, Str, Enum
 
+from ..menu import Action
 from ..tree_node import TreeNode
-
 from ..dock_window_theme import DockWindowTheme
-
 from ..editor_factory import EditorFactory
-
 from ..helper import Orientation
 
 #-------------------------------------------------------------------------
@@ -38,6 +36,30 @@ from ..helper import Orientation
 
 # Size of each tree node icon
 IconSize = Tuple((16, 16), Int, Int)
+
+
+#-------------------------------------------------------------------------
+#  The core tree node menu actions:
+#-------------------------------------------------------------------------
+
+
+NewAction = 'NewAction'
+CopyAction = Action(name='Copy',
+                    action='editor._menu_copy_node',
+                    enabled_when='editor._is_copyable(object)')
+CutAction = Action(name='Cut',
+                   action='editor._menu_cut_node',
+                   enabled_when='editor._is_cutable(object)')
+PasteAction = Action(name='Paste',
+                     action='editor._menu_paste_node',
+                     enabled_when='editor._is_pasteable(object)')
+DeleteAction = Action(name='Delete',
+                      action='editor._menu_delete_node',
+                      enabled_when='editor._is_deletable(object)')
+RenameAction = Action(name='Rename',
+                      action='editor._menu_rename_node',
+                      enabled_when='editor._is_renameable(object)')
+
 
 #-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:

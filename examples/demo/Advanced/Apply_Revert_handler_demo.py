@@ -11,14 +11,13 @@ Undo capability.
 from __future__ import print_function
 
 from traits.api import HasTraits, Str, List
-from traitsui.api import Item, View, Handler, HGroup, VGroup
-
-# 'ApplyRevert_Handler' class:
+from traitsui.api import Item, View, Handler, HGroup, VGroup, TextEditor
 
 
 class ApplyRevert_Handler(Handler):
 
     def apply(self, info):
+        print('apply called...')
         object = info.object
         object.stack.insert(0, object.input)
         object.queue.append(object.input)
@@ -26,8 +25,6 @@ class ApplyRevert_Handler(Handler):
     def revert(self, info):
         # Do something exciting here...
         print('revert called...')
-
-# 'ApplyRevertDemo' class:
 
 
 class ApplyRevertDemo(HasTraits):
@@ -42,7 +39,8 @@ class ApplyRevertDemo(HasTraits):
         VGroup(
             VGroup(
                 Item('input',
-                     show_label=False
+                     show_label=False,
+                     editor=TextEditor(auto_set=True)
                      ),
                 label='Input',
                 show_border=True
@@ -82,4 +80,4 @@ modal_popup = ApplyRevertDemo()
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
-    modal_popup.configure_traits()
+    modal_popup.configure_traits(kind='modal')

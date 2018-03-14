@@ -187,7 +187,11 @@ class LiveWindow(BaseDialog):
                     window_style |= (wx.FRAME_FLOAT_ON_PARENT |
                                      wx.FRAME_NO_TASKBAR)
 
-                window = wx.Frame(parent, -1, '', style=window_style)
+                if isinstance(parent, tuple):
+                    window = wx.Frame(None, -1, '', style=window_style)
+                    window._control_region = parent
+                else:
+                    window = wx.Frame(parent, -1, '', style=window_style)
                 window._kind = ui.view.kind
                 self._monitor = MouseMonitor(ui)
 
@@ -463,18 +467,18 @@ class MouseMonitor(wx.Timer):
         if self.is_activated:
             # Don't close the popup if any mouse buttons are currently pressed:
             ms = wx.GetMouseState()
-            if ms.LeftDown() or ms.MiddleDown() or ms.RightDown():
+            if ms.LeftIsDown() or ms.MiddleIsDown() or ms.RightIsDown():
                 return
 
             # Check for the special case of the mouse pointer having to be
             # within the original bounds of the object the popup was created
             # for:
             if self.is_info:
-                parent = control._parent
+                parent = control.GetParent()
                 if isinstance(parent, wx.Window):
                     px, py, pdx, pdy = parent.GetScreenRect()
                 else:
-                    px, py, pdx, pdy = parent
+                    px, py, pdx, pdy = control._control_region
                 if ((mx < px) or (mx >= (px + pdx)) or
                         (my < py) or (my >= (py + pdy))):
                     ui.owner.close_popup()

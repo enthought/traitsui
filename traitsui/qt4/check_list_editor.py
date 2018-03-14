@@ -84,7 +84,7 @@ class SimpleEditor(EditorWithList):
         """ Creates the initial editor control.
         """
         self.control = QtGui.QComboBox()
-        self.control.activated.connect(self.update_object)
+        self.control.activated[int].connect(self.update_object)
 
     #-------------------------------------------------------------------------
     #  Handles the list of legal check list values being updated:
@@ -135,10 +135,10 @@ class SimpleEditor(EditorWithList):
     #  Handles the user selecting a new value from the combo box:
     #-------------------------------------------------------------------------
 
-    def update_object(self, text):
+    def update_object(self, index):
         """ Handles the user selecting a new value from the combo box.
         """
-        value = self.values[text]
+        value = self.values[index]
         if not isinstance(self.value, basestring):
             value = [value]
         self.value = value
