@@ -183,7 +183,8 @@ class SimpleEditor(Editor):
         # Get rid of any previous contents:
         list_pane = self.control
         list_pane.SetSizer(None)
-        list_pane.DestroyChildren()
+        for child in list_pane.GetChildren():
+            child.Destroy()
 
         # Create all of the list item trait editors:
         trait_handler = self._trait_handler
@@ -396,7 +397,7 @@ class SimpleEditor(Editor):
         item_trait = self._trait_handler.item_trait
         value = item_trait.default_value_for(self.object, self.name)
         self.value = list[:index] + [value] + list[index:]
-        self.update_editor()
+        wx.CallAfter(self.update_editor)
 
     #-------------------------------------------------------------------------
     #  Inserts a new item before the current item:
@@ -435,7 +436,7 @@ class SimpleEditor(Editor):
         """
         list, index = self.get_info()
         self.value = list[:index] + list[index + 1:]
-        self.update_editor()
+        wx.CallAfter(self.update_editor)
 
     #-------------------------------------------------------------------------
     #  Move the current item up one in the list:
@@ -447,7 +448,7 @@ class SimpleEditor(Editor):
         list, index = self.get_info()
         self.value = (list[:index - 1] + [list[index], list[index - 1]] +
                       list[index + 1:])
-        self.update_editor()
+        wx.CallAfter(self.update_editor)
 
     #-------------------------------------------------------------------------
     #  Moves the current item down one in the list:
@@ -459,7 +460,7 @@ class SimpleEditor(Editor):
         list, index = self.get_info()
         self.value = (list[:index] + [list[index + 1], list[index]] +
                       list[index + 2:])
-        self.update_editor()
+        wx.CallAfter(self.update_editor)
 
     #-------------------------------------------------------------------------
     #  Moves the current item to the top of the list:
@@ -470,7 +471,7 @@ class SimpleEditor(Editor):
         """
         list, index = self.get_info()
         self.value = [list[index]] + list[:index] + list[index + 1:]
-        self.update_editor()
+        wx.CallAfter(self.update_editor)
 
     #-------------------------------------------------------------------------
     #  Moves the current item to the bottom of the list:
@@ -481,7 +482,7 @@ class SimpleEditor(Editor):
         """
         list, index = self.get_info()
         self.value = list[:index] + list[index + 1:] + [list[index]]
-        self.update_editor()
+        wx.CallAfter(self.update_editor)
 
     #-- Property Implementations ---------------------------------------------
 

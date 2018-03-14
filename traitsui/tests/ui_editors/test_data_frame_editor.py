@@ -13,7 +13,7 @@ from numpy.testing import assert_array_equal
 try:
     from pandas import DataFrame
 except ImportError as exc:
-    print "Can't import Pandas: skipping"
+    print("Can't import Pandas: skipping")
     raise nose.SkipTest
 
 from traits.api import Event, HasTraits, Instance
@@ -427,9 +427,9 @@ def test_data_frame_editor_with_update_refresh():
 def test_data_frame_editor_with_refresh():
     class DataFrameViewer(HasTraits):
         data = Instance(DataFrame)
-        df_updated = Event
+        df_refreshed = Event
         view = View(
-            Item('data', editor=DataFrameEditor())
+            Item('data', editor=DataFrameEditor(refresh="df_refreshed"))
         )
 
     df = DataFrame(DATA, index=['one', 'two', 'three', 'four'],
@@ -437,5 +437,15 @@ def test_data_frame_editor_with_refresh():
     viewer = DataFrameViewer(data=df)
     with store_exceptions_on_all_threads():
         ui = viewer.edit_traits()
-        viewer.df_updated = True
+        viewer.df_refreshed = True
+        ui.dispose()
+
+
+@skip_if_null
+def test_data_frame_editor_multi_select():
+    view = View(Item('data', editor=DataFrameEditor(multi_select=True),
+                width=400))
+    viewer = sample_data()
+    with store_exceptions_on_all_threads():
+        ui = viewer.edit_traits(view=view)
         ui.dispose()

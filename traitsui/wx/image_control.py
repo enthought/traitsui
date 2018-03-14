@@ -176,7 +176,7 @@ class ImageControl(wx.Window):
                 elif need_refresh:
                     self.Refresh()
                 if self._handler is not None:
-                    self._handler(self)
+                    wx.CallAfter(self._handler, self)
                 return
 
         if need_refresh:

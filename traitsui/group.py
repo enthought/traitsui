@@ -36,7 +36,7 @@ from .item import Item
 
 from .include import Include
 
-from .ui_traits import SequenceTypes, ATheme, ContainerDelegate, Orientation, Layout
+from .ui_traits import SequenceTypes, ContainerDelegate, Orientation, Layout
 
 from .dock_window_theme import dock_window_theme, DockWindowTheme
 
@@ -90,15 +90,6 @@ class Group(ViewSubElement):
 
     # The theme to use for a DockWindow:
     dock_theme = Instance(DockWindowTheme, allow_none=False)
-
-    # The theme to use for the group itself:
-    group_theme = ATheme
-
-    # The theme to use for items contained in the group:
-    item_theme = ContainerDelegate
-
-    # The theme to use for the labels of items contained in the group:
-    label_theme = ContainerDelegate
 
     # Category of elements dragged from view.
     export = ContainerDelegate
@@ -666,15 +657,6 @@ class ShadowGroup(Group):
 
     # The theme to use for a DockWindow:
     dock_theme = ShadowDelegate
-
-    # The theme to use for the group itself:
-    group_theme = ShadowDelegate
-
-    # The theme to use for item's contained in the group:
-    item_theme = ShadowDelegate
-
-    # The theme to use for the labels of items contained in the group:
-    label_theme = ShadowDelegate
 
     # Category of elements dragged from the view
     export = ShadowDelegate

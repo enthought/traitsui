@@ -10,5 +10,5 @@ include TODO.txt
 graft docs
 prune docs/build
 graft examples
-recursive-include traitsui *.py *.zip *.png *.txt
+recursive-include traitsui *.py *.zip *.png *.txt *.ico
 recursive-include integrationtests *.py *.gif

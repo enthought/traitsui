@@ -40,11 +40,10 @@ from traits.api \
 from traits.trait_notifiers \
     import set_ui_handler
 
+from traitsui.theme import Theme
+
 from traitsui.ui \
     import UI
-
-from traitsui.theme \
-    import Theme
 
 from traitsui.dock_window_theme \
     import DockWindowTheme
@@ -513,18 +512,6 @@ class GUIToolkit(Toolkit):
         }
 
     #-------------------------------------------------------------------------
-    #  Returns a renderer used to render 'themed' table cells for a specified
-    #  TableColumn object:
-    #-------------------------------------------------------------------------
-
-    def themed_cell_renderer(self, column):
-        """ Returns a renderer used to render 'themed' table cells for a
-            specified TableColum object.
-        """
-        from themed_cell_renderer import ThemedCellRenderer
-        return ThemedCellRenderer(column)
-
-    #-------------------------------------------------------------------------
     #  GUI toolkit dependent trait definitions:
     #-------------------------------------------------------------------------
 
@@ -698,6 +685,7 @@ class DragHandler(HasPrivateTraits):
             result = drag_result
         return result
 
+
 #-------------------------------------------------------------------------
 #  Defines the extensions needed to make the generic Theme class specific to
 #  wxPython:
@@ -756,7 +744,6 @@ class WXTheme(Category, Theme):
             return None
 
         return image_slice_for(self.image)
-
 #-------------------------------------------------------------------------
 #  Defines the extensions needed to make the generic DockWindowTheme class
 #  specific to wxPython:

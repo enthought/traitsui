@@ -316,14 +316,6 @@ class ModalDialog(BaseDialog):
             self._apply_context(self.ui._revert, self.ui._context)
             self.close(wx.ID_CANCEL)
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'Help' button being clicked:
-    #-------------------------------------------------------------------------
-
-    def _on_help(self, event):
-        """ Handles the **Help** button being clicked.
-        """
-        self.ui.handler.show_help(self.ui.info, event.GetEventObject())
 
     #-------------------------------------------------------------------------
     #  Handles the user hitting the 'Esc'ape key:

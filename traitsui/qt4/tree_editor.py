@@ -23,7 +23,8 @@ import logging
 
 from pyface.qt import QtCore, QtGui
 
-from pyface.resource_manager import resource_manager
+from pyface.api import ImageResource
+from pyface.ui_traits import convert_image
 from pyface.timer.api import do_later
 from traits.api import Any, Event
 from traitsui.api import TreeNode, ObjectTreeNode, MultiTreeNode
@@ -605,24 +606,31 @@ class SimpleEditor(Editor):
 
         icon_name = node.get_icon(object, is_expanded)
         if isinstance(icon_name, basestring):
-            icon = self.STD_ICON_MAP.get(icon_name)
-
-            if icon is not None:
+            if icon_name.startswith('@'):
+                image_resource = convert_image(icon_name, 4)
+                return image_resource.create_icon()
+            elif icon_name in self.STD_ICON_MAP:
+                icon = self.STD_ICON_MAP[icon_name]
                 return self._tree.style().standardIcon(icon)
 
             path = node.get_icon_path(object)
             if isinstance(path, basestring):
                 path = [path, node]
             else:
-                path.append(node)
-            reference = resource_manager.locate_image(icon_name, path)
-            if reference is None:
-                return QtGui.QIcon()
-            file_name = reference.filename
-        else:
-            # Assume it is an ImageResource, and get its file name directly:
-            file_name = icon_name.absolute_path
+                path = path + [node]
 
+            image_resource = ImageResource(icon_name, path)
+
+        elif isinstance(icon_name, ImageResource):
+            image_resource = icon_name
+
+        else:
+            raise ValueError(
+                "Icon value must be a string or IImageResource instance: " +
+                "given {!r}".format(icon_name)
+            )
+
+        file_name = image_resource.absolute_path
         return QtGui.QIcon(pixmap_cache(file_name))
 
     #-------------------------------------------------------------------------
@@ -1661,7 +1669,7 @@ class SimpleEditor(Editor):
 
             self.control.restoreState(structure)
         header = self._tree.header()
-        self.setExpandsOnDoubleClick(self.factory.expands_on_dclick)
+        self.control.setExpandsOnDoubleClick(self.factory.expands_on_dclick)
 
         if header is not None and 'column_state' in prefs:
             header.restoreState(prefs['column_state'])
@@ -1675,10 +1683,10 @@ class SimpleEditor(Editor):
         """
         prefs = {}
         if isinstance(self.control, QtGui.QSplitter):
-            prefs['structure'] = str(self.control.saveState())
+            prefs['structure'] = self.control.saveState().data()
         header = self._tree.header()
         if header is not None:
-            prefs['column_state'] = str(header.saveState())
+            prefs['column_state'] = header.saveState().data()
 
         return prefs
 

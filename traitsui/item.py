@@ -35,7 +35,7 @@ import traits._py2to3 as _py2to3
 
 from .view_element import ViewSubElement
 
-from .ui_traits import convert_theme, ContainerDelegate, EditorStyle
+from .ui_traits import ContainerDelegate, EditorStyle
 
 from .editor_factory import EditorFactory
 
@@ -128,12 +128,6 @@ class Item(ViewSubElement):
 
     # Image to display on notebook tabs:
     image = ContainerDelegate
-
-    # The theme to use for the item itself:
-    item_theme = ContainerDelegate
-
-    # The theme to use for the item's label:
-    label_theme = ContainerDelegate
 
     # Category of elements dragged from view:
     export = ContainerDelegate
@@ -524,10 +518,9 @@ class Label(Item):
     #  Initializes the object:
     #-------------------------------------------------------------------------
 
-    def __init__(self, label, item_theme=None, **traits):
+    def __init__(self, label, **traits):
         super(Label, self).__init__(
             label=label,
-            item_theme=convert_theme(item_theme),
             **traits
         )
 
