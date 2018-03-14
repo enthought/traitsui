@@ -24,6 +24,8 @@ from text_editor import SimpleEditor as SimpleTextEditor
 from helper import IconButton
 
 
+is_qt5 = (QtCore.__version_info__[0] >= 5)
+
 # Wildcard filter:
 filter_trait = List(Unicode)
 
@@ -187,7 +189,7 @@ class CustomEditor(SimpleTextEditor):
 
         # This is needed to enable horizontal scrollbar.
         header = self.control.header()
-        if QtCore.__version_info__[0] >= 5:
+        if is_qt5:
             header.setSectionResizeMode(0, QtGui.QHeaderView.ResizeToContents)
         else:
             header.setResizeMode(0, QtGui.QHeaderView.ResizeToContents)

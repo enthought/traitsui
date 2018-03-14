@@ -34,6 +34,9 @@ from editor import Editor
 from list_str_model import ListStrModel
 from traitsui.menu import Menu
 
+
+is_qt5 = (QtCore.__version_info__[0] >= 5)
+
 #-------------------------------------------------------------------------
 #  '_ListStrEditor' class:
 #-------------------------------------------------------------------------
@@ -122,7 +125,10 @@ class _ListStrEditor(Editor):
             header_view = QtGui.QHeaderView(QtCore.Qt.Horizontal, self.control)
             header_view.setModel(self.model)
             header_view.setMaximumHeight(header_view.sizeHint().height())
-            header_view.setResizeMode(QtGui.QHeaderView.Stretch)
+            if is_qt5:
+                header_view.setSectionResizeMode(QtGui.QHeaderView.Stretch)
+            else:
+                header_view.setResizeMode(QtGui.QHeaderView.Stretch)
             layout.addWidget(header_view)
 
         self.list_view = _ListView(self)
