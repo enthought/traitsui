@@ -39,7 +39,6 @@ class ThreadDemo(HasTraits):
         ),
         '_',
         Item('start', show_label=False,
-             width=-90,
              enabled_when='running == 0'),
         resizable=True,
         width=250,

@@ -50,7 +50,7 @@ def _get_sub_arrays(group, h5file):
     """Return a list of all arrays immediately below a group in an HDF5 file."""
     l = []
 
-    for array in h5file.iterNodes(group, classname='Array'):
+    for array in h5file.iter_nodes(group, classname='Array'):
         a = Hdf5ArrayNode(
             name=array._v_name,
             path=array._v_pathname,
@@ -65,7 +65,7 @@ def _get_sub_groups(group, h5file):
     """Return a list of all groups and arrays immediately below a group in an HDF5 file."""
     l = []
 
-    for subgroup in h5file.iterNodes(group, classname='Group'):
+    for subgroup in h5file.iter_nodes(group, classname='Group'):
         g = Hdf5GroupNode(
             name=subgroup._v_name,
             path=subgroup._v_pathname,
@@ -92,7 +92,7 @@ def _get_sub_groups(group, h5file):
 def _hdf5_tree(filename):
     """Return a list of all groups and arrays below the root group of an HDF5 file."""
 
-    h5file = tb.openFile(filename, 'r')
+    h5file = tb.open_file(filename, 'r')
 
     file_tree = Hdf5FileNode(
         name=filename,
@@ -143,6 +143,7 @@ def _hdf5_tree_editor(selected=''):
 
 
 if __name__ == '__main__':
+    import sys
     from traits.api import Any
 
     class ATree(HasTraits):
@@ -153,7 +154,8 @@ if __name__ == '__main__':
             Group(
                 Item('h5_tree',
                      editor=_hdf5_tree_editor(selected='node'),
-                     resizable=True
+                     resizable=True,
+                     show_label=False,
                      ),
                 orientation='vertical',
             ),
@@ -167,6 +169,6 @@ if __name__ == '__main__':
         def _node_changed(self):
             print(self.node.path)
 
-    a_tree = ATree(h5_tree=_hdf5_tree('/path/to/file.h5'))
+    a_tree = ATree(h5_tree=_hdf5_tree(sys.argv[1]))
     a_tree.configure_traits()
 #    a_tree.edit_traits()
