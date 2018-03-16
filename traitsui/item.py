@@ -75,13 +75,13 @@ class Item(ViewSubElement):
     - Items are rendered as layout elements if :attr:`name` is set to
       special values:
 
-      * name='', the item is rendered as a static label
+      * ``name=''``, the item is rendered as a static label
 
-      * name='_', the item is rendered as a separator
+      * ``name='_'``, the item is rendered as a separator
 
-      * name=' ', the item is rendered as a 5 pixel spacer
+      * ``name=' '``, the item is rendered as a 5 pixel spacer
 
-      * name='23' (any number), the item is rendered as a spacer of
+      * ``name='23'`` (any number), the item is rendered as a spacer of
         the size specified (number of pixels)
     """
 

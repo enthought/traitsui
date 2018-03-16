@@ -19,7 +19,7 @@ and running the test within them.  This improves repeatability and
 reliability of tests be removing many of the variables around the
 developer's particular Python environment.  Test environment setup and
 package management is performed using `EDM
-http://docs.enthought.com/edm/`_
+<http://docs.enthought.com/edm/>`_
 
 To use this to run you tests, you will need to install EDM and click
 into your working environment.  You will also need to have git

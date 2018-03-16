@@ -48,17 +48,6 @@ show_help = default_show_help
 def on_help_call(new_show_help=None):
     """ Sets a new global help provider function.
 
-    Parameters
-    ----------
-    new_show_help : function
-        The function to set as the new global help provider
-
-    Returns
-    -------
-    The previous global help provider function
-
-    Description
-    -----------
     The help provider function must have a signature of
     *function*(*info*, *control*), where *info* is a UIInfo object for the
     current view, and *control* is the UI control that invokes the function
@@ -67,6 +56,16 @@ def on_help_call(new_show_help=None):
 
     To retrieve the current help provider function, call this function with
     no arguments.
+
+    Parameters
+    ----------
+    new_show_help : function
+        The function to set as the new global help provider
+
+    Returns
+    -------
+    previous : callable
+        The previous global help provider function
     """
     global show_help
 

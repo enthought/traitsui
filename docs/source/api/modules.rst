@@ -1,7 +1,7 @@
-TraitsUI API Documentation
-==========================
+traitsui
+========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    traitsui

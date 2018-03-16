@@ -17,12 +17,12 @@
 Test case for bug (wx, Mac OS X)
 
 Editing the text part of a spin control box and pressing the OK button
-without de-focusing raises an AttributeError
+without de-focusing raises an AttributeError::
 
-Traceback (most recent call last):
-  File "ETS/traitsui/traitsui/wx/range_editor.py", line 783, in update_object
-    self.value = self.control.GetValue()
-AttributeError: 'NoneType' object has no attribute 'GetValue'
+    Traceback (most recent call last):
+    File "ETS/traitsui/traitsui/wx/range_editor.py", line 783, in update_object
+        self.value = self.control.GetValue()
+    AttributeError: 'NoneType' object has no attribute 'GetValue'
 """
 from __future__ import print_function
 

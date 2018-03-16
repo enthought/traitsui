@@ -256,11 +256,11 @@ class TreeNode(HasPrivateTraits):
     def confirm_delete(self, object):
         """ Checks whether a specified object can be deleted.
 
-        Returns
-        -------
-        * **True** if the object should be deleted with no further prompting.
-        * **False** if the object should not be deleted.
-        * Anything else: Caller should take its default action (which might
+        The following return values are possible:
+
+        - **True** if the object should be deleted with no further prompting.
+        - **False** if the object should not be deleted.
+        - Anything else: Caller should take its default action (which might
           include prompting the user to confirm deletion).
         """
         return None
@@ -720,11 +720,11 @@ class ITreeNode(Interface):
     def confirm_delete(self):
         """ Checks whether a specified object can be deleted.
 
-        Returns
-        -------
-        * **True** if the object should be deleted with no further prompting.
-        * **False** if the object should not be deleted.
-        * Anything else: Caller should take its default action (which might
+        The following return values are possible:
+
+        - **True** if the object should be deleted with no further prompting.
+        - **False** if the object should not be deleted.
+        - Anything else: Caller should take its default action (which might
           include prompting the user to confirm deletion).
         """
 
@@ -868,22 +868,24 @@ class ITreeNode(Interface):
 
 class ITreeNodeAdapter(Adapter):
     """ Abstract base class for an adapter that implements the ITreeNode
-        interface.
+    interface.
 
-        Usage:
+    Usage:
 
-        1. Create a subclass of ITreeNodeAdapter.
-        2. Add an 'adapts( xxx_class, ITreeNode )' declaration (usually placed
-           right after the 'class' statement) to define what class (or classes)
-           this is an ITreeNode adapter for.
-        3. Override any of the following methods as necessary, using the
-           'self.adaptee' trait to access the adapted object if needed.
+    1. Create a subclass of ITreeNodeAdapter.
+    2. Register the adapter to define what class (or classes) this is an
+       ITreeNode adapter for (ie.
+       ``register_factory(<from class>, ITreeNode, ITreeNodeAdapter)``).
+    3. Override any of the following methods as necessary, using the
+       ``self.adaptee`` trait to access the adapted object if needed.
 
-       Note: This base class implements all of the ITreeNode interface methods,
-       but does not necessarily provide useful implementations for all of the
-       methods. It allows you to get a new adapter class up and running quickly,
-       but you should carefully review your final adapter implementation class
-       to make sure it behaves correctly in your application.
+    Note
+    ----
+    This base class implements all of the ITreeNode interface methods,
+    but does not necessarily provide useful implementations for all of the
+    methods. It allows you to get a new adapter class up and running quickly,
+    but you should carefully review your final adapter implementation class
+    to make sure it behaves correctly in your application.
     """
 
     def allows_children(self):
@@ -919,11 +921,11 @@ class ITreeNodeAdapter(Adapter):
     def confirm_delete(self):
         """ Checks whether a specified object can be deleted.
 
-        Returns
-        -------
-        * **True** if the object should be deleted with no further prompting.
-        * **False** if the object should not be deleted.
-        * Anything else: Caller should take its default action (which might
+        The following return values are possible:
+
+        - **True** if the object should be deleted with no further prompting.
+        - **False** if the object should not be deleted.
+        - Anything else: Caller should take its default action (which might
           include prompting the user to confirm deletion).
         """
         return False
@@ -1150,11 +1152,11 @@ class ITreeNodeAdapterBridge(HasPrivateTraits):
     def confirm_delete(self, object):
         """ Checks whether a specified object can be deleted.
 
-        Returns
-        -------
-        * **True** if the object should be deleted with no further prompting.
-        * **False** if the object should not be deleted.
-        * Anything else: Caller should take its default action (which might
+        The following return values are possible:
+
+        - **True** if the object should be deleted with no further prompting.
+        - **False** if the object should not be deleted.
+        - Anything else: Caller should take its default action (which might
           include prompting the user to confirm deletion).
         """
         return self.adapter.confirm_delete()
@@ -1406,11 +1408,11 @@ class ObjectTreeNode(TreeNode):
     def confirm_delete(self, object):
         """ Checks whether a specified object can be deleted.
 
-        Returns
-        -------
-        * **True** if the object should be deleted with no further prompting.
-        * **False** if the object should not be deleted.
-        * Anything else: Caller should take its default action (which might
+        The following return values are possible:
+
+        - **True** if the object should be deleted with no further prompting.
+        - **False** if the object should not be deleted.
+        - Anything else: Caller should take its default action (which might
           include prompting the user to confirm deletion).
         """
         return object.tno_confirm_delete(self)
@@ -1765,11 +1767,11 @@ class TreeNodeObject(HasPrivateTraits):
     def tno_confirm_delete(self, node):
         """ Checks whether a specified object can be deleted.
 
-        Returns
-        -------
-        * **True** if the object should be deleted with no further prompting.
-        * **False** if the object should not be deleted.
-        * Anything else: Caller should take its default action (which might
+        The following return values are possible:
+
+        - **True** if the object should be deleted with no further prompting.
+        - **False** if the object should not be deleted.
+        - Anything else: Caller should take its default action (which might
           include prompting the user to confirm deletion).
         """
         return None

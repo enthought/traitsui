@@ -4,14 +4,9 @@ traitsui\.image package
 Submodules
 ----------
 
-traitsui\.image\.image module
------------------------------
+.. toctree::
 
-.. automodule:: traitsui.image.image
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   traitsui.image.image
 
 Module contents
 ---------------
