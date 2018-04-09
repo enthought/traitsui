@@ -84,6 +84,13 @@ class SimpleEditor(Editor):
         self.control.clicked.connect(self.update_object)
         self.set_tooltip()
 
+    def dispose(self):
+        """ Disposes of the contents of an editor.
+        """
+        if self.control is not None:
+            self.control.clicked.disconnect(self.update_object)
+        super(SimpleEditor, self).dispose()
+
     def _label_changed(self, label):
         self.control.setText(self.string_value(label))
 
@@ -105,6 +112,8 @@ class SimpleEditor(Editor):
         """ Handles the user clicking the button by setting the factory value
             on the object.
         """
+        if self.control is None:
+            return
         if self.selected_item != "":
             self.value = self.selected_item
         else:

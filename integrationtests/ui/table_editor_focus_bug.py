@@ -1,6 +1,7 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
+from __future__ import print_function
 
 from traits.api import HasTraits, Str, List
 from traitsui.api import Group, Item, TableEditor, View
@@ -73,4 +74,4 @@ if __name__ == '__main__':
            'these', 'in', 'the', 'dudes', 'bar'])
 
     foo.configure_traits(kind='modal')
-    print foo.input, [word.word for word in foo.parsed]
+    print(foo.input, [word.word for word in foo.parsed])

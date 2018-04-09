@@ -8,19 +8,15 @@ environment:
     INSTALL_EDM_VERSION: "1.9.1"
 
   matrix:
-
     - RUNTIME: '2.7'
-      TOOLKITS: "null pyqt pyside"
+      TOOLKITS: "null pyqt pyside wx"
     - RUNTIME: '3.5'
       TOOLKITS: "null pyqt pyqt5"
-    - RUNTIME: '2.7'
-      TOOLKITS: "wx"
+    - RUNTIME: '3.6'
+      TOOLKITS: "null pyqt pyqt5"
 
 matrix:
   fast_finish: True
-  allow_failures:
-    - RUNTIME: '2.7'
-      TOOLKITS: "wx"
 
 branches:
   only:

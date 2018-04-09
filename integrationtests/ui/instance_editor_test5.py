@@ -1,5 +1,6 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
+from __future__ import print_function
 
 from traits.api import *
 from traitsui.api import *
@@ -79,6 +80,7 @@ class Team(HasStrictTraits):
 #-------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    Team(name='Vultures',
+    t = Team(name='Vultures',
          captain=people[0],
-         roster=people).configure_traits()
+         roster=people)
+    t.configure_traits()

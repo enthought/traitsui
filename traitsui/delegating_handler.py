@@ -66,6 +66,12 @@ class DelegatingHandler(Handler):
     def init(self, info):
         """ Initializes the controls of a user interface.
 
+        This method is called after all user interface elements have been
+        created, but before the user interface is displayed. Use this method to
+        further customize the user interface before it is displayed.
+
+        This method is overridden here to delegate to sub-handlers.
+
         Parameters
         ----------
         info : *UIInfo* object
@@ -73,18 +79,11 @@ class DelegatingHandler(Handler):
 
         Returns
         -------
-        A boolean, indicating whether the user interface was successfully
-        initialized. A True value indicates that the UI can be displayed;
-        a False value indicates that the display operation should be
-        cancelled.
-
-        Description
-        -----------
-        This method is called after all user interface elements have been
-        created, but before the user interface is displayed. Use this method to
-        further customize the user interface before it is displayed.
-
-        This method is overridden here to delegate to sub-handlers.
+        initialized : bool
+            A boolean, indicating whether the user interface was successfully
+            initialized. A True value indicates that the UI can be displayed;
+            a False value indicates that the display operation should be
+            cancelled.
         """
 
         # Iterate through our sub-handlers, and for each method whose name is

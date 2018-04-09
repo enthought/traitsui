@@ -24,5 +24,5 @@ import pyface.qt
 
 import toolkit
 
-# Reference to the GUIToolkit object for PyQt.
-toolkit = toolkit.GUIToolkit()
+# Reference to the GUIToolkit object for Qt.
+toolkit = toolkit.GUIToolkit('traitsui', 'qt4', 'traitsui.qt4')

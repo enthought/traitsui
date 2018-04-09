@@ -21,7 +21,7 @@ from traits.api \
     import HasTraits, Trait, Enum, Range
 
 from traitsui.api \
-    import EnumEditor
+    import View, Item, EnumEditor
 
 #-------------------------------------------------------------------------
 #  Trait definitions:
@@ -41,10 +41,15 @@ class TestEnumEditor(HasTraits):
     #-------------------------------------------------------------------------
     #  Trait definitions:
     #-------------------------------------------------------------------------
+    value = Trait(1, enum, range)
 
-    value = Trait(1, enum, range,
-                  editor=EnumEditor(values=values,
-                                    evaluate=int))
+    other_value = Range(0, 4)
+
+    trait_view = View(
+        Item('value', editor=EnumEditor(values=values, evaluate=int)),
+        Item('other_value'),
+        resizable=True,
+    )
 
 #-------------------------------------------------------------------------
 #  Run the test:

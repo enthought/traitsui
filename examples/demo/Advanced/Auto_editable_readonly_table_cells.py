@@ -98,7 +98,7 @@ factors_view = View(
     Item('factors',
          id='factors',
          show_label=False,
-         editor=factor_table_editor
+         editor=factor_table_editor,
          ),
     id='traits.examples.demo.Advanced.factors_view',
     kind='info',

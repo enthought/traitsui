@@ -248,10 +248,16 @@ class ImageEnumTablePopupView(QtGui.QTableView):
         """
         QtGui.QTableView.__init__(self, parent)
         hheader = self.horizontalHeader()
-        hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        if QtCore.__version_info__[0] >= 5:
+            hheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
+        else:
+            hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
         hheader.hide()
         vheader = self.verticalHeader()
-        vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        if QtCore.__version_info__[0] >= 5:
+            vheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
+        else:
+            vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
         vheader.hide()
         self.setShowGrid(False)
 

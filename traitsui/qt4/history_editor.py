@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtGui
 
 from editor import Editor
 
@@ -56,7 +56,7 @@ class _HistoryEditor(Editor):
         if self.factory.auto_set:
             control.editTextChanged.connect(self.update_object)
         else:
-            control.activated.connect(self.update_object)
+            control.activated[unicode].connect(self.update_object)
 
         self.set_tooltip()
 

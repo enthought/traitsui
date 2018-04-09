@@ -271,7 +271,12 @@ class SimpleEditor(BaseEditor):
                     return
 
             self._no_enum_update += 1
-            self.value = value
+            try:
+                self.value = value
+            except Exception as excp:
+                self._no_enum_update -= 1
+                self.error(excp)
+                return
             self._set_background(OKColor)
             self._no_enum_update -= 1
 

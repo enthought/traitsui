@@ -96,7 +96,7 @@ if not is_released:
 
 if __name__ == "__main__":
     write_version_py()
-    from traitsui import __version__, __requires__
+    from traitsui import __version__, __requires__, __extras_require__
 
     def additional_commands():
         try:
@@ -135,12 +135,21 @@ if __name__ == "__main__":
         url='https://docs.enthought.com/traitsui',
         download_url='https://github.com/enthought/traitsui',
         install_requires=__requires__,
+        extras_require=__extras_require__,
         license='BSD',
         maintainer='ETS Developers',
         maintainer_email='enthought-dev@enthought.com',
         package_data=dict(traitsui=['image/library/*.zip', 'images/*',
                                     'wx/images/*', 'qt4/images/*']),
         packages=find_packages(),
+        entry_points = {
+            'traitsui.toolkits': [
+                'qt4 = traitsui.qt4:toolkit',
+                'wx = traitsui.wx:toolkit',
+                'qt = traitsui.qt4:toolkit',
+                'null = traitsui.null:toolkit',
+            ],
+        },
         platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
         zip_safe=False,
         use_2to3=True,

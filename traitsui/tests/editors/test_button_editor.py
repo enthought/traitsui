@@ -15,6 +15,13 @@ class ButtonTextEdit(HasTraits):
 
     play_button_label = Unicode("I'm a play button")
 
+    traits_view = View(
+        Item('play_button', style='simple'),
+        Item('play_button', style='custom'),
+        Item('play_button', style='readonly'),
+        Item('play_button', style='text'),
+    )
+
 
 simple_view = View(
     UItem(
@@ -64,6 +71,16 @@ class TestButtonEditor(unittest.TestCase):
 
             button_text_edit.play_button_label = "New Label"
             self.assertEqual(get_button_text(button), "New Label")
+
+    @skip_if_null
+    def test_styles(self):
+        # simple smoke test of buttons
+        gui = GUI()
+        button_text_edit = ButtonTextEdit()
+        with store_exceptions_on_all_threads():
+            ui = button_text_edit.edit_traits()
+            self.addCleanup(ui.dispose)
+            gui.process_events()
 
     @skip_if_null
     def test_simple_button_editor(self):

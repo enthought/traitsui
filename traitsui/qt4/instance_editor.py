@@ -20,35 +20,20 @@
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api \
-    import HasTraits, Instance, Property
+from traits.api import HasTraits, Instance, Property
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.instance_editor file.
-from traitsui.editors.instance_editor \
-    import ToolkitEditorFactory
-
-from traitsui.ui_traits \
-    import AView
-
-from traitsui.helper \
-    import user_name_for
-
-from traitsui.handler \
-    import Handler
-
-from traitsui.instance_choice \
-    import InstanceChoiceItem
-
-from editor \
-    import Editor
-
-from constants \
-    import DropColor
-
-from helper \
-    import position_window
+from traitsui.editors.instance_editor import ToolkitEditorFactory
+from traitsui.ui_traits import AView
+from traitsui.helper import user_name_for
+from traitsui.handler import Handler
+from traitsui.instance_choice import InstanceChoiceItem
+from .editor import Editor
+from .drop_editor import _DropEventFilter
+from .constants import DropColor
+from .helper import position_window
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -147,7 +132,9 @@ class CustomEditor(Editor):
             self.set_tooltip(self._choice)
 
         if droppable:
-            self._choice.SetDropTarget(PythonDropTarget(self))
+            # Install EventFilter on control to handle DND events.
+            drop_event_filter = _DropEventFilter(self.control)
+            self.control.installEventFilter(drop_event_filter)
 
         orientation = OrientationMap[factory.orientation]
         if orientation is None:
@@ -169,7 +156,7 @@ class CustomEditor(Editor):
         elif self.control is None:
             if self._choice is None:
                 self._choice = QtGui.QComboBox()
-                self._choice.activated.connect(self.update_object)
+                self._choice.activated[int].connect(self.update_object)
 
             self.control = self._choice
         else:
@@ -285,26 +272,23 @@ class CustomEditor(Editor):
     #  Handles the user selecting a new value from the combo box:
     #-------------------------------------------------------------------------
 
-    def update_object(self, text):
+    def update_object(self, index):
         """ Handles the user selecting a new value from the combo box.
         """
-        name = unicode(text)
-        for item in self.items:
-            if name == item.get_name():
-                id_item = id(item)
-                object = self._object_cache.get(id_item)
-                if object is None:
-                    object = item.get_object()
-                    if (not self.factory.editable) and item.is_factory:
-                        view = self.view_for(object, self.item_for(object))
-                        view.ui(object, self.control, 'modal')
+        item = self.items[index]
+        id_item = id(item)
+        object = self._object_cache.get(id_item)
+        if object is None:
+            object = item.get_object()
+            if (not self.factory.editable) and item.is_factory:
+                view = self.view_for(object, self.item_for(object))
+                view.ui(object, self.control, 'modal')
 
-                    if self.factory.cachable:
-                        self._object_cache[id_item] = object
+            if self.factory.cachable:
+                self._object_cache[id_item] = object
 
-                self.value = object
-                self.resynch_editor()
-                break
+        self.value = object
+        self.resynch_editor()
 
     #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

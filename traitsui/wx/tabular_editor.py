@@ -185,6 +185,9 @@ class TabularEditor(Editor):
     # The event fired when a table update is needed:
     update = Event
 
+    # The event fired when a simple repaint is needed:
+    refresh = Event
+
     # The current set of selected items (which one is used depends upon the
     # initial state of the editor factory 'multi_select' trait):
     selected = Any
@@ -314,7 +317,8 @@ class TabularEditor(Editor):
             self.sync_value(factory.selected_row, 'selected_row', 'both')
 
         # Synchronize other interesting traits as necessary:
-        self.sync_value(factory.update, 'update', 'from')
+        self.sync_value(factory.update, 'update', 'from', is_event=True)
+        self.sync_value(factory.refresh, 'refresh', 'from', is_event=True)
 
         self.sync_value(factory.activated, 'activated', 'to')
         self.sync_value(factory.activated_row, 'activated_row', 'to')
@@ -574,6 +578,9 @@ class TabularEditor(Editor):
         for row in event.added:
             control.SetItemState(row, wx.LIST_STATE_SELECTED,
                                  wx.LIST_STATE_SELECTED)
+
+    def _refresh_changed(self):
+        self.update_editor()
 
     #-- List Control Event Handlers ------------------------------------------
 

@@ -19,15 +19,6 @@ in terms of the primitives supplied by TraitsUI (views, items, editors,
 etc.), and let TraitsUI and your selected toolkit and back-end take care of
 the details of displaying them.
 
-The following GUI backends are supported:
-
-- PyQt
-- wxPython
-- PySide
-
-**Warning:** In TraitsUI version 5.0 the default GUI backend was changed from
-``wx`` to ``qt4``.
-
 Example
 -------
 
@@ -60,23 +51,53 @@ which creates a GUI which looks like this:
 
 .. image:: https://raw.github.com/enthought/traitsui/master/README_example.png
 
-Prerequisites
--------------
+Important Links
+---------------
+
+- Website and Documentation: `<http://docs.enthought.com/traitsui>`__
+
+  * User Manual `<http://docs.enthought.com/traitsui/traitsui_user_maunal>`__
+  * Tutorial `<http://docs.enthought.com/traitsui/tutorial>`__
+  * API Documentation `<http://docs.enthought.com/traitsui/api>`__
+
+- Source code repository: `<https://github.com/enthought/traitsui>`__
+
+  * Issue tracker: `<https://github.com/enthought/traitsui/issues>`__
+
+- Download releases: `<https://pypi.python.org/pypi/traitsui>`__
+
+- Mailing list: `<https://groups.google.com/forum/#!forum/ets-users>`__
+
+Installation
+------------
 
 If you want to run traitsui, you must also install:
 
-* `traits <https://github.com/enthought/traits>`__
-* `pyface <https://github.com/enthought/pyface>`_
+- Traits `<https://github.com/enthought/traits>`__
+- Pyface `<https://github.com/enthought/pyface>`__
 
-along with one of the GUI backends.
+You will also need one of the following backends:
+
+- PyQt
+- wxPython
+- PySide
+- PyQt5
+
+Backends have additional dependencies and there are optional dependencies on
+NumPy and Pandas for some editors.
+
+TraitsUI along with all dependencies can be installed in a straightforward way
+using the `Enthought Deployment Manager <http://docs.enthought.com/edm/>`__,
+``pip`` or other .
 
 Running the Test Suite
 ----------------------
 
-To run the test suite, install `Invoke http://www.pyinvoke.org/`_ and
-`EDM http://docs.enthought.com/edm/`_ and follow the instructions in
-``tasks.py``.  In particular::
+To run the test suite, you will need to install Git and
+`EDM <http://docs.enthought.com/edm/>`__ as well as have a Python environment
+which has install `Click <http://click.pocoo.org/>`__ available. You can then
+follow the instructions in ``etstool.py``.  In particular::
 
-    > invoke test_all
+    > python test_all
 
 will run tests in all supported environments automatically.

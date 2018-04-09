@@ -61,8 +61,8 @@ class Team(HasStrictTraits):
     #-------------------------------------------------------------------------
 
     traits_view = View('name', '_',
-                       Item('captain@',
-                            editor=InstanceEditor(name='roster')), '_',
+                        Item('captain@',
+                             editor=InstanceEditor(name='roster')), '_',
                        'roster')
 
 #-------------------------------------------------------------------------

@@ -93,6 +93,10 @@ class Handler(HasPrivateTraits):
     def init(self, info):
         """ Initializes the controls of a user interface.
 
+        This method is called after all user interface elements have been
+        created, but before the user interface is displayed. Override this
+        method to customize the user interface before it is displayed.
+
         Parameters
         ----------
         info : UIInfo object
@@ -100,17 +104,12 @@ class Handler(HasPrivateTraits):
 
         Returns
         -------
-        A Boolean, indicating whether the user interface was successfully
-        initialized. A True value indicates that the UI can be displayed;
-        a False value indicates that the display operation should be
-        cancelled. The default implementation returns True without taking
-        any other action.
-
-        Description
-        -----------
-        This method is called after all user interface elements have been
-        created, but before the user interface is displayed. Override this
-        method to customize the user interface before it is displayed.
+        initialized : bool
+            A Boolean, indicating whether the user interface was successfully
+            initialized. A True value indicates that the UI can be displayed;
+            a False value indicates that the display operation should be
+            cancelled. The default implementation returns True without taking
+            any other action.
         """
         return True
 
@@ -121,17 +120,6 @@ class Handler(HasPrivateTraits):
     def position(self, info):
         """ Positions a dialog-based user interface on the display.
 
-        Parameters
-        ----------
-        info : UIInfo object
-            The UIInfo object associated with the window
-
-        Returns
-        -------
-        Nothing.
-
-        Description
-        -----------
         This method is called after the user interface is initialized (by
         calling init()), but before the user interface is displayed. Override
         this method to position the window on the display device. The default
@@ -140,6 +128,11 @@ class Handler(HasPrivateTraits):
         Usually, you do not need to override this method, because you can
         control the window's placement using the **x** and **y** attributes
         of the View object.
+
+        Parameters
+        ----------
+        info : UIInfo object
+            The UIInfo object associated with the window
         """
         toolkit().position(info.ui)
 
@@ -150,6 +143,15 @@ class Handler(HasPrivateTraits):
     def close(self, info, is_ok):
         """ Handles the user attempting to close a dialog-based user interface.
 
+        This method is called when the user attempts to close a window, by
+        clicking an **OK** or **Cancel** button, or clicking a Close control
+        on the window). It is called before the window is actually destroyed.
+        Override this method to perform any checks before closing a window.
+
+        While Traits UI handles "OK" and "Cancel" events automatically, you
+        can use the value of the *is_ok* parameter to implement additional
+        behavior.
+
         Parameters
         ----------
         info : UIInfo object
@@ -160,18 +162,8 @@ class Handler(HasPrivateTraits):
 
         Returns
         -------
-        A Boolean, indicating whether the window should be allowed to close.
-
-        Description
-        -----------
-        This method is called when the user attempts to close a window, by
-        clicking an **OK** or **Cancel** button, or clicking a Close control
-        on the window). It is called before the window is actually destroyed.
-        Override this method to perform any checks before closing a window.
-
-        While Traits UI handles "OK" and "Cancel" events automatically, you
-        can use the value of the *is_ok* parameter to implement additional
-        behavior.
+        allow_close : bool
+            A Boolean, indicating whether the window should be allowed to close.
         """
         return True
 
@@ -182,6 +174,9 @@ class Handler(HasPrivateTraits):
     def closed(self, info, is_ok):
         """ Handles a dialog-based user interface being closed by the user.
 
+        This method is called *after* the window is destroyed. Override this
+        method to perform any clean-up tasks needed by the application.
+
         Parameters
         ----------
         info : UIInfo object
@@ -189,11 +184,6 @@ class Handler(HasPrivateTraits):
         is_ok : Boolean
             Indicates whether the user confirmed the changes (such as by
             clicking **OK**.)
-
-        Description
-        -----------
-        This method is called *after* the window is destroyed. Override this
-        method to perform any clean-up tasks needed by the application.
         """
         return
 
@@ -222,20 +212,18 @@ class Handler(HasPrivateTraits):
     def show_help(self, info, control=None):
         """ Shows the help associated with the view.
 
+        This method is called when the user clicks a **Help** button in a
+        Traits user interface. The method calls the global help handler, which
+        might be the default help handler, or might be a custom help handler.
+        See **traitsui.help** for details about the setting the
+        global help handler.
+
         Parameters
         ----------
         info : UIInfo object
             The UIInfo object associated with the view
         control : UI control
             The control that invokes the help dialog box
-
-        Description
-        -----------
-        This method is called when the user clicks a **Help** button in a
-        Traits user interface. The method calls the global help handler, which
-        might be the default help handler, or might be a custom help handler.
-        See **traitsui.help** for details about the setting the
-        global help handler.
         """
         if control is None:
             control = info.ui.control
@@ -251,7 +239,7 @@ class Handler(HasPrivateTraits):
         The default method looks for a method matching ``action.action`` and
         calls it (sniffing the signature to determine how to call it for
         historical reasons).  If this is not found, then it calls the
-        :py:meth:`perform` method of the action.
+        :py:meth:`~traitsui.menu.Action.perform` method of the action.
 
         Parameters
         ----------
@@ -322,17 +310,6 @@ class Handler(HasPrivateTraits):
     def setattr(self, info, object, name, value):
         """ Handles the user setting a specified object trait's value.
 
-        Parameters
-        ----------
-        object : object
-            The object whose attribute is being set
-        name : string
-            The name of the attribute being set
-        value
-            The value to which the attribute is being set
-
-        Description
-        -----------
         This method is called when an editor attempts to set a new value for
         a specified object trait attribute. Use this method to control what
         happens when a trait editor tries to set an attribute value. For
@@ -342,6 +319,17 @@ class Handler(HasPrivateTraits):
         If you override this method, make sure that it actually sets the
         attribute, either by calling the parent method or by setting the
         attribute directly
+
+        Parameters
+        ----------
+        info : UIInfo instance
+            The UIInfo for the current UI
+        object : object
+            The object whose attribute is being set
+        name : string
+            The name of the attribute being set
+        value
+            The value to which the attribute is being set
 
         """
         setattr(object, name, value)

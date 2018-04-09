@@ -25,40 +25,27 @@
 
 # Make sure that importimg from this backend is OK:
 from traitsui.toolkit import assert_toolkit_import
-assert_toolkit_import('wx')
+assert_toolkit_import(['wx'])
 
 import wx
 
-# Make sure a wx.App object is created early:
-_app = wx.GetApp()
-if _app is None:
-    _app = wx.App(redirect=False)
+# Ensure that we can import Pyface backend.  This starts App as a side-effect.
+from pyface.toolkit import toolkit_object as pyface_toolkit
+_app = pyface_toolkit('init:_app')
 
-from traits.api \
-    import HasPrivateTraits, Instance, Property, Category, cached_property
-
-from traits.trait_notifiers \
-    import set_ui_handler
+from traits.api import (
+    HasPrivateTraits, Instance, Property, Category, cached_property
+)
+from traits.trait_notifiers import set_ui_handler
+from pyface.wx.drag_and_drop import PythonDropTarget
 
 from traitsui.theme import Theme
+from traitsui.ui import UI
+from traitsui.dock_window_theme import DockWindowTheme
+from traitsui.toolkit import Toolkit
 
-from traitsui.ui \
-    import UI
-
-from traitsui.dock_window_theme \
-    import DockWindowTheme
-
-from traitsui.toolkit \
-    import Toolkit
-
-from pyface.wx.drag_and_drop \
-    import PythonDropTarget
-
-from constants \
-    import WindowColor, screen_dx, screen_dy
-
-from helper \
-    import position_window
+from .constants import WindowColor, screen_dx, screen_dy
+from .helper import position_window
 
 #-------------------------------------------------------------------------
 #  Constants:

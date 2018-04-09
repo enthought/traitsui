@@ -103,10 +103,10 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
     def str_font(self, font):
         """ Returns the text representation of the specified object trait value.
         """
-        weight = {wx.LIGHT: ' Light',
-                  wx.BOLD: ' Bold'}.get(font.GetWeight(), '')
-        style = {wx.SLANT: ' Slant',
-                 wx.ITALIC: ' Italic'}.get(font.GetStyle(), '')
+        weight = {wx.FONTWEIGHT_LIGHT: ' Light',
+                  wx.FONTWEIGHT_BOLD: ' Bold'}.get(font.GetWeight(), '')
+        style = {wx.FONTSTYLE_SLANT: ' Slant',
+                 wx.FONTSTYLE_ITALIC: ' Italic'}.get(font.GetStyle(), '')
         return '%s point %s%s%s' % (
             font.GetPointSize(), font.GetFaceName(), style, weight)
 
@@ -267,7 +267,7 @@ class CustomFontEditor(Editor):
         if self.factory.show_weight:
             weight += self._weight.GetCurrentSelection()
 
-        font = wx.Font(point_size, wx.DEFAULT, style, weight,
+        font = wx.Font(point_size, wx.FONTFAMILY_DEFAULT, style, weight,
                        faceName=facename)
         self.value = self.factory.from_wx_font(font)
 

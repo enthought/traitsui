@@ -8,21 +8,28 @@ env:
 
 matrix:
   include:
-    - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside"
-    - env: RUNTIME=3.5 TOOLKITS="null pyqt"
-    - env: RUNTIME=3.5 TOOLKITS="pyqt5"
-    - env: RUNTIME=2.7 TOOLKITS="wx"
-    - os: osx
-      env: RUNTIME=3.5 TOOLKITS="null pyqt"
+    - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside wx"
+    - env: RUNTIME=3.5 TOOLKITS="null pyqt pyqt5"
+    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5"
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="null pyside"
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
+    - os: osx
+      env: RUNTIME=3.5 TOOLKITS="null pyqt5"
+    - os: osx
+      env: RUNTIME=3.5 TOOLKITS="pyqt"
+    - os: osx
+      env: RUNTIME=3.6 TOOLKITS="null pyqt5"
+    - os: osx
+      env: RUNTIME=3.6 TOOLKITS="pyqt"
   allow_failures:
-    - env: RUNTIME=3.5 TOOLKITS="pyqt5"
-    - env: RUNTIME=2.7 TOOLKITS="wx"
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
+    - os: osx
+      env: RUNTIME=3.5 TOOLKITS="pyqt"
+    - os: osx
+      env: RUNTIME=3.6 TOOLKITS="pyqt"
   fast_finish: true
 
 branches:

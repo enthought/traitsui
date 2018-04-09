@@ -109,6 +109,10 @@ skip_if_not_qt4 = partial(skip_if_not_backend, backend_name='qt4')
 skip_if_not_null = partial(skip_if_not_backend, backend_name='null')
 
 
+#: True if current platform is MacOS
+is_mac_os = (sys.platform == "Darwin")
+
+
 def skip_if_null(test_func):
     """Decorator that skip tests if the backend is set to 'null'.
 

@@ -75,7 +75,8 @@ def test_wx_text_editing():
         press_ok_button(ui)
 
     # the number traits should be between 3 and 8
-    assert num.number >= 3 and num.number <= 8
+    print("Actual value:", num.number)
+    assert 3 <= num.number <= 8
 
 
 @skip_if_not_qt4

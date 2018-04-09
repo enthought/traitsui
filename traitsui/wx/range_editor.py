@@ -49,6 +49,12 @@ from constants \
 from helper \
     import TraitsUIPanel, Slider
 
+if not hasattr(wx, 'wx.wxEVT_SCROLL_ENDSCROLL'):
+    wxEVT_SCROLL_ENDSCROLL = wx.wxEVT_SCROLL_CHANGED
+else:
+    wxEVT_SCROLL_ENDSCROLL = wx.wxEVT_SCROLL_ENDSCROLL
+
+
 #-------------------------------------------------------------------------
 #  'BaseRangeEditor' class:
 #-------------------------------------------------------------------------
@@ -151,7 +157,8 @@ class SimpleSliderEditor(BaseRangeEditor):
         panel.slider = slider = Slider(panel, -1, ivalue, 0, 10000,
                                        size=wx.Size(80, 20),
                                        style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
-        slider.SetTickFreq(1000, 1)
+        slider.SetTickFreq(1000)
+        slider.SetValue(1)
         slider.SetPageSize(1000)
         slider.SetLineSize(100)
         wx.EVT_SCROLL(slider, self.update_object_on_scroll)
@@ -194,7 +201,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         """
         value = self._convert_from_slider(event.GetPosition())
         event_type = event.GetEventType()
-        if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
+        if ((event_type == wxEVT_SCROLL_ENDSCROLL) or
             (self.factory.auto_set and
              (event_type == wx.wxEVT_SCROLL_THUMBTRACK)) or
             (self.factory.enter_set and
@@ -454,7 +461,8 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         panel.slider = slider = Slider(panel, -1, ivalue, 0, 10000,
                                        size=wx.Size(80, 20),
                                        style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
-        slider.SetTickFreq(1000, 1)
+        slider.SetTickFreq(1000)
+        slider.SetValue(1)
         slider.SetPageSize(1000)
         slider.SetLineSize(100)
         wx.EVT_SCROLL(slider, self.update_object_on_scroll)
@@ -510,7 +518,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         event_type = event.GetEventType()
         try:
             self.ui_changing = True
-            if ((event_type == wx.wxEVT_SCROLL_ENDSCROLL) or
+            if ((event_type == wxEVT_SCROLL_ENDSCROLL) or
                 (self.factory.auto_set and
                  (event_type == wx.wxEVT_SCROLL_THUMBTRACK)) or
                 (self.factory.enter_set and
@@ -776,7 +784,8 @@ class SimpleSpinEditor(BaseRangeEditor):
                                    max=high,
                                    initial=self.value)
         wx.EVT_SPINCTRL(parent, self.control.GetId(), self.update_object)
-        wx.EVT_TEXT(parent, self.control.GetId(), self.update_object)
+        if wx.VERSION < (3, 0):
+            wx.EVT_TEXT(parent, self.control.GetId(), self.update_object)
         self.set_tooltip()
 
     #-------------------------------------------------------------------------
@@ -786,6 +795,8 @@ class SimpleSpinEditor(BaseRangeEditor):
     def update_object(self, event):
         """ Handles the user selecting a new value in the spin box.
         """
+        if self.control is None:
+            return
         self._locked = True
         try:
             self.value = self.control.GetValue()
@@ -845,6 +856,12 @@ class RangeTextEditor(TextEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
+    # Low value for the slider range
+    low = Any
+
+    # High value for the slider range
+    high = Any
+
     # Function to evaluate floats/ints
     evaluate = Any
 
@@ -857,6 +874,14 @@ class RangeTextEditor(TextEditor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        if not self.factory.low_name:
+            self.low = self.factory.low
+
+        if not self.factory.high_name:
+            self.high = self.factory.high
+
+        self.sync_value(self.factory.low_name, 'low', 'from')
+        self.sync_value(self.factory.high_name, 'high', 'from')
 
         if self.factory.enter_set:
             control = wx.TextCtrl(parent, -1, self.str_value,
@@ -908,6 +933,10 @@ class RangeTextEditor(TextEditor):
             self.error(excp)
             return
 
+        if value < self.low or value > self.high:
+            self.set_error_state(True)
+            return
+
         # Try to assign the numerical value to the trait.
         # This may fail because of constraints on the trait.
         try:
@@ -932,6 +961,28 @@ class RangeTextEditor(TextEditor):
             self.ui.errors += 1
             super(RangeTextEditor, self).error(excp)
         self.set_error_state(True)
+
+    #-------------------------------------------------------------------------
+    #  Handles the 'low'/'high' traits being changed:
+    #-------------------------------------------------------------------------
+
+    def _low_changed(self, low):
+        if self.value < low:
+            if self.factory.is_float:
+                self.value = float(low)
+            else:
+                self.value = int(low)
+        if self.control:
+            self.control.SetValue(int(self.value))
+
+    def _high_changed(self, high):
+        if self.value > high:
+            if self.factory.is_float:
+                self.value = float(high)
+            else:
+                self.value = int(high)
+        if self.control:
+            self.control.SetValue(int(self.value))
 
 #-------------------------------------------------------------------------
 #  'SimpleEnumEditor' factory adaptor:

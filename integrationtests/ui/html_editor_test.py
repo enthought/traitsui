@@ -68,7 +68,7 @@ class TestHTML(HasPrivateTraits):
     #-------------------------------------------------------------------------
 
     view = View(Group(
-        [Item('html#@', editor=HTMLEditor()), '|<>'],
+        [Item('html#@', editor=HTMLEditor(format_text=True)), '|<>'],
         ['{Enter formatted text and/or HTML below:}@',
          'html#@', '|<>'],
         '|<>', layout='split'),
