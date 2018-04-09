@@ -96,7 +96,7 @@ if not is_released:
 
 if __name__ == "__main__":
     write_version_py()
-    from traitsui import __version__, __requires__
+    from traitsui import __version__, __requires__, __extras_require__
 
     def additional_commands():
         try:
@@ -135,6 +135,7 @@ if __name__ == "__main__":
         url='https://docs.enthought.com/traitsui',
         download_url='https://github.com/enthought/traitsui',
         install_requires=__requires__,
+        extras_require=__extras_require__,
         license='BSD',
         maintainer='ETS Developers',
         maintainer_email='enthought-dev@enthought.com',
