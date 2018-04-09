@@ -4,7 +4,7 @@
 # array_editor.py -- Example of using array editors
 
 #--[Imports]--------------------------------------------------------------
-from numpy.numarray import Int, Float
+from numpy import int16, float32
 
 from traits.api import HasPrivateTraits, Array
 from traitsui.api import View, ArrayEditor, Item
@@ -15,8 +15,8 @@ from traitsui.menu import NoButtons
 
 class ArrayEditorTest(HasPrivateTraits):
 
-    three = Array(Int, (3, 3))
-    four = Array(Float,
+    three = Array(int16, (3, 3))
+    four = Array(float32,
                  (4, 4),
                  editor=ArrayEditor(width=-50))
 
