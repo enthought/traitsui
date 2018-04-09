@@ -1221,30 +1221,6 @@ tree:
 The wxWidgets implementation automatically detects the bitmap format of the
 icon.
 
-.. _extra-trait-editor-factories:
-
-"Extra" Trait Editor Factories
-------------------------------
-
-The traitsui.wx package defines a few editor factories that are
-specific to the wxWidgets toolkit, some of which are also specific to the
-Microsoft Windows platform. These editor factories are not necessarily
-implemented for other GUI toolkits or other operating system platforms.
-
-AnimatedGIFEditor()
-```````````````````
-
-:Suitable for:
-    File
-:Default for:
-    (none)
-:Optional parameters:
-    *playing*
-
-AnimatedGIFEditor() generates a display of the contents of an animated GIF image
-file. The Boolean *playing* parameter determines whether the image is animated
-or static.
-
 ArrayViewEditor()
 `````````````````
 :Suitable for:
@@ -1290,20 +1266,6 @@ The following have special meaning for the DataFrameEditor():
 
 - **fonts**: either a font for all entries, or a mapping of column id to fonts.
 
-FlashEditor()
-`````````````
-
-:Suitable for:
-    string traits, Enum(string values)
-:Default for:
-    (none)
-
-FlashEditor() generates a display of an Adobe Flash Video file, using an ActiveX
-control (if one is installed on the system). This factory is available only on
-Microsoft Windows platforms. The attribute being edited must have a value whose
-text representation is the name or URL of a Flash video file. If the value is a
-Unicode string, it must contain only characters that are valid for filenames or
-URLs.
 
 HistoryEditor()
 ```````````````
@@ -1321,6 +1283,67 @@ control is used for all editor styles. The *entries* parameter determines how
 many entries are preserved in the history list. This type of control is used as
 part of the simple style of file editor; see :ref:`fileeditor`.
 
+ImageEditor()
+`````````````
+
+:Suitable for:
+    (any)
+:Default for:
+    (none)
+:Optional parameters:
+    *image*, *scale*, *preserve_aspect_ratio*, *allow_upscaling*,
+    *allow_clipping*
+
+ImageEditor() generates a read-only display of an image. The image to be
+displayed is determined by the *image* parameter, or by the value of the trait
+attribute being edited, if *image* is not specified. In either case, the value
+must be a PyFace ImageResource (pyface.api.ImageResource), or a string
+that can be converted to one. If *image* is specified, then the type and value
+of the trait attribute being edited are irrelevant and are ignored.
+
+For the Qt backend *scale*, *preserve_aspect_ratio*, *allow_upscaling*, and
+*allow_clipping* control whether the image should be scaled or not, and how
+to perform that scaling.
+
+
+.. _extra-trait-editor-factories:
+
+"Extra" Trait Editor Factories
+------------------------------
+
+The traitsui.wx package defines a few editor factories that are
+specific to the wxWidgets toolkit, some of which are also specific to the
+Microsoft Windows platform. These editor factories are not necessarily
+implemented for other GUI toolkits or other operating system platforms.
+
+AnimatedGIFEditor()
+```````````````````
+
+:Suitable for:
+    File
+:Default for:
+    (none)
+:Optional parameters:
+    *playing*
+
+AnimatedGIFEditor() generates a display of the contents of an animated GIF image
+file. The Boolean *playing* parameter determines whether the image is animated
+or static.
+
+FlashEditor()
+`````````````
+
+:Suitable for:
+    string traits, Enum(string values)
+:Default for:
+    (none)
+
+FlashEditor() generates a display of an Adobe Flash Video file, using an ActiveX
+control (if one is installed on the system). This factory is available only on
+Microsoft Windows platforms. The attribute being edited must have a value whose
+text representation is the name or URL of a Flash video file. If the value is a
+Unicode string, it must contain only characters that are valid for filenames or
+URLs.
 
 IEHTMLEditor()
 ``````````````
@@ -1355,28 +1378,6 @@ own state. You can display these attributes elsewhere in the View.
   from the URL represented by the attribute being edited.
 - *status*: The text that would appear in the IE status bar.
 - *title*: The title of the currently displayed page.
-
-ImageEditor()
-`````````````
-
-:Suitable for:
-    (any)
-:Default for:
-    (none)
-:Optional parameters:
-    *image*, *scale*, *preserve_aspect_ratio*, *allow_upscaling*,
-    *allow_clipping*
-
-ImageEditor() generates a read-only display of an image. The image to be
-displayed is determined by the *image* parameter, or by the value of the trait
-attribute being edited, if *image* is not specified. In either case, the value
-must be a PyFace ImageResource (pyface.api.ImageResource), or a string
-that can be converted to one. If *image* is specified, then the type and value
-of the trait attribute being edited are irrelevant and are ignored.
-
-For the Qt backend *scale*, *preserve_aspect_ratio*, *allow_upscaling*, and
-*allow_clipping* control whether the image should be scaled or not, and how
-to perform that scaling.
 
 LEDEditor()
 ```````````
