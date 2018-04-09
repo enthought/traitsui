@@ -16,7 +16,7 @@ Defines the stub functions used for creating concrete implementations of
 the standard EditorFactory subclasses supplied with the Traits package.
 
 Most of the logic for determining which backend toolkit to use can now be
-found in pyface.base_toolkit.
+found in :py:mod:`pyface.base_toolkit`.
 """
 
 from __future__ import absolute_import
@@ -47,8 +47,8 @@ def assert_toolkit_import(names):
 def toolkit_object(name, raise_exceptions=False):
     """ Return the toolkit specific object with the given name.
 
-    Paramters
-    ---------
+    Parameters
+    ----------
     name : str
         The relative module path and the object name separated by a colon.
     raise_exceptions : bool
@@ -85,7 +85,7 @@ def toolkit(*toolkits):
     ----------
     *toolkits : strings
         Toolkit names to try if toolkit not already selected.  If not supplied,
-        will try all 'traitsui.toolkits' entry points until a match is found.
+        will try all ``traitsui.toolkits`` entry points until a match is found.
 
     Returns
     -------
@@ -107,7 +107,6 @@ def toolkit(*toolkits):
             _toolkit = find_toolkit('traitsui.toolkits', toolkits)
         else:
             _toolkit = find_toolkit('traitsui.toolkits')
-
     return _toolkit
 
 

@@ -12,6 +12,9 @@
 # serve to show the default value.
 
 import sys, os
+from io import open
+
+base_path = os.path.dirname(__file__)
 
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
@@ -23,7 +26,10 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.extlinks']
+extensions = [
+    'sphinx.ext.extlinks', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx', 'traits.util.trait_documenter'
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -36,7 +42,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2016, Enthought'
+copyright = '2008-2018, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
@@ -44,14 +50,16 @@ copyright = '2008-2016, Enthought'
 # Pull from the actual release number without imports
 d = {}
 try:
-    execfile(os.path.join('..', '..', 'traitsui', '_version.py'), d)
+    version_path = os.path.join(base_path, '..', '..', 'traitsui', '_version.py')
+    with open(version_path, 'r', encoding='utf8') as fp:
+        exec(fp.read(), d)
     release = d['version']
     version = '.'.join(d['version'].split('.', 2)[:2])
 
 except IOError as ioe:
     import warnings
     msg = '''_version.py seems to be missing!
-            Please run 
+            Please run
             $ python setup.py develop
             to generate this file!'''
     warnings.warn(RuntimeWarning(msg.format(ioe)))
@@ -212,3 +220,14 @@ latex_logo = "e-logo-rev.png"
 
 # If false, no module index is generated.
 #latex_use_modindex = True
+
+# Autodoc options
+autodo_mock_imports = [
+    "wx", "PySide", "PyQt", "PyQt5"
+]
+
+# Intersphinx configuration
+intersphinx_mapping = {
+    'traits': ('http://docs.enthought.com/traits', None),
+    'pyface': ('http://docs.enthought.com/pyface', None),
+}

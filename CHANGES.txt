@@ -34,8 +34,8 @@ Fixes
 * Version number in documentation (#273)
 
 
-What's new in Traits UI 5.0.0
------------------------------
+Release 5.0.0
+-------------
 
 This release features experimental support for Python 3 with the Qt toolkit!
 
@@ -136,11 +136,11 @@ Enhancements
 * Add Travis-CI support.
 
 * Remove the use of the deprecated PySimpleApp under Wx and several other
-   improvements. (#107)
+  improvements. (#107)
 
 * Improvements to Qt TabularEditor, TableEditor and TreeEditor drag and drop
-   support.  Should be roughly on par with Wx support.  No API changes.
-   (#124, #126, #129, #135)
+  support.  Should be roughly on par with Wx support.  No API changes.
+  (#124, #126, #129, #135)
 
 * Improvements to PyMimeData coercion to better handle lists of items. (#127)
 
@@ -232,18 +232,18 @@ Fixes
 There have been numerous minor bugfixes since the last release.  The most notable
 ones are:
 
- * Many fixes involve making Traits UI more robust if wxPython is not installed
-   on a system.  In the past, we have been able to use Qt if it was also
-   installed, but removing Wx would lead to a variety of little bugs in various
-   places.  We've squashed a number of these.  We've also added better checks
-   to make sure we're selecting the right toolkit at import and at runtime.
+* Many fixes involve making Traits UI more robust if wxPython is not installed
+  on a system.  In the past, we have been able to use Qt if it was also
+  installed, but removing Wx would lead to a variety of little bugs in various
+  places.  We've squashed a number of these.  We've also added better checks
+  to make sure we're selecting the right toolkit at import and at runtime.
 
- * A nasty cyclic reference was discovered and eliminated in DelegatesTo traits.
+* A nasty cyclic reference was discovered and eliminated in DelegatesTo traits.
 
- * The Undefined and Uninitialized Traits were made into true singletons.
+* The Undefined and Uninitialized Traits were made into true singletons.
 
- * Much of the inconsistent formatting across the entire Traits source has
-   been eliminated and normalized (tabs/spaces, line endings).
+* Much of the inconsistent formatting across the entire Traits source has
+  been eliminated and normalized (tabs/spaces, line endings).
 
 
 Traits 3.2.0 (July 15, 2009)
@@ -252,33 +252,33 @@ Traits 3.2.0 (July 15, 2009)
 Enhancements
 ~~~~~~~~~~~~
 
- * Implemented editable_labels attribute in the TabularEditor for enabling editing of the labels (i.e. the first column)
+* Implemented editable_labels attribute in the TabularEditor for enabling editing of the labels (i.e. the first column)
 
- * Saving/restoring window positions works with multiple displays of different sizes
+* Saving/restoring window positions works with multiple displays of different sizes
 
- * New ProgressEditor
+* New ProgressEditor
 
- * Changed default colors for TableEditor
+* Changed default colors for TableEditor
 
- * Added support for HTMLEditor for QT backend using QtWebKit
+* Added support for HTMLEditor for QT backend using QtWebKit
 
- * Improved support for opening links in external browser from HTMLEditor
+* Improved support for opening links in external browser from HTMLEditor
 
- * Added support for TabularEditor for QT backend
+* Added support for TabularEditor for QT backend
 
- * Added support for marking up the CodeEditor, including adding squiggles and dimming lines
+* Added support for marking up the CodeEditor, including adding squiggles and dimming lines
 
- * Added SearchEditor
+* Added SearchEditor
 
- * Improved unicode support
+* Improved unicode support
 
- * Changed behavior of RangeEditor text box to not auto-set
+* Changed behavior of RangeEditor text box to not auto-set
 
- * Added support in RangeEditor for specifying the method to evaluate new values.
+* Added support in RangeEditor for specifying the method to evaluate new values.
 
- * Add DefaultOverride editor factory courtesy Stéfan van der Walt
+* Add DefaultOverride editor factory courtesy Stéfan van der Walt
 
- * Removed sys.exit() call from SaveHandler.exit()
+* Removed sys.exit() call from SaveHandler.exit()
 
 
 Fixes

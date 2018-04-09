@@ -8,9 +8,10 @@ package is a set of GUI (Graphical User Interface) tools designed to complement
 :term:`Traits`, another Enthought open-source package that provides explicit
 typing, validation, and change notification for Python. This guide is intended
 for readers who are already moderately familiar with Traits; those who are not
-may wish to refer to the `Traits User Manual <http://github.enthought.com/traits/index.html>`_ for an introduction. This guide
-discusses many but not all features of TraitsUI. For complete details of the
-TraitsUI API, refer to the *Traits API Reference*.
+may wish to refer to the `Traits User Manual <http://docs.enthought.com/traits/index.html>`_
+for an introduction. This guide discusses many but not all features of
+TraitsUI. For complete details of the TraitsUI API, refer to the
+:doc:`TraitsUI API Reference <../api/index>`.
 
 .. index:: MVC design pattern, Model-View-Controller, model, view (in MVC), controller
 

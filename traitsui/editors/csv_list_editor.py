@@ -210,8 +210,8 @@ class CSVListEditor(TextEditor):
     Str types, the editor should not be used if whitespace at the beginning
     or end of the string must be preserved.
 
-    Constructor Keyword Arguments
-    -----------------------------
+    Parameters
+    ----------
     sep : str or None, optional
         The separator of the values in the list.  If None, each contiguous
         sequence of whitespace is a separator.
