@@ -34,102 +34,110 @@ from traits.api import (Any, Bool, Color, Enum, Event, HasPrivateTraits, Int,
 
 class IListStrAdapter(Interface):
 
-    # The index of the current item being adapted:
+    #: The index of the current item being adapted.
     index = Int
 
-    # Current item being adapted:
+    #: Current item being adapted.
     item = Any
 
-    # The current value (if any):
+    #: The current value (if any).
     value = Any
 
-    # Does the adapter know how to handler the current *item* or not:
+    #: Does the adapter know how to handle the current *item* or not?
     accepts = Bool
 
-    # Does the value of *accepts* depend only upon the type of *item*?
+    #: Does the value of *accepts* depend only upon the type of *item*?
     is_cacheable = Bool
+
 
 #-------------------------------------------------------------------------
 #  'AnIListStrAdapter' class:
 #-------------------------------------------------------------------------
 
-
 @provides(IListStrAdapter)
 class AnIListStrAdapter(HasPrivateTraits):
 
-    #-- Implementation of the IListStrAdapter Interface ----------------------
+    # Implementation of the IListStrAdapter Interface ------------------------
 
-    # The index of the current item being adapted:
+    #: The index of the current item being adapted.
     index = Int
 
-    # Current item being adapted:
+    #: Current item being adapted.
     item = Any
 
-    # The current value (if any):
+    #: The current value (if any).
     value = Any
 
-    # Does the adapter know how to handler the current *item* or not:
+    #: Does the adapter know how to handle the current *item* or not?
     accepts = Bool(True)
 
-    # Does the value of *accepts* depend only upon the type of *item*?
+    #: Does the value of *accepts* depend only upon the type of *item*?
     is_cacheable = Bool(True)
+
 
 #-------------------------------------------------------------------------
 #  'ListStrAdapter' class:
 #-------------------------------------------------------------------------
-
 
 class ListStrAdapter(HasPrivateTraits):
     """ The base class for adapting list items to values that can be edited
         by a ListStrEditor.
     """
 
-    #-- Trait Definitions ----------------------------------------------------
+    # Trait Definitions ------------------------------------------------------
 
-    # Specifies the default value for a new list item:
+    #: Specifies the default value for a new list item.
     default_value = Any('')
 
-    # Specifies the default text for a new list item:
+    #: Specifies the default text for a new list item.
     default_text = Str
 
-    # The default text color for list items (even, odd, any rows):
+    #: The default text color for even list items.
     even_text_color = Color(None, update=True)
+
+    #: The default text color for odd list items.
     odd_text_color = Color(None, update=True)
+
+    #: The default text color for list items.
     text_color = Color(None, update=True)
 
-    # The default background color for list items (even, odd, any rows):
+    #: The default background color for even list items.
     even_bg_color = Color(None, update=True)
+
+    #: The default background color for odd list items.
     odd_bg_color = Color(None, update=True)
+
+    #: The default background color for list items.
     bg_color = Color(None, update=True)
 
-    # The name of the default image to use for list items:
+    #: The name of the default image to use for list items.
     image = Str(None, update=True)
 
-    # Can the text value of each list item be edited:
+    #: Can the text value of each list item be edited.
     can_edit = Bool(True)
 
-    # Specifies where a dropped item should be placed in the list relative to
-    # the item it is dropped on:
+    #: Specifies where a dropped item should be placed in the list relative to
+    #: the item it is dropped on.
     dropped = Enum('after', 'before')
 
-    # The index of the current item being adapter:
+    #: The index of the current item being adapter.
     index = Int
 
-    # The current item being adapted:
+    #: The current item being adapted.
     item = Any
 
-    # The current value (if any):
+    #: The current value (if any).
     value = Any
 
-    # List of optional delegated adapters:
+    #: List of optional delegated adapters.
     adapters = List(IListStrAdapter, update=True)
 
     #-- Private Trait Definitions --------------------------------------------
 
-    # Cache of attribute handlers:
+    #: Cache of attribute handlers.
     cache = Any({})
 
-    # Event fired when the cache is flushed:
+    #: Event fired when the cache is flushed.
     cache_flushed = Event(update=True)
 
     #-- Adapter methods that are sensitive to item type ----------------------
