@@ -45,6 +45,56 @@ Additional notes:
  - You can change the current selection using the up and down arrow keys.
  - You can move a selected row up and down in the table using the left and
    right arrow keys.
+
+Hopefully, this simple example conveys some of the power and flexibility that
+the :py:class:`TabularAdapter` class provides you. But, just in case it
+doesn't, let's go over some of the more interesting details:
+
+- Note the values in the :py:attr:`~TabularAdapter.columns` trait. The first
+  three values define *column ids* which map directly to traits defined on our
+  data objects, while the last one defines an arbitrary string which we define
+  so that we can reference it in the :py:attr:`MarriedPerson_spouse_text` and
+  :py:attr:`Person_spouse_text` trait definitions.
+
+- Since the font we want to use applies to all table rows, we just specify a
+  new default value for the existing :py:class:`TabularAdapter.font` trait.
+
+- Since we only want to override the default left alignment for the age column,
+  we simply define an :py:attr:`age_alignment` trait as a constant ``'right'``
+  value. We could have also used ``age_alignment = Str('right')``, but
+  :py:class:`Constant` never requires storage to be used in an object.
+
+- We define the :py:attr:`MarriedPerson_age_image` property to handle putting
+  the ``'red flag'`` image in the age column. By including the class name of
+  the items it applies to, we only need to check the :py:attr:`age` value in
+  determining what value to return.
+
+- Similary, we use the :py:attr:`MarriedPerson_bg_color` trait to ensure that
+  each :py:class:`MarriedPerson` object has the correct background color in the
+  table.
+
+- Finally, we use the :py:attr:`MarriedPerson_spouse_text` and
+  :py:attr:`Person_spouse_text` traits, one a property and the other a simple
+  constant value, to determine what text to display in the *Spouse* column for
+  the different object types.  Note that even though a
+  :py:class:`MarriedPerson` is both a :py:class:`Person` and a
+  :py:class:`MarriedPerson`, it will correctly use the
+  :py:attr:`MarriedPerson_spouse_text` trait since the search for a matching
+  trait is always made in *mro* order.
+
+Although this is completely subjective, some of the things that the author
+feels stand out about this approach are:
+
+- The class definition is short and sweet. Less code is good.
+- The bulk of the code is declarative. Less room for logic errors.
+- There is only one bit of logic in the class (the ``if`` statement in the
+  :py:attr:`MarriedPerson_age_image` property implementation). Again, less
+  logic usually translates into more reliable code).
+- The defined traits and even the property implementation method names read
+  very descriptively. :py:meth:`_get_MarriedPerson_age_image` pretty much says
+  what you would write in a comment or doc string. The implementation almost is
+  the documentation.
+
 """
 
 from random import randint, choice, shuffle

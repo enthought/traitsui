@@ -182,6 +182,11 @@ except ImportError as exc:
     html_style = 'default.css'
     html_theme = 'classic'
 
+# #html_theme = 'bizstyle'
+# html_logo = "e-logo-rev.png"
+# #html_style = 'default.css'
+# #html_theme = 'classic'
+
 # Useful aliases to avoid repeating long URLs.
 extlinks = {'github-demo': (
     'https://github.com/enthought/traitsui/tree/master/examples/demo/%s',
