@@ -29,7 +29,7 @@ import glob
 import token
 import tokenize
 import operator
-from StringIO import StringIO
+from io import StringIO
 from configobj import ConfigObj
 
 from traits.api import (HasTraits, HasPrivateTraits, Str, Instance, Property,
