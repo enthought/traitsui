@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Customizing a View &mdash; TraitsUI 5 User Manual</title>
+    <title>Customizing a View &mdash; TraitsUI 6 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '5.1.0',
+        VERSION:     '6.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,9 +26,11 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/et.ico">
-    <link rel="top" title="TraitsUI 5 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 5.1 User Manual" href="index.html" >
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
     <link rel="next" title="Advanced View Concepts" href="advanced_view.html" >
     <link rel="prev" title="The View and Its Building Blocks" href="view.html" > 
   </head>
@@ -47,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 5 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 5.1 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
   
     <li><a href="#">Customizing a View</a></li>
   
@@ -134,7 +136,7 @@ attribute of the View object, as shown in the following table.</p>
 <col width="37%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">&nbsp;</th>
+<tr class="row-odd"><th class="head">&#160;</th>
 <th class="head">not modal</th>
 <th class="head">modal</th>
 </tr>
@@ -278,109 +280,140 @@ list; see <a class="reference internal" href="handler.html#custom-command-button
 </div>
 <div class="section" id="other-view-attributes">
 <span id="index-14"></span><span id="id8"></span><h2>Other View Attributes<a class="headerlink" href="#other-view-attributes" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="index-15"></span><span class="target" id="index-16"></span><span class="target" id="index-17"></span><span class="target" id="index-18"></span><p class="rubric" id="attributes-of-view-by-category-table"><span id="index-19"></span>Attributes of View, by category</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="13%" />
-<col width="28%" />
-<col width="59%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Category</th>
-<th class="head">Attributes</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Window
-display</td>
-<td><ul class="first last simple">
-<li><strong>dock</strong></li>
-<li><strong>height</strong></li>
-<li><strong>icon</strong></li>
-<li><strong>image</strong></li>
-<li><strong>item_theme</strong></li>
-<li><strong>label_theme</strong></li>
-<li><strong>resizable</strong></li>
-<li><strong>scrollable</strong></li>
-<li><strong>statusbar</strong></li>
-<li><strong>style</strong></li>
-<li><strong>title</strong></li>
-<li><strong>width</strong></li>
-<li><strong>x</strong></li>
-<li><strong>y</strong></li>
+<span class="target" id="index-15"></span><span class="target" id="index-16"></span><span class="target" id="index-17"></span><p class="rubric" id="attributes-of-view-by-category-table"><span id="index-18"></span>Attributes of View, by category</p>
+<dl class="docutils">
+<dt>Window display</dt>
+<dd><p class="first">These attributes control the visual properties of the window itself,
+regardless of its content.</p>
+<dl class="last docutils">
+<dt>dock: {&#8216;fixed&#8217;, &#8216;horizontal&#8217;, &#8216;vertical&#8217;, &#8216;tabbed&#8217;}</dt>
+<dd><p class="first">The default docking style to use for sub-groups of the view. The following
+values are possible:</p>
+<ul class="last simple">
+<li>&#8216;fixed&#8217;: No rearrangement of sub-groups is allowed.</li>
+<li>&#8216;horizontal&#8217;: Moveable elements have a visual &#8220;handle&#8221; to the left by
+which the element can be dragged.</li>
+<li>&#8216;vertical&#8217;: Moveable elements have a visual &#8220;handle&#8221; above them by
+which the element can be dragged.</li>
+<li>&#8216;tabbed&#8217;: Moveable elements appear as tabbed pages, which can be
+arranged within the window or &#8220;stacked&#8221; so that only one appears at
+at a time.</li>
 </ul>
-</td>
-<td>These attributes control the visual
-properties of the window itself, regardless
-of its content.<span class="target" id="index-20"></span><span class="target" id="index-21"></span><span class="target" id="index-22"></span><span class="target" id="index-23"></span><span class="target" id="index-24"></span><span class="target" id="index-25"></span><span class="target" id="index-26"></span><span class="target" id="index-27"></span><span class="target" id="index-28"></span></td>
-</tr>
-<tr class="row-odd" id="index-29"><td>Command</td>
-<td><ul class="first last simple">
-<li><strong>close_result</strong></li>
-<li><strong>handler</strong></li>
-<li><strong>key_bindings</strong></li>
-<li><strong>menubar</strong></li>
-<li><strong>model_view</strong></li>
-<li><strong>on_apply</strong></li>
-<li><strong>toolbar</strong></li>
-<li><strong>updated</strong></li>
+</dd>
+<dt>height: int or float</dt>
+<dd>Requested height for the view window, as an (integer) number of pixels, or
+as a (floating point) fraction of the screen height.</dd>
+<dt>icon: str</dt>
+<dd>The name of the icon to display in the dialog window title bar.</dd>
+<dt>image: Image</dt>
+<dd>The image to display on notebook tabs.</dd>
+<dt>resizable: bool</dt>
+<dd>Can the user resize the window?</dd>
+<dt>scrollable: bool</dt>
+<dd>Can the user scroll the view? If set to True, window-level scroll bars
+appear whenever the window is too small to show all of its contents at
+one time. If set to False, the window does not scroll, but individual
+widgets might still contain scroll bars.</dd>
+<dt>statusbar:</dt>
+<dd><p class="first">Status bar items to add to the view&#8217;s status bar. The value can be:</p>
+<ul class="last simple">
+<li><strong>None</strong>: No status bar for the view (the default).</li>
+<li>string: Same as <code class="docutils literal"><span class="pre">[StatusItem(name=string)]</span></code>.</li>
+<li>StatusItem: Same as <code class="docutils literal"><span class="pre">[StatusItem]</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">[[StatusItem|string],</span> <span class="pre">...</span> <span class="pre">]</span></code>: Create a status bar with one field for
+each StatusItem in the list (or tuple). The status bar fields are
+defined from left to right in the order specified. A string value is
+converted to: <code class="docutils literal"><span class="pre">StatusItem(name=string)</span></code>:</li>
 </ul>
-</td>
-<td>TraitsUI menus and toolbars are generally
-implemented in conjunction with custom
-<a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a>s; see
-<a class="reference internal" href="handler.html#menus-and-menu-bars"><span class="std std-ref">Menus and Menu Bars</span></a> for details. The
-<strong>key_bindings</strong> attribute references the set
-of global key bindings for the view.<span class="target" id="index-30"></span><span class="target" id="index-31"></span></td>
-</tr>
-<tr class="row-even" id="index-32"><td>Content</td>
-<td><ul class="first last simple">
-<li><strong>content</strong></li>
-<li><strong>drop_class</strong></li>
-<li><strong>export</strong></li>
-<li><strong>imports</strong></li>
-<li><strong>object</strong></li>
-</ul>
-</td>
-<td>The <strong>content</strong> attribute is the top-level
-Group object for the view. The <strong>object</strong>
-attribute is the  object being edited. The
-<strong>imports</strong> and <strong>drop_class</strong> attributes
-control what objects can be dragged and
-dropped on the view.<span class="target" id="index-33"></span></td>
-</tr>
-<tr class="row-odd" id="index-34"><td>User help</td>
-<td><ul class="first last simple">
-<li><strong>help</strong></li>
-<li><strong>help_id</strong></li>
-</ul>
-</td>
-<td>The <strong>help</strong> attribute is a deprecated way to
-specify that the View has a Help button. Use
-the buttons attribute instead (see
-<a class="reference internal" href="#command-buttons-the-buttons-attribute"><span class="std std-ref">Command Buttons: the buttons Attribute</span></a>
-for details). The <strong>help_id</strong> attribute is
-not used by Traits, but can be used by a
-custom help handler.</td>
-</tr>
-<tr class="row-even" id="index-35"><td>Unique
-identifier</td>
-<td><ul class="first last simple">
-<li><strong>id</strong></li>
-</ul>
-</td>
-<td>The <strong>id</strong> attribute is used as a key to save
-user preferences about a view, such as
-customized size and position, so that they
-are restored the next time the view is
-opened. The value of <strong>id</strong> must be unique
-across all Traits-based applications on a
-system. If no value is specified, no user
-preferences are saved for the view.</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt>style:</dt>
+<dd>The default editor style of elements in the view.</dd>
+<dt>title: str</dt>
+<dd>Title for the view, displayed in the title bar when the view appears as
+a secondary window (i.e., dialog or wizard). If not specified, &#8220;Edit
+properties&#8221; is used as the title.</dd>
+<dt>width: int or float</dt>
+<dd>Requested width for the view window, as an (integer) number of pixels,
+or as a (floating point) fraction of the screen width.</dd>
+<dt>x, y: int or float</dt>
+<dd>The requested x and y coordinates for the window (positive for top/left,
+negative for bottom/right, either pixels or proportions)</dd>
+</dl>
+<span class="target" id="index-19"></span><span class="target" id="index-20"></span><span class="target" id="index-21"></span><span class="target" id="index-22"></span><span class="target" id="index-23"></span><span class="target" id="index-24"></span><span class="target" id="index-25"></span><span class="target" id="index-26"></span><span class="target" id="index-27"></span></dd>
+<dt id="index-28">Command</dt>
+<dd><p class="first">TraitsUI menus and toolbars are generally implemented in conjunction with
+custom <a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a>s; see <a class="reference internal" href="handler.html#menus-and-menu-bars"><span class="std std-ref">Menus and Menu Bars</span></a> for details.</p>
+<dl class="last docutils">
+<dt>buttons:</dt>
+<dd>List of button actions to add to the view. The <strong>traitsui.menu</strong>
+module defines standard buttons, such as <strong>OKButton</strong>, and standard sets
+of buttons, such as <strong>ModalButtons</strong>, which can be used to define a value
+for this attribute. This value can also be a list of button name strings,
+such as <code class="docutils literal"><span class="pre">['OK',</span> <span class="pre">'Cancel',</span> <span class="pre">'Help']</span></code>. If set to the empty list, the
+view contains a default set of buttons (equivalent to <strong>LiveButtons</strong>:
+Undo/Redo, Revert, OK, Cancel, Help). To suppress buttons in the view,
+use the <strong>NoButtons</strong> variable, defined in <strong>traitsui.menu</strong>.</dd>
+<dt>close_result:</dt>
+<dd>What result should be returned if the user clicks the window or dialog
+close button or icon?</dd>
+<dt>handler:</dt>
+<dd>The Handler object that provides GUI logic for handling events in the
+window. Set this attribute only if you are using a custom Handler. If
+not set, the default Traits UI Handler is used.</dd>
+<dt>key_bindings:</dt>
+<dd>The set of global key bindings for the view. Each time a key is pressed
+while the view has keyboard focus, the key is checked to see if it is one
+of the keys recognized by the KeyBindings object.</dd>
+<dt>menubar:</dt>
+<dd>The menu bar for the view. Usually requires a custom <strong>handler</strong>.</dd>
+<dt>model_view:</dt>
+<dd>The factory function for converting a model into a model/view object.</dd>
+<dt>on_apply:</dt>
+<dd>Called when modal changes are applied or reverted.</dd>
+<dt>toolbar:</dt>
+<dd>The toolbar for the view. Usually requires a custom <strong>handler</strong>.</dd>
+<dt>updated: Event</dt>
+<dd>Event when the view has been updated.</dd>
+</dl>
+<span class="target" id="index-29"></span><span class="target" id="index-30"></span></dd>
+<dt id="index-31">Content</dt>
+<dd><p class="first">The <strong>imports</strong> and <strong>drop_class</strong> attributes control what objects can be
+dragged and dropped on the view.</p>
+<dl class="last docutils">
+<dt>content:</dt>
+<dd>The top-level Group object for the view.</dd>
+<dt>drop_class:</dt>
+<dd>Class of dropped objects that can be added.</dd>
+<dt>export:</dt>
+<dd>The category of exported elements.</dd>
+<dt>imports:</dt>
+<dd>The valid categories of imported elements.</dd>
+<dt>object:</dt>
+<dd>The default object being edited.</dd>
+</dl>
+<span class="target" id="index-32"></span></dd>
+<dt id="index-33">User help</dt>
+<dd><dl class="first last docutils">
+<dt>help: (deprecated)</dt>
+<dd>The <strong>help</strong> attribute is a deprecated way to specify that the
+View has a Help button. Use the buttons attribute instead (see
+<a class="reference internal" href="#command-buttons-the-buttons-attribute"><span class="std std-ref">Command Buttons: the buttons Attribute</span></a> for details).</dd>
+<dt>help_id:</dt>
+<dd>The <strong>help_id</strong> attribute is not used by Traits, but can be used by a
+custom help handler.</dd>
+</dl>
+</dd>
+<dt id="index-34">Unique</dt>
+<dd><dl class="first last docutils">
+<dt>id:</dt>
+<dd>The <strong>id</strong> attribute is used as a key to save user preferences about a
+view, such as customized size and position, so that they are restored
+the next time the view is opened. The value of <strong>id</strong> must be unique
+across all Traits-based applications on a system. If no value is
+specified, no user preferences are saved for the view.</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Footnotes</p>
 <table class="docutils footnote" frame="void" id="id9" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -425,14 +458,14 @@ Action class is described in <a class="reference internal" href="handler.html#ac
                         title="next chapter">Advanced View Concepts</a></p>
   <h3>This Page</h3>
   <div>
-    <a href="../_sources/traitsui_user_manual/custom_view.txt"
+    <a href="../_sources/traitsui_user_manual/custom_view.rst.txt"
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -454,13 +487,13 @@ Action class is described in <a class="reference internal" href="handler.html#ac
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2016, Enthought
+        &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 14, 2016.
+      Last updated on Apr 12, 2018.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
       </li>
     </ul>
     </div>

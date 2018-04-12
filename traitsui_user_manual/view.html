@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>The View and Its Building Blocks &mdash; TraitsUI 5 User Manual</title>
+    <title>The View and Its Building Blocks &mdash; TraitsUI 6 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '5.1.0',
+        VERSION:     '6.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,9 +26,11 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/et.ico">
-    <link rel="top" title="TraitsUI 5 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 5.1 User Manual" href="index.html" >
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
     <link rel="next" title="Customizing a View" href="custom_view.html" >
     <link rel="prev" title="Introduction" href="intro.html" > 
   </head>
@@ -47,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 5 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 5.1 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
   
     <li><a href="#">The View and Its Building Blocks</a></li>
   
@@ -191,148 +193,178 @@ trait attribute to be displayed is often enough to produce a usable result.</p>
 <p>The following table lists the attributes of the Item class, organized by
 functional categories. Refer to the <em>Traits API Reference</em> for details on the
 Item class.</p>
-<span class="target" id="index-5"></span><span class="target" id="index-6"></span><span class="target" id="index-7"></span><span class="target" id="index-8"></span><span class="target" id="index-9"></span><span class="target" id="index-10"></span><span class="target" id="index-11"></span><span class="target" id="index-12"></span><span class="target" id="index-13"></span><span class="target" id="index-14"></span><p class="rubric" id="attributes-of-item-by-category-table"><span id="index-15"></span>Attributes of Item, by category</p>
+<span class="target" id="index-5"></span><span class="target" id="index-6"></span><span class="target" id="index-7"></span><span class="target" id="index-8"></span><span class="target" id="index-9"></span><span class="target" id="index-10"></span><span class="target" id="index-11"></span><span class="target" id="index-12"></span><span class="target" id="index-13"></span><p class="rubric" id="attributes-of-item-by-category-table"><span id="index-14"></span>Attributes of Item, by category</p>
+<dl class="docutils">
+<dt>Content</dt>
+<dd><p class="first">These attributes specify the actual data to be displayed by an item.
+Because an Item is essentially a template for displaying a single trait,
+its <strong>name</strong> attribute is nearly always specified.</p>
+<dl class="last docutils">
+<dt>name: str</dt>
+<dd>The name of the trait being edited.</dd>
+</dl>
+</dd>
+<dt>Display format</dt>
+<dd><p class="first">In addition to specifying which trait attributes are to be displayed, you
+might need to adjust the format of one or more of the resulting widgets.</p>
+<p>If an Item&#8217;s <strong>label</strong> attribute is specified but not its name, the value
+of <strong>label</strong> is displayed as a simple, non-editable string. (This feature
+can be useful for displaying comments or instructions in a TraitsUI
+window.)</p>
+<dl class="last docutils">
+<dt>dock:</dt>
+<dd>Docking style for the item.</dd>
+<dt>emphasized: bool</dt>
+<dd>Should label text be emphasized?</dd>
+<dt>export:</dt>
+<dd>Category of elements dragged from view.</dd>
+<dt>height:</dt>
+<dd>Requested height as pixels (height &gt; 1) or proportion of screen (0 &lt;
+height &lt; 1)</dd>
+<dt>image:</dt>
+<dd>Image to show on tabs.</dd>
+<dt>label: str</dt>
+<dd>The label to display on the item.</dd>
+<dt>padding: int</dt>
+<dd>Amount of extra space, in pixels, to add around the item. Values must be
+integers between -15 and 15. Use negative values to subtract from the
+default spacing.</dd>
+<dt>resizable: bool</dt>
+<dd>Can the item be resized to use extra space. The default is False.</dd>
+<dt>show_label: bool</dt>
+<dd>Whether to show the label or not (defaults to True).</dd>
+<dt>springy: bool</dt>
+<dd>Use extra space in the parent layout? The default is False.</dd>
+<dt>width: float</dt>
+<dd>Requested width as pixels (width &gt; 1) or proportion of screen (0 &lt; width
+&lt; 1).</dd>
+</dl>
+</dd>
+<dt>Content format</dt>
+<dd><p class="first">In some cases it can be desirable to apply special formatting to a widget&#8217;s
+contents rather than to the widget itself. Examples of such formatting
+might include rounding a floating-point value to two decimal places, or
+capitalizing all letter characters in a license plate number.</p>
+<dl class="last docutils">
+<dt>format_str: str</dt>
+<dd>&#8216;% format&#8217; string for text.</dd>
+<dt>format_func: func</dt>
+<dd>Format function for text.</dd>
+</dl>
+</dd>
+<dt>Widget override</dt>
+<dd><p class="first">These attributes override the widget that is automatically
+selected by TraitsUI. These options are discussed in
+<a class="reference internal" href="factory_intro.html#introduction-to-trait-editor-factories"><span class="std std-ref">Introduction to Trait Editor Factories</span></a> and
+<a class="reference internal" href="factories_basic.html#the-predefined-trait-editor-factories"><span class="std std-ref">The Predefined Trait Editor Factories</span></a>.</p>
+<dl class="last docutils">
+<dt>editor: ItemEditor</dt>
+<dd>Editor to use.</dd>
+<dt>style: {&#8216;simple&#8217;, &#8216;custom&#8217;, &#8216;text&#8217;, &#8216;readonly&#8217;}</dt>
+<dd>The editor style (see <a class="reference internal" href="factory_intro.html#specifying-an-editor-style"><span class="std std-ref">Specifying an Editor Style</span></a>).</dd>
+</dl>
+</dd>
+<dt>Visibility and status</dt>
+<dd><p class="first">Use these attributes to create a simple form of a dynamic GUI, which
+alters the display in response to changes in the data it contains.
+More sophisticated dynamic behavior can be implemented using a custom
+<a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a> (see <a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span class="std std-ref">Controlling the Interface: the Handler</span></a>).</p>
+<dl class="last docutils">
+<dt>enabled_when: str</dt>
+<dd>Expression that determines whether of group can be edited.</dd>
+<dt>visible_when: str</dt>
+<dd>Expression that determines visibility of group.</dd>
+<dt>defined_when: str</dt>
+<dd>Expression that determines inclusion of group in parent.</dd>
+<dt>has_focus: bool</dt>
+<dd>Should this item get initial focus?</dd>
+</dl>
+</dd>
+<dt>User help</dt>
+<dd><p class="first">These attributes provide guidance to the user in using the user interface.</p>
+<dl class="last docutils">
+<dt>tooltip: str</dt>
+<dd>Tooltip to display on mouse-over.</dd>
+<dt>help:</dt>
+<dd>If the <strong>help</strong> attribute is not defined for an Item, a system-generated
+message is used instead.</dd>
+<dt>help_id:</dt>
+<dd>It is ignored by the default help handler, but can be used by a custom
+help handler.</dd>
+</dl>
+</dd>
+<dt>Unique identifier</dt>
+<dd><dl class="first last docutils">
+<dt>id:</dt>
+<dd>Used as a key for saving user preferences about the widget. If <strong>id</strong> is
+not specified, the value of the <strong>name</strong> attribute is used.</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="subclasses-of-item">
+<span id="index-15"></span><span id="id7"></span><h3>Subclasses of Item<a class="headerlink" href="#subclasses-of-item" title="Permalink to this headline">¶</a></h3>
+<p>The TraitsUI package defines the following subclasses of Item, which are helpful
+shorthands for defining certain types of items. Label, Heading and Spring are
+intended to help with the layout of a TraitsUI View, and need not have a trait
+attribute associated with them. For example, <code class="docutils literal"><span class="pre">Spring()</span></code> and
+<code class="docutils literal"><span class="pre">Label(&quot;This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">label&quot;)</span></code> are valid code.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="13%" />
-<col width="28%" />
-<col width="59%" />
+<col width="37%" />
+<col width="50%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">Category</th>
-<th class="head">Attributes</th>
+<tr class="row-odd"><th class="head">Subclass</th>
 <th class="head">Description</th>
+<th class="head">Equivalent To</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>Content</td>
-<td><ul class="first last simple">
-<li><strong>name</strong></li>
-</ul>
-</td>
-<td>These attributes specify the actual data to
-be displayed by an item. Because an Item is
-essentially a template for displaying a
-single trait, its <strong>name</strong> attribute is
-nearly always specified.</td>
+<tr class="row-even"><td>Label</td>
+<td>An item that is just a label
+and doesn&#8217;t require a trait
+name associated with it</td>
+<td>&#160;</td>
 </tr>
-<tr class="row-odd"><td>Display
-format</td>
-<td><ul class="first last simple">
-<li><strong>dock</strong></li>
-<li><strong>emphasized</strong></li>
-<li><strong>export</strong></li>
-<li><strong>height</strong></li>
-<li><strong>image</strong></li>
-<li><strong>item_theme</strong></li>
-<li><strong>label</strong></li>
-<li><strong>label_theme</strong></li>
-<li><strong>padding</strong></li>
-<li><strong>resizable</strong></li>
-<li><strong>show_label</strong></li>
-<li><strong>springy</strong></li>
-<li><strong>width</strong></li>
-</ul>
-</td>
-<td><p class="first">In addition to specifying which trait
-attributes are to be displayed, you might
-need to adjust the format of one or more of
-the resulting widgets.</p>
-<p class="last">If an Item&#8217;s <strong>label</strong> attribute is specified
-but not its name, the value of  <strong>label</strong> is
-displayed as a simple, non-editable string.
-(This feature can be useful for displaying
-comments or instructions in a TraitsUI
-window.)</p>
-</td>
+<tr class="row-odd"><td>Heading</td>
+<td>A fancy label</td>
+<td>&#160;</td>
 </tr>
-<tr class="row-even"><td>Content
-format</td>
-<td><ul class="first last simple">
-<li><strong>format_str</strong></li>
-<li><strong>format_func</strong></li>
-</ul>
-</td>
-<td>In some cases it can be desirable to apply
-special formatting to a widget&#8217;s contents
-rather than to the widget itself. Examples of
-such formatting might include rounding a
-floating-point value to two decimal places,
-or capitalizing all letter characters in a
-license plate number.</td>
+<tr class="row-even"><td>Spring</td>
+<td>A item that expands to  take
+as much space as necessary</td>
+<td><code class="samp docutils literal"><span class="pre">Item(name='spring',</span>
+<span class="pre">springy=True,</span> <span class="pre">show_label=False)</span></code></td>
 </tr>
-<tr class="row-odd"><td>Widget
-override</td>
-<td><ul class="first last simple">
-<li><strong>editor</strong></li>
-<li><strong>style</strong></li>
-</ul>
-</td>
-<td>These attributes override the widget that is
-automatically selected by TraitsUI. These
-options are discussed in
-<a class="reference internal" href="factory_intro.html#introduction-to-trait-editor-factories"><span class="std std-ref">Introduction to Trait Editor Factories</span></a>
-and
-<a class="reference internal" href="factories_basic.html#the-predefined-trait-editor-factories"><span class="std std-ref">The Predefined Trait Editor Factories</span></a>.</td>
+<tr class="row-odd"><td>Custom</td>
+<td>An item with a custom editor
+style</td>
+<td><code class="samp docutils literal"><span class="pre">Item(style='custom')</span></code></td>
 </tr>
-<tr class="row-even"><td>Visibility
-and status</td>
-<td><ul class="first last simple">
-<li><strong>enabled_when</strong></li>
-<li><strong>visible_when</strong></li>
-<li><strong>defined_when</strong></li>
-<li><strong>has_focus</strong></li>
-</ul>
-</td>
-<td>Use these attributes to create a simple form
-of a dynamic GUI, which alters the display
-in response to changes in the data it
-contains. More sophisticated dynamic behavior
-can be implemented using a custom
-<a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a> see
-<a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span class="std std-ref">Controlling the Interface: the Handler</span></a>
-).</td>
+<tr class="row-even"><td>Readonly</td>
+<td>An item with a readonly
+editor style</td>
+<td><code class="samp docutils literal"><span class="pre">Item(style='readonly')</span></code></td>
 </tr>
-<tr class="row-odd"><td>User help</td>
-<td><ul class="first last simple">
-<li><strong>tooltip</strong></li>
-<li><strong>help</strong></li>
-<li><strong>help_id</strong></li>
-</ul>
-</td>
-<td>These attributes provide guidance to the user
-in using the user interface. If the <strong>help</strong>
-attribute is not defined for an Item, a
-system-generated message is used instead. The
-<strong>help_id</strong> attribute is ignored by the
-default help handler, but can be used by a
-custom help handler.</td>
+<tr class="row-odd"><td>UItem</td>
+<td>An item with no label</td>
+<td><code class="samp docutils literal"><span class="pre">Item(show_label=False)</span></code></td>
 </tr>
-<tr class="row-even"><td>Unique
-identifier</td>
-<td><ul class="first last simple">
-<li><strong>id</strong></li>
-</ul>
-</td>
-<td>The <strong>id</strong> attribute is used as a key for
-saving user preferences about the widget. If
-<strong>id</strong> is not specified, the value of the
-<strong>name</strong> attribute is used.</td>
+<tr class="row-even"><td>UCustom</td>
+<td>A Custom item with no label</td>
+<td><code class="samp docutils literal"><span class="pre">Item(style='custom',</span>
+<span class="pre">show_label=False)</span></code></td>
+</tr>
+<tr class="row-odd"><td>UReadonly</td>
+<td>A Readonly item  with no
+label</td>
+<td><code class="samp docutils literal"><span class="pre">Item(style='readonly',</span>
+<span class="pre">show_label=False)</span></code></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="subclasses-of-item">
-<span id="index-16"></span><span id="id7"></span><h3>Subclasses of Item<a class="headerlink" href="#subclasses-of-item" title="Permalink to this headline">¶</a></h3>
-<p>The TraitsUI package defines the following subclasses of Item:</p>
-<ul class="simple">
-<li>Label</li>
-<li>Heading</li>
-<li>Spring</li>
-</ul>
-<p>These classes are intended to help with the layout of a TraitsUI View, and need
-not have a trait attribute associated with them. See the <em>Traits API Reference</em>
-for details.</p>
 </div>
 <div class="section" id="the-group-object">
 <span id="id8"></span><h3>The Group Object<a class="headerlink" href="#the-group-object" title="Permalink to this headline">¶</a></h3>
@@ -344,10 +376,7 @@ widgets within a labeled border) or logical (activating or deactivating the
 widgets in response to a single condition, defining group-level help text). In
 TraitsUI, such grouping is accomplished by means of the <a class="reference internal" href="glossary.html#term-group"><span class="xref std std-term">Group</span></a> object.</p>
 <p>Consider the following enhancement to Example 2:</p>
-<blockquote>
-<div>pair: configure_traits(); examples
-triple: View; Group; examples</div></blockquote>
-<p class="rubric" id="example-3-using-configure-traits-with-a-view-and-a-group-object">Example 3: Using configure_traits() with a View and a Group object</p>
+<p class="rubric" id="example-3-using-configure-traits-with-a-view-and-a-group-object"><span id="index-16"></span>Example 3: Using configure_traits() with a View and a Group object</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># configure_traits_view_group.py -- Sample code to demonstrate</span>
 <span class="c1">#                                   configure_traits()</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span>
@@ -393,118 +422,119 @@ functional categories. As with Item attributes, many of these attributes can
 be left unspecified for any given Group, as the default values usually lead to
 acceptable displays and behavior.</p>
 <p>See the <em>Traits API Reference</em> for details of the Group class.</p>
-<span class="target" id="index-18"></span><span class="target" id="index-19"></span><span class="target" id="index-20"></span><span class="target" id="index-21"></span><span class="target" id="index-22"></span><span class="target" id="index-23"></span><span class="target" id="index-24"></span><p class="rubric" id="attributes-of-group-by-category-table"><span id="index-25"></span>Attributes of Group, by category</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="13%" />
-<col width="28%" />
-<col width="59%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Category</th>
-<th class="head">Attributes</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Content</td>
-<td><ul class="first last simple">
-<li><strong>object</strong></li>
-<li><strong>content</strong></li>
+<span class="target" id="index-18"></span><span class="target" id="index-19"></span><span class="target" id="index-20"></span><span class="target" id="index-21"></span><span class="target" id="index-22"></span><span class="target" id="index-23"></span><p class="rubric" id="attributes-of-group-by-category-table"><span id="index-24"></span>Attributes of Group, by category</p>
+<dl class="docutils">
+<dt>Content</dt>
+<dd><dl class="first last docutils">
+<dt>object:</dt>
+<dd>References the object whose traits are being edited by members of the
+group; by default this is &#8216;object&#8217;, but could be another object in the
+current context.</dd>
+<dt>content: list</dt>
+<dd>List of elements in the group.</dd>
+</dl>
+</dd>
+<dt>Display format</dt>
+<dd><p class="first">These attributes define display options for the group as a whole.</p>
+<dl class="last docutils">
+<dt>columns:</dt>
+<dd>The number of columns in the group.</dd>
+<dt>dock:</dt>
+<dd>Dock style of sub-groups.</dd>
+<dt>dock_theme:</dt>
+<dd>The theme to use for the dock.</dd>
+<dt>export:</dt>
+<dd>Category of elements dragged from view.</dd>
+<dt>image:</dt>
+<dd>Image to show on tabs.</dd>
+<dt>label:</dt>
+<dd>The label to display on the group.</dd>
+<dt>layout: {&#8216;normal&#8217;, &#8216;flow&#8217;, &#8216;split&#8217;, &#8216;tabbed&#8217;}</dt>
+<dd><p class="first">Layout style of the group, which can be one of the following:</p>
+<ul class="simple">
+<li>&#8216;normal&#8217; (default): Sub-groups are displayed sequentially in a single
+panel.</li>
+<li>&#8216;flow&#8217;: Sub-groups are displayed sequentially, and then &#8220;wrap&#8221; when
+they exceed the available space in the <strong>orientation</strong> direction.</li>
+<li>&#8216;split&#8217;: Sub-groups are displayed in a single panel, separated by
+&#8220;splitter bars&#8221;, which the user can drag to adjust the amount of space
+for each sub-group.</li>
+<li>&#8216;tabbed&#8217;: Each sub-group appears on a separate tab, labeled with the
+sub-group&#8217;s <em>label</em> text, if any.</li>
 </ul>
-</td>
-<td>The <strong>object</strong> attribute references the
-object whose traits are being edited by
-members of the group; by default this is
-&#8216;object&#8217;, but could be another object in the
-current context. The <strong>content</strong> attribute is
-a list of elements in the group.</td>
-</tr>
-<tr class="row-odd"><td>Display
-format</td>
-<td><ul class="first last simple">
-<li><strong>columns</strong></li>
-<li><strong>dock</strong></li>
-<li><strong>dock_theme</strong></li>
-<li><strong>export</strong></li>
-<li><strong>group_theme</strong></li>
-<li><strong>image</strong></li>
-<li><strong>item_theme</strong></li>
-<li><strong>label</strong></li>
-<li><strong>label_theme</strong></li>
-<li><strong>layout</strong></li>
-<li><strong>orientation</strong></li>
-<li><strong>padding</strong></li>
-<li><strong>selected</strong></li>
-<li><strong>show_border</strong></li>
-<li><strong>show_labels</strong></li>
-<li><strong>show_left</strong></li>
-<li><strong>springy</strong></li>
-<li><strong>style</strong></li>
-</ul>
-</td>
-<td>These attributes define display options for
-the group as a whole.<span class="target" id="index-26"></span><span class="target" id="index-27"></span><span class="target" id="index-28"></span><span class="target" id="index-29"></span><span class="target" id="index-30"></span></td>
-</tr>
-<tr class="row-even" id="index-31"><td>Visibility
-and status</td>
-<td><ul class="first last simple">
-<li><strong>enabled_when</strong></li>
-<li><strong>visible_when</strong></li>
-<li><strong>defined_when</strong></li>
-</ul>
-</td>
-<td>These attributes work similarly to the
-attributes of the same names on the Item
-class.</td>
-</tr>
-<tr class="row-odd"><td>User help</td>
-<td><ul class="first last simple">
-<li><strong>help</strong></li>
-<li><strong>help_id</strong></li>
-</ul>
-</td>
-<td><p class="first">The help text is used by the default help
-handler only if the group is the only
-top-level group for the current View. For
-example, suppose help text is defined for a
-Group called <strong>group1</strong>. The following View
-shows this text in its help window:</p>
+<p class="last">This attribute is ignored for groups that contain only items, or contain
+only one sub-group.</p>
+</dd>
+<dt>orientation: {&#8216;vertical&#8217;, &#8216;horizontal&#8217;}</dt>
+<dd>The orientation of the subgroups.</dd>
+<dt>padding: int</dt>
+<dd>Amount of extra space, in pixels, to add around the item. Values must be
+integers between -15 and 15. Use negative values to subtract from the
+default spacing.</dd>
+<dt>selected:</dt>
+<dd>In a tabbed layout, should this be the visible tab?</dd>
+<dt>show_border: bool</dt>
+<dd>Should a border be shown or not</dd>
+<dt>show_labels:</dt>
+<dd>Show the labels of items?</dd>
+<dt>show_left: bool</dt>
+<dd>Show labels on the left or the right.</dd>
+<dt>springy: bool</dt>
+<dd>Use extra space in the parent layout? The default is False.</dd>
+<dt>style: {&#8216;simple&#8217;, &#8216;custom&#8217;, &#8216;text&#8217;, &#8216;readonly&#8217;}</dt>
+<dd>Default editor style of items in the group.</dd>
+</dl>
+<span class="target" id="index-25"></span><span class="target" id="index-26"></span><span class="target" id="index-27"></span><span class="target" id="index-28"></span><span class="target" id="index-29"></span></dd>
+<dt id="index-30">Visibility and status</dt>
+<dd><p class="first">These attributes work similarly to the attributes of the same names on the Item class.</p>
+<dl class="last docutils">
+<dt>enabled_when: str</dt>
+<dd>Expression that determines whether of group can be edited.</dd>
+<dt>visible_when: str</dt>
+<dd>Expression that determines visibility of group.</dd>
+<dt>defined_when: str</dt>
+<dd>Expression that determines inclusion of group in parent.</dd>
+</dl>
+</dd>
+<dt>User help</dt>
+<dd><p class="first">The help text is used by the default help handler only if the group is the
+only top-level group for the current View. For example, suppose help text
+is defined for a Group called <strong>group1</strong>. The following View shows this
+text in its help window:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span><span class="p">(</span><span class="n">group1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The following two do  not:</p>
+<p>The following two do not:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span><span class="p">(</span><span class="n">group1</span><span class="p">,</span> <span class="n">group2</span><span class="p">)</span>
 <span class="n">View</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">group1</span><span class="p">))</span>
 </pre></div>
 </div>
-<p class="last">The <strong>help_id</strong> attribute is ignored by the
-default help handler, but can be used by a
-custom help handler.</p>
-</td>
-</tr>
-<tr class="row-even"><td>Unique
-identifier</td>
-<td><ul class="first last simple">
-<li><strong>id</strong></li>
-</ul>
-</td>
-<td>The <strong>id</strong> attribute is used as a key for
-saving user preferences about the widget. If
-<strong>id</strong> is not specified, the <strong>id</strong> values
-of the elements of the group are concatenated
-and used as the group identifier.</td>
-</tr>
-</tbody>
-</table>
+<dl class="last docutils">
+<dt>help: str</dt>
+<dd>Help message. If the <strong>help</strong> attribute is not defined, a
+system-generated message is used instead.</dd>
+<dt>help_id:</dt>
+<dd>The <strong>help_id</strong> attribute is ignored by the default help handler, but can be
+used by a custom help handler.</dd>
+</dl>
+</dd>
+<dt>Unique identifier</dt>
+<dd><dl class="first last docutils">
+<dt>id: str</dt>
+<dd>The <strong>id</strong> attribute is used as a key for saving user preferences about
+the widget. If <strong>id</strong> is not specified, the <strong>id</strong> values of the elements
+of the group are concatenated and used as the group identifier.</dd>
+</dl>
+</dd>
+</dl>
 </div>
 </div>
 <div class="section" id="subclasses-of-group">
-<span id="index-32"></span><span id="id12"></span><h3>Subclasses of Group<a class="headerlink" href="#subclasses-of-group" title="Permalink to this headline">¶</a></h3>
+<span id="index-31"></span><span id="id12"></span><h3>Subclasses of Group<a class="headerlink" href="#subclasses-of-group" title="Permalink to this headline">¶</a></h3>
 <p>The TraitsUI package defines the following subclasses of Group, which are
 helpful shorthands for defining certain types of groups. Refer to the <em>Traits
 API Reference</em> for details.</p>
-<p class="rubric" id="subclasses-of-group-table"><span id="index-33"></span>Subclasses of Group</p>
+<p class="rubric" id="subclasses-of-group-table"><span id="index-32"></span>Subclasses of Group</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="13%" />
@@ -644,14 +674,14 @@ one type, but it is not recommended.</td></tr>
                         title="next chapter">Customizing a View</a></p>
   <h3>This Page</h3>
   <div>
-    <a href="../_sources/traitsui_user_manual/view.txt"
+    <a href="../_sources/traitsui_user_manual/view.rst.txt"
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -673,13 +703,13 @@ one type, but it is not recommended.</td></tr>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2016, Enthought
+        &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 14, 2016.
+      Last updated on Apr 12, 2018.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
       </li>
     </ul>
     </div>

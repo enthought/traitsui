@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Introduction &mdash; TraitsUI 5 User Manual</title>
+    <title>Introduction &mdash; TraitsUI 6 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '5.1.0',
+        VERSION:     '6.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,11 +26,13 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/et.ico">
-    <link rel="top" title="TraitsUI 5 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 5.1 User Manual" href="index.html" >
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
     <link rel="next" title="The View and Its Building Blocks" href="view.html" >
-    <link rel="prev" title="TraitsUI 5.1 User Manual" href="front.html" > 
+    <link rel="prev" title="TraitsUI 6.0 User Manual" href="front.html" > 
   </head>
   <body>
   <div class="container">
@@ -47,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 5 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 5.1 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
   
     <li><a href="#">Introduction</a></li>
   
@@ -67,7 +69,7 @@
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="front.html" title="TraitsUI 5.1 User Manual"
+        <a href="front.html" title="TraitsUI 6.0 User Manual"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -91,9 +93,10 @@ package is a set of GUI (Graphical User Interface) tools designed to complement
 <a class="reference internal" href="glossary.html#term-traits"><span class="xref std std-term">Traits</span></a>, another Enthought open-source package that provides explicit
 typing, validation, and change notification for Python. This guide is intended
 for readers who are already moderately familiar with Traits; those who are not
-may wish to refer to the <a class="reference external" href="http://github.enthought.com/traits/index.html">Traits User Manual</a> for an introduction. This guide
-discusses many but not all features of TraitsUI. For complete details of the
-TraitsUI API, refer to the <em>Traits API Reference</em>.</p>
+may wish to refer to the <a class="reference external" href="http://docs.enthought.com/traits/index.html">Traits User Manual</a>
+for an introduction. This guide discusses many but not all features of
+TraitsUI. For complete details of the TraitsUI API, refer to the
+<a class="reference internal" href="../api/index.html"><span class="doc">TraitsUI API Reference</span></a>.</p>
 <div class="section" id="the-model-view-controller-mvc-design-pattern">
 <span id="index-0"></span><span id="id1"></span><h2>The Model-View-Controller (MVC) Design Pattern<a class="headerlink" href="#the-model-view-controller-mvc-design-pattern" title="Permalink to this headline">¶</a></h2>
 <p>A common and well-tested approach to building end-user applications is the
@@ -164,7 +167,7 @@ GUI capabilities, so that all such packages &#8220;agree&#8221; on a single GUI 
 application. The etsconfig package contains a singleton object, <strong>ETSConfig</strong>
 (importable from <cite>traits.etsconfig.api</cite>), which has a string attribute,
 <strong>toolkit</strong>, that signifies the GUI toolkit.</p>
-<p id="index-5">The values of <strong>ETSConfig.toolkit</strong> that are supported by TraitsUI version 5.1
+<p id="index-5">The values of <strong>ETSConfig.toolkit</strong> that are supported by TraitsUI version 6.0
 are:</p>
 <ul class="simple" id="index-6">
 <li>&#8216;qt4&#8217;: <a class="reference external" href="http://riverbankcomputing.co.uk/pyqt/">PyQt</a>, which provides Python
@@ -187,8 +190,6 @@ traits.  For example, at the beginning of a program:</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">The user can specify a -toolkit flag on the command line of the program.</p>
-</li>
 <li><p class="first">The user can define a value for the ETS_TOOLKIT environment variable.</p>
 </li>
 </ol>
@@ -210,8 +211,6 @@ the simple to the elaborate, while leaving such details as GUI logic and
 widget selection to system defaults.</li>
 <li><a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span class="std std-ref">Controlling the Interface: the Handler</span></a> explains how to use the Handler
 class to implement custom GUI behaviors, as well as menus and toolbars.</li>
-<li><a class="reference internal" href="themes.html#traits-ui-themes"><span class="std std-ref">TraitsUI Themes</span></a> described how to customize the appearance of GUIs
-through <em>themes</em>.</li>
 <li><a class="reference internal" href="factory_intro.html#introduction-to-trait-editor-factories"><span class="std std-ref">Introduction to Trait Editor Factories</span></a> and
 <a class="reference internal" href="factories_basic.html#the-predefined-trait-editor-factories"><span class="std std-ref">The Predefined Trait Editor Factories</span></a> show how to control GUI widget
 selection by means of trait <a class="reference internal" href="glossary.html#term-editor"><span class="xref std std-term">editor</span></a>s.</li>
@@ -264,20 +263,20 @@ which enforces type validation.</td></tr>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="front.html"
-                        title="previous chapter">TraitsUI 5.1 User Manual</a></p>
+                        title="previous chapter">TraitsUI 6.0 User Manual</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="view.html"
                         title="next chapter">The View and Its Building Blocks</a></p>
   <h3>This Page</h3>
   <div>
-    <a href="../_sources/traitsui_user_manual/intro.txt"
+    <a href="../_sources/traitsui_user_manual/intro.rst.txt"
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -299,13 +298,13 @@ which enforces type validation.</td></tr>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2016, Enthought
+        &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 14, 2016.
+      Last updated on Apr 12, 2018.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
       </li>
     </ul>
     </div>

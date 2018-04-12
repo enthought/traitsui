@@ -1,0 +1,541 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.value_tree module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.view module" href="traitsui.view.html" >
+    <link rel="prev" title="traitsui.undo module" href="traitsui.undo.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.value_tree module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.view.html" title="traitsui.view module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.undo.html" title="traitsui.undo module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.value_tree">
+<span id="traitsui-value-tree-module"></span><h1>traitsui.value_tree module<a class="headerlink" href="#module-traitsui.value_tree" title="Permalink to this headline">¶</a></h1>
+<p>Defines tree node classes and editors for various types of values.</p>
+<dl class="class">
+<dt id="traitsui.value_tree.ArrayNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">ArrayNode</code><a class="headerlink" href="#traitsui.value_tree.ArrayNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.TupleNode" title="traitsui.value_tree.TupleNode"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.TupleNode</span></code></a></p>
+<p>A tree node for arrays.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.ArrayNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.ArrayNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.BoolNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">BoolNode</code><a class="headerlink" href="#traitsui.value_tree.BoolNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.SingleValueTreeNodeObject" title="traitsui.value_tree.SingleValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.SingleValueTreeNodeObject</span></code></a></p>
+<p>A tree node for Boolean values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.ClassNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">ClassNode</code><a class="headerlink" href="#traitsui.value_tree.ClassNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.ObjectNode" title="traitsui.value_tree.ObjectNode"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.ObjectNode</span></code></a></p>
+<p>A tree node for classes.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.ClassNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.ClassNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.ComplexNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">ComplexNode</code><a class="headerlink" href="#traitsui.value_tree.ComplexNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.SingleValueTreeNodeObject" title="traitsui.value_tree.SingleValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.SingleValueTreeNodeObject</span></code></a></p>
+<p>A tree node for complex number values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.DictNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">DictNode</code><a class="headerlink" href="#traitsui.value_tree.DictNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.TupleNode" title="traitsui.value_tree.TupleNode"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.TupleNode</span></code></a></p>
+<p>A tree node for dictionaries.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.DictNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.DictNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.DictNode.tno_can_delete">
+<code class="descname">tno_can_delete</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.DictNode.tno_can_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object&#8217;s children can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.DictNode.tno_get_children">
+<code class="descname">tno_get_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.DictNode.tno_get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object&#8217;s children.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.FloatNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">FloatNode</code><a class="headerlink" href="#traitsui.value_tree.FloatNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.SingleValueTreeNodeObject" title="traitsui.value_tree.SingleValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.SingleValueTreeNodeObject</span></code></a></p>
+<p>A tree node for floating point values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.FunctionNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">FunctionNode</code><a class="headerlink" href="#traitsui.value_tree.FunctionNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.SingleValueTreeNodeObject" title="traitsui.value_tree.SingleValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.SingleValueTreeNodeObject</span></code></a></p>
+<p>A tree node for functions</p>
+<dl class="method">
+<dt id="traitsui.value_tree.FunctionNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.FunctionNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.IntNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">IntNode</code><a class="headerlink" href="#traitsui.value_tree.IntNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.SingleValueTreeNodeObject" title="traitsui.value_tree.SingleValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.SingleValueTreeNodeObject</span></code></a></p>
+<p>A tree node for integer values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.ListNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">ListNode</code><a class="headerlink" href="#traitsui.value_tree.ListNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.TupleNode" title="traitsui.value_tree.TupleNode"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.TupleNode</span></code></a></p>
+<p>A tree node for lists.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.ListNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.ListNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.ListNode.tno_can_delete">
+<code class="descname">tno_can_delete</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.ListNode.tno_can_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object&#8217;s children can be deleted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.ListNode.tno_can_insert">
+<code class="descname">tno_can_insert</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.ListNode.tno_can_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object&#8217;s children can be inserted (vs.
+appended).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.MethodNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">MethodNode</code><a class="headerlink" href="#traitsui.value_tree.MethodNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.MultiValueTreeNodeObject" title="traitsui.value_tree.MultiValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.MultiValueTreeNodeObject</span></code></a></p>
+<dl class="method">
+<dt id="traitsui.value_tree.MethodNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.MethodNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.MethodNode.tno_get_children">
+<code class="descname">tno_get_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.MethodNode.tno_get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object&#8217;s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.MethodNode.tno_has_children">
+<code class="descname">tno_has_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.MethodNode.tno_has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.MultiValueTreeNodeObject">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">MultiValueTreeNodeObject</code><a class="headerlink" href="#traitsui.value_tree.MultiValueTreeNodeObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.SingleValueTreeNodeObject" title="traitsui.value_tree.SingleValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.SingleValueTreeNodeObject</span></code></a></p>
+<p>A tree node for objects of types that have multiple values.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.MultiValueTreeNodeObject.tno_allows_children">
+<code class="descname">tno_allows_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.MultiValueTreeNodeObject.tno_allows_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object can have children (True for this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.MultiValueTreeNodeObject.tno_has_children">
+<code class="descname">tno_has_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.MultiValueTreeNodeObject.tno_has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children (True for this class).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.NoneNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">NoneNode</code><a class="headerlink" href="#traitsui.value_tree.NoneNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.SingleValueTreeNodeObject" title="traitsui.value_tree.SingleValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.SingleValueTreeNodeObject</span></code></a></p>
+<p>A tree node for None values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.ObjectNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">ObjectNode</code><a class="headerlink" href="#traitsui.value_tree.ObjectNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.MultiValueTreeNodeObject" title="traitsui.value_tree.MultiValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.MultiValueTreeNodeObject</span></code></a></p>
+<p>A tree node for objects.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.ObjectNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.ObjectNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.ObjectNode.tno_get_children">
+<code class="descname">tno_get_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.ObjectNode.tno_get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object&#8217;s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.ObjectNode.tno_has_children">
+<code class="descname">tno_has_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.ObjectNode.tno_has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.OtherNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">OtherNode</code><a class="headerlink" href="#traitsui.value_tree.OtherNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.SingleValueTreeNodeObject" title="traitsui.value_tree.SingleValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.SingleValueTreeNodeObject</span></code></a></p>
+<p>A tree node for single-value types for which there is not another
+node type.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.RootNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">RootNode</code><a class="headerlink" href="#traitsui.value_tree.RootNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.MultiValueTreeNodeObject" title="traitsui.value_tree.MultiValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.MultiValueTreeNodeObject</span></code></a></p>
+<p>A root node.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.RootNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.RootNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.RootNode.tno_get_children">
+<code class="descname">tno_get_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.RootNode.tno_get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object&#8217;s children.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.SetNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">SetNode</code><a class="headerlink" href="#traitsui.value_tree.SetNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.ListNode" title="traitsui.value_tree.ListNode"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.ListNode</span></code></a></p>
+<p>A tree node for sets.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.SetNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SetNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">SingleValueTreeNodeObject</code><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.tree_node.html#traitsui.tree_node.TreeNodeObject" title="traitsui.tree_node.TreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.tree_node.TreeNodeObject</span></code></a></p>
+<p>A tree node for objects of types that have a single value.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.node_for">
+<code class="descname">node_for</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.node_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the correct node type for a specified value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.tno_allows_children">
+<code class="descname">tno_allows_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.tno_allows_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether this object can have children (False for this
+class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.tno_can_copy">
+<code class="descname">tno_can_copy</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.tno_can_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object&#8217;s children can be copied (True for this
+class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.tno_can_delete">
+<code class="descname">tno_can_delete</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.tno_can_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object&#8217;s children can be deleted (False for
+this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.tno_can_insert">
+<code class="descname">tno_can_insert</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.tno_can_insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object&#8217;s children can be inserted (False,
+meaning children are appended, for this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.tno_can_rename">
+<code class="descname">tno_can_rename</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.tno_can_rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object&#8217;s children can be renamed (False for
+this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.tno_get_icon">
+<code class="descname">tno_get_icon</code><span class="sig-paren">(</span><em>node</em>, <em>is_expanded</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.tno_get_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the icon for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.tno_get_label">
+<code class="descname">tno_get_label</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.tno_get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the label to display for a specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.tno_has_children">
+<code class="descname">tno_has_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.tno_has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children (False for this class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.SingleValueTreeNodeObject.tno_set_label">
+<code class="descname">tno_set_label</code><span class="sig-paren">(</span><em>node</em>, <em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.SingleValueTreeNodeObject.tno_set_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the label for a specified object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.StringNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">StringNode</code><a class="headerlink" href="#traitsui.value_tree.StringNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.SingleValueTreeNodeObject" title="traitsui.value_tree.SingleValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.SingleValueTreeNodeObject</span></code></a></p>
+<p>A tree node for strings.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.StringNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.StringNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.TraitsNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">TraitsNode</code><a class="headerlink" href="#traitsui.value_tree.TraitsNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.ObjectNode" title="traitsui.value_tree.ObjectNode"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.ObjectNode</span></code></a></p>
+<p>A tree node for traits.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.TraitsNode.tno_get_children">
+<code class="descname">tno_get_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.TraitsNode.tno_get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object&#8217;s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.TraitsNode.tno_has_children">
+<code class="descname">tno_has_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.TraitsNode.tno_has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.TraitsNode.tno_when_children_changed">
+<code class="descname">tno_when_children_changed</code><span class="sig-paren">(</span><em>node</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.TraitsNode.tno_when_children_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being changed on a
+specified object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.TraitsNode.tno_when_children_replaced">
+<code class="descname">tno_when_children_replaced</code><span class="sig-paren">(</span><em>node</em>, <em>listener</em>, <em>remove</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.TraitsNode.tno_when_children_replaced" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up or removes a listener for children being replaced on a
+specified object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.value_tree.TupleNode">
+<em class="property">class </em><code class="descclassname">traitsui.value_tree.</code><code class="descname">TupleNode</code><a class="headerlink" href="#traitsui.value_tree.TupleNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.value_tree.MultiValueTreeNodeObject" title="traitsui.value_tree.MultiValueTreeNodeObject"><code class="xref py py-class docutils literal"><span class="pre">traitsui.value_tree.MultiValueTreeNodeObject</span></code></a></p>
+<p>A tree node for tuples.</p>
+<dl class="method">
+<dt id="traitsui.value_tree.TupleNode.format_value">
+<code class="descname">format_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.TupleNode.format_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted version of the value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.TupleNode.tno_get_children">
+<code class="descname">tno_get_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.TupleNode.tno_get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the object&#8217;s children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.value_tree.TupleNode.tno_has_children">
+<code class="descname">tno_has_children</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.TupleNode.tno_has_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the object has children, based on the length of
+the tuple.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.value_tree.basic_types">
+<code class="descclassname">traitsui.value_tree.</code><code class="descname">basic_types</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.value_tree.basic_types" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.undo.html"
+                        title="previous chapter">traitsui.undo module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.view.html"
+                        title="next chapter">traitsui.view module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.value_tree.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

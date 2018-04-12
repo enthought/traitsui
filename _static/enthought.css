@@ -111,6 +111,35 @@ tt.descname {
     font-size: 20px;
 }
 
+code {
+    color: inherit;
+    font: inherit;
+    padding: 2px 0px;
+    border: inherit;
+}
+
+code.literal {
+    font-family: monospace;
+    padding-left: 2px;
+    background-color: rgb(242, 242, 242);
+}
+
+a code.literal {
+    border: none;
+    background-color: inherit;
+}
+
+code.xref {
+    font-family: inherit;
+    border-bottom: none;
+    background-color: inherit;
+    padding-left: 0px;
+}
+
+code.descname {
+    font-size: 16px;
+}
+
 dl.class,
 dl.function,
 dl.data
@@ -225,7 +254,7 @@ dl.class blockquote p,
 dl.function blockquote p,
 dl.classmethod blockquote p,
 dl.staticmethod blockquote p,
-dl.method blockquote p 
+dl.method blockquote p
 {
     font-family: inherit;
     font-size: inherit;
@@ -287,7 +316,7 @@ div#spc-section-body h1, h2, h3, h4, h5, h6{
     margin-bottom: 0.5em;
 }
 div#spc-section-body h1 { font-size: 200%; font-weight: bold; color: #333333; }
-div#spc-section-body h2 { font-size: 160%; font-weight: bold; } 
+div#spc-section-body h2 { font-size: 160%; font-weight: bold; }
 div#spc-section-body h3 { font-size: 140%; }
 div#spc-section-body h4 { font-size: 120%; border-bottom: none; }
 div#spc-section-body h5 { font-size: 110%; border-bottom: none; }
@@ -342,12 +371,6 @@ table.docutils {
     margin-bottom: 9.5px;
 }
 
-table.docutils th.field-name, table.docinfo th.docinfo-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap ;
-  padding-left: 0
-}
 
 /*
  * Admonitions

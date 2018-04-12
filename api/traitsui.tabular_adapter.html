@@ -1,0 +1,800 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.tabular_adapter module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.theme module" href="traitsui.theme.html" >
+    <link rel="prev" title="traitsui.table_filter module" href="traitsui.table_filter.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.tabular_adapter module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.theme.html" title="traitsui.theme module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.table_filter.html" title="traitsui.table_filter module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.tabular_adapter">
+<span id="traitsui-tabular-adapter-module"></span><h1>traitsui.tabular_adapter module<a class="headerlink" href="#module-traitsui.tabular_adapter" title="Permalink to this headline">¶</a></h1>
+<p>Defines the adapter classes associated with the Traits UI TabularEditor.</p>
+<dl class="class">
+<dt id="traitsui.tabular_adapter.AnITabularAdapter">
+<em class="property">class </em><code class="descclassname">traitsui.tabular_adapter.</code><code class="descname">AnITabularAdapter</code><a class="headerlink" href="#traitsui.tabular_adapter.AnITabularAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.AnITabularAdapter.accepts">
+<code class="descname">accepts</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.tabular_adapter.AnITabularAdapter.accepts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the adapter know how to handle the current <em>item</em> or not:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.AnITabularAdapter.column">
+<code class="descname">column</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.AnITabularAdapter.column" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current column id being adapted (if any):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.AnITabularAdapter.columns">
+<code class="descname">columns</code><em class="property"> = List(Str)</em><a class="headerlink" href="#traitsui.tabular_adapter.AnITabularAdapter.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of columns the adapter supports. The items in the list have the
+same format as the <a class="reference internal" href="#traitsui.tabular_adapter.AnITabularAdapter.columns" title="traitsui.tabular_adapter.AnITabularAdapter.columns"><code class="xref py py-attr docutils literal"><span class="pre">columns</span></code></a> trait in the
+<a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal"><span class="pre">TabularAdapter</span></code></a> class, with the additional requirement that
+the <code class="docutils literal"><span class="pre">string</span></code> values must correspond to a <code class="docutils literal"><span class="pre">string</span></code> value in the
+associated <a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal"><span class="pre">TabularAdapter</span></code></a> class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.AnITabularAdapter.is_cacheable">
+<code class="descname">is_cacheable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.tabular_adapter.AnITabularAdapter.is_cacheable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the value of <em>accepts</em> depend only upon the type of <em>item</em>?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.AnITabularAdapter.item">
+<code class="descname">item</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.AnITabularAdapter.item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current item being adapted:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.AnITabularAdapter.row">
+<code class="descname">row</code><em class="property"> = Int</em><a class="headerlink" href="#traitsui.tabular_adapter.AnITabularAdapter.row" title="Permalink to this definition">¶</a></dt>
+<dd><p>The row index of the current item being adapted:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.AnITabularAdapter.value">
+<code class="descname">value</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.AnITabularAdapter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value (if any):</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.tabular_adapter.ITabularAdapter">
+<em class="property">class </em><code class="descclassname">traitsui.tabular_adapter.</code><code class="descname">ITabularAdapter</code><a class="headerlink" href="#traitsui.tabular_adapter.ITabularAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.Interface</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.ITabularAdapter.accepts">
+<code class="descname">accepts</code><em class="property"> = Bool</em><a class="headerlink" href="#traitsui.tabular_adapter.ITabularAdapter.accepts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the adapter know how to handle the current <em>item</em> or not:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.ITabularAdapter.column">
+<code class="descname">column</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.ITabularAdapter.column" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current column id being adapted (if any):</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.ITabularAdapter.columns">
+<code class="descname">columns</code><em class="property"> = List(Str)</em><a class="headerlink" href="#traitsui.tabular_adapter.ITabularAdapter.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of columns the adapter supports. The items in the list have the
+same format as the <a class="reference internal" href="#traitsui.tabular_adapter.ITabularAdapter.columns" title="traitsui.tabular_adapter.ITabularAdapter.columns"><code class="xref py py-attr docutils literal"><span class="pre">columns</span></code></a> trait in the
+<a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal"><span class="pre">TabularAdapter</span></code></a> class, with the additional requirement that
+the <code class="docutils literal"><span class="pre">string</span></code> values must correspond to a <code class="docutils literal"><span class="pre">string</span></code> value in the
+associated <a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal"><span class="pre">TabularAdapter</span></code></a> class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.ITabularAdapter.is_cacheable">
+<code class="descname">is_cacheable</code><em class="property"> = Bool</em><a class="headerlink" href="#traitsui.tabular_adapter.ITabularAdapter.is_cacheable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the value of <em>accepts</em> depend only upon the type of <em>item</em>?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.ITabularAdapter.item">
+<code class="descname">item</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.ITabularAdapter.item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current item being adapted:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.ITabularAdapter.row">
+<code class="descname">row</code><em class="property"> = Int</em><a class="headerlink" href="#traitsui.tabular_adapter.ITabularAdapter.row" title="Permalink to this definition">¶</a></dt>
+<dd><p>The row index of the current item being adapted:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.ITabularAdapter.value">
+<code class="descname">value</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.ITabularAdapter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value (if any):</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.tabular_adapter.TabularAdapter">
+<em class="property">class </em><code class="descclassname">traitsui.tabular_adapter.</code><code class="descname">TabularAdapter</code><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>The base class for adapting list items to values that can be edited
+by a TabularEditor.</p>
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.adapter_column_indices">
+<code class="descname">adapter_column_indices</code><em class="property"> = Property(depends_on='adapters,columns')</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.adapter_column_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each adapter, specifies the column indices the adapter handles.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.adapter_column_map">
+<code class="descname">adapter_column_map</code><em class="property"> = Property(depends_on='adapters,columns')</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.adapter_column_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each adapter, specifies the mapping from column index to column id.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.adapters">
+<code class="descname">adapters</code><em class="property"> = List(ITabularAdapter, update=True)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.adapters" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of optional delegated adapters.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.alignment">
+<code class="descname">alignment</code><em class="property"> = Enum('left', 'center', 'right')</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horizontal alignment to use for a specified column.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.bg_color">
+<code class="descname">bg_color</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The background color for a row item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.cache">
+<code class="descname">cache</code><em class="property"> = Any({})</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cache of attribute handlers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.cache_flushed">
+<code class="descname">cache_flushed</code><em class="property"> = Event(update=True)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.cache_flushed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event fired when the cache is flushed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.can_drop">
+<code class="descname">can_drop</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.can_drop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can any arbitrary value be dropped onto the tabular view.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.can_edit">
+<code class="descname">can_edit</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.can_edit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can the text value of each item be edited?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.cleanup">
+<code class="descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up the adapter to remove references to objects.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.column">
+<code class="descname">column</code><em class="property"> = Int</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.column" title="Permalink to this definition">¶</a></dt>
+<dd><p>The column index of the current item being adapted.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.column_dict">
+<code class="descname">column_dict</code><em class="property"> = Property()</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.column_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps UI name of column to value identifying column to the adapter, if
+different.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.column_id">
+<code class="descname">column_id</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.column_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current column id being adapted (if any).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.column_map">
+<code class="descname">column_map</code><em class="property"> = Property(depends_on='columns')</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.column_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mapping from column indices to column identifiers (defined by the
+<a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter.columns" title="traitsui.tabular_adapter.TabularAdapter.columns"><code class="xref py py-attr docutils literal"><span class="pre">columns</span></code></a> trait).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.column_menu">
+<code class="descname">column_menu</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.column_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The context menu for column header.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.columns">
+<code class="descname">columns</code><em class="property"> = List()</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of columns that should appear in the table. Each entry can have
+one of two forms: <code class="docutils literal"><span class="pre">string</span></code> or <code class="docutils literal"><span class="pre">(string,</span> <span class="pre">id)</span></code>, where <code class="docutils literal"><span class="pre">string</span></code> is
+the UI name of the column, and <code class="docutils literal"><span class="pre">id</span></code> is a value that identifies that
+column to the adapter. Normally this value is either a trait name or an
+index, but it can be any value that the adapter wants. If only
+<code class="docutils literal"><span class="pre">string</span></code> is specified, then <code class="docutils literal"><span class="pre">id</span></code> is the index of the <code class="docutils literal"><span class="pre">string</span></code>
+within <a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter.columns" title="traitsui.tabular_adapter.TabularAdapter.columns"><code class="xref py py-attr docutils literal"><span class="pre">columns</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.content">
+<code class="descname">content</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>The content of a row/column item (may be any Python value).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.default_bg_color">
+<code class="descname">default_bg_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.default_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default background color for table rows.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.default_text_color">
+<code class="descname">default_text_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.default_text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default text color for table rows.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.default_value">
+<code class="descname">default_value</code><em class="property"> = Any('')</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.default_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the default value for a new row.  This will usually need to be
+overridden.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the specified row item.</p>
+<p>This method is only called if the <em>delete</em> operation is specified in
+the <a class="reference internal" href="traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal"><span class="pre">TabularEditor</span></code></a>
+<code class="xref py py-attr docutils literal"><span class="pre">operation</span></code>
+trait, and the user requests that the item be deleted from the table.</p>
+<p>The adapter can still choose not to delete the specified item if
+desired, although that may prove confusing to the user.</p>
+<p>The default implementation assumes the trait defined by
+<code class="docutils literal"><span class="pre">object.trait</span></code> is a mutable sequence and attempts to perform a
+<code class="docutils literal"><span class="pre">del</span> <span class="pre">object.trait[row]</span></code> operation.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.drag">
+<code class="descname">drag</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.drag" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value to be dragged for a specified row item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.dropped">
+<code class="descname">dropped</code><em class="property"> = Enum('after', 'before')</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.dropped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies where a dropped item should be placed in the table relative to
+the item it is dropped on.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.even_bg_color">
+<code class="descname">even_bg_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.even_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default background color for even table rows.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.even_text_color">
+<code class="descname">even_text_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.even_text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default text color for even table rows.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.font">
+<code class="descname">font</code><em class="property"> = Font(None)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.font" title="Permalink to this definition">¶</a></dt>
+<dd><p>The font for a row item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.format">
+<code class="descname">format</code><em class="property"> = Str('%s')</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Python format string to use for a specified column.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_alignment">
+<code class="descname">get_alignment</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the alignment style to use for a specified column.</p>
+<p>The possible values that can be returned are: <code class="docutils literal"><span class="pre">'left'</span></code>, <code class="docutils literal"><span class="pre">'center'</span></code>
+or <code class="docutils literal"><span class="pre">'right'</span></code>. All table items share the same alignment for a
+specified column.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_bg_color">
+<code class="descname">get_bg_color</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column=0</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the background color to use for a specified row or cell.</p>
+<p>A result of <code class="docutils literal"><span class="pre">None</span></code> means use the default background color; otherwise
+a toolkit-compatible color should be returned. Note that all columns
+for the specified table row will use the background color value
+returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_can_drop">
+<code class="descname">get_can_drop</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_can_drop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the specified <code class="docutils literal"><span class="pre">value</span></code> can be dropped on the specified row.</p>
+<p>A value of <code class="docutils literal"><span class="pre">True</span></code> means the <code class="docutils literal"><span class="pre">value</span></code> can be dropped; and a value of
+<code class="docutils literal"><span class="pre">False</span></code> indicates that it cannot be dropped.</p>
+<p>The result is used to provide the user positive or negative drag
+feedback while dragging items over the table. <code class="docutils literal"><span class="pre">value</span></code> will always be
+a single value, even if multiple items are being dragged. The editor
+handles multiple drag items by making a separate call to
+<a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter.get_can_drop" title="traitsui.tabular_adapter.TabularAdapter.get_can_drop"><code class="xref py py-meth docutils literal"><span class="pre">get_can_drop()</span></code></a> for each item being dragged.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_can_edit">
+<code class="descname">get_can_edit</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_can_edit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the user can edit a specified row.</p>
+<p>A <code class="docutils literal"><span class="pre">True</span></code> result indicates that the value can be edited, while a
+<code class="docutils literal"><span class="pre">False</span></code> result indicates that it cannot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_column">
+<code class="descname">get_column</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the column id corresponding to a specified column index.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_column_menu">
+<code class="descname">get_column_menu</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_column_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the context menu for a specified column.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_content">
+<code class="descname">get_content</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the content to display for a specified cell.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_default_value">
+<code class="descname">get_default_value</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_default_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new default value for the specified <code class="docutils literal"><span class="pre">object.trait</span></code> list.</p>
+<p>This method is called when <em>insert</em> or <em>append</em> operations are allowed
+and the user requests that a new item be added to the table. The result
+should be a new instance of whatever underlying representation is being
+used for table items.</p>
+<p>The default implementation simply returns the value of the adapter&#8217;s
+<a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter.default_value" title="traitsui.tabular_adapter.TabularAdapter.default_value"><code class="xref py py-attr docutils literal"><span class="pre">default_value</span></code></a> trait.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_drag">
+<code class="descname">get_drag</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_drag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value to be <em>dragged</em> for a specified row.</p>
+<p>A result of <code class="docutils literal"><span class="pre">None</span></code> means that the item cannot be dragged. Note that
+the value returned does not have to be the actual row item. It can be
+any value that you want to drag in its place. In particular, if you
+want the drag target to receive a copy of the row item, you should
+return a copy or clone of the item in its place.</p>
+<p>Also note that if multiple items are being dragged, and this method
+returns <code class="docutils literal"><span class="pre">None</span></code> for any item in the set, no drag operation is
+performed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_dropped">
+<code class="descname">get_dropped</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_dropped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns how to handle a specified <code class="docutils literal"><span class="pre">value</span></code> being dropped on a specified row.</p>
+<p>The possible return values are:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">'before'</span></code>: Insert the specified <code class="docutils literal"><span class="pre">value</span></code> before the dropped on item.</li>
+<li><code class="docutils literal"><span class="pre">'after'</span></code>: Insert the specified <code class="docutils literal"><span class="pre">value</span></code> after the dropped on item.</li>
+</ul>
+<p>Note there is no result indicating <em>do not drop</em> since you will have
+already indicated that the <code class="docutils literal"><span class="pre">object</span></code> can be dropped by the result
+returned from a previous call to <a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter.get_can_drop" title="traitsui.tabular_adapter.TabularAdapter.get_can_drop"><code class="xref py py-meth docutils literal"><span class="pre">get_can_drop()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_font">
+<code class="descname">get_font</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column=0</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_font" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the font to use for displaying a specified row or cell.</p>
+<p>A result of <code class="docutils literal"><span class="pre">None</span></code> means use the default font; otherwise a toolkit
+font object should be returned. Note that all columns for the specified
+table row will use the font value returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_format">
+<code class="descname">get_format</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Python formatting string to apply to the specified cell.</p>
+<p>The resulting of formatting with this string will be used as the text
+to display it in the table.</p>
+<p>The return can be any Python string containing exactly one old-style
+Python formatting sequence, such as <code class="docutils literal"><span class="pre">'%.4f'</span></code> or <code class="docutils literal"><span class="pre">'(%5.2f)'</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_image">
+<code class="descname">get_image</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the image to display for a specified cell.</p>
+<p>A result of <code class="docutils literal"><span class="pre">None</span></code> means no image will be displayed in the specified
+table cell. Otherwise the result should either be the name of the
+image, or an <code class="xref py py-class docutils literal"><span class="pre">ImageResource</span></code> object
+specifying the image to display.</p>
+<p>A name is allowed in the case where the image is specified in the
+<a class="reference internal" href="traitsui.editors.tabular_editor.html#traitsui.editors.tabular_editor.TabularEditor" title="traitsui.editors.tabular_editor.TabularEditor"><code class="xref py py-class docutils literal"><span class="pre">TabularEditor</span></code></a>
+<code class="xref py py-attr docutils literal"><span class="pre">images</span></code> trait.
+In that case, the name should be the same as the string specified in
+the <code class="xref py py-class docutils literal"><span class="pre">ImageResource</span></code> constructor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_item">
+<code class="descname">get_item</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the specified row item.</p>
+<p>The value returned should be the value that exists (or <em>logically</em>
+exists) at the specified <code class="docutils literal"><span class="pre">row</span></code> in your data. If your data is not
+really a list or array, then you can just use <code class="docutils literal"><span class="pre">row</span></code> as an integer
+<em>key</em> or <em>token</em> that can be used to retrieve a corresponding item. The
+value of <code class="docutils literal"><span class="pre">row</span></code> will always be in the range: 0 &lt;= row &lt;
+<code class="docutils literal"><span class="pre">len(object,</span> <span class="pre">trait)</span></code> (i.e. the result returned by the adapter
+<a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter.len" title="traitsui.tabular_adapter.TabularAdapter.len"><code class="xref py py-meth docutils literal"><span class="pre">len()</span></code></a> method).</p>
+<p>The default implementation assumes the trait defined by
+<code class="docutils literal"><span class="pre">object.trait</span></code> is a <em>sequence</em> and attempts to return the value at
+index <code class="docutils literal"><span class="pre">row</span></code>. If an error occurs, it returns <code class="docutils literal"><span class="pre">None</span></code> instead. This
+definition should work correctly for lists, tuples and arrays, or any
+other object that is indexable, but will have to be overridden for all
+other cases.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_label">
+<code class="descname">get_label</code><span class="sig-paren">(</span><em>section</em>, <em>obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this method if labels will vary from object to object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_menu">
+<code class="descname">get_menu</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the context menu for a specified cell.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_row_label">
+<code class="descname">get_row_label</code><span class="sig-paren">(</span><em>section</em>, <em>obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_row_label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_text">
+<code class="descname">get_text</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string containing the text to display for a specified cell.</p>
+<p>If the underlying data representation for a specified item is not a
+string, then it is your responsibility to convert it to one before
+returning it as the result.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_text_color">
+<code class="descname">get_text_color</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column=0</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the text color to use for a specified row or cell.</p>
+<p>A result of <code class="docutils literal"><span class="pre">None</span></code> means use the default text color; otherwise a
+toolkit-compatible color should be returned. Note that all columns for
+the specified table row will use the text color value returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_tooltip">
+<code class="descname">get_tooltip</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string containing the tooltip to display for a specified cell.</p>
+<p>You should return the empty string if you do not wish to display a
+tooltip.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.get_width">
+<code class="descname">get_width</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.get_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the width to use for a specified column.</p>
+<p>If the value is &lt;= 0, the column will have a <em>default</em> width, which is
+the same as specifying a width of 0.1.</p>
+<p>If the value is &gt; 1.0, it is converted to an integer and the result is
+the width of the column in pixels. This is referred to as a
+<em>fixed width</em> column.</p>
+<p>If the value is a float such that 0.0 &lt; value &lt;= 1.0, it is treated as
+the <em>unnormalized fraction of the available space</em> that is to be
+assigned to the column. What this means requires a little explanation.</p>
+<p>To arrive at the size in pixels of the column at any given time, the
+editor adds together all of the <em>unnormalized fraction</em> values
+returned for all columns in the table to arrive at a total value. Each
+<em>unnormalized fraction</em> is then divided by the total to create a
+<em>normalized fraction</em>. Each column is then assigned an amount of space
+in pixels equal to the maximum of 30 or its <em>normalized fraction</em>
+multiplied by the <em>available space</em>. The <em>available space</em> is defined
+as the actual width of the table minus the width of all <em>fixed width</em>
+columns. Note that this calculation is performed each time the table is
+resized in the user interface, thus allowing columns of this type to
+increase or decrease their width dynamically, while leaving <em>fixed
+width</em> columns unchanged.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.image">
+<code class="descname">image</code><em class="property"> = Str(None, update=True)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the default image to use for column items.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.insert">
+<code class="descname">insert</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts <code class="docutils literal"><span class="pre">value</span></code> at the specified <code class="docutils literal"><span class="pre">object.trait[row]</span></code> index.</p>
+<p>The specified <code class="docutils literal"><span class="pre">value</span></code> can be:</p>
+<ul class="simple">
+<li>An item being moved from one location in the data to another.</li>
+<li>A new item created by a previous call to
+<a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter.get_default_value" title="traitsui.tabular_adapter.TabularAdapter.get_default_value"><code class="xref py py-meth docutils literal"><span class="pre">get_default_value()</span></code></a>.</li>
+<li>An item the adapter previously approved via a call to
+<a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter.get_can_drop" title="traitsui.tabular_adapter.TabularAdapter.get_can_drop"><code class="xref py py-meth docutils literal"><span class="pre">get_can_drop()</span></code></a>.</li>
+</ul>
+<p>The adapter can still choose not to insert the item into the data,
+although that may prove confusing to the user.</p>
+<p>The default implementation assumes the trait defined by
+<code class="docutils literal"><span class="pre">object.trait</span></code> is a mutable sequence and attempts to perform an
+<code class="docutils literal"><span class="pre">object.trait[row:row]</span> <span class="pre">=</span> <span class="pre">[value]</span></code> operation.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.item">
+<code class="descname">item</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current item being adapted.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.label_map">
+<code class="descname">label_map</code><em class="property"> = Property(depends_on='columns')</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.label_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mapping from column indices to column labels (defined by the
+<a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter.columns" title="traitsui.tabular_adapter.TabularAdapter.columns"><code class="xref py py-attr docutils literal"><span class="pre">columns</span></code></a> trait).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.len">
+<code class="descname">len</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.len" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of row items in the specified <code class="docutils literal"><span class="pre">object.trait</span></code>.</p>
+<p>The result should be an integer greater than or equal to 0.</p>
+<p>The default implementation assumes the trait defined by
+<code class="docutils literal"><span class="pre">object.trait</span></code> is a <em>sequence</em> and attempts to return the result of
+calling <code class="docutils literal"><span class="pre">len(object.trait)</span></code>. It will need to be overridden for any
+type of data which for which <a class="reference internal" href="#traitsui.tabular_adapter.TabularAdapter.len" title="traitsui.tabular_adapter.TabularAdapter.len"><code class="xref py py-func docutils literal"><span class="pre">len()</span></code></a> will not work.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.menu">
+<code class="descname">menu</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The context menu for a row/column item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.name">
+<code class="descname">name</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the trait being edited.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.object">
+<code class="descname">object</code><em class="property"> = Instance(HasTraits)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.object" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object whose trait is being edited.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.odd_bg_color">
+<code class="descname">odd_bg_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.odd_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default background color for odd table rows.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.odd_text_color">
+<code class="descname">odd_text_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.odd_text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default text color for odd table rows.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.row">
+<code class="descname">row</code><em class="property"> = Int</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.row" title="Permalink to this definition">¶</a></dt>
+<dd><p>The row index of the current item being adapted.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.row_label_name">
+<code class="descname">row_label_name</code><em class="property"> = Either(None, Str)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.row_label_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the trait on a row item containing the value to use
+as a row label. If <code class="docutils literal"><span class="pre">None</span></code>, the label will be the empty string.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tabular_adapter.TabularAdapter.set_text">
+<code class="descname">set_text</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>column</em>, <em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.set_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the value for the specified cell.</p>
+<p>This method is called when the user completes an editing operation on a
+table cell.</p>
+<p>The string specified by <code class="docutils literal"><span class="pre">text</span></code> is the value that the user has
+entered in the table cell.  If the underlying data does not store the
+value as text, it is your responsibility to convert <code class="docutils literal"><span class="pre">text</span></code> to the
+correct representation used.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.text">
+<code class="descname">text</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text of a row/column item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.text_color">
+<code class="descname">text_color</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text color for a row item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.tooltip">
+<code class="descname">tooltip</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>The tooltip information for a row/column item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.value">
+<code class="descname">value</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value (if any).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.tabular_adapter.TabularAdapter.width">
+<code class="descname">width</code><em class="property"> = Float(-1)</em><a class="headerlink" href="#traitsui.tabular_adapter.TabularAdapter.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Width of a specified column.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.table_filter.html"
+                        title="previous chapter">traitsui.table_filter module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.theme.html"
+                        title="next chapter">traitsui.theme module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.tabular_adapter.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

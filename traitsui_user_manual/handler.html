@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Controlling the Interface: the Handler &mdash; TraitsUI 5 User Manual</title>
+    <title>Controlling the Interface: the Handler &mdash; TraitsUI 6 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '5.1.0',
+        VERSION:     '6.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,12 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/et.ico">
-    <link rel="top" title="TraitsUI 5 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 5.1 User Manual" href="index.html" >
-    <link rel="next" title="TraitsUI Themes" href="themes.html" >
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
+    <link rel="next" title="Introduction to Trait Editor Factories" href="factory_intro.html" >
     <link rel="prev" title="Advanced View Concepts" href="advanced_view.html" > 
   </head>
   <body>
@@ -47,9 +49,9 @@
               
     <ul class="nav nav-pills pull-left">
 	
-        <li class="active"><a href="../index.html">TraitsUI 5 User Manual</a></li>
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 5.1 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
   
     <li><a href="#">Controlling the Interface: the Handler</a></li>
   
@@ -63,7 +65,7 @@
            accesskey="I">index</a>
       </li>
       <li class="active">
-        <a href="themes.html" title="TraitsUI Themes"
+        <a href="factory_intro.html" title="Introduction to Trait Editor Factories"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -351,6 +353,16 @@ or instead of the
 global help handler,
 for this window.</td>
 </tr>
+<tr class="row-even"><td>perform(info, action,
+event)</td>
+<td>The user clicks a button
+or toolbar item, or
+selects a menu item.</td>
+<td>To change the way that
+actions are handled,
+eg. to pass more info
+to a method.</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -537,7 +549,7 @@ the View&#8217;s <strong>toolbar</strong> attribute.</p>
 created, as in the following code:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span> <span class="p">(</span> <span class="c1">#view contents,</span>
        <span class="c1"># ...,</span>
-       <span class="n">toolbar</span> <span class="o">=</span> <span class="n">ToolBar</span><span class="p">(</span> <span class="n">my_action</span><span class="p">))</span>
+       <span class="n">toolbar</span> <span class="o">=</span> <span class="n">ToolBar</span><span class="p">(</span><span class="n">my_action</span><span class="p">))</span>
 </pre></div>
 </div>
 <p class="rubric">Footnotes</p>
@@ -606,18 +618,18 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
   <p class="topless"><a href="advanced_view.html"
                         title="previous chapter">Advanced View Concepts</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="themes.html"
-                        title="next chapter">TraitsUI Themes</a></p>
+  <p class="topless"><a href="factory_intro.html"
+                        title="next chapter">Introduction to Trait Editor Factories</a></p>
   <h3>This Page</h3>
   <div>
-    <a href="../_sources/traitsui_user_manual/handler.txt"
+    <a href="../_sources/traitsui_user_manual/handler.rst.txt"
        rel="nofollow">Show Source</a>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -639,13 +651,13 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
     <div class="row-fluid">
     <ul class="inline pull-left">
       <li>
-        &copy; Copyright 2008-2016, Enthought
+        &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 14, 2016.
+      Last updated on Apr 12, 2018.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
       </li>
     </ul>
     </div>
