@@ -117,7 +117,7 @@ html_title = "TraitsUI {} User Manual".format(version.split('.')[0])
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = "et.ico"
+html_favicon = "favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -178,7 +178,8 @@ except ImportError as exc:
     warnings.warn(RuntimeWarning(msg.format(exc)))
 
     # old defaults
-    html_logo = "e-logo-rev.png"
+    html_logo = "e-logo-rev.jpg"
+    html_favicon = "et.png"
     html_style = 'default.css'
     html_theme = 'classic'
 
