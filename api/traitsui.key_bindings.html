@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.key_bindings module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.list_str_adapter module" href="traitsui.list_str_adapter.html" >
+    <link rel="prev" title="traitsui.item module" href="traitsui.item.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.key_bindings module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.list_str_adapter.html" title="traitsui.list_str_adapter module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.item.html" title="traitsui.item module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.key_bindings">
+<span id="traitsui-key-bindings-module"></span><h1>traitsui.key_bindings module<a class="headerlink" href="#module-traitsui.key_bindings" title="Permalink to this headline">¶</a></h1>
+<p>Defines KeyBinding and KeyBindings classes, which manage the mapping of
+keystroke events into method calls on controller objects that are supplied
+by the application.</p>
+<dl class="class">
+<dt id="traitsui.key_bindings.KeyBinding">
+<em class="property">class </em><code class="descclassname">traitsui.key_bindings.</code><code class="descname">KeyBinding</code><a class="headerlink" href="#traitsui.key_bindings.KeyBinding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasStrictTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasStrictTraits</span></code></a></p>
+<p>Binds one or two keystrokes to a method.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.key_bindings.KeyBindings">
+<em class="property">class </em><code class="descclassname">traitsui.key_bindings.</code><code class="descname">KeyBindings</code><span class="sig-paren">(</span><em>*bindings</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>A set of key bindings.</p>
+<dl class="method">
+<dt id="traitsui.key_bindings.KeyBindings.clone">
+<code class="descname">clone</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a clone of the KeyBindings object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.key_bindings.KeyBindings.dispose">
+<code class="descname">dispose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.dispose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dispose of the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.key_bindings.KeyBindings.do">
+<code class="descname">do</code><span class="sig-paren">(</span><em>event</em>, <em>controllers=[]</em>, <em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.do" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes a keyboard event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.key_bindings.KeyBindings.edit">
+<code class="descname">edit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.edit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edits a possibly hierarchical set of KeyBindings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.key_bindings.KeyBindings.key_binding_for">
+<code class="descname">key_binding_for</code><span class="sig-paren">(</span><em>binding</em>, <em>key_name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.key_binding_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current binding for a specified key (if any).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.key_bindings.KeyBindings.merge">
+<code class="descname">merge</code><span class="sig-paren">(</span><em>key_bindings</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.key_bindings.KeyBindings.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges another set of key bindings into this set.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.item.html"
+                        title="previous chapter">traitsui.item module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.list_str_adapter.html"
+                        title="next chapter">traitsui.list_str_adapter module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.key_bindings.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

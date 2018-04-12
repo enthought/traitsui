@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.extras.progress_column module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.extras package" href="traitsui.extras.html" >
+    <link rel="next" title="traitsui.extras.saving module" href="traitsui.extras.saving.html" >
+    <link rel="prev" title="traitsui.extras.edit_column module" href="traitsui.extras.edit_column.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.extras.html" accesskey="U">traitsui.extras package</a></li>
+  
+    <li><a href="#">traitsui.extras.progress_column module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.extras.saving.html" title="traitsui.extras.saving module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.extras.edit_column.html" title="traitsui.extras.edit_column module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.extras.progress_column">
+<span id="traitsui-extras-progress-column-module"></span><h1>traitsui.extras.progress_column module<a class="headerlink" href="#module-traitsui.extras.progress_column" title="Permalink to this headline">¶</a></h1>
+<p>A column class for for the TableEditor that displays progress bars.</p>
+<dl class="class">
+<dt id="traitsui.extras.progress_column.ProgressColumn">
+<em class="property">class </em><code class="descclassname">traitsui.extras.progress_column.</code><code class="descname">ProgressColumn</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.progress_column.ProgressColumn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.table_column.html#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
+<p>A column which displays trait values as a progress bar</p>
+<p>Progress values must be an integer value between the maximum and minimum
+values.  By default it is assumed to be a percentage.</p>
+<dl class="attribute">
+<dt id="traitsui.extras.progress_column.ProgressColumn.format">
+<code class="descname">format</code><em class="property"> = Str('%s%%')</em><a class="headerlink" href="#traitsui.extras.progress_column.ProgressColumn.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format string to apply to column values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.progress_column.ProgressColumn.get_maximum">
+<code class="descname">get_maximum</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.progress_column.ProgressColumn.get_maximum" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.progress_column.ProgressColumn.get_minimum">
+<code class="descname">get_minimum</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.progress_column.ProgressColumn.get_minimum" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.progress_column.ProgressColumn.get_text_visible">
+<code class="descname">get_text_visible</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.progress_column.ProgressColumn.get_text_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not to display text in column.</p>
+<p>Note, may not render on some platforms (eg. OS X) due to
+the rendering style.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.progress_column.ProgressColumn.is_editable">
+<code class="descname">is_editable</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.progress_column.ProgressColumn.is_editable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the column is editable for a specified object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.progress_column.ProgressColumn.maximum">
+<code class="descname">maximum</code><em class="property"> = Int(100)</em><a class="headerlink" href="#traitsui.extras.progress_column.ProgressColumn.maximum" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum value for a progress bar.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.progress_column.ProgressColumn.minimum">
+<code class="descname">minimum</code><em class="property"> = Int(0)</em><a class="headerlink" href="#traitsui.extras.progress_column.ProgressColumn.minimum" title="Permalink to this definition">¶</a></dt>
+<dd><p>The minimum value for a progress bar.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.extras.progress_column.ProgressColumn.text_visible">
+<code class="descname">text_visible</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.extras.progress_column.ProgressColumn.text_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not to display the text with the progress bar.
+This may not display with some progress bar styles, eg. on OS X.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.extras.edit_column.html"
+                        title="previous chapter">traitsui.extras.edit_column module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.extras.saving.html"
+                        title="next chapter">traitsui.extras.saving module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.extras.progress_column.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

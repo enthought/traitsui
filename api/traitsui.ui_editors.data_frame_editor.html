@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.ui_editors.data_frame_editor module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.ui_editors package" href="traitsui.ui_editors.html" >
+    <link rel="next" title="traitsui.api module" href="traitsui.api.html" >
+    <link rel="prev" title="traitsui.ui_editors.array_view_editor module" href="traitsui.ui_editors.array_view_editor.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.ui_editors.html" accesskey="U">traitsui.ui_editors package</a></li>
+  
+    <li><a href="#">traitsui.ui_editors.data_frame_editor module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.api.html" title="traitsui.api module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.ui_editors.array_view_editor.html" title="traitsui.ui_editors.array_view_editor module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.ui_editors.data_frame_editor">
+<span id="traitsui-ui-editors-data-frame-editor-module"></span><h1>traitsui.ui_editors.data_frame_editor module<a class="headerlink" href="#module-traitsui.ui_editors.data_frame_editor" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter">
+<em class="property">class </em><code class="descclassname">traitsui.ui_editors.data_frame_editor.</code><code class="descname">DataFrameAdapter</code><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter" title="traitsui.tabular_adapter.TabularAdapter"><code class="xref py py-class docutils literal"><span class="pre">traitsui.tabular_adapter.TabularAdapter</span></code></a></p>
+<p>Generic tabular adapter for data frames</p>
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.alignment">
+<code class="descname">alignment</code><em class="property"> = Property(Enum('left', 'center', 'right'))</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>The alignment for each cell</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override the base implementation to work with DataFrames</p>
+<p>Unavoidably does a copy of the data, setting the trait with the new
+value.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.font">
+<code class="descname">font</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.font" title="Permalink to this definition">¶</a></dt>
+<dd><p>The font to use for each column</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.format">
+<code class="descname">format</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format to use for each column</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.get_item">
+<code class="descname">get_item</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.get_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override the base implementation to work with DataFrames</p>
+<p>This returns a dataframe with one row, rather than a series, since
+using a dataframe preserves dtypes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.index_alignment">
+<code class="descname">index_alignment</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.index_alignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>The alignment to use for a row index.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.index_text">
+<code class="descname">index_text</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.index_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text to use for a row index.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.insert">
+<code class="descname">insert</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>row</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override the base implementation to work with DataFrames</p>
+<p>Unavoidably does a copy of the data, setting the trait with the new
+value.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameAdapter.text">
+<code class="descname">text</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameAdapter.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text to use for a generic entry.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor">
+<em class="property">class </em><code class="descclassname">traitsui.ui_editors.data_frame_editor.</code><code class="descname">DataFrameEditor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.basic_editor_factory.html#traitsui.basic_editor_factory.BasicEditorFactory" title="traitsui.basic_editor_factory.BasicEditorFactory"><code class="xref py py-class docutils literal"><span class="pre">traitsui.basic_editor_factory.BasicEditorFactory</span></code></a></p>
+<p>Editor factory for basic data frame editor</p>
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.columns">
+<code class="descname">columns</code><em class="property"> = List()</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional list of either column ID or pairs of (column title, column ID).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.editable">
+<code class="descname">editable</code><em class="property"> = Bool(False)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.editable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not the entries can be edited.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.fonts">
+<code class="descname">fonts</code><em class="property"> = Either(Font, Dict, default='Courier 10')</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.fonts" title="Permalink to this definition">¶</a></dt>
+<dd><p>The font for each element, or a mapping column ID to font.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.formats">
+<code class="descname">formats</code><em class="property"> = Either(Str, Dict, default='%s')</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.formats" title="Permalink to this definition">¶</a></dt>
+<dd><p>The format for each element, or a mapping column ID to format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.klass">
+<code class="descname">klass</code><em class="property"> = Property</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.klass" title="Permalink to this definition">¶</a></dt>
+<dd><p>The editor implementation class.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.show_index">
+<code class="descname">show_index</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.show_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should an index column be displayed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.ui_editors.data_frame_editor.DataFrameEditor.show_titles">
+<code class="descname">show_titles</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.ui_editors.data_frame_editor.DataFrameEditor.show_titles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should column headers be displayed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.ui_editors.array_view_editor.html"
+                        title="previous chapter">traitsui.ui_editors.array_view_editor module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.api.html"
+                        title="next chapter">traitsui.api module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.ui_editors.data_frame_editor.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
