@@ -52,7 +52,7 @@ python versions.  The TravisCI and Appveyor continuous integration tools have
 been updated to make use of these facilities as well.
 
 Thanks to Matrin Bergtholdt, Alex Chabot, Kit Choi, Mark Dickinson, Robin Dunn,
-Pradyun Gedam, Robert Kern, mm89039, Pankaj Pandey, Steve Peak,
+Pradyun Gedam, Robert Kern, Marika Murphy, Pankaj Pandey, Steve Peak,
 Prabhu Ramachandran, Jonathan Rocher, John Thacker, Gregor Thalhammer,
 Senganal Thirunavukkarasu, John Tyree, Ioannis Tziakos, Alona Varshal,
 Corran Webster, John Wiggins
@@ -63,7 +63,9 @@ Enhancements
 * Remove TraitsUI Themes (#342)
 * Improve Toolkit selection and handling (#425, #429)
 * API Documentation (#438)
+* Adapter documentation (#340)
 * Support multi-selection in DataFrameEditor (#413)
+* DataFrameEditor demo (#444)
 * Common BasePanel class for toolkits (#392)
 * Labels honor enable_when values (#401)
 * Better error messages when toolkit doesn't implement methods (#391)
@@ -83,6 +85,7 @@ Fixes
 * Fix some issues for newer WxPython (#418)
 * Fix Wx simple FileEditor (#426)
 * Fixes for DataFrameEditor (#415)
+* Fixes for preferences state saving under Qt (#410, #447)
 * Fix panel state after setting preferences (#253)
 * Fix TableEditor ColorColumn (#399)
 * Prevent loopback from slider in Qt RangeEditor (#400)
@@ -98,10 +101,10 @@ Fixes
 * Proper InstanceEditor dialog lifecycle (#332)
 * Don't explicitly destroy child widgets under Qt (#283)
 * Test fixes and improvements (#329, #369, #371, #327)
-* Fixes for demos and examples (#320)
+* Fixes for demos and examples (#320, #445)
 * Fix CheckListEditor string comparison (#318)
 * Remove some spurious print statements (#305)
-* Documentation fixes (#301, #326, #380)
+* Documentation fixes (#301, #326, #380, #438, #443)
 * Fixes for Python 3 compatibility (#295, #300, #165, #311, #410)
 * Fix error with Qt table model mimetype (#296)
 * Fixes for continuous integration (#299, #345, #365, #397, #420, #427)
