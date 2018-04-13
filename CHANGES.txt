@@ -51,7 +51,7 @@ will run all relevant tests for all available toolkits in all supported
 python versions.  The TravisCI and Appveyor continuous integration tools have
 been updated to make use of these facilities as well.
 
-Thanks to Matrin Bergtholdt, Alex Chabot, Kit Choi, Mark Dickinson, Robin Dunn,
+Thanks to Martin Bergtholdt, Alex Chabot, Kit Choi, Mark Dickinson, Robin Dunn,
 Pradyun Gedam, Robert Kern, Marika Murphy, Pankaj Pandey, Steve Peak,
 Prabhu Ramachandran, Jonathan Rocher, John Thacker, Gregor Thalhammer,
 Senganal Thirunavukkarasu, John Tyree, Ioannis Tziakos, Alona Varshal,
