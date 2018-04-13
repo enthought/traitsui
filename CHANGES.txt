@@ -1,6 +1,117 @@
 Traits UI Changelog
 ===================
 
+Release 6.0.0
+-------------
+
+This release introduces preliminary support for Qt5 via PyQt5, thanks to the
+work of Gregor Thalhammer which got the ball rolling.  Qt5 support is
+not yet robustly tested in deployed applications, so there may yet be bugs to
+find.  As part of this effort all occurences of old-style signals and slots
+have been removed; and this has greatly improved stability under Qt.
+
+This release also features a great deal of work at the API level to disentangle
+the two-way dependencies between Pyface and TraitsUI.  This has involved moving
+a number of sub-packages between the two libraries, most notably the zipped
+image resource support and a number of trait definitions.  We have endeavored
+to keep backwards compatibility via stub modules in the original locations,
+but we can't guarantee that there will be no issues with third party code
+caused by the change in locations.  We haven't been able to remove all
+dependencies, but as of this release on the dock and workbench submodules have
+required dependencies on TraitsUI.
+
+As part of the latter work, support for TraitsUI Themes have been removed. This
+was a feature that was only available under WxPython, was slow, was never used
+in production code, and was not supported for over a decade.  Some of the
+codebase remains as it is still used by the PyFace Dock infrastructure and
+several editors, but ther long-term intention is to remove this completely.
+
+Another long-desired feature was the ability to write toolkit backends for
+Pyface and TraitsUI that are not part of the main codebase.  This is now
+possible by contributing new toolkit backends to the "traitsui.toolkit"
+pkg_resources entry point in a setup.py.  This work was accompanied by an
+overhaul of the toolkit discovery and loading infrastructure; in particular
+Pyface and TraitsUI now share the same code for performing these searches
+and loading the backends.
+
+The entire TraitsUI codebase has been run through the AutoPEP8, assisted with
+some customized fixups and occasional drive-by cleanups of code, which means
+that the codebase is generally easier to read and follows modern Python
+conventions.
+
+Finally, the testing infrastructure has been overhauled to provide a one-stop
+location to run tests in self-contained environments using Enthought's EDM
+package management tool.  Tests can be run from any python environment with the
+"edm" command available and the "click" library installed with the "etstool.py"
+script at the top level of the repository.  In particular::
+
+    python etstool.py test_all
+
+will run all relevant tests for all available toolkits in all supported
+python versions.  The TravisCI and Appveyor continuous integration tools have
+been updated to make use of these facilities as well.
+
+Thanks to Matrin Bergtholdt, Alex Chabot, Kit Choi, Mark Dickinson, Robin Dunn,
+Pradyun Gedam, Robert Kern, Marika Murphy, Pankaj Pandey, Steve Peak,
+Prabhu Ramachandran, Jonathan Rocher, John Thacker, Gregor Thalhammer,
+Senganal Thirunavukkarasu, John Tyree, Ioannis Tziakos, Alona Varshal,
+Corran Webster, John Wiggins
+
+Enhancements
+~~~~~~~~~~~~
+* Support for Qt5 (#347, #352, #350, #433)
+* Remove TraitsUI Themes (#342)
+* Improve Toolkit selection and handling (#425, #429)
+* API Documentation (#438)
+* Adapter documentation (#340)
+* Support multi-selection in DataFrameEditor (#413)
+* DataFrameEditor demo (#444)
+* Common BasePanel class for toolkits (#392)
+* Labels honor enable_when values (#401)
+* Better error messages when toolkit doesn't implement methods (#391)
+* Improve TraitsUI Action handling (#384)
+* ListEditor UI improvements (#338, #396, #395)
+* Remove old style signals and slots for Qt backend (#330, #346, #347, #403)
+* Expose a "refresh" trait for the DataFrameEditor (#288)
+* Use Enthought Deployment Manager to automate CI and testing (#321, #357)
+* Continuous integration on OS X (#322)
+* Reduce circular dependencies of PyFace on TraitsUI (#304)
+* PEP8-compliant formatting of source (#290)
+* Add progress bar column for TableEditor (#287)
+* Add codecov coverage reports (#285, #328)
+
+Fixes
+~~~~~
+* Fix some issues for newer WxPython (#418)
+* Fix Wx simple FileEditor (#426)
+* Fixes for DataFrameEditor (#415)
+* Fixes for preferences state saving under Qt (#410, #447)
+* Fix panel state after setting preferences (#253)
+* Fix TableEditor ColorColumn (#399)
+* Prevent loopback from slider in Qt RangeEditor (#400)
+* Fix Action buttons under Qt (#393, #394)
+* Fix ValueEditor icons (#386)
+* Fix bug in update_object (#379)
+* Avoid reading Event trait values in sync_value (#375)
+* Fix raise_to_debug calls (#362, #372)
+* Fix errors during garbage collection (#359)
+* Remove unused argument in wx.hook_events (#360)
+* Fix button label updates (#358)
+* Fix TreeEditor label updates (#335)
+* Proper InstanceEditor dialog lifecycle (#332)
+* Don't explicitly destroy child widgets under Qt (#283)
+* Test fixes and improvements (#329, #369, #371, #327)
+* Fixes for demos and examples (#320, #445)
+* Fix CheckListEditor string comparison (#318)
+* Remove some spurious print statements (#305)
+* Documentation fixes (#301, #326, #380, #438, #443)
+* Fixes for Python 3 compatibility (#295, #300, #165, #311, #410)
+* Fix error with Qt table model mimetype (#296)
+* Fixes for continuous integration (#299, #345, #365, #397, #420, #427)
+* Fix offset issue when dragging from Qt TreeEditor (#293)
+* Fix Wx kill-focus event issues (#291)
+* Fix readthedocs build (#281)
+
 
 Release 5.2.0
 -------------

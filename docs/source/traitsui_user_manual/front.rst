@@ -4,7 +4,7 @@ TraitsUI |version| User Manual
 
 :Authors: Lyn Pierce, Janet Swisher, and Enthought Developers
 :Version: Document Version 4
-:Copyright: 2005, 2008-2016 Enthought, Inc. All Rights Reserved.
+:Copyright: 2005, 2008-2018 Enthought, Inc. All Rights Reserved.
 
 Redistribution and use of this document in source and derived forms, with or
 without modification, are permitted provided that the following conditions are
