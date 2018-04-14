@@ -98,6 +98,6 @@ To run the test suite, you will need to install Git and
 which has install `Click <http://click.pocoo.org/>`__ available. You can then
 follow the instructions in ``etstool.py``.  In particular::
 
-    > python test_all
+    > python etstool.py test_all
 
 will run tests in all supported environments automatically.
