@@ -38,6 +38,9 @@ from ..toolkit import toolkit_object
 # Supported display modes for a custom style editor
 Mode = Enum('radio', 'list')
 
+# Supported display modes for a custom style editor
+CompletionMode = Enum('inline', 'popup')
+
 #-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
 #-------------------------------------------------------------------------
@@ -62,6 +65,9 @@ class ToolkitEditorFactory(EditorWithListFactory):
 
     # Display modes supported for a custom style editor:
     mode = Mode
+
+    # Completion mode for editors with text-entry (Qt only):
+    completion_mode = CompletionMode
 
     #-------------------------------------------------------------------------
     #  'Editor' factory methods:
