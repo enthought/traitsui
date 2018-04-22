@@ -34,8 +34,8 @@ capitalize = lambda s: s.capitalize()
 
 
 completion_mode_map = {
-    'popup': QtGui.QCompleter.CompletionMode.PopupCompletion,
-    'inline': QtGui.QCompleter.CompletionMode.InlineCompletion,
+    'popup': QtGui.QCompleter.PopupCompletion,
+    'inline': QtGui.QCompleter.InlineCompletion,
 }
 
 
