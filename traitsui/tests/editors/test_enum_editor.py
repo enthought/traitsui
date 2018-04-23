@@ -39,30 +39,46 @@ simple_evaluate_view_popup = View(
 
 
 def get_combobox_text(combobox):
-    """ Return the button text given a button control """
+    """ Return the text given a combobox control """
     if is_current_backend_wx():
-        return combobox.GetValue()
+        return combobox.GetString(combobox.GetSelection())
 
     elif is_current_backend_qt4():
         return combobox.currentText()
 
 
 def set_combobox_text(combobox, text):
-    """ Set the button text given a button control """
+    """ Set the text given a combobox control """
     if is_current_backend_wx():
-        return combobox.SetValue(text)
+        import wx
+        if isinstance(combobox, wx.Choice):
+            event_type = wx.EVT_CHOICE.typeId
+            event = wx.CommandEvent(event_type, combobox.GetId())
+            event.SetString(text)
+            wx.PostEvent(combobox, event)
+        else:
+            combobox.SetValue(text)
 
     elif is_current_backend_qt4():
-        return combobox.setEditText(text)
+        combobox.setEditText(text)
 
 
 def set_combobox_index(combobox, idx):
-    """ Set the button text given a button control """
+    """ Set the choice index given a combobox control and index number """
     if is_current_backend_wx():
-        return combobox.SetSelection(idx)
+        import wx
+        if isinstance(combobox, wx.Choice):
+            event_type = wx.EVT_CHOICE.typeId
+        else:
+            event_type = wx.EVT_COMBOBOX.typeId
+        event = wx.CommandEvent(event_type, combobox.GetId())
+        text = combobox.GetString(idx)
+        event.SetString(text)
+        event.SetInt(idx)
+        wx.PostEvent(combobox, event)
 
     elif is_current_backend_qt4():
-        return combobox.setCurrentIndex(idx)
+        combobox.setCurrentIndex(idx)
 
 
 class TestEnumEditor(unittest.TestCase):
