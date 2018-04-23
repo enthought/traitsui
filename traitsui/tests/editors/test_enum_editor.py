@@ -41,8 +41,11 @@ simple_evaluate_view_popup = View(
 def get_combobox_text(combobox):
     """ Return the text given a combobox control """
     if is_current_backend_wx():
-        return combobox.GetString(combobox.GetSelection())
-
+        import wx
+        if isinstance(combobox, wx.Choice):
+            return combobox.GetString(combobox.GetSelection())
+        else:
+            return combobox.GetValue()
     elif is_current_backend_qt4():
         return combobox.currentText()
 
