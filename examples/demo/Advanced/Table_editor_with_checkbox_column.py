@@ -93,7 +93,8 @@ class Team(HasStrictTraits):
     traits_view = View(
         Item('players',
              show_label=False,
-             editor=player_editor
+             editor=player_editor,
+             enabled_when="False"
              ),
         title='Baseball Team Roster Demo',
         width=0.5,
