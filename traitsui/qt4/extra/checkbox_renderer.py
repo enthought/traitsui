@@ -95,7 +95,9 @@ class CheckboxRenderer(TableDelegate):
 
         # We mark the checkbox always active even when not selected, so
         # it's clear if it's ticked or not on OSX. See bug #439
-        box.state = QtGui.QStyle.State_Enabled | QtGui.QStyle.State_Active
+        if option.state & QtGui.QStyle.State_Enabled:
+            box.state = QtGui.QStyle.State_Enabled | QtGui.QStyle.State_Active
+
         if checked:
             box.state |= QtGui.QStyle.State_On
         else:
