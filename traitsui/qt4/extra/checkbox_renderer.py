@@ -93,7 +93,11 @@ class CheckboxRenderer(TableDelegate):
             box.rect.setLeft(option.rect.left() + option.rect.width() // 2 -
                              size.width() // 2 + margin - 2)
 
-        box.state = QtGui.QStyle.State_Enabled
+        # We mark the checkbox always active even when not selected, so
+        # it's clear if it's ticked or not on OSX. See bug #439
+        if option.state & QtGui.QStyle.State_Enabled:
+            box.state = QtGui.QStyle.State_Enabled | QtGui.QStyle.State_Active
+
         if checked:
             box.state |= QtGui.QStyle.State_On
         else:
