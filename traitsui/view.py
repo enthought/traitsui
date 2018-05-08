@@ -413,7 +413,7 @@ class View(ViewElement):
             handler = handler()
 
         if args is not None:
-            handler.set(**args)
+            handler.trait_set(**args)
 
         if not isinstance(context, dict):
             context = context.trait_context()

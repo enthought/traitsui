@@ -405,7 +405,7 @@ class TableEditor(Editor, BaseTableEditor):
                 self.toolbar_ui = ui = view.ui(
                     context={'object': self, 'model': self.model},
                     parent=parent,
-                    kind='subpanel').set(
+                    kind='subpanel').trait_set(
                     parent=self.ui)
                 tb_sizer.Add(ui.control, 0)
 
@@ -769,8 +769,7 @@ class TableEditor(Editor, BaseTableEditor):
             index, row = -1, None
 
         # Save the new selection information:
-        self.set(selected_row_index=index,
-                 trait_change_notify=False)
+        self.trait_set(selected_row_index=index, trait_change_notify=False)
         self.setx(selected_row=row)
 
         # Update the toolbar status:
@@ -835,8 +834,7 @@ class TableEditor(Editor, BaseTableEditor):
             index, column = -1, ''
 
         # Save the new selection information:
-        self.set(selected_column_index=index,
-                 trait_change_notify=False)
+        self.trait_set(selected_column_index=index, trait_change_notify=False)
         self.setx(selected_column=column)
 
         # Invoke the user 'on_select' handler:
@@ -860,8 +858,8 @@ class TableEditor(Editor, BaseTableEditor):
         values.sort(key=itemgetter(0))
 
         # Save the new selection information:
-        self.set(selected_column_indices=[v[0] for v in values],
-                 trait_change_notify=False)
+        self.trait_set(selected_column_indices=[v[0] for v in values],
+                       trait_change_notify=False)
         columns = [v[1] for v in values]
         self.setx(selected_columns=columns)
 
@@ -898,8 +896,7 @@ class TableEditor(Editor, BaseTableEditor):
             index, cell = (-1, -1), (None, '')
 
         # Save the new selection information:
-        self.set(selected_cell_index=index,
-                 trait_change_notify=False)
+        self.trait_set(selected_cell_index=index, trait_change_notify=False)
         self.setx(selected_cell=cell)
 
         # Update the toolbar status:

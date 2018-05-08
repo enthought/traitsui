@@ -411,7 +411,7 @@ class UI(HasPrivateTraits):
             created.
         """
         # Invoke all of the editor 'name_defined' methods we've accumulated:
-        info = self.info.set(initialized=False)
+        info = self.info.trait_set(initialized=False)
         for method in self._defined:
             method(info)
 

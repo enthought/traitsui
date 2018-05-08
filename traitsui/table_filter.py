@@ -336,7 +336,8 @@ class GenericTableFilterRule(HasPrivateTraits):
         """ Clones a new object from this one, optionally copying only a
         specified set of traits."""
         return super(GenericTableFilterRule, self).clone_traits(
-            traits, memo, copy, **metadata).set(enabled=self.enabled, name=self.name)
+            traits, memo, copy, **metadata).trait_set(
+                enabled=self.enabled, name=self.name)
 
     #-------------------------------------------------------------------------
     #  Returns a description of the filter:
@@ -731,7 +732,7 @@ class MenuTableFilter(RuleTableFilter):
         if len(self.rules) == 0:
             self.rules = [GenericTableFilterRule(
                 filter=self,
-                name_editor=name_editor).set(
+                name_editor=name_editor).trait_set(
                 name=name)
                 for name in names]
             for rule in self.rules:

@@ -95,7 +95,7 @@ class _HistoryEditor(Editor):
             except:
                 history.error = True
 
-            do_later(self.set, _dont_update=False)
+            do_later(self.trait_set, _dont_update=False)
 
     #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

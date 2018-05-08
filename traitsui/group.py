@@ -784,7 +784,7 @@ class ShadowGroup(Group):
         if len(items) > 0:
             content.append(
                 # Set shadow before hand to prevent delegation errors
-                ShadowGroup(shadow=self.shadow).set(
+                ShadowGroup(shadow=self.shadow).trait_set(
                     groups=0,
                     label='',
                     show_border=False,

@@ -147,7 +147,7 @@ class _ScrubberEditor(Editor):
         self._can_set_tooltip = (not self.set_tooltip())
 
         # Save the values we calculated:
-        self.set(low=low, high=high)
+        self.trait_set(low=low, high=high)
         self.sync_value(low_name, 'low', 'from')
         self.sync_value(high_name, 'high', 'from')
 

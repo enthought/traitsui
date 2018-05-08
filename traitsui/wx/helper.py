@@ -564,7 +564,7 @@ class GroupEditor(Editor):
     def __init__(self, **traits):
         """ Initializes the object.
         """
-        self.set(**traits)
+        self.trait_set(**traits)
 
 #-------------------------------------------------------------------------
 #  'PopupControl' class:

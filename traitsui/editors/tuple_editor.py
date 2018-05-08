@@ -94,7 +94,7 @@ class SimpleEditor(Editor):
             widget.
         """
         self._ts = ts = TupleStructure(self)
-        self._ui = ui = ts.view.ui(ts, parent, kind='subpanel').set(
+        self._ui = ui = ts.view.ui(ts, parent, kind='subpanel').trait_set(
             parent=self.ui)
         self.control = ui.control
         self.set_tooltip()

@@ -837,7 +837,8 @@ class _GroupPanel(object):
             # Get the editor factory associated with the Item:
             editor_factory = item.editor
             if editor_factory is None:
-                editor_factory = trait.get_editor().set(**item.editor_args)
+                editor_factory = trait.get_editor().trait_set(
+                    **item.editor_args)
 
                 # If still no editor factory found, use a default text editor:
                 if editor_factory is None:
@@ -861,7 +862,7 @@ class _GroupPanel(object):
             factory_method = getattr(editor_factory, item.style + '_editor')
             editor = factory_method(
                 ui, object, name, item.tooltip, None
-            ).set(item=item, object_name=item.object)
+            ).trait_set(item=item, object_name=item.object)
 
             # Tell the editor to actually build the editing widget.  Note that
             # "inner" is a layout.  This shouldn't matter as individual editors
@@ -1167,7 +1168,7 @@ class GroupEditor(Editor):
     def __init__(self, **traits):
         """ Initialise the object.
         """
-        self.set(**traits)
+        self.trait_set(**traits)
 
 
 class SplitterGroupEditor(GroupEditor):
