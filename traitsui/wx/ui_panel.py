@@ -927,7 +927,7 @@ class FillPanel(object):
             # Create the requested type of editor from the editor factory:
             factory_method = getattr(editor_factory, item.style + '_editor')
             editor = factory_method(ui, object, name, item.tooltip,
-                                    item_panel).set(
+                                    item_panel).trait_set(
                 item=item,
                 object_name=item.object)
 

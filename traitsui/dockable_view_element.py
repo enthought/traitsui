@@ -75,11 +75,11 @@ class DockableViewElement(HasPrivateTraits, IDockable):
             element = self.ui.view.content
 
         if not isinstance(element, Group):
-            element = Group().set(content=[element])
+            element = Group().trait_set(content=[element])
 
-        group = Group().set(content=[element])
-        self._view = View().set(**self.ui.view.get()).set(content=group,
-                                                          title='')
+        group = Group().trait_set(content=[element])
+        self._view = View().trait_set(**self.ui.view.get()).trait_set(
+            content=group, title='')
 
         # FIXME: The following private traits are being set here to facilitate
         # rebuilding the ui (which will require the context and the handler).
@@ -136,8 +136,8 @@ class DockableViewElement(HasPrivateTraits, IDockable):
                                            should_close=True)
             self._ui = None
 
-        dock_control.set(dockable=dockable,
-                         on_close=dockable.close_dock_control)
+        dock_control.trait_set(dockable=dockable,
+                               on_close=dockable.close_dock_control)
 
     #-------------------------------------------------------------------------
     #  Handles the closing of a DockControl containing a Traits UI:

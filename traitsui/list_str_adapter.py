@@ -325,7 +325,7 @@ class ListStrAdapter(HasPrivateTraits):
             adapter.value = value
             if adapter.accepts and (adapter.trait(trait_name) is not None):
                 handler = lambda: getattr(
-                    adapter.set(
+                    adapter.trait_set(
                         index=self.index,
                         item=self.item,
                         value=self.value),

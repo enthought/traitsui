@@ -83,6 +83,6 @@ class BasicEditorFactory(EditorFactory):
     #-------------------------------------------------------------------------
 
     def __call__(self, *args, **traits):
-        return self.set(**traits)
+        return self.trait_set(**traits)
 
 ## EOF ########################################################################

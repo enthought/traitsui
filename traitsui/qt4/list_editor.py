@@ -213,7 +213,7 @@ class SimpleEditor(Editor):
             if resizable:
                 control.proxy = proxy
             peditor = editor(self.ui, proxy, 'value', self.description,
-                             list_pane).set(object_name='')
+                             list_pane).trait_set(object_name='')
             peditor.prepare(list_pane)
             pcontrol = peditor.control
             pcontrol.proxy = proxy
@@ -758,7 +758,7 @@ class NotebookEditor(Editor):
             view_object = factory.factory(object)
         ui = view_object.edit_traits(parent=self.control,
                                      view=factory.view,
-                                     kind=factory.ui_kind).set(
+                                     kind=factory.ui_kind).trait_set(
             parent=self.ui)
 
         # Get the name of the page being added to the notebook:

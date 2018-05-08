@@ -715,11 +715,11 @@ class TabularAdapter(HasPrivateTraits):
                     get_name = '%s_%s' % (column_id, trait_name)
                     if adapter.trait(get_name) is not None:
                         if prefix == 'get_':
-                            handler = lambda: getattr(adapter.set(
+                            handler = lambda: getattr(adapter.trait_set(
                                 row=self.row, column=column_id,
                                 item=self.item), get_name)
                         else:
-                            handler = lambda: setattr(adapter.set(
+                            handler = lambda: setattr(adapter.trait_set(
                                 row=self.row, column=column_id,
                                 item=self.item), get_name, self.value)
 
