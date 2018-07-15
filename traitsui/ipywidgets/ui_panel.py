@@ -1,9 +1,12 @@
 import re
 
+import ipywidgets
+
+from traits.api import Any
 from traitsui.base_panel import BasePanel
 from traitsui.group import Group
+from traitsui.ipywidgets.editor import Editor
 
-import ipywidgets
 
 #: Characters that are considered punctuation symbols at the end of a label.
 #: If a label ends with one of these charactes, we do not append a colon.
@@ -105,12 +108,19 @@ class GroupPanel(object):
         self.ui = ui
 
         outer = sub = inner = None
-        if group.label != "":
+
+        # Get the group label.
+        if suppress_label:
+            label = ""
+        else:
+            label = group.label
+
+        if label != "":
             if group.orientation == 'horizontal':
                 outer = inner = ipywidgets.HBox()
             else:
                 outer = inner = ipywidgets.VBox()
-            inner.children += (ipywidgets.Label(value=group.label),)
+            inner.children += (ipywidgets.Label(value=label),)
 
         if len(content) == 0:
             pass
@@ -191,16 +201,11 @@ class GroupPanel(object):
         show_labels = any(item.show_label for item in content)
 
         if show_labels or columns > 1:
-            # if self.group.orientation == 'horizontal':
-            #     inner = ipywidgets.HBox()
-            # else:
-            #     inner = ipywidgets.VBox()
             inner = ipywidgets.GridBox()
             layout = ipywidgets.Layout(
                 grid_template_columns=' '.join(['auto']*(2*columns))
             )
             inner.layout = layout
-            print(inner)
             if outer is None:
                 outer = inner
             else:
@@ -209,9 +214,9 @@ class GroupPanel(object):
             row = 0
 
             if show_left:
-                label_alignment = 'left'
-            else:
                 label_alignment = 'right'
+            else:
+                label_alignment = 'left'
 
         else:
             if self.group.orientation == 'horizontal':
@@ -235,6 +240,8 @@ class GroupPanel(object):
                 if label != "":
                     label = ipywidgets.Label(value=label)
                     self._add_widget(inner, label, row, col, show_labels)
+                    if show_labels:
+                        inner.children += (ipywidgets.Label(value=''),)
                 continue
 
             if name == '_':
@@ -321,7 +328,6 @@ class GroupPanel(object):
 
     def _add_widget(self, layout, w, row, column, show_labels,
                     label_alignment='left'):
-        #print(layout)
         if row < 0:
             # we have an HBox or VBox
             layout.children += (w,)
@@ -334,12 +340,11 @@ class GroupPanel(object):
 
                 # Determine whether to place widget on left or right of
                 # "logical" column.
-                if (label_alignment == 'left' and not self.group.show_left) or \
-                   (label_alignment == 'right' and self.group.show_left):
+                if (label_alignment is not None and not self.group.show_left) or \
+                   (label_alignment is None and self.group.show_left):
                     column += 1
 
             layout.children += (w,)
-            print(layout)
 
 
     def _create_label(self, item, ui, desc, suffix=':'):
@@ -399,6 +404,45 @@ class GroupPanel(object):
 
         return label_control
 
+
+class GroupEditor(Editor):
+    """ A pseudo-editor that allows a group to be managed.
+    """
+
+    def __init__(self, **traits):
+        """ Initialise the object.
+        """
+        self.trait_set(**traits)
+
+
+
+class PagedGroupEditor(GroupEditor):
+    """ A pseudo-editor that allows a group with a 'tabbed' or 'fold' layout to
+        be managed.
+    """
+
+    # The QTabWidget or QToolBox for the group
+    container = Any
+
+    #-- UI preference save/restore interface ---------------------------------
+
+    def restore_prefs(self, prefs):
+        """ Restores any saved user preference information associated with the
+            editor.
+        """
+        if isinstance(prefs, dict):
+            current_index = prefs.get('current_index')
+        else:
+            current_index = prefs
+
+        self.container.setCurrentIndex(int(current_index))
+
+    def save_prefs(self):
+        """ Returns any user preference information associated with the editor.
+        """
+        return {'current_index': str(self.container.currentIndex())}
+
+
 # if __name__ == '__main__':
 #     from traitsui.api import VGroup, Item, View, UI, default_handler
 #
@@ -416,4 +460,3 @@ class GroupPanel(object):
 #         id='',
 #         scrollable=False)
 #
-#     #print(panel(ui))
