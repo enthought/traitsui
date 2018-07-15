@@ -312,6 +312,20 @@ class Item(ViewSubElement):
         return ((name == '') or (name == '_') or
                 (all_digits.match(name) is not None))
 
+    def is_label(self):
+        return not self.name and self.label
+
+    def is_separator(self):
+        return self.name == '_'
+
+    def get_spacing(self):
+        if self.name == ' ':
+            return 5
+        elif all_digits.match(self.name):
+            return int(self.name)
+        else:
+            return None
+
     #-------------------------------------------------------------------------
     #  Gets the help text associated with the Item in a specified UI:
     #-------------------------------------------------------------------------

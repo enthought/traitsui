@@ -13,7 +13,6 @@
 
 from pyface.action.api import ActionController
 from traits.api import Any, Instance
-from traitsui.menu import Action
 
 
 # Set of all predefined system button names:
@@ -59,6 +58,8 @@ class BasePanel(ActionController):
     def coerce_button(self, action):
         """ Coerces a string to an Action if necessary.
         """
+        from traitsui.menu import Action
+
         if isinstance(action, basestring):
             return Action(
                 name=action,

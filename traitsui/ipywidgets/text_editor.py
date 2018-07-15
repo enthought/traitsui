@@ -63,11 +63,13 @@ class SimpleEditor(Editor):
             # updated.
             control.continous_update = False
 
+        control.observe(self.update_object, 'value')
+
         self.control = control
         self.set_error_state(False)
         self.set_tooltip()
 
-    def update_object(self):
+    def update_object(self, event=None):
         """ Handles the user entering input data in the edit control.
         """
         if (not self._no_update) and (self.control is not None):

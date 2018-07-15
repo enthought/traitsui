@@ -28,7 +28,7 @@ from traits.api \
 
 
 def convert_to_color(object, name, value):
-    """ Converts a number into a QColor object.
+    """ Converts a number into a CSV color string.
     """
     # Try the toolkit agnostic format.
     try:

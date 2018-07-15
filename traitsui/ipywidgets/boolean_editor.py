@@ -19,13 +19,13 @@ class SimpleEditor(Editor):
             widget.
         """
         self.control = widgets.Checkbox(value=True, description='')
-        self.control.stateChanged.connect(self.update_object)
+        self.control.observe(self.update_object, 'value')
         self.set_tooltip()
 
-    def update_object(self, state):
+    def update_object(self, event=None):
         """ Handles the user clicking the checkbox.
         """
-        self.value = bool(state)
+        self.value = bool(self.control.value)
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
