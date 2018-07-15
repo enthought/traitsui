@@ -5,7 +5,11 @@ from traitsui.group import Group
 
 import ipywidgets
 
-# Pattern of all digits
+#: Characters that are considered punctuation symbols at the end of a label.
+#: If a label ends with one of these charactes, we do not append a colon.
+LABEL_PUNCTUATION_CHARS = '?=:;,.<>/\\"\'-+#|'
+
+#: Pattern of all digits
 all_digits = re.compile(r'\d+')
 
 
@@ -187,17 +191,27 @@ class GroupPanel(object):
         show_labels = any(item.show_label for item in content)
 
         if show_labels or columns > 1:
-            if self.group.orientation == 'horizontal':
-                inner = ipywidgets.HBox()
-            else:
-                inner = ipywidgets.VBox()
-            #inner = ipywidgets.GridBox()
+            # if self.group.orientation == 'horizontal':
+            #     inner = ipywidgets.HBox()
+            # else:
+            #     inner = ipywidgets.VBox()
+            inner = ipywidgets.GridBox()
+            layout = ipywidgets.Layout(
+                grid_template_columns=' '.join(['auto']*(2*columns))
+            )
+            inner.layout = layout
+            print(inner)
             if outer is None:
                 outer = inner
             else:
                 outer.children += (inner,)
 
             row = 0
+
+            if show_left:
+                label_alignment = 'left'
+            else:
+                label_alignment = 'right'
 
         else:
             if self.group.orientation == 'horizontal':
@@ -206,7 +220,7 @@ class GroupPanel(object):
                 outer = ipywidgets.VBox()
             inner = outer
             row = -1
-            show_left = None
+            label_alignment = None
 
         col = -1
         for item in content:
@@ -237,9 +251,7 @@ class GroupPanel(object):
                 continue
 
             # XXX can we avoid evals for dots?
-            print(item.object_, ui.context)
             obj = eval(item.object_, globals(), ui.context)
-            print(obj)
             trait = obj.base_trait(name)
             desc = trait.desc if trait.desc is not None else ''
 
@@ -279,7 +291,7 @@ class GroupPanel(object):
             if item.show_label:
                 label = self._create_label(item, ui, desc)
                 self._add_widget(inner, label, row, col, show_labels,
-                                 show_left)
+                                 label_alignment)
             else:
                 label = None
 
@@ -319,6 +331,73 @@ class GroupPanel(object):
 
             if show_labels:
                 column *= 2
+
+                # Determine whether to place widget on left or right of
+                # "logical" column.
+                if (label_alignment == 'left' and not self.group.show_left) or \
+                   (label_alignment == 'right' and self.group.show_left):
+                    column += 1
+
+            layout.children += (w,)
+            print(layout)
+
+
+    def _create_label(self, item, ui, desc, suffix=':'):
+        """Creates an item label.
+
+        When the label is on the left of its component,
+        it is not empty, and it does not end with a
+        punctuation character (see :attr:`LABEL_PUNCTUATION_CHARS`),
+        we append a suffix (by default a colon ':') at the end of the
+        label text.
+
+        We also set the help on the QLabel control (from item.help) and
+        the tooltip (it item.desc exists; we add "Specifies " at the start
+        of the item.desc string).
+
+        Parameters
+        ----------
+        item : Item
+            The item for which we want to create a label
+        ui : UI
+            Current ui object
+        desc : string
+            Description of the item, to create an appropriate tooltip
+        suffix : string
+            Characters to at the end of the label
+
+        Returns
+        -------
+        label_control : QLabel
+            The control for the label
+        """
+
+        label = item.get_label(ui)
+
+        # append a suffix if the label is on the left and it does
+        # not already end with a punctuation character
+        if (label != ''
+            and label[-1] not in LABEL_PUNCTUATION_CHARS
+                and self.group.show_left):
+            label = label + suffix
+
+        # create label controller
+        label_control = ipywidgets.Label(value=label)
+
+        # if item.emphasized:
+        #     self._add_emphasis(label_control)
+
+        # FIXME: Decide what to do about the help.  (The non-standard wx way,
+        # What's This style help, both?)
+        #wx.EVT_LEFT_UP( control, show_help_popup )
+        label_control.help = item.get_help(ui)
+
+        # FIXME: do people rely on traitsui adding 'Specifies ' to the start
+        # of every tooltip? It's not flexible at all
+        # if desc != '':
+        #     label_control.setToolTip('Specifies ' + desc)
+
+        return label_control
 
 # if __name__ == '__main__':
 #     from traitsui.api import VGroup, Item, View, UI, default_handler
