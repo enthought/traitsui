@@ -2,7 +2,7 @@
 """
 import ipywidgets as widgets
 
-from traits.api import TraitError, Str
+from traits.api import Str
 
 from editor import Editor
 
