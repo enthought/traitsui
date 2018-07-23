@@ -47,7 +47,7 @@ class ToolkitEditorFactory(EditorFactory):
 
 
 def RGBColorEditor(*args, **traits):
-    """ Returns an instance of the toolkit-specific editor factory declared in
+    r""" Returns an instance of the toolkit-specific editor factory declared in
     traitsui.<toolkit>.rgb_color_editor. If such an editor factory
     cannot be located, an instance of the abstract ToolkitEditorFactory
     declared in traitsui.editors.rgb_color_editor is returned.
