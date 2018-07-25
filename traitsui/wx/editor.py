@@ -115,11 +115,13 @@ class Editor(UIEditor):
         """
         desc = self.description
         if desc == '':
-            desc = self.object.base_trait(self.name).desc
+            desc = self.object.base_trait(self.name).tooltip
             if desc is None:
-                return False
+                desc = self.object.base_trait(self.name).desc
+                if desc is None:
+                    return False
 
-            desc = 'Specifies ' + desc
+                desc = 'Specifies ' + desc
 
         if control is None:
             control = self.control
