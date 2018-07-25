@@ -1101,8 +1101,9 @@ class _GroupPanel(object):
         label text.
 
         We also set the help on the QLabel control (from item.help) and the
-        tooltip (it item.desc exists; we add "Specifies " at the start of the
-        item.desc string, if item.tooltip exists we just use it as is).
+        tooltip (if the ``tooltip`` metadata on the edited trait exists, then
+        it will be used as-is; otherwise, if the ``desc`` metadata exists, the
+        string "Specifies " will be prepended to the start of ``desc``).
 
         Parameters
         ----------
