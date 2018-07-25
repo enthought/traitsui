@@ -832,7 +832,9 @@ class _GroupPanel(object):
             # Otherwise, it must be a trait Item:
             object = eval(item.object_, globals(), ui.context)
             trait = object.base_trait(name)
-            desc = trait.desc or ''
+            desc = trait.tooltip
+            if desc is None:
+                desc = 'Specifies ' + trait.desc if trait.desc else ''
 
             # Get the editor factory associated with the Item:
             editor_factory = item.editor
@@ -1098,9 +1100,9 @@ class _GroupPanel(object):
         we append a suffix (by default a colon ':') at the end of the
         label text.
 
-        We also set the help on the QLabel control (from item.help) and
-        the tooltip (it item.desc exists; we add "Specifies " at the start
-        of the item.desc string).
+        We also set the help on the QLabel control (from item.help) and the
+        tooltip (it item.desc exists; we add "Specifies " at the start of the
+        item.desc string, if item.tooltip exists we just use it as is).
 
         Parameters
         ----------
@@ -1117,6 +1119,7 @@ class _GroupPanel(object):
         -------
         label_control : QLabel
             The control for the label
+
         """
 
         label = item.get_label(ui)
@@ -1139,10 +1142,8 @@ class _GroupPanel(object):
         #wx.EVT_LEFT_UP( control, show_help_popup )
         label_control.help = item.get_help(ui)
 
-        # FIXME: do people rely on traitsui adding 'Specifies ' to the start
-        # of every tooltip? It's not flexible at all
         if desc != '':
-            label_control.setToolTip('Specifies ' + desc)
+            label_control.setToolTip(desc)
 
         return label_control
 

@@ -885,7 +885,10 @@ class FillPanel(object):
             # Otherwise, it must be a trait Item:
             object = eval(item.object_, globals(), ui.context)
             trait = object.base_trait(name)
-            desc = trait.desc or ''
+            desc = trait.tooltip
+            if desc is None:
+                desc = 'Specifies ' + trait.desc if trait.desc else ''
+
             label = None
 
             # If we are displaying labels on the left, add the label to the
@@ -1091,7 +1094,7 @@ class FillPanel(object):
                   pad_side, self.label_pad)
 
         if desc != '':
-            control.SetToolTipString('Specifies ' + desc)
+            control.SetToolTipString(desc)
 
         return control
 
