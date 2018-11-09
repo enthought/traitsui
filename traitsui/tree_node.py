@@ -25,6 +25,8 @@
 
 from __future__ import absolute_import
 
+import six
+
 from traits.api import (
     AdaptedTo,
     Adapter,
@@ -346,11 +348,12 @@ class TreeNode(HasPrivateTraits):
         trait = self.column_labels
         labels = xgetattr(object, trait, [])
         formatted = []
-        for formatter, label in map(None, self.column_formatters, labels):
+        for formatter, label in six.moves.zip_longest(
+                self.column_formatters, labels):
             # If the list of column formatters is shorter than the list of
-            # labels, then map(None) will extend it with Nones. Just pass the label
-            # as preformatted. Similarly, explicitly using None in the list will
-            # pass through the item.
+            # labels, then zip_longest() will extend it with Nones. Just pass
+            # the label as preformatted. Similarly, explicitly using None in
+            # the list will pass through the item.
             if formatter is None:
                 formatted.append(label)
             else:
