@@ -17,9 +17,13 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
+
 import copy
 import collections
 import logging
+
+from six.moves import zip_longest
 
 from pyface.qt import QtCore, QtGui
 
@@ -36,9 +40,9 @@ from traitsui.tree_node import (
 )
 from traitsui.menu import Menu, Action, Separator
 
-from clipboard import clipboard, PyMimeData
-from editor import Editor
-from helper import pixmap_cache
+from .clipboard import clipboard, PyMimeData
+from .editor import Editor
+from .helper import pixmap_cache
 
 logger = logging.getLogger(__name__)
 
@@ -336,7 +340,7 @@ class SimpleEditor(Editor):
         """ Set the column labels.
         """
         for i, (header, label) in enumerate(
-                map(None, self.factory.column_headers[1:], column_labels), 1):
+                zip_longest(self.factory.column_headers[1:], column_labels), 1):
             if header is not None and label is not None:
                 nid.setText(i, label)
 
