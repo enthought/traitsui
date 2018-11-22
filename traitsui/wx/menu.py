@@ -50,6 +50,7 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 #=========================================================================
 
 from __future__ import absolute_import
+from __future__ import print_function
 import wx
 import re
 import string
@@ -350,4 +351,4 @@ def option_check(test, string):
 
 
 def null_handler(event):
-    print 'null_handler invoked'
+    print('null_handler invoked')

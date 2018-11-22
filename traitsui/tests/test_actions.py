@@ -17,6 +17,7 @@
 Test that menu and toolbar actions are triggered.
 """
 from __future__ import absolute_import
+from __future__ import print_function
 import nose
 import pyface
 import unittest
@@ -101,7 +102,7 @@ def _qt_click_button(ui):
     from pyface.qt.QtGui import QDialogButtonBox
     bbox = ui.control.findChild(QDialogButtonBox)
     button = bbox.buttons()[1]
-    print(button.text())
+    print((button.text()))
     button.click()
 
 

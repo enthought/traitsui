@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import print_function
 from traits.api import *
 from traitsui.api import *
 
@@ -13,8 +14,8 @@ class Camera( HasTraits ):
 
    def capture(self):
       """ Captures an image on the camera and returns it """
-      print "capturing an image at %i ms exposure, gain: %i" % (
-                    self.exposure, self.gain )
+      print("capturing an image at %i ms exposure, gain: %i" % (
+                    self.exposure, self.gain ))
 
 if  __name__ == "__main__":
    camera = Camera()

@@ -23,6 +23,7 @@
 #-------------------------------------------------------------------------
 
 from __future__ import absolute_import
+from __future__ import print_function
 import datetime
 
 from pyface.qt import QtCore, QtGui
@@ -78,7 +79,7 @@ class SimpleEditor(Editor):
         try:
             self.value = datetime.time(hour, minute, second)
         except ValueError:
-            print 'Invalid time:', hour, minute, second
+            print('Invalid time:', hour, minute, second)
             raise
 
 #------------------------------------------------------------------------------

@@ -27,6 +27,7 @@
 #-------------------------------------------------------------------------
 
 from __future__ import absolute_import
+from __future__ import print_function
 import sys
 from operator import itemgetter
 import os
@@ -1782,7 +1783,7 @@ if __name__ == '__main__':
 
     # Validate the command line arguments:
     if len(sys.argv) > 2:
-        print Usage
+        print(Usage)
         sys.exit(1)
 
     # Determine the root path to use for the tutorial files:
@@ -1797,10 +1798,10 @@ if __name__ == '__main__':
     if tutor.root is not None:
         tutor.configure_traits()
     else:
-        print """No traits tutorial found in %s.
+        print("""No traits tutorial found in %s.
 
 Correct usage is: python tutor.py [tutorial_path]
 where: tutorial_path = Path to the root of the traits tutorial.
 
 If tutorial_path is omitted, the current directory is assumed to be the root of
-the tutorial.""" % path
+the tutorial.""" % path)
