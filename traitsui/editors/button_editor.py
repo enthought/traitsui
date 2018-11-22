@@ -30,6 +30,7 @@ from traits.api import Str, Range, Enum, Property, Trait
 from ..editor_factory import EditorFactory
 from ..ui_traits import AView
 from ..view import View
+import six
 
 #-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -92,7 +93,7 @@ class ToolkitEditorFactory(EditorFactory):
 
     def _set_value(self, value):
         self._value = value
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             try:
                 self._value = int(value)
             except:

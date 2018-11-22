@@ -54,6 +54,7 @@ from pyface.timer.api \
 
 from constants \
     import is_mac, scrollbar_dx
+import six
 
 try:
     from pyface.wx.drag_and_drop \
@@ -990,7 +991,7 @@ class TabularEditor(Editor):
     def _get_image(self, image):
         """ Converts a user specified image to a wx.ListCtrl image index.
         """
-        if isinstance(image, basestring):
+        if isinstance(image, six.string_types):
             self.image = image
             image = self.image
 

@@ -34,6 +34,7 @@ from ..view import View
 from ..editor_factory import EditorFactory
 
 from ..toolkit import toolkit_object
+import six
 
 #-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -171,7 +172,7 @@ class ToolkitEditorFactory(EditorFactory):
             self.high_label = unicode(high)
 
     def _cast(self, value):
-        if not isinstance(value, basestring):
+        if not isinstance(value, six.string_types):
             return value
 
         try:

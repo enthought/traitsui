@@ -8,6 +8,7 @@ from traits.api import Dict
 # as in the default date_editor.
 from date_editor import SimpleEditor
 from date_editor import CustomEditor as DateCustomEditor
+import six
 
 
 class CustomEditor(DateCustomEditor):
@@ -141,7 +142,7 @@ class CustomEditor(DateCustomEditor):
     def _color_to_brush(self, color):
         """ Returns a QBrush with the color specified in **color** """
         brush = QtGui.QBrush()
-        if isinstance(color, basestring) and hasattr(QtCore.Qt, color):
+        if isinstance(color, six.string_types) and hasattr(QtCore.Qt, color):
             col = getattr(QtCore.Qt, color)
         elif isinstance(color, tuple) and len(color) == 3:
             col = QtGui.QColor()

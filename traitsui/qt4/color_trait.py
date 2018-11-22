@@ -21,6 +21,7 @@ from pyface.qt import QtGui
 
 from traits.api \
     import Trait, TraitError
+import six
 
 #-------------------------------------------------------------------------
 #  Convert a number into a QColor object:
@@ -45,7 +46,7 @@ def convert_to_color(object, name, value):
         else:
             raise TraitError
     else:
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             # Allow for spaces in the string value.
             value = value.replace(' ', '')
 

@@ -18,6 +18,7 @@
 """
 
 from traitsui.table_column import ObjectColumn
+import six
 
 
 class ColorColumn(ObjectColumn):
@@ -47,7 +48,7 @@ class ColorColumn(ObjectColumn):
         value = getattr(self.get_object(object), self.name, '')
         if isinstance(value, tuple):
             value = self._float_rgb_tuple_to_str(value)
-        elif not isinstance(value, basestring):
+        elif not isinstance(value, six.string_types):
             value = ''
         return value
 

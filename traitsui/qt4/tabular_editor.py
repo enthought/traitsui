@@ -37,6 +37,7 @@ from traits.api import (Any, Bool, Callable, Event, HasStrictTraits, Instance,
 from traitsui.tabular_adapter import TabularAdapter
 from .editor import Editor
 from .tabular_model import TabularModel
+import six
 
 
 class HeaderEventFilter(QtCore.QObject):
@@ -321,7 +322,7 @@ class TabularEditor(Editor):
     def _get_image(self, image):
         """ Converts a user specified image to a QIcon.
         """
-        if isinstance(image, basestring):
+        if isinstance(image, six.string_types):
             self.image = image
             image = self.image
 

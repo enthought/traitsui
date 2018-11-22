@@ -14,6 +14,7 @@
 from pyface.action.api import ActionController
 from traits.api import Any, Instance
 from traitsui.menu import Action
+import six
 
 
 # Set of all predefined system button names:
@@ -52,14 +53,14 @@ class BasePanel(ActionController):
     def is_button(self, action, name):
         """ Returns whether a specified action button is a system button.
         """
-        if isinstance(action, basestring):
+        if isinstance(action, six.string_types):
             return (action == name)
         return (action.name == name)
 
     def coerce_button(self, action):
         """ Coerces a string to an Action if necessary.
         """
-        if isinstance(action, basestring):
+        if isinstance(action, six.string_types):
             return Action(
                 name=action,
                 action='' if action in SystemButtons else '?'

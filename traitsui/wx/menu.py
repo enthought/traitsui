@@ -52,6 +52,7 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 import wx
 import re
 import string
+import six
 
 #=========================================================================
 #  Constants:
@@ -260,7 +261,7 @@ class MakeMenu:
     def get_id(self, name):
         """ Returns the ID associated with a specified name.
         """
-        if isinstance(name, basestring):
+        if isinstance(name, six.string_types):
             return self.names[name]
         return name
 

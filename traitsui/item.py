@@ -38,6 +38,7 @@ from .view_element import ViewSubElement
 from .ui_traits import ContainerDelegate, EditorStyle
 
 from .editor_factory import EditorFactory
+import six
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -269,7 +270,7 @@ class Item(ViewSubElement):
         if value is None:
             return
 
-        if not isinstance(value, basestring):
+        if not isinstance(value, six.string_types):
             raise TypeError(
                 "The argument to Item must be a string of the "
                 "form: [id:][object.[object.]*][name]['['label']']`tooltip`"
@@ -366,7 +367,7 @@ class Item(ViewSubElement):
         if tlabel is None:
             return label
 
-        if isinstance(tlabel, basestring):
+        if isinstance(tlabel, six.string_types):
             if tlabel[0:3] == '...':
                 return label + tlabel[3:]
             if tlabel[-3:] == '...':

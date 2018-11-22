@@ -26,6 +26,7 @@ from __future__ import absolute_import
 
 from traits.api import (Any, Bool, Color, Enum, Event, HasPrivateTraits, Int,
                         Interface, List, Str, on_trait_change, provides)
+import six
 
 #-------------------------------------------------------------------------
 #  'IListStrAdapter' interface:
@@ -271,7 +272,7 @@ class ListStrAdapter(HasPrivateTraits):
         return unicode(self.item)
 
     def _get_can_drop(self):
-        return isinstance(self.value, basestring)
+        return isinstance(self.value, six.string_types)
 
     def _get_dropped(self):
         return self.dropped
