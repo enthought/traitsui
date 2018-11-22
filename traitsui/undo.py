@@ -36,8 +36,8 @@ from six.moves import range
 #  Constants:
 #-------------------------------------------------------------------------
 
-NumericTypes = (int, long, float, complex)
-SimpleTypes = (str, six.text_type, int, long, float, complex)
+NumericTypes = (int, int, float, complex)
+SimpleTypes = (str, six.text_type, int, int, float, complex)
 
 #-------------------------------------------------------------------------
 #  'AbstractUndoItem' class:
