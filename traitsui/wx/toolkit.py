@@ -69,7 +69,7 @@ EventSuffix = {
 }
 
 # Types of popup views:
-Popups = set(('popup', 'popover', 'info'))
+Popups = {'popup', 'popover', 'info'}
 
 #-------------------------------------------------------------------------
 #  Handles UI notification handler requests that occur on a thread other than

@@ -254,7 +254,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
         # handle re-ordering via internal drags
         if editor.factory.reorderable:
-            rows = sorted(set([index.row() for index in indexes]))
+            rows = sorted({index.row() for index in indexes})
             data = QtCore.QByteArray(str(id(self)))
             for row in rows:
                 data.append(' %i' % row)

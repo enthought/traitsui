@@ -264,7 +264,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to generate MIME data containing the rows of the
             current selection.
         """
-        rows = sorted(set([index.row() for index in indexes]))
+        rows = sorted({index.row() for index in indexes})
         items = [self._editor.adapter.get_drag(
             self._editor.object, self._editor.name, row)
             for row in rows]

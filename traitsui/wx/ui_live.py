@@ -55,7 +55,7 @@ POPOVER = 3
 INFO = 4
 
 # Types of 'popup' dialogs:
-Popups = set((POPUP, POPOVER, INFO))
+Popups = {POPUP, POPOVER, INFO}
 
 #-------------------------------------------------------------------------
 #  Creates a 'live update' wxPython user interface for a specified UI object:

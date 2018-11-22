@@ -222,7 +222,7 @@ class ListStrModel(QtCore.QAbstractListModel):
             current selection.
         """
         mime_data = QtCore.QMimeData()
-        rows = list(set([index.row() for index in indexes]))
+        rows = list({index.row() for index in indexes})
         data = QtCore.QByteArray(six.text_type(rows[0]).encode('utf8'))
         for row in rows[1:]:
             data.append((' %i' % row).encode('utf8'))

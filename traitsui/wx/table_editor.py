@@ -594,8 +594,8 @@ class TableEditor(Editor, BaseTableEditor):
                 return [index]
 
         elif sm == 'cells':
-            return list(set([row_col[0] for
-                             row_col in self.selected_cell_indices]))
+            return list({row_col[0] for
+                             row_col in self.selected_cell_indices})
 
         elif sm == 'cell':
             index = self.selected_cell_index[0]
@@ -615,8 +615,8 @@ class TableEditor(Editor, BaseTableEditor):
                 return [item]
 
         elif sm == 'cells':
-            return list(set([item_name[0]
-                             for item_name in self.selected_cells]))
+            return list({item_name[0]
+                             for item_name in self.selected_cells})
 
         elif sm == 'cell':
             item = self.selected_cell[0]
@@ -1227,11 +1227,11 @@ class TableEditor(Editor, BaseTableEditor):
         if n > 0:
             if self.in_row_mode:
                 self.set_selection(
-                    list(set([items[i] for i in indices])))
+                    list({items[i] for i in indices}))
             else:
                 self.set_extended_selection(
-                    list(set([(items[indices[i]], values[i][1])
-                              for i in range(n)])))
+                    list({(items[indices[i]], values[i][1])
+                              for i in range(n)}))
         else:
             self._update_toolbar(False)
 
