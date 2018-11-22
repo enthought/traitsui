@@ -637,7 +637,7 @@ class TraitsNode(ObjectNode):
             names[name] = None
         for name in value.__dict__.keys():
             names[name] = None
-        return names.keys()
+        return list(names.keys())
 
     #-------------------------------------------------------------------------
     #  Sets up/Tears down a listener for 'children replaced' on a specified

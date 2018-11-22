@@ -70,12 +70,12 @@ class CustomEditor(DateCustomEditor):
         groups = getattr(self.object, self.factory.dates_trait)
         styles = getattr(self.object, self.factory.styles_trait)
 
-        names_to_update = event.added.keys() + event.changed.keys()
+        names_to_update = list(event.added.keys()) + list(event.changed.keys())
         modified_groups = dict((name, groups[name])
                                for name in names_to_update)
         self._apply_styles(styles, modified_groups)
 
-        names_to_reset = event.removed.keys()
+        names_to_reset = list(event.removed.keys())
         for name in names_to_reset:
             self._reset_formatting(groups[name])
         return

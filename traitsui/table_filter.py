@@ -298,7 +298,7 @@ class GenericTableFilterRule(HasPrivateTraits):
     def __init__(self, **traits):
         super(GenericTableFilterRule, self).__init__(**traits)
         if self.name == '':
-            names = self.filter._trait_values.keys()
+            names = list(self.filter._trait_values.keys())
             if len(names) > 0:
                 names.sort()
                 self.name = names[0]
