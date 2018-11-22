@@ -29,7 +29,7 @@
 import wx
 import numpy
 
-from cPickle \
+from six.moves.cPickle \
     import load
 
 from traits.api \
