@@ -9,6 +9,7 @@ from traits.api import Dict
 from date_editor import SimpleEditor
 from date_editor import CustomEditor as DateCustomEditor
 import six
+from six.moves import map
 
 
 class CustomEditor(DateCustomEditor):
@@ -39,7 +40,7 @@ class CustomEditor(DateCustomEditor):
         # way to handle this is to reset the text formats of all the dates
         # in the old dict, and then set the dates in the new dict.
         if old:
-            [map(self._reset_formatting, dates) for dates in old.values()]
+            [list(map(self._reset_formatting, dates)) for dates in old.values()]
         if new:
             styles = getattr(self.object, self.factory.styles_trait, None)
             self._apply_styles(styles, new)
@@ -52,14 +53,14 @@ class CustomEditor(DateCustomEditor):
         self._apply_styles(styles, groups_to_set)
 
         # Handle the removed items by resetting them
-        [map(self._reset_formatting, dates)
+        [list(map(self._reset_formatting, dates))
          for dates in event.removed.values()]
 
     def _styles_changed(self, old, new):
         groups = getattr(self.object, self.factory.dates_trait, {})
         if not new:
             # If no new styles, then reset all the dates to a default style
-            [map(self._reset_formatting, dates) for dates in groups.values()]
+            [list(map(self._reset_formatting, dates)) for dates in groups.values()]
         else:
             self._apply_styles(new, groups)
         return
