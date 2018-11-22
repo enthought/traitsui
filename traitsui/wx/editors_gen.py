@@ -12,6 +12,7 @@
 the WX backend.
 """
 
+from __future__ import absolute_import
 import os
 import glob
 import sys

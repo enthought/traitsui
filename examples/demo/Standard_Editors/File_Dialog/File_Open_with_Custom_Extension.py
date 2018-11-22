@@ -9,6 +9,7 @@ over the standard OS file dialog, select the <b>File Open</b> demo.
 
 #-- Imports --------------------------------------------------------------
 
+from __future__ import absolute_import
 from os.path \
     import getsize
 

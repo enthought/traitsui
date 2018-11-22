@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 from traits.api \
@@ -43,7 +44,7 @@ from traitsui.wx.editor \
 from pyface.image_resource \
     import ImageResource
 
-from helper \
+from .helper \
     import disconnect, disconnect_no_id
 from six.moves import range
 

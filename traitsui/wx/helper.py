@@ -23,6 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from operator import itemgetter
 
 import wx
@@ -43,10 +44,10 @@ from traitsui.ui_traits \
 from pyface.timer.api \
     import do_later
 
-from constants \
+from .constants \
     import standard_bitmap_width, screen_dx, screen_dy
 
-from editor \
+from .editor \
     import Editor
 import six
 from six.moves import range

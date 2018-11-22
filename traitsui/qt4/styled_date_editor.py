@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 from pyface.qt.QtGui import QFont
 
@@ -6,8 +7,8 @@ from traits.api import Dict
 
 # For a simple editor style, we just punt and use the same simple editor
 # as in the default date_editor.
-from date_editor import SimpleEditor
-from date_editor import CustomEditor as DateCustomEditor
+from .date_editor import SimpleEditor
+from .date_editor import CustomEditor as DateCustomEditor
 import six
 from six.moves import map
 

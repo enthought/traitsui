@@ -11,6 +11,7 @@
 """ Defines file editors for the PyQt user interface toolkit.
 """
 
+from __future__ import absolute_import
 from os.path import abspath, splitext, isfile, exists
 
 from pyface.qt import QtCore, QtGui
@@ -20,8 +21,8 @@ from traits.api import List, Event, File, Unicode, TraitError
 # compatibility. The class has been moved to the
 # traitsui.editors.file_editor file.
 from traitsui.editors.file_editor import ToolkitEditorFactory
-from text_editor import SimpleEditor as SimpleTextEditor
-from helper import IconButton
+from .text_editor import SimpleEditor as SimpleTextEditor
+from .helper import IconButton
 import six
 from six.moves import range
 

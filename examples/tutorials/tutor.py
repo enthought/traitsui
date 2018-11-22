@@ -26,6 +26,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import sys
 from operator import itemgetter
 import os

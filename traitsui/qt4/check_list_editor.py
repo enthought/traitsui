@@ -20,6 +20,7 @@ user interface toolkit.
 
 from __future__ import division
 
+from __future__ import absolute_import
 import logging
 
 from pyface.qt import QtCore, QtGui
@@ -33,10 +34,10 @@ from traits.api \
 from traitsui.editors.check_list_editor \
     import ToolkitEditorFactory
 
-from editor_factory \
+from .editor_factory \
     import TextEditor as BaseTextEditor
 
-from editor \
+from .editor \
     import EditorWithList
 import six
 from six.moves import range

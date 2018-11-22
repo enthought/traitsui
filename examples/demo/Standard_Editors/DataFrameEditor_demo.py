@@ -7,6 +7,7 @@
 
 #--[Imports]--------------------------------------------------------------
 
+from __future__ import absolute_import
 from pandas import DataFrame
 from traits.api import HasTraits, Instance
 from traitsui.api import View, Item

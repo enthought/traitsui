@@ -16,6 +16,7 @@ source (i.e. *.py) files to be viewed and selected.
 
 #-- Imports --------------------------------------------------------------
 
+from __future__ import absolute_import
 from traits.api \
     import HasTraits, File, Button
 

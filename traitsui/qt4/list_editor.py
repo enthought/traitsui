@@ -17,6 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from pyface.api import ImageResource
@@ -30,9 +31,9 @@ from traits.trait_base import user_name_for, xgetattr
 from traitsui.editors.list_editor import ListItemProxy, \
     ToolkitEditorFactory
 
-from editor import Editor
-from helper import IconButton
-from menu import MakeMenu
+from .editor import Editor
+from .helper import IconButton
+from .menu import MakeMenu
 from six.moves import range
 
 #-------------------------------------------------------------------------

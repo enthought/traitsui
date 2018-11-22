@@ -23,6 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 import wx.stc as stc
 
@@ -44,10 +45,10 @@ from pyface.api \
 from pyface.util.python_stc \
     import faces
 
-from editor \
+from .editor \
     import Editor
 
-from constants \
+from .constants \
     import OKColor, ErrorColor
 from six.moves import range
 

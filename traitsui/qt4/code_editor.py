@@ -18,6 +18,7 @@ interface toolkit, useful for tools such as debuggers.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
@@ -32,9 +33,9 @@ from traitsui.editors.code_editor import ToolkitEditorFactory
 
 from pyface.key_pressed_event import KeyPressedEvent
 
-from constants import OKColor, ErrorColor
-from editor import Editor
-from helper import pixmap_cache
+from .constants import OKColor, ErrorColor
+from .editor import Editor
+from .helper import pixmap_cache
 import six
 
 #-------------------------------------------------------------------------

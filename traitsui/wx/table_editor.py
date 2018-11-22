@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from operator import itemgetter
 
 import wx
@@ -61,13 +62,13 @@ from pyface.image_resource \
 from pyface.timer.api \
     import do_later
 
-from editor \
+from .editor \
     import Editor
 
-from table_model \
+from .table_model \
     import TableModel, TraitGridSelection
 
-from helper import TraitsUIPanel
+from .helper import TraitsUIPanel
 from functools import reduce
 from six.moves import range
 

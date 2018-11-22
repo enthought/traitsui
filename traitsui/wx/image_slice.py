@@ -24,6 +24,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 from colorsys \
@@ -38,10 +39,10 @@ from traits.api \
 from pyface.image_resource \
     import ImageResource
 
-from constants \
+from .constants \
     import WindowColor
 
-from constants import is_mac
+from .constants import is_mac
 import traitsui.wx.constants
 from six.moves import range
 

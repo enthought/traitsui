@@ -23,6 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 import wx.lib.mixins.listctrl as listmix
 
@@ -52,7 +53,7 @@ from pyface.image_resource \
 from pyface.timer.api \
     import do_later
 
-from constants \
+from .constants \
     import is_mac, scrollbar_dx
 import six
 from six.moves import range

@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import sys
 import wx
 
@@ -37,16 +38,16 @@ from traits.api \
 from traitsui.editors.range_editor \
     import ToolkitEditorFactory
 
-from editor_factory \
+from .editor_factory \
     import TextEditor
 
-from editor \
+from .editor \
     import Editor
 
-from constants \
+from .constants \
     import OKColor, ErrorColor
 
-from helper \
+from .helper \
     import TraitsUIPanel, Slider
 from six.moves import range
 

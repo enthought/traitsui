@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 import wx.lib.scrolledpanel as wxsp
@@ -44,16 +45,16 @@ from traitsui.dockable_view_element \
 from pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
-from constants \
+from .constants \
     import scrollbar_dx
 
-from editor \
+from .editor \
     import Editor
 
-from menu \
+from .menu \
     import MakeMenu
 
-from image_control \
+from .image_control \
     import ImageControl
 import six
 from six.moves import range

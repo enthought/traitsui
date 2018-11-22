@@ -23,6 +23,7 @@ wxPython user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import logging
 
 import wx
@@ -36,13 +37,13 @@ from traits.api \
 from traitsui.editors.check_list_editor \
     import ToolkitEditorFactory
 
-from editor_factory \
+from .editor_factory \
     import TextEditor as BaseTextEditor
 
-from editor \
+from .editor \
     import EditorWithList
 
-from helper \
+from .helper \
     import TraitsUIPanel
 from functools import reduce
 import six

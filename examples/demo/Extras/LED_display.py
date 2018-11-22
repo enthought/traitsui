@@ -6,6 +6,7 @@ This demo illustrates use of the LEDEditor for displaying numeric values
 using a simulated LED display control.
 """
 
+from __future__ import absolute_import
 from threading \
     import Thread
 

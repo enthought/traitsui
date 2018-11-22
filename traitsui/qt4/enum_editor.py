@@ -18,6 +18,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api \
@@ -29,10 +30,10 @@ from traits.api \
 from traitsui.editors.enum_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from constants \
+from .constants \
     import OKColor, ErrorColor
 
 from traitsui.helper \

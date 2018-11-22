@@ -18,6 +18,7 @@ demos because this demo specifies a custom id when invoking the file dialog.
 
 #-- Imports --------------------------------------------------------------
 
+from __future__ import absolute_import
 from traits.api \
     import HasTraits, File, Button
 

@@ -76,6 +76,7 @@ Finally:
 
 #-- Imports --------------------------------------------------------------
 
+from __future__ import absolute_import
 from os \
     import walk, getcwd, listdir
 

@@ -6,6 +6,7 @@ one style of TableEditor is implemented, so that is the one shown.
 """
 
 # Imports:
+from __future__ import absolute_import
 from traits.api \
     import HasTraits, HasStrictTraits, Str, Int, Regex, List, Enum
 

@@ -22,12 +22,13 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import datetime
 
 from pyface.qt import QtCore, QtGui
 
-from editor import Editor
-from editor_factory import ReadonlyEditor as BaseReadonlyEditor
+from .editor import Editor
+from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

@@ -18,6 +18,7 @@ PyQt user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from math \
     import log10
 
@@ -32,16 +33,16 @@ from traits.api \
 from traitsui.editors.range_editor \
     import ToolkitEditorFactory
 
-from editor_factory \
+from .editor_factory \
     import TextEditor
 
-from editor \
+from .editor \
     import Editor
 
-from constants \
+from .constants \
     import OKColor, ErrorColor
 
-from helper \
+from .helper \
     import IconButton
 import six
 from six.moves import range

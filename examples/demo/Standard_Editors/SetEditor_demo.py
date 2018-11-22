@@ -13,6 +13,7 @@ The four tabs of this demo show variations on the interface as follows:
 """
 
 # Imports:
+from __future__ import absolute_import
 from traits.api \
     import HasTraits, List
 

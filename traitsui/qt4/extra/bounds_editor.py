@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pyface.qt import QtGui, QtCore
 
 from traits.api import Float, Any, Str, Trait

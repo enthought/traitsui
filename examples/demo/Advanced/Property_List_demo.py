@@ -30,6 +30,7 @@ the <i>ticker</i> event fires, not every time it is accessed.
 
 #-- Imports --------------------------------------------------------------
 
+from __future__ import absolute_import
 from random \
     import randint, choice
 

@@ -18,6 +18,7 @@ Traits-based user interface.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api \
@@ -26,7 +27,7 @@ from traits.api \
 from traitsui.editor_factory \
     import EditorFactory as BaseEditorFactory
 
-from editor \
+from .editor \
     import Editor
 import six
 

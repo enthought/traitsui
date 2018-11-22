@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from nose.tools import assert_equals
 
 from traitsui.api import DefaultOverride, EditorFactory

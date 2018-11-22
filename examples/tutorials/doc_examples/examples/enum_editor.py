@@ -4,6 +4,7 @@
 # enum_editor.py -- Example of using an enumeration editor
 
 #--[Imports]--------------------------------------------------------------
+from __future__ import absolute_import
 from traits.api import HasTraits, Enum
 from traitsui.api import EnumEditor, View, Item
 

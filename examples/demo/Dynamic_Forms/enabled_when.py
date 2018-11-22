@@ -19,6 +19,7 @@ attribute of the Person being viewed.
 Compare this to very similar demo of *visible_when*.
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, Range, Bool, Enum
 from traitsui.api import Item, Group, View, Label
 

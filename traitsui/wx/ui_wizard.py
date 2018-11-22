@@ -25,16 +25,17 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 import wx.wizard as wz
 
-from constants \
+from .constants \
     import DefaultTitle
 
-from helper \
+from .helper \
     import restore_window, save_window, GroupEditor
 
-from ui_panel \
+from .ui_panel \
     import fill_panel_for_group
 
 from traits.api \
