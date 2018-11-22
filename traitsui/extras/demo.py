@@ -159,7 +159,7 @@ class DemoFileHandler(Handler):
         locals['__file__'] = df.path
         sys.modules['__main__'].__file__ = df.path
         try:
-            execfile(df.path, locals, locals)
+            exec(compile(open(df.path).read(), df.path, 'exec'), locals, locals)
             demo = self._get_object('modal_popup', locals)
             if demo is not None:
                 demo = ModalDemoButton(demo=demo)
@@ -186,7 +186,7 @@ class DemoFileHandler(Handler):
 
     def execute_test(self, df, locals):
         """ Executes the file in df.path in the namespace of locals."""
-        execfile(df.path, locals, locals)
+        exec(compile(open(df.path).read(), df.path, 'exec'), locals, locals)
 
     #-------------------------------------------------------------------------
     #  Closes the view:
