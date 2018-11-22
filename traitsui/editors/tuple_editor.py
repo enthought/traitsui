@@ -38,6 +38,7 @@ from ..item import Item
 from ..editor_factory import EditorFactory
 
 from ..editor import Editor
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:

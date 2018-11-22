@@ -34,6 +34,7 @@ from editor \
 from traits.api \
     import Instance, Property
 import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

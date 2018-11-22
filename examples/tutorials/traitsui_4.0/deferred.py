@@ -36,6 +36,7 @@ number of screen updates.
 
 from traits.api import *
 from traitsui.api import *
+from six.moves import range
 
 #--[Count Class]----------------------------------------------------------
 

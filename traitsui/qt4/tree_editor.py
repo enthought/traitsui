@@ -44,6 +44,7 @@ from .clipboard import clipboard, PyMimeData
 from .editor import Editor
 from .helper import pixmap_cache
 import six
+from six.moves import range
 
 logger = logging.getLogger(__name__)
 

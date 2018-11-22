@@ -39,6 +39,7 @@ from editor_factory \
 from editor \
     import EditorWithList
 import six
+from six.moves import range
 
 logger = logging.getLogger(__name__)
 

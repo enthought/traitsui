@@ -28,6 +28,7 @@ from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
 import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -186,7 +187,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         adapter = editor.adapter
 
         self.beginInsertRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             value = adapter.get_default_value(editor.object, editor.name)
             editor.callx(
                 adapter.insert,
@@ -205,7 +206,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         adapter = editor.adapter
 
         self.beginRemoveRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             editor.callx(adapter.delete, editor.object, editor.name, row)
         self.endRemoveRows()
         return True
@@ -288,8 +289,8 @@ class ListStrModel(QtCore.QAbstractListModel):
         # Update the selection for the new location.
         if editor.factory.multi_select:
             editor.setx(multi_selected=objects)
-            editor.multi_selected_indices = range(
-                new_row, new_row + len(objects))
+            editor.multi_selected_indices = list(range(
+                new_row, new_row + len(objects)))
         else:
             editor.setx(selected=objects[0])
             editor.selected_index = new_row

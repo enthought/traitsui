@@ -62,6 +62,7 @@ from constants \
 from ui_base \
     import BaseDialog
 from constants import is_mac
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:

@@ -33,6 +33,7 @@ from traitsui.api \
 
 from traits.api \
     import Color, Font
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:

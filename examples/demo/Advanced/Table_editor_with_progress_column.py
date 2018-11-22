@@ -4,6 +4,7 @@ from pyface.api import GUI
 from traits.api import Button, HasTraits, Instance, Int, List, Str
 from traitsui.api import ObjectColumn, TableEditor, UItem, View
 from traitsui.extras.progress_column import ProgressColumn
+from six.moves import range
 
 
 class Job(HasTraits):

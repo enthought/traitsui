@@ -32,6 +32,7 @@ from traitsui.wx.editor import Editor
 from traitsui.wx.constants import WindowColor
 from traitsui.wx.text_editor \
     import ReadonlyEditor as TextReadonlyEditor
+from six.moves import range
 
 
 #------------------------------------------------------------------------------

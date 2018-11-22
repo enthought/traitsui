@@ -103,6 +103,7 @@ from traits.api import HasTraits, Str, Int, List, Instance, Property, \
 from traits.etsconfig.api import ETSConfig
 from traitsui.api import View, Group, Item, TabularEditor
 from traitsui.tabular_adapter import TabularAdapter
+from six.moves import range
 
 #-- Person Class Definition ----------------------------------------------
 

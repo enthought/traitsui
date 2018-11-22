@@ -22,6 +22,7 @@ from traitsui.ui_traits import SequenceTypes
 
 from .clipboard import PyMimeData
 from six.moves import map
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -209,7 +210,7 @@ class TableModel(QtCore.QAbstractTableModel):
         editor = self._editor
         items = editor.items()
         self.beginInsertRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             editor.callx(items.insert, row + i, editor.create_new_row())
         self.endInsertRows()
         return True
@@ -221,7 +222,7 @@ class TableModel(QtCore.QAbstractTableModel):
         editor = self._editor
         items = editor.items()
         self.beginRemoveRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             editor.callx(items.pop, row + i)
         self.endRemoveRows()
         return True

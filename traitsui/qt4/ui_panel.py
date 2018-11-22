@@ -44,6 +44,7 @@ from ui_base \
 
 from editor \
     import Editor
+from six.moves import range
 
 
 #-------------------------------------------------------------------------

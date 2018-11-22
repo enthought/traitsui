@@ -69,6 +69,7 @@ from table_model \
 
 from helper import TraitsUIPanel
 from functools import reduce
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -757,7 +758,7 @@ class TableEditor(Editor, BaseTableEditor):
         values = []
         for row0, col0 in tl:
             row1, col1 = br.next()
-            for row in xrange(row0, row1 + 1):
+            for row in range(row0, row1 + 1):
                 if row < rows:
                     values.append((rio(row), gfi(row)))
 
@@ -793,7 +794,7 @@ class TableEditor(Editor, BaseTableEditor):
         values = []
         for row0, col0 in tl:
             row1, col1 = br.next()
-            for row in xrange(row0, row1 + 1):
+            for row in range(row0, row1 + 1):
                 if row < rows:
                     values.append((rio(row), gfi(row)))
 
@@ -823,7 +824,7 @@ class TableEditor(Editor, BaseTableEditor):
         values = []
         for row0, col0 in tl:
             row1, col1 = br.next()
-            for col in xrange(col0, col1 + 1):
+            for col in range(col0, col1 + 1):
                 values.append((col, cols[col].name))
 
         if len(values) > 0:
@@ -851,7 +852,7 @@ class TableEditor(Editor, BaseTableEditor):
         values = []
         for row0, col0 in tl:
             row1, col1 = br.next()
-            for col in xrange(col0, col1 + 1):
+            for col in range(col0, col1 + 1):
                 values.append((col, cols[col].name))
 
         # Sort by increasing row index:
@@ -882,9 +883,9 @@ class TableEditor(Editor, BaseTableEditor):
         values = []
         for row0, col0 in tl:
             row1, col1 = br.next()
-            for row in xrange(row0, row1 + 1):
+            for row in range(row0, row1 + 1):
                 item = gfi(row)
-                for col in xrange(col0, col1 + 1):
+                for col in range(col0, col1 + 1):
                     values.append(((rio(row), col),
                                    (item, cols[col].name)))
 
@@ -918,9 +919,9 @@ class TableEditor(Editor, BaseTableEditor):
         values = []
         for row0, col0 in tl:
             row1, col1 = br.next()
-            for row in xrange(row0, row1 + 1):
+            for row in range(row0, row1 + 1):
                 item = gfi(row)
-                for col in xrange(col0, col1 + 1):
+                for col in range(col0, col1 + 1):
                     values.append(((rio(row), col),
                                    (item, cols[col].name)))
 

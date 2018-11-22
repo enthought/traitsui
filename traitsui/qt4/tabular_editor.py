@@ -38,6 +38,7 @@ from traitsui.tabular_adapter import TabularAdapter
 from .editor import Editor
 from .tabular_model import TabularModel
 import six
+from six.moves import range
 
 
 class HeaderEventFilter(QtCore.QObject):
@@ -295,14 +296,14 @@ class TabularEditor(Editor):
         cws = prefs.get('cached_widths')
         num_columns = len(self.adapter.columns)
         if cws is not None and num_columns == len(cws):
-            for column in xrange(num_columns):
+            for column in range(num_columns):
                 self.control.setColumnWidth(column, cws[column])
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
         widths = [self.control.columnWidth(column)
-                  for column in xrange(len(self.adapter.columns))]
+                  for column in range(len(self.adapter.columns))]
         return {'cached_widths': widths}
 
     #-------------------------------------------------------------------------
@@ -723,7 +724,7 @@ class _TableView(QtGui.QTableView):
         sh = QtGui.QTableView.sizeHint(self)
 
         width = 0
-        for column in xrange(len(self._editor.adapter.columns)):
+        for column in range(len(self._editor.adapter.columns)):
             width += self.sizeHintForColumn(column)
         sh.setWidth(width)
 
@@ -774,7 +775,7 @@ class _TableView(QtGui.QTableView):
 
         # Assign sizes for columns with absolute size requests
         percent_vals, percent_cols = [], []
-        for column in xrange(len(editor.adapter.columns)):
+        for column in range(len(editor.adapter.columns)):
             width = editor.adapter.get_width(
                 editor.object, editor.name, column)
             if width > 1:

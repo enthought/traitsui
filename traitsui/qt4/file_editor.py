@@ -23,6 +23,7 @@ from traitsui.editors.file_editor import ToolkitEditorFactory
 from text_editor import SimpleEditor as SimpleTextEditor
 from helper import IconButton
 import six
+from six.moves import range
 
 
 is_qt5 = (QtCore.__version_info__[0] >= 5)
@@ -175,7 +176,7 @@ class CustomEditor(SimpleTextEditor):
 
         # Hide the labels at the top and only show the column for the file name
         self.control.header().hide()
-        for column in xrange(1, model.columnCount()):
+        for column in range(1, model.columnCount()):
             self.control.hideColumn(column)
 
         factory = self.factory

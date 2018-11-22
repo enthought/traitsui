@@ -44,6 +44,7 @@ from constants \
 from helper \
     import IconButton
 import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'BaseRangeEditor' class:
@@ -825,7 +826,7 @@ def CustomEnumEditor(parent, factory, ui, object, name, description,
     if factory._enum is None:
         import traitsui.editors.enum_editor as enum_editor
         factory._enum = enum_editor.ToolkitEditorFactory(
-            values=range(factory.low, factory.high + 1),
+            values=list(range(factory.low, factory.high + 1)),
             cols=factory.cols)
 
     if style == 'simple':

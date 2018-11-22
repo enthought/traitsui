@@ -24,6 +24,7 @@ from traitsui.menu import Action
 from .constants import DefaultTitle
 from .editor import Editor
 from .helper import restore_window, save_window
+from six.moves import range
 
 
 class ButtonEditor(Editor):
@@ -222,7 +223,7 @@ class BaseDialog(BasePanel):
     """Base class for Traits UI dialog boxes."""
 
     # The different dialog styles.
-    NONMODAL, MODAL, POPUP = range(3)
+    NONMODAL, MODAL, POPUP = list(range(3))
 
     def init(self, ui, parent, style):
         """Initialise the dialog by creating the controls."""

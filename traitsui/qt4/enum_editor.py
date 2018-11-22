@@ -39,6 +39,7 @@ from traitsui.helper \
     import enum_values_changed
 from functools import reduce
 import six
+from six.moves import range
 
 
 # default formatting function (would import from string, but not in Python 3)

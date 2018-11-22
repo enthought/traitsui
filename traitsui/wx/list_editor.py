@@ -56,6 +56,7 @@ from menu \
 from image_control \
     import ImageControl
 import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -325,7 +326,7 @@ class SimpleEditor(Editor):
             pairs.
         """
         sizer = self.control.GetSizer()
-        for i in xrange(2 * len(controls) + extra):
+        for i in range(2 * len(controls) + extra):
             sizer.Remove(0)
         index = 0
         for control, pcontrol in controls:

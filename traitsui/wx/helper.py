@@ -49,6 +49,7 @@ from constants \
 from editor \
     import Editor
 import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Trait definitions:

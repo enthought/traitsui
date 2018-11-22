@@ -27,6 +27,7 @@ from pyface.qt import QtGui
 
 from editor import Editor
 import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  '_HistoryEditor' class:
@@ -95,7 +96,7 @@ class _HistoryEditor(Editor):
         """ Returns any user preference information associated with the editor.
         """
         history = [str(self.control.itemText(index))
-                   for index in xrange(self.control.count())]
+                   for index in range(self.control.count())]
 
         # If the view closed successfully, update the history with the current
         # editor value, as long it is different from the current object value:
@@ -116,5 +117,5 @@ class _HistoryEditor(Editor):
         """
         diff = self.control.count() - self.factory.entries
         if diff > 0:
-            for i in xrange(diff):
+            for i in range(diff):
                 self.control.removeItem(self.factory.entries)

@@ -48,6 +48,7 @@ from constants \
 
 from helper \
     import TraitsUIPanel, Slider
+from six.moves import range
 
 if not hasattr(wx, 'wx.wxEVT_SCROLL_ENDSCROLL'):
     wxEVT_SCROLL_ENDSCROLL = wx.wxEVT_SCROLL_CHANGED
@@ -1006,7 +1007,7 @@ def CustomEnumEditor(parent, factory, ui, object, name, description,
     if factory._enum is None:
         import traitsui.editors.enum_editor as enum_editor
         factory._enum = enum_editor.ToolkitEditorFactory(
-            values=range(factory.low, factory.high + 1),
+            values=list(range(factory.low, factory.high + 1)),
             cols=factory.cols)
 
     if style == 'simple':

@@ -55,6 +55,7 @@ Notes:
 
 import logging
 import sys
+from six.moves import range
 logging.basicConfig(stream=sys.stderr)
 
 from random \

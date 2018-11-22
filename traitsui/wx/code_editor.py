@@ -49,6 +49,7 @@ from editor \
 
 from constants \
     import OKColor, ErrorColor
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -398,7 +399,7 @@ class SourceEditor(Editor):
             self.control.Colourise(position, end)
             self.control.SetLexer(stc.STC_LEX_CONTAINER)
 
-        for line in xrange(start_line, end_line + 1):
+        for line in range(start_line, end_line + 1):
             # We don't use LineLength here because it includes newline
             # characters. Styling these leads to strange behavior.
             position = self.control.PositionFromLine(line)

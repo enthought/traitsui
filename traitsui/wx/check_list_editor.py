@@ -46,6 +46,7 @@ from helper \
     import TraitsUIPanel
 from functools import reduce
 import six
+from six.moves import range
 
 logger = logging.getLogger(__name__)
 

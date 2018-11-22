@@ -33,6 +33,7 @@ from traitsui.editors.list_editor import ListItemProxy, \
 from editor import Editor
 from helper import IconButton
 from menu import MakeMenu
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -660,7 +661,7 @@ class NotebookEditor(Editor):
         """ Closes the currently selected tab:
         """
         widget = self.control.currentWidget()
-        for i in xrange(len(self._uis)):
+        for i in range(len(self._uis)):
             page, ui, _, _ = self._uis[i]
             if page is widget:
                 if force or ui.handler.close(ui.info, True):

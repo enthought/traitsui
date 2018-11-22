@@ -43,6 +43,7 @@ from constants \
 from helper \
     import enum_values_changed, TraitsUIPanel, disconnect, disconnect_no_id
 from functools import reduce
+from six.moves import range
 
 
 # default formatting function (would import from string, but not in Python 3)

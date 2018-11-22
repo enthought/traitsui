@@ -48,6 +48,7 @@ from traitsui.api \
 
 from traitsui.table_column \
     import ObjectColumn
+from six.moves import range
 
 #-- Person Class ---------------------------------------------------------
 

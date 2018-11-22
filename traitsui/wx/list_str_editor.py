@@ -45,6 +45,7 @@ from pyface.image_resource \
 
 from helper \
     import disconnect, disconnect_no_id
+from six.moves import range
 
 try:
     from pyface.wx.drag_and_drop \
@@ -759,9 +760,9 @@ class _ListStrEditor(Editor):
         name = self.name
 
         if increment >= 0:
-            items = xrange(start, self.item_count)
+            items = range(start, self.item_count)
         else:
-            items = xrange(start, -1, -1)
+            items = range(start, -1, -1)
 
         for index in items:
             if search in get_text(object, name, index).lower():

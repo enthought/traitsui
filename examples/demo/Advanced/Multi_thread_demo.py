@@ -16,6 +16,7 @@ from threading import Thread
 from time import sleep
 from traits.api import HasTraits, Int, Button
 from traitsui.api import View, Item, VGroup
+from six.moves import range
 
 
 class ThreadDemo(HasTraits):
