@@ -480,7 +480,7 @@ class FunctionNode(SingleValueTreeNodeObject):
     def format_value(self, value):
         """ Returns the formatted version of the value.
         """
-        return 'Function %s()' % (value.func_code.co_name)
+        return 'Function %s()' % (value.__code__.co_name)
 
 #---------------------------------------------------------------------------
 #  'MethodNode' class:
@@ -497,13 +497,13 @@ class MethodNode(MultiValueTreeNodeObject):
         """ Returns the formatted version of the value.
         """
         type = 'B'
-        if value.im_self is None:
+        if value.__self__ is None:
             type = 'Unb'
 
         return '%sound method %s.%s()' % (
             type,
-            value.im_class.__name__,
-            value.im_func.func_code.co_name)
+            value.__self__.__class__.__name__,
+            value.__func__.__code__.co_name)
 
     #-------------------------------------------------------------------------
     #  Returns whether or not the object has children:
@@ -512,7 +512,7 @@ class MethodNode(MultiValueTreeNodeObject):
     def tno_has_children(self, node):
         """ Returns whether the object has children.
         """
-        return (self.value.im_func is not None)
+        return (self.value.__func__ is not None)
 
     #-------------------------------------------------------------------------
     #  Gets the object's children:
@@ -521,7 +521,7 @@ class MethodNode(MultiValueTreeNodeObject):
     def tno_get_children(self, node):
         """ Gets the object's children.
         """
-        return [self.node_for('Object', self.value.im_self)]
+        return [self.node_for('Object', self.value.__self__)]
 
 #-------------------------------------------------------------------------
 #  'ObjectNode' class:
