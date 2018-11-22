@@ -43,6 +43,7 @@ from traitsui.tabular_adapter \
 
 from pyface.image_resource \
     import ImageResource
+from io import open
 
 #-- Constants ------------------------------------------------------------
 

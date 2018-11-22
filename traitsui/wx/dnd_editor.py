@@ -45,6 +45,7 @@ from traitsui.editors.dnd_editor \
 from pyface.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
 import six
+from io import open
 
 try:
     from apptools.io import File

@@ -75,6 +75,7 @@ from pyface.timer.api import do_later
 from .helper import commatize
 
 from .toolkit import toolkit
+from io import open
 
 #-------------------------------------------------------------------------
 #  Constants:

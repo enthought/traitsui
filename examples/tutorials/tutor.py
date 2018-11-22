@@ -53,6 +53,7 @@ from traitsui.tree_node \
 
 from pyface.image_resource \
     import ImageResource
+from io import open
 
 try:
     from traitsui.wx.extra.windows.ie_html_editor \

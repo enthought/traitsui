@@ -27,6 +27,7 @@ import re
 import webbrowser
 
 import wx
+from io import open
 
 if wx.Platform == '__WXMSW__':
     # The new version of IEHTMLWindow (wx 2.8.8.0) is mostly compatible with

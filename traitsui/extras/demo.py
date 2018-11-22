@@ -44,6 +44,7 @@ from os import listdir
 
 from os.path import (join, isdir, split, splitext, dirname, basename, abspath,
                      exists, isabs)
+from io import open
 
 #-------------------------------------------------------------------------
 #  Global data:

@@ -26,6 +26,7 @@ from pyface.qt import QtGui
 from traits.api import File, List, Str
 from traitsui.view import View
 from six.moves import range
+from io import open
 
 # Logger.
 logger = logging.getLogger(__name__)

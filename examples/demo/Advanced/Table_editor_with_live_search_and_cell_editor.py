@@ -93,6 +93,7 @@ from traitsui.api \
 
 from traitsui.table_column \
     import ObjectColumn
+from io import open
 
 #-- Constants ------------------------------------------------------------
 

@@ -24,6 +24,7 @@ from traitsui.file_dialog  \
 
 from traitsui.helper \
     import commatize
+from io import open
 
 #-- LineCountInfo Class --------------------------------------------------
 

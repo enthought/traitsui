@@ -18,6 +18,7 @@ import glob
 import sys
 from traitsui.api import Editor
 from traitsui.editor_factory import EditorFactory
+from io import open
 
 
 def gen_editor_definitions(target_filename):
