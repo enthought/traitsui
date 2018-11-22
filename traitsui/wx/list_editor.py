@@ -55,6 +55,7 @@ from menu \
 
 from image_control \
     import ImageControl
+import six
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -756,7 +757,7 @@ class NotebookEditor(Editor):
                     name = handler(self.ui.info, user_object)
 
                 if name is None:
-                    name = unicode(
+                    name = six.text_type(
                         xgetattr(
                             view_object,
                             self.factory.page_name[
@@ -803,7 +804,7 @@ class NotebookEditor(Editor):
                 if handler_name is not None:
                     name = handler_name
                 else:
-                    name = unicode(name) or u'???'
+                    name = six.text_type(name) or u'???'
                 view_object.on_trait_change(self.update_page_name,
                                             page_name[1:], dispatch='ui')
             else:

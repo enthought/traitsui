@@ -17,6 +17,7 @@ from pyface.qt import QtCore, QtGui
 
 # ETS imports
 from editor import Editor
+import six
 
 
 class SearchWidget(QtGui.QLineEdit):
@@ -28,7 +29,7 @@ class SearchWidget(QtGui.QLineEdit):
         """ Store the descriptive text for the widget.
         """
         super(SearchWidget, self).__init__()
-        self._desc = unicode(desc)
+        self._desc = six.text_type(desc)
         self._set_descriptive_text()
 
     def focusInEvent(self, event):

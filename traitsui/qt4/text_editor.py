@@ -36,6 +36,7 @@ from editor_factory \
 
 from constants \
     import OKColor
+import six
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -165,7 +166,7 @@ class SimpleEditor(Editor):
         except AttributeError:
             value = self.control.toPlainText()
 
-        value = unicode(value)
+        value = six.text_type(value)
 
         try:
             value = self.evaluate(value)

@@ -36,7 +36,7 @@ import six
 #-------------------------------------------------------------------------
 
 NumericTypes = (int, long, float, complex)
-SimpleTypes = (str, unicode, int, long, float, complex)
+SimpleTypes = (str, six.text_type, int, long, float, complex)
 
 #-------------------------------------------------------------------------
 #  'AbstractUndoItem' class:

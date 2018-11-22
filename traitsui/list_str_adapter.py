@@ -269,7 +269,7 @@ class ListStrAdapter(HasPrivateTraits):
         return self.can_edit
 
     def _get_drag(self):
-        return unicode(self.item)
+        return six.text_type(self.item)
 
     def _get_can_drop(self):
         return isinstance(self.value, six.string_types)
@@ -296,7 +296,7 @@ class ListStrAdapter(HasPrivateTraits):
         return self.item
 
     def _get_text(self):
-        return unicode(self.item)
+        return six.text_type(self.item)
 
     #-- Private Methods ------------------------------------------------------
 

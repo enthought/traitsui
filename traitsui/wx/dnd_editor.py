@@ -43,6 +43,7 @@ from traitsui.editors.dnd_editor \
 
 from pyface.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
+import six
 
 try:
     from apptools.io import File
@@ -74,7 +75,7 @@ object_image = ImageResource('object').create_image()
 inactive_image = ImageResource('inactive').create_image()
 
 # String types:
-string_type = (str, unicode)
+string_type = (str, six.text_type)
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

@@ -180,7 +180,7 @@ class CustomEditor(SimpleEditor):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self._mapper = QtCore.QSignalMapper()
-        self._mapper.mapped[unicode].connect(self.update_object)
+        self._mapper.mapped[six.text_type].connect(self.update_object)
 
     #-------------------------------------------------------------------------
     #  Rebuilds the editor after its definition is modified:
@@ -279,7 +279,7 @@ class TextEditor(BaseTextEditor):
         """ Handles the user changing the contents of the edit control.
         """
         try:
-            value = unicode(self.control.text())
+            value = six.text_type(self.control.text())
             value = eval(value)
         except:
             pass

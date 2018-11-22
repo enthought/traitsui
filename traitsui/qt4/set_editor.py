@@ -33,6 +33,7 @@ from editor \
 
 from traits.api \
     import Instance, Property
+import six
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -510,7 +511,7 @@ class SimpleEditor(Editor):
     def _get_selected_strings(self, listbox):
         """ Returns a list of the selected strings in the given *listbox*.
         """
-        return [unicode(itm.text()) for itm in listbox.selectedItems()]
+        return [six.text_type(itm.text()) for itm in listbox.selectedItems()]
 
     #-------------------------------------------------------------------------
     # Returns the index of the first (or only) selected item.

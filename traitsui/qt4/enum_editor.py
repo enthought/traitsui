@@ -38,6 +38,7 @@ from constants \
 from traitsui.helper \
     import enum_values_changed
 from functools import reduce
+import six
 
 
 # default formatting function (would import from string, but not in Python 3)
@@ -246,7 +247,7 @@ class SimpleEditor(BaseEditor):
         if self._no_enum_update == 0:
             self._no_enum_update += 1
             try:
-                self.value = self.mapping[unicode(text)]
+                self.value = self.mapping[six.text_type(text)]
             except:
                 from traitsui.api import raise_to_debug
                 raise_to_debug()
@@ -260,7 +261,7 @@ class SimpleEditor(BaseEditor):
         """ Handles the user typing text into the combo box text entry field.
         """
         if self._no_enum_update == 0:
-            value = unicode(text)
+            value = six.text_type(text)
             try:
                 value = self.mapping[value]
             except:
@@ -497,7 +498,7 @@ class ListEditor(BaseEditor):
     def update_object(self, text):
         """ Handles the user selecting a list box item.
         """
-        value = unicode(text)
+        value = six.text_type(text)
         try:
             value = self.mapping[value]
         except:

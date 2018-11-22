@@ -27,6 +27,7 @@ from __future__ import unicode_literals
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
+import six
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -221,7 +222,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         """
         mime_data = QtCore.QMimeData()
         rows = list(set([index.row() for index in indexes]))
-        data = QtCore.QByteArray(unicode(rows[0]).encode('utf8'))
+        data = QtCore.QByteArray(six.text_type(rows[0]).encode('utf8'))
         for row in rows[1:]:
             data.append((' %i' % row).encode('utf8'))
         mime_data.setData(mime_type, data)

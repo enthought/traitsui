@@ -31,6 +31,7 @@ from editor_factory \
 
 from editor \
     import Editor
+import six
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -224,7 +225,7 @@ class TextColorEditor(BaseTextEditor):
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
-        self.value = unicode(self.control.text())
+        self.value = six.text_type(self.control.text())
         set_color(self)
 
     #-------------------------------------------------------------------------
@@ -380,7 +381,7 @@ def color_editor_for(editor, parent):
 
             i += 1
 
-    mapper.mapped[unicode].connect(editor.update_object_from_swatch)
+    mapper.mapped[six.text_type].connect(editor.update_object_from_swatch)
 
     panel.addLayout(grid)
 

@@ -53,6 +53,7 @@ from .view import View
 
 # Set up a logger:
 import logging
+import six
 logger = logging.getLogger(__name__)
 
 
@@ -883,7 +884,7 @@ class ListColumn(TableColumn):
     def get_value(self, object):
         """ Gets the value of the column for a specified object.
         """
-        return unicode(object[self.index])
+        return six.text_type(object[self.index])
 
     #-------------------------------------------------------------------------
     #  Sets the value of the column for a specified object:

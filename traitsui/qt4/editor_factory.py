@@ -28,6 +28,7 @@ from traitsui.editor_factory \
 
 from editor \
     import Editor
+import six
 
 #-------------------------------------------------------------------------
 #  'EditorFactory' class
@@ -109,7 +110,7 @@ class TextEditor(Editor):
         if self.control is None:
             return
         try:
-            self.value = unicode(self.control.text())
+            self.value = six.text_type(self.control.text())
         except TraitError as excp:
             pass
 

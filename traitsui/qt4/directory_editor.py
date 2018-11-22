@@ -21,6 +21,7 @@ from traitsui.editors.directory_editor import ToolkitEditorFactory
 from file_editor import (
     SimpleEditor as SimpleFileEditor, CustomEditor as CustomFileEditor
 )
+import six
 
 
 class SimpleEditor(SimpleFileEditor):
@@ -54,7 +55,7 @@ class CustomEditor(CustomFileEditor):
         """
         if self.control is not None:
             if self._model.isDir(idx):
-                self.value = unicode(self._model.filePath(idx))
+                self.value = six.text_type(self._model.filePath(idx))
 
     # Trait change handlers --------------------------------------------------
 

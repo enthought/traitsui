@@ -34,6 +34,7 @@ from traits.api import Any, Bool, HasPrivateTraits, HasTraits, Instance, List, S
 from .tree_node import ObjectTreeNode, TreeNode, TreeNodeObject
 
 from .editors.tree_editor import TreeEditor
+import six
 
 #-------------------------------------------------------------------------
 #  'SingleValueTreeNodeObject' class:
@@ -707,7 +708,7 @@ def basic_types():
         _basic_types = [
             (type(None), NoneNode),
             (str, StringNode),
-            (unicode, StringNode),
+            (six.text_type, StringNode),
             (bool, BoolNode),
             (int, IntNode),
             (float, FloatNode),

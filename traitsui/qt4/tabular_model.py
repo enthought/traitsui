@@ -30,6 +30,7 @@ from traitsui.ui_traits import SequenceTypes
 
 from .clipboard import PyMimeData
 from six.moves import map
+import six
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -267,7 +268,7 @@ class TabularModel(QtCore.QAbstractTableModel):
             self._editor.object, self._editor.name, row)
             for row in rows]
         mime_data = PyMimeData.coerce(items)
-        data = QtCore.QByteArray(unicode(id(self)).encode('utf8'))
+        data = QtCore.QByteArray(six.text_type(id(self)).encode('utf8'))
         for row in rows:
             data.append((' %i' % row).encode('utf8'))
         mime_data.setData(tabular_mime_type, data)

@@ -1474,7 +1474,7 @@ class SimpleEditor(Editor):
         except:
             return
 
-        new_label = unicode(nid.text(col))
+        new_label = six.text_type(nid.text(col))
         old_label = node.get_label(object)
 
         if new_label != old_label:

@@ -272,7 +272,7 @@ class MakeMenu:
         act = self.get_action(name)
 
         if label is None:
-            return unicode(act.text())
+            return six.text_type(act.text())
 
         act.setText(label)
 
