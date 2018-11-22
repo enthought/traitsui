@@ -1,6 +1,5 @@
 # Copyright (c) 2008-2015 by Enthought, Inc.
 # All rights reserved.
-from __future__ import unicode_literals
 
 import os
 import re
@@ -53,7 +52,7 @@ def git_version():
 
 
 def write_version_py(filename='traitsui/_version.py'):
-    template = """\
+    template = u"""\
 # THIS FILE IS GENERATED FROM TRAITS SETUP.PY
 version = '{version}'
 full_version = '{full_version}'
@@ -91,7 +90,7 @@ if not is_released:
     if not IS_RELEASED:
         fullversion += '.dev{0}'.format(dev_num)
 
-    with open(filename, "wt") as fp:
+    with open(filename, "wt", encoding='ascii') as fp:
         fp.write(template.format(version=VERSION,
                                  full_version=fullversion,
                                  git_revision=git_rev,
