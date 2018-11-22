@@ -5,6 +5,7 @@ import re
 import subprocess
 
 from setuptools import setup, find_packages
+from io import open
 
 MAJOR = 6
 MINOR = 1
@@ -94,6 +95,7 @@ if not is_released:
                                  git_revision=git_rev,
                                  is_released=IS_RELEASED))
 
+
 if __name__ == "__main__":
     write_version_py()
     from traitsui import __version__, __requires__, __extras_require__
@@ -142,7 +144,7 @@ if __name__ == "__main__":
         package_data=dict(traitsui=['image/library/*.zip', 'images/*',
                                     'wx/images/*', 'qt4/images/*']),
         packages=find_packages(),
-        entry_points = {
+        entry_points={
             'traitsui.toolkits': [
                 'qt4 = traitsui.qt4:toolkit',
                 'wx = traitsui.wx:toolkit',
@@ -152,5 +154,4 @@ if __name__ == "__main__":
         },
         platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
         zip_safe=False,
-        use_2to3=True,
     )
