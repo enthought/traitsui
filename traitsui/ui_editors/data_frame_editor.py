@@ -123,11 +123,11 @@ class DataFrameAdapter(TabularAdapter):
 
         df = getattr(object, trait)
         if 0 < row < len(df) - 1:
-            new_df = pd.concat([df.iloc[:row, :], df.iloc[row + 1:, :]])
+            new_df = pd.concat([df.iloc[:row,:], df.iloc[row + 1:,:]])
         elif row == 0:
-            new_df = df.iloc[row + 1:, :]
+            new_df = df.iloc[row + 1:,:]
         else:
-            new_df = df.iloc[:row, :]
+            new_df = df.iloc[:row,:]
         setattr(object, trait, new_df)
 
     def insert(self, object, trait, row, value):
@@ -140,7 +140,7 @@ class DataFrameAdapter(TabularAdapter):
 
         df = getattr(object, trait)
         if 0 < row < len(df) - 1:
-            new_df = pd.concat([df.iloc[:row, :], value, df.iloc[row:, :]])
+            new_df = pd.concat([df.iloc[:row,:], value, df.iloc[row:,:]])
         elif row == 0:
             new_df = pd.concat([value, df])
         else:

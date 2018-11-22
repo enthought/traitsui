@@ -68,7 +68,7 @@ def sample_data():
 
 
 def sample_data_numerical_index():
-    df = DataFrame(DATA, index=list(range(1,5)), columns=['X', 'Y', 'Z'])
+    df = DataFrame(DATA, index=list(range(1, 5)), columns=['X', 'Y', 'Z'])
     viewer = DataFrameViewer(data=df)
     return viewer
 
