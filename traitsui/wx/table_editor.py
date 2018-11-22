@@ -758,7 +758,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the row items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for row in range(row0, row1 + 1):
                 if row < rows:
                     values.append((rio(row), gfi(row)))
@@ -794,7 +794,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the row items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for row in range(row0, row1 + 1):
                 if row < rows:
                     values.append((rio(row), gfi(row)))
@@ -824,7 +824,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for col in range(col0, col1 + 1):
                 values.append((col, cols[col].name))
 
@@ -852,7 +852,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for col in range(col0, col1 + 1):
                 values.append((col, cols[col].name))
 
@@ -883,7 +883,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for row in range(row0, row1 + 1):
                 item = gfi(row)
                 for col in range(col0, col1 + 1):
@@ -919,7 +919,7 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
+            row1, col1 = next(br)
             for row in range(row0, row1 + 1):
                 item = gfi(row)
                 for col in range(col0, col1 + 1):
