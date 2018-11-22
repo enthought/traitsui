@@ -546,7 +546,7 @@ class DemoPath(DemoTreeNodeObject):
     def _get_init_dic(self):
         init_dic = {}
         description, source = parse_source(join(self.path, '__init__.py'))
-        exec (exec_str + source) in init_dic
+        exec((exec_str + source), init_dic)
         return init_dic
 
         # fixme: The following code should work, but doesn't, so we use the

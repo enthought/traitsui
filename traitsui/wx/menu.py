@@ -176,8 +176,8 @@ class MakeMenu:
                             handler = null_handler
                 else:
                     try:
-                        exec 'def handler(event,self=self.owner):\n%s\n' % (
-                            self.get_body(indented), ) in globals()
+                        exec('def handler(event,self=self.owner):\n%s\n' % (
+                            self.get_body(indented), ), globals())
                     except:
                         handler = null_handler
                 wx.EVT_MENU(self.window, cur_id, handler)
