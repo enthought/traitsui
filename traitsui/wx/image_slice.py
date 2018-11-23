@@ -280,7 +280,7 @@ class ImageSlice(HasPrivateTraits):
             else:
                 matches = [(dy / 2, 1)]
         elif n > self.stretch_rows:
-            matches.sort(lambda l, r: cmp(r[1], l[1]))
+            matches.sort(key=lambda x: x[1])
             matches = matches[: self.stretch_rows]
 
         # Calculate and save the horizontal slice sizes:
@@ -309,7 +309,7 @@ class ImageSlice(HasPrivateTraits):
             else:
                 matches = [(dx / 2, 1)]
         elif n > self.stretch_columns:
-            matches.sort(lambda l, r: cmp(r[1], l[1]))
+            matches.sort(key=lambda x: x[1])
             matches = matches[: self.stretch_columns]
 
         # Calculate and save the vertical slice sizes:
