@@ -30,7 +30,7 @@ import collections
 from traits.api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
                         Instance, Int, List, Property, Str, Trait)
 import six
-from six.moves import range
+
 
 #-------------------------------------------------------------------------
 #  Constants:

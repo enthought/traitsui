@@ -25,7 +25,6 @@ from pyface.qt import QtGui
 # Enthought library imports.
 from traits.api import File, List, Str
 from traitsui.view import View
-from six.moves import range
 from io import open
 
 # Logger.

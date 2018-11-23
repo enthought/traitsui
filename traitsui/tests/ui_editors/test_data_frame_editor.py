@@ -11,7 +11,7 @@ from __future__ import print_function
 import nose
 import numpy as np
 from numpy.testing import assert_array_equal
-from six.moves import range
+
 
 try:
     from pandas import DataFrame

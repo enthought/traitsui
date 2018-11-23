@@ -45,7 +45,6 @@ from .constants \
 from .helper \
     import IconButton
 import six
-from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'BaseRangeEditor' class:

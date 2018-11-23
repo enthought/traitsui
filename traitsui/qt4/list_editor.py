@@ -34,8 +34,7 @@ from traitsui.editors.list_editor import ListItemProxy, \
 from .editor import Editor
 from .helper import IconButton
 from .menu import MakeMenu
-from six.moves import range
-
+\
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
 #-------------------------------------------------------------------------

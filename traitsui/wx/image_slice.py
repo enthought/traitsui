@@ -44,7 +44,7 @@ from .constants \
 
 from .constants import is_mac
 import traitsui.wx.constants
-from six.moves import range
+
 
 #-------------------------------------------------------------------------
 #  Recursively paint the parent's background if they have an associated image

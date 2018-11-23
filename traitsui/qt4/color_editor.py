@@ -33,7 +33,7 @@ from .editor_factory \
 from .editor \
     import Editor
 import six
-from six.moves import range
+
 
 #-------------------------------------------------------------------------
 #  Constants:

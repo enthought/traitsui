@@ -49,7 +49,7 @@ from .constants \
 
 from .helper \
     import TraitsUIPanel, Slider
-from six.moves import range
+
 
 if not hasattr(wx, 'wx.wxEVT_SCROLL_ENDSCROLL'):
     wxEVT_SCROLL_ENDSCROLL = wx.wxEVT_SCROLL_CHANGED

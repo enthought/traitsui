@@ -42,7 +42,7 @@ from .editor \
 
 from .helper \
     import enum_values_changed, TraitsUIPanel
-from six.moves import range
+
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

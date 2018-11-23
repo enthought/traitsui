@@ -23,7 +23,6 @@ from traitsui.ui_traits import SequenceTypes
 
 from .clipboard import PyMimeData
 from six.moves import map
-from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:

@@ -38,7 +38,6 @@ from traitsui.tabular_adapter import TabularAdapter
 from .editor import Editor
 from .tabular_model import TabularModel
 import six
-from six.moves import range
 
 
 class HeaderEventFilter(QtCore.QObject):
