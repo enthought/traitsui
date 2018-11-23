@@ -23,6 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -30,11 +31,12 @@ from pyface.qt import QtCore, QtGui
 # traitsui.editors.image_enum_editor file.
 from traitsui.editors.image_enum_editor import ToolkitEditorFactory
 
-from editor import Editor
-from enum_editor import BaseEditor as BaseEnumEditor
-from enum_editor import SimpleEditor as SimpleEnumEditor
-from enum_editor import RadioEditor as CustomEnumEditor
-from helper import pixmap_cache
+from .editor import Editor
+from .enum_editor import BaseEditor as BaseEnumEditor
+from .enum_editor import SimpleEditor as SimpleEnumEditor
+from .enum_editor import RadioEditor as CustomEnumEditor
+from .helper import pixmap_cache
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'BaseImageEnumEditor' class:
@@ -199,7 +201,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
             # Unless we force it, the popup for a combo box will not be wider
             # than the box itself, so we set a high minimum width.
             width = 0
-            for col in xrange(self._editor.factory.cols):
+            for col in range(self._editor.factory.cols):
                 width += view.sizeHintForColumn(col)
             view.setMinimumWidth(width)
         else:

@@ -23,6 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 from traits.api \
@@ -31,7 +32,7 @@ from traits.api \
 from pyface.timer.api \
     import do_later
 
-from constants \
+from .constants \
     import OKColor, ErrorColor
 
 #-------------------------------------------------------------------------

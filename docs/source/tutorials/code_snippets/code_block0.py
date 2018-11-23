@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from numpy import cos, sin
 
 class Point(object):

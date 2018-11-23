@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 import wx.html as wh
 import re
@@ -53,15 +54,16 @@ from pyface.dock.api \
 from pyface.sizers.flow \
     import FlowSizer
 
-from helper \
+from .helper \
     import position_window, TraitsUIPanel, TraitsUIScrolledPanel, GroupEditor
 
-from constants \
+from .constants \
     import screen_dx, screen_dy, WindowColor
 
-from ui_base \
+from .ui_base \
     import BaseDialog
-from constants import is_mac
+from .constants import is_mac
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -908,7 +910,7 @@ class FillPanel(object):
 
                 # If still no editor factory found, use a default text editor:
                 if editor_factory is None:
-                    from text_editor import ToolkitEditorFactory
+                    from .text_editor import ToolkitEditorFactory
                     editor_factory = ToolkitEditorFactory()
 
                 # If the item has formatting traits set them in the editor

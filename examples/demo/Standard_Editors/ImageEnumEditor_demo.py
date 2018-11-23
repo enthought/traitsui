@@ -8,6 +8,7 @@ This demo shows each of the four styles of the ImageEnumEditor.
 """
 
 # Imports:
+from __future__ import absolute_import
 from traits.api \
     import HasTraits, Str, Trait
 

@@ -20,6 +20,7 @@ A ListStrEditor was not checking for valid item indexes under Wx.  This was
 most noticeable when the selected_index was set in the editor factory.
 """
 
+from __future__ import absolute_import
 from traits.has_traits import HasTraits
 from traits.trait_types import List, Int, Str
 from traitsui.item import Item

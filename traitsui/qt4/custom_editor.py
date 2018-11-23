@@ -18,6 +18,7 @@ based custom control.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -26,7 +27,7 @@ from pyface.qt import QtGui
 from traitsui.editors.custom_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------

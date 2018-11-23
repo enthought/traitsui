@@ -18,6 +18,7 @@ interface toolkit, useful for tools such as debuggers.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from pyface.ui.qt4.code_editor.code_widget import AdvancedCodeWidget
@@ -32,9 +33,10 @@ from traitsui.editors.code_editor import ToolkitEditorFactory
 
 from pyface.key_pressed_event import KeyPressedEvent
 
-from constants import OKColor, ErrorColor
-from editor import Editor
-from helper import pixmap_cache
+from .constants import OKColor, ErrorColor
+from .editor import Editor
+from .helper import pixmap_cache
+import six
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -193,7 +195,7 @@ class SourceEditor(Editor):
         """
         if not self._locked:
             try:
-                value = unicode(self._widget.code.toPlainText())
+                value = six.text_type(self._widget.code.toPlainText())
                 if isinstance(self.value, SequenceTypes):
                     value = value.split()
                 self.value = value
@@ -276,7 +278,7 @@ class SourceEditor(Editor):
     #-------------------------------------------------------------------------
 
     def _selection_changed(self):
-        self.selected_text = unicode(
+        self.selected_text = six.text_type(
             self._widget.code.textCursor().selectedText())
         start = self._widget.code.textCursor().selectionStart()
         end = self._widget.code.textCursor().selectionEnd()

@@ -4,6 +4,7 @@
 # key_bindings.py -- Example of a code editor with a key bindings editor
 
 #--[Imports]--------------------------------------------------------------
+from __future__ import absolute_import
 from traits.api \
     import Button, Code, HasPrivateTraits, Str
 

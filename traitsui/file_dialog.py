@@ -25,6 +25,7 @@
 
 from __future__ import absolute_import
 
+from __future__ import print_function
 from os import R_OK, W_OK, access, mkdir
 
 from os.path import (basename, dirname, exists, getatime, getctime, getmtime,
@@ -74,6 +75,7 @@ from pyface.timer.api import do_later
 from .helper import commatize
 
 from .toolkit import toolkit
+from io import open
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -720,5 +722,5 @@ def save_file(**traits):
 #-- Test Case ------------------------------------------------------------
 
 if __name__ == '__main__':
-    print save_file(extensions=[FileInfo(), TextInfo(), ImageInfo()],
-                    filter='Python file (*.py)|*.py')
+    print(save_file(extensions=[FileInfo(), TextInfo(), ImageInfo()],
+                    filter='Python file (*.py)|*.py'))

@@ -16,6 +16,7 @@
 Test case for ListStrEditor and ListStrAdapter
 """
 
+from __future__ import absolute_import
 from traits.has_traits import HasTraits
 from traits.trait_types import List, Str
 from traitsui.list_str_adapter import ListStrAdapter

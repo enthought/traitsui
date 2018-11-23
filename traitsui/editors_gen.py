@@ -20,6 +20,7 @@ backends.
 from __future__ import absolute_import
 
 import glob
+from io import open
 
 
 def gen_editor_definitions(target_filename='editors.py'):

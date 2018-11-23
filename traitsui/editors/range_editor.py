@@ -34,6 +34,7 @@ from ..view import View
 from ..editor_factory import EditorFactory
 
 from ..toolkit import toolkit_object
+import six
 
 #-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -155,8 +156,8 @@ class ToolkitEditorFactory(EditorFactory):
         if self.is_float is Undefined:
             self.is_float = isinstance(low, float)
 
-        if (self.low_label == '') or (self.low_label == unicode(old_low)):
-            self.low_label = unicode(low)
+        if (self.low_label == '') or (self.low_label == six.text_type(old_low)):
+            self.low_label = six.text_type(low)
 
     def _get_high(self):
         return self._high
@@ -167,11 +168,11 @@ class ToolkitEditorFactory(EditorFactory):
         if self.is_float is Undefined:
             self.is_float = isinstance(high, float)
 
-        if (self.high_label == '') or (self.high_label == unicode(old_high)):
-            self.high_label = unicode(high)
+        if (self.high_label == '') or (self.high_label == six.text_type(old_high)):
+            self.high_label = six.text_type(high)
 
     def _cast(self, value):
-        if not isinstance(value, basestring):
+        if not isinstance(value, six.string_types):
             return value
 
         try:

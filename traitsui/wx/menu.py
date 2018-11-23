@@ -49,9 +49,12 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 #  Imports:
 #=========================================================================
 
+from __future__ import absolute_import
+from __future__ import print_function
 import wx
 import re
 import string
+import six
 
 #=========================================================================
 #  Constants:
@@ -175,8 +178,8 @@ class MakeMenu:
                             handler = null_handler
                 else:
                     try:
-                        exec 'def handler(event,self=self.owner):\n%s\n' % (
-                            self.get_body(indented), ) in globals()
+                        exec('def handler(event,self=self.owner):\n%s\n' % (
+                            self.get_body(indented), ), globals())
                     except:
                         handler = null_handler
                 wx.EVT_MENU(self.window, cur_id, handler)
@@ -260,7 +263,7 @@ class MakeMenu:
     def get_id(self, name):
         """ Returns the ID associated with a specified name.
         """
-        if isinstance(name, basestring):
+        if isinstance(name, six.string_types):
             return self.names[name]
         return name
 
@@ -348,4 +351,4 @@ def option_check(test, string):
 
 
 def null_handler(event):
-    print 'null_handler invoked'
+    print('null_handler invoked')

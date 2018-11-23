@@ -1,6 +1,7 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Float, List
 from traitsui.api import View, Item, RangeEditor
 

@@ -18,6 +18,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import os.path
 
 from pyface.qt import QtCore, QtGui
@@ -25,6 +26,7 @@ from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
+import six
 
 is_qt5 = QtCore.__version_info__ >= (5,)
 
@@ -188,7 +190,7 @@ class IconButton(QtGui.QPushButton):
         # Get the minimum icon size to use.
         ico_sz = sty.pixelMetric(QtGui.QStyle.PM_ButtonIconSize)
 
-        if isinstance(icon, basestring):
+        if isinstance(icon, six.string_types):
             pm = pixmap_cache(icon)
 
             # Increase the icon size to accomodate the image if needed.

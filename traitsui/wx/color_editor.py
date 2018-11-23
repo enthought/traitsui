@@ -18,6 +18,7 @@
 #  Imports:
 #------------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 import wx.combo
 
@@ -25,12 +26,12 @@ from traits.api import List, TraitError
 from traitsui.editors.color_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
 
-from editor_factory import SimpleEditor as BaseSimpleEditor
-from editor_factory import ReadonlyEditor as BaseReadonlyEditor
-from editor_factory import TextEditor as BaseTextEditor
+from .editor_factory import SimpleEditor as BaseSimpleEditor
+from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
+from .editor_factory import TextEditor as BaseTextEditor
 
-from color_trait import w3c_color_database
-from helper import TraitsUIPanel
+from .color_trait import w3c_color_database
+from .helper import TraitsUIPanel
 
 # Version dependent imports (ColourPtr not defined in wxPython 2.5):
 try:

@@ -29,13 +29,15 @@ import collections
 
 from traits.api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
                         Instance, Int, List, Property, Str, Trait)
+import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------
 
-NumericTypes = (int, long, float, complex)
-SimpleTypes = (str, unicode, int, long, float, complex)
+NumericTypes = (int, int, float, complex)
+SimpleTypes = (str, six.text_type, int, int, float, complex)
 
 #-------------------------------------------------------------------------
 #  'AbstractUndoItem' class:
@@ -154,7 +156,7 @@ class UndoItem(AbstractUndoItem):
             t1 = type(v1)
             if isinstance(v2, t1):
 
-                if isinstance(t1, basestring):
+                if isinstance(t1, six.string_types):
                     # Merge two undo items if they have new values which are
                     # strings which only differ by one character (corresponding
                     # to a single character insertion, deletion or replacement

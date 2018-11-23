@@ -181,7 +181,7 @@ class KeyBindings(HasPrivateTraits):
         """ Processes a keyboard event.
         """
         if isinstance(controllers, dict):
-            controllers = controllers.values()
+            controllers = list(controllers.values())
         elif not isinstance(controllers, SequenceTypes):
             controllers = [controllers]
         else:

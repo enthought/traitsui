@@ -44,6 +44,7 @@ from os import listdir
 
 from os.path import (join, isdir, split, splitext, dirname, basename, abspath,
                      exists, isabs)
+from io import open
 
 #-------------------------------------------------------------------------
 #  Global data:
@@ -159,7 +160,7 @@ class DemoFileHandler(Handler):
         locals['__file__'] = df.path
         sys.modules['__main__'].__file__ = df.path
         try:
-            execfile(df.path, locals, locals)
+            exec(compile(open(df.path).read(), df.path, 'exec'), locals, locals)
             demo = self._get_object('modal_popup', locals)
             if demo is not None:
                 demo = ModalDemoButton(demo=demo)
@@ -186,7 +187,7 @@ class DemoFileHandler(Handler):
 
     def execute_test(self, df, locals):
         """ Executes the file in df.path in the namespace of locals."""
-        execfile(df.path, locals, locals)
+        exec(compile(open(df.path).read(), df.path, 'exec'), locals, locals)
 
     #-------------------------------------------------------------------------
     #  Closes the view:
@@ -546,7 +547,7 @@ class DemoPath(DemoTreeNodeObject):
     def _get_init_dic(self):
         init_dic = {}
         description, source = parse_source(join(self.path, '__init__.py'))
-        exec (exec_str + source) in init_dic
+        exec((exec_str + source), init_dic)
         return init_dic
 
         # fixme: The following code should work, but doesn't, so we use the

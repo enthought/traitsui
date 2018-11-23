@@ -9,6 +9,7 @@ each of the four styles of the CheckListEditor.
 """
 
 # Imports:
+from __future__ import absolute_import
 from traits.api \
     import HasTraits, List
 

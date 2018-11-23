@@ -17,6 +17,7 @@
 Test cases for the UI object.
 """
 
+from __future__ import absolute_import
 import nose
 
 from traits.has_traits import HasTraits

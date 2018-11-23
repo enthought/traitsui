@@ -60,6 +60,7 @@ Now try typing a value into the 'd' trait and you will see that an error
 results (indicated by the text entry field turning red), because this is a
 normal 'cached' trait that has no 'setter' method defined.
 """
+from __future__ import absolute_import
 from math import sqrt
 
 from traits.api import HasTraits, Int, Range, Property, cached_property

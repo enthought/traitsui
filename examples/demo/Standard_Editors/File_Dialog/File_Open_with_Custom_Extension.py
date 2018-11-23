@@ -9,6 +9,7 @@ over the standard OS file dialog, select the <b>File Open</b> demo.
 
 #-- Imports --------------------------------------------------------------
 
+from __future__ import absolute_import
 from os.path \
     import getsize
 
@@ -23,6 +24,7 @@ from traitsui.file_dialog  \
 
 from traitsui.helper \
     import commatize
+from io import open
 
 #-- LineCountInfo Class --------------------------------------------------
 
@@ -53,7 +55,7 @@ class LineCountInfo(MFileDialogModel):
             if getsize(self.file_name) > 10000000:
                 return 'File too big...'
 
-            fh = file(self.file_name, 'rU')
+            fh = open(self.file_name, 'rU')
             data = fh.read()
             fh.close()
         except:

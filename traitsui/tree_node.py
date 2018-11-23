@@ -455,13 +455,13 @@ class TreeNode(HasPrivateTraits):
 
     def get_background(self, object):
         background = self.background
-        if isinstance(background, basestring):
+        if isinstance(background, six.string_types):
             background = getattr(object, background, background)
         return background
 
     def get_foreground(self, object):
         foreground = self.foreground
-        if isinstance(foreground, basestring):
+        if isinstance(foreground, six.string_types):
             foreground = getattr(object, foreground, foreground)
         return foreground
 
