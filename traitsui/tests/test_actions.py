@@ -16,8 +16,8 @@
 """
 Test that menu and toolbar actions are triggered.
 """
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
+
 import nose
 import pyface
 import unittest

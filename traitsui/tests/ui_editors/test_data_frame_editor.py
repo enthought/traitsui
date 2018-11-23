@@ -6,8 +6,7 @@
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import,  print_function
 import nose
 import numpy as np
 from numpy.testing import assert_array_equal

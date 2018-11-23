@@ -18,9 +18,8 @@ user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import division
+from __future__ import absolute_import, division
 
-from __future__ import absolute_import
 import logging
 
 from pyface.qt import QtCore, QtGui

@@ -27,9 +27,8 @@ trait.
 
 #-- Imports --------------------------------------------------------------
 
-from __future__ import division
+from __future__ import absolute_import, division
 
-from __future__ import absolute_import
 from operator import attrgetter
 
 from traits.api \
