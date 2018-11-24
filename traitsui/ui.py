@@ -352,7 +352,7 @@ class UI(HasPrivateTraits):
 
         # Get the context 'object' (if available):
         if len(context) == 1:
-            object = list(context.values())[0]
+            object = next(context.values())
         else:
             object = context.get('object')
 
@@ -813,7 +813,7 @@ class UI(HasPrivateTraits):
                 if name != 'handler':
                     break
         elif n == 1:
-            name = list(context.keys())[0]
+            name = next(context.keys())
 
         value = context.get(name)
         if value is not None:
