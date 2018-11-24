@@ -480,7 +480,7 @@ class FunctionNode(SingleValueTreeNodeObject):
     def format_value(self, value):
         """ Returns the formatted version of the value.
         """
-        return 'Function %s()' % (value.__code__.co_name)
+        return 'Function %s()' % (value.__name__)
 
 #---------------------------------------------------------------------------
 #  'MethodNode' class:
@@ -503,7 +503,7 @@ class MethodNode(MultiValueTreeNodeObject):
         return '%sound method %s.%s()' % (
             type,
             value.__self__.__class__.__name__,
-            value.__func__.__code__.co_name)
+            value.__func__.__name__)
 
     #-------------------------------------------------------------------------
     #  Returns whether or not the object has children:
