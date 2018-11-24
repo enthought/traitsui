@@ -45,7 +45,6 @@ from traitsui.editors.dnd_editor \
 from pyface.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
 import six
-from io import open
 
 try:
     from apptools.io import File
@@ -223,15 +222,11 @@ class SimpleEditor(Editor):
     def _unpickle(self, file_name):
         """ Returns the unpickled version of a specified file (if possible).
         """
-        fh = None
-        try:
-            fh = open(file_name, 'rb')
-            object = load(fh)
-        except:
-            object = None
-
-        if fh is not None:
-            fh.close()
+        with open(file_name, 'rb') as fh:
+            try:
+                object = load(fh)
+            except Exception:
+                object = None
 
         return object
 

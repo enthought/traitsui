@@ -74,7 +74,6 @@ from pyface.timer.api import do_later
 from .helper import commatize
 
 from .toolkit import toolkit
-from io import open
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -256,10 +255,9 @@ class TextInfo(MFileDialogModel):
             if getsize(self.file_name) > MAX_SIZE:
                 return 'File too big...'
 
-            fh = open(self.file_name, 'rb')
-            data = fh.read()
-            fh.close()
-        except:
+            with open(self.file_name, 'rb') as fh:
+                data = fh.read()
+        except Exception:
             return ''
 
         if (data.find('\x00') >= 0) or (data.find('\xFF') >= 0):

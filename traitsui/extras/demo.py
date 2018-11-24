@@ -29,7 +29,7 @@ import glob
 import token
 import tokenize
 import operator
-from io import StringIO
+from io import BytesIO
 from configobj import ConfigObj
 
 from traits.api import (HasTraits, HasPrivateTraits, Str, Instance, Property,
@@ -44,7 +44,7 @@ from os import listdir
 
 from os.path import (join, isdir, split, splitext, dirname, basename, abspath,
                      exists, isabs)
-from io import open
+
 
 #-------------------------------------------------------------------------
 #  Global data:
@@ -81,7 +81,7 @@ def extract_docstring_from_source(source):
         The source code, sans docstring.
     """
     # Reset file and generate python tokens
-    f = StringIO(source)
+    f = BytesIO(source)
     python_tokens = tokenize.generate_tokens(f.readline)
 
     for ttype, tstring, tstart, tend, tline in python_tokens:
@@ -114,10 +114,10 @@ def parse_source(file_name):
         The source code, sans docstring.
     """
     try:
-        fh = open(file_name, 'rb')
-        source_code = fh.read()
+        with open(file_name, 'rb') as fh:
+            source_code = fh.read()
         return extract_docstring_from_source(source_code)
-    except:
+    except Exception:
         return ('', '')
 
 
@@ -160,7 +160,7 @@ class DemoFileHandler(Handler):
         locals['__file__'] = df.path
         sys.modules['__main__'].__file__ = df.path
         try:
-            exec(compile(open(df.path).read(), df.path, 'exec'), locals, locals)
+            exec(compile(open(df.path, 'rb').read(), df.path, 'exec'), locals, locals)
             demo = self._get_object('modal_popup', locals)
             if demo is not None:
                 demo = ModalDemoButton(demo=demo)
@@ -187,7 +187,7 @@ class DemoFileHandler(Handler):
 
     def execute_test(self, df, locals):
         """ Executes the file in df.path in the namespace of locals."""
-        exec(compile(open(df.path).read(), df.path, 'exec'), locals, locals)
+        exec(compile(open(df.path, 'rb').read(), df.path, 'exec'), locals, locals)
 
     #-------------------------------------------------------------------------
     #  Closes the view:
