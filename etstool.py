@@ -78,7 +78,6 @@ how to run commands within an EDM enviornment.
 
 import glob
 import os
-import platform
 import subprocess
 import sys
 from shutil import rmtree, copy as copyfile
