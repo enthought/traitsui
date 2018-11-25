@@ -89,7 +89,7 @@ import click
 
 supported_combinations = {
     '2.7': {'pyside', 'pyside2', 'pyqt', 'wx', 'null'},
-    '3.5': {'pyqt', 'pyqt5', 'null'},
+    '3.5': {'pyside2', 'pyqt', 'pyqt5', 'null'},
     '3.6': {'pyside2', 'pyqt', 'pyqt5', 'null'},
 }
 
@@ -153,7 +153,7 @@ def install(runtime, toolkit, environment):
         commands.append("edm run -e {environment} -- pip install pyqt5==5.9.2")
     elif toolkit == 'pyside2':
         commands.append(
-            "edm run -e {environment} -- pip install pyside2==5.11.1"
+            "edm run -e {environment} -- pip install pyside2"
         )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
