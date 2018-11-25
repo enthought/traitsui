@@ -16,6 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import cgi
 import re
 
@@ -36,14 +37,15 @@ from traitsui.help_template \
 from traitsui.menu \
     import UndoButton, RevertButton, HelpButton
 
-from helper \
+from .helper \
     import position_window
 
-from ui_base \
+from .ui_base \
     import BasePanel
 
-from editor \
+from .editor \
     import Editor
+from six.moves import range
 
 
 #-------------------------------------------------------------------------
@@ -832,16 +834,19 @@ class _GroupPanel(object):
             # Otherwise, it must be a trait Item:
             object = eval(item.object_, globals(), ui.context)
             trait = object.base_trait(name)
-            desc = trait.desc or ''
+            desc = trait.tooltip
+            if desc is None:
+                desc = 'Specifies ' + trait.desc if trait.desc else ''
 
             # Get the editor factory associated with the Item:
             editor_factory = item.editor
             if editor_factory is None:
-                editor_factory = trait.get_editor().set(**item.editor_args)
+                editor_factory = trait.get_editor().trait_set(
+                    **item.editor_args)
 
                 # If still no editor factory found, use a default text editor:
                 if editor_factory is None:
-                    from text_editor import ToolkitEditorFactory
+                    from .text_editor import ToolkitEditorFactory
                     editor_factory = ToolkitEditorFactory()
 
                 # If the item has formatting traits set them in the editor
@@ -861,7 +866,7 @@ class _GroupPanel(object):
             factory_method = getattr(editor_factory, item.style + '_editor')
             editor = factory_method(
                 ui, object, name, item.tooltip, None
-            ).set(item=item, object_name=item.object)
+            ).trait_set(item=item, object_name=item.object)
 
             # Tell the editor to actually build the editing widget.  Note that
             # "inner" is a layout.  This shouldn't matter as individual editors
@@ -1097,9 +1102,10 @@ class _GroupPanel(object):
         we append a suffix (by default a colon ':') at the end of the
         label text.
 
-        We also set the help on the QLabel control (from item.help) and
-        the tooltip (it item.desc exists; we add "Specifies " at the start
-        of the item.desc string).
+        We also set the help on the QLabel control (from item.help) and the
+        tooltip (if the ``tooltip`` metadata on the edited trait exists, then
+        it will be used as-is; otherwise, if the ``desc`` metadata exists, the
+        string "Specifies " will be prepended to the start of ``desc``).
 
         Parameters
         ----------
@@ -1116,6 +1122,7 @@ class _GroupPanel(object):
         -------
         label_control : QLabel
             The control for the label
+
         """
 
         label = item.get_label(ui)
@@ -1138,10 +1145,8 @@ class _GroupPanel(object):
         #wx.EVT_LEFT_UP( control, show_help_popup )
         label_control.help = item.get_help(ui)
 
-        # FIXME: do people rely on traitsui adding 'Specifies ' to the start
-        # of every tooltip? It's not flexible at all
         if desc != '':
-            label_control.setToolTip('Specifies ' + desc)
+            label_control.setToolTip(desc)
 
         return label_control
 
@@ -1167,7 +1172,7 @@ class GroupEditor(Editor):
     def __init__(self, **traits):
         """ Initialise the object.
         """
-        self.set(**traits)
+        self.trait_set(**traits)
 
 
 class SplitterGroupEditor(GroupEditor):

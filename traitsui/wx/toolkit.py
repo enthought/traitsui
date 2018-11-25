@@ -24,6 +24,7 @@
 #-------------------------------------------------------------------------
 
 # Make sure that importimg from this backend is OK:
+from __future__ import absolute_import
 from traitsui.toolkit import assert_toolkit_import
 assert_toolkit_import(['wx'])
 
@@ -69,7 +70,7 @@ EventSuffix = {
 }
 
 # Types of popup views:
-Popups = set(('popup', 'popover', 'info'))
+Popups = {'popup', 'popover', 'info'}
 
 #-------------------------------------------------------------------------
 #  Handles UI notification handler requests that occur on a thread other than
@@ -103,70 +104,70 @@ class GUIToolkit(Toolkit):
         """ Creates a wxPython panel-based user interface using information
             from the specified UI object.
         """
-        import ui_panel
+        from . import ui_panel
         ui_panel.ui_panel(ui, parent)
 
     def ui_subpanel(self, ui, parent):
         """ Creates a wxPython subpanel-based user interface using information
             from the specified UI object.
         """
-        import ui_panel
+        from . import ui_panel
         ui_panel.ui_subpanel(ui, parent)
 
     def ui_livemodal(self, ui, parent):
         """ Creates a wxPython modal "live update" dialog user interface using
             information from the specified UI object.
         """
-        import ui_live
+        from . import ui_live
         ui_live.ui_livemodal(ui, parent)
 
     def ui_live(self, ui, parent):
         """ Creates a wxPython non-modal "live update" window user interface
             using information from the specified UI object.
         """
-        import ui_live
+        from . import ui_live
         ui_live.ui_live(ui, parent)
 
     def ui_modal(self, ui, parent):
         """ Creates a wxPython modal dialog user interface using information
             from the specified UI object.
         """
-        import ui_modal
+        from . import ui_modal
         ui_modal.ui_modal(ui, parent)
 
     def ui_nonmodal(self, ui, parent):
         """ Creates a wxPython non-modal dialog user interface using
             information from the specified UI object.
         """
-        import ui_modal
+        from . import ui_modal
         ui_modal.ui_nonmodal(ui, parent)
 
     def ui_popup(self, ui, parent):
         """ Creates a wxPython temporary "live update" popup dialog user
             interface using information from the specified UI object.
         """
-        import ui_live
+        from . import ui_live
         ui_live.ui_popup(ui, parent)
 
     def ui_popover(self, ui, parent):
         """ Creates a wxPython temporary "live update" popup dialog user
             interface using information from the specified UI object.
         """
-        import ui_live
+        from . import ui_live
         ui_live.ui_popover(ui, parent)
 
     def ui_info(self, ui, parent):
         """ Creates a wxPython temporary "live update" popup dialog user
             interface using information from the specified UI object.
         """
-        import ui_live
+        from . import ui_live
         ui_live.ui_info(ui, parent)
 
     def ui_wizard(self, ui, parent):
         """ Creates a wxPython wizard dialog user interface using information
             from the specified UI object.
         """
-        import ui_wizard
+        from . import ui_wizard
         ui_wizard.ui_wizard(ui, parent)
 
     def view_application(self, context, view, kind=None, handler=None,
@@ -202,7 +203,7 @@ class GUIToolkit(Toolkit):
             to display all of the items in the view at one time.
 
         """
-        import view_application
+        from . import view_application
         return view_application.view_application(context, view, kind, handler,
                                                  id, scrollable, args)
 
@@ -299,7 +300,7 @@ class GUIToolkit(Toolkit):
     def show_help(self, ui, control):
         """ Shows a help window for a specified UI and control.
         """
-        import ui_panel
+        from . import ui_panel
         ui_panel.show_help(ui, control)
 
     #-------------------------------------------------------------------------
@@ -309,7 +310,7 @@ class GUIToolkit(Toolkit):
     def save_window(self, ui):
         """ Saves user preference information associated with a UI window.
         """
-        import helper
+        from . import helper
 
         helper.save_window(ui)
 
@@ -366,7 +367,7 @@ class GUIToolkit(Toolkit):
     def key_event_to_name(self, event):
         """ Converts a keystroke event into a corresponding key name.
         """
-        import key_event_to_name
+        from . import key_event_to_name
 
         return key_event_to_name.key_event_to_name(event)
 
@@ -503,15 +504,15 @@ class GUIToolkit(Toolkit):
     #-------------------------------------------------------------------------
 
     def color_trait(self, *args, **traits):
-        import color_trait as ct
+        from . import color_trait as ct
         return ct.WxColor(*args, **traits)
 
     def rgb_color_trait(self, *args, **traits):
-        import rgb_color_trait as rgbct
+        from . import rgb_color_trait as rgbct
         return rgbct.RGBColor(*args, **traits)
 
     def font_trait(self, *args, **traits):
-        import font_trait as ft
+        from . import font_trait as ft
         return ft.WxFont(*args, **traits)
 
     #-------------------------------------------------------------------------
@@ -520,7 +521,7 @@ class GUIToolkit(Toolkit):
 
     # Generic UI-base editor:
     def ui_editor(self):
-        import ui_editor
+        from . import ui_editor
         return ui_editor.UIEditor
 #
 #    # Drag and drop:
@@ -581,7 +582,7 @@ class GUIToolkit(Toolkit):
 #    # Shell:
 
     def shell_editor(self, *args, **traits):
-        import shell_editor as se
+        from . import shell_editor as se
         return se.ToolkitEditorFactory(*args, **traits)
 #
 #    # Tabular:
@@ -725,7 +726,7 @@ class WXTheme(Category, Theme):
 
     @cached_property
     def _get_image_slice(self):
-        from image_slice import image_slice_for
+        from .image_slice import image_slice_for
 
         if self.image is None:
             return None

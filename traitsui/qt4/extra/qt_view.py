@@ -16,6 +16,7 @@
 """
 
 # Standard library imports.
+from __future__ import absolute_import
 import logging
 
 # System library imports.
@@ -24,6 +25,8 @@ from pyface.qt import QtGui
 # Enthought library imports.
 from traits.api import File, List, Str
 from traitsui.view import View
+from six.moves import range
+from io import open
 
 # Logger.
 logger = logging.getLogger(__name__)
@@ -65,7 +68,7 @@ class QtView(View):
 
         if len(self.tab_order) >= 2:
             previous = self._get_editor_control(ui, self.tab_order[0])
-            for i in xrange(1, len(self.tab_order)):
+            for i in range(1, len(self.tab_order)):
                 current = self._get_editor_control(ui, self.tab_order[i])
                 QtGui.QWidget.setTabOrder(previous, current)
                 previous = current

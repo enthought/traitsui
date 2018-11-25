@@ -444,8 +444,8 @@ class Handler(HasPrivateTraits):
             # If DockControl was closed, then reset it to point to the new
             # control:
             if close:
-                dock_control.set(control=control,
-                                 style=parent.owner.style)
+                dock_control.trait_set(control=control,
+                                       style=parent.owner.style)
                 dockable.dockable_init_dockcontrol(dock_control)
                 return dock_control
 

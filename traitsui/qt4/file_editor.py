@@ -11,6 +11,7 @@
 """ Defines file editors for the PyQt user interface toolkit.
 """
 
+from __future__ import absolute_import
 from os.path import abspath, splitext, isfile, exists
 
 from pyface.qt import QtCore, QtGui
@@ -20,8 +21,10 @@ from traits.api import List, Event, File, Unicode, TraitError
 # compatibility. The class has been moved to the
 # traitsui.editors.file_editor file.
 from traitsui.editors.file_editor import ToolkitEditorFactory
-from text_editor import SimpleEditor as SimpleTextEditor
-from helper import IconButton
+from .text_editor import SimpleEditor as SimpleTextEditor
+from .helper import IconButton
+import six
+from six.moves import range
 
 
 is_qt5 = (QtCore.__version_info__[0] >= 5)
@@ -63,7 +66,7 @@ class SimpleEditor(SimpleTextEditor):
         """ Handles the user changing the contents of the edit control.
         """
         if self.control is not None:
-            file_name = unicode(self._file_name.text())
+            file_name = six.text_type(self._file_name.text())
             try:
                 if self.factory.truncate_ext:
                     file_name = splitext(file_name)[0]
@@ -90,7 +93,7 @@ class SimpleEditor(SimpleTextEditor):
             files = dlg.selectedFiles()
 
             if len(files) > 0:
-                file_name = unicode(files[0])
+                file_name = six.text_type(files[0])
 
                 if self.factory.truncate_ext:
                     file_name = splitext(file_name)[0]
@@ -174,7 +177,7 @@ class CustomEditor(SimpleTextEditor):
 
         # Hide the labels at the top and only show the column for the file name
         self.control.header().hide()
-        for column in xrange(1, model.columnCount()):
+        for column in range(1, model.columnCount()):
             self.control.hideColumn(column)
 
         factory = self.factory
@@ -199,7 +202,7 @@ class CustomEditor(SimpleTextEditor):
         """ Handles the user changing the contents of the edit control.
         """
         if self.control is not None:
-            path = unicode(self._model.filePath(idx))
+            path = six.text_type(self._model.filePath(idx))
 
             if self.factory.allow_dir or isfile(path):
                 if self.factory.truncate_ext:
@@ -221,7 +224,7 @@ class CustomEditor(SimpleTextEditor):
     def _on_dclick(self, idx):
         """ Handles the user double-clicking on a file name.
         """
-        self.dclick = unicode(self._model.filePath(idx))
+        self.dclick = six.text_type(self._model.filePath(idx))
 
     # Trait change handlers --------------------------------------------------
 

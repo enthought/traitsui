@@ -21,6 +21,7 @@ but structurally very different demo of *dynamic restructuring of a user
 interface using an Instance editor and a Handler*.
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, Range, Bool, Enum
 from traitsui.api import Item, Group, View, Label
 

@@ -22,6 +22,8 @@ Future Work
 The class needs to be extend to provide the four basic editor types,
 Simple, Custom, Text, and ReadOnly.
 """
+from __future__ import absolute_import
+from __future__ import print_function
 import datetime
 
 import wx
@@ -32,6 +34,7 @@ from traitsui.wx.editor import Editor
 from traitsui.wx.constants import WindowColor
 from traitsui.wx.text_editor \
     import ReadonlyEditor as TextReadonlyEditor
+from six.moves import range
 
 
 #------------------------------------------------------------------------------
@@ -77,7 +80,7 @@ class SimpleEditor(Editor):
             try:
                 self.value = datetime.date(year, month, day)
             except ValueError:
-                print 'Invalid date:', year, month, day
+                print('Invalid date:', year, month, day)
                 raise
         return
 

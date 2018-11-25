@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 import wx.html as wh
 import re
@@ -53,15 +54,16 @@ from pyface.dock.api \
 from pyface.sizers.flow \
     import FlowSizer
 
-from helper \
+from .helper \
     import position_window, TraitsUIPanel, TraitsUIScrolledPanel, GroupEditor
 
-from constants \
+from .constants \
     import screen_dx, screen_dy, WindowColor
 
-from ui_base \
+from .ui_base \
     import BaseDialog
-from constants import is_mac
+from .constants import is_mac
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -885,7 +887,10 @@ class FillPanel(object):
             # Otherwise, it must be a trait Item:
             object = eval(item.object_, globals(), ui.context)
             trait = object.base_trait(name)
-            desc = trait.desc or ''
+            desc = trait.tooltip
+            if desc is None:
+                desc = 'Specifies ' + trait.desc if trait.desc else ''
+
             label = None
 
             # If we are displaying labels on the left, add the label to the
@@ -905,7 +910,7 @@ class FillPanel(object):
 
                 # If still no editor factory found, use a default text editor:
                 if editor_factory is None:
-                    from text_editor import ToolkitEditorFactory
+                    from .text_editor import ToolkitEditorFactory
                     editor_factory = ToolkitEditorFactory()
 
                 # If the item has formatting traits set them in the editor
@@ -927,7 +932,7 @@ class FillPanel(object):
             # Create the requested type of editor from the editor factory:
             factory_method = getattr(editor_factory, item.style + '_editor')
             editor = factory_method(ui, object, name, item.tooltip,
-                                    item_panel).set(
+                                    item_panel).trait_set(
                 item=item,
                 object_name=item.object)
 
@@ -1091,7 +1096,7 @@ class FillPanel(object):
                   pad_side, self.label_pad)
 
         if desc != '':
-            control.SetToolTipString('Specifies ' + desc)
+            control.SetToolTipString(desc)
 
         return control
 

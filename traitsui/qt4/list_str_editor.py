@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 import collections
 
@@ -30,8 +31,8 @@ from traits.api import Any, Bool, Event, Int, Instance, List, \
     Property, Str, TraitListEvent, NO_COMPARE
 from traitsui.list_str_adapter import ListStrAdapter
 
-from editor import Editor
-from list_str_model import ListStrModel
+from .editor import Editor
+from .list_str_model import ListStrModel
 from traitsui.menu import Menu
 
 

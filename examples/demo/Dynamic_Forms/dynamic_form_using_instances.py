@@ -29,6 +29,7 @@ version of Traits UI.
 Compare this to the simpler, but less powerful demo of *enabled_when*.
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, Range, Enum, Bool, Instance
 
 from traitsui.api import Item, Group, View, Handler, Label

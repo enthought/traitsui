@@ -44,7 +44,7 @@ class ToolkitEditorFactory(EditorFactory):
 # in traitsui.<toolkit>.font_editor, and if none is found, the
 # ToolkitEditorFactory declared here is returned.
 def FontEditor(*args, **traits):
-    """ Returns an instance of the toolkit-specific editor factory declared in
+    r""" Returns an instance of the toolkit-specific editor factory declared in
     traitsui.<toolkit>.font_editor. If such an editor factory
     cannot be located, an instance of the abstract ToolkitEditorFactory
     declared in traitsui.editors.font_editor is returned.

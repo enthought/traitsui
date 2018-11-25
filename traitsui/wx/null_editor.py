@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -30,7 +31,7 @@ import wx
 from traitsui.editors.null_editor \
     import NullEditor as ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------

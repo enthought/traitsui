@@ -14,6 +14,7 @@ When editing an Int, consider styles 'simple' and 'readonly'.
 # It no longer does. Should it?
 
 # Imports:
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, Int, Password
 
 from traitsui.api import Item, Group, View

@@ -13,6 +13,7 @@
 #
 #------------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import nose
 
 from traits.api import Bool, HasTraits, Instance, Int, List

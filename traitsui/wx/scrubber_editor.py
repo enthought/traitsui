@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 from math \
@@ -46,13 +47,13 @@ from traitsui.wx.editor \
 from pyface.timer.api \
     import do_after
 
-from constants \
+from .constants \
     import ErrorColor
 
-from image_slice \
+from .image_slice \
     import paint_parent
 
-from helper \
+from .helper \
     import disconnect, disconnect_no_id, BufferDC
 
 #-------------------------------------------------------------------------
@@ -147,7 +148,7 @@ class _ScrubberEditor(Editor):
         self._can_set_tooltip = (not self.set_tooltip())
 
         # Save the values we calculated:
-        self.set(low=low, high=high)
+        self.trait_set(low=low, high=high)
         self.sync_value(low_name, 'low', 'from')
         self.sync_value(high_name, 'high', 'from')
 

@@ -23,16 +23,17 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from traits.api \
     import Any, on_trait_change
 
 from pyface.timer.api \
     import do_later
 
-from editor \
+from .editor \
     import Editor
 
-from history_control \
+from .history_control \
     import HistoryControl
 
 #-------------------------------------------------------------------------
@@ -95,7 +96,7 @@ class _HistoryEditor(Editor):
             except:
                 history.error = True
 
-            do_later(self.set, _dont_update=False)
+            do_later(self.trait_set, _dont_update=False)
 
     #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:

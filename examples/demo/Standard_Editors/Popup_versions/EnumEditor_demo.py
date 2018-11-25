@@ -6,6 +6,7 @@ This demo shows each of the four styles of the EnumEditor.
 Fixme: This only shows the capabilities of the old-style EnumEditor
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Enum
 from traitsui.api import Item, Group, View
 

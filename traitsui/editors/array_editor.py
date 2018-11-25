@@ -40,6 +40,7 @@ from ..view import View
 from ..group import Group
 
 from ..item import Item
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:

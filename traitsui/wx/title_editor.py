@@ -22,7 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from editor \
+from __future__ import absolute_import
+from .editor \
     import Editor
 
 from pyface.heading_text \

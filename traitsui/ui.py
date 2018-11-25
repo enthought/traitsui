@@ -352,7 +352,7 @@ class UI(HasPrivateTraits):
 
         # Get the context 'object' (if available):
         if len(context) == 1:
-            object = context.values()[0]
+            object = list(context.values())[0]
         else:
             object = context.get('object')
 
@@ -411,7 +411,7 @@ class UI(HasPrivateTraits):
             created.
         """
         # Invoke all of the editor 'name_defined' methods we've accumulated:
-        info = self.info.set(initialized=False)
+        info = self.info.trait_set(initialized=False)
         for method in self._defined:
             method(info)
 
@@ -813,7 +813,7 @@ class UI(HasPrivateTraits):
                 if name != 'handler':
                     break
         elif n == 1:
-            name = context.keys()[0]
+            name = list(context.keys())[0]
 
         value = context.get(name)
         if value is not None:
@@ -957,7 +957,7 @@ class UI(HasPrivateTraits):
             return None
 
         # Get the KeyBindings object to use:
-        values = context.values()
+        values = list(context.values())
         key_bindings = view.key_bindings
         if key_bindings is None:
             from .key_bindings import KeyBindings

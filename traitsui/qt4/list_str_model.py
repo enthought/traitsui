@@ -24,9 +24,12 @@
 
 from __future__ import unicode_literals
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
+import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -185,7 +188,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         adapter = editor.adapter
 
         self.beginInsertRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             value = adapter.get_default_value(editor.object, editor.name)
             editor.callx(
                 adapter.insert,
@@ -204,7 +207,7 @@ class ListStrModel(QtCore.QAbstractListModel):
         adapter = editor.adapter
 
         self.beginRemoveRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             editor.callx(adapter.delete, editor.object, editor.name, row)
         self.endRemoveRows()
         return True
@@ -220,8 +223,8 @@ class ListStrModel(QtCore.QAbstractListModel):
             current selection.
         """
         mime_data = QtCore.QMimeData()
-        rows = list(set([index.row() for index in indexes]))
-        data = QtCore.QByteArray(unicode(rows[0]).encode('utf8'))
+        rows = list({index.row() for index in indexes})
+        data = QtCore.QByteArray(six.text_type(rows[0]).encode('utf8'))
         for row in rows[1:]:
             data.append((' %i' % row).encode('utf8'))
         mime_data.setData(mime_type, data)
@@ -287,8 +290,8 @@ class ListStrModel(QtCore.QAbstractListModel):
         # Update the selection for the new location.
         if editor.factory.multi_select:
             editor.setx(multi_selected=objects)
-            editor.multi_selected_indices = range(
-                new_row, new_row + len(objects))
+            editor.multi_selected_indices = list(range(
+                new_row, new_row + len(objects)))
         else:
             editor.setx(selected=objects[0])
             editor.selected_index = new_row

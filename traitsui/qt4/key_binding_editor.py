@@ -19,6 +19,7 @@ key binding editor).
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api \
@@ -30,10 +31,10 @@ from traits.api \
 from traitsui.editors.key_binding_editor \
     import KeyBindingEditor as ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from key_event_to_name \
+from .key_event_to_name \
     import key_event_to_name
 
 #-------------------------------------------------------------------------

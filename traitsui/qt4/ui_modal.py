@@ -14,15 +14,16 @@
 """
 
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.menu \
     import ApplyButton, RevertButton, OKButton, CancelButton, HelpButton
 
-from ui_base \
+from .ui_base \
     import BaseDialog
 
-from ui_panel \
+from .ui_panel \
     import panel
 
 

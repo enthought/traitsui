@@ -16,13 +16,14 @@ the PyQt user interface toolkit.
 
 # import pyface.qt before anything else is done so the sipapi
 # can be set correctly if needed
+from __future__ import absolute_import
 import pyface.qt
 
 #----------------------------------------------------------------------------
 #  Define the reference to the exported GUIToolkit object:
 #----------------------------------------------------------------------------
 
-import toolkit
+from . import toolkit
 
 # Reference to the GUIToolkit object for Qt.
 toolkit = toolkit.GUIToolkit('traitsui', 'qt4', 'traitsui.qt4')

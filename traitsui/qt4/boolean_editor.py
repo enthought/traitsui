@@ -17,6 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -25,16 +26,16 @@ from pyface.qt import QtCore, QtGui
 from traitsui.editors.boolean_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 # This needs to be imported in here for use by the editor factory for boolean
 # editors (declared in traitsui). The editor factory's text_editor
 # method will use the TextEditor in the ui.
-from text_editor \
+from .text_editor \
     import SimpleEditor as TextEditor
 
-from constants \
+from .constants \
     import ReadonlyColor
 
 #-------------------------------------------------------------------------

@@ -29,6 +29,7 @@ trait.
 
 from __future__ import division
 
+from __future__ import absolute_import
 from operator import attrgetter
 
 from traits.api \
@@ -39,6 +40,7 @@ from traitsui.api \
 
 from traitsui.table_column \
     import ObjectColumn
+from six.moves import range
 
 #-- Integer Class --------------------------------------------------------
 

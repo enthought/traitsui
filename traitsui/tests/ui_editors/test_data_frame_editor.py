@@ -6,9 +6,12 @@
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 
+from __future__ import absolute_import
+from __future__ import print_function
 import nose
 import numpy as np
 from numpy.testing import assert_array_equal
+from six.moves import range
 
 try:
     from pandas import DataFrame
@@ -67,7 +70,7 @@ def sample_data():
 
 
 def sample_data_numerical_index():
-    df = DataFrame(DATA, index=range(1,5), columns=['X', 'Y', 'Z'])
+    df = DataFrame(DATA, index=list(range(1, 5)), columns=['X', 'Y', 'Z'])
     viewer = DataFrameViewer(data=df)
     return viewer
 

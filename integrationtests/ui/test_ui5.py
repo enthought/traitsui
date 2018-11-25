@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 from traits.api \
@@ -33,6 +34,7 @@ from traitsui.api \
 
 from traits.api \
     import Color, Font
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:

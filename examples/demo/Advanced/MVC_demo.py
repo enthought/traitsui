@@ -17,6 +17,7 @@ A few key points:
      - the Controller's View can access model traits directly ('myname')
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, Bool, TraitError
 from traitsui.api import View, VGroup, HGroup, Item, Controller
 

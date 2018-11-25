@@ -23,6 +23,7 @@ based custom control.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -31,10 +32,10 @@ import wx
 from traitsui.editors.custom_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from helper \
+from .helper \
     import open_fbi
 
 #-------------------------------------------------------------------------

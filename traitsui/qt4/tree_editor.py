@@ -17,9 +17,13 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
+
 import copy
 import collections
 import logging
+
+from six.moves import zip_longest
 
 from pyface.qt import QtCore, QtGui
 
@@ -36,9 +40,11 @@ from traitsui.tree_node import (
 )
 from traitsui.menu import Menu, Action, Separator
 
-from clipboard import clipboard, PyMimeData
-from editor import Editor
-from helper import pixmap_cache
+from .clipboard import clipboard, PyMimeData
+from .editor import Editor
+from .helper import pixmap_cache
+import six
+from six.moves import range
 
 logger = logging.getLogger(__name__)
 
@@ -193,7 +199,7 @@ class SimpleEditor(Editor):
         """
         try:
             tree = self._tree
-            if (not isinstance(selection, basestring) and
+            if (not isinstance(selection, six.string_types) and
                     isinstance(selection, collections.Iterable)):
 
                 item_selection = QtGui.QItemSelection()
@@ -336,7 +342,7 @@ class SimpleEditor(Editor):
         """ Set the column labels.
         """
         for i, (header, label) in enumerate(
-                map(None, self.factory.column_headers[1:], column_labels), 1):
+                zip_longest(self.factory.column_headers[1:], column_labels), 1):
             if header is not None and label is not None:
                 nid.setText(i, label)
 
@@ -590,7 +596,7 @@ class SimpleEditor(Editor):
             return QtGui.QIcon()
 
         icon_name = node.get_icon(object, is_expanded)
-        if isinstance(icon_name, basestring):
+        if isinstance(icon_name, six.string_types):
             if icon_name.startswith('@'):
                 image_resource = convert_image(icon_name, 4)
                 return image_resource.create_icon()
@@ -599,7 +605,7 @@ class SimpleEditor(Editor):
                 return self._tree.style().standardIcon(icon)
 
             path = node.get_icon_path(object)
-            if isinstance(path, basestring):
+            if isinstance(path, six.string_types):
                 path = [path, node]
             else:
                 path = path + [node]
@@ -1469,7 +1475,7 @@ class SimpleEditor(Editor):
         except:
             return
 
-        new_label = unicode(nid.text(col))
+        new_label = six.text_type(nid.text(col))
         old_label = node.get_label(object)
 
         if new_label != old_label:

@@ -3,6 +3,7 @@
 
 # view_standalone.py --- Example of a view as a
 #                        standalone object
+from __future__ import absolute_import
 import wx
 from traits.api import HasTraits, Int, Str, Trait
 from traitsui.api import View
