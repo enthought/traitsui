@@ -4,6 +4,7 @@ Implementation of a FileEditor demo plugin for Traits UI demo program.
 This demo shows each of the four styles of the FileEditor.
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, File
 from traitsui.api import Item, Group, View
 

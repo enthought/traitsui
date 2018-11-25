@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pyface.qt import QtGui, QtCore
 
 
@@ -184,7 +186,7 @@ if __name__ == "__main__":
     import sys
 
     def echo(value):
-        print value
+        print(value)
     app = QtGui.QApplication(sys.argv)
     slider = RangeSlider()
     slider.setMinimum(0)

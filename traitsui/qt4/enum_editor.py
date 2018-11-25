@@ -13,13 +13,16 @@
 """ Defines the various editors and the editor factory for single-selection
     enumerations, for the PyQt user interface toolkit.
 """
+from __future__ import absolute_import
 
 from functools import reduce
+
+import six
+from six.moves import range
 
 from pyface.qt import QtCore, QtGui
 
 from traits.api import Bool, Property
-
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.enum_editor file.
@@ -244,7 +247,7 @@ class SimpleEditor(BaseEditor):
         if self._no_enum_update == 0:
             self._no_enum_update += 1
             try:
-                self.value = self.mapping[unicode(text)]
+                self.value = self.mapping[six.text_type(text)]
             except:
                 from traitsui.api import raise_to_debug
                 raise_to_debug()
@@ -254,7 +257,7 @@ class SimpleEditor(BaseEditor):
         """ Handles the user typing text into the combo box text entry field.
         """
         if self._no_enum_update == 0:
-            value = unicode(text)
+            value = six.text_type(text)
             try:
                 value = self.mapping[value]
             except:

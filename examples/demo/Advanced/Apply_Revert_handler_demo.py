@@ -10,6 +10,7 @@ Undo capability.
 """
 from __future__ import print_function
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, List
 from traitsui.api import Item, View, Handler, HGroup, VGroup, TextEditor
 

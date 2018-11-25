@@ -67,7 +67,7 @@ class ToolkitEditorFactory(EditorFactory):
 # in traitsui.<toolkit>.color_editor, and if none is found, the
 # ToolkitEditorFactory declared here is returned.
 def ColorEditor(*args, **traits):
-    """ Returns an instance of the toolkit-specific editor factory declared in
+    r""" Returns an instance of the toolkit-specific editor factory declared in
     traitsui.<toolkit>.color_editor. If such an editor factory
     cannot be located, an instance of the abstract ToolkitEditorFactory
     declared in traitsui.editors.color_editor is returned.

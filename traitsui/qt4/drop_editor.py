@@ -18,6 +18,7 @@ target editor handles drag and drop operations as a drop target.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtGui, QtCore
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -25,9 +26,9 @@ from pyface.qt import QtGui, QtCore
 # traitsui.editors.drop_editor file.
 from traitsui.editors.drop_editor import ToolkitEditorFactory
 
-from text_editor import SimpleEditor as Editor
-from constants import DropColor
-from clipboard import PyMimeData, clipboard
+from .text_editor import SimpleEditor as Editor
+from .constants import DropColor
+from .clipboard import PyMimeData, clipboard
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

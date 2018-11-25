@@ -61,6 +61,7 @@ from .group import Group
 from .item import Item
 
 from .include import Include
+import six
 
 #-------------------------------------------------------------------------
 #  Trait definitions:
@@ -352,7 +353,7 @@ class View(ViewElement):
                 content.append(value)
             elif type(value) in SequenceTypes:
                 content.append(Group(*value))
-            elif (isinstance(value, basestring) and
+            elif (isinstance(value, six.string_types) and
                   (value[:1] == '<') and (value[-1:] == '>')):
                 # Convert string to an Include value:
                 content.append(Include(value[1:-1].strip()))
@@ -413,7 +414,7 @@ class View(ViewElement):
             handler = handler()
 
         if args is not None:
-            handler.set(**args)
+            handler.trait_set(**args)
 
         if not isinstance(context, dict):
             context = context.trait_context()

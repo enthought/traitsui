@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from traits.api import Bool, List, Str
 from .date_editor import DateEditor
 

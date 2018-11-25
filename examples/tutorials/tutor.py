@@ -26,6 +26,8 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 from operator import itemgetter
 import os
@@ -51,6 +53,7 @@ from traitsui.tree_node \
 
 from pyface.image_resource \
     import ImageResource
+from io import open
 
 try:
     from traitsui.wx.extra.windows.ie_html_editor \
@@ -624,7 +627,7 @@ class ASection(HasPrivateTraits):
         self._subsections = [
             sf.section for sf in [
                 SectionFactory(title=title_for(title),
-                               parent=self).set(
+                               parent=self).trait_set(
                     path=dir)
                 for index, title, dir in dirs
             ] if sf.section is not None
@@ -672,14 +675,14 @@ class ASection(HasPrivateTraits):
                     dir = os.path.join(path, names[0])
                     if os.path.isdir(dir):
                         subsections[i] = SectionFactory(title=title,
-                                                        parent=self).set(
+                                                        parent=self).trait_set(
                             path=dir).section
                         continue
 
                 # Otherwise, create a section from the list of matching files:
                 subsections[i] = SectionFactory(title=title,
                                                 parent=self,
-                                                files=names).set(
+                                                files=names).trait_set(
                     path=path).section
 
         # Set the subsections to the non-None values that are left:
@@ -889,7 +892,7 @@ class Lab(ASection):
                         del values[name]
 
                 # Execute the current lab code:
-                exec module[2:] in values, values
+                exec(module[2:], values, values)
 
                 # fixme: Hack trying to update the Traits UI view of the dict.
                 self.values = {}
@@ -1768,7 +1771,7 @@ class Tutor(HasPrivateTraits):
         """
         path = self.path
         title = title_for(os.path.splitext(os.path.basename(path))[0])
-        section = SectionFactory(title=title).set(path=path).section
+        section = SectionFactory(title=title).trait_set(path=path).section
         if section is not None:
             self.section = self.root = section
 
@@ -1781,7 +1784,7 @@ if __name__ == '__main__':
 
     # Validate the command line arguments:
     if len(sys.argv) > 2:
-        print Usage
+        print(Usage)
         sys.exit(1)
 
     # Determine the root path to use for the tutorial files:
@@ -1791,15 +1794,15 @@ if __name__ == '__main__':
         path = os.getcwd()
 
     # Create a tutor and display the tutorial:
-    tutor = Tutor(home=os.path.dirname(sys.argv[0])).set(
+    tutor = Tutor(home=os.path.dirname(sys.argv[0])).trait_set(
         path=path)
     if tutor.root is not None:
         tutor.configure_traits()
     else:
-        print """No traits tutorial found in %s.
+        print("""No traits tutorial found in %s.
 
 Correct usage is: python tutor.py [tutorial_path]
 where: tutorial_path = Path to the root of the traits tutorial.
 
 If tutorial_path is omitted, the current directory is assumed to be the root of
-the tutorial.""" % path
+the tutorial.""" % path)

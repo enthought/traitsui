@@ -13,6 +13,7 @@ make the window itself resizable.
 This demo includes a simple Chaco plot for variety, but it is not a Chaco demo.
 
 """
+from __future__ import absolute_import
 from numpy import linspace, pi, sin
 from traits.api import HasTraits, Instance, Str, Int
 # UItem is Unlabeled Item

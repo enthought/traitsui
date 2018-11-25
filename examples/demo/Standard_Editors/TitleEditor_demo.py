@@ -21,6 +21,7 @@ This demonstration shows three variations of using a TitleEditor:
 """
 
 # Imports:
+from __future__ import absolute_import
 from traits.api \
     import HasTraits, Enum, Str, Float, Property, cached_property
 

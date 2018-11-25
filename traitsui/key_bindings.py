@@ -171,7 +171,7 @@ class KeyBindings(HasPrivateTraits):
         self.add_trait('bindings', List(KeyBinding, minlen=n,
                                         maxlen=n,
                                         mode='list'))
-        self.bindings = [binding.set(owner=self) for binding in bindings]
+        self.bindings = [binding.trait_set(owner=self) for binding in bindings]
 
     #-------------------------------------------------------------------------
     #  Processes a keyboard event:
@@ -181,7 +181,7 @@ class KeyBindings(HasPrivateTraits):
         """ Processes a keyboard event.
         """
         if isinstance(controllers, dict):
-            controllers = controllers.values()
+            controllers = list(controllers.values())
         elif not isinstance(controllers, SequenceTypes):
             controllers = [controllers]
         else:
@@ -214,7 +214,7 @@ class KeyBindings(HasPrivateTraits):
     def clone(self, **traits):
         """ Returns a clone of the KeyBindings object.
         """
-        return self.__class__(*self.bindings, **traits).set(
+        return self.__class__(*self.bindings, **traits).trait_set(
             **self.get('prefix', 'suffix'))
 
     #-------------------------------------------------------------------------

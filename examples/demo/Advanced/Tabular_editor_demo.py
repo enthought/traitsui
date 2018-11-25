@@ -97,12 +97,14 @@ feels stand out about this approach are:
 
 """
 
+from __future__ import absolute_import
 from random import randint, choice, shuffle
 from traits.api import HasTraits, Str, Int, List, Instance, Property, \
     Constant, Color
 from traits.etsconfig.api import ETSConfig
 from traitsui.api import View, Group, Item, TabularEditor
 from traitsui.tabular_adapter import TabularAdapter
+from six.moves import range
 
 #-- Person Class Definition ----------------------------------------------
 

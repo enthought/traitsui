@@ -17,6 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from pyface.api import ImageResource
@@ -30,9 +31,10 @@ from traits.trait_base import user_name_for, xgetattr
 from traitsui.editors.list_editor import ListItemProxy, \
     ToolkitEditorFactory
 
-from editor import Editor
-from helper import IconButton
-from menu import MakeMenu
+from .editor import Editor
+from .helper import IconButton
+from .menu import MakeMenu
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -213,7 +215,7 @@ class SimpleEditor(Editor):
             if resizable:
                 control.proxy = proxy
             peditor = editor(self.ui, proxy, 'value', self.description,
-                             list_pane).set(object_name='')
+                             list_pane).trait_set(object_name='')
             peditor.prepare(list_pane)
             pcontrol = peditor.control
             pcontrol.proxy = proxy
@@ -660,7 +662,7 @@ class NotebookEditor(Editor):
         """ Closes the currently selected tab:
         """
         widget = self.control.currentWidget()
-        for i in xrange(len(self._uis)):
+        for i in range(len(self._uis)):
             page, ui, _, _ = self._uis[i]
             if page is widget:
                 if force or ui.handler.close(ui.info, True):
@@ -758,7 +760,7 @@ class NotebookEditor(Editor):
             view_object = factory.factory(object)
         ui = view_object.edit_traits(parent=self.control,
                                      view=factory.view,
-                                     kind=factory.ui_kind).set(
+                                     kind=factory.ui_kind).trait_set(
             parent=self.ui)
 
         # Get the name of the page being added to the notebook:

@@ -3,6 +3,7 @@
 
 # view_multi_object.py --- Example of a view for
 #                          editing multiple objects
+from __future__ import absolute_import
 import wx
 from traits.api import HasTraits, Int, Str, Trait
 from traitsui.api import View

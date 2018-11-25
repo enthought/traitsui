@@ -26,10 +26,11 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 import numpy
 
-from cPickle \
+from six.moves.cPickle \
     import load
 
 from traits.api \
@@ -43,6 +44,8 @@ from traitsui.editors.dnd_editor \
 
 from pyface.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
+import six
+from io import open
 
 try:
     from apptools.io import File
@@ -57,7 +60,7 @@ except ImportError:
 from pyface.image_resource \
     import ImageResource
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------
@@ -74,7 +77,7 @@ object_image = ImageResource('object').create_image()
 inactive_image = ImageResource('inactive').create_image()
 
 # String types:
-string_type = (str, unicode)
+string_type = (str, six.text_type)
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

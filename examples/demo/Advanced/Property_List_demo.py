@@ -30,6 +30,7 @@ the <i>ticker</i> event fires, not every time it is accessed.
 
 #-- Imports --------------------------------------------------------------
 
+from __future__ import absolute_import
 from random \
     import randint, choice
 
@@ -48,6 +49,7 @@ from traitsui.api \
 
 from traitsui.table_column \
     import ObjectColumn
+from six.moves import range
 
 #-- Person Class ---------------------------------------------------------
 

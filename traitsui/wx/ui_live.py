@@ -23,18 +23,19 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
-from helper \
+from .helper \
     import restore_window, save_window, TraitsUIScrolledPanel
 
-from ui_base \
+from .ui_base \
     import BaseDialog
 
-from ui_panel \
+from .ui_panel \
     import panel, show_help
 
-from constants \
+from .constants \
     import DefaultTitle, WindowColor, screen_dy, \
     scrollbar_dx
 from traitsui.undo \
@@ -55,7 +56,7 @@ POPOVER = 3
 INFO = 4
 
 # Types of 'popup' dialogs:
-Popups = set((POPUP, POPOVER, INFO))
+Popups = {POPUP, POPOVER, INFO}
 
 #-------------------------------------------------------------------------
 #  Creates a 'live update' wxPython user interface for a specified UI object:

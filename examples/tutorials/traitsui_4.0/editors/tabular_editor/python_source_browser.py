@@ -37,6 +37,7 @@ related trait and property definitions in the adapter class itself.
 
 #--<Imports>--------------------------------------------------------------
 
+from __future__ import absolute_import
 import traits
 import traitsui
 
@@ -63,6 +64,7 @@ from traitsui.tabular_adapter \
 
 from pyface.image_resource \
     import ImageResource
+from io import open
 
 #--<Constants>------------------------------------------------------------
 

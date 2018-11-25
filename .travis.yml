@@ -3,33 +3,26 @@ sudo: false
 
 env:
   global:
-    - INSTALL_EDM_VERSION=1.5.2
+    - INSTALL_EDM_VERSION=1.10.0
       PYTHONUNBUFFERED="1"
 
 matrix:
   include:
     - env: RUNTIME=2.7 TOOLKITS="null pyqt pyside wx"
-    - env: RUNTIME=3.5 TOOLKITS="null pyqt pyqt5"
-    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5"
+    - env: RUNTIME=2.7 TOOLKITS="pyside2"
+    - env: RUNTIME=3.5 TOOLKITS="null pyqt pyqt5 pyside2"
+    - env: RUNTIME=3.6 TOOLKITS="null pyqt pyqt5 pyside2"
     - os: osx
-      env: RUNTIME=2.7 TOOLKITS="null pyside"
+      env: RUNTIME=2.7 TOOLKITS="null pyside pyqt pyside2"
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
     - os: osx
-      env: RUNTIME=3.5 TOOLKITS="null pyqt5"
+      env: RUNTIME=3.5 TOOLKITS="null pyqt5 pyqt pyside2"
     - os: osx
-      env: RUNTIME=3.5 TOOLKITS="pyqt"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="null pyqt5"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="pyqt"
+      env: RUNTIME=3.6 TOOLKITS="null pyqt5 pyqt pyside2"
   allow_failures:
     - os: osx
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
-    - os: osx
-      env: RUNTIME=3.5 TOOLKITS="pyqt"
-    - os: osx
-      env: RUNTIME=3.6 TOOLKITS="pyqt"
   fast_finish: true
 
 branches:

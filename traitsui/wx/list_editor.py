@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 import wx.lib.scrolledpanel as wxsp
@@ -44,17 +45,19 @@ from traitsui.dockable_view_element \
 from pyface.dock.api \
     import DockWindow, DockSizer, DockSection, DockRegion, DockControl
 
-from constants \
+from .constants \
     import scrollbar_dx
 
-from editor \
+from .editor \
     import Editor
 
-from menu \
+from .menu \
     import MakeMenu
 
-from image_control \
+from .image_control \
     import ImageControl
+import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -223,7 +226,7 @@ class SimpleEditor(Editor):
                 if resizable:
                     control.proxy = proxy
                 peditor = editor(self.ui, proxy, 'value', self.description,
-                                 list_pane).set(object_name='')
+                                 list_pane).trait_set(object_name='')
                 peditor.prepare(list_pane)
                 pcontrol = peditor.control
                 pcontrol.proxy = proxy
@@ -324,7 +327,7 @@ class SimpleEditor(Editor):
             pairs.
         """
         sizer = self.control.GetSizer()
-        for i in xrange(2 * len(controls) + extra):
+        for i in range(2 * len(controls) + extra):
             sizer.Remove(0)
         index = 0
         for control, pcontrol in controls:
@@ -756,7 +759,7 @@ class NotebookEditor(Editor):
                     name = handler(self.ui.info, user_object)
 
                 if name is None:
-                    name = unicode(
+                    name = six.text_type(
                         xgetattr(
                             view_object,
                             self.factory.page_name[
@@ -784,7 +787,7 @@ class NotebookEditor(Editor):
 
         ui = view_object.edit_traits(parent=self.control,
                                      view=factory.view,
-                                     kind=factory.ui_kind).set(
+                                     kind=factory.ui_kind).trait_set(
             parent=self.ui)
 
         # Get the name of the page being added to the notebook:
@@ -803,7 +806,7 @@ class NotebookEditor(Editor):
                 if handler_name is not None:
                     name = handler_name
                 else:
-                    name = unicode(name) or u'???'
+                    name = six.text_type(name) or u'???'
                 view_object.on_trait_change(self.update_page_name,
                                             page_name[1:], dispatch='ui')
             else:

@@ -5,6 +5,7 @@ This demo shows each of the two styles of the ButtonEditor.
 (As of this writing, they are identical.)
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Button
 from traitsui.api import Item, View, Group
 from traitsui.message import message

@@ -87,9 +87,9 @@ from contextlib import contextmanager
 import click
 
 supported_combinations = {
-    '2.7': {'pyside', 'pyqt', 'wx', 'null'},
-    '3.5': {'pyqt', 'pyqt5', 'null'},
-    '3.6': {'pyqt', 'pyqt5', 'null'},
+    '2.7': {'pyside', 'pyside2', 'pyqt', 'wx', 'null'},
+    '3.5': {'pyside2', 'pyqt', 'pyqt5', 'null'},
+    '3.6': {'pyside2', 'pyqt', 'pyqt5', 'null'},
 }
 
 dependencies = {
@@ -104,6 +104,8 @@ dependencies = {
 
 extra_dependencies = {
     'pyside': {'pyside'},
+    # XXX once pyside2 is available in EDM, we will want it here
+    'pyside2': set(),
     'pyqt': {'pyqt<4.12'},  # FIXME: build of 4.12-1 appears to be bad
     # XXX once pyqt5 is available in EDM, we will want it here
     'pyqt5': set(),
@@ -113,6 +115,7 @@ extra_dependencies = {
 
 environment_vars = {
     'pyside': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside'},
+    'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
     'pyqt': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt'},
     'pyqt5': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyqt5'},
     'wx': {'ETS_TOOLKIT': 'wx'},
@@ -144,9 +147,13 @@ def install(runtime, toolkit, environment):
         "edm run -e {environment} -- python setup.py clean --all",
         "edm run -e {environment} -- python setup.py install"
     ]
-    # pip install pyqt5, because we don't have it in EDM yet
+    # pip install pyqt5 and pyside2, because we don't have them in EDM yet
     if toolkit == 'pyqt5':
         commands.append("edm run -e {environment} -- pip install pyqt5==5.9.2")
+    elif toolkit == 'pyside2':
+        commands.append(
+            "edm run -e {environment} -- pip install pyside2"
+        )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
     execute(commands, parameters)

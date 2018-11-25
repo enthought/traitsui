@@ -14,6 +14,7 @@ changes made in one editor are automatically reflected in the others.
 """
 
 # Imports:
+from __future__ import absolute_import
 from traits.api \
     import HasStrictTraits, Str, Int, Regex, List, Instance
 

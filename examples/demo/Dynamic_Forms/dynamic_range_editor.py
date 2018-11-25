@@ -30,6 +30,7 @@ widths can also be specified if desired.
 """
 
 # Imports:
+from __future__ import absolute_import
 from traits.api import HasPrivateTraits, Float, Range, Int
 
 from traitsui.api import View, Group, Item, Label, RangeEditor

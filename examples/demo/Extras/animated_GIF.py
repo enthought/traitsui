@@ -5,6 +5,7 @@
 This demo shows you how to use animated GIF files in a traits user interface.
 """
 
+from __future__ import absolute_import
 from os.path import join, dirname, abspath
 
 from traits.api import HasTraits, File, Bool

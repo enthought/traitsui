@@ -8,6 +8,7 @@ at the bottom of this file.
 """
 from __future__ import print_function
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, List, Instance
 from traitsui.api import TreeEditor, TreeNode, View, Item, Group
 

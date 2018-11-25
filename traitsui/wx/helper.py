@@ -23,6 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from operator import itemgetter
 
 import wx
@@ -43,11 +44,13 @@ from traitsui.ui_traits \
 from pyface.timer.api \
     import do_later
 
-from constants \
+from .constants \
     import standard_bitmap_width, screen_dx, screen_dy
 
-from editor \
+from .editor \
     import Editor
+import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Trait definitions:
@@ -284,7 +287,7 @@ def enum_values_changed(values):
     """
 
     if isinstance(values, dict):
-        data = [(unicode(v), n) for n, v in values.items()]
+        data = [(six.text_type(v), n) for n, v in values.items()]
         if len(data) > 0:
             data.sort(key=itemgetter(0))
             col = data[0][0].find(':') + 1
@@ -297,12 +300,12 @@ def enum_values_changed(values):
         if not isinstance(handler, BaseTraitHandler):
             raise TraitError("Invalid value for 'values' specified")
         if handler.is_mapped:
-            data = [(unicode(n), n) for n in handler.map.keys()]
+            data = [(six.text_type(n), n) for n in handler.map.keys()]
             data.sort(key=itemgetter(0))
         else:
-            data = [(unicode(v), v) for v in handler.values]
+            data = [(six.text_type(v), v) for v in handler.values]
     else:
-        data = [(unicode(v), v) for v in values]
+        data = [(six.text_type(v), v) for v in values]
 
     names = [x[0] for x in data]
     mapping = {}
@@ -564,7 +567,7 @@ class GroupEditor(Editor):
     def __init__(self, **traits):
         """ Initializes the object.
         """
-        self.set(**traits)
+        self.trait_set(**traits)
 
 #-------------------------------------------------------------------------
 #  'PopupControl' class:

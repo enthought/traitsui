@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import unittest
 
 from traitsui.extras.demo import extract_docstring_from_source

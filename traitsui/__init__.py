@@ -22,6 +22,7 @@ from ._version import full_version as __version__
 __requires__ = [
     'traits',
     'pyface>=6.0.0',
+    'six',
 ]
 __extras_require__ = {
     'wx': ['wxpython>=2.8.10', 'numpy'],

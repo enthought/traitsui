@@ -25,10 +25,11 @@
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.shell_editor file.
+from __future__ import absolute_import
 from traitsui.editors.shell_editor \
     import _ShellEditor as BaseShellEditor, ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------

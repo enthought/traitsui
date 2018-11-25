@@ -25,6 +25,7 @@
 
 from __future__ import absolute_import
 
+from __future__ import print_function
 from os import R_OK, W_OK, access, mkdir
 
 from os.path import (basename, dirname, exists, getatime, getctime, getmtime,
@@ -74,6 +75,7 @@ from pyface.timer.api import do_later
 from .helper import commatize
 
 from .toolkit import toolkit
+from io import open
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -680,11 +682,10 @@ class OpenFileDialog(Handler):
         """ Handles prompting the user when the selected file already exists,
             and the dialog is a 'save file' dialog.
         """
-        FileExistsHandler(message=("The file '%s' already exists.\nDo "
-                                   "you wish to overwrite it?") %
-                          basename(self.file_name)
-                          ).edit_traits(context=self,
-                                        parent=self.info.ok.control).set(
+        feh = FileExistsHandler(
+            message=("The file '%s' already exists.\nDo "
+                     "you wish to overwrite it?") % basename(self.file_name))
+        feh.edit_traits(context=self, parent=self.info.ok.control).trait_set(
             parent=self.info.ui)
 
 #-------------------------------------------------------------------------
@@ -721,5 +722,5 @@ def save_file(**traits):
 #-- Test Case ------------------------------------------------------------
 
 if __name__ == '__main__':
-    print save_file(extensions=[FileInfo(), TextInfo(), ImageInfo()],
-                    filter='Python file (*.py)|*.py')
+    print(save_file(extensions=[FileInfo(), TextInfo(), ImageInfo()],
+                    filter='Python file (*.py)|*.py'))

@@ -1,7 +1,6 @@
 """
-Defining column-specific context menu in a Table
-
-Shows a TableEditor which has column-specific context menus.
+Defining column-specific context menu in a Tabular Editor. Shows how the
+example for the Table Editor can be adapted to work with a Tabular Editor.
 
 The demo is a simple baseball scoring system, which lists each player and
 their current batting statistics. After a given player has an at bat, you
@@ -19,69 +18,74 @@ is 'affects_average').
 from __future__ import absolute_import
 from random import randint
 from traits.api import HasStrictTraits, Str, Int, Float, List, Property
-from traitsui.api import View, Item, TableEditor
+from traits.etsconfig.api import ETSConfig
+from traitsui.api import View, Item, TabularEditor
 from traitsui.menu import Menu, Action
-from traitsui.table_column import ObjectColumn
+from traitsui.tabular_adapter import TabularAdapter
 
-# Define a custom table column for handling items which affect the player's
+
+# Define a custom tabular adapter for handling items which affect the player's
 # batting average:
+class PlayerAdapter(TabularAdapter):
 
+    alignment = 'center'
 
-class AffectsAverageColumn(ObjectColumn):
-
-    # Define the context menu for the column:
-    menu = Menu(Action(name='Add', action='column.add(object)'),
-                Action(name='Sub', action='column.sub(object)'))
-
-    # Right-align numeric values (override):
-    horizontal_alignment = 'center'
-
-    # Column width (override):
     width = 0.09
 
-    # Don't allow the data to be edited directly:
-    editable = False
+    def get_menu(self, object, trait, row, column):
+        column_name = self.column_map[column]
+        if column_name not in ['name', 'average']:
+            menu = Menu(Action(name='Add',
+                               action='editor.adapter.add(item, column)'),
+                        Action(name='Sub',
+                               action='editor.adapter.sub(item, column)'))
+            return menu
+        else:
+            return super(PlayerAdapter, self).get_menu(
+                object, trait, row, column)
 
-    # Action methods for the context menu items:
+    def get_format(self, object, trait, row, column):
+        column_name = self.column_map[column]
+        if column_name == 'average':
+            return '%0.3f'
+        else:
+            return super(PlayerAdapter, self).get_format(
+                object, trait, row, column)
 
-    def add(self, object):
+    def add(self, object, column):
         """ Increment the affected player statistic.
         """
-        setattr(object, self.name, getattr(object, self.name) + 1)
+        column_name = self.column_map[column]
+        setattr(object, column_name, getattr(object, column_name) + 1)
 
-    def sub(self, object):
+    def sub(self, object, column):
         """ Decrement the affected player statistic.
         """
-        setattr(object, self.name, getattr(object, self.name) - 1)
+        column_name = self.column_map[column]
+        setattr(object, column_name, getattr(object, column_name) - 1)
 
 
 # The 'players' trait table editor:
-player_editor = TableEditor(
+columns = [
+    ('Player Name', 'name'),
+    ('AB', 'at_bats'),
+    ('SO', 'strike_outs'),
+    ('S', 'singles'),
+    ('D', 'doubles'),
+    ('T', 'triples'),
+    ('HR', 'home_runs'),
+    ('W', 'walks'),
+    ('Ave', 'average'),
+]
+
+player_editor = TabularEditor(
     editable=True,
-    sortable=True,
-    auto_size=False,
-    columns=[ObjectColumn(name='name',
-                          editable=False, width=0.28),
-             AffectsAverageColumn(name='at_bats',
-                                  label='AB'),
-             AffectsAverageColumn(name='strike_outs',
-                                  label='SO'),
-             AffectsAverageColumn(name='singles',
-                                  label='S'),
-             AffectsAverageColumn(name='doubles',
-                                  label='D'),
-             AffectsAverageColumn(name='triples',
-                                  label='T'),
-             AffectsAverageColumn(name='home_runs',
-                                  label='HR'),
-             AffectsAverageColumn(name='walks',
-                                  label='W'),
-             ObjectColumn(name='average',
-                          label='Ave',
-                          editable=False,
-                          width=0.09,
-                          horizontal_alignment='center',
-                          format='%0.3f')]
+    auto_resize=True,
+    auto_resize_rows=True,
+    stretch_last_section=False,
+    auto_update=True,
+    adapter=PlayerAdapter(columns=columns),
+    show_row_titles=ETSConfig.toolkit == 'qt4',
 )
 
 

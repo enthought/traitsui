@@ -76,6 +76,7 @@ Finally:
 
 #-- Imports --------------------------------------------------------------
 
+from __future__ import absolute_import
 from os \
     import walk, getcwd, listdir
 
@@ -92,6 +93,7 @@ from traitsui.api \
 
 from traitsui.table_column \
     import ObjectColumn
+from io import open
 
 #-- Constants ------------------------------------------------------------
 

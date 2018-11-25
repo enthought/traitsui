@@ -2,6 +2,7 @@
 #  License: BSD Style.
 from __future__ import print_function
 
+from __future__ import absolute_import
 from traits.api import *
 from traitsui.api import *
 from traitsui.instance_choice \

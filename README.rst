@@ -40,7 +40,7 @@ we can use TraitsUI to specify a and display a GUI view::
     person_view = View(
         Item('name'),
         Item('gender'),
-        Item('age', editor=RangeEditor(mode='spinner')),
+        Item('age', editor=RangeEditor(mode='spinner', low=0, high=150)),
         buttons=['OK', 'Cancel'],
         resizable=True,
     )

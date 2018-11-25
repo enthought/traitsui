@@ -8,6 +8,7 @@ to navigate, up & down to change).
 
 """
 from __future__ import print_function
+from __future__ import absolute_import
 import datetime
 
 from traits.api import HasTraits, Time

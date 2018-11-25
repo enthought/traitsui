@@ -23,9 +23,12 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtGui
 
-from editor import Editor
+from .editor import Editor
+import six
+from six.moves import range
 
 #-------------------------------------------------------------------------
 #  '_HistoryEditor' class:
@@ -56,7 +59,7 @@ class _HistoryEditor(Editor):
         if self.factory.auto_set:
             control.editTextChanged.connect(self.update_object)
         else:
-            control.activated[unicode].connect(self.update_object)
+            control.activated[six.text_type].connect(self.update_object)
 
         self.set_tooltip()
 
@@ -64,7 +67,7 @@ class _HistoryEditor(Editor):
         """ Handles the user entering input data in the edit control.
         """
         if not self._no_update:
-            self.value = unicode(text)
+            self.value = six.text_type(text)
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -94,7 +97,7 @@ class _HistoryEditor(Editor):
         """ Returns any user preference information associated with the editor.
         """
         history = [str(self.control.itemText(index))
-                   for index in xrange(self.control.count())]
+                   for index in range(self.control.count())]
 
         # If the view closed successfully, update the history with the current
         # editor value, as long it is different from the current object value:
@@ -115,5 +118,5 @@ class _HistoryEditor(Editor):
         """
         diff = self.control.count() - self.factory.entries
         if diff > 0:
-            for i in xrange(diff):
+            for i in range(diff):
                 self.control.removeItem(self.factory.entries)

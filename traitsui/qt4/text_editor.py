@@ -17,6 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api \
@@ -28,14 +29,15 @@ from traits.api \
 from traitsui.editors.text_editor \
     import evaluate_trait, ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from editor_factory \
+from .editor_factory \
     import ReadonlyEditor as BaseReadonlyEditor
 
-from constants \
+from .constants \
     import OKColor
+import six
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -165,7 +167,7 @@ class SimpleEditor(Editor):
         except AttributeError:
             value = self.control.toPlainText()
 
-        value = unicode(value)
+        value = six.text_type(value)
 
         try:
             value = self.evaluate(value)
