@@ -46,12 +46,19 @@ from os.path import (join, isdir, split, splitext, dirname, basename, abspath,
                      exists, isabs)
 
 
+# Tokenize's open handles source file encoding correctly in Python 3
+# otherwise just use builtin open on Python 2
+if sys.version_info.major >= 3:
+    src_open = tokenize.open
+else:
+    src_open = open
+
 #-------------------------------------------------------------------------
 #  Global data:
 #-------------------------------------------------------------------------
 
 # Define the code used to populate the 'execfile' dictionary:
-exec_str =  """from traits.api import *
+exec_str = """from traits.api import *
 
 """
 
@@ -114,7 +121,7 @@ def parse_source(file_name):
         The source code, sans docstring.
     """
     try:
-        with open(file_name, 'rb') as fh:
+        with src_open(file_name, 'r') as fh:
             source_code = fh.read()
         return extract_docstring_from_source(source_code)
     except Exception:
@@ -160,7 +167,8 @@ class DemoFileHandler(Handler):
         locals['__file__'] = df.path
         sys.modules['__main__'].__file__ = df.path
         try:
-            exec(compile(open(df.path, 'rb').read(), df.path, 'exec'), locals, locals)
+            with src_open(df.path, 'r') as fp:
+                exec(compile(fp.read(), df.path, 'exec'), locals, locals)
             demo = self._get_object('modal_popup', locals)
             if demo is not None:
                 demo = ModalDemoButton(demo=demo)
@@ -187,7 +195,8 @@ class DemoFileHandler(Handler):
 
     def execute_test(self, df, locals):
         """ Executes the file in df.path in the namespace of locals."""
-        exec(compile(open(df.path, 'rb').read(), df.path, 'exec'), locals, locals)
+        with src_open(df.path, 'r') as fp:
+            exec(compile(fp.read(), df.path, 'exec'), locals, locals)
 
     #-------------------------------------------------------------------------
     #  Closes the view:

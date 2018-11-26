@@ -12,7 +12,9 @@
 # serve to show the default value.
 
 from __future__ import absolute_import
-import sys, os
+
+from io import open
+import os
 
 base_path = os.path.dirname(__file__)
 
@@ -51,7 +53,7 @@ copyright = '2008-2018, Enthought'
 d = {}
 try:
     version_path = os.path.join(base_path, '..', '..', 'traitsui', '_version.py')
-    with open(version_path, 'rb') as fp:
+    with open(version_path, 'r', encoding='utf8') as fp:
         exec(compile(fp.read(), version_path, 'exec'), d)
     release = d['version']
     version = '.'.join(d['version'].split('.', 2)[:2])
