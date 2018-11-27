@@ -25,7 +25,6 @@ from traitsui.menu import Action
 from .constants import DefaultTitle
 from .editor import Editor
 from .helper import restore_window, save_window
-from six.moves import range
 
 
 class ButtonEditor(Editor):

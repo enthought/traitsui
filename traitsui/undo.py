@@ -27,17 +27,18 @@ from __future__ import absolute_import
 
 import collections
 
+import six
+
 from traits.api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
                         Instance, Int, List, Property, Str, Trait)
-import six
-from six.moves import range
+
 
 #-------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------
 
-NumericTypes = (int, int, float, complex)
-SimpleTypes = (str, six.text_type, int, int, float, complex)
+NumericTypes = six.integer_types + (float, complex)
+SimpleTypes = (six.text_type, bytes) + NumericTypes
 
 #-------------------------------------------------------------------------
 #  'AbstractUndoItem' class:

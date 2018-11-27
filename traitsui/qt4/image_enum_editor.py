@@ -36,7 +36,7 @@ from .enum_editor import BaseEditor as BaseEnumEditor
 from .enum_editor import SimpleEditor as SimpleEnumEditor
 from .enum_editor import RadioEditor as CustomEnumEditor
 from .helper import pixmap_cache
-from six.moves import range
+
 
 #-------------------------------------------------------------------------
 #  'BaseImageEnumEditor' class:

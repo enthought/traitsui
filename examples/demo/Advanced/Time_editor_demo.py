@@ -7,8 +7,8 @@ You can edit the time directly, or by using only the arrow keys (left & right
 to navigate, up & down to change).
 
 """
-from __future__ import print_function
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
+
 import datetime
 
 from traits.api import HasTraits, Time

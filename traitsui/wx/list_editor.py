@@ -57,7 +57,7 @@ from .menu \
 from .image_control \
     import ImageControl
 import six
-from six.moves import range
+
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

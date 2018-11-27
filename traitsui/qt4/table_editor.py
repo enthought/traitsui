@@ -35,7 +35,6 @@ from traitsui.ui_traits import SequenceTypes
 from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
 import six
-from six.moves import range
 
 
 is_qt5 = QtCore.__version_info__ >= (5,)

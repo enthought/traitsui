@@ -22,8 +22,6 @@ from pyface.qt import QtCore, QtGui
 from traitsui.ui_traits import SequenceTypes
 
 from .clipboard import PyMimeData
-from six.moves import map
-from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -271,7 +269,7 @@ class TableModel(QtCore.QAbstractTableModel):
         # this is a drag from a table model?
         data = mime_data.data(mime_type)
         if not data.isNull() and action == QtCore.Qt.MoveAction:
-            id_and_rows = list(map(int, str(data).split(' ')))
+            id_and_rows = [int(s) for s in data.data().decode('utf8').split(' ')]
             table_id = id_and_rows[0]
             # is it from ourself?
             if table_id == id(self):

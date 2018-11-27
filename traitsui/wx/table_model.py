@@ -54,7 +54,6 @@ from pyface.ui.wx.grid.trait_grid_cell_adapter \
 
 from pyface.timer.api \
     import do_later
-from six.moves import range
 
 
 logger = logging.getLogger(__name__)

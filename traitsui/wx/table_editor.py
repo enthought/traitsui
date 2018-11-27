@@ -70,7 +70,7 @@ from .table_model \
 
 from .helper import TraitsUIPanel
 from functools import reduce
-from six.moves import range
+
 
 #-------------------------------------------------------------------------
 #  Constants:

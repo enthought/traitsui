@@ -69,7 +69,7 @@ from pyface.image_resource \
 
 # Necessary because of the dynamic way in which the demos are loaded:
 import traitsui.api
-from six.moves import range
+
 
 search_path = [join(dirname(traitsui.api.__file__),
                     'demo', 'Advanced')]

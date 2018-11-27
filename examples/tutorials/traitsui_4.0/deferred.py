@@ -37,7 +37,6 @@ number of screen updates.
 from __future__ import absolute_import
 from traits.api import *
 from traitsui.api import *
-from six.moves import range
 
 #--[Count Class]----------------------------------------------------------
 

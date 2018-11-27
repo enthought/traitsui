@@ -50,7 +50,6 @@ from .editor \
 
 from .constants \
     import OKColor, ErrorColor
-from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:

@@ -31,7 +31,6 @@ from ..tabular_adapter import TabularAdapter
 from ..toolkit import toolkit_object
 
 from ..ui_editor import UIEditor
-from six.moves import range
 
 #-- Tabular Adapter Definition -------------------------------------------
 

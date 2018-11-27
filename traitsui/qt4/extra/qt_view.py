@@ -25,7 +25,6 @@ from pyface.qt import QtGui
 # Enthought library imports.
 from traits.api import File, List, Str
 from traitsui.view import View
-from six.moves import range
 from io import open
 
 # Logger.
@@ -61,7 +60,7 @@ class QtView(View):
 
         if self.style_sheet_path:
             try:
-                with open(self.style_sheet_path, 'r') as f:
+                with open(self.style_sheet_path, 'r', encoding='utf8') as f:
                     ui.control.setStyleSheet(f.read())
             except IOError:
                 logger.exception("Error loading Qt style sheet")
