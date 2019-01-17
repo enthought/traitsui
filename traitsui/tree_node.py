@@ -219,7 +219,7 @@ class TreeNode(HasPrivateTraits):
     def get_children(self, object):
         """ Gets the object's children.
         """
-        return getattr(object, self.children)
+        return xgetattr(object, self.children)
 
     #-------------------------------------------------------------------------
     #  Gets the object's children identifier:
@@ -237,7 +237,8 @@ class TreeNode(HasPrivateTraits):
     def append_child(self, object, child):
         """ Appends a child to the object's children.
         """
-        getattr(object, self.children).append(child)
+        children = self.get_children(object)
+        children.append(child)
 
     #-------------------------------------------------------------------------
     #  Inserts a child into the object's children:
@@ -246,7 +247,8 @@ class TreeNode(HasPrivateTraits):
     def insert_child(self, object, index, child):
         """ Inserts a child into the object's children.
         """
-        getattr(object, self.children)[index: index] = [child]
+        children = self.get_children()
+        children[index: index] = [child]
 
     #-------------------------------------------------------------------------
     #  Confirms that a specified object can be deleted or not:
@@ -267,14 +269,14 @@ class TreeNode(HasPrivateTraits):
         """
         return None
 
-    #-------------------------------------------------------------------------
+    #-----------self.get_children(object)--------------------------------------------------------------
     #  Deletes a child at a specified index from the object's children:
     #-------------------------------------------------------------------------
 
     def delete_child(self, object, index):
         """ Deletes a child at a specified index from the object's children.
         """
-        del getattr(object, self.children)[index]
+        del self.get_children(object)[index]
 
     #-------------------------------------------------------------------------
     #  Sets up/Tears down a listener for 'children replaced' on a specified
