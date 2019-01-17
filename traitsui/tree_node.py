@@ -249,7 +249,7 @@ class TreeNode(HasPrivateTraits):
         """ Inserts a child into the object's children.
         """
         children = self.get_children()
-        children[index: index] = [child]
+        children[index:index] = [child]
 
     #-------------------------------------------------------------------------
     #  Confirms that a specified object can be deleted or not:
