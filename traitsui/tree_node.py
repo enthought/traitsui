@@ -269,7 +269,7 @@ class TreeNode(HasPrivateTraits):
         """
         return None
 
-    #-----------self.get_children(object)--------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Deletes a child at a specified index from the object's children:
     #-------------------------------------------------------------------------
 
