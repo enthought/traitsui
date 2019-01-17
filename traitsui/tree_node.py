@@ -61,7 +61,8 @@ class TreeNode(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Name of trait containing children (if '', the node is a leaf).
+    # Name of trait containing children (if '', the node is a leaf). Nested
+    # attributes are allowed, e.g., 'library.books'
     children = Str
 
     # Either the name of a trait containing a label, or a constant label, if
