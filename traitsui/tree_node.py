@@ -220,7 +220,7 @@ class TreeNode(HasPrivateTraits):
     def get_children(self, object):
         """ Gets the object's children.
         """
-        return xgetattr(object, self.children)
+        return xgetattr(object, self.children, default=None)
 
     #-------------------------------------------------------------------------
     #  Gets the object's children identifier:
