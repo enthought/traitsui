@@ -32,6 +32,8 @@ from traits.api import HasPrivateTraits, Trait, Bool
 from .ui_traits import (AnObject, DockStyle, EditorStyle, ExportType,
                         HelpId, Image)
 
+from .util import str_rfind
+
 #-------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------
@@ -176,7 +178,7 @@ class ViewSubElement(ViewElement):
         value = self._option(value, '@', 'style', 'custom')
         value = self._option(value, '*', 'style', 'text')
         value = self._option(value, '~', 'style', 'readonly')
-        value = self._split('style', value, ';', str.rfind, 1, 0)
+        value = self._split('style', value, ';', str_rfind, 1, 0)
 
         return value
 

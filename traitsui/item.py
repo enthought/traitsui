@@ -36,6 +36,8 @@ from .view_element import ViewSubElement
 
 from .ui_traits import ContainerDelegate, EditorStyle
 
+from .util import str_find, str_rfind
+
 from .editor_factory import EditorFactory
 import six
 
@@ -284,8 +286,8 @@ class Item(ViewSubElement):
         value = self._parse_tooltip(value)
         value = self._option(value, '#', 'resizable', True)
         value = self._option(value, '^', 'emphasized', True)
-        value = self._split('id', value, ':', str.find, 0, 1)
-        value = self._split('object', value, '.', str.rfind, 0, 1)
+        value = self._split('id', value, ':', str_find, 0, 1)
+        value = self._split('object', value, '.', str_rfind, 0, 1)
 
         if value != '':
             self.name = value
