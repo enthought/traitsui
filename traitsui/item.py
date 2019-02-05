@@ -31,7 +31,6 @@ from traits.api import (Bool, Callable, Constant, Delegate, Float, Instance,
                         Range, Str, Undefined, Dict,)
 
 from traits.trait_base import user_name_for
-import traits._py2to3 as _py2to3
 
 from .view_element import ViewSubElement
 
@@ -285,8 +284,8 @@ class Item(ViewSubElement):
         value = self._parse_tooltip(value)
         value = self._option(value, '#', 'resizable', True)
         value = self._option(value, '^', 'emphasized', True)
-        value = self._split('id', value, ':', _py2to3.str_find, 0, 1)
-        value = self._split('object', value, '.', _py2to3.str_rfind, 0, 1)
+        value = self._split('id', value, ':', str.find, 0, 1)
+        value = self._split('object', value, '.', str.rfind, 0, 1)
 
         if value != '':
             self.name = value
