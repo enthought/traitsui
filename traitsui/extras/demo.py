@@ -29,7 +29,8 @@ import glob
 import token
 import tokenize
 import operator
-from io import StringIO, open
+from io import StringIO
+import io
 from configobj import ConfigObj
 
 from traits.api import (HasTraits, HasPrivateTraits, Str, Instance, Property,
@@ -119,7 +120,7 @@ def parse_source(file_name):
         The source code, sans docstring.
     """
     try:
-        with open(file_name, 'r') as fh:
+        with io.open(file_name, 'r', encoding='utf-8') as fh:
             source_code = fh.read()
         return extract_docstring_from_source(source_code)
     except Exception:
@@ -165,7 +166,7 @@ class DemoFileHandler(Handler):
         locals['__file__'] = df.path
         sys.modules['__main__'].__file__ = df.path
         try:
-            with open(df.path, 'r') as fp:
+            with io.open(df.path, 'r', encoding='utf-8') as fp:
                 exec(compile(fp.read(), df.path, 'exec'), locals, locals)
             demo = self._get_object('modal_popup', locals)
             if demo is not None:
@@ -193,7 +194,7 @@ class DemoFileHandler(Handler):
 
     def execute_test(self, df, locals):
         """ Executes the file in df.path in the namespace of locals."""
-        with open(df.path, 'r') as fp:
+        with io.open(df.path, 'r', encoding='utf-8') as fp:
             exec(compile(fp.read(), df.path, 'exec'), locals, locals)
 
     #-------------------------------------------------------------------------
