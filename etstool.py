@@ -100,6 +100,7 @@ dependencies = {
     "pip",
     "nose",
     "coverage",
+    "configobj",
 }
 
 extra_dependencies = {

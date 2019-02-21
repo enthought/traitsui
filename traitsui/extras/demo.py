@@ -29,7 +29,8 @@ import glob
 import token
 import tokenize
 import operator
-from io import BytesIO
+from io import StringIO
+import io
 from configobj import ConfigObj
 
 from traits.api import (HasTraits, HasPrivateTraits, Str, Instance, Property,
@@ -45,13 +46,6 @@ from os import listdir
 from os.path import (join, isdir, split, splitext, dirname, basename, abspath,
                      exists, isabs)
 
-
-# Tokenize's open handles source file encoding correctly in Python 3
-# otherwise just use builtin open on Python 2
-if sys.version_info.major >= 3:
-    src_open = tokenize.open
-else:
-    src_open = open
 
 #-------------------------------------------------------------------------
 #  Global data:
@@ -80,6 +74,11 @@ def user_name_for(name):
 def extract_docstring_from_source(source):
     """Return module docstring and source code from python source code.
 
+    Parameters
+    ----------
+    source : Str (Unicode)
+        Python source code.
+
     Returns
     -------
     docstring : str
@@ -88,7 +87,7 @@ def extract_docstring_from_source(source):
         The source code, sans docstring.
     """
     # Reset file and generate python tokens
-    f = BytesIO(source)
+    f = StringIO(source)
     python_tokens = tokenize.generate_tokens(f.readline)
 
     for ttype, tstring, tstart, tend, tline in python_tokens:
@@ -121,11 +120,17 @@ def parse_source(file_name):
         The source code, sans docstring.
     """
     try:
-        with src_open(file_name, 'r') as fh:
+        with io.open(file_name, 'r', encoding='utf-8') as fh:
             source_code = fh.read()
         return extract_docstring_from_source(source_code)
     except Exception:
-        return ('', '')
+        # Print an error message instead of failing silently.
+        # Ideally, the message would be output to the "log" tab.
+        import traceback
+        traceback_text = traceback.format_exc()
+        error_fmt = u"""Sorry, something went wrong.\n\n{}"""
+        error_msg = error_fmt.format(traceback_text)
+        return (error_msg, '')
 
 
 #-------------------------------------------------------------------------
@@ -167,7 +172,7 @@ class DemoFileHandler(Handler):
         locals['__file__'] = df.path
         sys.modules['__main__'].__file__ = df.path
         try:
-            with src_open(df.path, 'r') as fp:
+            with io.open(df.path, 'r', encoding='utf-8') as fp:
                 exec(compile(fp.read(), df.path, 'exec'), locals, locals)
             demo = self._get_object('modal_popup', locals)
             if demo is not None:
@@ -195,7 +200,7 @@ class DemoFileHandler(Handler):
 
     def execute_test(self, df, locals):
         """ Executes the file in df.path in the namespace of locals."""
-        with src_open(df.path, 'r') as fp:
+        with io.open(df.path, 'r', encoding='utf-8') as fp:
             exec(compile(fp.read(), df.path, 'exec'), locals, locals)
 
     #-------------------------------------------------------------------------
