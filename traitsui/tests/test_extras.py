@@ -14,7 +14,7 @@ class TestDemo(TestCase):
         docstring, source = extract_docstring_from_source(source_code)
         self.assertEqual((u"", u""), (docstring, source))
 
-        source_code = u'''""" Module description """'''
+        source_code = u'''""" Module description """\nx=1\ny=2'''
         docstring, source = extract_docstring_from_source(source_code)
-        expected = (u' Module description ', '')
+        expected = (u' Module description ', 'x=1\ny=2')
         self.assertEqual(expected, (docstring, source))
