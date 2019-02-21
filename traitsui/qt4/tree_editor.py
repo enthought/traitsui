@@ -1,5 +1,6 @@
 #------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
+# Copyright (c) 2019, Enthought Inc.
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.

@@ -49,6 +49,8 @@ class SparklineRenderer(AbstractTreeNodeRenderer):
 
     handles_all = True
 
+    handles_text = True
+
     def paint(self, editor, node, column, object, paint_context):
         painter, option, index = paint_context
         data = self.get_data(object)
