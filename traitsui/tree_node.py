@@ -61,7 +61,8 @@ class TreeNode(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Name of trait containing children (if '', the node is a leaf).
+    # Name of trait containing children (if '', the node is a leaf). Nested
+    # attributes are allowed, e.g., 'library.books'
     children = Str
 
     # Either the name of a trait containing a label, or a constant label, if
@@ -219,7 +220,7 @@ class TreeNode(HasPrivateTraits):
     def get_children(self, object):
         """ Gets the object's children.
         """
-        return getattr(object, self.children)
+        return xgetattr(object, self.children, default=None)
 
     #-------------------------------------------------------------------------
     #  Gets the object's children identifier:
@@ -237,7 +238,8 @@ class TreeNode(HasPrivateTraits):
     def append_child(self, object, child):
         """ Appends a child to the object's children.
         """
-        getattr(object, self.children).append(child)
+        children = self.get_children(object)
+        children.append(child)
 
     #-------------------------------------------------------------------------
     #  Inserts a child into the object's children:
@@ -246,7 +248,8 @@ class TreeNode(HasPrivateTraits):
     def insert_child(self, object, index, child):
         """ Inserts a child into the object's children.
         """
-        getattr(object, self.children)[index: index] = [child]
+        children = self.get_children()
+        children[index:index] = [child]
 
     #-------------------------------------------------------------------------
     #  Confirms that a specified object can be deleted or not:
@@ -274,7 +277,7 @@ class TreeNode(HasPrivateTraits):
     def delete_child(self, object, index):
         """ Deletes a child at a specified index from the object's children.
         """
-        del getattr(object, self.children)[index]
+        del self.get_children(object)[index]
 
     #-------------------------------------------------------------------------
     #  Sets up/Tears down a listener for 'children replaced' on a specified
@@ -456,13 +459,13 @@ class TreeNode(HasPrivateTraits):
     def get_background(self, object):
         background = self.background
         if isinstance(background, six.string_types):
-            background = getattr(object, background, background)
+            background = xgetattr(object, background, default=background)
         return background
 
     def get_foreground(self, object):
         foreground = self.foreground
         if isinstance(foreground, six.string_types):
-            foreground = getattr(object, foreground, foreground)
+            foreground = xgetattr(object, foreground, default=foreground)
         return foreground
 
     #-------------------------------------------------------------------------
@@ -1731,7 +1734,7 @@ class TreeNodeObject(HasPrivateTraits):
     def tno_get_children(self, node):
         """ Gets the object's children.
         """
-        return getattr(self, node.children)
+        return xgetattr(self, node.children, default=None)
 
     #-------------------------------------------------------------------------
     #  Gets the object's children identifier:
@@ -1749,7 +1752,7 @@ class TreeNodeObject(HasPrivateTraits):
     def tno_append_child(self, node, child):
         """ Appends a child to the object's children.
         """
-        getattr(self, node.children).append(child)
+        self.tno_get_children(node).append(child)
 
     #-------------------------------------------------------------------------
     #  Inserts a child into the object's children:
@@ -1758,7 +1761,8 @@ class TreeNodeObject(HasPrivateTraits):
     def tno_insert_child(self, node, index, child):
         """ Inserts a child into the object's children.
         """
-        getattr(self, node.children)[index: index] = [child]
+        children = self.tno_get_children(node)
+        children[index:index] = [child]
 
     #-------------------------------------------------------------------------
     #  Confirms that a specified object can be deleted or not:
@@ -1786,7 +1790,8 @@ class TreeNodeObject(HasPrivateTraits):
     def tno_delete_child(self, node, index):
         """ Deletes a child at a specified index from the object's children.
         """
-        del getattr(self, node.children)[index]
+
+        del self.tno_get_children(node)[index]
 
     #-------------------------------------------------------------------------
     #  Sets up/Tears down a listener for 'children replaced' on a specified
