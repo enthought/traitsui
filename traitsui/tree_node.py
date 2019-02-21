@@ -172,6 +172,9 @@ class TreeNode(HasPrivateTraits):
     #        Instance( 'traitsui.menu.MenuBar' ), but it doesn't work
     #        right currently.
 
+    #: A toolkit-appropriate cell renderer (currently Qt only)
+    renderer = Any
+
     #-------------------------------------------------------------------------
     #  Initializes the object:
     #-------------------------------------------------------------------------
@@ -467,6 +470,10 @@ class TreeNode(HasPrivateTraits):
         if isinstance(foreground, six.string_types):
             foreground = xgetattr(object, foreground, default=foreground)
         return foreground
+
+    def get_renderer(self, object, column=0):
+        """ Return the renderer for the object and column. """
+        return self.renderer
 
     #-------------------------------------------------------------------------
     #  Returns whether or not the object's children can be renamed:
@@ -1026,6 +1033,11 @@ class ITreeNodeAdapter(Adapter):
         """
         return None
 
+    def get_renderer(self, column=0):
+        """ Returns the renderer for object
+        """
+        return None
+
     def can_rename(self):
         """ Returns whether the object's children can be renamed.
         """
@@ -1256,6 +1268,11 @@ class ITreeNodeAdapterBridge(HasPrivateTraits):
         """ Returns the foreground for object
         """
         return self.adapter.get_foreground()
+
+    def get_renderer(self, object, column=0):
+        """ Returns the renderer for object
+        """
+        return self.adapter.get_renderer(column)
 
     def can_rename(self, object):
         """ Returns whether the object's children can be renamed.

@@ -28,17 +28,18 @@ from six.moves import zip_longest
 from pyface.qt import QtCore, QtGui
 
 from pyface.api import ImageResource
-from pyface.ui_traits import convert_image
+from pyface.ui_traits import convert_image, HasBorder
 from pyface.timer.api import do_later
-from traits.api import Any, Event
+from traits.api import Any, Event, Int
+from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
 from traitsui.editors.tree_editor import (
     CopyAction, CutAction, DeleteAction, NewAction, PasteAction, RenameAction,
 )
-from traitsui.undo import ListUndoItem
 from traitsui.tree_node import (
     ITreeNodeAdapterBridge, MultiTreeNode, ObjectTreeNode, TreeNode
 )
 from traitsui.menu import Menu, Action, Separator
+from traitsui.undo import ListUndoItem
 
 from .clipboard import clipboard, PyMimeData
 from .editor import Editor
@@ -175,6 +176,13 @@ class SimpleEditor(Editor):
         else:
             # Otherwise, just create the tree control:
             self.control = self._tree = _TreeWidget(self)
+
+        # Create our item delegate
+        delegate = TreeItemDelegate()
+        delegate.editor = self
+        self._tree.setItemDelegate(delegate)
+        # From Qt Docs: QAbstractItemView does not take ownership of `delegate`
+        self._item_delegate = delegate
 
         # Set up the mapping between objects and tree id's:
         self._map = {}
@@ -338,57 +346,18 @@ class SimpleEditor(Editor):
             q_color = QtGui.QColor(color)
         return QtGui.QBrush(q_color)
 
-    def _set_column_labels(self, nid, column_labels):
-        """ Set the column labels.
-        """
+    def _set_column_labels(self, nid, node, object):
+        """ Set the column labels. """
+        column_labels = node.get_column_labels(object)
+
         for i, (header, label) in enumerate(
                 zip_longest(self.factory.column_headers[1:], column_labels), 1):
-            if header is not None and label is not None:
-                nid.setText(i, label)
-
-    #-------------------------------------------------------------------------
-    #  Private Delegate class to do drawing in case of wrapped text labels
-    #-------------------------------------------------------------------------
-
-    class ItemDelegate(QtGui.QStyledItemDelegate):
-        """ A delegate class to draw wrapped text labels """
-        # FIXME: sizeHint() should return the size required by the label,
-        # which is dependent on the width available, which is different for
-        # each item due to the nested tree structure. However the option.rect
-        # argument available to the sizeHint() is invalid (width=-1) so as a
-        # hack sizeHintChanged is emitted in paint() and the size of drawn
-        # text is returned, as paint() gets a valid option.rect argument.
-
-        def __init__(self, *args, **kwargs):
-            self.size_map = collections.defaultdict(
-                lambda: QtCore.QSize(1, 21))
-            QtGui.QStyledItemDelegate.__init__(self, *args, **kwargs)
-
-        def sizeHint(self, option, index):
-            """ returns area taken by the text. """
-            return self.size_map[self.editor._tree.itemFromIndex(index)]
-
-        def paint(self, painter, option, index):
-            """ Do the actual drawing of the text """
-            # For icon and highlights during selection etc
-            super(self.__class__, self).paint(painter, option, index)
-
-            item = self.editor._tree.itemFromIndex(index)
-            expanded, node, object = self.editor._get_node_data(item)
-            text = node.get_label(object)
-            if self.editor.factory.show_icons:
-                iconwidth = 24  # FIXME: get width from actual
+            renderer = node.get_renderer(object, i)
+            handles_text = renderer.handles_text if renderer else False
+            if header is None or label is None or handles_text:
+                nid.setText(i, '')
             else:
-                iconwidth = 0
-            rect = painter.drawText(option.rect.left() + iconwidth,
-                                    option.rect.top(),
-                                    option.rect.width() - iconwidth,
-                                    option.rect.height(),
-                                    QtCore.Qt.TextWordWrap, text)
-            # Need to set the appropriate sizeHint of the item.
-            if self.size_map[item] != rect.size():
-                self.size_map[item] = rect.size()
-                do_later(self.sizeHintChanged.emit, index)
+                nid.setText(i, label)
 
     #-------------------------------------------------------------------------
     #  Create a TreeWidgetItem as per word wrap policy and set icon,tooltip
@@ -404,15 +373,17 @@ class SimpleEditor(Editor):
         else:
             cnid = QtGui.QTreeWidgetItem()
             nid.insertChild(index, cnid)
-        if self.factory.word_wrap:
-            item = self.ItemDelegate()
-            item.editor = self
-            self._tree.setItemDelegate(item)
-        else:
+
+        renderer = node.get_renderer(object)
+        handles_text = getattr(renderer, 'handles_text', False)
+        handles_icon = getattr(renderer, 'handles_icon', False)
+        if not (self.factory.word_wrap or handles_text):
             cnid.setText(0, node.get_label(object))
-        cnid.setIcon(0, self._get_icon(node, object))
+        if not handles_icon:
+            cnid.setIcon(0, self._get_icon(node, object))
         cnid.setToolTip(0, node.get_tooltip(object))
-        self._set_column_labels(cnid, node.get_column_labels(object))
+
+        self._set_column_labels(cnid, node, object)
 
         color = node.get_background(object)
         if color:
@@ -423,10 +394,17 @@ class SimpleEditor(Editor):
 
         return cnid
 
-    def _set_label(self, nid, text, col=0):
+    def _set_label(self, nid, col=0):
         """ Set the label of the specified item """
-        if not self.factory.word_wrap or col != 0:
-            expanded, node, object = self._get_node_data(nid)
+        if col != 0:
+            # these are handled by _set_column_labels
+            return
+        expanded, node, object = self._get_node_data(nid)
+        renderer = node.get_renderer(object)
+        handles_text = getattr(renderer, 'handles_text', False)
+        if self.factory.word_wrap or handles_text:
+            nid.setText(col, '')
+        else:
             nid.setText(col, node.get_label(object))
 
     #-------------------------------------------------------------------------
@@ -779,7 +757,11 @@ class SimpleEditor(Editor):
         """ Updates the icon for a specified node.
         """
         expanded, node, object = self._get_node_data(nid)
-        nid.setIcon(0, self._get_icon(node, object, expanded))
+        renderer = node.get_renderer(object)
+        if renderer is None or not renderer.handles_icon:
+            nid.setIcon(0, self._get_icon(node, object, expanded))
+        else:
+            nid.setIcon(0, QIcon())
 
     #-------------------------------------------------------------------------
     #  Begins an 'undoable' transaction:
@@ -1636,9 +1618,7 @@ class SimpleEditor(Editor):
             if nid not in nids:
                 nids[nid] = None
                 node = self._get_node_data(nid)[1]
-                # Just do all of them at once. The number of columns should be
-                # small.
-                self._set_column_labels(nid, node.get_column_labels(object))
+                self._set_column_labels(nid, node, object)
 
         self._tree.blockSignals(blk)
 
@@ -1933,3 +1913,93 @@ class _TreeWidget(QtGui.QTreeWidget):
                 action = None
 
         return (action, to_node, to_object, to_index, data)
+
+
+class TreeItemDelegate(QtGui.QStyledItemDelegate):
+    """ A delegate class to draw wrapped text labels """
+    # FIXME: sizeHint() should return the size required by the label,
+    # which is dependent on the width available, which is different for
+    # each item due to the nested tree structure. However the option.rect
+    # argument available to the sizeHint() is invalid (width=-1) so as a
+    # hack sizeHintChanged is emitted in paint() and the size of drawn
+    # text is returned, as paint() gets a valid option.rect argument.
+
+    # TODO: add ability to override editor in item delegate
+
+    def __init__(self, *args, **kwargs):
+        self.size_map = collections.defaultdict(lambda: QtCore.QSize(1, 41))
+        QtGui.QStyledItemDelegate.__init__(self, *args, **kwargs)
+
+    def sizeHint(self, option, index):
+        """ returns area taken by the text. """
+        return self.size_map[self.editor._tree.itemFromIndex(index)]
+
+    def updateEditorGeometry(self, editor, option, index):
+        """ Update the editor's geometry.
+        """
+        editor.setGeometry(option.rect)
+
+    def paint(self, painter, option, index):
+        """ Render the contents of the item. """
+        item = self.editor._tree.itemFromIndex(index)
+        expanded, node, instance = self.editor._get_node_data(item)
+        column = index.column()
+
+        renderer = node.get_renderer(object, column=column)
+        if renderer is None and self.editor.factory.word_wrap:
+            renderer = WordWrapRenderer()
+        if renderer is None:
+            super(TreeItemDelegate, self).paint(painter, option, index)
+            size = option.rect.size()
+        else:
+            if not renderer.handles_all:
+                # renderers background and selection highlights
+                # will also render icon and text if flags are set
+                super(TreeItemDelegate, self).paint(painter, option, index)
+            paint_context = (painter, option, index)
+            size = renderer.paint(self.editor, node, column, instance, paint_context)
+
+        # Need to set the appropriate sizeHint of the item.
+        if size is not None:
+            self.updateSizeHint(index, size)
+
+    def updateSizeHint(self, index, size):
+        """ Updates the size stored in the size_map. """
+        item = self.editor._tree.itemFromIndex(index)
+        if self.size_map[item] != size:
+            self.size_map[item] = size
+            do_later(self.sizeHintChanged.emit, index)
+
+
+class WordWrapRenderer(AbstractTreeNodeRenderer):
+    """ A renderer that wraps the label text across multiple lines. """
+
+    #: The padding around the text.
+    padding = HasBorder(2)
+
+    #: The minimum width we want.
+    width_hint = Int(100)
+
+    def paint(self, editor, node, column, object, paint_context):
+        painter, option, index = paint_context
+        text = self.get_label(node, object, column)
+
+        if editor.factory.show_icons:
+            iconwidth = 24  # FIXME: get width from actual
+        else:
+            iconwidth = 0
+
+        x = option.rect.left() + iconwidth + self.padding.left
+        y = option.rect.top() + self.padding.top
+        width = (option.rect.width() - iconwidth - self.padding.left
+                 - self.padding.right)
+        height = option.rect.height() - self.padding.top - self.padding.bottom
+        rect = painter.drawText(
+            x, y, width, height, QtCore.Qt.TextWordWrap, text
+        )
+
+        width = max(rect.width(), width)
+        return QtCore.QSize(
+            width + self.padding.left + self.padding.right,
+            rect.height() + self.padding.top + self.padding.bottom,
+        )

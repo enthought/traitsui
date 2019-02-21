@@ -15,17 +15,23 @@ from __future__ import (
 
 from random import choice
 
-from pyface.qt import QtCore
-from traits.api import HasTraits, Instance, List, Unicode
+import numpy as np
 
-from traitsui.api import UItem, View
-from traitsui.qt4.extra.styled_tree_editor import (
-    StyledTreeEditor, StyledTreeItemDelegate, StyledTreeNode
-)
+from pyface.qt import QtCore, QtGui
+from traits.api import Array, HasTraits, Instance, List, Unicode
+
+from traitsui.api import TreeEditor, TreeNode, UItem, View
+from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
+from traitsui.qt4.tree_editor import WordWrapRenderer
 
 
 class MyDataItem(HasTraits):
     text = Unicode
+
+    data = Array
+
+    def _data_default(self):
+        return np.random.standard_normal((1000,)).cumsum()
 
 
 class MyData(HasTraits):
@@ -39,20 +45,37 @@ class MyData(HasTraits):
         return [MyDataItem(text=choice(DATA_ITEMS)) for _ in range(5)]
 
 
-class MyStyledTreeItemDelegate(StyledTreeItemDelegate):
-    def custom_paint(self, painter, option, index, node, instance):
-        """ The paint() method for subclasses to override.
-        """
-        text = node.get_label(instance)
-        rect = painter.drawText(option.rect.left(),
-                                option.rect.top() + 2,
-                                option.rect.width(),
-                                option.rect.height() + 2,
-                                QtCore.Qt.TextWordWrap, text)
+class SparklineRenderer(AbstractTreeNodeRenderer):
 
-        # Need to set the appropriate sizeHint of the item.
-        size = QtCore.QSize(rect.width(), rect.height() + 4)
-        self.updateSizeHint(index, size)
+    handles_all = True
+
+    def paint(self, editor, node, column, object, paint_context):
+        painter, option, index = paint_context
+        data = self.get_data(object)
+
+        xs = np.linspace(0, option.rect.width() - 4, len(data)) + option.rect.left() + 2
+        ys = (data - data.min())/data.ptp() * (option.rect.height() - 4) + option.rect.top() + 2
+
+        points = [QtCore.QPointF(x, y) for x, y in zip(xs, ys)]
+
+        if bool(option.state & QtGui.QStyle.State_Selected):
+            painter.fillRect(option.rect, option.palette.highlight())
+
+        painter.drawPolyline(points)
+
+        return None
+
+    def get_data(self, object):
+        return object.data
+
+
+class SparklineTreeNode(TreeNode):
+
+    def get_renderer(self, object, column=0):
+        if column == 1:
+            return SparklineRenderer()
+        else:
+            return WordWrapRenderer()
 
 
 class MyClass(HasTraits):
@@ -60,26 +83,27 @@ class MyClass(HasTraits):
     traits_view = View(
         UItem(
             'root',
-            editor=StyledTreeEditor(
-                item_delegate_klass=MyStyledTreeItemDelegate,
+            editor=TreeEditor(
                 nodes=[
-                    StyledTreeNode(
+                    TreeNode(
                         node_for=[MyData],
                         children='items',
                         label='name',
                     ),
-                    StyledTreeNode(
-                        delegates_style=True,
+                    SparklineTreeNode(
                         node_for=[MyDataItem],
                         auto_open=True,
                         label='text',
                     ),
                 ],
+                column_headers=["The Tree View", "The Sparklines"],
                 hide_root=False,
                 editable=False,
             ),
         ),
         resizable=True,
+        width=400,
+        height=300,
     )
 
 
