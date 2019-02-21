@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from traitsui.extras.demo import extract_docstring_from_source
+from traitsui.extras.demo import extract_docstring_from_source, parse_source
 
 
 class TestDemo(TestCase):
@@ -18,3 +18,7 @@ class TestDemo(TestCase):
         docstring, source = extract_docstring_from_source(source_code)
         expected = (u' Module description ', 'x=1\ny=2')
         self.assertEqual(expected, (docstring, source))
+
+    def test_parse_source(self):
+        docstring, source = parse_source('non-existent-file.<>|:')
+        self.assertIn('Sorry, something went wrong.', docstring)
