@@ -102,7 +102,7 @@ class TestWrapText(unittest.TestCase):
         self.assertEqual(lines[:19], expected_lines[:19])
         # different os elide the last line slightly differently,
         # just check last character shows elision.
-        self.assertEqual(lines[19][-1], u'\u2026')
+        self.assertEqual(lines[19][-1], '\u2026')
 
     def test_wrap_text_short(self):
         font = create_traitsfont("Courier")
