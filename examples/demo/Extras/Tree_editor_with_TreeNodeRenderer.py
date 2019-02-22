@@ -9,6 +9,11 @@
 # Thanks for using Enthought open source!
 #
 # -----------------------------------------------------------------------------
+"""
+This demo illustrates use of TreeNodeRenderers for displaying more complex
+contents inside the cells of a TreeEditor.
+"""
+
 from __future__ import (
     absolute_import, division, print_function, unicode_literals
 )
@@ -18,7 +23,7 @@ from random import choice
 import numpy as np
 
 from pyface.qt import QtCore, QtGui
-from traits.api import Array, HasTraits, Instance, List, Unicode
+from traits.api import Array, Float, HasTraits, Instance, Int, List, Unicode
 
 from traitsui.api import TreeEditor, TreeNode, UItem, View
 from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
@@ -40,35 +45,67 @@ class MyData(HasTraits):
 
     def _items_default(self):
         DATA_ITEMS = (
-            'I live on\nmultiple\nlines!', 'Foo\nBar', 'Baz', 'Qux',
+            'I live on\nmultiple\nlines!',
+            'Foo\nBar',
+            'Baz',
+            'Qux',
+            'z ' * 20,
+            __doc__,
         )
         return [MyDataItem(text=choice(DATA_ITEMS)) for _ in range(5)]
 
 
 class SparklineRenderer(AbstractTreeNodeRenderer):
+    """ Renderer that draws sparklines into a cell. """
 
+    #: This renderer handles all rendering.
     handles_all = True
 
+    #: This renderer handles text rendering (there is none).
     handles_text = True
+
+    #: The scale for y-values.
+    y_scale = Float(1.0)
+
+    #: The extra border applied by Qt internally
+    # XXX get this dynamically from Qt? How?
+    extra_space = Int(8)
 
     def paint(self, editor, node, column, object, paint_context):
         painter, option, index = paint_context
         data = self.get_data(object)
 
-        xs = np.linspace(0, option.rect.width() - 4, len(data)) + option.rect.left() + 2
-        ys = (data - data.min())/data.ptp() * (option.rect.height() - 4) + option.rect.top() + 2
+        xs = np.linspace(0, option.rect.width(), len(data)) + option.rect.left()
+        ys = (data.max() - data)/self.y_scale + option.rect.top()
 
-        points = [QtCore.QPointF(x, y) for x, y in zip(xs, ys)]
+        height = option.rect.height()
+        plot_height = ys.ptp()
+        extra = height - plot_height
+        if bool(option.displayAlignment & QtCore.Qt.AlignVCenter):
+            ys += extra/2
+        elif bool(option.displayAlignment & QtCore.Qt.Bottom):
+            ys += extra
 
         if bool(option.state & QtGui.QStyle.State_Selected):
             painter.fillRect(option.rect, option.palette.highlight())
 
-        painter.drawPolyline(points)
+        points = [QtCore.QPointF(x, y) for x, y in zip(xs, ys)]
+        old_pen = painter.pen()
+        if bool(option.state & QtGui.QStyle.State_Selected):
+            painter.setPen(QtGui.QPen(option.palette.highlightedText(), 0))
+        try:
+            painter.drawPolyline(points)
+        finally:
+            painter.setPen(old_pen)
 
         return None
 
     def get_data(self, object):
         return object.data
+
+    def size(self, editor, node, column, object, size_context):
+        data = self.get_data(object)
+        return (100, data.ptp()/self.y_scale + self.extra_space)
 
 
 class SparklineTreeNode(TreeNode):

@@ -44,6 +44,27 @@ class AbstractTreeNodeRenderer(ABCHasStrictTraits):
         """
         raise NotImplementedError()
 
+    @abstractmethod
+    def size(self, node, column, object, size_context):
+        """ Return the preferred size for the item
+
+        Parameters
+        ----------
+        node : ITreeNode instance
+            The tree node to render.
+        column : int
+            The column in the tree that should be rendererd.
+        object : object
+            The underlying object being edited.
+        size_context : object
+            A toolkit-dependent context for performing sizing operations.
+
+        Returns
+        -------
+        size : tuple of (width, height) or None
+        """
+        raise NotImplementedError()
+
     def get_label(self, node, object, column=0):
         """ Get the label associated with an item and column. """
         if column == 0:

@@ -29,10 +29,9 @@ from six.moves import zip_longest
 from pyface.qt import QtCore, QtGui
 
 from pyface.api import ImageResource
-from pyface.ui_traits import convert_image, HasBorder
+from pyface.ui_traits import convert_image
 from pyface.timer.api import do_later
 from traits.api import Any, Event, Int
-from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
 from traitsui.editors.tree_editor import (
     CopyAction, CutAction, DeleteAction, NewAction, PasteAction, RenameAction,
 )
@@ -40,23 +39,21 @@ from traitsui.tree_node import (
     ITreeNodeAdapterBridge, MultiTreeNode, ObjectTreeNode, TreeNode
 )
 from traitsui.menu import Menu, Action, Separator
+from traitsui.ui_traits import SequenceTypes
 from traitsui.undo import ListUndoItem
 
 from .clipboard import clipboard, PyMimeData
 from .editor import Editor
 from .helper import pixmap_cache
+from .tree_node_renderers import WordWrapRenderer
 import six
 
 
 logger = logging.getLogger(__name__)
 
-#-------------------------------------------------------------------------
-#  The core tree node menu actions:
-#-------------------------------------------------------------------------
-from traitsui.ui_traits import SequenceTypes
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+
+# The renderer to use when word_wrap is True.
+DEFAULT_WRAP_RENDERER = WordWrapRenderer()
 
 
 class SimpleEditor(Editor):
@@ -1927,13 +1924,28 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
 
     # TODO: add ability to override editor in item delegate
 
-    def __init__(self, *args, **kwargs):
-        self.size_map = collections.defaultdict(lambda: QtCore.QSize(1, 41))
-        QtGui.QStyledItemDelegate.__init__(self, *args, **kwargs)
-
     def sizeHint(self, option, index):
         """ returns area taken by the text. """
-        return self.size_map[self.editor._tree.itemFromIndex(index)]
+        column = index.column()
+        item = self.editor._tree.itemFromIndex(index)
+        expanded, node, instance = self.editor._get_node_data(item)
+        column = index.column()
+
+        renderer = node.get_renderer(object, column=column)
+        if renderer is None:
+            size = index.model().data(index, QtCore.Qt.SizeHintRole)
+            if size is None:
+                size = QtCore.QSize(1, 21)
+            return size
+
+        size_context = (option, index)
+        size = renderer.size(
+            self.editor, node, column, instance, size_context
+        )
+        if size is None:
+            return QtCore.QSize(1, 21)
+        else:
+            return QtCore.QSize(*size)
 
     def updateEditorGeometry(self, editor, option, index):
         """ Update the editor's geometry.
@@ -1948,59 +1960,25 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
 
         renderer = node.get_renderer(object, column=column)
         if renderer is None and self.editor.factory.word_wrap:
-            renderer = WordWrapRenderer()
+            renderer = DEFAULT_WRAP_RENDERER
         if renderer is None:
             super(TreeItemDelegate, self).paint(painter, option, index)
-            size = option.rect.size()
         else:
             if not renderer.handles_all:
                 # renderers background and selection highlights
                 # will also render icon and text if flags are set
                 super(TreeItemDelegate, self).paint(painter, option, index)
             paint_context = (painter, option, index)
-            size = renderer.paint(self.editor, node, column, instance, paint_context)
-
-        # Need to set the appropriate sizeHint of the item.
-        if size is not None:
-            self.updateSizeHint(index, size)
+            size = renderer.paint(
+                self.editor, node, column, instance, paint_context
+            )
+            if size is not None:
+                do_later(self.sizeHintChanged.emit, index)
 
     def updateSizeHint(self, index, size):
         """ Updates the size stored in the size_map. """
+        column = index.column()
         item = self.editor._tree.itemFromIndex(index)
-        if self.size_map[item] != size:
-            self.size_map[item] = size
+        if self.size_map[(item, column)] != size:
+            self.size_map[(item, column)] = size
             do_later(self.sizeHintChanged.emit, index)
-
-
-class WordWrapRenderer(AbstractTreeNodeRenderer):
-    """ A renderer that wraps the label text across multiple lines. """
-
-    #: The padding around the text.
-    padding = HasBorder(2)
-
-    #: The minimum width we want.
-    width_hint = Int(100)
-
-    def paint(self, editor, node, column, object, paint_context):
-        painter, option, index = paint_context
-        text = self.get_label(node, object, column)
-
-        if editor.factory.show_icons:
-            iconwidth = 24  # FIXME: get width from actual
-        else:
-            iconwidth = 0
-
-        x = option.rect.left() + iconwidth + self.padding.left
-        y = option.rect.top() + self.padding.top
-        width = (option.rect.width() - iconwidth - self.padding.left
-                 - self.padding.right)
-        height = option.rect.height() - self.padding.top - self.padding.bottom
-        rect = painter.drawText(
-            x, y, width, height, QtCore.Qt.TextWordWrap, text
-        )
-
-        width = max(rect.width(), width)
-        return QtCore.QSize(
-            width + self.padding.left + self.padding.right,
-            rect.height() + self.padding.top + self.padding.bottom,
-        )
