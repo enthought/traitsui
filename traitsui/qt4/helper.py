@@ -225,7 +225,7 @@ DockStyle = Enum('horizontal', 'vertical', 'tab', 'fixed')
 #  Text Rendering helpers
 #-------------------------------------------------------------------------
 
-def wrap_text_with_eilision(text, font, width, height):
+def wrap_text_with_elision(text, font, width, height):
     """ Wrap paragraphs to fit inside a given size, eliding if too long.
 
     Parameters
@@ -266,7 +266,7 @@ def wrap_text_with_eilision(text, font, width, height):
             lines.append(line_text)
             y_offset += line_spacing
         text_layout.endLayout()
-        if y_offset + line_spacing >= height:
+        if y_offset + line_spacing > height:
             break
     if lines and y_offset + line_spacing > height:
         # elide last line as we ran out of room

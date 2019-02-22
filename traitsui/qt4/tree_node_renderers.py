@@ -17,7 +17,7 @@ from pyface.ui_traits import HasBorder
 from traits.api import Int
 
 from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
-from .helper import wrap_text_with_eilision
+from .helper import wrap_text_with_elision
 
 
 class WordWrapRenderer(AbstractTreeNodeRenderer):
@@ -55,7 +55,7 @@ class WordWrapRenderer(AbstractTreeNodeRenderer):
                  - self.padding.right)
         height = option.rect.height() - self.padding.top - self.padding.bottom
 
-        lines = wrap_text_with_eilision(text, option.font, width, height)
+        lines = wrap_text_with_elision(text, option.font, width, height)
 
         old_pen = painter.pen()
         if bool(option.state & QtGui.QStyle.State_Selected):
@@ -100,7 +100,7 @@ class WordWrapRenderer(AbstractTreeNodeRenderer):
 
         width = self.width_hint - icon_width - self.padding.left - self.padding.right
         max_height = self.max_lines * font_metrics.lineSpacing()
-        lines = wrap_text_with_eilision(text, option.font, width, max_height)
+        lines = wrap_text_with_elision(text, option.font, width, max_height)
 
         text_height = len(lines) * font_metrics.lineSpacing()
 

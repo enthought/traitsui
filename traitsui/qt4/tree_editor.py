@@ -1974,11 +1974,3 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
             )
             if size is not None:
                 do_later(self.sizeHintChanged.emit, index)
-
-    def updateSizeHint(self, index, size):
-        """ Updates the size stored in the size_map. """
-        column = index.column()
-        item = self.editor._tree.itemFromIndex(index)
-        if self.size_map[(item, column)] != size:
-            self.size_map[(item, column)] = size
-            do_later(self.sizeHintChanged.emit, index)
