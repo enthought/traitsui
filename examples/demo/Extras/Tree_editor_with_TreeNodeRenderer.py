@@ -116,11 +116,15 @@ class SparklineRenderer(AbstractTreeNodeRenderer):
 class SparklineTreeNode(TreeNode):
     """ A TreeNode that renders sparklines in column index 1 """
 
+    # static instances of renderers( they have no state, so this is fine)
+    sparkline_renderer = SparklineRenderer()
+    word_wrap_renderer = WordWrapRenderer()
+
     def get_renderer(self, object, column=0):
         if column == 1:
-            return SparklineRenderer()
+            return self.sparkline_renderer
         else:
-            return WordWrapRenderer()
+            return self.word_wrap_renderer
 
 
 class SparklineTreeView(HasTraits):

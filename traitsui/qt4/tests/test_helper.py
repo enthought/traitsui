@@ -83,8 +83,7 @@ class TestWrapText(unittest.TestCase):
 
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
-        expected_lines = get_expected_lines(lorem_ipsum, 20)
-        self.assertEqual(lines, expected_lines)
+        self.assertTrue(all(len(line) < 21 for line in lines))
 
     def test_wrap_text_narrow_short(self):
         font = create_traitsfont("Courier")
@@ -98,8 +97,7 @@ class TestWrapText(unittest.TestCase):
 
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
-        expected_lines = get_expected_lines(lorem_ipsum, 20)[:20]
-        self.assertEqual(lines[:19], expected_lines[:19])
+        self.assertTrue(all(len(line) < 21 for line in lines))
         # different os elide the last line slightly differently,
         # just check last character shows elision.
         self.assertEqual(lines[19][-1], '\u2026')
