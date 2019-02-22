@@ -1462,7 +1462,7 @@ class SimpleEditor(Editor):
             if new_label != '':
                 node.set_label(object, new_label)
             else:
-                self._set_label(nid, old_label, col)
+                self._set_label(nid, col)
 
     #-------------------------------------------------------------------------
     #  Adds a new object to the current node:
@@ -1600,7 +1600,7 @@ class SimpleEditor(Editor):
                 if nid not in nids:
                     nids.append(nid)
                     node = self._get_node_data(nid)[1]
-                    self._set_label(nid, node.get_label(object), 0)
+                    self._set_label(nid, 0)
                     self._update_icon(nid)
         finally:
             self._tree.blockSignals(blk)
