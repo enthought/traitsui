@@ -41,6 +41,12 @@ class AbstractTreeNodeRenderer(ABCHasStrictTraits):
             The underlying object being edited.
         paint_context : object
             A toolkit-dependent context for performing paint operations.
+
+        Returns
+        -------
+        size : tuple of (width, height) or None
+            Optionally return a new preferred size so that the toolkit can
+            perform better layout.
         """
         raise NotImplementedError()
 
