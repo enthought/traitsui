@@ -30,9 +30,11 @@ from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
 from traitsui.qt4.tree_editor import WordWrapRenderer
 
 
-class MyDataItem(HasTraits):
+class MyDataElement(HasTraits):
+    #: Some text to display.
     text = Unicode
 
+    #: A random walk to plot.
     data = Array
 
     def _data_default(self):
@@ -40,11 +42,14 @@ class MyDataItem(HasTraits):
 
 
 class MyData(HasTraits):
+    #: The name of the root node.
     name = Unicode('Rooty McRootface')
-    items = List(Instance(MyDataItem))
 
-    def _items_default(self):
-        DATA_ITEMS = (
+    #: The elements contained in the root node.
+    elements = List(Instance(MyDataElement))
+
+    def _elements_default(self):
+        DATA_ELEMENTS = (
             'I live on\nmultiple\nlines!',
             'Foo\nBar',
             'Baz',
@@ -52,7 +57,7 @@ class MyData(HasTraits):
             'z ' * 20,
             __doc__,
         )
-        return [MyDataItem(text=choice(DATA_ITEMS)) for _ in range(5)]
+        return [MyDataElement(text=choice(DATA_ELEMENTS)) for _ in range(5)]
 
 
 class SparklineRenderer(AbstractTreeNodeRenderer):
@@ -109,6 +114,7 @@ class SparklineRenderer(AbstractTreeNodeRenderer):
 
 
 class SparklineTreeNode(TreeNode):
+    """ A TreeNode that renders sparklines in column index 1 """
 
     def get_renderer(self, object, column=0):
         if column == 1:
@@ -117,8 +123,12 @@ class SparklineTreeNode(TreeNode):
             return WordWrapRenderer()
 
 
-class MyClass(HasTraits):
+class SparklineTreeView(HasTraits):
+    """ Class that views the data with sparklines. """
+
+    #: The root of the tree.
     root = Instance(MyData, args=())
+
     traits_view = View(
         UItem(
             'root',
@@ -126,11 +136,11 @@ class MyClass(HasTraits):
                 nodes=[
                     TreeNode(
                         node_for=[MyData],
-                        children='items',
+                        children='elements',
                         label='name',
                     ),
                     SparklineTreeNode(
-                        node_for=[MyDataItem],
+                        node_for=[MyDataElement],
                         auto_open=True,
                         label='text',
                     ),
@@ -147,4 +157,4 @@ class MyClass(HasTraits):
 
 
 if __name__ == '__main__':
-    MyClass().configure_traits()
+    SparklineTreeView().configure_traits()
