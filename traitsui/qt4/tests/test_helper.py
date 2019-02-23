@@ -78,12 +78,12 @@ class TestWrapText(unittest.TestCase):
         average_char_width = font_metrics.averageCharWidth()
         line_spacing = font_metrics.lineSpacing()
 
-        width = 20 * average_char_width + 1
+        width = 20 * average_char_width
         height = 100 * line_spacing
 
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
-        self.assertTrue(all(len(line) < 21 for line in lines))
+        self.assertTrue(all(len(line) <= 21 for line in lines))
 
     def test_wrap_text_narrow_short(self):
         font = create_traitsfont("Courier")
@@ -92,10 +92,14 @@ class TestWrapText(unittest.TestCase):
         average_char_width = font_metrics.averageCharWidth()
         line_spacing = font_metrics.lineSpacing()
 
-        width = 20 * average_char_width + 1
+        width = 20 * average_char_width
         height = 20 * line_spacing
 
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
+
+        if any(len(line) > 21 for line in lines):
+            # feedback in case of error
+            print(average_char_width, line_spacing)
 
         self.assertTrue(all(len(line) < 21 for line in lines))
         # different os elide the last line slightly differently,
