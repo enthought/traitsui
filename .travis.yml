@@ -18,9 +18,9 @@ matrix:
     - os: osx
       env: RUNTIME=3.5 TOOLKITS="null pyqt5 pyqt pyside2"
     - os: osx
-      env: RUNTIME=3.6 TOOLKITS="null pyqt5 pyq pyside2"
+      env: RUNTIME=3.6 TOOLKITS="null pyqt5 pyqt pyside2"
   allow_failures:
-   - os: osx
+    - os: osx
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
   fast_finish: true
 
