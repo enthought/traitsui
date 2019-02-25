@@ -18,12 +18,13 @@ from __future__ import (
     absolute_import, division, print_function, unicode_literals
 )
 
-from random import choice
+from random import choice, uniform
+import colorsys
 
 import numpy as np
 
 from pyface.qt import QtCore, QtGui
-from traits.api import Array, Float, HasTraits, Instance, Int, List, Unicode
+from traits.api import Array, Float, HasTraits, Instance, Int, List, RGBColor, Unicode
 
 from traitsui.api import TreeEditor, TreeNode, UItem, View
 from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
@@ -37,8 +38,14 @@ class MyDataElement(HasTraits):
     #: A random walk to plot.
     data = Array
 
+    #: A color to show as an icon.
+    color = RGBColor
+
     def _data_default(self):
         return np.random.standard_normal((1000,)).cumsum()
+
+    def _color_default(self):
+        return colorsys.hsv_to_rgb(uniform(0.0, 1.0), 1.0, 1.0)
 
 
 class MyData(HasTraits):
@@ -125,6 +132,9 @@ class SparklineTreeNode(TreeNode):
             return self.sparkline_renderer
         else:
             return self.word_wrap_renderer
+
+    def get_icon(self, object, is_expanded):
+        return object.color
 
 
 class SparklineTreeView(HasTraits):
