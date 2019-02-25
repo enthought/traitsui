@@ -152,7 +152,7 @@ def install(runtime, toolkit, environment):
         commands.append("edm run -e {environment} -- pip install pyqt5==5.9.2")
     elif toolkit == 'pyside2':
         commands.append(
-            "edm run -e {environment} -- pip install pyside2"
+            "edm run -e {environment} -- pip install pyside2==5.11"
         )
 
     click.echo("Creating environment '{environment}'".format(**parameters))
