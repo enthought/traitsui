@@ -90,17 +90,52 @@ buttons is called a :term:`dialog box`.
 Wizards
 ```````
 
-Unlike a window, whose contents generally appear as a single page or a tabbed
-display, a :term:`wizard` is presented as a series of pages that a user must
-navigate sequentially.
+Unlike a standalone window, whose contents appear as a single page or a tabbed
+display, a :term:`wizard` window presents the view's Groups as a series of
+pages that a user must navigate sequentially.
+(For more information about breaking up a view into groups, see
+:ref:`the-group-object`.)
 
-.. TODO: Add a reference to the section on the organization of Views via
-   Groups, once it's been added.
+For example, ::
 
-.. TODO: add code and screenshot for a simple tabbed display and of the same
-   View presented as a Wizard.
+  # wizard.py ---Example of a traits-based wizard UI
 
-TraitsUI Wizards are always modal and live. They always display a standard
+  from traits.api import HasTraits, Str
+  from traitsui.api import Item, View, VGroup
+
+  class Person(HasTraits):
+      first_name = Str
+      last_name = Str
+
+      company = Str
+      position = Str
+
+      view = View(
+          VGroup(
+              Item("first_name"),
+              Item("last_name")
+          ),
+          VGroup(
+              Item("company"),
+              Item("position")
+          )
+      )
+
+  person = Person(first_name='Postman', last_name='Pat', company="Enthought",
+                  position="Software Developer")
+  person.configure_traits(kind='wizard')
+
+
+leads to the following 2 modal dialogs:
+
+.. figure:: images/wizard_dialog_1.png
+   :alt: First dialog from wizard view.
+
+.. figure:: images/wizard_dialog_2.png
+   :alt: Second dialog from wizard view.
+
+
+Note that TraitsUI Wizards are always modal and live. They always display a standard
 wizard button set; i.e., they ignore the **buttons** View attribute. In short,
 wizards are considerably less flexible than windows, and are primarily suitable
 for highly controlled user interactions such as software installation.
