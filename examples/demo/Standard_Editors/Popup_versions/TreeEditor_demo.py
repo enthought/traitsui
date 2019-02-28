@@ -9,6 +9,7 @@ In this case, the tree has the following hierarchy:
         - Employee
 """
 
+from __future__ import absolute_import
 from traits.api \
     import HasTraits, Str, Regex, List, Instance
 

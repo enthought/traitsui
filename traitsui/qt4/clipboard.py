@@ -14,6 +14,7 @@
 using pickle.
 """
 
+from __future__ import absolute_import
 from pyface.qt import QtGui
 from pyface.ui.qt4.mimedata import PyMimeData, str2bytes
 from traits.api import HasTraits, Instance, Property

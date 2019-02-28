@@ -18,6 +18,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import os.path
 
 from pyface.qt import QtCore, QtGui
@@ -25,6 +26,7 @@ from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
+import six
 
 is_qt5 = QtCore.__version_info__ >= (5,)
 
@@ -188,7 +190,7 @@ class IconButton(QtGui.QPushButton):
         # Get the minimum icon size to use.
         ico_sz = sty.pixelMetric(QtGui.QStyle.PM_ButtonIconSize)
 
-        if isinstance(icon, basestring):
+        if isinstance(icon, six.string_types):
             pm = pixmap_cache(icon)
 
             # Increase the icon size to accomodate the image if needed.
@@ -218,3 +220,59 @@ class IconButton(QtGui.QPushButton):
 #-------------------------------------------------------------------------
 
 DockStyle = Enum('horizontal', 'vertical', 'tab', 'fixed')
+
+#-------------------------------------------------------------------------
+#  Text Rendering helpers
+#-------------------------------------------------------------------------
+
+def wrap_text_with_elision(text, font, width, height):
+    """ Wrap paragraphs to fit inside a given size, eliding if too long.
+
+    Parameters
+    ----------
+    text : unicode
+        The text to wrap.
+    font : QFont instance
+        The font the text will be rendered in.
+    width : int
+        The width of the box the text will display in.
+    height : int
+        The height of the box the text will display in.
+
+    Returns
+    -------
+    lines : list of unicode
+        The lines of text to display, split
+    """
+    # XXX having an LRU cache on this might be useful
+
+    font_metrics = QtGui.QFontMetrics(font)
+    line_spacing = font_metrics.lineSpacing()
+    y_offset = 0
+
+    lines = []
+    for paragraph in text.splitlines():
+        line_start = 0
+        text_layout = QtGui.QTextLayout(paragraph, font)
+        text_layout.beginLayout()
+        while y_offset + line_spacing <= height:
+            line = text_layout.createLine()
+            if not line.isValid():
+                break
+            line.setLineWidth(width)
+            line_start = line.textStart()
+            line_end = line_start + line.textLength()
+            line_text = paragraph[line_start:line_end].rstrip()
+            lines.append(line_text)
+            y_offset += line_spacing
+        text_layout.endLayout()
+        if y_offset + line_spacing > height:
+            break
+    if lines and y_offset + line_spacing > height:
+        # elide last line as we ran out of room
+        last_line = paragraph[line_start:]
+        lines[-1] = font_metrics.elidedText(
+            last_line, QtCore.Qt.ElideRight, width
+        )
+
+    return lines

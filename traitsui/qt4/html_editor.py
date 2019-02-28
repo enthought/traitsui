@@ -21,13 +21,14 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import webbrowser
 
 from pyface.qt import QtCore, QtGui, QtWebKit
 
 from traits.api import Str
 
-from editor import Editor
+from .editor import Editor
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

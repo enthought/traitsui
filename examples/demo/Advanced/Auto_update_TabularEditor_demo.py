@@ -19,6 +19,7 @@ each item in the list.
 
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, Float, List, Instance, Button
 from traitsui.api import View, HGroup, Item, TabularEditor, spring
 from traitsui.tabular_adapter import TabularAdapter

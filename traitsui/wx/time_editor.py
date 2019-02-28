@@ -24,6 +24,7 @@ At the minimum, a spinner should be provided so the time can be changed
 without the need for a keyboard.  In addition we need to extend to provide
 all four of the basic editor types, Simple, Custom, Text, and Readonly.
 """
+from __future__ import absolute_import
 import datetime
 
 import wx.lib.masked as masked

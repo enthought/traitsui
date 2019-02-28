@@ -23,6 +23,7 @@ the Flash file defined by the new value of the trait.
 
 #--[Imports]--------------------------------------------------------------
 
+from __future__ import absolute_import
 from traitsui.wx.extra.windows.flash_editor \
     import FlashEditor
 

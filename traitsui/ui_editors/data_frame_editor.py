@@ -18,6 +18,7 @@ from traitsui.tabular_adapter import TabularAdapter
 from traitsui.toolkit import toolkit_object
 from traitsui.ui_editor import UIEditor
 from traitsui.view import View
+import six
 
 
 class DataFrameAdapter(TabularAdapter):
@@ -73,7 +74,7 @@ class DataFrameAdapter(TabularAdapter):
             return self._fonts.get(self.column_id, 'Courier 10')
 
     def _get_format(self):
-        if isinstance(self._formats, basestring):
+        if isinstance(self._formats, six.string_types):
             return self._formats
         else:
             return self._formats.get(self.column_id, '%s')
@@ -122,11 +123,11 @@ class DataFrameAdapter(TabularAdapter):
 
         df = getattr(object, trait)
         if 0 < row < len(df) - 1:
-            new_df = pd.concat([df.iloc[:row, :], df.iloc[row + 1:, :]])
+            new_df = pd.concat([df.iloc[:row,:], df.iloc[row + 1:,:]])
         elif row == 0:
-            new_df = df.iloc[row + 1:, :]
+            new_df = df.iloc[row + 1:,:]
         else:
-            new_df = df.iloc[:row, :]
+            new_df = df.iloc[:row,:]
         setattr(object, trait, new_df)
 
     def insert(self, object, trait, row, value):
@@ -139,7 +140,7 @@ class DataFrameAdapter(TabularAdapter):
 
         df = getattr(object, trait)
         if 0 < row < len(df) - 1:
-            new_df = pd.concat([df.iloc[:row, :], value, df.iloc[row:, :]])
+            new_df = pd.concat([df.iloc[:row,:], value, df.iloc[row:,:]])
         elif row == 0:
             new_df = pd.concat([value, df])
         else:
@@ -208,7 +209,7 @@ class _DataFrameEditor(UIEditor):
         if (factory.columns != []):
             columns = []
             for column in factory.columns:
-                if isinstance(column, basestring):
+                if isinstance(column, six.string_types):
                     title = column
                     column_id = column
                 else:

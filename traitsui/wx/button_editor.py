@@ -23,6 +23,7 @@
 #-------------------------------------------------------------------------
 
 
+from __future__ import absolute_import
 import wx
 
 from traits.api \
@@ -34,7 +35,7 @@ from traits.api \
 from traitsui.editors.button_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------

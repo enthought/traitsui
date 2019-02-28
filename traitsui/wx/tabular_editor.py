@@ -23,6 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 import wx.lib.mixins.listctrl as listmix
 
@@ -52,8 +53,10 @@ from pyface.image_resource \
 from pyface.timer.api \
     import do_later
 
-from constants \
+from .constants \
     import is_mac, scrollbar_dx
+import six
+from six.moves import range
 
 try:
     from pyface.wx.drag_and_drop \
@@ -424,7 +427,7 @@ class TabularEditor(Editor):
         adapter = self.adapter
         object, name = self.object, self.name
         agi = adapter.get_item
-        for row in xrange(adapter.len(object, name)):
+        for row in range(adapter.len(object, name)):
             if item is agi(object, name, row):
                 self._refresh_row(row)
                 return
@@ -929,11 +932,11 @@ class TabularEditor(Editor):
         wdx = 0.0
         widths = []
         cached = self._cached_widths
-        current = [control.GetColumnWidth(i) for i in xrange(n)]
+        current = [control.GetColumnWidth(i) for i in range(n)]
         if (cached is None) or (len(cached) != n):
             self._cached_widths = cached = [None] * n
 
-        for i in xrange(n):
+        for i in range(n):
             cw = cached[i]
             if (cw is None) or (-cw == current[i]):
                 width = float(get_width(object, name, i))
@@ -990,7 +993,7 @@ class TabularEditor(Editor):
     def _get_image(self, image):
         """ Converts a user specified image to a wx.ListCtrl image index.
         """
-        if isinstance(image, basestring):
+        if isinstance(image, six.string_types):
             self.image = image
             image = self.image
 

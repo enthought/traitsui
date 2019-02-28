@@ -16,6 +16,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
@@ -208,7 +209,7 @@ class TableModel(QtCore.QAbstractTableModel):
         editor = self._editor
         items = editor.items()
         self.beginInsertRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             editor.callx(items.insert, row + i, editor.create_new_row())
         self.endInsertRows()
         return True
@@ -220,7 +221,7 @@ class TableModel(QtCore.QAbstractTableModel):
         editor = self._editor
         items = editor.items()
         self.beginRemoveRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             editor.callx(items.pop, row + i)
         self.endRemoveRows()
         return True
@@ -252,7 +253,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
         # handle re-ordering via internal drags
         if editor.factory.reorderable:
-            rows = sorted(set([index.row() for index in indexes]))
+            rows = sorted({index.row() for index in indexes})
             data = QtCore.QByteArray(str(id(self)))
             for row in rows:
                 data.append(' %i' % row)
@@ -268,7 +269,7 @@ class TableModel(QtCore.QAbstractTableModel):
         # this is a drag from a table model?
         data = mime_data.data(mime_type)
         if not data.isNull() and action == QtCore.Qt.MoveAction:
-            id_and_rows = map(int, str(data).split(' '))
+            id_and_rows = [int(s) for s in data.data().decode('utf8').split(' ')]
             table_id = id_and_rows[0]
             # is it from ourself?
             if table_id == id(self):

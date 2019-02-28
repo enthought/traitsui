@@ -8,6 +8,7 @@ are shown in the right table. Each table has only one column.
 
 """
 
+from __future__ import absolute_import
 from traits.api import HasPrivateTraits, List, Str, Property
 from traitsui.api import View, HGroup, UItem, TabularEditor
 from traitsui.tabular_adapter import TabularAdapter

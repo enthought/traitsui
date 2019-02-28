@@ -34,6 +34,7 @@ from traitsui.ui_traits import SequenceTypes
 
 from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
+import six
 
 
 is_qt5 = QtCore.__version_info__ >= (5,)
@@ -534,7 +535,7 @@ class TableEditor(Editor, BaseTableEditor):
         f = self.filter
         if f is None:
             self._filtered_cache = None
-            self.filtered_indices = range(num_items)
+            self.filtered_indices = list(range(num_items))
             self.filter_summary = 'All %i items' % num_items
         else:
             if not callable(f):
@@ -556,7 +557,7 @@ class TableEditor(Editor, BaseTableEditor):
     def _get_image(self, image):
         """ Converts a user specified image to a QIcon.
         """
-        if isinstance(image, basestring):
+        if isinstance(image, six.string_types):
             self.image = image
             image = self.image
 
@@ -1071,7 +1072,7 @@ class TableView(QtGui.QTableView):
 
         # Compute sizes for columns with absolute or no size requests
         proportional = []
-        for column_index in xrange(len(editor.columns)):
+        for column_index in range(len(editor.columns)):
             column = editor.columns[column_index]
             requested_width = column.get_width()
             if column.resize_mode in ("interactive", "stretch") \

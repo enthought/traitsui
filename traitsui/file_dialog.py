@@ -23,7 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 from os import R_OK, W_OK, access, mkdir
 
@@ -255,10 +255,9 @@ class TextInfo(MFileDialogModel):
             if getsize(self.file_name) > MAX_SIZE:
                 return 'File too big...'
 
-            fh = open(self.file_name, 'rb')
-            data = fh.read()
-            fh.close()
-        except:
+            with open(self.file_name, 'rb') as fh:
+                data = fh.read()
+        except Exception:
             return ''
 
         if (data.find('\x00') >= 0) or (data.find('\xFF') >= 0):
@@ -720,5 +719,5 @@ def save_file(**traits):
 #-- Test Case ------------------------------------------------------------
 
 if __name__ == '__main__':
-    print save_file(extensions=[FileInfo(), TextInfo(), ImageInfo()],
-                    filter='Python file (*.py)|*.py')
+    print(save_file(extensions=[FileInfo(), TextInfo(), ImageInfo()],
+                    filter='Python file (*.py)|*.py'))

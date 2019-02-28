@@ -9,6 +9,7 @@ This demo shows each of the four styles of the BooleanEditor
 #  Demo Class
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Bool
 from traitsui.api import Item, Group, View
 

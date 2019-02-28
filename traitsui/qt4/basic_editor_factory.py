@@ -15,6 +15,7 @@
 ## Deprecated proxy for the BasicEditorFactory class declared in
 # traitsui, declared here just for backward compatibility.
 
+from __future__ import absolute_import
 import warnings
 
 from traitsui.basic_editor_factory \

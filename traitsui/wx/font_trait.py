@@ -22,6 +22,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 from traits.api \
@@ -185,7 +186,7 @@ class TraitWXFont(TraitHandler):
 
 
 def get_font_editor(*args, **traits):
-    from font_editor import ToolkitEditorFactory
+    from .font_editor import ToolkitEditorFactory
     return ToolkitEditorFactory(*args, **traits)
 
 fh = TraitWXFont()

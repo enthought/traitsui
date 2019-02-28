@@ -1,10 +1,12 @@
 # Copyright (c) 2008-2015 by Enthought, Inc.
 # All rights reserved.
+
 import os
 import re
 import subprocess
 
 from setuptools import setup, find_packages
+from io import open
 
 MAJOR = 6
 MINOR = 1
@@ -50,7 +52,7 @@ def git_version():
 
 
 def write_version_py(filename='traitsui/_version.py'):
-    template = """\
+    template = u"""\
 # THIS FILE IS GENERATED FROM TRAITS SETUP.PY
 version = '{version}'
 full_version = '{full_version}'
@@ -88,11 +90,12 @@ if not is_released:
     if not IS_RELEASED:
         fullversion += '.dev{0}'.format(dev_num)
 
-    with open(filename, "wt") as fp:
+    with open(filename, "w", encoding='ascii') as fp:
         fp.write(template.format(version=VERSION,
                                  full_version=fullversion,
                                  git_revision=git_rev,
                                  is_released=IS_RELEASED))
+
 
 if __name__ == "__main__":
     write_version_py()
@@ -142,7 +145,7 @@ if __name__ == "__main__":
         package_data=dict(traitsui=['image/library/*.zip', 'images/*',
                                     'wx/images/*', 'qt4/images/*']),
         packages=find_packages(),
-        entry_points = {
+        entry_points={
             'traitsui.toolkits': [
                 'qt4 = traitsui.qt4:toolkit',
                 'wx = traitsui.wx:toolkit',
@@ -152,5 +155,4 @@ if __name__ == "__main__":
         },
         platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
         zip_safe=False,
-        use_2to3=True,
     )

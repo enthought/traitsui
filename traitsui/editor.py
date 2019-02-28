@@ -49,6 +49,7 @@ from .context_value import ContextValue
 from .undo import UndoItem
 
 from .item import Item
+import six
 
 #-------------------------------------------------------------------------
 #  Trait definitions:
@@ -307,7 +308,7 @@ class Editor(HasPrivateTraits):
         if format_func is not None:
             return format_func(value)
 
-        return unicode(value)
+        return six.text_type(value)
 
     #-------------------------------------------------------------------------
     #  Returns the text representation of the object trait:
@@ -326,7 +327,7 @@ class Editor(HasPrivateTraits):
         """ Returns the text representation of a specified value.
         """
         # In Unicode!
-        return unicode(value)
+        return six.text_type(value)
 
     #-------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:

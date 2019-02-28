@@ -23,6 +23,7 @@
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
+from __future__ import absolute_import
 import wx
 
 from traits.api \
@@ -112,7 +113,7 @@ for color_name in w3c_color_database._color_names:
 
 
 def get_rgb_color_editor(*args, **traits):
-    from rgb_color_editor import ToolkitEditorFactory
+    from .rgb_color_editor import ToolkitEditorFactory
     return ToolkitEditorFactory(*args, **traits)
 
 # Trait whose value must be an RGB color:

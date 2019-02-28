@@ -6,6 +6,7 @@
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 
+from __future__ import absolute_import
 from traitsui.ui_editors.data_frame_editor \
     import _DataFrameEditor as BaseDataFrameEditor
 

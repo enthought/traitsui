@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 import wx
 
 from traits.api import Float, Any, Str, Trait
 from traitsui.editors.api import RangeEditor
 from traitsui.wx.editor import Editor
 from traitsui.wx.helper import TraitsUIPanel, Slider
+import six
 
 
 class _BoundsEditor(Editor):
@@ -102,7 +104,7 @@ class _BoundsEditor(Editor):
             event.Skip()
         try:
             try:
-                low = eval(unicode(self._label_lo.GetValue()).strip())
+                low = eval(six.text_type(self._label_lo.GetValue()).strip())
                 if self.evaluate is not None:
                     low = self.evaluate(low)
             except Exception as ex:
@@ -126,7 +128,7 @@ class _BoundsEditor(Editor):
             event.Skip()
         try:
             try:
-                high = eval(unicode(self._label_hi.GetValue()).strip())
+                high = eval(six.text_type(self._label_hi.GetValue()).strip())
                 if self.evaluate is not None:
                     high = self.evaluate(high)
             except:

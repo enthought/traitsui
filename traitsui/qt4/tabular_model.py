@@ -22,12 +22,13 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
+
+import six
 
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
-
 from .clipboard import PyMimeData
 
 #-------------------------------------------------------------------------
@@ -221,7 +222,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         adapter = editor.adapter
 
         self.beginInsertRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             value = adapter.get_default_value(editor.object, editor.name)
             editor.callx(
                 adapter.insert,
@@ -239,7 +240,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         editor = self._editor
         adapter = editor.adapter
         self.beginRemoveRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             editor.callx(adapter.delete, editor.object, editor.name, row)
         self.endRemoveRows()
         n = self.rowCount(None)
@@ -261,12 +262,12 @@ class TabularModel(QtCore.QAbstractTableModel):
         """ Reimplemented to generate MIME data containing the rows of the
             current selection.
         """
-        rows = sorted(set([index.row() for index in indexes]))
+        rows = sorted({index.row() for index in indexes})
         items = [self._editor.adapter.get_drag(
             self._editor.object, self._editor.name, row)
             for row in rows]
         mime_data = PyMimeData.coerce(items)
-        data = QtCore.QByteArray(unicode(id(self)).encode('utf8'))
+        data = QtCore.QByteArray(six.text_type(id(self)).encode('utf8'))
         for row in rows:
             data.append((' %i' % row).encode('utf8'))
         mime_data.setData(tabular_mime_type, data)
@@ -281,7 +282,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         # this is a drag from a tabular model
         data = mime_data.data(tabular_mime_type)
         if not data.isNull() and action == QtCore.Qt.MoveAction:
-            id_and_rows = map(int, data.data().decode('utf8').split(' '))
+            id_and_rows = [int(s) for s in data.data().decode('utf8').split(' ')]
             table_id = id_and_rows[0]
             # is it from ourself?
             if table_id == id(self):
@@ -370,7 +371,7 @@ class TabularModel(QtCore.QAbstractTableModel):
         # Update the selection for the new location.
         if editor.factory.multi_select:
             editor.setx(multi_selected=objects)
-            editor.multi_selected_rows = range(new_row, new_row + len(objects))
+            editor.multi_selected_rows = list(range(new_row, new_row + len(objects)))
         else:
             editor.setx(selected=objects[0])
             editor.selected_row = new_row

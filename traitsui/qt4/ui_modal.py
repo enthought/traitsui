@@ -14,15 +14,16 @@
 """
 
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.menu \
     import ApplyButton, RevertButton, OKButton, CancelButton, HelpButton
 
-from ui_base \
+from .ui_base \
     import BaseDialog
 
-from ui_panel \
+from .ui_panel \
     import panel
 
 
@@ -164,7 +165,7 @@ class _ModalDialog(BaseDialog):
 
         self.add_contents(panel(ui), bbox)
 
-    def close(self, rc):
+    def close(self, rc=True):
         """Close the dialog and set the given return code.
         """
         super(_ModalDialog, self).close(rc)

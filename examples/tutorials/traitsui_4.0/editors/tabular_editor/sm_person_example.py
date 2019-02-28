@@ -43,6 +43,7 @@ Additional notes:
 
 #--<Imports>--------------------------------------------------------------
 
+from __future__ import absolute_import
 from os.path \
     import join, dirname
 
@@ -68,6 +69,7 @@ from pyface.image_resource \
 
 # Necessary because of the dynamic way in which the demos are loaded:
 import traitsui.api
+
 
 search_path = [join(dirname(traitsui.api.__file__),
                     'demo', 'Advanced')]

@@ -30,6 +30,7 @@ from traits.api import HasPrivateTraits, Str, Any, Dict, Tuple, Callable, Bool
 from .ui_traits import AView
 
 from .helper import user_name_for
+import six
 
 #-------------------------------------------------------------------------
 #  'InstanceChoiceItem' class:
@@ -133,7 +134,7 @@ class InstanceChoice(InstanceChoiceItem):
             return self.name
 
         name = getattr(self.object, self.name_trait, None)
-        if isinstance(name, basestring):
+        if isinstance(name, six.string_types):
             return name
 
         return user_name_for(self.object.__class__.__name__)
@@ -198,7 +199,7 @@ class InstanceFactoryChoice(InstanceChoiceItem):
             return self.name
 
         name = getattr(object, 'name', None)
-        if isinstance(name, basestring):
+        if isinstance(name, six.string_types):
             return name
 
         if issubclass(type(self.klass), type):

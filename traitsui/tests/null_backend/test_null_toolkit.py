@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from nose.tools import assert_raises
 
 from traits.api import HasTraits, Int

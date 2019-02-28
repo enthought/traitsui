@@ -26,10 +26,11 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 import numpy
 
-from cPickle \
+from six.moves.cPickle \
     import load
 
 from traits.api \
@@ -43,6 +44,7 @@ from traitsui.editors.dnd_editor \
 
 from pyface.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
+import six
 
 try:
     from apptools.io import File
@@ -57,7 +59,7 @@ except ImportError:
 from pyface.image_resource \
     import ImageResource
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------
@@ -74,7 +76,7 @@ object_image = ImageResource('object').create_image()
 inactive_image = ImageResource('inactive').create_image()
 
 # String types:
-string_type = (str, unicode)
+string_type = (str, six.text_type)
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -220,15 +222,11 @@ class SimpleEditor(Editor):
     def _unpickle(self, file_name):
         """ Returns the unpickled version of a specified file (if possible).
         """
-        fh = None
-        try:
-            fh = open(file_name, 'rb')
-            object = load(fh)
-        except:
-            object = None
-
-        if fh is not None:
-            fh.close()
+        with open(file_name, 'rb') as fh:
+            try:
+                object = load(fh)
+            except Exception:
+                object = None
 
         return object
 

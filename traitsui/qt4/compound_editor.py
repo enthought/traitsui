@@ -18,6 +18,7 @@ PyQt user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtGui
 
 from traits.api \
@@ -29,7 +30,7 @@ from traits.api \
 from traitsui.editors.compound_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
 #-------------------------------------------------------------------------
