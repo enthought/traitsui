@@ -89,6 +89,7 @@ buttons is called a :term:`dialog box`.
 
 Wizards
 ```````
+.. note:: Wizard views are only supported with the WX backend!
 
 Unlike a standalone window, whose contents appear as a single page or a tabbed
 display, a :term:`wizard` window presents the view's Groups as a series of
@@ -96,7 +97,11 @@ pages that a user must navigate sequentially.
 (For more information about breaking up a view into groups, see
 :ref:`the-group-object`.)
 
-For example, ::
+.. _example-3.1-displaying-a-view-the-wizard-style:
+
+.. rubric:: Example 3.1: Displaying a view the "wizard" style
+
+::
 
   # wizard.py ---Example of a traits-based wizard UI
 
@@ -135,7 +140,7 @@ leads to the following 2 modal dialogs:
    :alt: Second dialog from wizard view.
 
 
-Note that TraitsUI Wizards are always modal and live. They always display a standard
+TraitsUI Wizards are always modal and live. They always display a standard
 wizard button set; i.e., they ignore the **buttons** View attribute. In short,
 wizards are considerably less flexible than windows, and are primarily suitable
 for highly controlled user interactions such as software installation.
