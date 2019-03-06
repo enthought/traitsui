@@ -591,14 +591,33 @@ class SimpleEditor(Editor):
         elif isinstance(icon_name, ImageResource):
             image_resource = icon_name
 
+        elif isinstance(icon_name, tuple):
+            if max(icon_name) <= 1.0:
+                # rgb(a) color tuple between 0.0 and 1.0
+                color = QtGui.QColor.fromRgbF(*icon_name)
+            else:
+                # rgb(a) color tuple between 0 and 255
+                color = QtGui.QColor.fromRgb(*icon_name)
+            return self._icon_from_color(color)
+
+        elif isinstance(icon_name, QtGui.QColor):
+            return self._icon_from_color(icon_name)
+
         else:
             raise ValueError(
-                "Icon value must be a string or IImageResource instance: " +
+                "Icon value must be a string or color or color tuple or " +
+                "IImageResource instance: " +
                 "given {!r}".format(icon_name)
             )
 
         file_name = image_resource.absolute_path
         return QtGui.QIcon(pixmap_cache(file_name))
+
+    def _icon_from_color(self, color):
+        """ Create a square icon filled with the given color. """
+        pixmap = QtGui.QPixmap(self._tree.iconSize())
+        pixmap.fill(color)
+        return QtGui.QIcon(pixmap)
 
     #-------------------------------------------------------------------------
     #  Adds the event listeners for a specified object:
