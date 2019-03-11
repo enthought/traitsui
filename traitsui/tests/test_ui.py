@@ -204,6 +204,7 @@ def test_destroy_after_ok_qt():
     nose.tools.assert_equal(control.deleteLater._n_calls, 1)
 
 
+@skip_if_null
 def test_no_spring_trait():
     obj = DisallowNewTraits()
     ui = obj.edit_traits()
