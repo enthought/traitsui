@@ -552,7 +552,11 @@ class Spring(Item):
     #-------------------------------------------------------------------------
 
     # Name of the trait the item is editing
-    name = 'spring'
+    # Just a dummy trait that exists on all HasTraits objects. It's an Event,
+    # so it won't cause Traits UI to add any synchronization, and because it
+    # already exists, it won't force the addition of a new trait with a bogus
+    # name.
+    name = 'trait_modified'
 
     # Should a label be displayed?
     show_label = Bool(False)
