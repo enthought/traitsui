@@ -23,6 +23,8 @@ from traitsui.ui_traits import SequenceTypes
 
 from .clipboard import PyMimeData
 
+import six
+
 #-------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------
@@ -254,9 +256,9 @@ class TableModel(QtCore.QAbstractTableModel):
         # handle re-ordering via internal drags
         if editor.factory.reorderable:
             rows = sorted({index.row() for index in indexes})
-            data = QtCore.QByteArray(str(id(self)))
+            data = QtCore.QByteArray(six.text_type(id(self)).encode('utf8'))
             for row in rows:
-                data.append(' %i' % row)
+                data.append((' %i' % row).encode('utf8'))
             mime_data.setData(mime_type, data)
         return mime_data
 
