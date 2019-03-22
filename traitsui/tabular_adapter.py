@@ -688,8 +688,12 @@ class TabularAdapter(HasPrivateTraits):
 
     def _result_for(self, name, object, trait, row, column, value=None):
         """ Returns/Sets the value of the specified *name* attribute for the
-            specified *object.trait[row].column* item.
+        specified *object.trait[row].column* item, or None if the requested
+        column cannot be found in self.column_map.
+
         """
+        if column not in self.column_map:
+            return None
         self.object = object
         self.name = trait
         self.row = row
