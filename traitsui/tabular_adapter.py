@@ -372,9 +372,7 @@ class TabularAdapter(HasPrivateTraits):
         font object should be returned. Note that all columns for the specified
         table row will use the font value returned.
         """
-        if column in self.column_map:
-            return self._result_for('get_font', object, trait, row, column)
-        return None
+        return self._result_for('get_font', object, trait, row, column)
 
     def get_text_color(self, object, trait, row, column=0):
         """ Returns the text color to use for a specified row or cell.
