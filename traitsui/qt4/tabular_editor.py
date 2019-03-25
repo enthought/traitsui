@@ -634,7 +634,12 @@ class _TableView(QtGui.QTableView):
             # we make a reasonable guess based on the minimum size hint and the font
             # of the first row.
             size = vheader.minimumSectionSize()
-            font = editor.adapter.get_font(editor.object, editor.name, 0)
+
+            # Check if any columns have been added, and use their font, otherwise
+            # use the default font
+            font = None
+            if 0 in editor.adapter.column_map:
+                font = editor.adapter.get_font(editor.object, editor.name, 0)
             if font is not None:
                 size = max(
                     size, QtGui.QFontMetrics(
