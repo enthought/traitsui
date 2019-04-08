@@ -167,16 +167,22 @@ class CustomEditor(Editor):
         value = datetime.date(q_date.year(), q_date.month(), q_date.day())
         if self.factory.multi_select:
             if value in self.value:
-                self._selected.remove(value)
-                self.apply_unselected_style(value)
+                self.unselect_date(value)
             else:
-                self._selected.add(value)
-                self.apply_style(self.factory.selected_style, value)
+                self.select_date(value)
 
             self.value = sorted(self._selected)
 
         else:
             self.value = value
+
+    def unselect_date(self, date):
+        self._selected.remove(date)
+        self.apply_unselected_style(date)
+
+    def select_date(self, date):
+        self._selected.add(date)
+        self.apply_style(self.factory.selected_style, date)
 
     #-------------------------------------------------------------------------
     #  Helper methods for applying styling
