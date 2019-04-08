@@ -77,12 +77,18 @@ class CustomEditor(DateCustomEditor):
 
         names_to_reset = list(event.removed.keys())
         for name in names_to_reset:
-            self.reset_formatting(groups[name])
+            self._reset_formatting(groups[name])
         return
 
     #------------------------------------------------------------------------
     # Helper functions
     #------------------------------------------------------------------------
+
+    def _apply_style(self, style, dates):
+        """ **style** is a CellFormat, **dates** is a list of datetime.date """
+        for dt in dates:
+            self.set_unselected_style(style, date)
+        return
 
     def _apply_styles(self, style_dict, date_dict):
         """ Applies the proper style out of style_dict to every (name,date_list)
@@ -94,5 +100,11 @@ class CustomEditor(DateCustomEditor):
             cellformat = style_dict.get(groupname, None)
             if not cellformat:
                 continue
-            for date in dates:
-                self.set_unselected_style(cellformat, date)
+            for dt in dates:
+                self.set_unselected_style(cellformat, dt)
+        return
+
+    def _reset_formatting(self, dates):
+        # Resets the text format on the given dates
+        for dt in dates:
+            self.apply_unselected_style(date)
