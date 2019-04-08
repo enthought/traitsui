@@ -107,7 +107,7 @@ class DateEditor(EditorFactory):
         CellFormat,
         kw={
             "bold": True,
-            "fgcolor": (255, 255, 255, 255),
-            "bgcolor": (0, 128, 0, 255),
+            "fgcolor": (255, 255, 255),
+            "bgcolor": (0, 128, 0),
         },
     )
