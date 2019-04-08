@@ -102,6 +102,7 @@ class DateEditor(EditorFactory):
     # Does the user have to hold down Shift for the left-click multiselect?
     shift_to_select = Bool(False)
 
+    # Style used when a date is selected.
     selected_style = Instance(
         CellFormat,
         kw={

@@ -7,6 +7,7 @@ from .date_editor import DateEditor
 
 class ToolkitEditorFactory(DateEditor):
 
+    # Whether it is possible to unset the date range.
     allow_no_range = Bool(False)
 
 
