@@ -195,8 +195,7 @@ class CustomEditor(Editor):
             if date not in self.value:
                 self.apply_style(style, date)
         else:
-            if date != self.value:
-                self.apply_style(style, date)
+            self.apply_style(style, date)
 
     def apply_style(self, style, date):
         """ Apply a given style to a given date."""
