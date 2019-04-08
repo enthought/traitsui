@@ -52,7 +52,6 @@ class DateEditorDemo(HasTraits):
 
                 Group(Item('date_range',
                            editor=DateRangeEditor(
-                               multi_select=True,
                                allow_no_range=True,
                             ),
                            style='custom',
