@@ -85,3 +85,23 @@ class TestDateEditor(unittest.TestCase):
         textformat = editor.control.dateTextFormat(QtCore.QDate(2018, 2, 2))
         self.assertEqual(textformat.fontWeight(), QtGui.QFont.Normal)
         self.assertEqual(textformat.background().color().green(), 0)
+
+    @skip_if_not_qt4
+    def test_multi_select_qt4_styles_reset(self):
+        from pyface.qt import QtCore, QtGui
+        foo, ui, editor = self._get_custom_editor(multi_select_custom_view)
+
+        qdate = QtCore.QDate(2018, 2, 1)
+        editor.update_object(qdate)
+        textformat = editor.control.dateTextFormat(qdate)
+        self.assertEqual(textformat.fontWeight(), QtGui.QFont.Bold)
+
+        editor.update_object(qdate)
+        textformat = editor.control.dateTextFormat(qdate)
+        self.assertEqual(textformat.fontWeight(), QtGui.QFont.Normal)
+        self.assertEqual(
+            textformat.background().style(),
+            QtCore.Qt.BrushStyle.NoBrush,
+        )
+
+
