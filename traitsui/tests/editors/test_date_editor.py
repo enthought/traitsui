@@ -11,6 +11,19 @@ class Foo(HasTraits):
 
     dates = List(Date)
 
+    single_date = Date()
+
+
+def single_select_custom_view():
+    view = View(
+        Item(
+            name='single_date',
+            style="custom",
+            editor=DateEditor(multi_select=False),
+        )
+    )
+    return view
+
 
 def multi_select_custom_view():
     view = View(
@@ -43,4 +56,15 @@ class TestDateEditor(unittest.TestCase):
             foo.dates,
             [datetime.date(2018, 2, 3), datetime.date(2018, 2, 5)]
         )
+        ui.dispose()
+
+    @skip_if_not_qt4
+    def test_single_select_qt4(self):
+        from pyface.qt import QtCore
+        foo, ui, editor = self._get_custom_editor(single_select_custom_view)
+        editor.update_object(QtCore.QDate(2018, 2, 3))
+        self.assertEqual(foo.single_date, datetime.date(2018, 2, 3))
+
+        editor.update_object(QtCore.QDate(2018, 2, 5))
+        self.assertEqual(foo.single_date, datetime.date(2018, 2, 5))
         ui.dispose()
