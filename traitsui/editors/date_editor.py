@@ -38,8 +38,8 @@ class CellFormat(object):
     # The color attributes should be strings representing color names,
     # from the list:
     #   red, green, blue, cyan, magenta, yellow, gray, white,
-    #   darkRed, darkGreen, darkBlue, darkCyan, darkmagenta, darkYellow, darkGray,
-    #   black, lightGray
+    #   darkRed, darkGreen, darkBlue, darkCyan, darkmagenta, darkYellow,
+    #   darkGray, black, lightGray
     #
     # Alternatively, they can be a tuple of (R,G,B) values from 0-255.
     bgcolor = None
@@ -104,5 +104,9 @@ class DateEditor(EditorFactory):
 
     selected_style = Instance(
         CellFormat,
-        kw={"bold": True, "fgcolor": "white", "bgcolor": "darkGreen"},
+        kw={
+            "bold": True,
+            "fgcolor": (255, 255, 255, 255),
+            "bgcolor": (0, 128, 0, 255),
+        },
     )

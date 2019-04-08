@@ -77,21 +77,12 @@ class CustomEditor(DateCustomEditor):
 
         names_to_reset = list(event.removed.keys())
         for name in names_to_reset:
-            self._reset_formatting(groups[name])
+            self.reset_formatting(groups[name])
         return
 
     #------------------------------------------------------------------------
     # Helper functions
     #------------------------------------------------------------------------
-
-    def _apply_style(self, style, dates):
-        """ **style** is a CellFormat, **dates** is a list of datetime.date """
-        for dt in dates:
-            qdt = QtCore.QDate(dt)
-            textformat = self.control.dateTextFormat(qdt)
-            self._apply_cellformat(style, textformat)
-            self.control.setDateTextFormat(qdt, textformat)
-        return
 
     def _apply_styles(self, style_dict, date_dict):
         """ Applies the proper style out of style_dict to every (name,date_list)
@@ -103,54 +94,5 @@ class CustomEditor(DateCustomEditor):
             cellformat = style_dict.get(groupname, None)
             if not cellformat:
                 continue
-            for dt in dates:
-                qdt = QtCore.QDate(dt)
-                textformat = self.control.dateTextFormat(qdt)
-                self._apply_cellformat(cellformat, textformat)
-                self.control.setDateTextFormat(qdt, textformat)
-        return
-
-    def _reset_formatting(self, dates):
-        # Resets the text format on the given dates
-        for dt in dates:
-            qdt = QtCore.QDate(dt)
-            self.control.setDateTextFormat(qdt, QtGui.QTextCharFormat())
-
-    def _apply_cellformat(self, cf, textformat):
-        """ Applies the formatting in the cellformat cf to the QTextCharFormat
-        object provided.
-        """
-        if cf.italics is not None:
-            textformat.setFontItalic(cf.italics)
-
-        if cf.underline is not None:
-            textformat.setFontUnderline(cf.underline)
-
-        if cf.bold is not None:
-            if cf.bold:
-                weight = QFont.Bold
-            else:
-                weight = QFont.Normal
-            textformat.setFontWeight(weight)
-
-        if cf.bgcolor is not None:
-            textformat.setBackground(self._color_to_brush(cf.bgcolor))
-
-        if cf.fgcolor is not None:
-            textformat.setForeground(self._color_to_brush(cf.fgcolor))
-
-        return
-
-    def _color_to_brush(self, color):
-        """ Returns a QBrush with the color specified in **color** """
-        brush = QtGui.QBrush()
-        if isinstance(color, six.string_types) and hasattr(QtCore.Qt, color):
-            col = getattr(QtCore.Qt, color)
-        elif isinstance(color, tuple) and len(color) == 3:
-            col = QtGui.QColor()
-            col.setRgb(*color)
-        else:
-            raise RuntimeError("Invalid color specification '%r'" % color)
-
-        brush.setColor(col)
-        return brush
+            for date in dates:
+                self.set_unselected_style(cellformat, date)
