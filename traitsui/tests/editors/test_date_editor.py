@@ -51,10 +51,10 @@ class TestDateEditor(unittest.TestCase):
         editor.update_object(QtCore.QDate(2018, 2, 3))
         self.assertEqual(foo.dates, [datetime.date(2018, 2, 3)])
 
-        editor.update_object(QtCore.QDate(2018, 2, 5))
+        editor.update_object(QtCore.QDate(2018, 2, 1))
         self.assertEqual(
             foo.dates,
-            [datetime.date(2018, 2, 3), datetime.date(2018, 2, 5)]
+            [datetime.date(2018, 2, 1), datetime.date(2018, 2, 3)]
         )
         ui.dispose()
 
