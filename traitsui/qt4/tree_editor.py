@@ -1629,15 +1629,15 @@ class SimpleEditor(Editor):
         """
         # Prevent the itemChanged() signal from being emitted.
         blk = self._tree.blockSignals(True)
-
-        nids = {}
-        for name2, nid in self._map[id(object)]:
-            if nid not in nids:
-                nids[nid] = None
-                node = self._get_node_data(nid)[1]
-                self._set_column_labels(nid, node, object)
-
-        self._tree.blockSignals(blk)
+        try:
+            nids = []
+            for name2, nid in self._map[id(object)]:
+                if nid not in nids:
+                    nids.append(nid)
+                    node = self._get_node_data(nid)[1]
+                    self._set_column_labels(nid, node, object)
+        finally:
+            self._tree.blockSignals(blk)
 
 #-- UI preference save/restore interface ---------------------------------
 
