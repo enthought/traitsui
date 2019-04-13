@@ -45,65 +45,38 @@ class TestDateEditorCustomQt(unittest.TestCase):
         editor, = ui._editors
         return foo, ui, editor
 
-    def test_multi_select_qt4(self):
-        from pyface.qt import QtCore
-        foo, ui, editor = self._get_custom_editor(multi_select_custom_view)
-        editor.update_object(QtCore.QDate(2018, 2, 3))
-        self.assertEqual(foo.dates, [datetime.date(2018, 2, 3)])
-
-        editor.update_object(QtCore.QDate(2018, 2, 1))
-        self.assertEqual(
-            foo.dates,
-            [datetime.date(2018, 2, 1), datetime.date(2018, 2, 3)]
-        )
-        ui.dispose()
-
     def test_single_select_qt4(self):
-        from pyface.qt import QtCore
-        foo, ui, editor = self._get_custom_editor(single_select_custom_view)
-        editor.update_object(QtCore.QDate(2018, 2, 3))
-        self.assertEqual(foo.single_date, datetime.date(2018, 2, 3))
+        foo, _, editor = self._get_custom_editor(single_select_custom_view)
 
-        editor.update_object(QtCore.QDate(2018, 2, 5))
-        self.assertEqual(foo.single_date, datetime.date(2018, 2, 5))
-        ui.dispose()
+        date = datetime.date(2018, 2, 3)
+        self.click_date_on_editor(editor, date)
+        self.assertEqual(foo.single_date, date)
 
-    def test_multi_select_qt4_styles(self):
-        from pyface.qt import QtCore, QtGui
+    def test_multi_select_dates_on_editor(self):
         foo, ui, editor = self._get_custom_editor(multi_select_custom_view)
-        qdates = [QtCore.QDate(2018, 2, 1), QtCore.QDate(2018, 2, 3)]
-        for qdate in qdates:
-            editor.update_object(qdate)
+        dates = [
+            datetime.date(2018, 2, 3), datetime.date(2018, 2, 1)
+        ]
+        for date in dates:
+            self.click_date_on_editor(editor, date)
 
-        for qdate in qdates:
-            textformat = editor.control.dateTextFormat(qdate)
-            self.assertEqual(textformat.fontWeight(), QtGui.QFont.Bold)
-            self.assertEqual(textformat.background().color().green(), 128)
+        for date in dates:
+            self.check_select_status(editor=editor, date=date, selected=True)
 
-        textformat = editor.control.dateTextFormat(QtCore.QDate(2018, 2, 2))
-        self.assertEqual(textformat.fontWeight(), QtGui.QFont.Normal)
-        self.assertEqual(textformat.background().color().green(), 0)
+        self.assertEqual(foo.dates, sorted(dates))
 
     def test_multi_select_qt4_styles_reset(self):
-        from pyface.qt import QtCore, QtGui
         foo, ui, editor = self._get_custom_editor(multi_select_custom_view)
 
-        qdate = QtCore.QDate(2018, 2, 1)
-        editor.update_object(qdate)
-        textformat = editor.control.dateTextFormat(qdate)
-        self.assertEqual(textformat.fontWeight(), QtGui.QFont.Bold)
+        date = datetime.date(2018, 2, 1)
+        self.click_date_on_editor(editor, date)
+        self.check_select_status(editor=editor, date=date, selected=True)
 
-        editor.update_object(qdate)
-        textformat = editor.control.dateTextFormat(qdate)
-        self.assertEqual(textformat.fontWeight(), QtGui.QFont.Normal)
-        self.assertEqual(
-            textformat.background().style(),
-            0,   # Qt.BrushStyle.NoBrush,
-        )
+        self.click_date_on_editor(editor, date)
+        self.check_select_status(editor=editor, date=date, selected=False)
 
     def test_multi_select_qt4_set_model_dates(self):
         # Test setting the dates from the model object.
-        from pyface.qt import QtCore, QtGui
         foo, ui, editor = self._get_custom_editor(multi_select_custom_view)
         foo.dates = [
             datetime.date(2010, 1, 2),
@@ -111,6 +84,52 @@ class TestDateEditorCustomQt(unittest.TestCase):
         ]
 
         for date in foo.dates:
-            qdate = QtCore.QDate(date.year, date.month, date.day)
-            textformat = editor.control.dateTextFormat(qdate)
-            self.assertEqual(textformat.fontWeight(), QtGui.QFont.Bold)
+            self.check_select_status(editor=editor, date=date, selected=True)
+
+    # --------------------
+    # Helper methods
+    # --------------------
+
+    def get_custom_editor(self, view_factory):
+        foo = Foo()
+        ui = foo.edit_traits(view=view_factory())
+        editor, = ui._editors
+        return foo, ui, editor
+
+    def check_select_status(self, editor, date, selected):
+        from pyface.qt import QtCore, QtGui
+        qdate = QtCore.QDate(date.year, date.month, date.day)
+        textformat = editor.control.dateTextFormat(qdate)
+        if selected:
+            self.assertEqual(
+                textformat.fontWeight(),
+                QtGui.QFont.Bold,
+                "{!r} is not selected.".format(date))
+
+            self.assertEqual(
+                textformat.background().color().green(),
+                128,
+                "Expected non-zero green color value.")
+        else:
+            self.assertEqual(
+                textformat.fontWeight(),
+                QtGui.QFont.Normal,
+                "{!r} is not unselected.".format(date),
+            )
+            self.assertEqual(
+                textformat.background().style(),
+                0,   # Qt.BrushStyle.NoBrush,
+                "Expected brush to have been reset."
+            )
+            self.assertEqual(
+                textformat.background().color().green(),
+                0,
+                "Expected color to have been reset.")
+
+    def click_date_on_editor(self, editor, date):
+        from pyface.qt import QtCore
+        # QCalendarWidget.setSelectedDate modifies internal state
+        # instead of triggering the click signal.
+        # So we call update_object directly
+        editor.update_object(
+            QtCore.QDate(date.year, date.month, date.day))
