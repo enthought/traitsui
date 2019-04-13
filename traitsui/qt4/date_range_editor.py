@@ -21,6 +21,21 @@ class CustomEditor(DateCustomEditor):
 
         super(CustomEditor, self).init(parent)
 
+    def update_editor(self):
+        """ Updates the editor when the object trait changes externally to the
+            editor.
+        """
+        start_date, end_date = self.value
+        if start_date is not None and end_date is not None:
+            self._apply_style_to_range(start_date, end_date)
+        elif start_date is None and end_date is None:
+            self.apply_unselected_style_to_all()
+        else:
+            raise ValueError(
+                "The start and end dates must be either both defined or "
+                "both be None. Got {!r}".format(self.value)
+            )
+
     def update_object(self, q_date):
         """ Handles the user entering input data in the edit control.
         """
@@ -53,6 +68,9 @@ class CustomEditor(DateCustomEditor):
             start_date = value
 
         self.value = (start_date, end_date)
+        self._apply_style_to_range(start_date, end_date)
+
+    def _apply_style_to_range(self, start_date, end_date):
         num_days = (end_date - start_date).days + 1
 
         selected_dates = [
