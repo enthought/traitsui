@@ -1,3 +1,4 @@
+import contextlib
 import datetime
 import unittest
 
@@ -44,135 +45,148 @@ class TestDateRangeEditorQt(unittest.TestCase):
         push_exception_handler(reraise_exceptions=True)
         self.addCleanup(pop_exception_handler)
 
-    def test_date_range_editor_default(self):
-        self.get_custom_editor(default_custom_view)
-
     def test_set_date_range_on_model(self):
         # Test when the date range is set on the model
-        foo, _, editor = self.get_custom_editor(default_custom_view)
-        foo.date_range = (datetime.date(2010, 4, 3), datetime.date(2010, 4, 5))
+        with self.launch_editor(default_custom_view) as (foo, editor):
+            foo.date_range = (
+                datetime.date(2010, 4, 3), datetime.date(2010, 4, 5)
+            )
 
-        expected_selected = [
-            datetime.date(2010, 4, 3),
-            datetime.date(2010, 4, 4),
-            datetime.date(2010, 4, 5)
-        ]
-        for date in expected_selected:
-            self.check_select_status(editor=editor, date=date, selected=True)
+            expected_selected = [
+                datetime.date(2010, 4, 3),
+                datetime.date(2010, 4, 4),
+                datetime.date(2010, 4, 5)
+            ]
+            for date in expected_selected:
+                self.check_select_status(
+                    editor=editor, date=date, selected=True)
 
-        # Outside of the range
-        self.check_select_status(
-            editor=editor, date=datetime.date(2010, 4, 2), selected=False)
-        self.check_select_status(
-            editor=editor, date=datetime.date(2010, 4, 6), selected=False)
+            # Outside of the range
+            self.check_select_status(
+                editor=editor, date=datetime.date(2010, 4, 2), selected=False)
+            self.check_select_status(
+                editor=editor, date=datetime.date(2010, 4, 6), selected=False)
 
     def test_set_one_sided_range_error(self):
-        _, _, editor = self.get_custom_editor(default_custom_view)
 
-        with self.assertRaises(ValueError) as exception_context:
-            editor.value = (datetime.date(2010, 10, 3), None)
-            editor.update_editor()
+        with self.launch_editor(default_custom_view) as (_, editor):
 
-        self.assertIn(
-            "The start and end dates must be either both defined or both "
-            "be None",
-            str(exception_context.exception),
-        )
+            with self.assertRaises(ValueError) as exception_context:
+                editor.value = (datetime.date(2010, 10, 3), None)
+                editor.update_editor()
+
+            self.assertIn(
+                "The start and end dates must be either both defined or both "
+                "be None",
+                str(exception_context.exception),
+            )
 
     def test_set_reverse_range_on_model(self):
-        foo, _, editor = self.get_custom_editor(default_custom_view)
-        foo.date_range = (datetime.date(2010, 5, 3), datetime.date(2010, 5, 1))
 
-        # None of these dates should be selected
-        dates = [
-            datetime.date(2010, 5, 1),
-            datetime.date(2010, 5, 2),
-            datetime.date(2010, 5, 3),
-        ]
-        for date in dates:
-            self.check_select_status(editor=editor, date=date, selected=False)
+        with self.launch_editor(default_custom_view) as (foo, editor):
+            foo.date_range = (
+                datetime.date(2010, 5, 3), datetime.date(2010, 5, 1)
+            )
+
+            # None of these dates should be selected
+            dates = [
+                datetime.date(2010, 5, 1),
+                datetime.date(2010, 5, 2),
+                datetime.date(2010, 5, 3),
+            ]
+            for date in dates:
+                self.check_select_status(
+                    editor=editor, date=date, selected=False)
 
     def test_set_date_range_on_editor(self):
-        foo, _, editor = self.get_custom_editor(default_custom_view)
+        with self.launch_editor(default_custom_view) as (foo, editor):
 
-        self.click_date_on_editor(editor, datetime.date(2012, 3, 4))
-        self.click_date_on_editor(editor, datetime.date(2012, 3, 6))
+            self.click_date_on_editor(editor, datetime.date(2012, 3, 4))
+            self.click_date_on_editor(editor, datetime.date(2012, 3, 6))
 
-        expected_selected = [
-            datetime.date(2012, 3, 4),
-            datetime.date(2012, 3, 5),
-            datetime.date(2012, 3, 6),
-        ]
-        for date in expected_selected:
-            self.check_select_status(editor=editor, date=date, selected=True)
+            expected_selected = [
+                datetime.date(2012, 3, 4),
+                datetime.date(2012, 3, 5),
+                datetime.date(2012, 3, 6),
+            ]
+            for date in expected_selected:
+                self.check_select_status(
+                    editor=editor, date=date, selected=True)
 
-        self.assertEqual(
-            foo.date_range,
-            (datetime.date(2012, 3, 4), datetime.date(2012, 3, 6)))
+            self.assertEqual(
+                foo.date_range,
+                (datetime.date(2012, 3, 4), datetime.date(2012, 3, 6)))
 
     def test_set_date_range_reset_when_click_outside(self):
-        foo, _, editor = self.get_custom_editor(default_custom_view)
+        with self.launch_editor(default_custom_view) as (foo, editor):
 
-        foo.date_range = (
-            datetime.date(2012, 2, 10), datetime.date(2012, 2, 13),
-        )
-        self.click_date_on_editor(editor, datetime.date(2012, 2, 4))
+            foo.date_range = (
+                datetime.date(2012, 2, 10), datetime.date(2012, 2, 13),
+            )
+            self.click_date_on_editor(editor, datetime.date(2012, 2, 4))
 
-        self.assertEqual(
-            foo.date_range,
-            (datetime.date(2012, 2, 4), datetime.date(2012, 2, 4)))
+            self.assertEqual(
+                foo.date_range,
+                (datetime.date(2012, 2, 4), datetime.date(2012, 2, 4)))
 
     def test_set_date_range_reverse_order(self):
         # Test setting end date first then start date.
-        foo, _, editor = self.get_custom_editor(default_custom_view)
+        with self.launch_editor(default_custom_view) as (foo, editor):
 
-        self.click_date_on_editor(editor, datetime.date(2012, 3, 6))
-        self.click_date_on_editor(editor, datetime.date(2012, 3, 4))
+            self.click_date_on_editor(editor, datetime.date(2012, 3, 6))
+            self.click_date_on_editor(editor, datetime.date(2012, 3, 4))
 
-        expected_selected = [
-            datetime.date(2012, 3, 4),
-            datetime.date(2012, 3, 5),
-            datetime.date(2012, 3, 6),
-        ]
-        for date in expected_selected:
-            self.check_select_status(editor=editor, date=date, selected=True)
+            expected_selected = [
+                datetime.date(2012, 3, 4),
+                datetime.date(2012, 3, 5),
+                datetime.date(2012, 3, 6),
+            ]
+            for date in expected_selected:
+                self.check_select_status(
+                    editor=editor, date=date, selected=True)
 
-        self.assertEqual(
-            foo.date_range,
-            (datetime.date(2012, 3, 4), datetime.date(2012, 3, 6)))
+            self.assertEqual(
+                foo.date_range,
+                (datetime.date(2012, 3, 4), datetime.date(2012, 3, 6)))
 
     def test_allow_no_range(self):
-        # Test clicking again will unset the range
-        foo, _, editor = self.get_custom_editor(custom_view_allow_no_range)
+        # Test clicking again will unset the range if allow_no_range is True
 
-        self.click_date_on_editor(editor, datetime.date(2012, 3, 6))
-        self.click_date_on_editor(editor, datetime.date(2012, 3, 4))
+        with self.launch_editor(custom_view_allow_no_range) as (foo, editor):
 
-        expected_selected = [
-            datetime.date(2012, 3, 4),
-            datetime.date(2012, 3, 5),
-            datetime.date(2012, 3, 6),
-        ]
-        for date in expected_selected:
-            self.check_select_status(editor=editor, date=date, selected=True)
+            self.click_date_on_editor(editor, datetime.date(2012, 3, 6))
+            self.click_date_on_editor(editor, datetime.date(2012, 3, 4))
 
-        # Click again
-        self.click_date_on_editor(editor, datetime.date(2012, 3, 1))
+            expected_selected = [
+                datetime.date(2012, 3, 4),
+                datetime.date(2012, 3, 5),
+                datetime.date(2012, 3, 6),
+            ]
+            for date in expected_selected:
+                self.check_select_status(
+                    editor=editor, date=date, selected=True)
 
-        for date in expected_selected:
-            self.check_select_status(editor=editor, date=date, selected=False)
+            # Click again
+            self.click_date_on_editor(editor, datetime.date(2012, 3, 1))
 
-        self.assertEqual(foo.date_range, (None, None))
+            for date in expected_selected:
+                self.check_select_status(editor=editor, date=date, selected=False)
+
+            self.assertEqual(foo.date_range, (None, None))
 
     # --------------------
     # Helper methods
     # --------------------
 
-    def get_custom_editor(self, view_factory):
+    @contextlib.contextmanager
+    def launch_editor(self, view_factory):
         foo = Foo()
         ui = foo.edit_traits(view=view_factory())
         editor, = ui._editors
-        return foo, ui, editor
+        try:
+            yield foo, editor
+        finally:
+            ui.dispose()
 
     def check_select_status(self, editor, date, selected):
         from pyface.qt import QtCore, QtGui
@@ -183,12 +197,26 @@ class TestDateRangeEditorQt(unittest.TestCase):
                 textformat.fontWeight(),
                 QtGui.QFont.Bold,
                 "{!r} is not selected.".format(date))
+
+            self.assertEqual(
+                textformat.background().color().green(),
+                128,
+                "Expected non-zero green color value.")
         else:
             self.assertEqual(
                 textformat.fontWeight(),
                 QtGui.QFont.Normal,
                 "{!r} is not unselected.".format(date),
             )
+            self.assertEqual(
+                textformat.background().style(),
+                0,   # Qt.BrushStyle.NoBrush,
+                "Expected brush to have been reset."
+            )
+            self.assertEqual(
+                textformat.background().color().green(),
+                0,
+                "Expected color to have been reset.")
 
     def click_date_on_editor(self, editor, date):
         from pyface.qt import QtCore
