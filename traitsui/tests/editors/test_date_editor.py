@@ -4,7 +4,7 @@ import unittest
 from traits.api import Date, HasTraits, List
 from traitsui.api import DateEditor, View, Item
 
-from traitsui.tests._tools import skip_if_not_qt4, skip_if_not_wx
+from traitsui.tests._tools import skip_if_not_qt4
 
 
 class Foo(HasTraits):
@@ -34,7 +34,6 @@ def multi_select_custom_view():
         )
     )
     return view
-
 
 
 @skip_if_not_qt4
@@ -101,3 +100,17 @@ class TestDateEditorCustomQt(unittest.TestCase):
             textformat.background().style(),
             0,   # Qt.BrushStyle.NoBrush,
         )
+
+    def test_multi_select_qt4_set_model_dates(self):
+        # Test setting the dates from the model object.
+        from pyface.qt import QtCore, QtGui
+        foo, ui, editor = self._get_custom_editor(multi_select_custom_view)
+        foo.dates = [
+            datetime.date(2010, 1, 2),
+            datetime.date(2010, 2, 1),
+        ]
+
+        for date in foo.dates:
+            qdate = QtCore.QDate(date.year, date.month, date.day)
+            textformat = editor.control.dateTextFormat(qdate)
+            self.assertEqual(textformat.fontWeight(), QtGui.QFont.Bold)
