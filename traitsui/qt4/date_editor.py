@@ -295,7 +295,7 @@ def _color_to_brush(color):
 
 
 def _brush_to_color(brush):
-    if brush.style() == QtCore.Qt.BrushStyle.NoBrush:
+    if brush.style() == 0:   # Qt.BrushStyle.NoBrush
         return None
 
     color = brush.color()
