@@ -39,21 +39,15 @@ def multi_select_custom_view():
 @skip_if_not_qt4
 class TestDateEditorCustomQt(unittest.TestCase):
 
-    def _get_custom_editor(self, view_factory):
-        foo = Foo()
-        ui = foo.edit_traits(view=view_factory())
-        editor, = ui._editors
-        return foo, ui, editor
-
     def test_single_select_qt4(self):
-        foo, _, editor = self._get_custom_editor(single_select_custom_view)
+        foo, _, editor = self.get_custom_editor(single_select_custom_view)
 
         date = datetime.date(2018, 2, 3)
         self.click_date_on_editor(editor, date)
         self.assertEqual(foo.single_date, date)
 
     def test_multi_select_dates_on_editor(self):
-        foo, ui, editor = self._get_custom_editor(multi_select_custom_view)
+        foo, ui, editor = self.get_custom_editor(multi_select_custom_view)
         dates = [
             datetime.date(2018, 2, 3), datetime.date(2018, 2, 1)
         ]
@@ -66,7 +60,7 @@ class TestDateEditorCustomQt(unittest.TestCase):
         self.assertEqual(foo.dates, sorted(dates))
 
     def test_multi_select_qt4_styles_reset(self):
-        foo, ui, editor = self._get_custom_editor(multi_select_custom_view)
+        foo, ui, editor = self.get_custom_editor(multi_select_custom_view)
 
         date = datetime.date(2018, 2, 1)
         self.click_date_on_editor(editor, date)
@@ -77,7 +71,7 @@ class TestDateEditorCustomQt(unittest.TestCase):
 
     def test_multi_select_qt4_set_model_dates(self):
         # Test setting the dates from the model object.
-        foo, ui, editor = self._get_custom_editor(multi_select_custom_view)
+        foo, ui, editor = self.get_custom_editor(multi_select_custom_view)
         foo.dates = [
             datetime.date(2010, 1, 2),
             datetime.date(2010, 2, 1),
