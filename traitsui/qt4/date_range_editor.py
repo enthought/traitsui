@@ -45,8 +45,7 @@ class CustomEditor(DateCustomEditor):
         if (self.factory.allow_no_range and
                 start_date is not None and
                 end_date is not None and
-                value >= start_date and
-                value <= end_date):
+                start_date < end_date):
             self.value = (None, None)
             self.apply_unselected_style_to_all()
             return
