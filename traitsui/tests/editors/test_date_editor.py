@@ -4,6 +4,7 @@ import unittest
 
 from traits.api import Date, HasTraits, List
 from traitsui.api import DateEditor, View, Item
+from traitsui.editors.date_editor import CellFormat
 
 from traitsui.tests._tools import skip_if_not_qt4
 
@@ -32,6 +33,23 @@ def multi_select_custom_view():
             name='dates',
             style="custom",
             editor=DateEditor(multi_select=True),
+        )
+    )
+    return view
+
+
+def multi_select_selected_color_view():
+    view = View(
+        Item(
+            name='dates',
+            style="custom",
+            editor=DateEditor(
+                multi_select=True,
+                selected_style=CellFormat(
+                    bold=True,
+                    bgcolor=(128, 10, 0),
+                )
+            ),
         )
     )
     return view
@@ -81,6 +99,14 @@ class TestDateEditorCustomQt(unittest.TestCase):
                 self.check_select_status(
                     editor=editor, date=date, selected=True)
 
+    def test_custom_selected_color(self):
+        view_factory = multi_select_selected_color_view
+        with self.launch_editor(view_factory) as (foo, editor):
+            date = datetime.date(2011, 3, 4)
+            foo.dates = [date]
+
+            self.check_date_bgcolor(editor, date, (128, 10, 0))
+
     # --------------------
     # Helper methods
     # --------------------
@@ -104,11 +130,7 @@ class TestDateEditorCustomQt(unittest.TestCase):
                 textformat.fontWeight(),
                 QtGui.QFont.Bold,
                 "{!r} is not selected.".format(date))
-
-            self.assertEqual(
-                textformat.background().color().green(),
-                128,
-                "Expected non-zero green color value.")
+            self.check_date_bgcolor(editor, date, (0, 128, 0))
         else:
             self.assertEqual(
                 textformat.fontWeight(),
@@ -120,10 +142,7 @@ class TestDateEditorCustomQt(unittest.TestCase):
                 0,   # Qt.BrushStyle.NoBrush,
                 "Expected brush to have been reset."
             )
-            self.assertEqual(
-                textformat.background().color().green(),
-                0,
-                "Expected color to have been reset.")
+            self.check_date_bgcolor(editor, date, (0, 0, 0))
 
     def click_date_on_editor(self, editor, date):
         from pyface.qt import QtCore
@@ -132,3 +151,18 @@ class TestDateEditorCustomQt(unittest.TestCase):
         # So we call update_object directly
         editor.update_object(
             QtCore.QDate(date.year, date.month, date.day))
+
+    def check_date_bgcolor(self, editor, date, expected):
+        from pyface.qt import QtCore
+        qdate = QtCore.QDate(date.year, date.month, date.day)
+        textformat = editor.control.dateTextFormat(qdate)
+
+        color = textformat.background().color()
+        actual = (
+            color.red(), color.green(), color.blue()
+        )
+        self.assertEqual(
+            actual, expected, "Expected color: {!r}. Got color: {!r}".format(
+                expected, actual,
+            )
+        )
