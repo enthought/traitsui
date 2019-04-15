@@ -72,10 +72,10 @@ class CustomEditor(DateCustomEditor):
     def _apply_style_to_range(self, start_date, end_date):
         num_days = (end_date - start_date).days + 1
 
-        selected_dates = [
+        selected_dates = (
             start_date + datetime.timedelta(days=i)
             for i in range(num_days)
-        ]
+        )
         self.apply_unselected_style_to_all()
         for dt in selected_dates:
             self.select_date(dt)
