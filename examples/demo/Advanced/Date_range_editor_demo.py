@@ -2,7 +2,7 @@
 #  License: BSD Style.
 
 """
-A Traits UI editor that wraps a WX calendar panel.
+A Traits UI editor that wraps a Qt calendar panel.
 """
 from __future__ import absolute_import, print_function
 
