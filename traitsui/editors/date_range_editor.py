@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 
-from traits.api import Bool
+from traits.api import Bool, Constant
 from .date_editor import DateEditor
 
 
@@ -11,7 +11,7 @@ class ToolkitEditorFactory(DateEditor):
     """
 
     # This must be set to true for setting a date range.
-    multi_select = Bool(True)
+    multi_select = Constant(True)
 
     # Whether it is possible to unset the date range.
     # If true, then the date range will be set to (None, None)

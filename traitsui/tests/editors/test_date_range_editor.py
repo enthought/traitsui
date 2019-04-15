@@ -3,7 +3,8 @@ import datetime
 import unittest
 
 from traits.api import (
-    Date, HasTraits, Tuple, pop_exception_handler, push_exception_handler)
+    Date, HasTraits, TraitError, Tuple,
+    pop_exception_handler, push_exception_handler)
 from traitsui.api import DateRangeEditor, View, Item
 
 from traitsui.tests._tools import skip_if_not_qt4
@@ -36,6 +37,14 @@ def custom_view_allow_no_range():
         )
     )
     return view
+
+
+class TestDateRangeEditorGeneric(unittest.TestCase):
+    """ Tests that are not GUI backend specific."""
+
+    def test_date_range_multi_select_is_constant(self):
+        with self.assertRaises(TraitError):
+            DateRangeEditor(multi_select=False)
 
 
 @skip_if_not_qt4
