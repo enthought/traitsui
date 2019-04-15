@@ -42,7 +42,7 @@ class CustomEditor(DateCustomEditor):
         value = datetime.date(q_date.year(), q_date.month(), q_date.day())
         start_date, end_date = self.value
 
-        if (self.factory.allow_no_range and
+        if (self.factory.allow_no_selection and
                 start_date is not None and
                 end_date is not None and
                 start_date < end_date):

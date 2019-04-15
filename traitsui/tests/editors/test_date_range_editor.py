@@ -27,12 +27,12 @@ def default_custom_view():
 
 
 def custom_view_allow_no_range():
-    """ DateRangeEditor with allow_no_range set to True."""
+    """ DateRangeEditor with allow_no_selection set to True."""
     view = View(
         Item(
             name='date_range',
             style="custom",
-            editor=DateRangeEditor(allow_no_range=True),
+            editor=DateRangeEditor(allow_no_selection=True),
         )
     )
     return view

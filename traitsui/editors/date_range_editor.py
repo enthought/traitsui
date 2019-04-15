@@ -16,7 +16,7 @@ class ToolkitEditorFactory(DateEditor):
     # Whether it is possible to unset the date range.
     # If true, then the date range will be set to (None, None)
     # when all the dates are unselected.
-    allow_no_range = Bool(False)
+    allow_no_selection = Bool(False)
 
 
 DateRangeEditor = ToolkitEditorFactory
