@@ -16,9 +16,7 @@ class DateRangeEditorDemo(HasTraits):
 
     view = View(
                 Group(Item('date_range',
-                           editor=DateRangeEditor(
-                               allow_no_range=True,
-                            ),
+                           editor=DateRangeEditor(),
                            style='custom',
                            label='Date range'),
                       label='Date range'),
