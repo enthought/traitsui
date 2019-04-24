@@ -6,10 +6,8 @@ from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 from traitsui.api import Item, ObjectColumn, TableEditor, View
 from traitsui.tests._tools import (
     is_current_backend_qt4, is_current_backend_wx, press_ok_button,
-
-from traitsui.tests._tools import (
-    skip_if_not_qt4, press_ok_button,
-    skip_if_null, store_exceptions_on_all_threads)
+    skip_if_not_qt4,  skip_if_null, store_exceptions_on_all_threads
+)
 
 
 class ListItem(HasTraits):
