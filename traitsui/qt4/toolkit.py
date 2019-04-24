@@ -63,8 +63,10 @@ class _CallAfter(QtCore.QObject):
 
         # Add this to the list.
         self._calls_mutex.lock()
-        self._calls.append(self)
-        self._calls_mutex.unlock()
+        try:
+            self._calls.append(self)
+        finally:
+            self._calls_mutex.unlock()
 
         # Move to the main GUI thread.
         self.moveToThread(QtGui.QApplication.instance().thread())
@@ -80,12 +82,13 @@ class _CallAfter(QtCore.QObject):
         """
         if event.type() == _QT_TRAITS_EVENT:
             # Invoke the handler
-            self._handler(*self._args, **self._kwds)
-
-            # We cannot remove from self._calls here. QObjects don't like being
-            # garbage collected during event handlers (there are tracebacks,
-            # plus maybe a memory leak, I think).
-            QtCore.QTimer.singleShot(0, self._finished)
+            try:
+                self._handler(*self._args, **self._kwds)
+            finally:
+                # We cannot remove from self._calls here. QObjects don't like being
+                # garbage collected during event handlers (there are tracebacks,
+                # plus maybe a memory leak, I think).
+                QtCore.QTimer.singleShot(0, self._finished)
 
             return True
         else:
@@ -95,8 +98,10 @@ class _CallAfter(QtCore.QObject):
         """ Remove the call from the list, so it can be garbage collected.
         """
         self._calls_mutex.lock()
-        del self._calls[self._calls.index(self)]
-        self._calls_mutex.unlock()
+        try:
+            del self._calls[self._calls.index(self)]
+        finally:
+            self._calls_mutex.unlock()
 
 
 def ui_handler(handler, *args, **kwds):
