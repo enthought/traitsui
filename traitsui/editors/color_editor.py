@@ -18,9 +18,9 @@
 """ Defines the color editor factory for the all traits toolkit backends.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -35,30 +35,31 @@ from ..view import View
 
 from ..editor_factory import EditorFactory
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ToolkitEditorFactory ( EditorFactory ):
+
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for color editors.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Is the underlying color trait mapped?
-    mapped = Bool( True )
+    mapped = Bool(True)
 
     # Do we use a native dialog for the popup or the toolkit's?
     # At present, only affects Qt.
-    use_native_dialog = Bool( True )
+    use_native_dialog = Bool(True)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Traits view definition:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    traits_view = View( [ 'mapped{Is value mapped?}', '|[]>' ] )
+    traits_view = View(['mapped{Is value mapped?}', '|[]>'])
 
 
 # Define the ColorEditor class
@@ -66,7 +67,7 @@ class ToolkitEditorFactory ( EditorFactory ):
 # in traitsui.<toolkit>.color_editor, and if none is found, the
 # ToolkitEditorFactory declared here is returned.
 def ColorEditor(*args, **traits):
-    """ Returns an instance of the toolkit-specific editor factory declared in
+    r""" Returns an instance of the toolkit-specific editor factory declared in
     traitsui.<toolkit>.color_editor. If such an editor factory
     cannot be located, an instance of the abstract ToolkitEditorFactory
     declared in traitsui.editors.color_editor is returned.
@@ -79,8 +80,9 @@ def ColorEditor(*args, **traits):
     """
 
     try:
-        return toolkit_object('color_editor:ToolkitEditorFactory', True)(*args,
-                                                                    **traits)
+        return toolkit_object(
+            'color_editor:ToolkitEditorFactory', True)(
+            *args, **traits)
     except:
         return ToolkitEditorFactory(*args, **traits)
 

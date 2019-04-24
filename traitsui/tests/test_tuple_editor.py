@@ -16,6 +16,7 @@
 Test cases for the TupleEditor object.
 """
 
+from __future__ import absolute_import
 import unittest
 
 from traits.api import Float, HasStrictTraits, Str, Tuple
@@ -34,19 +35,18 @@ class DummyModel(HasStrictTraits):
     traits_view = View(Item(name='data', editor=TupleEditor()))
 
 
-@skip_if_null
 class TestTupleEditor(UnittestTools, unittest.TestCase):
 
+    @skip_if_null
     def test_value_update(self):
         # Regression test for #179
         model = DummyModel()
+        ui = model.edit_traits()
         try:
-            ui = model.edit_traits()
             with self.assertTraitChanges(model, 'data', count=1):
                 model.data = (3, 4.6, 'nono')
         finally:
-            if ui is not None:
-                ui.dispose()
+            ui.dispose()
 
 
 if __name__ == '__main__':

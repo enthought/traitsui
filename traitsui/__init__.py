@@ -21,5 +21,13 @@ from ._version import full_version as __version__
 
 __requires__ = [
     'traits',
-    'pyface',
+    'pyface>=6.0.0',
+    'six',
 ]
+__extras_require__ = {
+    'wx': ['wxpython>=2.8.10', 'numpy'],
+    'pyqt': ['pyqt>=4.10', 'pygments'],
+    'pyqt5': ['pyqt>=5', 'pygments'],
+    'pyside': ['pyside>=1.2', 'pygments'],
+    'demo': ['configobj'],
+}

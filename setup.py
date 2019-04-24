@@ -1,12 +1,14 @@
 # Copyright (c) 2008-2015 by Enthought, Inc.
 # All rights reserved.
+
 import os
 import re
 import subprocess
 
 from setuptools import setup, find_packages
+from io import open
 
-MAJOR = 5
+MAJOR = 6
 MINOR = 1
 MICRO = 0
 
@@ -50,7 +52,7 @@ def git_version():
 
 
 def write_version_py(filename='traitsui/_version.py'):
-    template = """\
+    template = u"""\
 # THIS FILE IS GENERATED FROM TRAITS SETUP.PY
 version = '{version}'
 full_version = '{full_version}'
@@ -88,15 +90,16 @@ if not is_released:
     if not IS_RELEASED:
         fullversion += '.dev{0}'.format(dev_num)
 
-    with open(filename, "wt") as fp:
+    with open(filename, "w", encoding='ascii') as fp:
         fp.write(template.format(version=VERSION,
                                  full_version=fullversion,
                                  git_revision=git_rev,
                                  is_released=IS_RELEASED))
 
+
 if __name__ == "__main__":
     write_version_py()
-    from traitsui import __version__, __requires__
+    from traitsui import __version__, __requires__, __extras_require__
 
     def additional_commands():
         try:
@@ -107,11 +110,11 @@ if __name__ == "__main__":
             return {'documentation': BuildDoc}
 
     setup(
-        name = 'traitsui',
-        version = __version__,
-        author = 'David C. Morrill, et. al.',
-        author_email = 'dmorrill@enthought.com',
-        classifiers = [c.strip() for c in """\
+        name='traitsui',
+        version=__version__,
+        author='David C. Morrill, et. al.',
+        author_email='dmorrill@enthought.com',
+        classifiers=[c.strip() for c in """\
             Development Status :: 5 - Production/Stable
             Intended Audience :: Developers
             Intended Audience :: Science/Research
@@ -130,18 +133,26 @@ if __name__ == "__main__":
             Topic :: Software Development
             Topic :: Software Development :: Libraries
             """.splitlines() if len(c.strip()) > 0],
-        description = 'traitsui: traits-capable user interfaces',
-        long_description = open('README.rst').read(),
-        url = 'https://docs.enthought.com/traitsui',
-        download_url = 'https://github.com/enthought/traitsui',
+        description='traitsui: traits-capable user interfaces',
+        long_description=open('README.rst').read(),
+        url='http://docs.enthought.com/traitsui',
+        download_url='https://github.com/enthought/traitsui',
         install_requires=__requires__,
-        license = 'BSD',
-        maintainer = 'ETS Developers',
-        maintainer_email = 'enthought-dev@enthought.com',
-        package_data = dict(traitsui=['image/library/*.zip',
-                                      'wx/images/*', 'qt4/images/*']),
-        packages = find_packages(),
-        platforms = ["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
-        zip_safe = False,
-        use_2to3 = True,
+        extras_require=__extras_require__,
+        license='BSD',
+        maintainer='ETS Developers',
+        maintainer_email='enthought-dev@enthought.com',
+        package_data=dict(traitsui=['image/library/*.zip', 'images/*',
+                                    'wx/images/*', 'qt4/images/*']),
+        packages=find_packages(),
+        entry_points={
+            'traitsui.toolkits': [
+                'qt4 = traitsui.qt4:toolkit',
+                'wx = traitsui.wx:toolkit',
+                'qt = traitsui.qt4:toolkit',
+                'null = traitsui.null:toolkit',
+            ],
+        },
+        platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
+        zip_safe=False,
     )

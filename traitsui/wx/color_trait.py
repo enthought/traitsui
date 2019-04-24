@@ -18,9 +18,10 @@
 """ Trait definition for a wxPython-based color.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+from __future__ import absolute_import
 import wx
 
 from traits.api \
@@ -30,12 +31,13 @@ from traits.api \
 try:
     ColourPtr = wx.ColourPtr
 except:
-    class ColourPtr ( object ): pass
+    class ColourPtr(object):
+        pass
 
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  W3CColourDatabase
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 class W3CColourDatabase(object):
     """ Proxy for the ColourDatabase which allows for finding W3C colors.
@@ -47,7 +49,6 @@ class W3CColourDatabase(object):
         This class is a proxy because AddColour expects a wx.ColourDatabase
         instance, not an instance of a subclass
     """
-
 
     _database = wx.ColourDatabase()
 
@@ -85,9 +86,10 @@ class W3CColourDatabase(object):
 
 w3c_color_database = W3CColourDatabase()
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Convert a number into a wxColour object:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 def tuple_to_wxcolor(tup):
     if 3 <= len(tup) <= 4:
@@ -99,32 +101,34 @@ def tuple_to_wxcolor(tup):
     else:
         raise TraitError
 
-def convert_to_color ( object, name, value ):
+
+def convert_to_color(object, name, value):
     """ Converts a number into a wxColour object.
     """
-    if isinstance( value, tuple ):
+    if isinstance(value, tuple):
         return tuple_to_wxcolor(value)
 
-    elif isinstance( value, ColourPtr ):
-        return wx.Colour( value.Red(), value.Green(), value.Blue() )
+    elif isinstance(value, ColourPtr):
+        return wx.Colour(value.Red(), value.Green(), value.Blue())
 
-    elif isinstance( value, wx.Colour ):
+    elif isinstance(value, wx.Colour):
         return value
 
-    elif isinstance( value, str ):
+    elif isinstance(value, str):
 
         if value in standard_colors:
             return standard_colors[value]
 
         # Check for tuple-ness
         tmp = value.strip()
-        if tmp.startswith("(") and tmp.endswith(")") and tmp.count(",") in (2,3):
+        if tmp.startswith("(") and tmp.endswith(
+                ")") and tmp.count(",") in (2, 3):
             tup = eval(tmp)
             return tuple_to_wxcolor(tup)
 
-    elif isinstance( value, int ):
-        num = int( value )
-        return wx.Colour( num / 0x10000, (num / 0x100) & 0xFF, num & 0xFF )
+    elif isinstance(value, int):
+        num = int(value)
+        return wx.Colour(num / 0x10000, (num / 0x100) & 0xFF, num & 0xFF)
 
     raise TraitError
 
@@ -134,37 +138,37 @@ convert_to_color.info = ('a string of the form (r,g,b) or (r,g,b,a) where r, '
                          '0xRRGGBB, where RR is red, GG is green, and BB is '
                          'blue')
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Standard colors:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 standard_colors = {}
-for name in [ 'aquamarine', 'black', 'blue', 'blue violet', 'brown',
-              'cadet blue', 'coral', 'cornflower blue', 'cyan', 'dark grey',
-              'dark green', 'dark olive green', 'dark orchid',
-              'dark slate blue', 'dark slate grey', 'dark turquoise',
-              'dim grey', 'firebrick', 'forest green', 'gold', 'goldenrod',
-              'grey', 'green', 'green yellow', 'indian red', 'khaki',
-              'light blue', 'light grey', 'light steel blue', 'lime green',
-              'magenta', 'maroon', 'medium aquamarine', 'medium blue',
-              'medium forest green', 'medium goldenrod', 'medium orchid',
-              'medium sea green', 'medium slate blue', 'medium spring green',
-              'medium turquoise', 'medium violet red', 'midnight blue', 'navy',
-              'orange', 'orange red', 'orchid', 'pale green', 'pink', 'plum',
-              'purple', 'red', 'salmon', 'sea green', 'sienna', 'sky blue',
-              'slate blue', 'spring green', 'steel blue', 'tan', 'thistle',
-              'turquoise', 'violet', 'violet red', 'wheat', 'white', 'yellow',
-              'yellow green' ]:
+for name in ['aquamarine', 'black', 'blue', 'blue violet', 'brown',
+             'cadet blue', 'coral', 'cornflower blue', 'cyan', 'dark grey',
+             'dark green', 'dark olive green', 'dark orchid',
+             'dark slate blue', 'dark slate grey', 'dark turquoise',
+             'dim grey', 'firebrick', 'forest green', 'gold', 'goldenrod',
+             'grey', 'green', 'green yellow', 'indian red', 'khaki',
+             'light blue', 'light grey', 'light steel blue', 'lime green',
+             'magenta', 'maroon', 'medium aquamarine', 'medium blue',
+             'medium forest green', 'medium goldenrod', 'medium orchid',
+             'medium sea green', 'medium slate blue', 'medium spring green',
+             'medium turquoise', 'medium violet red', 'midnight blue', 'navy',
+             'orange', 'orange red', 'orchid', 'pale green', 'pink', 'plum',
+             'purple', 'red', 'salmon', 'sea green', 'sienna', 'sky blue',
+             'slate blue', 'spring green', 'steel blue', 'tan', 'thistle',
+             'turquoise', 'violet', 'violet red', 'wheat', 'white', 'yellow',
+             'yellow green']:
     try:
         wx_color = w3c_color_database.Find(name)
-        standard_colors[ name ] = convert_to_color( None, None,
-                                                    wx_color )
+        standard_colors[name] = convert_to_color(None, None,
+                                                 wx_color)
     except:
         pass
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Define wxPython specific color traits:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 ### Note: Declare the editor to be a function which returns the ColorEditor
 # class from traits ui to avoid circular import issues. For backwards
@@ -172,17 +176,20 @@ for name in [ 'aquamarine', 'black', 'blue', 'blue violet', 'brown',
 # project declares 'from api import *' in its __init__.py. The 'api' in turn
 # can contain classes that have a Color trait which lead to this file getting
 # imported. This leads to a circular import when declaring a Color trait.
+
+
 def get_color_editor(*args, **traits):
-    from color_editor import ToolkitEditorFactory
+    from .color_editor import ToolkitEditorFactory
     return ToolkitEditorFactory(*args, **traits)
 
-def WxColor ( default = 'white', allow_none = False, **metadata ):
+
+def WxColor(default='white', allow_none=False, **metadata):
     """ Defines wxPython-specific color traits.
     """
 
     if allow_none:
-        return Trait( default, None, standard_colors, convert_to_color,
-                      editor = get_color_editor, **metadata )
+        return Trait(default, None, standard_colors, convert_to_color,
+                     editor=get_color_editor, **metadata)
 
-    return Trait( default, standard_colors, convert_to_color,
-                  editor = get_color_editor, **metadata )
+    return Trait(default, standard_colors, convert_to_color,
+                 editor=get_color_editor, **metadata)

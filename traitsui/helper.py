@@ -19,9 +19,9 @@
     user interfaces.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -30,85 +30,90 @@ from operator import itemgetter
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
 
 from .ui_traits import SequenceTypes
+import six
 
-#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Layout orientation for a control and its associated editor
-Orientation = Enum( 'horizontal', 'vertical' )
+Orientation = Enum('horizontal', 'vertical')
 
 # Docking drag bar style:
-DockStyle = Enum( 'horizontal', 'vertical', 'tab', 'fixed' )
+DockStyle = Enum('horizontal', 'vertical', 'tab', 'fixed')
 
 #----------------------------------------------------------------------------
 #  Return a 'user-friendly' name for a specified trait:
 #----------------------------------------------------------------------------
 
-def user_name_for ( name ):
+
+def user_name_for(name):
     """ Returns a "user-friendly" name for a specified trait.
     """
-    name       = name.replace( '_', ' ' )
-    name       = name[:1].upper() + name[1:]
-    result     = ''
+    name = name.replace('_', ' ')
+    name = name[:1].upper() + name[1:]
+    result = ''
     last_lower = 0
     for c in name:
         if c.isupper() and last_lower:
-           result += ' '
+            result += ' '
         last_lower = c.islower()
-        result    += c
+        result += c
     return result
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Format a number with embedded commas:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def commatize ( value ):
+
+def commatize(value):
     """ Formats a specified value as an integer string with embedded commas.
         For example: commatize( 12345 ) returns "12,345".
     """
-    s = str( abs( value ) )
-    s = s.rjust( ((len( s ) + 2) / 3) * 3 )
-    result = ','.join( [ s[ i: i+3 ] for i in range( 0, len(s), 3 ) ] ).lstrip()
+    s = str(abs(value))
+    s = s.rjust(((len(s) + 2) / 3) * 3)
+    result = ','.join([s[i: i + 3] for i in range(0, len(s), 3)]).lstrip()
     if value >= 0:
         return result
 
     return '-' + result
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Recomputes the mappings for a new set of enumeration values:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def enum_values_changed ( values, strfunc=unicode ):
+
+def enum_values_changed(values, strfunc=six.text_type):
     """ Recomputes the mappings for a new set of enumeration values.
     """
 
-    if isinstance( values, dict ):
-        data = [ ( strfunc( v ), n ) for n, v in values.items() ]
-        if len( data ) > 0:
+    if isinstance(values, dict):
+        data = [(strfunc(v), n) for n, v in values.items()]
+        if len(data) > 0:
             data.sort(key=itemgetter(0))
-            col = data[0][0].find( ':' ) + 1
+            col = data[0][0].find(':') + 1
             if col > 0:
-                data = [ ( n[ col: ], v ) for n, v in data ]
-    elif not isinstance( values, SequenceTypes ):
+                data = [(n[col:], v) for n, v in data]
+    elif not isinstance(values, SequenceTypes):
         handler = values
-        if isinstance( handler, CTrait ):
+        if isinstance(handler, CTrait):
             handler = handler.handler
-        if not isinstance( handler, BaseTraitHandler ):
+        if not isinstance(handler, BaseTraitHandler):
             raise TraitError("Invalid value for 'values' specified")
         if handler.is_mapped:
-            data = [ ( strfunc( n ), n ) for n in handler.map.keys() ]
+            data = [(strfunc(n), n) for n in handler.map.keys()]
             data.sort(key=itemgetter(0))
         else:
-            data = [ ( strfunc( v ), v ) for v in handler.values ]
+            data = [(strfunc(v), v) for v in handler.values]
     else:
-        data = [ ( strfunc( v ), v ) for v in values ]
+        data = [(strfunc(v), v) for v in values]
 
-    names           = [ x[0] for x in data ]
-    mapping         = {}
+    names = [x[0] for x in data]
+    mapping = {}
     inverse_mapping = {}
     for name, value in data:
-        mapping[ name ] = value
-        inverse_mapping[ value ] = name
+        mapping[name] = value
+        inverse_mapping[value] = name
 
-    return ( names, mapping, inverse_mapping )
+    return (names, mapping, inverse_mapping)

@@ -19,57 +19,58 @@ attribute of the Person being viewed.
 Compare this to very similar demo of *visible_when*.
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, Range, Bool, Enum
 from traitsui.api import Item, Group, View, Label
 
 
-class Person( HasTraits ):
+class Person(HasTraits):
     """ Example of enabling/disabling components of a user interface.
     """
 
     # General traits:
     first_name = Str
-    last_name  = Str
-    age        = Range(0, 120)
+    last_name = Str
+    age = Range(0, 120)
 
     # Traits for children only:
     legal_guardian = Str
-    school         = Str
-    grade          = Range(1, 12)
+    school = Str
+    grade = Range(1, 12)
 
     # Traits for adults only:
-    marital_status   = Enum('single', 'married', 'divorced', 'widowed')
+    marital_status = Enum('single', 'married', 'divorced', 'widowed')
     registered_voter = Bool(False)
     military_service = Bool(False)
 
     # Interface for attributes that are always visible in interface:
     gen_group = Group(
-        Item(name = 'first_name'),
-        Item(name = 'last_name'),
-        Item(name = 'age'),
-        label       = 'General Info',
-        show_border = True
+        Item(name='first_name'),
+        Item(name='last_name'),
+        Item(name='age'),
+        label='General Info',
+        show_border=True
     )
 
     # Interface for attributes of Persons under 18:
     child_group = Group(
-        Item(name = 'legal_guardian'),
-        Item(name = 'school'),
-        Item(name = 'grade'),
-        label        = 'Additional Info for minors',
-        show_border  = True,
-        enabled_when = 'age < 18',
+        Item(name='legal_guardian'),
+        Item(name='school'),
+        Item(name='grade'),
+        label='Additional Info for minors',
+        show_border=True,
+        enabled_when='age < 18',
     )
 
     # Interface for attributes of Persons 18 and over:
     adult_group = Group(
-        Item(name = 'marital_status'),
-        Item(name = 'registered_voter'),
-        Item(name = 'military_service'),
+        Item(name='marital_status'),
+        Item(name='registered_voter'),
+        Item(name='military_service'),
         '10',
-        label        = 'Additional Info for adults',
-        show_border  = True,
-        enabled_when = 'age >= 18',
+        label='Additional Info for adults',
+        show_border=True,
+        enabled_when='age >= 18',
     )
 
     # A simple View is sufficient, since the Group definitions do all the work:
@@ -82,19 +83,18 @@ class Person( HasTraits ):
             child_group,
             adult_group
         ),
-        title     = 'Personal Information',
-        resizable = True,
-        buttons   = [ 'OK' ]
+        title='Personal Information',
+        resizable=True,
+        buttons=['OK']
     )
 
 # Create the demo:
 demo = Person(
-    first_name = "Samuel",
-    last_name  = "Johnson",
-    age        = 16
+    first_name="Samuel",
+    last_name="Johnson",
+    age=16
 )
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

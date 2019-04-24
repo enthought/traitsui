@@ -12,36 +12,40 @@
 """ Defines the table model used by the table editor.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
 
 from .clipboard import PyMimeData
 
-#-------------------------------------------------------------------------------
+import six
+
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Mapping for trait alignment values to qt4 horizontal alignment constants
 h_alignment_map = {
-    'left':   QtCore.Qt.AlignLeft,
+    'left': QtCore.Qt.AlignLeft,
     'center': QtCore.Qt.AlignHCenter,
-    'right':  QtCore.Qt.AlignRight,
+    'right': QtCore.Qt.AlignRight,
 }
 
 # Mapping for trait alignment values to qt4 vertical alignment constants
 v_alignment_map = {
-    'top':    QtCore.Qt.AlignTop,
+    'top': QtCore.Qt.AlignTop,
     'center': QtCore.Qt.AlignVCenter,
     'bottom': QtCore.Qt.AlignBottom,
 }
 
 # MIME type for internal table drag/drop operations
 mime_type = 'traits-ui-table-editor'
+
 
 def as_qcolor(color):
     """ Convert a color specification (maybe a tuple) into a QColor.
@@ -51,9 +55,10 @@ def as_qcolor(color):
     else:
         return QtGui.QColor(color)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'TableModel' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class TableModel(QtCore.QAbstractTableModel):
     """The model for table data."""
@@ -65,9 +70,9 @@ class TableModel(QtCore.QAbstractTableModel):
 
         self._editor = editor
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  QAbstractTableModel interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def rowCount(self, mi):
         """Reimplemented to return the number of rows."""
@@ -152,19 +157,20 @@ class TableModel(QtCore.QAbstractTableModel):
                 return QtCore.Qt.NoItemFlags
 
         flags = QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled | \
-                QtCore.Qt.ItemIsDragEnabled
+            QtCore.Qt.ItemIsDragEnabled
 
         obj = editor.items()[mi.row()]
         column = editor.columns[mi.column()]
 
-        if editor.factory.editable and column.is_editable(obj):
-            flags |= QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsDropEnabled
+        if editor.factory:
+            if editor.factory.editable and column.is_editable(obj):
+                flags |= QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsDropEnabled
 
-        if editor.factory.reorderable:
-            flags |= QtCore.Qt.ItemIsDropEnabled
+            if editor.factory.reorderable:
+                flags |= QtCore.Qt.ItemIsDropEnabled
 
-        if column.get_type(obj) == "bool" and column.show_checkbox:
-            flags |= QtCore.Qt.ItemIsUserCheckable
+            if column.get_type(obj) == "bool" and column.show_checkbox:
+                flags |= QtCore.Qt.ItemIsUserCheckable
 
         return flags
 
@@ -205,7 +211,7 @@ class TableModel(QtCore.QAbstractTableModel):
         editor = self._editor
         items = editor.items()
         self.beginInsertRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             editor.callx(items.insert, row + i, editor.create_new_row())
         self.endInsertRows()
         return True
@@ -217,7 +223,7 @@ class TableModel(QtCore.QAbstractTableModel):
         editor = self._editor
         items = editor.items()
         self.beginRemoveRows(parent, row, row + count - 1)
-        for i in xrange(count):
+        for i in range(count):
             editor.callx(items.pop, row + i)
         self.endRemoveRows()
         return True
@@ -237,7 +243,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if selection_mode.startswith("cell"):
             data = [self._get_cell_drag_value(index.row(), index.column())
-                for index in indexes]
+                    for index in indexes]
         elif selection_mode.startswith("column"):
             columns = sorted(set(index.column() for index in indexes))
             data = self._get_columns_drag_value(columns)
@@ -249,10 +255,10 @@ class TableModel(QtCore.QAbstractTableModel):
 
         # handle re-ordering via internal drags
         if editor.factory.reorderable:
-            rows = sorted(set([ index.row() for index in indexes ]))
-            data = QtCore.QByteArray(str(id(self)))
+            rows = sorted({index.row() for index in indexes})
+            data = QtCore.QByteArray(six.text_type(id(self)).encode('utf8'))
             for row in rows:
-                data.append(' %i' % row)
+                data.append((' %i' % row).encode('utf8'))
             mime_data.setData(mime_type, data)
         return mime_data
 
@@ -265,15 +271,15 @@ class TableModel(QtCore.QAbstractTableModel):
         # this is a drag from a table model?
         data = mime_data.data(mime_type)
         if not data.isNull() and action == QtCore.Qt.MoveAction:
-            id_and_rows = map(int, str(data).split(' '))
+            id_and_rows = [int(s) for s in data.data().decode('utf8').split(' ')]
             table_id = id_and_rows[0]
             # is it from ourself?
             if table_id == id(self):
                 current_rows = id_and_rows[1:]
                 if not parent.isValid():
-                    row = len(self._editor.items())-1
+                    row = len(self._editor.items()) - 1
                 else:
-                    row == parent.row()
+                    row = parent.row()
 
                 self.moveRows(current_rows, row)
                 return True
@@ -300,9 +306,9 @@ class TableModel(QtCore.QAbstractTableModel):
 
         return QtCore.Qt.MoveAction
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Utility methods
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _get_columns_drag_value(self, columns):
         """ Returns the value to use when the specified columns are dragged or
@@ -333,9 +339,9 @@ class TableModel(QtCore.QAbstractTableModel):
         drag_value = editor.columns[column].get_drag_value(item)
         return drag_value
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  TableModel interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def moveRow(self, old_row, new_row):
         """Convenience method to move a single row."""
@@ -372,9 +378,10 @@ class TableModel(QtCore.QAbstractTableModel):
         # Update the selection for the new location.
         self._editor.set_selection(objects)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SortFilterTableModel' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class SortFilterTableModel(QtGui.QSortFilterProxyModel):
     """A wrapper for the TableModel which provides sorting and filtering
@@ -387,9 +394,9 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
 
         self._editor = editor
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  QSortFilterProxyModel interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def filterAcceptsRow(self, source_row, source_parent):
         """"Reimplemented to use a TableFilter for filtering rows."""
@@ -415,9 +422,9 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
 
         return column.key(left) < column.key(right)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  SortFilterTableModel interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def moveRow(self, old_row, new_row):
         """Convenience method to move a single row."""
@@ -428,7 +435,7 @@ class SortFilterTableModel(QtGui.QSortFilterProxyModel):
         """Delegate to source model with mapped rows."""
 
         source = self.sourceModel()
-        current_rows = [ self.mapToSource(self.index(row, 0)).row()
-                         for row in current_rows ]
+        current_rows = [self.mapToSource(self.index(row, 0)).row()
+                        for row in current_rows]
         new_row = self.mapToSource(self.index(new_row, 0)).row()
         source.moveRows(current_rows, new_row)

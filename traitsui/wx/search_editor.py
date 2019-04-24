@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,13 +13,14 @@
 #  Author: Evan Patterson
 #  Date:   06/25/09
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # System library imports
+from __future__ import absolute_import
 import wx
 
 # Local imports
-from editor import Editor
+from .editor import Editor
 
 
 class SearchEditor(Editor):

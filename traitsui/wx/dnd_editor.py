@@ -22,14 +22,15 @@
     target.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 import numpy
 
-from cPickle \
+from six.moves.cPickle \
     import load
 
 from traits.api \
@@ -43,6 +44,7 @@ from traitsui.editors.dnd_editor \
 
 from pyface.wx.drag_and_drop \
     import PythonDropSource, PythonDropTarget, clipboard
+import six
 
 try:
     from apptools.io import File
@@ -57,59 +59,60 @@ except ImportError:
 from pyface.image_resource \
     import ImageResource
 
-from editor \
+from .editor \
     import Editor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # The image to use when the editor accepts files:
-file_image = ImageResource( 'file' ).create_image()
+file_image = ImageResource('file').create_image()
 
 # The image to use when the editor accepts objects:
-object_image = ImageResource( 'object' ).create_image()
+object_image = ImageResource('object').create_image()
 
 # The image to use when the editor is disabled:
-inactive_image = ImageResource( 'inactive' ).create_image()
+inactive_image = ImageResource('inactive').create_image()
 
 # String types:
-string_type = ( str, unicode )
+string_type = (str, six.text_type)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class SimpleEditor ( Editor ):
+
+class SimpleEditor(Editor):
     """ Simply style of editor for a drag-and-drop editor, which is both a drag
         source and a drop target.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Is the editor a drop target?
-    drop_target = Bool( True )
+    drop_target = Bool(True)
 
     # Is the editor a drag source?
-    drag_source = Bool( True )
+    drag_source = Bool(True)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         # Determine the drag/drop type:
-        value         = self.value
-        self._is_list = isinstance( value, list )
-        self._is_file = (isinstance( value, string_type ) or
-                         (self._is_list and (len( value ) > 0) and
-                          isinstance( value[0], string_type )))
+        value = self.value
+        self._is_list = isinstance(value, list)
+        self._is_file = (isinstance(value, string_type) or
+                         (self._is_list and (len(value) > 0) and
+                          isinstance(value[0], string_type)))
 
         # Get the right image to use:
         image = self.factory.image
@@ -120,7 +123,7 @@ class SimpleEditor ( Editor ):
                 disabled_image = disabled_image.create_image()
         else:
             disabled_image = inactive_image
-            image          = object_image
+            image = object_image
             if self._is_file:
                 image = file_image
 
@@ -128,124 +131,123 @@ class SimpleEditor ( Editor ):
         if disabled_image is not None:
             self._disabled_image = disabled_image.ConvertToBitmap()
         else:
-            data = numpy.reshape( numpy.fromstring( image.GetData(),
-                                                    numpy.uint8 ),
-                      ( -1, 3 ) ) * numpy.array( [ [ 0.297, 0.589, 0.114 ] ] )
-            g = data[ :, 0 ] + data[ :, 1 ] + data[ :, 2 ]
-            data[ :, 0 ] = data[ :, 1 ] = data[ :, 2 ] = g
-            image.SetData( numpy.ravel( data.astype(numpy.uint8) ).tostring() )
-            image.SetMaskColour( 0, 0, 0 )
+            data = numpy.reshape(numpy.fromstring(image.GetData(),
+                                                  numpy.uint8),
+                                 (-1, 3)) * numpy.array([[0.297, 0.589, 0.114]])
+            g = data[:, 0] + data[:, 1] + data[:, 2]
+            data[:, 0] = data[:, 1] = data[:, 2] = g
+            image.SetData(numpy.ravel(data.astype(numpy.uint8)).tostring())
+            image.SetMaskColour(0, 0, 0)
             self._disabled_image = image.ConvertToBitmap()
 
         # Create the control and set up the event handlers:
-        self.control = control = wx.Window( parent, -1,
-                         size = wx.Size( image.GetWidth(), image.GetHeight() ) )
+        self.control = control = wx.Window(
+            parent, -1, size=wx.Size(image.GetWidth(), image.GetHeight()))
         self.set_tooltip()
 
         if self.drop_target:
-            control.SetDropTarget( PythonDropTarget( self ) )
+            control.SetDropTarget(PythonDropTarget(self))
 
-        wx.EVT_LEFT_DOWN( control, self._left_down )
-        wx.EVT_LEFT_UP(   control, self._left_up )
-        wx.EVT_MOTION(    control, self._mouse_move )
-        wx.EVT_PAINT(     control, self._on_paint )
+        wx.EVT_LEFT_DOWN(control, self._left_down)
+        wx.EVT_LEFT_UP(control, self._left_up)
+        wx.EVT_MOTION(control, self._mouse_move)
+        wx.EVT_PAINT(control, self._on_paint)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Disposes of the contents of an editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def dispose ( self ):
+    def dispose(self):
         """ Disposes of the contents of an editor.
         """
         control = self.control
-        wx.EVT_LEFT_DOWN( control, None )
-        wx.EVT_LEFT_UP(   control, None )
-        wx.EVT_MOTION(    control, None )
-        wx.EVT_PAINT(     control, None )
+        wx.EVT_LEFT_DOWN(control, None)
+        wx.EVT_LEFT_UP(control, None)
+        wx.EVT_MOTION(control, None)
+        wx.EVT_PAINT(control, None)
 
-        super( SimpleEditor, self ).dispose()
+        super(SimpleEditor, self).dispose()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         return
 
-#-- Private Methods ------------------------------------------------------------
+#-- Private Methods ------------------------------------------------------
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the processed version of a drag request's data:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _get_drag_data ( self, data ):
+    def _get_drag_data(self, data):
         """ Returns the processed version of a drag request's data.
         """
-        if isinstance( data, list ):
+        if isinstance(data, list):
 
-            if Binding is not None and isinstance( data[0], Binding ):
-                data = [ item.obj for item in data ]
+            if Binding is not None and isinstance(data[0], Binding):
+                data = [item.obj for item in data]
 
-            if File is not None and isinstance( data[0], File ):
-                data = [ item.absolute_path for item in data ]
+            if File is not None and isinstance(data[0], File):
+                data = [item.absolute_path for item in data]
                 if not self._is_file:
                     result = []
                     for file in data:
-                        item = self._unpickle( file )
+                        item = self._unpickle(file)
                         if item is not None:
-                            result.append( item )
+                            result.append(item)
                     data = result
 
         else:
-            if Binding is not None and isinstance( data, Binding ):
+            if Binding is not None and isinstance(data, Binding):
                 data = data.obj
 
-            if File is not None and isinstance( data, File ):
+            if File is not None and isinstance(data, File):
                 data = data.absolute_path
                 if not self._is_file:
-                    object = self._unpickle( data )
+                    object = self._unpickle(data)
                     if object is not None:
                         data = object
 
         return data
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the unpickled version of a specified file (if possible):
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _unpickle ( self, file_name ):
+    def _unpickle(self, file_name):
         """ Returns the unpickled version of a specified file (if possible).
         """
-        fh = None
-        try:
-            fh     = file( file_name, 'rb' )
-            object = load( fh )
-        except:
-            object = None
-
-        if fh is not None:
-            fh.close()
+        with open(file_name, 'rb') as fh:
+            try:
+                object = load(fh)
+            except Exception:
+                object = None
 
         return object
 
-#-- wxPython Event Handlers ----------------------------------------------------
+#-- wxPython Event Handlers ----------------------------------------------
 
-    def _on_paint ( self, event ):
+    def _on_paint(self, event):
         """ Called when the control needs repainting.
         """
-        image   = self._image
+        image = self._image
         control = self.control
         if not control.IsEnabled():
             image = self._disabled_image
 
         wdx, wdy = control.GetClientSizeTuple()
-        wx.PaintDC( control ).DrawBitmap( image,
-            (wdx - image.GetWidth())  / 2, (wdy - image.GetHeight()) / 2, True )
+        wx.PaintDC(control).DrawBitmap(
+            image,
+            (wdx - image.GetWidth()) / 2,
+            (wdy - image.GetHeight()) / 2,
+            True)
 
-    def _left_down ( self, event ):
+    def _left_down(self, event):
         """ Handles the left mouse button being pressed.
         """
         if self.control.IsEnabled() and self.drag_source:
@@ -254,7 +256,7 @@ class SimpleEditor ( Editor ):
 
         event.Skip()
 
-    def _left_up ( self, event ):
+    def _left_up(self, event):
         """ Handles the left mouse button being released.
         """
         if self._x is not None:
@@ -263,117 +265,123 @@ class SimpleEditor ( Editor ):
 
         event.Skip()
 
-    def _mouse_move ( self, event ):
+    def _mouse_move(self, event):
         """ Handles the mouse being moved.
         """
         if self._x is not None:
-            if ((abs( self._x - event.GetX() ) +
-                 abs( self._y - event.GetY() )) >= 3):
+            if ((abs(self._x - event.GetX()) +
+                 abs(self._y - event.GetY())) >= 3):
                 self.control.ReleaseMouse()
                 self._x = None
                 if self._is_file:
-                    FileDropSource(   self.control, self.value )
+                    FileDropSource(self.control, self.value)
                 else:
-                    PythonDropSource( self.control, self.value )
+                    PythonDropSource(self.control, self.value)
 
         event.Skip()
 
-#----- Drag and drop event handlers: -------------------------------------------
+#----- Drag and drop event handlers: -------------------------------------
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles a Python object being dropped on the control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def wx_dropped_on ( self, x, y, data, drag_result ):
+    def wx_dropped_on(self, x, y, data, drag_result):
         """ Handles a Python object being dropped on the tree.
         """
         try:
-            self.value = self._get_drag_data( data )
+            self.value = self._get_drag_data(data)
             return drag_result
         except:
             return wx.DragNone
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles a Python object being dragged over the control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def wx_drag_over ( self, x, y, data, drag_result ):
+    def wx_drag_over(self, x, y, data, drag_result):
         """ Handles a Python object being dragged over the tree.
         """
         try:
-            self.object.base_trait( self.name ).validate( self.object,
-                                        self.name, self._get_drag_data( data ) )
+            self.object.base_trait(
+                self.name).validate(
+                self.object,
+                self.name,
+                self._get_drag_data(data))
             return drag_result
         except:
             return wx.DragNone
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'CustomEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class CustomEditor ( SimpleEditor ):
+
+class CustomEditor(SimpleEditor):
     """ Custom style of drag-and-drop editor, which is not a drag source.
     """
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Is the editor a drag source? This value overrides the default.
     drag_source = False
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ReadonlyEditor ( SimpleEditor ):
+
+class ReadonlyEditor(SimpleEditor):
     """ Read-only style of drag-and-drop editor, which is not a drop target.
     """
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # Is the editor a drop target? This value overrides the default.
     drop_target = False
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'FileDropSource' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class FileDropSource ( wx.DropSource ):
+
+class FileDropSource(wx.DropSource):
     """ Represents a draggable file.
     """
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Initializes the object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __init__ ( self, source, files ):
+    def __init__(self, source, files):
         """ Initializes the object.
         """
-        self.handler    = None
+        self.handler = None
         self.allow_move = True
 
         # Put the data to be dragged on the clipboard:
-        clipboard.data        = files
-        clipboard.source      = source
+        clipboard.data = files
+        clipboard.source = source
         clipboard.drop_source = self
 
         data_object = wx.FileDataObject()
-        if isinstance( files, string_type ):
-            files = [ files ]
+        if isinstance(files, string_type):
+            files = [files]
 
         for file in files:
-            data_object.AddFile( file )
+            data_object.AddFile(file)
 
         # Create the drop source and begin the drag and drop operation:
-        super( FileDropSource, self ).__init__( source )
-        self.SetData( data_object )
-        self.result = self.DoDragDrop( True )
+        super(FileDropSource, self).__init__(source)
+        self.SetData(data_object)
+        self.result = self.DoDragDrop(True)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Called when the data has been dropped:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def on_dropped ( self, drag_result ):
+    def on_dropped(self, drag_result):
         """ Called when the data has been dropped. """
         return
 

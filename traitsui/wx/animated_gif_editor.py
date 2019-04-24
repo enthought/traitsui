@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,20 +13,20 @@
 #  Author: David C. Morrill
 #  Date:   03/02/2007
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Defines an editor for playing animated GIF files.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 # Define the wx version dependent version of the editor:
 if wx.__version__[:3] == '2.6':
-    from animated_gif_editor_26 import AnimatedGIFEditor
+    from .animated_gif_editor_26 import AnimatedGIFEditor
 else:
-    from animated_gif_editor_28 import AnimatedGIFEditor
-
+    from .animated_gif_editor_28 import AnimatedGIFEditor

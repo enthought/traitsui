@@ -19,61 +19,63 @@
     editors to display trait values iconically.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ImageControl' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ImageControl ( wx.Window ):
+
+class ImageControl(wx.Window):
     """ A wxPython control that displays an image, which can be selected or
         unselected by mouse clicks.
     """
 
     # Pens used to draw the 'selection' marker:
     _selectedPenDark = wx.Pen(
-        wx.SystemSettings_GetColour( wx.SYS_COLOUR_3DSHADOW ), 1,
-        wx.SOLID )
+        wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DSHADOW), 1,
+        wx.SOLID)
 
     _selectedPenLight = wx.Pen(
-        wx.SystemSettings_GetColour( wx.SYS_COLOUR_3DHIGHLIGHT ), 1,
-        wx.SOLID )
+        wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DHIGHLIGHT), 1,
+        wx.SOLID)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Initializes the object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __init__ ( self, parent, bitmap, selected = None, handler = None,
-                         padding = 10 ):
+    def __init__(self, parent, bitmap, selected=None, handler=None,
+                 padding=10):
         """ Initializes the object.
         """
-        wx.Window.__init__( self, parent, -1,
-                            size = wx.Size( bitmap.GetWidth()  + padding,
-                                            bitmap.GetHeight() + padding ) )
-        self._bitmap      = bitmap
-        self._selected    = selected
-        self._handler     = handler
-        self._mouse_over  = False
+        wx.Window.__init__(self, parent, -1,
+                           size=wx.Size(bitmap.GetWidth() + padding,
+                                        bitmap.GetHeight() + padding))
+        self._bitmap = bitmap
+        self._selected = selected
+        self._handler = handler
+        self._mouse_over = False
         self._button_down = False
 
         # Set up the 'paint' event handler:
-        wx.EVT_PAINT( self, self._on_paint )
+        self.Bind(wx.EVT_PAINT, self._on_paint)
 
         # Set up mouse event handlers:
-        wx.EVT_LEFT_DOWN(    self, self._on_left_down )
-        wx.EVT_LEFT_UP(      self, self._on_left_up )
-        wx.EVT_ENTER_WINDOW( self, self._on_enter )
-        wx.EVT_LEAVE_WINDOW( self, self._on_leave )
+        self.Bind(wx.EVT_LEFT_DOWN, self._on_left_down)
+        self.Bind(wx.EVT_LEFT_UP, self._on_left_up)
+        self.Bind(wx.EVT_ENTER_WINDOW, self._on_enter)
+        self.Bind(wx.EVT_LEAVE_WINDOW, self._on_leave)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Gets/Sets the current selection state of the image:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def Selected ( self, selected = None ):
+    def Selected(self, selected=None):
         """ Gets or sets the selection state of the image.
         """
         if selected is not None:
@@ -81,9 +83,9 @@ class ImageControl ( wx.Window ):
             if selected != self._selected:
                 if selected:
                     for control in self.GetParent().GetChildren():
-                        if (isinstance( control, ImageControl ) and
-                            control.Selected()):
-                            control.Selected( False )
+                        if (isinstance(control, ImageControl) and
+                                control.Selected()):
+                            control.Selected(False)
                             break
 
                 self._selected = selected
@@ -91,11 +93,11 @@ class ImageControl ( wx.Window ):
 
         return self._selected
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Gets/Sets the current bitmap image:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def Bitmap ( self, bitmap = None ):
+    def Bitmap(self, bitmap=None):
         """ Gets or sets the bitmap image.
         """
         if bitmap is not None:
@@ -105,11 +107,11 @@ class ImageControl ( wx.Window ):
 
         return self._bitmap
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Gets/Sets the current click handler:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def Handler ( self, handler = None ):
+    def Handler(self, handler=None):
         """ Gets or sets the click handler.
         """
         if handler is not None:
@@ -119,33 +121,33 @@ class ImageControl ( wx.Window ):
 
         return self._handler
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the mouse entering the control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _on_enter ( self, event = None ):
+    def _on_enter(self, event=None):
         """ Handles the mouse entering the control.
         """
         if self._selected is not None:
             self._mouse_over = True
             self.Refresh()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the mouse leaving the control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _on_leave ( self, event = None ):
+    def _on_leave(self, event=None):
         """ Handles the mouse leaving the control.
         """
         if self._mouse_over:
             self._mouse_over = False
             self.Refresh()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the user pressing the mouse button:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _on_left_down ( self, event = None ):
+    def _on_left_down(self, event=None):
         """ Handles the user pressing the mouse button.
         """
         if self._selected is not None:
@@ -153,11 +155,11 @@ class ImageControl ( wx.Window ):
             self._button_down = True
             self.Refresh()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the user clicking the control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _on_left_up ( self, event = None ):
+    def _on_left_up(self, event=None):
         """ Handles the user clicking the control.
         """
         need_refresh = self._button_down
@@ -167,56 +169,55 @@ class ImageControl ( wx.Window ):
 
         if self._selected is not None:
             wdx, wdy = self.GetClientSizeTuple()
-            x        = event.GetX()
-            y        = event.GetY()
+            x = event.GetX()
+            y = event.GetY()
             if (0 <= x < wdx) and (0 <= y < wdy):
                 if self._selected != -1:
-                    self.Selected( True )
+                    self.Selected(True)
                 elif need_refresh:
                     self.Refresh()
                 if self._handler is not None:
-                    self._handler( self )
+                    wx.CallAfter(self._handler, self)
                 return
 
         if need_refresh:
             self.Refresh()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the control being re-painted:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def _on_paint ( self, event = None ):
+    def _on_paint(self, event=None):
         """ Handles the control being re-painted.
         """
-        wdc      = wx.PaintDC( self )
+        wdc = wx.PaintDC(self)
         wdx, wdy = self.GetClientSizeTuple()
-        bitmap   = self._bitmap
-        bdx      = bitmap.GetWidth()
-        bdy      = bitmap.GetHeight()
-        wdc.DrawBitmap( bitmap, (wdx - bdx) / 2, (wdy - bdy) / 2, True )
+        bitmap = self._bitmap
+        bdx = bitmap.GetWidth()
+        bdy = bitmap.GetHeight()
+        wdc.DrawBitmap(bitmap, (wdx - bdx) / 2, (wdy - bdy) / 2, True)
 
-        pens = [ self._selectedPenLight, self._selectedPenDark ]
-        bd   = self._button_down
+        pens = [self._selectedPenLight, self._selectedPenDark]
+        bd = self._button_down
 
         if self._mouse_over:
-            wdc.SetBrush( wx.TRANSPARENT_BRUSH )
-            wdc.SetPen( pens[ bd ] )
-            wdc.DrawLine( 0, 0, wdx, 0 )
-            wdc.DrawLine( 0, 1, 0, wdy )
-            wdc.SetPen( pens[ 1 - bd ] )
-            wdc.DrawLine( wdx - 1, 1, wdx - 1, wdy )
-            wdc.DrawLine( 1, wdy - 1, wdx - 1, wdy - 1 )
+            wdc.SetBrush(wx.TRANSPARENT_BRUSH)
+            wdc.SetPen(pens[bd])
+            wdc.DrawLine(0, 0, wdx, 0)
+            wdc.DrawLine(0, 1, 0, wdy)
+            wdc.SetPen(pens[1 - bd])
+            wdc.DrawLine(wdx - 1, 1, wdx - 1, wdy)
+            wdc.DrawLine(1, wdy - 1, wdx - 1, wdy - 1)
 
         if self._selected is True:
-            wdc.SetBrush( wx.TRANSPARENT_BRUSH )
-            wdc.SetPen( pens[ bd ] )
-            wdc.DrawLine( 1, 1, wdx - 1, 1 )
-            wdc.DrawLine( 1, 1, 1, wdy - 1 )
-            wdc.DrawLine( 2, 2, wdx - 2, 2 )
-            wdc.DrawLine( 2, 2, 2, wdy - 2 )
-            wdc.SetPen( pens[ 1 - bd ] )
-            wdc.DrawLine( wdx - 2, 2, wdx - 2, wdy - 1 )
-            wdc.DrawLine( 2, wdy - 2, wdx - 2, wdy - 2 )
-            wdc.DrawLine( wdx - 3, 3, wdx - 3, wdy - 2 )
-            wdc.DrawLine( 3, wdy - 3, wdx - 3, wdy - 3 )
-
+            wdc.SetBrush(wx.TRANSPARENT_BRUSH)
+            wdc.SetPen(pens[bd])
+            wdc.DrawLine(1, 1, wdx - 1, 1)
+            wdc.DrawLine(1, 1, 1, wdy - 1)
+            wdc.DrawLine(2, 2, wdx - 2, 2)
+            wdc.DrawLine(2, 2, 2, wdy - 2)
+            wdc.SetPen(pens[1 - bd])
+            wdc.DrawLine(wdx - 2, 2, wdx - 2, wdy - 1)
+            wdc.DrawLine(2, wdy - 2, wdx - 2, wdy - 2)
+            wdc.DrawLine(wdx - 3, 3, wdx - 3, wdy - 2)
+            wdc.DrawLine(3, wdy - 3, wdx - 3, wdy - 3)

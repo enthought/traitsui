@@ -5,6 +5,7 @@
 This demo shows you how to use animated GIF files in a traits user interface.
 """
 
+from __future__ import absolute_import
 from os.path import join, dirname, abspath
 
 from traits.api import HasTraits, File, Bool
@@ -45,7 +46,7 @@ class AnimatedGIFDemo(HasTraits):
             Item('gif_file',
                  label='GIF File',
                  editor=EnumEditor(values=files)
-            )
+                 )
         ),
         title='Animated GIF Demo',
         buttons=['OK']

@@ -17,14 +17,14 @@
 Test case for bug (wx, Mac OS X)
 
 Editing the text part of a spin control box and pressing the OK button
-without de-focusing raises an AttributeError
+without de-focusing raises an AttributeError::
 
-Traceback (most recent call last):
-  File "ETS/traitsui/traitsui/wx/range_editor.py", line 783, in update_object
-    self.value = self.control.GetValue()
-AttributeError: 'NoneType' object has no attribute 'GetValue'
+    Traceback (most recent call last):
+    File "ETS/traitsui/traitsui/wx/range_editor.py", line 783, in update_object
+        self.value = self.control.GetValue()
+    AttributeError: 'NoneType' object has no attribute 'GetValue'
 """
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Int
@@ -44,7 +44,7 @@ class NumberWithSpinnerEditor(HasTraits):
     traits_view = View(
         Item(label="Enter 4, then press OK without defocusing"),
         Item('number', editor=RangeEditor(low=3, high=8, mode='spinner')),
-        buttons = ['OK']
+        buttons=['OK']
     )
 
 
@@ -87,6 +87,11 @@ def test_wx_spin_control_editing_does_not_update():
     # the OK button does not update the value of the HasTraits class
     # on Mac OS X
 
+    # But under wx >= 3.0 this has been resolved
+    import wx
+    if wx.VERSION >= (3, 0):
+        return
+
     with store_exceptions_on_all_threads():
         num = NumberWithSpinnerEditor()
         ui = num.edit_traits()
@@ -110,7 +115,9 @@ def test_wx_spin_control_editing_does_not_update():
         # press the OK button and close the dialog
         press_ok_button(ui)
 
-        # if all went well, the number traits has been updated and its value is 4
+        # if all went well, the number traits has been updated and its value is
+        # 4
+        print(num.number)
         assert num.number == 4
 
 

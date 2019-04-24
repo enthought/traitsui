@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright(c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,23 +13,26 @@
 #  Author: Evan Patterson
 #  Date:   08/21/2009
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Defines a text editor which displays a text field and maintains a history
     of previously entered values.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from __future__ import absolute_import
+from pyface.qt import QtGui
 
-from editor import Editor
+from .editor import Editor
+import six
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  '_HistoryEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class _HistoryEditor(Editor):
     """ Simple style text editor, which displays a text field and maintains a
@@ -37,9 +40,9 @@ class _HistoryEditor(Editor):
         specified by the 'entries' trait of the HistoryEditor factory.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  'Editor' interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -50,14 +53,12 @@ class _HistoryEditor(Editor):
         control.setInsertPolicy(QtGui.QComboBox.InsertAtTop)
 
         if self.factory.entries > 0:
-            signal = QtCore.SIGNAL('rowsInserted(const QModelIndex&, int, int)')
-            QtCore.QObject.connect(control.model(), signal, self._truncate)
+            control.model().rowsInserted.connect(self._truncate)
 
         if self.factory.auto_set:
-            signal = QtCore.SIGNAL('editTextChanged(QString)')
+            control.editTextChanged.connect(self.update_object)
         else:
-            signal = QtCore.SIGNAL('activated(QString)')
-        QtCore.QObject.connect(control, signal, self.update_object)
+            control.activated[six.text_type].connect(self.update_object)
 
         self.set_tooltip()
 
@@ -65,7 +66,7 @@ class _HistoryEditor(Editor):
         """ Handles the user entering input data in the edit control.
         """
         if not self._no_update:
-            self.value = unicode(text)
+            self.value = six.text_type(text)
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -75,7 +76,7 @@ class _HistoryEditor(Editor):
         self.control.setEditText(self.str_value)
         self._no_update = False
 
-    #-- UI preference save/restore interface -----------------------------------
+    #-- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
@@ -94,8 +95,8 @@ class _HistoryEditor(Editor):
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
-        history = [ str(self.control.itemText(index))
-                    for index in xrange(self.control.count()) ]
+        history = [str(self.control.itemText(index))
+                   for index in range(self.control.count())]
 
         # If the view closed successfully, update the history with the current
         # editor value, as long it is different from the current object value:
@@ -104,11 +105,11 @@ class _HistoryEditor(Editor):
             if current != self.str_value:
                 history.insert(0, current)
 
-        return { 'history': history }
+        return {'history': history}
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  '_HistoryEditor' private interface:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def _truncate(self, parent, start, end):
         """ Handle items being added to the combo box. If there are too many,
@@ -116,5 +117,5 @@ class _HistoryEditor(Editor):
         """
         diff = self.control.count() - self.factory.entries
         if diff > 0:
-            for i in xrange(diff):
+            for i in range(diff):
                 self.control.removeItem(self.factory.entries)

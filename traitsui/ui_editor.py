@@ -19,9 +19,9 @@
     their function by creating an embedded Traits UI.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -31,50 +31,51 @@ from .ui import UI
 
 from .editor import Editor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'UIEditor' base class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class UIEditor ( Editor ):
+
+class UIEditor(Editor):
     """ An editor that creates an embedded Traits UI.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # The Traits UI created by the editor
-    editor_ui = Instance( UI )
+    editor_ui = Instance(UI)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.editor_ui = self.init_ui( parent ).set( parent = self.ui )
-        self.control   = self.editor_ui.control
+        self.editor_ui = self.init_ui(parent).trait_set(parent=self.ui)
+        self.control = self.editor_ui.control
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Creates the traits UI for the editor (can be overridden by a subclass):
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init_ui ( self, parent ):
+    def init_ui(self, parent):
         """ Creates the traits UI for the editor.
         """
-        return self.value.edit_traits( view    = self.trait_view(),
-                                       context = { 'object': self.value,
-                                                   'editor': self },
-                                       parent  = parent )
+        return self.value.edit_traits(view=self.trait_view(),
+                                      context={'object': self.value,
+                                               'editor': self},
+                                      parent=parent)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes external to the
             editor.
         """
@@ -82,46 +83,46 @@ class UIEditor ( Editor ):
         # itself, without our meddling:
         pass
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Disposes of the contents of an editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def dispose ( self ):
+    def dispose(self):
         """ Disposes of the contents of an editor.
         """
         # Make sure the embedded traits UI is disposed of properly:
         if self.editor_ui is not None:
             self.editor_ui.dispose()
 
-        super( UIEditor, self ).dispose()
+        super(UIEditor, self).dispose()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the editor's control for indicating error status:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def get_error_control ( self ):
+    def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self.editor_ui.get_error_controls()
 
-#-- UI preference save/restore interface ---------------------------------------
+#-- UI preference save/restore interface ---------------------------------
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Restores any saved user preference information associated with the
     #  editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def restore_prefs ( self, prefs ):
+    def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
-        self.editor_ui.set_prefs( prefs )
+        self.editor_ui.set_prefs(prefs)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns any user preference information associated with the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def save_prefs ( self ):
+    def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
         return self.editor_ui.get_prefs()

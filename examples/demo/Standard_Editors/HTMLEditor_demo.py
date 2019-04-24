@@ -18,17 +18,19 @@ parameter True.
 
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, HTML
 from traitsui.api import UItem, View, HTMLEditor
 
 # Sample text to display as HTML: header, plus module docstring, plus
-# some lists. The docstring and lists will be auto-formatted (format_text=True).
+# some lists. The docstring and lists will be auto-formatted
+# (format_text=True).
 sample_text = ("""
 <html><body><h1>HTMLEditor example</h1>
 
 """ +
-__doc__ +
-"""
+               __doc__ +
+               """
 <i>Here are some lists formatted in this way:</i>
 
 Numbered list:
@@ -43,7 +45,7 @@ Bulleted list:
 """)
 
 
-class HTMLEditorDemo ( HasTraits ):
+class HTMLEditorDemo(HasTraits):
     """ Defines the main HTMLEditor demo class. """
 
     # Define a HTML trait to view
@@ -54,11 +56,11 @@ class HTMLEditorDemo ( HasTraits ):
         UItem('my_html_trait',
               # we specify the editor explicitly in order to set format_text:
               editor=HTMLEditor(format_text=True)),
-                title     = 'HTMLEditor',
-                buttons   = ['OK'],
-                width     = 800,
-                height    = 600,
-                resizable = True)
+        title='HTMLEditor',
+        buttons=['OK'],
+        width=800,
+        height=600,
+        resizable=True)
 
 # Create the demo:
 demo = HTMLEditorDemo()

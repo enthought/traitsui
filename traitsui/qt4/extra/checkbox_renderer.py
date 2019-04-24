@@ -17,6 +17,7 @@
 """
 
 # System library imports
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 # ETS imports
@@ -28,9 +29,9 @@ class CheckboxRenderer(TableDelegate):
         unchecked box for a false value.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  QAbstractItemDelegate interface
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def editorEvent(self, event, model, option, index):
         """ Reimplemented to handle mouse button clicks.
@@ -80,7 +81,7 @@ class CheckboxRenderer(TableDelegate):
         # Align the checkbox appropriately.
         box.rect = option.rect
         size = style.sizeFromContents(QtGui.QStyle.CT_CheckBox, box,
-            QtCore.QSize(), None)
+                                      QtCore.QSize(), None)
         box.rect.setWidth(size.width())
         margin = style.pixelMetric(QtGui.QStyle.PM_ButtonMargin, box)
         alignment = column.horizontal_alignment
@@ -91,9 +92,13 @@ class CheckboxRenderer(TableDelegate):
         else:
             # FIXME: I don't know why I need the 2 pixels, but I do.
             box.rect.setLeft(option.rect.left() + option.rect.width() // 2 -
-                size.width() // 2 + margin - 2)
+                             size.width() // 2 + margin - 2)
 
-        box.state = QtGui.QStyle.State_Enabled
+        # We mark the checkbox always active even when not selected, so
+        # it's clear if it's ticked or not on OSX. See bug #439
+        if option.state & QtGui.QStyle.State_Enabled:
+            box.state = QtGui.QStyle.State_Enabled | QtGui.QStyle.State_Active
+
         if checked:
             box.state |= QtGui.QStyle.State_On
         else:

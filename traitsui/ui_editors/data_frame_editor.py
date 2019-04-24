@@ -18,6 +18,7 @@ from traitsui.tabular_adapter import TabularAdapter
 from traitsui.toolkit import toolkit_object
 from traitsui.ui_editor import UIEditor
 from traitsui.view import View
+import six
 
 
 class DataFrameAdapter(TabularAdapter):
@@ -61,8 +62,6 @@ class DataFrameAdapter(TabularAdapter):
         import numpy as np
 
         column = self.item[self.column_id]
-        print self.columns
-        print column.name, column.dtype
         if np.issubdtype(column.dtype, np.number):
             return 'right'
         else:
@@ -75,7 +74,7 @@ class DataFrameAdapter(TabularAdapter):
             return self._fonts.get(self.column_id, 'Courier 10')
 
     def _get_format(self):
-        if isinstance(self._formats, basestring):
+        if isinstance(self._formats, six.string_types):
             return self._formats
         else:
             return self._formats.get(self.column_id, '%s')
@@ -112,7 +111,7 @@ class DataFrameAdapter(TabularAdapter):
         using a dataframe preserves dtypes.
 
         """
-        return getattr(object, trait).iloc[row:row+1]
+        return getattr(object, trait).iloc[row:row + 1]
 
     def delete(self, object, trait, row):
         """ Override the base implementation to work with DataFrames
@@ -123,12 +122,12 @@ class DataFrameAdapter(TabularAdapter):
         import pandas as pd
 
         df = getattr(object, trait)
-        if 0 < row < len(df)-1:
-            new_df = pd.concat([df.iloc[:row, :], df.iloc[row+1:, :]])
+        if 0 < row < len(df) - 1:
+            new_df = pd.concat([df.iloc[:row,:], df.iloc[row + 1:,:]])
         elif row == 0:
-            new_df = df.iloc[row+1:, :]
+            new_df = df.iloc[row + 1:,:]
         else:
-            new_df = df.iloc[:row, :]
+            new_df = df.iloc[:row,:]
         setattr(object, trait, new_df)
 
     def insert(self, object, trait, row, value):
@@ -140,8 +139,8 @@ class DataFrameAdapter(TabularAdapter):
         import pandas as pd
 
         df = getattr(object, trait)
-        if 0 < row < len(df)-1:
-            new_df = pd.concat([df.iloc[:row, :], value, df.iloc[row:, :]])
+        if 0 < row < len(df) - 1:
+            new_df = pd.concat([df.iloc[:row,:], value, df.iloc[row:,:]])
         elif row == 0:
             new_df = pd.concat([value, df])
         else:
@@ -165,13 +164,14 @@ class _DataFrameEditor(UIEditor):
 
     def _target_name(self, name):
         if name:
-            return 'object.object.'+name
+            return 'object.object.' + name
         else:
             return ''
 
     def _data_frame_view(self):
         """ Return the view used by the editor.
         """
+
         return View(
             Item(
                 self._target_name(self.name),
@@ -184,7 +184,8 @@ class _DataFrameEditor(UIEditor):
                     selected=self._target_name(self.factory.selected),
                     selected_row=self._target_name(self.factory.selected_row),
                     selectable=self.factory.selectable,
-                    activated=self._target_name(self.factory.selected),
+                    multi_select=self.factory.multi_select,
+                    activated=self._target_name(self.factory.activated),
                     activated_row=self._target_name(self.factory.activated_row),  # noqa
                     clicked=self._target_name(self.factory.clicked),
                     dclicked=self._target_name(self.factory.dclicked),
@@ -193,6 +194,8 @@ class _DataFrameEditor(UIEditor):
                     column_clicked=self._target_name(self.factory.column_clicked),  # noqa
                     column_right_clicked=self._target_name(self.factory.column_right_clicked),  # noqa
                     operations=self.factory.operations,
+                    update=self._target_name(self.factory.update),
+                    refresh=self._target_name(self.factory.refresh),
                 )
             ),
             id='data_frame_editor',
@@ -206,7 +209,7 @@ class _DataFrameEditor(UIEditor):
         if (factory.columns != []):
             columns = []
             for column in factory.columns:
-                if isinstance(column, basestring):
+                if isinstance(column, six.string_types):
                     title = column
                     column_id = column
                 else:
@@ -224,11 +227,18 @@ class _DataFrameEditor(UIEditor):
                 index_name = ''
             columns.insert(0, (index_name, 'index'))
 
-        self.adapter = DataFrameAdapter(
-            columns=columns,
-            _formats=factory.formats,
-            _fonts=factory.fonts
-        )
+        if factory.adapter is not None:
+            self.adapter = factory.adapter
+            self.adapter._formats=factory.formats
+            self.adapter._fonts=factory.fonts
+            if not self.adapter.columns:
+                self.adapter.columns = columns
+        else:
+            self.adapter = DataFrameAdapter(
+                columns=columns,
+                _formats=factory.formats,
+                _fonts=factory.fonts
+            )
 
         return self.edit_traits(
             view='_data_frame_view',
@@ -269,6 +279,9 @@ class DataFrameEditor(BasicEditorFactory):
     # Whether or not to allow selection.
     selectable = Bool(True)
 
+    # Whether or not to allow for multiple selections
+    multi_select = Bool(False)
+
     # The optional extended name of the trait to synchronize the activated
     # value with:
     activated = Str
@@ -307,6 +320,17 @@ class DataFrameEditor(BasicEditorFactory):
     # What type of operations are allowed on the list:
     operations = List(Enum('delete', 'insert', 'append', 'edit', 'move'),
                       ['delete', 'insert', 'append', 'edit', 'move'])
+
+    # The optional extended name of the trait used to indicate that a complete
+    # table update is needed:
+    update = Str
+
+    # The optional extended name of the trait used to indicate that the table
+    # just needs to be repainted.
+    refresh = Str
+
+    # Set to override the default dataframe adapter
+    adapter = Instance(DataFrameAdapter)
 
     def _get_klass(self):
         """ The class used to construct editor objects.

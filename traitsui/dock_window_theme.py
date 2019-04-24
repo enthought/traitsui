@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,36 +13,38 @@
 #  Author: David C. Morrill
 #  Date:   07/14/2007
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Defines the theme style information for a DockWindow and its components.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
+from pyface.ui_traits import Image
 from traits.api import HasPrivateTraits, Bool
 
-from .ui_traits import Image, ATheme
+from .ui_traits import ATheme
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'DockWindowTheme' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class DockWindowTheme ( HasPrivateTraits ):
+
+class DockWindowTheme(HasPrivateTraits):
     """ Defines the theme style information for a DockWindow and its components.
     """
 
-    #-- Public Trait Definitions -----------------------------------------------
+    #-- Public Trait Definitions ---------------------------------------------
 
     # Use the theme background color as the DockWindow background color?
-    use_theme_color = Bool( True )
+    use_theme_color = Bool(True)
 
     # Draw notebook tabs at the top (True) or the bottom (False)?
-    tabs_at_top = Bool( True )
+    tabs_at_top = Bool(True)
 
     # Active tab theme:
     tab_active = ATheme
@@ -77,15 +79,17 @@ class DockWindowTheme ( HasPrivateTraits ):
     # Horizontal drag bar theme:
     horizontal_drag = ATheme
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Define the default theme:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # The current default DockWindow theme:
 _dock_window_theme = None
 
 # Gets/Sets the default DockWindow theme:
-def dock_window_theme ( theme = None ):
+
+
+def dock_window_theme(theme=None):
     global _dock_window_theme
 
     if _dock_window_theme is None:
@@ -98,4 +102,3 @@ def dock_window_theme ( theme = None ):
         _dock_window_theme = theme
 
     return old_theme
-

@@ -184,7 +184,8 @@ class SaveHandler(Handler):
             return False
         else:
             extLen = len(self.extension)
-            if extLen and fileDialog.path[-extLen-1:] != '.' + self.extension:
+            if extLen and fileDialog.path[-extLen -
+                                          1:] != '.' + self.extension:
                 fileDialog.path += '.' + self.extension
             self.saveObject.filepath = fileDialog.path
             return self._validateAndSave()
@@ -233,7 +234,7 @@ class SaveHandler(Handler):
         else:
             title = "Validation error"
             if (self.allowValidationBypass and
-                confirm(None, message, title=title) == YES):
+                    confirm(None, message, title=title) == YES):
                 self.saveObject.save()
                 success = True
             else:

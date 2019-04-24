@@ -1,6 +1,8 @@
 
+from __future__ import absolute_import
 from traits.api import Bool, List, Str
 from .date_editor import DateEditor
+
 
 class CellFormat(object):
     """ Encapsulates some common visual attributes to set on the cells of a
@@ -23,7 +25,7 @@ class CellFormat(object):
     fgcolor = None
 
     def __init__(self, **args):
-        for key,val in args.items():
+        for key, val in args.items():
             setattr(self, key, val)
 
 

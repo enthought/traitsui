@@ -60,42 +60,49 @@ Now try typing a value into the 'd' trait and you will see that an error
 results (indicated by the text entry field turning red), because this is a
 normal 'cached' trait that has no 'setter' method defined.
 """
+from __future__ import absolute_import
+from math import sqrt
 
-from traits.api import HasTraits, Int, Range, Property, property_depends_on
+from traits.api import HasTraits, Int, Range, Property, cached_property
 from traitsui.api import View, Item, RangeEditor
 
-#-- Demo Class -----------------------------------------------------------------
+#-- Demo Class -----------------------------------------------------------
+
 
 class SettableCachedProperty(HasTraits):
 
     a = Range(1, 10)
     b = Range(1, 10)
-    c = Property(Int)
-    d = Property
+    c = Property(Int, depends_on=['a', 'b'])
+    d = Property(depends_on='c')
 
     view = View(
         Item('a'),
         Item('b'),
         '_',
         Item('c',
-              editor = RangeEditor(low = 1, high = 100, mode = 'slider')),
+             editor=RangeEditor(low=1, high=100, mode='slider')),
         Item('c'),
         '_',
         Item('d',
-              editor = RangeEditor(low = 1, high = 400, mode = 'slider')),
+             editor=RangeEditor(low=1, high=400, mode='slider')),
         Item('d'),
-        width = 0.3
+        width=0.3
     )
 
-    @property_depends_on('a,b', settable = True)
+    @cached_property
     def _get_c(self):
         return (self.a * self.b)
 
-    @property_depends_on('c')
+    def _set_c(self, value):
+        self.a = int(sqrt(value))
+        self.b = int(sqrt(value))
+
+    @cached_property
     def _get_d(self):
         return (self.c + self.c)
 
-#-- Run the demo ---------------------------------------------------------------
+#-- Run the demo ---------------------------------------------------------
 
 # Create the demo:
 demo = SettableCachedProperty()

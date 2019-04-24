@@ -19,9 +19,9 @@
     by the row
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -30,26 +30,25 @@ from ..table_column import ObjectColumn
 
 if ETSConfig.toolkit == 'wx':
     from pyface.ui.wx.grid.edit_renderer import EditRenderer
-else:
-    raise NotImplementedError("No EditColumn implementation for backend")
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'EditColumn' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class EditColumn ( ObjectColumn ):
 
-    def __init__ ( self, **traits ):
+class EditColumn(ObjectColumn):
+
+    def __init__(self, **traits):
         """ Initializes the object.
         """
-        super( EditColumn, self ).__init__( **traits )
+        super(EditColumn, self).__init__(**traits)
 
         # force the renderer to be a edit renderer
         self.renderer = EditRenderer()
 
         self.label = ''
 
-    def get_cell_color ( self, object ):
+    def get_cell_color(self, object):
         """ Returns the cell background color for the column for a specified
             object.
         """
@@ -57,7 +56,7 @@ class EditColumn ( ObjectColumn ):
         # Override the parent class to ALWAYS provide the standard color:
         return self.cell_color_
 
-    def is_editable ( self, object ):
+    def is_editable(self, object):
         """ Returns whether the column is editable for a specified object.
         """
         return False

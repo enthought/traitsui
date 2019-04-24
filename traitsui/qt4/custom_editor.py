@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -13,10 +14,11 @@
 based custom control.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtGui
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -25,28 +27,29 @@ from pyface.qt import QtGui
 from traitsui.editors.custom_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'CustomEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class CustomEditor ( Editor ):
+
+class CustomEditor(Editor):
     """ Wrapper for a custom editor control
     """
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         factory = self.factory.factory
         if factory is not None:
-            self.control = factory( *(( parent, self ) + self.factory.args ) )
+            self.control = factory(*((parent, self) + self.factory.args))
         if self.control is None:
             self.control = QtGui.QLabel(
                 'An error occurred creating a custom editor.\n'
@@ -54,11 +57,11 @@ class CustomEditor ( Editor ):
             self.control.setStyleSheet("background-color: red; color: white")
         self.set_tooltip()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """

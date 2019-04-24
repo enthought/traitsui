@@ -3,9 +3,11 @@
 
 # view_standalone.py --- Example of a view as a
 #                        standalone object
+from __future__ import absolute_import
 import wx
 from traits.api import HasTraits, Int, Str, Trait
 from traitsui.api import View
+
 
 class Person(HasTraits):
     first_name = Str
@@ -19,21 +21,22 @@ person_view = View('first_name', 'last_name', 'age', 'gender')
 
 bill = Person()
 
-class TraitApp ( wx.App ):
 
-    def __init__ ( self, object, view ):
+class TraitApp(wx.App):
+
+    def __init__(self, object, view):
         self.object = object
         self.view = view
         wx.InitAllImageHandlers()
-        wx.App.__init__( self, 1, 'debug.log' )
+        wx.App.__init__(self, 1, 'debug.log')
         self.MainLoop()
 
-    def OnInit ( self ):
+    def OnInit(self):
         # This is the call to the ui() method.
         ui = self.view.ui(self.object)
-        self.SetTopWindow( ui.control )
+        self.SetTopWindow(ui.control)
         return True
 
 
 #  Main program:
-TraitApp( bill, person_view )
+TraitApp(bill, person_view)

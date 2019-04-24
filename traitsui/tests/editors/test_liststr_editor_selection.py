@@ -20,6 +20,7 @@ A ListStrEditor was not checking for valid item indexes under Wx.  This was
 most noticeable when the selected_index was set in the editor factory.
 """
 
+from __future__ import absolute_import
 from traits.has_traits import HasTraits
 from traits.trait_types import List, Int, Str
 from traitsui.item import Item
@@ -39,30 +40,30 @@ class ListStrEditorWithSelectedIndex(HasTraits):
 
 single_select_view = View(
     Item('values',
-        show_label=False,
-        editor=ListStrEditor(
-            selected_index='selected_index',
-            editable=False),
-    ),
+         show_label=False,
+         editor=ListStrEditor(
+             selected_index='selected_index',
+             editable=False),
+         ),
     buttons=['OK'])
 
 multi_select_view = View(
     Item('values',
-        show_label=False,
-        editor=ListStrEditor(
-            multi_select=True,
-            selected_index='selected_indices',
-            editable=False),
-    ),
+         show_label=False,
+         editor=ListStrEditor(
+             multi_select=True,
+             selected_index='selected_indices',
+             editable=False),
+         ),
     buttons=['OK'])
 
 single_select_item_view = View(
     Item('values',
-        show_label=False,
-        editor=ListStrEditor(
-            selected='selected',
-            editable=False),
-    ),
+         show_label=False,
+         editor=ListStrEditor(
+             selected='selected',
+             editable=False),
+         ),
     buttons=['OK'])
 
 
@@ -71,12 +72,12 @@ def get_selected(control):
     """
     import wx
     selected = []
-    item     = -1
+    item = -1
     while True:
         item = control.GetNextItem(item, wx.LIST_NEXT_ALL,
-                                    wx.LIST_STATE_SELECTED)
+                                   wx.LIST_STATE_SELECTED)
         if item == -1:
-            break;
+            break
         selected.append(item)
     return selected
 
@@ -87,8 +88,8 @@ def test_wx_list_str_selected_index():
 
     with store_exceptions_on_all_threads():
         obj = ListStrEditorWithSelectedIndex(
-                values=['value1', 'value2'],
-                selected_index=1)
+            values=['value1', 'value2'],
+            selected_index=1)
         ui = obj.edit_traits(view=single_select_view)
 
         # the following is equivalent to setting the text in the text control,
@@ -114,8 +115,8 @@ def test_wx_list_str_multi_selected_index():
 
     with store_exceptions_on_all_threads():
         obj = ListStrEditorWithSelectedIndex(
-                values=['value1', 'value2'],
-                selected_indices=[1])
+            values=['value1', 'value2'],
+            selected_indices=[1])
         ui = obj.edit_traits(view=multi_select_view)
 
         # the following is equivalent to setting the text in the text control,
@@ -171,6 +172,6 @@ def test_selection_listener_disconnected():
 if __name__ == '__main__':
     # Executing the file opens the dialog for manual testing
     editor = ListStrEditorWithSelectedIndex(
-            values=['value1', 'value2'],
-            selected_index=1)
+        values=['value1', 'value2'],
+        selected_index=1)
     editor.configure_traits(view=single_select_view)

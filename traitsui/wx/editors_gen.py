@@ -12,9 +12,14 @@
 the WX backend.
 """
 
-import os, glob, sys
+from __future__ import absolute_import
+import os
+import glob
+import sys
 from traitsui.api import Editor
 from traitsui.editor_factory import EditorFactory
+from io import open
+
 
 def gen_editor_definitions(target_filename):
     """ Generates a file containing definitions for all of the editors
@@ -34,23 +39,23 @@ def gen_editor_definitions(target_filename):
         (dirname, filename) = (os.path.dirname(absfilename),
                                os.path.basename(absfilename).rstrip('.py'))
         import_path = 'traitsui.wx' + \
-                       dirname.replace(dirpath, '').replace(os.sep, '.') +\
-                       '.' + filename
+            dirname.replace(dirpath, '').replace(os.sep, '.') +\
+            '.' + filename
         __import__(import_path)
         module = sys.modules[import_path]
         class_names = []
         for name in dir(module):
             try:
                 if issubclass(getattr(module, name), EditorFactory) and \
-                    name not in ['EditorFactory', 'BasicEditorFactory']:
+                        name not in ['EditorFactory', 'BasicEditorFactory']:
                     class_names.append(name)
                 elif issubclass(getattr(module, name), Editor) and \
-                     name != 'Editor':
+                        name != 'Editor':
                     class_names.append(name)
             except:
                 try:
                     if isinstance(getattr(module, name), EditorFactory) or \
-                        isinstance(getattr(module, name), Editor):
+                            isinstance(getattr(module, name), Editor):
                         class_names.insert(0, name)
                 except:
                     pass
@@ -61,15 +66,16 @@ def gen_editor_definitions(target_filename):
                 class_name = 'ToolkitEditorFactory'
             else:
                 class_name = ''.join([name.capitalize() for name in
-                                     filename.split('_')])
+                                      filename.split('_')])
                 if class_name not in class_names:
                     class_name = class_names[0]
-            function = "def %(filename)s(*args, **traits):"%locals()
+            function = "def %(filename)s(*args, **traits):" % locals()
             target_file.write(function)
             target_file.write('\n')
-            func_code = ' '*4 + "import %(import_path)s as editor"%locals()+'\n'
-            func_code+= ' '*4 + "return editor.%(class_name)s(*args, **traits)" \
-                    % locals()
+            func_code = ' ' * 4 + \
+                "import %(import_path)s as editor" % locals() + '\n'
+            func_code += ' ' * 4 + \
+                "return editor.%(class_name)s(*args, **traits)" % locals()
             target_file.write(func_code)
             target_file.write('\n\n')
 

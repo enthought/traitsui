@@ -1,7 +1,7 @@
 #  Copyright (c) 2007, Enthought, Inc.
 #  License: BSD Style.
 
-#--(Deferred UI Notifications)--------------------------------------------------
+#--(Deferred UI Notifications)--------------------------------------------
 """
 Deferred UI Notifications
 =========================
@@ -32,34 +32,36 @@ interface would previously have appeared to be unresponsive due to an excessive
 number of screen updates.
 """
 
-#--<Imports>--------------------------------------------------------------------
+#--<Imports>--------------------------------------------------------------
 
+from __future__ import absolute_import
 from traits.api import *
 from traitsui.api import *
 
-#--[Count Class]----------------------------------------------------------------
+#--[Count Class]----------------------------------------------------------
 
-class Count ( HasTraits ):
+
+class Count(HasTraits):
 
     count = Int
-    go    = Button( 'Count' )
+    go = Button('Count')
 
     view = View(
-        Item( 'count', style = 'readonly' ),
-        Item( 'go', show_label = False )
+        Item('count', style='readonly'),
+        Item('go', show_label=False)
     )
 
-    def _go_changed ( self ):
+    def _go_changed(self):
         # Even though the 'count' trait (which is visible in the UI) is being
         # rapidly updated here, the UI should show only a single update each
         # time the 'Count' button is clicked. In previous Traits versions, the
         # user would actually see the counter update sequentially through all
         # 10,000 values, during which time the user interface would be
         # unresponsive:
-        for i in range( 10000 ):
+        for i in range(10000):
             self.count += 1
 
-#--<Example*>-------------------------------------------------------------------
+#--<Example*>-------------------------------------------------------------
 
 demo = Count()
 

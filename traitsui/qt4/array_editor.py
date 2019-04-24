@@ -18,23 +18,25 @@
 """ Defines array editors for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.array_editor file.
+from __future__ import absolute_import
 from traitsui.editors.array_editor \
     import SimpleEditor as BaseSimpleEditor, ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class SimpleEditor ( BaseSimpleEditor, Editor ):
+
+class SimpleEditor(BaseSimpleEditor, Editor):
     """ Simple style of editor for arrays.
     """
 
@@ -42,9 +44,10 @@ class SimpleEditor ( BaseSimpleEditor, Editor ):
     # PyQt Editor class.
     pass
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
 
 class ReadonlyEditor(SimpleEditor):
 

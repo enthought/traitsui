@@ -1,9 +1,12 @@
+from __future__ import absolute_import
 from pyface.qt import QtGui, QtCore
 
 from traits.api import Float, Any, Str, Trait
 from traitsui.editors.api import RangeEditor
 from traitsui.qt4.editor import Editor
 from traitsui.qt4.extra.range_slider import RangeSlider
+import six
+
 
 class _BoundsEditor(Editor):
 
@@ -32,18 +35,17 @@ class _BoundsEditor(Editor):
         self.format = factory.format
 
         self.evaluate = factory.evaluate
-        self.sync_value( factory.evaluate_name, 'evaluate', 'from' )
+        self.sync_value(factory.evaluate_name, 'evaluate', 'from')
 
-        self.sync_value( factory.low_name,  'low',  'both' )
-        self.sync_value( factory.high_name, 'high', 'both' )
+        self.sync_value(factory.low_name, 'low', 'both')
+        self.sync_value(factory.high_name, 'high', 'both')
 
         self.control = QtGui.QWidget()
         panel = QtGui.QHBoxLayout(self.control)
         panel.setContentsMargins(0, 0, 0, 0)
 
         self._label_lo = QtGui.QLineEdit(self.format % self.low)
-        QtCore.QObject.connect(self._label_lo, QtCore.SIGNAL('editingFinished()'),
-                self.update_low_on_enter)
+        self._label_lo.editingFinished.connect(self.update_low_on_enter)
         panel.addWidget(self._label_lo)
 
         # The default size is a bit too big and probably doesn't need to grow.
@@ -60,13 +62,11 @@ class _BoundsEditor(Editor):
         slider.setLow(self._convert_to_slider(self.low))
         slider.setHigh(self._convert_to_slider(self.high))
 
-        QtCore.QObject.connect(slider, QtCore.SIGNAL('sliderMoved(int)'),
-                self.update_object_on_scroll)
+        slider.sliderMoved.connect(self.update_object_on_scroll)
         panel.addWidget(slider)
 
         self._label_hi = QtGui.QLineEdit(self.format % self.high)
-        QtCore.QObject.connect(self._label_hi, QtCore.SIGNAL('editingFinished()'),
-                self.update_high_on_enter)
+        self._label_hi.editingFinished.connect(self.update_high_on_enter)
         panel.addWidget(self._label_hi)
 
         # The default size is a bit too big and probably doesn't need to grow.
@@ -81,7 +81,7 @@ class _BoundsEditor(Editor):
     def update_low_on_enter(self):
         try:
             try:
-                low = eval(unicode(self._label_lo.text()).strip())
+                low = eval(six.text_type(self._label_lo.text()).strip())
                 if self.evaluate is not None:
                     low = self.evaluate(low)
             except Exception as ex:
@@ -103,7 +103,7 @@ class _BoundsEditor(Editor):
     def update_high_on_enter(self):
         try:
             try:
-                high = eval(unicode(self._label_hi.text()).strip())
+                high = eval(six.text_type(self._label_hi.text()).strip())
                 if self.evaluate is not None:
                     high = self.evaluate(high)
             except:
@@ -138,7 +138,6 @@ class _BoundsEditor(Editor):
             self.control.slider.setLow(self._convert_to_slider(low))
             self.control.slider.setHigh(self._convert_to_slider(high))
 
-
     def update_editor(self):
         return
 
@@ -153,7 +152,7 @@ class _BoundsEditor(Editor):
         slider_delta = self.control.slider.maximum() - self.control.slider.minimum()
         range_delta = self.max - self.min
 
-        return float(range_delta)/slider_delta
+        return float(range_delta) / slider_delta
 
     def _convert_from_slider(self, slider_val):
         self._check_max_and_min()
@@ -161,7 +160,7 @@ class _BoundsEditor(Editor):
 
     def _convert_to_slider(self, value):
         self._check_max_and_min()
-        return self.control.slider.minimum() + (value-self.min) / self._step_size()
+        return self.control.slider.minimum() + (value - self.min) / self._step_size()
 
     def _low_changed(self, low):
         if self.control is None:
@@ -179,6 +178,7 @@ class _BoundsEditor(Editor):
 
         self.control.slider.setHigh(self._convert_to_slider(self.high))
 
+
 class BoundsEditor(RangeEditor):
 
     min = Trait(None, Float)
@@ -186,5 +186,6 @@ class BoundsEditor(RangeEditor):
 
     def _get_simple_editor_class(self):
         return _BoundsEditor
+
     def _get_custom_editor_class(self):
         return _BoundsEditor

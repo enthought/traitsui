@@ -7,8 +7,9 @@ For more information about why you would want to use the Traits file dialog
 over the standard OS file dialog, select the <b>File Open</b> demo.
 """
 
-#-- Imports --------------------------------------------------------------------
+#-- Imports --------------------------------------------------------------
 
+from __future__ import absolute_import
 from os.path \
     import getsize
 
@@ -23,77 +24,80 @@ from traitsui.file_dialog  \
 
 from traitsui.helper \
     import commatize
+from io import open
 
-#-- LineCountInfo Class --------------------------------------------------------
+#-- LineCountInfo Class --------------------------------------------------
 
-class LineCountInfo ( MFileDialogModel ):
+
+class LineCountInfo(MFileDialogModel):
     """ Defines a file dialog extension that displays the number of text lines
         in the currently selected file.
     """
 
     # The number of text lines in the currently selected file:
-    lines = Property( depends_on = 'file_name' )
+    lines = Property(depends_on='file_name')
 
-    #-- Traits View Definitions ------------------------------------------------
+    #-- Traits View Definitions ----------------------------------------------
 
     view = View(
         VGroup(
-            Item( 'lines', style = 'readonly' ),
-            label       = 'Line Count Info',
-            show_border = True
+            Item('lines', style='readonly'),
+            label='Line Count Info',
+            show_border=True
         )
     )
 
-    #-- Property Implementations -----------------------------------------------
+    #-- Property Implementations ---------------------------------------------
 
     @cached_property
-    def _get_lines ( self ):
+    def _get_lines(self):
         try:
-            if getsize( self.file_name ) > 10000000:
+            if getsize(self.file_name) > 10000000:
                 return 'File too big...'
 
-            fh   = file( self.file_name, 'rU' )
+            fh = open(self.file_name, 'rU', encoding='utf8')
             data = fh.read()
             fh.close()
         except:
             return ''
 
-        if (data.find( '\x00' ) >= 0) or (data.find( '\xFF' ) >= 0):
+        if (data.find('\x00') >= 0) or (data.find('\xFF') >= 0):
             return 'File contains binary data...'
 
-        return ('%s lines' % commatize( len( data.splitlines() ) ))
+        return ('%s lines' % commatize(len(data.splitlines())))
 
-#-- FileDialogDemo Class -------------------------------------------------------
+#-- FileDialogDemo Class -------------------------------------------------
 
 # Demo specific file dialig id:
 demo_id = ('traitsui.demo.standard_editors.file_dialog.'
            'line_count_info')
 
-class FileDialogDemo ( HasTraits ):
+
+class FileDialogDemo(HasTraits):
 
     # The name of the selected file:
     file_name = File
 
     # The button used to display the file dialog:
-    open = Button( 'Open...' )
+    open = Button('Open...')
 
-    #-- Traits View Definitions ------------------------------------------------
+    #-- Traits View Definitions ----------------------------------------------
 
     view = View(
         HGroup(
-            Item( 'open', show_label = False ),
+            Item('open', show_label=False),
             '_',
-            Item( 'file_name', style = 'readonly', springy = True )
+            Item('file_name', style='readonly', springy=True)
         ),
-        width = 0.5
+        width=0.5
     )
 
-    #-- Traits Event Handlers --------------------------------------------------
+    #-- Traits Event Handlers ------------------------------------------------
 
-    def _open_changed ( self ):
+    def _open_changed(self):
         """ Handles the user clicking the 'Open...' button.
         """
-        file_name = open_file( extensions = LineCountInfo(), id = demo_id )
+        file_name = open_file(extensions=LineCountInfo(), id=demo_id)
         if file_name != '':
             self.file_name = file_name
 

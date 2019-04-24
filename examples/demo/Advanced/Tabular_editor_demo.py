@@ -29,7 +29,7 @@ In addition:
    image in the age column.
  - If the person is married, it makes the background color for that row a light
    blue.
-   
+
  - If this demo is running under QT, it displays each person's surname
    in a row label.
 
@@ -45,59 +45,113 @@ Additional notes:
  - You can change the current selection using the up and down arrow keys.
  - You can move a selected row up and down in the table using the left and
    right arrow keys.
+
+Hopefully, this simple example conveys some of the power and flexibility that
+the :py:class:`TabularAdapter` class provides you. But, just in case it
+doesn't, let's go over some of the more interesting details:
+
+- Note the values in the :py:attr:`~TabularAdapter.columns` trait. The first
+  three values define *column ids* which map directly to traits defined on our
+  data objects, while the last one defines an arbitrary string which we define
+  so that we can reference it in the :py:attr:`MarriedPerson_spouse_text` and
+  :py:attr:`Person_spouse_text` trait definitions.
+
+- Since the font we want to use applies to all table rows, we just specify a
+  new default value for the existing :py:class:`TabularAdapter.font` trait.
+
+- Since we only want to override the default left alignment for the age column,
+  we simply define an :py:attr:`age_alignment` trait as a constant ``'right'``
+  value. We could have also used ``age_alignment = Str('right')``, but
+  :py:class:`Constant` never requires storage to be used in an object.
+
+- We define the :py:attr:`MarriedPerson_age_image` property to handle putting
+  the ``'red flag'`` image in the age column. By including the class name of
+  the items it applies to, we only need to check the :py:attr:`age` value in
+  determining what value to return.
+
+- Similary, we use the :py:attr:`MarriedPerson_bg_color` trait to ensure that
+  each :py:class:`MarriedPerson` object has the correct background color in the
+  table.
+
+- Finally, we use the :py:attr:`MarriedPerson_spouse_text` and
+  :py:attr:`Person_spouse_text` traits, one a property and the other a simple
+  constant value, to determine what text to display in the *Spouse* column for
+  the different object types.  Note that even though a
+  :py:class:`MarriedPerson` is both a :py:class:`Person` and a
+  :py:class:`MarriedPerson`, it will correctly use the
+  :py:attr:`MarriedPerson_spouse_text` trait since the search for a matching
+  trait is always made in *mro* order.
+
+Although this is completely subjective, some of the things that the author
+feels stand out about this approach are:
+
+- The class definition is short and sweet. Less code is good.
+- The bulk of the code is declarative. Less room for logic errors.
+- There is only one bit of logic in the class (the ``if`` statement in the
+  :py:attr:`MarriedPerson_age_image` property implementation). Again, less
+  logic usually translates into more reliable code).
+- The defined traits and even the property implementation method names read
+  very descriptively. :py:meth:`_get_MarriedPerson_age_image` pretty much says
+  what you would write in a comment or doc string. The implementation almost is
+  the documentation.
+
 """
 
+from __future__ import absolute_import
 from random import randint, choice, shuffle
 from traits.api import HasTraits, Str, Int, List, Instance, Property, \
-     Constant, Color
+    Constant, Color
 from traits.etsconfig.api import ETSConfig
 from traitsui.api import View, Group, Item, TabularEditor
 from traitsui.tabular_adapter import TabularAdapter
 
-#-- Person Class Definition ----------------------------------------------------
+#-- Person Class Definition ----------------------------------------------
+
 
 class Person(HasTraits):
 
-    name    = Str
+    name = Str
     address = Str
-    age     = Int
-    
+    age = Int
+
     # surname is displayed in qt-only row label:
-    surname = Property(fget=lambda self: self.name.split()[-1], 
+    surname = Property(fget=lambda self: self.name.split()[-1],
                        depends_on='name')
 
-#-- MarriedPerson Class Definition ---------------------------------------------
+#-- MarriedPerson Class Definition ---------------------------------------
+
 
 class MarriedPerson(Person):
 
     partner = Instance(Person)
 
-#-- Tabular Adapter Definition -------------------------------------------------
+#-- Tabular Adapter Definition -------------------------------------------
+
 
 class ReportAdapter(TabularAdapter):
-    """ The tabular adapter interfaces between the tabular editor and the data 
-    being displayed. For more details, please refer to the traitsUI user guide. 
+    """ The tabular adapter interfaces between the tabular editor and the data
+    being displayed. For more details, please refer to the traitsUI user guide.
     """
     # List of (Column labels, Column ID).
-    columns = [ ('Name',    'name'),
-                ('Age',     'age'),
-                ('Address', 'address'),
-                ('Spouse',  'spouse') ]
+    columns = [('Name', 'name'),
+               ('Age', 'age'),
+               ('Address', 'address'),
+               ('Spouse', 'spouse')]
 
     row_label_name = 'surname'
 
-    # Interfacing between the model and the view: make some of the cell 
-    # attributes a property whose behavior is then controlled by the get 
-    # (and optionally set methods). The cell is identified by its column 
+    # Interfacing between the model and the view: make some of the cell
+    # attributes a property whose behavior is then controlled by the get
+    # (and optionally set methods). The cell is identified by its column
     # ID (age, spouse).
-    
+
     # Font fails with wx in OSX; see traitsui issue #13:
     # font                      = 'Courier 10'
-    age_alignment             = Constant('right')
-    MarriedPerson_age_image   = Property
-    MarriedPerson_bg_color    = Color(0xE0E0FF)
+    age_alignment = Constant('right')
+    MarriedPerson_age_image = Property
+    MarriedPerson_bg_color = Color(0xE0E0FF)
     MarriedPerson_spouse_text = Property
-    Person_spouse_text        = Constant('')
+    Person_spouse_text = Constant('')
 
     def _get_MarriedPerson_age_image(self):
         if self.item.age < 18:
@@ -108,18 +162,19 @@ class ReportAdapter(TabularAdapter):
     def _get_MarriedPerson_spouse_text(self):
         return self.item.partner.name
 
-#-- Tabular Editor Definition --------------------------------------------------
+#-- Tabular Editor Definition --------------------------------------------
 
-# The tabular editor works in conjunction with an adapter class, derived from 
-# TabularAdapter. 
+# The tabular editor works in conjunction with an adapter class, derived from
+# TabularAdapter.
 tabular_editor = TabularEditor(
-    adapter    = ReportAdapter(),
-    operations = [ 'move', 'edit' ],
+    adapter=ReportAdapter(),
+    operations=['move', 'edit'],
     # Row titles are not supported in WX:
-    show_row_titles = ETSConfig.toolkit == 'qt4',
+    show_row_titles=ETSConfig.toolkit == 'qt4',
 )
 
-#-- Report Class Definition ----------------------------------------------------
+#-- Report Class Definition ----------------------------------------------
+
 
 class Report(HasTraits):
 
@@ -127,82 +182,235 @@ class Report(HasTraits):
 
     view = View(
         Group(
-            Item('people', id = 'table', editor = tabular_editor),
-            show_labels        = False
+            Item('people', id='table', editor=tabular_editor),
+            show_labels=False
         ),
-        title     = 'Tabular Editor Demo',
-        id        = 'traitsui.demo.Applications.tabular_editor_demo',
-        width     = 0.60,
-        height    = 0.75,
-        resizable = True
+        title='Tabular Editor Demo',
+        id='traitsui.demo.Applications.tabular_editor_demo',
+        width=0.60,
+        height=0.75,
+        resizable=True
     )
 
-#-- Generate 10,000 random single and married people ---------------------------
+#-- Generate 10,000 random single and married people ---------------------
 
-male_names = [ 'Michael', 'Edward', 'Timothy', 'James', 'George', 'Ralph',
-    'David', 'Martin', 'Bryce', 'Richard', 'Eric', 'Travis', 'Robert', 'Bryan',
-    'Alan', 'Harold', 'John', 'Stephen', 'Gael', 'Frederic', 'Eli', 'Scott',
-    'Samuel', 'Alexander', 'Tobias', 'Sven', 'Peter', 'Albert', 'Thomas',
-    'Horatio', 'Julius', 'Henry', 'Walter', 'Woodrow', 'Dylan', 'Elmer' ]
+male_names = [
+    'Michael',
+    'Edward',
+    'Timothy',
+    'James',
+    'George',
+    'Ralph',
+    'David',
+    'Martin',
+    'Bryce',
+    'Richard',
+    'Eric',
+    'Travis',
+    'Robert',
+    'Bryan',
+    'Alan',
+    'Harold',
+    'John',
+    'Stephen',
+    'Gael',
+    'Frederic',
+    'Eli',
+    'Scott',
+    'Samuel',
+    'Alexander',
+    'Tobias',
+    'Sven',
+    'Peter',
+    'Albert',
+    'Thomas',
+    'Horatio',
+    'Julius',
+    'Henry',
+    'Walter',
+    'Woodrow',
+    'Dylan',
+    'Elmer']
 
-female_names = [ 'Leah', 'Jaya', 'Katrina', 'Vibha', 'Diane', 'Lisa', 'Jean',
-    'Alice', 'Rebecca', 'Delia', 'Christine', 'Marie', 'Dorothy', 'Ellen',
-    'Victoria', 'Elizabeth', 'Margaret', 'Joyce', 'Sally', 'Ethel', 'Esther',
-    'Suzanne', 'Monica', 'Hortense', 'Samantha', 'Tabitha', 'Judith', 'Ariel',
-    'Helen', 'Mary', 'Jane', 'Janet', 'Jennifer', 'Rita', 'Rena', 'Rianna' ]
+female_names = [
+    'Leah',
+    'Jaya',
+    'Katrina',
+    'Vibha',
+    'Diane',
+    'Lisa',
+    'Jean',
+    'Alice',
+    'Rebecca',
+    'Delia',
+    'Christine',
+    'Marie',
+    'Dorothy',
+    'Ellen',
+    'Victoria',
+    'Elizabeth',
+    'Margaret',
+    'Joyce',
+    'Sally',
+    'Ethel',
+    'Esther',
+    'Suzanne',
+    'Monica',
+    'Hortense',
+    'Samantha',
+    'Tabitha',
+    'Judith',
+    'Ariel',
+    'Helen',
+    'Mary',
+    'Jane',
+    'Janet',
+    'Jennifer',
+    'Rita',
+    'Rena',
+    'Rianna']
 
 all_names = male_names + female_names
 
-male_name   = lambda: choice(male_names)
+male_name = lambda: choice(male_names)
 female_name = lambda: choice(female_names)
-any_name    = lambda: choice(all_names)
-age         = lambda: randint(15, 72)
+any_name = lambda: choice(all_names)
+age = lambda: randint(15, 72)
 
-family_name = lambda: choice([ 'Jones', 'Smith', 'Thompson', 'Hayes', 'Thomas', 'Boyle',
-    "O'Reilly", 'Lebowski', 'Lennon', 'Starr', 'McCartney', 'Harrison',
-    'Harrelson', 'Steinbeck', 'Rand', 'Hemingway', 'Zhivago', 'Clemens',
-    'Heinlien', 'Farmer', 'Niven', 'Van Vogt', 'Sturbridge', 'Washington',
-    'Adams', 'Bush', 'Kennedy', 'Ford', 'Lincoln', 'Jackson', 'Johnson',
-    'Eisenhower', 'Truman', 'Roosevelt', 'Wilson', 'Coolidge', 'Mack', 'Moon',
-    'Monroe', 'Springsteen', 'Rigby', "O'Neil", 'Philips', 'Clinton',
-    'Clapton', 'Santana', 'Midler', 'Flack', 'Conner', 'Bond', 'Seinfeld',
-    'Costanza', 'Kramer', 'Falk', 'Moore', 'Cramdon', 'Baird', 'Baer',
-    'Spears', 'Simmons', 'Roberts', 'Michaels', 'Stuart', 'Montague',
-    'Miller' ])
+family_name = lambda: choice(['Jones',
+                              'Smith',
+                              'Thompson',
+                              'Hayes',
+                              'Thomas',
+                              'Boyle',
+                              "O'Reilly",
+                              'Lebowski',
+                              'Lennon',
+                              'Starr',
+                              'McCartney',
+                              'Harrison',
+                              'Harrelson',
+                              'Steinbeck',
+                              'Rand',
+                              'Hemingway',
+                              'Zhivago',
+                              'Clemens',
+                              'Heinlien',
+                              'Farmer',
+                              'Niven',
+                              'Van Vogt',
+                              'Sturbridge',
+                              'Washington',
+                              'Adams',
+                              'Bush',
+                              'Kennedy',
+                              'Ford',
+                              'Lincoln',
+                              'Jackson',
+                              'Johnson',
+                              'Eisenhower',
+                              'Truman',
+                              'Roosevelt',
+                              'Wilson',
+                              'Coolidge',
+                              'Mack',
+                              'Moon',
+                              'Monroe',
+                              'Springsteen',
+                              'Rigby',
+                              "O'Neil",
+                              'Philips',
+                              'Clinton',
+                              'Clapton',
+                              'Santana',
+                              'Midler',
+                              'Flack',
+                              'Conner',
+                              'Bond',
+                              'Seinfeld',
+                              'Costanza',
+                              'Kramer',
+                              'Falk',
+                              'Moore',
+                              'Cramdon',
+                              'Baird',
+                              'Baer',
+                              'Spears',
+                              'Simmons',
+                              'Roberts',
+                              'Michaels',
+                              'Stuart',
+                              'Montague',
+                              'Miller'])
 
-address = lambda: '%d %s %s' % (randint(11, 999), choice([ 'Spring',
-    'Summer', 'Moonlight', 'Winding', 'Windy', 'Whispering', 'Falling',
-    'Roaring', 'Hummingbird', 'Mockingbird', 'Bluebird', 'Robin', 'Babbling',
-    'Cedar', 'Pine', 'Ash', 'Maple', 'Oak', 'Birch', 'Cherry', 'Blossom',
-    'Rosewood', 'Apple', 'Peach', 'Blackberry', 'Strawberry', 'Starlight',
-    'Wilderness', 'Dappled', 'Beaver', 'Acorn', 'Pecan', 'Pheasant', 'Owl' ]),
-    choice([ 'Way', 'Lane', 'Boulevard', 'Street', 'Drive', 'Circle',
-    'Avenue', 'Trail' ]))
+address = lambda: '%d %s %s' % (randint(11,
+                                        999),
+                                choice(['Spring',
+                                        'Summer',
+                                        'Moonlight',
+                                        'Winding',
+                                        'Windy',
+                                        'Whispering',
+                                        'Falling',
+                                        'Roaring',
+                                        'Hummingbird',
+                                        'Mockingbird',
+                                        'Bluebird',
+                                        'Robin',
+                                        'Babbling',
+                                        'Cedar',
+                                        'Pine',
+                                        'Ash',
+                                        'Maple',
+                                        'Oak',
+                                        'Birch',
+                                        'Cherry',
+                                        'Blossom',
+                                        'Rosewood',
+                                        'Apple',
+                                        'Peach',
+                                        'Blackberry',
+                                        'Strawberry',
+                                        'Starlight',
+                                        'Wilderness',
+                                        'Dappled',
+                                        'Beaver',
+                                        'Acorn',
+                                        'Pecan',
+                                        'Pheasant',
+                                        'Owl']),
+                                choice(['Way',
+                                        'Lane',
+                                        'Boulevard',
+                                        'Street',
+                                        'Drive',
+                                        'Circle',
+                                        'Avenue',
+                                        'Trail']))
 
-people = [ Person(name    = '%s %s' % (any_name(), family_name()),
-                   age     = age(),
-                   address = address()) for i in range(5000) ]
+people = [Person(name='%s %s' % (any_name(), family_name()),
+                 age=age(),
+                 address=address()) for i in range(5000)]
 
-marrieds = [ (MarriedPerson(name    = '%s %s' % (female_name(), last_name),
-                              age     = age(),
-                              address = address),
-               MarriedPerson(name    = '%s %s' % (male_name(), last_name),
-                              age     = age(),
-                              address = address))
-             for last_name, address in
-                 [ (family_name(), address()) for i in range(2500) ] ]
+marrieds = [(MarriedPerson(name='%s %s' % (female_name(), last_name),
+                           age=age(),
+                           address=address),
+             MarriedPerson(name='%s %s' % (male_name(), last_name),
+                           age=age(),
+                           address=address))
+            for last_name, address in
+            [(family_name(), address()) for i in range(2500)]]
 
 for female, male in marrieds:
     female.partner = male
-    male.partner   = female
-    people.extend([ female, male ])
+    male.partner = female
+    people.extend([female, male])
 
 shuffle(people)
 
 # Create the demo:
-demo = Report(people = people)
+demo = Report(people=people)
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

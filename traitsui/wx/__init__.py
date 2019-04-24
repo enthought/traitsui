@@ -19,11 +19,12 @@
     the wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Define the reference to the exported GUIToolkit object:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-import toolkit
+from __future__ import absolute_import
+from . import toolkit
 
 # Reference to the GUIToolkit object for wxPython
-toolkit = toolkit.GUIToolkit()
+toolkit = toolkit.GUIToolkit('traitsui', 'wx', 'traitsui.wx')

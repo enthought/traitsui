@@ -12,6 +12,7 @@
 """ Tests for the ShadowGroup class.
 """
 
+from __future__ import absolute_import
 import unittest
 
 from traitsui.api import Group
@@ -19,6 +20,7 @@ from traitsui.group import ShadowGroup
 
 
 class TestShadowGroup(unittest.TestCase):
+
     def test_creation_sets_shadow_first(self):
         group = Group()
         # We end up with a DelegationError if the 'shadow' trait is not set

@@ -19,24 +19,25 @@
     their function by creating an embedded Traits UI.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from traitsui.ui_editor \
     import UIEditor as BaseUIEditor
 
-from editor \
+from .editor \
     import Editor
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'UIEditor' base class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class UIEditor ( BaseUIEditor, Editor ):
+
+class UIEditor(BaseUIEditor, Editor):
     """ An editor that creates an embedded Traits UI.
     """
     pass
 
-#-- End UI preference save/restore interface -----------------------------------
-
+#-- End UI preference save/restore interface -----------------------------

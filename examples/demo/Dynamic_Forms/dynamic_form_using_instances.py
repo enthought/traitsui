@@ -29,44 +29,45 @@ version of Traits UI.
 Compare this to the simpler, but less powerful demo of *enabled_when*.
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, Range, Enum, Bool, Instance
 
 from traitsui.api import Item, Group, View, Handler, Label
 
 
-class Spec ( HasTraits ):
+class Spec(HasTraits):
     """ An empty class from which all age-specific trait list classes are
         derived.
     """
     pass
 
 
-class ChildSpec ( Spec ):
+class ChildSpec(Spec):
     """ Trait list for children (assigned to 'misc' for a Person when age < 18).
     """
     legal_guardian = Str
-    school         = Str
-    grade          = Range( 1, 12 )
+    school = Str
+    grade = Range(1, 12)
 
-    traits_view = View( 'legal_guardian',
-                        'school',
-                        'grade' )
+    traits_view = View('legal_guardian',
+                       'school',
+                       'grade')
 
 
-class AdultSpec ( Spec ):
+class AdultSpec(Spec):
     """ Trait list for adults (assigned to 'misc' for a Person when age >= 18).
     """
 
-    marital_status   = Enum( 'single', 'married', 'divorced', 'widowed' )
+    marital_status = Enum('single', 'married', 'divorced', 'widowed')
     registered_voter = Bool
     military_service = Bool
 
-    traits_view = View( 'marital_status',
-                        'registered_voter',
-                        'military_service' )
+    traits_view = View('marital_status',
+                       'registered_voter',
+                       'military_service')
 
 
-class PersonHandler ( Handler ):
+class PersonHandler(Handler):
     """ Handler class to perform restructuring action when conditions are met.
     The restructuring consists of replacing a ChildSpec instance by an
     AdultSpec instance, or vice-versa. We would not need a handler to listen
@@ -75,65 +76,64 @@ class PersonHandler ( Handler ):
     immediate restructuring of the UI.
     """
 
-    def object_age_changed ( self, info ):
+    def object_age_changed(self, info):
         if ((info.object.age >= 18) and
-            (not isinstance( info.object.misc, AdultSpec ))):
+                (not isinstance(info.object.misc, AdultSpec))):
             info.object.misc = AdultSpec()
         elif ((info.object.age < 18) and
-              (not isinstance( info.object.misc, ChildSpec ))):
+              (not isinstance(info.object.misc, ChildSpec))):
             info.object.misc = ChildSpec()
 
 
-class Person ( HasTraits ):
+class Person(HasTraits):
     """ Demo class for demonstrating dynamic interface restructuring.
     """
     first_name = Str
-    last_name  = Str
-    age        = Range( 0, 120 )
-    misc       = Instance( Spec )
+    last_name = Str
+    age = Range(0, 120)
+    misc = Instance(Spec)
 
     # Interface for attributes that are always visible in interface:
     gen_group = Group(
-        Item( name = 'first_name' ),
-        Item( name = 'last_name' ),
-        Item( name = 'age'),
-        label       = 'General Info',
-        show_border = True
+        Item(name='first_name'),
+        Item(name='last_name'),
+        Item(name='age'),
+        label='General Info',
+        show_border=True
     )
 
     # Interface for attributes that depend on the value of 'age':
     spec_group = Group(
         Group(
-            Item( name = 'misc', style = 'custom' ),
-            show_labels = False
+            Item(name='misc', style='custom'),
+            show_labels=False
         ),
-        label       = 'Additional Info',
-        show_border = True
+        label='Additional Info',
+        show_border=True
     )
 
     # A simple View is enough as long as the right handler is specified:
     view = View(
-        Group( 
-            gen_group, 
+        Group(
+            gen_group,
             '10',
             Label("Using Instances and a Handler:"),
             '10',
-            spec_group 
-            ),
-        title     = 'Personal Information',
-        buttons   = [ 'OK' ],
-        resizable = True,
-        width = 300,
-        handler   = PersonHandler()
+            spec_group
+        ),
+        title='Personal Information',
+        buttons=['OK'],
+        resizable=True,
+        width=300,
+        handler=PersonHandler()
     )
 
 # Create the demo:
-demo = Person( first_name = "Samuel",
-               last_name  = "Johnson",
-               age        = 18,
-               misc       = AdultSpec() )
+demo = Person(first_name="Samuel",
+              last_name="Johnson",
+              age=18,
+              misc=AdultSpec())
 
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

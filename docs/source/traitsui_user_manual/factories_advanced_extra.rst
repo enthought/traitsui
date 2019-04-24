@@ -252,12 +252,13 @@ parameter.
 The items in the list must be instances of traitsui.api.TableColumn,
 or of a subclass of TableColumn. Some subclasses of TableColumn that are
 provided by the TraitsUI package include ObjectColumn, ListColumn,
-NumericColumn, and ExpressionColumn. (See the *Traits API Reference* for details
-about these classes.) In practice, most columns are derived from one of these
-subclasses, rather than from TableColumn. For the usual case of editing trait
-attributes on objects in the list, use ObjectColumn. You must specify the *name*
-parameter to the ObjectColumn() constructor, referencing the name of the trait
-attribute to be edited.
+NumericColumn, ExpressionColumn, CheckboxColumn and ProgressColumn.
+(See the *Traits API Reference* for details about these classes.) In practice,
+most columns are derived from one of these subclasses, rather than from
+TableColumn. For the usual case of editing trait attributes on objects in the
+list, use ObjectColumn. You must specify the *name* parameter to the
+ObjectColumn() constructor, referencing the name of the trait attribute to be
+edited.
 
 You can specify additional columns that are not initially displayed using the
 *other_columns* parameter. If the *configurable* parameter is True (the
@@ -1220,30 +1221,6 @@ tree:
 The wxWidgets implementation automatically detects the bitmap format of the
 icon.
 
-.. _extra-trait-editor-factories:
-
-"Extra" Trait Editor Factories
-------------------------------
-
-The traitsui.wx package defines a few editor factories that are
-specific to the wxWidgets toolkit, some of which are also specific to the
-Microsoft Windows platform. These editor factories are not necessarily
-implemented for other GUI toolkits or other operating system platforms.
-
-AnimatedGIFEditor()
-```````````````````
-
-:Suitable for:
-    File
-:Default for:
-    (none)
-:Optional parameters:
-    *playing*
-
-AnimatedGIFEditor() generates a display of the contents of an animated GIF image
-file. The Boolean *playing* parameter determines whether the image is animated
-or static.
-
 ArrayViewEditor()
 `````````````````
 :Suitable for:
@@ -1289,20 +1266,6 @@ The following have special meaning for the DataFrameEditor():
 
 - **fonts**: either a font for all entries, or a mapping of column id to fonts.
 
-FlashEditor()
-`````````````
-
-:Suitable for:
-    string traits, Enum(string values)
-:Default for:
-    (none)
-
-FlashEditor() generates a display of an Adobe Flash Video file, using an ActiveX
-control (if one is installed on the system). This factory is available only on
-Microsoft Windows platforms. The attribute being edited must have a value whose
-text representation is the name or URL of a Flash video file. If the value is a
-Unicode string, it must contain only characters that are valid for filenames or
-URLs.
 
 HistoryEditor()
 ```````````````
@@ -1320,6 +1283,67 @@ control is used for all editor styles. The *entries* parameter determines how
 many entries are preserved in the history list. This type of control is used as
 part of the simple style of file editor; see :ref:`fileeditor`.
 
+ImageEditor()
+`````````````
+
+:Suitable for:
+    (any)
+:Default for:
+    (none)
+:Optional parameters:
+    *image*, *scale*, *preserve_aspect_ratio*, *allow_upscaling*,
+    *allow_clipping*
+
+ImageEditor() generates a read-only display of an image. The image to be
+displayed is determined by the *image* parameter, or by the value of the trait
+attribute being edited, if *image* is not specified. In either case, the value
+must be a PyFace ImageResource (pyface.api.ImageResource), or a string
+that can be converted to one. If *image* is specified, then the type and value
+of the trait attribute being edited are irrelevant and are ignored.
+
+For the Qt backend *scale*, *preserve_aspect_ratio*, *allow_upscaling*, and
+*allow_clipping* control whether the image should be scaled or not, and how
+to perform that scaling.
+
+
+.. _extra-trait-editor-factories:
+
+"Extra" Trait Editor Factories
+------------------------------
+
+The traitsui.wx package defines a few editor factories that are
+specific to the wxWidgets toolkit, some of which are also specific to the
+Microsoft Windows platform. These editor factories are not necessarily
+implemented for other GUI toolkits or other operating system platforms.
+
+AnimatedGIFEditor()
+```````````````````
+
+:Suitable for:
+    File
+:Default for:
+    (none)
+:Optional parameters:
+    *playing*
+
+AnimatedGIFEditor() generates a display of the contents of an animated GIF image
+file. The Boolean *playing* parameter determines whether the image is animated
+or static.
+
+FlashEditor()
+`````````````
+
+:Suitable for:
+    string traits, Enum(string values)
+:Default for:
+    (none)
+
+FlashEditor() generates a display of an Adobe Flash Video file, using an ActiveX
+control (if one is installed on the system). This factory is available only on
+Microsoft Windows platforms. The attribute being edited must have a value whose
+text representation is the name or URL of a Flash video file. If the value is a
+Unicode string, it must contain only characters that are valid for filenames or
+URLs.
 
 IEHTMLEditor()
 ``````````````
@@ -1355,28 +1379,6 @@ own state. You can display these attributes elsewhere in the View.
 - *status*: The text that would appear in the IE status bar.
 - *title*: The title of the currently displayed page.
 
-ImageEditor()
-`````````````
-
-:Suitable for:
-    (any)
-:Default for:
-    (none)
-:Optional parameters:
-    *image*, *scale*, *preserve_aspect_ratio*, *allow_upscaling*,
-    *allow_clipping*
-
-ImageEditor() generates a read-only display of an image. The image to be
-displayed is determined by the *image* parameter, or by the value of the trait
-attribute being edited, if *image* is not specified. In either case, the value
-must be a PyFace ImageResource (pyface.api.ImageResource), or a string
-that can be converted to one. If *image* is specified, then the type and value
-of the trait attribute being edited are irrelevant and are ignored.
-
-For the Qt backend *scale*, *preserve_aspect_ratio*, *allow_upscaling*, and
-*allow_clipping* control whether the image should be scaled or not, and how
-to perform that scaling.
-
 LEDEditor()
 ```````````
 
@@ -1398,131 +1400,3 @@ the value should be aligned within the display. The default is right-alignment.
    :alt: LED-like display of 90452
 
    Figure 56: LED Editor with right alignment
-
-ThemedButtonEditor()
-````````````````````
-
-:Suitable for:
-    Event
-:Default for:
-    (none)
-:Optional parameters:
-    *label*, *theme, down_theme, hover_theme, disabled_theme, image, position,*
-    *spacing, view*
-
-The ThemedButtonEditor() factory generates a button that is formatted according
-to specified or default themes. All editor styles have the same appearance.
-
-.. figure:: images/themed_button_editor.png
-   :alt: Themed buttons for normal, hover, down, and disabled states
-
-   Figure 57: Themed buttons in various states
-
-The theme-related parameters determine the appearance of the button in various
-states. Figure 57 shows the default theme.
-
-ThemedCheckboxEditor()
-``````````````````````
-
-:Suitable for:
-    Boolean
-:Default for:
-    (none)
-:Optional parameters:
-    *label*, *theme, hover_off_image,  hover_off_theme, hover_on_image,*
-    *hover_on_theme,  image, on_image, on_theme, position, spacing*
-
-The ThemedCheckboxEditor() factory generates a checkbox that is formatted
-according to specified or default themes. All editor styles have the same
-appearance.
-
-.. figure:: images/themed_checkbox_editor.png
-   :alt: Themed checkbox for On, Off, Hover Off, and Hover On states
-
-   Figure 58: Themed checkbox in various states
-
-The theme-related parameters determine the appearance of the checkbox in the
-various states. shows the default theme. If *label* is not specified for the
-editor factory, the value is inherited from the *label* value of the enclosing
-Item. Both labels may be displayed, if the Item's label is not hidden.
-
-
-ThemedSliderEditor()
-````````````````````
-
-:Suitable for:
-    Range
-:Default for:
-    (none)
-:Optional parameters:
-    *alignment, bg_color,  high, increment, low, show_value, slider_color,*
-    *text_color, tip_color*
-
-The ThemedSliderEditor() factory generates a slider control that is formatted
-according to specified or default themes. All editor styles have the same
-appearance. The value is edited by modifying its textual representation. The
-background of the control updates to reflect the value relative to the total
-range represented by a slider. For example, if the range is from -2 to 2, a
-value of 0 is represented by a bar covering the left half of the control area,
-as shown in Figure 59.
-
-.. image:: images/themed_slider_no_focus.png
-   :alt: Themed box with shading in the left half and a vertical orange bar in the middle
-
-.. figure:: images/themed_slide_with_focus.png
-   :alt: Themed box with the value 0 selected in the center
-
-   Figure 59: Themed slider without focus, and with focus
-
-ThemedTextEditor()
-``````````````````
-
-:Suitable for:
-    Str, String, Unicode, CStr, CUnicode, and any trait whose value is a string
-:Default for:
-    (none)
-:Optional parameters:
-    *auto_set*, *enter_set*, *evaluate*, *evaluate_name*, *mapping*,
-    *multi_line*, *password, theme*
-
-The ThemedTextEditor() factory generates a text editor that is formatted
-according to a specified theme. If no theme is specified, the editor uses the
-theme, if any, specified by the surrounding Group or View. Thus, there is no
-default theme. All editor styles have the same appearance, except the read-only
-style, which is not editable.
-
-.. image:: images/themed_text_editor_no_focus.png
-   :alt: Themed text editor, displaying text ``a*x*x-b*x``
-
-.. figure:: images/themed_text_editor_with_focus.png
-   :alt: Themed text editor, with text ``a*x*x-b*x`` selected
-
-   Figure 60: Themed text editor, without focus and with focus
-
-ThemedVerticalNotebookEditor()
-``````````````````````````````
-
-:Suitable for:
-    Lists of Instances
-:Default for:
-    (none)
-:Optional parameters:
-    *closed_theme, double_click, open_theme, page_name, multiple_open,*
-    *scrollable, view*
-
-The ThemedVerticalNotebookEditor() factory generates a "notebook" editor,
-containing tabs that can be vertically expanded or collapsed. It can be used for
-lists of instances, similarly to the ListEditor() factory, with the
-*use_notebook* parameter. You can specify themes to use for the open and closed
-states of the tabs.
-
-.. figure:: images/themed_notebook_closed.png
-   :alt: Stacked boxes displaying names as labels
-
-   Figure 61: Themed vertical notebook, with tabs for Person instances closed
-
-
-.. figure:: images/themed_notebook_open.png
-   :alt: Stacked boxes, with one expanded to show themed text editors
-
-   Figure 62: Themed vertical notebook, with one tab open

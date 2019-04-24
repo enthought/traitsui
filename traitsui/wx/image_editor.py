@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,15 +13,16 @@
 #  Author: David C. Morrill
 #  Date:   06/05/2007
 #
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 """ Traits UI 'display only' image editor.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.image_resource \
     import ImageResource
 
@@ -34,26 +35,27 @@ from traitsui.ui_traits \
 from traitsui.editors.image_editor \
     import ImageEditor
 
-from editor \
+from .editor \
     import Editor
 
-from image_control \
+from .image_control \
     import ImageControl
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  '_ImageEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class _ImageEditor ( Editor ):
+
+class _ImageEditor(Editor):
     """ Traits UI 'display only' image editor.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
@@ -61,23 +63,22 @@ class _ImageEditor ( Editor ):
         if image is None:
             image = self.value
 
-        self.control = ImageControl( parent, convert_bitmap( image ),
-                                     padding = 0 )
+        self.control = ImageControl(parent, convert_bitmap(image),
+                                    padding=0)
 
         self.set_tooltip()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         if self.factory.image is None:
             value = self.value
-            if isinstance( value, ImageResource ):
-                self.control.Bitmap( convert_bitmap( value ) )
+            if isinstance(value, ImageResource):
+                self.control.Bitmap(convert_bitmap(value))
 
 ### EOF #######################################################################
-

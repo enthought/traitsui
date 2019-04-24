@@ -12,6 +12,7 @@
 """ General regression tests for various fixed bugs.
 """
 
+from __future__ import absolute_import
 import unittest
 
 from traits.api import DelegatesTo, Event, HasTraits, Instance, Undefined
@@ -28,11 +29,16 @@ class Child(HasTraits):
 
 
 class TestRegression(unittest.TestCase):
+
     def test_editor_on_delegates_to_event(self):
         """ Make sure that DelegatesTo on Events passes Editor creation.
         """
         child = Child(parent=Parent())
-        editor = Editor(None, factory=TextEditor(), object=child, name='button')
+        editor = Editor(
+            None,
+            factory=TextEditor(),
+            object=child,
+            name='button')
         self.assertIs(editor.old_value, Undefined)
 
     def test_attribute_error(self):

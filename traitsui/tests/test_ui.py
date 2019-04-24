@@ -17,10 +17,13 @@
 Test cases for the UI object.
 """
 
-from traits.has_traits import HasTraits
+from __future__ import absolute_import
+import nose
+
+from traits.has_traits import HasTraits, HasStrictTraits
 from traits.trait_types import Str, Int
 import traitsui
-from traitsui.item import Item
+from traitsui.item import Item, spring
 from traitsui.view import View
 
 from traitsui.tests._tools import *
@@ -35,7 +38,18 @@ class FooDialog(HasTraits):
     traits_view = View(
         Item('my_int'),
         Item('my_str'),
-        buttons = ['OK']
+        buttons=['OK']
+    )
+
+
+class DisallowNewTraits(HasStrictTraits):
+    """ Make sure no extra traits are added.
+    """
+    x = Int(10)
+
+    traits_view = View(
+        Item('x'),
+        spring,
     )
 
 
@@ -150,10 +164,11 @@ def test_destroy_after_ok_wx():
     foo = FooDialog()
     ui = foo.edit_traits()
 
-    # keep references to the children of the ui to check that they were deleted
-    ui_children = []
-    for c in ui.control.GetChildren():
-        ui_children.append(c)
+    # keep reference to the control to check that it was destroyed
+    control = ui.control
+
+    # decorate control's `Destroy` function to check that it is called
+    control.Destroy = count_calls(control.Destroy)
 
     # press the OK button and close the dialog
     okbutton = ui.control.FindWindowByName('button')
@@ -162,10 +177,7 @@ def test_destroy_after_ok_wx():
     okbutton.ProcessEvent(click_event)
 
     nose.tools.assert_is_none(ui.control)
-    # and its children have been destroyed
-    for c in ui_children:
-        with nose.tools.assert_raises(wx._core.PyDeadObjectError):
-            c.GetName()
+    nose.tools.assert_equal(control.Destroy._n_calls, 1)
 
 
 @skip_if_not_qt4
@@ -178,21 +190,24 @@ def test_destroy_after_ok_qt():
     foo = FooDialog()
     ui = foo.edit_traits()
 
-    # decorate children's `deleteLater` function to check that it is called
-    for c in ui.control.children():
-        c.deleteLater = count_calls(c.deleteLater)
+    # keep reference to the control to check that it was deleted
+    control = ui.control
 
-    # keep references to the children of the ui to check that they were deleted
-    ui_children = []
-    for c in ui.control.children():
-        ui_children.append(c)
+    # decorate control's `deleteLater` function to check that it is called
+    control.deleteLater = count_calls(control.deleteLater)
 
     # press the OK button and close the dialog
-    okb = ui.control.findChild(qt.QtGui.QPushButton)
+    okb = control.findChild(qt.QtGui.QPushButton)
     okb.click()
 
     nose.tools.assert_is_none(ui.control)
-    # children are scheduled for removal
-    for c in ui_children:
-        if isinstance(c, qt.QtGui.QWidget):
-            nose.tools.assert_equal(c.deleteLater._n_calls, 1)
+    nose.tools.assert_equal(control.deleteLater._n_calls, 1)
+
+
+@skip_if_null
+def test_no_spring_trait():
+    obj = DisallowNewTraits()
+    ui = obj.edit_traits()
+    ui.dispose()
+
+    nose.tools.assert_true('spring' not in obj.traits())

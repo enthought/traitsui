@@ -11,7 +11,12 @@
 # All configuration values have a default value; values that are commented out
 # serve to show the default value.
 
-import sys, os
+from __future__ import absolute_import
+
+from io import open
+import os
+
+base_path = os.path.dirname(__file__)
 
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
@@ -23,7 +28,10 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.extlinks']
+extensions = [
+    'sphinx.ext.extlinks', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx', 'traits.util.trait_documenter'
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -36,15 +44,27 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'traitsui'
-copyright = '2008-2015, Enthought'
+copyright = '2008-2018, Enthought'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
 #
 # Pull from the actual release number without imports
 d = {}
-execfile(os.path.join('..', '..', 'traitsui', '_version.py'), d)
-version = release = d['version']
+try:
+    version_path = os.path.join(base_path, '..', '..', 'traitsui', '_version.py')
+    with open(version_path, 'r', encoding='utf8') as fp:
+        exec(compile(fp.read(), version_path, 'exec'), d)
+    release = d['version']
+    version = '.'.join(d['version'].split('.', 2)[:2])
+
+except IOError as ioe:
+    import warnings
+    msg = '''_version.py seems to be missing!
+            Please run
+            $ python setup.py develop
+            to generate this file!'''
+    warnings.warn(RuntimeWarning(msg.format(ioe)))
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -87,7 +107,7 @@ pygments_style = 'sphinx'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "TraitsUI 4 User Manual"
+html_title = "TraitsUI {} User Manual".format(version.split('.')[0])
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -99,13 +119,13 @@ html_title = "TraitsUI 4 User Manual"
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = "et.ico"
+#html_favicon = "favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static',
-                    os.path.join('tutorials','code_snippets')]
+                    os.path.join('tutorials', 'code_snippets')]
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -153,12 +173,22 @@ try:
     html_theme = 'enthought'
 except ImportError as exc:
     import warnings
-    msg = "Can't find Enthought Sphinx Theme, using default.\nException was:\n{}"
+    msg = '''Can't find Enthought Sphinx Theme, using default.
+            Exception was: {}
+            Enthought Sphinx Theme can be downloaded from
+            https://github.com/enthought/enthought-sphinx-theme'''
     warnings.warn(RuntimeWarning(msg.format(exc)))
 
     # old defaults
-    html_logo = "e-logo-rev.png"
+    html_logo = "e-logo-rev.jpg"
+    html_favicon = "et.png"
     html_style = 'default.css'
+    html_theme = 'classic'
+
+# #html_theme = 'bizstyle'
+# html_logo = "e-logo-rev.png"
+# #html_style = 'default.css'
+# #html_theme = 'classic'
 
 # Useful aliases to avoid repeating long URLs.
 extlinks = {'github-demo': (
@@ -198,3 +228,14 @@ latex_logo = "e-logo-rev.png"
 
 # If false, no module index is generated.
 #latex_use_modindex = True
+
+# Autodoc options
+autodo_mock_imports = [
+    "wx", "PySide", "PyQt", "PyQt5"
+]
+
+# Intersphinx configuration
+intersphinx_mapping = {
+    'traits': ('http://docs.enthought.com/traits', None),
+    'pyface': ('http://docs.enthought.com/pyface', None),
+}

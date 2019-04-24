@@ -18,9 +18,9 @@
 """ Defines the font editor factory for all traits user interface toolkits.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -28,10 +28,12 @@ from ..editor_factory import EditorFactory
 
 from ..toolkit import toolkit_object
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------------
-class ToolkitEditorFactory ( EditorFactory ):
+#-------------------------------------------------------------------------
+
+
+class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for font editors.
     """
     pass
@@ -42,7 +44,7 @@ class ToolkitEditorFactory ( EditorFactory ):
 # in traitsui.<toolkit>.font_editor, and if none is found, the
 # ToolkitEditorFactory declared here is returned.
 def FontEditor(*args, **traits):
-    """ Returns an instance of the toolkit-specific editor factory declared in
+    r""" Returns an instance of the toolkit-specific editor factory declared in
     traitsui.<toolkit>.font_editor. If such an editor factory
     cannot be located, an instance of the abstract ToolkitEditorFactory
     declared in traitsui.editors.font_editor is returned.
@@ -55,10 +57,11 @@ def FontEditor(*args, **traits):
     """
 
     try:
-       return toolkit_object('font_editor:ToolkitEditorFactory', True)(*args,
-                                                                    **traits)
+        return toolkit_object(
+            'font_editor:ToolkitEditorFactory', True)(
+            *args, **traits)
     except Exception as e:
-       return ToolkitEditorFactory(*args, **traits)
+        return ToolkitEditorFactory(*args, **traits)
 
 
 ## EOF ########################################################################

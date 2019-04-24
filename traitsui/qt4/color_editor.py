@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -12,28 +13,30 @@
 """ Defines the various color editors for the PyQt user interface toolkit.
 """
 
-from __future__ import division
+from __future__ import absolute_import, division
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from pyface.qt import QtCore, QtGui
 
 from traitsui.editors.color_editor \
     import ToolkitEditorFactory as BaseToolkitEditorFactory
 
-from editor_factory \
+from .editor_factory \
     import SimpleEditor as BaseSimpleEditor, \
     TextEditor as BaseTextEditor, \
     ReadonlyEditor as BaseReadonlyEditor
 
-from editor \
+from .editor \
     import Editor
+import six
 
-#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------
 #  Constants:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Standard color samples:
 color_samples = []
@@ -47,60 +50,64 @@ color_samples = []
 ## in this file does not work quite well, since we want custom editors to
 ## override these methods easily.
 
+
 class ToolkitEditorFactory(BaseToolkitEditorFactory):
     """ PyQt editor factory for color editors.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Gets the PyQt color equivalent of the object trait:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def to_qt4_color ( self, editor ):
+    def to_qt4_color(self, editor):
         """ Gets the PyQt color equivalent of the object trait.
         """
         if self.mapped:
-            return getattr( editor.object, editor.name + '_' )
+            return getattr(editor.object, editor.name + '_')
 
-        return getattr( editor.object, editor.name )
+        return getattr(editor.object, editor.name)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Gets the application equivalent of a PyQt value:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def from_qt4_color ( self, color ):
+    def from_qt4_color(self, color):
         """ Gets the application equivalent of a PyQt value.
         """
         return color
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the text representation of a specified color value:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def str_color ( self, color ):
+    def str_color(self, color):
         """ Returns the text representation of a specified color value.
         """
         if isinstance(color, QtGui.QColor):
             alpha = color.alpha()
             if alpha == 255:
-                return "(%d,%d,%d)" % (color.red(), color.green(), color.blue())
+                return "(%d,%d,%d)" % (
+                    color.red(), color.green(), color.blue())
 
-            return "(%d,%d,%d,%d)" % (color.red(), color.green(), color.blue(), alpha)
+            return "(%d,%d,%d,%d)" % (
+                color.red(), color.green(), color.blue(), alpha)
 
         return color
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'SimpleColorEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class SimpleColorEditor ( BaseSimpleEditor ):
+
+class SimpleColorEditor(BaseSimpleEditor):
     """ Simple style of color editor, which displays a text field whose
     background color is the color value. Selecting the text field displays
     a dialog box for selecting a new color value.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Invokes the pop-up editor for an object trait:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def popup_editor(self):
         """ Invokes the pop-up editor for an object trait.
@@ -120,50 +127,51 @@ class SimpleColorEditor ( BaseSimpleEditor ):
             self.value = self.factory.from_qt4_color(color)
             self.update_editor()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        super( SimpleColorEditor, self ).update_editor()
-        set_color( self )
+        super(SimpleColorEditor, self).update_editor()
+        set_color(self)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the text representation of a specified color value:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def string_value ( self, color ):
+    def string_value(self, color):
         """ Returns the text representation of a specified color value.
         """
-        return self.factory.str_color( color )
+        return self.factory.str_color(color)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'CustomColorEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class CustomColorEditor ( Editor ):
+
+class CustomColorEditor(Editor):
     """ Custom style of color editor, which displays a color editor panel.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.control, self._simple_field = color_editor_for(self, parent)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Disposes of the contents of an editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def dispose ( self ):
+    def dispose(self):
         """ Disposes of the contents of an editor.
         """
         if getattr(self, '_simple_field', None) is not None:
@@ -171,19 +179,19 @@ class CustomColorEditor ( Editor ):
             self._simple_field = None
         super(CustomColorEditor, self).dispose()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self._simple_field.update_editor()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the object trait when a color swatch is clicked:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def update_object_from_swatch(self, color_text):
         """ Updates the object trait when a color swatch is clicked.
@@ -192,100 +200,103 @@ class CustomColorEditor ( Editor ):
         self.value = self.factory.from_qt4_color(color)
         self.update_editor()
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the text representation of a specified color value:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def string_value ( self, color ):
+    def string_value(self, color):
         """ Returns the text representation of a specified color value.
         """
-        return self.factory.str_color( color )
+        return self.factory.str_color(color)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'TextColorEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class TextColorEditor ( BaseTextEditor ):
+
+class TextColorEditor(BaseTextEditor):
     """ Text style of color editor, which displays a text field whose
     background color is the color value.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Handles the user changing the contents of the edit control:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
-        self.value = unicode(self.control.text())
-        set_color( self )
+        self.value = six.text_type(self.control.text())
+        set_color(self)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        super( TextColorEditor, self ).update_editor()
-        set_color( self )
+        super(TextColorEditor, self).update_editor()
+        set_color(self)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the text representation of a specified color value:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def string_value ( self, color ):
+    def string_value(self, color):
         """ Returns the text representation of a specified color value.
         """
-        return self.factory.str_color( color )
+        return self.factory.str_color(color)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ReadonlyColorEditor' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ReadonlyColorEditor ( BaseReadonlyEditor ):
+
+class ReadonlyColorEditor(BaseReadonlyEditor):
     """ Read-only style of color editor, which displays a read-only text field
     whose background color is the color value.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.control = QtGui.QLineEdit()
         self.control.setReadOnly(True)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
-        super( ReadonlyColorEditor, self ).update_editor()
-        set_color( self )
+        super(ReadonlyColorEditor, self).update_editor()
+        set_color(self)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns the text representation of a specified color value:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def string_value ( self, color ):
+    def string_value(self, color):
         """ Returns the text representation of a specified color value.
         """
-        return self.factory.str_color( color )
+        return self.factory.str_color(color)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #   Sets the color of the specified editor's color control:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def set_color ( editor ):
+
+def set_color(editor):
     """  Sets the color of the specified color control.
     """
     color = editor.factory.to_qt4_color(editor)
@@ -303,6 +314,7 @@ def set_color ( editor ):
 #----------------------------------------------------------------------------
 #  Creates a custom color editor panel for a specified editor:
 #----------------------------------------------------------------------------
+
 
 class FixedButton(QtGui.QPushButton):
     """ Override to work around a bug in Qt 4.7 on Macs.
@@ -329,8 +341,8 @@ def color_editor_for(editor, parent):
     panel = QtGui.QHBoxLayout(root)
     panel.setContentsMargins(0, 0, 0, 0)
 
-    swatch_editor = editor.factory.simple_editor(editor.ui, editor.object,
-            editor.name, editor.description, None)
+    swatch_editor = editor.factory.simple_editor(
+        editor.ui, editor.object, editor.name, editor.description, None)
     swatch_editor.prepare(parent)
     panel.addWidget(swatch_editor.control)
 
@@ -357,7 +369,7 @@ def color_editor_for(editor, parent):
     for r in range(rows):
         for c in range(cols):
             control = FixedButton()
-            color = color_samples[r*cols + c]
+            color = color_samples[r * cols + c]
             color_text = '%d,%d,%d,%d' % color.getRgb()
             control.setStyleSheet(sheet_template % color_text)
             control.setAttribute(QtCore.Qt.WA_LayoutUsesWidgetRect, True)
@@ -370,7 +382,7 @@ def color_editor_for(editor, parent):
 
             i += 1
 
-    mapper.mapped[unicode].connect(editor.update_object_from_swatch)
+    mapper.mapped[six.text_type].connect(editor.update_object_from_swatch)
 
     panel.addLayout(grid)
 
@@ -379,7 +391,7 @@ def color_editor_for(editor, parent):
 
 # Define the SimpleEditor, CustomEditor, etc. classes which are used by the
 # editor factory for the color editor.
-SimpleEditor   = SimpleColorEditor
-CustomEditor   = CustomColorEditor
-TextEditor     = TextColorEditor
+SimpleEditor = SimpleColorEditor
+CustomEditor = CustomColorEditor
+TextEditor = TextColorEditor
 ReadonlyEditor = ReadonlyColorEditor

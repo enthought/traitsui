@@ -19,44 +19,35 @@
     Traits UI View object.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
 from .toolkit import toolkit
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Default handler for showing the help associated with a view:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def default_show_help ( info, control ):
+
+def default_show_help(info, control):
     """ Default handler for showing the help associated with a view.
     """
-    toolkit().show_help( info.ui, control )
+    toolkit().show_help(info.ui, control)
 
 # The default handler for showing help
 show_help = default_show_help
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Allows an application to change the default show help handler:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def on_help_call ( new_show_help = None ):
+
+def on_help_call(new_show_help=None):
     """ Sets a new global help provider function.
 
-    Parameters
-    ----------
-    new_show_help : function
-        The function to set as the new global help provider
-
-    Returns
-    -------
-    The previous global help provider function
-
-    Description
-    -----------
     The help provider function must have a signature of
     *function*(*info*, *control*), where *info* is a UIInfo object for the
     current view, and *control* is the UI control that invokes the function
@@ -65,6 +56,16 @@ def on_help_call ( new_show_help = None ):
 
     To retrieve the current help provider function, call this function with
     no arguments.
+
+    Parameters
+    ----------
+    new_show_help : function
+        The function to set as the new global help provider
+
+    Returns
+    -------
+    previous : callable
+        The previous global help provider function
     """
     global show_help
 
@@ -72,4 +73,3 @@ def on_help_call ( new_show_help = None ):
     if new_show_help is not None:
         show_help = new_show_help
     return result
-

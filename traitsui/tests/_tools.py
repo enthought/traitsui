@@ -13,17 +13,21 @@
 #
 #------------------------------------------------------------------------------
 
-from functools import partial
-from contextlib import contextmanager
-import nose
+from __future__ import absolute_import, print_function
 
 import sys
 import traceback
+import inspect
+from functools import partial, wraps
+from contextlib import contextmanager
+from unittest import skip
 
+from nose import SkipTest
 from traits.etsconfig.api import ETSConfig
 import traits.trait_notifiers
 
 # ######### Testing tools
+
 
 @contextmanager
 def store_exceptions_on_all_threads():
@@ -40,7 +44,7 @@ def store_exceptions_on_all_threads():
     def _print_uncaught_exception(type, value, tb):
         message = 'Uncaught exception:\n'
         message += ''.join(traceback.format_exception(type, value, tb))
-        print message
+        print(message)
 
     def excepthook(type, value, tb):
         exceptions.append(value)
@@ -67,17 +71,24 @@ def _is_current_backend(backend_name=''):
     return ETSConfig.toolkit == backend_name
 
 
-def skip_if_not_backend(test_func, backend_name=''):
+def skip_if_not_backend(item, backend_name=''):
     """Decorator that skip tests if the backend is not the desired one."""
 
-    if not _is_current_backend(backend_name):
-        # preserve original name so that it appears in the report
-        orig_name = test_func.__name__
-        def test_func():
-            raise nose.SkipTest
-        test_func.__name__ = orig_name
-
-    return test_func
+    if inspect.isclass(item):
+        if not _is_current_backend(backend_name):
+            message = '' if backend_name != '' else 'Test only for {}'
+            wrapper = skip(message)(item)
+        else:
+            wrapper = item
+    else:
+        @wraps(item)
+        def wrapper(*args, **kwargs):
+            if not _is_current_backend(backend_name):
+                message = '' if backend_name != '' else 'Test only for {}'
+                raise SkipTest(message.format(backend_name))
+            else:
+                return item(*args, **kwargs)
+    return wrapper
 
 
 #: Return True if current backend is 'wx'
@@ -100,21 +111,23 @@ skip_if_not_qt4 = partial(skip_if_not_backend, backend_name='qt4')
 skip_if_not_null = partial(skip_if_not_backend, backend_name='null')
 
 
+#: True if current platform is MacOS
+is_mac_os = (sys.platform == "Darwin")
+
+
 def skip_if_null(test_func):
     """Decorator that skip tests if the backend is set to 'null'.
 
     Some tests handle both wx and Qt in one go, but many things are not
     defined in the null backend. Use this decorator to skip the test.
     """
-
-    if _is_current_backend('null'):
-        # preserve original name so that it appears in the report
-        orig_name = test_func.__name__
-        def test_func():
-            raise nose.SkipTest
-        test_func.__name__ = orig_name
-
-    return test_func
+    @wraps(test_func)
+    def wrapper(*args, **kwargs):
+        if _is_current_backend('null'):
+            raise SkipTest("Test not working on the 'null' backend")
+        else:
+            return test_func(*args, **kwargs)
+    return wrapper
 
 
 def count_calls(func):
@@ -181,10 +194,10 @@ def get_dialog_size(ui_control):
 def apply_on_children(func, node, _level=0):
     """Print the result of applying a function on `node` and its children.
     """
-    print '-'*_level + str(node)
-    print ' '*_level + str(func(node)) + '\n'
+    print('-' * _level + str(node))
+    print(' ' * _level + str(func(node)) + '\n')
     for child in get_children(node):
-        apply_on_children(func, child, _level+1)
+        apply_on_children(func, child, _level + 1)
 
 
 def wx_print_names(node):
@@ -221,11 +234,11 @@ def wx_announce_when_destroyed(node):
     _destroy_method = node.Destroy
 
     def destroy_wrapped():
-        print 'Destroying:', node
+        print('Destroying:', node)
         #print 'Stack is'
         #traceback.print_stack()
         _destroy_method()
-        print 'Destroyed:', node
+        print('Destroyed:', node)
 
     node.Destroy = destroy_wrapped
     return 'Node {} decorated'.format(node.GetName())

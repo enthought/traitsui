@@ -1,4 +1,4 @@
-#--(Python Source Browser Example)----------------------------------------------
+#--(Python Source Browser Example)----------------------------------------
 """
 This lesson shows a combination of the **DirectoryEditor**, the
 **TabularEditor** and the **CodeEditor** used together to create a very simple
@@ -35,8 +35,9 @@ thresholds. The column id is used simply to provide a name reference for the
 related trait and property definitions in the adapter class itself.
 """
 
-#--<Imports>--------------------------------------------------------------------
+#--<Imports>--------------------------------------------------------------
 
+from __future__ import absolute_import
 import traits
 import traitsui
 
@@ -53,7 +54,7 @@ from os.path \
 
 from traits.api \
     import HasPrivateTraits, Str, Float, List, Directory, File, Code, \
-           Instance, Property, cached_property
+    Instance, Property, cached_property
 
 from traitsui.api \
     import View, Item, HSplit, VSplit, TabularEditor
@@ -64,112 +65,115 @@ from traitsui.tabular_adapter \
 from pyface.image_resource \
     import ImageResource
 
-#--<Constants>------------------------------------------------------------------
+#--<Constants>------------------------------------------------------------
 
 # Necessary because of the dynamic way in which the demos are loaded:
-search_path = [ join( dirname( traitsui.api.__file__ ),
-                      'demo', 'Applications' ) ]
+search_path = [join(dirname(traitsui.api.__file__),
+                    'demo', 'Applications')]
 
-#--[FileInfo Class]-------------------------------------------------------------
+#--[FileInfo Class]-------------------------------------------------------
 
-class FileInfo ( HasPrivateTraits ):
+
+class FileInfo(HasPrivateTraits):
 
     file_name = File
-    name      = Property
-    size      = Property
-    time      = Property
-    date      = Property
+    name = Property
+    size = Property
+    time = Property
+    date = Property
 
     @cached_property
-    def _get_name ( self ):
-        return basename( self.file_name )
+    def _get_name(self):
+        return basename(self.file_name)
 
     @cached_property
-    def _get_size ( self ):
-        return getsize( self.file_name )
+    def _get_size(self):
+        return getsize(self.file_name)
 
     @cached_property
-    def _get_time ( self ):
-        return strftime( '%I:%M:%S %p',
-                         localtime( getmtime( self.file_name ) ) )
+    def _get_time(self):
+        return strftime('%I:%M:%S %p',
+                        localtime(getmtime(self.file_name)))
 
     @cached_property
-    def _get_date ( self ):
-        return strftime( '%m/%d/%Y',
-                         localtime( getmtime( self.file_name ) ) )
+    def _get_date(self):
+        return strftime('%m/%d/%Y',
+                        localtime(getmtime(self.file_name)))
 
-#--[FileInfoAdapter Class]------------------------------------------------------
+#--[FileInfoAdapter Class]------------------------------------------------
 
-class FileInfoAdapter ( TabularAdapter ):
 
-    columns = [ ( 'File Name', 'name' ),
-                ( 'Size',      'size' ),
-                ( '',          'big'  ),
-                ( 'Time',      'time' ),
-                ( 'Date',      'date' ) ]
+class FileInfoAdapter(TabularAdapter):
 
-    even_bg_color  = wx.Colour( 201, 223, 241 )
-    font           = 'Courier 10'
-    size_alignment = Str( 'right' )
-    time_alignment = Str( 'right' )
-    date_alignment = Str( 'right' )
-    big_text       = Str
-    big_width      = Float( 18 )
-    big_image      = Property
+    columns = [('File Name', 'name'),
+               ('Size', 'size'),
+               ('', 'big'),
+               ('Time', 'time'),
+               ('Date', 'date')]
 
-    def _get_big_image ( self ):
+    even_bg_color = wx.Colour(201, 223, 241)
+    font = 'Courier 10'
+    size_alignment = Str('right')
+    time_alignment = Str('right')
+    date_alignment = Str('right')
+    big_text = Str
+    big_width = Float(18)
+    big_image = Property
+
+    def _get_big_image(self):
         size = self.item.size
         if size > 65536:
             return 'red_ball'
 
-        return ( None, 'blue_ball' )[ size > 16384 ]
+        return (None, 'blue_ball')[size > 16384]
 
-#--[Tabular Editor Definition]--------------------------------------------------
+#--[Tabular Editor Definition]--------------------------------------------
 
 tabular_editor = TabularEditor(
-    editable   = False,
-    selected   = 'file_info',
-    adapter    = FileInfoAdapter(),
-    operations = [],
-    images     = [ ImageResource( 'blue_ball', search_path = search_path ),
-                   ImageResource( 'red_ball',  search_path = search_path ) ]
+    editable=False,
+    selected='file_info',
+    adapter=FileInfoAdapter(),
+    operations=[],
+    images=[ImageResource('blue_ball', search_path=search_path),
+             ImageResource('red_ball', search_path=search_path)]
 )
 
-#--[PythonBrowser Class]--------------------------------------------------------
+#--[PythonBrowser Class]--------------------------------------------------
 
-class PythonBrowser ( HasPrivateTraits ):
 
-    dir       = Directory
-    files     = List( FileInfo )
-    file_info = Instance( FileInfo )
-    code      = Code
+class PythonBrowser(HasPrivateTraits):
+
+    dir = Directory
+    files = List(FileInfo)
+    file_info = Instance(FileInfo)
+    code = Code
 
     view = View(
         HSplit(
-            Item( 'dir', style = 'custom' ),
+            Item('dir', style='custom'),
             VSplit(
-                Item( 'files', editor = tabular_editor ),
-                Item( 'code',  style = 'readonly' ),
-                show_labels = False ),
-            show_labels = False
+                Item('files', editor=tabular_editor),
+                Item('code', style='readonly'),
+                show_labels=False),
+            show_labels=False
         ),
-        resizable = True,
-        width     = 0.75,
-        height    = 0.75
+        resizable=True,
+        width=0.75,
+        height=0.75
     )
 
-    #-- Event Handlers ---------------------------------------------------------
+    #-- Event Handlers -------------------------------------------------------
 
-    def _dir_changed ( self, dir ):
-        self.files = [ FileInfo( file_name = join( dir, name ) )
-                       for name in listdir( dir )
-                       if ((splitext( name )[1] == '.py') and
-                           isfile( join( dir, name ) )) ]
+    def _dir_changed(self, dir):
+        self.files = [FileInfo(file_name=join(dir, name))
+                      for name in listdir(dir)
+                      if ((splitext(name)[1] == '.py') and
+                          isfile(join(dir, name)))]
 
-    def _file_info_changed ( self, file_info ):
+    def _file_info_changed(self, file_info):
         fh = None
         try:
-            fh = open( file_info.file_name, 'rb' )
+            fh = open(file_info.file_name, 'rb')
             self.code = fh.read()
         except:
             pass
@@ -177,7 +181,6 @@ class PythonBrowser ( HasPrivateTraits ):
         if fh is not None:
             fh.close()
 
-#--[Example*]-------------------------------------------------------------------
+#--[Example*]-------------------------------------------------------------
 
-demo = PythonBrowser( dir = dirname( traits.api.__file__ ) )
-
+demo = PythonBrowser(dir=dirname(traits.api.__file__))

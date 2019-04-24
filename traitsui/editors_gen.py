@@ -20,8 +20,10 @@ backends.
 from __future__ import absolute_import
 
 import glob
+from io import open
 
-def gen_editor_definitions(target_filename = 'editors.py'):
+
+def gen_editor_definitions(target_filename='editors.py'):
     """ Generates a file containing definitions for editors defined in the
        various backends.
 
@@ -40,19 +42,19 @@ def gen_editor_definitions(target_filename = 'editors.py'):
     definition_files = glob.glob('*_definition.py')
     new_editors = []
     for file in definition_files:
-           import_path = file.rstrip('.py')
-           mod = __import__(import_path, globals=globals(), level=1)
-           for name in dir(mod):
-               if '_definition' in name:
-                   new_editors.append(getattr(mod, name))
+        import_path = file.rstrip('.py')
+        mod = __import__(import_path, globals=globals(), level=1)
+        for name in dir(mod):
+            if '_definition' in name:
+                new_editors.append(getattr(mod, name))
     target_file = open(target_filename, 'a')
     for editor_name in new_editors:
-            function = "\ndef %s( *args, **traits ):\n" % editor_name.split(':')[1]
-            target_file.write(function)
-            func_code =  ' '*4 + 'from toolkit import toolkit_object\n'
-            func_code += ' '*4 + \
-                         'return toolkit_object("%s")( *args, **traits )' \
-                         % editor_name
-            target_file.write(func_code)
-            target_file.write('\n\n')
+        function = "\ndef %s( *args, **traits ):\n" % editor_name.split(':')[1]
+        target_file.write(function)
+        func_code = ' ' * 4 + 'from toolkit import toolkit_object\n'
+        func_code += ' ' * 4 + \
+                     'return toolkit_object("%s")( *args, **traits )' \
+                     % editor_name
+        target_file.write(func_code)
+        target_file.write('\n\n')
     target_file.close()

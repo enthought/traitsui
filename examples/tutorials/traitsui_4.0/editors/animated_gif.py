@@ -1,4 +1,4 @@
-#--(Animated GIF Editor)--------------------------------------------------------
+#--(Animated GIF Editor)--------------------------------------------------
 """
 Animated GIF Editor
 ===================
@@ -19,8 +19,9 @@ animated GIF image file to be displayed. No user editing of the value is
 provided by this editor, it is display only.
 """
 
-#--[Imports]--------------------------------------------------------------------
+#--[Imports]--------------------------------------------------------------
 
+from __future__ import absolute_import
 from os.path \
     import join, dirname
 
@@ -33,51 +34,51 @@ from traitsui.api \
 from traitsui.wx.animated_gif_editor \
     import AnimatedGIFEditor
 
-#--[Setup]----------------------------------------------------------------------
+#--[Setup]----------------------------------------------------------------
 
 # Some sample animated GIF files:
 import traitsui as ui
 
-base_path = join( dirname( ui.__file__ ), 'demo', 'Extras', 'images' )
+base_path = join(dirname(ui.__file__), 'demo', 'Extras', 'images')
 
 # Get the names of the animated GIF files that can be displayed:
 files = [
-    join( base_path, 'logo_64x64.gif' ),
-    join( base_path, 'logo_48x48.gif' ),
-    join( base_path, 'logo_32x32.gif' )
+    join(base_path, 'logo_64x64.gif'),
+    join(base_path, 'logo_48x48.gif'),
+    join(base_path, 'logo_32x32.gif')
 ]
 
-#--[AnimatedGIFDemo Class]------------------------------------------------------
+#--[AnimatedGIFDemo Class]------------------------------------------------
 
-class AnimatedGIFDemo ( HasTraits ):
+
+class AnimatedGIFDemo(HasTraits):
 
     # The animated GIF file to display:
-    gif_file = File( files[0] )
+    gif_file = File(files[0])
 
     # Is the animation playing or not?
-    playing = Bool( True )
+    playing = Bool(True)
 
     # The traits view:
     view = View(
         VGroup(
             HGroup(
-                Item( 'gif_file',
-                      editor     = AnimatedGIFEditor( playing = 'playing' ),
-                      show_label = False ),
-                Item( 'playing' ),
+                Item('gif_file',
+                     editor=AnimatedGIFEditor(playing='playing'),
+                     show_label=False),
+                Item('playing'),
             ),
             '_',
-            Item( 'gif_file',
-                  label  = 'GIF File',
-                  editor = EnumEditor( values = files )
-            )
+            Item('gif_file',
+                 label='GIF File',
+                 editor=EnumEditor(values=files)
+                 )
         ),
-        title     = 'Animated GIF Demo',
-        resizable = True,
-        buttons   = [ 'OK' ]
+        title='Animated GIF Demo',
+        resizable=True,
+        buttons=['OK']
     )
 
-#--<Example*>-------------------------------------------------------------------
+#--<Example*>-------------------------------------------------------------
 
 demo = AnimatedGIFDemo()
-

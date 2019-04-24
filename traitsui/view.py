@@ -19,21 +19,40 @@
     Traits-based user interface.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
-from traits.api import (Any, Bool, Callable, Enum, Event, Float, Instance, List, Str,
-    Trait, TraitPrefixList)
+from traits.api import (
+    Any,
+    Bool,
+    Callable,
+    Enum,
+    Event,
+    Float,
+    Instance,
+    List,
+    Str,
+    Trait,
+    TraitPrefixList)
 
 from .view_element import ViewElement, ViewSubElement
 
 from .ui import UI
 
-from .ui_traits import (AButton, ATheme, AnObject, Buttons, DockStyle,
-    EditorStyle, ExportType, HelpId, Image, SequenceTypes, ViewStatus)
+from .ui_traits import (
+    AButton,
+    AnObject,
+    Buttons,
+    DockStyle,
+    EditorStyle,
+    ExportType,
+    HelpId,
+    Image,
+    SequenceTypes,
+    ViewStatus)
 
 from .handler import Handler, default_handler
 
@@ -42,31 +61,32 @@ from .group import Group
 from .item import Item
 
 from .include import Include
+import six
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Name of the view trait:
-AnId = Str( desc = 'the name of the view' )
+AnId = Str(desc='the name of the view')
 
 # Contents of the view trait (i.e., a single Group object):
-Content = Instance( Group, desc = 'the content of the view' )
+Content = Instance(Group, desc='the content of the view')
 
 # An optional model/view factory for converting the model into a viewable
 # 'model_view' object
-AModelView = Callable( desc = 'the factory function for converting a model '
-                              'into a model/view object' )
+AModelView = Callable(desc='the factory function for converting a model '
+                      'into a model/view object')
 
 # Reference to a Handler object trait:
-AHandler = Any( desc = 'the handler for the view' )
+AHandler = Any(desc='the handler for the view')
 
 # Dialog window title trait:
-ATitle = Str( desc = 'the window title for the view' )
+ATitle = Str(desc='the window title for the view')
 
 # Dialog window icon trait
 #icon_trait = Instance( 'pyface.image_resource.ImageResource',
-#                     desc = 'the ImageResource of the icon file for the view' )
+# desc = 'the ImageResource of the icon file for the view' )
 
 # User interface 'kind' trait. The values have the following meanings:
 #
@@ -89,47 +109,48 @@ ATitle = Str( desc = 'the window title for the view' )
 #   pages, which can be accessed by clicking **Next** and **Back** buttons.
 #   Changes to attribute values are applied only when the user clicks the
 #   **Finish** button on the last page.
-AKind = Trait( 'live', TraitPrefixList(
-                   'panel', 'subpanel', 'modal', 'nonmodal', 'livemodal',
-                   'live', 'popup', 'popover', 'info', 'wizard' ),
-               desc = 'the kind of view window to create',
-               cols = 4 )
+AKind = Trait('live', TraitPrefixList(
+    'panel', 'subpanel', 'modal', 'nonmodal', 'livemodal',
+    'live', 'popup', 'popover', 'info', 'wizard'),
+    desc='the kind of view window to create',
+    cols=4)
 
 # Apply changes handler:
-OnApply = Callable( desc = 'the routine to call when modal changes are applied '
-                           'or reverted' )
+OnApply = Callable(desc='the routine to call when modal changes are applied '
+                   'or reverted')
 
 # Is the dialog window resizable?
-IsResizable = Bool( False, desc = 'whether dialog can be resized or not' )
+IsResizable = Bool(False, desc='whether dialog can be resized or not')
 
 # Is the view scrollable?
-IsScrollable = Bool( False, desc = 'whether view should be scrollable or not' )
+IsScrollable = Bool(False, desc='whether view should be scrollable or not')
 
 # The valid categories of imported elements that can be dragged into the view:
-ImportTypes = List( Str, desc = 'the categories of elements that can be '
-                                'dragged into the view' )
+ImportTypes = List(Str, desc='the categories of elements that can be '
+                   'dragged into the view')
 
 # The view position and size traits:
-Width       = Float( -1E6, desc = 'the width of the view window' )
-Height      = Float( -1E6, desc = 'the height of the view window' )
-XCoordinate = Float( -1E6, desc = 'the x coordinate of the view window' )
-YCoordinate = Float( -1E6, desc = 'the y coordinate of the view window' )
+Width = Float(-1E6, desc='the width of the view window')
+Height = Float(-1E6, desc='the height of the view window')
+XCoordinate = Float(-1E6, desc='the x coordinate of the view window')
+YCoordinate = Float(-1E6, desc='the y coordinate of the view window')
 
 # The result that should be returned if the user clicks the window or dialog
 # close button or icon
-CloseResult = Enum( None, True, False,
-                    desc = 'the result to return when the user clicks the '
-                           'window or dialog close button or icon' )
+CloseResult = Enum(None, True, False,
+                   desc='the result to return when the user clicks the '
+                   'window or dialog close button or icon')
 
 # The KeyBindings trait:
-AKeyBindings = Instance( 'traitsui.key_bindings.KeyBindings',
-                         desc = 'the global key bindings for the view' )
+AKeyBindings = Instance('traitsui.key_bindings.KeyBindings',
+                        desc='the global key bindings for the view')
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'View' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class View ( ViewElement ):
+
+class View(ViewElement):
     """ A Traits-based user interface for one or more objects.
 
         The attributes of the View object determine the contents and layout of
@@ -138,9 +159,9 @@ class View ( ViewElement ):
         object derived from HasTraits, or it can be a standalone object.
     """
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Trait definitions:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
     # A unique identifier for the view:
     id = AnId
@@ -149,10 +170,10 @@ class View ( ViewElement ):
     content = Content
 
     # The menu bar for the view. Usually requires a custom **handler**:
-    menubar = Any # Instance( pyface.action.MenuBarManager )
+    menubar = Any  # Instance( pyface.action.MenuBarManager )
 
     # The toolbar for the view. Usually requires a custom **handler**:
-    toolbar = Any # Instance( pyface.action.ToolBarManager )
+    toolbar = Any  # Instance( pyface.action.ToolBarManager )
 
     # Status bar items to add to the view's status bar. The value can be:
     #
@@ -295,73 +316,68 @@ class View ( ViewElement ):
     # close button or icon?
     close_result = CloseResult
 
-    # The default theme to use for a contained item:
-    item_theme = ATheme
+    # Note: Group objects delegate their 'object' and 'style' traits to the
+    # View
 
-    # The default theme to use for a contained item's label:
-    label_theme = ATheme
+    #-- Deprecated Traits (DO NOT USE) ---------------------------------------
 
-    # Note: Group objects delegate their 'object' and 'style' traits to the View
+    ok = Bool(False)
+    cancel = Bool(False)
+    undo = Bool(False)
+    redo = Bool(False)
+    apply = Bool(False)
+    revert = Bool(False)
+    help = Bool(False)
 
-    #-- Deprecated Traits (DO NOT USE) -----------------------------------------
-
-    ok     = Bool( False )
-    cancel = Bool( False )
-    undo   = Bool( False )
-    redo   = Bool( False )
-    apply  = Bool( False )
-    revert = Bool( False )
-    help   = Bool( False )
-
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Initializes the object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __init__ ( self, *values, **traits ):
+    def __init__(self, *values, **traits):
         """ Initializes the object.
         """
-        ViewElement.__init__( self, **traits )
-        self.set_content( *values )
+        ViewElement.__init__(self, **traits)
+        self.set_content(*values)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Sets the content of a view:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def set_content ( self, *values ):
+    def set_content(self, *values):
         """ Sets the content of a view.
         """
         content = []
-        accum   = []
+        accum = []
         for value in values:
-            if isinstance( value, ViewSubElement ):
-                content.append( value )
-            elif type( value ) in SequenceTypes:
-                content.append( Group( *value ) )
-            elif (isinstance( value, basestring ) and
-                 (value[:1] == '<') and (value[-1:] == '>')):
+            if isinstance(value, ViewSubElement):
+                content.append(value)
+            elif type(value) in SequenceTypes:
+                content.append(Group(*value))
+            elif (isinstance(value, six.string_types) and
+                  (value[:1] == '<') and (value[-1:] == '>')):
                 # Convert string to an Include value:
-                content.append( Include( value[1:-1].strip() ) )
+                content.append(Include(value[1:-1].strip()))
             else:
-                content.append( Item( value ) )
+                content.append(Item(value))
 
         # If there are any 'Item' objects in the content, wrap the content in a
         # Group:
         for item in content:
-            if isinstance( item, Item ):
-                content = [ Group( *content ) ]
+            if isinstance(item, Item):
+                content = [Group(*content)]
                 break
 
         # Wrap all of the content up into a Group and save it as our content:
-        self.content = Group( container = self, *content )
+        self.content = Group(container=self, *content)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Creates a UI user interface object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def ui ( self, context, parent        = None, kind       = None,
-                            view_elements = None, handler    = None,
-                            id            = '',   scrollable = None,
-                            args          = None ):
+    def ui(self, context, parent=None, kind=None,
+            view_elements=None, handler=None,
+            id='', scrollable=None,
+            args=None):
         """ Creates a **UI** object, which generates the actual GUI window or
         panel from a set of view elements.
 
@@ -394,69 +410,68 @@ class View ( ViewElement ):
 
         """
         handler = handler or self.handler or default_handler()
-        if not isinstance( handler, Handler ):
+        if not isinstance(handler, Handler):
             handler = handler()
 
         if args is not None:
-            handler.set( **args )
+            handler.trait_set(**args)
 
-        if not isinstance( context, dict ):
+        if not isinstance(context, dict):
             context = context.trait_context()
 
-        context.setdefault( 'handler', handler )
-        handler = context[ 'handler' ]
+        context.setdefault('handler', handler)
+        handler = context['handler']
 
         if self.model_view is not None:
-            context[ 'object' ] = self.model_view( context[ 'object' ] )
+            context['object'] = self.model_view(context['object'])
 
         self_id = self.id
         if self_id != '':
             if id != '':
-                id = '%s:%s' % ( self_id, id )
+                id = '%s:%s' % (self_id, id)
             else:
                 id = self_id
 
         if scrollable is None:
             scrollable = self.scrollable
 
-        ui = UI( view          = self,
-                 context       = context,
-                 handler       = handler,
-                 view_elements = view_elements,
-                 title         = self.title,
-                 id            = id,
-                 scrollable    = scrollable )
+        ui = UI(view=self,
+                context=context,
+                handler=handler,
+                view_elements=view_elements,
+                title=self.title,
+                id=id,
+                scrollable=scrollable)
 
         if kind is None:
             kind = self.kind
 
-        ui.ui( parent, kind )
+        ui.ui(parent, kind)
 
         return ui
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Replaces any items which have an 'id' with an Include object with the
     #  same 'id', and puts the object with the 'id' into the specified
     #  ViewElements object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def replace_include ( self, view_elements ):
+    def replace_include(self, view_elements):
         """ Replaces any items that have an ID with an Include object with
             the same ID, and puts the object with the ID into the specified
             ViewElements object.
         """
         if self.content is not None:
-            self.content.replace_include( view_elements )
+            self.content.replace_include(view_elements)
 
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Returns a 'pretty print' version of the View:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __repr__ ( self ):
+    def __repr__(self):
         """ Returns a "pretty print" version of the View.
         """
         if self.content is None:
             return '()'
-        return "( %s )" %  ', '.join(
-               [ item.__repr__() for item in self.content.content ] )
-
+        return "( %s )" % ', '.join(
+               [item.__repr__() for item in self.content.content])

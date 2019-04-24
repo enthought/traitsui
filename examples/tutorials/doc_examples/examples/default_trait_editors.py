@@ -3,16 +3,18 @@
 
 # default_trait_editors.py -- Example of using default trait editors
 
-#--[Imports]--------------------------------------------------------------------
+#--[Imports]--------------------------------------------------------------
+from __future__ import absolute_import
 from traits.api import HasTraits, Str, Range, Bool
 from traitsui.api import View, Item
 
-#--[Code]-----------------------------------------------------------------------
+#--[Code]-----------------------------------------------------------------
+
 
 class Adult(HasTraits):
     first_name = Str
     last_name = Str
-    age = Range(21,99)
+    age = Range(21, 99)
     registered_voter = Bool
 
     traits_view = View(Item(name='first_name'),
@@ -26,4 +28,3 @@ alice = Adult(first_name='Alice',
               registered_voter=True)
 
 alice.configure_traits()
-

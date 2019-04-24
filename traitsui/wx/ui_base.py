@@ -19,357 +19,141 @@
     dialogs.
 """
 
-#-------------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------------
-
+from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import HasStrictTraits, HasPrivateTraits, Instance, List, Event
+from traits.api import HasPrivateTraits, Instance
 
-from traitsui.api \
-    import UI
+from traitsui.base_panel import BasePanel as _BasePanel
+from traitsui.menu import Action
+from .editor import Editor
 
-from traitsui.menu \
-    import Action
 
-from editor \
-    import Editor
-
-#-------------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------------
-
-# List of all predefined system button names:
-SystemButtons = [ 'Undo', 'Redo', 'Apply', 'Revert', 'OK', 'Cancel', 'Help' ]
-
-# List of alternative context items that might handle an Action 'perform':
-PerformHandlers = ( 'object', 'model' )
-
-#-------------------------------------------------------------------------------
-#  'RadioGroup' class:
-#-------------------------------------------------------------------------------
-
-class RadioGroup ( HasStrictTraits ):
-    """ A group of mutually-exclusive menu or toolbar actions.
-    """
-    # List of menu or tool bar items
-    items = List
-
-    #---------------------------------------------------------------------------
-    #  Handles a menu item in the group being checked:
-    #---------------------------------------------------------------------------
-
-    def menu_checked ( self, menu_item ):
-        """ Handles a menu item in the group being checked.
-        """
-        for item in self.items:
-            if item is not menu_item:
-                item.control.Check( False )
-                item.item.action.checked = False
-
-    #---------------------------------------------------------------------------
-    #  Handles a tool bar item in the group being checked:
-    #---------------------------------------------------------------------------
-
-    def toolbar_checked ( self, toolbar_item ):
-        """ Handles a tool bar item in the group being checked.
-        """
-        for item in self.items:
-            if item is not toolbar_item:
-                item.tool_bar.ToggleTool( item.control_id, False )
-                item.item.action.checked = False
-
-#-------------------------------------------------------------------------------
-#  'ButtonEditor' class:
-#-------------------------------------------------------------------------------
-
-class ButtonEditor ( Editor ):
+class ButtonEditor(Editor):
     """ Editor for buttons.
     """
-    #---------------------------------------------------------------------------
-    #  Trait definitions:
-    #---------------------------------------------------------------------------
-
     # Action associated with the button
-    action = Instance( Action )
+    action = Instance(Action)
 
-    #---------------------------------------------------------------------------
-    #  Initializes the object:
-    #---------------------------------------------------------------------------
+    def __init__(self, **traits):
+        # XXX Why does this need to be an Editor subclass? -- CJW
+        HasPrivateTraits.__init__(self, **traits)
 
-    def __init__ ( self, **traits ):
-        self.set( **traits )
-
-    #---------------------------------------------------------------------------
-    #  Handles the associated button being clicked:
-    #---------------------------------------------------------------------------
-
-    def perform ( self, event ):
+    def perform(self, event):
         """ Handles the associated button being clicked.
         """
-        self.ui.do_undoable( self._perform, event )
+        handler = self.ui.handler
+        self.ui.do_undoable(handler.perform, self.ui.info, self.action, event)
 
-    def _perform ( self, event ):
-        method_name = self.action.action
-        if method_name == '':
-            method_name = '_%s_clicked' % (self.action.name.lower())
-        method = getattr( self.ui.handler, method_name, None )
-        if method is not None:
-            method( self.ui.info )
-        else:
-            self.action.perform( event )
 
-#-------------------------------------------------------------------------------
-#  'BaseDialog' class:
-#-------------------------------------------------------------------------------
-
-class BaseDialog ( object ):
+class BaseDialog(_BasePanel):
     """ Base class for Traits UI dialog boxes.
     """
-    #---------------------------------------------------------------------------
-    #  Sets the frame's icon:
-    #---------------------------------------------------------------------------
 
-    def set_icon ( self, icon = None ):
+    def default_icon(self):
+        """ Return a default icon for a TraitsUI dialog. """
+        from pyface.image_resource import ImageResource
+        return ImageResource('frame.ico')
+
+    def set_icon(self, icon=None):
         """ Sets the frame's icon.
         """
         from pyface.image_resource import ImageResource
 
-        if not isinstance( icon, ImageResource ):
-            icon = ImageResource( 'frame.ico' )
-        self.control.SetIcon( icon.create_icon() )
+        if not isinstance(icon, ImageResource):
+            icon = self.default_icon()
+        self.control.SetIcon(icon.create_icon())
 
-    #---------------------------------------------------------------------------
-    #  Adds a status bar to the dialog:
-    #---------------------------------------------------------------------------
-
-    def add_statusbar ( self ):
+    def add_statusbar(self):
         """ Adds a status bar to the dialog.
         """
-        ui        = self.ui
+        ui = self.ui
         statusbar = ui.view.statusbar
-        context   = ui.context
+        context = ui.context
         if statusbar is not None:
-            widths    = []
+            widths = []
             listeners = []
-            control   = wx.StatusBar( self.control )
-            control.SetFieldsCount( len( statusbar ) )
-            for i, item in enumerate( statusbar ):
-                width = abs( item.width )
+            control = wx.StatusBar(self.control)
+            control.SetFieldsCount(len(statusbar))
+            for i, item in enumerate(statusbar):
+                width = abs(item.width)
                 if width <= 1.0:
-                    widths.append( -max( 1, int( 1000 * width ) ) )
+                    widths.append(-max(1, int(1000 * width)))
                 else:
-                    widths.append( int( width ) )
+                    widths.append(int(width))
 
-                set_text = self._set_status_text( control, i )
-                name     = item.name
-                set_text( ui.get_extended_value( name ) )
-                col    = name.find( '.' )
+                set_text = self._set_status_text(control, i)
+                name = item.name
+                set_text(ui.get_extended_value(name))
+                col = name.find('.')
                 object = 'object'
                 if col >= 0:
-                    object = name[ : col ]
-                    name   = name[ col + 1: ]
-                object = context[ object ]
-                object.on_trait_change( set_text, name, dispatch = 'ui' )
-                listeners.append( ( object, set_text, name ) )
+                    object = name[: col]
+                    name = name[col + 1:]
+                object = context[object]
+                object.on_trait_change(set_text, name, dispatch='ui')
+                listeners.append((object, set_text, name))
 
-            control.SetStatusWidths( widths )
-            self.control.SetStatusBar( control )
+            control.SetStatusWidths(widths)
+            self.control.SetStatusBar(control)
             ui._statusbar = listeners
 
-    def _set_status_text ( self, control, i ):
-        def set_status_text ( text ):
-            control.SetStatusText( text, i )
+    def _set_status_text(self, control, i):
+        def set_status_text(text):
+            control.SetStatusText(text, i)
 
         return set_status_text
 
-    #---------------------------------------------------------------------------
-    #  Adds a menu bar to the dialog:
-    #---------------------------------------------------------------------------
-
-    def add_menubar ( self ):
+    def add_menubar(self):
         """ Adds a menu bar to the dialog.
         """
         menubar = self.ui.view.menubar
         if menubar is not None:
             self._last_group = self._last_parent = None
             self.control.SetMenuBar(
-                menubar.create_menu_bar( self.control, self ) )
+                menubar.create_menu_bar(self.control, self))
             self._last_group = self._last_parent = None
 
-    #---------------------------------------------------------------------------
-    #  Adds a tool bar to the dialog:
-    #---------------------------------------------------------------------------
-
-    def add_toolbar ( self ):
+    def add_toolbar(self):
         """ Adds a toolbar to the dialog.
         """
         toolbar = self.ui.view.toolbar
         if toolbar is not None:
             self._last_group = self._last_parent = None
             self.control.SetToolBar(
-                toolbar.create_tool_bar( self.control, self ) )
+                toolbar.create_tool_bar(self.control, self))
             self._last_group = self._last_parent = None
 
-    #---------------------------------------------------------------------------
-    #  Adds a menu item to the menu bar being constructed:
-    #---------------------------------------------------------------------------
-
-    def add_to_menu ( self, menu_item ):
-        """ Adds a menu item to the menu bar being constructed.
-        """
-        item   = menu_item.item
-        action = item.action
-
-        if action.id != '':
-            self.ui.info.bind( action.id, menu_item )
-
-        if action.style == 'radio':
-            if ((self._last_group is None) or
-                (self._last_parent is not item.parent)):
-                self._last_group = RadioGroup()
-                self._last_parent = item.parent
-            self._last_group.items.append( menu_item )
-            menu_item.group = self._last_group
-
-        if action.enabled_when != '':
-            self.ui.add_enabled( action.enabled_when, menu_item )
-
-        if action.checked_when != '':
-            self.ui.add_checked( action.checked_when, menu_item )
-
-    #---------------------------------------------------------------------------
-    #  Adds a tool bar item to the tool bar being constructed:
-    #---------------------------------------------------------------------------
-
-    def add_to_toolbar ( self, toolbar_item ):
-        """ Adds a toolbar item to the toolbar being constructed.
-        """
-        self.add_to_menu( toolbar_item )
-
-    #---------------------------------------------------------------------------
-    #  Returns whether the menu action should be defined in the user interface:
-    #---------------------------------------------------------------------------
-
-    def can_add_to_menu ( self, action, action_event = None ):
-        """ Returns whether the action should be defined in the user interface.
-        """
-        if action.defined_when == '':
-            return True
-
-        return self.ui.eval_when( action.defined_when )
-
-    #---------------------------------------------------------------------------
-    #  Returns whether the toolbar action should be defined in the user
-    #  interface:
-    #---------------------------------------------------------------------------
-
-    def can_add_to_toolbar ( self, action ):
-        """ Returns whether the toolbar action should be defined in the user
-            interface.
-        """
-        return self.can_add_to_menu( action )
-
-    #---------------------------------------------------------------------------
-    #  Performs the action described by a specified Action object:
-    #---------------------------------------------------------------------------
-
-    def perform ( self, action ):
-        """ Performs the action described by a specified Action object.
-        """
-        self.ui.do_undoable( self._perform, action )
-
-    def _perform ( self, action ):
-        method = getattr( self.ui.handler, action.action, None )
-        if method is not None:
-            method( self.ui.info )
-        else:
-            context = self.ui.context
-            for item in PerformHandlers:
-                handler = context.get( item, None )
-                if handler is not None:
-                    method = getattr( handler, action.action, None )
-                    if method is not None:
-                        method()
-                        break
-            else:
-                action.perform()
-
-    #---------------------------------------------------------------------------
-    #  Check to see if a specified 'system' button is in the buttons list, and
-    # add it if it is not:
-    #---------------------------------------------------------------------------
-
-    def check_button ( self, buttons, action ):
-        """ Adds *action* to the system buttons list for this dialog, if it is
-        not already in the list.
-        """
-        name = action.name
-        for button in buttons:
-            if self.is_button( button, name ):
-                return
-        buttons.append( action )
-
-    #---------------------------------------------------------------------------
-    #  Check to see if a specified Action button is a 'system' button:
-    #---------------------------------------------------------------------------
-
-    def is_button ( self, action, name ):
-        """ Returns whether a specified action button is a system button.
-        """
-        if isinstance(action, basestring):
-            return (action == name)
-        return (action.name == name)
-
-    #---------------------------------------------------------------------------
-    #  Coerces a string to an Action if necessary:
-    #---------------------------------------------------------------------------
-
-    def coerce_button ( self, action ):
-        """ Coerces a string to an Action if necessary.
-        """
-        if isinstance(action, basestring):
-            return Action( name   = action,
-                           action = '?'[ (not action in SystemButtons): ] )
-        return action
-
-    #---------------------------------------------------------------------------
-    #  Creates a user specified button:
-    #---------------------------------------------------------------------------
-
-    def add_button ( self, action, sizer, method  = None, enabled = True,
-                     name = None, default = False ):
+    def add_button(self, action, sizer, method=None, enabled=True,
+                   name=None, default=False):
         """ Creates a button.
         """
         ui = self.ui
         if ((action.defined_when != '') and
-            (not ui.eval_when( action.defined_when ))):
+                (not ui.eval_when(action.defined_when))):
             return None
 
         if name is None:
             name = action.name
-        id     = action.id
-        button = wx.Button( self.control, -1, name )
-        button.Enable( enabled )
+        id = action.id
+        button = wx.Button(self.control, -1, name)
+        button.Enable(enabled)
         if default:
             button.SetDefault()
         if (method is None) or (action.enabled_when != '') or (id != ''):
-            editor = ButtonEditor( ui      = ui,
-                                   action  = action,
-                                   control = button )
+            editor = ButtonEditor(ui=ui,
+                                  action=action,
+                                  control=button)
             if id != '':
-                ui.info.bind( id, editor )
+                ui.info.bind(id, editor)
             if action.visible_when != '':
-                ui.add_visible( action.visible_when, editor )
+                ui.add_visible(action.visible_when, editor)
             if action.enabled_when != '':
-                ui.add_enabled( action.enabled_when, editor )
+                ui.add_enabled(action.enabled_when, editor)
             if method is None:
                 method = editor.perform
-        wx.EVT_BUTTON( self.control, button.GetId(), method )
-        sizer.Add( button, 0, wx.LEFT, 5 )
+        wx.EVT_BUTTON(self.control, button.GetId(), method)
+        sizer.Add(button, 0, wx.LEFT, 5)
         if action.tooltip != '':
-            button.SetToolTipString( action.tooltip )
+            button.SetToolTipString(action.tooltip)
         return button
-

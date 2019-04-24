@@ -5,12 +5,12 @@ This editor allows the user to enter a *single* line of input text, containing
 comma-separated values (or another separator may be specified). Your program
 specifies an element Trait type of Int, Float, Str, Enum, or Range.
 """
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from traits.api import HasTraits, List, Int, Float, Enum, Range, Str, Button, \
-                            Property
+    Property
 from traitsui.api import View, Item, Label, Heading, VGroup, HGroup, UItem, \
-                            spring, TextEditor, CSVListEditor
+    spring, TextEditor, CSVListEditor
 
 
 class Demo(HasTraits):
@@ -46,46 +46,46 @@ class Demo(HasTraits):
                 # This VGroup forms the column of CSVListEditor examples.
                 VGroup(
                     Item('list1', label="List(Int)",
-                        editor=CSVListEditor(ignore_trailing_sep=False),
-                        tooltip='options: ignore_trailing_sep=False'),
+                         editor=CSVListEditor(ignore_trailing_sep=False),
+                         tooltip='options: ignore_trailing_sep=False'),
                     Item('list1', label="List(Int)", style='readonly',
-                        editor=CSVListEditor()),
+                         editor=CSVListEditor()),
                     Item('list2', label="List(Float)",
-                        editor=CSVListEditor(enter_set=True, auto_set=False),
-                        tooltip='options: enter_set=True, auto_set=False'),
+                         editor=CSVListEditor(enter_set=True, auto_set=False),
+                         tooltip='options: enter_set=True, auto_set=False'),
                     Item('list3', label="List(Str, maxlen=3)",
-                        editor=CSVListEditor()),
+                         editor=CSVListEditor()),
                     Item('list4',
                          label="List(Enum('red', 'green', 'blue', 2, 3))",
-                        editor=CSVListEditor(sep=None),
-                        tooltip='options: sep=None'),
+                         editor=CSVListEditor(sep=None),
+                         tooltip='options: sep=None'),
                     Item('list5', label="List(Range(low=0.0, high=10.0))",
-                        editor=CSVListEditor()),
+                         editor=CSVListEditor()),
                     Item('list6', label="List(Range(low=-1.0, high='high'))",
-                        editor=CSVListEditor()),
+                         editor=CSVListEditor()),
                     Item('list7', label="List(Range(low='low', high='high'))",
-                        editor=CSVListEditor()),
+                         editor=CSVListEditor()),
                     springy=True,
                 ),
                 # This VGroup forms the right column; it will display the
                 # Python str representation of the lists.
                 VGroup(
                     UItem('list1str', editor=TextEditor(),
-                                        enabled_when='False', width=240),
+                          enabled_when='False', width=240),
                     UItem('list1str', editor=TextEditor(),
-                                        enabled_when='False', width=240),
+                          enabled_when='False', width=240),
                     UItem('list2', editor=TextEditor(),
-                                        enabled_when='False', width=240),
+                          enabled_when='False', width=240),
                     UItem('list3', editor=TextEditor(),
-                                        enabled_when='False', width=240),
+                          enabled_when='False', width=240),
                     UItem('list4', editor=TextEditor(),
-                                        enabled_when='False', width=240),
+                          enabled_when='False', width=240),
                     UItem('list5', editor=TextEditor(),
-                                        enabled_when='False', width=240),
+                          enabled_when='False', width=240),
                     UItem('list6', editor=TextEditor(),
-                                        enabled_when='False', width=240),
+                          enabled_when='False', width=240),
                     UItem('list7', editor=TextEditor(),
-                                        enabled_when='False', width=240),
+                          enabled_when='False', width=240),
                 ),
             ),
             '_',

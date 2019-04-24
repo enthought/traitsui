@@ -26,55 +26,55 @@ In this demo, we define an <b>ITreeNodeAdapter</b> subclass that adapts the
 tree view.
 """
 
-#-- Imports --------------------------------------------------------------------
+#-- Imports --------------------------------------------------------------
 
-from os \
-    import getcwd
+from __future__ import absolute_import
+from os import getcwd
 
-from traits.api \
-    import HasTraits, Property, Directory, adapts, property_depends_on
+from traits.api import (
+    HasTraits, Property, Directory, property_depends_on, register_factory
+)
 
-from traitsui.api \
-    import View, VGroup, Item, TreeEditor, ITreeNode, ITreeNodeAdapter
+from traitsui.api import (
+    View, VGroup, Item, TreeEditor, ITreeNode, ITreeNodeAdapter
+)
 
-from apptools.io.api \
-    import File
+from apptools.io.api import File
 
-#-- FileAdapter Class ----------------------------------------------------------
 
-class FileAdapter ( ITreeNodeAdapter ):
+#-- FileAdapter Class ----------------------------------------------------
 
-    adapts( File, ITreeNode )
+class FileAdapter(ITreeNodeAdapter):
 
-    #-- ITreeNodeAdapter Method Overrides --------------------------------------
+    #-- ITreeNodeAdapter Method Overrides ------------------------------------
 
-    def allows_children ( self ):
+    def allows_children(self):
         """ Returns whether this object can have children.
         """
         return self.adaptee.is_folder
 
-    def has_children ( self ):
+    def has_children(self):
         """ Returns whether the object has children.
         """
         children = self.adaptee.children
-        return ((children is not None) and (len( children ) > 0))
+        return ((children is not None) and (len(children) > 0))
 
-    def get_children ( self ):
+    def get_children(self):
         """ Gets the object's children.
         """
         return self.adaptee.children
 
-    def get_label ( self ):
+    def get_label(self):
         """ Gets the label to display for a specified object.
         """
         return self.adaptee.name + self.adaptee.ext
 
-    def get_tooltip ( self ):
+    def get_tooltip(self):
         """ Gets the tooltip to display for a specified object.
         """
         return self.adaptee.absolute_path
 
-    def get_icon ( self, is_expanded ):
+    def get_icon(self, is_expanded):
         """ Returns the icon for a specified object.
         """
         if self.adaptee.is_file:
@@ -85,18 +85,19 @@ class FileAdapter ( ITreeNodeAdapter ):
 
         return '<open>'
 
-    def can_auto_close ( self ):
+    def can_auto_close(self):
         """ Returns whether the object's children should be automatically
             closed.
         """
         return True
 
-#-- FileTreeDemo Class ---------------------------------------------------------
+#-- FileTreeDemo Class ---------------------------------------------------
 
-class FileTreeDemo ( HasTraits ):
+
+class FileTreeDemo(HasTraits):
 
     # The path to the file tree root:
-    root_path = Directory( entries = 10 )
+    root_path = Directory(entries=10)
 
     # The root of the file tree:
     root = Property
@@ -104,33 +105,34 @@ class FileTreeDemo ( HasTraits ):
     # The traits view to display:
     view = View(
         VGroup(
-            Item( 'root_path' ),
-            Item( 'root',
-                  editor = TreeEditor( editable = False, auto_open = 1 )
-            ),
-            show_labels = False
+            Item('root_path'),
+            Item('root',
+                 editor=TreeEditor(editable=False, auto_open=1)
+                 ),
+            show_labels=False
         ),
-        width     = 0.33,
-        height    = 0.50,
-        resizable = True
+        width=0.33,
+        height=0.50,
+        resizable=True
     )
 
-    #-- Traits Default Value Methods -------------------------------------------
+    #-- Traits Default Value Methods -----------------------------------------
 
-    def _root_path_default ( self ):
+    def _root_path_default(self):
         return getcwd()
 
-    #-- Property Implementations -----------------------------------------------
+    #-- Property Implementations ---------------------------------------------
 
-    @property_depends_on( 'root_path' )
-    def _get_root ( self ):
-        return File( path = self.root_path )
+    @property_depends_on('root_path')
+    def _get_root(self):
+        return File(path=self.root_path)
 
-#-- Create and run the demo ----------------------------------------------------
+#-- Create and run the demo ----------------------------------------------
 
+
+register_factory(FileAdapter, File, ITreeNode)
 demo = FileTreeDemo()
 
 # Run the demo (if invoked form the command line):
 if __name__ == '__main__':
     demo.configure_traits()
-

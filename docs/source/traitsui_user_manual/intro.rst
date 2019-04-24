@@ -8,9 +8,10 @@ package is a set of GUI (Graphical User Interface) tools designed to complement
 :term:`Traits`, another Enthought open-source package that provides explicit
 typing, validation, and change notification for Python. This guide is intended
 for readers who are already moderately familiar with Traits; those who are not
-may wish to refer to the `Traits User Manual <http://github.enthought.com/traits/index.html>`_ for an introduction. This guide
-discusses many but not all features of TraitsUI. For complete details of the
-TraitsUI API, refer to the *Traits API Reference*.
+may wish to refer to the `Traits User Manual <http://docs.enthought.com/traits/index.html>`_
+for an introduction. This guide discusses many but not all features of
+TraitsUI. For complete details of the TraitsUI API, refer to the
+:doc:`TraitsUI API Reference <../api/index>`.
 
 .. index:: MVC design pattern, Model-View-Controller, model, view (in MVC), controller
 
@@ -113,7 +114,7 @@ application. The etsconfig package contains a singleton object, **ETSConfig**
 
 .. index:: ETSConfig.toolkit
 
-The values of **ETSConfig.toolkit** that are supported by TraitsUI version 4
+The values of **ETSConfig.toolkit** that are supported by TraitsUI version |version|
 are:
 
 .. index:: wxPython toolkit, Qt toolkit, null toolkit
@@ -140,10 +141,9 @@ order of precedence:
        from traits.etsconfig.api import ETSConfig
        ETSConfig.toolkit = 'wx'
 
-#. The user can specify a -toolkit flag on the command line of the program.
 #. The user can define a value for the ETS_TOOLKIT environment variable.
 
-.. warning:: The default order of toolkits will change in TraitsUI 5.0 to
+.. warning:: The default order of toolkits changed in TraitsUI 5.0 to
    prefer 'qt4' over 'wx'.
 
 .. _structure-of-this-guide:
@@ -161,8 +161,6 @@ sophisticated interfaces from one chapter to the next.
   widget selection to system defaults.
 * :ref:`controlling-the-interface-the-handler` explains how to use the Handler
   class to implement custom GUI behaviors, as well as menus and toolbars.
-* :ref:`traits-ui-themes` described how to customize the appearance of GUIs
-  through *themes*.
 * :ref:`introduction-to-trait-editor-factories` and
   :ref:`the-predefined-trait-editor-factories` show how to control GUI widget
   selection by means of trait :term:`editor`\ s.

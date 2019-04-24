@@ -3,7 +3,8 @@
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 
 #
 # Author: Riverbank Computing Limited
@@ -13,11 +14,12 @@
 complete application, using information from the specified UI object.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 # Standard library imports.
+from __future__ import absolute_import
 import os
 
 # System library imports.
@@ -41,12 +43,12 @@ def on_ui_destroyed(object, name, old, destroyed):
         object.on_trait_change(on_ui_destroyed, 'destroyed', remove=True)
 
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Creates a 'stand-alone' PyQt application to display a specified traits UI
 #  View:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-def view_application ( context, view, kind, handler, id, scrollable, args ):
+def view_application(context, view, kind, handler, id, scrollable, args):
     """ Creates a stand-alone PyQt application to display a specified traits UI
         View.
 
@@ -79,15 +81,15 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
 
     app = QtGui.QApplication.instance()
     if app is None or not is_event_loop_running_qt4(app):
-        return ViewApplication( context, view, kind, handler, id,
-                                scrollable, args ).ui.result
+        return ViewApplication(context, view, kind, handler, id,
+                               scrollable, args).ui.result
 
-    ui = view.ui( context,
-                  kind       = kind,
-                  handler    = handler,
-                  id         = id,
-                  scrollable = scrollable,
-                  args       = args )
+    ui = view.ui(context,
+                 kind=kind,
+                 handler=handler,
+                 id=id,
+                 scrollable=scrollable,
+                 args=args)
 
     # If the UI has not been closed yet, we need to keep a reference to
     # it until it does close.
@@ -96,41 +98,42 @@ def view_application ( context, view, kind, handler, id, scrollable, args ):
         ui.on_trait_change(on_ui_destroyed, 'destroyed')
     return ui.result
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  'ViewApplication' class:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-class ViewApplication ( object ):
+
+class ViewApplication(object):
     """ Modal window that contains a stand-alone application.
     """
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
     #  Initializes the object:
-    #---------------------------------------------------------------------------
+    #-------------------------------------------------------------------------
 
-    def __init__ ( self, context, view, kind, handler, id, scrollable, args ):
+    def __init__(self, context, view, kind, handler, id, scrollable, args):
         """ Initializes the object.
         """
-        self.context    = context
-        self.view       = view
-        self.kind       = kind
-        self.handler    = handler
-        self.id         = id
+        self.context = context
+        self.view = view
+        self.kind = kind
+        self.handler = handler
+        self.id = id
         self.scrollable = scrollable
-        self.args       = args
+        self.args = args
 
         # FIXME: fbi is wx specific at the moment.
-        if os.environ.get( 'ENABLE_FBI' ) is not None:
+        if os.environ.get('ENABLE_FBI') is not None:
             try:
                 from etsdevtools.developer.helper.fbi import enable_fbi
                 enable_fbi()
             except:
                 pass
 
-        self.ui = self.view.ui( self.context,
-                                kind       = self.kind,
-                                handler    = self.handler,
-                                id         = self.id,
-                                scrollable = self.scrollable,
-                                args       = self.args )
+        self.ui = self.view.ui(self.context,
+                               kind=self.kind,
+                               handler=self.handler,
+                               id=self.id,
+                               scrollable=self.scrollable,
+                               args=self.args)
 
         start_event_loop_qt4()

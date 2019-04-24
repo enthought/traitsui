@@ -21,12 +21,11 @@
     installed, but users still want to use traits for non-UI related tasks.
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Define the reference to the exported GUIToolkit object:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
 from . import toolkit
-toolkit = toolkit.GUIToolkit()
-
+toolkit = toolkit.GUIToolkit('traitsui', 'null', 'traitsui.null')

@@ -19,9 +19,9 @@ specialized editor used to associate a particular key with a control (i.e., the
 key binding editor).
 """
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Imports:
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -31,13 +31,16 @@ from ..basic_editor_factory import BasicEditorFactory
 from ..toolkit import toolkit_object
 
 # Callable which returns the editor to use in the ui.
+
+
 def key_binding_editor(*args, **traits):
     return toolkit_object('key_binding_editor:KeyBindingEditor')(*args,
                                                                  **traits)
 
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------------
-KeyBindingEditor = ToolkitEditorFactory = BasicEditorFactory(klass = key_binding_editor)
+#-------------------------------------------------------------------------
+KeyBindingEditor = ToolkitEditorFactory = BasicEditorFactory(
+    klass=key_binding_editor)
 
-### EOF ------------------------------------------------------------------------
+### EOF ------------------------------------------------------------------

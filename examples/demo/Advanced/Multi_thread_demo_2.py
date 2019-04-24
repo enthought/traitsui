@@ -16,20 +16,23 @@ Note that repeated clicking of the *Create Thread* button will create
 additional threads.
 """
 
+from __future__ import absolute_import
 from time import sleep
 from traits.api import HasTraits, Int, Button, List
 from traitsui.api import View, Item, ListEditor
 
-#-- The Counter objects used to keep track of the current count ----------------
+#-- The Counter objects used to keep track of the current count ----------
+
 
 class Counter(HasTraits):
 
     # The current count:
     count = Int
 
-    view = View(Item('count', style = 'readonly'))
+    view = View(Item('count', style='readonly'))
 
-#-- The main 'ThreadDemo' class ------------------------------------------------
+#-- The main 'ThreadDemo' class ------------------------------------------
+
 
 class ThreadDemo(HasTraits):
 
@@ -40,16 +43,16 @@ class ThreadDemo(HasTraits):
     counters = List(Counter)
 
     view = View(
-        Item('create', show_label = False, width = -100),
+        Item('create', show_label=False),
         '_',
-        Item('counters', style      = 'custom',
-                          show_label = False,
-                          editor     = ListEditor(use_notebook = True,
-                                                   dock_style   = 'tab')),
-        resizable = True,
-        width = 300,
-        height = 150,
-        title = 'Dynamic threads'
+        Item('counters', style='custom',
+             show_label=False,
+             editor=ListEditor(use_notebook=True,
+                               dock_style='tab')),
+        resizable=True,
+        width=300,
+        height=150,
+        title='Dynamic threads'
     )
 
     def __init__(self, **traits):
@@ -57,7 +60,7 @@ class ThreadDemo(HasTraits):
 
         # Set up the notification handler for the 'Create Thread' button so
         # that it is run on a new thread:
-        self.on_trait_change(self.count, 'create', dispatch = 'new')
+        self.on_trait_change(self.count, 'create', dispatch='new')
 
     def count(self):
         """ This method is dispatched on a new thread each time the

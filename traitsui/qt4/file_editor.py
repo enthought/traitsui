@@ -1,22 +1,18 @@
-#------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
+# Copyright (c) 2018, Enthought, Inc
 # All rights reserved.
 #
 # This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described in the PyQt GPL exception also apply
-
+# However, when used with the GPL version of PyQt the additional terms
+# described in the PyQt GPL exception also apply
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
 
 """ Defines file editors for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------------
-
-from os.path import splitext, isfile, exists
+from __future__ import absolute_import
+from os.path import abspath, splitext, isfile, exists
 
 from pyface.qt import QtCore, QtGui
 from traits.api import List, Event, File, Unicode, TraitError
@@ -25,32 +21,24 @@ from traits.api import List, Event, File, Unicode, TraitError
 # compatibility. The class has been moved to the
 # traitsui.editors.file_editor file.
 from traitsui.editors.file_editor import ToolkitEditorFactory
-from text_editor import SimpleEditor as SimpleTextEditor
-from helper import IconButton
+from .text_editor import SimpleEditor as SimpleTextEditor
+from .helper import IconButton
+import six
 
-#-------------------------------------------------------------------------------
-#  Trait definitions:
-#-------------------------------------------------------------------------------
+
+is_qt5 = (QtCore.__version_info__[0] >= 5)
 
 # Wildcard filter:
 filter_trait = List(Unicode)
 
-#-------------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------------
 
-class SimpleEditor ( SimpleTextEditor ):
+class SimpleEditor(SimpleTextEditor):
     """ Simple style of file editor, consisting of a text field and a **Browse**
         button that opens a file-selection dialog box. The user can also drag
         and drop a file onto this control.
     """
 
-    #---------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #---------------------------------------------------------------------------
-
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
@@ -62,47 +50,35 @@ class SimpleEditor ( SimpleTextEditor ):
         layout.addWidget(control)
 
         if self.factory.auto_set:
-            signal = QtCore.SIGNAL('textEdited(QString)')
+            control.textEdited.connect(self.update_object)
         else:
-            # Assume enter_set is set, or else the value will never get updated.
-            signal = QtCore.SIGNAL('editingFinished()')
-        QtCore.QObject.connect(control, signal, self.update_object)
+            # Assume enter_set is set, or else the value will never get
+            # updated.
+            control.editingFinished.connect(self.update_object)
 
         button = IconButton(QtGui.QStyle.SP_DirIcon, self.show_file_dialog)
         layout.addWidget(button)
 
         self.set_tooltip(control)
 
-    #---------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #---------------------------------------------------------------------------
-
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
         if self.control is not None:
-            file_name = unicode(self._file_name.text())
+            file_name = six.text_type(self._file_name.text())
             try:
                 if self.factory.truncate_ext:
-                    file_name = splitext( file_name )[0]
+                    file_name = splitext(file_name)[0]
 
                 self.value = file_name
             except TraitError as excp:
                 self._file_name.setText(self.value)
 
-    #---------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
-
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self._file_name.setText(self.str_value)
-
-    #---------------------------------------------------------------------------
-    #  Displays the pop-up file dialog:
-    #---------------------------------------------------------------------------
 
     def show_file_dialog(self):
         """ Displays the pop-up file dialog.
@@ -116,7 +92,7 @@ class SimpleEditor ( SimpleTextEditor ):
             files = dlg.selectedFiles()
 
             if len(files) > 0:
-                file_name = unicode(files[0])
+                file_name = six.text_type(files[0])
 
                 if self.factory.truncate_ext:
                     file_name = splitext(file_name)[0]
@@ -124,18 +100,15 @@ class SimpleEditor ( SimpleTextEditor ):
                 self.value = file_name
                 self.update_editor()
 
-    #---------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #---------------------------------------------------------------------------
 
-    def get_error_control ( self ):
+    def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self._file_name
 
-    #-- Private Methods --------------------------------------------------------
+    #-- Private Methods ------------------------------------------------------
 
-    def _create_file_dialog ( self ):
+    def _create_file_dialog(self):
         """ Creates the correct type of file dialog.
         """
         dlg = QtGui.QFileDialog(self.control)
@@ -151,11 +124,8 @@ class SimpleEditor ( SimpleTextEditor ):
 
         return dlg
 
-#-------------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------------
 
-class CustomEditor ( SimpleTextEditor ):
+class CustomEditor(SimpleTextEditor):
     """ Custom style of file editor, consisting of a file system tree view.
     """
 
@@ -174,19 +144,14 @@ class CustomEditor ( SimpleTextEditor ):
     # Event fired when the user double-clicks a file:
     dclick = Event
 
-    #---------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #---------------------------------------------------------------------------
-
-    def init ( self, parent ):
+    def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = _TreeView(self)
-
+        control = _TreeView(self)
         self._model = model = QtGui.QFileSystemModel()
-        self.control.setModel(model)
+
+        current_path = abspath(self.str_value)
 
         # Don't apply filters to directories and don't show "." and ".."
         model.setFilter(QtCore.QDir.AllDirs | QtCore.QDir.Files |
@@ -195,12 +160,23 @@ class CustomEditor ( SimpleTextEditor ):
         # Hide filtered out files instead of only disabling them
         self._model.setNameFilterDisables(False)
 
-        # Show the full filesystem by default.
-        model.setRootPath(QtCore.QDir.rootPath())
+        # Show the user's home directory by default.
+        model.setRootPath(QtCore.QDir.homePath())
+
+        control.setModel(model)
+        control.setRootIndex(model.index(QtCore.QDir.homePath()))
+
+        self.control = control
+
+        # set the current item
+        if current_path:
+            index = model.index(current_path)
+            control.expand(index)
+            control.setCurrentIndex(index)
 
         # Hide the labels at the top and only show the column for the file name
         self.control.header().hide()
-        for column in xrange(1, model.columnCount()):
+        for column in range(1, model.columnCount()):
             self.control.hideColumn(column)
 
         factory = self.factory
@@ -214,81 +190,62 @@ class CustomEditor ( SimpleTextEditor ):
         self.set_tooltip()
 
         # This is needed to enable horizontal scrollbar.
-        self.control.header().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
-        self.control.header().setStretchLastSection(False)
-
-    #---------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #---------------------------------------------------------------------------
+        header = self.control.header()
+        if is_qt5:
+            header.setSectionResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        else:
+            header.setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        header.setStretchLastSection(False)
 
     def update_object(self, idx):
         """ Handles the user changing the contents of the edit control.
         """
         if self.control is not None:
-            path = unicode(self._model.filePath(idx))
+            path = six.text_type(self._model.filePath(idx))
 
             if self.factory.allow_dir or isfile(path):
                 if self.factory.truncate_ext:
-                    path = splitext( path )[0]
+                    path = splitext(path)[0]
 
                 self.value = path
 
-    #---------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #---------------------------------------------------------------------------
-
-    def update_editor ( self ):
+    def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         if exists(self.str_value):
-            index = self._model.index(self.str_value)
+            index = self._model.index(abspath(self.str_value))
             self.control.expand(index)
             self.control.setCurrentIndex(index)
 
-    #---------------------------------------------------------------------------
-    #  Handles the 'filter' trait being changed:
-    #---------------------------------------------------------------------------
+    #-- Private Methods ------------------------------------------------------
 
-    def _filter_changed ( self ):
+    def _on_dclick(self, idx):
+        """ Handles the user double-clicking on a file name.
+        """
+        self.dclick = six.text_type(self._model.filePath(idx))
+
+    # Trait change handlers --------------------------------------------------
+
+    def _filter_changed(self):
         """ Handles the 'filter' trait being changed.
         """
         self._model.setNameFilters(self.filter)
 
-    #---------------------------------------------------------------------------
-    #  Handles the 'root_path' trait being changed:
-    #---------------------------------------------------------------------------
-
-    def _root_path_changed ( self ):
+    def _root_path_changed(self):
         """ Handles the 'root_path' trait being changed.
         """
         path = self.root_path
         if not path:
-            path = QtCore.QDir.rootPath()
+            path = QtCore.QDir.homePath()
         self._model.setRootPath(path)
         self.control.setRootIndex(self._model.index(path))
 
-    #---------------------------------------------------------------------------
-    #  Handles the user double-clicking on a file name:
-    #---------------------------------------------------------------------------
-
-    def _on_dclick ( self, idx ):
-        """ Handles the user double-clicking on a file name.
-        """
-        self.dclick = unicode(self._model.filePath(idx))
-
-    #---------------------------------------------------------------------------
-    #  Handles the 'reload' trait being changed:
-    #---------------------------------------------------------------------------
-
-    def _reload_changed ( self ):
+    def _reload_changed(self):
         """ Handles the 'reload' trait being changed.
         """
         self._model.refresh()
 
-#-------------------------------------------------------------------------------
-#  '_TreeView' class:
-#-------------------------------------------------------------------------------
 
 class _TreeView(QtGui.QTreeView):
     """ This is an internal class needed because QAbstractItemView doesn't
@@ -299,8 +256,8 @@ class _TreeView(QtGui.QTreeView):
         super(_TreeView, self).__init__()
         self.doubleClicked.connect(editor._on_dclick)
         self._editor = editor
-        
-    def event(self, event): 
+
+    def event(self, event):
         if event.type() == QtCore.QEvent.ToolTip:
             index = self.indexAt(event.pos())
             if index and index.isValid():
@@ -308,9 +265,9 @@ class _TreeView(QtGui.QTreeView):
             else:
                 QtGui.QToolTip.hideText()
                 event.ignore()
-                                
+
             return True
-            
+
         return super(_TreeView, self).event(event)
 
     def keyPressEvent(self, keyevent):
