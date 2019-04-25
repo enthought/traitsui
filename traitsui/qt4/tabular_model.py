@@ -315,7 +315,7 @@ class TabularModel(QtCore.QAbstractTableModel):
     def supportedDropActions(self):
         """ Reimplemented to allow items to be moved.
         """
-        return QtCore.Qt.MoveAction
+        return QtCore.Qt.MoveAction | QtCore.Qt.CopyAction
 
     #-------------------------------------------------------------------------
     #  TabularModel interface:
