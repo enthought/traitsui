@@ -291,7 +291,11 @@ class TreeNode(HasPrivateTraits):
         """ Sets up or removes a listener for children being replaced on a
         specified object.
         """
-        object.on_trait_change(listener, self.children, remove=remove,
+        def wrapped_listener(target, name, label):
+            """ Ensure listener gets called with correct object. """
+            return listener(object, name, label)
+
+        object.on_trait_change(wrapped_listener, self.children, remove=remove,
                                dispatch='fast_ui')
 
     #-------------------------------------------------------------------------
@@ -303,7 +307,11 @@ class TreeNode(HasPrivateTraits):
         """ Sets up or removes a listener for children being changed on a
         specified object.
         """
-        object.on_trait_change(listener, self.children + '_items',
+        def wrapped_listener(target, name, label):
+            """ Ensure listener gets called with correct object. """
+            return listener(object, name, label)
+
+        object.on_trait_change(wrapped_listener, self.children + '_items',
                                remove=remove, dispatch='fast_ui')
 
     #-------------------------------------------------------------------------
@@ -345,7 +353,11 @@ class TreeNode(HasPrivateTraits):
         """
         label = self.label
         if label[:1] != '=':
-            object.on_trait_change(listener, label, remove=remove,
+            def wrapped_listener(target, name, label):
+                """ Ensure listener gets called with correct object. """
+                return listener(object, name, label)
+
+            object.on_trait_change(wrapped_listener, label, remove=remove,
                                    dispatch='ui')
 
     def get_column_labels(self, object):
@@ -372,18 +384,19 @@ class TreeNode(HasPrivateTraits):
 
         This will fire when either the list is reassigned or when it is
         modified. I.e., it listens both to the trait change event and the
-        trait_items change event. Implement the listener appropriately to handle
-        either case.
+        trait_items change event. Implement the listener appropriately to
+        handle either case.
         """
         trait = self.column_labels
         if trait != '':
-            object.on_trait_change(
-                listener, trait, remove=remove, dispatch='ui')
-            object.on_trait_change(
-                listener,
-                trait + '_items',
-                remove=remove,
-                dispatch='ui')
+            def wrapped_listener(target, name, label):
+                """ Ensure listener gets called with correct object. """
+                return listener(object, name, label)
+
+            object.on_trait_change(wrapped_listener, trait, remove=remove,
+                                   dispatch='ui')
+            object.on_trait_change(wrapped_listener, trait + '_items',
+                                   remove=remove, dispatch='ui')
 
     #-------------------------------------------------------------------------
     #  Gets the tooltip to display for a specified object:
@@ -1819,7 +1832,11 @@ class TreeNodeObject(HasPrivateTraits):
         """ Sets up or removes a listener for children being replaced on a
         specified object.
         """
-        self.on_trait_change(listener, node.children, remove=remove,
+        def wrapped_listener(target, name, label):
+            """ Ensure listener gets called with correct object. """
+            return listener(object, name, label)
+
+        self.on_trait_change(wrapped_listener, node.children, remove=remove,
                              dispatch='fast_ui')
 
     #-------------------------------------------------------------------------
@@ -1831,7 +1848,11 @@ class TreeNodeObject(HasPrivateTraits):
         """ Sets up or removes a listener for children being changed on a
         specified object.
         """
-        self.on_trait_change(listener, node.children + '_items',
+        def wrapped_listener(target, name, label):
+            """ Ensure listener gets called with correct object. """
+            return listener(object, name, label)
+
+        self.on_trait_change(wrapped_listener, node.children + '_items',
                              remove=remove, dispatch='fast_ui')
 
     #-------------------------------------------------------------------------
@@ -1871,9 +1892,13 @@ class TreeNodeObject(HasPrivateTraits):
         """ Sets up or removes a listener for  the label being changed on a
         specified object.
         """
+        def wrapped_listener(target, name, label):
+            """ Ensure listener gets called with correct object. """
+            return listener(object, name, label)
+
         label = node.label
         if label[:1] != '=':
-            self.on_trait_change(listener, label, remove=remove,
+            self.on_trait_change(wrapped_listener, label, remove=remove,
                                  dispatch='ui')
 
     #-------------------------------------------------------------------------
