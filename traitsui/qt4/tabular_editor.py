@@ -31,8 +31,9 @@ from pyface.qt import QtCore, QtGui
 from pyface.image_resource import ImageResource
 from pyface.ui_traits import Image
 
-from traits.api import (Any, Bool, Callable, Event, HasStrictTraits, Instance,
-                        Int, List, NO_COMPARE, Property, TraitListEvent)
+from traits.api import (Any, Bool, Callable, Color, Event, HasStrictTraits,
+                        Instance, Int, List, NO_COMPARE, Property,
+                        TraitListEvent)
 
 from traitsui.tabular_adapter import TabularAdapter
 from .editor import Editor
@@ -128,6 +129,9 @@ class TabularEditor(Editor):
     header_event_filter = Any()
 
     widget_factory = Callable(lambda *args, **kwds: _TableView(*args, **kwds))
+
+    # Row highlighting color
+    highlight_color = Color("blue")
 
     #-------------------------------------------------------------------------
     #  Editor interface:
@@ -581,10 +585,21 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
         QtGui.QStyledItemDelegate.__init__(self, table_view)
         self._horizontal_lines = table_view._editor.factory.horizontal_lines
         self._vertical_lines = table_view._editor.factory.vertical_lines
+        self.highlight_color = table_view._editor.factory.highlight_color
 
     def paint(self, painter, option, index):
-        """ Overrident to draw gridlines.
+        """ Overriden to draw gridlines.
         """
+        # diable the highlighting of the selected cells' backgrounds, this
+        # diverges from the behavior of the parent class
+        option.showDecorationSelected = False
+        if option.state & QtGui.QStyle.State_Selected:
+            # disable the highlighting of the selected cells' text
+            option.state &= QtGui.QStyle.State_NoChange
+            draw_overlay = True
+        else:
+            draw_overlay = False
+
         QtGui.QStyledItemDelegate.paint(self, painter, option, index)
         painter.save()
 
@@ -600,6 +615,12 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
                 option.rect.bottomRight())
         if self._vertical_lines:
             painter.drawLine(option.rect.topRight(), option.rect.bottomRight())
+
+        # draw an overlay over the selected cells, this diverges from the
+        # behavior of the parent class
+        if draw_overlay:
+            painter.setBrush(self.highlight_color)
+            painter.drawRect(option.rect)
 
         painter.restore()
 
