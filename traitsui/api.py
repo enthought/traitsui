@@ -50,6 +50,7 @@ from .editors.api import (
     DNDEditor,
     StyledDateEditor,
     DateEditor,
+    DateRangeEditor,
     DefaultOverride,
     DirectoryEditor,
     DropEditor,

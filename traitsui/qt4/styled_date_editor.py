@@ -87,10 +87,7 @@ class CustomEditor(DateCustomEditor):
     def _apply_style(self, style, dates):
         """ **style** is a CellFormat, **dates** is a list of datetime.date """
         for dt in dates:
-            qdt = QtCore.QDate(dt)
-            textformat = self.control.dateTextFormat(qdt)
-            self._apply_cellformat(style, textformat)
-            self.control.setDateTextFormat(qdt, textformat)
+            self.set_unselected_style(style, date)
         return
 
     def _apply_styles(self, style_dict, date_dict):
@@ -104,53 +101,10 @@ class CustomEditor(DateCustomEditor):
             if not cellformat:
                 continue
             for dt in dates:
-                qdt = QtCore.QDate(dt)
-                textformat = self.control.dateTextFormat(qdt)
-                self._apply_cellformat(cellformat, textformat)
-                self.control.setDateTextFormat(qdt, textformat)
+                self.set_unselected_style(cellformat, dt)
         return
 
     def _reset_formatting(self, dates):
         # Resets the text format on the given dates
         for dt in dates:
-            qdt = QtCore.QDate(dt)
-            self.control.setDateTextFormat(qdt, QtGui.QTextCharFormat())
-
-    def _apply_cellformat(self, cf, textformat):
-        """ Applies the formatting in the cellformat cf to the QTextCharFormat
-        object provided.
-        """
-        if cf.italics is not None:
-            textformat.setFontItalic(cf.italics)
-
-        if cf.underline is not None:
-            textformat.setFontUnderline(cf.underline)
-
-        if cf.bold is not None:
-            if cf.bold:
-                weight = QFont.Bold
-            else:
-                weight = QFont.Normal
-            textformat.setFontWeight(weight)
-
-        if cf.bgcolor is not None:
-            textformat.setBackground(self._color_to_brush(cf.bgcolor))
-
-        if cf.fgcolor is not None:
-            textformat.setForeground(self._color_to_brush(cf.fgcolor))
-
-        return
-
-    def _color_to_brush(self, color):
-        """ Returns a QBrush with the color specified in **color** """
-        brush = QtGui.QBrush()
-        if isinstance(color, six.string_types) and hasattr(QtCore.Qt, color):
-            col = getattr(QtCore.Qt, color)
-        elif isinstance(color, tuple) and len(color) == 3:
-            col = QtGui.QColor()
-            col.setRgb(*color)
-        else:
-            raise RuntimeError("Invalid color specification '%r'" % color)
-
-        brush.setColor(col)
-        return brush
+            self.apply_unselected_style(date)
