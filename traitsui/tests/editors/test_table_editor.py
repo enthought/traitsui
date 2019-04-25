@@ -389,7 +389,6 @@ def test_table_editor_select_columns():
         press_ok_button(ui)
         gui.process_events()
 
-    print selected
     assert selected == ['value', 'other_value']
 
 
