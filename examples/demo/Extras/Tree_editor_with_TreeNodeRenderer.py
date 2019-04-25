@@ -23,8 +23,10 @@ import colorsys
 
 import numpy as np
 
-from pyface.qt import QtCore, QtGui
-from traits.api import Array, Float, HasTraits, Instance, Int, List, RGBColor, Unicode
+from pyface.qt import QtCore, QtGui, qt_api
+from traits.api import (
+    Array, Float, HasTraits, Instance, Int, List, RGBColor, Unicode
+)
 
 from traitsui.api import TreeEditor, TreeNode, UItem, View
 from traitsui.tree_node_renderer import AbstractTreeNodeRenderer
@@ -32,6 +34,8 @@ from traitsui.qt4.tree_editor import WordWrapRenderer
 
 
 class MyDataElement(HasTraits):
+    """ A node in a tree of data. """
+
     #: Some text to display.
     text = Unicode
 
@@ -49,6 +53,8 @@ class MyDataElement(HasTraits):
 
 
 class MyData(HasTraits):
+    """ The root node for a tree of data. """
+
     #: The name of the root node.
     name = Unicode('Rooty McRootface')
 
@@ -106,7 +112,10 @@ class SparklineRenderer(AbstractTreeNodeRenderer):
         if bool(option.state & QtGui.QStyle.State_Selected):
             painter.setPen(QtGui.QPen(option.palette.highlightedText(), 0))
         try:
-            painter.drawPolyline(points)
+            if qt_api.startswith('pyside'):
+                painter.drawPolyline(points)
+            else:
+                painter.drawPolyline(*points)
         finally:
             painter.setPen(old_pen)
 
@@ -123,8 +132,12 @@ class SparklineRenderer(AbstractTreeNodeRenderer):
 class SparklineTreeNode(TreeNode):
     """ A TreeNode that renders sparklines in column index 1 """
 
-    # static instances of renderers( they have no state, so this is fine)
+    #: static instance of SparklineRenderer
+    #: (it has no state, so this is fine)
     sparkline_renderer = SparklineRenderer()
+
+    #: static instance of WordWrapRenderer
+    #: (it has no state, so this is fine)
     word_wrap_renderer = WordWrapRenderer()
 
     def get_renderer(self, object, column=0):
