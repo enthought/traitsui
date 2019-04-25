@@ -240,7 +240,6 @@ select_cell_indices_view = View(
 )
 
 
-
 @skip_if_null
 def test_table_editor():
     gui = GUI()
@@ -392,6 +391,7 @@ def test_table_editor_select_columns():
 
     print selected
     assert selected == ['value', 'other_value']
+
 
 @skip_if_null
 def test_table_editor_select_column_index():

@@ -968,6 +968,7 @@ class TableEditor(Editor, BaseTableEditor):
             else:
                 self.set_extended_selection(
                     (None, self.model.get_column_name(index))
+                )
 
     def _selected_columns_changed(self, names):
         if not self._no_notify:
@@ -991,6 +992,7 @@ class TableEditor(Editor, BaseTableEditor):
                 self.set_extended_selection(
                     (self.value[row],
                      self.model.get_column_name(column))
+                )
 
     def _selected_cells_changed(self, cells):
         if not self._no_notify:
