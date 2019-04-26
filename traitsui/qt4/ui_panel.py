@@ -16,7 +16,8 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division
+
 import cgi
 import re
 
@@ -465,7 +466,7 @@ class _GroupSplitter(QtGui.QSplitter):
 
         # Allocate the remainder to those parts that didn't request a width.
         if remain > 0:
-            remain = int(avail / remain)
+            remain = int(avail // remain)
 
             for i, sz in enumerate(sizes):
                 if sz < 0:
