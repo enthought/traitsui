@@ -209,8 +209,6 @@ class ToolkitEditorFactory(EditorFactory):
         if self.is_float is Undefined:
             self.is_float = True
 
-        print(low, high, self.is_float, self.low, self.high)
-
         return (low, high, self.is_float)
 
     #-------------------------------------------------------------------------
