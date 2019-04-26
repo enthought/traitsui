@@ -61,6 +61,9 @@ def set_combobox_text(combobox, text):
             wx.PostEvent(combobox, event)
         else:
             combobox.SetValue(text)
+            event = wx.CommandEvent(event_type, combobox.GetId())
+            event.SetString(text)
+            wx.PostEvent(combobox, event)
 
     elif is_current_backend_qt4():
         combobox.setEditText(text)
@@ -95,7 +98,7 @@ class TestEnumEditor(unittest.TestCase):
             self.addCleanup(ui.dispose)
 
             gui.process_events()
-            editor, = ui.get_editors("value")
+            editor = ui.get_editors("value")[0]
             combobox = editor.control
 
             self.assertEqual(get_combobox_text(combobox), "one")
@@ -114,7 +117,7 @@ class TestEnumEditor(unittest.TestCase):
             self.addCleanup(ui.dispose)
 
             gui.process_events()
-            editor, = ui.get_editors("value")
+            editor = ui.get_editors("value")[0]
             combobox = editor.control
 
             self.assertEqual(enum_edit.value, "one")
@@ -133,7 +136,7 @@ class TestEnumEditor(unittest.TestCase):
             self.addCleanup(ui.dispose)
 
             gui.process_events()
-            editor, = ui.get_editors("value")
+            editor = ui.get_editors("value")[0]
             combobox = editor.control
 
             self.assertEqual(enum_edit.value, "one")
@@ -152,7 +155,7 @@ class TestEnumEditor(unittest.TestCase):
             self.addCleanup(ui.dispose)
 
             gui.process_events()
-            editor, = ui.get_editors("value")
+            editor = ui.get_editors("value")[0]
             combobox = editor.control
 
             self.assertEqual(enum_edit.value, "one")
@@ -180,7 +183,7 @@ class TestEnumEditor(unittest.TestCase):
 
     @skip_if_null
     def test_simple_evaluate_editor_bad_text(self):
-        self.check_enum_text_update(simple_evaluate_view)
+        self.check_enum_text_bad_update(simple_evaluate_view)
 
     @skip_if_null
     def test_simple_evaluate_editor_object(self):
@@ -196,7 +199,7 @@ class TestEnumEditor(unittest.TestCase):
 
     @skip_if_null
     def test_simple_evaluate_popup_editor_bad_text(self):
-        self.check_enum_text_update(simple_evaluate_view_popup)
+        self.check_enum_text_bad_update(simple_evaluate_view_popup)
 
     @skip_if_null
     def test_simple_evaluate_popup_editor_object(self):
