@@ -17,8 +17,9 @@ the PyQt user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import, division
+
 # Make sure that importing from this backend is OK:
-from __future__ import absolute_import
 from traitsui.toolkit import assert_toolkit_import
 assert_toolkit_import(['qt4', 'qt'])
 
@@ -276,7 +277,7 @@ class GUIToolkit(Toolkit):
         y = view.y
 
         if x < -99999.0:
-            x = px + ((pdx - width) / 2)
+            x = px + ((pdx - width) // 2)
         elif x <= -1.0:
             x = px + pdx - width + int(x) + 1
         elif x < 0.0:
@@ -287,7 +288,7 @@ class GUIToolkit(Toolkit):
             x = int(x)
 
         if y < -99999.0:
-            y = py + ((pdy - height) / 2)
+            y = py + ((pdy - height) // 2)
         elif y <= -1.0:
             y = py + pdy - height + int(y) + 1
         elif x < 0.0:
