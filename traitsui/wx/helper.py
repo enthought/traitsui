@@ -192,8 +192,8 @@ def find_closest_display(x, y):
         else:
             def _distance(x, y, display):
                 dis_x, dis_y, dis_w, dis_h = display.GetGeometry()
-                dis_mid_x = (dis_x + dis_w) / 2
-                dis_mid_y = (dis_y + dis_h) / 2
+                dis_mid_x = dis_x + dis_w / 2
+                dis_mid_y = dis_y + dis_h / 2
 
                 return (x - dis_mid_x)**2 + (y - dis_mid_y)**2
 
