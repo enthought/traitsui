@@ -135,18 +135,13 @@ class ToolkitEditorFactory(EditorFactory):
                 handler = handler.handler
 
             if self.low_name == '':
-                if isinstance(handler._low, six.string_types):
-                    self.low_name = handler._low
-                elif isinstance(handler._low, CodeType):
+                if isinstance(handler._low, CodeType):
                     self.low = eval(handler._low)
                 else:
                     self.low = handler._low
 
             if self.high_name == '':
-                print('here', handler._high)
-                if isinstance(handler._high, six.string_types):
-                    self.high_name = handler._high
-                elif isinstance(handler._low, CodeType):
+                if isinstance(handler._low, CodeType):
                     self.high = eval(handler._high)
                 else:
                     self.high = handler._high
