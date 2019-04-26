@@ -465,8 +465,6 @@ class TableEditor(Editor, BaseTableEditor):
                     row = items.index(obj)
                 except ValueError:
                     continue
-                if row == -1:
-                    continue
                 indexes.append(self.source_model.index(row, source_column))
 
         # Selection mode is 'column' or 'columns'
@@ -484,8 +482,6 @@ class TableEditor(Editor, BaseTableEditor):
                 try:
                     row = items.index(obj)
                 except ValueError:
-                    continue
-                if row == -1:
                     continue
                 column = self._column_index_from_name(name)
                 if column != -1:
@@ -613,7 +609,7 @@ class TableEditor(Editor, BaseTableEditor):
         else:
             indices = [(index.row(), index.column()) for index in indices]
 
-        if self.factory.selection_mode.endswith('s'):
+        if self.factory.selection_mode in {'rows', 'columns', 'cells'}:
             return indices
         elif len(indices) > 0:
             return indices[0]
