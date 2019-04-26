@@ -22,14 +22,12 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.ui_traits import SequenceTypes
 import six
-from six.moves import range
 
 #-------------------------------------------------------------------------
 #  Constants:

@@ -28,8 +28,6 @@ from __future__ import absolute_import
 from traits.api import (Bool, Delegate, Float, Instance, List, Property, Range,
                         ReadOnly, Str, TraitError, cached_property)
 
-import traits._py2to3 as _py2to3
-
 from .view_element import ViewSubElement
 
 from .item import Item
@@ -37,6 +35,8 @@ from .item import Item
 from .include import Include
 
 from .ui_traits import SequenceTypes, ContainerDelegate, Orientation, Layout
+
+from .util import str_find
 
 from .dock_window_theme import dock_window_theme, DockWindowTheme
 import six
@@ -366,7 +366,7 @@ class Group(ViewSubElement):
         self.show_labels = show_labels
 
         # Parse all of the punctuation based sub-string options:
-        value = self._split('id', value, ':', _py2to3.str_find, 0, 1)
+        value = self._split('id', value, ':', str_find, 0, 1)
         if value != '':
             self.object = value
 

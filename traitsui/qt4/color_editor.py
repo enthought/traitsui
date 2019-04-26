@@ -13,13 +13,12 @@
 """ Defines the various color editors for the PyQt user interface toolkit.
 """
 
-from __future__ import division
+from __future__ import absolute_import, division
 
 #-------------------------------------------------------------------------
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traitsui.editors.color_editor \
@@ -33,7 +32,7 @@ from .editor_factory \
 from .editor \
     import Editor
 import six
-from six.moves import range
+
 
 #-------------------------------------------------------------------------
 #  Constants:

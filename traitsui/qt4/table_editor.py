@@ -2,8 +2,10 @@
 # Copyright (c) 2008, Riverbank Computing Limited
 # All rights reserved.
 #
-# This software is provided without warranty under the terms of the BSD license.
-# However, when used with the GPL version of PyQt the additional terms described
+# This software is provided without warranty under the terms of the BSD
+# license.
+#
+# When used with the GPL version of PyQt the additional terms described
 # in the PyQt GPL exception also apply.
 #
 # Author: Riverbank Computing Limited
@@ -35,7 +37,6 @@ from traitsui.ui_traits import SequenceTypes
 from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
 import six
-from six.moves import range
 
 
 is_qt5 = QtCore.__version_info__ >= (5,)
@@ -225,7 +226,7 @@ class TableEditor(Editor, BaseTableEditor):
 
         # Create auxillary editor and encompassing splitter if necessary
         mode = factory.selection_mode
-        if (factory.edit_view == ' ') or not mode in ('row', 'rows'):
+        if (factory.edit_view == ' ') or mode not in {'row', 'rows'}:
             self.control = main_view
         else:
             if factory.orientation == 'horizontal':
@@ -443,7 +444,7 @@ class TableEditor(Editor, BaseTableEditor):
     def set_selection(self, objects=[], notify=True):
         """Sets the current selection to a set of specified objects."""
 
-        if not isinstance(objects, SequenceTypes):
+        if not isinstance(objects, list):
             objects = [objects]
 
         mode = self.factory.selection_mode
@@ -488,15 +489,17 @@ class TableEditor(Editor, BaseTableEditor):
 
         # Perform the selection so that only one signal is emitted
         selection = QtGui.QItemSelection()
+        smodel = self.table_view.selectionModel()
         for index in indexes:
             index = self.model.mapFromSource(index)
             if index.isValid():
-                self.table_view.setCurrentIndex(index)
+                smodel.setCurrentIndex(
+                    index, QtGui.QItemSelectionModel.NoUpdate)
                 selection.select(index, index)
-        smodel = self.table_view.selectionModel()
         try:
             smodel.blockSignals(not notify)
             if len(selection.indexes()):
+                smodel.clear()
                 smodel.select(selection, flags)
             else:
                 smodel.clear()
@@ -599,16 +602,36 @@ class TableEditor(Editor, BaseTableEditor):
         """Gets the row,column indices which match the selected trait"""
         selection_items = self.table_view.selectionModel().selection()
         indices = self.model.mapSelectionToSource(selection_items).indexes()
-        return [(index.row(), index.column()) for index in indices]
+        if self.factory.selection_mode.startswith('row'):
+            indices = sorted(set(index.row() for index in indices))
+        elif self.factory.selection_mode.startswith('column'):
+            indices = sorted(set(index.column() for index in indices))
+        else:
+            indices = [(index.row(), index.column()) for index in indices]
+
+        if self.factory.selection_mode in {'rows', 'columns', 'cells'}:
+            return indices
+        elif len(indices) > 0:
+            return indices[0]
+        else:
+            return -1
 
     def _set_selected_indices(self, indices):
+        if not isinstance(indices, list):
+            indices = [indices]
         selected = []
-        for row, col in indices:
-            selected.append((self.value[row], self.columns[col].name))
+        if self.factory.selection_mode.startswith('row'):
+            for row in indices:
+                selected.append(self.value[row])
+        elif self.factory.selection_mode.startswith('column'):
+            for col in indices:
+                selected.append(self.columns[col].name)
+        else:
+            for row, col in indices:
+                selected.append((self.value[row], self.columns[col].name))
 
         self.selected = selected
         self.set_selection(self.selected, False)
-        return
 
     #-- Trait Change Handlers ------------------------------------------------
 
@@ -631,8 +654,7 @@ class TableEditor(Editor, BaseTableEditor):
             if column.renderer:
                 self.table_view.setItemDelegateForColumn(i, column.renderer)
 
-        self.model.beginResetModel()
-        self.model.endResetModel()
+        self.model.invalidate()
         self.table_view.resizeColumnsToContents()
         if self.auto_size:
             self.table_view.resizeRowsToContents()
@@ -665,7 +687,6 @@ class TableEditor(Editor, BaseTableEditor):
 
     def _on_rows_selection(self, added, removed):
         """Handle the rows selection being changed."""
-
         items = self.items()
         indexes = self.table_view.selectionModel().selectedRows()
         selected = [items[self.model.mapToSource(index).row()]
@@ -783,8 +804,10 @@ class TableEditor(Editor, BaseTableEditor):
 
         self.model.moveRow(self.header_row, self.header_row + 1)
 
+
 # Define the SimpleEditor class.
 SimpleEditor = TableEditor
+
 
 # Define the ReadonlyEditor class.
 ReadonlyEditor = TableEditor
@@ -976,9 +999,9 @@ class TableView(QtGui.QTableView):
 
     def resizeEvent(self, event):
         """Reimplemented to size the table columns when the size of the table
-        changes. Because the layout algorithm requires that the available space
-        be known, we have to wait until the UI that contains this table gives it
-        its initial size."""
+        changes. Because the layout algorithm requires that the available
+        space be known, we have to wait until the UI that contains this table
+        gives it its initial size."""
 
         QtGui.QTableView.resizeEvent(self, event)
 
@@ -989,7 +1012,8 @@ class TableView(QtGui.QTableView):
         else:
             parent = self.parent()
             if (not self._initial_size and parent and (
-                    self.isVisible() or isinstance(parent, QtGui.QMainWindow))):
+                    self.isVisible()
+                    or isinstance(parent, QtGui.QMainWindow))):
                 self._initial_size = True
                 if self._editor.auto_size:
                     self.resizeColumnsToContents()
@@ -1057,7 +1081,7 @@ class TableView(QtGui.QTableView):
             return requested_width
 
     def resizeColumnsToContents(self):
-        """Reimplemented to support proportional column width specifications."""
+        """ Support proportional column width specifications. """
 
         # TODO: The proportional size specification approach found in the
         # TableColumns is not entirely compatible with the ability to
@@ -1128,10 +1152,12 @@ class TableView(QtGui.QTableView):
         # we make the last non-fixed-size column stretchy.
         hheader = self.horizontalHeader()
         set_resize_mode = set_qheader_section_resize_mode(hheader)
-        resize_mode_map = dict(interactive=QtGui.QHeaderView.Interactive,
-                               fixed=QtGui.QHeaderView.Fixed,
-                               stretch=QtGui.QHeaderView.Stretch,
-                               resize_to_contents=QtGui.QHeaderView.ResizeToContents)
+        resize_mode_map = dict(
+            interactive=QtGui.QHeaderView.Interactive,
+            fixed=QtGui.QHeaderView.Fixed,
+            stretch=QtGui.QHeaderView.Stretch,
+            resize_to_contents=QtGui.QHeaderView.ResizeToContents,
+        )
         stretchable_columns = []
         for i, column in enumerate(editor.columns):
             set_resize_mode(i, resize_mode_map[column.resize_mode])
@@ -1186,34 +1212,56 @@ class TableFilterEditor(HasTraits):
     remove_button = Button('Delete')
 
     # The default view for this editor
-    view = View(Group(Group(Group(Item('add_button',
-                                       enabled_when='selected_template'),
-                                  Item('remove_button',
-                                       enabled_when='len(templates) > 1 and '
-                                       'selected_filter is not None'),
-                                  orientation='horizontal',
-                                  show_labels=False),
-                            Label('Base filter for new filters:'),
-                            Item('selected_template',
-                                 editor=EnumEditor(name='templates')),
-                            Item('selected_filter',
-                                 style='custom',
-                                 editor=EnumEditor(name='filters',
-                                                   mode='list')),
-                            show_labels=False),
-                      Item('selected_filter',
-                           width=0.75,
-                           style='custom',
-                           editor=InstanceEditor(view_name='selected_filter_view')),
-                      id='TableFilterEditorSplit',
-                      show_labels=False,
-                      layout='split',
-                      orientation='horizontal'),
-                id='traitsui.qt4.table_editor.TableFilterEditor',
-                buttons=['OK', 'Cancel'],
-                kind='livemodal',
-                resizable=True, width=800, height=400,
-                title='Customize filters')
+    view = View(
+        Group(
+            Group(
+                Group(
+                    Item(
+                        'add_button',
+                        enabled_when='selected_template'
+                    ),
+                    Item(
+                        'remove_button',
+                        enabled_when='len(templates) > 1 and '
+                                     'selected_filter is not None',
+                    ),
+                    orientation='horizontal',
+                    show_labels=False,
+                ),
+                Label('Base filter for new filters:'),
+                Item(
+                    'selected_template',
+                    editor=EnumEditor(name='templates')
+                ),
+                Item(
+                    'selected_filter',
+                    style='custom',
+                    editor=EnumEditor(
+                        name='filters',
+                        mode='list',
+                    )
+                ),
+                show_labels=False,
+            ),
+            Item(
+                'selected_filter',
+                width=0.75,
+                style='custom',
+                editor=InstanceEditor(view_name='selected_filter_view')
+            ),
+            id='TableFilterEditorSplit',
+            show_labels=False,
+            layout='split',
+            orientation='horizontal',
+        ),
+        id='traitsui.qt4.table_editor.TableFilterEditor',
+        buttons=['OK', 'Cancel'],
+        kind='livemodal',
+        resizable=True,
+        width=800,
+        height=400,
+        title='Customize filters',
+    )
 
     #-------------------------------------------------------------------------
     #  Private methods:

@@ -28,7 +28,6 @@ from pyface.qt import QtGui
 
 from .editor import Editor
 import six
-from six.moves import range
 
 #-------------------------------------------------------------------------
 #  '_HistoryEditor' class:

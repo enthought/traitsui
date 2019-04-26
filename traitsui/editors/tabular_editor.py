@@ -152,7 +152,7 @@ class TabularEditor(BasicEditorFactory):
 
     # Are 'drag_move' operations allowed (i.e. True), or should they always be
     # treated as 'drag_copy' operations (i.e. False):
-    drag_move = Bool(False)
+    drag_move = Bool(True)
 
     # The set of images that can be used:
     images = List(Image)

@@ -55,7 +55,7 @@ class LineCountInfo(MFileDialogModel):
             if getsize(self.file_name) > 10000000:
                 return 'File too big...'
 
-            fh = open(self.file_name, 'rU')
+            fh = open(self.file_name, 'rU', encoding='utf8')
             data = fh.read()
             fh.close()
         except:

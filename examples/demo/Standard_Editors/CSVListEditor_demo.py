@@ -5,9 +5,8 @@ This editor allows the user to enter a *single* line of input text, containing
 comma-separated values (or another separator may be specified). Your program
 specifies an element Trait type of Int, Float, Str, Enum, or Range.
 """
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
-from __future__ import absolute_import
 from traits.api import HasTraits, List, Int, Float, Enum, Range, Str, Button, \
     Property
 from traitsui.api import View, Item, Label, Heading, VGroup, HGroup, UItem, \

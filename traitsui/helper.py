@@ -31,7 +31,7 @@ from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
 
 from .ui_traits import SequenceTypes
 import six
-from six.moves import range
+
 
 #-------------------------------------------------------------------------
 #  Trait definitions:

@@ -46,8 +46,8 @@ A line beginning with a hyphen (-) is interpreted as a menu separator.
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
+
 import re
 
 from pyface.qt import QtGui

@@ -24,7 +24,6 @@ from traitsui.editors.file_editor import ToolkitEditorFactory
 from .text_editor import SimpleEditor as SimpleTextEditor
 from .helper import IconButton
 import six
-from six.moves import range
 
 
 is_qt5 = (QtCore.__version_info__[0] >= 5)

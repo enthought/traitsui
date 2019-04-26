@@ -27,7 +27,7 @@ import re
 import webbrowser
 
 import wx
-from io import open
+
 
 if wx.Platform == '__WXMSW__':
     # The new version of IEHTMLWindow (wx 2.8.8.0) is mostly compatible with
@@ -161,9 +161,8 @@ class _IEHTMLEditor(Editor):
 
         elif (value[:4] != 'http') or (value.find('://') < 0):
             try:
-                file = open(value, 'rb')
-                self.control.LoadStream(file)
-                file.close()
+                with open(value, 'rb') as file:
+                    self.control.LoadStream(file)
             except:
                 pass
 

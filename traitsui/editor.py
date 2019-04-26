@@ -369,8 +369,10 @@ class Editor(HasPrivateTraits):
                 self._update_editor, self.extended_name, remove=True)
             return
 
-        # Log the change that was made (as long as it is not for an event):
-        if object.base_trait(name).type != 'event':
+        # Log the change that was made (as long as the Item is not readonly
+        # or it is not for an event):
+        if (self.item.style != 'readonly'
+                and object.base_trait(name).type != 'event'):
             self.log_change(self.get_undo_item, object, name,
                             old_value, new_value)
 

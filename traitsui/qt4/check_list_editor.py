@@ -18,9 +18,8 @@ user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import division
+from __future__ import absolute_import, division
 
-from __future__ import absolute_import
 import logging
 
 from pyface.qt import QtCore, QtGui
@@ -40,7 +39,7 @@ from .editor_factory \
 from .editor \
     import EditorWithList
 import six
-from six.moves import range
+
 
 logger = logging.getLogger(__name__)
 

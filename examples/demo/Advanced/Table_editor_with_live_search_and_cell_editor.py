@@ -403,7 +403,7 @@ class SourceFile(HasTraits):
     @property_depends_on('full_name')
     def _get_contents(self):
         try:
-            with open(self.full_name, 'rU') as fh:
+            with open(self.full_name, 'rU', encoding='utf8') as fh:
                 contents = fh.readlines()
                 return contents
         except Exception:

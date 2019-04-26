@@ -28,7 +28,6 @@ from traitsui.api \
 
 from .constants \
     import OKColor, ErrorColor
-from six.moves import range
 
 #-------------------------------------------------------------------------
 #  'Editor' class:

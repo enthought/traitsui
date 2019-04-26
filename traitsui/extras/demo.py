@@ -30,6 +30,7 @@ import token
 import tokenize
 import operator
 from io import StringIO
+import io
 from configobj import ConfigObj
 
 from traits.api import (HasTraits, HasPrivateTraits, Str, Instance, Property,
@@ -44,14 +45,14 @@ from os import listdir
 
 from os.path import (join, isdir, split, splitext, dirname, basename, abspath,
                      exists, isabs)
-from io import open
+
 
 #-------------------------------------------------------------------------
 #  Global data:
 #-------------------------------------------------------------------------
 
 # Define the code used to populate the 'execfile' dictionary:
-exec_str =  """from traits.api import *
+exec_str = """from traits.api import *
 
 """
 
@@ -72,6 +73,11 @@ def user_name_for(name):
 
 def extract_docstring_from_source(source):
     """Return module docstring and source code from python source code.
+
+    Parameters
+    ----------
+    source : Str (Unicode)
+        Python source code.
 
     Returns
     -------
@@ -114,11 +120,17 @@ def parse_source(file_name):
         The source code, sans docstring.
     """
     try:
-        fh = open(file_name, 'rb')
-        source_code = fh.read()
+        with io.open(file_name, 'r', encoding='utf-8') as fh:
+            source_code = fh.read()
         return extract_docstring_from_source(source_code)
-    except:
-        return ('', '')
+    except Exception:
+        # Print an error message instead of failing silently.
+        # Ideally, the message would be output to the "log" tab.
+        import traceback
+        traceback_text = traceback.format_exc()
+        error_fmt = u"""Sorry, something went wrong.\n\n{}"""
+        error_msg = error_fmt.format(traceback_text)
+        return (error_msg, '')
 
 
 #-------------------------------------------------------------------------
@@ -160,7 +172,8 @@ class DemoFileHandler(Handler):
         locals['__file__'] = df.path
         sys.modules['__main__'].__file__ = df.path
         try:
-            exec(compile(open(df.path).read(), df.path, 'exec'), locals, locals)
+            with io.open(df.path, 'r', encoding='utf-8') as fp:
+                exec(compile(fp.read(), df.path, 'exec'), locals, locals)
             demo = self._get_object('modal_popup', locals)
             if demo is not None:
                 demo = ModalDemoButton(demo=demo)
@@ -187,7 +200,8 @@ class DemoFileHandler(Handler):
 
     def execute_test(self, df, locals):
         """ Executes the file in df.path in the namespace of locals."""
-        exec(compile(open(df.path).read(), df.path, 'exec'), locals, locals)
+        with io.open(df.path, 'r', encoding='utf-8') as fp:
+            exec(compile(fp.read(), df.path, 'exec'), locals, locals)
 
     #-------------------------------------------------------------------------
     #  Closes the view:

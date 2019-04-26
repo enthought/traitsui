@@ -20,7 +20,6 @@ from __future__ import absolute_import
 from time import sleep
 from traits.api import HasTraits, Int, Button, List
 from traitsui.api import View, Item, ListEditor
-from six.moves import range
 
 #-- The Counter objects used to keep track of the current count ----------
 

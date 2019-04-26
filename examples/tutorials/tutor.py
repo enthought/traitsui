@@ -26,8 +26,8 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
+
 import sys
 from operator import itemgetter
 import os
@@ -192,12 +192,12 @@ MP3Template = """<html>
 #-------------------------------------------------------------------------
 
 
-def read_file(path, mode='rU'):
+def read_file(path, mode='rU', encoding='utf8'):
     """ Returns the contents of a specified text file (or None).
 
     """
     try:
-        with open(path, mode) as fh:
+        with open(path, mode, encoding=encoding) as fh:
             result = fh.read()
         return result
     except Exception:
