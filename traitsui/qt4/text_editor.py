@@ -248,3 +248,11 @@ class ReadonlyEditor(BaseReadonlyEditor):
             new_value = '*' * len(new_value)
 
         self.control.setText(new_value)
+
+
+#-------------------------------------------------------------------------
+#  'TextEditor' class:
+#-------------------------------------------------------------------------
+
+# Same as SimpleEditor for a text editor.
+TextEditor = SimpleEditor
