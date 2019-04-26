@@ -61,6 +61,7 @@ def set_combobox_text(combobox, text):
             wx.PostEvent(combobox, event)
         else:
             combobox.SetValue(text)
+            event_type = wx.EVT_COMBOBOX.typeId
             event = wx.CommandEvent(event_type, combobox.GetId())
             event.SetString(text)
             wx.PostEvent(combobox, event)
