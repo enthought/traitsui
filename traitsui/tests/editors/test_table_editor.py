@@ -3,7 +3,9 @@ from __future__ import absolute_import
 from pyface.gui import GUI
 from traits.api import HasTraits, Instance, Int, List, Str, Tuple
 
-from traitsui.api import Item, ObjectColumn, TableEditor, View
+from traitsui.api import (
+    EvalTableFilter, Item, ObjectColumn, TableEditor, View
+)
 from traitsui.tests._tools import (
     is_current_backend_qt4, is_current_backend_wx, press_ok_button,
     skip_if_not_qt4,  skip_if_null, store_exceptions_on_all_threads
@@ -43,6 +45,21 @@ simple_view = View(
                 ObjectColumn(name='value'),
                 ObjectColumn(name='other_value'),
             ],
+        )
+    ),
+    buttons=['OK'],
+)
+
+filtered_view = View(
+    Item(
+        'values',
+        show_label=False,
+        editor=TableEditor(
+            columns=[
+                ObjectColumn(name='value'),
+                ObjectColumn(name='other_value'),
+            ],
+            filter=EvalTableFilter(expression='other_value >= 2'),
         )
     ),
     buttons=['OK'],
@@ -252,6 +269,27 @@ def test_table_editor():
         gui.process_events()
         press_ok_button(ui)
         gui.process_events()
+
+
+@skip_if_null
+def test_filtered_table_editor():
+    gui = GUI()
+    object_list = ObjectListWithSelection(
+        values=[ListItem(value=str(i**2)) for i in range(10)]
+    )
+
+    with store_exceptions_on_all_threads():
+        ui = object_list.edit_traits(view=filtered_view)
+        gui.process_events()
+
+        print('here')
+        filter = ui.get_editors('values')[0].filter
+        print(filter)
+
+        press_ok_button(ui)
+        gui.process_events()
+
+    assert filter is not None
 
 
 @skip_if_null

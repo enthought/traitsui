@@ -1030,13 +1030,13 @@ class TableEditor(Editor, BaseTableEditor):
                         deletable(item) for item in self.selected_items
                     )
 
-                toolbar.search.enabled = toolbar.add.enabled = True
+                toolbar.search.enabled = no_filter
                 toolbar.move_up.enabled = (no_filter and (start > 0))
                 toolbar.move_down.enabled = (no_filter and (indices[-1] < n))
             else:
-                toolbar.add.enabled = no_filter
-                toolbar.search.enabled = toolbar.delete.enabled = \
-                    toolbar.move_up.enabled = toolbar.move_down.enabled = False
+                toolbar.add.enabled = toolbar.search.enabled = no_filter
+                toolbar.delete.enabled = toolbar.move_up.enabled = \
+                    toolbar.move_down.enabled = False
 
     #-------------------------------------------------------------------------
     #  Handles the contents of the model being resorted:
@@ -1700,7 +1700,7 @@ class TableSearchHandler(Handler):
         """ Handles the user clicking the OK button.
         """
         if info.initialized:
-            info.ui.dispose()
+            self.close(info, True)
 
 
 # Define the SimpleEditor class.
