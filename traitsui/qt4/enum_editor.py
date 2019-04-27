@@ -205,9 +205,11 @@ class SimpleEditor(BaseEditor):
             object's **values** trait changes.
         """
         self.control.blockSignals(True)
-        self.control.clear()
-        self.control.addItems(self.names)
-        self.control.blockSignals(False)
+        try:
+            self.control.clear()
+            self.control.addItems(self.names)
+        finally:
+            self.control.blockSignals(False)
 
         self.update_editor()
 
@@ -248,7 +250,7 @@ class SimpleEditor(BaseEditor):
             self._no_enum_update += 1
             try:
                 self.value = self.mapping[six.text_type(text)]
-            except:
+            except Exception:
                 from traitsui.api import raise_to_debug
                 raise_to_debug()
             self._no_enum_update -= 1
@@ -257,10 +259,11 @@ class SimpleEditor(BaseEditor):
         """ Handles the user typing text into the combo box text entry field.
         """
         if self._no_enum_update == 0:
+
             value = six.text_type(text)
             try:
                 value = self.mapping[value]
-            except:
+            except Exception:
                 try:
                     value = self.factory.evaluate(value)
                 except Exception as excp:
