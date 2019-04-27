@@ -14,7 +14,7 @@
 from __future__ import absolute_import
 from os.path import abspath, splitext, isfile, exists
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_qt5
 from traits.api import List, Event, File, Unicode, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -25,8 +25,6 @@ from .text_editor import SimpleEditor as SimpleTextEditor
 from .helper import IconButton
 import six
 
-
-is_qt5 = (QtCore.__version_info__[0] >= 5)
 
 # Wildcard filter:
 filter_trait = List(Unicode)

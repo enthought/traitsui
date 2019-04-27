@@ -20,7 +20,7 @@
 
 from __future__ import absolute_import
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_qt5
 from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
 from pyface.ui_traits import Image
@@ -38,8 +38,6 @@ from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
 import six
 
-
-is_qt5 = QtCore.__version_info__ >= (5,)
 
 if is_qt5:
     def set_qheader_section_resize_mode(header):

@@ -21,14 +21,13 @@
 from __future__ import absolute_import
 import os.path
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_qt5
 from pyface.ui_traits import convert_image
 from traits.api import Enum, CTrait, BaseTraitHandler, TraitError
 
 from traitsui.ui_traits import SequenceTypes
 import six
 
-is_qt5 = QtCore.__version_info__ >= (5,)
 
 #-------------------------------------------------------------------------
 #  Trait definitions:
