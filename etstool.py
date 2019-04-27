@@ -130,7 +130,7 @@ def cli():
 
 
 @cli.command()
-@click.option('--runtime', default='3.5')
+@click.option('--runtime', default='3.6')
 @click.option('--toolkit', default='null')
 @click.option('--environment', default=None)
 def install(runtime, toolkit, environment):
@@ -150,7 +150,7 @@ def install(runtime, toolkit, environment):
     ]
     # pip install pyqt5 and pyside2, because we don't have them in EDM yet
     if toolkit == 'pyqt5':
-        commands.append("edm run -e {environment} -- pip install pyqt5==5.9.2")
+        commands.append("edm run -e {environment} -- pip install pyqt5==5.11.3")
     elif toolkit == 'pyside2':
         commands.append(
             "edm run -e {environment} -- pip install pyside2==5.11"
