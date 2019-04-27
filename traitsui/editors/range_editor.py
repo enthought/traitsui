@@ -23,6 +23,10 @@
 
 from __future__ import absolute_import
 
+from types import CodeType
+
+import six
+
 from traits.api import (CTrait, Property, Range, Enum, Str, Int, Any, Unicode,
                         Bool, Undefined)
 
@@ -34,7 +38,6 @@ from ..view import View
 from ..editor_factory import EditorFactory
 
 from ..toolkit import toolkit_object
-import six
 
 #-------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
@@ -132,10 +135,16 @@ class ToolkitEditorFactory(EditorFactory):
                 handler = handler.handler
 
             if self.low_name == '':
-                self.low = handler._low
+                if isinstance(handler._low, CodeType):
+                    self.low = eval(handler._low)
+                else:
+                    self.low = handler._low
 
             if self.high_name == '':
-                self.high = handler._high
+                if isinstance(handler._low, CodeType):
+                    self.high = eval(handler._high)
+                else:
+                    self.high = handler._high
         else:
             if (self.low is None) and (self.low_name == ''):
                 self.low = 0.0
