@@ -778,7 +778,7 @@ class SimpleEditor(Editor):
         if renderer is None or not renderer.handles_icon:
             nid.setIcon(0, self._get_icon(node, object, expanded))
         else:
-            nid.setIcon(0, QIcon())
+            nid.setIcon(0, QtGui.QIcon())
 
     #-------------------------------------------------------------------------
     #  Begins an 'undoable' transaction:
