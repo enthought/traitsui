@@ -25,14 +25,15 @@
 
 from __future__ import absolute_import, print_function
 
-import sys
-import os
 import logging
 
-from traits.api import HasPrivateTraits, Callable, Str, Bool, Event, Any, Property
+import six
+
+from traits.api import (
+    HasPrivateTraits, Callable, Str, Bool, Event, Any, Property
+)
 
 from .helper import enum_values_changed
-
 from .toolkit import toolkit_object
 
 
@@ -178,6 +179,7 @@ class EditorFactory(HasPrivateTraits):
     #-------------------------------------------------------------------------
     #  Private methods
     #-------------------------------------------------------------------------
+
     @classmethod
     def _get_toolkit_editor(cls, class_name):
         """
@@ -197,6 +199,26 @@ class EditorFactory(HasPrivateTraits):
                 if index == len(editor_factory_modules) - 1:
                     raise e
         return None
+
+    def string_value(self, value, format_func=None):
+        """ Returns the text representation of a specified object trait value.
+
+        If the **format_func** attribute is set on the editor factory, then
+        this method calls that function to do the formatting.  If the
+        **format_str** attribute is set on the editor factory, then this
+        method uses that string for formatting. If neither attribute is
+        set, then this method just calls the appropriate text type to format.
+        """
+        if self.format_func is not None:
+            return self.format_func(value)
+
+        if self.format_str != '':
+            return self.format_str % value
+
+        if format_func is not None:
+            return format_func(value)
+
+        return six.text_type(value)
 
     #-------------------------------------------------------------------------
     #  Property getters
@@ -299,8 +321,6 @@ class EditorWithListFactory(EditorFactory):
         """ Recomputes the mappings whenever the **values** trait is changed.
         """
         self._names, self._mapping, self._inverse_mapping = \
-            enum_values_changed(self.values)
+            enum_values_changed(self.values, strfunc=self.string_value)
 
         self.values_modified = True
-
-## EOF ########################################################################
