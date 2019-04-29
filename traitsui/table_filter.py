@@ -413,7 +413,7 @@ class GenericTableFilterRuleEnabledColumn(ObjectColumn):
         """ Returns the traits editor of the column for a specified object.
         """
         if hasattr(object, 'enabled') and object.enabled:
-            return u'\u2714'
+            return u'\N{HEAVY CHECK MARK}'
         else:
             return ''
 

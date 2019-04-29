@@ -282,9 +282,7 @@ def test_filtered_table_editor():
         ui = object_list.edit_traits(view=filtered_view)
         gui.process_events()
 
-        print('here')
         filter = ui.get_editors('values')[0].filter
-        print(filter)
 
         press_ok_button(ui)
         gui.process_events()

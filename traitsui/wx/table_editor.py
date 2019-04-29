@@ -1030,7 +1030,7 @@ class TableEditor(Editor, BaseTableEditor):
                         deletable(item) for item in self.selected_items
                     )
 
-                toolbar.search.enabled = no_filter
+                toolbar.add.enabled = toolbar.search.enabled = no_filter
                 toolbar.move_up.enabled = (no_filter and (start > 0))
                 toolbar.move_down.enabled = (no_filter and (indices[-1] < n))
             else:
