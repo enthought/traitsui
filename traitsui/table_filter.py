@@ -412,7 +412,10 @@ class GenericTableFilterRuleEnabledColumn(ObjectColumn):
     def get_value(self, object):
         """ Returns the traits editor of the column for a specified object.
         """
-        return ['', '==>'][object.enabled]
+        if hasattr(object, 'enabled') and object.enabled:
+            return u'\N{HEAVY CHECK MARK}'
+        else:
+            return ''
 
 #-------------------------------------------------------------------------
 #  'GenericTableFilterRuleAndOrColumn' class:
