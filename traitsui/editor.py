@@ -292,23 +292,9 @@ class Editor(HasPrivateTraits):
     def string_value(self, value, format_func=None):
         """ Returns the text representation of a specified object trait value.
 
-            If the **format_func** attribute is set on the editor factory, then
-            this method calls that function to do the formatting.  If the
-            **format_str** attribute is set on the editor factory, then this
-            method uses that string for formatting. If neither attribute is
-            set, then this method just calls the built-in unicode() function.
+        This simply delegates to the factorys `string_value` method.
         """
-        factory = self.factory
-        if factory.format_func is not None:
-            return factory.format_func(value)
-
-        if factory.format_str != '':
-            return factory.format_str % value
-
-        if format_func is not None:
-            return format_func(value)
-
-        return six.text_type(value)
+        return self.factory.string_value(value, format_func)
 
     #-------------------------------------------------------------------------
     #  Returns the text representation of the object trait:
