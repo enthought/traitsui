@@ -101,6 +101,9 @@ class TabularEditor(Editor):
     # The event triggering scrolling.
     scroll_to_row = Event(Int)
 
+    # The event triggering scrolling.
+    scroll_to_column = Event(Int)
+
     # Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
 
@@ -180,6 +183,8 @@ class TabularEditor(Editor):
             'column_right_clicked',
             'to')
         self.sync_value(factory.scroll_to_row, 'scroll_to_row', 'from',
+                        is_event=True)
+        self.sync_value(factory.scroll_to_column, 'scroll_to_column', 'from',
                         is_event=True)
 
         # Connect other signals as necessary
@@ -432,6 +437,14 @@ class TabularEditor(Editor):
         scroll_hint = self.scroll_to_row_hint_map.get(
             self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
         self.control.scrollTo(self.model.index(row, 0), scroll_hint)
+
+    def _scroll_to_column_changed(self, column):
+        """ Scroll to the given column.
+        """
+        import ipdb; ipdb.set_trace()
+        scroll_hint = self.scroll_to_row_hint_map.get(
+            self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
+        self.control.scrollTo(self.model.index(0, column), scroll_hint)
 
     #-- Table Control Event Handlers -----------------------------------------
 
