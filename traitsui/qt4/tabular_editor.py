@@ -443,7 +443,10 @@ class TabularEditor(Editor):
         """
         scroll_hint = self.scroll_to_row_hint_map.get(
             self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
-        self.control.scrollTo(self.model.index(0, column), scroll_hint)
+        self.control.scrollTo(
+            self.model.index(self.activated_row, column),
+            scroll_hint
+        )
 
     #-- Table Control Event Handlers -----------------------------------------
 
