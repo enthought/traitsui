@@ -441,7 +441,6 @@ class TabularEditor(Editor):
     def _scroll_to_column_changed(self, column):
         """ Scroll to the given column.
         """
-        import ipdb; ipdb.set_trace()
         scroll_hint = self.scroll_to_row_hint_map.get(
             self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
         self.control.scrollTo(self.model.index(0, column), scroll_hint)
