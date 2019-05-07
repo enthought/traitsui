@@ -29,7 +29,7 @@ def read_module(module, package='traitsui'):
     base_dir = os.path.dirname(__file__)
     module_name = package + '.' + module
     path = os.path.join(base_dir, package, module+'.py')
-    with open(path, 'r') as fp:
+    with open(path, 'r', encoding='utf-8') as fp:
         code = compile(fp.read(), module_name, 'exec')
     context = {}
     exec(code, context)
