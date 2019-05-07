@@ -17,8 +17,8 @@ IS_RELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
-def read_module(module, package='pyface'):
-    """ Read a simple .py file from pyface in a safe way.
+def read_module(module, package='traitsui'):
+    """ Read a simple .py file from traitsui in a safe way.
 
     It would be simpler to import the file, but that can be problematic in an
     unknown system, so we exec the file instead and extract the variables.
@@ -70,7 +70,7 @@ def git_version():
     return git_revision, git_count
 
 
-def write_version_py(filename='traitsui/_version.py'):
+def write_version_py(filename=None):
     template = u"""\
 # THIS FILE IS GENERATED FROM TRAITS SETUP.PY
 version = '{version}'
@@ -81,13 +81,18 @@ is_released = {is_released}
 if not is_released:
     version = full_version
 """
+    if filename is None:
+        # correctly generate relative path
+        base_dir = os.path.basename(__file__)
+        filename = os.path.join(base_dir, 'traitsui', '_version.py')
+
     # Adding the git rev number needs to be done inside
     # write_version_py(), otherwise the import of traits._version messes
     # up the build under Python 3.
     fullversion = VERSION
     if os.path.exists('.git'):
         git_rev, dev_num = git_version()
-    elif os.path.exists('traitsui/_version.py'):
+    elif os.path.exists(filename):
         # must be a source distribution, use existing version file
         try:
             data = read_module('_version')
