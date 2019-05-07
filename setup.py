@@ -83,7 +83,7 @@ if not is_released:
 """
     if filename is None:
         # correctly generate relative path
-        base_dir = os.path.basename(__file__)
+        base_dir = os.path.dirname(__file__)
         filename = os.path.join(base_dir, 'traitsui', '_version.py')
 
     # Adding the git rev number needs to be done inside
