@@ -95,7 +95,7 @@ if not is_released:
             fullversion_source = data['full_version']
         except ImportError:
             raise ImportError("Unable to read git_revision. Try removing "
-                              "pyface/_version.py and the build directory "
+                              "traitsui/_version.py and the build directory "
                               "before building.")
 
         match = re.match(r'.*?\.dev(?P<dev_num>\d+)', fullversion_source)
