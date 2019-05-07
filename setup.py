@@ -17,6 +17,25 @@ IS_RELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
+def read_module(module, package='pyface'):
+    """ Read a simple .py file from pyface in a safe way.
+
+    It would be simpler to import the file, but that can be problematic in an
+    unknown system, so we exec the file instead and extract the variables.
+
+    This will fail if things get too complex in the file being read, but is
+    sufficient to get version and requirements information.
+    """
+    base_dir = os.path.dirname(__file__)
+    module_name = package + '.' + module
+    path = os.path.join(base_dir, package, module+'.py')
+    with open(path, 'r') as fp:
+        code = compile(fp.read(), module_name, 'exec')
+    context = {}
+    exec(code, context)
+    return context
+
+
 # Return the git revision as a string
 def git_version():
     def _minimal_ext_cmd(cmd):
@@ -71,14 +90,15 @@ if not is_released:
     elif os.path.exists('traitsui/_version.py'):
         # must be a source distribution, use existing version file
         try:
-            from traitsui._version import git_revision as git_rev
-            from traitsui._version import full_version as full_v
+            data = read_module('_version')
+            git_rev = data['git_revision']
+            fullversion_source = data['full_version']
         except ImportError:
-            raise ImportError("Unable to import git_revision. Try removing "
-                              "traitsui/_version.py and the build directory "
+            raise ImportError("Unable to read git_revision. Try removing "
+                              "pyface/_version.py and the build directory "
                               "before building.")
 
-        match = re.match(r'.*?\.dev(?P<dev_num>\d+)', full_v)
+        match = re.match(r'.*?\.dev(?P<dev_num>\d+)', fullversion_source)
         if match is None:
             dev_num = '0'
         else:
