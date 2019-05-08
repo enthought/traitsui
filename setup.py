@@ -122,10 +122,14 @@ if not is_released:
                                  git_revision=git_rev,
                                  is_released=IS_RELEASED))
 
+    return fullversion
+
 
 if __name__ == "__main__":
-    write_version_py()
-    from traitsui import __version__, __requires__, __extras_require__
+    __version__ = write_version_py()
+    data = read_module('__init__')
+    __requires__ = data['__requires__']
+    __extras_require__ = data['__extras_require__']
 
     def additional_commands():
         try:
