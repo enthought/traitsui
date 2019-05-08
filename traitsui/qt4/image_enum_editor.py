@@ -24,7 +24,7 @@
 #-------------------------------------------------------------------------
 
 from __future__ import absolute_import
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_qt5
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
@@ -250,13 +250,13 @@ class ImageEnumTablePopupView(QtGui.QTableView):
         """
         QtGui.QTableView.__init__(self, parent)
         hheader = self.horizontalHeader()
-        if QtCore.__version_info__[0] >= 5:
+        if is_qt5:
             hheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
         else:
             hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
         hheader.hide()
         vheader = self.verticalHeader()
-        if QtCore.__version_info__[0] >= 5:
+        if is_qt5:
             vheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
         else:
             vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
