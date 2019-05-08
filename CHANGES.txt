@@ -54,6 +54,7 @@ Fixes
 ~~~~~
 * Fixes to README (#478).
 * Documentation fixes (#471, #508).
+* Fixes to setup.py (#549).
 * Fix an attribute error on Qt TextRangeEditor (#540).
 * Use SimpleEditor for Qt TextEditor's "text" style (#535).
 * Fix handling of Range traits with a mix of constant and named bounds (#533).

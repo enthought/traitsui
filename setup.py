@@ -17,6 +17,25 @@ IS_RELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
+def read_module(module, package='traitsui'):
+    """ Read a simple .py file from traitsui in a safe way.
+
+    It would be simpler to import the file, but that can be problematic in an
+    unknown system, so we exec the file instead and extract the variables.
+
+    This will fail if things get too complex in the file being read, but is
+    sufficient to get version and requirements information.
+    """
+    base_dir = os.path.dirname(__file__)
+    module_name = package + '.' + module
+    path = os.path.join(base_dir, package, module+'.py')
+    with open(path, 'r', encoding='utf-8') as fp:
+        code = compile(fp.read(), module_name, 'exec')
+    context = {}
+    exec(code, context)
+    return context
+
+
 # Return the git revision as a string
 def git_version():
     def _minimal_ext_cmd(cmd):
@@ -51,7 +70,7 @@ def git_version():
     return git_revision, git_count
 
 
-def write_version_py(filename='traitsui/_version.py'):
+def write_version_py(filename=None):
     template = u"""\
 # THIS FILE IS GENERATED FROM TRAITS SETUP.PY
 version = '{version}'
@@ -62,23 +81,30 @@ is_released = {is_released}
 if not is_released:
     version = full_version
 """
+    if filename is None:
+        # correctly generate relative path
+        base_dir = os.path.dirname(__file__)
+        filename = os.path.join(base_dir, 'traitsui', '_version.py')
+
     # Adding the git rev number needs to be done inside
     # write_version_py(), otherwise the import of traits._version messes
     # up the build under Python 3.
     fullversion = VERSION
     if os.path.exists('.git'):
         git_rev, dev_num = git_version()
-    elif os.path.exists('traitsui/_version.py'):
+    elif os.path.exists(filename):
         # must be a source distribution, use existing version file
         try:
-            from traitsui._version import git_revision as git_rev
-            from traitsui._version import full_version as full_v
-        except ImportError:
-            raise ImportError("Unable to import git_revision. Try removing "
-                              "traitsui/_version.py and the build directory "
-                              "before building.")
+            data = read_module('_version')
+            git_rev = data['git_revision']
+            fullversion_source = data['full_version']
+        except Exception:
+            print("Unable to read git_revision. Try removing "
+                  "traitsui/_version.py and the build directory "
+                  "before building.")
+            raise
 
-        match = re.match(r'.*?\.dev(?P<dev_num>\d+)', full_v)
+        match = re.match(r'.*?\.dev(?P<dev_num>\d+)', fullversion_source)
         if match is None:
             dev_num = '0'
         else:
@@ -96,10 +122,14 @@ if not is_released:
                                  git_revision=git_rev,
                                  is_released=IS_RELEASED))
 
+    return fullversion
+
 
 if __name__ == "__main__":
-    write_version_py()
-    from traitsui import __version__, __requires__, __extras_require__
+    __version__ = write_version_py()
+    data = read_module('__init__')
+    __requires__ = data['__requires__']
+    __extras_require__ = data['__extras_require__']
 
     def additional_commands():
         try:
