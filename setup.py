@@ -98,10 +98,11 @@ if not is_released:
             data = read_module('_version')
             git_rev = data['git_revision']
             fullversion_source = data['full_version']
-        except ImportError:
-            raise ImportError("Unable to read git_revision. Try removing "
-                              "traitsui/_version.py and the build directory "
-                              "before building.")
+        except Exception:
+            print("Unable to read git_revision. Try removing "
+                  "traitsui/_version.py and the build directory "
+                  "before building.")
+            raise
 
         match = re.match(r'.*?\.dev(?P<dev_num>\d+)', fullversion_source)
         if match is None:
