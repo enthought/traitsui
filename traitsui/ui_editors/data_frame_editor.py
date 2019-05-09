@@ -190,7 +190,7 @@ class _DataFrameEditor(UIEditor):
                     clicked=self._target_name(self.factory.clicked),
                     dclicked=self._target_name(self.factory.dclicked),
                     scroll_to_row=self._target_name(self.factory.scroll_to_row),  # noqa
-                    scroll_to_row_hint=self._target_name(self.factory.scroll_to_row_hint),  # noqa
+                    scroll_to_row_hint=self.factory.scroll_to_row_hint,
                     right_clicked=self._target_name(self.factory.right_clicked),  # noqa
                     right_dclicked=self._target_name(self.factory.right_dclicked),  # noqa
                     column_clicked=self._target_name(self.factory.column_clicked),  # noqa
