@@ -89,11 +89,6 @@ class BogusTreeNodeObject(TreeNodeObject):
 
     bogus_list = List
 
-    wrapped_bogus = Instance(BogusWrap)
-
-    def _wrapped_bogus_default(self):
-        return BogusTreeNodeObject(bogus_list=[BogusTreeNodeObject()])
-
 
 class BogusTreeNodeObjectView(HasTraits):
     """ A traitsui view visualizing Bogus objects as trees. """
@@ -102,19 +97,22 @@ class BogusTreeNodeObjectView(HasTraits):
 
     hide_root = Bool
 
-    word_wrap = Bool
+    nodes = List(TreeNode)
+
+    def _nodes_default(self):
+        return [
+            TreeNode(
+                node_for=[BogusTreeNodeObject],
+                children='bogus_list',
+                label='=Bogus'
+            )
+        ]
 
     def default_traits_view(self):
         tree_editor = TreeEditor(
-            nodes=[
-                ObjectTreeNode(
-                    node_for=[BogusTreeNodeObject],
-                    label='name',
-                )
-            ],
+            nodes=self.nodes,
             hide_root=self.hide_root,
             editable=False,
-            word_wrap=self.word_wrap,
         )
 
         traits_view = View(
@@ -155,7 +153,8 @@ class TestTreeView(unittest.TestCase):
             notifiers_list = bogus.trait(trait)._notifiers(False)
             self.assertEqual(0, len(notifiers_list))
 
-    def _test_tree_node_object_releases_listeners(self, hide_root, trait='bogus_list',
+    def _test_tree_node_object_releases_listeners(self, hide_root, nodes=None,
+                                                  trait='bogus_list',
                                                   expected_listeners=1):
         """ The TreeEditor should release the listener to the root node's children
         when it's disposed of.
@@ -166,6 +165,7 @@ class TestTreeView(unittest.TestCase):
             tree_editor_view = BogusTreeNodeObjectView(
                 bogus=bogus,
                 hide_root=hide_root,
+                nodes=nodes,
             )
             ui = tree_editor_view.edit_traits()
 
@@ -232,10 +232,40 @@ class TestTreeView(unittest.TestCase):
         )
 
     @skip_if_null
-    def test_tree_node_object_label_listener(self):
+    def test_tree_node_object_listeners_with_shown_root(self):
+        nodes = [
+            ObjectTreeNode(
+                node_for=[BogusTreeNodeObject],
+                children='bogus_list',
+                label='=Bogus'
+            )
+        ]
         self._test_tree_node_object_releases_listeners(
-            hide_root=False, trait='name')
+            nodes=nodes, hide_root=False)
 
+    @skip_if_null
+    def test_tree_node_object_listeners_with_hidden_root(self):
+        nodes = [
+            ObjectTreeNode(
+                node_for=[BogusTreeNodeObject],
+                children='bogus_list',
+                label='=Bogus'
+            )
+        ]
+        self._test_tree_node_object_releases_listeners(
+            nodes=nodes, hide_root=True)
+
+    @skip_if_null
+    def test_tree_node_object_label_listener(self):
+        nodes = [
+            ObjectTreeNode(
+                node_for=[BogusTreeNodeObject],
+                children='bogus_list',
+                label='name'
+            )
+        ]
+        self._test_tree_node_object_releases_listeners(
+            nodes=nodes, hide_root=False, trait='name')
 
     @skip_if_null
     def test_smoke_save_restore_prefs(self):
