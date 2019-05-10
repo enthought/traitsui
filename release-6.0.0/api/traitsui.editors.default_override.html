@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.default_override module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
+    <link rel="next" title="traitsui.editors.directory_editor module" href="traitsui.editors.directory_editor.html" >
+    <link rel="prev" title="traitsui.editors.date_editor module" href="traitsui.editors.date_editor.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
+  
+    <li><a href="#">traitsui.editors.default_override module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.directory_editor.html" title="traitsui.editors.directory_editor module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.date_editor.html" title="traitsui.editors.date_editor module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.editors.default_override">
+<span id="traitsui-editors-default-override-module"></span><h1>traitsui.editors.default_override module<a class="headerlink" href="#module-traitsui.editors.default_override" title="Permalink to this headline">¶</a></h1>
+<p>Editor factory that overrides certain attributes of the default editor.</p>
+<p>For example, the default editor for Range(low=0, high=1500) has
+&#8216;1500&#8217; as the upper label.  To change it to &#8216;Max&#8217; instead, use</p>
+<dl class="docutils">
+<dt>my_range = Range(low=0, high=1500,</dt>
+<dd>editor=DefaultOverride(high_label=&#8217;Max&#8217;))</dd>
+</dl>
+<p>Alternatively, the override can also be specified in the view:</p>
+<p>View(Item(&#8216;my_range&#8217;, editor=DefaultOverride(high_label=&#8217;Max&#8217;))</p>
+<dl class="class">
+<dt id="traitsui.editors.default_override.DefaultOverride">
+<em class="property">class </em><code class="descclassname">traitsui.editors.default_override.</code><code class="descname">DefaultOverride</code><span class="sig-paren">(</span><em>*args</em>, <em>**overrides</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
+<p>Editor factory for selectively overriding certain parameters
+of the default editor.</p>
+<dl class="method">
+<dt id="traitsui.editors.default_override.DefaultOverride.custom_editor">
+<code class="descname">custom_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.custom_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editors.default_override.DefaultOverride.readonly_editor">
+<code class="descname">readonly_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.readonly_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editors.default_override.DefaultOverride.simple_editor">
+<code class="descname">simple_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.simple_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editors.default_override.DefaultOverride.text_editor">
+<code class="descname">text_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.default_override.DefaultOverride.text_editor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.editors.date_editor.html"
+                        title="previous chapter">traitsui.editors.date_editor module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.editors.directory_editor.html"
+                        title="next chapter">traitsui.editors.directory_editor module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.editors.default_override.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

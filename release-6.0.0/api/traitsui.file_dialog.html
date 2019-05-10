@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.file_dialog module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.group module" href="traitsui.group.html" >
+    <link rel="prev" title="traitsui.editors_gen module" href="traitsui.editors_gen.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.file_dialog module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.group.html" title="traitsui.group module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors_gen.html" title="traitsui.editors_gen module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.file_dialog">
+<span id="traitsui-file-dialog-module"></span><h1>traitsui.file_dialog module<a class="headerlink" href="#module-traitsui.file_dialog" title="Permalink to this headline">¶</a></h1>
+<p>Defines functions and classes used to create pop-up file dialogs for
+opening and saving files.</p>
+<dl class="class">
+<dt id="traitsui.file_dialog.CreateDirHandler">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">CreateDirHandler</code><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal"><span class="pre">traitsui.handler.Handler</span></code></a></p>
+<p>Controller for the &#8216;create new directory&#8217; popup.</p>
+<dl class="method">
+<dt id="traitsui.file_dialog.CreateDirHandler.handler_cancel_changed">
+<code class="descname">handler_cancel_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler.handler_cancel_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the user clicking the Cancel button.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.file_dialog.CreateDirHandler.handler_ok_changed">
+<code class="descname">handler_ok_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.CreateDirHandler.handler_ok_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the user clicking the OK button.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.FileExistsHandler">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">FileExistsHandler</code><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal"><span class="pre">traitsui.handler.Handler</span></code></a></p>
+<p>Controller for the &#8216;file already exists&#8217; popup.</p>
+<dl class="method">
+<dt id="traitsui.file_dialog.FileExistsHandler.handler_cancel_changed">
+<code class="descname">handler_cancel_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler.handler_cancel_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the user clicking the Cancel button.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.file_dialog.FileExistsHandler.handler_ok_changed">
+<code class="descname">handler_ok_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.FileExistsHandler.handler_ok_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the user clicking the OK button.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.FileInfo">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">FileInfo</code><a class="headerlink" href="#traitsui.file_dialog.FileInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.file_dialog.MFileDialogModel" title="traitsui.file_dialog.MFileDialogModel"><code class="xref py py-class docutils literal"><span class="pre">traitsui.file_dialog.MFileDialogModel</span></code></a></p>
+<p>Defines a file dialog extension that display various file information.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.IFileDialogExtension">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">IFileDialogExtension</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogExtension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.file_dialog.IFileDialogModel" title="traitsui.file_dialog.IFileDialogModel"><code class="xref py py-class docutils literal"><span class="pre">traitsui.file_dialog.IFileDialogModel</span></code></a>, <a class="reference internal" href="#traitsui.file_dialog.IFileDialogView" title="traitsui.file_dialog.IFileDialogView"><code class="xref py py-class docutils literal"><span class="pre">traitsui.file_dialog.IFileDialogView</span></code></a></p>
+<p>Defines a (convenience) union of the IFileDialogModel and
+IFileDialogView interfaces.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.IFileDialogModel">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">IFileDialogModel</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.Interface</span></code></a></p>
+<p>Defines a model extension to a file dialog.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.IFileDialogView">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">IFileDialogView</code><a class="headerlink" href="#traitsui.file_dialog.IFileDialogView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.Interface</span></code></a></p>
+<p>Defines a visual extension to a file dialog.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.ImageInfo">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">ImageInfo</code><a class="headerlink" href="#traitsui.file_dialog.ImageInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.file_dialog.MFileDialogModel" title="traitsui.file_dialog.MFileDialogModel"><code class="xref py py-class docutils literal"><span class="pre">traitsui.file_dialog.MFileDialogModel</span></code></a></p>
+<p>Defines a file dialog extension that display an image file&#8217;s dimensions
+and content.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.MFileDialogExtension">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">MFileDialogExtension</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogExtension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.file_dialog.MFileDialogModel" title="traitsui.file_dialog.MFileDialogModel"><code class="xref py py-class docutils literal"><span class="pre">traitsui.file_dialog.MFileDialogModel</span></code></a>, <a class="reference internal" href="#traitsui.file_dialog.MFileDialogView" title="traitsui.file_dialog.MFileDialogView"><code class="xref py py-class docutils literal"><span class="pre">traitsui.file_dialog.MFileDialogView</span></code></a></p>
+<p>Defines a (convenience) union of the MFileDialogModel and
+MFileDialogView mix-in classes.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.MFileDialogModel">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">MFileDialogModel</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.MFileDialogView">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">MFileDialogView</code><a class="headerlink" href="#traitsui.file_dialog.MFileDialogView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>Defines a visual extension to a file dialog.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.OpenFileDialog">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">OpenFileDialog</code><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal"><span class="pre">traitsui.handler.Handler</span></code></a></p>
+<p>Defines the model and handler for the open file dialog.</p>
+<dl class="method">
+<dt id="traitsui.file_dialog.OpenFileDialog.init_info">
+<code class="descname">init_info</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.init_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the UIInfo object being initialized during view start-up.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.file_dialog.OpenFileDialog.object_cancel_changed">
+<code class="descname">object_cancel_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.object_cancel_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the user clicking the Cancel button.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.file_dialog.OpenFileDialog.object_create_changed">
+<code class="descname">object_create_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.object_create_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the user clicking the create directory button.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.file_dialog.OpenFileDialog.object_ok_changed">
+<code class="descname">object_ok_changed</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.object_ok_changed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the user clicking the OK button.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.file_dialog.OpenFileDialog.open_file_view">
+<code class="descname">open_file_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.OpenFileDialog.open_file_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the file dialog view to use.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.file_dialog.TextInfo">
+<em class="property">class </em><code class="descclassname">traitsui.file_dialog.</code><code class="descname">TextInfo</code><a class="headerlink" href="#traitsui.file_dialog.TextInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.file_dialog.MFileDialogModel" title="traitsui.file_dialog.MFileDialogModel"><code class="xref py py-class docutils literal"><span class="pre">traitsui.file_dialog.MFileDialogModel</span></code></a></p>
+<p>Defines a file dialog extension that displays a file&#8217;s contents as text.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.file_dialog.open_file">
+<code class="descclassname">traitsui.file_dialog.</code><code class="descname">open_file</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.open_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a file name to open or an empty string if the user cancels the
+operation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.file_dialog.save_file">
+<code class="descclassname">traitsui.file_dialog.</code><code class="descname">save_file</code><span class="sig-paren">(</span><em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.file_dialog.save_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a file name to save to or an empty string if the user cancels
+the operation. In the case where the file selected already exists, the
+user will be prompted if they want to overwrite the file before the
+selected file name is returned.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.editors_gen.html"
+                        title="previous chapter">traitsui.editors_gen module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.group.html"
+                        title="next chapter">traitsui.group module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.file_dialog.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

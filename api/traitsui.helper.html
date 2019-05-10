@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.helper module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.include.html" title="traitsui.include module"
@@ -94,19 +99,19 @@ user interfaces.</p>
 <dt id="traitsui.helper.commatize">
 <code class="descclassname">traitsui.helper.</code><code class="descname">commatize</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.commatize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Formats a specified value as an integer string with embedded commas.
-For example: commatize( 12345 ) returns &#8220;12,345&#8221;.</p>
+For example: commatize( 12345 ) returns “12,345”.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="traitsui.helper.enum_values_changed">
-<code class="descclassname">traitsui.helper.</code><code class="descname">enum_values_changed</code><span class="sig-paren">(</span><em>values</em>, <em>strfunc=&lt;type 'unicode'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.enum_values_changed" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">traitsui.helper.</code><code class="descname">enum_values_changed</code><span class="sig-paren">(</span><em>values</em>, <em>strfunc=&lt;class 'str'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.enum_values_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recomputes the mappings for a new set of enumeration values.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="traitsui.helper.user_name_for">
 <code class="descclassname">traitsui.helper.</code><code class="descname">user_name_for</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.helper.user_name_for" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a &#8220;user-friendly&#8221; name for a specified trait.</p>
+<dd><p>Returns a “user-friendly” name for a specified trait.</p>
 </dd></dl>
 
 </div>
@@ -133,12 +138,14 @@ For example: commatize( 12345 ) returns &#8220;12,345&#8221;.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -160,10 +167,10 @@ For example: commatize( 12345 ) returns &#8220;12,345&#8221;.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

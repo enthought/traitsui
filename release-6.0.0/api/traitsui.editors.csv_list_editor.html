@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.editors.csv_list_editor module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.editors package" href="traitsui.editors.html" >
+    <link rel="next" title="traitsui.editors.custom_editor module" href="traitsui.editors.custom_editor.html" >
+    <link rel="prev" title="traitsui.editors.compound_editor module" href="traitsui.editors.compound_editor.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
+  
+    <li><a href="#">traitsui.editors.csv_list_editor module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.custom_editor.html" title="traitsui.editors.custom_editor module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.editors.compound_editor.html" title="traitsui.editors.compound_editor module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.editors.csv_list_editor">
+<span id="traitsui-editors-csv-list-editor-module"></span><h1>traitsui.editors.csv_list_editor module<a class="headerlink" href="#module-traitsui.editors.csv_list_editor" title="Permalink to this headline">¶</a></h1>
+<p>This modules defines CSVListEditor.</p>
+<p>A CSVListEditor provides an editor for lists of simple data types.
+It allows the user to edit the list in a text field, using commas
+(or optionally some other character) to separate the elements.</p>
+<dl class="class">
+<dt id="traitsui.editors.csv_list_editor.CSVListEditor">
+<em class="property">class </em><code class="descclassname">traitsui.editors.csv_list_editor.</code><code class="descname">CSVListEditor</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.csv_list_editor.CSVListEditor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.editors.text_editor.html#traitsui.editors.text_editor.ToolkitEditorFactory" title="traitsui.editors.text_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal"><span class="pre">traitsui.editors.text_editor.ToolkitEditorFactory</span></code></a></p>
+<p>A text editor for a List.</p>
+<p>This editor provides a single line of input text of comma separated
+values.  (Actually, the default separator is a comma, but this can
+changed.)  The editor can only be used with List traits whose inner
+trait is one of Int, Float, Str, Enum, or Range.</p>
+<p>The &#8216;simple&#8217;, &#8216;text&#8217;, &#8216;custom&#8217; and readonly styles are based on
+TextEditor. The &#8216;readonly&#8217; style provides the same formatting in the
+text field as the other editors, but the user cannot change the value.</p>
+<p>Like other Traits editors, the background of the text field will turn
+red if the user enters an incorrectly formatted list or if the values
+do not match the type of the inner trait.  This validation only occurs
+while editing the text field.  If, for example, the inner trait is
+Range(low=&#8217;lower&#8217;, high=&#8217;upper&#8217;), a change in &#8216;upper&#8217; will not trigger
+the validation code of the editor.</p>
+<p>The editor removes whitespace of entered items with strip(), so for
+Str types, the editor should not be used if whitespace at the beginning
+or end of the string must be preserved.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sep</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) &#8211; The separator of the values in the list.  If None, each contiguous
+sequence of whitespace is a separator.
+Default is &#8216;,&#8217;.</li>
+<li><strong>ignore_trailing_sep</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; If this is False, a line containing a trailing separator is invalid.
+Default is True.</li>
+<li><strong>auto_set</strong> (<em>bool</em>) &#8211; If True, then every keystroke sets the value of the trait.</li>
+<li><strong>enter_set</strong> (<em>bool</em>) &#8211; If True, the user input sets the value when the Enter key is pressed.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>The following will display a window containing a single input field.
+Entering, say, &#8216;0, .5, 1&#8217; in this field will result in the list
+x = [0.0, 0.5, 1.0].</p>
+<dl class="method">
+<dt id="traitsui.editors.csv_list_editor.CSVListEditor.custom_editor">
+<code class="descname">custom_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.csv_list_editor.CSVListEditor.custom_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an editor using the &#8220;custom&#8221; style.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editors.csv_list_editor.CSVListEditor.readonly_editor">
+<code class="descname">readonly_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.csv_list_editor.CSVListEditor.readonly_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an &#8220;editor&#8221; that is read-only.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editors.csv_list_editor.CSVListEditor.simple_editor">
+<code class="descname">simple_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.csv_list_editor.CSVListEditor.simple_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an editor using the &#8220;simple&#8221; style.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editors.csv_list_editor.CSVListEditor.text_editor">
+<code class="descname">text_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.csv_list_editor.CSVListEditor.text_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an editor using the &#8220;text&#8221; style.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.editors.compound_editor.html"
+                        title="previous chapter">traitsui.editors.compound_editor module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.editors.custom_editor.html"
+                        title="next chapter">traitsui.editors.custom_editor module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.editors.csv_list_editor.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

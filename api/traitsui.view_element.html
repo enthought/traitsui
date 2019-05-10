@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.view_element module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.view_elements.html" title="traitsui.view_elements module"
@@ -93,7 +98,7 @@
 <dl class="class">
 <dt id="traitsui.view_element.DefaultViewElement">
 <em class="property">class </em><code class="descclassname">traitsui.view_element.</code><code class="descname">DefaultViewElement</code><a class="headerlink" href="#traitsui.view_element.DefaultViewElement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
 <p>A view element that can be used as a default value for traits whose
 value is a view element.</p>
 </dd></dl>
@@ -101,7 +106,7 @@ value is a view element.</p>
 <dl class="class">
 <dt id="traitsui.view_element.ViewElement">
 <em class="property">class </em><code class="descclassname">traitsui.view_element.</code><code class="descname">ViewElement</code><a class="headerlink" href="#traitsui.view_element.ViewElement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>An element of a view.</p>
 <dl class="method">
 <dt id="traitsui.view_element.ViewElement.is_includable">
@@ -112,7 +117,7 @@ value is a view element.</p>
 <dl class="method">
 <dt id="traitsui.view_element.ViewElement.replace_include">
 <code class="descname">replace_include</code><span class="sig-paren">(</span><em>view_elements</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view_element.ViewElement.replace_include" title="Permalink to this definition">¶</a></dt>
-<dd><p>Searches the current object&#8217;s <strong>content</strong> attribute for objects that
+<dd><p>Searches the current object’s <strong>content</strong> attribute for objects that
 have an <strong>id</strong> attribute, and replaces each one with an Include object
 with the same <strong>id</strong> value, and puts the replaced object into the
 specified ViewElements object.</p>
@@ -120,7 +125,7 @@ specified ViewElements object.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>view_elements</strong> (<em>ViewElements object</em>) &#8211; Object containing Group, Item, and Include objects</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>view_elements</strong> (<em>ViewElements object</em>) – Object containing Group, Item, and Include objects</td>
 </tr>
 </tbody>
 </table>
@@ -131,7 +136,7 @@ specified ViewElements object.</p>
 <dl class="class">
 <dt id="traitsui.view_element.ViewSubElement">
 <em class="property">class </em><code class="descclassname">traitsui.view_element.</code><code class="descname">ViewSubElement</code><a class="headerlink" href="#traitsui.view_element.ViewSubElement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
 <p>Abstract class representing elements that can be contained in a view.</p>
 </dd></dl>
 
@@ -159,12 +164,14 @@ specified ViewElements object.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -186,10 +193,10 @@ specified ViewElements object.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

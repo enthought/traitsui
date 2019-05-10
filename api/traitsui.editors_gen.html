@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.editors_gen module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.file_dialog.html" title="traitsui.file_dialog module"
@@ -98,12 +103,12 @@ backends.</p>
 <dd>various backends.</dd>
 </dl>
 <p>The idea is that if a new editor has been declared in any of the backends,
-the author needs to create a file called &#8216;&lt;myeditor&gt;_definition&#8217; in the
+the author needs to create a file called ‘&lt;myeditor&gt;_definition’ in the
 Traits package (in traitsui). This function will be run each time
-the user runs the setup.py file, and the new editor&#8217;s definition will be
+the user runs the setup.py file, and the new editor’s definition will be
 appended to the editors.py file.</p>
 <p>The structure of the &lt;myeditor&gt;_definition file should be as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">myeditor_definition</span> <span class="o">=</span> <span class="s1">&#39;&lt;file name in the backend package&gt;:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myeditor_definition</span> <span class="o">=</span> <span class="s1">&#39;&lt;file name in the backend package&gt;:</span>
                  <span class="o">&lt;</span><span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">Editor</span> <span class="ow">or</span> <span class="n">the</span> <span class="n">EditorFactory</span> <span class="n">class</span><span class="s1">&#39;</span>
 </pre></div>
 </div>
@@ -133,12 +138,14 @@ appended to the editors.py file.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -160,10 +167,10 @@ appended to the editors.py file.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

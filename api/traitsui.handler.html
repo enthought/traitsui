@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.handler module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.help.html" title="traitsui.help module"
@@ -93,13 +98,13 @@ a Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.handler.Controller">
 <em class="property">class </em><code class="descclassname">traitsui.handler.</code><code class="descname">Controller</code><span class="sig-paren">(</span><em>model=None</em>, <em>**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.handler.Controller" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal"><span class="pre">traitsui.handler.Handler</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.handler.Handler</span></code></a></p>
 <p>Defines a handler class which provides a view and controller for a
 specified model.</p>
 <p>This class is used when implementing a standard MVC-based design. The
 <strong>model</strong> trait contains most, if not all, of the data being viewed,
-and can be referenced in a Controller instance&#8217;s View definition using
-unadorned trait names. (e.g., <code class="docutils literal"><span class="pre">Item('name')</span></code>).</p>
+and can be referenced in a Controller instance’s View definition using
+unadorned trait names. (e.g., <code class="docutils literal notranslate"><span class="pre">Item('name')</span></code>).</p>
 <dl class="method">
 <dt id="traitsui.handler.Controller.get_perform_handlers">
 <code class="descname">get_perform_handlers</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.handler.Controller.get_perform_handlers" title="Permalink to this definition">¶</a></dt>
@@ -109,9 +114,9 @@ unadorned trait names. (e.g., <code class="docutils literal"><span class="pre">I
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<em>UIInfo instance</em><em> or </em><em>None</em>) &#8211; The UIInfo associated with the view, or None.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<em>UIInfo instance</em><em> or </em><em>None</em>) – The UIInfo associated with the view, or None.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>handlers</strong> &#8211; A list of objects that may potentially have action methods on them.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>handlers</strong> – A list of objects that may potentially have action methods on them.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
@@ -137,7 +142,7 @@ traits.</p>
 <dl class="class">
 <dt id="traitsui.handler.Handler">
 <em class="property">class </em><code class="descclassname">traitsui.handler.</code><code class="descname">Handler</code><a class="headerlink" href="#traitsui.handler.Handler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Provides access to and control over the run-time workings of a
 Traits-based user interface.</p>
 <dl class="method">
@@ -165,7 +170,7 @@ Traits-based user interface.</p>
 clicking an <strong>OK</strong> or <strong>Cancel</strong> button, or clicking a Close control
 on the window). It is called before the window is actually destroyed.
 Override this method to perform any checks before closing a window.</p>
-<p>While Traits UI handles &#8220;OK&#8221; and &#8220;Cancel&#8221; events automatically, you
+<p>While Traits UI handles “OK” and “Cancel” events automatically, you
 can use the value of the <em>is_ok</em> parameter to implement additional
 behavior.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -173,13 +178,13 @@ behavior.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>info</strong> (<em>UIInfo object</em>) &#8211; The UIInfo object associated with the view</li>
-<li><strong>is_ok</strong> (<em>Boolean</em>) &#8211; Indicates whether the user confirmed the changes (such as by
+<li><strong>info</strong> (<em>UIInfo object</em>) – The UIInfo object associated with the view</li>
+<li><strong>is_ok</strong> (<em>Boolean</em>) – Indicates whether the user confirmed the changes (such as by
 clicking <strong>OK</strong>.)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>allow_close</strong> &#8211; A Boolean, indicating whether the window should be allowed to close.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>allow_close</strong> – A Boolean, indicating whether the window should be allowed to close.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
@@ -200,8 +205,8 @@ method to perform any clean-up tasks needed by the application.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>info</strong> (<em>UIInfo object</em>) &#8211; The UIInfo object associated with the view</li>
-<li><strong>is_ok</strong> (<em>Boolean</em>) &#8211; Indicates whether the user confirmed the changes (such as by
+<li><strong>info</strong> (<em>UIInfo object</em>) – The UIInfo object associated with the view</li>
+<li><strong>is_ok</strong> (<em>Boolean</em>) – Indicates whether the user confirmed the changes (such as by
 clicking <strong>OK</strong>.)</li>
 </ul>
 </td>
@@ -213,7 +218,7 @@ clicking <strong>OK</strong>.)</li>
 <dl class="method">
 <dt id="traitsui.handler.Handler.configure_traits">
 <code class="descname">configure_traits</code><span class="sig-paren">(</span><em>filename=None</em>, <em>view=None</em>, <em>kind=None</em>, <em>edit=True</em>, <em>context=None</em>, <em>handler=None</em>, <em>id=''</em>, <em>scrollable=None</em>, <em>**args</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.handler.Handler.configure_traits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configures the object&#8217;s traits.</p>
+<dd><p>Configures the object’s traits.</p>
 </dd></dl>
 
 <dl class="method">
@@ -231,7 +236,7 @@ clicking <strong>OK</strong>.)</li>
 <dl class="method">
 <dt id="traitsui.handler.Handler.edit_traits">
 <code class="descname">edit_traits</code><span class="sig-paren">(</span><em>view=None</em>, <em>parent=None</em>, <em>kind=None</em>, <em>context=None</em>, <em>handler=None</em>, <em>id=''</em>, <em>scrollable=None</em>, <em>**args</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.handler.Handler.edit_traits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Edits the object&#8217;s traits.</p>
+<dd><p>Edits the object’s traits.</p>
 </dd></dl>
 
 <dl class="method">
@@ -244,9 +249,9 @@ set of objects.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<em>UIInfo instance</em><em> or </em><em>None</em>) &#8211; The UIInfo associated with the view, or None.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<em>UIInfo instance</em><em> or </em><em>None</em>) – The UIInfo associated with the view, or None.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>handlers</strong> &#8211; A list of objects that may potentially have action methods on them.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>handlers</strong> – A list of objects that may potentially have action methods on them.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
@@ -265,9 +270,9 @@ method to customize the user interface before it is displayed.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<em>UIInfo object</em>) &#8211; The UIInfo object associated with the view</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<em>UIInfo object</em>) – The UIInfo object associated with the view</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>initialized</strong> &#8211; A Boolean, indicating whether the user interface was successfully
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>initialized</strong> – A Boolean, indicating whether the user interface was successfully
 initialized. A True value indicates that the UI can be displayed;
 a False value indicates that the display operation should be
 cancelled. The default implementation returns True without taking
@@ -300,18 +305,18 @@ being edited.</p>
 <dt id="traitsui.handler.Handler.perform">
 <code class="descname">perform</code><span class="sig-paren">(</span><em>info</em>, <em>action</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.handler.Handler.perform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform computation for an action.</p>
-<p>The default method looks for a method matching <code class="docutils literal"><span class="pre">action.action</span></code> and
+<p>The default method looks for a method matching <code class="docutils literal notranslate"><span class="pre">action.action</span></code> and
 calls it (sniffing the signature to determine how to call it for
 historical reasons).  If this is not found, then it calls the
-<code class="xref py py-meth docutils literal"><span class="pre">perform()</span></code> method of the action.</p>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">perform()</span></code> method of the action.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>info</strong> (<em>UIInfo instance</em>) &#8211; The UIInfo assicated with the view, if available.</li>
-<li><strong>action</strong> (<em>Action instance</em>) &#8211; The Action that the user invoked.</li>
-<li><strong>event</strong> (<em>ActionEvent instance</em>) &#8211; The ActionEvent associated with the user action.</li>
+<li><strong>info</strong> (<em>UIInfo instance</em>) – The UIInfo assicated with the view, if available.</li>
+<li><strong>action</strong> (<em>Action instance</em>) – The Action that the user invoked.</li>
+<li><strong>event</strong> (<em>ActionEvent instance</em>) – The ActionEvent associated with the user action.</li>
 </ul>
 </td>
 </tr>
@@ -319,8 +324,8 @@ historical reasons).  If this is not found, then it calls the
 </table>
 <p class="rubric">Notes</p>
 <p>If overriding in a subclass, the method needs to ensure that any
-standard menu action items that are needed (eg. &#8220;Close&#8221;, &#8220;Undo&#8221;,
-&#8220;Redo&#8221;, &#8220;Help&#8221;, etc.) get dispatched correctly.</p>
+standard menu action items that are needed (eg. “Close”, “Undo”,
+“Redo”, “Help”, etc.) get dispatched correctly.</p>
 </dd></dl>
 
 <dl class="method">
@@ -332,13 +337,13 @@ calling init()), but before the user interface is displayed. Override
 this method to position the window on the display device. The default
 implementation calls the position() method of the current toolkit.</p>
 <p>Usually, you do not need to override this method, because you can
-control the window&#8217;s placement using the <strong>x</strong> and <strong>y</strong> attributes
+control the window’s placement using the <strong>x</strong> and <strong>y</strong> attributes
 of the View object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<em>UIInfo object</em>) &#8211; The UIInfo object associated with the window</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>info</strong> (<em>UIInfo object</em>) – The UIInfo object associated with the window</td>
 </tr>
 </tbody>
 </table>
@@ -353,12 +358,12 @@ of the View object.</p>
 <dl class="method">
 <dt id="traitsui.handler.Handler.setattr">
 <code class="descname">setattr</code><span class="sig-paren">(</span><em>info</em>, <em>object</em>, <em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.handler.Handler.setattr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handles the user setting a specified object trait&#8217;s value.</p>
+<dd><p>Handles the user setting a specified object trait’s value.</p>
 <p>This method is called when an editor attempts to set a new value for
 a specified object trait attribute. Use this method to control what
 happens when a trait editor tries to set an attribute value. For
 example, you can use this method to record a history of changes, in
-order to implement an &#8220;undo&#8221; mechanism. No result is returned. The
+order to implement an “undo” mechanism. No result is returned. The
 default implementation simply calls the built-in setattr() function.
 If you override this method, make sure that it actually sets the
 attribute, either by calling the parent method or by setting the
@@ -368,10 +373,10 @@ attribute directly</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>info</strong> (<em>UIInfo instance</em>) &#8211; The UIInfo for the current UI</li>
-<li><strong>object</strong> (<a class="reference internal" href="traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.object" title="traitsui.tabular_adapter.TabularAdapter.object"><em>object</em></a>) &#8211; The object whose attribute is being set</li>
-<li><strong>name</strong> (<em>string</em>) &#8211; The name of the attribute being set</li>
-<li><strong>value</strong> &#8211; The value to which the attribute is being set</li>
+<li><strong>info</strong> (<em>UIInfo instance</em>) – The UIInfo for the current UI</li>
+<li><strong>object</strong> (<em>object</em>) – The object whose attribute is being set</li>
+<li><strong>name</strong> (<em>string</em>) – The name of the attribute being set</li>
+<li><strong>value</strong> – The value to which the attribute is being set</li>
 </ul>
 </td>
 </tr>
@@ -393,8 +398,8 @@ global help handler.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>info</strong> (<em>UIInfo object</em>) &#8211; The UIInfo object associated with the view</li>
-<li><strong>control</strong> (<em>UI control</em>) &#8211; The control that invokes the help dialog box</li>
+<li><strong>info</strong> (<em>UIInfo object</em>) – The UIInfo object associated with the view</li>
+<li><strong>control</strong> (<em>UI control</em>) – The control that invokes the help dialog box</li>
 </ul>
 </td>
 </tr>
@@ -413,7 +418,7 @@ global help handler.</p>
 <dl class="class">
 <dt id="traitsui.handler.ModelView">
 <em class="property">class </em><code class="descclassname">traitsui.handler.</code><code class="descname">ModelView</code><span class="sig-paren">(</span><em>model=None</em>, <em>**metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.handler.ModelView" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.handler.Controller" title="traitsui.handler.Controller"><code class="xref py py-class docutils literal"><span class="pre">traitsui.handler.Controller</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.handler.Controller" title="traitsui.handler.Controller"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.handler.Controller</span></code></a></p>
 <p>Defines a handler class which provides a view and controller for a
 specified model.</p>
 <p>This class is useful when creating a variant of the standard MVC-based
@@ -439,7 +444,7 @@ traits.</p>
 <dl class="class">
 <dt id="traitsui.handler.ViewHandler">
 <em class="property">class </em><code class="descclassname">traitsui.handler.</code><code class="descname">ViewHandler</code><a class="headerlink" href="#traitsui.handler.ViewHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal"><span class="pre">traitsui.handler.Handler</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.handler.Handler</span></code></a></p>
 </dd></dl>
 
 <dl class="function">
@@ -480,12 +485,14 @@ global default handler.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -507,10 +514,10 @@ global default handler.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.help module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.help_template module" href="traitsui.help_template.html" >
+    <link rel="prev" title="traitsui.handler module" href="traitsui.handler.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.help module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.help_template.html" title="traitsui.help_template module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.handler.html" title="traitsui.handler module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.help">
+<span id="traitsui-help-module"></span><h1>traitsui.help module<a class="headerlink" href="#module-traitsui.help" title="Permalink to this headline">¶</a></h1>
+<p>Defines the help interface for displaying the help associated with a
+Traits UI View object.</p>
+<dl class="function">
+<dt id="traitsui.help.default_show_help">
+<code class="descclassname">traitsui.help.</code><code class="descname">default_show_help</code><span class="sig-paren">(</span><em>info</em>, <em>control</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.help.default_show_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default handler for showing the help associated with a view.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.help.on_help_call">
+<code class="descclassname">traitsui.help.</code><code class="descname">on_help_call</code><span class="sig-paren">(</span><em>new_show_help=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.help.on_help_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a new global help provider function.</p>
+<p>The help provider function must have a signature of
+<em>function*(*info</em>, <em>control</em>), where <em>info</em> is a UIInfo object for the
+current view, and <em>control</em> is the UI control that invokes the function
+(typically, a <strong>Help</strong> button). It is provided in case the help provider
+needs to position the help window relative to the <strong>Help</strong> button.</p>
+<p>To retrieve the current help provider function, call this function with
+no arguments.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_show_help</strong> (<em>function</em>) &#8211; The function to set as the new global help provider</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>previous</strong> &#8211; The previous global help provider function</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">callable</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="traitsui.help.show_help">
+<code class="descclassname">traitsui.help.</code><code class="descname">show_help</code><span class="sig-paren">(</span><em>info</em>, <em>control</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.help.show_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default handler for showing the help associated with a view.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.handler.html"
+                        title="previous chapter">traitsui.handler module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.help_template.html"
+                        title="next chapter">traitsui.help_template module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.help.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

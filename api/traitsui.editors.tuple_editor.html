@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.editors.html" accesskey="U">traitsui.editors package</a></li>
   
@@ -65,6 +66,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.editors.value_editor.html" title="traitsui.editors.value_editor module"
@@ -93,14 +98,14 @@
 <dl class="class">
 <dt id="traitsui.editors.tuple_editor.SimpleEditor">
 <em class="property">class </em><code class="descclassname">traitsui.editors.tuple_editor.</code><code class="descname">SimpleEditor</code><span class="sig-paren">(</span><em>parent</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.tuple_editor.SimpleEditor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="traitsui.editor.html#traitsui.editor.Editor" title="traitsui.editor.Editor"><code class="xref py py-class docutils literal"><span class="pre">traitsui.editor.Editor</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="traitsui.editor.html#traitsui.editor.Editor" title="traitsui.editor.Editor"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor.Editor</span></code></a></p>
 <p>Simple style of editor for tuples.</p>
 <p>The editor displays an editor for each of the fields in the tuple, based on
 the type of each field.</p>
 <dl class="method">
 <dt id="traitsui.editors.tuple_editor.SimpleEditor.get_error_control">
 <code class="descname">get_error_control</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.tuple_editor.SimpleEditor.get_error_control" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the editor&#8217;s control for indicating error status.</p>
+<dd><p>Returns the editor’s control for indicating error status.</p>
 </dd></dl>
 
 <dl class="method">
@@ -122,20 +127,20 @@ editor.</p>
 <dl class="class">
 <dt id="traitsui.editors.tuple_editor.ToolkitEditorFactory">
 <em class="property">class </em><code class="descclassname">traitsui.editors.tuple_editor.</code><code class="descname">ToolkitEditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.tuple_editor.ToolkitEditorFactory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="traitsui.editor_factory.html#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
 <p>Editor factory for tuple editors.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="traitsui.editors.tuple_editor.TupleEditor">
 <code class="descclassname">traitsui.editors.tuple_editor.</code><code class="descname">TupleEditor</code><a class="headerlink" href="#traitsui.editors.tuple_editor.TupleEditor" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#traitsui.editors.tuple_editor.ToolkitEditorFactory" title="traitsui.editors.tuple_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal"><span class="pre">ToolkitEditorFactory</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="#traitsui.editors.tuple_editor.ToolkitEditorFactory" title="traitsui.editors.tuple_editor.ToolkitEditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editors.tuple_editor.ToolkitEditorFactory</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.editors.tuple_editor.TupleStructure">
 <em class="property">class </em><code class="descclassname">traitsui.editors.tuple_editor.</code><code class="descname">TupleStructure</code><span class="sig-paren">(</span><em>editor</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editors.tuple_editor.TupleStructure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
 <p>Creates a view containing items for each field in a tuple.</p>
 </dd></dl>
 
@@ -163,12 +168,14 @@ editor.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -190,10 +197,10 @@ editor.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

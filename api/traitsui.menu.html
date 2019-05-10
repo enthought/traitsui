@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.menu module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.message.html" title="traitsui.message module"
@@ -93,7 +98,7 @@ and standard actions and buttons.</p>
 <dl class="class">
 <dt id="traitsui.menu.Action">
 <em class="property">class </em><code class="descclassname">traitsui.menu.</code><code class="descname">Action</code><a class="headerlink" href="#traitsui.menu.Action" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/pyface/api/pyface.action.html#pyface.action.action.Action" title="(in pyface v6.0.0)"><code class="xref py py-class docutils literal"><span class="pre">pyface.action.action.Action</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/pyface/api/pyface.action.action.html#pyface.action.action.Action" title="(in pyface v6.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyface.action.action.Action</span></code></a></p>
 <p>An action on a menu bar in a Traits UI window or panel.</p>
 <dl class="attribute">
 <dt id="traitsui.menu.Action.action">
@@ -163,13 +168,13 @@ held before the window was opened. The window is then closed.</p>
 <dl class="data">
 <dt id="traitsui.menu.CloseAction">
 <code class="descclassname">traitsui.menu.</code><code class="descname">CloseAction</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.CloseAction" title="Permalink to this definition">¶</a></dt>
-<dd><p>The standard &#8220;close window&#8221; action</p>
+<dd><p>The standard “close window” action</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="traitsui.menu.HelpAction">
 <code class="descclassname">traitsui.menu.</code><code class="descname">HelpAction</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.HelpAction" title="Permalink to this definition">¶</a></dt>
-<dd><p>The standard &#8220;show help&#8221; action</p>
+<dd><p>The standard “show help” action</p>
 </dd></dl>
 
 <dl class="data">
@@ -199,13 +204,13 @@ applied to the model, and the window is closed.</p>
 <dl class="data">
 <dt id="traitsui.menu.RedoAction">
 <code class="descclassname">traitsui.menu.</code><code class="descname">RedoAction</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.RedoAction" title="Permalink to this definition">¶</a></dt>
-<dd><p>The standard &#8220;redo last undo&#8221; action</p>
+<dd><p>The standard “redo last undo” action</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="traitsui.menu.RevertAction">
 <code class="descclassname">traitsui.menu.</code><code class="descname">RevertAction</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.RevertAction" title="Permalink to this definition">¶</a></dt>
-<dd><p>The standard &#8220;revert all changes&#8221; action</p>
+<dd><p>The standard “revert all changes” action</p>
 </dd></dl>
 
 <dl class="data">
@@ -220,8 +225,7 @@ is live), the model data is restored as well. The window remains open.</p>
 <dl class="attribute">
 <dt id="traitsui.menu.Separator">
 <code class="descclassname">traitsui.menu.</code><code class="descname">Separator</code><a class="headerlink" href="#traitsui.menu.Separator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Menu separator</p>
-<p>alias of <code class="xref py py-class docutils literal"><span class="pre">Group</span></code></p>
+<dd><p>alias of <a class="reference external" href="http://docs.enthought.com/pyface/api/pyface.action.group.html#pyface.action.group.Group" title="(in pyface v6.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyface.action.group.Group</span></code></a></p>
 </dd></dl>
 
 <dl class="data">
@@ -233,15 +237,23 @@ is live), the model data is restored as well. The window remains open.</p>
 <dl class="data">
 <dt id="traitsui.menu.UndoAction">
 <code class="descclassname">traitsui.menu.</code><code class="descname">UndoAction</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.UndoAction" title="Permalink to this definition">¶</a></dt>
-<dd><p>The standard &#8220;undo last change&#8221; action</p>
+<dd><p>The standard “undo last change” action</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="traitsui.menu.UndoButton">
 <code class="descclassname">traitsui.menu.</code><code class="descname">UndoButton</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.UndoButton" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>Appears as two buttons</em> &#8211; <strong>Undo</strong> and <strong>Redo</strong>. When <strong>Undo</strong> is clicked, the
+<dd><p><strong>Undo</strong> and <strong>Redo</strong>. When <strong>Undo</strong> is clicked, the
 most recent change to the data is cancelled, restoring the previous value.
-<strong>Redo</strong> cancels the most recent &#8220;undo&#8221; operation.</p>
+<strong>Redo</strong> cancels the most recent “undo” operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Appears as two buttons</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -268,12 +280,14 @@ most recent change to the data is cancelled, restoring the previous value.
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -295,10 +309,10 @@ most recent change to the data is cancelled, restoring the previous value.
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

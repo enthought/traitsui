@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,15 +24,16 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
     <link rel="up" title="traitsui package" href="traitsui.html" >
     <link rel="next" title="traitsui.ui_editor module" href="traitsui.ui_editor.html" >
-    <link rel="prev" title="traitsui.tree_node module" href="traitsui.tree_node.html" > 
+    <link rel="prev" title="traitsui.tree_node_renderer module" href="traitsui.tree_node_renderer.html" > 
   </head>
   <body>
   <div class="container">
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.ui module</a></li>
@@ -66,11 +67,15 @@
            accesskey="I">index</a>
       </li>
       <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
         <a href="traitsui.ui_editor.html" title="traitsui.ui_editor module"
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="traitsui.tree_node.html" title="traitsui.tree_node module"
+        <a href="traitsui.tree_node_renderer.html" title="traitsui.tree_node_renderer module"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -93,7 +98,7 @@ interface.</p>
 <dl class="class">
 <dt id="traitsui.ui.Dispatcher">
 <em class="property">class </em><code class="descclassname">traitsui.ui.</code><code class="descname">Dispatcher</code><span class="sig-paren">(</span><em>method</em>, <em>info</em>, <em>object</em>, <em>method_name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.Dispatcher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="traitsui.ui.Dispatcher.dispatch">
 <code class="descname">dispatch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.Dispatcher.dispatch" title="Permalink to this definition">¶</a></dt>
@@ -111,13 +116,13 @@ interface.</p>
 <dl class="class">
 <dt id="traitsui.ui.UI">
 <em class="property">class </em><code class="descclassname">traitsui.ui.</code><code class="descname">UI</code><a class="headerlink" href="#traitsui.ui.UI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Information about the user interface for a View.</p>
 <dl class="method">
 <dt id="traitsui.ui.UI.add_checked">
 <code class="descname">add_checked</code><span class="sig-paren">(</span><em>checked_when</em>, <em>editor</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.add_checked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a conditionally enabled (menu) Editor object to the list of
-monitored &#8216;checked_when&#8217; objects.</p>
+monitored ‘checked_when’ objects.</p>
 </dd></dl>
 
 <dl class="method">
@@ -131,14 +136,14 @@ user interface has been constructed.</p>
 <dt id="traitsui.ui.UI.add_enabled">
 <code class="descname">add_enabled</code><span class="sig-paren">(</span><em>enabled_when</em>, <em>editor</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.add_enabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a conditionally enabled Editor object to the list of monitored
-&#8216;enabled_when&#8217; objects.</p>
+‘enabled_when’ objects.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.ui.UI.add_visible">
 <code class="descname">add_visible</code><span class="sig-paren">(</span><em>visible_when</em>, <em>editor</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.add_visible" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a conditionally enabled Editor object to the list of monitored
-&#8216;visible_when&#8217; objects.</p>
+‘visible_when’ objects.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -161,14 +166,14 @@ user interface has been constructed.</p>
 <dl class="method">
 <dt id="traitsui.ui.UI.eval_when">
 <code class="descname">eval_when</code><span class="sig-paren">(</span><em>when</em>, <em>result=True</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.eval_when" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluates an expression in the UI&#8217;s <strong>context</strong> and returns the
+<dd><p>Evaluates an expression in the UI’s <strong>context</strong> and returns the
 result.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.ui.UI.evaluate">
 <code class="descname">evaluate</code><span class="sig-paren">(</span><em>function</em>, <em>*args</em>, <em>**kw_args</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluates a specified function in the UI&#8217;s <strong>context</strong>.</p>
+<dd><p>Evaluates a specified function in the UI’s <strong>context</strong>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -242,7 +247,7 @@ created.</p>
 
 <dl class="attribute">
 <dt id="traitsui.ui.UI.recyclable_traits">
-<code class="descname">recyclable_traits</code><em class="property"> = ['_context', '_revert', '_defined', '_visible', '_enabled', '_checked', '_search', '_dispatchers', '_editors', '_names', '_active_group', '_undoable', '_rebuild', '_groups_cache']</em><a class="headerlink" href="#traitsui.ui.UI.recyclable_traits" title="Permalink to this definition">¶</a></dt>
+<code class="descname">recyclable_traits</code><em class="property"> = ['_context', '_revert', '_defined', '_visible', '_enabled', '_checked', '_search', '_dispatchers', '_editors', '_names', '_active_group', '_undoable', '_rebuild', '_groups_cache', '_key_bindings']</em><a class="headerlink" href="#traitsui.ui.UI.recyclable_traits" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -267,7 +272,7 @@ associated with the UI.</p>
 <dl class="method">
 <dt id="traitsui.ui.UI.route_event">
 <code class="descname">route_event</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.ui.UI.route_event" title="Permalink to this definition">¶</a></dt>
-<dd><p>Routes a &#8220;hooked&#8221; event to the correct handler method.</p>
+<dd><p>Routes a “hooked” event to the correct handler method.</p>
 </dd></dl>
 
 <dl class="method">
@@ -314,8 +319,8 @@ associated with the UI.</p>
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="traitsui.tree_node.html"
-                        title="previous chapter">traitsui.tree_node module</a></p>
+  <p class="topless"><a href="traitsui.tree_node_renderer.html"
+                        title="previous chapter">traitsui.tree_node_renderer module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="traitsui.ui_editor.html"
                         title="next chapter">traitsui.ui_editor module</a></p>
@@ -326,12 +331,14 @@ associated with the UI.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -353,10 +360,10 @@ associated with the UI.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

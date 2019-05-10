@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,13 +24,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
+    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
     <link rel="next" title="Appendix II: Editor Factories for Predefined Traits" href="predefined_traits.html" >
     <link rel="prev" title="Tips, Tricks and Gotchas" href="tips.html" > 
   </head>
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
   
     <li><a href="#">Appendix I: Glossary of Terms</a></li>
   
@@ -63,6 +64,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="predefined_traits.html" title="Appendix II: Editor Factories for Predefined Traits"
@@ -92,8 +97,8 @@
 <dd>An element of data that is associated with all instances of a given
 class, and is named at the class level. <a class="footnote-reference" href="#id2" id="id1">[19]</a> In most cases, attributes
 are stored and assigned separately for each instance (for the exception,
-see <a class="reference internal" href="#term-class-attribute"><span class="xref std std-term">class attribute</span></a>). Synonyms include &#8220;data member&#8221; and
-&#8220;instance variable&#8221;.</dd>
+see <a class="reference internal" href="#term-class-attribute"><span class="xref std std-term">class attribute</span></a>). Synonyms include “data member” and
+“instance variable”.</dd>
 <dt id="term-class-attribute">class attribute</dt>
 <dd>An element of data that is associated with a class, and is named at the
 class level. There is only one value for a class attribute, associated
@@ -104,7 +109,7 @@ there is a value associated with every instance of a class.</dd>
 <span class="guilabel">OK</span>, <span class="guilabel">Cancel</span>, <span class="guilabel">Apply</span>,
 <span class="guilabel">Revert</span>, and <span class="guilabel">Help</span>.</dd>
 <dt id="term-controller">controller</dt>
-<dd>The element of the <a class="reference internal" href="#term-mvc"><span class="xref std std-term">MVC</span></a> (&#8220;model-view-controller&#8221;) design pattern
+<dd>The element of the <a class="reference internal" href="#term-mvc"><span class="xref std std-term">MVC</span></a> (“model-view-controller”) design pattern
 that manages the transfer of information between the data <a class="reference internal" href="#term-model"><span class="xref std std-term">model</span></a>
 and the <a class="reference internal" href="#term-29"><span class="xref std std-term">view</span></a> used to observe and edit it.</dd>
 <dt id="term-dialog-box">dialog box</dt>
@@ -159,7 +164,7 @@ changes.</dd>
 <a class="reference internal" href="#term-modal"><span class="xref std std-term">modal</span></a>.</dd>
 <dt id="term-mvc">MVC</dt>
 <dd>A design pattern for interactive software applications. The initials
-stand for &#8220;Model-View-Controller&#8221;, the three distinct entities
+stand for “Model-View-Controller”, the three distinct entities
 prescribed for designing such applications. (See the glossary entries
 for <a class="reference internal" href="#term-model"><span class="xref std std-term">model</span></a>, <a class="reference internal" href="#term-29"><span class="xref std std-term">view</span></a>, and <a class="reference internal" href="#term-controller"><span class="xref std std-term">controller</span></a>.)</dd>
 <dt id="term-modal">modal</dt>
@@ -210,7 +215,7 @@ class View.</dd>
 <dd>A component of the <a class="reference internal" href="#term-mvc"><span class="xref std std-term">MVC</span></a> design pattern for interactive software
 applications. The view component encompasses the visual aspect of the
 application, as opposed to the underlying data (the <a class="reference internal" href="#term-model"><span class="xref std std-term">model</span></a>) and
-the application&#8217;s behavior (the <a class="reference internal" href="#term-controller"><span class="xref std std-term">controller</span></a>).</dd>
+the application’s behavior (the <a class="reference internal" href="#term-controller"><span class="xref std std-term">controller</span></a>).</dd>
 <dt id="term-viewelement">ViewElement</dt>
 <dd>A View, Group or Item object. The ViewElement class is the parent of
 all three of these subclasses.</dd>
@@ -258,12 +263,14 @@ individual objects.</td></tr>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -285,10 +292,10 @@ individual objects.</td></tr>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

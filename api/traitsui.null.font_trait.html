@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.null.html" accesskey="U">traitsui.null package</a></li>
   
@@ -65,6 +66,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.null.rgb_color_trait.html" title="traitsui.null.rgb_color_trait module"
@@ -93,14 +98,30 @@
 <dl class="class">
 <dt id="traitsui.null.font_trait.TraitFont">
 <em class="property">class </em><code class="descclassname">traitsui.null.font_trait.</code><code class="descname">TraitFont</code><a class="headerlink" href="#traitsui.null.font_trait.TraitFont" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/trait_handlers.html#traits.trait_handlers.TraitHandler" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.trait_handlers.TraitHandler</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/trait_handlers.html#traits.trait_handlers.TraitHandler" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.trait_handlers.TraitHandler</span></code></a></p>
 <p>Ensures that values assigned to a trait attribute are valid font
 descriptor strings; the value actually assigned is the corresponding
 canonical font descriptor string.</p>
 <dl class="method">
 <dt id="traitsui.null.font_trait.TraitFont.info">
 <code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.null.font_trait.TraitFont.info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Must return a string describing the type of value accepted by the
+trait handler.</p>
+<p>The string should be a phrase describing the type defined by the
+TraitHandler subclass, rather than a complete sentence. For example, use
+the phrase, “a square sprocket” instead of the sentence, “The value must
+be a square sprocket.” The value returned by info() is combined with
+other information whenever an error occurs and therefore makes more
+sense to the user if the result is a phrase. The info() method is
+similar in purpose and use to the <strong>info</strong> attribute of a validator
+function.</p>
+<p>Note that the result can include information specific to the particular
+trait handler instance. For example, TraitRange instances return a
+string indicating the range of values acceptable to the handler (e.g.,
+“an integer in the range from 1 to 9”). If the info() method is not
+overridden, the default method returns the value of the ‘info_text’
+attribute.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="traitsui.null.font_trait.TraitFont.validate">
@@ -139,12 +160,14 @@ canonical font descriptor string.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -166,10 +189,10 @@ canonical font descriptor string.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

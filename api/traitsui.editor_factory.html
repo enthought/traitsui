@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.editor_factory module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.editors_gen.html" title="traitsui.editors_gen module"
@@ -93,13 +98,13 @@ creating the Editor objects used in a Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.editor_factory.EditorFactory">
 <em class="property">class </em><code class="descclassname">traitsui.editor_factory.</code><code class="descname">EditorFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Represents a factory for creating the Editor objects in a Traits-based
 user interface.</p>
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.custom_editor">
 <code class="descname">custom_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.custom_editor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates an editor using the &#8220;custom&#8221; style.</p>
+<dd><p>Generates an editor using the “custom” style.</p>
 </dd></dl>
 
 <dl class="method">
@@ -113,25 +118,36 @@ have been set.</p>
 <dt id="traitsui.editor_factory.EditorFactory.named_value">
 <code class="descname">named_value</code><span class="sig-paren">(</span><em>name</em>, <em>ui</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.named_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of a specified extended name of the form: name or
-context_object_name.name[.name...]:</p>
+context_object_name.name[.name…]:</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.readonly_editor">
 <code class="descname">readonly_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.readonly_editor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates an &#8220;editor&#8221; that is read-only.</p>
+<dd><p>Generates an “editor” that is read-only.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.simple_editor">
 <code class="descname">simple_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.simple_editor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates an editor using the &#8220;simple&#8221; style.</p>
+<dd><p>Generates an editor using the “simple” style.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.editor_factory.EditorFactory.string_value">
+<code class="descname">string_value</code><span class="sig-paren">(</span><em>value</em>, <em>format_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.string_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the text representation of a specified object trait value.</p>
+<p>If the <strong>format_func</strong> attribute is set on the editor factory, then
+this method calls that function to do the formatting.  If the
+<strong>format_str</strong> attribute is set on the editor factory, then this
+method uses that string for formatting. If neither attribute is
+set, then this method just calls the appropriate text type to format.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor_factory.EditorFactory.text_editor">
 <code class="descname">text_editor</code><span class="sig-paren">(</span><em>ui</em>, <em>object</em>, <em>name</em>, <em>description</em>, <em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorFactory.text_editor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates an editor using the &#8220;text&#8221; style.</p>
+<dd><p>Generates an editor using the “text” style.</p>
 </dd></dl>
 
 </dd></dl>
@@ -139,7 +155,7 @@ context_object_name.name[.name...]:</p>
 <dl class="class">
 <dt id="traitsui.editor_factory.EditorWithListFactory">
 <em class="property">class </em><code class="descclassname">traitsui.editor_factory.</code><code class="descname">EditorWithListFactory</code><span class="sig-paren">(</span><em>*args</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor_factory.EditorWithListFactory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.editor_factory.EditorFactory" title="traitsui.editor_factory.EditorFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.editor_factory.EditorFactory</span></code></a></p>
 <p>Base class for factories of editors for objects that contain lists.</p>
 </dd></dl>
 
@@ -167,12 +183,14 @@ context_object_name.name[.name...]:</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -194,10 +212,10 @@ context_object_name.name[.name...]:</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

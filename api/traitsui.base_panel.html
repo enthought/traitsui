@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.base_panel module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.basic_editor_factory.html" title="traitsui.basic_editor_factory module"
@@ -91,7 +96,7 @@
 <dl class="class">
 <dt id="traitsui.base_panel.BasePanel">
 <em class="property">class </em><code class="descclassname">traitsui.base_panel.</code><code class="descname">BasePanel</code><a class="headerlink" href="#traitsui.base_panel.BasePanel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/pyface/api/pyface.action.html#pyface.action.action_controller.ActionController" title="(in pyface v6.0.0)"><code class="xref py py-class docutils literal"><span class="pre">pyface.action.action_controller.ActionController</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/pyface/api/pyface.action.action_controller.html#pyface.action.action_controller.ActionController" title="(in pyface v6.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyface.action.action_controller.ActionController</span></code></a></p>
 <p>Base class for Traits UI panels and dialog boxes.</p>
 <p>Concrete subclasses of BasePanel are the Python-side owners of the
 top-level toolkit control for a UI.  They also implement the Pyface
@@ -109,7 +114,7 @@ APIs are identical.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>menu_item</strong> (<em>toolkit MenuItem</em>) &#8211; The Pyface toolkit-level item to add to the menu.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>menu_item</strong> (<em>toolkit MenuItem</em>) – The Pyface toolkit-level item to add to the menu.</td>
 </tr>
 </tbody>
 </table>
@@ -127,7 +132,7 @@ status.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>toolbar_item</strong> (<em>toolkit Tool</em>) &#8211; The Pyface toolkit-level item to add to the toolbar.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>toolbar_item</strong> (<em>toolkit Tool</em>) – The Pyface toolkit-level item to add to the toolbar.</td>
 </tr>
 </tbody>
 </table>
@@ -142,9 +147,9 @@ status.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>action</strong> (<a class="reference internal" href="traitsui.menu.html#traitsui.menu.Action" title="traitsui.menu.Action"><em>Action</em></a>) &#8211; The Action to add to the toolbar.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>action</strong> (<a class="reference internal" href="traitsui.menu.html#traitsui.menu.Action" title="traitsui.menu.Action"><em>Action</em></a>) – The Action to add to the toolbar.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>defined</strong> &#8211; Whether or not the action should be added to the menu.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>defined</strong> – Whether or not the action should be added to the menu.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
@@ -161,9 +166,9 @@ status.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>action</strong> (<a class="reference internal" href="traitsui.menu.html#traitsui.menu.Action" title="traitsui.menu.Action"><em>Action</em></a>) &#8211; The Action to add to the toolbar.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>action</strong> (<a class="reference internal" href="traitsui.menu.html#traitsui.menu.Action" title="traitsui.menu.Action"><em>Action</em></a>) – The Action to add to the toolbar.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>defined</strong> &#8211; Whether or not the action should be added to the toolbar.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>defined</strong> – Whether or not the action should be added to the toolbar.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
@@ -211,12 +216,12 @@ not already in the list.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>action</strong> (<em>Action instance</em>) &#8211; The action to perform.</li>
-<li><strong>event</strong> (<em>ActionEvent instance</em>) &#8211; The event that triggered the action.</li>
+<li><strong>action</strong> (<em>Action instance</em>) – The action to perform.</li>
+<li><strong>event</strong> (<em>ActionEvent instance</em>) – The event that triggered the action.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>result</strong> &#8211; The result of the action&#8217;s perform method (usually None).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>result</strong> – The result of the action’s perform method (usually None).</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">any</p>
@@ -258,12 +263,14 @@ not already in the list.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -285,10 +292,10 @@ not already in the list.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

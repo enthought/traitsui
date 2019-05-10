@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.tests.html" >traitsui.tests package</a></li>
           <li class="active"><a href="traitsui.tests.editors.html" accesskey="U">traitsui.tests.editors package</a></li>
@@ -66,6 +67,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.tests.editors.test_tuple_editor.html" title="traitsui.tests.editors.test_tuple_editor module"
@@ -93,36 +98,71 @@
 <dl class="class">
 <dt id="traitsui.tests.editors.test_tree_editor.Bogus">
 <em class="property">class </em><code class="descclassname">traitsui.tests.editors.test_tree_editor.</code><code class="descname">Bogus</code><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.Bogus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
 <p>A bogus class representing a bogus tree.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.tests.editors.test_tree_editor.BogusTreeView">
 <em class="property">class </em><code class="descclassname">traitsui.tests.editors.test_tree_editor.</code><code class="descname">BogusTreeView</code><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.BogusTreeView" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
 <p>A traitsui view visualizing Bogus objects as trees.</p>
 <dl class="method">
 <dt id="traitsui.tests.editors.test_tree_editor.BogusTreeView.default_traits_view">
 <code class="descname">default_traits_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.BogusTreeView.default_traits_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the default traits view for the object’s class.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.tests.editors.test_tree_editor.BogusWrap">
+<em class="property">class </em><code class="descclassname">traitsui.tests.editors.test_tree_editor.</code><code class="descname">BogusWrap</code><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.BogusWrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<p>A bogus class representing a bogus tree.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.tests.editors.test_tree_editor.TestTreeView">
+<em class="property">class </em><code class="descclassname">traitsui.tests.editors.test_tree_editor.</code><code class="descname">TestTreeView</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.TestTreeView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="traitsui.tests.editors.test_tree_editor.TestTreeView.test_smoke_save_restore_prefs">
+<code class="descname">test_smoke_save_restore_prefs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.TestTreeView.test_smoke_save_restore_prefs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tests.editors.test_tree_editor.TestTreeView.test_smoke_word_wrap">
+<code class="descname">test_smoke_word_wrap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.TestTreeView.test_smoke_word_wrap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tests.editors.test_tree_editor.TestTreeView.test_tree_editor_label_listener">
+<code class="descname">test_tree_editor_label_listener</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.TestTreeView.test_tree_editor_label_listener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tests.editors.test_tree_editor.TestTreeView.test_tree_editor_listeners_with_hidden_root">
+<code class="descname">test_tree_editor_listeners_with_hidden_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.TestTreeView.test_tree_editor_listeners_with_hidden_root" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tests.editors.test_tree_editor.TestTreeView.test_tree_editor_listeners_with_shown_root">
+<code class="descname">test_tree_editor_listeners_with_shown_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.TestTreeView.test_tree_editor_listeners_with_shown_root" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="traitsui.tests.editors.test_tree_editor.TestTreeView.test_tree_editor_xgetattr_label_listener">
+<code class="descname">test_tree_editor_xgetattr_label_listener</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.TestTreeView.test_tree_editor_xgetattr_label_listener" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="function">
-<dt id="traitsui.tests.editors.test_tree_editor.test_smoke_save_restore_prefs">
-<code class="descclassname">traitsui.tests.editors.test_tree_editor.</code><code class="descname">test_smoke_save_restore_prefs</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.test_smoke_save_restore_prefs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="traitsui.tests.editors.test_tree_editor.test_tree_editor_listeners_with_hidden_root">
-<code class="descclassname">traitsui.tests.editors.test_tree_editor.</code><code class="descname">test_tree_editor_listeners_with_hidden_root</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.test_tree_editor_listeners_with_hidden_root" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="traitsui.tests.editors.test_tree_editor.test_tree_editor_listeners_with_shown_root">
-<code class="descclassname">traitsui.tests.editors.test_tree_editor.</code><code class="descname">test_tree_editor_listeners_with_shown_root</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.test_tree_editor_listeners_with_shown_root" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="traitsui.tests.editors.test_tree_editor.skip_if_not_qt4">
+<code class="descclassname">traitsui.tests.editors.test_tree_editor.</code><code class="descname">skip_if_not_qt4</code><span class="sig-paren">(</span><em>item</em>, <em>*</em>, <em>backend_name='qt4'</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.tests.editors.test_tree_editor.skip_if_not_qt4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator that skip tests if the backend is not the desired one.</p>
+</dd></dl>
 
 </div>
 
@@ -148,12 +188,14 @@
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -175,10 +217,10 @@
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

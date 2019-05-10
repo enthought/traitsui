@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.menu module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.message module" href="traitsui.message.html" >
+    <link rel="prev" title="traitsui.list_str_adapter module" href="traitsui.list_str_adapter.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.menu module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.message.html" title="traitsui.message module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.list_str_adapter.html" title="traitsui.list_str_adapter module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.menu">
+<span id="traitsui-menu-module"></span><h1>traitsui.menu module<a class="headerlink" href="#module-traitsui.menu" title="Permalink to this headline">¶</a></h1>
+<p>Defines the standard menu bar for use with Traits UI windows and panels,
+and standard actions and buttons.</p>
+<dl class="class">
+<dt id="traitsui.menu.Action">
+<em class="property">class </em><code class="descclassname">traitsui.menu.</code><code class="descname">Action</code><a class="headerlink" href="#traitsui.menu.Action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/pyface/api/pyface.action.html#pyface.action.action.Action" title="(in pyface v6.0.0)"><code class="xref py py-class docutils literal"><span class="pre">pyface.action.action.Action</span></code></a></p>
+<p>An action on a menu bar in a Traits UI window or panel.</p>
+<dl class="attribute">
+<dt id="traitsui.menu.Action.action">
+<code class="descname">action</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.menu.Action.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>The method to call to perform the action, on the Handler for the window.
+The method must accept a single parameter, which is a UIInfo object.
+Because Actions are associated with Views rather than Handlers, you must
+ensure that the Handler object for a particular window has a method with
+the correct name, for each Action defined on the View for that window.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.menu.Action.checked_when">
+<code class="descname">checked_when</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.menu.Action.checked_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean expression indicating when the action is displayed with a check
+mark beside it. This attribute applies only to actions that are included
+in menus.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.menu.Action.defined_when">
+<code class="descname">defined_when</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.menu.Action.defined_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for including the action in the menu bar or toolbar. If the
+expression evaluates to False, the action is not defined in the display.
+Conditions for <strong>defined_when</strong> are evaluated only once, when the display
+is first constructed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.menu.Action.enabled_when">
+<code class="descname">enabled_when</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.menu.Action.enabled_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for enabling the action. If the expression evaluates to
+False, the action is disabled, that is, it cannot be selected. All
+<strong>enabled_when</strong> conditions are checked each time that any trait value
+is edited in the display. Therefore, you can use <strong>enabled_when</strong>
+conditions to enable or disable actions in response to user input.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.menu.Action.visible_when">
+<code class="descname">visible_when</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.menu.Action.visible_when" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-condition for showing the action. If the expression evaluates to False,
+the action is not visible (and disappears if it was previously visible).
+If the value evaluates to True, the action becomes visible. All
+<strong>visible_when</strong> conditions are checked each time that any trait value
+is edited in the display. Therefore, you can use <strong>visible_when</strong>
+conditions to hide or show actions in response to user input.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.ApplyButton">
+<code class="descclassname">traitsui.menu.</code><code class="descname">ApplyButton</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.ApplyButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>When the user clicks the <strong>Apply</strong> button, all changes made in the window are
+applied to the model. This option is meaningful only for modal windows.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.CancelButton">
+<code class="descclassname">traitsui.menu.</code><code class="descname">CancelButton</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.CancelButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>When the user clicks the <strong>Cancel</strong> button, all changes made in the window
+are discarded; if the window is live, the model is restored to the values it
+held before the window was opened. The window is then closed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.CloseAction">
+<code class="descclassname">traitsui.menu.</code><code class="descname">CloseAction</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.CloseAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard &#8220;close window&#8221; action</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.HelpAction">
+<code class="descclassname">traitsui.menu.</code><code class="descname">HelpAction</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.HelpAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard &#8220;show help&#8221; action</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.HelpButton">
+<code class="descclassname">traitsui.menu.</code><code class="descname">HelpButton</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.HelpButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>When the user clicks the <strong>Help</strong> button, the current help handler is
+invoked. If the default help handler is used, a pop-up window is displayed,
+which contains the <strong>help</strong> text for the top-level Group (if any), and for
+the items in the view. If the default help handler has been overridden,
+the action is determined by the custom help handler. See
+<strong>traitsui.help</strong>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.NoButtons">
+<code class="descclassname">traitsui.menu.</code><code class="descname">NoButtons</code><em class="property"> = [&lt;traitsui.menu.Action object&gt;]</em><a class="headerlink" href="#traitsui.menu.NoButtons" title="Permalink to this definition">¶</a></dt>
+<dd><p>The window has no command buttons</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.OKButton">
+<code class="descclassname">traitsui.menu.</code><code class="descname">OKButton</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.OKButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>When the user clicks the <strong>OK</strong> button, all changes made in the window are
+applied to the model, and the window is closed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.RedoAction">
+<code class="descclassname">traitsui.menu.</code><code class="descname">RedoAction</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.RedoAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard &#8220;redo last undo&#8221; action</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.RevertAction">
+<code class="descclassname">traitsui.menu.</code><code class="descname">RevertAction</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.RevertAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard &#8220;revert all changes&#8221; action</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.RevertButton">
+<code class="descclassname">traitsui.menu.</code><code class="descname">RevertButton</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.RevertButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>When the user clicks the <strong>Revert</strong> button, all changes made in the window are
+cancelled and the original values are restored. If the changes have been
+applied to the model (because the user clicked <strong>Apply</strong> or because the window
+is live), the model data is restored as well. The window remains open.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.menu.Separator">
+<code class="descclassname">traitsui.menu.</code><code class="descname">Separator</code><a class="headerlink" href="#traitsui.menu.Separator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Menu separator</p>
+<p>alias of <code class="xref py py-class docutils literal"><span class="pre">Group</span></code></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.StandardMenuBar">
+<code class="descclassname">traitsui.menu.</code><code class="descname">StandardMenuBar</code><em class="property"> = &lt;pyface.ui.qt4.action.menu_bar_manager.MenuBarManager object&gt;</em><a class="headerlink" href="#traitsui.menu.StandardMenuBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard Traits UI menu bar</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.UndoAction">
+<code class="descclassname">traitsui.menu.</code><code class="descname">UndoAction</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.UndoAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard &#8220;undo last change&#8221; action</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="traitsui.menu.UndoButton">
+<code class="descclassname">traitsui.menu.</code><code class="descname">UndoButton</code><em class="property"> = &lt;traitsui.menu.Action object&gt;</em><a class="headerlink" href="#traitsui.menu.UndoButton" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Appears as two buttons</em> &#8211; <strong>Undo</strong> and <strong>Redo</strong>. When <strong>Undo</strong> is clicked, the
+most recent change to the data is cancelled, restoring the previous value.
+<strong>Redo</strong> cancels the most recent &#8220;undo&#8221; operation.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.list_str_adapter.html"
+                        title="previous chapter">traitsui.list_str_adapter module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.message.html"
+                        title="next chapter">traitsui.message module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.menu.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

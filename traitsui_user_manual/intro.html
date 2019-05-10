@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,15 +24,16 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
+    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
     <link rel="next" title="The View and Its Building Blocks" href="view.html" >
-    <link rel="prev" title="TraitsUI 6.0 User Manual" href="front.html" > 
+    <link rel="prev" title="TraitsUI 6.1 User Manual" href="front.html" > 
   </head>
   <body>
   <div class="container">
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
   
     <li><a href="#">Introduction</a></li>
   
@@ -65,11 +66,15 @@
            accesskey="I">index</a>
       </li>
       <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
         <a href="view.html" title="The View and Its Building Blocks"
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="front.html" title="TraitsUI 6.0 User Manual"
+        <a href="front.html" title="TraitsUI 6.1 User Manual"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -100,9 +105,9 @@ TraitsUI. For complete details of the TraitsUI API, refer to the
 <div class="section" id="the-model-view-controller-mvc-design-pattern">
 <span id="index-0"></span><span id="id1"></span><h2>The Model-View-Controller (MVC) Design Pattern<a class="headerlink" href="#the-model-view-controller-mvc-design-pattern" title="Permalink to this headline">¶</a></h2>
 <p>A common and well-tested approach to building end-user applications is the
-<a class="reference internal" href="glossary.html#term-mvc"><span class="xref std std-term">MVC</span></a> (&#8220;Model-View-Controller&#8221;) design pattern. In essence, the MVC
+<a class="reference internal" href="glossary.html#term-mvc"><span class="xref std std-term">MVC</span></a> (“Model-View-Controller”) design pattern. In essence, the MVC
 pattern the idea that an application should consist of three separate entities:
-a <a class="reference internal" href="glossary.html#term-model"><span class="xref std std-term">model</span></a>, which manages the data, state, and internal (&#8220;business&#8221;) logic
+a <a class="reference internal" href="glossary.html#term-model"><span class="xref std std-term">model</span></a>, which manages the data, state, and internal (“business”) logic
 of the application; one or more <a class="reference internal" href="glossary.html#term-29"><span class="xref std std-term">view</span></a>s, which format the model data into
 a graphical display with which the end user can interact; and a
 <a class="reference internal" href="glossary.html#term-controller"><span class="xref std std-term">controller</span></a>, which manages the transfer of information between model and
@@ -163,18 +168,18 @@ TraitsUI. However, <em>some</em> particular toolkit must be installed on the sys
 order to actually display GUI windows.</p>
 <p>TraitsUI uses a separate package, traits.etsconfig, to determine which GUI
 toolkit to use. This package is also used by other Enthought packages that need
-GUI capabilities, so that all such packages &#8220;agree&#8221; on a single GUI toolkit per
+GUI capabilities, so that all such packages “agree” on a single GUI toolkit per
 application. The etsconfig package contains a singleton object, <strong>ETSConfig</strong>
 (importable from <cite>traits.etsconfig.api</cite>), which has a string attribute,
 <strong>toolkit</strong>, that signifies the GUI toolkit.</p>
-<p id="index-5">The values of <strong>ETSConfig.toolkit</strong> that are supported by TraitsUI version 6.0
+<p id="index-5">The values of <strong>ETSConfig.toolkit</strong> that are supported by TraitsUI version 6.1
 are:</p>
 <ul class="simple" id="index-6">
-<li>&#8216;qt4&#8217;: <a class="reference external" href="http://riverbankcomputing.co.uk/pyqt/">PyQt</a>, which provides Python
+<li>‘qt4’: <a class="reference external" href="http://riverbankcomputing.co.uk/pyqt/">PyQt</a>, which provides Python
 bindings for the <a class="reference external" href="http://trolltech.com/products/qt">Qt</a> framework version 4.</li>
-<li>&#8216;wx&#8217;: <a class="reference external" href="http://www.wxpython.org">wxPython</a>, which provides Python bindings
+<li>‘wx’: <a class="reference external" href="http://www.wxpython.org">wxPython</a>, which provides Python bindings
 for the <a class="reference external" href="http://wxwidgets.org">wxWidgets</a> toolkit.</li>
-<li>&#8216;null&#8217;: A do-nothing toolkit, for situations where neither of the other
+<li>‘null’: A do-nothing toolkit, for situations where neither of the other
 toolkits is installed, but Traits is needed for non-UI purposes.</li>
 </ul>
 <p>The default behavior of TraitsUI is to search for available toolkit-specific
@@ -185,7 +190,7 @@ order of precedence:</p>
 <li><p class="first">The program can explicitly set <strong>ETSConfig.toolkit</strong>. It must do this before
 importing from any other Enthought Tool Suite component, including
 traits.  For example, at the beginning of a program:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.etsconfig.api</span> <span class="k">import</span> <span class="n">ETSConfig</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.etsconfig.api</span> <span class="k">import</span> <span class="n">ETSConfig</span>
 <span class="n">ETSConfig</span><span class="o">.</span><span class="n">toolkit</span> <span class="o">=</span> <span class="s1">&#39;wx&#39;</span>
 </pre></div>
 </div>
@@ -196,7 +201,7 @@ traits.  For example, at the beginning of a program:</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The default order of toolkits changed in TraitsUI 5.0 to
-prefer &#8216;qt4&#8217; over &#8216;wx&#8217;.</p>
+prefer ‘qt4’ over ‘wx’.</p>
 </div>
 </div>
 <div class="section" id="structure-of-this-manual">
@@ -246,7 +251,7 @@ which enforces type validation.</td></tr>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Introduction</a><ul>
 <li><a class="reference internal" href="#the-model-view-controller-mvc-design-pattern">The Model-View-Controller (MVC) Design Pattern</a><ul>
@@ -263,7 +268,7 @@ which enforces type validation.</td></tr>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="front.html"
-                        title="previous chapter">TraitsUI 6.0 User Manual</a></p>
+                        title="previous chapter">TraitsUI 6.1 User Manual</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="view.html"
                         title="next chapter">The View and Its Building Blocks</a></p>
@@ -274,12 +279,14 @@ which enforces type validation.</td></tr>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -301,10 +308,10 @@ which enforces type validation.</td></tr>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

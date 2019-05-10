@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,13 +24,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
+    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
     <link rel="next" title="The Predefined Trait Editor Factories" href="factories_basic.html" >
     <link rel="prev" title="Controlling the Interface: the Handler" href="handler.html" > 
   </head>
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
   
     <li><a href="#">Introduction to Trait Editor Factories</a></li>
   
@@ -63,6 +64,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="factories_basic.html" title="The Predefined Trait Editor Factories"
@@ -109,7 +114,7 @@ the Traits package has a predefined trait editor factory that is automatically
 used whenever the trait is displayed, unless you specify otherwise.</p>
 <p>Consider the following script and the window it creates:</p>
 <p class="rubric" id="example-12-using-default-trait-editors">Example 12: Using default trait editors</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># default_trait_editors.py -- Example of using default</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># default_trait_editors.py -- Example of using default</span>
 <span class="c1">#                             trait editors</span>
 
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Range</span><span class="p">,</span> <span class="n">Bool</span>
@@ -165,7 +170,7 @@ defined in one of the following packages:</p>
 <li>traitsui.wx.extra</li>
 <li>traitsui.wx.extra.windows (specific to Microsoft Windows)</li>
 </ul>
-<p>These editor factories are described in <a class="reference internal" href="factories_advanced_extra.html#extra-trait-editor-factories"><span class="std std-ref">&#8220;Extra&#8221; Trait Editor Factories</span></a>.</p>
+<p>These editor factories are described in <a class="reference internal" href="factories_advanced_extra.html#extra-trait-editor-factories"><span class="std std-ref">“Extra” Trait Editor Factories</span></a>.</p>
 <p>For a current complete list of editor factories, refer to the <em>Traits API
 Reference</em>.</p>
 <p>Other packages can define their own editor factories for their own traits. For
@@ -182,12 +187,12 @@ for building additional trait editors and factories for them as needed.</p>
 <p>To use an alternate editor factory for a trait in a TraitsUI window, you must
 specify it in the View for that window. This is done at the Item level, using
 the <em>editor</em> keyword parameter. The syntax of the specification is
-<code class="samp docutils literal"><span class="pre">editor</span> <span class="pre">=</span> <em><span class="pre">editor_factory</span></em><span class="pre">()</span></code>. (Use the same syntax for specifying that
+<code class="samp docutils literal notranslate"><span class="pre">editor</span> <span class="pre">=</span> <em><span class="pre">editor_factory</span></em><span class="pre">()</span></code>. (Use the same syntax for specifying that
 the default editor should be used, but with certain keyword parameters
 explicitly specified; see <a class="reference internal" href="#initializing-editors"><span class="std std-ref">Initializing Editors</span></a>).</p>
 <p>For example, to display a Str trait called <strong>my_string</strong> using the default
 editor factory (TextEditor()), the View might contain the following Item:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_string&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_string&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The resulting widget would have the following appearance:</p>
@@ -197,7 +202,7 @@ editor factory (TextEditor()), the View might contain the following Item:</p>
 </div>
 <p>To use the HTMLEditor factory instead, add the appropriate specification to the
 Item:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Item</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_string&#39;</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">HTMLEditor</span><span class="p">()</span> <span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Item</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_string&#39;</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">HTMLEditor</span><span class="p">()</span> <span class="p">)</span>
 </pre></div>
 </div>
 <p>The resulting widget appears as in Figure 14:</p>
@@ -229,14 +234,14 @@ approach commingles the <a class="reference internal" href="glossary.html#term-2
 design pattern.</p>
 <div class="section" id="initializing-editors">
 <span id="id4"></span><h3>Initializing Editors<a class="headerlink" href="#initializing-editors" title="Permalink to this headline">¶</a></h3>
-<p>Many of the TraitsUI trait editors can be used &#8220;straight from the box&#8221; as in
+<p>Many of the TraitsUI trait editors can be used “straight from the box” as in
 the example above. There are some editors, however, that must be initialized in
 order to be useful. For example, a checklist editor (from CheckListEditor()) and
 a set editor (from SetEditor()) both enable the user to edit a List attribute by
 selecting elements from a specified set; the contents of this set must, of
 course, be known to the editor. This sort of initialization is usually performed
 by means of one or more keyword arguments to the editor factory, for example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_list&#39;</span><span class="p">,</span><span class="n">editor</span><span class="o">=</span><span class="n">CheckListEditor</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;opt1&quot;</span><span class="p">,</span><span class="s2">&quot;opt2&quot;</span><span class="p">,</span><span class="s2">&quot;opt3&quot;</span><span class="p">]))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_list&#39;</span><span class="p">,</span><span class="n">editor</span><span class="o">=</span><span class="n">CheckListEditor</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;opt1&quot;</span><span class="p">,</span><span class="s2">&quot;opt2&quot;</span><span class="p">,</span><span class="s2">&quot;opt3&quot;</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p>The descriptions of trait editor factories in
@@ -248,7 +253,7 @@ optional initialization keywords for each editor.</p>
 <span id="id5"></span><h2>Specifying an Editor Style<a class="headerlink" href="#specifying-an-editor-style" title="Permalink to this headline">¶</a></h2>
 <p>In TraitsUI, any given trait editor can be generated in one or more of four
 different styles: <em>simple</em>, <em>custom</em>, <em>text</em> or <em>readonly</em>. These styles, which
-are described in general terms below, represent different &#8220;flavors&#8221; of data
+are described in general terms below, represent different “flavors” of data
 display, so that a given trait editor can look completely different in one style
 than in another. However, different trait editors displayed in the same style
 (usually) have noticeable characteristics in common. This is useful because
@@ -256,7 +261,7 @@ editor style, unlike individual editors, can be set at the Group or View level,
 not just at the Item level. This point is discussed further in
 <a class="reference internal" href="#using-editor-styles"><span class="std std-ref">Using Editor Styles</span></a>.</p>
 <div class="section" id="the-simple-style">
-<span id="id6"></span><h3>The &#8216;simple&#8217; Style<a class="headerlink" href="#the-simple-style" title="Permalink to this headline">¶</a></h3>
+<span id="id6"></span><h3>The ‘simple’ Style<a class="headerlink" href="#the-simple-style" title="Permalink to this headline">¶</a></h3>
 <p>The <em>simple</em> editor style is designed to be as functional as possible while
 requiring minimal space within the window. In simple style, most of the Traits
 UI editors take up only a single line of space in the window in which they are
@@ -280,7 +285,7 @@ editor for the wxWidgets toolkit looks like this:</p>
 concise.</p>
 </div>
 <div class="section" id="the-custom-style">
-<h3>The &#8216;custom&#8217; Style<a class="headerlink" href="#the-custom-style" title="Permalink to this headline">¶</a></h3>
+<h3>The ‘custom’ Style<a class="headerlink" href="#the-custom-style" title="Permalink to this headline">¶</a></h3>
 <p>The <em>custom</em> editor style generally generates the most detailed version of any
 given editor. It is intended to provide maximal functionality and information
 without regard to the amount of window space used. For example, in the wxWindows
@@ -299,7 +304,7 @@ implementations. If the custom style is requested for an editor for which it is
 not defined, the simple style is generated instead.</p>
 </div>
 <div class="section" id="the-text-style">
-<h3>The &#8216;text&#8217; Style<a class="headerlink" href="#the-text-style" title="Permalink to this headline">¶</a></h3>
+<h3>The ‘text’ Style<a class="headerlink" href="#the-text-style" title="Permalink to this headline">¶</a></h3>
 <p>The <em>text</em> editor style is the simplest of the editor styles. When applied to a
 given trait attribute, it generates a text representation of the trait value in
 an editable box. Thus the enumeration editor in text style looks like the
@@ -328,7 +333,7 @@ of the trait editor factory, if any, is used to format the attribute value.</li>
 </ol>
 </div>
 <div class="section" id="the-readonly-style">
-<h3>The &#8216;readonly&#8217; style<a class="headerlink" href="#the-readonly-style" title="Permalink to this headline">¶</a></h3>
+<h3>The ‘readonly’ style<a class="headerlink" href="#the-readonly-style" title="Permalink to this headline">¶</a></h3>
 <p>The <em>readonly</em> editor style is usually identical in appearance to the text
 style, except that the value appears as static text rather than in an editable
 box:</p>
@@ -352,13 +357,13 @@ or View that contains the Item is used.</li>
 assigned. Otherwise, it is the editor style of the Group or View that
 contains the Group.</li>
 <li>The editor style of a View is the value of its <strong>style</strong> attribute if
-specified, and &#8216;simple&#8217; otherwise.</li>
+specified, and ‘simple’ otherwise.</li>
 </ol>
 <p>In other words, editor style can be specified at the Item, Group or View level,
 and in case of conflicts the style of the smaller scope takes precedence. For
 example, consider the following script:</p>
 <p class="rubric" id="example-13-using-editor-styles-at-various-levels">Example 13: Using editor styles at various levels</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># mixed_styles.py -- Example of using editor styles at</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># mixed_styles.py -- Example of using editor styles at</span>
 <span class="c1">#                    various levels</span>
 
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Enum</span>
@@ -418,7 +423,7 @@ Traits package and their default trait editor types.</td></tr>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Introduction to Trait Editor Factories</a><ul>
 <li><a class="reference internal" href="#specifying-an-alternate-trait-editor-factory">Specifying an Alternate Trait Editor Factory</a><ul>
@@ -426,10 +431,10 @@ Traits package and their default trait editor types.</td></tr>
 </ul>
 </li>
 <li><a class="reference internal" href="#specifying-an-editor-style">Specifying an Editor Style</a><ul>
-<li><a class="reference internal" href="#the-simple-style">The &#8216;simple&#8217; Style</a></li>
-<li><a class="reference internal" href="#the-custom-style">The &#8216;custom&#8217; Style</a></li>
-<li><a class="reference internal" href="#the-text-style">The &#8216;text&#8217; Style</a></li>
-<li><a class="reference internal" href="#the-readonly-style">The &#8216;readonly&#8217; style</a></li>
+<li><a class="reference internal" href="#the-simple-style">The ‘simple’ Style</a></li>
+<li><a class="reference internal" href="#the-custom-style">The ‘custom’ Style</a></li>
+<li><a class="reference internal" href="#the-text-style">The ‘text’ Style</a></li>
+<li><a class="reference internal" href="#the-readonly-style">The ‘readonly’ style</a></li>
 <li><a class="reference internal" href="#using-editor-styles">Using Editor Styles</a></li>
 </ul>
 </li>
@@ -450,12 +455,14 @@ Traits package and their default trait editor types.</td></tr>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -477,10 +484,10 @@ Traits package and their default trait editor types.</td></tr>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>
