@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,13 +24,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
+    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
     <link rel="next" title="Advanced Editor Adapters" href="adapters.html" >
     <link rel="prev" title="The Predefined Trait Editor Factories" href="factories_basic.html" > 
   </head>
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
   
     <li><a href="#">Advanced Trait Editors</a></li>
   
@@ -63,6 +64,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="adapters.html" title="Advanced Editor Adapters"
@@ -109,7 +114,7 @@ interfaces, in conjunction with other editors.</p>
 </tr>
 </tbody>
 </table>
-<p>Use CustomEditor() to create an &#8220;editor&#8221; that is a non-Traits-based custom
+<p>Use CustomEditor() to create an “editor” that is a non-Traits-based custom
 control. The <em>factory</em> parameter must be a function that generates the custom
 control. The function must have the following signature:</p>
 <p>factory_function(<em>window_parent</em>, <em>editor*[, **args</em>, **<em>kwargs</em>])</p>
@@ -139,7 +144,7 @@ CustomEditor() is used to generate the plots in the user interface.</p>
 </tbody>
 </table>
 <p>DropEditor() generates an editor that is a text field containing a string
-representation of the trait attribute&#8217;s value. The user can change the value
+representation of the trait attribute’s value. The user can change the value
 assigned to the attribute by dragging and dropping an object on the text field,
 for example, a node from a tree editor (See <a class="reference internal" href="#treeeditor"><span class="std std-ref">TreeEditor()</span></a>). If the
 <em>readonly</em> parameter is True (the default), the user cannot modify the value by
@@ -230,7 +235,7 @@ associate that key press with a method.</p>
 <p>The following code example creates a user interface containing a code editor
 with associated key bindings, and a button that invokes the key binding editor.</p>
 <p class="rubric" id="example-17-code-editor-with-key-binding-editor">Example 17: Code editor with key binding editor</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># key_bindings.py -- Example of a code editor with a</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># key_bindings.py -- Example of a code editor with a</span>
 <span class="c1">#                    key bindings editor</span>
 
 <span class="kn">from</span> <span class="nn">traits.api</span> \
@@ -291,7 +296,7 @@ with associated key bindings, and a button that invokes the key binding editor.<
         <span class="n">key_bindings</span><span class="o">.</span><span class="n">edit_traits</span><span class="p">()</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">KBCodeExample</span><span class="p">()</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -324,8 +329,8 @@ interacting with and formatting the table.</p>
 <img alt="Table editor with toolbar and instance editor" src="../_images/table_editor.jpg" />
 <p class="caption"><span class="caption-text">Figure 51: Table editor</span></p>
 </div>
-<p>To see the code that results in Figure 51, refer to <code class="file docutils literal"><span class="pre">TableEditor_demo.py</span></code>
-in the <code class="file docutils literal"><span class="pre">demos/TraitsUI</span> <span class="pre">Demo/Standard</span> <span class="pre">Editors</span></code> subdirectory of the Traits
+<p>To see the code that results in Figure 51, refer to <code class="file docutils literal notranslate"><span class="pre">TableEditor_demo.py</span></code>
+in the <code class="file docutils literal notranslate"><span class="pre">demos/TraitsUI</span> <span class="pre">Demo/Standard</span> <span class="pre">Editors</span></code> subdirectory of the Traits
 UI package. This example demonstrates object columns, expression columns,
 filters, searching, and adding and deleting rows.</p>
 <p>The parameters for TableEditor() can be grouped in several broad categories,
@@ -357,7 +362,7 @@ edited.</p>
 <p>You can specify additional columns that are not initially displayed using the
 <em>other_columns</em> parameter. If the <em>configurable</em> parameter is True (the
 default), a <span class="guilabel">Set user preferences for table</span> icon (<img alt="preferences_icon" src="../_images/table_prefs.png" />)
-appears on the table&#8217;s toolbar. When the user clicks this icon, a dialog box
+appears on the table’s toolbar. When the user clicks this icon, a dialog box
 opens that enables the user to select and order the columns displayed in the
 table, as shown in Figure 52. (The dialog box is implemented using a set editor;
 see <a class="reference internal" href="factories_basic.html#seteditor"><span class="std std-ref">SetEditor()</span></a>.) Any columns that were specified in the <em>other_columns</em>
@@ -388,10 +393,10 @@ header of that column.</p>
 <ul class="simple">
 <li>On the first click, the items are sorted in ascending order. The characters
 <span class="guilabel">&gt;&gt;</span> appear in the column header to indicate that the table is
-sorted ascending on this column&#8217;s values.</li>
+sorted ascending on this column’s values.</li>
 <li>On the second click, the items are sorted descending order. The characters
 <span class="guilabel">&lt;&lt;</span> appear in the column header to indicate that the table is
-sorted descending on this column&#8217;s values.</li>
+sorted descending on this column’s values.</li>
 <li>On the third click, the items are restored to their original order, and the
 column header is undecorated.</li>
 </ul>
@@ -415,7 +420,7 @@ traitsui.api.TableFilter, or of a subclass of TableFilter. Some
 subclasses of TableFilter that are provided by the TraitsUI package include
 EvalTableFilter, RuleTableFilter, and MenuTableFilter. (See the <em>Traits API
 Reference</em> for details about these classes.) The TraitsUI package also provides
-instances of these filter classes as &#8220;templates&#8221;, which cannot be edited or
+instances of these filter classes as “templates”, which cannot be edited or
 deleted, but which can be used as models for creating new filters.</p>
 <p>The <em>filter</em> parameter specifies a filter that is applied to the table when it
 is first displayed. The <em>filter_name</em> parameter specifies an extended trait name
@@ -446,15 +451,15 @@ behavior.</p>
 <p>The value of the <em>selection_mode</em> parameter specifies how the user can make
 selections in the grid:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">cell</span></code>: A single cell at a time</li>
-<li><code class="docutils literal"><span class="pre">cells</span></code>: Multiple cells</li>
-<li><code class="docutils literal"><span class="pre">column</span></code>: A single column at a time</li>
-<li><code class="docutils literal"><span class="pre">columns</span></code>: Multiple columns</li>
-<li><code class="docutils literal"><span class="pre">row</span></code>: A single row at a time</li>
-<li><code class="docutils literal"><span class="pre">rows</span></code>: Multiple rows</li>
+<li><code class="docutils literal notranslate"><span class="pre">cell</span></code>: A single cell at a time</li>
+<li><code class="docutils literal notranslate"><span class="pre">cells</span></code>: Multiple cells</li>
+<li><code class="docutils literal notranslate"><span class="pre">column</span></code>: A single column at a time</li>
+<li><code class="docutils literal notranslate"><span class="pre">columns</span></code>: Multiple columns</li>
+<li><code class="docutils literal notranslate"><span class="pre">row</span></code>: A single row at a time</li>
+<li><code class="docutils literal notranslate"><span class="pre">rows</span></code>: Multiple rows</li>
 </ul>
 <p>You can use the <em>selected</em> parameter to specify the name of a trait attribute in
-the current context to synchronize with the user&#8217;s current selection. For
+the current context to synchronize with the user’s current selection. For
 example, you can enable or disable menu items or toolbar icons depending on
 which item is selected. The synchronization is two-way; you can set the
 attribute referenced by <em>selected</em> to force the table to select a particular
@@ -465,22 +470,22 @@ editor selection. The content of the selection depends on the <em>selection_mode
 value:</p>
 <ul class="simple">
 <li><dl class="first docutils">
-<dt><code class="docutils literal"><span class="pre">cell</span></code>: The selection is a tuple of the form (<em>object</em>, <em>column_name</em>),</dt>
+<dt><code class="docutils literal notranslate"><span class="pre">cell</span></code>: The selection is a tuple of the form (<em>object</em>, <em>column_name</em>),</dt>
 <dd>where <em>object</em> is the object contains the selected cell, and <em>column_name</em>
 is the name of the column the cell is in. If there is no selection, the
-tuple is (None, &#8216;&#8217;).</dd>
+tuple is (None, ‘’).</dd>
 </dl>
 </li>
-<li><code class="docutils literal"><span class="pre">cells</span></code>: The selection is a list of tuples of the form (<em>object</em>,
+<li><code class="docutils literal notranslate"><span class="pre">cells</span></code>: The selection is a list of tuples of the form (<em>object</em>,
 <em>column_name</em>), with one tuple for each selected cell, in order from top to
 bottom and left to right. If there is no selection, the list is empty.</li>
-<li><code class="docutils literal"><span class="pre">column</span></code>: The selection is the name of the selected column, or the empty
+<li><code class="docutils literal notranslate"><span class="pre">column</span></code>: The selection is the name of the selected column, or the empty
 string if there is no selection.</li>
-<li><code class="docutils literal"><span class="pre">columns</span></code>: The selection is a list containing the names of the selected
+<li><code class="docutils literal notranslate"><span class="pre">columns</span></code>: The selection is a list containing the names of the selected
 columns, in order from left to right. If there is no selection, the list is empty.</li>
-<li><code class="docutils literal"><span class="pre">row</span></code>: The selection is either the selected object or None if nothing is
+<li><code class="docutils literal notranslate"><span class="pre">row</span></code>: The selection is either the selected object or None if nothing is
 selected in the table.</li>
-<li><code class="docutils literal"><span class="pre">rows</span></code>: The selection is a list of the selected objects, in ascending row
+<li><code class="docutils literal notranslate"><span class="pre">rows</span></code>: The selection is a list of the selected objects, in ascending row
 order. If there is no selection, the list is empty.</li>
 </ul>
 <p>The <em>on_select</em> and <em>on_dclick</em> parameters are callables to invoke when the user
@@ -494,7 +499,7 @@ Action objects for the menu commands.</p>
 <span id="id8"></span><h3>Editing the Table<a class="headerlink" href="#editing-the-table" title="Permalink to this headline">¶</a></h3>
 <p>The Boolean <em>editable</em> parameter controls whether the table or its items can be
 modified in any way. This parameter defaults to True, except when the style is
-&#8216;readonly&#8217;. Even when the table as a whole is editable, you can control whether
+‘readonly’. Even when the table as a whole is editable, you can control whether
 individual columns are editable through the <strong>editable</strong> attribute of
 TableColumn.</p>
 <div class="section" id="adding-items">
@@ -524,14 +529,14 @@ in the table.</p>
 <span id="id10"></span><h4>Modifying Items<a class="headerlink" href="#modifying-items" title="Permalink to this headline">¶</a></h4>
 <p>The user can modify items in two ways.</p>
 <ul class="simple">
-<li>For columns that are editable, the user can change an item&#8217;s value directly
+<li>For columns that are editable, the user can change an item’s value directly
 in the table. The editor used for each attribute in the table is the simple
 style of editor for the corresponding trait.</li>
 <li>Alternatively, you can specify a View for editing instances, using the
 <em>edit_view</em> parameter. The resulting user interface appears in a
 <a class="reference internal" href="glossary.html#term-subpanel"><span class="xref std std-term">subpanel</span></a> to the right or below the table (depending on the
 <em>orientation</em> parameter).  You can specify a handler to use with the view,
-using <em>edit_view_handler</em>. You can also specify the subpanel&#8217;s height and
+using <em>edit_view_handler</em>. You can also specify the subpanel’s height and
 width, with <em>edit_view_height</em> and <em>edit_view_width</em>.</li>
 </ul>
 </div>
@@ -544,11 +549,11 @@ the display of the table.</p>
 <li><em>auto_size</em>: If True, the cells of the table automatically adjust to the
 optimal size based on their contents.</li>
 <li><em>orientation</em>: The layout of the table relative to its associated editor pane.
-Can be &#8216;horizontal&#8217; or &#8216;vertical&#8217;.</li>
+Can be ‘horizontal’ or ‘vertical’.</li>
 <li><em>rows</em>: The number of visible rows in the table.</li>
 <li><em>show_column_labels</em>: If True (the default), displays labels for the columns.
 You can specify the labels to use in the column definitions; otherwise, a
-&#8220;user friendly&#8221; version of the trait attribute name is used.</li>
+“user friendly” version of the trait attribute name is used.</li>
 <li><em>show_toolbar</em>: If False, the table toolbar is not displayed, regardless of
 whether other settings would normally create a toolbar. The default is True.</li>
 </ul>
@@ -625,7 +630,7 @@ support for both copy and move operations for single and multiple items.</li>
 </ul>
 </li>
 <li><strong>Visually appealing</strong>: The tabular editor, in general, uses the underlying
-operating system&#8217;s native table or grid control, and as a result often looks
+operating system’s native table or grid control, and as a result often looks
 better than the control used by the table editor.</li>
 <li><strong>Supports displaying text and images in any cell</strong>. However, the images
 displayed must be all the same size for optimal results.</li>
@@ -656,7 +661,7 @@ type. The string is used as the label for the column. The second value in the
 tuple, called the <em>column ID</em>, identifies the column to the adapter. It is
 typically a trait attribute name or an integer index, but it can be any value
 appropriate to the adapter. If only a string is specified for an entry, then the
-index of the entry within the <strong>columns</strong> list is used as that entry&#8217;s column
+index of the entry within the <strong>columns</strong> list is used as that entry’s column
 ID.</p>
 <p>Attributes on TabularAdapter control the appearance of items, and aspects of
 interaction with items, such as whether they can be edited, and how they respond
@@ -674,7 +679,7 @@ attributes with the following naming conventions in the following order:</p>
 <li><em>attribute</em></li>
 </ol>
 <p>For example, to find the <strong>text_color</strong> value for an item whose class is Person
-and whose column ID is &#8216;age&#8217;, the get_text_color() method looks for the
+and whose column ID is ‘age’, the get_text_color() method looks for the
 following attributes in sequence, and returns the first value it finds:</p>
 <ol class="arabic simple">
 <li><strong>Person_age_text_color</strong></li>
@@ -683,7 +688,7 @@ following attributes in sequence, and returns the first value it finds:</p>
 <li><strong>text_color</strong></li>
 </ol>
 <p>Note that the <em>classname</em> can be the name of a base class, searched in the
-method resolution order (MRO) for the item&#8217;s class. So for example, if the item
+method resolution order (MRO) for the item’s class. So for example, if the item
 were a direct instance of Employee, which is a subclass of Person, then the
 <strong>Person_age_text_color</strong> attribute would apply to that item (as long as there
 were no <strong>Employee_age_text_color</strong> attribute).</p>
@@ -702,32 +707,32 @@ may be available. For some interactions, you must specify that the corresponding
 operation is allowed by including the operation name in the <em>operations</em> list
 parameter of TabularEditor().</p>
 <ul class="simple">
-<li><code class="kbd docutils literal"><span class="pre">Up</span> <span class="pre">arrow</span></code>: Selects the row above the currently selected row.</li>
-<li><code class="kbd docutils literal"><span class="pre">Down</span> <span class="pre">arrow</span></code>: Selects the row below the currently selected row.</li>
-<li><code class="kbd docutils literal"><span class="pre">Page</span> <span class="pre">down</span></code>: Appends a new item to the end of the list (&#8216;append&#8217;
+<li><kbd class="kbd docutils literal notranslate">Up arrow</kbd>: Selects the row above the currently selected row.</li>
+<li><kbd class="kbd docutils literal notranslate">Down arrow</kbd>: Selects the row below the currently selected row.</li>
+<li><kbd class="kbd docutils literal notranslate">Page down</kbd>: Appends a new item to the end of the list (‘append’
 operation).</li>
-<li><code class="kbd docutils literal"><span class="pre">Left</span> <span class="pre">arrow</span></code>: Moves the currently selected row up one line (&#8216;move&#8217;
+<li><kbd class="kbd docutils literal notranslate">Left arrow</kbd>: Moves the currently selected row up one line (‘move’
 operation).</li>
-<li><code class="kbd docutils literal"><span class="pre">Right</span> <span class="pre">arrow</span></code>: Moves the currently selected row down one line (&#8216;move&#8217;
+<li><kbd class="kbd docutils literal notranslate">Right arrow</kbd>: Moves the currently selected row down one line (‘move’
 operation).</li>
-<li><code class="kbd docutils literal"><span class="pre">Backspace,</span> <span class="pre">Delete</span></code>: Deletes from the list all items in the current
-selection (&#8216;delete&#8217; operation).</li>
-<li><code class="kbd docutils literal"><span class="pre">Enter,</span> <span class="pre">Escape</span></code>: Initiates editing on the current selection (&#8216;edit&#8217;
+<li><kbd class="kbd docutils literal notranslate">Backspace, Delete</kbd>: Deletes from the list all items in the current
+selection (‘delete’ operation).</li>
+<li><kbd class="kbd docutils literal notranslate">Enter, Escape</kbd>: Initiates editing on the current selection (‘edit’
 operation).</li>
 <li><dl class="first docutils">
-<dt><code class="kbd docutils literal"><span class="pre">Insert:</span></code>: Inserts a new item before the current selection (&#8216;insert&#8217;</dt>
+<dt><kbd class="kbd docutils literal notranslate">Insert:</kbd>: Inserts a new item before the current selection (‘insert’</dt>
 <dd>operation).</dd>
 </dl>
 </li>
 </ul>
-<p>The &#8216;append&#8217;, &#8216;move&#8217;, &#8216;edit&#8217;, and &#8216;insert&#8217; operations can occur only when a
-single item is selected. The &#8216;delete&#8217; operation works for one or more items
+<p>The ‘append’, ‘move’, ‘edit’, and ‘insert’ operations can occur only when a
+single item is selected. The ‘delete’ operation works for one or more items
 selected.</p>
 <p>Depending on how the editor and adapter are specified, drag and drop operations
 may be available. If the user selects multiple items and drags one of them, all
 selected items are included in the drag operation. If the user drags a
 non-selected item, only that item is dragged.</p>
-<p>The editor supports both &#8220;drag-move&#8221; and &#8220;drag-copy&#8221; semantics. A drag-move
+<p>The editor supports both “drag-move” and “drag-copy” semantics. A drag-move
 operation means that the dragged items are sent to the target and are removed
 from the list displayed in the editor. A drag-copy operation means that the
 dragged items are sent to the target, but are not deleted from the list data.</p>
@@ -757,7 +762,7 @@ useful for cases where objects contain lists of other objects.</p>
 <p>The tree control is displayed in one pane of the editor, and a user interface
 for the selected object is displayed in the other pane. The layout orientation
 of the tree and the object editor is determined by the <em>orientation</em> parameter
-of TreeEditor(), which can be &#8216;horizontal&#8217; or &#8216;vertical&#8217;.</p>
+of TreeEditor(), which can be ‘horizontal’ or ‘vertical’.</p>
 <p>You must specify the types of nodes that can appear in the tree using the
 <em>nodes</em> parameter, which must be a list of instances of TreeNode (or of
 subclasses of TreeNode).</p>
@@ -768,7 +773,7 @@ subclasses of TreeNode).</p>
 <p>The following example shows the code that produces the editor shown in Figure
 54.</p>
 <p class="rubric" id="example-18-code-for-example-tree-editor">Example 18: Code for example tree editor</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># tree_editor.py -- Example of a tree editor</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># tree_editor.py -- Example of a tree editor</span>
 
 <span class="kn">from</span> <span class="nn">traits.api</span> \
     <span class="kn">import</span> <span class="nn">HasTraits</span><span class="o">,</span> <span class="nn">Str</span><span class="o">,</span> <span class="nn">Regex</span><span class="o">,</span> <span class="nn">List</span><span class="o">,</span> <span class="nn">Instance</span>
@@ -786,7 +791,7 @@ subclasses of TreeNode).</p>
 <span class="k">class</span> <span class="nc">Employee</span> <span class="p">(</span> <span class="n">HasTraits</span> <span class="p">):</span>
     <span class="n">name</span>  <span class="o">=</span> <span class="n">Str</span><span class="p">(</span> <span class="s1">&#39;&lt;unknown&gt;&#39;</span> <span class="p">)</span>
     <span class="n">title</span> <span class="o">=</span> <span class="n">Str</span>
-    <span class="n">phone</span> <span class="o">=</span> <span class="n">Regex</span><span class="p">(</span> <span class="n">regex</span> <span class="o">=</span> <span class="s1">r&#39;\d\d\d-\d\d\d\d&#39;</span> <span class="p">)</span>
+    <span class="n">phone</span> <span class="o">=</span> <span class="n">Regex</span><span class="p">(</span> <span class="n">regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\d\d\d-\d\d\d\d&#39;</span> <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">default_title</span> <span class="p">(</span> <span class="bp">self</span> <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Senior Engineer&#39;</span>
@@ -958,7 +963,7 @@ subclasses of TreeNode).</p>
             <span class="n">width</span> <span class="o">=</span> <span class="o">.</span><span class="mi">3</span><span class="p">,</span>
             <span class="n">height</span> <span class="o">=</span> <span class="o">.</span><span class="mi">3</span> <span class="p">)</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">owner</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">(</span> <span class="n">view</span> <span class="o">=</span> <span class="n">view</span> <span class="p">)</span>
 </pre></div>
 </div>
@@ -971,14 +976,14 @@ Reference</em>.</p>
 list contains only one class. You can have more than one node type that applies
 to a particular class; in this case, each object of that class is represented by
 multiple nodes, one for each applicable node type. In Figure 54, one Company
-object is represented by the nodes labeled &#8220;Acme Labs, Inc.&#8221;, &#8220;Departments&#8221;, and
-&#8220;Employees&#8221;.</p>
+object is represented by the nodes labeled “Acme Labs, Inc.”, “Departments”, and
+“Employees”.</p>
 <div class="section" id="a-node-type-without-children">
 <span id="id17"></span><h4>A Node Type without Children<a class="headerlink" href="#a-node-type-without-children" title="Permalink to this headline">¶</a></h4>
 <p>To define a node type without children, set the <strong>children</strong> attribute of
 TreeNode to the empty string. In Example 16, the following lines define the node
 type for the node that displays the company name, with no children:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TreeNode</span><span class="p">(</span> <span class="n">node_for</span>  <span class="o">=</span> <span class="p">[</span> <span class="n">Company</span> <span class="p">],</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TreeNode</span><span class="p">(</span> <span class="n">node_for</span>  <span class="o">=</span> <span class="p">[</span> <span class="n">Company</span> <span class="p">],</span>
           <span class="n">auto_open</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
           <span class="n">children</span>  <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
           <span class="n">label</span>     <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span>
@@ -992,11 +997,11 @@ type for the node that displays the company name, with no children:</p>
 <span id="id18"></span><h4>A Node Type with Children<a class="headerlink" href="#a-node-type-with-children" title="Permalink to this headline">¶</a></h4>
 <p>To define a node type that has children, set the <strong>children</strong> attribute of
 TreeNode to the (extended) name of a trait on the object that it is a node for;
-the named trait contains a list of the node&#8217;s children. In Example 16, the
+the named trait contains a list of the node’s children. In Example 16, the
 following lines define the node type for the node that contains the departments
-of a company. The node type is for instances of Company, and &#8216;departments&#8217; is a
+of a company. The node type is for instances of Company, and ‘departments’ is a
 trait attribute of Company.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TreeNode</span><span class="p">(</span> <span class="n">node_for</span>  <span class="o">=</span> <span class="p">[</span> <span class="n">Company</span> <span class="p">],</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TreeNode</span><span class="p">(</span> <span class="n">node_for</span>  <span class="o">=</span> <span class="p">[</span> <span class="n">Company</span> <span class="p">],</span>
           <span class="n">auto_open</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
           <span class="n">children</span>  <span class="o">=</span> <span class="s1">&#39;departments&#39;</span><span class="p">,</span>
           <span class="n">label</span>     <span class="o">=</span> <span class="s1">&#39;=Departments&#39;</span><span class="p">,</span>
@@ -1013,7 +1018,7 @@ attribute name, or as a literal string.</p>
 an attribute on the object that the node is for, whose value is used as the
 label. This approach is used in the code snippet in
 <a class="reference internal" href="#a-node-type-without-children"><span class="std std-ref">A Node Type without Children</span></a>.</p>
-<p>If the value is a string that begins with an equals sign (&#8216;=&#8217;), the rest of the
+<p>If the value is a string that begins with an equals sign (‘=’), the rest of the
 string is used as the literal label. This approach is used in the code snippet
 in <a class="reference internal" href="#a-node-type-with-children"><span class="std std-ref">A Node Type with Children</span></a>.</p>
 <p>You can also specify a callable to format the label of the node, using the
@@ -1031,7 +1036,7 @@ the user right-clicks on a node. The value is a TraitsUI or PyFace menu
 containing Action objects for the menu commands. In Example 16, the following
 lines define the node type for employees, including a shortcut menu for employee
 nodes:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TreeNode</span><span class="p">(</span> <span class="n">node_for</span>  <span class="o">=</span> <span class="p">[</span> <span class="n">Department</span> <span class="p">],</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TreeNode</span><span class="p">(</span> <span class="n">node_for</span>  <span class="o">=</span> <span class="p">[</span> <span class="n">Department</span> <span class="p">],</span>
           <span class="n">auto_open</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
           <span class="n">children</span>  <span class="o">=</span> <span class="s1">&#39;employees&#39;</span><span class="p">,</span>
           <span class="n">label</span>     <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span>
@@ -1068,7 +1073,7 @@ also be created (and therefore are specified in the <strong>add</strong> value).
 <p class="last">Specifying the <strong>add</strong> attribute makes it possible for objects of the
 specified classes to be created, but by itself, it does not provide a way for
 the user to do so. In the code snippet in the preceding section
-(<a class="reference internal" href="#shortcut-menus-on-nodes"><span class="std std-ref">Shortcut Menus on Nodes</span></a>), &#8216;NewAction&#8217; in the Menu constructor call
+(<a class="reference internal" href="#shortcut-menus-on-nodes"><span class="std std-ref">Shortcut Menus on Nodes</span></a>), ‘NewAction’ in the Menu constructor call
 defines a <span class="menuselection">New &gt; Employee</span> menu item that creates Employee
 objects.</p>
 </div>
@@ -1081,7 +1086,7 @@ adding a particular type of object, using the <strong>name</strong> attribute of
 Note that you set this attribute on the tree node type that will be <em>added</em> by
 the menu item, not the node type that <em>contains</em> the menu item. For example, to
 change <span class="menuselection">New &gt; Employee</span> to <span class="menuselection">New &gt; Worker</span>, set
-<code class="docutils literal"><span class="pre">name</span> <span class="pre">=</span> <span class="pre">'Worker'</span></code> on the tree node whose <strong>node_for</strong> value contains
+<code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">=</span> <span class="pre">'Worker'</span></code> on the tree node whose <strong>node_for</strong> value contains
 Employee. If this attribute is not set, the class name is used.</p>
 <p>You can determine whether a node or its children can be copied, renamed, or
 deleted, by setting the following attributes on TreeNode:</p>
@@ -1093,17 +1098,17 @@ deleted, by setting the following attributes on TreeNode:</p>
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Attribute</th>
-<th class="head">If True, the ...</th>
-<th class="head">can be...</th>
+<th class="head">If True, the …</th>
+<th class="head">can be…</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><strong>copy</strong></td>
-<td>object&#8217;s children</td>
+<td>object’s children</td>
 <td>copied.</td>
 </tr>
 <tr class="row-odd"><td><strong>delete</strong></td>
-<td>object&#8217;s children</td>
+<td>object’s children</td>
 <td>deleted.</td>
 </tr>
 <tr class="row-even"><td><strong>delete_me</strong></td>
@@ -1111,7 +1116,7 @@ deleted, by setting the following attributes on TreeNode:</p>
 <td>deleted.</td>
 </tr>
 <tr class="row-odd"><td><strong>rename</strong></td>
-<td>object&#8217;s children</td>
+<td>object’s children</td>
 <td>renamed.</td>
 </tr>
 <tr class="row-even"><td><strong>rename_me</strong></td>
@@ -1127,7 +1132,7 @@ actions to perform these operations.</p>
 <span id="id23"></span><h4>Behavior on Nodes<a class="headerlink" href="#behavior-on-nodes" title="Permalink to this headline">¶</a></h4>
 <p>As the user clicks in the tree, you may wish to enable certain program behavior.</p>
 <p>You can use the <em>selected</em> parameter to specify the name of a trait attribute on
-the current context object to synchronize with the user&#8217;s current selection. For
+the current context object to synchronize with the user’s current selection. For
 example, you can enable or disable menu items or toolbar icons depending on
 which node is selected. The synchronization is two-way; you can set the
 attribute referenced by <em>selected</em> to force the tree to select a particular
@@ -1147,9 +1152,9 @@ type are expanded when they are displayed (at any time, not just on initial
 display of the tree). For example, suppose that a tree editor has <em>auto_open</em>
 setting of 2, and contains a tree node at level 3 whose <strong>auto_open</strong> attribute
 is True. The nodes at level 3 are not displayed initially, but when the user
-expands a level 2 node, displaying the level 3 node, that&#8217;s nodes children are
+expands a level 2 node, displaying the level 3 node, that’s nodes children are
 automatically displayed also. Similarly, the number of levels of nodes initially
-displayed can be greater than specified by the tree editor&#8217;s <em>auto_open</em>
+displayed can be greater than specified by the tree editor’s <em>auto_open</em>
 setting, if some of the nodes have <strong>auto_open</strong> set to True.</p>
 <p>If the <strong>auto_close</strong> attribute of TreeNode is set to True, then when a node is
 expanded, any siblings of that node are automatically closed. In other words,
@@ -1173,7 +1178,7 @@ following:</p>
 <li><p class="first">Call TreeEditor() with the <em>shared_editor</em> parameter set to True, without
 defining any tree nodes. The object this call returns defines the shared
 editor pane. For example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">my_shared_editor_pane</span> <span class="o">=</span> <span class="n">TreeEditor</span><span class="p">(</span><span class="n">shared_editor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_shared_editor_pane</span> <span class="o">=</span> <span class="n">TreeEditor</span><span class="p">(</span><span class="n">shared_editor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
@@ -1183,7 +1188,7 @@ editor pane. For example:</p>
 <li>Set the editor parameter of TreeEditor() to the object returned in Step 1.</li>
 </ul>
 <p>For example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">shared_tree_1</span> <span class="o">=</span> <span class="n">TreeEditor</span><span class="p">(</span><span class="n">shared_editor</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shared_tree_1</span> <span class="o">=</span> <span class="n">TreeEditor</span><span class="p">(</span><span class="n">shared_editor</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                            <span class="n">editor</span> <span class="o">=</span> <span class="n">my_shared_editor_pane</span><span class="p">,</span>
                            <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span> <span class="n">TreeNode</span><span class="p">(</span> <span class="c1"># ...</span>
                                              <span class="p">)</span>
@@ -1210,11 +1215,11 @@ tree.</li>
 <li><em>icon_size</em>: A two-integer tuple indicating the size of the icons for the
 nodes.</li>
 <li><em>lines_mode</em>: Determines whether lines are displayed between related nodes.
-The valid values are &#8216;on&#8217;, &#8216;off&#8217;, and &#8216;appearance&#8217; (the default). When set to
-&#8216;appearance&#8217;, lines are displayed except on Posix-based platforms.</li>
+The valid values are ‘on’, ‘off’, and ‘appearance’ (the default). When set to
+‘appearance’, lines are displayed except on Posix-based platforms.</li>
 <li><em>hide_root</em>: If True, the root node in the hierarchy is not displayed. If
 this parameter were specified as True in Example 16, the node in Figure 54
-that is labeled &#8220;Acme Labs, Inc.&#8221; would not appear.</li>
+that is labeled “Acme Labs, Inc.” would not appear.</li>
 </ul>
 <p>Additionally, several attributes of TreeNode also affect the display of the
 tree:</p>
@@ -1332,7 +1337,7 @@ to perform that scaling.</p>
 </div>
 </div>
 <div class="section" id="extra-trait-editor-factories">
-<span id="id27"></span><h1>&#8220;Extra&#8221; Trait Editor Factories<a class="headerlink" href="#extra-trait-editor-factories" title="Permalink to this headline">¶</a></h1>
+<span id="id27"></span><h1>“Extra” Trait Editor Factories<a class="headerlink" href="#extra-trait-editor-factories" title="Permalink to this headline">¶</a></h1>
 <p>The traitsui.wx package defines a few editor factories that are
 specific to the wxWidgets toolkit, some of which are also specific to the
 Microsoft Windows platform. These editor factories are not necessarily
@@ -1428,10 +1433,10 @@ from the URL represented by the attribute being edited.</li>
 </tr>
 </tbody>
 </table>
-<p>LEDEditor() generates a display that resembles a &#8220;digital&#8221; display using
+<p>LEDEditor() generates a display that resembles a “digital” display using
 light-emitting diodes. All styles of this editor are the same, and are
 read-only.</p>
-<p>The <em>alignment</em> parameter can be &#8216;left&#8217;, &#8216;center&#8217;, or &#8216;right&#8217; to indicate how
+<p>The <em>alignment</em> parameter can be ‘left’, ‘center’, or ‘right’ to indicate how
 the value should be aligned within the display. The default is right-alignment.</p>
 <div class="figure" id="id34">
 <img alt="LED-like display of 90452" src="../_images/led_editor.png" />
@@ -1449,7 +1454,7 @@ the value should be aligned within the display. The default is right-alignment.<
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Advanced Trait Editors</a><ul>
 <li><a class="reference internal" href="#customeditor">CustomEditor()</a></li>
@@ -1506,7 +1511,7 @@ the value should be aligned within the display. The default is right-alignment.<
 <li><a class="reference internal" href="#imageeditor">ImageEditor()</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#extra-trait-editor-factories">&#8220;Extra&#8221; Trait Editor Factories</a><ul>
+<li><a class="reference internal" href="#extra-trait-editor-factories">“Extra” Trait Editor Factories</a><ul>
 <li><a class="reference internal" href="#animatedgifeditor">AnimatedGIFEditor()</a></li>
 <li><a class="reference internal" href="#flasheditor">FlashEditor()</a></li>
 <li><a class="reference internal" href="#iehtmleditor">IEHTMLEditor()</a></li>
@@ -1528,12 +1533,14 @@ the value should be aligned within the display. The default is right-alignment.<
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1555,10 +1562,10 @@ the value should be aligned within the display. The default is right-alignment.<
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

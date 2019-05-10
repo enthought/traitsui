@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,13 +24,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
+    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
     <link rel="next" title="Appendix I: Glossary of Terms" href="glossary.html" >
     <link rel="prev" title="Advanced Editor Adapters" href="adapters.html" > 
   </head>
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
   
     <li><a href="#">Tips, Tricks and Gotchas</a></li>
   
@@ -63,6 +64,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="glossary.html" title="Appendix I: Glossary of Terms"
@@ -95,13 +100,13 @@ methods for this purpose: trait_views() and trait_view().</p>
 <div class="section" id="trait-views">
 <span id="id2"></span><h3>trait_views()<a class="headerlink" href="#trait-views" title="Permalink to this headline">¶</a></h3>
 <p>The trait_views() method, when called without arguments, returns a list
-containing the names of all Views defined in the object&#8217;s class. For example, if
+containing the names of all Views defined in the object’s class. For example, if
 <strong>sam</strong> is an object of type SimpleEmployee3 (from
 <a class="reference internal" href="advanced_view.html#example-6-defining-multiple-view-objects-in-a-hastraits-class"><span class="std std-ref">Example 6</span></a>),
-the method call <code class="docutils literal"><span class="pre">sam.trait_views()</span></code> returns the list <code class="docutils literal"><span class="pre">['all_view',</span>
+the method call <code class="docutils literal notranslate"><span class="pre">sam.trait_views()</span></code> returns the list <code class="docutils literal notranslate"><span class="pre">['all_view',</span>
 <span class="pre">'traits_view']</span></code>.</p>
-<p>Alternatively, a call to <code class="samp docutils literal"><span class="pre">trait_views(</span><em><span class="pre">view_element_type</span></em><span class="pre">)</span></code> returns a list
-of all named instances of class <em>view_element_type</em> defined in the object&#8217;s
+<p>Alternatively, a call to <code class="samp docutils literal notranslate"><span class="pre">trait_views(</span><em><span class="pre">view_element_type</span></em><span class="pre">)</span></code> returns a list
+of all named instances of class <em>view_element_type</em> defined in the object’s
 class. The possible values of <em>view_element_type</em> are:</p>
 <ul class="simple">
 <li><a class="reference internal" href="glossary.html#term-29"><span class="xref std std-term">View</span></a></li>
@@ -110,14 +115,14 @@ class. The possible values of <em>view_element_type</em> are:</p>
 <li><a class="reference internal" href="glossary.html#term-viewelement"><span class="xref std std-term">ViewElement</span></a></li>
 <li>ViewSubElement</li>
 </ul>
-<p>Thus calling <code class="docutils literal"><span class="pre">trait_views(View)</span></code> is identical to calling <code class="docutils literal"><span class="pre">trait_views()</span></code>.
-Note that the call <code class="docutils literal"><span class="pre">sam.trait_views(Group)</span></code> returns an empty list, even though
+<p>Thus calling <code class="docutils literal notranslate"><span class="pre">trait_views(View)</span></code> is identical to calling <code class="docutils literal notranslate"><span class="pre">trait_views()</span></code>.
+Note that the call <code class="docutils literal notranslate"><span class="pre">sam.trait_views(Group)</span></code> returns an empty list, even though
 both of the Views defined in SimpleEmployee contain Groups. This is because only
 <em>named</em> elements are returned by the method.</p>
 <p>Group and Item are both subclasses of ViewSubElement, while ViewSubElement and
 View are both subclasses of ViewElement. Thus, a call to
-<code class="docutils literal"><span class="pre">trait_views(ViewSubElement)</span></code> returns a list of named Items and Groups, while
-<code class="docutils literal"><span class="pre">trait_views(ViewElement)</span></code> returns a list of named Items, Groups and Views.</p>
+<code class="docutils literal notranslate"><span class="pre">trait_views(ViewSubElement)</span></code> returns a list of named Items and Groups, while
+<code class="docutils literal notranslate"><span class="pre">trait_views(ViewElement)</span></code> returns a list of named Items, Groups and Views.</p>
 </div>
 <div class="section" id="trait-view">
 <h3>trait_view()<a class="headerlink" href="#trait-view" title="Permalink to this headline">¶</a></h3>
@@ -129,16 +134,16 @@ View are both subclasses of ViewElement. Thus, a call to
 </ul>
 <p>For example:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">obj.trait_view()</span></code> returns the default View associated with object <em>obj</em>.
-For example, <code class="docutils literal"><span class="pre">sam.trait_view()</span></code> returns the View object called
-<code class="docutils literal"><span class="pre">traits_view</span></code>. Note that unlike trait_views(), trait_view() returns the
+<li><code class="docutils literal notranslate"><span class="pre">obj.trait_view()</span></code> returns the default View associated with object <em>obj</em>.
+For example, <code class="docutils literal notranslate"><span class="pre">sam.trait_view()</span></code> returns the View object called
+<code class="docutils literal notranslate"><span class="pre">traits_view</span></code>. Note that unlike trait_views(), trait_view() returns the
 View itself, not its name.</li>
-<li><code class="docutils literal"><span class="pre">obj.trait_view('my_view')</span></code> returns the view element named <code class="docutils literal"><span class="pre">my_view</span></code>
-(or None if <code class="docutils literal"><span class="pre">my_view</span></code> is not defined).</li>
-<li><code class="docutils literal"><span class="pre">obj.trait_view('my_group',</span> <span class="pre">Group('a',</span> <span class="pre">'b'))</span></code> defines a Group with the name
-<code class="docutils literal"><span class="pre">my_group</span></code>. Note that although this Group can be retrieved using
-<code class="docutils literal"><span class="pre">trait_view()</span></code>, its name does not appear in the list returned by
-<code class="docutils literal"><span class="pre">traits_view(Group)</span></code>. This is because <code class="docutils literal"><span class="pre">my_group</span></code> is associated with
+<li><code class="docutils literal notranslate"><span class="pre">obj.trait_view('my_view')</span></code> returns the view element named <code class="docutils literal notranslate"><span class="pre">my_view</span></code>
+(or None if <code class="docutils literal notranslate"><span class="pre">my_view</span></code> is not defined).</li>
+<li><code class="docutils literal notranslate"><span class="pre">obj.trait_view('my_group',</span> <span class="pre">Group('a',</span> <span class="pre">'b'))</span></code> defines a Group with the name
+<code class="docutils literal notranslate"><span class="pre">my_group</span></code>. Note that although this Group can be retrieved using
+<code class="docutils literal notranslate"><span class="pre">trait_view()</span></code>, its name does not appear in the list returned by
+<code class="docutils literal notranslate"><span class="pre">traits_view(Group)</span></code>. This is because <code class="docutils literal notranslate"><span class="pre">my_group</span></code> is associated with
 <em>obj</em> itself, rather than with its class.</li>
 </ul>
 </div>
@@ -154,7 +159,7 @@ View itself, not its name.</li>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Tips, Tricks and Gotchas</a><ul>
 <li><a class="reference internal" href="#getting-and-setting-model-view-elements">Getting and Setting Model View Elements</a><ul>
@@ -179,12 +184,14 @@ View itself, not its name.</li>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -206,10 +213,10 @@ View itself, not its name.</li>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

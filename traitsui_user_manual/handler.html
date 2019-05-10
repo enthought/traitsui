@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,13 +24,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
+    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
     <link rel="next" title="Introduction to Trait Editor Factories" href="factory_intro.html" >
     <link rel="prev" title="Advanced View Concepts" href="advanced_view.html" > 
   </head>
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
   
     <li><a href="#">Controlling the Interface: the Handler</a></li>
   
@@ -63,6 +64,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="factory_intro.html" title="Introduction to Trait Editor Factories"
@@ -119,8 +124,8 @@ to be useful, a Handler must be able to observe and manipulate both its
 corresponding window and model objects. In TraitsUI, this is accomplished by
 means of the UIInfo object.</p>
 <p>Whenever TraitsUI creates a window or panel from a View, a UIInfo object is
-created to act as the Handler&#8217;s reference to that window and to the objects
-whose <a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a>s are displayed in it. Each entry in the View&#8217;s
+created to act as the Handler’s reference to that window and to the objects
+whose <a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a>s are displayed in it. Each entry in the View’s
 context (see <a class="reference internal" href="advanced_view.html#the-view-context"><span class="std std-ref">The View Context</span></a>) becomes an attribute of the UIInfo
 object. <a class="footnote-reference" href="#id21" id="id4">[12]</a> For example, the UIInfo object created in
 <a class="reference internal" href="advanced_view.html#example-7-using-a-multi-object-view-with-a-context"><span class="std std-ref">Example 7</span></a>
@@ -148,7 +153,7 @@ for that window. The TraitsUI package provides three ways to accomplish this:</p
 <div class="section" id="binding-a-singleton-handler-to-a-view">
 <span id="id6"></span><h3>Binding a Singleton Handler to a View<a class="headerlink" href="#binding-a-singleton-handler-to-a-view" title="Permalink to this headline">¶</a></h3>
 <p>To associate a given custom Handler with all windows produced from a given View,
-assign an instance of the custom Handler class to the View&#8217;s <strong>handler</strong>
+assign an instance of the custom Handler class to the View’s <strong>handler</strong>
 attribute. The result of this technique, as shown in
 <a class="reference internal" href="#example-9-using-a-handler-that-reacts-to-trait-changes"><span class="std std-ref">Example 9</span></a>, is
 that the window created by the View object is automatically controlled by the
@@ -162,7 +167,7 @@ window-building methods (the configure_traits() and edit_traits() methods of the
 HasTraits class and the ui() method of the View class) has a <em>handler</em> keyword
 argument. Assigning an instance of Handler to this argument gives that handler
 instance control <em>only of the specific window being created by the method call</em>.
-This assignment overrides the View&#8217;s <strong>handler</strong> attribute.</p>
+This assignment overrides the View’s <strong>handler</strong> attribute.</p>
 </div>
 <div class="section" id="creating-a-default-view-within-a-handler">
 <span id="id8"></span><h3>Creating a Default View Within a Handler<a class="headerlink" href="#creating-a-default-view-within-a-handler" title="Permalink to this headline">¶</a></h3>
@@ -172,7 +177,7 @@ useful to be able to do so. In most real-life scenarios, a custom Handler is
 tailored to a particular View with which it is always used. One way to reflect
 this usage in the program design is to define the View as part of the Handler.
 The same rules apply as for defining Views within HasTraits objects; for
-example, a view named &#8216;trait_view&#8217; is used as the default view.</p>
+example, a view named ‘trait_view’ is used as the default view.</p>
 <p>The Handler class, which is a subclass of HasTraits, overrides the standard
 configure_traits() and edit_traits() methods; the subclass versions are
 identical to the originals except that the Handler object on which they are
@@ -199,9 +204,9 @@ associated with either subclass. Normally, the <strong>model</strong> attribute 
 constructor when an instance of ModelView or Controller is created.</p>
 <p>The <strong>info</strong> attribute provides convenient access to the UIInfo object
 associated with the active user interface view for the handler object. The
-<strong>info</strong> attribute is automatically set when the handler object&#8217;s view is
+<strong>info</strong> attribute is automatically set when the handler object’s view is
 created.</p>
-<p>Both classes&#8217; constructors accept an optional <em>model</em> parameter, which is the
+<p>Both classes’ constructors accept an optional <em>model</em> parameter, which is the
 model object. They also can accept metadata as keyword parameters.</p>
 <dl class="class">
 <dt id="ModelView">
@@ -219,38 +224,38 @@ in the following sections.</p>
 <div class="section" id="controller-class">
 <span id="id10"></span><h3>Controller Class<a class="headerlink" href="#controller-class" title="Permalink to this headline">¶</a></h3>
 <p>The Controller class is normally used when implementing a standard MVC-based
-design, and plays the &#8220;controller&#8221; role in the MVC design pattern. The &#8220;model&#8221;
-role is played by the object referenced by the Controller&#8217;s <strong>model</strong> attribute;
-and the &#8220;view&#8221; role is played by the View object associated with the model
+design, and plays the “controller” role in the MVC design pattern. The “model”
+role is played by the object referenced by the Controller’s <strong>model</strong> attribute;
+and the “view” role is played by the View object associated with the model
 object.</p>
-<p>The context dictionary that a Controller object passes to the View&#8217;s ui() method
+<p>The context dictionary that a Controller object passes to the View’s ui() method
 contains the following entries:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">object</span></code>: The Controller&#8217;s model object.</li>
-<li><code class="docutils literal"><span class="pre">controller</span></code>: The Controller object itself.</li>
+<li><code class="docutils literal notranslate"><span class="pre">object</span></code>: The Controller’s model object.</li>
+<li><code class="docutils literal notranslate"><span class="pre">controller</span></code>: The Controller object itself.</li>
 </ul>
 <p>Using a Controller as the handler class assumes that the model object contains
 most, if not all, of the data to be viewed. Therefore, the model object is used
 for the object key in the context dictionary, so that its attributes can be
-easily referenced with unqualified names (such as Item(&#8216;name&#8217;)).</p>
+easily referenced with unqualified names (such as Item(‘name’)).</p>
 </div>
 <div class="section" id="modelview-class">
 <span id="id11"></span><h3>ModelView Class<a class="headerlink" href="#modelview-class" title="Permalink to this headline">¶</a></h3>
 <p>The ModelView class is useful when creating a variant of the standard MVC
 design pattern. In this variant, the ModelView subclass reformulates a number
 of trait attributes on its model object as properties on the ModelView, usually
-to convert the model&#8217;s data into a format that is more suited to a user
+to convert the model’s data into a format that is more suited to a user
 interface.</p>
-<p>The context dictionary that a ModelView object passes to the View&#8217;s ui() method
+<p>The context dictionary that a ModelView object passes to the View’s ui() method
 contains the following entries:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">object</span></code>: The ModelView object itself.</li>
-<li><code class="docutils literal"><span class="pre">model</span></code>: The ModelView&#8217;s model object.</li>
+<li><code class="docutils literal notranslate"><span class="pre">object</span></code>: The ModelView object itself.</li>
+<li><code class="docutils literal notranslate"><span class="pre">model</span></code>: The ModelView’s model object.</li>
 </ul>
 <p>In effect, the ModelView object substitutes itself for the model object in
-relation to the View object, serving both the &#8220;controller&#8221; role and the &#8220;model&#8221;
+relation to the View object, serving both the “controller” role and the “model”
 role (as a set of properties wrapped around the original model). Because the
-ModelView object is passed as the context&#8217;s object, its attributes can be
+ModelView object is passed as the context’s object, its attributes can be
 referenced by unqualified names in the View definition.</p>
 </div>
 </div>
@@ -268,7 +273,7 @@ behaviors. The following sequence shows the points at which the Handler methods
 are called.</p>
 <ol class="arabic simple">
 <li>A UIInfo object is created</li>
-<li>The Handler&#8217;s init_info() method is called. Override this method if the
+<li>The Handler’s init_info() method is called. Override this method if the
 handler needs access to viewable traits on the UIInfo object whose values
 are properties that depend on items in the context being edited.</li>
 <li>The UI object is created, and generates the actual window.</li>
@@ -374,8 +379,8 @@ methods that are automatically executed whenever the user edits a <em>particular
 trait. While you can use static notification handler methods on the HasTraits
 object, you might want to implement behavior that concerns only the user
 interface. In that case, following the MVC pattern dictates that such behavior
-should not be implemented in the &#8220;model&#8221; part of the code. In keeping with this
-pattern, TraitsUI supports &#8220;user interface notification&#8221; methods, which must
+should not be implemented in the “model” part of the code. In keeping with this
+pattern, TraitsUI supports “user interface notification” methods, which must
 have a signature with the following format:</p>
 <dl class="method">
 <dt id="extended_traitname_changed">
@@ -386,7 +391,7 @@ have a signature with the following format:</p>
 <em>extended_traitname</em> in the <strong>context</strong> of the View used to create the window
 (see <a class="reference internal" href="advanced_view.html#multi-object-views"><span class="std std-ref">Multi-Object Views</span></a>), where the dots in the extended trait reference
 have been replaced by underscores. For example, for a method to handle changes
-on the <strong>salary</strong> attribute of the object whose context key is &#8216;object&#8217; (the
+on the <strong>salary</strong> attribute of the object whose context key is ‘object’ (the
 default object), the method name should be object_salary_changed().</p>
 <p>By contrast, a subclass of Handler for
 <a class="reference internal" href="advanced_view.html#example-7-using-a-multi-object-view-with-a-context"><span class="std std-ref">Example 7</span></a> might
@@ -402,7 +407,7 @@ created.</p>
 initialized and code that should be executed when the trait actually changes,
 use the <strong>initialized</strong> attribute of the UIInfo object (i.e., of the <em>info</em>
 argument):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">object_foo_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">object_foo_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">info</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
         <span class="c1">#code to be executed only when the window is</span>
@@ -414,11 +419,11 @@ argument):</p>
     <span class="c1">#code to be executed in either case</span>
 </pre></div>
 </div>
-<p>The following script, which annotates its window&#8217;s title with an asterisk (&#8216;*&#8217;)
+<p>The following script, which annotates its window’s title with an asterisk (‘*’)
 the first time a data element is updated, demonstrates a simple use of both an
 overridden setattr() method and user interface notification method.</p>
 <p class="rubric" id="example-9-using-a-handler-that-reacts-to-trait-changes">Example 9: Using a Handler that reacts to trait changes</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># handler_override.py -- Example of a Handler that overrides</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># handler_override.py -- Example of a Handler that overrides</span>
 <span class="c1">#                        setattr(), and that has a user interface</span>
 <span class="c1">#                        notification method</span>
 
@@ -473,7 +478,7 @@ have any name (e.g., do_recalc()), but must accept exactly one argument: a
 UIInfo object.</p>
 </li>
 <li><p class="first">Create an Action instance using the name of the new method, e.g.:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">recalc</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Recalculate&quot;</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">recalc</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Recalculate&quot;</span><span class="p">,</span>
                 <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;do_recalc&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -489,7 +494,7 @@ along with any standard buttons you specify.</p>
 <li><p class="first">Define the handler method and action, as described in <a class="reference internal" href="#actions"><span class="std std-ref">Actions</span></a>.</p>
 </li>
 <li><p class="first">Include the new Action in the <strong>buttons</strong> attribute for the View:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span> <span class="p">(</span> <span class="c1">#view contents,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">View</span> <span class="p">(</span> <span class="c1">#view contents,</span>
        <span class="c1"># ...,</span>
        <span class="n">buttons</span> <span class="o">=</span> <span class="p">[</span> <span class="n">OKButton</span><span class="p">,</span> <span class="n">CancelButton</span><span class="p">,</span> <span class="n">recalc</span> <span class="p">])</span>
 </pre></div>
@@ -504,14 +509,14 @@ make it into a menu option.</p>
 <ol class="arabic simple">
 <li>Define the handler method and action, as described in <a class="reference internal" href="#actions"><span class="std std-ref">Actions</span></a>.</li>
 <li>If the View does not already include a MenuBar, create one and assign it to
-the View&#8217;s <strong>menubar</strong> attribute.</li>
+the View’s <strong>menubar</strong> attribute.</li>
 <li>If the appropriate Menu does not yet exist, create it and add it to the
 MenuBar.</li>
 <li>Add the Action to the Menu.</li>
 </ol>
 <p>These steps can be executed all at once when the View is created, as in the
 following code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span> <span class="p">(</span> <span class="c1">#view contents,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">View</span> <span class="p">(</span> <span class="c1">#view contents,</span>
        <span class="c1"># ...,</span>
        <span class="n">menubar</span> <span class="o">=</span> <span class="n">MenuBar</span><span class="p">(</span>
           <span class="n">Menu</span><span class="p">(</span> <span class="n">my_action</span><span class="p">,</span>
@@ -530,7 +535,7 @@ tooltip and an image to display on the toolbar. The image must be a Pyface
 ImageResource instance; if a path to the image file is not specified, it is
 assumed to be in an images subdirectory of the directory where ImageResource
 is used:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">From</span> <span class="n">pyface</span><span class="o">.</span><span class="n">api</span> <span class="kn">import</span> <span class="nn">ImageResource</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">From</span> <span class="n">pyface</span><span class="o">.</span><span class="n">api</span> <span class="kn">import</span> <span class="nn">ImageResource</span>
 
 <span class="n">recalc</span> <span class="o">=</span> <span class="n">Action</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Recalculate&quot;</span><span class="p">,</span>
                 <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;do_recalc&quot;</span><span class="p">,</span>
@@ -540,14 +545,14 @@ is used:</p>
 </div>
 </li>
 <li><p class="first">If the View does not already include a ToolBar, create one and assign it to
-the View&#8217;s <strong>toolbar</strong> attribute.</p>
+the View’s <strong>toolbar</strong> attribute.</p>
 </li>
 <li><p class="first">Add the Action to the ToolBar.</p>
 </li>
 </ol>
 <p>As with a MenuBar, these steps can be executed all at once when the View is
 created, as in the following code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span> <span class="p">(</span> <span class="c1">#view contents,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">View</span> <span class="p">(</span> <span class="c1">#view contents,</span>
        <span class="c1"># ...,</span>
        <span class="n">toolbar</span> <span class="o">=</span> <span class="n">ToolBar</span><span class="p">(</span><span class="n">my_action</span><span class="p">))</span>
 </pre></div>
@@ -583,7 +588,7 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Controlling the Interface: the Handler</a><ul>
 <li><a class="reference internal" href="#backstage-introducing-the-uiinfo-object">Backstage: Introducing the UIInfo Object</a></li>
@@ -627,12 +632,14 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -654,10 +661,10 @@ and <strong>defined_when</strong> attributes of Items and Groups.</td></tr>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

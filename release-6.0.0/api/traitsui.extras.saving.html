@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.extras.saving module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui.extras package" href="traitsui.extras.html" >
+    <link rel="next" title="traitsui.image package" href="traitsui.image.html" >
+    <link rel="prev" title="traitsui.extras.progress_column module" href="traitsui.extras.progress_column.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" >traitsui package</a></li>
+          <li class="active"><a href="traitsui.extras.html" accesskey="U">traitsui.extras package</a></li>
+  
+    <li><a href="#">traitsui.extras.saving module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.image.html" title="traitsui.image package"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.extras.progress_column.html" title="traitsui.extras.progress_column module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.extras.saving">
+<span id="traitsui-extras-saving-module"></span><h1>traitsui.extras.saving module<a class="headerlink" href="#module-traitsui.extras.saving" title="Permalink to this headline">¶</a></h1>
+<p>Provides a lightweight framework that removes some of the drudge work
+involved with implementing user-friendly saving behavior in a Traits
+UI application.</p>
+<dl class="class">
+<dt id="traitsui.extras.saving.CanSaveMixin">
+<em class="property">class </em><code class="descclassname">traitsui.extras.saving.</code><code class="descname">CanSaveMixin</code><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<p>A mixin-class for objects that wish to support GUI saving via a
+SaveHandler. It is the responsiblity of the child class to manage
+its dirty flag, which describes whether its information has changed
+since its last save.</p>
+<dl class="method">
+<dt id="traitsui.extras.saving.CanSaveMixin.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the object to the path specified by its &#8216;filepath&#8217; trait. This
+method should also reset the dirty flag on this object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.saving.CanSaveMixin.validate">
+<code class="descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the information in the object is valid to be saved
+in tuple form. The first item is the validation state (boolean) and
+the second item is the message to display if the object did not
+validate.</p>
+<p>By default, an object always validates.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.extras.saving.SaveHandler">
+<em class="property">class </em><code class="descclassname">traitsui.extras.saving.</code><code class="descname">SaveHandler</code><a class="headerlink" href="#traitsui.extras.saving.SaveHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal"><span class="pre">traitsui.handler.Handler</span></code></a></p>
+<p>A Handler that facilates adding saving to a Traits UI application.</p>
+<dl class="method">
+<dt id="traitsui.extras.saving.SaveHandler.close">
+<code class="descname">close</code><span class="sig-paren">(</span><em>info</em>, <em>is_ok</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the user requests to close the interface. Returns a
+boolean indicating whether the window should be allowed to close.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.saving.SaveHandler.closed">
+<code class="descname">closed</code><span class="sig-paren">(</span><em>info</em>, <em>is_ok</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.closed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called after the window is destroyed. Makes sure that the autosave
+timer is stopped.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.saving.SaveHandler.exit">
+<code class="descname">exit</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the UI unless a save prompt is cancelled. Provided for
+convenience to be used with a Menu action.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.saving.SaveHandler.init">
+<code class="descname">init</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the default save object (the object being handled). Also,
+perform a questionable hack by which we remove the handled
+object from the keybinding&#8217;s controllers. This means that a
+keybinding to &#8216;save&#8217; only calls this object, not the object
+being edited as well. (For reasons unclear, the KeyBinding handler
+API is radically different from the Action API, which is the reason
+that this problem exists. Keybindings are a UI concept&#8211;they should
+<em>not</em> call the model by default.)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.saving.SaveHandler.promptForSave">
+<code class="descname">promptForSave</code><span class="sig-paren">(</span><em>info</em>, <em>cancel=True</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.promptForSave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prompts the user to save the object, if appropriate. Returns whether
+the user canceled the action that invoked this prompt.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.saving.SaveHandler.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the object to its current filepath. If this is not specified,
+opens a dialog to select this path. Returns whether the save
+actually occurred.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.extras.saving.SaveHandler.saveAs">
+<code class="descname">saveAs</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.saveAs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the object to a new path, and sets this as the &#8216;filepath&#8217; on
+the object. Returns whether the save actually occurred.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.extras.progress_column.html"
+                        title="previous chapter">traitsui.extras.progress_column module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.image.html"
+                        title="next chapter">traitsui.image package</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.extras.saving.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

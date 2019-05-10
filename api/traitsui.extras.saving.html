@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" >traitsui package</a></li>
           <li class="active"><a href="traitsui.extras.html" accesskey="U">traitsui.extras package</a></li>
   
@@ -65,6 +66,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.image.html" title="traitsui.image package"
@@ -95,7 +100,7 @@ UI application.</p>
 <dl class="class">
 <dt id="traitsui.extras.saving.CanSaveMixin">
 <em class="property">class </em><code class="descclassname">traitsui.extras.saving.</code><code class="descname">CanSaveMixin</code><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasTraits</span></code></a></p>
 <p>A mixin-class for objects that wish to support GUI saving via a
 SaveHandler. It is the responsiblity of the child class to manage
 its dirty flag, which describes whether its information has changed
@@ -103,7 +108,7 @@ since its last save.</p>
 <dl class="method">
 <dt id="traitsui.extras.saving.CanSaveMixin.save">
 <code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.CanSaveMixin.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the object to the path specified by its &#8216;filepath&#8217; trait. This
+<dd><p>Saves the object to the path specified by its ‘filepath’ trait. This
 method should also reset the dirty flag on this object.</p>
 </dd></dl>
 
@@ -122,7 +127,7 @@ validate.</p>
 <dl class="class">
 <dt id="traitsui.extras.saving.SaveHandler">
 <em class="property">class </em><code class="descclassname">traitsui.extras.saving.</code><code class="descname">SaveHandler</code><a class="headerlink" href="#traitsui.extras.saving.SaveHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal"><span class="pre">traitsui.handler.Handler</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="traitsui.handler.html#traitsui.handler.Handler" title="traitsui.handler.Handler"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.handler.Handler</span></code></a></p>
 <p>A Handler that facilates adding saving to a Traits UI application.</p>
 <dl class="method">
 <dt id="traitsui.extras.saving.SaveHandler.close">
@@ -150,11 +155,11 @@ convenience to be used with a Menu action.</p>
 <code class="descname">init</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.init" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the default save object (the object being handled). Also,
 perform a questionable hack by which we remove the handled
-object from the keybinding&#8217;s controllers. This means that a
-keybinding to &#8216;save&#8217; only calls this object, not the object
+object from the keybinding’s controllers. This means that a
+keybinding to ‘save’ only calls this object, not the object
 being edited as well. (For reasons unclear, the KeyBinding handler
 API is radically different from the Action API, which is the reason
-that this problem exists. Keybindings are a UI concept&#8211;they should
+that this problem exists. Keybindings are a UI concept–they should
 <em>not</em> call the model by default.)</p>
 </dd></dl>
 
@@ -176,7 +181,7 @@ actually occurred.</p>
 <dl class="method">
 <dt id="traitsui.extras.saving.SaveHandler.saveAs">
 <code class="descname">saveAs</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.extras.saving.SaveHandler.saveAs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the object to a new path, and sets this as the &#8216;filepath&#8217; on
+<dd><p>Saves the object to a new path, and sets this as the ‘filepath’ on
 the object. Returns whether the save actually occurred.</p>
 </dd></dl>
 
@@ -206,12 +211,14 @@ the object. Returns whether the save actually occurred.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -233,10 +240,10 @@ the object. Returns whether the save actually occurred.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

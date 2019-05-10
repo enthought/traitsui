@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.table_column module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.table_filter.html" title="traitsui.table_filter module"
@@ -93,7 +98,7 @@ classes for numeric and table editors.</p>
 <dl class="class">
 <dt id="traitsui.table_column.ExpressionColumn">
 <em class="property">class </em><code class="descclassname">traitsui.table_column.</code><code class="descname">ExpressionColumn</code><a class="headerlink" href="#traitsui.table_column.ExpressionColumn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
 <p>A column for displaying computed values.</p>
 <dl class="method">
 <dt id="traitsui.table_column.ExpressionColumn.get_raw_value">
@@ -106,7 +111,7 @@ classes for numeric and table editors.</p>
 <dl class="class">
 <dt id="traitsui.table_column.ListColumn">
 <em class="property">class </em><code class="descclassname">traitsui.table_column.</code><code class="descname">ListColumn</code><a class="headerlink" href="#traitsui.table_column.ListColumn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.TableColumn" title="traitsui.table_column.TableColumn"><code class="xref py py-class docutils literal"><span class="pre">traitsui.table_column.TableColumn</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.TableColumn" title="traitsui.table_column.TableColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.TableColumn</span></code></a></p>
 <p>A column for editing lists.</p>
 <dl class="method">
 <dt id="traitsui.table_column.ListColumn.get_editor">
@@ -137,7 +142,7 @@ classes for numeric and table editors.</p>
 <dl class="class">
 <dt id="traitsui.table_column.NumericColumn">
 <em class="property">class </em><code class="descclassname">traitsui.table_column.</code><code class="descname">NumericColumn</code><a class="headerlink" href="#traitsui.table_column.NumericColumn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.ObjectColumn" title="traitsui.table_column.ObjectColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.ObjectColumn</span></code></a></p>
 <p>A column for editing Numeric arrays.</p>
 <dl class="method">
 <dt id="traitsui.table_column.NumericColumn.get_cell_color">
@@ -227,7 +232,7 @@ column for a specified object row.</p>
 <dl class="class">
 <dt id="traitsui.table_column.ObjectColumn">
 <em class="property">class </em><code class="descclassname">traitsui.table_column.</code><code class="descname">ObjectColumn</code><a class="headerlink" href="#traitsui.table_column.ObjectColumn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.TableColumn" title="traitsui.table_column.TableColumn"><code class="xref py py-class docutils literal"><span class="pre">traitsui.table_column.TableColumn</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.table_column.TableColumn" title="traitsui.table_column.TableColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.table_column.TableColumn</span></code></a></p>
 <p>A column for editing objects.</p>
 <dl class="method">
 <dt id="traitsui.table_column.ObjectColumn.get_drag_value">
@@ -289,7 +294,7 @@ column for a specified object.</p>
 <dl class="class">
 <dt id="traitsui.table_column.TableColumn">
 <em class="property">class </em><code class="descclassname">traitsui.table_column.</code><code class="descname">TableColumn</code><a class="headerlink" href="#traitsui.table_column.TableColumn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Represents a column in a table editor.</p>
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.cmp">
@@ -308,7 +313,7 @@ object.</p>
 <dl class="method">
 <dt id="traitsui.table_column.TableColumn.get_edit_height">
 <code class="descname">get_edit_height</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.table_column.TableColumn.get_edit_height" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the height of the column cell&#8217;s row while it is being
+<dd><p>Returns the height of the column cell’s row while it is being
 edited.</p>
 </dd></dl>
 
@@ -471,12 +476,14 @@ column for a specified object.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -498,10 +505,10 @@ column for a specified object.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

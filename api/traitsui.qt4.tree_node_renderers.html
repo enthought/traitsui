@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.qt4.tree_node_renderers module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+  
+    <li><a href="#">traitsui.qt4.tree_node_renderers module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.qt4.tree_node_renderers">
+<span id="traitsui-qt4-tree-node-renderers-module"></span><h1>traitsui.qt4.tree_node_renderers module<a class="headerlink" href="#module-traitsui.qt4.tree_node_renderers" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="traitsui.qt4.tree_node_renderers.WordWrapRenderer">
+<em class="property">class </em><code class="descclassname">traitsui.qt4.tree_node_renderers.</code><code class="descname">WordWrapRenderer</code><a class="headerlink" href="#traitsui.qt4.tree_node_renderers.WordWrapRenderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="traitsui.tree_node_renderer.html#traitsui.tree_node_renderer.AbstractTreeNodeRenderer" title="traitsui.tree_node_renderer.AbstractTreeNodeRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.tree_node_renderer.AbstractTreeNodeRenderer</span></code></a></p>
+<p>A renderer that wraps the label text across multiple lines.</p>
+<dl class="attribute">
+<dt id="traitsui.qt4.tree_node_renderers.WordWrapRenderer.max_lines">
+<code class="descname">max_lines</code><em class="property"> = Int(5)</em><a class="headerlink" href="#traitsui.qt4.tree_node_renderers.WordWrapRenderer.max_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of lines to show without eliding.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.qt4.tree_node_renderers.WordWrapRenderer.padding">
+<code class="descname">padding</code><em class="property"> = HasBorder(0)</em><a class="headerlink" href="#traitsui.qt4.tree_node_renderers.WordWrapRenderer.padding" title="Permalink to this definition">¶</a></dt>
+<dd><p>The padding around the text.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.qt4.tree_node_renderers.WordWrapRenderer.paint">
+<code class="descname">paint</code><span class="sig-paren">(</span><em>editor</em>, <em>node</em>, <em>column</em>, <em>object</em>, <em>paint_context</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.qt4.tree_node_renderers.WordWrapRenderer.paint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Paint word-wrapped text with elision.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.qt4.tree_node_renderers.WordWrapRenderer.size">
+<code class="descname">size</code><span class="sig-paren">(</span><em>editor</em>, <em>node</em>, <em>column</em>, <em>object</em>, <em>size_context</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.qt4.tree_node_renderers.WordWrapRenderer.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the preferred size for the word-wrapped text</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>node</strong> (<em>ITreeNode instance</em>) – The tree node to render.</li>
+<li><strong>column</strong> (<em>int</em>) – The column in the tree that should be rendererd.</li>
+<li><strong>object</strong> (<em>object</em>) – The underlying object being edited.</li>
+<li><strong>size_context</strong> (<em>object</em>) – A toolkit-dependent context for performing sizing operations.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>size</strong></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple of (width, height) or None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.qt4.tree_node_renderers.WordWrapRenderer.width_hint">
+<code class="descname">width_hint</code><em class="property"> = Int(100)</em><a class="headerlink" href="#traitsui.qt4.tree_node_renderers.WordWrapRenderer.width_hint" title="Permalink to this definition">¶</a></dt>
+<dd><p>The a good size for the width of the item.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.qt4.tree_node_renderers.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on May 10, 2019.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

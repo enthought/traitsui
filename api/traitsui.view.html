@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.view module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.view_element.html" title="traitsui.view_element module"
@@ -93,7 +98,7 @@ Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.view.View">
 <em class="property">class </em><code class="descclassname">traitsui.view.</code><code class="descname">View</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.view.View" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewElement" title="traitsui.view_element.ViewElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewElement</span></code></a></p>
 <p>A Traits-based user interface for one or more objects.</p>
 <p>The attributes of the View object determine the contents and layout of
 an attribute-editing window. A View object contains a set of Group,
@@ -123,21 +128,21 @@ panel from a set of view elements.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>context</strong> (<a class="reference internal" href="traitsui.tabular_adapter.html#traitsui.tabular_adapter.TabularAdapter.object" title="traitsui.tabular_adapter.TabularAdapter.object"><em>object</em></a><em> or </em><em>dictionary</em>) &#8211; A single object or a dictionary of string/object pairs, whose trait
+<li><strong>context</strong> (<em>object</em><em> or </em><em>dictionary</em>) – A single object or a dictionary of string/object pairs, whose trait
 attributes are to be edited. If not specified, the current object is
 used.</li>
-<li><strong>parent</strong> (<em>window component</em>) &#8211; The window parent of the View object&#8217;s window</li>
-<li><strong>kind</strong> (<em>string</em>) &#8211; The kind of window to create. See the <strong>AKind</strong> trait for details.
+<li><strong>parent</strong> (<em>window component</em>) – The window parent of the View object’s window</li>
+<li><strong>kind</strong> (<em>string</em>) – The kind of window to create. See the <strong>AKind</strong> trait for details.
 If <em>kind</em> is unspecified or None, the <strong>kind</strong> attribute of the
 View object is used.</li>
-<li><strong>view_elements</strong> (<em>ViewElements object</em>) &#8211; The set of Group, Item, and Include objects contained in the view.
+<li><strong>view_elements</strong> (<em>ViewElements object</em>) – The set of Group, Item, and Include objects contained in the view.
 Do not use this parameter when calling this method directly.</li>
-<li><strong>handler</strong> (<em>Handler object</em>) &#8211; A handler object used for event handling in the dialog box. If
+<li><strong>handler</strong> (<em>Handler object</em>) – A handler object used for event handling in the dialog box. If
 None, the default handler for Traits UI is used.</li>
-<li><strong>id</strong> (<em>string</em>) &#8211; A unique ID for persisting preferences about this user interface,
+<li><strong>id</strong> (<em>string</em>) – A unique ID for persisting preferences about this user interface,
 such as size and position. If not specified, no user preferences
 are saved.</li>
-<li><strong>scrollable</strong> (<em>Boolean</em>) &#8211; Indicates whether the dialog box should be scrollable. When set to
+<li><strong>scrollable</strong> (<em>Boolean</em>) – Indicates whether the dialog box should be scrollable. When set to
 True, scroll bars appear on the dialog box if it is not large enough
 to display all of the items in the view at one time.</li>
 </ul>
@@ -173,12 +178,14 @@ to display all of the items in the view at one time.</li>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -200,10 +207,10 @@ to display all of the items in the view at one time.</li>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

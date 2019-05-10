@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.editor module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.editor_factory.html" title="traitsui.editor_factory module"
@@ -93,7 +98,7 @@ an object trait in a Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.editor.Editor">
 <em class="property">class </em><code class="descclassname">traitsui.editor.</code><code class="descname">Editor</code><span class="sig-paren">(</span><em>parent</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v5.1.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
 <p>Represents an editing control for an object trait in a Traits-based
 user interface.</p>
 <dl class="method">
@@ -105,7 +110,7 @@ user interface.</p>
 <dl class="method">
 <dt id="traitsui.editor.Editor.error">
 <code class="descname">error</code><span class="sig-paren">(</span><em>excp</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handles an error that occurs while setting the object&#8217;s trait value.</p>
+<dd><p>Handles an error that occurs while setting the object’s trait value.</p>
 </dd></dl>
 
 <dl class="method">
@@ -130,9 +135,9 @@ widget.</p>
 <dl class="method">
 <dt id="traitsui.editor.Editor.parse_extended_name">
 <code class="descname">parse_extended_name</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.parse_extended_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a tuple of the form ( context_object, &#8216;name[.name...],
-callable ) for a specified extended name of the form: &#8216;name&#8217; or
-&#8216;context_object_name.name[.name...]&#8217;.</p>
+<dd><p>Returns a tuple of the form ( context_object, ‘name[.name…],
+callable ) for a specified extended name of the form: ‘name’ or
+‘context_object_name.name[.name…]’.</p>
 </dd></dl>
 
 <dl class="method">
@@ -157,18 +162,14 @@ editor.</p>
 <dl class="method">
 <dt id="traitsui.editor.Editor.set_focus">
 <code class="descname">set_focus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.set_focus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assigns focus to the editor&#8217;s underlying toolkit widget.</p>
+<dd><p>Assigns focus to the editor’s underlying toolkit widget.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="traitsui.editor.Editor.string_value">
 <code class="descname">string_value</code><span class="sig-paren">(</span><em>value</em>, <em>format_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.editor.Editor.string_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the text representation of a specified object trait value.</p>
-<p>If the <strong>format_func</strong> attribute is set on the editor factory, then
-this method calls that function to do the formatting.  If the
-<strong>format_str</strong> attribute is set on the editor factory, then this
-method uses that string for formatting. If neither attribute is
-set, then this method just calls the built-in unicode() function.</p>
+<p>This simply delegates to the factorys <cite>string_value</cite> method.</p>
 </dd></dl>
 
 <dl class="method">
@@ -177,26 +178,26 @@ set, then this method just calls the built-in unicode() function.</p>
 <dd><p>Set up synchronization between an editor trait and a user object
 trait.</p>
 <p>Also sets the initial value of the editor trait from the
-user object trait (for modes &#8216;from&#8217; and &#8216;both&#8217;), and the initial
+user object trait (for modes ‘from’ and ‘both’), and the initial
 value of the user object trait from the editor trait (for mode
-&#8216;to&#8217;).</p>
+‘to’).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>user_name</strong> (<em>string</em>) &#8211; The name of the trait to be used on the user object. If empty, no
+<li><strong>user_name</strong> (<em>string</em>) – The name of the trait to be used on the user object. If empty, no
 synchronization will be set up.</li>
-<li><strong>editor_name</strong> (<em>string</em>) &#8211; The name of the relevant editor trait.</li>
-<li><strong>mode</strong> (<em>string</em><em>, </em><em>optional; one of 'to'</em><em>, </em><em>'from'</em><em> or </em><em>'both'</em>) &#8211; The direction of synchronization. &#8216;from&#8217; means that trait changes
-in the user object should be propagated to the editor. &#8216;to&#8217; means
+<li><strong>editor_name</strong> (<em>string</em>) – The name of the relevant editor trait.</li>
+<li><strong>mode</strong> (<em>string</em><em>, </em><em>optional; one of 'to'</em><em>, </em><em>'from'</em><em> or </em><em>'both'</em>) – The direction of synchronization. ‘from’ means that trait changes
+in the user object should be propagated to the editor. ‘to’ means
 that trait changes in the editor should be propagated to the user
-object. &#8216;both&#8217; means changes should be propagated in both
-directions. The default is &#8216;both&#8217;.</li>
-<li><strong>is_list</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; If true, synchronization for item events will be set up in
+object. ‘both’ means changes should be propagated in both
+directions. The default is ‘both’.</li>
+<li><strong>is_list</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, synchronization for item events will be set up in
 addition to the synchronization for the object itself.
 The default is False.</li>
-<li><strong>is_event</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; If true, this method won&#8217;t attempt to initialize the user
+<li><strong>is_event</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, this method won’t attempt to initialize the user
 object or editor trait values. The default is False.</li>
 </ul>
 </td>
@@ -238,12 +239,14 @@ editor.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -265,10 +268,10 @@ editor.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

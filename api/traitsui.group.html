@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="index.html" >TraitsUI 6.1 API Reference</a></li>
           <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
   
     <li><a href="#">traitsui.group module</a></li>
@@ -64,6 +65,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="traitsui.handler.html" title="traitsui.handler module"
@@ -93,7 +98,7 @@ Traits-based user interface.</p>
 <dl class="class">
 <dt id="traitsui.group.Group">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">Group</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewSubElement" title="traitsui.view_element.ViewSubElement"><code class="xref py py-class docutils literal"><span class="pre">traitsui.view_element.ViewSubElement</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="traitsui.view_element.html#traitsui.view_element.ViewSubElement" title="traitsui.view_element.ViewSubElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.view_element.ViewSubElement</span></code></a></p>
 <p>Represents a grouping of items in a user interface view.</p>
 <dl class="method">
 <dt id="traitsui.group.Group.get_label">
@@ -126,7 +131,7 @@ into the specified ViewElements object.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>view_elements</strong> (<em>ViewElements object</em>) &#8211; A set of Group, Item, and Include objects</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>view_elements</strong> (<em>ViewElements object</em>) – A set of Group, Item, and Include objects</td>
 </tr>
 </tbody>
 </table>
@@ -143,29 +148,29 @@ into the specified ViewElements object.</p>
 <dl class="class">
 <dt id="traitsui.group.HFlow">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">HFlow</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HFlow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.group.HGroup" title="traitsui.group.HGroup"><code class="xref py py-class docutils literal"><span class="pre">traitsui.group.HGroup</span></code></a></p>
-<p>A group in which items are laid out horizontally, and &#8220;wrap&#8221; when
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.HGroup" title="traitsui.group.HGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.HGroup</span></code></a></p>
+<p>A group in which items are laid out horizontally, and “wrap” when
 they exceed the available horizontal space..</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.HGroup">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">HGroup</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HGroup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal"><span class="pre">traitsui.group.Group</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>A group whose items are laid out horizontally.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.HSplit">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">HSplit</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.HSplit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal"><span class="pre">traitsui.group.Group</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>A horizontal group with splitter bars to separate it from other groups.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.ShadowGroup">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">ShadowGroup</code><span class="sig-paren">(</span><em>shadow</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.ShadowGroup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal"><span class="pre">traitsui.group.Group</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>Corresponds to a Group object, but with all embedded Include
 objects resolved, and with all embedded Group objects replaced by
 corresponding ShadowGroup objects.</p>
@@ -196,44 +201,44 @@ substituted values.</p>
 <dl class="class">
 <dt id="traitsui.group.Tabbed">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">Tabbed</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.Tabbed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal"><span class="pre">traitsui.group.Group</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>A group that is shown as a tabbed notebook.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.VFlow">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VFlow</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VFlow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal"><span class="pre">traitsui.group.VGroup</span></code></a></p>
-<p>A group in which items are laid out vertically, and &#8220;wrap&#8221; when they
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.VGroup</span></code></a></p>
+<p>A group in which items are laid out vertically, and “wrap” when they
 exceed the available vertical space.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.VFold">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VFold</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VFold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal"><span class="pre">traitsui.group.VGroup</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.VGroup</span></code></a></p>
 <p>A group in which items are laid out vertically and can be collapsed
-(i.e. &#8216;folded&#8217;) by clicking their title.</p>
+(i.e. ‘folded’) by clicking their title.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.VGrid">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VGrid</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VGrid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal"><span class="pre">traitsui.group.VGroup</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.VGroup" title="traitsui.group.VGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.VGroup</span></code></a></p>
 <p>A group whose items are laid out in 2 columns.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.VGroup">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VGroup</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VGroup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal"><span class="pre">traitsui.group.Group</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>A group whose items are laid out vertically.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="traitsui.group.VSplit">
 <em class="property">class </em><code class="descclassname">traitsui.group.</code><code class="descname">VSplit</code><span class="sig-paren">(</span><em>*values</em>, <em>**traits</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.group.VSplit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal"><span class="pre">traitsui.group.Group</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#traitsui.group.Group" title="traitsui.group.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">traitsui.group.Group</span></code></a></p>
 <p>A vertical group with splitter bars to separate it from other groups.</p>
 </dd></dl>
 
@@ -261,12 +266,14 @@ exceed the available vertical space.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -288,10 +295,10 @@ exceed the available vertical space.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

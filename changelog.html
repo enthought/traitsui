@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,13 +24,14 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
     <script type="text/javascript" src="_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="_static/favicon.ico">
+    <link rel="shortcut icon" href="_static/img/favicon.ico">
     <link rel="index" title="Index" href="genindex.html" >
     <link rel="search" title="Search" href="search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="index.html" >
-    <link rel="prev" title="TraitsUI 6.0 Demos" href="demos/index.html" > 
+    <link rel="prev" title="TraitsUI 6.1 Demos" href="demos/index.html" > 
   </head>
   <body>
   <div class="container">
@@ -62,7 +63,11 @@
            accesskey="I">index</a>
       </li>
       <li class="active">
-        <a href="demos/index.html" title="TraitsUI 6.0 Demos"
+        <a href="py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="demos/index.html" title="TraitsUI 6.1 Demos"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -80,6 +85,77 @@
             
   <div class="section" id="traits-ui-changelog">
 <h1>Traits UI Changelog<a class="headerlink" href="#traits-ui-changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="release-6-1-0">
+<h2>Release 6.1.0<a class="headerlink" href="#release-6-1-0" title="Permalink to this headline">¶</a></h2>
+<p>This is an incremental release without many new features, but with
+significant improvements in the code base and numerous small bugfixes.
+Probably the most significant change, but one not obvious to most users
+is that we have moved away from using 2to3 for Python 3 support to using
+a single codebase with the six library to patch over the differences.
+This significantly enhances maintainability and development speed, and
+gives a better path forward for future Python versions.</p>
+<p>Additionally, this release introduces experimental support for PySide2
+(also known as “Qt for Python”).  Pyside2 was enabled as a potential
+backend in 6.0.0 but there was no testing being performed.  As of this
+release PySide2 is now tested as part of the CI system with tests passing
+on Linux and OS X using the 5.11 release.  There are currently issues with
+the 5.12 release which have yet to be fully investigated.</p>
+<p>The one significant new feature that has been added to this release is the
+ability to completely replace the rendering of TreeEditorNodes with custom
+rendering code on Qt (due to the limitations of the Wx tree control, this
+is unlikely to be extended to Wx).  An example showing the drawing of
+sparkline plots in TreeEditor cells has been added to the code demos.</p>
+<p>There has been a long-standing issue with the way that the Qt TableEditor
+handled selections, and this release fixes this, matching the behaviour of
+the Wx backend and the documentation.  It is possible that this may break
+code that was written expecting the buggy behaviour.</p>
+<p>Finally, there are a large number of minor bug fixes</p>
+<p>Thanks to:</p>
+<p>Martin Bergtholdt, Stefano Borini, Alex Chabot, Kit Choi, Mark Dickinson,
+Kevin Duff, Matthew Evans, Matt Hancock, Robert Kern, Fede Miorelli,
+Rahul Poruri, Jenni Portman, Prabhu Ramachandran, &#64;ransonr, Jonathan Rocher,
+Roger Serwy, Ajeet Vivekanandan, Corran Webster, John Wiggins.</p>
+<div class="section" id="enhancemenrs">
+<h3>Enhancemenrs<a class="headerlink" href="#enhancemenrs" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Switch to using six instead of 2to3 (#482, #484, #486, #498, #531).</li>
+<li>Experimental Pyside2 support (#451, #500, #504).</li>
+<li>Allow arbitrary rendering of tree nodes in Qt backend (#499, #502, #527).</li>
+<li>Use tooltip metadata on a trait instead of desc, if available (#473).</li>
+<li>Enable scroll to column for TabularEditor (#547)</li>
+<li>Add demo for tabular editor with context menu (#460).</li>
+<li>Allow the use of extended trait names in TreeNodes where possible (#500, #528).</li>
+<li>Allow drag move and drag copy modes on Qt TabularEditor (#363).</li>
+</ul>
+</div>
+<div class="section" id="fixes">
+<h3>Fixes<a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Fixes to README (#478).</li>
+<li>Documentation fixes (#471, #508).</li>
+<li>Fixes to setup.py (#549).</li>
+<li>Fix an attribute error on Qt TextRangeEditor (#540).</li>
+<li>Use SimpleEditor for Qt TextEditor’s “text” style (#535).</li>
+<li>Fix handling of Range traits with a mix of constant and named bounds (#533).</li>
+<li>Fix display selection on Wx backend (#534).</li>
+<li>Fixes for Qt TableEditor selections (#275).</li>
+<li>Fix deprecation warnings for inspect.getargspec (#530).</li>
+<li>Fixes to etstool (#526).</li>
+<li>Fix TreeEditor unhashable type errors (#525).</li>
+<li>Fix crash when TabularEditor has no columns (#521).</li>
+<li>Clone editor factories so they don’t share traits (#519).</li>
+<li>Avoid creation of dummy traits by springy items (#515).</li>
+<li>Fix drag and drop crash in Python 3 (#516).</li>
+<li>Fix Undo/Redo for readonly items and error handling (#510).</li>
+<li>Fix source parsing in demo app (#501).</li>
+<li>Fix signature of close() method of Qt modal dialog (#506).</li>
+<li>Fix incorrect code in Wx ColorEditor (#479).</li>
+<li>Fix incorrect code in Wx ProgressEditor (#513).</li>
+<li>Remove uses of deprecated HasTraits.set() calls (#457).</li>
+<li>Fix rendering of CheckboxColumn on OS X and Qt (#456).</li>
+</ul>
+</div>
+</div>
 <div class="section" id="release-6-0-0">
 <h2>Release 6.0.0<a class="headerlink" href="#release-6-0-0" title="Permalink to this headline">¶</a></h2>
 <p>This release introduces preliminary support for Qt5 via PyQt5, thanks to the
@@ -92,8 +168,8 @@ the two-way dependencies between Pyface and TraitsUI.  This has involved moving
 a number of sub-packages between the two libraries, most notably the zipped
 image resource support and a number of trait definitions.  We have endeavored
 to keep backwards compatibility via stub modules in the original locations,
-but we can&#8217;t guarantee that there will be no issues with third party code
-caused by the change in locations.  We haven&#8217;t been able to remove all
+but we can’t guarantee that there will be no issues with third party code
+caused by the change in locations.  We haven’t been able to remove all
 dependencies, but as of this release on the dock and workbench submodules have
 required dependencies on TraitsUI.</p>
 <p>As part of the latter work, support for TraitsUI Themes have been removed. This
@@ -103,7 +179,7 @@ codebase remains as it is still used by the PyFace Dock infrastructure and
 several editors, but ther long-term intention is to remove this completely.</p>
 <p>Another long-desired feature was the ability to write toolkit backends for
 Pyface and TraitsUI that are not part of the main codebase.  This is now
-possible by contributing new toolkit backends to the &#8220;traitsui.toolkit&#8221;
+possible by contributing new toolkit backends to the “traitsui.toolkit”
 pkg_resources entry point in a setup.py.  This work was accompanied by an
 overhaul of the toolkit discovery and loading infrastructure; in particular
 Pyface and TraitsUI now share the same code for performing these searches
@@ -113,17 +189,17 @@ some customized fixups and occasional drive-by cleanups of code, which means
 that the codebase is generally easier to read and follows modern Python
 conventions.</p>
 <p>Finally, the testing infrastructure has been overhauled to provide a one-stop
-location to run tests in self-contained environments using Enthought&#8217;s EDM
+location to run tests in self-contained environments using Enthought’s EDM
 package management tool.  Tests can be run from any python environment with the
-&#8220;edm&#8221; command available and the &#8220;click&#8221; library installed with the &#8220;etstool.py&#8221;
+“edm” command available and the “click” library installed with the “etstool.py”
 script at the top level of the repository.  In particular:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">etstool</span><span class="o">.</span><span class="n">py</span> <span class="n">test_all</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">etstool</span><span class="o">.</span><span class="n">py</span> <span class="n">test_all</span>
 </pre></div>
 </div>
 <p>will run all relevant tests for all available toolkits in all supported
 python versions.  The TravisCI and Appveyor continuous integration tools have
 been updated to make use of these facilities as well.</p>
-<p>Thanks to Matrin Bergtholdt, Alex Chabot, Kit Choi, Mark Dickinson, Robin Dunn,
+<p>Thanks to Martin Bergtholdt, Alex Chabot, Kit Choi, Mark Dickinson, Robin Dunn,
 Pradyun Gedam, Robert Kern, Marika Murphy, Pankaj Pandey, Steve Peak,
 Prabhu Ramachandran, Jonathan Rocher, John Thacker, Gregor Thalhammer,
 Senganal Thirunavukkarasu, John Tyree, Ioannis Tziakos, Alona Varshal,
@@ -140,11 +216,11 @@ Corran Webster, John Wiggins</p>
 <li>DataFrameEditor demo (#444)</li>
 <li>Common BasePanel class for toolkits (#392)</li>
 <li>Labels honor enable_when values (#401)</li>
-<li>Better error messages when toolkit doesn&#8217;t implement methods (#391)</li>
+<li>Better error messages when toolkit doesn’t implement methods (#391)</li>
 <li>Improve TraitsUI Action handling (#384)</li>
 <li>ListEditor UI improvements (#338, #396, #395)</li>
 <li>Remove old style signals and slots for Qt backend (#330, #346, #347, #403)</li>
-<li>Expose a &#8220;refresh&#8221; trait for the DataFrameEditor (#288)</li>
+<li>Expose a “refresh” trait for the DataFrameEditor (#288)</li>
 <li>Use Enthought Deployment Manager to automate CI and testing (#321, #357)</li>
 <li>Continuous integration on OS X (#322)</li>
 <li>Reduce circular dependencies of PyFace on TraitsUI (#304)</li>
@@ -153,8 +229,8 @@ Corran Webster, John Wiggins</p>
 <li>Add codecov coverage reports (#285, #328)</li>
 </ul>
 </div>
-<div class="section" id="fixes">
-<h3>Fixes<a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>Fixes<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix some issues for newer WxPython (#418)</li>
 <li>Fix Wx simple FileEditor (#426)</li>
@@ -173,7 +249,7 @@ Corran Webster, John Wiggins</p>
 <li>Fix button label updates (#358)</li>
 <li>Fix TreeEditor label updates (#335)</li>
 <li>Proper InstanceEditor dialog lifecycle (#332)</li>
-<li>Don&#8217;t explicitly destroy child widgets under Qt (#283)</li>
+<li>Don’t explicitly destroy child widgets under Qt (#283)</li>
 <li>Test fixes and improvements (#329, #369, #371, #327)</li>
 <li>Fixes for demos and examples (#320, #445)</li>
 <li>Fix CheckListEditor string comparison (#318)</li>
@@ -190,8 +266,8 @@ Corran Webster, John Wiggins</p>
 </div>
 <div class="section" id="release-5-2-0">
 <h2>Release 5.2.0<a class="headerlink" href="#release-5-2-0" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id1">
-<h3>Enhancements<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>Enhancements<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Add support for multi-select in the DataFrameEditor (#413).</li>
 </ul>
@@ -199,8 +275,8 @@ Corran Webster, John Wiggins</p>
 </div>
 <div class="section" id="release-5-1-0">
 <h2>Release 5.1.0<a class="headerlink" href="#release-5-1-0" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id2">
-<h3>Enhancements<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Enhancements<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Enthought Sphinx Theme Support (#219)</li>
 <li>Allow hiding groups in split layouts on Qt (#246)</li>
@@ -208,8 +284,8 @@ Corran Webster, John Wiggins</p>
 <li>Add toolbar in Qt UI panel (#263)</li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h3>Fixes<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Fixes<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix Qt TableEditor segfault on editing close (#277)</li>
 <li>Update tree nodes when adding children to am empty tree (#251)</li>
@@ -239,7 +315,7 @@ view of a Pandas DataFrame, similar to the existing ArrayViewEditor.</p>
 <p>There are also a number of bug fixes and minor improvements detailed below.</p>
 <p>Finally, this release changes the default GUI toolkit from Wx to Qt. This
 changes the behaviour of the library in the case where both WxPython and
-PyQt/PySide are installed and the user or code doesn&#8217;t specify the toolkit to
+PyQt/PySide are installed and the user or code doesn’t specify the toolkit to
 use explicitly.</p>
 <div class="section" id="new-features">
 <h3>New Features<a class="headerlink" href="#new-features" title="Permalink to this headline">¶</a></h3>
@@ -249,8 +325,8 @@ use explicitly.</p>
 (#196)</li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h3>Enhancements<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Enhancements<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Change the default backend from Wx to Qt (#212)</li>
 <li>Add a Qt version of the ProgressEditor (#217)</li>
@@ -259,8 +335,8 @@ use explicitly.</p>
 Editor. (#143)</li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h3>Fixes<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>Fixes<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix failure to disconnect selection listeners for ListStrEditor in Qt (#223)</li>
 <li>Fix layout of TextEditors in some situations (#216)</li>
@@ -272,8 +348,8 @@ Editor. (#143)</li>
 </div>
 <div class="section" id="release-4-5-1">
 <h2>Release 4.5.1<a class="headerlink" href="#release-4-5-1" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id6">
-<h3>Fixes<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Fixes<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix pypi installation problem (#206)</li>
 </ul>
@@ -281,15 +357,15 @@ Editor. (#143)</li>
 </div>
 <div class="section" id="release-4-5-0">
 <h2>Release 4.5.0<a class="headerlink" href="#release-4-5-0" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id7">
-<h3>Fixes<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>Fixes<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Application-modal Traits UI dialogs are correctly styled as
 application-modal under Qt. On Macs, they will now appear as independent
 windows rather than drop-down sheets. (#164)</li>
-<li>Qt CodeEditor now honors &#8216;show_line_numbers&#8217; and the &#8216;readonly&#8217; style (#137)</li>
+<li>Qt CodeEditor now honors ‘show_line_numbers’ and the ‘readonly’ style (#137)</li>
 <li>Deprecated <cite>implements</cite> declaration removed, use <cite>provides</cite> instead (#152)</li>
-<li>Fix TableEditor so that Qt.QSplitter honors &#8216;orientation&#8217; trait (#171)</li>
+<li>Fix TableEditor so that Qt.QSplitter honors ‘orientation’ trait (#171)</li>
 <li>Show row labels in Qt TableEditor when requested (#176)</li>
 <li>Fix TupleEditor so that multiple change events are not fired (#179)</li>
 <li><dl class="first docutils">
@@ -308,14 +384,14 @@ in Traits 4.4.0.  Other than that, there are a number of other minor changes,
 improvements and bugfixes.</p>
 <p>Corran Webster (corranwebster on GitHub) is now maintainer of TraitsUI.</p>
 <p>Change summary since 4.3.0</p>
-<div class="section" id="id8">
-<h3>New Features<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id9">
+<h3>New Features<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Changes for new Traits adaptation mechanism support (#113)</li>
 </ul>
 </div>
-<div class="section" id="id9">
-<h3>Enhancements<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h3>Enhancements<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Add Travis-CI support.</li>
 <li>Remove the use of the deprecated PySimpleApp under Wx and several other
@@ -326,8 +402,8 @@ support.  Should be roughly on par with Wx support.  No API changes.
 <li>Improvements to PyMimeData coercion to better handle lists of items. (#127)</li>
 </ul>
 </div>
-<div class="section" id="id10">
-<h3>Fixes<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h3>Fixes<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fixes item selection issue #133 in ListStrEditor under Wx 2.9 (#137)</li>
 <li>Fixes to avoid asking for value of a Delegated Event (#123 and #136)</li>
@@ -343,18 +419,18 @@ before this file was created.</p>
 </div>
 <div class="section" id="traits-3-5-0-oct-15-2010">
 <h2>Traits 3.5.0 (Oct 15, 2010)<a class="headerlink" href="#traits-3-5-0-oct-15-2010" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id11">
-<h3>Enhancements<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id12">
+<h3>Enhancements<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>adding support for drop-down menu in Button traits, but only for qt backend</li>
-<li>adding &#8216;show_notebook_menu&#8217; option to ListEditor so that the user can
+<li>adding ‘show_notebook_menu’ option to ListEditor so that the user can
 right-click and show or hide the context menu (Qt)</li>
 <li>added selection range traits to make it possible for users to replace
 selected text</li>
 </ul>
 </div>
-<div class="section" id="id12">
-<h3>Fixes<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id13">
+<h3>Fixes<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>fixed null color editor to work with tuples</li>
 <li>bug when opening a view with the ToolbarButton</li>
@@ -363,14 +439,14 @@ selected text</li>
 </div>
 <div class="section" id="traits-3-4-0-may-26-2010">
 <h2>Traits 3.4.0 (May 26, 2010)<a class="headerlink" href="#traits-3-4-0-may-26-2010" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id13">
-<h3>Enhancements<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id14">
+<h3>Enhancements<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>adding new example to make testing rgb color editor easier</li>
 </ul>
 </div>
-<div class="section" id="id14">
-<h3>Fixes<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id15">
+<h3>Fixes<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>fixed NumericColumn to not expect object to have model_selection attribute,
 and removed more dead theming code</li>
@@ -385,25 +461,25 @@ first before using os.path.isfile()</li>
 </div>
 <div class="section" id="traits-3-3-0-feb-24-2010">
 <h2>Traits 3.3.0 (Feb 24, 2010)<a class="headerlink" href="#traits-3-3-0-feb-24-2010" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id15">
-<h3>Enhancements<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id16">
+<h3>Enhancements<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
 <p>The major enhancement this release is that the entire Traits package has been
 changed to use relative imports so that it can be installed as a sub-package
 inside another larger library or package.  This was not previously possible,
 since the various modules inside Traits would import each other directly
-through &#8220;traits.[module]&#8221;.  Many thanks to Darren Dale for the
+through “traits.[module]”.  Many thanks to Darren Dale for the
 patch.</p>
 </div>
-<div class="section" id="id16">
-<h3>Fixes<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id17">
+<h3>Fixes<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
 <p>There have been numerous minor bugfixes since the last release.  The most notable
 ones are:</p>
 <ul class="simple">
 <li>Many fixes involve making Traits UI more robust if wxPython is not installed
 on a system.  In the past, we have been able to use Qt if it was also
 installed, but removing Wx would lead to a variety of little bugs in various
-places.  We&#8217;ve squashed a number of these.  We&#8217;ve also added better checks
-to make sure we&#8217;re selecting the right toolkit at import and at runtime.</li>
+places.  We’ve squashed a number of these.  We’ve also added better checks
+to make sure we’re selecting the right toolkit at import and at runtime.</li>
 <li>A nasty cyclic reference was discovered and eliminated in DelegatesTo traits.</li>
 <li>The Undefined and Uninitialized Traits were made into true singletons.</li>
 <li>Much of the inconsistent formatting across the entire Traits source has
@@ -413,8 +489,8 @@ been eliminated and normalized (tabs/spaces, line endings).</li>
 </div>
 <div class="section" id="traits-3-2-0-july-15-2009">
 <h2>Traits 3.2.0 (July 15, 2009)<a class="headerlink" href="#traits-3-2-0-july-15-2009" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id17">
-<h3>Enhancements<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id18">
+<h3>Enhancements<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Implemented editable_labels attribute in the TabularEditor for enabling editing of the labels (i.e. the first column)</li>
 <li>Saving/restoring window positions works with multiple displays of different sizes</li>
@@ -432,8 +508,8 @@ been eliminated and normalized (tabs/spaces, line endings).</li>
 <li>Removed sys.exit() call from SaveHandler.exit()</li>
 </ul>
 </div>
-<div class="section" id="id18">
-<h3>Fixes<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id19">
+<h3>Fixes<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 </div>
@@ -447,61 +523,66 @@ been eliminated and normalized (tabs/spaces, line endings).</li>
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Traits UI Changelog</a><ul>
-<li><a class="reference internal" href="#release-6-0-0">Release 6.0.0</a><ul>
-<li><a class="reference internal" href="#enhancements">Enhancements</a></li>
+<li><a class="reference internal" href="#release-6-1-0">Release 6.1.0</a><ul>
+<li><a class="reference internal" href="#enhancemenrs">Enhancemenrs</a></li>
 <li><a class="reference internal" href="#fixes">Fixes</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#release-6-0-0">Release 6.0.0</a><ul>
+<li><a class="reference internal" href="#enhancements">Enhancements</a></li>
+<li><a class="reference internal" href="#id1">Fixes</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#release-5-2-0">Release 5.2.0</a><ul>
-<li><a class="reference internal" href="#id1">Enhancements</a></li>
+<li><a class="reference internal" href="#id2">Enhancements</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-5-1-0">Release 5.1.0</a><ul>
-<li><a class="reference internal" href="#id2">Enhancements</a></li>
-<li><a class="reference internal" href="#id3">Fixes</a></li>
+<li><a class="reference internal" href="#id3">Enhancements</a></li>
+<li><a class="reference internal" href="#id4">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#release-5-0-0">Release 5.0.0</a><ul>
 <li><a class="reference internal" href="#new-features">New Features</a></li>
-<li><a class="reference internal" href="#id4">Enhancements</a></li>
-<li><a class="reference internal" href="#id5">Fixes</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#release-4-5-1">Release 4.5.1</a><ul>
+<li><a class="reference internal" href="#id5">Enhancements</a></li>
 <li><a class="reference internal" href="#id6">Fixes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#release-4-5-0">Release 4.5.0</a><ul>
+<li><a class="reference internal" href="#release-4-5-1">Release 4.5.1</a><ul>
 <li><a class="reference internal" href="#id7">Fixes</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#release-4-5-0">Release 4.5.0</a><ul>
+<li><a class="reference internal" href="#id8">Fixes</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#release-4-4-0">Release 4.4.0</a><ul>
-<li><a class="reference internal" href="#id8">New Features</a></li>
-<li><a class="reference internal" href="#id9">Enhancements</a></li>
-<li><a class="reference internal" href="#id10">Fixes</a></li>
+<li><a class="reference internal" href="#id9">New Features</a></li>
+<li><a class="reference internal" href="#id10">Enhancements</a></li>
+<li><a class="reference internal" href="#id11">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#traits-3-5-0-oct-15-2010">Traits 3.5.0 (Oct 15, 2010)</a><ul>
-<li><a class="reference internal" href="#id11">Enhancements</a></li>
-<li><a class="reference internal" href="#id12">Fixes</a></li>
+<li><a class="reference internal" href="#id12">Enhancements</a></li>
+<li><a class="reference internal" href="#id13">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#traits-3-4-0-may-26-2010">Traits 3.4.0 (May 26, 2010)</a><ul>
-<li><a class="reference internal" href="#id13">Enhancements</a></li>
-<li><a class="reference internal" href="#id14">Fixes</a></li>
+<li><a class="reference internal" href="#id14">Enhancements</a></li>
+<li><a class="reference internal" href="#id15">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#traits-3-3-0-feb-24-2010">Traits 3.3.0 (Feb 24, 2010)</a><ul>
-<li><a class="reference internal" href="#id15">Enhancements</a></li>
-<li><a class="reference internal" href="#id16">Fixes</a></li>
+<li><a class="reference internal" href="#id16">Enhancements</a></li>
+<li><a class="reference internal" href="#id17">Fixes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#traits-3-2-0-july-15-2009">Traits 3.2.0 (July 15, 2009)</a><ul>
-<li><a class="reference internal" href="#id17">Enhancements</a></li>
-<li><a class="reference internal" href="#id18">Fixes</a></li>
+<li><a class="reference internal" href="#id18">Enhancements</a></li>
+<li><a class="reference internal" href="#id19">Fixes</a></li>
 </ul>
 </li>
 </ul>
@@ -510,7 +591,7 @@ been eliminated and normalized (tabs/spaces, line endings).</li>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="demos/index.html"
-                        title="previous chapter">TraitsUI 6.0 Demos</a></p>
+                        title="previous chapter">TraitsUI 6.1 Demos</a></p>
   <h3>This Page</h3>
   <div>
     <a href="_sources/changelog.rst.txt"
@@ -518,12 +599,14 @@ been eliminated and normalized (tabs/spaces, line endings).</li>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -545,10 +628,10 @@ been eliminated and normalized (tabs/spaces, line endings).</li>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

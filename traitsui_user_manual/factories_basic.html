@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,13 +24,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
+    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
     <link rel="next" title="Advanced Trait Editors" href="factories_advanced_extra.html" >
     <link rel="prev" title="Introduction to Trait Editor Factories" href="factory_intro.html" > 
   </head>
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
   
     <li><a href="#">The Predefined Trait Editor Factories</a></li>
   
@@ -63,6 +64,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="factories_advanced_extra.html" title="Advanced Trait Editors"
@@ -134,7 +139,7 @@ can specify the width of the text fields with the <em>width</em> parameter.</p>
 </div>
 <p>The following code generates the editors shown in Figure 21.</p>
 <p class="rubric" id="example-14-demonstration-of-array-editors">Example 14: Demonstration of array editors</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># array_editor.py -- Example of using array editors</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># array_editor.py -- Example of using array editors</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasPrivateTraits</span><span class="p">,</span> <span class="n">Array</span>
@@ -164,7 +169,7 @@ can specify the width of the text fields with the <em>width</em> parameter.</p>
                  <span class="n">resizable</span> <span class="o">=</span> <span class="kc">True</span> <span class="p">)</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">ArrayEditorTest</span><span class="p">()</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -190,14 +195,14 @@ True/False) traits. In the simple and custom styles, it generates a checkbox. In
 the text style, the editor displays the trait value (as one would expect) as the
 strings True or False. However, several variations are accepted as input:</p>
 <ul class="simple">
-<li><code class="samp docutils literal"><span class="pre">'True'</span></code></li>
-<li><code class="docutils literal"><span class="pre">T</span></code></li>
-<li><code class="docutils literal"><span class="pre">Yes</span></code></li>
-<li><code class="docutils literal"><span class="pre">y</span></code></li>
-<li><code class="samp docutils literal"><span class="pre">'False'</span></code></li>
-<li><code class="docutils literal"><span class="pre">F</span></code></li>
-<li><code class="docutils literal"><span class="pre">No</span></code></li>
-<li><code class="docutils literal"><span class="pre">n</span></code></li>
+<li><code class="samp docutils literal notranslate"><span class="pre">'True'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">T</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">Yes</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">y</span></code></li>
+<li><code class="samp docutils literal notranslate"><span class="pre">'False'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">F</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">No</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">n</span></code></li>
 </ul>
 <p>The set of acceptable text inputs can be changed by setting the BooleanEditor()
 parameter <em>mapping</em> to a dictionary whose entries are of the form <em>str</em>: <em>val</em>,
@@ -205,7 +210,7 @@ where <em>val</em> is either True or False and <em>str</em> is a string that is 
 text input in place of that value. For example, to create a Boolean editor that
 accepts only yes and no as appropriate text values, you might use the following
 expression:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">editor</span><span class="o">=</span><span class="n">BooleanEditor</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;yes&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">})</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">editor</span><span class="o">=</span><span class="n">BooleanEditor</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;yes&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">})</span>
 </pre></div>
 </div>
 <p>Note that in this case, the strings True and False would <em>not</em> be acceptable as
@@ -265,7 +270,7 @@ an event listener.</p>
 </tbody>
 </table>
 <p>The editors generated by the CheckListEditor() factory are designed to enable
-the user to edit a List trait by selecting elements from a &#8220;master list&#8221;, i.e.,
+the user to edit a List trait by selecting elements from a “master list”, i.e.,
 a list of possible values. The list of values can be supplied by the trait being
 edited, or by the <em>values</em> parameter.</p>
 <p>The <em>values</em> parameter can take either of two forms:</p>
@@ -376,7 +381,7 @@ color.</p>
 Boolean value indicating whether the trait being edited has a built-in mapping
 of user-oriented representations (e.g., strings) to internal representations.
 Since ColorEditor() is generally used only for Color traits, which are mapped
-(e.g., &#8216;cyan&#8217; to wx.Colour(0,255,255) ), this parameter defaults to True and is
+(e.g., ‘cyan’ to wx.Colour(0,255,255) ), this parameter defaults to True and is
 not of interest to most programmers. However, it is possible to define a custom
 color trait that uses ColorEditor() but is not mapped (i.e., uses only one
 representation), which is why the attribute is available.</p>
@@ -389,7 +394,7 @@ representation), which is why the attribute is available.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Suitable for:</th><td class="field-body">special</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">&#8220;compound&#8221; traits</td>
+<tr class="field-even field"><th class="field-name">Default for:</th><td class="field-body">“compound” traits</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body"><em>auto_set</em></td>
@@ -400,8 +405,8 @@ representation), which is why the attribute is available.</p>
 for trait types that compose the compound trait. The widgets for the compound
 editor are of the style specified for the compound editor (simple, custom,
 etc.). The editors shown in Figure 28 are for the following trait, whose value
-can be an integer between 1 and 6, or any of the letters &#8216;a&#8217; through &#8216;f&#8217;:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">compound_trait</span> <span class="o">=</span> <span class="n">Trait</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Range</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span> <span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">)</span>
+can be an integer between 1 and 6, or any of the letters ‘a’ through ‘f’:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">compound_trait</span> <span class="o">=</span> <span class="n">Trait</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Range</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span> <span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="figure" id="id22">
@@ -434,11 +439,11 @@ data types.  The following List traits can be edited by a CSVListEditor:</p>
 <li>List(Int)</li>
 <li>List(Float)</li>
 <li>List(Str)</li>
-<li>List(Enum(&#8216;string1&#8217;, &#8216;string2&#8217;, <cite>etc</cite>))</li>
+<li>List(Enum(‘string1’, ‘string2’, <cite>etc</cite>))</li>
 <li>List(Range(low= <cite>low value or trait name</cite>, high= <cite>high value or trait name</cite>))</li>
 </ul>
-<p>The &#8216;text&#8217;, &#8216;simple&#8217; and &#8216;custom&#8217; styles are all the same.  They provide a
-single line of text in which the user can enter the list.  The &#8216;readonly&#8217;
+<p>The ‘text’, ‘simple’ and ‘custom’ styles are all the same.  They provide a
+single line of text in which the user can enter the list.  The ‘readonly’
 style provides a line of text that can not be edited by the user.</p>
 <p>The default separator of items in the list is a comma.  This can be
 overridden with the <em>sep</em> keyword parameter.</p>
@@ -460,9 +465,9 @@ each contiguous span of whitespace is a separator. (Note: After the
 text field is split at the occurrences of <cite>sep</cite>, leading and trailing
 whitespace is removed from each item before converting to the underlying
 data type.)
-<cite>Default:</cite> &#8216;,&#8217; (a comma)</dd>
+<cite>Default:</cite> ‘,’ (a comma)</dd>
 <dt><em>ignore_trailing_sep</em> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>If <em>ignore_trailing_sep</em> is True, the user may enter a trailing separator (e.g. &#8216;1, 2, 3,&#8217;)
+<dd>If <em>ignore_trailing_sep</em> is True, the user may enter a trailing separator (e.g. ‘1, 2, 3,’)
 and it will be ignored.  If this is False, a trailing separator is an
 error.
 <cite>Default:</cite> True</dd>
@@ -485,13 +490,13 @@ error.
 </tr>
 </tbody>
 </table>
-<p>The DefaultOverride() is a factory that takes the trait&#8217;s default editor and
+<p>The DefaultOverride() is a factory that takes the trait’s default editor and
 customizes it with the specified parameters. This is useful when a trait defines
 a default editor using some of its data, e.g. Range or Enum, and you want to
 tweak some of the other parameters without having recreate that data.</p>
 <p>For example, the default editor for Range(low=0, high=1500) has
-&#8216;1500&#8217; as the upper label.  To change it to &#8216;Max&#8217; instead, use:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="s1">&#39;my_range&#39;</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">DefaultOverride</span><span class="p">(</span><span class="n">high_label</span><span class="o">=</span><span class="s1">&#39;Max&#39;</span><span class="p">))</span>
+‘1500’ as the upper label.  To change it to ‘Max’ instead, use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">View</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="s1">&#39;my_range&#39;</span><span class="p">,</span> <span class="n">editor</span><span class="o">=</span><span class="n">DefaultOverride</span><span class="p">(</span><span class="n">high_label</span><span class="o">=</span><span class="s1">&#39;Max&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -518,7 +523,7 @@ shown in Figure 29.</p>
 <p class="caption"><span class="caption-text">Figure 29: Directory editor styles</span></p>
 </div>
 <p>In the simple style, the current value of the trait is displayed in a combo box
-to the left of a button labeled &#8216;...&#8217;. The user can type a new path directly
+to the left of a button labeled ‘…’. The user can type a new path directly
 into the text box, select a previous value from the droplist of the combo box,
 or use the button to bring up a directory browser panel similar to the custom
 style of editor.</p>
@@ -530,7 +535,7 @@ populated with the new path string.</p>
 expand or collapse directory structures, and click a folder icon to select a
 directory.</p>
 <p>The text style of editor is simply a text box into which the user can type a
-directory path. The &#8216;readonly&#8217; style is identical to the text style, except that
+directory path. The ‘readonly’ style is identical to the text style, except that
 the text box is not editable.</p>
 <p>The optional parameters are the same as the FileEditor.</p>
 <p>No validation is performed on Directory traits; the user must ensure that a
@@ -550,7 +555,7 @@ typed-in value is in fact an actual directory on the system.</p>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">for non-Enum traits: <em>values</em> or <em>name</em></td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">Optional parameters:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body"><em>cols</em>, <em>evaluate</em>, <em>mode</em></td>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><em>cols</em>, <em>evaluate</em>, <em>mode</em>, <em>completion_mode</em> (Qt only)</td>
 </tr>
 </tbody>
 </table>
@@ -560,7 +565,10 @@ from a closed set of values.</p>
 <img alt="simple: drop-list; custom: radio buttons; text: text; read-only: read-only" src="../_images/enum_editors.png" />
 <p class="caption"><span class="caption-text">Figure 30: Enumeration editor styles</span></p>
 </div>
-<p>The simple style of editor is a drop-down list box.</p>
+<p>The simple style of editor is a drop-down list box.  If <em>evaluate</em> is True
+then the user can also enter text. The <em>completion_mode</em> parameter controls how
+to display partially matching values, either as inline text when there is only
+one matching enumeration, or as a popup menu of all possible matches.</p>
 <p>The custom style is a set of radio buttons. Use the <em>cols</em> parameter to specify
 the number of columns of radio buttons.</p>
 <p>The text style is an editable text field; if the user enters a value that is not
@@ -572,13 +580,13 @@ parameter.</p>
 specify either the trait attribute (with the <em>name</em> parameter), or the set of
 values to display (with the <em>values</em> parameter). The <em>name</em> parameter can be an
 extended trait name. The <em>values</em> parameter can be a list, tuple, or dictionary,
-or a &#8220;mapped&#8221; trait.</p>
+or a “mapped” trait.</p>
 <p>By default, an enumeration editor sorts its values alphabetically. To specify a
 different order for the items, give it a mapping from the normal values to ones
 with a numeric tag. The enumeration editor sorts the values based on the numeric
 tags, and then strips out the tags.</p>
 <p class="rubric" id="example-15-enumeration-editor-with-mapped-values">Example 15: Enumeration editor with mapped values</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># enum_editor.py -- Example of using an enumeration editor</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># enum_editor.py -- Example of using an enumeration editor</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="k">import</span> <span class="n">EnumEditor</span>
 
@@ -627,9 +635,9 @@ the local system hierarchy. The styles of this editor are shown in Figure 31.</p
 <p>The default version of the simply style displays a text box and a <span class="guilabel">Browse</span>
 button. Clicking <span class="guilabel">Browse</span> opens a platform-specific file selection dialog box.
 If you specify the <em>entries</em> keyword parameter with an integer value to the
-factory function, the simple style is a combo box and a button labeled <span class="guilabel">...</span>.
+factory function, the simple style is a combo box and a button labeled <span class="guilabel">…</span>.
 The user can type a file path in the combo box, or select one of <em>entries</em>
-previous values. Clicking the <span class="guilabel">...</span> button opens a browser panel similar to the
+previous values. Clicking the <span class="guilabel">…</span> button opens a browser panel similar to the
 custom style of editor. When the user selects a file in this browser, the panel
 collapses, and control is returned to the original editor widget, which is
 automatically populated with the new path string.</p>
@@ -639,7 +647,7 @@ onto the control.</p>
 expand or collapse directory structures, and click an icon to select a file.</p>
 <p>You can specify a list of filters to apply to the file names displayed, using
 the <em>filter</em> keyword parameter of the factory function. In Figure 31, the
-&#8220;Custom with Filter&#8221; editor uses a <em>filter</em> value of <code class="docutils literal"><span class="pre">['*.py']</span></code> to display only
+“Custom with Filter” editor uses a <em>filter</em> value of <code class="docutils literal notranslate"><span class="pre">['*.py']</span></code> to display only
 Python source files. You can also specify this parameter for the simple style,
 and it will be used in the file selection dialog box or pop-up file system
 browser panel. Alternatively, you can specify <em>filter_name</em>, whose value is an
@@ -704,7 +712,7 @@ editable.</p>
 </tr>
 </tbody>
 </table>
-<p>The &#8220;editor&#8221; generated by HTMLEditor() interprets and displays text as HTML. It
+<p>The “editor” generated by HTMLEditor() interprets and displays text as HTML. It
 does not support the user editing the text that it displays. It generates the
 same type of editor, regardless of the style specified. Figure 34 shows an HTML
 editor in the upper pane, with a code editor in the lower pane, displaying the
@@ -726,8 +734,8 @@ for details.</p>
 implicit formatting, which it converts to HTML before passing the text to the
 HTML interpreter. The implicit formatting follows these rules:</p>
 <ul class="simple">
-<li>Indented lines that start with a dash (&#8216;-&#8216;) are converted to unordered lists.</li>
-<li>Indented lines that start with an asterisk (&#8216;*&#8217;) are converted to ordered
+<li>Indented lines that start with a dash (‘-‘) are converted to unordered lists.</li>
+<li>Indented lines that start with an asterisk (‘*’) are converted to ordered
 lists.</li>
 <li>Indented lines that start with any other character are converted to code
 blocks.</li>
@@ -735,7 +743,7 @@ blocks.</li>
 </ul>
 <p>The following text produces the same displayed HTML as in Figure 34, when
 <em>format_text</em> is True:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">code</span> <span class="n">block</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">code</span> <span class="n">block</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="nf">foo</span> <span class="p">(</span> <span class="n">bar</span> <span class="p">):</span>
         <span class="nb">print</span> <span class="s1">&#39;bar:&#39;</span><span class="p">,</span> <span class="n">bar</span>
@@ -804,9 +812,9 @@ rules to locate images to use:</p>
 <li><p class="first">The base file name of the image is the string representation of the value,
 with spaces replaced by underscores and the suffix argument, if any,
 appended. Note that suffix is not a file extension, but rather a string
-appended to the base file name. For example, if <em>suffix</em> is <code class="docutils literal"><span class="pre">_origin</span></code> and
-the <em>value</em> is &#8216;top left&#8217;, the image file name is
-<code class="file docutils literal"><span class="pre">top_left_origin.gif</span></code>.</p>
+appended to the base file name. For example, if <em>suffix</em> is <code class="docutils literal notranslate"><span class="pre">_origin</span></code> and
+the <em>value</em> is ‘top left’, the image file name is
+<code class="file docutils literal notranslate"><span class="pre">top_left_origin.gif</span></code>.</p>
 </li>
 <li><p class="first">If the <em>path</em> parameter is defined, it is used to locate the file. It can be
 absolute or relative to the file where the image enumeration editor is
@@ -826,7 +834,7 @@ of the directory that contains the module.</li>
 <li>If <em>path</em>, <em>klass</em>, and <em>module</em> are not defined, the editor searches
 for an images subdirectory of the traitsui.wx package.</li>
 <li>If none of the above paths are defined, the editor searches for an
-<code class="file docutils literal"><span class="pre">images</span></code> directory that is a sibling of the directory from which
+<code class="file docutils literal notranslate"><span class="pre">images</span></code> directory that is a sibling of the directory from which
 the application was run.</li>
 </ol>
 </div></blockquote>
@@ -864,7 +872,7 @@ attributes of the instance. The simple style displays a button, which when
 clicked, opens a window containing a user interface for the instance. The <em>kind</em>
 parameter specifies the kind of window to open (see <a class="reference internal" href="custom_view.html#stand-alone-windows"><span class="std std-ref">Stand-alone Windows</span></a>).
 The <em>label</em> parameter specifies a label for the button in the simple interface.
-The <em>view</em> parameter specifies a view to use for the referenced instance&#8217;s user
+The <em>view</em> parameter specifies a view to use for the referenced instance’s user
 interface; if this is not specified, the default view for the instance is used
 (see <a class="reference internal" href="advanced_view.html#defining-a-default-view"><span class="std std-ref">Defining a Default View</span></a>).</p>
 <p>The text and read-only styles display the string representation of the instance.
@@ -885,9 +893,9 @@ used for the string in the list; otherwise, a user-friendly version of the class
 name is used.</p>
 <p>For example, the following code defines a Team class and a Person class. A Team
 has a roster of Persons, and a captain. In the view for a team, the user can
-pick a captain and edit that person&#8217;s information.</p>
+pick a captain and edit that person’s information.</p>
 <p id="example-16-instance-editor-with-instance-selection">Example 16: Instance editor with instance selection</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># instance_editor_selection.py -- Example of an instance editor</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># instance_editor_selection.py -- Example of an instance editor</span>
 <span class="c1">#                                 with instance selection</span>
 
 <span class="kn">from</span> <span class="nn">traits.api</span>    \
@@ -931,7 +939,7 @@ pick a captain and edit that person&#8217;s information.</p>
                              <span class="p">),</span>
                         <span class="n">buttons</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;OK&#39;</span><span class="p">])</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">Team</span><span class="p">(</span> <span class="n">name</span>    <span class="o">=</span> <span class="s1">&#39;Vultures&#39;</span><span class="p">,</span>
           <span class="n">captain</span> <span class="o">=</span> <span class="n">people</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
           <span class="n">roster</span>  <span class="o">=</span> <span class="n">people</span> <span class="p">)</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
@@ -1005,7 +1013,7 @@ list, as shown in Figure 39.</p>
 </div>
 <p>In addition to the four standard styles for list editors, a fifth list editor
 user interface option is available. If <em>use_notebook</em> is True, then the list
-editor displays the list as a &#8220;notebook&#8221; of tabbed pages, one for each item in
+editor displays the list as a “notebook” of tabbed pages, one for each item in
 the list, as shown in Figure 40. This style can be useful in cases where the
 list items are instances with their own views. If the <em>deletable</em> parameter is
 True, a close box appears on each tab, allowing the user to delete the item; the
@@ -1154,12 +1162,12 @@ desired value.</p>
 <p>You can override the default widget for each type of editor using the <em>mode</em>
 parameter, which can have the following values:</p>
 <ul class="simple">
-<li>&#8216;auto&#8217;: The default widget, as described in Table 8</li>
-<li>&#8216;slider&#8217;: Simple slider with text field</li>
-<li>&#8216;xslider&#8217;: Large-range slider with text field</li>
-<li>&#8216;spinner&#8217;: Spin box with increment/decrement buttons</li>
-<li>&#8216;enum&#8217;: Radio buttons</li>
-<li>&#8216;text&#8217;: Text field</li>
+<li>‘auto’: The default widget, as described in Table 8</li>
+<li>‘slider’: Simple slider with text field</li>
+<li>‘xslider’: Large-range slider with text field</li>
+<li>‘spinner’: Spin box with increment/decrement buttons</li>
+<li>‘enum’: Radio buttons</li>
+<li>‘text’: Text field</li>
 </ul>
 <p>You can set the limits of the range dynamically, using the <em>low_name</em> and
 <em>high_name</em> parameters to specify trait attributes that contain the low and high
@@ -1280,7 +1288,7 @@ it is a multi-line field; for the read-only style, it is static text. If
 <p class="caption"><span class="caption-text">Figure 47: Text editor styles for passwords</span></p>
 </div>
 <p>You can specify whether the trait being edited is updated on every keystroke
-(<code class="docutils literal"><span class="pre">auto_set=True</span></code>) or when the user presses the Enter key (<code class="docutils literal"><span class="pre">enter_set=True</span></code>).
+(<code class="docutils literal notranslate"><span class="pre">auto_set=True</span></code>) or when the user presses the Enter key (<code class="docutils literal notranslate"><span class="pre">enter_set=True</span></code>).
 If <em>auto_set</em> and <em>enter_set</em> are False, the trait is updated when the user
 shifts the input focus to another widget.</p>
 <p>You can specify a mapping from user input values to other values with the
@@ -1353,8 +1361,8 @@ for editors.</p>
 </tbody>
 </table>
 <p>ValueEditor() generates a tree editor that displays Python values and objects,
-including all the objects&#8217; members. For example, Figure 49 shows a value editor
-that is displayed by the &#8220;pickle viewer&#8221; utility in enthought.debug.</p>
+including all the objects’ members. For example, Figure 49 shows a value editor
+that is displayed by the “pickle viewer” utility in enthought.debug.</p>
 <div class="figure" id="id43">
 <img alt="tree of Python values, including dictionaries, lists, and tuples" src="../_images/value_editor.png" />
 <p class="caption"><span class="caption-text">Figure 49: Value editor from Pickle Viewer</span></p>
@@ -1395,7 +1403,7 @@ instead; see <a class="reference internal" href="factories_advanced_extra.html#t
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">The Predefined Trait Editor Factories</a><ul>
 <li><a class="reference internal" href="#basic-trait-editor-factories">Basic Trait Editor Factories</a><ul>
@@ -1454,12 +1462,14 @@ instead; see <a class="reference internal" href="factories_advanced_extra.html#t
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1481,10 +1491,10 @@ instead; see <a class="reference internal" href="factories_advanced_extra.html#t
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

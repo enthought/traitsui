@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Introduction &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
+    <link rel="next" title="The View and Its Building Blocks" href="view.html" >
+    <link rel="prev" title="TraitsUI 6.0 User Manual" href="front.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
+  
+    <li><a href="#">Introduction</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="view.html" title="The View and Its Building Blocks"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="front.html" title="TraitsUI 6.0 User Manual"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>This guide is designed to act as a conceptual guide to <a class="reference internal" href="glossary.html#term-traitsui"><span class="xref std std-term">TraitsUI</span></a>, an
+open-source package built and maintained by Enthought, Inc. The TraitsUI
+package is a set of GUI (Graphical User Interface) tools designed to complement
+<a class="reference internal" href="glossary.html#term-traits"><span class="xref std std-term">Traits</span></a>, another Enthought open-source package that provides explicit
+typing, validation, and change notification for Python. This guide is intended
+for readers who are already moderately familiar with Traits; those who are not
+may wish to refer to the <a class="reference external" href="http://docs.enthought.com/traits/index.html">Traits User Manual</a>
+for an introduction. This guide discusses many but not all features of
+TraitsUI. For complete details of the TraitsUI API, refer to the
+<a class="reference internal" href="../api/index.html"><span class="doc">TraitsUI API Reference</span></a>.</p>
+<div class="section" id="the-model-view-controller-mvc-design-pattern">
+<span id="index-0"></span><span id="id1"></span><h2>The Model-View-Controller (MVC) Design Pattern<a class="headerlink" href="#the-model-view-controller-mvc-design-pattern" title="Permalink to this headline">¶</a></h2>
+<p>A common and well-tested approach to building end-user applications is the
+<a class="reference internal" href="glossary.html#term-mvc"><span class="xref std std-term">MVC</span></a> (&#8220;Model-View-Controller&#8221;) design pattern. In essence, the MVC
+pattern the idea that an application should consist of three separate entities:
+a <a class="reference internal" href="glossary.html#term-model"><span class="xref std std-term">model</span></a>, which manages the data, state, and internal (&#8220;business&#8221;) logic
+of the application; one or more <a class="reference internal" href="glossary.html#term-29"><span class="xref std std-term">view</span></a>s, which format the model data into
+a graphical display with which the end user can interact; and a
+<a class="reference internal" href="glossary.html#term-controller"><span class="xref std std-term">controller</span></a>, which manages the transfer of information between model and
+view so that neither needs to be directly linked to the other. In practice,
+particularly in simple applications, the view and controller are often so
+closely linked as to be almost indistinguishable, but it remains useful to think
+of them as distinct entities.</p>
+<p>The three parts of the MVC pattern correspond roughly to three classes in the
+Traits and TraitsUI packages.</p>
+<ul class="simple">
+<li>Model: <a class="reference internal" href="glossary.html#term-hastraits"><span class="xref std std-term">HasTraits</span></a> class (Traits package)</li>
+<li>View: View class (TraitsUI package)</li>
+<li>Controller: <a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a> class (TraitsUI package)</li>
+</ul>
+<p>The remainder of this section gives an overview of these relationships.</p>
+<div class="section" id="the-model-hastraits-subclasses-and-objects">
+<span id="index-1"></span><span id="id2"></span><h3>The Model: HasTraits Subclasses and Objects<a class="headerlink" href="#the-model-hastraits-subclasses-and-objects" title="Permalink to this headline">¶</a></h3>
+<p>In the context of Traits, a model consists primarily of one or more subclasses
+or <a class="reference internal" href="glossary.html#term-instance"><span class="xref std std-term">instance</span></a>s of the HasTraits class, whose <a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a>s
+(typed attributes as defined in Traits) represent the model data. The specifics
+of building such a model are outside the scope of this manual; please see the
+<a class="reference external" href="http://github.enthought.com/traits/index.html">Traits User Manual</a> for further information.</p>
+</div>
+<div class="section" id="the-view-view-objects">
+<span id="index-2"></span><span id="id4"></span><h3>The View: View Objects<a class="headerlink" href="#the-view-view-objects" title="Permalink to this headline">¶</a></h3>
+<p>A view for a Traits-based application is an instance of a class called,
+conveniently enough, View. A View object is essentially a display specification
+for a GUI window or <a class="reference internal" href="glossary.html#term-panel"><span class="xref std std-term">panel</span></a>. Its contents are defined in terms of
+instances of two other classes: <a class="reference internal" href="glossary.html#term-item"><span class="xref std std-term">Item</span></a> and <a class="reference internal" href="glossary.html#term-group"><span class="xref std std-term">Group</span></a>. <a class="footnote-reference" href="#id9" id="id5">[1]</a> These three
+classes are described in detail in <a class="reference internal" href="view.html#the-view-and-its-building-blocks"><span class="std std-ref">The View and Its Building Blocks</span></a>; for
+the moment, it is important to note that they are all defined independently of
+the model they are used to display.</p>
+<p>Note that the terms <a class="reference internal" href="glossary.html#term-29"><span class="xref std std-term">view</span></a> and <a class="reference internal" href="glossary.html#term-29"><span class="xref std std-term">View</span></a> are distinct for the purposes
+of this document. The former refers to the component of the MVC design pattern;
+the latter is a TraitsUI construct.</p>
+</div>
+<div class="section" id="the-controller-handler-subclasses-and-objects">
+<span id="index-3"></span><span id="id6"></span><h3>The Controller: Handler Subclasses and Objects<a class="headerlink" href="#the-controller-handler-subclasses-and-objects" title="Permalink to this headline">¶</a></h3>
+<p>The controller for a Traits-based application is defined in terms of the
+<a class="reference internal" href="glossary.html#term-handler"><span class="xref std std-term">Handler</span></a> class. <a class="footnote-reference" href="#id10" id="id7">[2]</a> Specifically, the relationship between any given
+View instance and the underlying model is managed by an instance of the Handler
+class. For simple interfaces, the Handler can be implicit. For example, none of
+the examples in the first four chapters includes or requires any specific
+Handler code; they are managed by a default Handler that performs the basic
+operations of window initialization, transfer of data between GUI and model, and
+window closing. Thus, a programmer new to TraitsUI need not be concerned with
+Handlers at all. Nonetheless, custom handlers can be a powerful tool for
+building sophisticated application interfaces, as discussed in
+<a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span class="std std-ref">Controlling the Interface: the Handler</span></a>.</p>
+</div>
+</div>
+<div class="section" id="toolkit-selection">
+<span id="index-4"></span><span id="id8"></span><h2>Toolkit Selection<a class="headerlink" href="#toolkit-selection" title="Permalink to this headline">¶</a></h2>
+<p>The TraitsUI package is designed to be toolkit-independent. Programs that use
+TraitsUI do not need to explicitly import or call any particular GUI toolkit
+code unless they need some capability of the toolkit that is not provided by
+TraitsUI. However, <em>some</em> particular toolkit must be installed on the system in
+order to actually display GUI windows.</p>
+<p>TraitsUI uses a separate package, traits.etsconfig, to determine which GUI
+toolkit to use. This package is also used by other Enthought packages that need
+GUI capabilities, so that all such packages &#8220;agree&#8221; on a single GUI toolkit per
+application. The etsconfig package contains a singleton object, <strong>ETSConfig</strong>
+(importable from <cite>traits.etsconfig.api</cite>), which has a string attribute,
+<strong>toolkit</strong>, that signifies the GUI toolkit.</p>
+<p id="index-5">The values of <strong>ETSConfig.toolkit</strong> that are supported by TraitsUI version 6.0
+are:</p>
+<ul class="simple" id="index-6">
+<li>&#8216;qt4&#8217;: <a class="reference external" href="http://riverbankcomputing.co.uk/pyqt/">PyQt</a>, which provides Python
+bindings for the <a class="reference external" href="http://trolltech.com/products/qt">Qt</a> framework version 4.</li>
+<li>&#8216;wx&#8217;: <a class="reference external" href="http://www.wxpython.org">wxPython</a>, which provides Python bindings
+for the <a class="reference external" href="http://wxwidgets.org">wxWidgets</a> toolkit.</li>
+<li>&#8216;null&#8217;: A do-nothing toolkit, for situations where neither of the other
+toolkits is installed, but Traits is needed for non-UI purposes.</li>
+</ul>
+<p>The default behavior of TraitsUI is to search for available toolkit-specific
+packages in the order listed, and uses the first one it finds. The programmer or
+the user can override this behavior in any of several ways, in the following
+order of precedence:</p>
+<span class="target" id="index-7"></span><ol class="arabic" id="index-8">
+<li><p class="first">The program can explicitly set <strong>ETSConfig.toolkit</strong>. It must do this before
+importing from any other Enthought Tool Suite component, including
+traits.  For example, at the beginning of a program:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.etsconfig.api</span> <span class="k">import</span> <span class="n">ETSConfig</span>
+<span class="n">ETSConfig</span><span class="o">.</span><span class="n">toolkit</span> <span class="o">=</span> <span class="s1">&#39;wx&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">The user can define a value for the ETS_TOOLKIT environment variable.</p>
+</li>
+</ol>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The default order of toolkits changed in TraitsUI 5.0 to
+prefer &#8216;qt4&#8217; over &#8216;wx&#8217;.</p>
+</div>
+</div>
+<div class="section" id="structure-of-this-manual">
+<span id="structure-of-this-guide"></span><h2>Structure of this Manual<a class="headerlink" href="#structure-of-this-manual" title="Permalink to this headline">¶</a></h2>
+<p>The intent of this guide is to present the capabilities of the TraitsUI package
+in usable increments, so that you can create and display gradually more
+sophisticated interfaces from one chapter to the next.</p>
+<ul class="simple">
+<li><a class="reference internal" href="view.html#the-view-and-its-building-blocks"><span class="std std-ref">The View and Its Building Blocks</span></a>, <a class="reference internal" href="custom_view.html#customizing-a-view"><span class="std std-ref">Customizing a View</span></a>, and
+<a class="reference internal" href="advanced_view.html#advanced-view-concepts"><span class="std std-ref">Advanced View Concepts</span></a> show how to construct and display views from
+the simple to the elaborate, while leaving such details as GUI logic and
+widget selection to system defaults.</li>
+<li><a class="reference internal" href="handler.html#controlling-the-interface-the-handler"><span class="std std-ref">Controlling the Interface: the Handler</span></a> explains how to use the Handler
+class to implement custom GUI behaviors, as well as menus and toolbars.</li>
+<li><a class="reference internal" href="factory_intro.html#introduction-to-trait-editor-factories"><span class="std std-ref">Introduction to Trait Editor Factories</span></a> and
+<a class="reference internal" href="factories_basic.html#the-predefined-trait-editor-factories"><span class="std std-ref">The Predefined Trait Editor Factories</span></a> show how to control GUI widget
+selection by means of trait <a class="reference internal" href="glossary.html#term-editor"><span class="xref std std-term">editor</span></a>s.</li>
+<li><a class="reference internal" href="tips.html#tips-tricks-and-gotchas"><span class="std std-ref">Tips, Tricks and Gotchas</span></a> covers miscellaneous additional topics.</li>
+<li>Further reference materials, including a <a class="reference internal" href="glossary.html#glossary-of-terms"><span class="std std-ref">Appendix I: Glossary of Terms</span></a> and an API
+summary for the TraitsUI classes covered in this Manual, are located in the
+Appendices.</li>
+</ul>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[1]</a></td><td>A third type of content object, Include, is discussed briefly in
+<a class="reference internal" href="advanced_view.html#include-objects"><span class="std std-ref">Include Objects</span></a>, but presently is not commonly used.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[2]</a></td><td>Not to be confused with the TraitHandler class of the Traits package,
+which enforces type validation.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#the-model-view-controller-mvc-design-pattern">The Model-View-Controller (MVC) Design Pattern</a><ul>
+<li><a class="reference internal" href="#the-model-hastraits-subclasses-and-objects">The Model: HasTraits Subclasses and Objects</a></li>
+<li><a class="reference internal" href="#the-view-view-objects">The View: View Objects</a></li>
+<li><a class="reference internal" href="#the-controller-handler-subclasses-and-objects">The Controller: Handler Subclasses and Objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#toolkit-selection">Toolkit Selection</a></li>
+<li><a class="reference internal" href="#structure-of-this-manual">Structure of this Manual</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="front.html"
+                        title="previous chapter">TraitsUI 6.0 User Manual</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="view.html"
+                        title="next chapter">The View and Its Building Blocks</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/traitsui_user_manual/intro.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

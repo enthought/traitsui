@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>traitsui.list_str_adapter module &mdash; TraitsUI 6 User Manual</title>
+    
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../_static/enthought.css" type="text/css" >
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="search" title="Search" href="../search.html" >
+    <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
+    <link rel="up" title="traitsui package" href="traitsui.html" >
+    <link rel="next" title="traitsui.menu module" href="traitsui.menu.html" >
+    <link rel="prev" title="traitsui.key_bindings module" href="traitsui.key_bindings.html" > 
+  </head>
+  <body>
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
+	
+          <li class="active"><a href="index.html" >TraitsUI 6.0 API Reference</a></li>
+          <li class="active"><a href="traitsui.html" accesskey="U">traitsui package</a></li>
+  
+    <li><a href="#">traitsui.list_str_adapter module</a></li>
+  
+
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.menu.html" title="traitsui.menu module"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="traitsui.key_bindings.html" title="traitsui.key_bindings module"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-traitsui.list_str_adapter">
+<span id="traitsui-list-str-adapter-module"></span><h1>traitsui.list_str_adapter module<a class="headerlink" href="#module-traitsui.list_str_adapter" title="Permalink to this headline">¶</a></h1>
+<p>Defines adapter interfaces for use with the ListStrEditor.</p>
+<dl class="class">
+<dt id="traitsui.list_str_adapter.AnIListStrAdapter">
+<em class="property">class </em><code class="descclassname">traitsui.list_str_adapter.</code><code class="descname">AnIListStrAdapter</code><a class="headerlink" href="#traitsui.list_str_adapter.AnIListStrAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.AnIListStrAdapter.accepts">
+<code class="descname">accepts</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.list_str_adapter.AnIListStrAdapter.accepts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the adapter know how to handle the current <em>item</em> or not?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.AnIListStrAdapter.index">
+<code class="descname">index</code><em class="property"> = Int</em><a class="headerlink" href="#traitsui.list_str_adapter.AnIListStrAdapter.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of the current item being adapted.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.AnIListStrAdapter.is_cacheable">
+<code class="descname">is_cacheable</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.list_str_adapter.AnIListStrAdapter.is_cacheable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the value of <em>accepts</em> depend only upon the type of <em>item</em>?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.AnIListStrAdapter.item">
+<code class="descname">item</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.list_str_adapter.AnIListStrAdapter.item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current item being adapted.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.AnIListStrAdapter.value">
+<code class="descname">value</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.list_str_adapter.AnIListStrAdapter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value (if any).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.list_str_adapter.IListStrAdapter">
+<em class="property">class </em><code class="descclassname">traitsui.list_str_adapter.</code><code class="descname">IListStrAdapter</code><a class="headerlink" href="#traitsui.list_str_adapter.IListStrAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.Interface" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.Interface</span></code></a></p>
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.IListStrAdapter.accepts">
+<code class="descname">accepts</code><em class="property"> = Bool</em><a class="headerlink" href="#traitsui.list_str_adapter.IListStrAdapter.accepts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the adapter know how to handle the current <em>item</em> or not?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.IListStrAdapter.index">
+<code class="descname">index</code><em class="property"> = Int</em><a class="headerlink" href="#traitsui.list_str_adapter.IListStrAdapter.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of the current item being adapted.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.IListStrAdapter.is_cacheable">
+<code class="descname">is_cacheable</code><em class="property"> = Bool</em><a class="headerlink" href="#traitsui.list_str_adapter.IListStrAdapter.is_cacheable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the value of <em>accepts</em> depend only upon the type of <em>item</em>?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.IListStrAdapter.item">
+<code class="descname">item</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.list_str_adapter.IListStrAdapter.item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current item being adapted.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.IListStrAdapter.value">
+<code class="descname">value</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.list_str_adapter.IListStrAdapter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value (if any).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="traitsui.list_str_adapter.ListStrAdapter">
+<em class="property">class </em><code class="descclassname">traitsui.list_str_adapter.</code><code class="descname">ListStrAdapter</code><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.enthought.com/traits/traits_api_reference/has_traits.html#traits.has_traits.HasPrivateTraits" title="(in traits v4.6.0)"><code class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasPrivateTraits</span></code></a></p>
+<p>The base class for adapting list items to values that can be edited
+by a ListStrEditor.</p>
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.adapters">
+<code class="descname">adapters</code><em class="property"> = List(IListStrAdapter, update=True)</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.adapters" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of optional delegated adapters.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.bg_color">
+<code class="descname">bg_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default background color for list items.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.cache">
+<code class="descname">cache</code><em class="property"> = Any({})</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cache of attribute handlers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.cache_flushed">
+<code class="descname">cache_flushed</code><em class="property"> = Event(update=True)</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.cache_flushed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event fired when the cache is flushed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.can_edit">
+<code class="descname">can_edit</code><em class="property"> = Bool(True)</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.can_edit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can the text value of each list item be edited.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.default_text">
+<code class="descname">default_text</code><em class="property"> = Str</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.default_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the default text for a new list item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.default_value">
+<code class="descname">default_value</code><em class="property"> = Any('')</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.default_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the default value for a new list item.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the specified <em>object.trait[index]</em> list item.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.dropped">
+<code class="descname">dropped</code><em class="property"> = Enum('after', 'before')</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.dropped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies where a dropped item should be placed in the list relative to
+the item it is dropped on.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.even_bg_color">
+<code class="descname">even_bg_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.even_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default background color for even list items.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.even_text_color">
+<code class="descname">even_text_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.even_text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default text color for even list items.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_bg_color">
+<code class="descname">get_bg_color</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the background color for a specified <em>object.trait[index]</em>
+list item. A result of None means use the default list item
+background color.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_can_drop">
+<code class="descname">get_can_drop</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_can_drop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the specified <em>value</em> can be dropped on the
+specified <em>object.trait[index]</em> list item. A value of <strong>True</strong> means
+the <em>value</em> can be dropped; and a value of <strong>False</strong> indicates that
+it cannot be dropped.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_can_edit">
+<code class="descname">get_can_edit</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_can_edit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the user can edit a specified <em>object.trait[index]</em>
+list item. A True result indicates the value can be edited, while
+a False result indicates that it cannot be edited.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_default_bg_color">
+<code class="descname">get_default_bg_color</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_default_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the default background color for the specified
+<em>object.trait</em> list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_default_image">
+<code class="descname">get_default_image</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_default_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the default image for the specified <em>object.trait</em> list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_default_text">
+<code class="descname">get_default_text</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_default_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the default text for the specified <em>object.trait</em> list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_default_text_color">
+<code class="descname">get_default_text_color</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_default_text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the default text color for the specified <em>object.trait</em>
+list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_default_value">
+<code class="descname">get_default_value</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_default_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new default value for the specified <em>object.trait</em> list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_drag">
+<code class="descname">get_drag</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_drag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the &#8216;drag&#8217; value for a specified <em>object.trait[index]</em>
+list item. A result of <em>None</em> means that the item cannot be dragged.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_dropped">
+<code class="descname">get_dropped</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_dropped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns how to handle a specified <em>value</em> being dropped on a
+specified <em>object.trait[index]</em> list item. The possible return
+values are:</p>
+<dl class="docutils">
+<dt>&#8216;before&#8217;</dt>
+<dd>Insert the specified <em>value</em> before the dropped on item.</dd>
+<dt>&#8216;after&#8217;</dt>
+<dd>Insert the specified <em>value</em> after the dropped on item.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_image">
+<code class="descname">get_image</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the image to use for a specified
+<em>object.trait[index]</em> list item. A result of None means no image
+should be used. Otherwise, the result should either be the name of
+the image, or an ImageResource item specifying the image to use.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_item">
+<code class="descname">get_item</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of the <em>object.trait[index]</em> list item.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_text">
+<code class="descname">get_text</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the text to display for a specified <em>object.trait[index]</em>
+list item.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.get_text_color">
+<code class="descname">get_text_color</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.get_text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the text color for a specified <em>object.trait[index]</em> list
+item. A result of None means use the default list item text color.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.image">
+<code class="descname">image</code><em class="property"> = Str(None, update=True)</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the default image to use for list items.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.index">
+<code class="descname">index</code><em class="property"> = Int</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of the current item being adapter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.insert">
+<code class="descname">insert</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts a new value at the specified <em>object.trait[index]</em> list
+index.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.item">
+<code class="descname">item</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.item" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current item being adapted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.len">
+<code class="descname">len</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.len" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of items in the specified <em>object.trait</em> list.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.odd_bg_color">
+<code class="descname">odd_bg_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.odd_bg_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default background color for odd list items.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.odd_text_color">
+<code class="descname">odd_text_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.odd_text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default text color for odd list items.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.set_text">
+<code class="descname">set_text</code><span class="sig-paren">(</span><em>object</em>, <em>trait</em>, <em>index</em>, <em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.set_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the text for a specified <em>object.trait[index]</em> list item to
+<em>text</em>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.text_color">
+<code class="descname">text_color</code><em class="property"> = Color(None, update=True)</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.text_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default text color for list items.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="traitsui.list_str_adapter.ListStrAdapter.value">
+<code class="descname">value</code><em class="property"> = Any</em><a class="headerlink" href="#traitsui.list_str_adapter.ListStrAdapter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value (if any).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traitsui.key_bindings.html"
+                        title="previous chapter">traitsui.key_bindings module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traitsui.menu.html"
+                        title="next chapter">traitsui.menu module</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="../_sources/api/traitsui.list_str_adapter.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2008-2018, Enthought
+      </li>
+      <li>
+      Last updated on Apr 12, 2018.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

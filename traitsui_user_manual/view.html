@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,13 +24,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.0 User Manual" href="index.html" >
+    <link rel="up" title="TraitsUI 6.1 User Manual" href="index.html" >
     <link rel="next" title="Customizing a View" href="custom_view.html" >
     <link rel="prev" title="Introduction" href="intro.html" > 
   </head>
@@ -51,7 +52,7 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 User Manual</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 User Manual</a></li>
   
     <li><a href="#">The View and Its Building Blocks</a></li>
   
@@ -63,6 +64,10 @@
       <li class="active">
         <a href="../genindex.html" title="General Index"
            accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
       </li>
       <li class="active">
         <a href="custom_view.html" title="Customizing a View"
@@ -88,14 +93,14 @@
   <div class="section" id="the-view-and-its-building-blocks">
 <span id="id1"></span><h1>The View and Its Building Blocks<a class="headerlink" href="#the-view-and-its-building-blocks" title="Permalink to this headline">¶</a></h1>
 <p>A simple way to edit (or simply observe) the attribute values of a
-<a class="reference internal" href="glossary.html#term-hastraits"><span class="xref std std-term">HasTraits</span></a> object in a GUI window is to call the object&#8217;s
+<a class="reference internal" href="glossary.html#term-hastraits"><span class="xref std std-term">HasTraits</span></a> object in a GUI window is to call the object’s
 configure_traits() <a class="footnote-reference" href="#id13" id="id2">[3]</a> method. This method constructs and displays a window
-containing editable fields for each of the object&#8217;s <a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a>s.
+containing editable fields for each of the object’s <a class="reference internal" href="glossary.html#term-trait-attribute"><span class="xref std std-term">trait attribute</span></a>s.
 For example, the following sample code <a class="footnote-reference" href="#id14" id="id3">[4]</a> defines the SimpleEmployee class,
 creates an object of that class, and constructs and displays a GUI for the
 object:</p>
 <p class="rubric" id="example-1-using-configure-traits"><span id="index-0"></span>Example 1: Using configure_traits()</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># configure_traits.py -- Sample code to demonstrate</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># configure_traits.py -- Sample code to demonstrate</span>
 <span class="c1">#                        configure_traits()</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span>
 <span class="kn">import</span> <span class="nn">traitsui</span>
@@ -131,7 +136,7 @@ and the employee number should not be edited). Furthermore, you would like to
 specify the order in which those fields appear. You can do this by defining a
 View object and passing it to the configure_traits() method:</p>
 <p class="rubric" id="example-2-using-configure-traits-with-a-view-object"><span id="index-2"></span>Example 2: Using configure_traits() with a View object</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># configure_traits_view.py -- Sample code to demonstrate</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># configure_traits_view.py -- Sample code to demonstrate</span>
 <span class="c1">#                             configure_traits()</span>
 
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span>
@@ -181,7 +186,7 @@ arguments to the View constructor, as in the case of the three Items in Example
 <p>The simplest building block of a View is the <a class="reference internal" href="glossary.html#term-item"><span class="xref std std-term">Item</span></a> object. An Item
 specifies a single interface <a class="reference internal" href="glossary.html#term-widget"><span class="xref std std-term">widget</span></a>, usually the display for a single
 trait attribute of a HasTraits object. The content, appearance, and behavior of
-the widget are controlled by means of the Item object&#8217;s attributes, which are
+the widget are controlled by means of the Item object’s attributes, which are
 usually specified as keyword arguments to the Item constructor, as in the case
 of <em>name</em> in Example 2.</p>
 <p>The remainder of this section describes the attributes of the Item object,
@@ -207,7 +212,7 @@ its <strong>name</strong> attribute is nearly always specified.</p>
 <dt>Display format</dt>
 <dd><p class="first">In addition to specifying which trait attributes are to be displayed, you
 might need to adjust the format of one or more of the resulting widgets.</p>
-<p>If an Item&#8217;s <strong>label</strong> attribute is specified but not its name, the value
+<p>If an Item’s <strong>label</strong> attribute is specified but not its name, the value
 of <strong>label</strong> is displayed as a simple, non-editable string. (This feature
 can be useful for displaying comments or instructions in a TraitsUI
 window.)</p>
@@ -241,13 +246,13 @@ default spacing.</dd>
 </dl>
 </dd>
 <dt>Content format</dt>
-<dd><p class="first">In some cases it can be desirable to apply special formatting to a widget&#8217;s
+<dd><p class="first">In some cases it can be desirable to apply special formatting to a widget’s
 contents rather than to the widget itself. Examples of such formatting
 might include rounding a floating-point value to two decimal places, or
 capitalizing all letter characters in a license plate number.</p>
 <dl class="last docutils">
 <dt>format_str: str</dt>
-<dd>&#8216;% format&#8217; string for text.</dd>
+<dd>‘% format’ string for text.</dd>
 <dt>format_func: func</dt>
 <dd>Format function for text.</dd>
 </dl>
@@ -260,7 +265,7 @@ selected by TraitsUI. These options are discussed in
 <dl class="last docutils">
 <dt>editor: ItemEditor</dt>
 <dd>Editor to use.</dd>
-<dt>style: {&#8216;simple&#8217;, &#8216;custom&#8217;, &#8216;text&#8217;, &#8216;readonly&#8217;}</dt>
+<dt>style: {‘simple’, ‘custom’, ‘text’, ‘readonly’}</dt>
 <dd>The editor style (see <a class="reference internal" href="factory_intro.html#specifying-an-editor-style"><span class="std std-ref">Specifying an Editor Style</span></a>).</dd>
 </dl>
 </dd>
@@ -307,8 +312,8 @@ not specified, the value of the <strong>name</strong> attribute is used.</dd>
 <p>The TraitsUI package defines the following subclasses of Item, which are helpful
 shorthands for defining certain types of items. Label, Heading and Spring are
 intended to help with the layout of a TraitsUI View, and need not have a trait
-attribute associated with them. For example, <code class="docutils literal"><span class="pre">Spring()</span></code> and
-<code class="docutils literal"><span class="pre">Label(&quot;This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">label&quot;)</span></code> are valid code.</p>
+attribute associated with them. For example, <code class="docutils literal notranslate"><span class="pre">Spring()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Label(&quot;This</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">label&quot;)</span></code> are valid code.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="13%" />
@@ -324,7 +329,7 @@ attribute associated with them. For example, <code class="docutils literal"><spa
 <tbody valign="top">
 <tr class="row-even"><td>Label</td>
 <td>An item that is just a label
-and doesn&#8217;t require a trait
+and doesn’t require a trait
 name associated with it</td>
 <td>&#160;</td>
 </tr>
@@ -335,32 +340,32 @@ name associated with it</td>
 <tr class="row-even"><td>Spring</td>
 <td>A item that expands to  take
 as much space as necessary</td>
-<td><code class="samp docutils literal"><span class="pre">Item(name='spring',</span>
+<td><code class="samp docutils literal notranslate"><span class="pre">Item(name='spring',</span>
 <span class="pre">springy=True,</span> <span class="pre">show_label=False)</span></code></td>
 </tr>
 <tr class="row-odd"><td>Custom</td>
 <td>An item with a custom editor
 style</td>
-<td><code class="samp docutils literal"><span class="pre">Item(style='custom')</span></code></td>
+<td><code class="samp docutils literal notranslate"><span class="pre">Item(style='custom')</span></code></td>
 </tr>
 <tr class="row-even"><td>Readonly</td>
 <td>An item with a readonly
 editor style</td>
-<td><code class="samp docutils literal"><span class="pre">Item(style='readonly')</span></code></td>
+<td><code class="samp docutils literal notranslate"><span class="pre">Item(style='readonly')</span></code></td>
 </tr>
 <tr class="row-odd"><td>UItem</td>
 <td>An item with no label</td>
-<td><code class="samp docutils literal"><span class="pre">Item(show_label=False)</span></code></td>
+<td><code class="samp docutils literal notranslate"><span class="pre">Item(show_label=False)</span></code></td>
 </tr>
 <tr class="row-even"><td>UCustom</td>
 <td>A Custom item with no label</td>
-<td><code class="samp docutils literal"><span class="pre">Item(style='custom',</span>
+<td><code class="samp docutils literal notranslate"><span class="pre">Item(style='custom',</span>
 <span class="pre">show_label=False)</span></code></td>
 </tr>
 <tr class="row-odd"><td>UReadonly</td>
 <td>A Readonly item  with no
 label</td>
-<td><code class="samp docutils literal"><span class="pre">Item(style='readonly',</span>
+<td><code class="samp docutils literal notranslate"><span class="pre">Item(style='readonly',</span>
 <span class="pre">show_label=False)</span></code></td>
 </tr>
 </tbody>
@@ -377,7 +382,7 @@ widgets in response to a single condition, defining group-level help text). In
 TraitsUI, such grouping is accomplished by means of the <a class="reference internal" href="glossary.html#term-group"><span class="xref std std-term">Group</span></a> object.</p>
 <p>Consider the following enhancement to Example 2:</p>
 <p class="rubric" id="example-3-using-configure-traits-with-a-view-and-a-group-object"><span id="index-16"></span>Example 3: Using configure_traits() with a View and a Group object</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># configure_traits_view_group.py -- Sample code to demonstrate</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># configure_traits_view_group.py -- Sample code to demonstrate</span>
 <span class="c1">#                                   configure_traits()</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span> <span class="n">Int</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="k">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">Group</span>
@@ -428,7 +433,7 @@ acceptable displays and behavior.</p>
 <dd><dl class="first last docutils">
 <dt>object:</dt>
 <dd>References the object whose traits are being edited by members of the
-group; by default this is &#8216;object&#8217;, but could be another object in the
+group; by default this is ‘object’, but could be another object in the
 current context.</dd>
 <dt>content: list</dt>
 <dd>List of elements in the group.</dd>
@@ -449,23 +454,23 @@ current context.</dd>
 <dd>Image to show on tabs.</dd>
 <dt>label:</dt>
 <dd>The label to display on the group.</dd>
-<dt>layout: {&#8216;normal&#8217;, &#8216;flow&#8217;, &#8216;split&#8217;, &#8216;tabbed&#8217;}</dt>
+<dt>layout: {‘normal’, ‘flow’, ‘split’, ‘tabbed’}</dt>
 <dd><p class="first">Layout style of the group, which can be one of the following:</p>
 <ul class="simple">
-<li>&#8216;normal&#8217; (default): Sub-groups are displayed sequentially in a single
+<li>‘normal’ (default): Sub-groups are displayed sequentially in a single
 panel.</li>
-<li>&#8216;flow&#8217;: Sub-groups are displayed sequentially, and then &#8220;wrap&#8221; when
+<li>‘flow’: Sub-groups are displayed sequentially, and then “wrap” when
 they exceed the available space in the <strong>orientation</strong> direction.</li>
-<li>&#8216;split&#8217;: Sub-groups are displayed in a single panel, separated by
-&#8220;splitter bars&#8221;, which the user can drag to adjust the amount of space
+<li>‘split’: Sub-groups are displayed in a single panel, separated by
+“splitter bars”, which the user can drag to adjust the amount of space
 for each sub-group.</li>
-<li>&#8216;tabbed&#8217;: Each sub-group appears on a separate tab, labeled with the
-sub-group&#8217;s <em>label</em> text, if any.</li>
+<li>‘tabbed’: Each sub-group appears on a separate tab, labeled with the
+sub-group’s <em>label</em> text, if any.</li>
 </ul>
 <p class="last">This attribute is ignored for groups that contain only items, or contain
 only one sub-group.</p>
 </dd>
-<dt>orientation: {&#8216;vertical&#8217;, &#8216;horizontal&#8217;}</dt>
+<dt>orientation: {‘vertical’, ‘horizontal’}</dt>
 <dd>The orientation of the subgroups.</dd>
 <dt>padding: int</dt>
 <dd>Amount of extra space, in pixels, to add around the item. Values must be
@@ -481,7 +486,7 @@ default spacing.</dd>
 <dd>Show labels on the left or the right.</dd>
 <dt>springy: bool</dt>
 <dd>Use extra space in the parent layout? The default is False.</dd>
-<dt>style: {&#8216;simple&#8217;, &#8216;custom&#8217;, &#8216;text&#8217;, &#8216;readonly&#8217;}</dt>
+<dt>style: {‘simple’, ‘custom’, ‘text’, ‘readonly’}</dt>
 <dd>Default editor style of items in the group.</dd>
 </dl>
 <span class="target" id="index-25"></span><span class="target" id="index-26"></span><span class="target" id="index-27"></span><span class="target" id="index-28"></span><span class="target" id="index-29"></span></dd>
@@ -501,11 +506,11 @@ default spacing.</dd>
 only top-level group for the current View. For example, suppose help text
 is defined for a Group called <strong>group1</strong>. The following View shows this
 text in its help window:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span><span class="p">(</span><span class="n">group1</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">View</span><span class="p">(</span><span class="n">group1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The following two do not:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">View</span><span class="p">(</span><span class="n">group1</span><span class="p">,</span> <span class="n">group2</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">View</span><span class="p">(</span><span class="n">group1</span><span class="p">,</span> <span class="n">group2</span><span class="p">)</span>
 <span class="n">View</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">group1</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -551,38 +556,38 @@ API Reference</em> for details.</p>
 <tr class="row-even"><td>HGroup</td>
 <td>A group whose items are laid
 out horizontally.</td>
-<td><code class="samp docutils literal"><span class="pre">Group(orientation='horizontal')</span></code></td>
+<td><code class="samp docutils literal notranslate"><span class="pre">Group(orientation='horizontal')</span></code></td>
 </tr>
 <tr class="row-odd"><td>HFlow</td>
 <td>A horizontal group whose items
-&#8220;wrap&#8221; when they exceed the
+“wrap” when they exceed the
 available horizontal space.</td>
-<td><code class="samp docutils literal"><span class="pre">Group(orientation='horizontal',</span>
+<td><code class="samp docutils literal notranslate"><span class="pre">Group(orientation='horizontal',</span>
 <span class="pre">layout='flow',</span> <span class="pre">show_labels=False)</span></code></td>
 </tr>
 <tr class="row-even"><td>HSplit</td>
 <td>A horizontal group with
 splitter bars to separate it
 from other groups.</td>
-<td><code class="samp docutils literal"><span class="pre">Group(orientation='horizontal',</span>
+<td><code class="samp docutils literal notranslate"><span class="pre">Group(orientation='horizontal',</span>
 <span class="pre">layout='split')</span></code></td>
 </tr>
 <tr class="row-odd"><td>Tabbed</td>
 <td>A group that is shown as a tab
 in a notebook.</td>
-<td><code class="samp docutils literal"><span class="pre">Group(orientation='horizontal'</span>
+<td><code class="samp docutils literal notranslate"><span class="pre">Group(orientation='horizontal'</span>
 <span class="pre">layout='tabbed',</span> <span class="pre">springy=True)</span></code></td>
 </tr>
 <tr class="row-even"><td>VGroup</td>
 <td>A group whose items are laid
 out vertically.</td>
-<td><code class="samp docutils literal"><span class="pre">Group(orientation='vertical')</span></code></td>
+<td><code class="samp docutils literal notranslate"><span class="pre">Group(orientation='vertical')</span></code></td>
 </tr>
 <tr class="row-odd"><td>VFlow</td>
 <td>A vertical group whose items
-&#8220;wrap&#8221; when they exceed the
+“wrap” when they exceed the
 available vertical space.</td>
-<td><code class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
+<td><code class="samp docutils literal notranslate"><span class="pre">Group(orientation='vertical',</span>
 <span class="pre">layout='flow',</span> <span class="pre">show_labels=False)</span></code></td>
 </tr>
 <tr class="row-even"><td>VFold</td>
@@ -590,20 +595,20 @@ available vertical space.</td>
 items can be collapsed (i.e.,
 folded) by clicking their
 titles.</td>
-<td><code class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
+<td><code class="samp docutils literal notranslate"><span class="pre">Group(orientation='vertical',</span>
 <span class="pre">layout='fold',</span> <span class="pre">show_labels=False)</span></code></td>
 </tr>
 <tr class="row-odd"><td>VGrid</td>
 <td>A vertical group whose items
 are laid out in two columns.</td>
-<td><code class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
+<td><code class="samp docutils literal notranslate"><span class="pre">Group(orientation='vertical',</span>
 <span class="pre">columns=2)</span></code></td>
 </tr>
 <tr class="row-even"><td>VSplit</td>
 <td>A vertical group with splitter
 bars to separate it from other
 groups.</td>
-<td><code class="samp docutils literal"><span class="pre">Group(orientation='vertical',</span>
+<td><code class="samp docutils literal notranslate"><span class="pre">Group(orientation='vertical',</span>
 <span class="pre">layout='split')</span></code></td>
 </tr>
 </tbody>
@@ -621,10 +626,10 @@ discussed in more detail in <a class="reference internal" href="advanced_view.ht
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id3">[4]</a></td><td>All code examples in this guide that include a file name are also
-available as examples in the <code class="file docutils literal"><span class="pre">tutorials/doc_examples/examples</span></code>
+available as examples in the <code class="file docutils literal notranslate"><span class="pre">tutorials/doc_examples/examples</span></code>
 subdirectory of the Traits docs directory. You can run them individually,
 or view them in a tutorial program by running:
-<strong class="program">python</strong> <code class="file docutils literal"><em><span class="pre">Traits_dir</span></em><span class="pre">/tutorials/tutor.py</span></code> <code class="file docutils literal"><em><span class="pre">Traits_dir</span></em><span class="pre">/docs/tutorials/doc_examples</span></code></td></tr>
+<strong class="program">python</strong> <code class="file docutils literal notranslate"><em><span class="pre">Traits_dir</span></em><span class="pre">/tutorials/tutor.py</span></code> <code class="file docutils literal notranslate"><em><span class="pre">Traits_dir</span></em><span class="pre">/docs/tutorials/doc_examples</span></code></td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id15" rules="none">
@@ -647,7 +652,7 @@ one type, but it is not recommended.</td></tr>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">The View and Its Building Blocks</a><ul>
 <li><a class="reference internal" href="#the-view-object">The View Object</a></li>
@@ -679,12 +684,14 @@ one type, but it is not recommended.</td></tr>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -706,10 +713,10 @@ one type, but it is not recommended.</td></tr>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>

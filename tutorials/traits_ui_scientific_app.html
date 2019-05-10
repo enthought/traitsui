@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Writing a graphical application for scientific programming using TraitsUI 6.0 &mdash; TraitsUI 6 User Manual</title>
+    <title>Writing a graphical application for scientific programming using TraitsUI 6.1 &mdash; TraitsUI 6 User Manual</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '6.0.0',
+        VERSION:     '6.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,15 +24,16 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <script type="text/javascript" src="../_static/js/wrap_on_dot.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico">
+    <link rel="shortcut icon" href="../_static/img/favicon.ico">
     <link rel="index" title="Index" href="../genindex.html" >
     <link rel="search" title="Search" href="../search.html" >
     <link rel="top" title="TraitsUI 6 User Manual" href="../index.html" >
-    <link rel="up" title="TraitsUI 6.0 Tutorials" href="index.html" >
-    <link rel="next" title="TraitsUI 6.0 Demos" href="../demos/index.html" >
-    <link rel="prev" title="TraitsUI 6.0 Tutorials" href="index.html" > 
+    <link rel="up" title="TraitsUI 6.1 Tutorials" href="index.html" >
+    <link rel="next" title="TraitsUI 6.1 Demos" href="../demos/index.html" >
+    <link rel="prev" title="TraitsUI 6.1 Tutorials" href="index.html" > 
   </head>
   <body>
   <div class="container">
@@ -51,9 +52,9 @@
 	
         <li class="active"><a href="../index.html">TraitsUI 6 User Manual</a></li>
 	
-          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.0 Tutorials</a></li>
+          <li class="active"><a href="index.html" accesskey="U">TraitsUI 6.1 Tutorials</a></li>
   
-    <li><a href="#">Writing a graphical application for scientific programming using TraitsUI 6.0</a></li>
+    <li><a href="#">Writing a graphical application for scientific programming using TraitsUI 6.1</a></li>
   
 
     </ul>
@@ -65,11 +66,15 @@
            accesskey="I">index</a>
       </li>
       <li class="active">
-        <a href="../demos/index.html" title="TraitsUI 6.0 Demos"
+        <a href="../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="../demos/index.html" title="TraitsUI 6.1 Demos"
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="index.html" title="TraitsUI 6.0 Tutorials"
+        <a href="index.html" title="TraitsUI 6.1 Tutorials"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -86,7 +91,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="writing-a-graphical-application-for-scientific-programming-using-traitsui-version">
-<span id="writing-a-graphical-application-for-scientific-programming-using-traitsui"></span><h1>Writing a graphical application for scientific programming using TraitsUI 6.0<a class="headerlink" href="#writing-a-graphical-application-for-scientific-programming-using-traitsui-version" title="Permalink to this headline">¶</a></h1>
+<span id="writing-a-graphical-application-for-scientific-programming-using-traitsui"></span><h1>Writing a graphical application for scientific programming using TraitsUI 6.1<a class="headerlink" href="#writing-a-graphical-application-for-scientific-programming-using-traitsui-version" title="Permalink to this headline">¶</a></h1>
 <p><strong>A step by step guide for a non-programmer</strong></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -94,7 +99,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Gael Varoquaux</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2018-04-12</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">2019-05-10</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">License:</th><td class="field-body">BSD</td>
 </tr>
@@ -116,7 +121,7 @@ data processing aspects of the examples, but may not be paramount. Some
 examples rely on matplotlib <a class="footnote-reference" href="#id11" id="id3">[3]</a> . This
 document is <strong>not</strong> a replacement for user manuals and references of the
 different packages (traitsUI <a class="footnote-reference" href="#id12" id="id4">[4]</a>, scipy, matplotlib). It provides a
-&#8220;cookbook&#8221; approach, and not a reference.</p>
+“cookbook” approach, and not a reference.</p>
 <p>This tutorial provides step-by-step guide to building a medium-size
 application. The example chosen is an application used to do control of a
 camera, analysis of the retrieved data and display of the results. This
@@ -131,8 +136,8 @@ necessary to build the final application. Each section is in itself
 independent of the following ones. The complete beginner trying to use
 this as an introduction should not expect to understand all the details
 in a first pass.</p>
-<p>The author&#8217;s experience while working on several projects in various
-physics labs is that code tends to be created in an &#8216;organic&#8217; way, by
+<p>The author’s experience while working on several projects in various
+physics labs is that code tends to be created in an ‘organic’ way, by
 different people with various levels of qualification in computer
 development, and that it rapidly decays to a disorganized and
 hard-to-maintain code base. This tutorial tries to prevent this by
@@ -162,7 +167,7 @@ input parameters graphically in the program.</p>
 <h3>Object-oriented programming<a class="headerlink" href="#object-oriented-programming" title="Permalink to this headline">¶</a></h3>
 <p>Software engineering is a difficult field. As programs, grow they become
 harder and harder to grasp for the developer. This problem is not new and
-has sometimes been know as the &#8220;tar pit&#8221;. Many attempts have been made to
+has sometimes been know as the “tar pit”. Many attempts have been made to
 mitigate the difficulties. Most often they consist in finding useful
 abstractions that allow the developer to manipulate larger ideas, rather
 than their software implementation.</p>
@@ -186,13 +191,13 @@ procedure to rotate it.</p>
 <p>Object-oriented programming introduces a new abstraction: the <cite>object</cite>.
 It consists of both data (our 3 numbers, in the case of a point), and
 procedures that use and modify this data (e.g., rotations). The data
-entries are called &#8220;<cite>attributes</cite>&#8221; of the object and the procedures
-&#8220;<cite>methods</cite>&#8221;. Thus with object oriented programming an object &#8220;knows&#8221; how
+entries are called “<cite>attributes</cite>” of the object and the procedures
+“<cite>methods</cite>”. Thus with object oriented programming an object “knows” how
 to be rotated.</p>
 <p>A point object could be implemented in python with:</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/code_block0.py">code snippet #0</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span>
 
 <span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; 3D Point objects &quot;&quot;&quot;</span>
@@ -212,7 +217,7 @@ to be rotated.</p>
 <p>This code creates a <em>Point</em> class. Points objects can be created as
 <cite>instances</cite> of the Point class:</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Point</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">rotate_z</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
@@ -229,7 +234,7 @@ internal details of their procedures. As long as the object has a
 <blockquote>
 <div><p><strong>Note</strong>: Beginners often use objects as structures: entities with
 several data fields useful to pass data around in a program. Objects
-are much more then that: they have methods. They are &#8216;active&#8217; data
+are much more then that: they have methods. They are ‘active’ data
 structures that know how to modify themselves. Part of the point of
 object-oriented programming is that the object is responsible for
 modifying itself through its methods. The object therefore takes care
@@ -244,9 +249,9 @@ for such a use than objects.</p>
 a point is, but that you also want some points to have a color. Instead
 of copy-and-pasting the <em>Point</em> class and adding a color attribute, you can
 define a new class <em>ColoredPoint</em> that inherits all of the <em>Point</em>
-class&#8217;s methods and attributes:</p>
+class’s methods and attributes:</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ColoredPoint</span><span class="p">(</span><span class="n">Point</span><span class="p">):</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ColoredPoint</span><span class="p">(</span><span class="n">Point</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Colored 3D point &quot;&quot;&quot;</span>
     <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
 </pre></div>
@@ -276,14 +281,14 @@ attributes. To be able to build the dialog, the <em>HasTraits</em> class
 enforces that the types of all the attributes are specified in the class
 definition.</p>
 <p>The <em>HasTraits</em> objects have a <em>configure_traits()</em> method that brings up
-a dialog to edit the objects&#8217; attributes specified in its class
+a dialog to edit the objects’ attributes specified in its class
 definition.</p>
 <p>Here we define a camera object (which, in our real world example, is a
 camera interfaced to python through the ctypes <a class="footnote-reference" href="#id14" id="id5">[5]</a> module), and show how
 to open a dialog to edit its properties :</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/code_block1.py">code snippet #1</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
@@ -302,7 +307,7 @@ to open a dialog to edit its properties :</p>
         <span class="k">print</span> <span class="s2">&quot;capturing an image at </span><span class="si">%i</span><span class="s2"> ms exposure, gain: </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">exposure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gain</span> <span class="p">)</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">()</span>
     <span class="n">camera</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
     <span class="n">camera</span><span class="o">.</span><span class="n">capture</span><span class="p">()</span>
@@ -310,7 +315,7 @@ to open a dialog to edit its properties :</p>
 </div>
 </div></blockquote>
 <p>The <em>camera.configure_traits()</em> call in the above example opens a dialog
-that allows the user to modify the camera object&#8217;s attributes:</p>
+that allows the user to modify the camera object’s attributes:</p>
 <blockquote>
 <div><img alt="../_images/code_block1.png" src="../_images/code_block1.png" />
 </div></blockquote>
@@ -337,7 +342,7 @@ object, we can control how the representation generated by Traits looks
 like (see the TraitsUI manual):</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/container.py">code snippet #2</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
@@ -371,20 +376,20 @@ and the <em>Display</em> object below it:</p>
 </div></blockquote>
 <p>The <em>View</em> attribute of the <em>container</em> object has been tweaked to get
 the representation we are interested in: traitsUI is told to display the
-<em>camera</em> item with a <em>&#8216;custom&#8217;</em> style, which instructs it to display the
-representation of the object inside the current panel. The <em>&#8216;show_label&#8217;</em>
+<em>camera</em> item with a <em>‘custom’</em> style, which instructs it to display the
+representation of the object inside the current panel. The <em>‘show_label’</em>
 argument is set to <em>False</em> as we do not want the name of the displayed
-object (&#8216;camera&#8217;, for instance) to appear in the dialog. See the traitsUI
+object (‘camera’, for instance) to appear in the dialog. See the traitsUI
 manual for more details on this powerful feature.</p>
 <p>The <em>camera</em> and <em>display</em> objects are created during the call to the
 creator of the <em>container</em> object, and passed as its attributes
-immediately: <em>&#8220;container = Container(camera=Camera(),
-display=TextDisplay())&#8221;</em></p>
+immediately: <em>“container = Container(camera=Camera(),
+display=TextDisplay())”</em></p>
 </div>
 <div class="section" id="writing-a-graphical-script">
-<h3>Writing a &#8220;graphical script&#8221;<a class="headerlink" href="#writing-a-graphical-script" title="Permalink to this headline">¶</a></h3>
+<h3>Writing a “graphical script”<a class="headerlink" href="#writing-a-graphical-script" title="Permalink to this headline">¶</a></h3>
 <p>If you want to create an application that has a very linear flow, popping
-up dialogs when user input is required, like a &#8220;setup wizard&#8221; often used
+up dialogs when user input is required, like a “setup wizard” often used
 to install programs, you already have all the tools to do it. You can use
 object oriented programming to write your program, and call the objects
 <em>configure_traits</em> method each time you need user input. This might be an
@@ -413,7 +418,7 @@ widgets (e.g., text boxes, check boxes, buttons, menus). Each of these
 widgets has specific behaviors associated with user interaction
 (modifying the content of a text box, clicking on a button, opening a
 menu). It is natural to use objects to represent the widgets, with their
-behavior being set in the object&#8217;s methods.</p>
+behavior being set in the object’s methods.</p>
 <p>Dialogs populated with widgets are automatically created by <cite>traitsUI</cite> in
 the <em>configure_traits()</em> call. <cite>traitsUI</cite> allow the developer to not
 worry about widgets, but to deal only with objects and their attributes.
@@ -422,13 +427,13 @@ only the attributes they are associated to.</p>
 <p>A <em>HasTraits</em> object has an <em>edit_traits()</em> method that creates a
 graphical panel to edit its attributes. This method creates and returns
 the panel, but does not start its event loop. The panel is not yet
-&#8220;alive&#8221;, unlike with the <em>configure_traits()</em> method. Traits uses the
+“alive”, unlike with the <em>configure_traits()</em> method. Traits uses the
 wxWidget toolkit by default to create its widget. They can be turned live
 and displayed by starting a wx application, and its main loop (ie event
 loop in wx speech).</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/event_loop.py">code snippet #3</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">wx</span>
 
 <span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
@@ -455,8 +460,8 @@ it processes events, until the user closes the GUI, and the event loop
 returns to the code.</p>
 <p>Interactions with objects generate events, and these events can be
 associated to callbacks, ie functions or methods processing the event. In
-a GUI, callbacks created by user-generated events are placed on an &#8220;event
-stack&#8221;. The event loop processes each call on the event queue one after the
+a GUI, callbacks created by user-generated events are placed on an “event
+stack”. The event loop processes each call on the event queue one after the
 other, thus emptying the event queue. The flow of the program is still
 sequential (two code blocks never run at the same time in an event loop),
 but the execution order is chosen by the user, and not by the developer.</p>
@@ -467,7 +472,7 @@ but the execution order is chosen by the user, and not by the developer.</p>
 duplicated to output.</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/echo_box.py">code snippet #4</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">class</span> <span class="nc">EchoBox</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="nb">input</span> <span class="o">=</span>  <span class="n">Str</span><span class="p">()</span>
@@ -487,7 +492,7 @@ Here is an example of an interactive <cite>traitsUI</cite> application using a
 button:</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/interactive.py">code snippet #5</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">ButtonEditor</span>
 
 <span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
@@ -532,7 +537,7 @@ operations in the same time.</p>
 <p>A standard python program executes in a sequential way. Consider the
 following code snippet :</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">do_a</span><span class="p">()</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">do_a</span><span class="p">()</span>
 <span class="n">do_b</span><span class="p">()</span>
 <span class="n">do_c</span><span class="p">()</span>
 </pre></div>
@@ -543,14 +548,14 @@ everything is sequential. In some situation this can be very limiting.
 Suppose we want to capture an image from a camera and that it is a very
 lengthy operation. Suppose also that no other operation in our program
 requires the capture to be complete. We would like to have a different
-&#8220;timeline&#8221; in which the camera capture instructions can happen in a
+“timeline” in which the camera capture instructions can happen in a
 sequential way, while the rest of the program continues in parallel.</p>
 <p>Threads are the solution to this problem: a thread is a portion of a
 program that can run concurrently with other portions of the program.</p>
 <p>Programming with threads is difficult as instructions are no longer
 executed in the order they are specified and the output of a program can
 vary from a run to another, depending on subtle timing issues. These
-problems are known as &#8220;race conditions&#8221; and to minimize them you should
+problems are known as “race conditions” and to minimize them you should
 avoid accessing the same objects in different threads. Indeed if two
 different threads are modifying the same object at the same time,
 unexpected things can happen.</p>
@@ -564,7 +569,7 @@ thread in its <em>run</em> method. You can start your thread using its <em>start
 method:</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/thread_example.py">code snippet #6</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 
 <span class="k">class</span> <span class="nc">MyThread</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
@@ -580,7 +585,7 @@ method:</p>
 </div>
 </div></blockquote>
 <p>The above code yields the following output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Main</span> <span class="n">thread</span> <span class="n">done</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Main</span> <span class="n">thread</span> <span class="n">done</span>
 <span class="n">MyThread</span> <span class="n">done</span>
 </pre></div>
 </div>
@@ -613,7 +618,7 @@ you are accessing it. Here is an example of code inserting the
 modification to traits objects by hand in the event loop:</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/traits_thread.py">code snippet #7</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">ButtonEditor</span>
@@ -662,7 +667,7 @@ modification to traits objects by hand in the event loop:</p>
     <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="s1">&#39;display&#39;</span><span class="p">,</span> <span class="s1">&#39;camera&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;custom&quot;</span><span class="p">,</span> <span class="n">resizable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">MainWindow</span><span class="p">()</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -672,7 +677,7 @@ continuous camera acquisition loop.</p>
 <blockquote>
 <div><img alt="../_images/traits_thread.png" src="../_images/traits_thread.png" />
 </div></blockquote>
-<p>When the &#8220;Start stop capture&#8221; button is pressed the
+<p>When the “Start stop capture” button is pressed the
 <em>_start_stop_capture_fired</em> method is called. It checks to see if a
 <em>CaptureThread</em> is running or not. If none is running, it starts a new
 one. If one is running, it sets its <em>wants_abort</em> attribute to true.</p>
@@ -735,7 +740,7 @@ control as the <em>control</em> attribute of the editor. TraitsUI takes care of
 displaying and positioning the editor.</p>
 <blockquote>
 <div><p><a class="reference external" href="../_static/mpl_figure_editor.py">code snippet #8</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wx</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wx</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="c1"># We want matplotlib to use a wxPython backend</span>
@@ -778,7 +783,7 @@ displaying and positioning the editor.</p>
     <span class="n">klass</span> <span class="o">=</span> <span class="n">_MPLFigureEditor</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="c1"># Create a window to demo the editor</span>
     <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasTraits</span>
     <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span>
@@ -794,8 +799,8 @@ displaying and positioning the editor.</p>
                         <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
                         <span class="n">resizable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="nb">super</span><span class="p">(</span><span class="n">Test</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">Test</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
             <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
             <span class="n">t</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
             <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">11</span><span class="o">*</span><span class="n">t</span><span class="p">)),</span> <span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">11</span><span class="o">*</span><span class="n">t</span><span class="p">)))</span>
@@ -830,11 +835,11 @@ physics experiment (Bose-Einstein condensation), at the university of
 Toronto.</p>
 <p>The reason I am providing this code is to give an example to study of how
 a full-blown application can be built. This code can be found in the
-<a class="reference external" href="http://gael-varoquaux.info/computers/traits_tutorial/traits_tutorial.zip">tutorial&#8217;s zip file</a>
+<a class="reference external" href="http://gael-varoquaux.info/computers/traits_tutorial/traits_tutorial.zip">tutorial’s zip file</a>
 (it is the file <cite>application.py</cite>).</p>
 <ul class="simple">
 <li>The camera will be built as an object. Its real attributes (exposure
-time, gain...) will be represented as the object&#8217;s attributes, and
+time, gain…) will be represented as the object’s attributes, and
 exposed through traitsUI.</li>
 <li>The continuous acquisition/processing/user-interaction will be handled
 by appropriate threads, as discussed in section 2.3.</li>
@@ -844,7 +849,7 @@ by appropriate threads, as discussed in section 2.3.</li>
 <h3>The imports<a class="headerlink" href="#the-imports" title="Permalink to this headline">¶</a></h3>
 <p>The MPLFigureEditor is imported from the last example.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">Group</span><span class="p">,</span> <span class="n">HSplit</span><span class="p">,</span> <span class="n">Handler</span>
@@ -862,7 +867,7 @@ by appropriate threads, as discussed in section 2.3.</li>
 <p>These objects store information for the program to interact with the user
 via traitsUI.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Experiment</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Experiment</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Object that contains the parameters that control the experiment,</span>
 <span class="sd">    modified by the user.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -888,7 +893,7 @@ via traitsUI.</p>
 it has a method to acquire an image (or in our case simulate acquiring),
 using its attributes as parameters for the acquisition.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Camera objects. Implements both the camera parameters controls, and</span>
 <span class="sd">    the picture acquisition.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -926,7 +931,7 @@ accumulation of threads in the case that the processing takes longer than
 the time lapse between two images, the acquisition thread checks that the
 processing thread is done before spawning a new one.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">results_obj</span><span class="p">):</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">results_obj</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Function called to do the processing &quot;&quot;&quot;</span>
     <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">indices</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">X</span><span class="o">*</span><span class="n">image</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
@@ -985,7 +990,7 @@ also has an Button for starting or stopping the acquisition, and a string
 process. The view attribute is tweaked to produce a pleasant and usable
 dialog. Tabs are used to help the display to be light and clear.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ControlPanel</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ControlPanel</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; This object is the core of the traitsUI interface. Its view is</span>
 <span class="sd">    the right panel of the application, and it hosts the method for</span>
 <span class="sd">    interaction between the objects and the GUI.</span>
@@ -1076,7 +1081,7 @@ dialog. Tabs are used to help the display to be light and clear.</p>
                 <span class="n">handler</span><span class="o">=</span><span class="n">MainWindowHandler</span><span class="p">(),</span>
                 <span class="n">buttons</span><span class="o">=</span><span class="n">NoButtons</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">MainWindow</span><span class="p">()</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1169,9 +1174,9 @@ helpful on the mailing lists.</p>
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/img/e-logo.png" alt="Logo">
             </a></p>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Writing a graphical application for scientific programming using TraitsUI 6.0</a><ul>
+<li><a class="reference internal" href="#">Writing a graphical application for scientific programming using TraitsUI 6.1</a><ul>
 <li><a class="reference internal" href="#from-objects-to-dialogs-using-traitsui">From objects to dialogs using traitsUI</a><ul>
 <li><a class="reference internal" href="#object-oriented-programming">Object-oriented programming</a><ul>
 <li><a class="reference internal" href="#objects-attributes-and-methods">Objects, attributes and methods</a></li>
@@ -1180,7 +1185,7 @@ helpful on the mailing lists.</p>
 </li>
 <li><a class="reference internal" href="#an-object-and-its-representation">An object and its representation</a></li>
 <li><a class="reference internal" href="#displaying-several-objects-in-the-same-panel">Displaying several objects in the same panel</a></li>
-<li><a class="reference internal" href="#writing-a-graphical-script">Writing a &#8220;graphical script&#8221;</a></li>
+<li><a class="reference internal" href="#writing-a-graphical-script">Writing a “graphical script”</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#from-graphical-to-interactive">From graphical to interactive</a><ul>
@@ -1211,10 +1216,10 @@ helpful on the mailing lists.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">TraitsUI 6.0 Tutorials</a></p>
+                        title="previous chapter">TraitsUI 6.1 Tutorials</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../demos/index.html"
-                        title="next chapter">TraitsUI 6.0 Demos</a></p>
+                        title="next chapter">TraitsUI 6.1 Demos</a></p>
   <h3>This Page</h3>
   <div>
     <a href="../_sources/tutorials/traits_ui_scientific_app.rst.txt"
@@ -1222,12 +1227,14 @@ helpful on the mailing lists.</p>
   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1249,10 +1256,10 @@ helpful on the mailing lists.</p>
         &copy; Copyright 2008-2018, Enthought
       </li>
       <li>
-      Last updated on Apr 12, 2018.
+      Last updated on May 10, 2019.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.5.
       </li>
     </ul>
     </div>
