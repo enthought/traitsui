@@ -1742,6 +1742,9 @@ class TreeNodeObject(HasPrivateTraits):
     """ Represents the object that corresponds to a tree node.
     """
 
+    #: A cache for listeners that need to keep state.
+    _listener_cache = Dict
+
     #-------------------------------------------------------------------------
     #  Returns whether chidren of this object are allowed or not:
     #-------------------------------------------------------------------------
