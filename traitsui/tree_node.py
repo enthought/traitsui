@@ -1892,11 +1892,11 @@ class TreeNodeObject(HasPrivateTraits):
         """
         label = node.label
         if label[:1] != '=':
-            memo = ('label', label, object, listener)
+            memo = ('label', label, node, listener)
             if not remove:
                 def wrapped_listener(target, name, new):
                     """ Ensure listener gets called with correct object. """
-                    return listener(object, name, new)
+                    return listener(node, name, new)
 
                 self._listener_cache[memo] = wrapped_listener
             else:
