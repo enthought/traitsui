@@ -189,6 +189,9 @@ class _DataFrameEditor(UIEditor):
                     activated_row=self._target_name(self.factory.activated_row),  # noqa
                     clicked=self._target_name(self.factory.clicked),
                     dclicked=self._target_name(self.factory.dclicked),
+                    scroll_to_row=self._target_name(self.factory.scroll_to_row),  # noqa
+                    scroll_to_row_hint=self.factory.scroll_to_row_hint,
+                    scroll_to_column=self._target_name(self.factory.scroll_to_column),  # noqa
                     right_clicked=self._target_name(self.factory.right_clicked),  # noqa
                     right_dclicked=self._target_name(self.factory.right_dclicked),  # noqa
                     column_clicked=self._target_name(self.factory.column_clicked),  # noqa
@@ -297,6 +300,17 @@ class DataFrameEditor(BasicEditorFactory):
     # The optional extended name of the trait to synchronize left double click
     # data with. The data is a TabularEditorEvent:
     dclicked = Str
+
+    # The optional extended name of the Event trait that should be used to
+    # trigger a scroll-to command. The data is an integer giving the row.
+    scroll_to_row = Str
+
+    # Controls behavior of scroll to row
+    scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
+
+    # The optional extended name of the Event trait that should be used to
+    # trigger a scroll-to command. The data is an integer giving the column.
+    scroll_to_column = Str
 
     # The optional extended name of the trait to synchronize right click data
     # with. The data is a TabularEditorEvent:
