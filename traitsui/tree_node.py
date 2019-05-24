@@ -246,7 +246,7 @@ class TreeNode(HasPrivateTraits):
     def insert_child(self, object, index, child):
         """ Inserts a child into the object's children.
         """
-        children = self.get_children()
+        children = self.get_children(object)
         children[index:index] = [child]
 
     #-------------------------------------------------------------------------
