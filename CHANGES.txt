@@ -1,6 +1,16 @@
 Traits UI Changelog
 ===================
 
+Release 6.1.1
+-------------
+
+A bugfix release to correct some critical issues with the TreeEditor.
+
+Fixes
+~~~~~
+* Fix TreeNodeObject listener cache (#558).
+* Fix tree node insertion (#561).
+
 Release 6.1.0
 -------------
 
