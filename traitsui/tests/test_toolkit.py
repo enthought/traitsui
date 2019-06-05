@@ -1,9 +1,8 @@
-
 from __future__ import absolute_import
 from contextlib import contextmanager
 import warnings
+import unittest
 
-from traits.testing.unittest_tools import unittest
 from traits.trait_base import ETSConfig
 import traitsui.toolkit
 
