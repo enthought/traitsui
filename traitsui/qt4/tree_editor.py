@@ -1952,10 +1952,7 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
 
         renderer = node.get_renderer(object, column=column)
         if renderer is None:
-            size = index.model().data(index, QtCore.Qt.SizeHintRole)
-            if size is None:
-                size = QtCore.QSize(1, 21)
-            return size
+            return super(TreeItemDelegate, self).sizeHint(option, index)
 
         size_context = (option, index)
         size = renderer.size(
