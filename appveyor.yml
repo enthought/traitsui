@@ -23,10 +23,6 @@ matrix:
     - RUNTIME: '3.6'
       TOOLKITS: "pyside2"
 
-branches:
-  only:
-    - master
-
 cache:
   - C:\Users\appveyor\.cache -> appveyor-clean-cache.txt
   - C:\Users\appveyor\AppData\Local\pip\Cache -> appveyor-clean-cache.txt
