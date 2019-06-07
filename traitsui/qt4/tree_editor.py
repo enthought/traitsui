@@ -649,7 +649,7 @@ class SimpleEditor(Editor):
 
         node.when_label_changed(object, self._label_updated, True)
         node.when_column_labels_change(
-            object, self._column_labels_updated, False)
+            object, self._column_labels_updated, True)
 
     #-------------------------------------------------------------------------
     #  Returns the tree node data for a specified object in the form
