@@ -24,6 +24,11 @@ matrix:
       env: RUNTIME=2.7 TOOLKITS="pyqt wx"
   fast_finish: true
 
+branches:
+  only:
+    - master
+    - maint/6.1
+
 cache:
   directories:
     - "~/.cache"
