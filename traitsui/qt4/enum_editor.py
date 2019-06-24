@@ -186,12 +186,12 @@ class SimpleEditor(BaseEditor):
                 try:
                     index = self.names.index(self.inverse_mapping[self.value])
                     self.control.setCurrentIndex(index)
-                except:
+                except Exception:
                     self.control.setCurrentIndex(-1)
             else:
                 try:
                     self.control.setEditText(self.str_value)
-                except:
+                except Exception:
                     self.control.setEditText('')
             self._no_enum_update -= 1
 
@@ -387,7 +387,7 @@ class RadioEditor(BaseEditor):
         """
         try:
             self.value = self.mapping[self.names[index]]
-        except:
+        except Exception:
             pass
 
 
@@ -427,7 +427,7 @@ class ListEditor(BaseEditor):
                     control.setCurrentItem(itm)
                     control.scrollToItem(itm)
                     break
-        except:
+        except Exception:
             pass
 
     def rebuild_editor(self):
@@ -452,15 +452,15 @@ class ListEditor(BaseEditor):
     def update_object(self, text):
         """ Handles the user selecting a list box item.
         """
-        value = unicode(text)
+        value = six.text_type(text)
         try:
             value = self.mapping[value]
-        except:
+        except Exception:
             try:
                 value = self.factory.evaluate(value)
-            except:
+            except Exception:
                 pass
         try:
             self.value = value
-        except:
+        except Exception:
             pass
