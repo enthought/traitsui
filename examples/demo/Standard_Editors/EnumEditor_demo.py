@@ -40,6 +40,12 @@ class EnumEditorDemo(HasTraits):
         Item('name_list', style='simple', label='Simple'),
         Item('_'),
 
+        Item('name_list', style='simple',
+             editor=EnumEditor(values=name_list, completion_mode='popup',
+                               evaluate=True),
+             label='Simple (text entry)'),
+        Item('_'),
+
         # The custom style defaults to radio button mode:
         Item('name_list', style='custom', label='Custom radio'),
         Item('_'),

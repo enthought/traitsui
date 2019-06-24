@@ -797,12 +797,13 @@ class RangeTextEditor(TextEditor):
                 value = self.evaluate(value)
             self.value = value
             col = OKColor
-        except:
+        except Exception:
             col = ErrorColor
 
-        pal = QtGui.QPalette(self.control.palette())
-        pal.setColor(QtGui.QPalette.Base, col)
-        self.control.setPalette(pal)
+        if self.control is not None:
+            pal = QtGui.QPalette(self.control.palette())
+            pal.setColor(QtGui.QPalette.Base, col)
+            self.control.setPalette(pal)
 
 #-------------------------------------------------------------------------
 #  'SimpleEnumEditor' factory adaptor:

@@ -20,7 +20,7 @@
 
 from __future__ import absolute_import
 
-from pyface.qt import QtCore, QtGui
+from pyface.qt import QtCore, QtGui, is_qt5
 from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
 from pyface.ui_traits import Image
@@ -38,8 +38,6 @@ from .editor import Editor
 from .table_model import TableModel, SortFilterTableModel
 import six
 
-
-is_qt5 = QtCore.__version_info__ >= (5,)
 
 if is_qt5:
     def set_qheader_section_resize_mode(header):
@@ -148,11 +146,14 @@ class TableEditor(Editor, BaseTableEditor):
         widget."""
 
         factory = self.factory
+        self.filter = factory.filter
+
         columns = factory.columns[:]
         if (len(columns) == 0) and (len(self.value) > 0):
             columns = [ObjectColumn(name=name)
                        for name in self.value[0].editable_traits()]
         self.columns = columns
+
         if factory.table_view_factory is not None:
             self.table_view = factory.table_view_factory(editor=self)
         if factory.source_model_factory is not None:
@@ -490,14 +491,18 @@ class TableEditor(Editor, BaseTableEditor):
         # Perform the selection so that only one signal is emitted
         selection = QtGui.QItemSelection()
         smodel = self.table_view.selectionModel()
+        if smodel is None:
+            # guard against selection during tear-down
+            return
         for index in indexes:
             index = self.model.mapFromSource(index)
             if index.isValid():
                 smodel.setCurrentIndex(
                     index, QtGui.QItemSelectionModel.NoUpdate)
                 selection.select(index, index)
+
+        smodel.blockSignals(not notify)
         try:
-            smodel.blockSignals(not notify)
             if len(selection.indexes()):
                 smodel.clear()
                 smodel.select(selection, flags)

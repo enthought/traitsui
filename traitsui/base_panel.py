@@ -70,17 +70,17 @@ class BasePanel(ActionController):
 
     # Button handlers --------------------------------------------------------
 
-    def _on_undo(self, event):
+    def _on_undo(self, event=None):
         """ Handles an "Undo" change request.
         """
         self.ui.history.undo()
 
-    def _on_redo(self, event):
+    def _on_redo(self, event=None):
         """ Handles a "Redo" change request.
         """
         self.ui.history.redo()
 
-    def _on_revert(self, event):
+    def _on_revert(self, event=None):
         """ Handles a request to revert all changes.
         """
         ui = self.ui
@@ -88,7 +88,7 @@ class BasePanel(ActionController):
             ui.history.revert()
         ui.handler.revert(ui.info)
 
-    def _on_help(self, event):
+    def _on_help(self, event=None):
         """ Handles the user clicking the Help button.
         """
         self.ui.handler.show_help(self.ui.info)

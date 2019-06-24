@@ -649,7 +649,7 @@ class SimpleEditor(Editor):
 
         node.when_label_changed(object, self._label_updated, True)
         node.when_column_labels_change(
-            object, self._column_labels_updated, False)
+            object, self._column_labels_updated, True)
 
     #-------------------------------------------------------------------------
     #  Returns the tree node data for a specified object in the form
@@ -778,7 +778,7 @@ class SimpleEditor(Editor):
         if renderer is None or not renderer.handles_icon:
             nid.setIcon(0, self._get_icon(node, object, expanded))
         else:
-            nid.setIcon(0, QIcon())
+            nid.setIcon(0, QtGui.QIcon())
 
     #-------------------------------------------------------------------------
     #  Begins an 'undoable' transaction:
@@ -1952,10 +1952,7 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
 
         renderer = node.get_renderer(object, column=column)
         if renderer is None:
-            size = index.model().data(index, QtCore.Qt.SizeHintRole)
-            if size is None:
-                size = QtCore.QSize(1, 21)
-            return size
+            return super(TreeItemDelegate, self).sizeHint(option, index)
 
         size_context = (option, index)
         size = renderer.size(
