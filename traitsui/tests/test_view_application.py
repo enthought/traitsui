@@ -20,6 +20,10 @@ from ._tools import is_current_backend_qt4
 GuiTestAssistant = toolkit_object('util.gui_test_assistant:GuiTestAssistant')
 no_gui_test_assistant = (GuiTestAssistant.__name__ == 'Unimplemented')
 
+if no_gui_test_assistant:
+    class GuiTestAssistant(object):
+        pass
+
 
 class SimpleModel(HasTraits):
     cell = Int
