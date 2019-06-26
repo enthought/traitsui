@@ -126,9 +126,10 @@ class ViewApplication(object):
             try:
                 from etsdevtools.developer.helper.fbi import enable_fbi
                 enable_fbi()
-            except:
+            except Exception:
                 pass
 
+        # this will block for modal dialogs, but not non-modals
         self.ui = self.view.ui(self.context,
                                kind=self.kind,
                                handler=self.handler,
@@ -136,4 +137,6 @@ class ViewApplication(object):
                                scrollable=self.scrollable,
                                args=self.args)
 
-        start_event_loop_qt4()
+        # only non-modal UIs need to have an event loop started for them
+        if kind not in {'modal', 'livemodal'}:
+            start_event_loop_qt4()

@@ -114,6 +114,10 @@ extra_dependencies = {
     'null': set()
 }
 
+runtime_dependencies = {
+    '2.7': {'mock'},
+}
+
 environment_vars = {
     'pyside': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside'},
     'pyside2': {'ETS_TOOLKIT': 'qt4', 'QT_API': 'pyside2'},
@@ -139,7 +143,10 @@ def install(runtime, toolkit, environment):
     """
     parameters = get_parameters(runtime, toolkit, environment)
     packages = ' '.join(
-        dependencies | extra_dependencies.get(toolkit, set()))
+        dependencies
+        | extra_dependencies.get(toolkit, set())
+        | runtime_dependencies.get(runtime, set())
+    )
     # edm commands to setup the development environment
     commands = [
         "edm environments create {environment} --force --version={runtime}",
