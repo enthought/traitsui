@@ -108,8 +108,7 @@ extra_dependencies = {
     # XXX once pyside2 is available in EDM, we will want it here
     'pyside2': set(),
     'pyqt': {'pyqt<4.12'},  # FIXME: build of 4.12-1 appears to be bad
-    # XXX once pyqt5 is available in EDM, we will want it here
-    'pyqt5': set(),
+    'pyqt5': {'pyqt5'},
     'wx': {'wxpython'},
     'null': set()
 }
@@ -134,7 +133,7 @@ def cli():
 
 
 @cli.command()
-@click.option('--runtime', default='3.5')
+@click.option('--runtime', default='3.6')
 @click.option('--toolkit', default='null')
 @click.option('--environment', default=None)
 def install(runtime, toolkit, environment):
@@ -156,9 +155,7 @@ def install(runtime, toolkit, environment):
         "edm run -e {environment} -- python setup.py install"
     ]
     # pip install pyqt5 and pyside2, because we don't have them in EDM yet
-    if toolkit == 'pyqt5':
-        commands.append("edm run -e {environment} -- pip install pyqt5==5.9.2")
-    elif toolkit == 'pyside2':
+    if toolkit == 'pyside2':
         commands.append(
             "edm run -e {environment} -- pip install pyside2==5.11"
         )
