@@ -127,4 +127,6 @@ class ViewApplication(object):
                                scrollable=self.scrollable,
                                args=self.args)
 
-        start_event_loop_qt4()
+        # only non-modal UIs need to have an event loop started for them
+        if kind not in {'modal', 'livemodal'}:
+            start_event_loop_qt4()
