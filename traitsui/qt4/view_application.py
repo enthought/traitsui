@@ -120,6 +120,8 @@ class ViewApplication(object):
         self.id = id
         self.scrollable = scrollable
         self.args = args
+
+        # this will block for modal dialogs, but not non-modals
         self.ui = self.view.ui(self.context,
                                kind=self.kind,
                                handler=self.handler,
