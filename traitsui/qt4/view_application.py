@@ -120,15 +120,6 @@ class ViewApplication(object):
         self.id = id
         self.scrollable = scrollable
         self.args = args
-
-        # FIXME: fbi is wx specific at the moment.
-        if os.environ.get('ENABLE_FBI') is not None:
-            try:
-                from etsdevtools.developer.helper.fbi import enable_fbi
-                enable_fbi()
-            except:
-                pass
-
         self.ui = self.view.ui(self.context,
                                kind=self.kind,
                                handler=self.handler,

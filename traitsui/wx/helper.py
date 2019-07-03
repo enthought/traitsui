@@ -540,20 +540,6 @@ def init_wx_handlers(control, object, prefix=''):
             handler(control, method)
 
 #-------------------------------------------------------------------------
-#  Safely tries to pop up an FBI window if etsdevtools.debug is installed
-#-------------------------------------------------------------------------
-
-
-def open_fbi():
-    try:
-        from etsdevtools.developer.helper.fbi import if_fbi
-        if not if_fbi():
-            import traceback
-            traceback.print_exc()
-    except ImportError:
-        pass
-
-#-------------------------------------------------------------------------
 #  'GroupEditor' class:
 #-------------------------------------------------------------------------
 

@@ -56,7 +56,7 @@ from pyface.dock.api import DockWindow, DockSizer, DockSection, DockRegion, Dock
 
 from .constants import OKColor
 from .editor import Editor
-from .helper import open_fbi, TraitsUIPanel, TraitsUIScrolledPanel
+from .helper import TraitsUIPanel, TraitsUIScrolledPanel
 
 #-------------------------------------------------------------------------
 #  Global data:
@@ -1650,18 +1650,12 @@ class SimpleEditor(Editor):
         """ Returns whether the action should be defined in the user interface.
         """
         if action.defined_when != '':
-            try:
-                if not eval(action.defined_when, globals(), self._context):
-                    return False
-            except:
-                open_fbi()
+            if not eval(action.defined_when, globals(), self._context):
+                return False
 
         if action.visible_when != '':
-            try:
-                if not eval(action.visible_when, globals(), self._context):
-                    return False
-            except:
-                open_fbi()
+            if not eval(action.visible_when, globals(), self._context):
+                return False
 
         return True
 
@@ -1729,11 +1723,8 @@ class SimpleEditor(Editor):
         """
         if condition != '':
             value = True
-            try:
-                if not eval(condition, globals(), self._context):
-                    value = False
-            except:
-                open_fbi()
+            if not eval(condition, globals(), self._context):
+                value = False
             setattr(object, trait, value)
 
 #----- Menu event handlers: ----------------------------------------------
