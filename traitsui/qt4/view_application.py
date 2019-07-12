@@ -121,14 +121,6 @@ class ViewApplication(object):
         self.scrollable = scrollable
         self.args = args
 
-        # FIXME: fbi is wx specific at the moment.
-        if os.environ.get('ENABLE_FBI') is not None:
-            try:
-                from etsdevtools.developer.helper.fbi import enable_fbi
-                enable_fbi()
-            except Exception:
-                pass
-
         # this will block for modal dialogs, but not non-modals
         self.ui = self.view.ui(self.context,
                                kind=self.kind,
