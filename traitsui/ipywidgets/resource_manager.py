@@ -25,12 +25,4 @@ class PyfaceResourceFactory(ResourceFactory):
     def image_from_data(self, data, filename=None):
         """ Creates an image from the specified data. """
 
-        suffix = imghdr.what(filename, data)
-        mimetype = mimetypes.suffix_map['.' + suffix]
-
-        data_url = u"data:{};base64,{}".format(
-            mimetype,
-            base64.b64encode(data),
-        )
-
-        return data_url
+        return data
