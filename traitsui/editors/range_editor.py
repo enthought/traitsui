@@ -23,6 +23,10 @@
 
 from __future__ import absolute_import
 
+from types import CodeType
+
+import six
+
 from traits.api import (CTrait, Property, Range, Enum, Str, Int, Any, Unicode,
                         Bool, Undefined)
 
@@ -131,10 +135,16 @@ class ToolkitEditorFactory(EditorFactory):
                 handler = handler.handler
 
             if self.low_name == '':
-                self.low = handler._low
+                if isinstance(handler._low, CodeType):
+                    self.low = eval(handler._low)
+                else:
+                    self.low = handler._low
 
             if self.high_name == '':
-                self.high = handler._high
+                if isinstance(handler._low, CodeType):
+                    self.high = eval(handler._high)
+                else:
+                    self.high = handler._high
         else:
             if (self.low is None) and (self.low_name == ''):
                 self.low = 0.0
@@ -155,8 +165,8 @@ class ToolkitEditorFactory(EditorFactory):
         if self.is_float is Undefined:
             self.is_float = isinstance(low, float)
 
-        if (self.low_label == '') or (self.low_label == unicode(old_low)):
-            self.low_label = unicode(low)
+        if (self.low_label == '') or (self.low_label == six.text_type(old_low)):
+            self.low_label = six.text_type(low)
 
     def _get_high(self):
         return self._high
@@ -167,11 +177,11 @@ class ToolkitEditorFactory(EditorFactory):
         if self.is_float is Undefined:
             self.is_float = isinstance(high, float)
 
-        if (self.high_label == '') or (self.high_label == unicode(old_high)):
-            self.high_label = unicode(high)
+        if (self.high_label == '') or (self.high_label == six.text_type(old_high)):
+            self.high_label = six.text_type(high)
 
     def _cast(self, value):
-        if not isinstance(value, basestring):
+        if not isinstance(value, six.string_types):
             return value
 
         try:

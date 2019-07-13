@@ -111,7 +111,7 @@ class UI(HasPrivateTraits):
     history = Any
 
     # The KeyBindings object (if any) for this UI:
-    key_bindings = Property  # Instance( KeyBindings )
+    key_bindings = Property(depends_on=['view._key_bindings', 'context'])
 
     # The unique ID for this UI for persistence
     id = Str
@@ -194,12 +194,15 @@ class UI(HasPrivateTraits):
     # its value is arrived at too late to be of use in building the UI.
     _scrollable = Bool(False)
 
+    # Cache for key bindings.
+    _key_bindings = Instance('traitsui.key_bindings.KeyBindings')
+
     # List of traits that are reset when a user interface is recycled
     # (i.e. rebuilt).
     recyclable_traits = [
         '_context', '_revert', '_defined', '_visible', '_enabled', '_checked',
         '_search', '_dispatchers', '_editors', '_names', '_active_group',
-        '_undoable', '_rebuild', '_groups_cache'
+        '_undoable', '_rebuild', '_groups_cache', '_key_bindings'
     ]
 
     # List of additional traits that are discarded when a user interface is
@@ -296,8 +299,8 @@ class UI(HasPrivateTraits):
         self.control = None
 
         # Dispose of any KeyBindings object we reference:
-        if self.key_bindings is not None:
-            self.key_bindings.dispose()
+        if self._key_bindings is not None:
+            self._key_bindings.dispose()
 
         # Break the linkage to any objects in the context dictionary:
         self.context.clear()
@@ -352,7 +355,7 @@ class UI(HasPrivateTraits):
 
         # Get the context 'object' (if available):
         if len(context) == 1:
-            object = context.values()[0]
+            object = list(context.values())[0]
         else:
             object = context.get('object')
 
@@ -813,7 +816,7 @@ class UI(HasPrivateTraits):
                 if name != 'handler':
                     break
         elif n == 1:
-            name = context.keys()[0]
+            name = list(context.keys())[0]
 
         value = context.get(name)
         if value is not None:
@@ -950,21 +953,24 @@ class UI(HasPrivateTraits):
 
     #-- Property Implementations ---------------------------------------------
 
-    @property_depends_on('view, context')
     def _get_key_bindings(self):
-        view, context = self.view, self.context
-        if (view is None) or (context is None):
-            return None
+        if self._key_bindings is None:
+            # create a new key_bindings instance lazily
 
-        # Get the KeyBindings object to use:
-        values = context.values()
-        key_bindings = view.key_bindings
-        if key_bindings is None:
-            from .key_bindings import KeyBindings
+            view, context = self.view, self.context
+            if (view is None) or (context is None):
+                return None
 
-            return KeyBindings(controllers=values)
+            # Get the KeyBindings object to use:
+            values = list(context.values())
+            key_bindings = view.key_bindings
+            if key_bindings is None:
+                from .key_bindings import KeyBindings
+                self._key_bindings = KeyBindings(controllers=values)
+            else:
+                self._key_bindings = key_bindings.clone(controllers=values)
 
-        return key_bindings.clone(controllers=values)
+        return self._key_bindings
 
     #-- Traits Event Handlers ------------------------------------------------
 

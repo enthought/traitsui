@@ -8,7 +8,7 @@ starting state (before any "Apply").
 Note that this does not automatically provide a full (multi-step incremental)
 Undo capability.
 """
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from traits.api import HasTraits, Str, List
 from traitsui.api import Item, View, Handler, HGroup, VGroup, TextEditor

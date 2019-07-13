@@ -14,6 +14,7 @@ For an example of how to dynamically vary the bounds of a Range trait, see
 the *Dynamic Range Editor* example.
 """
 
+from __future__ import absolute_import
 from traits.api import HasTraits, Range
 from traitsui.api import Item, Group, View
 

@@ -24,6 +24,7 @@
 #-------------------------------------------------------------------------
 
 # Standard library imports.
+from __future__ import absolute_import
 import os
 import sys
 
@@ -128,13 +129,6 @@ class ViewApplication(wx.App):
         self.id = id
         self.scrollable = scrollable
         self.args = args
-
-        if os.environ.get('ENABLE_FBI') is not None:
-            try:
-                from etsdevtools.developer.helper.fbi import enable_fbi
-                enable_fbi()
-            except:
-                pass
 
         if redirect_filename.strip() != '':
             super(ViewApplication, self).__init__(1, redirect_filename)

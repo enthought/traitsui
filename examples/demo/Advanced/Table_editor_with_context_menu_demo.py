@@ -16,6 +16,7 @@ a single event handler defined for the category (in this case, the category
 is 'affects_average').
 """
 
+from __future__ import absolute_import
 from random import randint
 from traits.api import HasStrictTraits, Str, Int, Float, List, Property
 from traitsui.api import View, Item, TableEditor

@@ -23,6 +23,7 @@ based custom control.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
@@ -31,11 +32,8 @@ import wx
 from traitsui.editors.custom_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
-
-from helper \
-    import open_fbi
 
 #-------------------------------------------------------------------------
 #  'CustomEditor' class:
@@ -56,10 +54,7 @@ class CustomEditor(Editor):
         """
         factory = self.factory.factory
         if factory is not None:
-            try:
-                self.control = factory(*((parent, self) + self.factory.args))
-            except:
-                open_fbi()
+            self.control = factory(*((parent, self) + self.factory.args))
         if self.control is None:
             self.control = control = wx.StaticText(
                 parent, -1, 'An error occurred creating a custom editor.\n'

@@ -22,9 +22,11 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import os
 import wx
 import copy
+import six
 
 try:
     from pyface.wx.drag_and_drop import PythonDropSource, \
@@ -54,7 +56,7 @@ from pyface.dock.api import DockWindow, DockSizer, DockSection, DockRegion, Dock
 
 from .constants import OKColor
 from .editor import Editor
-from .helper import open_fbi, TraitsUIPanel, TraitsUIScrolledPanel
+from .helper import TraitsUIPanel, TraitsUIScrolledPanel
 
 #-------------------------------------------------------------------------
 #  Global data:
@@ -651,7 +653,7 @@ class SimpleEditor(Editor):
             return -1
 
         icon_name = node.get_icon(object, is_expanded)
-        if isinstance(icon_name, basestring):
+        if isinstance(icon_name, six.string_types):
             if icon_name.startswith('@'):
                 image = convert_image(icon_name, 3)
                 if image is None:
@@ -662,7 +664,7 @@ class SimpleEditor(Editor):
                     path = self
                 else:
                     path = node.get_icon_path(object)
-                    if isinstance(path, basestring):
+                    if isinstance(path, six.string_types):
                         path = [path, node]
                     else:
                         path.append(node)
@@ -1648,18 +1650,12 @@ class SimpleEditor(Editor):
         """ Returns whether the action should be defined in the user interface.
         """
         if action.defined_when != '':
-            try:
-                if not eval(action.defined_when, globals(), self._context):
-                    return False
-            except:
-                open_fbi()
+            if not eval(action.defined_when, globals(), self._context):
+                return False
 
         if action.visible_when != '':
-            try:
-                if not eval(action.visible_when, globals(), self._context):
-                    return False
-            except:
-                open_fbi()
+            if not eval(action.visible_when, globals(), self._context):
+                return False
 
         return True
 
@@ -1727,11 +1723,8 @@ class SimpleEditor(Editor):
         """
         if condition != '':
             value = True
-            try:
-                if not eval(condition, globals(), self._context):
-                    value = False
-            except:
-                open_fbi()
+            if not eval(condition, globals(), self._context):
+                value = False
             setattr(object, trait, value)
 
 #----- Menu event handlers: ----------------------------------------------

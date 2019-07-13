@@ -18,6 +18,7 @@ from traitsui.tabular_adapter import TabularAdapter
 from traitsui.toolkit import toolkit_object
 from traitsui.ui_editor import UIEditor
 from traitsui.view import View
+import six
 
 
 class DataFrameAdapter(TabularAdapter):
@@ -73,7 +74,7 @@ class DataFrameAdapter(TabularAdapter):
             return self._fonts.get(self.column_id, 'Courier 10')
 
     def _get_format(self):
-        if isinstance(self._formats, basestring):
+        if isinstance(self._formats, six.string_types):
             return self._formats
         else:
             return self._formats.get(self.column_id, '%s')
@@ -122,11 +123,11 @@ class DataFrameAdapter(TabularAdapter):
 
         df = getattr(object, trait)
         if 0 < row < len(df) - 1:
-            new_df = pd.concat([df.iloc[:row, :], df.iloc[row + 1:, :]])
+            new_df = pd.concat([df.iloc[:row,:], df.iloc[row + 1:,:]])
         elif row == 0:
-            new_df = df.iloc[row + 1:, :]
+            new_df = df.iloc[row + 1:,:]
         else:
-            new_df = df.iloc[:row, :]
+            new_df = df.iloc[:row,:]
         setattr(object, trait, new_df)
 
     def insert(self, object, trait, row, value):
@@ -139,7 +140,7 @@ class DataFrameAdapter(TabularAdapter):
 
         df = getattr(object, trait)
         if 0 < row < len(df) - 1:
-            new_df = pd.concat([df.iloc[:row, :], value, df.iloc[row:, :]])
+            new_df = pd.concat([df.iloc[:row,:], value, df.iloc[row:,:]])
         elif row == 0:
             new_df = pd.concat([value, df])
         else:
@@ -188,6 +189,9 @@ class _DataFrameEditor(UIEditor):
                     activated_row=self._target_name(self.factory.activated_row),  # noqa
                     clicked=self._target_name(self.factory.clicked),
                     dclicked=self._target_name(self.factory.dclicked),
+                    scroll_to_row=self._target_name(self.factory.scroll_to_row),  # noqa
+                    scroll_to_row_hint=self.factory.scroll_to_row_hint,
+                    scroll_to_column=self._target_name(self.factory.scroll_to_column),  # noqa
                     right_clicked=self._target_name(self.factory.right_clicked),  # noqa
                     right_dclicked=self._target_name(self.factory.right_dclicked),  # noqa
                     column_clicked=self._target_name(self.factory.column_clicked),  # noqa
@@ -208,7 +212,7 @@ class _DataFrameEditor(UIEditor):
         if (factory.columns != []):
             columns = []
             for column in factory.columns:
-                if isinstance(column, basestring):
+                if isinstance(column, six.string_types):
                     title = column
                     column_id = column
                 else:
@@ -296,6 +300,17 @@ class DataFrameEditor(BasicEditorFactory):
     # The optional extended name of the trait to synchronize left double click
     # data with. The data is a TabularEditorEvent:
     dclicked = Str
+
+    # The optional extended name of the Event trait that should be used to
+    # trigger a scroll-to command. The data is an integer giving the row.
+    scroll_to_row = Str
+
+    # Controls behavior of scroll to row
+    scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
+
+    # The optional extended name of the Event trait that should be used to
+    # trigger a scroll-to command. The data is an integer giving the column.
+    scroll_to_column = Str
 
     # The optional extended name of the trait to synchronize right click data
     # with. The data is a TabularEditorEvent:

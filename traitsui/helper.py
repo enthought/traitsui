@@ -30,6 +30,8 @@ from operator import itemgetter
 from traits.api import BaseTraitHandler, CTrait, Enum, TraitError
 
 from .ui_traits import SequenceTypes
+import six
+
 
 #-------------------------------------------------------------------------
 #  Trait definitions:
@@ -82,7 +84,7 @@ def commatize(value):
 #-------------------------------------------------------------------------
 
 
-def enum_values_changed(values, strfunc=unicode):
+def enum_values_changed(values, strfunc=six.text_type):
     """ Recomputes the mappings for a new set of enumeration values.
     """
 

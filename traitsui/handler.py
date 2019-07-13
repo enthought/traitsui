@@ -25,19 +25,20 @@
 
 from __future__ import absolute_import
 
-from inspect import getargspec
-
-from .toolkit import toolkit
-
-from .help import on_help_call
-
-from .view_element import ViewElement
-
-from .helper import user_name_for
-
-from .ui_info import UIInfo
+import six
+if six.PY2:
+    from inspect import getargspec
+else:
+    # avoid deprecation warning
+    from inspect import getfullargspec as getargspec
 
 from traits.api import HasPrivateTraits, HasTraits, Instance
+
+from .toolkit import toolkit
+from .help import on_help_call
+from .view_element import ViewElement
+from .helper import user_name_for
+from .ui_info import UIInfo
 
 #-------------------------------------------------------------------------
 #  Closes a DockControl (if allowed by the associated traits UI Handler):

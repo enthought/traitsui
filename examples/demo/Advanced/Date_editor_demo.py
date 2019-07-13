@@ -4,7 +4,7 @@
 """
 A Traits UI editor that wraps a WX calendar panel.
 """
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from traits.api import HasTraits, Date, List, Str
 from traitsui.api import View, Item, DateEditor, Group

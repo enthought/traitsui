@@ -114,6 +114,10 @@ class TabularEditor(BasicEditorFactory):
     # trigger a scroll-to command. The data is an integer giving the row.
     scroll_to_row = Str
 
+    # The optional extended name of the Event trait that should be used to
+    # trigger a scroll-to command. The data is an integer giving the column.
+    scroll_to_column = Str
+
     # Controls behavior of scroll to row
     scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
 
@@ -152,7 +156,7 @@ class TabularEditor(BasicEditorFactory):
 
     # Are 'drag_move' operations allowed (i.e. True), or should they always be
     # treated as 'drag_copy' operations (i.e. False):
-    drag_move = Bool(False)
+    drag_move = Bool(True)
 
     # The set of images that can be used:
     images = List(Image)

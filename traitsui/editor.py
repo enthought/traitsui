@@ -49,6 +49,7 @@ from .context_value import ContextValue
 from .undo import UndoItem
 
 from .item import Item
+import six
 
 #-------------------------------------------------------------------------
 #  Trait definitions:
@@ -291,23 +292,9 @@ class Editor(HasPrivateTraits):
     def string_value(self, value, format_func=None):
         """ Returns the text representation of a specified object trait value.
 
-            If the **format_func** attribute is set on the editor factory, then
-            this method calls that function to do the formatting.  If the
-            **format_str** attribute is set on the editor factory, then this
-            method uses that string for formatting. If neither attribute is
-            set, then this method just calls the built-in unicode() function.
+        This simply delegates to the factorys `string_value` method.
         """
-        factory = self.factory
-        if factory.format_func is not None:
-            return factory.format_func(value)
-
-        if factory.format_str != '':
-            return factory.format_str % value
-
-        if format_func is not None:
-            return format_func(value)
-
-        return unicode(value)
+        return self.factory.string_value(value, format_func)
 
     #-------------------------------------------------------------------------
     #  Returns the text representation of the object trait:
@@ -326,7 +313,7 @@ class Editor(HasPrivateTraits):
         """ Returns the text representation of a specified value.
         """
         # In Unicode!
-        return unicode(value)
+        return six.text_type(value)
 
     #-------------------------------------------------------------------------
     #  Handles an error that occurs while setting the object's trait value:
@@ -368,8 +355,10 @@ class Editor(HasPrivateTraits):
                 self._update_editor, self.extended_name, remove=True)
             return
 
-        # Log the change that was made (as long as it is not for an event):
-        if object.base_trait(name).type != 'event':
+        # Log the change that was made (as long as the Item is not readonly
+        # or it is not for an event):
+        if (self.item.style != 'readonly'
+                and object.base_trait(name).type != 'event'):
             self.log_change(self.get_undo_item, object, name,
                             old_value, new_value)
 

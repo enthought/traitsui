@@ -27,15 +27,18 @@ from __future__ import absolute_import
 
 import collections
 
+import six
+
 from traits.api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
                         Instance, Int, List, Property, Str, Trait)
+
 
 #-------------------------------------------------------------------------
 #  Constants:
 #-------------------------------------------------------------------------
 
-NumericTypes = (int, long, float, complex)
-SimpleTypes = (str, unicode, int, long, float, complex)
+NumericTypes = six.integer_types + (float, complex)
+SimpleTypes = (six.text_type, bytes) + NumericTypes
 
 #-------------------------------------------------------------------------
 #  'AbstractUndoItem' class:
@@ -122,8 +125,9 @@ class UndoItem(AbstractUndoItem):
         """
         try:
             setattr(self.object, self.name, self.old_value)
-        except:
-            pass
+        except Exception:
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
 
     #-------------------------------------------------------------------------
     #  Re-does the change:
@@ -134,8 +138,9 @@ class UndoItem(AbstractUndoItem):
         """
         try:
             setattr(self.object, self.name, self.new_value)
-        except:
-            pass
+        except Exception:
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
 
     #-------------------------------------------------------------------------
     #  Merges two undo items if possible:
@@ -154,13 +159,15 @@ class UndoItem(AbstractUndoItem):
             t1 = type(v1)
             if isinstance(v2, t1):
 
-                if isinstance(t1, basestring):
+                if isinstance(t1, six.string_types):
                     # Merge two undo items if they have new values which are
                     # strings which only differ by one character (corresponding
                     # to a single character insertion, deletion or replacement
                     # operation in a text editor):
                     n1 = len(v1)
                     n2 = len(v2)
+                    if abs(n1 - n2) > 1:
+                        return False
                     n = min(n1, n2)
                     i = 0
                     while (i < n) and (v1[i] == v2[i]):
@@ -194,7 +201,7 @@ class UndoItem(AbstractUndoItem):
                                     return False
                                 self.new_value = v2
                                 return True
-                        except:
+                        except Exception:
                             pass
 
                 elif t1 in NumericTypes:
@@ -248,8 +255,9 @@ class ListUndoItem(AbstractUndoItem):
         try:
             list = getattr(self.object, self.name)
             list[self.index: (self.index + len(self.added))] = self.removed
-        except:
-            pass
+        except Exception:
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
 
     #-------------------------------------------------------------------------
     #  Re-does the change:
@@ -261,8 +269,9 @@ class ListUndoItem(AbstractUndoItem):
         try:
             list = getattr(self.object, self.name)
             list[self.index: (self.index + len(self.removed))] = self.added
-        except:
-            pass
+        except Exception:
+            from traitsui.api import raise_to_debug
+            raise_to_debug()
 
     #-------------------------------------------------------------------------
     #  Merges two undo items if possible:

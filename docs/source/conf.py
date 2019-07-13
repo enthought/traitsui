@@ -11,8 +11,10 @@
 # All configuration values have a default value; values that are commented out
 # serve to show the default value.
 
-import sys, os
+from __future__ import absolute_import
+
 from io import open
+import os
 
 base_path = os.path.dirname(__file__)
 
@@ -52,7 +54,7 @@ d = {}
 try:
     version_path = os.path.join(base_path, '..', '..', 'traitsui', '_version.py')
     with open(version_path, 'r', encoding='utf8') as fp:
-        exec(fp.read(), d)
+        exec(compile(fp.read(), version_path, 'exec'), d)
     release = d['version']
     version = '.'.join(d['version'].split('.', 2)[:2])
 
@@ -123,7 +125,7 @@ html_title = "TraitsUI {} User Manual".format(version.split('.')[0])
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static',
-                    os.path.join('tutorials','code_snippets')]
+                    os.path.join('tutorials', 'code_snippets')]
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.

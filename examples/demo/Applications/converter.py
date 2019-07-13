@@ -16,6 +16,7 @@ of the code is simply declarative.
 
 # FIXME: Help is broken in QT
 
+from __future__ import absolute_import
 from traits.api import HasStrictTraits, Trait, CFloat, Property
 from traitsui.api import View, VGroup, HGroup, Item
 

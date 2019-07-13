@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import wx
 
 from traits.api import Instance, Int, Str
@@ -64,7 +65,7 @@ class SimpleEditor(Editor):
         sizer = wx.BoxSizer(wx.VERTICAL)
         panel.SetSizer(sizer)
         panel.SetAutoLayout(True)
-        panel.SetBackgroundColour(wx.NullColor)
+        panel.SetBackgroundColour(wx.NullColour)
 
         self.progress.dialog_size = wx.Size()
 

@@ -22,7 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from __future__ import absolute_import
+from pyface.qt import QtCore, QtGui, is_qt5
 import collections
 
 from pyface.image_resource import ImageResource
@@ -30,12 +31,11 @@ from traits.api import Any, Bool, Event, Int, Instance, List, \
     Property, Str, TraitListEvent, NO_COMPARE
 from traitsui.list_str_adapter import ListStrAdapter
 
-from editor import Editor
-from list_str_model import ListStrModel
+from .editor import Editor
+from .list_str_model import ListStrModel
 from traitsui.menu import Menu
 
 
-is_qt5 = (QtCore.__version_info__[0] >= 5)
 
 #-------------------------------------------------------------------------
 #  '_ListStrEditor' class:

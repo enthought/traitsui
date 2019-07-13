@@ -9,6 +9,7 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #------------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import contextlib
 import unittest
 

@@ -19,6 +19,7 @@ complete application, using information from the specified UI object.
 #-------------------------------------------------------------------------
 
 # Standard library imports.
+from __future__ import absolute_import
 import os
 
 # System library imports.
@@ -120,14 +121,7 @@ class ViewApplication(object):
         self.scrollable = scrollable
         self.args = args
 
-        # FIXME: fbi is wx specific at the moment.
-        if os.environ.get('ENABLE_FBI') is not None:
-            try:
-                from etsdevtools.developer.helper.fbi import enable_fbi
-                enable_fbi()
-            except:
-                pass
-
+        # this will block for modal dialogs, but not non-modals
         self.ui = self.view.ui(self.context,
                                kind=self.kind,
                                handler=self.handler,
@@ -135,4 +129,6 @@ class ViewApplication(object):
                                scrollable=self.scrollable,
                                args=self.args)
 
-        start_event_loop_qt4()
+        # only non-modal UIs need to have an event loop started for them
+        if kind not in {'modal', 'livemodal'}:
+            start_event_loop_qt4()

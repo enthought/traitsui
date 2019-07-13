@@ -22,6 +22,8 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
+
 from operator import itemgetter
 
 import wx
@@ -61,14 +63,14 @@ from pyface.image_resource \
 from pyface.timer.api \
     import do_later
 
-from editor \
+from .editor \
     import Editor
 
-from table_model \
+from .table_model \
     import TableModel, TraitGridSelection
 
-from helper import TraitsUIPanel
-from functools import reduce
+from .helper import TraitsUIPanel
+
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -284,12 +286,6 @@ class TableEditor(Editor, BaseTableEditor):
         self.grid.on_trait_change(
             getattr(self, '_selection_%s_updated' % mode),
             'selection_changed', dispatch='ui')
-
-        # Make sure the selection is initialized:
-        if row_mode:
-            self.set_selection(items[0:1])
-        else:
-            self.set_selection()
 
         # Set the min height of the grid panel to 0, this will provide
         # a scrollbar if the window is resized such that only the first row
@@ -593,8 +589,9 @@ class TableEditor(Editor, BaseTableEditor):
                 return [index]
 
         elif sm == 'cells':
-            return list(set([row_col[0] for
-                             row_col in self.selected_cell_indices]))
+            return list(
+                {row_col[0] for row_col in self.selected_cell_indices}
+            )
 
         elif sm == 'cell':
             index = self.selected_cell_index[0]
@@ -614,8 +611,9 @@ class TableEditor(Editor, BaseTableEditor):
                 return [item]
 
         elif sm == 'cells':
-            return list(set([item_name[0]
-                             for item_name in self.selected_cells]))
+            return list(
+                {item_name[0] for item_name in self.selected_cells}
+            )
 
         elif sm == 'cell':
             item = self.selected_cell[0]
@@ -697,7 +695,7 @@ class TableEditor(Editor, BaseTableEditor):
             structure = prefs.get('structure')
             if (structure is not None) and (factory.edit_view != ' '):
                 self.control.GetSizer().SetStructure(self.control, structure)
-        except:
+        except Exception:
             pass
 
     #-------------------------------------------------------------------------
@@ -756,8 +754,8 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the row items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
-            for row in xrange(row0, row1 + 1):
+            row1, col1 = next(br)
+            for row in range(row0, row1 + 1):
                 if row < rows:
                     values.append((rio(row), gfi(row)))
 
@@ -792,8 +790,8 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the row items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
-            for row in xrange(row0, row1 + 1):
+            row1, col1 = next(br)
+            for row in range(row0, row1 + 1):
                 if row < rows:
                     values.append((rio(row), gfi(row)))
 
@@ -822,8 +820,8 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
-            for col in xrange(col0, col1 + 1):
+            row1, col1 = next(br)
+            for col in range(col0, col1 + 1):
                 values.append((col, cols[col].name))
 
         if len(values) > 0:
@@ -850,8 +848,8 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
-            for col in xrange(col0, col1 + 1):
+            row1, col1 = next(br)
+            for col in range(col0, col1 + 1):
                 values.append((col, cols[col].name))
 
         # Sort by increasing row index:
@@ -881,10 +879,10 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
-            for row in xrange(row0, row1 + 1):
+            row1, col1 = next(br)
+            for row in range(row0, row1 + 1):
                 item = gfi(row)
-                for col in xrange(col0, col1 + 1):
+                for col in range(col0, col1 + 1):
                     values.append(((rio(row), col),
                                    (item, cols[col].name)))
 
@@ -917,10 +915,10 @@ class TableEditor(Editor, BaseTableEditor):
         # Get the column items and indices in the selection:
         values = []
         for row0, col0 in tl:
-            row1, col1 = br.next()
-            for row in xrange(row0, row1 + 1):
+            row1, col1 = next(br)
+            for row in range(row0, row1 + 1):
                 item = gfi(row)
-                for col in xrange(col0, col1 + 1):
+                for col in range(col0, col1 + 1):
                     values.append(((rio(row), col),
                                    (item, cols[col].name)))
 
@@ -971,7 +969,8 @@ class TableEditor(Editor, BaseTableEditor):
                 self.set_extended_selection()
             else:
                 self.set_extended_selection(
-                    (None, self.model.get_column_name[index]))
+                    (None, self.model.get_column_name(index))
+                )
 
     def _selected_columns_changed(self, names):
         if not self._no_notify:
@@ -994,7 +993,8 @@ class TableEditor(Editor, BaseTableEditor):
             else:
                 self.set_extended_selection(
                     (self.value[row],
-                     self.model.get_column_name[column]))
+                     self.model.get_column_name(column))
+                )
 
     def _selected_cells_changed(self, cells):
         if not self._no_notify:
@@ -1026,17 +1026,17 @@ class TableEditor(Editor, BaseTableEditor):
 
                 deletable = self.factory.deletable
                 if delete.enabled and callable(deletable):
-                    delete.enabled = reduce(
-                        lambda l, r: l and r, [
-                            deletable(item) for item in self.selected_items], True)
+                    delete.enabled = all(
+                        deletable(item) for item in self.selected_items
+                    )
 
-                toolbar.search.enabled = toolbar.add.enabled = True
+                toolbar.add.enabled = toolbar.search.enabled = no_filter
                 toolbar.move_up.enabled = (no_filter and (start > 0))
                 toolbar.move_down.enabled = (no_filter and (indices[-1] < n))
             else:
-                toolbar.add.enabled = no_filter
-                toolbar.search.enabled  = toolbar.delete.enabled    = \
-                    toolbar.move_up.enabled = toolbar.move_down.enabled = False
+                toolbar.add.enabled = toolbar.search.enabled = no_filter
+                toolbar.delete.enabled = toolbar.move_up.enabled = \
+                    toolbar.move_down.enabled = False
 
     #-------------------------------------------------------------------------
     #  Handles the contents of the model being resorted:
@@ -1187,8 +1187,8 @@ class TableEditor(Editor, BaseTableEditor):
         self.add_row()
 
     #-------------------------------------------------------------------------
-    #  Handles the user requesting to delete the currently selected items of the
-    #  table:
+    #  Handles the user requesting to delete the currently selected items of
+    #  the table:
     #-------------------------------------------------------------------------
 
     def on_delete(self):
@@ -1226,11 +1226,11 @@ class TableEditor(Editor, BaseTableEditor):
         if n > 0:
             if self.in_row_mode:
                 self.set_selection(
-                    list(set([items[i] for i in indices])))
+                    list({items[i] for i in indices}))
             else:
-                self.set_extended_selection(
-                    list(set([(items[indices[i]], values[i][1])
-                              for i in range(n)])))
+                self.set_extended_selection(list(
+                    {(items[indices[i]], values[i][1]) for i in range(n)}
+                ))
         else:
             self._update_toolbar(False)
 
@@ -1244,9 +1244,11 @@ class TableEditor(Editor, BaseTableEditor):
             table.
         """
         columns = self.columns[:]
-        columns.extend([c
-                        for c in (self.factory.columns + self.factory.other_columns)
-                        if c not in columns])
+        columns.extend([
+            c
+            for c in (self.factory.columns + self.factory.other_columns)
+            if c not in columns
+        ])
         self.edit_traits(
             parent=self.control,
             view=View([Item('columns',
@@ -1698,10 +1700,12 @@ class TableSearchHandler(Handler):
         """ Handles the user clicking the OK button.
         """
         if info.initialized:
-            info.ui.dispose()
+            self.close(info, True)
+
 
 # Define the SimpleEditor class.
 SimpleEditor = TableEditor
+
 
 # Define the ReadonlyEditor class.
 ReadonlyEditor = TableEditor

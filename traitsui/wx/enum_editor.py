@@ -23,6 +23,7 @@ wxPython user interface toolkit.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 from traits.api \
@@ -34,13 +35,13 @@ from traits.api \
 from traitsui.editors.enum_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from constants \
+from .constants \
     import OKColor, ErrorColor
 
-from helper \
+from .helper \
     import enum_values_changed, TraitsUIPanel, disconnect, disconnect_no_id
 from functools import reduce
 

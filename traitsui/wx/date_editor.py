@@ -22,6 +22,8 @@ Future Work
 The class needs to be extend to provide the four basic editor types,
 Simple, Custom, Text, and ReadOnly.
 """
+from __future__ import absolute_import, print_function
+
 import datetime
 
 import wx
@@ -77,7 +79,7 @@ class SimpleEditor(Editor):
             try:
                 self.value = datetime.date(year, month, day)
             except ValueError:
-                print 'Invalid date:', year, month, day
+                print('Invalid date:', year, month, day)
                 raise
         return
 

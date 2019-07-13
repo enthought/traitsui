@@ -23,6 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from operator import itemgetter
 
 import wx
@@ -43,11 +44,13 @@ from traitsui.ui_traits \
 from pyface.timer.api \
     import do_later
 
-from constants \
+from .constants \
     import standard_bitmap_width, screen_dx, screen_dy
 
-from editor \
+from .editor \
     import Editor
+import six
+
 
 #-------------------------------------------------------------------------
 #  Trait definitions:
@@ -189,8 +192,8 @@ def find_closest_display(x, y):
         else:
             def _distance(x, y, display):
                 dis_x, dis_y, dis_w, dis_h = display.GetGeometry()
-                dis_mid_x = (dis_x + dis_w) / 2
-                dis_mid_y = (dis_y + dis_h) / 2
+                dis_mid_x = dis_x + dis_w / 2
+                dis_mid_y = dis_y + dis_h / 2
 
                 return (x - dis_mid_x)**2 + (y - dis_mid_y)**2
 
@@ -284,7 +287,7 @@ def enum_values_changed(values):
     """
 
     if isinstance(values, dict):
-        data = [(unicode(v), n) for n, v in values.items()]
+        data = [(six.text_type(v), n) for n, v in values.items()]
         if len(data) > 0:
             data.sort(key=itemgetter(0))
             col = data[0][0].find(':') + 1
@@ -297,12 +300,12 @@ def enum_values_changed(values):
         if not isinstance(handler, BaseTraitHandler):
             raise TraitError("Invalid value for 'values' specified")
         if handler.is_mapped:
-            data = [(unicode(n), n) for n in handler.map.keys()]
+            data = [(six.text_type(n), n) for n in handler.map.keys()]
             data.sort(key=itemgetter(0))
         else:
-            data = [(unicode(v), v) for v in handler.values]
+            data = [(six.text_type(v), v) for v in handler.values]
     else:
-        data = [(unicode(v), v) for v in values]
+        data = [(six.text_type(v), v) for v in values]
 
     names = [x[0] for x in data]
     mapping = {}
@@ -535,20 +538,6 @@ def init_wx_handlers(control, object, prefix=''):
         method = getattr(object, prefix + name, None)
         if method is not None:
             handler(control, method)
-
-#-------------------------------------------------------------------------
-#  Safely tries to pop up an FBI window if etsdevtools.debug is installed
-#-------------------------------------------------------------------------
-
-
-def open_fbi():
-    try:
-        from etsdevtools.developer.helper.fbi import if_fbi
-        if not if_fbi():
-            import traceback
-            traceback.print_exc()
-    except ImportError:
-        pass
 
 #-------------------------------------------------------------------------
 #  'GroupEditor' class:

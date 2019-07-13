@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 import wx
 
 import matplotlib
@@ -34,7 +35,7 @@ class _MPLFigureEditor(Editor):
         sizer.Add(mpl_control, 1, wx.LEFT | wx.TOP | wx.GROW)
         toolbar = NavigationToolbar2Wx(mpl_control)
         sizer.Add(toolbar, 0, wx.EXPAND)
-        self.value.canvas.SetMinSize((10,10))
+        self.value.canvas.SetMinSize((10, 10))
         return panel
 
 class MPLFigureEditor(BasicEditorFactory):

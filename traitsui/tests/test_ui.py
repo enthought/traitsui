@@ -17,12 +17,13 @@
 Test cases for the UI object.
 """
 
+from __future__ import absolute_import
 import nose
 
-from traits.has_traits import HasTraits
+from traits.has_traits import HasTraits, HasStrictTraits
 from traits.trait_types import Str, Int
 import traitsui
-from traitsui.item import Item
+from traitsui.item import Item, spring
 from traitsui.view import View
 
 from traitsui.tests._tools import *
@@ -38,6 +39,17 @@ class FooDialog(HasTraits):
         Item('my_int'),
         Item('my_str'),
         buttons=['OK']
+    )
+
+
+class DisallowNewTraits(HasStrictTraits):
+    """ Make sure no extra traits are added.
+    """
+    x = Int(10)
+
+    traits_view = View(
+        Item('x'),
+        spring,
     )
 
 
@@ -190,3 +202,12 @@ def test_destroy_after_ok_qt():
 
     nose.tools.assert_is_none(ui.control)
     nose.tools.assert_equal(control.deleteLater._n_calls, 1)
+
+
+@skip_if_null
+def test_no_spring_trait():
+    obj = DisallowNewTraits()
+    ui = obj.edit_traits()
+    ui.dispose()
+
+    nose.tools.assert_true('spring' not in obj.traits())

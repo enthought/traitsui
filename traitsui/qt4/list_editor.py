@@ -17,6 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from pyface.api import ImageResource
@@ -30,9 +31,9 @@ from traits.trait_base import user_name_for, xgetattr
 from traitsui.editors.list_editor import ListItemProxy, \
     ToolkitEditorFactory
 
-from editor import Editor
-from helper import IconButton
-from menu import MakeMenu
+from .editor import Editor
+from .helper import IconButton
+from .menu import MakeMenu
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:
@@ -660,7 +661,7 @@ class NotebookEditor(Editor):
         """ Closes the currently selected tab:
         """
         widget = self.control.currentWidget()
-        for i in xrange(len(self._uis)):
+        for i in range(len(self._uis)):
             page, ui, _, _ = self._uis[i]
             if page is widget:
                 if force or ui.handler.close(ui.info, True):

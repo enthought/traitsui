@@ -23,18 +23,20 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
-from pyface.qt import QtCore, QtGui
+from __future__ import absolute_import
+from pyface.qt import QtCore, QtGui, is_qt5
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.image_enum_editor file.
 from traitsui.editors.image_enum_editor import ToolkitEditorFactory
 
-from editor import Editor
-from enum_editor import BaseEditor as BaseEnumEditor
-from enum_editor import SimpleEditor as SimpleEnumEditor
-from enum_editor import RadioEditor as CustomEnumEditor
-from helper import pixmap_cache
+from .editor import Editor
+from .enum_editor import BaseEditor as BaseEnumEditor
+from .enum_editor import SimpleEditor as SimpleEnumEditor
+from .enum_editor import RadioEditor as CustomEnumEditor
+from .helper import pixmap_cache
+
 
 #-------------------------------------------------------------------------
 #  'BaseImageEnumEditor' class:
@@ -199,7 +201,7 @@ class ImageEnumComboBox(QtGui.QComboBox):
             # Unless we force it, the popup for a combo box will not be wider
             # than the box itself, so we set a high minimum width.
             width = 0
-            for col in xrange(self._editor.factory.cols):
+            for col in range(self._editor.factory.cols):
                 width += view.sizeHintForColumn(col)
             view.setMinimumWidth(width)
         else:
@@ -248,13 +250,13 @@ class ImageEnumTablePopupView(QtGui.QTableView):
         """
         QtGui.QTableView.__init__(self, parent)
         hheader = self.horizontalHeader()
-        if QtCore.__version_info__[0] >= 5:
+        if is_qt5:
             hheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
         else:
             hheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)
         hheader.hide()
         vheader = self.verticalHeader()
-        if QtCore.__version_info__[0] >= 5:
+        if is_qt5:
             vheader.setSectionResizeMode(QtGui.QHeaderView.ResizeToContents)
         else:
             vheader.setResizeMode(QtGui.QHeaderView.ResizeToContents)

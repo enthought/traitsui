@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------
 #
-#  Copyright (c) 2005, Enthought, Inc.
+#  Copyright (c) 2005-19, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -25,23 +25,17 @@
 
 from __future__ import absolute_import
 
-from traits.api import (
-    AdaptedTo,
-    Adapter,
-    Any,
-    Bool,
-    Callable,
-    Either,
-    HasPrivateTraits,
-    Instance,
-    Interface,
-    isinterface,
-    List,
-    Property,
-    Str,
-    cached_property)
+import six
 
-from traits.trait_base import SequenceTypes, get_resource_path, xgetattr, xsetattr
+from traits.api import (
+    AdaptedTo, Adapter, Any, Bool, Callable, Dict, Either,
+    HasPrivateTraits, Instance, Interface, isinterface, List, Property,
+    Str, cached_property
+)
+
+from traits.trait_base import (
+    SequenceTypes, get_resource_path, xgetattr, xsetattr
+)
 
 from .ui_traits import AView
 
@@ -59,7 +53,8 @@ class TreeNode(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Name of trait containing children (if '', the node is a leaf).
+    # Name of trait containing children (if '', the node is a leaf). Nested
+    # attributes are allowed, e.g., 'library.books'
     children = Str
 
     # Either the name of a trait containing a label, or a constant label, if
@@ -169,6 +164,12 @@ class TreeNode(HasPrivateTraits):
     #        Instance( 'traitsui.menu.MenuBar' ), but it doesn't work
     #        right currently.
 
+    #: A toolkit-appropriate cell renderer (currently Qt only)
+    renderer = Any
+
+    #: A cache for listeners that need to keep state.
+    _listener_cache = Dict
+
     #-------------------------------------------------------------------------
     #  Initializes the object:
     #-------------------------------------------------------------------------
@@ -217,7 +218,7 @@ class TreeNode(HasPrivateTraits):
     def get_children(self, object):
         """ Gets the object's children.
         """
-        return getattr(object, self.children)
+        return getattr(object, self.children, None)
 
     #-------------------------------------------------------------------------
     #  Gets the object's children identifier:
@@ -235,7 +236,8 @@ class TreeNode(HasPrivateTraits):
     def append_child(self, object, child):
         """ Appends a child to the object's children.
         """
-        getattr(object, self.children).append(child)
+        children = self.get_children(object)
+        children.append(child)
 
     #-------------------------------------------------------------------------
     #  Inserts a child into the object's children:
@@ -244,7 +246,8 @@ class TreeNode(HasPrivateTraits):
     def insert_child(self, object, index, child):
         """ Inserts a child into the object's children.
         """
-        getattr(object, self.children)[index: index] = [child]
+        children = self.get_children(object)
+        children[index:index] = [child]
 
     #-------------------------------------------------------------------------
     #  Confirms that a specified object can be deleted or not:
@@ -272,7 +275,7 @@ class TreeNode(HasPrivateTraits):
     def delete_child(self, object, index):
         """ Deletes a child at a specified index from the object's children.
         """
-        del getattr(object, self.children)[index]
+        del self.get_children(object)[index]
 
     #-------------------------------------------------------------------------
     #  Sets up/Tears down a listener for 'children replaced' on a specified
@@ -337,7 +340,19 @@ class TreeNode(HasPrivateTraits):
         """
         label = self.label
         if label[:1] != '=':
-            object.on_trait_change(listener, label, remove=remove,
+            memo = ('label', label, object, listener)
+            if not remove:
+                def wrapped_listener(target, name, new):
+                    """ Ensure listener gets called with correct object. """
+                    return listener(object, name, new)
+
+                self._listener_cache[memo] = wrapped_listener
+            else:
+                wrapped_listener = self._listener_cache.pop(memo, None)
+                if wrapped_listener is None:
+                    return
+
+            object.on_trait_change(wrapped_listener, label, remove=remove,
                                    dispatch='ui')
 
     def get_column_labels(self, object):
@@ -346,11 +361,12 @@ class TreeNode(HasPrivateTraits):
         trait = self.column_labels
         labels = xgetattr(object, trait, [])
         formatted = []
-        for formatter, label in map(None, self.column_formatters, labels):
+        for formatter, label in six.moves.zip_longest(
+                self.column_formatters, labels):
             # If the list of column formatters is shorter than the list of
-            # labels, then map(None) will extend it with Nones. Just pass the label
-            # as preformatted. Similarly, explicitly using None in the list will
-            # pass through the item.
+            # labels, then zip_longest() will extend it with Nones. Just pass
+            # the label as preformatted. Similarly, explicitly using None in
+            # the list will pass through the item.
             if formatter is None:
                 formatted.append(label)
             else:
@@ -363,18 +379,27 @@ class TreeNode(HasPrivateTraits):
 
         This will fire when either the list is reassigned or when it is
         modified. I.e., it listens both to the trait change event and the
-        trait_items change event. Implement the listener appropriately to handle
-        either case.
+        trait_items change event. Implement the listener appropriately to
+        handle either case.
         """
         trait = self.column_labels
         if trait != '':
-            object.on_trait_change(
-                listener, trait, remove=remove, dispatch='ui')
-            object.on_trait_change(
-                listener,
-                trait + '_items',
-                remove=remove,
-                dispatch='ui')
+            memo = ('column_label', trait, object, listener)
+            if not remove:
+                def wrapped_listener(target, name, new):
+                    """ Ensure listener gets called with correct object. """
+                    return listener(object, name, new)
+
+                self._listener_cache[memo] = wrapped_listener
+            else:
+                wrapped_listener = self._listener_cache.pop(memo, None)
+                if wrapped_listener is None:
+                    return
+
+            object.on_trait_change(wrapped_listener, trait, remove=remove,
+                                   dispatch='ui')
+            object.on_trait_change(wrapped_listener, trait + '_items',
+                                   remove=remove, dispatch='ui')
 
     #-------------------------------------------------------------------------
     #  Gets the tooltip to display for a specified object:
@@ -452,15 +477,19 @@ class TreeNode(HasPrivateTraits):
 
     def get_background(self, object):
         background = self.background
-        if isinstance(background, basestring):
-            background = getattr(object, background, background)
+        if isinstance(background, six.string_types):
+            background = xgetattr(object, background, default=background)
         return background
 
     def get_foreground(self, object):
         foreground = self.foreground
-        if isinstance(foreground, basestring):
-            foreground = getattr(object, foreground, foreground)
+        if isinstance(foreground, six.string_types):
+            foreground = xgetattr(object, foreground, default=foreground)
         return foreground
+
+    def get_renderer(self, object, column=0):
+        """ Return the renderer for the object and column. """
+        return self.renderer
 
     #-------------------------------------------------------------------------
     #  Returns whether or not the object's children can be renamed:
@@ -1020,6 +1049,11 @@ class ITreeNodeAdapter(Adapter):
         """
         return None
 
+    def get_renderer(self, column=0):
+        """ Returns the renderer for object
+        """
+        return None
+
     def can_rename(self):
         """ Returns whether the object's children can be renamed.
         """
@@ -1250,6 +1284,11 @@ class ITreeNodeAdapterBridge(HasPrivateTraits):
         """ Returns the foreground for object
         """
         return self.adapter.get_foreground()
+
+    def get_renderer(self, object, column=0):
+        """ Returns the renderer for object
+        """
+        return self.adapter.get_renderer(column)
 
     def can_rename(self, object):
         """ Returns whether the object's children can be renamed.
@@ -1703,6 +1742,9 @@ class TreeNodeObject(HasPrivateTraits):
     """ Represents the object that corresponds to a tree node.
     """
 
+    #: A cache for listeners that need to keep state.
+    _listener_cache = Dict
+
     #-------------------------------------------------------------------------
     #  Returns whether chidren of this object are allowed or not:
     #-------------------------------------------------------------------------
@@ -1728,7 +1770,7 @@ class TreeNodeObject(HasPrivateTraits):
     def tno_get_children(self, node):
         """ Gets the object's children.
         """
-        return getattr(self, node.children)
+        return getattr(self, node.children, None)
 
     #-------------------------------------------------------------------------
     #  Gets the object's children identifier:
@@ -1746,7 +1788,7 @@ class TreeNodeObject(HasPrivateTraits):
     def tno_append_child(self, node, child):
         """ Appends a child to the object's children.
         """
-        getattr(self, node.children).append(child)
+        self.tno_get_children(node).append(child)
 
     #-------------------------------------------------------------------------
     #  Inserts a child into the object's children:
@@ -1755,7 +1797,8 @@ class TreeNodeObject(HasPrivateTraits):
     def tno_insert_child(self, node, index, child):
         """ Inserts a child into the object's children.
         """
-        getattr(self, node.children)[index: index] = [child]
+        children = self.tno_get_children(node)
+        children[index:index] = [child]
 
     #-------------------------------------------------------------------------
     #  Confirms that a specified object can be deleted or not:
@@ -1783,7 +1826,8 @@ class TreeNodeObject(HasPrivateTraits):
     def tno_delete_child(self, node, index):
         """ Deletes a child at a specified index from the object's children.
         """
-        del getattr(self, node.children)[index]
+
+        del self.tno_get_children(node)[index]
 
     #-------------------------------------------------------------------------
     #  Sets up/Tears down a listener for 'children replaced' on a specified
@@ -1848,7 +1892,19 @@ class TreeNodeObject(HasPrivateTraits):
         """
         label = node.label
         if label[:1] != '=':
-            self.on_trait_change(listener, label, remove=remove,
+            memo = ('label', label, node, listener)
+            if not remove:
+                def wrapped_listener(target, name, new):
+                    """ Ensure listener gets called with correct object. """
+                    return listener(node, name, new)
+
+                self._listener_cache[memo] = wrapped_listener
+            else:
+                wrapped_listener = self._listener_cache.pop(memo, None)
+                if wrapped_listener is None:
+                    return
+
+            self.on_trait_change(wrapped_listener, label, remove=remove,
                                  dispatch='ui')
 
     #-------------------------------------------------------------------------

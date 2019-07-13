@@ -25,6 +25,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 from traits.api \
@@ -36,11 +37,12 @@ from traits.api \
 from traitsui.editors.set_editor \
     import ToolkitEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from helper \
+from .helper \
     import enum_values_changed, TraitsUIPanel
+
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

@@ -39,6 +39,7 @@ Setting 'transpose' to True will logically transpose the input array (e.g. an
 (3 x n) array will be displayed as an (n x 3) array).
 """
 
+from __future__ import absolute_import
 from numpy.random import random
 from traits.api import HasTraits, Array
 from traitsui.api import View, Item

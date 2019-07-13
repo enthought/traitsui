@@ -76,6 +76,7 @@ Finally:
 
 #-- Imports --------------------------------------------------------------
 
+from __future__ import absolute_import
 from os \
     import walk, getcwd, listdir
 
@@ -92,6 +93,7 @@ from traitsui.api \
 
 from traitsui.table_column \
     import ObjectColumn
+from io import open
 
 #-- Constants ------------------------------------------------------------
 
@@ -401,7 +403,7 @@ class SourceFile(HasTraits):
     @property_depends_on('full_name')
     def _get_contents(self):
         try:
-            with open(self.full_name, 'rU') as fh:
+            with open(self.full_name, 'rU', encoding='utf8') as fh:
                 contents = fh.readlines()
                 return contents
         except Exception:

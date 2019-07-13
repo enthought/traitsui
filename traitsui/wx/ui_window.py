@@ -22,12 +22,13 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import wx
 
 from traits.api \
     import HasPrivateTraits, Instance, Property
 
-from helper \
+from .helper \
     import init_wx_handlers, BufferDC
 
 #-------------------------------------------------------------------------

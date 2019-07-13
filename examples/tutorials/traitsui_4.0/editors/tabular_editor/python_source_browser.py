@@ -37,6 +37,7 @@ related trait and property definitions in the adapter class itself.
 
 #--<Imports>--------------------------------------------------------------
 
+from __future__ import absolute_import
 import traits
 import traitsui
 

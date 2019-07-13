@@ -31,13 +31,15 @@ from traits.api import (Bool, Callable, Constant, Delegate, Float, Instance,
                         Range, Str, Undefined, Dict,)
 
 from traits.trait_base import user_name_for
-import traits._py2to3 as _py2to3
 
 from .view_element import ViewSubElement
 
 from .ui_traits import ContainerDelegate, EditorStyle
 
+from .util import str_find, str_rfind
+
 from .editor_factory import EditorFactory
+import six
 
 #-------------------------------------------------------------------------
 #  Constants:
@@ -269,7 +271,7 @@ class Item(ViewSubElement):
         if value is None:
             return
 
-        if not isinstance(value, basestring):
+        if not isinstance(value, six.string_types):
             raise TypeError(
                 "The argument to Item must be a string of the "
                 "form: [id:][object.[object.]*][name]['['label']']`tooltip`"
@@ -284,8 +286,8 @@ class Item(ViewSubElement):
         value = self._parse_tooltip(value)
         value = self._option(value, '#', 'resizable', True)
         value = self._option(value, '^', 'emphasized', True)
-        value = self._split('id', value, ':', _py2to3.str_find, 0, 1)
-        value = self._split('object', value, '.', _py2to3.str_rfind, 0, 1)
+        value = self._split('id', value, ':', str_find, 0, 1)
+        value = self._split('object', value, '.', str_rfind, 0, 1)
 
         if value != '':
             self.name = value
@@ -380,7 +382,7 @@ class Item(ViewSubElement):
         if tlabel is None:
             return label
 
-        if isinstance(tlabel, basestring):
+        if isinstance(tlabel, six.string_types):
             if tlabel[0:3] == '...':
                 return label + tlabel[3:]
             if tlabel[-3:] == '...':
@@ -564,7 +566,11 @@ class Spring(Item):
     #-------------------------------------------------------------------------
 
     # Name of the trait the item is editing
-    name = 'spring'
+    # Just a dummy trait that exists on all HasTraits objects. It's an Event,
+    # so it won't cause Traits UI to add any synchronization, and because it
+    # already exists, it won't force the addition of a new trait with a bogus
+    # name.
+    name = 'trait_modified'
 
     # Should a label be displayed?
     show_label = Bool(False)

@@ -37,6 +37,7 @@ from traits.api import (Any, Bool, Callable, Event, HasStrictTraits, Instance,
 from traitsui.tabular_adapter import TabularAdapter
 from .editor import Editor
 from .tabular_model import TabularModel
+import six
 
 
 class HeaderEventFilter(QtCore.QObject):
@@ -99,6 +100,9 @@ class TabularEditor(Editor):
 
     # The event triggering scrolling.
     scroll_to_row = Event(Int)
+
+    # The event triggering scrolling.
+    scroll_to_column = Event(Int)
 
     # Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
@@ -179,6 +183,8 @@ class TabularEditor(Editor):
             'column_right_clicked',
             'to')
         self.sync_value(factory.scroll_to_row, 'scroll_to_row', 'from',
+                        is_event=True)
+        self.sync_value(factory.scroll_to_column, 'scroll_to_column', 'from',
                         is_event=True)
 
         # Connect other signals as necessary
@@ -294,14 +300,14 @@ class TabularEditor(Editor):
         cws = prefs.get('cached_widths')
         num_columns = len(self.adapter.columns)
         if cws is not None and num_columns == len(cws):
-            for column in xrange(num_columns):
+            for column in range(num_columns):
                 self.control.setColumnWidth(column, cws[column])
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
         widths = [self.control.columnWidth(column)
-                  for column in xrange(len(self.adapter.columns))]
+                  for column in range(len(self.adapter.columns))]
         return {'cached_widths': widths}
 
     #-------------------------------------------------------------------------
@@ -321,7 +327,7 @@ class TabularEditor(Editor):
     def _get_image(self, image):
         """ Converts a user specified image to a QIcon.
         """
-        if isinstance(image, basestring):
+        if isinstance(image, six.string_types):
             self.image = image
             image = self.image
 
@@ -431,6 +437,16 @@ class TabularEditor(Editor):
         scroll_hint = self.scroll_to_row_hint_map.get(
             self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
         self.control.scrollTo(self.model.index(row, 0), scroll_hint)
+
+    def _scroll_to_column_changed(self, column):
+        """ Scroll to the given column.
+        """
+        scroll_hint = self.scroll_to_row_hint_map.get(
+            self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
+        self.control.scrollTo(
+            self.model.index(self.activated_row, column),
+            scroll_hint
+        )
 
     #-- Table Control Event Handlers -----------------------------------------
 
@@ -633,7 +649,12 @@ class _TableView(QtGui.QTableView):
             # we make a reasonable guess based on the minimum size hint and the font
             # of the first row.
             size = vheader.minimumSectionSize()
-            font = editor.adapter.get_font(editor.object, editor.name, 0)
+
+            # Check if any columns have been added, and use their font, otherwise
+            # use the default font
+            font = None
+            if 0 in editor.adapter.column_map:
+                font = editor.adapter.get_font(editor.object, editor.name, 0)
             if font is not None:
                 size = max(
                     size, QtGui.QFontMetrics(
@@ -666,6 +687,8 @@ class _TableView(QtGui.QTableView):
             self.viewport().setAcceptDrops(True)
         if factory.drag_move:
             self.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+        else:
+            self.setDragDropMode(QtGui.QAbstractItemView.DragDrop)
         self.setDropIndicatorShown(True)
 
     def keyPressEvent(self, event):
@@ -722,7 +745,7 @@ class _TableView(QtGui.QTableView):
         sh = QtGui.QTableView.sizeHint(self)
 
         width = 0
-        for column in xrange(len(self._editor.adapter.columns)):
+        for column in range(len(self._editor.adapter.columns)):
             width += self.sizeHintForColumn(column)
         sh.setWidth(width)
 
@@ -773,7 +796,7 @@ class _TableView(QtGui.QTableView):
 
         # Assign sizes for columns with absolute size requests
         percent_vals, percent_cols = [], []
-        for column in xrange(len(editor.adapter.columns)):
+        for column in range(len(editor.adapter.columns)):
             width = editor.adapter.get_width(
                 editor.object, editor.name, column)
             if width > 1:

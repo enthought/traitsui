@@ -24,7 +24,7 @@ without de-focusing raises an AttributeError::
         self.value = self.control.GetValue()
     AttributeError: 'NoneType' object has no attribute 'GetValue'
 """
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 from traits.has_traits import HasTraits
 from traits.trait_types import Int

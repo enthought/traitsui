@@ -18,6 +18,7 @@ editors and text editor factories.
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtGui
 
 #-------------------------------------------------------------------------

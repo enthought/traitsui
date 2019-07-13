@@ -23,16 +23,17 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from traits.api \
     import Any, on_trait_change
 
 from pyface.timer.api \
     import do_later
 
-from editor \
+from .editor \
     import Editor
 
-from history_control \
+from .history_control \
     import HistoryControl
 
 #-------------------------------------------------------------------------

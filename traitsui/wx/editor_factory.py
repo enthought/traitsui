@@ -23,6 +23,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 import warnings
 
 import wx
@@ -33,10 +34,10 @@ from traits.api \
 from traitsui.editor_factory \
     import EditorFactory as BaseEditorFactory
 
-from editor \
+from .editor \
     import Editor
 
-from constants \
+from .constants \
     import WindowColor
 
 #-------------------------------------------------------------------------

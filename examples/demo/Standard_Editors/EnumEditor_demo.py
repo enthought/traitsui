@@ -22,6 +22,7 @@ An Enum can be displayed / edited in one of five styles:
 """
 
 # Imports:
+from __future__ import absolute_import
 from traits.api import HasTraits, Enum
 
 from traitsui.api import Item, Group, View, EnumEditor
@@ -37,6 +38,12 @@ class EnumEditorDemo(HasTraits):
     # Items are used to define the display, one Item per editor style:
     enum_group = Group(
         Item('name_list', style='simple', label='Simple'),
+        Item('_'),
+
+        Item('name_list', style='simple',
+             editor=EnumEditor(values=name_list, completion_mode='popup',
+                               evaluate=True),
+             label='Simple (text entry)'),
         Item('_'),
 
         # The custom style defaults to radio button mode:

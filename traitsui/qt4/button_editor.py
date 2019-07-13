@@ -17,6 +17,7 @@
 #  Imports:
 #-------------------------------------------------------------------------
 
+from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
 from traits.api import Unicode, List, Str, on_trait_change
@@ -27,7 +28,7 @@ from traits.api import Unicode, List, Str, on_trait_change
 from traitsui.editors.button_editor \
     import ToolkitEditorFactory
 
-from editor import Editor
+from .editor import Editor
 
 #-------------------------------------------------------------------------
 #  'SimpleEditor' class:

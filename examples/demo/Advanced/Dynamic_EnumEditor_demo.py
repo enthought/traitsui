@@ -27,6 +27,14 @@ Notes:
    definition, which links the list of available entrees from the
    KitchenCapabilities object to the OrderMenu object's entree EnumEditor.
 
+ - The user can freely type any value they want, but only items in the
+   capabilities will be accepted, due to the use of the 'values' argument
+   to the Enum trait.  This will be updated as the capabilities change.
+
+ - With the Qt backend, the user can type text and it will be auto-completed
+   to valid values as a the user types. The Wx backend doesn't support this
+   capability in the underlying toolkit.
+
  - The design will work with any number of active OrderMenu objects, since they
    all share a common KitchenCapabilities object. As the KitchenCapabilities
    object is updated, all OrderMenu UI's will automatically update their
@@ -35,15 +43,18 @@ Notes:
  - A careful reader will also observe that this example contains only
    declarative code. No imperative code is required to handle the automatic
    updating of the Entree list.
+
 """
 
-#-- Imports --------------------------------------------------------------
+from __future__ import absolute_import, unicode_literals
 
-from traits.api \
-    import HasPrivateTraits, Str, List, Constant
+import six
 
-from traitsui.api \
-    import View, Item, VGroup, HSplit, EnumEditor, CheckListEditor
+from traits.api import Enum, HasPrivateTraits, List, Constant
+
+from traitsui.api import (
+    View, Item, VGroup, HSplit, EnumEditor, CheckListEditor
+)
 
 #-- The list of possible entrees -----------------------------------------
 
@@ -76,7 +87,7 @@ kitchen_capabilities = KitchenCapabilities()
 class OrderMenu(HasPrivateTraits):
 
     # The person's entree order:
-    entree = Str
+    entree = Enum(values='capabilities.available')
 
     # Reference to the restaurant's current entree capabilities:
     capabilities = Constant(kitchen_capabilities)
@@ -87,7 +98,10 @@ class OrderMenu(HasPrivateTraits):
             VGroup(
                 Item('entree',
                      editor=EnumEditor(
-                         name='object.capabilities.available')
+                         name='object.capabilities.available',
+                         evaluate=six.text_type,
+                         completion_mode='popup',
+                        )
                      ),
                 label='Order',
                 show_border=True,
@@ -105,6 +119,7 @@ class OrderMenu(HasPrivateTraits):
             )
         ),
         title='Dynamic EnumEditor Demo',
+        resizable=True,
     )
 
 #-------------------------------------------------------------------------
@@ -115,3 +130,4 @@ demo = OrderMenu()
 # Run the demo (if invoked from the command line):
 if __name__ == '__main__':
     demo.configure_traits()
+    print(demo.entree)

@@ -13,6 +13,7 @@ applications.
 
 #-- Imports ------------------------------------------------------------------
 
+from __future__ import absolute_import
 from traits.api import HasPrivateTraits, List, Str, Property, on_trait_change
 
 from traitsui.api import View, HGroup, Item, TabularEditor
