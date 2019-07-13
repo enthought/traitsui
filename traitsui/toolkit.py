@@ -24,7 +24,6 @@ from __future__ import absolute_import
 import logging
 
 from traits.trait_base import ETSConfig
-from traits.has_traits import HasTraits
 from pyface.base_toolkit import Toolkit, find_toolkit
 
 
@@ -34,13 +33,6 @@ not_implemented_message = "the '{}' toolkit does not implement this method"
 
 #: The current GUI toolkit object being used:
 _toolkit = None
-
-
-# FIXME: this definitely belongs elsewhere.
-# An injected method to render the object in a Jupyter notebook.
-def _repr_html_(self):
-    self.configure_traits(kind='live')
-HasTraits._repr_html_ = _repr_html_
 
 
 def assert_toolkit_import(names):

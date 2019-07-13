@@ -118,7 +118,7 @@ from .menu import (
     RevertAction,
     RevertButton,
     Separator,
-    #StandardMenuBar,
+    StandardMenuBar,
     ToolBar,
     UndoAction,
     UndoButton)

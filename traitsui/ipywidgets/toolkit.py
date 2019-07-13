@@ -1,6 +1,7 @@
 from traitsui.toolkit import assert_toolkit_import
 assert_toolkit_import(['ipywidgets'])
 
+from traits.has_traits import HasTraits
 from traits.trait_notifiers import set_ui_handler
 from pyface.base_toolkit import Toolkit as PyfaceToolkit
 from traitsui.toolkit import Toolkit
@@ -9,11 +10,14 @@ from IPython.display import display
 import ipywidgets
 
 
-toolkit = PyfaceToolkit(
-    'pyface',
-    'ipywidgets',
-    'traitsui.ipywidgets'
-)
+toolkit = PyfaceToolkit('pyface', 'ipywidgets', 'traitsui.ipywidgets')
+
+# FIXME: this definitely belongs elsewhere.
+# An injected method to render the object in a Jupyter notebook.
+def _repr_html_(self):
+    self.configure_traits(kind='live')
+HasTraits._repr_html_ = _repr_html_
+
 
 def ui_handler(handler, *args, **kwds):
     """ Handles UI notification handler requests that occur on a thread other
