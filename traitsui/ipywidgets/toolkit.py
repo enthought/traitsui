@@ -12,11 +12,12 @@ import ipywidgets
 
 toolkit = PyfaceToolkit('pyface', 'ipywidgets', 'traitsui.ipywidgets')
 
-# FIXME: this definitely belongs elsewhere.
-# An injected method to render the object in a Jupyter notebook.
-def _repr_html_(self):
+def has_traits_html(self):
+    """ Jupyter HasTraits HTML formatter. """
     self.configure_traits(kind='live')
-HasTraits._repr_html_ = _repr_html_
+
+html_formatter = get_ipython().display_formatter.formatters['text/html']
+html_formatter.for_type(HasTraits, has_traits_html)
 
 
 def ui_handler(handler, *args, **kwds):
