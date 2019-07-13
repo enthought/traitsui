@@ -12,8 +12,10 @@
 #  Date:   Aug 2017
 
 from __future__ import absolute_import
+
 from pyface.action.api import ActionController
 from traits.api import Any, Instance
+from traitsui.menu import Action
 import six
 
 
@@ -60,7 +62,6 @@ class BasePanel(ActionController):
     def coerce_button(self, action):
         """ Coerces a string to an Action if necessary.
         """
-        from traitsui.menu import Action
 
         if isinstance(action, six.string_types):
             return Action(

@@ -124,16 +124,16 @@ HelpAction = Action(
 )
 
 #: The standard Traits UI menu bar
-# StandardMenuBar = MenuBar(
-#     Menu(CloseAction,
-#          name='File'),
-#     Menu(UndoAction,
-#          RedoAction,
-#          RevertAction,
-#          name='Edit'),
-#     Menu(HelpAction,
-#          name='Help')
-# )
+StandardMenuBar = MenuBar(
+    Menu(CloseAction,
+         name='File'),
+    Menu(UndoAction,
+         RedoAction,
+         RevertAction,
+         name='Edit'),
+    Menu(HelpAction,
+         name='Help')
+)
 
 #-------------------------------------------------------------------------
 #  Standard buttons (i.e. actions):
