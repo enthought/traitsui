@@ -174,6 +174,13 @@ class TestTreeView(unittest.TestCase):
             notifiers_list = bogus.trait(trait)._notifiers(False)
             self.assertEqual(expected_listeners, len(notifiers_list))
 
+            if trait == 'name':
+                # fire a label change
+                bogus.name = "Something else"
+            else:
+                # change the children
+                bogus.bogus_list.append(BogusTreeNodeObject())
+
             # Manually close the UI
             press_ok_button(ui)
 
