@@ -153,19 +153,6 @@ def save_window(ui):
     geom = ui.control.geometry()
     ui.save_prefs((geom.x(), geom.y(), geom.width(), geom.height()))
 
-#-------------------------------------------------------------------------
-#  Safely tries to pop up an FBI window if etsdevtools.debug is installed
-#-------------------------------------------------------------------------
-
-
-def open_fbi():
-    try:
-        from etsdevtools.developer.helper.fbi import if_fbi
-        if not if_fbi():
-            import traceback
-            traceback.print_exc()
-    except ImportError:
-        pass
 
 #-------------------------------------------------------------------------
 #  'IconButton' class:
