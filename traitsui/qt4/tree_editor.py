@@ -1429,7 +1429,7 @@ class SimpleEditor(Editor):
         """
         node, object, nid = self._data
         self._data = None
-        self._undoable_append(node, object, clipboard.instance, False)
+        self._undoable_append(node, object, clipboard.instance, True)
 
     #-------------------------------------------------------------------------
     #  Deletes the current node from the tree:
