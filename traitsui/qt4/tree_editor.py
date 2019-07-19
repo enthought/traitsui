@@ -649,7 +649,7 @@ class SimpleEditor(Editor):
 
         node.when_label_changed(object, self._label_updated, True)
         node.when_column_labels_change(
-            object, self._column_labels_updated, False)
+            object, self._column_labels_updated, True)
 
     #-------------------------------------------------------------------------
     #  Returns the tree node data for a specified object in the form
@@ -1429,7 +1429,7 @@ class SimpleEditor(Editor):
         """
         node, object, nid = self._data
         self._data = None
-        self._undoable_append(node, object, clipboard.instance, False)
+        self._undoable_append(node, object, clipboard.instance, True)
 
     #-------------------------------------------------------------------------
     #  Deletes the current node from the tree:
@@ -1952,10 +1952,7 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
 
         renderer = node.get_renderer(object, column=column)
         if renderer is None:
-            size = index.model().data(index, QtCore.Qt.SizeHintRole)
-            if size is None:
-                size = QtCore.QSize(1, 21)
-            return size
+            return super(TreeItemDelegate, self).sizeHint(option, index)
 
         size_context = (option, index)
         size = renderer.size(

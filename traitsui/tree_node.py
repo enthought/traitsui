@@ -1896,7 +1896,7 @@ class TreeNodeObject(HasPrivateTraits):
             if not remove:
                 def wrapped_listener(target, name, new):
                     """ Ensure listener gets called with correct object. """
-                    return listener(node, name, new)
+                    return listener(self, name, new)
 
                 self._listener_cache[memo] = wrapped_listener
             else:

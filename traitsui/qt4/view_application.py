@@ -120,15 +120,6 @@ class ViewApplication(object):
         self.id = id
         self.scrollable = scrollable
         self.args = args
-
-        # FIXME: fbi is wx specific at the moment.
-        if os.environ.get('ENABLE_FBI') is not None:
-            try:
-                from etsdevtools.developer.helper.fbi import enable_fbi
-                enable_fbi()
-            except:
-                pass
-
         self.ui = self.view.ui(self.context,
                                kind=self.kind,
                                handler=self.handler,
@@ -136,4 +127,6 @@ class ViewApplication(object):
                                scrollable=self.scrollable,
                                args=self.args)
 
-        start_event_loop_qt4()
+        # only non-modal UIs need to have an event loop started for them
+        if kind not in {'modal', 'livemodal'}:
+            start_event_loop_qt4()
