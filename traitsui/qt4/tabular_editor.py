@@ -76,6 +76,10 @@ class TabularEditor(Editor):
     selected_row = Int(-1)
     multi_selected_rows = List(Int)
 
+    # The optional extended name of the trait to synchronize the selection
+    # column with:
+    selected_column = Int(-1)
+
     # The most recently actived item and its index:
     activated = Any(comparison_mode=NO_COMPARE)
     activated_row = Int(comparison_mode=NO_COMPARE)
@@ -107,8 +111,9 @@ class TabularEditor(Editor):
     # Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
 
-    # Row index of item to select after rebuilding editor list:
-    row = Any
+    # NIT: This doesn't seem to be used anywhere...can I delete?
+    # # Row index of item to select after rebuilding editor list:
+    # row = Any
 
     # Should the selected item be edited after rebuilding the editor list:
     edit = Bool(False)
@@ -349,6 +354,18 @@ class TabularEditor(Editor):
 
     #-- Trait Event Handlers -------------------------------------------------
 
+    def _clicked_changed(self):
+        """ When mouse is clicked on a specific cell, update the selected
+            indices first
+        """
+        self.selected_row = self.clicked.row
+        self.selected_column = self.clicked.column
+
+    def _column_clicked_changed(self):
+        """ When column is clicked, update selected column first
+        """
+        self.selected_column = self.clicked.column
+
     def _update_changed(self):
         self.update_editor()
 
@@ -371,12 +388,19 @@ class TabularEditor(Editor):
     def _selected_row_changed(self, selected_row):
         if not self._no_update:
             smodel = self.control.selectionModel()
-            if selected_row == -1:
+            if selected_row < 0:
                 smodel.clearSelection()
             else:
-                smodel.select(self.model.index(selected_row, 0),
-                              QtGui.QItemSelectionModel.ClearAndSelect |
-                              QtGui.QItemSelectionModel.Rows)
+                smodel.select(
+                    self.model.index(
+                        selected_row,
+                        max(self.selected_column, 0)
+                    ),
+                    QtGui.QItemSelectionModel.ClearAndSelect |
+                    QtGui.QItemSelectionModel.Rows
+                )
+                # Once selected, scroll to the row
+                self.scroll_to_row = selected_row
 
     def _multi_selected_changed(self, new):
         if not self._no_update:
@@ -424,6 +448,21 @@ class TabularEditor(Editor):
                           QtGui.QItemSelectionModel.Select |
                           QtGui.QItemSelectionModel.Rows)
 
+    def _selected_column_changed(self, selected_column):
+        if not self._no_update:
+            smodel = self.control.selectionModel()
+            if selected_column >= 0:
+                smodel.select(
+                    self.model.index(
+                        max(self.selected_row,0),
+                        selected_column
+                    ),
+                    QtGui.QItemSelectionModel.ClearAndSelect |
+                    QtGui.QItemSelectionModel.Rows
+                )
+                # Once selected, scroll to the column
+                self.scroll_to_column = selected_column
+
     scroll_to_row_hint_map = {
         'center': QtGui.QTableView.PositionAtCenter,
         'top': QtGui.QTableView.PositionAtTop,
@@ -436,7 +475,10 @@ class TabularEditor(Editor):
         """
         scroll_hint = self.scroll_to_row_hint_map.get(
             self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
-        self.control.scrollTo(self.model.index(row, 0), scroll_hint)
+        self.control.scrollTo(
+            self.model.index(row, max(self.selected_column, 0)),
+            scroll_hint
+        )
 
     def _scroll_to_column_changed(self, column):
         """ Scroll to the given column.
@@ -444,7 +486,7 @@ class TabularEditor(Editor):
         scroll_hint = self.scroll_to_row_hint_map.get(
             self.factory.scroll_to_row_hint, self.control.PositionAtCenter)
         self.control.scrollTo(
-            self.model.index(self.activated_row, column),
+            self.model.index(max(self.selected_row, 0), column),
             scroll_hint
         )
 
@@ -473,6 +515,11 @@ class TabularEditor(Editor):
     def _on_right_click(self, column):
         event = TabularEditorEvent(editor=self, row=0, column=column)
         setattr(self, 'right_clicked', event)
+
+    def _column_clicked_changed(self):
+        """ When column is clicked, update selected column first
+        """
+        self.selected_column = self.clicked.column
 
     def _on_column_right_click(self, column):
         event = TabularEditorEvent(editor=self, row=0, column=column)
