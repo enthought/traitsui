@@ -1404,7 +1404,7 @@ class SimpleEditor(Editor):
     def _menu_copy_node(self):
         """ Copies the current tree node object to the paste buffer.
         """
-        clipboard.instance = self._data[1]
+        clipboard.instance = copy.deepcopy(self._data[1])
         self._data = None
 
     #-------------------------------------------------------------------------
