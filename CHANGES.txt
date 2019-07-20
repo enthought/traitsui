@@ -1,6 +1,40 @@
 Traits UI Changelog
 ===================
 
+Release 6.1.2
+-------------
+
+A bugfix release that fixes a number of issues discovered since the
+6.1.1 release.  In particular this fixes a couple of issues that impacted
+the usability of Mayavi.
+
+Thanks to Mark Dickinson, Maxwell Grady, Prabhu Ramachandran, Matt Reay,
+Ajeet Vivekanandan, Corran Webster, John Wiggins.
+
+Fixes
+~~~~~
+* Fix tree node copy failure to copy (#590)
+* Fix/scroll to row preserve column (#588)
+* Call correct object on label change for TreeNodeObject (#586)
+* Remove uses of etsdevtools (#577)
+* Fix modal view application (#574)
+* Remove unicode usage (#572)
+* Update Travis CI configuration to be compatible with Ubuntu Xenial. (#569)
+* Build CI on maintenance branches (#567)
+* Fix an erroneous handler removal (#566)
+* Fix the sizeHint() default for TreeItemDelegate (#565).
+* Update unittest import (#564)
+
+Release 6.1.1
+-------------
+
+A bugfix release to correct some critical issues with the TreeEditor.
+
+Fixes
+~~~~~
+* Fix TreeNodeObject listener cache (#558).
+* Fix tree node insertion (#561).
+
 Release 6.1.0
 -------------
 
