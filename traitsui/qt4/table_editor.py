@@ -1166,6 +1166,8 @@ class TableView(QtGui.QTableView):
             set_resize_mode(QtGui.QHeaderView.ResizeToContents)
         elif not factory.show_row_labels:
             vheader.hide()
+        if factory.row_height > 0:
+            vheader.setDefaultSectionSize(factory.row_height)
         self.setAlternatingRowColors(factory.alternate_bg_color)
         self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
         # Configure the column headings.
