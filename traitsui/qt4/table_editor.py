@@ -874,6 +874,22 @@ class TableDelegate(QtGui.QStyledItemDelegate):
         """
         editor.setGeometry(option.rect)
 
+    def paint(self, painter, option, index):
+        self.initStyleOption(option, index)
+
+        if ((option.state & QtGui.QStyle.State_Selected) and
+                (option.state & QtGui.QStyle.State_Active)):
+            factory = self.parent()._editor.factory
+            if factory.selection_bg_color is not None:
+                option.palette.setColor(
+                    QtGui.QPalette.Highlight, factory.selection_bg_color_)
+            if factory.selection_color is not None:
+                option.palette.setColor(
+                    QtGui.QPalette.HighlightedText, factory.selection_color_)
+
+        QtGui.QApplication.style().drawControl(
+            QtGui.QStyle.CE_ItemViewItem, option, painter, None);
+
 
 class TableView(QtGui.QTableView):
     """A QTableView configured to behave as expected by TraitsUI."""
