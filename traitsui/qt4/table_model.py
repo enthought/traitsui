@@ -107,6 +107,8 @@ class TableModel(QtCore.QAbstractTableModel):
 
         elif role == QtCore.Qt.FontRole:
             font = column.get_text_font(obj)
+            if font is None:
+                font = self._editor.factory.cell_font
             if font is not None:
                 return QtGui.QFont(font)
 
@@ -120,15 +122,21 @@ class TableModel(QtCore.QAbstractTableModel):
         elif role == QtCore.Qt.BackgroundRole:
             color = column.get_cell_color(obj)
             if color is None:
-                # FIXME: Yes, this is weird. It should work fine to fall through
-                # to the catch-all None at the end, but it doesn't.
-                return None
-            else:
-                q_color = as_qcolor(color)
-                return QtGui.QBrush(q_color)
+                if column.is_editable(obj):
+                    color = self._editor.factory.cell_bg_color_
+                else:
+                    color = self._editor.factory.cell_read_only_bg_color_
+                if color is None:
+                    # FIXME: Yes, this is weird. It should work fine to fall through
+                    # to the catch-all None at the end, but it doesn't.
+                    return None
+            q_color = as_qcolor(color)
+            return QtGui.QBrush(q_color)
 
         elif role == QtCore.Qt.ForegroundRole:
             color = column.get_text_color(obj)
+            if color is None:
+                color = self._editor.factory.cell_color_
             if color is not None:
                 q_color = as_qcolor(color)
                 return QtGui.QBrush(q_color)
@@ -177,9 +185,9 @@ class TableModel(QtCore.QAbstractTableModel):
     def headerData(self, section, orientation, role):
         """Reimplemented to return the header data."""
 
-        if orientation == QtCore.Qt.Horizontal:
+        editor = self._editor
 
-            editor = self._editor
+        if orientation == QtCore.Qt.Horizontal:
             column = editor.columns[section]
 
             if role == QtCore.Qt.DisplayRole:
@@ -189,6 +197,24 @@ class TableModel(QtCore.QAbstractTableModel):
 
             if role == QtCore.Qt.DisplayRole:
                 return str(section + 1)
+
+        if role == QtCore.Qt.FontRole:
+            if editor.factory is None:
+                # XXX I think this should never happen, but it does
+                return None
+            font = editor.factory.label_font
+            if font is not None:
+                return QtGui.QFont(font)
+
+        elif role == QtCore.Qt.BackgroundRole:
+            color = editor.factory.label_bg_color_
+            if color is not None:
+                return color
+
+        elif role == QtCore.Qt.ForegroundRole:
+            color = editor.factory.label_color_
+            if color is not None:
+                return color
 
         return None
 
