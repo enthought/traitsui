@@ -198,10 +198,12 @@ class TableModel(QtCore.QAbstractTableModel):
             if role == QtCore.Qt.DisplayRole:
                 return str(section + 1)
 
+        if editor.factory is None:
+            # XXX This should never happen, but it does,
+            # probably during shutdown, but I haven't investigated
+            return None
+
         if role == QtCore.Qt.FontRole:
-            if editor.factory is None:
-                # XXX I think this should never happen, but it does
-                return None
             font = editor.factory.label_font
             if font is not None:
                 return QtGui.QFont(font)
