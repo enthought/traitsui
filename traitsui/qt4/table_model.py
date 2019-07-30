@@ -90,6 +90,11 @@ class TableModel(QtCore.QAbstractTableModel):
         obj = self._editor.items()[mi.row()]
         column = self._editor.columns[mi.column()]
 
+        if self._editor.factory is None:
+            # XXX This should never happen, but it does,
+            # probably during shutdown, but I haven't investigated
+            return None
+
         if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
             text = column.get_value(obj)
             if text is not None:
