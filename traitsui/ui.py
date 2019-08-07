@@ -28,6 +28,7 @@ from __future__ import absolute_import
 import shelve
 import os
 
+from pyface.ui_traits import Image
 from traits.api import (
     Any,
     Bool,
@@ -126,7 +127,7 @@ class UI(HasPrivateTraits):
     title = Str
 
     # The ImageResource of the icon, if any
-    icon = Any
+    icon = Image
 
     # Should the created UI have scroll bars?
     scrollable = Bool(False)

@@ -25,6 +25,7 @@
 
 from __future__ import absolute_import
 
+from pyface.ui_traits import Image
 from traits.api import (
     Any,
     Bool,
@@ -83,10 +84,6 @@ AHandler = Any(desc='the handler for the view')
 
 # Dialog window title trait:
 ATitle = Str(desc='the window title for the view')
-
-# Dialog window icon trait
-#icon_trait = Instance( 'pyface.image_resource.ImageResource',
-# desc = 'the ImageResource of the icon file for the view' )
 
 # User interface 'kind' trait. The values have the following meanings:
 #
@@ -228,7 +225,7 @@ class View(ViewElement):
     title = ATitle
 
     # The name of the icon to display in the dialog window title bar:
-    icon = Any
+    icon = Image
 
     # The kind of user interface to create:
     kind = AKind
