@@ -25,6 +25,7 @@
 
 from __future__ import absolute_import
 
+from pyface.ui_traits import Image
 from traits.api import (
     Any,
     Bool,
@@ -228,7 +229,7 @@ class View(ViewElement):
     title = ATitle
 
     # The name of the icon to display in the dialog window title bar:
-    icon = Any
+    icon = Image
 
     # The kind of user interface to create:
     kind = AKind
