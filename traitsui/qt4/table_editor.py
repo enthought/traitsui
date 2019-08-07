@@ -168,7 +168,7 @@ class TableEditor(Editor, BaseTableEditor):
 
         # Create the vertical header context menu and connect to its signals
         self.header_menu = QtGui.QMenu(self.table_view)
-        insertable = factory.row_factory is not None and not factory.auto_add
+        insertable = factory.row_factory is not None
         if factory.editable:
             if insertable:
                 action = self.header_menu.addAction('Insert new item')
@@ -970,8 +970,7 @@ class TableView(QtGui.QTableView):
         editor = self._editor
         if row == -1:
             factory = editor.factory
-            if (factory.editable and factory.row_factory is not None and
-                    not factory.auto_add):
+            if (factory.editable and factory.row_factory is not None):
                 event.accept()
                 editor.empty_menu.exec_(position)
 
@@ -1003,7 +1002,7 @@ class TableView(QtGui.QTableView):
             row = vheader.logicalIndexAt(event.pos().y())
             if row == -1:
                 factory = editor.factory
-                if factory.row_factory is not None and not factory.auto_add:
+                if factory.row_factory is not None:
                     editor.empty_menu.exec_(event.globalPos())
             else:
                 editor.header_row = row
@@ -1159,7 +1158,7 @@ class TableView(QtGui.QTableView):
         # Configure the row headings.
         vheader = self.verticalHeader()
         set_resize_mode = set_qheader_section_resize_mode(vheader)
-        insertable = factory.row_factory is not None and not factory.auto_add
+        insertable = factory.row_factory is not None
         if ((factory.editable and (insertable or factory.deletable)) or
                 factory.reorderable):
             vheader.installEventFilter(self)
