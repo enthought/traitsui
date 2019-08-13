@@ -22,7 +22,7 @@ from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
 
-from ._tools import skip_if_null
+from ._tools import is_current_backend_null
 
 
 class FakeControl(HasTraits):
@@ -105,7 +105,8 @@ class UserObject(HasTraits):
     user_event = Event
 
 
-@skip_if_null
+@unittest.skipIf(is_current_backend_null(),
+                 'Editor tests require non-null backend')
 class TestEditor(UnittestTools, unittest.TestCase):
 
     def create_editor(self, context=None, object_name='object',
