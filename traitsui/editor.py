@@ -411,7 +411,8 @@ class Editor(HasPrivateTraits):
         if len(parts) == 1:
             object = self.context_object
         else:
-            object, name = parts
+            object_name, name = parts
+            object = self.ui.context[object_name]
 
         return (object, name, partial(xgetattr, object, name))
 
