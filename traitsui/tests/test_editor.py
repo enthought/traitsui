@@ -22,6 +22,8 @@ from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
 
+from ._tools import skip_if_null
+
 
 class FakeControl(HasTraits):
 
@@ -103,6 +105,7 @@ class UserObject(HasTraits):
     user_event = Event
 
 
+@skip_if_null
 class TestEditor(UnittestTools, unittest.TestCase):
 
     def create_editor(self, context=None, object_name='object',
