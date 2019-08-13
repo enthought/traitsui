@@ -39,6 +39,9 @@ class StubEditorFactory(EditorFactory):
     #: Whether or not the traits are events.
     is_event = Bool()
 
+    #: Whether or not the traits are events.
+    auxilliary_value = Any(sync_value=True)
+
 
 class StubEditor(Editor):
 
@@ -110,7 +113,7 @@ class UserObject(HasTraits):
 class TestEditor(UnittestTools, unittest.TestCase):
 
     def create_editor(self, context=None, object_name='object',
-                      name='user_value', is_event=False):
+                      name='user_value', factory=None, is_event=False):
         if context is None:
             user_object = UserObject()
             context = {'object': user_object}
@@ -124,7 +127,10 @@ class TestEditor(UnittestTools, unittest.TestCase):
             context=context,
             handler=default_handler(),
         )
-        factory = StubEditorFactory(is_event=is_event)
+
+        if factory is None:
+            factory = StubEditorFactory()
+        factory.is_event = is_event
 
         editor = StubEditor(
             parent=None,
@@ -279,6 +285,16 @@ class TestEditor(UnittestTools, unittest.TestCase):
         self.assertEqual(editor.value, 'new object')
         self.assertIs(editor.object, new_user_object)
         self.assertEqual(editor.object.user_value, 'new object')
+
+        editor.dispose()
+
+    def test_factory_sync_simple(self):
+        factory = StubEditorFactory(auxilliary_value='test')
+        editor = self.create_editor(factory=factory)
+        editor.prepare(None)
+
+        # preparation copies the auxilliary value from the factory
+        self.assertIs(editor.auxilliary_value, 'test')
 
         editor.dispose()
 
