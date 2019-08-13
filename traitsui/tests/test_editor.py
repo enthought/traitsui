@@ -13,10 +13,13 @@
 
 import unittest
 
-from traits.api import Any, Bool, Event, HasTraits, List, Undefined
+from traits.api import (
+    Any, Bool, Event, Float, HasTraits, Int, List, Undefined
+)
 from traits.trait_base import xgetattr
 from traits.testing.unittest_tools import UnittestTools
 
+from traitsui.context_value import ContextValue, CVFloat, CVInt
 from traitsui.editor import Editor
 from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
@@ -42,6 +45,18 @@ class StubEditorFactory(EditorFactory):
     #: Whether or not the traits are events.
     auxilliary_value = Any(sync_value=True)
 
+    #: Whether or not the traits are events.
+    auxilliary_cv_int = CVInt
+
+    #: Whether or not the traits are events.
+    auxilliary_cv_float = CVFloat
+
+    def _auxilliary_cv_int_default(self):
+        return 0
+
+    def _auxilliary_cv_float_default(self):
+        return 0.0
+
 
 class StubEditor(Editor):
 
@@ -56,6 +71,12 @@ class StubEditor(Editor):
 
     #: An auxilliary event we want to synchronize.
     auxilliary_event = Event
+
+    #: An auxilliary int we want to synchronize with a context value.
+    auxilliary_cv_int = Int(sync_value='from')
+
+    #: An auxilliary float we want to synchronize with a context value.
+    auxilliary_cv_float = Float
 
     def init(self, parent):
         self.control = FakeControl()
@@ -298,6 +319,54 @@ class TestEditor(UnittestTools, unittest.TestCase):
 
         editor.dispose()
 
+    def test_factory_sync_cv_simple(self):
+        factory = StubEditorFactory()
+        editor = self.create_editor(factory=factory)
+        editor.prepare(None)
+
+        # preparation copies the auxilliary CV int value from the factory
+        self.assertIs(editor.auxilliary_cv_int, 0)
+
+        editor.dispose()
+
+    def test_parse_extended_name(self):
+        context = {
+            'object': UserObject(
+                user_auxilliary=UserObject(user_value='other_test'),
+            ),
+            'other_object': UserObject(user_value='another_test'),
+        }
+        editor = self.create_editor(context=context)
+        editor.prepare(None)
+
+        # test simple name
+        object, name, getter = editor.parse_extended_name('user_value')
+        value = getter()
+
+        self.assertIs(object, context['object'])
+        self.assertEqual(name, 'user_value')
+        self.assertEqual(value, 'test')
+
+        # test different context object name
+        object, name, getter = editor.parse_extended_name(
+                'other_object.user_value')
+        value = getter()
+
+        self.assertIs(object, context['other_object'])
+        self.assertEqual(name, 'user_value')
+        self.assertEqual(value, 'another_test')
+
+        # test chained name
+        object, name, getter = editor.parse_extended_name(
+                'object.user_auxilliary.user_value')
+        value = getter()
+
+        self.assertIs(object, context['object'])
+        self.assertEqual(name, 'user_auxilliary.user_value')
+        self.assertEqual(value, 'other_test')
+
+        editor.dispose()
+
     # Testing sync_value "from" ---------------------------------------------
 
     def test_sync_value_from(self):
@@ -443,6 +512,28 @@ class TestEditor(UnittestTools, unittest.TestCase):
         with self.assertTraitDoesNotChange(editor, 'auxilliary_event'):
             user_object.user_event = True
 
+    def test_sync_value_from_cv(self):
+        factory = StubEditorFactory(
+            auxilliary_cv_int=ContextValue('object.user_auxilliary')
+        )
+        editor = self.create_editor(factory=factory)
+        user_object = editor.object
+
+        with self.assertTraitChanges(editor, 'auxilliary_cv_int', count=1):
+            editor.prepare(None)
+
+        self.assertEqual(editor.auxilliary_cv_int, 10)
+
+        with self.assertTraitChanges(editor, 'auxilliary_cv_int', count=1):
+            user_object.user_auxilliary = 11
+
+        self.assertEqual(editor.auxilliary_cv_int, 11)
+
+        editor.dispose()
+
+        with self.assertTraitDoesNotChange(editor, 'auxilliary_cv_int'):
+            user_object.user_auxilliary = 12
+
     # Testing sync_value "to" -----------------------------------------------
 
     def test_sync_value_to(self):
@@ -586,6 +677,29 @@ class TestEditor(UnittestTools, unittest.TestCase):
 
         with self.assertTraitDoesNotChange(user_object, 'user_event'):
             editor.auxilliary_event = True
+
+    def test_sync_value_to_cv(self):
+        factory = StubEditorFactory(
+            auxilliary_cv_float=ContextValue('object.user_auxilliary')
+        )
+        editor = self.create_editor(factory=factory)
+        user_object = editor.object
+        editor.auxilliary_cv_float = 20.0
+
+        with self.assertTraitChanges(user_object, 'user_auxilliary', count=1):
+            editor.prepare(None)
+
+        self.assertEqual(user_object.user_auxilliary, 20)
+
+        with self.assertTraitChanges(user_object, 'user_auxilliary', count=1):
+            editor.auxilliary_cv_float = 11.0
+
+        self.assertEqual(user_object.user_auxilliary, 11)
+
+        editor.dispose()
+
+        with self.assertTraitDoesNotChange(user_object, 'user_auxilliary'):
+            editor.auxilliary_cv_float = 12.0
 
     # Testing sync_value "both" -----------------------------------------------
 
