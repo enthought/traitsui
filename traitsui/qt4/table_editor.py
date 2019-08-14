@@ -225,7 +225,7 @@ class TableEditor(Editor, BaseTableEditor):
         else:
             main_view = self.table_view
 
-        # Create auxillary editor and encompassing splitter if necessary
+        # Create auxiliary editor and encompassing splitter if necessary
         mode = factory.selection_mode
         if (factory.edit_view == ' ') or mode not in {'row', 'rows'}:
             self.control = main_view
@@ -301,7 +301,7 @@ class TableEditor(Editor, BaseTableEditor):
     def dispose(self):
         """ Disposes of the contents of an editor."""
 
-        # Make sure that the auxillary UIs are properly disposed
+        # Make sure that the auxiliary UIs are properly disposed
         if self.toolbar_ui is not None:
             self.toolbar_ui.dispose()
         if self._ui is not None:
