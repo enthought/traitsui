@@ -29,6 +29,11 @@ from ._tools import is_current_backend_null
 
 
 class FakeControl(HasTraits):
+    """ A pure Traits object that fakes being a control.
+
+    It can aither hold a value (mimicking a field), or have an event
+    which is listened to (mimicking a button or similar control).
+    """
 
     #: The value stored in the control.
     control_value = Any
@@ -38,6 +43,12 @@ class FakeControl(HasTraits):
 
 
 class StubEditorFactory(EditorFactory):
+    """ A minimal editor factory
+
+    This simply holds state that may or may not be copied to the
+    editor.  No attempt is made to handle custom/readonly/etc.
+    variation.
+    """
 
     #: Whether or not the traits are events.
     is_event = Bool()
@@ -59,6 +70,12 @@ class StubEditorFactory(EditorFactory):
 
 
 class StubEditor(Editor):
+    """ A minimal editor implementaton for a StubEditorFactory.
+
+    The editor creates a FakeControl instance as its control object
+    and keeps values synchronized either to `control_value` or
+    `control_event` (if `is_event` is True).
+    """
 
     #: Whether or not the traits are events.
     is_event = Bool
@@ -115,6 +132,7 @@ class StubEditor(Editor):
 
 
 class UserObject(HasTraits):
+    """ A simple HasTraits class with a variety of state. """
 
     #: The value being edited.
     user_value = Any('test')
