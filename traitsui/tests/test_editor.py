@@ -13,11 +13,11 @@
 
 import unittest
 
+from pyface.toolkit import toolkit_object
 from traits.api import (
     Any, Bool, Event, Float, HasTraits, Int, List, Undefined
 )
 from traits.trait_base import xgetattr
-from traits.testing.unittest_tools import UnittestTools
 
 from traitsui.context_value import ContextValue, CVFloat, CVInt
 from traitsui.editor import Editor
@@ -25,7 +25,9 @@ from traitsui.editor_factory import EditorFactory
 from traitsui.handler import default_handler
 from traitsui.ui import UI
 
-from ._tools import is_current_backend_null
+
+GuiTestAssistant = toolkit_object('util.gui_test_assistant:GuiTestAssistant')
+no_gui_test_assistant = (GuiTestAssistant.__name__ == 'Unimplemented')
 
 
 class FakeControl(HasTraits):
@@ -147,9 +149,8 @@ class UserObject(HasTraits):
     user_event = Event
 
 
-@unittest.skipIf(is_current_backend_null(),
-                 'Editor tests require non-null backend')
-class TestEditor(UnittestTools, unittest.TestCase):
+@unittest.skipIf(no_gui_test_assistant, 'No GuiTestAssistant')
+class TestEditor(GuiTestAssistant, unittest.TestCase):
 
     def create_editor(self, context=None, object_name='object',
                       name='user_value', factory=None, is_event=False):
@@ -181,6 +182,28 @@ class TestEditor(UnittestTools, unittest.TestCase):
         )
         return editor
 
+    def change_user_value(self, editor, object, name, value):
+        if editor.is_event:
+            control_name = 'control_event'
+        else:
+            control_name = 'control_value'
+
+        # test the value in the control changes
+        with self.assertTraitChanges(editor.control, control_name, count=1):
+            self.gui.set_trait_later(object, name, value)
+            self.event_loop_helper.event_loop_with_timeout(repeat=6)
+
+    def change_control_value(self, editor, object, name, value):
+        if editor.is_event:
+            control_name = 'control_event'
+        else:
+            control_name = 'control_value'
+
+        # test the value in the user object changes
+        with self.assertTraitChanges(object, name, count=1):
+            self.gui.set_trait_later(editor.control, control_name, value)
+            self.event_loop_helper.event_loop_with_timeout(repeat=6)
+
     def test_lifecycle(self):
         editor = self.create_editor()
 
@@ -198,18 +221,16 @@ class TestEditor(UnittestTools, unittest.TestCase):
         self.assertEqual(editor.value, 'test')
         self.assertEqual(editor.control.control_value, 'test')
 
-        # test changing the value in the control
-        with self.assertTraitChanges(editor.control, 'control_value', count=1):
-            with self.assertTraitChanges(editor.ui, 'modified', count=1):
-                editor.object.user_value = 'new test'
+        with self.assertTraitChanges(editor.ui, 'modified', count=1):
+            self.change_user_value(editor, editor.object, 'user_value',
+                                   'new test')
 
         self.assertEqual(editor.value, 'new test')
         self.assertEqual(editor.control.control_value, 'new test')
         self.assertTrue(editor.ui.modified)
 
-        # test changing the value in the user object
-        with self.assertTraitChanges(editor.object, 'user_value', count=1):
-            editor.control.control_value = 'even newer test'
+        self.change_control_value(editor, editor.object, 'user_value',
+                               'even newer test')
 
         self.assertEqual(editor.value, 'even newer test')
         self.assertEqual(editor.object.user_value, 'even newer test')
@@ -239,16 +260,13 @@ class TestEditor(UnittestTools, unittest.TestCase):
         self.assertEqual(editor.value, 'other_test')
         self.assertEqual(editor.control.control_value, 'other_test')
 
-        # test the value in the control changes
-        with self.assertTraitChanges(editor.control, 'control_value', count=1):
-            user_object.user_value = 'new test'
+        self.change_user_value(editor, user_object, 'user_value', 'new test')
 
         self.assertEqual(editor.value, 'new test')
         self.assertEqual(editor.control.control_value, 'new test')
 
-        # test the value in the user object changes
-        with self.assertTraitChanges(user_object, 'user_value', count=1):
-            editor.control.control_value = 'even newer test'
+        self.change_control_value(editor, user_object, 'user_value',
+                                  'even newer test')
 
         self.assertEqual(editor.value, 'even newer test')
         self.assertEqual(editor.object.user_value, 'even newer test')
@@ -268,13 +286,8 @@ class TestEditor(UnittestTools, unittest.TestCase):
         # preparation creates the control and sets the control value
         self.assertIs(editor.value, Undefined)
 
-        # test changing the value in the control
-        with self.assertTraitChanges(editor.control, 'control_event', count=1):
-            user_object.user_event = True
-
-        # test the value in the user object changes
-        with self.assertTraitChanges(user_object, 'user_event', count=1):
-            editor.control.control_event = True
+        self.change_user_value(editor, user_object, 'user_event', True)
+        self.change_control_value(editor, user_object, 'user_event', True)
 
         editor.dispose()
 
@@ -301,25 +314,22 @@ class TestEditor(UnittestTools, unittest.TestCase):
         self.assertEqual(editor.value, 'other_test')
         self.assertEqual(editor.control.control_value, 'other_test')
 
-        # test changing the value in the control
-        with self.assertTraitChanges(editor.control, 'control_value', count=1):
-            user_object.user_value = 'new test'
+        self.change_user_value(editor, user_object, 'user_value', 'new test')
 
         self.assertEqual(editor.value, 'new test')
         self.assertEqual(editor.control.control_value, 'new test')
 
-        # test changing the value in the user object
-        with self.assertTraitChanges(user_object, 'user_value', count=1):
-            editor.control.control_value = 'even newer test'
+        self.change_control_value(editor, user_object, 'user_value',
+                                  'even newer test')
 
         self.assertEqual(editor.value, 'even newer test')
         self.assertEqual(editor.object.user_value, 'even newer test')
 
         # test changing the chained object
         new_user_object = UserObject(user_value='new object')
-        with self.assertTraitChanges(editor.control, 'control_value', count=1):
-            with self.assertTraitChanges(editor, 'object', count=1):
-                context['object'].user_auxiliary = new_user_object
+        with self.assertTraitChanges(editor, 'object', count=1):
+            self.change_user_value(editor, context['object'], 'user_auxiliary',
+                                   new_user_object)
 
         self.assertEqual(editor.value, 'new object')
         self.assertIs(editor.object, new_user_object)
