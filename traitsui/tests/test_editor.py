@@ -28,6 +28,11 @@ from traitsui.ui import UI
 
 GuiTestAssistant = toolkit_object('util.gui_test_assistant:GuiTestAssistant')
 no_gui_test_assistant = (GuiTestAssistant.__name__ == 'Unimplemented')
+if no_gui_test_assistant:
+
+    # ensure null toolkit has an inheritable GuiTestAssistant
+    class GuiTestAssistant(object):
+        pass
 
 
 class FakeControl(HasTraits):
