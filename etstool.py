@@ -166,7 +166,7 @@ def install(runtime, toolkit, environment):
 
 
 @cli.command()
-@click.option('--runtime', default='3.5')
+@click.option('--runtime', default='3.6')
 @click.option('--toolkit', default='null')
 @click.option('--environment', default=None)
 def test(runtime, toolkit, environment):
@@ -194,7 +194,7 @@ def test(runtime, toolkit, environment):
     click.echo('Done test')
 
 @cli.command()
-@click.option('--runtime', default='3.5')
+@click.option('--runtime', default='3.6')
 @click.option('--toolkit', default='null')
 @click.option('--environment', default=None)
 def cleanup(runtime, toolkit, environment):
@@ -211,7 +211,7 @@ def cleanup(runtime, toolkit, environment):
 
 
 @cli.command()
-@click.option('--runtime', default='3.5')
+@click.option('--runtime', default='3.6')
 @click.option('--toolkit', default='null')
 def test_clean(runtime, toolkit):
     """ Run tests in a clean environment, cleaning up afterwards
@@ -225,7 +225,7 @@ def test_clean(runtime, toolkit):
         cleanup(args=args, standalone_mode=False)
 
 @cli.command()
-@click.option('--runtime', default='3.5')
+@click.option('--runtime', default='3.6')
 @click.option('--toolkit', default='null')
 @click.option('--environment', default=None)
 def update(runtime, toolkit, environment):
