@@ -94,7 +94,7 @@ supported_combinations = {
 
 dependencies = {
     "numpy",
-    "pandas",
+    "pandas<0.24",
     "pygments",
     "traits",
     "pip",
