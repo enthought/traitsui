@@ -1,6 +1,5 @@
-#------------------------------------------------------------------------------
 #
-#  Copyright (c) 2005, Enthought, Inc.
+#  Copyright (c) 2005-19, Enthought, Inc.
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
@@ -12,8 +11,6 @@
 #
 #  Author: David C. Morrill
 #  Date:   10/07/2004
-#
-#------------------------------------------------------------------------------
 
 """ Defines the abstract Editor class, which represents an editing control for
     an object trait in a Traits-based user interface.
@@ -21,7 +18,6 @@
 
 from __future__ import absolute_import
 
-from abc import abstractmethod
 from contextlib import contextmanager
 from functools import partial
 
@@ -130,7 +126,9 @@ class Editor(HasPrivateTraits):
     def init(self, parent):
         """ Creating the underlying toolkit for the widget.
 
-        This method should
+        This method must be overriden by subclasses.  Implementations must
+        ensure that the :attr:`control` trait is set to an appropriate
+        toolkit object.
 
         Parameters
         ----------
@@ -148,6 +146,8 @@ class Editor(HasPrivateTraits):
 
     def set_focus(self):
         """ Assigns focus to the editor's underlying toolkit widget.
+
+        This method must be overriden by subclasses.
         """
         raise NotImplementedError
 
@@ -184,6 +184,9 @@ class Editor(HasPrivateTraits):
 
         This disconnects any synchronised values and resets references
         to other objects.
+
+        Subclasses may chose to override this method to perform additional
+        clean-up.
         """
         if self.ui is None:
             return
@@ -527,20 +530,51 @@ class Editor(HasPrivateTraits):
         """ Initialize and synchronize editor and factory traits
 
         Initializes and synchronizes (as needed) editor traits with the
-            value of corresponding factory traits.
+        value of corresponding factory traits.  The name of the factory
+        trait and the editor trait must match and the factory trait needs
+        to have ``sync_value`` metadata set.  The strategy followed is:
+
+        - for each factory trait with ``sync_value`` metadata:
+
+          1.  if the value is a :class:`ContextValue` instance then
+              call :meth:`sync_value` with the ``name`` from the
+              context value.
+          2.  if the trait has ``sync_name`` metadata, look at the
+              referenced trait value and if it is a non-empty string
+              then use this value as the name of the value in the
+              context.
+          3.  otherwise initialize the current value of the factory
+              trait to the corresponding value of the editor.
+
+        - synchronization mode in cases 1 and 2 is taken from the
+          ``sync_value`` metadata of the editor trait first and then
+          the ``sync_value`` metadata of the factory trait if that is
+          empty.
+
+        - if the value is a container type, then the `is_list` metadata
+          is set to
         """
         factory = self.factory
         for name, trait in factory.traits(sync_value=not_none).items():
             value = getattr(factory, name)
+            self_trait = self.trait(name)
+            if self_trait.sync_value:
+                mode = self_trait.sync_value
+            else:
+                mode = trait.sync_value
             if isinstance(value, ContextValue):
-                self_trait = self.trait(name)
-                if self_trait.sync_value:
-                    mode = self_trait.sync_value
-                else:
-                    mode = trait.sync_value
                 self.sync_value(
                     value.name, name, mode, bool(self_trait.is_list),
-                    bool(self_trait.is_event)
+                    self_trait.type == 'event'
+                )
+            elif (trait.sync_name is not None
+                    and getattr(factory, trait.sync_name, '') != ''):
+                # Note: this is implemented as a stepping stone from things
+                # like ``low_name`` and ``high_name`` to using context values.
+                sync_name = getattr(factory, trait.sync_name)
+                self.sync_value(
+                    sync_name, name, mode, bool(self_trait.is_list),
+                    self_trait.type == 'event'
                 )
             elif value is not Undefined:
                 setattr(self, name, value)
