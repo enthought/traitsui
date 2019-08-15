@@ -24,12 +24,12 @@ from operator import itemgetter
 
 import wx
 
-from pyface.ui.wx.grid.api import Grid
 from pyface.dock.api import (
     DockWindow, DockSizer, DockSection, DockRegion, DockControl
 )
 from pyface.image_resource import ImageResource
 from pyface.timer.api import do_later
+from pyface.ui.wx.grid.api import Grid
 from traits.api import (
     Int, List, Instance, Str, Any, Button, Tuple, HasPrivateTraits, Bool,
     Event, Property
