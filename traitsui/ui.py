@@ -28,6 +28,7 @@ from __future__ import absolute_import
 import shelve
 import os
 
+from pyface.ui_traits import Image
 from traits.api import (
     Any,
     Bool,
@@ -126,7 +127,7 @@ class UI(HasPrivateTraits):
     title = Str
 
     # The ImageResource of the icon, if any
-    icon = Any
+    icon = Image
 
     # Should the created UI have scroll bars?
     scrollable = Bool(False)
@@ -188,6 +189,11 @@ class UI(HasPrivateTraits):
     # The statusbar listeners that have been set up:
     _statusbar = List
 
+    # Control which gets focus after UI is created
+    # Note: this does not track focus after UI creation
+    # only used by Qt backend.
+    _focus_control = Any
+
     # Does the UI contain any scrollable widgets?
     #
     # The _scrollable trait is set correctly, but not used currently because
@@ -202,7 +208,8 @@ class UI(HasPrivateTraits):
     recyclable_traits = [
         '_context', '_revert', '_defined', '_visible', '_enabled', '_checked',
         '_search', '_dispatchers', '_editors', '_names', '_active_group',
-        '_undoable', '_rebuild', '_groups_cache', '_key_bindings'
+        '_undoable', '_rebuild', '_groups_cache', '_key_bindings',
+        '_focus_control'
     ]
 
     # List of additional traits that are discarded when a user interface is

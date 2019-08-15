@@ -281,7 +281,7 @@ class BaseDialog(BasePanel):
 
         try:
             ui.prepare_ui()
-        except:
+        except BaseException:
             ui.control.setParent(None)
             ui.control.ui = None
             ui.control = None
@@ -291,6 +291,11 @@ class BaseDialog(BasePanel):
 
         ui.handler.position(ui.info)
         restore_window(ui)
+
+        # if an item asked for initial focus, give it to them
+        if ui._focus_control is not None:
+            ui._focus_control.setFocus()
+            ui._focus_control = None
 
         if style == BaseDialog.NONMODAL:
             ui.control.show()
