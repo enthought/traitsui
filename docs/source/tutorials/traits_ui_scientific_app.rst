@@ -1128,10 +1128,10 @@ ____
 .. [#] The traits and traitsUI user guide:
    `http://docs.enthought.com/traits <http://docs.enthought.com/traits>`_
 
-.. [#] ctypes: `http://starship.python.net/crew/theller/ctypes/ <http://starship.python.net/crew/theller/ctypes/>`_
+.. [#] ctypes: `https://docs.python.org/3/library/ctypes.html <https://docs.python.org/3/library/ctypes.html>`_
 
 .. [#] threading: `http://docs.python.org/lib/module-threading.html <http://docs.python.org/lib/module-threading.html>`_
 
-.. [#] chaco: `http://code.enthought.com/chaco/ <http://code.enthought.com/chaco/>`_
+.. [#] chaco: `http://docs.enthought.com/chaco/ <http://docs.enthought.com/chaco/>`_
 
 .. vim:spell:spelllang=en_us
