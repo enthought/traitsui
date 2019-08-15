@@ -56,8 +56,8 @@ Important Links
 
 - Website and Documentation: `<http://docs.enthought.com/traitsui>`__
 
-  * User Manual `<http://docs.enthought.com/traitsui/traitsui_user_maunal>`__
-  * Tutorial `<http://docs.enthought.com/traitsui/tutorial>`__
+  * User Manual `<http://docs.enthought.com/traitsui/traitsui_user_manual>`__
+  * Tutorial `<http://docs.enthought.com/traitsui/tutorials>`__
   * API Documentation `<http://docs.enthought.com/traitsui/api>`__
 
 - Source code repository: `<https://github.com/enthought/traitsui>`__
