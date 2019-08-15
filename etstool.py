@@ -92,6 +92,12 @@ supported_combinations = {
     '3.6': {'pyside2', 'pyqt', 'pyqt5', 'null'},
 }
 
+# Default Python version to use in the comamnds below if none is specified.
+DEFAULT_RUNTIME = '3.6'
+
+# Default toolkit to use if none specified.
+DEFAULT_TOOLKIT = 'null'
+
 dependencies = {
     "numpy",
     "pandas<0.24",
@@ -133,8 +139,8 @@ def cli():
 
 
 @cli.command()
-@click.option('--runtime', default='3.5')
-@click.option('--toolkit', default='null')
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def install(runtime, toolkit, environment):
     """ Install project and dependencies into a clean EDM environment.
@@ -166,8 +172,8 @@ def install(runtime, toolkit, environment):
 
 
 @cli.command()
-@click.option('--runtime', default='3.5')
-@click.option('--toolkit', default='null')
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def test(runtime, toolkit, environment):
     """ Run the test suite in a given environment with the specified toolkit.
@@ -194,8 +200,8 @@ def test(runtime, toolkit, environment):
     click.echo('Done test')
 
 @cli.command()
-@click.option('--runtime', default='3.5')
-@click.option('--toolkit', default='null')
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def cleanup(runtime, toolkit, environment):
     """ Remove a development environment.
@@ -211,8 +217,8 @@ def cleanup(runtime, toolkit, environment):
 
 
 @cli.command()
-@click.option('--runtime', default='3.5')
-@click.option('--toolkit', default='null')
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
 def test_clean(runtime, toolkit):
     """ Run tests in a clean environment, cleaning up afterwards
 
@@ -225,8 +231,8 @@ def test_clean(runtime, toolkit):
         cleanup(args=args, standalone_mode=False)
 
 @cli.command()
-@click.option('--runtime', default='3.5')
-@click.option('--toolkit', default='null')
+@click.option('--runtime', default=DEFAULT_RUNTIME)
+@click.option('--toolkit', default=DEFAULT_TOOLKIT)
 @click.option('--environment', default=None)
 def update(runtime, toolkit, environment):
     """ Update/Reinstall package into environment.
@@ -266,7 +272,7 @@ def test_all():
 def get_parameters(runtime, toolkit, environment):
     """ Set up parameters dictionary for format() substitution """
     parameters = {'runtime': runtime, 'toolkit': toolkit, 'environment': environment}
-    if toolkit not in supported_combinations[runtime] :
+    if toolkit not in supported_combinations[runtime]:
         msg = ("Python {runtime} and toolkit {toolkit} not supported by " +
                "test environments")
         raise RuntimeError(msg.format(**parameters))
