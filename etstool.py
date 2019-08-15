@@ -100,7 +100,7 @@ DEFAULT_TOOLKIT = 'null'
 
 dependencies = {
     "numpy",
-    "pandas",
+    "pandas<0.24",
     "pygments",
     "traits",
     "pip",
