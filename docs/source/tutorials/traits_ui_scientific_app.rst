@@ -72,7 +72,7 @@ GUI, and not on the code.
 
 TraitsUI provides a beautiful answer to this problem by building
 graphical representations of an object. Traits and TraitsUI have their
-own manuals (`http://code.enthought.com/traits/ <http://code.enthought.com/traits/>`_) and the reader is encouraged to
+own manuals (`http://docs.enthought.com/traits/ <http://docs.enthought.com/traits/>`_) and the reader is encouraged to
 refer to these for more information.
 
 We will use TraitsUI for *all* our GUIs. This forces us to store all the
@@ -1126,7 +1126,7 @@ ____
    `http://matplotlib.sourceforge.net <http://matplotlib.sourceforge.net>`_
 
 .. [#] The traits and traitsUI user guide:
-   `http://code.enthought.com/traits <http://code.enthought.com/traits>`_
+   `http://docs.enthought.com/traits <http://docs.enthought.com/traits>`_
 
 .. [#] ctypes: `http://starship.python.net/crew/theller/ctypes/ <http://starship.python.net/crew/theller/ctypes/>`_
 
