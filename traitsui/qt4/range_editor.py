@@ -207,6 +207,10 @@ class SimpleSliderEditor(BaseRangeEditor):
     def update_object_on_enter(self):
         """ Handles the user pressing the Enter key in the text field.
         """
+        # it is possible we get the event after the control has gone away
+        if self.control is None:
+            return
+
         try:
             try:
                 value = eval(six.text_type(self.control.text.text()).strip())
