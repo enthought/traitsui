@@ -131,6 +131,8 @@ from .table_column import (ExpressionColumn, ListColumn, NumericColumn,
 from .table_filter import (EvalTableFilter, MenuTableFilter, RuleTableFilter,
                            TableFilter)
 
+from .tabular_adapter import TabularAdapter
+
 from .toolkit import toolkit
 
 from .toolkit_traits import ColorTrait, FontTrait, RGBColorTrait
