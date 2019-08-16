@@ -122,7 +122,7 @@ class SimpleEditor(SimpleTextEditor):
         """ Disposes of the contents of an editor.
         """
         panel = self.control
-        panel.Bind(wx.EVT_BUTTON, None, self._button.GetId())
+        panel.Bind(wx.EVT_BUTTON, None, id=self._button.GetId())
         self._button = None
 
         if self.history is not None:
