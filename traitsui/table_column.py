@@ -87,7 +87,7 @@ class TableColumn(HasPrivateTraits):
     text_color = Color('black')
 
     # Text font for this column:
-    text_font = Font
+    text_font = Either(None, Font)
 
     # Cell background color for this column:
     cell_color = Either(Color('white'), None)
