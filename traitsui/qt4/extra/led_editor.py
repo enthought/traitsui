@@ -1,6 +1,7 @@
 from pyface.qt import QtGui
 from traitsui.qt4.editor import Editor
 from traitsui.basic_editor_factory import BasicEditorFactory
+from traits.api import undefined
 
 
 class _LEDEditor(Editor):
@@ -16,5 +17,7 @@ class _LEDEditor(Editor):
 
 class LEDEditor(BasicEditorFactory):
 
-    # The editor class to be created:
+    #: The editor class to be created
     klass = _LEDEditor
+    # Alignment is not supported for QT backend
+    alignment = undefined
