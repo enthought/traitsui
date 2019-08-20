@@ -294,8 +294,11 @@ class SimpleSliderEditor(BaseRangeEditor):
         """ Returns the slider setting corresponding to the user-supplied value.
         """
         if self.high > self.low:
-            ivalue = int((float(value - self.low) /
+            try:
+                ivalue = int((float(value - self.low) /
                           (self.high - self.low)) * 10000.0)
+            except TypeError:
+                ivalue = self.low
         else:
             ivalue = self.low
         return ivalue
