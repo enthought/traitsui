@@ -1,4 +1,4 @@
-# (C) Copyright 2019 Enthought, Inc., Austin, TX
+# (C) Copyright 2007-2019 Enthought, Inc., Austin, TX
 # All rights reserved.
 # This software is provided without warranty under the terms of the BSD
 # license included in LICENSE.txt and may be redistributed only
