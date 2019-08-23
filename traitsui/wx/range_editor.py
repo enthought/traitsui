@@ -244,6 +244,9 @@ class SimpleSliderEditor(BaseRangeEditor):
                 # Pretend it didn't happen (i.e. do not change self.value).
                 value = self.value
                 self.control.text.SetValue(str(value))
+                # for compound editor, value may be non-numeric
+                if not isinstance(value, (int, float)):
+                    return
 
             self.value = value
             if not self.ui_changing:
