@@ -4,7 +4,7 @@
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -19,9 +19,6 @@
     of objects, etc).
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -32,9 +29,6 @@ from ..basic_editor_factory import BasicEditorFactory
 
 from ..toolkit import toolkit_object
 
-#-------------------------------------------------------------------------
-#  'TabularEditor' editor factory class:
-#-------------------------------------------------------------------------
 
 
 class TabularEditor(BasicEditorFactory):

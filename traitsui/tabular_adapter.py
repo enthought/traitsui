@@ -4,7 +4,7 @@
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -18,9 +18,6 @@
 """ Defines the adapter classes associated with the Traits UI TabularEditor.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -46,9 +43,6 @@ from traits.api import (
     provides)
 import six
 
-#-------------------------------------------------------------------------
-#  'ITabularAdapter' interface:
-#-------------------------------------------------------------------------
 
 
 class ITabularAdapter(Interface):
@@ -78,9 +72,6 @@ class ITabularAdapter(Interface):
     #: Does the value of *accepts* depend only upon the type of *item*?
     is_cacheable = Bool
 
-#-------------------------------------------------------------------------
-#  'AnITabularAdapter' class:
-#-------------------------------------------------------------------------
 
 
 @provides(ITabularAdapter)
@@ -113,10 +104,6 @@ class AnITabularAdapter(HasPrivateTraits):
     #: Does the value of *accepts* depend only upon the type of *item*?
     is_cacheable = Bool(True)
 
-
-#-------------------------------------------------------------------------
-#  'TabularAdapter' class:
-#-------------------------------------------------------------------------
 
 class TabularAdapter(HasPrivateTraits):
     """ The base class for adapting list items to values that can be edited

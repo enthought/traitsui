@@ -4,7 +4,7 @@
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -19,9 +19,6 @@
     of objects, etc).
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import
 import wx
@@ -64,9 +61,6 @@ try:
 except:
     PythonDropSource = PythonDropTarget = None
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
 
 # Mapping for trait alignment values to wx alignment values:
 alignment_map = {
@@ -89,10 +83,6 @@ class TextEditMixin(listmix.TextEditMixin):
             return
         else:
             return listmix.TextEditMixin.OpenEditor(self, col, row)
-
-#-------------------------------------------------------------------------
-#  'wxListCtrl' class:
-#-------------------------------------------------------------------------
 
 
 class wxListCtrl(wx.ListCtrl, TextEditMixin):
@@ -172,10 +162,6 @@ class wxListCtrl(wx.ListCtrl, TextEditMixin):
         editor = self._editor
         return editor.adapter.get_text(editor.object, editor.name,
                                        row, column)
-
-#-------------------------------------------------------------------------
-#  'TabularEditor' class:
-#-------------------------------------------------------------------------
 
 
 class TabularEditor(Editor):
@@ -1161,10 +1147,6 @@ class TabularEditor(Editor):
         # actually means to skip looking, skip(True) means to keep looking.
         # This seems backwards to me...
         event.Skip(True)
-
-#-------------------------------------------------------------------------
-#  'TabularEditorEvent' class:
-#-------------------------------------------------------------------------
 
 
 class TabularEditorEvent(HasStrictTraits):

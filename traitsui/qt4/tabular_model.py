@@ -4,7 +4,7 @@
 #  All rights reserved.
 #
 #  This software is provided without warranty under the terms of the BSD
-#  license included in enthought/LICENSE.txt and may be redistributed only
+#  license included in LICENSE.txt and may be redistributed only
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
@@ -18,9 +18,6 @@
 """ Defines the table model used by the tabular editor.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
 
 from __future__ import absolute_import, unicode_literals
 
@@ -31,9 +28,6 @@ from pyface.qt import QtCore, QtGui
 from traitsui.ui_traits import SequenceTypes
 from .clipboard import PyMimeData
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
 
 # Mapping for trait alignment values to qt4 alignment values:
 alignment_map = {
@@ -45,10 +39,6 @@ alignment_map = {
 
 # MIME type for internal table drag/drop operations
 tabular_mime_type = 'traits-ui-tabular-editor'
-
-#-------------------------------------------------------------------------
-#  'TabularModel' class:
-#-------------------------------------------------------------------------
 
 
 class TabularModel(QtCore.QAbstractTableModel):
