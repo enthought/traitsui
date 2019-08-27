@@ -83,67 +83,67 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The editor to use for each list item:
+    #: The editor to use for each list item:
     editor = editor_trait
 
-    # Can the list be reorganized, or have items added and deleted.
+    #: Can the list be reorganized, or have items added and deleted.
     mutable = Bool(True)
 
-    # The style of editor to use for each item:
+    #: The style of editor to use for each item:
     style = style_trait
 
-    # The trait handler for each list item:
+    #: The trait handler for each list item:
     trait_handler = handler_trait
 
-    # The number of list rows to display:
+    #: The number of list rows to display:
     rows = rows_trait
 
-    # The number of list columns to create:
+    #: The number of list columns to create:
     columns = columns_trait
 
-    # Use a notebook for a custom view?
+    #: Use a notebook for a custom view?
     use_notebook = Bool(False)
 
-    # Show a right-click context menu for the notebook tabs?  (Qt only)
+    #: Show a right-click context menu for the notebook tabs?  (Qt only)
     show_notebook_menu = Bool(False)
 
     #-- Notebook Specific Traits ---------------------------------------------
 
-    # Are notebook items deletable?
+    #: Are notebook items deletable?
     deletable = Bool(False)
 
-    # The extended name of the trait on each page object which should be used
-    # to determine whether or not an individual page should be deletable.
+    #: The extended name of the trait on each page object which should be used
+    #: to determine whether or not an individual page should be deletable.
     deletable_trait = Str()
 
-    # FIXME: Currently, this trait is used only in the wx backend.
-    # The DockWindow graphical theme
+    #: FIXME: Currently, this trait is used only in the wx backend.
+    #: The DockWindow graphical theme
     dock_theme = Any
 
-    # FIXME: Currently, this trait is used only in the wx backend.
-    # Dock page style to use for each DockControl:
+    #: FIXME: Currently, this trait is used only in the wx backend.
+    #: Dock page style to use for each DockControl:
     dock_style = DockStyle
 
-    # Export class for each item in a notebook:
+    #: Export class for each item in a notebook:
     export = Str
 
-    # Name of the view to use in notebook mode:
+    #: Name of the view to use in notebook mode:
     view = AView
 
-    # The type of UI to construct ('panel', 'subpanel', etc)
+    #: The type of UI to construct ('panel', 'subpanel', etc)
     ui_kind = Enum('subpanel', 'panel')
 
-    # A factory function that can be used to define that actual object to be
-    # edited (i.e. view_object = factory( object )):
+    #: A factory function that can be used to define that actual object to be
+    #: edited (i.e. view_object = factory( object )):
     factory = Callable
 
-    # Extended name to use for each notebook page. It can be either the actual
-    # name or the name of an attribute on the object in the form:
-    # '.name[.name...]'
+    #: Extended name to use for each notebook page. It can be either the actual
+    #: name or the name of an attribute on the object in the form:
+    #: '.name[.name...]'
     page_name = Str
 
-    # Name of the [object.]trait[.trait...] to synchronize notebook page
-    # selection with:
+    #: Name of the [object.]trait[.trait...] to synchronize notebook page
+    #: selection with:
     selected = Str
 
     #-------------------------------------------------------------------------
@@ -179,17 +179,17 @@ class ToolkitEditorFactory(EditorFactory):
 
 class ListItemProxy(HasTraits):
 
-    # The list proxy:
+    #: The list proxy:
     list = Property
 
-    # The item proxies index into the original list:
+    #: The item proxies index into the original list:
     index = Int
 
-    # Delegate all other traits to the original object:
+    #: Delegate all other traits to the original object:
     _ = PrototypedFrom('_zzz_object')
 
-    # Define all of the private internal use values (the funny names are an
-    # attempt to avoid name collisions with delegated trait names):
+    #: Define all of the private internal use values (the funny names are an
+    #: attempt to avoid name collisions with delegated trait names):
     _zzz_inited = Any
     _zzz_object = Any
     _zzz_name = Any

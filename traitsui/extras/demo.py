@@ -143,7 +143,7 @@ class DemoFileHandler(Handler):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The current 'info' object (for use by the 'write' method):
+    #: The current 'info' object (for use by the 'write' method):
     info = Instance(UIInfo)
 
     #-------------------------------------------------------------------------
@@ -254,7 +254,7 @@ class DemoError(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The error message text:
+    #: The error message text:
     msg = Code
 
     #-------------------------------------------------------------------------
@@ -279,10 +279,10 @@ class DemoButton(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The demo to be launched via a button:
+    #: The demo to be launched via a button:
     demo = Instance(HasTraits)
 
-    # The demo view item to use:
+    #: The demo view item to use:
     demo_item = Item('demo',
                      show_label=False,
                      editor=InstanceEditor(label='Run demo...', kind='live')
@@ -318,7 +318,7 @@ class ModalDemoButton(DemoButton):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The demo view item to use:
+    #: The demo view item to use:
     demo_item = Item('demo',
                      show_label=False,
                      editor=InstanceEditor(label='Run demo...', kind='modal')
@@ -335,10 +335,10 @@ class DemoTreeNodeObject(TreeNodeObject):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Cached result of 'tno_has_children':
+    #: Cached result of 'tno_has_children':
     _has_children = Any
 
-    # Cached result of 'tno_get_children':
+    #: Cached result of 'tno_get_children':
     _get_children = Any
 
     #-------------------------------------------------------------------------
@@ -403,31 +403,31 @@ class DemoFile(DemoTreeNodeObject):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Parent of this file:
+    #: Parent of this file:
     parent = Any
 
-    # Name of file system path to this file:
+    #: Name of file system path to this file:
     path = Property
 
-    # Name of the file:
+    #: Name of the file:
     name = Str
 
-    # UI form of the 'name':
+    #: UI form of the 'name':
     nice_name = Property
 
-    # Files don't allow children:
+    #: Files don't allow children:
     allows_children = false
 
-    # Description of what the demo does:
+    #: Description of what the demo does:
     description = HTML
 
-    # Source code for the demo:
+    #: Source code for the demo:
     source = Code
 
-    # Demo object whose traits UI is to be displayed:
+    #: Demo object whose traits UI is to be displayed:
     demo = Instance(HasTraits)
 
-    # Log of all print messages displayed:
+    #: Log of all print messages displayed:
     log = Code
 
     _nice_name = Str
@@ -472,41 +472,41 @@ class DemoPath(DemoTreeNodeObject):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Parent of this package:
+    #: Parent of this package:
     parent = Any
 
-    # Name of file system path to this package:
+    #: Name of file system path to this package:
     path = Property
 
-    # Name of the directory:
+    #: Name of the directory:
     name = Str
 
-    # UI form of the 'name':
+    #: UI form of the 'name':
     nice_name = Property
 
-    # Description of the contents of the directory:
+    #: Description of the contents of the directory:
     description = Property(HTML)
 
-    # Source code contained in the '__init__.py' file:
+    #: Source code contained in the '__init__.py' file:
     source = Property(Code)
 
-    # Dictionary containing symbols defined by the path's '__init__.py' file:
+    #: Dictionary containing symbols defined by the path's '__init__.py' file:
     init_dic = Property
 
-    # Should .py files be included?
+    #: Should .py files be included?
     use_files = true
 
-    # Paths do allow children:
+    #: Paths do allow children:
     allows_children = true
 
-    # Configuration dictionary for this node
-    # This trait is set when a config file exists for the parent of this path.
+    #: Configuration dictionary for this node
+    #: This trait is set when a config file exists for the parent of this path.
     config_dict = Dict
 
-    # Configuration file for this node.
+    #: Configuration file for this node.
     config_filename = Str
 
-    # Cached value of the nice_name property.
+    #: Cached value of the nice_name property.
     _nice_name = Str
 
     #-------------------------------------------------------------------------
@@ -824,13 +824,13 @@ class Demo(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Path to the root demo directory:
+    #: Path to the root demo directory:
     path = Str
 
-    # Root path object for locating demo files:
+    #: Root path object for locating demo files:
     root = Instance(DemoPath)
 
-    # Title for the demo
+    #: Title for the demo
     title = Str
 
     #-------------------------------------------------------------------------

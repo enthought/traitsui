@@ -41,10 +41,10 @@ class UIInfo(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Bound to a UI object at UIInfo construction time
+    #: Bound to a UI object at UIInfo construction time
     ui = Instance('traitsui.ui.UI', allow_none=True)
 
-    # Indicates whether the UI has finished initialization
+    #: Indicates whether the UI has finished initialization
     initialized = Bool(False)
 
     #-------------------------------------------------------------------------

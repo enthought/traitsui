@@ -416,13 +416,13 @@ class EditorWithList(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Object containing the list being monitored
+    #: Object containing the list being monitored
     list_object = Instance(HasTraits)
 
-    # Name of the monitored trait
+    #: Name of the monitored trait
     list_name = Str
 
-    # Function used to evaluate the current list object value:
+    #: Function used to evaluate the current list object value:
     list_value = Callable
 
     #-------------------------------------------------------------------------

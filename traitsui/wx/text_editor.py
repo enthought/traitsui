@@ -60,17 +60,17 @@ class SimpleEditor(Editor):
     """ Simple style text editor, which displays a text field.
     """
 
-    # Flag for window styles:
+    #: Flag for window styles:
     base_style = 0
 
-    # Background color when input is OK:
+    #: Background color when input is OK:
     ok_color = OKColor
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Function used to evaluate textual user input:
+    #: Function used to evaluate textual user input:
     evaluate = evaluate_trait
 
     #-------------------------------------------------------------------------
@@ -215,7 +215,7 @@ class CustomEditor(SimpleEditor):
     """ Custom style of text editor, which displays a multi-line text field.
     """
 
-    # Flag for window style. This value overrides the default.
+    #: Flag for window style. This value overrides the default.
     base_style = wx.TE_MULTILINE
 
 #-------------------------------------------------------------------------

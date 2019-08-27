@@ -128,49 +128,49 @@ class _ListStrEditor(Editor):
 
     #-- Trait Definitions ----------------------------------------------------
 
-    # The title of the editor:
+    #: The title of the editor:
     title = Str
 
-    # The current set of selected items (which one is used depends upon the
-    # initial state of the editor factory 'multi_select' trait):
+    #: The current set of selected items (which one is used depends upon the
+    #: initial state of the editor factory 'multi_select' trait):
     selected = Any
     multi_selected = List
 
-    # The current set of selected item indices (which one is used depends upon
-    # the initial state of the editor factory 'multi_select' trait):
+    #: The current set of selected item indices (which one is used depends upon
+    #: the initial state of the editor factory 'multi_select' trait):
     selected_index = Int
     multi_selected_indices = List(Int)
 
-    # The most recently actived item and its index:
+    #: The most recently actived item and its index:
     activated = Any
     activated_index = Int
 
-    # The most recently right_clicked item and its index:
+    #: The most recently right_clicked item and its index:
     right_clicked = Event
     right_clicked_index = Event
 
-    # Is the list editor scrollable? This value overrides the default.
+    #: Is the list editor scrollable? This value overrides the default.
     scrollable = True
 
-    # Index of item to select after rebuilding editor list:
+    #: Index of item to select after rebuilding editor list:
     index = Any
 
-    # Should the selected item be edited after rebuilding the editor list:
+    #: Should the selected item be edited after rebuilding the editor list:
     edit = Bool(False)
 
-    # The adapter from list items to editor values:
+    #: The adapter from list items to editor values:
     adapter = Instance(ListStrAdapter)
 
-    # Dictionaly mapping image names to wx.ImageList indices:
+    #: Dictionaly mapping image names to wx.ImageList indices:
     images = Any({})
 
-    # Dictionary mapping ImageResource objects to wx.ImageList indices:
+    #: Dictionary mapping ImageResource objects to wx.ImageList indices:
     image_resources = Any({})
 
-    # The current number of item currently in the list:
+    #: The current number of item currently in the list:
     item_count = Property
 
-    # The current search string:
+    #: The current search string:
     search = Str
 
     #-------------------------------------------------------------------------

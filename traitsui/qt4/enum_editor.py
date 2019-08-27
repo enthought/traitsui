@@ -46,13 +46,13 @@ class BaseEditor(Editor):
     """ Base class for enumeration editors.
     """
 
-    # Current set of enumeration names:
+    #: Current set of enumeration names:
     names = Property
 
-    # Current mapping from names to values:
+    #: Current mapping from names to values:
     mapping = Property
 
-    # Current inverse mapping from values to names:
+    #: Current inverse mapping from values to names:
     inverse_mapping = Property
 
     #-------------------------------------------------------------------------
@@ -292,7 +292,7 @@ class RadioEditor(BaseEditor):
         buttons.
     """
 
-    # Is the button layout row-major or column-major?
+    #: Is the button layout row-major or column-major?
     row_major = Bool(False)
 
     #-------------------------------------------------------------------------

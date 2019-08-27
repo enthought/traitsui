@@ -55,19 +55,19 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The top level QLayout for the editor:
+    #: The top level QLayout for the editor:
     root_layout = Instance(QtGui.QLayout)
 
-    # Current set of enumeration names:
+    #: Current set of enumeration names:
     names = Property
 
-    # Current mapping from names to values:
+    #: Current mapping from names to values:
     mapping = Property
 
-    # Current inverse mapping from values to names:
+    #: Current inverse mapping from values to names:
     inverse_mapping = Property
 
-    # Is set editor scrollable? This value overrides the default.
+    #: Is set editor scrollable? This value overrides the default.
     scrollable = True
 
     #-------------------------------------------------------------------------

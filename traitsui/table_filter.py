@@ -75,27 +75,27 @@ class TableFilter(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # UI name of this filter (so the user can identify it in the UI)
+    #: UI name of this filter (so the user can identify it in the UI)
     name = Str('Default filter')
 
-    # Default name that can be automatically overridden
+    #: Default name that can be automatically overridden
     _name = Str('Default filter')
 
-    # A user-readable description of what kind of object satisfies the filter
+    #: A user-readable description of what kind of object satisfies the filter
     desc = Str('All items')
 
-    # A callable function that returns whether the passed object is allowed
-    # by the filter
+    #: A callable function that returns whether the passed object is allowed
+    #: by the filter
     allowed = Callable(lambda object: True, transient=True)
 
-    # Is the filter a template (i.e., non-deletable, non-editable)?
+    #: Is the filter a template (i.e., non-deletable, non-editable)?
     template = Bool(False)
 
     #-------------------------------------------------------------------------
     #  Class constants:
     #-------------------------------------------------------------------------
 
-    # Traits that are ignored by the _anytrait_changed() handler
+    #: Traits that are ignored by the _anytrait_changed() handler
     ignored_traits = ['_name', 'template', 'desc']
 
     #-------------------------------------------------------------------------
@@ -206,10 +206,10 @@ class EvalTableFilter(TableFilter):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Override the standard **name** trait
+    #: Override the standard **name** trait
     name = 'Default evaluation filter'
 
-    # Python expression which will be applied to each table item
+    #: Python expression which will be applied to each table item
     expression = Expression
 
     #-------------------------------------------------------------------------
@@ -260,35 +260,35 @@ class GenericTableFilterRule(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Filter this rule is part of
+    #: Filter this rule is part of
     filter = Instance('RuleTableFilter')
 
-    # Is this rule enabled?
+    #: Is this rule enabled?
     enabled = Bool(False)
 
-    # Is this rule an 'and' rule or an 'or' rule?
+    #: Is this rule an 'and' rule or an 'or' rule?
     and_or = Enum('and', 'or')
 
-    # EnumEditor used to edit the **name** trait:
+    #: EnumEditor used to edit the **name** trait:
     name_editor = Instance(EditorFactory)
 
-    # Name of the object trait that this rule applies to
+    #: Name of the object trait that this rule applies to
     name = Str
 
-    # Operation to be applied in the rule
+    #: Operation to be applied in the rule
     operation = GenericTableFilterRuleOperation
 
-    # Editor used to edit the **value** trait
+    #: Editor used to edit the **value** trait
     value_editor = Instance(EditorFactory)
 
-    # Value to use in the operation when applying the rule to an object
+    #: Value to use in the operation when applying the rule to an object
     value = Any
 
     #-------------------------------------------------------------------------
     #  Class constants:
     #-------------------------------------------------------------------------
 
-    # Traits that are ignored by the _anytrait_changed() handler
+    #: Traits that are ignored by the _anytrait_changed() handler
     ignored_traits = ['filter', 'name_editor', 'value_editor']
 
     #-------------------------------------------------------------------------
@@ -499,22 +499,22 @@ class RuleTableFilter(TableFilter):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Overrides the default **name** trait
+    #: Overrides the default **name** trait
     name = 'Default rule-based filter'
 
-    # List of the filter rules to be applied
+    #: List of the filter rules to be applied
     rules = List(GenericTableFilterRule)
 
-    # Event fired when the contents of the filter have changed
+    #: Event fired when the contents of the filter have changed
     modified = Event
 
-    # Persistence ID of the view
+    #: Persistence ID of the view
     view_id = Str('traitsui.table_filter.RuleTableFilter')
 
-    # Sample object that the filter will apply to
+    #: Sample object that the filter will apply to
     _object = Any
 
-    # Map of trait names and default values
+    #: Map of trait names and default values
     _trait_values = Any
 
     #-------------------------------------------------------------------------
@@ -685,10 +685,10 @@ class MenuTableFilter(RuleTableFilter):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Overrides the default **name** trait
+    #: Overrides the default **name** trait
     name = 'Default menu-based filter'
 
-    # Overrides the persistence ID of the view
+    #: Overrides the persistence ID of the view
     view_id = Str('traitsui.table_filter.MenuTableFilter')
 
     #-------------------------------------------------------------------------

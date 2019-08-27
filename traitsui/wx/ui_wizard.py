@@ -282,9 +282,9 @@ class PageGroupEditor(GroupEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # ID of next page to display
+    #: ID of next page to display
     next = none_str_trait
-    # ID of previous page to display
+    #: ID of previous page to display
     previous = none_str_trait
-    # Message to display if user can't link to page
+    #: Message to display if user can't link to page
     msg = Str

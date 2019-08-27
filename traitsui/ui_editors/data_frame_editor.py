@@ -151,13 +151,13 @@ class DataFrameAdapter(TabularAdapter):
 class _DataFrameEditor(UIEditor):
     """ TraitsUI-based editor implementation for data frames """
 
-    # Indicate that the editor is scrollable/resizable:
+    #: Indicate that the editor is scrollable/resizable:
     scrollable = True
 
-    # Should column titles be displayed:
+    #: Should column titles be displayed:
     show_titles = Bool(True)
 
-    # The tabular adapter being used for the editor view:
+    #: The tabular adapter being used for the editor view:
     adapter = Instance(DataFrameAdapter)
 
     #-- Private Methods ------------------------------------------------------
@@ -271,79 +271,79 @@ class DataFrameEditor(BasicEditorFactory):
     #: The font for each element, or a mapping column ID to font.
     fonts = Either(Font, Dict, default='Courier 10')
 
-    # The optional extended name of the trait to synchronize the selection
-    # values with:
+    #: The optional extended name of the trait to synchronize the selection
+    #: values with:
     selected = Str
 
-    # The optional extended name of the trait to synchronize the selection rows
-    # with:
+    #: The optional extended name of the trait to synchronize the selection rows
+    #: with:
     selected_row = Str
 
-    # Whether or not to allow selection.
+    #: Whether or not to allow selection.
     selectable = Bool(True)
 
-    # Whether or not to allow for multiple selections
+    #: Whether or not to allow for multiple selections
     multi_select = Bool(False)
 
-    # The optional extended name of the trait to synchronize the activated
-    # value with:
+    #: The optional extended name of the trait to synchronize the activated
+    #: value with:
     activated = Str
 
-    # The optional extended name of the trait to synchronize the activated
-    # value's row with:
+    #: The optional extended name of the trait to synchronize the activated
+    #: value's row with:
     activated_row = Str
 
-    # The optional extended name of the trait to synchronize left click data
-    # with. The data is a TabularEditorEvent:
+    #: The optional extended name of the trait to synchronize left click data
+    #: with. The data is a TabularEditorEvent:
     clicked = Str
 
-    # The optional extended name of the trait to synchronize left double click
-    # data with. The data is a TabularEditorEvent:
+    #: The optional extended name of the trait to synchronize left double click
+    #: data with. The data is a TabularEditorEvent:
     dclicked = Str
 
-    # The optional extended name of the Event trait that should be used to
-    # trigger a scroll-to command. The data is an integer giving the row.
+    #: The optional extended name of the Event trait that should be used to
+    #: trigger a scroll-to command. The data is an integer giving the row.
     scroll_to_row = Str
 
-    # Controls behavior of scroll to row
+    #: Controls behavior of scroll to row
     scroll_to_row_hint = Enum("center", "top", "bottom", "visible")
 
-    # The optional extended name of the Event trait that should be used to
-    # trigger a scroll-to command. The data is an integer giving the column.
+    #: The optional extended name of the Event trait that should be used to
+    #: trigger a scroll-to command. The data is an integer giving the column.
     scroll_to_column = Str
 
-    # The optional extended name of the trait to synchronize right click data
-    # with. The data is a TabularEditorEvent:
+    #: The optional extended name of the trait to synchronize right click data
+    #: with. The data is a TabularEditorEvent:
     right_clicked = Str
 
-    # The optional extended name of the trait to synchronize right double
-    # clicked data with. The data is a TabularEditorEvent:
+    #: The optional extended name of the trait to synchronize right double
+    #: clicked data with. The data is a TabularEditorEvent:
     right_dclicked = Str
 
-    # The optional extended name of the trait to synchronize column
-    # clicked data with. The data is a TabularEditorEvent:
+    #: The optional extended name of the trait to synchronize column
+    #: clicked data with. The data is a TabularEditorEvent:
     column_clicked = Str
 
-    # The optional extended name of the trait to synchronize column
-    # right clicked data with. The data is a TabularEditorEvent:
+    #: The optional extended name of the trait to synchronize column
+    #: right clicked data with. The data is a TabularEditorEvent:
     column_right_clicked = Str
 
     #: Whether or not the entries can be edited.
     editable = Bool(False)
 
-    # What type of operations are allowed on the list:
+    #: What type of operations are allowed on the list:
     operations = List(Enum('delete', 'insert', 'append', 'edit', 'move'),
                       ['delete', 'insert', 'append', 'edit', 'move'])
 
-    # The optional extended name of the trait used to indicate that a complete
-    # table update is needed:
+    #: The optional extended name of the trait used to indicate that a complete
+    #: table update is needed:
     update = Str
 
-    # The optional extended name of the trait used to indicate that the table
-    # just needs to be repainted.
+    #: The optional extended name of the trait used to indicate that the table
+    #: just needs to be repainted.
     refresh = Str
 
-    # Set to override the default dataframe adapter
+    #: Set to override the default dataframe adapter
     adapter = Instance(DataFrameAdapter)
 
     def _get_klass(self):

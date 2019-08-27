@@ -84,58 +84,58 @@ class ImageSlice(HasPrivateTraits):
 
     #-- Trait Definitions ----------------------------------------------------
 
-    # The ImageResource to be sliced and drawn:
+    #: The ImageResource to be sliced and drawn:
     image = Instance(ImageResource)
 
-    # The minimum number of adjacent, identical rows/columns needed to identify
-    # a repeatable section:
+    #: The minimum number of adjacent, identical rows/columns needed to identify
+    #: a repeatable section:
     threshold = Int(10)
 
-    # The maximum number of 'stretchable' rows and columns:
+    #: The maximum number of 'stretchable' rows and columns:
     stretch_rows = Enum(1, 2)
     stretch_columns = Enum(1, 2)
 
-    # Width/height of the image borders:
+    #: Width/height of the image borders:
     top = Int
     bottom = Int
     left = Int
     right = Int
 
-    # Width/height of the extended image borders:
+    #: Width/height of the extended image borders:
     xtop = Int
     xbottom = Int
     xleft = Int
     xright = Int
 
-    # The color to use for content text:
+    #: The color to use for content text:
     content_color = Instance(wx.Colour)
 
-    # The color to use for label text:
+    #: The color to use for label text:
     label_color = Instance(wx.Colour)
 
-    # The background color of the image:
+    #: The background color of the image:
     bg_color = Color
 
-    # Should debugging slice lines be drawn?
+    #: Should debugging slice lines be drawn?
     debug = Bool(False)
 
     #-- Private Traits -------------------------------------------------------
 
-    # The current image's opaque bitmap:
+    #: The current image's opaque bitmap:
     opaque_bitmap = Instance(wx.Bitmap)
 
-    # The current image's transparent bitmap:
+    #: The current image's transparent bitmap:
     transparent_bitmap = Instance(wx.Bitmap)
 
-    # Size of the current image:
+    #: Size of the current image:
     dx = Int
     dy = Int
 
-    # Size of the current image's slices:
+    #: Size of the current image's slices:
     dxs = List
     dys = List
 
-    # Fixed minimum size of current image:
+    #: Fixed minimum size of current image:
     fdx = Int
     fdy = Int
 

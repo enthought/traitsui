@@ -38,13 +38,13 @@ from ..toolkit import toolkit_object
 class ToolkitEditorFactory(BasicEditorFactory):
     """ Editor factory for custom editors.
     """
-    # Editor class to be instantiated.
+    #: Editor class to be instantiated.
     klass = Property
 
-    # Factory function used to create the custom control
+    #: Factory function used to create the custom control
     factory = Callable
 
-    # Arguments to be passed to the user's custom editor factory
+    #: Arguments to be passed to the user's custom editor factory
     args = Tuple
 
     #-------------------------------------------------------------------------

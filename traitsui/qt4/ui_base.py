@@ -34,7 +34,7 @@ class ButtonEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Action associated with the button
+    #: Action associated with the button
     action = Instance(Action)
 
     #-------------------------------------------------------------------------
@@ -222,7 +222,7 @@ class _StickyDialog(QtGui.QDialog):
 class BaseDialog(BasePanel):
     """Base class for Traits UI dialog boxes."""
 
-    # The different dialog styles.
+    #: The different dialog styles.
     NONMODAL, MODAL, POPUP = list(range(3))
 
     def init(self, ui, parent, style):

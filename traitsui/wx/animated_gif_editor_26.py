@@ -51,7 +51,7 @@ class _AnimatedGIFEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the animated GIF file currently playing?
+    #: Is the animated GIF file currently playing?
     playing = Bool(True)
 
     #-------------------------------------------------------------------------
@@ -124,9 +124,9 @@ class _AnimatedGIFEditor(Editor):
 
 class AnimatedGIFEditor(BasicEditorFactory):
 
-    # The editor class to be created:
+    #: The editor class to be created:
     klass = _AnimatedGIFEditor
 
-    # The optional trait used to control whether the animated GIF file is
-    # playing or not:
+    #: The optional trait used to control whether the animated GIF file is
+    #: playing or not:
     playing = Str

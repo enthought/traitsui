@@ -87,8 +87,8 @@ class _LEDEditor(Editor):
 
 class LEDEditor(BasicEditorFactory):
 
-    # The editor class to be created:
+    #: The editor class to be created:
     klass = _LEDEditor
 
-    # The alignment of the numeric text within the control:
+    #: The alignment of the numeric text within the control:
     alignment = Enum('right', 'left', 'center')

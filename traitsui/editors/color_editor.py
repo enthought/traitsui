@@ -48,11 +48,11 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the underlying color trait mapped?
+    #: Is the underlying color trait mapped?
     mapped = Bool(True)
 
-    # Do we use a native dialog for the popup or the toolkit's?
-    # At present, only affects Qt.
+    #: Do we use a native dialog for the popup or the toolkit's?
+    #: At present, only affects Qt.
     use_native_dialog = Bool(True)
 
     #-------------------------------------------------------------------------

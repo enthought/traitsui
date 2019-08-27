@@ -44,10 +44,10 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The image to use for the target:
+    #: The image to use for the target:
     image = Image
 
-    # The image to use when the target is disabled:
+    #: The image to use when the target is disabled:
     disabled_image = Image
 
 

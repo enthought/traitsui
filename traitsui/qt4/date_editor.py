@@ -115,11 +115,11 @@ class CustomEditor(Editor):
     """ Custom Traits UI date editor that wraps QCalendarWidget.
     """
 
-    # Style used for when a date is unselected.
-    # Mapping from datetime.date to CellFormat
+    #: Style used for when a date is unselected.
+    #: Mapping from datetime.date to CellFormat
     _unselected_styles = Dict(Date, Instance(CellFormat))
 
-    # Selected dates (used when multi_select is true)
+    #: Selected dates (used when multi_select is true)
     _selected = Set(Date)
 
     #-------------------------------------------------------------------------

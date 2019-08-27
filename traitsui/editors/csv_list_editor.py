@@ -235,18 +235,18 @@ class CSVListEditor(TextEditor):
     x = [0.0, 0.5, 1.0].
     """
 
-    # The separator of the element in the list.
+    #: The separator of the element in the list.
     sep = Trait(',', None, Str)
 
-    # If False, it is an error to have a trailing separator.
+    #: If False, it is an error to have a trailing separator.
     ignore_trailing_sep = Bool(True)
 
-    # Include some of the TextEditor API:
+    #: Include some of the TextEditor API:
 
-    # Is user input set on every keystroke?
+    #: Is user input set on every keystroke?
     auto_set = Bool(True)
 
-    # Is user input set when the Enter key is pressed?
+    #: Is user input set when the Enter key is pressed?
     enter_set = Bool(False)
 
     def _funcs(self, object, name):

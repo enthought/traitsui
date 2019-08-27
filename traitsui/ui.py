@@ -81,130 +81,130 @@ class UI(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The ViewElements object from which this UI resolves Include items
+    #: The ViewElements object from which this UI resolves Include items
     view_elements = Instance(ViewElements)
 
-    # Context objects that the UI is editing
+    #: Context objects that the UI is editing
     context = DictStrAny
 
-    # Handler object used for event handling
+    #: Handler object used for event handling
     handler = Instance(Handler)
 
-    # View template used to construct the user interface
+    #: View template used to construct the user interface
     view = Instance('traitsui.view.View')
 
-    # Panel or dialog associated with the user interface
+    #: Panel or dialog associated with the user interface
     control = Any
 
-    # The parent UI (if any) of this UI
+    #: The parent UI (if any) of this UI
     parent = Instance('UI')
 
-    # Toolkit-specific object that "owns" **control**
+    #: Toolkit-specific object that "owns" **control**
     owner = Any
 
-    # UIInfo object containing context or editor objects
+    #: UIInfo object containing context or editor objects
     info = Instance(UIInfo)
 
-    # Result from a modal or wizard dialog:
+    #: Result from a modal or wizard dialog:
     result = Bool(False)
 
-    # Undo and Redo history
+    #: Undo and Redo history
     history = Any
 
-    # The KeyBindings object (if any) for this UI:
+    #: The KeyBindings object (if any) for this UI:
     key_bindings = Property(depends_on=['view._key_bindings', 'context'])
 
-    # The unique ID for this UI for persistence
+    #: The unique ID for this UI for persistence
     id = Str
 
-    # Have any modifications been made to UI contents?
+    #: Have any modifications been made to UI contents?
     modified = Bool(False)
 
-    # Event when the user interface has changed
+    #: Event when the user interface has changed
     updated = Event(Bool)
 
-    # Title of the dialog, if any
+    #: Title of the dialog, if any
     title = Str
 
-    # The ImageResource of the icon, if any
+    #: The ImageResource of the icon, if any
     icon = Image
 
-    # Should the created UI have scroll bars?
+    #: Should the created UI have scroll bars?
     scrollable = Bool(False)
 
-    # The number of currently pending editor error conditions
+    #: The number of currently pending editor error conditions
     errors = Int
 
-    # The code used to rebuild an updated user interface
+    #: The code used to rebuild an updated user interface
     rebuild = Callable
 
-    # Set to True when the UI has finished being destroyed.
+    #: Set to True when the UI has finished being destroyed.
     destroyed = Bool(False)
 
     #-- Private Traits -------------------------------------------------------
 
-    # Original context when used with a modal dialog
+    #: Original context when used with a modal dialog
     _context = DictStrAny
 
-    # Copy of original context used for reverting changes
+    #: Copy of original context used for reverting changes
     _revert = DictStrAny
 
-    # List of methods to call once the user interface is created
+    #: List of methods to call once the user interface is created
     _defined = List
 
-    # List of (visible_when,Editor) pairs
+    #: List of (visible_when,Editor) pairs
     _visible = List
 
-    # List of (enabled_when,Editor) pairs
+    #: List of (enabled_when,Editor) pairs
     _enabled = List
 
-    # List of (checked_when,Editor) pairs
+    #: List of (checked_when,Editor) pairs
     _checked = List
 
-    # Search stack used while building a user interface
+    #: Search stack used while building a user interface
     _search = List
 
-    # List of dispatchable Handler methods
+    #: List of dispatchable Handler methods
     _dispatchers = List
 
-    # List of editors used to build the user interface
+    #: List of editors used to build the user interface
     _editors = List
 
-    # List of names bound to the **info** object
+    #: List of names bound to the **info** object
     _names = List
 
-    # Index of currently the active group in the user interface
+    #: Index of currently the active group in the user interface
     _active_group = Int
 
-    # List of top-level groups used to build the user interface
+    #: List of top-level groups used to build the user interface
     _groups = Property
     _groups_cache = Any
 
-    # Count of levels of nesting for undoable actions
+    #: Count of levels of nesting for undoable actions
     _undoable = Int(-1)
 
-    # Code used to rebuild an updated user interface
+    #: Code used to rebuild an updated user interface
     _rebuild = Callable
 
-    # The statusbar listeners that have been set up:
+    #: The statusbar listeners that have been set up:
     _statusbar = List
 
-    # Control which gets focus after UI is created
-    # Note: this does not track focus after UI creation
-    # only used by Qt backend.
+    #: Control which gets focus after UI is created
+    #: Note: this does not track focus after UI creation
+    #: only used by Qt backend.
     _focus_control = Any
 
-    # Does the UI contain any scrollable widgets?
-    #
-    # The _scrollable trait is set correctly, but not used currently because
-    # its value is arrived at too late to be of use in building the UI.
+    #: Does the UI contain any scrollable widgets?
+    #:
+    #: The _scrollable trait is set correctly, but not used currently because
+    #: its value is arrived at too late to be of use in building the UI.
     _scrollable = Bool(False)
 
-    # Cache for key bindings.
+    #: Cache for key bindings.
     _key_bindings = Instance('traitsui.key_bindings.KeyBindings')
 
-    # List of traits that are reset when a user interface is recycled
-    # (i.e. rebuilt).
+    #: List of traits that are reset when a user interface is recycled
+    #: (i.e. rebuilt).
     recyclable_traits = [
         '_context', '_revert', '_defined', '_visible', '_enabled', '_checked',
         '_search', '_dispatchers', '_editors', '_names', '_active_group',
@@ -212,8 +212,8 @@ class UI(HasPrivateTraits):
         '_focus_control'
     ]
 
-    # List of additional traits that are discarded when a user interface is
-    # disposed.
+    #: List of additional traits that are discarded when a user interface is
+    #: disposed.
     disposable_traits = [
         'view_elements', 'info', 'handler', 'context', 'view', 'history',
         'key_bindings', 'icon', 'rebuild',

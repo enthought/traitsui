@@ -46,19 +46,19 @@ class ToolkitEditorFactory(EditorFactory):
     #-------------------------------------------------------------------------
     #  Trait definitions:
     #-------------------------------------------------------------------------
-    # Prefix to add to values to form image names:
+    #: Prefix to add to values to form image names:
     prefix = Unicode
 
-    # Suffix to add to values to form image names:
+    #: Suffix to add to values to form image names:
     suffix = Unicode
 
-    # Path to use to locate image files:
+    #: Path to use to locate image files:
     path = Unicode
 
-    # Class used to derive the path to the image files:
+    #: Class used to derive the path to the image files:
     klass = Type
 
-    # Module used to derive the path to the image files:
+    #: Module used to derive the path to the image files:
     module = Module
 
     #-------------------------------------------------------------------------

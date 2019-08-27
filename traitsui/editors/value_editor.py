@@ -49,13 +49,13 @@ class _ValueEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the editor read only?
+    #: Is the editor read only?
     readonly = false
 
-    # The root node of the value tree
+    #: The root node of the value tree
     root = Instance(RootNode)
 
-    # Is the value editor scrollable? This values overrides the default.
+    #: Is the value editor scrollable? This values overrides the default.
     scrollable = True
 
     #-------------------------------------------------------------------------
@@ -130,7 +130,7 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Number of tree levels to automatically open
+    #: Number of tree levels to automatically open
     auto_open = Int(2)
 
 # Define the ValueEditor class.

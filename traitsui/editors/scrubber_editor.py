@@ -40,34 +40,34 @@ from ..toolkit import toolkit_object
 
 class ScrubberEditor(BasicEditorFactory):
 
-    # The editor class to be instantiated:
+    #: The editor class to be instantiated:
     klass = Property
 
-    # The low end of the scrubber range:
+    #: The low end of the scrubber range:
     low = Float
 
-    # The high end of the scrubber range:
+    #: The high end of the scrubber range:
     high = Float
 
-    # The normal increment (default: auto-calculate):
+    #: The normal increment (default: auto-calculate):
     increment = Float
 
-    # The alignment of the text within the scrubber:
+    #: The alignment of the text within the scrubber:
     alignment = Alignment('center')
 
-    # The background color for the scrubber:
+    #: The background color for the scrubber:
     color = Color(None)
 
-    # The hover mode background color for the scrubber:
+    #: The hover mode background color for the scrubber:
     hover_color = Color(None)
 
-    # The active mode background color for the scrubber:
+    #: The active mode background color for the scrubber:
     active_color = Color(None)
 
-    # The scrubber border color:
+    #: The scrubber border color:
     border_color = Color(None)
 
-    # The color to use for the value text:
+    #: The color to use for the value text:
     text_color = Color('black')
 
     def _get_klass(self):

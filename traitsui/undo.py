@@ -87,13 +87,13 @@ class UndoItem(AbstractUndoItem):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Object the change occurred on
+    #: Object the change occurred on
     object = Trait(HasTraits)
-    # Name of the trait that changed
+    #: Name of the trait that changed
     name = Str
-    # Old value of the changed trait
+    #: Old value of the changed trait
     old_value = Property
-    # New value of the changed trait
+    #: New value of the changed trait
     new_value = Property
 
     #-------------------------------------------------------------------------
@@ -234,15 +234,15 @@ class ListUndoItem(AbstractUndoItem):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Object that the change occurred on
+    #: Object that the change occurred on
     object = Trait(HasTraits)
-    # Name of the trait that changed
+    #: Name of the trait that changed
     name = Str
-    # Starting index
+    #: Starting index
     index = Int
-    # Items added to the list
+    #: Items added to the list
     added = List
-    # Items removed from the list
+    #: Items removed from the list
     removed = List
 
     #-------------------------------------------------------------------------
@@ -325,17 +325,17 @@ class UndoHistory(HasStrictTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # List of accumulated undo changes
+    #: List of accumulated undo changes
     history = List
-    # The current position in the list
+    #: The current position in the list
     now = Int
-    # Fired when state changes to undoable
+    #: Fired when state changes to undoable
     undoable = Event(False)
-    # Fired when state changes to redoable
+    #: Fired when state changes to redoable
     redoable = Event(False)
-    # Can an action be undone?
+    #: Can an action be undone?
     can_undo = Property
-    # Can an action be redone?
+    #: Can an action be redone?
     can_redo = Property
 
     #-------------------------------------------------------------------------
@@ -473,7 +473,7 @@ class UndoHistoryUndoItem(AbstractUndoItem):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The undo history to undo or redo
+    #: The undo history to undo or redo
     history = Instance(UndoHistory)
 
     #-------------------------------------------------------------------------

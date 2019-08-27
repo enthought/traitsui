@@ -37,10 +37,10 @@ from ..ui_editor import UIEditor
 
 class ArrayViewAdapter(TabularAdapter):
 
-    # Is the array 1D or 2D?
+    #: Is the array 1D or 2D?
     is_2d = Bool(True)
 
-    # Should array rows and columns be transposed:
+    #: Should array rows and columns be transposed:
     transpose = Bool(False)
 
     alignment = 'right'
@@ -81,13 +81,13 @@ class ArrayViewAdapter(TabularAdapter):
 
 class _ArrayViewEditor(UIEditor):
 
-    # Indicate that the editor is scrollable/resizable:
+    #: Indicate that the editor is scrollable/resizable:
     scrollable = True
 
-    # Should column titles be displayed:
+    #: Should column titles be displayed:
     show_titles = Bool(False)
 
-    # The tabular adapter being used for the editor view:
+    #: The tabular adapter being used for the editor view:
     adapter = Instance(ArrayViewAdapter)
 
     #-- Private Methods ------------------------------------------------------
@@ -163,22 +163,22 @@ class _ArrayViewEditor(UIEditor):
 
 class ArrayViewEditor(BasicEditorFactory):
 
-    # The editor implementation class:
+    #: The editor implementation class:
     klass = Property
 
-    # Should an index column be displayed:
+    #: Should an index column be displayed:
     show_index = Bool(True)
 
-    # List of (optional) column titles:
+    #: List of (optional) column titles:
     titles = List(Str)
 
-    # Should the array be logically transposed:
+    #: Should the array be logically transposed:
     transpose = Bool(False)
 
-    # The format used to display each array element:
+    #: The format used to display each array element:
     format = Str('%s')
 
-    # The font to use for displaying each array element:
+    #: The font to use for displaying each array element:
     font = Font('Courier 10')
 
     def _get_klass(self):

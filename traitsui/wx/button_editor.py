@@ -51,7 +51,7 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The button label
+    #: The button label
     label = Str
 
     #-------------------------------------------------------------------------

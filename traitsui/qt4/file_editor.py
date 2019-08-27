@@ -127,19 +127,19 @@ class CustomEditor(SimpleTextEditor):
     """ Custom style of file editor, consisting of a file system tree view.
     """
 
-    # Is the file editor scrollable? This value overrides the default.
+    #: Is the file editor scrollable? This value overrides the default.
     scrollable = True
 
-    # Wildcard filter to apply to the file dialog:
+    #: Wildcard filter to apply to the file dialog:
     filter = filter_trait
 
-    # The root path of the file tree view.
+    #: The root path of the file tree view.
     root_path = File
 
-    # Event fired when the file system view should be rebuilt:
+    #: Event fired when the file system view should be rebuilt:
     reload = Event
 
-    # Event fired when the user double-clicks a file:
+    #: Event fired when the user double-clicks a file:
     dclick = Event
 
     def init(self, parent):

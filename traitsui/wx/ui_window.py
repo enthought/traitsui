@@ -40,16 +40,16 @@ class UIWindow(HasPrivateTraits):
     """ A base class for creating custom Traits UI windows.
     """
 
-    # The wx.Window associated with this custom window:
+    #: The wx.Window associated with this custom window:
     control = Instance(wx.Window)
 
-    # The initial size of the window:
+    #: The initial size of the window:
     size = Instance(wx.Size, (-1, -1))
 
-    # The current width of the window:
+    #: The current width of the window:
     width = Property
 
-    # The current height of the window:
+    #: The current height of the window:
     height = Property
 
     #-- Public Methods -------------------------------------------------------

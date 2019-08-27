@@ -75,7 +75,7 @@ class Include(ViewSubElement):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The name of the substitutable content
+    #: The name of the substitutable content
     id = Str
 
     #-------------------------------------------------------------------------

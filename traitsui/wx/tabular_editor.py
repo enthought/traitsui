@@ -185,63 +185,63 @@ class TabularEditor(Editor):
 
     #-- Trait Definitions ----------------------------------------------------
 
-    # The event fired when a table update is needed:
+    #: The event fired when a table update is needed:
     update = Event
 
-    # The event fired when a simple repaint is needed:
+    #: The event fired when a simple repaint is needed:
     refresh = Event
 
-    # The current set of selected items (which one is used depends upon the
-    # initial state of the editor factory 'multi_select' trait):
+    #: The current set of selected items (which one is used depends upon the
+    #: initial state of the editor factory 'multi_select' trait):
     selected = Any
     multi_selected = List
 
-    # The current set of selected item indices (which one is used depends upon
-    # the initial state of the editor factory 'multi_select' trait):
+    #: The current set of selected item indices (which one is used depends upon
+    #: the initial state of the editor factory 'multi_select' trait):
     selected_row = Int(-1)
     multi_selected_rows = List(Int)
 
-    # The most recently actived item and its index:
+    #: The most recently actived item and its index:
     activated = Any
     activated_row = Int
 
-    # The most recent left click data:
+    #: The most recent left click data:
     clicked = Instance('TabularEditorEvent')
 
-    # The most recent left double click data:
+    #: The most recent left double click data:
     dclicked = Instance('TabularEditorEvent')
 
-    # The most recent right click data:
+    #: The most recent right click data:
     right_clicked = Instance('TabularEditorEvent')
 
-    # The most recent right double click data:
+    #: The most recent right double click data:
     right_dclicked = Instance('TabularEditorEvent')
 
-    # The most recent column click data:
+    #: The most recent column click data:
     column_clicked = Instance('TabularEditorEvent')
 
-    # Is the tabular editor scrollable? This value overrides the default.
+    #: Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
 
-    # Row index of item to select after rebuilding editor list:
+    #: Row index of item to select after rebuilding editor list:
     row = Any
 
-    # Should the selected item be edited after rebuilding the editor list:
+    #: Should the selected item be edited after rebuilding the editor list:
     edit = Bool(False)
 
-    # The adapter from trait values to editor values:
+    #: The adapter from trait values to editor values:
     adapter = Instance(TabularAdapter)
 
-    # Dictionary mapping image names to wx.ImageList indices:
+    #: Dictionary mapping image names to wx.ImageList indices:
     images = Any({})
 
-    # Dictionary mapping ImageResource objects to wx.ImageList indices:
+    #: Dictionary mapping ImageResource objects to wx.ImageList indices:
     image_resources = Any({})
 
-    # An image being converted:
+    #: An image being converted:
     image = Image
 
-    # Flag for marking whether the update was within the visible area
+    #: Flag for marking whether the update was within the visible area
     _update_visible = Bool(False)
 
     #-------------------------------------------------------------------------
@@ -1169,18 +1169,18 @@ class TabularEditor(Editor):
 
 class TabularEditorEvent(HasStrictTraits):
 
-    # The index of the row:
+    #: The index of the row:
     row = Int
 
-    # The id of the column (either a string or an integer):
+    #: The id of the column (either a string or an integer):
     column = Any
 
-    # The row item:
+    #: The row item:
     item = Property
 
     #-- Private Traits -------------------------------------------------------
 
-    # The editor the event is associated with:
+    #: The editor the event is associated with:
     editor = Instance(TabularEditor)
 
     #-- Property Implementations ---------------------------------------------

@@ -92,10 +92,10 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the editor a drop target?
+    #: Is the editor a drop target?
     drop_target = Bool(True)
 
-    # Is the editor a drag source?
+    #: Is the editor a drag source?
     drag_source = Bool(True)
 
     #-------------------------------------------------------------------------
@@ -324,7 +324,7 @@ class CustomEditor(SimpleEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the editor a drag source? This value overrides the default.
+    #: Is the editor a drag source? This value overrides the default.
     drag_source = False
 
 #-------------------------------------------------------------------------
@@ -339,7 +339,7 @@ class ReadonlyEditor(SimpleEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the editor a drop target? This value overrides the default.
+    #: Is the editor a drop target? This value overrides the default.
     drop_target = False
 
 #-------------------------------------------------------------------------

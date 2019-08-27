@@ -35,12 +35,12 @@ class TimeEditor(EditorFactory):
 
     #-- ReadonlyEditor traits ------------------------------------------------
 
-    # Message to show when Time is None.
+    #: Message to show when Time is None.
     message = Str('Undefined')
 
-    # The string representation of the time to show.  Uses time.strftime
-    # format.
+    #: The string representation of the time to show.  Uses time.strftime
+    #: format.
     strftime = Str('%I:%M:%S %p')
 
-    # An optional view to display when a read-only text editor is clicked:
+    #: An optional view to display when a read-only text editor is clicked:
     view = AView

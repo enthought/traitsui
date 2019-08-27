@@ -54,19 +54,19 @@ class ToolkitEditorFactory(EditorWithListFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # (Optional) Function used to evaluate text input:
+    #: (Optional) Function used to evaluate text input:
     evaluate = Any
 
-    # Is user input set on every keystroke (when text input is allowed)?
+    #: Is user input set on every keystroke (when text input is allowed)?
     auto_set = Bool(True)
 
-    # Number of columns to use when displayed as a grid:
+    #: Number of columns to use when displayed as a grid:
     cols = Range(1, 20)
 
-    # Display modes supported for a custom style editor:
+    #: Display modes supported for a custom style editor:
     mode = Mode
 
-    # Completion mode for editors with text-entry (Qt only):
+    #: Completion mode for editors with text-entry (Qt only):
     completion_mode = CompletionMode
 
     #-------------------------------------------------------------------------

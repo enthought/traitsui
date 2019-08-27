@@ -49,19 +49,19 @@ class SingleValueTreeNodeObject(TreeNodeObject):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The parent of this node
+    #: The parent of this node
     parent = Instance(TreeNodeObject)
 
-    # Name of the value
+    #: Name of the value
     name = Str
 
-    # User-specified override of the default label
+    #: User-specified override of the default label
     label = Str
 
-    # The value itself
+    #: The value itself
     value = Any
 
-    # Is the value readonly?
+    #: Is the value readonly?
     readonly = Bool(False)
 
     #-------------------------------------------------------------------------
@@ -742,7 +742,7 @@ class _ValueTree(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # List of arbitrary Python values contained in the tree:
+    #: List of arbitrary Python values contained in the tree:
     values = List(SingleValueTreeNodeObject)
 
 #-------------------------------------------------------------------------

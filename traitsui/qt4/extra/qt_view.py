@@ -35,14 +35,14 @@ class QtView(View):
     """ A View that allows the specification of Qt style sheets.
     """
 
-    # An optional string containing a Qt style sheet.
+    #: An optional string containing a Qt style sheet.
     style_sheet = Str
 
-    # An optional file path for a Qt style sheet.
+    #: An optional file path for a Qt style sheet.
     style_sheet_path = File
 
-    # A list of trait names that defines the order for focus switching via
-    # Tab/Shift+Tab. If the view contains multiple items for a specified trait
+    #: A list of trait names that defines the order for focus switching via
+    #: Tab/Shift+Tab. If the view contains multiple items for a specified trait
     # name, the order is undefined.
     tab_order = List(Str)
 

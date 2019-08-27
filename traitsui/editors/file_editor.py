@@ -52,47 +52,47 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Wildcard filter to apply to the file dialog:
+    #: Wildcard filter to apply to the file dialog:
     filter = filter_trait
 
-    # Optional extended trait name of the trait containing the list of filters:
+    #: Optional extended trait name of the trait containing the list of filters:
     filter_name = Str
 
-    # Should file extension be truncated?
+    #: Should file extension be truncated?
     truncate_ext = Bool(False)
 
-    # Can the user select directories as well as files?
+    #: Can the user select directories as well as files?
     allow_dir = Bool(False)
 
-    # Is user input set on every keystroke? (Overrides the default) ('simple'
-    # style only):
+    #: Is user input set on every keystroke? (Overrides the default) ('simple'
+    #: style only):
     auto_set = False
 
-    # Is user input set when the Enter key is pressed? (Overrides the default)
-    # ('simple' style only):
+    #: Is user input set when the Enter key is pressed? (Overrides the default)
+    #: ('simple' style only):
     enter_set = True
 
-    # The number of history entries to maintain:
-    # FIXME: add support
+    #: The number of history entries to maintain:
+    #: FIXME: add support
     entries = Int(10)
 
-    # The root path of the file tree view ('custom' style only, not supported
-    # under wx). If not specified, the filesystem root is used.
+    #: The root path of the file tree view ('custom' style only, not supported
+    #: under wx). If not specified, the filesystem root is used.
     root_path = File
 
-    # Optional extend trait name of the trait containing the root path.
+    #: Optional extend trait name of the trait containing the root path.
     root_path_name = Str
 
-    # Optional extended trait name used to notify the editor when the file
-    # system view should be reloaded ('custom' style only):
+    #: Optional extended trait name used to notify the editor when the file
+    #: system view should be reloaded ('custom' style only):
     reload_name = Str
 
-    # Optional extended trait name used to notify when the user double-clicks
-    # an entry in the file tree view. The associated path is assigned it:
+    #: Optional extended trait name used to notify when the user double-clicks
+    #: an entry in the file tree view. The associated path is assigned it:
     dclick_name = Str
 
-    # The style of file dialog to use when the 'Browse...' button is clicked
-    # Should be one of 'open' or 'save'
+    #: The style of file dialog to use when the 'Browse...' button is clicked
+    #: Should be one of 'open' or 'save'
     dialog_style = Str('open')
 
     #-------------------------------------------------------------------------

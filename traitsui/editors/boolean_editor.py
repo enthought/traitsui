@@ -63,8 +63,8 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Dictionary mapping user input to other values.
-    # These definitions override definitions in the 'text_editor' version
+    #: Dictionary mapping user input to other values.
+    #: These definitions override definitions in the 'text_editor' version
     mapping = mapping_trait
 
     #-------------------------------------------------------------------------

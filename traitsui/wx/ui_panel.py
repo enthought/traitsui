@@ -1151,7 +1151,7 @@ class DockWindowGroupEditor(GroupEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # DockWindow for the group
+    #: DockWindow for the group
     dock_window = Instance(wx.Window)
 
     #-- UI preference save/restore interface ---------------------------------

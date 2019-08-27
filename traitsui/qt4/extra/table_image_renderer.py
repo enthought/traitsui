@@ -30,7 +30,7 @@ class TableImageRenderer(TableDelegate):
         text displayed in the same way the default renderer would.
     """
 
-    # Should the image be scaled to the size of the cell
+    #: Should the image be scaled to the size of the cell
     scale_to_cell = Bool(True)
 
     #-------------------------------------------------------------------------

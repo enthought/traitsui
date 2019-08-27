@@ -34,34 +34,34 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The title
+    #: The title
     title = Str
 
-    # The message to be displayed along side the progress guage
+    #: The message to be displayed along side the progress guage
     message = Str
 
-    # The name of an [object.]trait that defines the message string
+    #: The name of an [object.]trait that defines the message string
     message_name = Str
 
-    # The starting value
+    #: The starting value
     min = Int
 
-    # The name of an [object.]trait that defines the starting value
+    #: The name of an [object.]trait that defines the starting value
     min_name = Str
 
-    # The ending value
+    #: The ending value
     max = Int
 
-    # The name of an [object.]trait that defines the ending value
+    #: The name of an [object.]trait that defines the ending value
     max_name = Str
 
-    # If the cancel button should be shown (not very sensible as an editor)
+    #: If the cancel button should be shown (not very sensible as an editor)
     can_cancel = Bool(False)
 
-    # If the estimated time should be shown (not very sensible as an editor)
+    #: If the estimated time should be shown (not very sensible as an editor)
     show_time = Bool(False)
 
-    # if the percent complete should be shown
+    #: if the percent complete should be shown
     show_percent = Bool(False)
 
 

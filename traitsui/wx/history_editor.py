@@ -51,7 +51,7 @@ class _HistoryEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The history control:
+    #: The history control:
     history = Any
 
     #-------------------------------------------------------------------------

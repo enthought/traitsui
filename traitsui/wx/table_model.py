@@ -67,10 +67,10 @@ class TraitGridSelection(HasPrivateTraits):
     """ Structure for holding specification information.
     """
 
-    # The selected object
+    #: The selected object
     obj = Any
 
-    # The specific trait selected on the object
+    #: The specific trait selected on the object
     name = Str
 
 #-------------------------------------------------------------------------
@@ -86,22 +86,22 @@ class TableModel(GridModel):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The editor that created this model
+    #: The editor that created this model
     editor = Instance(Editor)
 
-    # The current filter
+    #: The current filter
     filter = Instance(TableFilter, allow_none=True)
 
-    # Current filter summary message
+    #: Current filter summary message
     filter_summary = Str('All items')
 
-    # Display the table items in reverse order?
+    #: Display the table items in reverse order?
     reverse = Bool(False)
 
-    # Event fired when the table has been sorted
+    #: Event fired when the table has been sorted
     sorted = Event
 
-    # The current 'auto_add' row
+    #: The current 'auto_add' row
     auto_add_row = Any
 
     #-------------------------------------------------------------------------

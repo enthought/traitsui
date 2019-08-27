@@ -607,10 +607,10 @@ class DragHandler(HasPrivateTraits):
     #  Traits definitions:
     #-------------------------------------------------------------------------
 
-    # The UI associated with the drag handler
+    #: The UI associated with the drag handler
     ui = Instance(UI)
 
-    # The wx control associated with the drag handler
+    #: The wx control associated with the drag handler
     control = Instance(wx.Window)
 
 #-- Drag and drop event handlers: ----------------------------------------
@@ -685,13 +685,13 @@ class WXTheme(Category, Theme):
         to wxPython.
     """
 
-    # The color to use for content text:
+    #: The color to use for content text:
     content_color = Property
 
-    # The color to use for label text:
+    #: The color to use for label text:
     label_color = Property
 
-    # The image slice used to draw the theme:
+    #: The image slice used to draw the theme:
     image_slice = Property(depends_on='image')
 
     #-- Property Implementations ---------------------------------------------
@@ -743,10 +743,10 @@ class WXDockWindowTheme(Category, DockWindowTheme):
         specific to wxPython.
     """
 
-    # The bitmap for the 'tab_inactive_edge' image:
+    #: The bitmap for the 'tab_inactive_edge' image:
     tab_inactive_edge_bitmap = Property(depends_on='tab_inactive_edge')
 
-    # The bitmap for the 'tab_hover_edge' image:
+    #: The bitmap for the 'tab_hover_edge' image:
     tab_hover_edge_bitmap = Property(depends_on='tab_hover_edge')
 
     #-- Property Implementations ---------------------------------------------

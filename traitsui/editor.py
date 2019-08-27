@@ -72,67 +72,67 @@ class Editor(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The UI (user interface) this editor is part of:
+    #: The UI (user interface) this editor is part of:
     ui = Instance('traitsui.ui.UI')
 
-    # Full name of the object the editor is editing (e.g.
-    # 'object.link1.link2'):
+    #: Full name of the object the editor is editing (e.g.
+    #: 'object.link1.link2'):
     object_name = Str('object')
 
-    # The object this editor is editing (e.g. object.link1.link2):
+    #: The object this editor is editing (e.g. object.link1.link2):
     object = Instance(HasTraits)
 
-    # The name of the trait this editor is editing (e.g. 'value'):
+    #: The name of the trait this editor is editing (e.g. 'value'):
     name = ReadOnly
 
-    # The context object the editor is editing (e.g. object):
+    #: The context object the editor is editing (e.g. object):
     context_object = Property
 
-    # The extended name of the object trait being edited. That is,
-    # 'object_name.name' minus the context object name at the beginning. For
-    # example: 'link1.link2.value':
+    #: The extended name of the object trait being edited. That is,
+    #: 'object_name.name' minus the context object name at the beginning. For
+    #: example: 'link1.link2.value':
     extended_name = Property
 
-    # Original value of object.name (e.g. object.link1.link2.value):
+    #: Original value of object.name (e.g. object.link1.link2.value):
     old_value = Any
 
-    # Text description of the object trait being edited:
+    #: Text description of the object trait being edited:
     description = ReadOnly
 
-    # The Item object used to create this editor:
+    #: The Item object used to create this editor:
     item = Instance(Item, ())
 
-    # The GUI widget defined by this editor:
+    #: The GUI widget defined by this editor:
     control = Any
 
-    # The GUI label (if any) defined by this editor:
+    #: The GUI label (if any) defined by this editor:
     label_control = Any
 
-    # Is the underlying GUI widget enabled?
+    #: Is the underlying GUI widget enabled?
     enabled = Bool(True)
 
-    # Is the underlying GUI widget visible?
+    #: Is the underlying GUI widget visible?
     visible = Bool(True)
 
-    # Is the underlying GUI widget scrollable?
+    #: Is the underlying GUI widget scrollable?
     scrollable = Bool(False)
 
-    # The EditorFactory used to create this editor:
+    #: The EditorFactory used to create this editor:
     factory = factory_trait
 
-    # Is the editor updating the object.name value?
+    #: Is the editor updating the object.name value?
     updating = Bool(False)
 
-    # Current value for object.name:
+    #: Current value for object.name:
     value = Property
 
-    # Current value of object trait as a string:
+    #: Current value of object trait as a string:
     str_value = Property
 
-    # The trait the editor is editing (not its value, but the trait itself):
+    #: The trait the editor is editing (not its value, but the trait itself):
     value_trait = Property
 
-    # The current editor invalid state status:
+    #: The current editor invalid state status:
     invalid = Bool(False)
 
     #-------------------------------------------------------------------------

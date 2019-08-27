@@ -40,43 +40,43 @@ class DockWindowTheme(HasPrivateTraits):
 
     #-- Public Trait Definitions ---------------------------------------------
 
-    # Use the theme background color as the DockWindow background color?
+    #: Use the theme background color as the DockWindow background color?
     use_theme_color = Bool(True)
 
-    # Draw notebook tabs at the top (True) or the bottom (False)?
+    #: Draw notebook tabs at the top (True) or the bottom (False)?
     tabs_at_top = Bool(True)
 
-    # Active tab theme:
+    #: Active tab theme:
     tab_active = ATheme
 
-    # Inactive tab theme:
+    #: Inactive tab theme:
     tab_inactive = ATheme
 
-    # Optional image to use for right edge of rightmost inactive tab:
+    #: Optional image to use for right edge of rightmost inactive tab:
     tab_inactive_edge = Image
 
-    # Tab hover theme (used for inactive tabs):
+    #: Tab hover theme (used for inactive tabs):
     tab_hover = ATheme
 
-    # Optional image to use for right edge of rightmost hover tab:
+    #: Optional image to use for right edge of rightmost hover tab:
     tab_hover_edge = Image
 
-    # Tab background theme:
+    #: Tab background theme:
     tab_background = ATheme
 
-    # Tab theme:
+    #: Tab theme:
     tab = ATheme
 
-    # Vertical splitter bar theme:
+    #: Vertical splitter bar theme:
     vertical_splitter = ATheme
 
-    # Horizontal splitter bar theme:
+    #: Horizontal splitter bar theme:
     horizontal_splitter = ATheme
 
-    # Vertical drag bar theme:
+    #: Vertical drag bar theme:
     vertical_drag = ATheme
 
-    # Horizontal drag bar theme:
+    #: Horizontal drag bar theme:
     horizontal_drag = ATheme
 
 #-------------------------------------------------------------------------

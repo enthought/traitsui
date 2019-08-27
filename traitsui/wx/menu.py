@@ -87,7 +87,7 @@ key_map = {
 class MakeMenu:
     """ Manages creation of menus.
     """
-    # Initialize the globally unique menu ID:
+    #: Initialize the globally unique menu ID:
     cur_id = 1000
 
     #-------------------------------------------------------------------------

@@ -81,27 +81,27 @@ class CustomEditor(Editor):
     containing trait editors for all the instance's traits.
     """
 
-    # Background color when an item can be dropped on the editor:
+    #: Background color when an item can be dropped on the editor:
     ok_color = DropColor
 
-    # The orientation of the instance editor relative to the instance selector:
+    #: The orientation of the instance editor relative to the instance selector:
     orientation = wx.VERTICAL
 
-    # Class constant:
+    #: Class constant:
     extra = 0
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # List of InstanceChoiceItem objects used by the editor
+    #: List of InstanceChoiceItem objects used by the editor
     items = Property
 
-    # The maximum extra padding that should be allowed around the editor:
-    # (Override of the Editor base class trait)
+    #: The maximum extra padding that should be allowed around the editor:
+    #: (Override of the Editor base class trait)
     border_size = 0
 
-    # The view to use for displaying the instance:
+    #: The view to use for displaying the instance:
     view = AView
 
     #-------------------------------------------------------------------------
@@ -564,7 +564,7 @@ class SimpleEditor(CustomEditor):
     the button displays a dialog box in which the instance can be edited.
     """
 
-    # Class constants:
+    #: Class constants:
     orientation = wx.HORIZONTAL
     extra = 2
 

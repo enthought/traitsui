@@ -44,7 +44,7 @@ class UIEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The Traits UI created by the editor
+    #: The Traits UI created by the editor
     editor_ui = Instance(UI)
 
     #-------------------------------------------------------------------------

@@ -61,79 +61,79 @@ class TableEditor(Editor, BaseTableEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The table view control associated with the editor:
+    #: The table view control associated with the editor:
     table_view = Any
 
     def _table_view_default(self):
         return TableView(editor=self)
 
-    # A wrapper around the source model which provides filtering and sorting:
+    #: A wrapper around the source model which provides filtering and sorting:
     model = Instance(SortFilterTableModel)
 
     def _model_default(self):
         return SortFilterTableModel(editor=self)
 
-    # The table model associated with the editor:
+    #: The table model associated with the editor:
     source_model = Instance(TableModel)
 
     def _source_model_default(self):
         return TableModel(editor=self)
 
-    # The set of columns currently defined on the editor:
+    #: The set of columns currently defined on the editor:
     columns = List(TableColumn)
 
-    # The currently selected row(s), column(s), or cell(s).
+    #: The currently selected row(s), column(s), or cell(s).
     selected = Any
 
-    # The current selected row
+    #: The current selected row
     selected_row = Property(Any, depends_on='selected')
 
     selected_indices = Property(Any, depends_on='selected')
 
-    # Current filter object (should be a TableFilter or callable or None):
+    #: Current filter object (should be a TableFilter or callable or None):
     filter = Any
 
-    # The indices of the table items currently passing the table filter:
+    #: The indices of the table items currently passing the table filter:
     filtered_indices = List(Int)
 
-    # Current filter summary message
+    #: Current filter summary message
     filter_summary = Str('All items')
 
-    # Update the filtered contents.
+    #: Update the filtered contents.
     update_filter = Event()
 
-    # The event fired when a cell is clicked on:
+    #: The event fired when a cell is clicked on:
     click = Event
 
-    # The event fired when a cell is double-clicked on:
+    #: The event fired when a cell is double-clicked on:
     dclick = Event
 
-    # The Traits UI associated with the table editor toolbar:
+    #: The Traits UI associated with the table editor toolbar:
     toolbar_ui = Instance(UI)
 
-    # The context menu associated with empty space in the table
+    #: The context menu associated with empty space in the table
     empty_menu = Instance(QtGui.QMenu)
 
-    # The context menu associated with the vertical header
+    #: The context menu associated with the vertical header
     header_menu = Instance(QtGui.QMenu)
 
-    # The context menu actions for moving rows up and down
+    #: The context menu actions for moving rows up and down
     header_menu_up = Instance(QtGui.QAction)
     header_menu_down = Instance(QtGui.QAction)
 
-    # The index of the row that was last right clicked on its vertical header
+    #: The index of the row that was last right clicked on its vertical header
     header_row = Int
 
-    # Whether to auto-size the columns or not.
+    #: Whether to auto-size the columns or not.
     auto_size = Bool(False)
 
-    # Dictionary mapping image names to QIcons
+    #: Dictionary mapping image names to QIcons
     images = Any({})
 
-    # Dictionary mapping ImageResource objects to QIcons
+    #: Dictionary mapping ImageResource objects to QIcons
     image_resources = Any({})
 
-    # An image being converted:
+    #: An image being converted:
     image = Image
 
     #-------------------------------------------------------------------------
@@ -1211,25 +1211,25 @@ class TableFilterEditor(HasTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # TableEditor this editor is associated with
+    #: TableEditor this editor is associated with
     editor = Instance(TableEditor)
 
-    # The list of filters
+    #: The list of filters
     filters = List(TableFilter)
 
-    # The list of available templates from which filters can be created
+    #: The list of available templates from which filters can be created
     templates = Property(List(TableFilter), depends_on='filters')
 
-    # The currently selected filter template
+    #: The currently selected filter template
     selected_template = Instance(TableFilter)
 
-    # The currently selected filter
+    #: The currently selected filter
     selected_filter = Instance(TableFilter, allow_none=True)
 
-    # The view to use for the current filter
+    #: The view to use for the current filter
     selected_filter_view = Property(depends_on='selected_filter')
 
-    # Buttons for add/removing filters
+    #: Buttons for add/removing filters
     add_button = Button('New')
     remove_button = Button('Delete')
 

@@ -48,53 +48,53 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # List of items describing the types of selectable or editable instances
+    #: List of items describing the types of selectable or editable instances
     values = List(InstanceChoiceItem)
 
-    # Extended name of the context object trait containing the list of types of
-    # selectable or editable instances
+    #: Extended name of the context object trait containing the list of types of
+    #: selectable or editable instances
     name = Str
 
-    # Is the current value of the object trait editable (vs. merely
-    # selectable)?
+    #: Is the current value of the object trait editable (vs. merely
+    #: selectable)?
     editable = Bool(True)
 
-    # Should the object trait value be selectable from a list of objects (a
-    # value of True forces a selection list to be displayed, while a value of
-    # False displays a selection list only if at least one object in the list
-    # of possible object values is selectable):
+    #: Should the object trait value be selectable from a list of objects (a
+    #: value of True forces a selection list to be displayed, while a value of
+    #: False displays a selection list only if at least one object in the list
+    #: of possible object values is selectable):
     selectable = Bool(False)
 
-    # Should the editor support drag and drop of objects to set the trait value
-    # (a value of True forces the editor to allow drag and drop, while a value
-    # of False only supports drag and drop if at least one item in the list of
-    # possible objects supports drag and drop):
+    #: Should the editor support drag and drop of objects to set the trait value
+    #: (a value of True forces the editor to allow drag and drop, while a value
+    #: of False only supports drag and drop if at least one item in the list of
+    #: possible objects supports drag and drop):
     droppable = Bool(False)
 
-    # Should factory-created objects be cached?
+    #: Should factory-created objects be cached?
     cachable = Bool(True)
 
-    # Optional label for button
+    #: Optional label for button
     label = Unicode
 
-    # Optional instance view to use
+    #: Optional instance view to use
     view = AView
 
-    # Extended name of the context object trait containing the view, or name of
-    # the view, to use
+    #: Extended name of the context object trait containing the view, or name of
+    #: the view, to use
     view_name = Str
 
-    # The ID to use with the view
+    #: The ID to use with the view
     id = Str
 
-    # Kind of pop-up editor (live, modal, nonmodal, wizard)
+    #: Kind of pop-up editor (live, modal, nonmodal, wizard)
     kind = AKind
 
-    # The orientation of the instance editor relative to the instance selector
+    #: The orientation of the instance editor relative to the instance selector
     orientation = Enum('default', 'horizontal', 'vertical')
 
-    # The default adapter class used to create InstanceChoice compatible
-    # adapters for instance objects:
+    #: The default adapter class used to create InstanceChoice compatible
+    #: adapters for instance objects:
     adapter = Type(InstanceChoice, allow_none=False)
 
     #-------------------------------------------------------------------------

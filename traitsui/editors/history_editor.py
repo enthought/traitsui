@@ -45,11 +45,11 @@ def history_editor(*args, **traits):
 
 class ToolkitEditorFactory(BasicEditorFactory):
 
-    # The number of entries in the history:
+    #: The number of entries in the history:
     entries = Int(10)
 
-    # Should each keystroke update the value (or only the enter key, tab,
-    # etc.)?
+    #: Should each keystroke update the value (or only the enter key, tab,
+    #: etc.)?
     auto_set = Bool(False)
 
 

@@ -77,41 +77,41 @@ class SaveHandler(Handler):
     """ A Handler that facilates adding saving to a Traits UI application.
     """
 
-    # The object which is to be saved (subclass of CanSaveMixin). It is assigned
-    # to info.object in the 'init' method, which in many cases is what you want.
-    # If not, override that method to set it to something else.
+    #: The object which is to be saved (subclass of CanSaveMixin). It is assigned
+    #: to info.object in the 'init' method, which in many cases is what you want.
+    #: If not, override that method to set it to something else.
     saveObject = Any
 
-    # The type of files to show in the save dialogs
+    #: The type of files to show in the save dialogs
     wildcard = Str('All files (*.*)|*.*')
 
-    # The option extension which should appear at the end of all filenames. If
-    # the user does not explicitly specifiy it, it is appended to the filename.
+    #: The option extension which should appear at the end of all filenames. If
+    #: the user does not explicitly specifiy it, it is appended to the filename.
     extension = Str
 
-    # This message to display when the Handler requests a save
+    #: This message to display when the Handler requests a save
     savePromptMessage = Str('Would you like to save?')
 
-    # Whether to prompt for a save on exit if the save object is dirty
+    #: Whether to prompt for a save on exit if the save object is dirty
     promptOnExit = Bool(True)
 
-    # Whether to allow the user to override a validation failure through a
-    # confirmation dialog. By default, validation errors cannot be overriden.
+    #: Whether to allow the user to override a validation failure through a
+    #: confirmation dialog. By default, validation errors cannot be overriden.
     allowValidationBypass = Bool(False)
 
-    # Whether to automatically save after a certain amount of time has passed
-    # since the last save
+    #: Whether to automatically save after a certain amount of time has passed
+    #: since the last save
     autosave = Bool(False)
 
-    # Number of seconds between each autosave. Default is 5 minutes.
+    #: Number of seconds between each autosave. Default is 5 minutes.
     autosaveInterval = Int(300)
 
-    # If it is possible to override validation failures, this specifies whether
-    # autosave will do so. If False and a validation errors occurs, no save
-    # will occur.
+    #: If it is possible to override validation failures, this specifies whether
+    #: autosave will do so. If False and a validation errors occurs, no save
+    #: will occur.
     autosaveValidationBypass = Bool(True)
 
-    # Protected traits
+    #: Protected traits
     _timer = Instance(Timer)
 
     #-----------------------------------------------------------------

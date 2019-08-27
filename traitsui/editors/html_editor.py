@@ -62,16 +62,16 @@ class ToolkitEditorFactory(BasicEditorFactory):
     #  Trait definitions:
     #--------------------------------------------------------------------------
 
-    # Should implicit text formatting be converted to HTML?
+    #: Should implicit text formatting be converted to HTML?
     format_text = false
 
-    # External objects referenced in the HTML are relative to this url
+    #: External objects referenced in the HTML are relative to this url
     base_url = Str
 
-    # The object trait containing the base URL
+    #: The object trait containing the base URL
     base_url_name = Str
 
-    # Should links be opened in an external browser?
+    #: Should links be opened in an external browser?
     open_externally = false
 
     #-------------------------------------------------------------------------

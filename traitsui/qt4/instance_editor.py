@@ -58,23 +58,23 @@ class CustomEditor(Editor):
     containing trait editors for all the instance's traits.
     """
 
-    # Background color when an item can be dropped on the editor:
+    #: Background color when an item can be dropped on the editor:
     ok_color = DropColor
 
-    # The orientation of the instance editor relative to the instance selector:
+    #: The orientation of the instance editor relative to the instance selector:
     orientation = QtGui.QBoxLayout.TopToBottom
 
-    # Class constant:
+    #: Class constant:
     extra = 0
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # List of InstanceChoiceItem objects used by the editor
+    #: List of InstanceChoiceItem objects used by the editor
     items = Property
 
-    # The view to use for displaying the instance
+    #: The view to use for displaying the instance
     view = AView
 
     #-------------------------------------------------------------------------
@@ -464,7 +464,7 @@ class SimpleEditor(CustomEditor):
     #: The ui instance for the currently open editor dialog
     _dialog_ui = Instance('traitsui.ui.UI')
 
-    # Class constants:
+    #: Class constants:
     orientation = QtGui.QBoxLayout.LeftToRight
     extra = 2
 

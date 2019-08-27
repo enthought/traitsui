@@ -611,10 +611,10 @@ class Controller(Handler):
 
     #-- Trait Definitions ----------------------------------------------------
 
-    # The model this handler defines a view and controller for
+    #: The model this handler defines a view and controller for
     model = Instance(HasTraits)
 
-    # The Info object associated with the controller
+    #: The Info object associated with the controller
     info = Instance(UIInfo)
 
     #-- HasTraits Method Overrides -------------------------------------------

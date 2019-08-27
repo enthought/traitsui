@@ -51,7 +51,7 @@ class SimpleEditor(Editor):
     contains the string representation of the object trait's value.
     """
 
-    # Background color when it is OK to drop objects.
+    #: Background color when it is OK to drop objects.
     ok_color = DropColor
 
     #-------------------------------------------------------------------------

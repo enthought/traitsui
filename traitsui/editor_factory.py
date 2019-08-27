@@ -53,37 +53,37 @@ class EditorFactory(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Function to use for string formatting
+    #: Function to use for string formatting
     format_func = Callable
 
-    # Format string to use for formatting (used if **format_func** is not set).
+    #: Format string to use for formatting (used if **format_func** is not set).
     format_str = Str
 
-    # Is the editor being used to create table grid cells?
+    #: Is the editor being used to create table grid cells?
     is_grid_cell = Bool(False)
 
-    # Are created editors initially enabled?
+    #: Are created editors initially enabled?
     enabled = Bool(True)
 
-    # The extended trait name of the trait containing editor invalid state
-    # status:
+    #: The extended trait name of the trait containing editor invalid state
+    #: status:
     invalid = Str
 
-    # Text aligment to use in most readonly editors
-    # Possible values: left, right, top, bottom, just, vcenter, hcenter, center
-    # Example: left,vcenter
+    #: Text aligment to use in most readonly editors
+    #: Possible values: left, right, top, bottom, just, vcenter, hcenter, center
+    #: Example: left,vcenter
     text_alignment = Str
 
-    # The editor class to use for 'simple' style views.
+    #: The editor class to use for 'simple' style views.
     simple_editor_class = Property
 
-    # The editor class to use for 'custom' style views.
+    #: The editor class to use for 'custom' style views.
     custom_editor_class = Property
 
-    # The editor class to use for 'text' style views.
+    #: The editor class to use for 'text' style views.
     text_editor_class = Property
 
-    # The editor class to use for 'readonly' style views.
+    #: The editor class to use for 'readonly' style views.
     readonly_editor_class = Property
 
     #-------------------------------------------------------------------------
@@ -300,17 +300,17 @@ class EditorWithListFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Values to enumerate (can be a list, tuple, dict, or a CTrait or
-    # TraitHandler that is "mapped"):
+    #: Values to enumerate (can be a list, tuple, dict, or a CTrait or
+    #: TraitHandler that is "mapped"):
     values = Any
 
-    # Extended name of the trait on **object** containing the enumeration data:
+    #: Extended name of the trait on **object** containing the enumeration data:
     object = Str('object')
 
-    # Name of the trait on 'object' containing the enumeration data
+    #: Name of the trait on 'object' containing the enumeration data
     name = Str
 
-    # Fired when the **values** trait has been updated:
+    #: Fired when the **values** trait has been updated:
     values_modified = Event
 
     #-------------------------------------------------------------------------

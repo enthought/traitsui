@@ -54,13 +54,13 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Width of the individual fields
+    #: Width of the individual fields
     width = Int(-80)
 
-    # Is user input set on every keystroke?
+    #: Is user input set on every keystroke?
     auto_set = Bool(True)
 
-    # Is user input set when the Enter key is pressed?
+    #: Is user input set when the Enter key is pressed?
     enter_set = Bool(False)
 
 #-------------------------------------------------------------------------
@@ -74,10 +74,10 @@ class ArrayStructure(HasTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Editor that this structure is linked to
+    #: Editor that this structure is linked to
     editor = Instance(Editor)
 
-    # The constructed View for the array
+    #: The constructed View for the array
     view = Instance(View)
 
     #-------------------------------------------------------------------------

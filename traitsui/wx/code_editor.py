@@ -79,39 +79,39 @@ class SourceEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The code editor is scrollable. This value overrides the default.
+    #: The code editor is scrollable. This value overrides the default.
     scrollable = True
 
-    # Is the editor read only?
+    #: Is the editor read only?
     readonly = Bool(False)
 
-    # The currently selected line
+    #: The currently selected line
     selected_line = Int
 
-    # The currently selected text
+    #: The currently selected text
     selected_text = Str
 
-    # The list of line numbers to mark
+    #: The list of line numbers to mark
     mark_lines = List(Int)
 
-    # The current line number
+    #: The current line number
     line = Event
 
-    # The current column
+    #: The current column
     column = Event
 
-    # calltip clicked event
+    #: calltip clicked event
     calltip_clicked = Event
 
-    # The STC lexer use
+    #: The STC lexer use
     lexer = Int
 
-    # The lines to be dimmed
+    #: The lines to be dimmed
     dim_lines = List(Int)
     dim_color = Str
     _dim_style_number = Int(16)  # 0-15 are reserved for the python lexer
 
-    # The lines to have squiggles drawn under them
+    #: The lines to have squiggles drawn under them
     squiggle_lines = List(Int)
     squiggle_color = Str
 
@@ -481,7 +481,7 @@ CustomEditor = SimpleEditor = TextEditor = SourceEditor
 
 class ReadonlyEditor(SourceEditor):
 
-    # Set the value of the readonly trait.
+    #: Set the value of the readonly trait.
     readonly = True
 
 ### EOF ##################################################################

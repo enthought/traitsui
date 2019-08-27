@@ -71,7 +71,7 @@ class BaseRangeEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Function to evaluate floats/ints
+    #: Function to evaluate floats/ints
     evaluate = Any
 
     #-------------------------------------------------------------------------
@@ -99,16 +99,16 @@ class SimpleSliderEditor(BaseRangeEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Low value for the slider range
+    #: Low value for the slider range
     low = Any
 
-    # High value for the slider range
+    #: High value for the slider range
     high = Any
 
-    # Formatting string used to format value and labels
+    #: Formatting string used to format value and labels
     format = Str
 
-    # Flag indicating that the UI is in the process of being updated
+    #: Flag indicating that the UI is in the process of being updated
     ui_changing = Bool(False)
 
     #-------------------------------------------------------------------------
@@ -392,19 +392,19 @@ class LargeRangeSliderEditor(BaseRangeEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Low value for the slider range
+    #: Low value for the slider range
     low = Any(0)
 
-    # High value for the slider range
+    #: High value for the slider range
     high = Any(1)
 
-    # Low end of displayed range
+    #: Low end of displayed range
     cur_low = Float
 
-    # High end of displayed range
+    #: High end of displayed range
     cur_high = Float
 
-    # Flag indicating that the UI is in the process of being updated
+    #: Flag indicating that the UI is in the process of being updated
     ui_changing = Bool(False)
 
     #-------------------------------------------------------------------------
@@ -758,10 +758,10 @@ class SimpleSpinEditor(BaseRangeEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Low value for the slider range
+    #: Low value for the slider range
     low = Any
 
-    # High value for the slider range
+    #: High value for the slider range
     high = Any
 
     #-------------------------------------------------------------------------
@@ -861,13 +861,13 @@ class RangeTextEditor(TextEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Low value for the slider range
+    #: Low value for the slider range
     low = Any
 
-    # High value for the slider range
+    #: High value for the slider range
     high = Any
 
-    # Function to evaluate floats/ints
+    #: Function to evaluate floats/ints
     evaluate = Any
 
     #-------------------------------------------------------------------------

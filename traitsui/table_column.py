@@ -77,97 +77,97 @@ class TableColumn(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Column label to use for this column:
+    #: Column label to use for this column:
     label = Str(UndefinedLabel)
 
-    # Type of data contained by the column:
+    #: Type of data contained by the column:
     type = Enum('text')
 
-    # Text color for this column:
+    #: Text color for this column:
     text_color = Color('black')
 
-    # Text font for this column:
+    #: Text font for this column:
     text_font = Either(None, Font)
 
-    # Cell background color for this column:
+    #: Cell background color for this column:
     cell_color = Either(Color('white'), None)
 
-    # Cell background color for non-editable columns:
+    #: Cell background color for non-editable columns:
     read_only_cell_color = Either(Color(0xF4F3EE), None)
 
-    # Cell graph color:
+    #: Cell graph color:
     graph_color = Color(0xDDD9CC)
 
-    # Horizontal alignment of text in the column:
+    #: Horizontal alignment of text in the column:
     horizontal_alignment = Enum('left', ['left', 'center', 'right'])
 
-    # Vertical alignment of text in the column:
+    #: Vertical alignment of text in the column:
     vertical_alignment = Enum('center', ['top', 'center', 'bottom'])
 
-    # Horizontal cell margin
+    #: Horizontal cell margin
     horizontal_margin = Int(4)
 
-    # Vertical cell margin
+    #: Vertical cell margin
     vertical_margin = Int(3)
 
-    # The image to display in the cell:
+    #: The image to display in the cell:
     image = Image
 
-    # Renderer used to render the contents of this column:
+    #: Renderer used to render the contents of this column:
     renderer = Any  # A toolkit specific renderer
 
-    # Is the table column visible (i.e., viewable)?
+    #: Is the table column visible (i.e., viewable)?
     visible = Bool(True)
 
-    # Is this column editable?
+    #: Is this column editable?
     editable = Bool(True)
 
-    # Is the column automatically edited/viewed (i.e. should the column editor
-    # or popup be activated automatically on mouse over)?
+    #: Is the column automatically edited/viewed (i.e. should the column editor
+    #: or popup be activated automatically on mouse over)?
     auto_editable = Bool(False)
 
-    # Should a checkbox be displayed instead of True/False?
+    #: Should a checkbox be displayed instead of True/False?
     show_checkbox = Bool(True)
 
-    # Can external objects be dropped on the column?
+    #: Can external objects be dropped on the column?
     droppable = Bool(False)
 
-    # Context menu to display when this column is right-clicked:
+    #: Context menu to display when this column is right-clicked:
     menu = Instance(Menu)
 
-    # The tooltip to display when the mouse is over the column:
+    #: The tooltip to display when the mouse is over the column:
     tooltip = Str
 
-    # The width of the column (< 0.0: Default, 0.0..1.0: fraction of total table
-    # width, > 1.0: absolute width in pixels):
+    #: The width of the column (< 0.0: Default, 0.0..1.0: fraction of total table
+    #: width, > 1.0: absolute width in pixels):
     width = Float(-1.0)
 
-    # The width of the column while it is being edited (< 0.0: Default,
-    # 0.0..1.0: fraction of total table width, > 1.0: absolute width in
-    # pixels):
+    #: The width of the column while it is being edited (< 0.0: Default,
+    #: 0.0..1.0: fraction of total table width, > 1.0: absolute width in
+    #: pixels):
     edit_width = Float(-1.0)
 
-    # The height of the column cell's row while it is being edited
-    # (< 0.0: Default, 0.0..1.0: fraction of total table height,
-    # > 1.0: absolute height in pixels):
+    #: The height of the column cell's row while it is being edited
+    #: (< 0.0: Default, 0.0..1.0: fraction of total table height,
+    #: > 1.0: absolute height in pixels):
     edit_height = Float(-1.0)
 
-    # The resize mode for this column.  This takes precedence over other settings
-    # (like **width**, above).
-    #   "interactive": column can be resized by users or programmatically
-    #   "fixed": users cannot resize the column, but it can be set programmatically
-    #   "stretch": the column will be resized to fill the available space
-    #   "resize_to_contents": column will be sized to fit the contents, but then cannot be resized
+    #: The resize mode for this column.  This takes precedence over other settings
+    #: (like **width**, above).
+    #:   "interactive": column can be resized by users or programmatically
+    #:   "fixed": users cannot resize the column, but it can be set programmatically
+    #:   "stretch": the column will be resized to fill the available space
+    #:   "resize_to_contents": column will be sized to fit the contents, but then cannot be resized
     resize_mode = Enum("interactive", "fixed", "stretch", "resize_to_contents")
 
-    # The view (if any) to display when clicking a non-editable cell:
+    #: The view (if any) to display when clicking a non-editable cell:
     view = AView
 
-    # Optional maximum value a numeric cell value can have:
+    #: Optional maximum value a numeric cell value can have:
     maximum = Float(trait_value=True)
 
     #-------------------------------------------------------------------------
-    #  Returns the actual object being edited:
+    #:  Returns the actual object being edited:
     #-------------------------------------------------------------------------
 
     def get_object(self, object):
@@ -423,22 +423,22 @@ class ObjectColumn(TableColumn):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Name of the object trait associated with this column:
+    #: Name of the object trait associated with this column:
     name = Str
 
-    # Column label to use for this column:
+    #: Column label to use for this column:
     label = Property
 
-    # Trait editor used to edit the contents of this column:
+    #: Trait editor used to edit the contents of this column:
     editor = Instance(EditorFactory)
 
-    # The editor style to use to edit the contents of this column:
+    #: The editor style to use to edit the contents of this column:
     style = EditorStyle
 
-    # Format string to apply to column values:
+    #: Format string to apply to column values:
     format = Str('%s')
 
-    # Format function to apply to column values:
+    #: Format function to apply to column values:
     format_func = Callable
 
     #-------------------------------------------------------------------------
@@ -606,14 +606,14 @@ class ExpressionColumn(ObjectColumn):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The Python expression used to return the value of the column:
+    #: The Python expression used to return the value of the column:
     expression = Expression
 
-    # Is this column editable?
+    #: Is this column editable?
     editable = Constant(False)
 
-    # The globals dictionary that should be passed to the expression
-    # evaluation:
+    #: The globals dictionary that should be passed to the expression
+    #: evaluation:
     globals = Any({})
 
     #-------------------------------------------------------------------------
@@ -643,23 +643,23 @@ class NumericColumn(ObjectColumn):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Column label to use for this column
+    #: Column label to use for this column
     label = Property
 
-    # Text color this column when selected
+    #: Text color this column when selected
     selected_text_color = Color('black')
 
-    # Text font for this column when selected
+    #: Text font for this column when selected
     selected_text_font = Font
 
-    # Cell background color for this column when selected
+    #: Cell background color for this column when selected
     selected_cell_color = Color(0xD8FFD8)
 
-    # Formatting string for the cell value
+    #: Formatting string for the cell value
     format = Str('%s')
 
-    # Horizontal alignment of text in the column; this value overrides the
-    # default.
+    #: Horizontal alignment of text in the column; this value overrides the
+    #: default.
     horizontal_alignment = 'center'
 
     #-------------------------------------------------------------------------
@@ -848,7 +848,7 @@ class ListColumn(TableColumn):
     #Label to use for this column
     label = Property
 
-    # Index of the list element associated with this column
+    #: Index of the list element associated with this column
     index = Int
 
     # Is this column editable? This value overrides the base class default.

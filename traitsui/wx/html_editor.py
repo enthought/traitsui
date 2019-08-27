@@ -90,10 +90,10 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the HTML editor scrollable? This values override the default.
+    #: Is the HTML editor scrollable? This values override the default.
     scrollable = True
 
-    # External objects referenced in the HTML are relative to this URL
+    #: External objects referenced in the HTML are relative to this URL
     base_url = Str
 
     #-------------------------------------------------------------------------

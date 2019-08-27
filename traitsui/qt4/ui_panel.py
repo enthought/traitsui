@@ -1180,7 +1180,7 @@ class SplitterGroupEditor(GroupEditor):
     """ A pseudo-editor that allows a group with a 'split' layout to be managed.
     """
 
-    # The QSplitter for the group
+    #: The QSplitter for the group
     splitter = Instance(_GroupSplitter)
 
     #-- UI preference save/restore interface ---------------------------------
@@ -1208,7 +1208,7 @@ class TabbedFoldGroupEditor(GroupEditor):
         be managed.
     """
 
-    # The QTabWidget or QToolBox for the group
+    #: The QTabWidget or QToolBox for the group
     container = Any
 
     #-- UI preference save/restore interface ---------------------------------

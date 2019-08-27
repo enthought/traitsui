@@ -60,77 +60,77 @@ class TabularEditor(Editor):
 
     #-- Trait Definitions ----------------------------------------------------
 
-    # The event fired when a table update is needed:
+    #: The event fired when a table update is needed:
     update = Event
 
-    # The event fired when a simple repaint is needed:
+    #: The event fired when a simple repaint is needed:
     refresh = Event
 
-    # The current set of selected items (which one is used depends upon the
-    # initial state of the editor factory 'multi_select' trait):
+    #: The current set of selected items (which one is used depends upon the
+    #: initial state of the editor factory 'multi_select' trait):
     selected = Any
     multi_selected = List
 
-    # The current set of selected item indices (which one is used depends upon
-    # the initial state of the editor factory 'multi_select' trait):
+    #: The current set of selected item indices (which one is used depends upon
+    #: the initial state of the editor factory 'multi_select' trait):
     selected_row = Int(-1)
     multi_selected_rows = List(Int)
 
-    # The optional extended name of the trait to synchronize the selection
-    # column with:
+    #: The optional extended name of the trait to synchronize the selection
+    #: column with:
     selected_column = Int(-1)
 
-    # The most recently actived item and its index:
+    #: The most recently actived item and its index:
     activated = Any(comparison_mode=NO_COMPARE)
     activated_row = Int(comparison_mode=NO_COMPARE)
 
-    # The most recent left click data:
+    #: The most recent left click data:
     clicked = Instance('TabularEditorEvent')
 
-    # The most recent left double click data:
+    #: The most recent left double click data:
     dclicked = Instance('TabularEditorEvent')
 
-    # The most recent right click data:
+    #: The most recent right click data:
     right_clicked = Instance('TabularEditorEvent')
 
-    # The most recent right double click data:
+    #: The most recent right double click data:
     right_dclicked = Instance('TabularEditorEvent')
 
-    # The most recent column click data:
+    #: The most recent column click data:
     column_clicked = Instance('TabularEditorEvent')
 
-    # The most recent column click data:
+    #: The most recent column click data:
     column_right_clicked = Instance('TabularEditorEvent')
 
-    # The event triggering scrolling.
+    #: The event triggering scrolling.
     scroll_to_row = Event(Int)
 
-    # The event triggering scrolling.
+    #: The event triggering scrolling.
     scroll_to_column = Event(Int)
 
-    # Is the tabular editor scrollable? This value overrides the default.
+    #: Is the tabular editor scrollable? This value overrides the default.
     scrollable = True
 
-    # NIT: This doesn't seem to be used anywhere...can I delete?
-    # # Row index of item to select after rebuilding editor list:
-    # row = Any
+    #: NIT: This doesn't seem to be used anywhere...can I delete?
+    #: # Row index of item to select after rebuilding editor list:
+    #: row = Any
 
-    # Should the selected item be edited after rebuilding the editor list:
+    #: Should the selected item be edited after rebuilding the editor list:
     edit = Bool(False)
 
-    # The adapter from trait values to editor values:
+    #: The adapter from trait values to editor values:
     adapter = Instance(TabularAdapter)
 
-    # The table model associated with the editor:
+    #: The table model associated with the editor:
     model = Instance(TabularModel)
 
-    # Dictionary mapping image names to QIcons
+    #: Dictionary mapping image names to QIcons
     images = Any({})
 
-    # Dictionary mapping ImageResource objects to QIcons
+    #: Dictionary mapping ImageResource objects to QIcons
     image_resources = Any({})
 
-    # An image being converted:
+    #: An image being converted:
     image = Image
 
     header_event_filter = Any()

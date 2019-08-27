@@ -40,13 +40,13 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Allowable drop objects must be of this class (optional)
+    #: Allowable drop objects must be of this class (optional)
     klass = Any
 
-    # Must allowable drop objects be bindings?
+    #: Must allowable drop objects be bindings?
     binding = Bool(False)
 
-    # Can the user type into the editor, or is it read only?
+    #: Can the user type into the editor, or is it read only?
     readonly = Bool(True)
 
 # Define the DropEditor class.

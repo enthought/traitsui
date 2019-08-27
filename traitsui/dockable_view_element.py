@@ -51,13 +51,13 @@ class DockableViewElement(HasPrivateTraits, IDockable):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The Traits UI that can be docked with an external DockWindow
+    #: The Traits UI that can be docked with an external DockWindow
     ui = Instance(UI)
 
-    # The (optional) element of the Traits UI that can be docked
+    #: The (optional) element of the Traits UI that can be docked
     element = Instance(ViewSubElement)
 
-    # Should the DockControl be closed on redocking?
+    #: Should the DockControl be closed on redocking?
     should_close = Bool(False)
 
 #-- IDockable interface --------------------------------------------------

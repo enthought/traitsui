@@ -152,8 +152,8 @@ class CustomEditor(BaseEditor, CustomEnumEditor):
     """ Simple style of image enumeration editor, which displays a combo box.
     """
 
-    # Is the button layout row-major or column-major? This value overrides the
-    # default.
+    #: Is the button layout row-major or column-major? This value overrides the
+    #: default.
     row_major = True
 
     #-------------------------------------------------------------------------

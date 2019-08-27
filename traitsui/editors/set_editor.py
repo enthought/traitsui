@@ -39,16 +39,16 @@ class ToolkitEditorFactory(EditorWithListFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Are the items in the set ordered (vs. unordered)?
+    #: Are the items in the set ordered (vs. unordered)?
     ordered = Bool(False)
 
-    # Can the user add and delete all items in the set at once?
+    #: Can the user add and delete all items in the set at once?
     can_move_all = Bool(True)
 
-    # Title of left column:
+    #: Title of left column:
     left_column_title = Str
 
-    # Title of right column:
+    #: Title of right column:
     right_column_title = Str
 
 # Define the SetEditor class

@@ -51,26 +51,26 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Trait definitions for each tuple field
+    #: Trait definitions for each tuple field
     types = Any
 
-    # Labels for each of the tuple fields
+    #: Labels for each of the tuple fields
     labels = List(Unicode)
 
-    # Editors for each of the tuple fields:
+    #: Editors for each of the tuple fields:
     editors = List(EditorFactory)
 
-    # Number of tuple fields or rows
+    #: Number of tuple fields or rows
     cols = Int(1)
 
-    # Is user input set on every keystroke? This is applied to every field
-    # of the tuple, provided the field does not already have an 'auto_set'
-    # metadata or an editor defined.
+    #: Is user input set on every keystroke? This is applied to every field
+    #: of the tuple, provided the field does not already have an 'auto_set'
+    #: metadata or an editor defined.
     auto_set = Bool(True)
 
-    # Is user input set when the Enter key is pressed? This is applied to
-    # every field of the tuple, provided the field does not already have an
-    # 'enter_set' metadata or an editor defined.
+    #: Is user input set when the Enter key is pressed? This is applied to
+    #: every field of the tuple, provided the field does not already have an
+    #: 'enter_set' metadata or an editor defined.
     enter_set = Bool(False)
 
 #-------------------------------------------------------------------------
@@ -132,13 +132,13 @@ class TupleStructure(HasTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Editor this structure is linked to
+    #: Editor this structure is linked to
     editor = Any
 
-    # The constructed View for the tuple
+    #: The constructed View for the tuple
     view = Any
 
-    # Number of tuple fields
+    #: Number of tuple fields
     fields = Int
 
     #-------------------------------------------------------------------------

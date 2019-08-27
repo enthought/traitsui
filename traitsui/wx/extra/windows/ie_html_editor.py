@@ -67,40 +67,40 @@ class _IEHTMLEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the table editor is scrollable? This value overrides the default.
+    #: Is the table editor is scrollable? This value overrides the default.
     scrollable = True
 
-    # External objects referenced in the HTML are relative to this url
+    #: External objects referenced in the HTML are relative to this url
     base_url = Str
 
-    # Event fired when the browser home page should be displayed:
+    #: Event fired when the browser home page should be displayed:
     home = Event
 
-    # Event fired when the browser should show the previous page:
+    #: Event fired when the browser should show the previous page:
     back = Event
 
-    # Event fired when the browser should show the next page:
+    #: Event fired when the browser should show the next page:
     forward = Event
 
-    # Event fired when the browser should stop loading the current page:
+    #: Event fired when the browser should stop loading the current page:
     stop = Event
 
-    # Event fired when the browser should refresh the current page:
+    #: Event fired when the browser should refresh the current page:
     refresh = Event
 
-    # Event fired when the browser should search the current page:
+    #: Event fired when the browser should search the current page:
     search = Event
 
-    # The current browser status:
+    #: The current browser status:
     status = Str
 
-    # The current browser page title:
+    #: The current browser page title:
     title = Str
 
-    # The URL of the page that just finished loading:
+    #: The URL of the page that just finished loading:
     page_loaded = Str
 
-    # The current page content as HTML:
+    #: The current page content as HTML:
     html = Property
 
     #-------------------------------------------------------------------------
@@ -235,45 +235,45 @@ class _IEHTMLEditor(Editor):
 
 class IEHTMLEditor(BasicEditorFactory):
 
-    # The editor class to be created:
+    #: The editor class to be created:
     klass = _IEHTMLEditor
 
-    # External objects referenced in the HTML are relative to this url
+    #: External objects referenced in the HTML are relative to this url
     base_url = Str
 
-    # The object trait containing the base URL
+    #: The object trait containing the base URL
     base_url_name = Str
 
-    # Should links be opened in an external browser?
+    #: Should links be opened in an external browser?
     open_externally = Bool(False)
 
-    # Optional name of trait used to tell browser to show Home page:
+    #: Optional name of trait used to tell browser to show Home page:
     home = Str
 
-    # Optional name of trait used to tell browser to view the previous page:
+    #: Optional name of trait used to tell browser to view the previous page:
     back = Str
 
-    # Optional name of trait used to tell browser to view the next page:
+    #: Optional name of trait used to tell browser to view the next page:
     forward = Str
 
-    # Optional name of trait used to tell browser to stop loading page:
+    #: Optional name of trait used to tell browser to stop loading page:
     stop = Str
 
-    # Optional name of trait used to tell browser to refresh the current page:
+    #: Optional name of trait used to tell browser to refresh the current page:
     refresh = Str
 
-    # Optional name of trait used to tell browser to search the current page:
+    #: Optional name of trait used to tell browser to search the current page:
     search = Str
 
-    # Optional name of trait used to contain the current browser status:
+    #: Optional name of trait used to contain the current browser status:
     status = Str
 
-    # Optional name of trait used to contain the current browser page title:
+    #: Optional name of trait used to contain the current browser page title:
     title = Str
 
-    # Optional name of trait used to contain the URL of the page that just
-    # completed loading:
+    #: Optional name of trait used to contain the URL of the page that just
+    #: completed loading:
     page_loaded = Str
 
-    # Optional name of trait used to get/set the page content as HTML:
+    #: Optional name of trait used to get/set the page content as HTML:
     html = Str

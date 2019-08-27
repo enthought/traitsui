@@ -61,10 +61,10 @@ class SimpleEditor(SimpleTextEditor):
         and drop a file onto this control.
     """
 
-    # The history control (used if the factory 'entries' > 0):
+    #: The history control (used if the factory 'entries' > 0):
     history = Any
 
-    # The popup file control (an Instance( PopupFile )):
+    #: The popup file control (an Instance( PopupFile )):
     popup = Any
 
     #-------------------------------------------------------------------------
@@ -308,16 +308,16 @@ class CustomEditor(SimpleTextEditor):
     """ Custom style of file editor, consisting of a file system tree view.
     """
 
-    # Is the file editor scrollable? This value overrides the default.
+    #: Is the file editor scrollable? This value overrides the default.
     scrollable = True
 
-    # Wildcard filter to apply to the file dialog:
+    #: Wildcard filter to apply to the file dialog:
     filter = filter_trait
 
-    # Event fired when the file system view should be rebuilt:
+    #: Event fired when the file system view should be rebuilt:
     reload = Event
 
-    # Event fired when the user double-clicks a file:
+    #: Event fired when the user double-clicks a file:
     dclick = Event
 
     #-------------------------------------------------------------------------
@@ -447,13 +447,13 @@ class CustomEditor(SimpleTextEditor):
 
 class PopupFile(PopupControl):
 
-    # The initially specified file name:
+    #: The initially specified file name:
     file_name = Str
 
-    # The file name filter to support:
+    #: The file name filter to support:
     filter = filter_trait
 
-    # Override of PopupControl trait to make the popup resizable:
+    #: Override of PopupControl trait to make the popup resizable:
     resizable = True
 
     #-- PopupControl Method Overrides ----------------------------------------

@@ -79,26 +79,26 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the tree editor is scrollable? This value overrides the default.
+    #: Is the tree editor is scrollable? This value overrides the default.
     scrollable = True
 
-    # Allows an external agent to set the tree selection
+    #: Allows an external agent to set the tree selection
     selection = Event
 
-    # The currently selected object
+    #: The currently selected object
     selected = Any
 
-    # The event fired when a tree node is activated by double clicking or
-    # pressing the enter key on a node.
+    #: The event fired when a tree node is activated by double clicking or
+    #: pressing the enter key on a node.
     activated = Event
 
-    # The event fired when a tree node is clicked on:
+    #: The event fired when a tree node is clicked on:
     click = Event
 
-    # The event fired when a tree node is double-clicked on:
+    #: The event fired when a tree node is double-clicked on:
     dclick = Event
 
-    # The event fired when the application wants to veto an operation:
+    #: The event fired when the application wants to veto an operation:
     veto = Event
 
     #-------------------------------------------------------------------------
@@ -1969,7 +1969,7 @@ class ObjectLabel(HasStrictTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Label to be edited
+    #: Label to be edited
     label = Str
 
     #-------------------------------------------------------------------------

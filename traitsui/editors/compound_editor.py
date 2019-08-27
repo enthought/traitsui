@@ -45,10 +45,10 @@ class ToolkitEditorFactory(EditorFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Component editor factories used to build the editor
+    #: Component editor factories used to build the editor
     editors = editors_trait
 
-    # Is user input set on every keystroke?
+    #: Is user input set on every keystroke?
     auto_set = true
 
 

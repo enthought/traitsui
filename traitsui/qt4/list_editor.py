@@ -50,14 +50,14 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The kind of editor to create for each list item
+    #: The kind of editor to create for each list item
     kind = Str
 
-    # Is the list of items being edited mutable?
+    #: Is the list of items being edited mutable?
     mutable = Bool(True)
 
-    # Signal mapper allowing to identify which icon button requested a context
-    # menu
+    #: Signal mapper allowing to identify which icon button requested a context
+    #: menu
     mapper = Instance(QtCore.QSignalMapper)
 
     buttons = List([])
@@ -66,14 +66,14 @@ class SimpleEditor(Editor):
     #  Class constants:
     #-------------------------------------------------------------------------
 
-    # Whether the list is displayed in a single row
+    #: Whether the list is displayed in a single row
     single_row = True
 
     #-------------------------------------------------------------------------
     #  Normal list item menu:
     #-------------------------------------------------------------------------
 
-    # Menu for modifying the list
+    #: Menu for modifying the list
     list_menu = """
        Add &Before     [_menu_before]: self.add_before()
        Add &After      [_menu_after]:  self.add_after()
@@ -469,15 +469,15 @@ class CustomEditor(SimpleEditor):
     #  Class constants:
     #-------------------------------------------------------------------------
 
-    # Whether the list is displayed in a single row. This value overrides the
-    # default.
+    #: Whether the list is displayed in a single row. This value overrides the
+    #: default.
     single_row = False
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the list editor is scrollable? This values overrides the default.
+    #: Is the list editor is scrollable? This values overrides the default.
     scrollable = True
 
 #-------------------------------------------------------------------------
@@ -487,8 +487,8 @@ class CustomEditor(SimpleEditor):
 
 class TextEditor(CustomEditor):
 
-    # The kind of editor to create for each list item. This value overrides the
-    # default.
+    #: The kind of editor to create for each list item. This value overrides the
+    #: default.
     kind = 'text_editor'
 
 #-------------------------------------------------------------------------
@@ -498,8 +498,8 @@ class TextEditor(CustomEditor):
 
 class ReadonlyEditor(CustomEditor):
 
-    # Is the list of items being edited mutable? This value overrides the
-    # default.
+    #: Is the list of items being edited mutable? This value overrides the
+    #: default.
     mutable = False
 
 #-------------------------------------------------------------------------
@@ -512,26 +512,26 @@ class NotebookEditor(Editor):
     pages.
     """
 
-    # The "Close Tab" button.
+    #: The "Close Tab" button.
     close_button = Any()
 
-    # Maps tab names to QWidgets representing the tab contents
-    # TODO: It would be nice to be able to reuse self._pages for this, but
-    # its keys are not quite what we want.
+    #: Maps tab names to QWidgets representing the tab contents
+    #: TODO: It would be nice to be able to reuse self._pages for this, but
+    #: its keys are not quite what we want.
     _pagewidgets = Dict
 
-    # Maps names of tabs to their menu QAction instances; used to toggle
-    # checkboxes
+    #: Maps names of tabs to their menu QAction instances; used to toggle
+    #: checkboxes
     _action_dict = Dict
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the notebook editor scrollable? This values overrides the default:
+    #: Is the notebook editor scrollable? This values overrides the default:
     scrollable = True
 
-    # The currently selected notebook page object:
+    #: The currently selected notebook page object:
     selected = Any
 
     #-------------------------------------------------------------------------

@@ -32,16 +32,16 @@ class _Clipboard(HasTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The instance on the clipboard (if any).
+    #: The instance on the clipboard (if any).
     instance = Property
 
-    # Set if the clipboard contains an instance.
+    #: Set if the clipboard contains an instance.
     has_instance = Property
 
-    # The type of the instance on the clipboard (if any).
+    #: The type of the instance on the clipboard (if any).
     instance_type = Property
 
-    # The application clipboard.
+    #: The application clipboard.
     clipboard = Instance(QtGui.QClipboard)
 
     #-------------------------------------------------------------------------

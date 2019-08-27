@@ -56,54 +56,54 @@ class SourceEditor(Editor):
     #  PyFace PythonEditor interface:
     #-------------------------------------------------------------------------
 
-    # Event that is fired on keypresses:
+    #: Event that is fired on keypresses:
     key_pressed = Event(KeyPressedEvent)
 
     #-------------------------------------------------------------------------
     #  Editor interface:
     #-------------------------------------------------------------------------
 
-    # The code editor is scrollable. This value overrides the default.
+    #: The code editor is scrollable. This value overrides the default.
     scrollable = True
 
     #-------------------------------------------------------------------------
     #  SoureEditor interface:
     #-------------------------------------------------------------------------
 
-    # Is the editor read only?
+    #: Is the editor read only?
     readonly = Bool(False)
 
-    # The currently selected line
+    #: The currently selected line
     selected_line = Int
 
-    # The start position of the selected
+    #: The start position of the selected
     selected_start_pos = Int
 
-    # The end position of the selected
+    #: The end position of the selected
     selected_end_pos = Int
 
-    # The currently selected text
+    #: The currently selected text
     selected_text = Unicode
 
-    # The list of line numbers to mark
+    #: The list of line numbers to mark
     mark_lines = List(Int)
 
-    # The current line number
+    #: The current line number
     line = Event
 
-    # The current column
+    #: The current column
     column = Event
 
-    # The lines to be dimmed
+    #: The lines to be dimmed
     dim_lines = List(Int)
     dim_color = Str
     dim_style_number = Int(16)  # 0-15 are reserved for the python lexer
 
-    # The lines to have squiggles drawn under them
+    #: The lines to have squiggles drawn under them
     squiggle_lines = List(Int)
     squiggle_color = Str
 
-    # The lexer to use.
+    #: The lexer to use.
     lexer = Str
 
     #-------------------------------------------------------------------------

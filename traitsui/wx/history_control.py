@@ -42,22 +42,22 @@ from .constants \
 
 class HistoryControl(HasPrivateTraits):
 
-    # The UI control:
+    #: The UI control:
     control = Instance(wx.Window)
 
-    # The current value of the control:
+    #: The current value of the control:
     value = Str
 
-    # Should 'value' be updated on every keystroke?
+    #: Should 'value' be updated on every keystroke?
     auto_set = Bool(False)
 
-    # The current history of the control:
+    #: The current history of the control:
     history = List(Str)
 
-    # The maximum number of history entries allowed:
+    #: The maximum number of history entries allowed:
     entries = Int(10)
 
-    # Is the current value valid?
+    #: Is the current value valid?
     error = Bool(False)
 
     #-- Public Methods -------------------------------------------------------

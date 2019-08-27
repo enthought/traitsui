@@ -74,30 +74,30 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The kind of editor to create for each list item
+    #: The kind of editor to create for each list item
     kind = Str
 
-    # Is the list of items being edited mutable?
+    #: Is the list of items being edited mutable?
     mutable = Bool
 
-    # The image used by the editor:
+    #: The image used by the editor:
     image = Image('list_editor')
 
-    # The bitmap used by the editor:
+    #: The bitmap used by the editor:
     bitmap = Property
 
     #-------------------------------------------------------------------------
     #  Class constants:
     #-------------------------------------------------------------------------
 
-    # Whether the list is displayed in a single row
+    #: Whether the list is displayed in a single row
     single_row = True
 
     #-------------------------------------------------------------------------
     #  Normal list item menu:
     #-------------------------------------------------------------------------
 
-    # Menu for modifying the list
+    #: Menu for modifying the list
     list_menu = """
        Add Before     [_menu_before]: self.add_before()
        Add After      [_menu_after]:  self.add_after()
@@ -530,15 +530,15 @@ class CustomEditor(SimpleEditor):
     #  Class constants:
     #-------------------------------------------------------------------------
 
-    # Whether the list is displayed in a single row. This value overrides the
-    # default.
+    #: Whether the list is displayed in a single row. This value overrides the
+    #: default.
     single_row = False
 
     #-------------------------------------------------------------------------
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the list editor is scrollable? This values overrides the default.
+    #: Is the list editor is scrollable? This values overrides the default.
     scrollable = True
 
 
@@ -548,8 +548,8 @@ class CustomEditor(SimpleEditor):
 
 class TextEditor(CustomEditor):
 
-    # The kind of editor to create for each list item. This value overrides the
-    # default.
+    #: The kind of editor to create for each list item. This value overrides the
+    #: default.
     kind = 'text_editor'
 
 #-------------------------------------------------------------------------
@@ -559,8 +559,8 @@ class TextEditor(CustomEditor):
 
 class ReadonlyEditor(CustomEditor):
 
-    # Is the list of items being edited mutable? This value overrides the
-    # default.
+    #: Is the list of items being edited mutable? This value overrides the
+    #: default.
     mutable = False
 
 #-------------------------------------------------------------------------
@@ -577,10 +577,10 @@ class NotebookEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the notebook editor scrollable? This values overrides the default:
+    #: Is the notebook editor scrollable? This values overrides the default:
     scrollable = True
 
-    # The currently selected notebook page object:
+    #: The currently selected notebook page object:
     selected = Any
 
     #-------------------------------------------------------------------------
@@ -866,7 +866,7 @@ class DockableListElement(DockableViewElement):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The editor this dockable item is associated with:
+    #: The editor this dockable item is associated with:
     editor = Instance(NotebookEditor)
 
     #-------------------------------------------------------------------------

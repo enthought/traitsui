@@ -60,10 +60,10 @@ class SimpleEditor(EditorWithList):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Checklist item names
+    #: Checklist item names
     names = List(Unicode)
 
-    # Checklist item values
+    #: Checklist item values
     values = List
 
     #-------------------------------------------------------------------------

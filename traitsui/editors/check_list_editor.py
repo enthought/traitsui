@@ -40,7 +40,7 @@ class ToolkitEditorFactory(EditorWithListFactory):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Number of columns to use when the editor is displayed as a grid
+    #: Number of columns to use when the editor is displayed as a grid
     cols = Range(1, 20)
 
 # Define the CheckListEditor class

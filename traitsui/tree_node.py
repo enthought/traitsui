@@ -53,111 +53,111 @@ class TreeNode(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Name of trait containing children (if '', the node is a leaf). Nested
-    # attributes are allowed, e.g., 'library.books'
+    #: Name of trait containing children (if '', the node is a leaf). Nested
+    #: attributes are allowed, e.g., 'library.books'
     children = Str
 
-    # Either the name of a trait containing a label, or a constant label, if
-    # the string starts with '='.
+    #: Either the name of a trait containing a label, or a constant label, if
+    #: the string starts with '='.
     label = Str
 
-    # The name of a trait containing a list of labels for any columns.
+    #: The name of a trait containing a list of labels for any columns.
     column_labels = Str
 
-    # Either the name of a trait containing a tooltip, or constant tooltip, if
-    # the string starts with '='.
+    #: Either the name of a trait containing a tooltip, or constant tooltip, if
+    #: the string starts with '='.
     tooltip = Str
 
-    # Name to use for a new instance
+    #: Name to use for a new instance
     name = Str
 
-    # Can the object's children be renamed?
+    #: Can the object's children be renamed?
     rename = Bool(True)
 
-    # Can the object be renamed?
+    #: Can the object be renamed?
     rename_me = Bool(True)
 
-    # Can the object's children be copied?
+    #: Can the object's children be copied?
     copy = Bool(True)
 
-    # Can the object's children be deleted?
+    #: Can the object's children be deleted?
     delete = Bool(True)
 
-    # Can the object be deleted (if its parent allows it)?
+    #: Can the object be deleted (if its parent allows it)?
     delete_me = Bool(True)
 
-    # Can children be inserted (vs. appended)?
+    #: Can children be inserted (vs. appended)?
     insert = Bool(True)
 
-    # Should tree nodes be automatically opened (expanded)?
+    #: Should tree nodes be automatically opened (expanded)?
     auto_open = Bool(False)
 
-    # Automatically close sibling tree nodes?
+    #: Automatically close sibling tree nodes?
     auto_close = Bool(False)
 
-    # List of object classes than can be added or copied
+    #: List of object classes than can be added or copied
     add = List(Any)
 
-    # List of object classes that can be moved
+    #: List of object classes that can be moved
     move = List(Any)
 
-    # List of object classes and/or interfaces that the node applies to
+    #: List of object classes and/or interfaces that the node applies to
     node_for = List(Any)
 
-    # Tuple of object classes that the node applies to
+    #: Tuple of object classes that the node applies to
     node_for_class = Property(depends_on='node_for')
 
-    # List of object interfaces that the node applies to
+    #: List of object interfaces that the node applies to
     node_for_interface = Property(depends_on='node_for')
 
-    # Function for formatting the label
+    #: Function for formatting the label
     formatter = Callable
 
-    # Functions for formatting the other columns.
+    #: Functions for formatting the other columns.
     column_formatters = List(Either(None, Callable))
 
-    # Function for formatting the tooltip
+    #: Function for formatting the tooltip
     tooltip_formatter = Callable
 
-    # Function for handling selecting an object
+    #: Function for handling selecting an object
     on_select = Callable
 
-    # Function for handling clicking an object
+    #: Function for handling clicking an object
     on_click = Callable
 
-    # Function for handling double-clicking an object
+    #: Function for handling double-clicking an object
     on_dclick = Callable
 
-    # Function for handling activation of an object
-    # (double-click or Enter key press when node is in focus)
+    #: Function for handling activation of an object
+    #: (double-click or Enter key press when node is in focus)
     on_activated = Callable
 
-    # View to use for editing the object
+    #: View to use for editing the object
     view = AView
 
-    # Right-click context menu. The value can be one of:
-    #
-    # - Instance( Menu ): Use this menu as the context menu
-    # - None: Use the default context menu
-    # - False: Do not display a context menu
+    #: Right-click context menu. The value can be one of:
+    #:
+    #: - Instance( Menu ): Use this menu as the context menu
+    #: - None: Use the default context menu
+    #: - False: Do not display a context menu
     menu = Any
 
-    # Name of leaf item icon
+    #: Name of leaf item icon
     icon_item = Str('<item>')
 
-    # Name of group item icon
+    #: Name of group item icon
     icon_group = Str('<group>')
 
-    # Name of opened group item icon
+    #: Name of opened group item icon
     icon_open = Str('<open>')
 
-    # Resource path used to locate the node icon
+    #: Resource path used to locate the node icon
     icon_path = Str
 
-    # Selector or name for background color
+    #: Selector or name for background color
     background = Any
 
-    # Selector or name for foreground color
+    #: Selector or name for foreground color
     foreground = Any
 
     # fixme: The 'menu' trait should really be defined as:
@@ -1148,7 +1148,7 @@ class ITreeNodeAdapterBridge(HasPrivateTraits):
         to the ITreeNode interface used by object adapters.
     """
 
-    # The ITreeNode adapter being bridged:
+    #: The ITreeNode adapter being bridged:
     adapter = AdaptedTo(ITreeNode)
 
     #-- TreeNode implementation ----------------------------------------------
@@ -2187,10 +2187,10 @@ class MultiTreeNode(TreeNode):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # TreeNode that applies to the base object itself
+    #: TreeNode that applies to the base object itself
     root_node = Instance(TreeNode)
 
-    # List of TreeNodes (one for each sub-item list)
+    #: List of TreeNodes (one for each sub-item list)
     nodes = List(TreeNode)
 
     #-------------------------------------------------------------------------

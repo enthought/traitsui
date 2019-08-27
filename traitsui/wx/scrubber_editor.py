@@ -65,19 +65,19 @@ class _ScrubberEditor(Editor):
     """ Traits UI simple, scrubber-based integer or float value editor.
     """
 
-    # The low end of the slider range:
+    #: The low end of the slider range:
     low = Any
 
-    # The high end of the slider range:
+    #: The high end of the slider range:
     high = Any
 
-    # The smallest allowed increment:
+    #: The smallest allowed increment:
     increment = Float
 
-    # The current text being displayed:
+    #: The current text being displayed:
     text = Str
 
-    # The mapping to use (only for Enum's):
+    #: The mapping to use (only for Enum's):
     mapping = Any
 
     #-- Class Variables ------------------------------------------------------

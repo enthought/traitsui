@@ -67,7 +67,7 @@ class SimpleEditor(Editor):
         the value.
     """
 
-    # Has the left mouse button been pressed:
+    #: Has the left mouse button been pressed:
     left_down = Bool(False)
 
     #-------------------------------------------------------------------------

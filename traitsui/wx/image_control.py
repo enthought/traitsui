@@ -36,7 +36,7 @@ class ImageControl(wx.Window):
         unselected by mouse clicks.
     """
 
-    # Pens used to draw the 'selection' marker:
+    #: Pens used to draw the 'selection' marker:
     _selectedPenDark = wx.Pen(
         wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DSHADOW), 1,
         wx.SOLID)

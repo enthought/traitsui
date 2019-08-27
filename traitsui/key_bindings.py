@@ -62,19 +62,19 @@ class KeyBinding(HasStrictTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # First key binding
+    #: First key binding
     binding1 = Binding
 
-    # Second key binding
+    #: Second key binding
     binding2 = Binding
 
-    # Description of what application function the method performs
+    #: Description of what application function the method performs
     description = Str
 
-    # Name of controller method the key is bound to
+    #: Name of controller method the key is bound to
     method_name = Str
 
-    # KeyBindings object that "owns" the KeyBinding
+    #: KeyBindings object that "owns" the KeyBinding
     owner = Instance('KeyBindings')
 
     #-------------------------------------------------------------------------
@@ -111,34 +111,34 @@ class KeyBindings(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Set of defined key bindings (redefined dynamically)
+    #: Set of defined key bindings (redefined dynamically)
     bindings = List(KeyBinding)
 
-    # Optional prefix to add to each method name
+    #: Optional prefix to add to each method name
     prefix = Str
 
-    # Optional suffix to add to each method name
+    #: Optional suffix to add to each method name
     suffix = Str
 
     #-- Private Traits -------------------------------------------------------
 
-    # The (optional) list of controllers associated with this KeyBindings
-    # object. The controllers may also be provided with the 'do' method:
+    #: The (optional) list of controllers associated with this KeyBindings
+    #: object. The controllers may also be provided with the 'do' method:
     controllers = List(transient=True)
 
-    # The 'parent' KeyBindings object of this one (if any):
+    #: The 'parent' KeyBindings object of this one (if any):
     parent = Instance('KeyBindings', transient=True)
 
-    # The root of the KeyBindings tree this object is part of:
+    #: The root of the KeyBindings tree this object is part of:
     root = Property(depends_on='parent')
 
-    # The child KeyBindings of this object (if any):
+    #: The child KeyBindings of this object (if any):
     children = List(transient=True)
 
-    # Event fired when one of the contained KeyBinding objects is changed
+    #: Event fired when one of the contained KeyBinding objects is changed
     binding_modified = Event(KeyBinding)
 
-    # Control that currently has the focus (if any)
+    #: Control that currently has the focus (if any)
     focus_owner = Any(transient=True)
 
     #-------------------------------------------------------------------------

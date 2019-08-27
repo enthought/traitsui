@@ -43,13 +43,13 @@ class SimpleEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The button label
+    #: The button label
     label = Unicode
 
-    # The list of items in a drop-down menu, if any
+    #: The list of items in a drop-down menu, if any
     #menu_items = List
 
-    # The selected item in the drop-down menu.
+    #: The selected item in the drop-down menu.
     selected_item = Str
 
     #-------------------------------------------------------------------------
@@ -140,7 +140,7 @@ class CustomEditor(SimpleEditor):
     """ Custom style editor for a button, which can contain an image.
     """
 
-    # The mapping of button styles to Qt classes.
+    #: The mapping of button styles to Qt classes.
     _STYLE_MAP = {
         'checkbox': QtGui.QCheckBox,
         'radio': QtGui.QRadioButton,

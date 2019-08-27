@@ -38,26 +38,26 @@ from ..toolkit import toolkit_object
 
 class ImageEditor(BasicEditorFactory):
 
-    # The editor class to be created:
+    #: The editor class to be created:
     klass = Property
 
-    # The optional image resource to be displayed by the editor (if not
-    # specified, the editor's object value is used as the ImageResource to
-    # display):
+    #: The optional image resource to be displayed by the editor (if not
+    #: specified, the editor's object value is used as the ImageResource to
+    #: display):
     image = Image
 
-    # The following traits are currently supported on Qt only
+    #: The following traits are currently supported on Qt only
 
-    # Whether or not to scale the image to fit the available space
+    #: Whether or not to scale the image to fit the available space
     scale = Bool
 
-    # Whether or not to scale the image larger than the original when scaling
+    #: Whether or not to scale the image larger than the original when scaling
     allow_upscaling = Bool
 
-    # Whether or not to preserve the aspect ratio when scaling
+    #: Whether or not to preserve the aspect ratio when scaling
     preserve_aspect_ratio = Bool
 
-    # Whether or not to allow the image to be clipped when not scaling
+    #: Whether or not to allow the image to be clipped when not scaling
     allow_clipping = Bool
 
     def _get_klass(self):

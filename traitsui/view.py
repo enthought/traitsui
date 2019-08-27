@@ -160,161 +160,161 @@ class View(ViewElement):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # A unique identifier for the view:
+    #: A unique identifier for the view:
     id = AnId
 
-    # The top-level Group object for the view:
+    #: The top-level Group object for the view:
     content = Content
 
-    # The menu bar for the view. Usually requires a custom **handler**:
+    #: The menu bar for the view. Usually requires a custom **handler**:
     menubar = Any  # Instance( pyface.action.MenuBarManager )
 
-    # The toolbar for the view. Usually requires a custom **handler**:
+    #: The toolbar for the view. Usually requires a custom **handler**:
     toolbar = Any  # Instance( pyface.action.ToolBarManager )
 
-    # Status bar items to add to the view's status bar. The value can be:
-    #
-    #   - **None**: No status bar for the view (the default).
-    #   - string: Same as [ StatusItem( name = string ) ].
-    #   - StatusItem: Same as [ StatusItem ].
-    #   - [ [StatusItem|string], ... ]: Create a status bar with one field for
-    #     each StatusItem in the list (or tuple). The status bar fields are
-    #     defined from left to right in the order specified. A string value is
-    #     converted to: StatusItem( name = string ):
+    #: Status bar items to add to the view's status bar. The value can be:
+    #:
+    #:   - **None**: No status bar for the view (the default).
+    #:   - string: Same as [ StatusItem( name = string ) ].
+    #:   - StatusItem: Same as [ StatusItem ].
+    #:   - [ [StatusItem|string], ... ]: Create a status bar with one field for
+    #:     each StatusItem in the list (or tuple). The status bar fields are
+    #:     defined from left to right in the order specified. A string value is
+    #:     converted to: StatusItem( name = string ):
     statusbar = ViewStatus
 
-    # List of button actions to add to the view. The **traitsui.menu**
-    # module defines standard buttons, such as **OKButton**, and standard sets
-    # of buttons, such as **ModalButtons**, which can be used to define a value
-    # for this attribute. This value can also be a list of button name strings,
-    # such as ``['OK', 'Cancel', 'Help']``. If set to the empty list, the
-    # view contains a default set of buttons (equivalent to **LiveButtons**:
-    # Undo/Redo, Revert, OK, Cancel, Help). To suppress buttons in the view,
-    # use the **NoButtons** variable, defined in **traitsui.menu**.
+    #: List of button actions to add to the view. The **traitsui.menu**
+    #: module defines standard buttons, such as **OKButton**, and standard sets
+    #: of buttons, such as **ModalButtons**, which can be used to define a value
+    #: for this attribute. This value can also be a list of button name strings,
+    #: such as ``['OK', 'Cancel', 'Help']``. If set to the empty list, the
+    #: view contains a default set of buttons (equivalent to **LiveButtons**:
+    #: Undo/Redo, Revert, OK, Cancel, Help). To suppress buttons in the view,
+    #: use the **NoButtons** variable, defined in **traitsui.menu**.
     buttons = Buttons
 
-    # The default button to activate when Enter is pressed. If not specified,
-    # pressing Enter will not activate any button.
+    #: The default button to activate when Enter is pressed. If not specified,
+    #: pressing Enter will not activate any button.
     default_button = AButton
 
-    # The set of global key bindings for the view. Each time a key is pressed
-    # while the view has keyboard focus, the key is checked to see if it is one
-    # of the keys recognized by the KeyBindings object. If it is, the matching
-    # KeyBinding's method name is checked to see if it is defined on any of the
-    # object's in the view's context. If it is, the method is invoked. If the
-    # result of the method is **False**, then the search continues with the
-    # next object in the context. If any invoked method returns a non-False
-    # value, processing stops and the key is marked as having been handled. If
-    # all invoked methods return **False**, or no matching KeyBinding object is
-    # found, the key is processed normally. If the view has a non-empty *id*
-    # trait, the contents of the **KeyBindings** object will be saved as part
-    # of the view's persistent data:
+    #: The set of global key bindings for the view. Each time a key is pressed
+    #: while the view has keyboard focus, the key is checked to see if it is one
+    #: of the keys recognized by the KeyBindings object. If it is, the matching
+    #: KeyBinding's method name is checked to see if it is defined on any of the
+    #: object's in the view's context. If it is, the method is invoked. If the
+    #: result of the method is **False**, then the search continues with the
+    #: next object in the context. If any invoked method returns a non-False
+    #: value, processing stops and the key is marked as having been handled. If
+    #: all invoked methods return **False**, or no matching KeyBinding object is
+    #: found, the key is processed normally. If the view has a non-empty *id*
+    #: trait, the contents of the **KeyBindings** object will be saved as part
+    #: of the view's persistent data:
     key_bindings = AKeyBindings
 
-    # The Handler object that provides GUI logic for handling events in the
-    # window. Set this attribute only if you are using a custom Handler. If
-    # not set, the default Traits UI Handler is used.
+    #: The Handler object that provides GUI logic for handling events in the
+    #: window. Set this attribute only if you are using a custom Handler. If
+    #: not set, the default Traits UI Handler is used.
     handler = AHandler
 
-    # The factory function for converting a model into a model/view object:
+    #: The factory function for converting a model into a model/view object:
     model_view = AModelView
 
-    # Title for the view, displayed in the title bar when the view appears as a
-    # secondary window (i.e., dialog or wizard). If not specified, "Edit
-    # properties" is used as the title.
+    #: Title for the view, displayed in the title bar when the view appears as a
+    #: secondary window (i.e., dialog or wizard). If not specified, "Edit
+    #: properties" is used as the title.
     title = ATitle
 
-    # The name of the icon to display in the dialog window title bar:
+    #: The name of the icon to display in the dialog window title bar:
     icon = Image
 
-    # The kind of user interface to create:
+    #: The kind of user interface to create:
     kind = AKind
 
-    # The default object being edited:
+    #: The default object being edited:
     object = AnObject
 
-    # The default editor style of elements in the view:
+    #: The default editor style of elements in the view:
     style = EditorStyle
 
-    # The default docking style to use for sub-groups of the view. The following
-    # values are possible:
-    #
-    # * 'fixed': No rearrangement of sub-groups is allowed.
-    # * 'horizontal': Moveable elements have a visual "handle" to the left by
-    #   which the element can be dragged.
-    # * 'vertical': Moveable elements have a visual "handle" above them by
-    #   which the element can be dragged.
-    # * 'tabbed': Moveable elements appear as tabbed pages, which can be
-    #   arranged within the window or "stacked" so that only one appears at
-    #   at a time.
+    #: The default docking style to use for sub-groups of the view. The following
+    #: values are possible:
+    #:
+    #: * 'fixed': No rearrangement of sub-groups is allowed.
+    #: * 'horizontal': Moveable elements have a visual "handle" to the left by
+    #:   which the element can be dragged.
+    #: * 'vertical': Moveable elements have a visual "handle" above them by
+    #:   which the element can be dragged.
+    #: * 'tabbed': Moveable elements appear as tabbed pages, which can be
+    #:   arranged within the window or "stacked" so that only one appears at
+    #:   at a time.
     dock = DockStyle
 
-    # The image to display on notebook tabs:
+    #: The image to display on notebook tabs:
     image = Image
 
-    # Called when modal changes are applied or reverted:
+    #: Called when modal changes are applied or reverted:
     on_apply = OnApply
 
-    # Can the user resize the window?
+    #: Can the user resize the window?
     resizable = IsResizable
 
-    # Can the user scroll the view? If set to True, window-level scroll bars
-    # appear whenever the window is too small to show all of its contents at
-    # one time. If set to False, the window does not scroll, but individual
-    # widgets might still contain scroll bars.
+    #: Can the user scroll the view? If set to True, window-level scroll bars
+    #: appear whenever the window is too small to show all of its contents at
+    #: one time. If set to False, the window does not scroll, but individual
+    #: widgets might still contain scroll bars.
     scrollable = IsScrollable
 
-    # The category of exported elements:
+    #: The category of exported elements:
     export = ExportType
 
-    # The valid categories of imported elements:
+    #: The valid categories of imported elements:
     imports = ImportTypes
 
-    # External help context identifier, which can be used by a custom help
-    # handler. This attribute is ignored by the default help handler.
+    #: External help context identifier, which can be used by a custom help
+    #: handler. This attribute is ignored by the default help handler.
     help_id = HelpId
 
-    # Requested x-coordinate (horizontal position) for the view window. This
-    # attribute can be specified in the following ways:
-    #
-    # * A positive integer: indicates the number of pixels from the left edge
-    #   of the screen to the left edge of the window.
-    # * A negative integer: indicates the number of pixels from the right edge
-    #   of the screen to the right edge of the window.
-    # * A floating point value between 0 and 1: indicates the fraction of the
-    #   total screen width between the left edge of the screen and the left edge
-    #   of the window.
-    # * A floating point value between -1 and 0: indicates the fraction of the
-    #   total screen width between the right edge of the screen and the right
-    #   edge of the window.
+    #: Requested x-coordinate (horizontal position) for the view window. This
+    #: attribute can be specified in the following ways:
+    #:
+    #: * A positive integer: indicates the number of pixels from the left edge
+    #:   of the screen to the left edge of the window.
+    #: * A negative integer: indicates the number of pixels from the right edge
+    #:   of the screen to the right edge of the window.
+    #: * A floating point value between 0 and 1: indicates the fraction of the
+    #:   total screen width between the left edge of the screen and the left edge
+    #:   of the window.
+    #: * A floating point value between -1 and 0: indicates the fraction of the
+    #:   total screen width between the right edge of the screen and the right
+    #:   edge of the window.
     x = XCoordinate
 
-    # Requested y-coordinate (vertical position) for the view window. This
-    # attribute behaves exactly like the **x** attribute, except that its value
-    # indicates the position of the top or bottom of the view window relative
-    # to the top or bottom of the screen.
+    #: Requested y-coordinate (vertical position) for the view window. This
+    #: attribute behaves exactly like the **x** attribute, except that its value
+    #: indicates the position of the top or bottom of the view window relative
+    #: to the top or bottom of the screen.
     y = YCoordinate
 
-    # Requested width for the view window, as an (integer) number of pixels, or
-    # as a (floating point) fraction of the screen width.
+    #: Requested width for the view window, as an (integer) number of pixels, or
+    #: as a (floating point) fraction of the screen width.
     width = Width
 
-    # Requested height for the view window, as an (integer) number of pixels, or
-    # as a (floating point) fraction of the screen height.
+    #: Requested height for the view window, as an (integer) number of pixels, or
+    #: as a (floating point) fraction of the screen height.
     height = Height
 
-    # Class of dropped objects that can be added:
+    #: Class of dropped objects that can be added:
     drop_class = Any
 
-    # Event when the view has been updated:
+    #: Event when the view has been updated:
     updated = Event
 
-    # What result should be returned if the user clicks the window or dialog
-    # close button or icon?
+    #: What result should be returned if the user clicks the window or dialog
+    #: close button or icon?
     close_result = CloseResult
 
-    # Note: Group objects delegate their 'object' and 'style' traits to the
-    # View
+    #: Note: Group objects delegate their 'object' and 'style' traits to the
+    #: View
 
     #-- Deprecated Traits (DO NOT USE) ---------------------------------------
 

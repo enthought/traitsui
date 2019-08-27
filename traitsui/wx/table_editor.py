@@ -83,10 +83,10 @@ class TableEditor(Editor, BaseTableEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The set of columns currently defined on the editor:
+    #: The set of columns currently defined on the editor:
     columns = List(TableColumn)
 
-    # Index of currently edited (i.e., selected) table item(s):
+    #: Index of currently edited (i.e., selected) table item(s):
     selected_row_index = Int(-1)
     selected_row_indices = List(Int)
     selected_indices = Property
@@ -97,7 +97,7 @@ class TableEditor(Editor, BaseTableEditor):
     selected_cell_index = Tuple(Int, Int)
     selected_cell_indices = List(Tuple(Int, Int))
 
-    # The currently selected table item(s):
+    #: The currently selected table item(s):
     selected_row = Any
     selected_rows = List
     selected_items = Property
@@ -110,41 +110,41 @@ class TableEditor(Editor, BaseTableEditor):
 
     selected_values = Property
 
-    # The indices of the table items currently passing the table filter:
+    #: The indices of the table items currently passing the table filter:
     filtered_indices = List(Int)
 
-    # The event fired when a cell is clicked on:
+    #: The event fired when a cell is clicked on:
     click = Event
 
-    # The event fired when a cell is double-clicked on:
+    #: The event fired when a cell is double-clicked on:
     dclick = Event
 
-    # Is the editor in row mode (i.e. not column or cell mode)?
+    #: Is the editor in row mode (i.e. not column or cell mode)?
     in_row_mode = Property
 
-    # Is the editor in column mode (i.e. not row or cell mode)?
+    #: Is the editor in column mode (i.e. not row or cell mode)?
     in_column_mode = Property
 
-    # Current filter object (should be a TableFilter or callable or None):
+    #: Current filter object (should be a TableFilter or callable or None):
     filter = Any
 
-    # The grid widget associated with the editor:
+    #: The grid widget associated with the editor:
     grid = Instance(Grid)
 
-    # The table model associated with the editor:
+    #: The table model associated with the editor:
     model = Instance(TableModel)
 
-    # TableEditorToolbar associated with the editor:
+    #: TableEditorToolbar associated with the editor:
     toolbar = Any
 
-    # The Traits UI associated with the table editor toolbar:
+    #: The Traits UI associated with the table editor toolbar:
     toolbar_ui = Instance(UI)
 
-    # Is the table editor scrollable? This value overrides the default.
+    #: Is the table editor scrollable? This value overrides the default.
     scrollable = True
 
-    # Is 'auto_add' mode in effect? (I.e., new rows are automatically added to
-    # the end of the table when the user modifies current last row.)
+    #: Is 'auto_add' mode in effect? (I.e., new rows are automatically added to
+    #: the end of the table when the user modifies current last row.)
     auto_add = Bool(False)
 
     def init(self, parent):
@@ -1187,22 +1187,22 @@ class TableFilterEditor(Handler):
     """ Editor that manages table filters.
     """
 
-    # TableEditor this editor is associated with
+    #: TableEditor this editor is associated with
     editor = Instance(TableEditor)
 
-    # Current filter
+    #: Current filter
     filter = Instance(TableFilter, allow_none=True)
 
-    # Edit the current filter
+    #: Edit the current filter
     edit = Button
 
-    # Create a new filter and edit it
+    #: Create a new filter and edit it
     new = Button
 
-    # Apply the current filter to the editor's table
+    #: Apply the current filter to the editor's table
     apply = Button
 
-    # Delete the current filter
+    #: Delete the current filter
     delete = Button
 
     #-------------------------------------------------------------------------
@@ -1337,7 +1337,7 @@ class TableEditorToolbar(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Do not sort columns:
+    #: Do not sort columns:
     no_sort = Instance(Action,
                        {'name': 'No Sorting',
                         'tooltip': 'Do not sort columns',
@@ -1345,7 +1345,7 @@ class TableEditorToolbar(HasPrivateTraits):
                         'enabled': False,
                         'image': ImageResource('table_no_sort.png')})
 
-    # Move current object up one row:
+    #: Move current object up one row:
     move_up = Instance(Action,
                        {'name': 'Move Up',
                         'tooltip': 'Move current item up one row',
@@ -1353,7 +1353,7 @@ class TableEditorToolbar(HasPrivateTraits):
                         'enabled': False,
                         'image': ImageResource('table_move_up.png')})
 
-    # Move current object down one row:
+    #: Move current object down one row:
     move_down = Instance(Action,
                          {'name': 'Move Down',
                           'tooltip': 'Move current item down one row',
@@ -1361,21 +1361,21 @@ class TableEditorToolbar(HasPrivateTraits):
                           'enabled': False,
                           'image': ImageResource('table_move_down.png')})
 
-    # Search the table:
+    #: Search the table:
     search = Instance(Action,
                       {'name': 'Search',
                        'tooltip': 'Search table',
                        'action': 'on_search',
                        'image': ImageResource('table_search.png')})
 
-    # Add a row:
+    #: Add a row:
     add = Instance(Action,
                    {'name': 'Add',
                     'tooltip': 'Insert new item',
                     'action': 'on_add',
                     'image': ImageResource('table_add.png')})
 
-    # Delete selected row:
+    #: Delete selected row:
     delete = Instance(Action,
                       {'name': 'Delete',
                        'tooltip': 'Delete current item',
@@ -1383,17 +1383,17 @@ class TableEditorToolbar(HasPrivateTraits):
                        'enabled': False,
                        'image': ImageResource('table_delete.png')})
 
-    # Edit the user preferences:
+    #: Edit the user preferences:
     prefs = Instance(Action,
                      {'name': 'Preferences',
                       'tooltip': 'Set user preferences for table',
                       'action': 'on_prefs',
                       'image': ImageResource('table_prefs.png')})
 
-    # The table editor that this is the toolbar for:
+    #: The table editor that this is the toolbar for:
     editor = Instance(TableEditor)
 
-    # The toolbar control:
+    #: The toolbar control:
     control = Any
 
     def __init__(self, parent=None, **traits):
@@ -1474,22 +1474,22 @@ class TableSearchHandler(Handler):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The editor that this handler is associated with
+    #: The editor that this handler is associated with
     editor = Instance(TableEditor)
 
-    # Find next matching item
+    #: Find next matching item
     find_next = Button('Find Next')
 
-    # Find previous matching item
+    #: Find previous matching item
     find_previous = Button('Find Previous')
 
-    # Select all matching items
+    #: Select all matching items
     select = Button
 
-    # The user is finished searching
+    #: The user is finished searching
     OK = Button('Close')
 
-    # Search status message:
+    #: Search status message:
     status = Str
 
     def handler_find_next_changed(self, info):

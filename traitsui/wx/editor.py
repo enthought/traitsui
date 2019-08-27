@@ -56,10 +56,10 @@ class Editor(UIEditor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Style for embedding control in a sizer:
+    #: Style for embedding control in a sizer:
     layout_style = Int(wx.EXPAND)
 
-    # The maximum extra padding that should be allowed around the editor:
+    #: The maximum extra padding that should be allowed around the editor:
     border_size = Int(4)
 
     #-------------------------------------------------------------------------
@@ -250,13 +250,13 @@ class EditorWithList(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Object containing the list being monitored
+    #: Object containing the list being monitored
     list_object = Instance(HasTraits)
 
-    # Name of the monitored trait
+    #: Name of the monitored trait
     list_name = Str
 
-    # Function used to evaluate the current list object value:
+    #: Function used to evaluate the current list object value:
     list_value = Callable
 
     #-------------------------------------------------------------------------

@@ -45,7 +45,7 @@ class Message(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The message to be displayed
+    #: The message to be displayed
     message = Str
 
 #-------------------------------------------------------------------------
@@ -100,10 +100,10 @@ def error(message='', title='Message', buttons=['OK', 'Cancel'],
 
 class AutoCloseMessage(HasPrivateTraits):
 
-    # The message to be shown:
+    #: The message to be shown:
     message = Str('Please wait')
 
-    # The time (in seconds) to show the message:
+    #: The time (in seconds) to show the message:
     time = Float(2.0)
 
     def show(self, parent=None, title=''):

@@ -95,14 +95,14 @@ AView = Any
 
 class StatusItem(HasStrictTraits):
 
-    # The name of the trait the status information will be synched with:
+    #: The name of the trait the status information will be synched with:
     name = Str('status')
 
-    # The width of the status field. The possible values are:
-    #
-    #   - abs( width )  > 1.0: Width of the field in pixels = abs( width )
-    #   - abs( width ) <= 1.0: Relative width of the field when compared to
-    #                          the other relative width fields.
+    #: The width of the status field. The possible values are:
+    #:
+    #:   - abs( width )  > 1.0: Width of the field in pixels = abs( width )
+    #:   - abs( width ) <= 1.0: Relative width of the field when compared to
+    #:                          the other relative width fields.
     width = Float(0.5)
 
     def __init__(self, value=None, **traits):
@@ -123,10 +123,10 @@ class ViewStatus(TraitType):
         list of StatusItem instances.
     """
 
-    # Define the default value for the trait:
+    #: Define the default value for the trait:
     default_value = None
 
-    # A description of the type of value this trait accepts:
+    #: A description of the type of value this trait accepts:
     info_text = ('None, a string, a single StatusItem instance, or a list or '
                  'tuple of strings and/or StatusItem instances')
 
@@ -188,10 +188,10 @@ class ATheme(TraitType):
         can be converted to one.
     """
 
-    # Define the default value for the trait:
+    #: Define the default value for the trait:
     default_value = None
 
-    # A description of the type of value this trait accepts:
+    #: A description of the type of value this trait accepts:
     info_text = 'a Theme or string that can be used to define one'
 
     def __init__(self, value=None, **metadata):

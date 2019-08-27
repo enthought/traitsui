@@ -64,130 +64,130 @@ class Group(ViewSubElement):
     # Trait definitions:
     #-------------------------------------------------------------------------
 
-    # A list of Group, Item, and Include objects in this group.
+    #: A list of Group, Item, and Include objects in this group.
     content = List(ViewSubElement)
 
-    # A unique identifier for the group.
+    #: A unique identifier for the group.
     id = Str
 
-    # User interface label for the group. How the label is displayed depends
-    # on the **show_border** attribute, and on the **layout** attribute of
-    # the group's parent group or view.
+    #: User interface label for the group. How the label is displayed depends
+    #: on the **show_border** attribute, and on the **layout** attribute of
+    #: the group's parent group or view.
     label = Str
 
     style_sheet = Str
 
-    # Default context object for group items.
+    #: Default context object for group items.
     object = ContainerDelegate
 
-    # Default editor style of items in the group.
+    #: Default editor style of items in the group.
     style = ContainerDelegate
 
-    # Default docking style of items in group.
+    #: Default docking style of items in group.
     dock = ContainerDelegate
 
-    # Default image to display on notebook tabs.
+    #: Default image to display on notebook tabs.
     image = ContainerDelegate
 
-    # The theme to use for a DockWindow:
+    #: The theme to use for a DockWindow:
     dock_theme = Instance(DockWindowTheme, allow_none=False)
 
-    # Category of elements dragged from view.
+    #: Category of elements dragged from view.
     export = ContainerDelegate
 
-    # Spatial orientation of the group's elements. Can be 'vertical' (default)
-    # or 'horizontal'.
+    #: Spatial orientation of the group's elements. Can be 'vertical' (default)
+    #: or 'horizontal'.
     orientation = Orientation
 
-    # Layout style of the group, which can be one of the following:
-    #
-    # * 'normal' (default): Sub-groups are displayed sequentially in a single
-    #   panel.
-    # * 'flow': Sub-groups are displayed sequentially, and then "wrap" when
-    #   they exceed the available space in the **orientation** direction.
-    # * 'split': Sub-groups are displayed in a single panel, separated by
-    #   "splitter bars", which the user can drag to adjust the amount of space
-    #   for each sub-group.
-    # * 'tabbed': Each sub-group appears on a separate tab, labeled with the
-    #   sub-group's *label* text, if any.
-    #
-    # This attribute is ignored for groups that contain only items, or contain
-    # only one sub-group.
+    #: Layout style of the group, which can be one of the following:
+    #:
+    #: * 'normal' (default): Sub-groups are displayed sequentially in a single
+    #:   panel.
+    #: * 'flow': Sub-groups are displayed sequentially, and then "wrap" when
+    #:   they exceed the available space in the **orientation** direction.
+    #: * 'split': Sub-groups are displayed in a single panel, separated by
+    #:   "splitter bars", which the user can drag to adjust the amount of space
+    #:   for each sub-group.
+    #: * 'tabbed': Each sub-group appears on a separate tab, labeled with the
+    #:   sub-group's *label* text, if any.
+    #:
+    #: This attribute is ignored for groups that contain only items, or contain
+    #: only one sub-group.
     layout = Layout
 
-    # Should the group be scrollable along the direction of orientation?
+    #: Should the group be scrollable along the direction of orientation?
     scrollable = Bool(False)
 
-    # The number of columns in the group
+    #: The number of columns in the group
     columns = Range(1, 50)
 
-    # Should a border be drawn around group? If set to True, the **label** text
-    # is embedded in the border. If set to False, the label appears as a banner
-    # above the elements of the group.
+    #: Should a border be drawn around group? If set to True, the **label** text
+    #: is embedded in the border. If set to False, the label appears as a banner
+    #: above the elements of the group.
     show_border = Bool(False)
 
-    # Should labels be added to items in group? Only items that are directly
-    # contained in the group are affected. That is, if the group contains
-    # a sub-group, the display of labels in the sub-group is not affected by
-    # the attribute on this group.
+    #: Should labels be added to items in group? Only items that are directly
+    #: contained in the group are affected. That is, if the group contains
+    #: a sub-group, the display of labels in the sub-group is not affected by
+    #: the attribute on this group.
     show_labels = Bool(True)
 
-    # Should labels be shown to the left of items (True) or the right (False)?
-    # Only items that are directly contained in the group are affected. That is,
-    # if the group contains a sub-group, the display of labels in the sub-group
-    # is not affected by the attribute in this group. If **show_labels** is
-    # False, this attribute is irrelevant.
+    #: Should labels be shown to the left of items (True) or the right (False)?
+    #: Only items that are directly contained in the group are affected. That is,
+    #: if the group contains a sub-group, the display of labels in the sub-group
+    #: is not affected by the attribute in this group. If **show_labels** is
+    #: False, this attribute is irrelevant.
     show_left = Bool(True)
 
-    # Is this group the tab that is initially selected? If True, the group's
-    # tab is displayed when the view is opened. If the **layout** of the group's
-    # parent is not 'tabbed', this attribute is ignored.
+    #: Is this group the tab that is initially selected? If True, the group's
+    #: tab is displayed when the view is opened. If the **layout** of the group's
+    #: parent is not 'tabbed', this attribute is ignored.
     selected = Bool(False)
 
-    # Should the group use extra space along its parent group's layout
-    # orientation?
+    #: Should the group use extra space along its parent group's layout
+    #: orientation?
     springy = Bool(False)
 
-    # Optional help text (for top-level group). This help text appears in the
-    # View-level help window (created by the default help handler), for any
-    # View that contains *only* this group. Group-level help is ignored for
-    # nested groups and multiple top-level groups
+    #: Optional help text (for top-level group). This help text appears in the
+    #: View-level help window (created by the default help handler), for any
+    #: View that contains *only* this group. Group-level help is ignored for
+    #: nested groups and multiple top-level groups
     help = Str
 
-    # Pre-condition for including the group in the display. If the expression
-    # evaluates to False, the group is not defined in the display. Conditions
-    # for **defined_when** are evaluated only once, when the display is first
-    # constructed. Use this attribute for conditions based on attributes that
-    # vary from object to object, but that do not change over time.
+    #: Pre-condition for including the group in the display. If the expression
+    #: evaluates to False, the group is not defined in the display. Conditions
+    #: for **defined_when** are evaluated only once, when the display is first
+    #: constructed. Use this attribute for conditions based on attributes that
+    #: vary from object to object, but that do not change over time.
     defined_when = Str
 
-    # Pre-condition for showing the group. If the expression evaluates to False,
-    # the group and its items are not visible (and they disappear if they were
-    # previously visible). If the value evaluates to True, the group and items
-    # become visible. All **visible_when** conditions are checked each time
-    # that any trait value is edited in the display. Therefore, you can use
-    # **visible_when** conditions to hide or show groups in response to user
-    # input.
+    #: Pre-condition for showing the group. If the expression evaluates to False,
+    #: the group and its items are not visible (and they disappear if they were
+    #: previously visible). If the value evaluates to True, the group and items
+    #: become visible. All **visible_when** conditions are checked each time
+    #: that any trait value is edited in the display. Therefore, you can use
+    #: **visible_when** conditions to hide or show groups in response to user
+    #: input.
     visible_when = Str
 
-    # Pre-condition for enabling the group. If the expression evaluates to False,
-    # the group is disabled, that is, none of the widgets accept input. All
-    # **enabled_when** conditions are checked each time that any trait value
-    # is edited in the display. Therefore, you can use **enabled_when**
-    # conditions to enable or disable groups in response to user input.
+    #: Pre-condition for enabling the group. If the expression evaluates to False,
+    #: the group is disabled, that is, none of the widgets accept input. All
+    #: **enabled_when** conditions are checked each time that any trait value
+    #: is edited in the display. Therefore, you can use **enabled_when**
+    #: conditions to enable or disable groups in response to user input.
     enabled_when = Str
 
-    # Amount of padding (in pixels) to add around each item in the group. The
-    # value must be an integer between 0 and 15. (Unlike the Item class, the
-    # Group class does not support negative padding.) The padding for any
-    # individual widget is the sum of the padding for its Group, the padding
-    # for its Item, and the default spacing determined by the toolkit.
+    #: Amount of padding (in pixels) to add around each item in the group. The
+    #: value must be an integer between 0 and 15. (Unlike the Item class, the
+    #: Group class does not support negative padding.) The padding for any
+    #: individual widget is the sum of the padding for its Group, the padding
+    #: for its Item, and the default spacing determined by the toolkit.
     padding = Padding
 
-    # Requested width of the group (calculated from widths of contents)
+    #: Requested width of the group (calculated from widths of contents)
     width = Property(Float, depends_on='content')
 
-    # Requested height of the group (calculated from heights of contents)
+    #: Requested height of the group (calculated from heights of contents)
     height = Property(Float, depends_on='content')
 
     #-------------------------------------------------------------------------
@@ -464,8 +464,8 @@ class HGroup(Group):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Override standard Group trait defaults to give it horizontal group
-    # behavior:
+    #: Override standard Group trait defaults to give it horizontal group
+    #: behavior:
     orientation = 'horizontal'
 
 #-------------------------------------------------------------------------
@@ -481,8 +481,8 @@ class VGroup(Group):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Override standard Group trait defaults to give it vertical group
-    # behavior:
+    #: Override standard Group trait defaults to give it vertical group
+    #: behavior:
     orientation = 'vertical'
 
 #-------------------------------------------------------------------------
@@ -498,7 +498,7 @@ class VGrid(VGroup):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Override standard Group trait defaults to give it grid behavior:
+    #: Override standard Group trait defaults to give it grid behavior:
     columns = 2
 
 #-------------------------------------------------------------------------
@@ -515,8 +515,8 @@ class HFlow(HGroup):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Override standard Group trait defaults to give it horizontal flow
-    # behavior:
+    #: Override standard Group trait defaults to give it horizontal flow
+    #: behavior:
     layout = 'flow'
     show_labels = False
 
@@ -534,7 +534,7 @@ class VFlow(VGroup):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Override standard Group trait defaults to give it vertical flow behavior:
+    #: Override standard Group trait defaults to give it vertical flow behavior:
     layout = 'flow'
     show_labels = False
 
@@ -552,8 +552,8 @@ class VFold(VGroup):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Override standard Group trait defaults to give it vertical folding group
-    # behavior:
+    #: Override standard Group trait defaults to give it vertical folding group
+    #: behavior:
     layout = 'fold'
     show_labels = False
 
@@ -570,8 +570,8 @@ class HSplit(Group):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Override standard Group trait defaults to give it horizontal splitter
-    # behavior:
+    #: Override standard Group trait defaults to give it horizontal splitter
+    #: behavior:
     layout = 'split'
     orientation = 'horizontal'
 
@@ -588,8 +588,8 @@ class VSplit(Group):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Override standard Group trait defaults to give it vertical splitter
-    # behavior:
+    #: Override standard Group trait defaults to give it vertical splitter
+    #: behavior:
     layout = 'split'
     orientation = 'vertical'
 
@@ -606,8 +606,8 @@ class Tabbed(Group):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Override standard Group trait defaults to give it tabbed notebook
-    # behavior:
+    #: Override standard Group trait defaults to give it tabbed notebook
+    #: behavior:
     layout = 'tabbed'
     springy = True
 
@@ -632,80 +632,80 @@ class ShadowGroup(Group):
     # Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Group object this is a "shadow" for
+    #: Group object this is a "shadow" for
     shadow = ReadOnly
 
-    # Number of ShadowGroups in **content**
+    #: Number of ShadowGroups in **content**
     groups = ReadOnly
 
-    # Name of the group
+    #: Name of the group
     id = ShadowDelegate
 
-    # User interface label for the group
+    #: User interface label for the group
     label = ShadowDelegate
 
-    # Default context object for group items
+    #: Default context object for group items
     object = ShadowDelegate
 
-    # Default style of items in the group
+    #: Default style of items in the group
     style = ShadowDelegate
 
-    # Default docking style of items in the group
+    #: Default docking style of items in the group
     dock = ShadowDelegate
 
-    # Default image to display on notebook tabs
+    #: Default image to display on notebook tabs
     image = ShadowDelegate
 
-    # The theme to use for a DockWindow:
+    #: The theme to use for a DockWindow:
     dock_theme = ShadowDelegate
 
-    # Category of elements dragged from the view
+    #: Category of elements dragged from the view
     export = ShadowDelegate
 
-    # Spatial orientation of the group
+    #: Spatial orientation of the group
     orientation = ShadowDelegate
 
-    # Layout style of the group
+    #: Layout style of the group
     layout = ShadowDelegate
 
-    # Should the group be scrollable along the direction of orientation?
+    #: Should the group be scrollable along the direction of orientation?
     scrollable = ShadowDelegate
 
-    # The number of columns in the group
+    #: The number of columns in the group
     columns = ShadowDelegate
 
-    # Should a border be drawn around group?
+    #: Should a border be drawn around group?
     show_border = ShadowDelegate
 
-    # Should labels be added to items in group?
+    #: Should labels be added to items in group?
     show_labels = ShadowDelegate
 
-    # Should labels be shown to the left of items (vs. the right)?
+    #: Should labels be shown to the left of items (vs. the right)?
     show_left = ShadowDelegate
 
-    # Is group the initially selected page?
+    #: Is group the initially selected page?
     selected = ShadowDelegate
 
-    # Should the group use extra space along its parent group's layout
-    # orientation?
+    #: Should the group use extra space along its parent group's layout
+    #: orientation?
     springy = ShadowDelegate
 
-    # Optional help text (for top-level group)
+    #: Optional help text (for top-level group)
     help = ShadowDelegate
 
-    # Pre-condition for defining the group
+    #: Pre-condition for defining the group
     defined_when = ShadowDelegate
 
-    # Pre-condition for showing the group
+    #: Pre-condition for showing the group
     visible_when = ShadowDelegate
 
-    # Pre-condition for enabling the group
+    #: Pre-condition for enabling the group
     enabled_when = ShadowDelegate
 
-    # Amount of padding to add around each item
+    #: Amount of padding to add around each item
     padding = ShadowDelegate
 
-    # Style sheet for the panel
+    #: Style sheet for the panel
     style_sheet = ShadowDelegate
 
     #-------------------------------------------------------------------------

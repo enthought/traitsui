@@ -62,13 +62,13 @@ class BaseEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Current set of enumeration names:
+    #: Current set of enumeration names:
     names = Property
 
-    # Current mapping from names to values:
+    #: Current mapping from names to values:
     mapping = Property
 
-    # Current inverse mapping from values to names:
+    #: Current inverse mapping from values to names:
     inverse_mapping = Property
 
     #-------------------------------------------------------------------------

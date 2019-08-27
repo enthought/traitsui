@@ -78,24 +78,24 @@ class _PopupEditor(UIEditor):
 
 class PopupEditor(BasicEditorFactory):
 
-    # The class used to construct editor objects:
+    #: The class used to construct editor objects:
     klass = Property
 
-    # The kind of popup to use:
+    #: The kind of popup to use:
     kind = Enum('popover', 'popup', 'info')
 
-    # The editor to use for the pop-up view (can be None (use default editor),
-    # an EditorFactory instance, or a callable that returns an EditorFactory
-    # instance):
+    #: The editor to use for the pop-up view (can be None (use default editor),
+    #: an EditorFactory instance, or a callable that returns an EditorFactory
+    #: instance):
     editor = Any
 
-    # The style of editor to use for the popup editor (same as Item.style):
+    #: The style of editor to use for the popup editor (same as Item.style):
     style = EditorStyle
 
-    # The height of the popup (same as Item.height):
+    #: The height of the popup (same as Item.height):
     height = Float(-1.0)
 
-    # The width of the popup (same as Item.width):
+    #: The width of the popup (same as Item.width):
     width = Float(-1.0)
 
     def _get_klass(self):

@@ -53,7 +53,7 @@ class ViewElements(HasStrictTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Dictionary containing the named ViewElement items
+    #: Dictionary containing the named ViewElement items
     content = content_trait
 
     #-------------------------------------------------------------------------
@@ -204,8 +204,8 @@ class SearchStackItem(HasStrictTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Name that was looked up
+    #: Name that was looked up
     id = Str
 
-    # Index into the 'mro' list of ViewElements that the ID was found in
+    #: Index into the 'mro' list of ViewElements that the ID was found in
     context = Int

@@ -43,13 +43,13 @@ class InstanceChoiceItem(HasPrivateTraits):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # User interface name for the item
+    #: User interface name for the item
     name = Str
 
-    # View associated with this item
+    #: View associated with this item
     view = AView
 
-    # Does this item create new instances?
+    #: Does this item create new instances?
     is_factory = Bool(False)
 
     #-------------------------------------------------------------------------
@@ -117,10 +117,10 @@ class InstanceChoice(InstanceChoiceItem):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Object associated with the item
+    #: Object associated with the item
     object = Any
 
-    # The name of the object trait containing its user interface name:
+    #: The name of the object trait containing its user interface name:
     name_trait = Str('name')
 
     #-------------------------------------------------------------------------
@@ -168,24 +168,24 @@ class InstanceFactoryChoice(InstanceChoiceItem):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Indicates whether an instance compatible with this item can be dragged and
-    # dropped rather than created
+    #: Indicates whether an instance compatible with this item can be dragged and
+    #: dropped rather than created
     droppable = Bool(False)
 
-    # Indicates whether the item can be selected by the user
+    #: Indicates whether the item can be selected by the user
     selectable = Bool(True)
 
-    # A class (or other callable) that can be used to create an item compatible
-    # with this item
+    #: A class (or other callable) that can be used to create an item compatible
+    #: with this item
     klass = Callable
 
-    # Tuple of arguments to pass to **klass** to create an instance
+    #: Tuple of arguments to pass to **klass** to create an instance
     args = Tuple
 
-    # Dictionary of arguments to pass to **klass** to create an instance
+    #: Dictionary of arguments to pass to **klass** to create an instance
     kw_args = Dict(Str, Any)
 
-    # Does this item create new instances? This value overrides the default.
+    #: Does this item create new instances? This value overrides the default.
     is_factory = True
 
     #-------------------------------------------------------------------------
@@ -258,13 +258,13 @@ class InstanceDropChoice(InstanceFactoryChoice):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Indicates whether an instance compatible with this item can be dragged and
-    # dropped rather than created . This value overrides the default.
+    #: Indicates whether an instance compatible with this item can be dragged and
+    #: dropped rather than created . This value overrides the default.
     droppable = True
 
-    # Indicates whether the item can be selected by the user. This value
-    # overrides the default.
+    #: Indicates whether the item can be selected by the user. This value
+    #: overrides the default.
     selectable = False
 
-    # Does this item create new instances? This value overrides the default.
+    #: Does this item create new instances? This value overrides the default.
     is_factory = False

@@ -49,13 +49,13 @@ class KeyBindingEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Does the editor's control have focus currently?
+    #: Does the editor's control have focus currently?
     has_focus = Bool(False)
 
-    # Keyboard event
+    #: Keyboard event
     key = Event
 
-    # Clear field event
+    #: Clear field event
     clear = Event
 
     #-------------------------------------------------------------------------

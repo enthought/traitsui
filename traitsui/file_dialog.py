@@ -91,7 +91,7 @@ class IFileDialogModel(Interface):
     """ Defines a model extension to a file dialog.
     """
 
-    # The name of the currently selected file:
+    #: The name of the currently selected file:
     file_name = File
 
 #-------------------------------------------------------------------------
@@ -103,10 +103,10 @@ class IFileDialogView(Interface):
     """ Defines a visual extension to a file dialog.
     """
 
-    # The view to display:
+    #: The view to display:
     view = AView
 
-    # Is the view fixed or variable width?
+    #: Is the view fixed or variable width?
     is_fixed = Bool
 
 #-------------------------------------------------------------------------
@@ -127,7 +127,7 @@ class IFileDialogExtension(IFileDialogModel, IFileDialogView):
 @provides(IFileDialogModel)
 class MFileDialogModel(HasPrivateTraits):
 
-    # The name of the currently selected file:
+    #: The name of the currently selected file:
     file_name = File
 
 #-------------------------------------------------------------------------
@@ -139,10 +139,10 @@ class MFileDialogView(HasPrivateTraits):
     """ Defines a visual extension to a file dialog.
     """
 
-    # The view to display:
+    #: The view to display:
     view = AView
 
-    # Is the view fixed or variable width?
+    #: Is the view fixed or variable width?
     is_fixed = Bool(False)
 
 # Create a default implementation:
@@ -167,16 +167,16 @@ class FileInfo(MFileDialogModel):
     """ Defines a file dialog extension that display various file information.
     """
 
-    # The size of the file:
+    #: The size of the file:
     size = Property(depends_on='file_name')
 
-    # Last file access time:
+    #: Last file access time:
     atime = Property(depends_on='file_name')
 
-    # List file modification time:
+    #: List file modification time:
     mtime = Property(depends_on='file_name')
 
-    # File creation time (or last metadata change time):
+    #: File creation time (or last metadata change time):
     ctime = Property(depends_on='file_name')
 
     #-- Traits View Definitions ----------------------------------------------
@@ -234,7 +234,7 @@ class TextInfo(MFileDialogModel):
     """ Defines a file dialog extension that displays a file's contents as text.
     """
 
-    # The file's text content:
+    #: The file's text content:
     text = Property(depends_on='file_name')
 
     #-- Traits View Definitions ----------------------------------------------
@@ -275,13 +275,13 @@ class ImageInfo(MFileDialogModel):
         and content.
     """
 
-    # The ImageResource object for the current file:
+    #: The ImageResource object for the current file:
     image = Property(depends_on='file_name')
 
-    # The width of the current image:
+    #: The width of the current image:
     width = Property(depends_on='image')
 
-    # The height of the current image:
+    #: The height of the current image:
     height = Property(depends_on='image')
 
     #-- Traits View Definitions ----------------------------------------------
@@ -341,13 +341,13 @@ class CreateDirHandler(Handler):
     """ Controller for the 'create new directory' popup.
     """
 
-    # The name for the new directory to be created:
+    #: The name for the new directory to be created:
     dir_name = Str
 
-    # The current status message:
+    #: The current status message:
     message = Str
 
-    # The OK and Cancel buttons:
+    #: The OK and Cancel buttons:
     ok = Button('OK')
     cancel = Button('Cancel')
 
@@ -417,10 +417,10 @@ class CreateDirHandler(Handler):
 class FileExistsHandler(Handler):
     """ Controller for the 'file already exists' popup.
     """
-    # The current status message:
+    #: The current status message:
     message = Str
 
-    # The OK and Cancel buttons:
+    #: The OK and Cancel buttons:
     ok = Button('OK')
     cancel = Button('Cancel')
 
@@ -468,48 +468,48 @@ class OpenFileDialog(Handler):
     """ Defines the model and handler for the open file dialog.
     """
 
-    # The starting and current file path:
+    #: The starting and current file path:
     file_name = File
 
-    # The list of file filters to apply:
+    #: The list of file filters to apply:
     filter = CList(Str)
 
-    # Number of history entries to allow:
+    #: Number of history entries to allow:
     entries = Int(10)
 
-    # The file dialog title:
+    #: The file dialog title:
     title = Str('Open File')
 
-    # The Traits UI persistence id to use:
+    #: The Traits UI persistence id to use:
     id = Str('traitsui.file_dialog.OpenFileDialog')
 
-    # A list of optional file dialog extensions:
+    #: A list of optional file dialog extensions:
     extensions = CList(IFileDialogModel)
 
     #-- Private Traits -------------------------------------------------------
 
-    # The UIInfo object for the view:
+    #: The UIInfo object for the view:
     info = Instance(UIInfo)
 
-    # Event fired when the file tree view should be reloaded:
+    #: Event fired when the file tree view should be reloaded:
     reload = Event
 
-    # Event fired when the user double-clicks on a file name:
+    #: Event fired when the user double-clicks on a file name:
     dclick = Event
 
-    # Allow extension models to be added dynamically:
+    #: Allow extension models to be added dynamically:
     extension__ = Instance(IFileDialogModel)
 
-    # Is the file dialog for saving a file (or opening a file)?
+    #: Is the file dialog for saving a file (or opening a file)?
     is_save_file = Bool(False)
 
-    # Is the currently specified file name valid?
+    #: Is the currently specified file name valid?
     is_valid_file = Property(depends_on='file_name')
 
-    # Can a directory be created now?
+    #: Can a directory be created now?
     can_create_dir = Property(depends_on='file_name')
 
-    # The OK, Cancel and create directory buttons:
+    #: The OK, Cancel and create directory buttons:
     ok = Button('OK')
     cancel = Button('Cancel')
     create = Button(image='@icons:folder-new',

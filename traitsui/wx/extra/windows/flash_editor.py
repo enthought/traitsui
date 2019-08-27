@@ -47,7 +47,7 @@ class _FlashEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # Is the table editor is scrollable? This value overrides the default.
+    #: Is the table editor is scrollable? This value overrides the default.
     scrollable = True
 
     #-------------------------------------------------------------------------
@@ -87,5 +87,5 @@ class _FlashEditor(Editor):
 
 class FlashEditor(BasicEditorFactory):
 
-    # The editor class to be created:
+    #: The editor class to be created:
     klass = _FlashEditor

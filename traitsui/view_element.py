@@ -92,22 +92,22 @@ class DefaultViewElement(ViewElement):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The default context object to edit:
+    #: The default context object to edit:
     object = AnObject
 
-    # The default editor style to use:
+    #: The default editor style to use:
     style = EditorStyle
 
-    # The default dock style to use:
+    #: The default dock style to use:
     dock = DockStyle
 
-    # The default notebook tab image to use:
+    #: The default notebook tab image to use:
     image = Image
 
-    # The category of elements dragged out of the view:
+    #: The category of elements dragged out of the view:
     export = ExportType
 
-    # Should labels be added to items in a group?
+    #: Should labels be added to items in a group?
     show_labels = Bool(True)
 
 #-------------------------------------------------------------------------
@@ -130,10 +130,10 @@ class ViewSubElement(ViewElement):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The object this ViewSubElement is contained in; must be a ViewElement.
+    #: The object this ViewSubElement is contained in; must be a ViewElement.
     container = Container
 
-    # External help context identifier:
+    #: External help context identifier:
     help_id = HelpId
 
     #-------------------------------------------------------------------------

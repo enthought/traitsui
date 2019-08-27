@@ -41,12 +41,12 @@ class DelegatingHandler(Handler):
 
     #-- Public 'DelegatingHandler' Interface ---------------------------------
 
-    # The list of sub-handlers this object delegates to:
+    #: The list of sub-handlers this object delegates to:
     sub_handlers = List(HasTraits)
 
     #-- Protected 'DelegatingHandler' Interface ------------------------------
 
-    # A list of dispatchable handler methods:
+    #: A list of dispatchable handler methods:
     _dispatchers = List
 
     #-------------------------------------------------------------------------

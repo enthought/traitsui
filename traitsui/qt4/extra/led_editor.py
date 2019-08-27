@@ -27,5 +27,5 @@ class LEDEditor(BasicEditorFactory):
 
     #: The editor class to be created
     klass = _LEDEditor
-    # Alignment is not supported for QT backend
+    #: Alignment is not supported for QT backend
     alignment = undefined

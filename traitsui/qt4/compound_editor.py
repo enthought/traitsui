@@ -46,7 +46,7 @@ class CompoundEditor(Editor):
     #  Trait definitions:
     #-------------------------------------------------------------------------
 
-    # The kind of editor to create for each list item
+    #: The kind of editor to create for each list item
     kind = Str
 
     #-------------------------------------------------------------------------
@@ -106,8 +106,8 @@ class CompoundEditor(Editor):
 
 class SimpleEditor(CompoundEditor):
 
-    # The kind of editor to create for each list item. This value overrides
-    # the default.
+    #: The kind of editor to create for each list item. This value overrides
+    #: the default.
     kind = 'simple_editor'
 
 #-------------------------------------------------------------------------
@@ -117,7 +117,7 @@ class SimpleEditor(CompoundEditor):
 
 class CustomEditor(CompoundEditor):
 
-    # The kind of editor to create for each list item. This value overrides
-    # the default.
+    #: The kind of editor to create for each list item. This value overrides
+    #: the default.
 
     kind = 'custom_editor'
