@@ -98,20 +98,12 @@ class CompoundEditor(Editor):
 
         super(CompoundEditor, self).dispose()
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(CompoundEditor):
 
     #: The kind of editor to create for each list item. This value overrides
     #: the default.
     kind = 'simple_editor'
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomEditor(CompoundEditor):

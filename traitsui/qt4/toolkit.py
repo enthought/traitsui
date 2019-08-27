@@ -107,10 +107,6 @@ def ui_handler(handler, *args, **kwds):
 # Tell the traits notification handlers to use this UI handler
 set_ui_handler(ui_handler)
 
-#-------------------------------------------------------------------------
-#  'GUIToolkit' class:
-#-------------------------------------------------------------------------
-
 
 class _KeyEventHook(QtCore.QObject):
     """

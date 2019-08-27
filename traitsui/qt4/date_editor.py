@@ -33,10 +33,6 @@ from traitsui.editors.date_editor import CellFormat
 
 import six
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple Traits UI date editor that wraps QDateEdit.
@@ -90,10 +86,6 @@ class SimpleEditor(Editor):
         """ Handles the user entering input data in the edit control.
         """
         self.value = datetime.date(q_date.year(), q_date.month(), q_date.day())
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomEditor(Editor):

@@ -27,10 +27,6 @@ from traits.api import Str
 
 from .view_element import ViewSubElement
 
-#-------------------------------------------------------------------------
-#  'Include' class:
-#-------------------------------------------------------------------------
-
 
 class Include(ViewSubElement):
     """ A substitutable user interface element, i.e., a placeholder in a view

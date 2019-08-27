@@ -54,10 +54,6 @@ from .image_slice \
 from .helper \
     import disconnect, disconnect_no_id, BufferDC
 
-#-------------------------------------------------------------------------
-#  '_ScrubberEditor' class:
-#-------------------------------------------------------------------------
-
 
 class _ScrubberEditor(Editor):
     """ Traits UI simple, scrubber-based integer or float value editor.

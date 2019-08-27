@@ -60,10 +60,6 @@ def close_dock_control(dock_control):
     # And tell the DockWindow to remove the DockControl:
     return True
 
-#-------------------------------------------------------------------------
-#  'Handler' class:
-#-------------------------------------------------------------------------
-
 
 class Handler(HasPrivateTraits):
     """ Provides access to and control over the run-time workings of a
@@ -503,10 +499,6 @@ def default_handler(handler=None):
         _default_handler = handler
     return _default_handler
 
-#-------------------------------------------------------------------------
-#  'Controller' class:
-#-------------------------------------------------------------------------
-
 
 class Controller(Handler):
     """ Defines a handler class which provides a view and controller for a
@@ -565,10 +557,6 @@ class Controller(Handler):
         """
         self.info = info
 
-#-------------------------------------------------------------------------
-#  'ModelView' class:
-#-------------------------------------------------------------------------
-
 
 class ModelView(Controller):
     """ Defines a handler class which provides a view and controller for a
@@ -594,10 +582,6 @@ class ModelView(Controller):
             traits.
         """
         return {'object': self, 'handler': self, 'model': self.model}
-
-#-------------------------------------------------------------------------
-#  'ViewHandler' class:
-#-------------------------------------------------------------------------
 
 
 class ViewHandler(Handler):

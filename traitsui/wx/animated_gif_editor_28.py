@@ -33,10 +33,6 @@ from traitsui.wx.editor \
 from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
-#-------------------------------------------------------------------------
-#  '_AnimatedGIFEditor' class:
-#-------------------------------------------------------------------------
-
 
 class _AnimatedGIFEditor(Editor):
     """ Editor that displays an animated GIF file.

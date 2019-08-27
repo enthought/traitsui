@@ -42,10 +42,6 @@ class SimpleEditor(BaseSimpleEditor, Editor):
     # PyQt Editor class.
     pass
 
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
-
 
 class ReadonlyEditor(SimpleEditor):
 

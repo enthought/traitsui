@@ -61,10 +61,6 @@ class ToolkitEditorFactory(EditorFactory):
     #: Is user input set when the Enter key is pressed?
     enter_set = Bool(False)
 
-#-------------------------------------------------------------------------
-#  'ArrayStructure' class:
-#-------------------------------------------------------------------------
-
 
 class ArrayStructure(HasTraits):
 

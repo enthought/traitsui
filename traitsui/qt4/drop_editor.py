@@ -28,10 +28,6 @@ from .text_editor import SimpleEditor as Editor
 from .constants import DropColor
 from .clipboard import PyMimeData, clipboard
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple style of drop editor, which displays a read-only text field that

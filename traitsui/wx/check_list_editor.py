@@ -242,10 +242,6 @@ class CustomEditor(SimpleEditor):
             if control.IsShown():
                 control.SetValue(control.value in new_values)
 
-#-------------------------------------------------------------------------
-#  'TextEditor' class:
-#-------------------------------------------------------------------------
-
 
 class TextEditor(BaseTextEditor):
     """ Text style of editor for checklists, which displays a text field.

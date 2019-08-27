@@ -56,10 +56,6 @@ import six
 # Reference to an EditorFactory object
 factory_trait = Trait(EditorFactory)
 
-#-------------------------------------------------------------------------
-#  'Editor' abstract base class:
-#-------------------------------------------------------------------------
-
 
 class Editor(HasPrivateTraits):
     """ Represents an editing control for an object trait in a Traits-based

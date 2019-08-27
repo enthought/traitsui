@@ -114,10 +114,6 @@ class KeyBindingEditor(Editor):
         """
         self.value = ''
 
-#-------------------------------------------------------------------------
-#  'KeyBindingCtrl' class:
-#-------------------------------------------------------------------------
-
 
 class KeyBindingCtrl(wx.Window):
     """ wxPython control for editing key bindings.

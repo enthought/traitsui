@@ -36,10 +36,6 @@ from traitsui.basic_editor_factory \
 from pyface.timer.api \
     import do_after
 
-#-------------------------------------------------------------------------
-#  '_AnimatedGIFEditor' class:
-#-------------------------------------------------------------------------
-
 
 class _AnimatedGIFEditor(Editor):
     """ Editor that displays an animated GIF file.

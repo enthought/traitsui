@@ -32,10 +32,6 @@ from traitsui.editors.null_editor \
 from .editor \
     import Editor
 
-#-------------------------------------------------------------------------
-#  'NullEditor' class:
-#-------------------------------------------------------------------------
-
 
 class NullEditor(Editor):
     """ A completely empty editor.

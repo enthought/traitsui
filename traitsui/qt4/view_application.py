@@ -96,10 +96,6 @@ def view_application(context, view, kind, handler, id, scrollable, args):
         ui.on_trait_change(on_ui_destroyed, 'destroyed')
     return ui.result
 
-#-------------------------------------------------------------------------
-#  'ViewApplication' class:
-#-------------------------------------------------------------------------
-
 
 class ViewApplication(object):
     """ Modal window that contains a stand-alone application.

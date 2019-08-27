@@ -71,10 +71,6 @@ class ToolkitEditorFactory(EditorFactory):
     #: 'enter_set' metadata or an editor defined.
     enter_set = Bool(False)
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple style of editor for tuples.
@@ -104,10 +100,6 @@ class SimpleEditor(Editor):
         """ Returns the editor's control for indicating error status.
         """
         return self._ui.get_error_controls()
-
-#-------------------------------------------------------------------------
-#  'TupleStructure' class:
-#-------------------------------------------------------------------------
 
 
 class TupleStructure(HasTraits):

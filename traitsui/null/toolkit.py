@@ -32,10 +32,6 @@ from ..editor_factory import EditorFactory
 # Create a dummy singleton editor factory:
 null_editor_factory = EditorFactory()
 
-#-------------------------------------------------------------------------
-#  'GUIToolkit' class:
-#-------------------------------------------------------------------------
-
 
 class GUIToolkit(Toolkit):
 

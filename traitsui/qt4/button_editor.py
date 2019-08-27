@@ -28,10 +28,6 @@ from traitsui.editors.button_editor \
 
 from .editor import Editor
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple style editor for a button.
@@ -123,10 +119,6 @@ class SimpleEditor(Editor):
             editor.
         """
         pass
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomEditor(SimpleEditor):

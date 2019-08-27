@@ -34,10 +34,6 @@ from .tree_node import ObjectTreeNode, TreeNode, TreeNodeObject
 from .editors.tree_editor import TreeEditor
 import six
 
-#-------------------------------------------------------------------------
-#  'SingleValueTreeNodeObject' class:
-#-------------------------------------------------------------------------
-
 
 class SingleValueTreeNodeObject(TreeNodeObject):
     """ A tree node for objects of types that have a single value.
@@ -144,10 +140,6 @@ class SingleValueTreeNodeObject(TreeNodeObject):
                     value=value,
                     readonly=self.readonly)
 
-#-------------------------------------------------------------------------
-#  'MultiValueTreeNodeObject' class:
-#-------------------------------------------------------------------------
-
 
 class MultiValueTreeNodeObject(SingleValueTreeNodeObject):
     """ A tree node for objects of types that have multiple values.
@@ -163,10 +155,6 @@ class MultiValueTreeNodeObject(SingleValueTreeNodeObject):
         """
         return True
 
-#-------------------------------------------------------------------------
-#  'StringNode' class:
-#-------------------------------------------------------------------------
-
 
 class StringNode(SingleValueTreeNodeObject):
     """ A tree node for strings.
@@ -181,19 +169,11 @@ class StringNode(SingleValueTreeNodeObject):
 
         return '%s [%d]' % (repr(value), n)
 
-#-------------------------------------------------------------------------
-#  'NoneNode' class:
-#-------------------------------------------------------------------------
-
 
 class NoneNode(SingleValueTreeNodeObject):
     """ A tree node for None values.
     """
     pass
-
-#-------------------------------------------------------------------------
-#  'BoolNode' class:
-#-------------------------------------------------------------------------
 
 
 class BoolNode(SingleValueTreeNodeObject):
@@ -201,19 +181,11 @@ class BoolNode(SingleValueTreeNodeObject):
     """
     pass
 
-#-------------------------------------------------------------------------
-#  'IntNode' class:
-#-------------------------------------------------------------------------
-
 
 class IntNode(SingleValueTreeNodeObject):
     """ A tree node for integer values.
     """
     pass
-
-#-------------------------------------------------------------------------
-#  'FloatNode' class:
-#-------------------------------------------------------------------------
 
 
 class FloatNode(SingleValueTreeNodeObject):
@@ -221,19 +193,11 @@ class FloatNode(SingleValueTreeNodeObject):
     """
     pass
 
-#-------------------------------------------------------------------------
-#  'ComplexNode' class:
-#-------------------------------------------------------------------------
-
 
 class ComplexNode(SingleValueTreeNodeObject):
     """ A tree node for complex number values.
     """
     pass
-
-#-------------------------------------------------------------------------
-#  'OtherNode' class:
-#-------------------------------------------------------------------------
 
 
 class OtherNode(SingleValueTreeNodeObject):
@@ -241,10 +205,6 @@ class OtherNode(SingleValueTreeNodeObject):
     node type.
     """
     pass
-
-#-------------------------------------------------------------------------
-#  'TupleNode' class:
-#-------------------------------------------------------------------------
 
 
 class TupleNode(MultiValueTreeNodeObject):
@@ -275,10 +235,6 @@ class TupleNode(MultiValueTreeNodeObject):
 
         return [node_for('[%d]' % i, x) for i, x in enumerate(value)]
 
-#-------------------------------------------------------------------------
-#  'ListNode' class:
-#-------------------------------------------------------------------------
-
 
 class ListNode(TupleNode):
     """ A tree node for lists.
@@ -300,10 +256,6 @@ class ListNode(TupleNode):
         """
         return (not self.readonly)
 
-#-------------------------------------------------------------------------
-#  'SetNode' class:
-#-------------------------------------------------------------------------
-
 
 class SetNode(ListNode):
     """ A tree node for sets.
@@ -314,10 +266,6 @@ class SetNode(ListNode):
         """
         return 'Set(%d)' % len(value)
 
-#-------------------------------------------------------------------------
-#  'ArrayNode' class:
-#-------------------------------------------------------------------------
-
 
 class ArrayNode(TupleNode):
     """ A tree node for arrays.
@@ -327,10 +275,6 @@ class ArrayNode(TupleNode):
         """ Returns the formatted version of the value.
         """
         return 'Array(%s)' % ','.join([str(n) for n in value.shape])
-
-#-------------------------------------------------------------------------
-#  'DictNode' class:
-#-------------------------------------------------------------------------
 
 
 class DictNode(TupleNode):
@@ -359,10 +303,6 @@ class DictNode(TupleNode):
         """ Returns whether the object's children can be deleted.
         """
         return (not self.readonly)
-
-#-------------------------------------------------------------------------
-#  'FunctionNode' class:
-#-------------------------------------------------------------------------
 
 
 class FunctionNode(SingleValueTreeNodeObject):
@@ -403,10 +343,6 @@ class MethodNode(MultiValueTreeNodeObject):
         """
         return [self.node_for('Object', self.value.__self__)]
 
-#-------------------------------------------------------------------------
-#  'ObjectNode' class:
-#-------------------------------------------------------------------------
-
 
 class ObjectNode(MultiValueTreeNodeObject):
     """ A tree node for objects.
@@ -436,10 +372,6 @@ class ObjectNode(MultiValueTreeNodeObject):
         items.sort(key=itemgetter(0))
         return [self.node_for('.' + k, v) for k, v in items]
 
-#-------------------------------------------------------------------------
-#  'ClassNode' class:
-#-------------------------------------------------------------------------
-
 
 class ClassNode(ObjectNode):
     """ A tree node for classes.
@@ -449,10 +381,6 @@ class ClassNode(ObjectNode):
         """ Returns the formatted version of the value.
         """
         return value.__name__
-
-#-------------------------------------------------------------------------
-#  'TraitsNode' class:
-#-------------------------------------------------------------------------
 
 
 class TraitsNode(ObjectNode):
@@ -508,10 +436,6 @@ class TraitsNode(ObjectNode):
         """
         pass
 
-#-------------------------------------------------------------------------
-#  'RootNode' class:
-#-------------------------------------------------------------------------
-
 
 class RootNode(MultiValueTreeNodeObject):
     """ A root node.
@@ -564,10 +488,6 @@ def basic_types():
             pass
 
     return _basic_types
-
-#-------------------------------------------------------------------------
-#  '_ValueTree' class:
-#-------------------------------------------------------------------------
 
 
 class _ValueTree(HasPrivateTraits):

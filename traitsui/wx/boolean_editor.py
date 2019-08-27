@@ -41,10 +41,6 @@ from .text_editor \
 from .constants \
     import ReadonlyColor
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple style of editor for Boolean values, which displays a check box.
@@ -67,10 +63,6 @@ class SimpleEditor(Editor):
             editor.
         """
         self.control.SetValue(self.value)
-
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ReadonlyEditor(Editor):

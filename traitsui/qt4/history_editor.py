@@ -27,10 +27,6 @@ from pyface.qt import QtGui
 from .editor import Editor
 import six
 
-#-------------------------------------------------------------------------
-#  '_HistoryEditor' class:
-#-------------------------------------------------------------------------
-
 
 class _HistoryEditor(Editor):
     """ Simple style text editor, which displays a text field and maintains a

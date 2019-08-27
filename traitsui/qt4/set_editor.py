@@ -34,10 +34,6 @@ from traits.api \
     import Instance, Property
 import six
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple style of editor for sets.

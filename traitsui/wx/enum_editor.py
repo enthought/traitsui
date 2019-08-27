@@ -308,10 +308,6 @@ class SimpleEditor(BaseEditor):
 
         self.update_editor()
 
-#-------------------------------------------------------------------------
-#  'RadioEditor' class:
-#-------------------------------------------------------------------------
-
 
 class RadioEditor(BaseEditor):
     """ Enumeration editor, used for the "custom" style, that displays radio
@@ -400,10 +396,6 @@ class RadioEditor(BaseEditor):
 
         # Set-up the layout:
         panel.SetSizerAndFit(sizer)
-
-#-------------------------------------------------------------------------
-#  'ListEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ListEditor(BaseEditor):

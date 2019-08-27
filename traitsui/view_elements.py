@@ -39,10 +39,6 @@ from .view_element import ViewElement
 # Trait for contents of a ViewElements object
 content_trait = Dict(str, ViewElement)
 
-#-------------------------------------------------------------------------
-#  'ViewElements' class:
-#-------------------------------------------------------------------------
-
 
 class ViewElements(HasStrictTraits):
     """ Defines a hierarchical name space of related ViewElement objects.
@@ -168,10 +164,6 @@ class ViewElements(HasStrictTraits):
 
 ViewElements.add_class_trait('parents', List(ViewElements))
 ViewElements.add_class_trait('_search_order', Any)
-
-#-------------------------------------------------------------------------
-#  'SearchStackItem' class:
-#-------------------------------------------------------------------------
 
 
 class SearchStackItem(HasStrictTraits):

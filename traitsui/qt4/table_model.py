@@ -51,10 +51,6 @@ def as_qcolor(color):
     else:
         return QtGui.QColor(color)
 
-#-------------------------------------------------------------------------
-#  'TableModel' class:
-#-------------------------------------------------------------------------
-
 
 class TableModel(QtCore.QAbstractTableModel):
     """The model for table data."""
@@ -406,10 +402,6 @@ class TableModel(QtCore.QAbstractTableModel):
 
         # Update the selection for the new location.
         self._editor.set_selection(objects)
-
-#-------------------------------------------------------------------------
-#  'SortFilterTableModel' class:
-#-------------------------------------------------------------------------
 
 
 class SortFilterTableModel(QtGui.QSortFilterProxyModel):

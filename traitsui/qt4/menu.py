@@ -56,10 +56,6 @@ import six
 help_pat = re.compile(r'(.*){(.*)}(.*)')
 options_pat = re.compile(r'(.*)\[(.*)\](.*)')
 
-#-------------------------------------------------------------------------
-#  'MakeMenu' class:
-#-------------------------------------------------------------------------
-
 
 class MakeMenu:
     """ Manages creation of menus.
@@ -245,10 +241,6 @@ class MakeMenu:
             return six.text_type(act.text())
 
         act.setText(label)
-
-#-------------------------------------------------------------------------
-#  'MakeMenuItem' class:
-#-------------------------------------------------------------------------
 
 
 class MakeMenuItem:

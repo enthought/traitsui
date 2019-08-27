@@ -49,10 +49,6 @@ ShadowDelegate = Delegate('shadow')
 # Amount of padding to add around item
 Padding = Range(0, 15, desc='amount of padding to add around each item')
 
-#-------------------------------------------------------------------------
-#  'Group' class:
-#-------------------------------------------------------------------------
-
 
 class Group(ViewSubElement):
     """ Represents a grouping of items in a user interface view.
@@ -405,10 +401,6 @@ class Group(ViewSubElement):
 
         return height
 
-#-------------------------------------------------------------------------
-#  'HGroup' class:
-#-------------------------------------------------------------------------
-
 
 class HGroup(Group):
     """ A group whose items are laid out horizontally.
@@ -421,10 +413,6 @@ class HGroup(Group):
     #: Override standard Group trait defaults to give it horizontal group
     #: behavior:
     orientation = 'horizontal'
-
-#-------------------------------------------------------------------------
-#  'VGroup' class:
-#-------------------------------------------------------------------------
 
 
 class VGroup(Group):
@@ -439,10 +427,6 @@ class VGroup(Group):
     #: behavior:
     orientation = 'vertical'
 
-#-------------------------------------------------------------------------
-#  'VGrid' class:
-#-------------------------------------------------------------------------
-
 
 class VGrid(VGroup):
     """ A group whose items are laid out in 2 columns.
@@ -454,10 +438,6 @@ class VGrid(VGroup):
 
     #: Override standard Group trait defaults to give it grid behavior:
     columns = 2
-
-#-------------------------------------------------------------------------
-#  'HFlow' class:
-#-------------------------------------------------------------------------
 
 
 class HFlow(HGroup):
@@ -474,10 +454,6 @@ class HFlow(HGroup):
     layout = 'flow'
     show_labels = False
 
-#-------------------------------------------------------------------------
-#  'VFlow' class:
-#-------------------------------------------------------------------------
-
 
 class VFlow(VGroup):
     """ A group in which items are laid out vertically, and "wrap" when they
@@ -491,10 +467,6 @@ class VFlow(VGroup):
     #: Override standard Group trait defaults to give it vertical flow behavior:
     layout = 'flow'
     show_labels = False
-
-#-------------------------------------------------------------------------
-#  'VFold' class:
-#-------------------------------------------------------------------------
 
 
 class VFold(VGroup):
@@ -511,10 +483,6 @@ class VFold(VGroup):
     layout = 'fold'
     show_labels = False
 
-#-------------------------------------------------------------------------
-#  'HSplit' class:
-#-------------------------------------------------------------------------
-
 
 class HSplit(Group):
     """ A horizontal group with splitter bars to separate it from other groups.
@@ -528,10 +496,6 @@ class HSplit(Group):
     #: behavior:
     layout = 'split'
     orientation = 'horizontal'
-
-#-------------------------------------------------------------------------
-#  'VSplit' class:
-#-------------------------------------------------------------------------
 
 
 class VSplit(Group):
@@ -547,10 +511,6 @@ class VSplit(Group):
     layout = 'split'
     orientation = 'vertical'
 
-#-------------------------------------------------------------------------
-#  'Tabbed' class:
-#-------------------------------------------------------------------------
-
 
 class Tabbed(Group):
     """ A group that is shown as a tabbed notebook.
@@ -564,10 +524,6 @@ class Tabbed(Group):
     #: behavior:
     layout = 'tabbed'
     springy = True
-
-#-------------------------------------------------------------------------
-#  'ShadowGroup' class:
-#-------------------------------------------------------------------------
 
 
 class ShadowGroup(Group):

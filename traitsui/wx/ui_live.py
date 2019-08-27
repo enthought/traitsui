@@ -128,10 +128,6 @@ def ui_dialog(ui, parent, style):
     else:
         ui.control.Show()
 
-#-------------------------------------------------------------------------
-#  'LiveWindow' class:
-#-------------------------------------------------------------------------
-
 
 class LiveWindow(BaseDialog):
     """ User interface window that immediately updates its underlying object(s).
@@ -384,10 +380,6 @@ class LiveWindow(BaseDialog):
         """ Handles a change to the "revert" state.
         """
         self.revert.Enable(state)
-
-#-------------------------------------------------------------------------
-#  'MouseMonitor' class:
-#-------------------------------------------------------------------------
 
 
 class MouseMonitor(wx.Timer):

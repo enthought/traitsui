@@ -32,10 +32,6 @@ import six
 # MIME type for internal table drag/drop operations
 mime_type = 'traits-ui-list-str-editor'
 
-#-------------------------------------------------------------------------
-#  'ListStrModel' class:
-#-------------------------------------------------------------------------
-
 
 class ListStrModel(QtCore.QAbstractListModel):
     """ A model for lists of strings.

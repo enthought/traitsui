@@ -94,10 +94,6 @@ def ui_dialog(ui, parent, is_modal):
     else:
         ui.control.Show()
 
-#-------------------------------------------------------------------------
-#  'ModalDialog' class:
-#-------------------------------------------------------------------------
-
 
 class ModalDialog(BaseDialog):
     """ Modal dialog box for Traits-based user interfaces.

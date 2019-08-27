@@ -140,10 +140,6 @@ class SimpleFontEditor(BaseSimpleEditor):
         """
         return self.factory.str_font(font)
 
-#-------------------------------------------------------------------------
-#  'CustomFontEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomFontEditor(Editor):
     """ Custom style of font editor, which displays the following:
@@ -276,10 +272,6 @@ class TextFontEditor(BaseTextEditor):
         """
         return self.factory.str_font(font)
 
-#-------------------------------------------------------------------------
-#  'ReadonlyFontEditor' class:
-#-------------------------------------------------------------------------
-
 
 class ReadonlyFontEditor(BaseReadonlyEditor):
     """ Read-only style of font editor, which displays a read-only text field
@@ -310,10 +302,6 @@ def set_font(editor):
     font = editor.factory.to_wx_font(editor)
     font.SetPointSize(min(10, font.GetPointSize()))
     editor.control.SetFont(font)
-
-#-------------------------------------------------------------------------
-#  'FontEnumerator' class:
-#-------------------------------------------------------------------------
 
 
 class FontEnumerator(wx.FontEnumerator):

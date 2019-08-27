@@ -272,10 +272,6 @@ class SimpleEditor(SimpleTextEditor):
 
         return self._file_name.GetValue()
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleTextEditor):
     """ Custom style of file editor, consisting of a file system tree view.
@@ -376,10 +372,6 @@ class CustomEditor(SimpleTextEditor):
         """
         self.control.ReCreateTree()
 
-#-------------------------------------------------------------------------
-#  'PopupFile' class:
-#-------------------------------------------------------------------------
-
 
 class PopupFile(PopupControl):
 
@@ -442,10 +434,6 @@ class PopupFile(PopupControl):
             (path[-1:] not in ('/\\')) and
                 self.is_valid(path)):
             self.value = path
-
-#-------------------------------------------------------------------------
-#  'FileDropTarget' class:
-#-------------------------------------------------------------------------
 
 
 class FileDropTarget(wx.FileDropTarget):

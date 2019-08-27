@@ -42,10 +42,6 @@ LEDStyles = {
     'right': LED_ALIGN_RIGHT,
 }
 
-#-------------------------------------------------------------------------
-#  '_LEDEditor' class:
-#-------------------------------------------------------------------------
-
 
 class _LEDEditor(Editor):
     """ Traits UI 'display only' LED numeric editor.

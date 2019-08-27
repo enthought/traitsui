@@ -33,10 +33,6 @@ elif ETSConfig.toolkit == 'qt4':
 else:
     raise NotImplementedError("No checkbox renderer for backend")
 
-#-------------------------------------------------------------------------
-#  'CheckboxColumn' class:
-#-------------------------------------------------------------------------
-
 
 class CheckboxColumn(ObjectColumn):
 

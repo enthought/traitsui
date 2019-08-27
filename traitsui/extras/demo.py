@@ -233,10 +233,6 @@ class DemoFileHandler(Handler):
 # Create a singleton instance:
 demo_file_handler = DemoFileHandler()
 
-#-------------------------------------------------------------------------
-#  'DemoError' class:
-#-------------------------------------------------------------------------
-
 
 class DemoError(HasPrivateTraits):
 
@@ -257,10 +253,6 @@ class DemoError(HasPrivateTraits):
             Item('msg', style='custom', show_label=False),
         )
     )
-
-#-------------------------------------------------------------------------
-#  'DemoButton' class:
-#-------------------------------------------------------------------------
 
 
 class DemoButton(HasPrivateTraits):
@@ -297,10 +289,6 @@ class DemoButton(HasPrivateTraits):
         resizable=True
     )
 
-#-------------------------------------------------------------------------
-#  'ModalDemoButton' class:
-#-------------------------------------------------------------------------
-
 
 class ModalDemoButton(DemoButton):
 
@@ -313,10 +301,6 @@ class ModalDemoButton(DemoButton):
                      show_label=False,
                      editor=InstanceEditor(label='Run demo...', kind='modal')
                      )
-
-#-------------------------------------------------------------------------
-#  'DemoTreeNodeObject' class:
-#-------------------------------------------------------------------------
 
 
 class DemoTreeNodeObject(TreeNodeObject):
@@ -382,10 +366,6 @@ class DemoTreeNodeObject(TreeNodeObject):
         """
         raise NotImplementedError
 
-#-------------------------------------------------------------------------
-#  'DemoFile' class:
-#-------------------------------------------------------------------------
-
 
 class DemoFile(DemoTreeNodeObject):
 
@@ -450,10 +430,6 @@ class DemoFile(DemoTreeNodeObject):
         """ Returns whether or not the object has children.
         """
         return False
-
-#-------------------------------------------------------------------------
-#  'DemoPath' class:
-#-------------------------------------------------------------------------
 
 
 class DemoPath(DemoTreeNodeObject):
@@ -802,10 +778,6 @@ demo_tree_editor = TreeEditor(
                        view=demo_view)
     ]
 )
-
-#-------------------------------------------------------------------------
-#  'Demo' class:
-#-------------------------------------------------------------------------
 
 
 class Demo(HasPrivateTraits):

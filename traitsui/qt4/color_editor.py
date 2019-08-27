@@ -78,10 +78,6 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
 
         return color
 
-#-------------------------------------------------------------------------
-#  'SimpleColorEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleColorEditor(BaseSimpleEditor):
     """ Simple style of color editor, which displays a text field whose
@@ -118,10 +114,6 @@ class SimpleColorEditor(BaseSimpleEditor):
         """ Returns the text representation of a specified color value.
         """
         return self.factory.str_color(color)
-
-#-------------------------------------------------------------------------
-#  'CustomColorEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomColorEditor(Editor):
@@ -160,10 +152,6 @@ class CustomColorEditor(Editor):
         """
         return self.factory.str_color(color)
 
-#-------------------------------------------------------------------------
-#  'TextColorEditor' class:
-#-------------------------------------------------------------------------
-
 
 class TextColorEditor(BaseTextEditor):
     """ Text style of color editor, which displays a text field whose
@@ -187,10 +175,6 @@ class TextColorEditor(BaseTextEditor):
         """ Returns the text representation of a specified color value.
         """
         return self.factory.str_color(color)
-
-#-------------------------------------------------------------------------
-#  'ReadonlyColorEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ReadonlyColorEditor(BaseReadonlyEditor):

@@ -64,10 +64,6 @@ from .group import Group, ShadowGroup
 # List of **kind** types for views that must have a **parent** window specified
 kind_must_have_parent = ('panel', 'subpanel')
 
-#-------------------------------------------------------------------------
-#  'UI' class:
-#-------------------------------------------------------------------------
-
 
 class UI(HasPrivateTraits):
     """ Information about the user interface for a View.
@@ -863,10 +859,6 @@ class UI(HasPrivateTraits):
             # KeyBindings object (if any):
             if parent.key_bindings is not None:
                 parent.key_bindings.children.append(self.key_bindings)
-
-#-------------------------------------------------------------------------
-#  'Dispatcher' class:
-#-------------------------------------------------------------------------
 
 
 class Dispatcher(object):

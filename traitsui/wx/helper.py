@@ -412,10 +412,6 @@ else:
                 result = self.GetNextHandler().ProcessEvent(event)
                 return result
 
-#-------------------------------------------------------------------------
-#  'TraitsUIScrolledPanel' class:
-#-------------------------------------------------------------------------
-
 
 class TraitsUIScrolledPanel(wx.lib.scrolledpanel.ScrolledPanel):
 
@@ -537,10 +533,6 @@ def init_wx_handlers(control, object, prefix=''):
         if method is not None:
             handler(control, method)
 
-#-------------------------------------------------------------------------
-#  'GroupEditor' class:
-#-------------------------------------------------------------------------
-
 
 class GroupEditor(Editor):
 
@@ -548,10 +540,6 @@ class GroupEditor(Editor):
         """ Initializes the object.
         """
         self.trait_set(**traits)
-
-#-------------------------------------------------------------------------
-#  'PopupControl' class:
-#-------------------------------------------------------------------------
 
 
 class PopupControl(HasPrivateTraits):
@@ -662,10 +650,6 @@ class PopupControl(HasPrivateTraits):
         self.popup.Destroy()
         self.popup = self.control = None
 
-#-------------------------------------------------------------------------
-#  'BufferDC' class:
-#-------------------------------------------------------------------------
-
 
 class BufferDC(wx.MemoryDC):
     """ An off-screen buffer class.
@@ -698,10 +682,6 @@ class BufferDC(wx.MemoryDC):
         """
         self.dc.Blit(x, y, self.bitmap.GetWidth(), self.bitmap.GetHeight(),
                      self, 0, 0)
-
-#-------------------------------------------------------------------------
-#  'Slider' class:
-#-------------------------------------------------------------------------
 
 
 class Slider(wx.Slider):

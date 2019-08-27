@@ -483,10 +483,6 @@ class CustomEditor(Editor):
     def _view_changed(self, view):
         self.resynch_editor()
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(CustomEditor):
     """ Simple style of editor for instances, which displays a button. Clicking

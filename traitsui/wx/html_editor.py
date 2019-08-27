@@ -76,10 +76,6 @@ class URLResolvingHtmlWindow(wh.HtmlWindow):
         else:
             return wh.HTML_OPEN
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple style of editor for HTML, which displays interpreted HTML.

@@ -36,10 +36,6 @@ from .enum_editor import RadioEditor as CustomEnumEditor
 from .helper import pixmap_cache
 
 
-#-------------------------------------------------------------------------
-#  'BaseImageEnumEditor' class:
-#-------------------------------------------------------------------------
-
 
 class BaseEditor(object):
     """ The base class for the different styles of ImageEnumEditor.
@@ -53,10 +49,6 @@ class BaseEditor(object):
         factory = self.factory
         name = ''.join((factory.prefix, name, factory.suffix))
         return pixmap_cache(name, factory._image_path)
-
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ReadonlyEditor(BaseEditor, BaseEnumEditor):
@@ -77,10 +69,6 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
             editor.
         """
         self.control.setPixmap(self.get_pixmap(self.str_value))
-
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
 
 
 class SimpleEditor(BaseEditor, SimpleEnumEditor):
@@ -118,10 +106,6 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
             object's **values** trait changes.
         """
         self.control.model().reset()
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomEditor(BaseEditor, CustomEnumEditor):

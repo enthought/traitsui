@@ -279,10 +279,6 @@ class SimpleEditor(Editor):
         except:
             return wx.DragNone
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleEditor):
     """ Custom style of drag-and-drop editor, which is not a drag source.
@@ -294,10 +290,6 @@ class CustomEditor(SimpleEditor):
     #: Is the editor a drag source? This value overrides the default.
     drag_source = False
 
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
-
 
 class ReadonlyEditor(SimpleEditor):
     """ Read-only style of drag-and-drop editor, which is not a drop target.
@@ -308,10 +300,6 @@ class ReadonlyEditor(SimpleEditor):
 
     #: Is the editor a drop target? This value overrides the default.
     drop_target = False
-
-#-------------------------------------------------------------------------
-#  'FileDropSource' class:
-#-------------------------------------------------------------------------
 
 
 class FileDropSource(wx.DropSource):

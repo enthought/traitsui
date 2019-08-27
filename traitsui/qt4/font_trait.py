@@ -127,10 +127,6 @@ def create_traitsfont(value):
 
     return fnt
 
-#-------------------------------------------------------------------------
-#  'TraitsFont' class:
-#-------------------------------------------------------------------------
-
 
 class TraitsFont(QtGui.QFont):
     """ A Traits-specific QFont.

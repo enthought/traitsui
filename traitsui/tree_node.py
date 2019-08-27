@@ -1415,10 +1415,6 @@ class ObjectTreeNode(TreeNode):
         """
         return object.tno_activated(self)
 
-#-------------------------------------------------------------------------
-#  'TreeNodeObject' class:
-#-------------------------------------------------------------------------
-
 
 class TreeNodeObject(HasPrivateTraits):
     """ Represents the object that corresponds to a tree node.

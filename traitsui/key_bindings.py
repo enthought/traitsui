@@ -47,10 +47,6 @@ from traits.trait_base import SequenceTypes
 # Trait definition for key bindings
 Binding = Str(event='binding', editor=KeyBindingEditor())
 
-#-------------------------------------------------------------------------
-#  'KeyBinding' class:
-#-------------------------------------------------------------------------
-
 
 class KeyBinding(HasStrictTraits):
     """ Binds one or two keystrokes to a method.
@@ -91,10 +87,6 @@ class KeyBinding(HasStrictTraits):
     def _binding_changed(self):
         if self.owner is not None:
             self.owner.binding_modified = self
-
-#-------------------------------------------------------------------------
-#  'KeyBindings' class:
-#-------------------------------------------------------------------------
 
 
 class KeyBindings(HasPrivateTraits):

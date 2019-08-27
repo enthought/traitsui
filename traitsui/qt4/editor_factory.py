@@ -44,10 +44,6 @@ class EditorFactory(BaseEditorFactory):
         warnings.warn("DEPRECATED: Use traitsui.editor_factory."
                       ".EditorFactory instead.", DeprecationWarning)
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Base class for simple style editors, which displays a text field
@@ -72,10 +68,6 @@ class SimpleEditor(Editor):
         """ Invokes the pop-up editor for an object trait.
         """
         pass
-
-#-------------------------------------------------------------------------
-#  'TextEditor' class:
-#-------------------------------------------------------------------------
 
 
 class TextEditor(Editor):
@@ -107,10 +99,6 @@ class TextEditor(Editor):
             self.value = six.text_type(self.control.text())
         except TraitError as excp:
             pass
-
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ReadonlyEditor(Editor):
@@ -163,10 +151,6 @@ class ReadonlyEditor(Editor):
             editor.
         """
         self.control.setText(self.str_value)
-
-#-------------------------------------------------------------------------
-#  '_SimpleField' class:
-#-------------------------------------------------------------------------
 
 
 class _SimpleField(QtGui.QLineEdit):

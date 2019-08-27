@@ -132,10 +132,6 @@ class SimpleEditor(EditorWithList):
         except:
             pass
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleEditor):
     """ Custom style of editor for checklists, which displays a set of check
@@ -219,10 +215,6 @@ class CustomEditor(SimpleEditor):
                 cb.setCheckState(QtCore.Qt.Checked)
             else:
                 cb.setCheckState(QtCore.Qt.Unchecked)
-
-#-------------------------------------------------------------------------
-#  'TextEditor' class:
-#-------------------------------------------------------------------------
 
 
 class TextEditor(BaseTextEditor):

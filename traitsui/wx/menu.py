@@ -79,10 +79,6 @@ key_map = {
     'F12': wx.WXK_F12
 }
 
-#-------------------------------------------------------------------------
-#  'MakeMenu' class:
-#-------------------------------------------------------------------------
-
 
 class MakeMenu:
     """ Manages creation of menus.
@@ -271,10 +267,6 @@ class MakeMenu:
         if label is None:
             return self.menu.GetLabel(self.get_id(name))
         self.menu.SetLabel(self.get_id(name), label)
-
-#-------------------------------------------------------------------------
-#  'MakeMenuItem' class:
-#-------------------------------------------------------------------------
 
 
 class MakeMenuItem:

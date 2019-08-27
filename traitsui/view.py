@@ -140,10 +140,6 @@ CloseResult = Enum(None, True, False,
 AKeyBindings = Instance('traitsui.key_bindings.KeyBindings',
                         desc='the global key bindings for the view')
 
-#-------------------------------------------------------------------------
-#  'View' class:
-#-------------------------------------------------------------------------
-
 
 class View(ViewElement):
     """ A Traits-based user interface for one or more objects.

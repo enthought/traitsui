@@ -53,10 +53,6 @@ class EditorFactory(BaseEditorFactory):
         warnings.warn("DEPRECATED: Use traitsui.editor_factory."
                       ".EditorFactory instead.", DeprecationWarning)
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Base class for simple style editors, which displays a text field
@@ -106,10 +102,6 @@ class SimpleEditor(Editor):
             self.left_down = False
             self.popup_editor(event)
 
-#-------------------------------------------------------------------------
-#  'TextEditor' class:
-#-------------------------------------------------------------------------
-
 
 class TextEditor(Editor):
     """ Base class for text style editors, which displays an editable text
@@ -135,10 +127,6 @@ class TextEditor(Editor):
             self.value = self.control.GetValue()
         except TraitError as excp:
             pass
-
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ReadonlyEditor(Editor):

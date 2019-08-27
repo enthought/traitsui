@@ -30,10 +30,6 @@ from .ui_traits import AView
 from .helper import user_name_for
 import six
 
-#-------------------------------------------------------------------------
-#  'InstanceChoiceItem' class:
-#-------------------------------------------------------------------------
-
 
 class InstanceChoiceItem(HasPrivateTraits):
 
@@ -80,10 +76,6 @@ class InstanceChoiceItem(HasPrivateTraits):
         """
         return False
 
-#-------------------------------------------------------------------------
-#  'InstanceChoice' class:
-#-------------------------------------------------------------------------
-
 
 class InstanceChoice(InstanceChoiceItem):
 
@@ -118,10 +110,6 @@ class InstanceChoice(InstanceChoiceItem):
         """ Indicates whether a specified object is compatible with the item.
         """
         return (object is self.object)
-
-#-------------------------------------------------------------------------
-#  'InstanceFactoryChoice' class:
-#-------------------------------------------------------------------------
 
 
 class InstanceFactoryChoice(InstanceChoiceItem):
@@ -188,10 +176,6 @@ class InstanceFactoryChoice(InstanceChoiceItem):
         """ Indicates whether the item can be selected by the user.
         """
         return self.selectable
-
-#-------------------------------------------------------------------------
-#  'InstanceDropChoice' class:
-#-------------------------------------------------------------------------
 
 
 class InstanceDropChoice(InstanceFactoryChoice):

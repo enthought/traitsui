@@ -64,10 +64,6 @@ class ViewElement(HasPrivateTraits):
         """
         return False  # Normally overridden in a subclass
 
-#-------------------------------------------------------------------------
-#  'DefaultViewElement' class:
-#-------------------------------------------------------------------------
-
 
 class DefaultViewElement(ViewElement):
     """ A view element that can be used as a default value for traits whose

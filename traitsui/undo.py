@@ -36,10 +36,6 @@ from traits.api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
 NumericTypes = six.integer_types + (float, complex)
 SimpleTypes = (six.text_type, bytes) + NumericTypes
 
-#-------------------------------------------------------------------------
-#  'AbstractUndoItem' class:
-#-------------------------------------------------------------------------
-
 
 class AbstractUndoItem(HasPrivateTraits):
     """ Abstract base class for undo items.
@@ -58,10 +54,6 @@ class AbstractUndoItem(HasPrivateTraits):
         """ Merges two undo items if possible.
         """
         return False
-
-#-------------------------------------------------------------------------
-#  'UndoItem' class:
-#-------------------------------------------------------------------------
 
 
 class UndoItem(AbstractUndoItem):
@@ -186,10 +178,6 @@ class UndoItem(AbstractUndoItem):
         return 'undo( %s.%s = %s )\nredo( %s.%s = %s )' % (
             cn, n, self.old_value, cn, n, self.new_value)
 
-#-------------------------------------------------------------------------
-#  'ListUndoItem' class:
-#-------------------------------------------------------------------------
-
 
 class ListUndoItem(AbstractUndoItem):
     """ A change to a list, which can be undone.
@@ -260,10 +248,6 @@ class ListUndoItem(AbstractUndoItem):
         return 'undo( %s.%s[%d:%d] = %s )' % (
             self.object.__class__.__name__, self.name, self.index,
             self.index + len(self.removed), self.added)
-
-#-------------------------------------------------------------------------
-#  'UndoHistory' class:
-#-------------------------------------------------------------------------
 
 
 class UndoHistory(HasStrictTraits):
@@ -376,10 +360,6 @@ class UndoHistory(HasStrictTraits):
         """ Are there any redoable operations?
         """
         return self.now < len(self.history)
-
-#-------------------------------------------------------------------------
-#  'UndoHistoryUndoItem' class:
-#-------------------------------------------------------------------------
 
 
 class UndoHistoryUndoItem(AbstractUndoItem):

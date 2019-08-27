@@ -62,10 +62,6 @@ class SimpleEditor(SimpleFileEditor):
                               filter=self.factory.filter,
                               height=300)
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(CustomFileEditor):
     """ Custom style of editor for directories, which displays a tree view of
@@ -84,10 +80,6 @@ class CustomEditor(CustomFileEditor):
             path = self.control.GetPath()
             if isdir(path):
                 self.value = path
-
-#-------------------------------------------------------------------------
-#  'PopupDirectory' class:
-#-------------------------------------------------------------------------
 
 
 class PopupDirectory(PopupFile):

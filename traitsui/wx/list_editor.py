@@ -439,10 +439,6 @@ class SimpleEditor(Editor):
         """ Trait handler to set the mutable trait from the factory. """
         return self.factory.mutable
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleEditor):
     """ Custom style of editor for lists, which displays the items as a series
@@ -476,20 +472,12 @@ class TextEditor(CustomEditor):
     #: default.
     kind = 'text_editor'
 
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
-
 
 class ReadonlyEditor(CustomEditor):
 
     #: Is the list of items being edited mutable? This value overrides the
     #: default.
     mutable = False
-
-#-------------------------------------------------------------------------
-#  'NotebookEditor' class:
-#-------------------------------------------------------------------------
 
 
 class NotebookEditor(Editor):
@@ -741,10 +729,6 @@ class NotebookEditor(Editor):
                 value[0].activate()
                 break
         return
-
-#-------------------------------------------------------------------------
-#  'DockableListElement' class:
-#-------------------------------------------------------------------------
 
 
 class DockableListElement(DockableViewElement):

@@ -33,10 +33,6 @@ from .editor import Editor
 from .helper import IconButton
 from .menu import MakeMenu
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple style of editor for lists, which displays a scrolling list box
@@ -382,10 +378,6 @@ class SimpleEditor(Editor):
         """
         return self.factory.mutable
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleEditor):
     """ Custom style of editor for lists, which displays the items as a series
@@ -408,10 +400,6 @@ class CustomEditor(SimpleEditor):
     #: Is the list editor is scrollable? This values overrides the default.
     scrollable = True
 
-#-------------------------------------------------------------------------
-#  'TextEditor' class:
-#-------------------------------------------------------------------------
-
 
 class TextEditor(CustomEditor):
 
@@ -419,20 +407,12 @@ class TextEditor(CustomEditor):
     #: default.
     kind = 'text_editor'
 
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
-
 
 class ReadonlyEditor(CustomEditor):
 
     #: Is the list of items being edited mutable? This value overrides the
     #: default.
     mutable = False
-
-#-------------------------------------------------------------------------
-#  'NotebookEditor' class:
-#-------------------------------------------------------------------------
 
 
 class NotebookEditor(Editor):

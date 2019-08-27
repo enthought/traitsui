@@ -77,10 +77,6 @@ class BaseRangeEditor(Editor):
             value = self.evaluate(value)
         Editor._set_value(self, value)
 
-#-------------------------------------------------------------------------
-#  'SimpleSliderEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleSliderEditor(BaseRangeEditor):
     """ Simple style of range editor that displays a slider and a text field.
@@ -339,10 +335,6 @@ class LogRangeSliderEditor(SimpleSliderEditor):
         if not self.factory.is_float:
             fvalue = int(round(fvalue))
         return fvalue
-
-#-------------------------------------------------------------------------
-#  'LargeRangeSliderEditor' class:
-#-------------------------------------------------------------------------
 
 
 class LargeRangeSliderEditor(BaseRangeEditor):
@@ -681,10 +673,6 @@ class LargeRangeSliderEditor(BaseRangeEditor):
 
             self.update_editor()
 
-#-------------------------------------------------------------------------
-#  'SimpleSpinEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleSpinEditor(BaseRangeEditor):
     """ A simple style of range editor that displays a spin box control.
@@ -764,10 +752,6 @@ class SimpleSpinEditor(BaseRangeEditor):
         if self.control:
             self.control.SetRange(self.low, self.high)
             self.control.SetValue(int(self.value))
-
-#-------------------------------------------------------------------------
-#  'RangeTextEditor' class:
-#-------------------------------------------------------------------------
 
 
 class RangeTextEditor(TextEditor):

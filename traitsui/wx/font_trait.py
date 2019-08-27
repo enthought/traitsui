@@ -111,10 +111,6 @@ def create_traitsfont(value):
     return TraitsFont(point_size or 10, family, style, weight, underline,
                       ' '.join(facename))
 
-#-------------------------------------------------------------------------
-#  'TraitsFont' class:
-#-------------------------------------------------------------------------
-
 
 class TraitsFont(wx.Font):
     """ A Traits-specific wx.Font.

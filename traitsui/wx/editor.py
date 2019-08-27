@@ -41,10 +41,6 @@ from traitsui.editor \
 from .constants \
     import WindowColor, OKColor, ErrorColor
 
-#-------------------------------------------------------------------------
-#  'Editor' class:
-#-------------------------------------------------------------------------
-
 
 class Editor(UIEditor):
     """ Base class for wxPython editors for Traits-based UIs.
@@ -192,10 +188,6 @@ class Editor(UIEditor):
         """
         self.set_error_state()
 
-#-------------------------------------------------------------------------
-#  'EditorWithList' class:
-#-------------------------------------------------------------------------
-
 
 class EditorWithList(Editor):
     """ Editor for an object that contains a list.
@@ -247,10 +239,6 @@ class EditorWithList(Editor):
         """ Handles the monitored list being updated.
         """
         raise NotImplementedError
-
-#-------------------------------------------------------------------------
-#  'EditorFromView' class:
-#-------------------------------------------------------------------------
 
 
 class EditorFromView(Editor):

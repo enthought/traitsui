@@ -47,10 +47,6 @@ from .constants \
 HoverColor = wx.LIGHT_GREY
 DownColor = wx.WHITE
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple style text editor, which displays a text field.
@@ -177,10 +173,6 @@ class SimpleEditor(Editor):
         """
         return (self.invalid or self._error)
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleEditor):
     """ Custom style of text editor, which displays a multi-line text field.
@@ -188,10 +180,6 @@ class CustomEditor(SimpleEditor):
 
     #: Flag for window style. This value overrides the default.
     base_style = wx.TE_MULTILINE
-
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ReadonlyEditor(BaseReadonlyEditor):

@@ -31,10 +31,6 @@ from traitsui.editors.compound_editor \
 from .editor \
     import Editor
 
-#-------------------------------------------------------------------------
-#  'CompoundEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CompoundEditor(Editor):
     """ Editor for compound traits, which displays editors for each of the
@@ -84,20 +80,12 @@ class CompoundEditor(Editor):
 
         super(CompoundEditor, self).dispose()
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(CompoundEditor):
 
     #: The kind of editor to create for each list item. This value overrides
     #: the default.
     kind = 'simple_editor'
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomEditor(CompoundEditor):

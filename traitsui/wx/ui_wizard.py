@@ -199,10 +199,6 @@ def page_changing(event):
         if msg != '':
             wx.MessageBox(msg)
 
-#-------------------------------------------------------------------------
-#  'UIWizardPage' class:
-#-------------------------------------------------------------------------
-
 
 class UIWizardPage(wz.PyWizardPage):
     """ A page within a wizard interface.
@@ -247,10 +243,6 @@ class UIWizardPage(wz.PyWizardPage):
                 if page.id == previous:
                     return page
         return self.previous
-
-#-------------------------------------------------------------------------
-#  'PageGroupEditor' class:
-#-------------------------------------------------------------------------
 
 
 class PageGroupEditor(GroupEditor):

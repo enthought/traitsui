@@ -68,10 +68,6 @@ customize_filter = TableFilter(name='Customize...')
 # A trait whose value can be True, False, or a callable function
 BoolOrCallable = Trait(False, Bool, Callable)
 
-#-------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
-
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for table editors.

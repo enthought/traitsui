@@ -1622,10 +1622,6 @@ class SimpleEditor(Editor):
 
 #-- End UI preference save/restore interface -----------------------------
 
-#-------------------------------------------------------------------------
-#  'ObjectLabel' class:
-#-------------------------------------------------------------------------
-
 
 class ObjectLabel(HasStrictTraits):
     """ An editable label for an object.

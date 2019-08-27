@@ -1434,10 +1434,6 @@ class SimpleEditor(Editor):
 
 #-- End UI preference save/restore interface -----------------------------
 
-#-------------------------------------------------------------------------
-#  '_TreeWidget' class:
-#-------------------------------------------------------------------------
-
 
 class _TreeWidget(QtGui.QTreeWidget):
     """ The _TreeWidget class is a specialised QTreeWidget that reimplements

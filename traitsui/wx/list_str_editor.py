@@ -115,10 +115,6 @@ class wxListCtrl(wx.ListCtrl):
 
         return editor.adapter.get_text(editor.object, editor.name, index)
 
-#-------------------------------------------------------------------------
-#  '_ListStrEditor' class:
-#-------------------------------------------------------------------------
-
 
 class _ListStrEditor(Editor):
     """ Traits UI editor for editing lists of strings.

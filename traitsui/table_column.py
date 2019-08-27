@@ -60,10 +60,6 @@ logger = logging.getLogger(__name__)
 # Flag used to indicate user has not specified a column label
 UndefinedLabel = '???'
 
-#-------------------------------------------------------------------------
-#  'TableColumn' class:
-#-------------------------------------------------------------------------
-
 
 class TableColumn(HasPrivateTraits):
     """ Represents a column in a table editor.
@@ -305,10 +301,6 @@ class TableColumn(HasPrivateTraits):
         """
         return self.get_label()
 
-#-------------------------------------------------------------------------
-#  'ObjectColumn' class:
-#-------------------------------------------------------------------------
-
 
 class ObjectColumn(TableColumn):
     """ A column for editing objects.
@@ -451,10 +443,6 @@ class ObjectColumn(TableColumn):
 
         return (xgetattr(object, name[:col]), name[col + 1:])
 
-#-------------------------------------------------------------------------
-#  'ExpressionColumn' class:
-#-------------------------------------------------------------------------
-
 
 class ExpressionColumn(ObjectColumn):
     """ A column for displaying computed values.
@@ -483,10 +471,6 @@ class ExpressionColumn(ObjectColumn):
             logger.exception('Error evaluating table column expression: %s' %
                              self.expression)
             return None
-
-#-------------------------------------------------------------------------
-#  'NumericColumn' class:
-#-------------------------------------------------------------------------
 
 
 class NumericColumn(ObjectColumn):
@@ -621,10 +605,6 @@ class NumericColumn(ObjectColumn):
                 and object.model_selection is not None:
             return True
         return False
-
-#-------------------------------------------------------------------------
-#  'ListColumn' class:
-#-------------------------------------------------------------------------
 
 
 class ListColumn(TableColumn):

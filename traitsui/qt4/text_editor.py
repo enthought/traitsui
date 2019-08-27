@@ -37,10 +37,6 @@ from .constants \
     import OKColor
 import six
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple style text editor, which displays a text field.
@@ -177,10 +173,6 @@ class SimpleEditor(Editor):
         """
         return (self.invalid or self._error)
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleEditor):
     """ Custom style of text editor, which displays a multi-line text field.
@@ -189,10 +181,6 @@ class CustomEditor(SimpleEditor):
     #: FIXME: The wx version exposes a wx constant.
     #: Flag for window style. This value overrides the default.
     base_style = QtGui.QTextEdit
-
-#-------------------------------------------------------------------------
-#  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ReadonlyEditor(BaseReadonlyEditor):

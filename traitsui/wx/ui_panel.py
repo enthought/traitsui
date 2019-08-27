@@ -126,10 +126,6 @@ def ui_panel_for(ui, parent, buttons):
     ui.restore_prefs()
     ui.result = True
 
-#-------------------------------------------------------------------------
-#  'Panel' class:
-#-------------------------------------------------------------------------
-
 
 class Panel(BaseDialog):
     """ wxPython user interface panel for Traits-based user interfaces.
@@ -443,10 +439,6 @@ def fill_panel_for_group(panel, group, ui, suppress_label=False,
     fp = FillPanel(panel, group, ui, suppress_label, is_dock_window,
                    create_panel)
     return (fp.control or fp.sizer, fp.resizable, fp.dock_contents)
-
-#-------------------------------------------------------------------------
-#  'FillPanel' class:
-#-------------------------------------------------------------------------
 
 
 class FillPanel(object):
@@ -1065,10 +1057,6 @@ class FillPanel(object):
         for child in control.GetChildren():
             self._set_owner(child, owner)
 
-#-------------------------------------------------------------------------
-#  'DockWindowGroupEditor' class:
-#-------------------------------------------------------------------------
-
 
 class DockWindowGroupEditor(GroupEditor):
     """ Editor for a group which displays a DockWindow.
@@ -1100,10 +1088,6 @@ class DockWindowGroupEditor(GroupEditor):
         return {'structure': self.dock_window.GetSizer().GetStructure()}
 
     #-- End UI preference save/restore interface -----------------------------
-
-#-------------------------------------------------------------------------
-#  'HTMLHelpWindow' class:
-#-------------------------------------------------------------------------
 
 
 class HTMLHelpWindow(wx.Frame):

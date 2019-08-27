@@ -70,10 +70,6 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
         return '%s point %s%s%s' % (
                font.pointSize(), font.family(), style, weight)
 
-#-------------------------------------------------------------------------
-#  'SimpleFontEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleFontEditor(BaseSimpleEditor):
     """ Simple style of font editor, which displays a text field that contains
@@ -101,10 +97,6 @@ class SimpleFontEditor(BaseSimpleEditor):
         """ Returns the text representation of a specified font value.
         """
         return self.factory.str_font(font)
-
-#-------------------------------------------------------------------------
-#  'CustomFontEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomFontEditor(Editor):
@@ -205,10 +197,6 @@ class CustomFontEditor(Editor):
         font.setPointSize(min(10, font.pointSize()))
         self._font.setFont(font)
 
-#-------------------------------------------------------------------------
-#  'TextFontEditor' class:
-#-------------------------------------------------------------------------
-
 
 class TextFontEditor(BaseTextEditor):
     """ Text style of font editor, which displays an editable text field
@@ -231,10 +219,6 @@ class TextFontEditor(BaseTextEditor):
         """ Returns the text representation of a specified font value.
         """
         return self.factory.str_font(font)
-
-#-------------------------------------------------------------------------
-#  'ReadonlyFontEditor' class:
-#-------------------------------------------------------------------------
 
 
 class ReadonlyFontEditor(BaseReadonlyEditor):

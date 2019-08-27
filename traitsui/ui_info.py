@@ -25,10 +25,6 @@ from __future__ import absolute_import
 
 from traits.api import HasPrivateTraits, Instance, Constant, Bool
 
-#-------------------------------------------------------------------------
-#  'UIInfo' class:
-#-------------------------------------------------------------------------
-
 
 class UIInfo(HasPrivateTraits):
     """ Represents the object and editor content of an active Traits-based

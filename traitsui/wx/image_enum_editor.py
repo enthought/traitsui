@@ -80,10 +80,6 @@ class ReadonlyEditor(Editor):
                 False,
                 self.factory._image_path))
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(ReadonlyEditor):
     """ Simple style of image enumeration editor, which displays an
@@ -105,10 +101,6 @@ class SimpleEditor(ReadonlyEditor):
             dialog.
         """
         ImageEnumDialog(self)
-
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
 
 
 class CustomEditor(Editor):
@@ -178,10 +170,6 @@ class CustomEditor(Editor):
         value = self.value
         for control in self.control.GetChildren():
             control.Selected(value == control.value)
-
-#-------------------------------------------------------------------------
-#  'ImageEnumDialog' class:
-#-------------------------------------------------------------------------
 
 
 class ImageEnumDialog(wx.Frame):

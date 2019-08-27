@@ -144,19 +144,11 @@ class MFileDialogView(HasPrivateTraits):
 # Create a default implementation:
 default_view = MFileDialogView()
 
-#-------------------------------------------------------------------------
-#  'MFileDialogExtension' mix-in class:
-#-------------------------------------------------------------------------
-
 
 class MFileDialogExtension(MFileDialogModel, MFileDialogView):
     """ Defines a (convenience) union of the MFileDialogModel and
         MFileDialogView mix-in classes.
     """
-
-#-------------------------------------------------------------------------
-#  'FileInfo' class:
-#-------------------------------------------------------------------------
 
 
 class FileInfo(MFileDialogModel):
@@ -221,10 +213,6 @@ class FileInfo(MFileDialogModel):
         except:
             return ''
 
-#-------------------------------------------------------------------------
-#  'TextInfo' class:
-#-------------------------------------------------------------------------
-
 
 class TextInfo(MFileDialogModel):
     """ Defines a file dialog extension that displays a file's contents as text.
@@ -260,10 +248,6 @@ class TextInfo(MFileDialogModel):
             return 'File contains binary data...'
 
         return data
-
-#-------------------------------------------------------------------------
-#  'ImageInfo' class:
-#-------------------------------------------------------------------------
 
 
 class ImageInfo(MFileDialogModel):
@@ -327,10 +311,6 @@ class ImageInfo(MFileDialogModel):
             return str(toolkit().image_size(self._cur_image)[1]) + ' pixels'
         except:
             return '---'
-
-#-------------------------------------------------------------------------
-#  'CreateDirHandler' class:
-#-------------------------------------------------------------------------
 
 
 class CreateDirHandler(Handler):
@@ -405,10 +385,6 @@ class CreateDirHandler(Handler):
         """
         info.ui.dispose(False)
 
-#-------------------------------------------------------------------------
-#  'FileExistsHandler' class:
-#-------------------------------------------------------------------------
-
 
 class FileExistsHandler(Handler):
     """ Controller for the 'file already exists' popup.
@@ -454,10 +430,6 @@ class FileExistsHandler(Handler):
         """ Handles the user clicking the Cancel button.
         """
         info.ui.dispose(False)
-
-#-------------------------------------------------------------------------
-#  'OpenFileDialog' class:
-#-------------------------------------------------------------------------
 
 
 class OpenFileDialog(Handler):

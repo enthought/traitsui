@@ -42,10 +42,6 @@ OrientationMap = {
     'vertical': QtGui.QBoxLayout.TopToBottom
 }
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(Editor):
     """ Custom style of editor for instances. If selection among instances is
@@ -387,10 +383,6 @@ class CustomEditor(Editor):
 
     def _view_changed(self, view):
         self.resynch_editor()
-
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
 
 
 class SimpleEditor(CustomEditor):

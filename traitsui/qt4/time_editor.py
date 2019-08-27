@@ -29,10 +29,6 @@ from pyface.qt import QtCore, QtGui
 from .editor import Editor
 from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
-#-------------------------------------------------------------------------
-#  'SimpleEditor' class:
-#-------------------------------------------------------------------------
-
 
 class SimpleEditor(Editor):
     """ Simple Traits UI time editor that wraps QTimeEdit.

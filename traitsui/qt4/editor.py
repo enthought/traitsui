@@ -27,10 +27,6 @@ from traitsui.api \
 from .constants \
     import OKColor, ErrorColor
 
-#-------------------------------------------------------------------------
-#  'Editor' class:
-#-------------------------------------------------------------------------
-
 
 class Editor(UIEditor):
     """ Base class for PyQt editors for Traits-based UIs.
@@ -354,10 +350,6 @@ class Editor(UIEditor):
 
         self.control.setSizePolicy(policy)
 
-#-------------------------------------------------------------------------
-#  'EditorWithList' class:
-#-------------------------------------------------------------------------
-
 
 class EditorWithList(Editor):
     """ Editor for an object that contains a list.
@@ -417,10 +409,6 @@ class EditorWithList(Editor):
         """ Handles the monitored list being updated.
         """
         raise NotImplementedError
-
-#-------------------------------------------------------------------------
-#  'EditorFromView' class:
-#-------------------------------------------------------------------------
 
 
 class EditorFromView(Editor):

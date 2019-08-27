@@ -56,10 +56,6 @@ from pyface.timer.api \
 
 logger = logging.getLogger(__name__)
 
-#-------------------------------------------------------------------------
-#  'TraitGridSelection' class:
-#-------------------------------------------------------------------------
-
 
 class TraitGridSelection(HasPrivateTraits):
     """ Structure for holding specification information.
@@ -70,10 +66,6 @@ class TraitGridSelection(HasPrivateTraits):
 
     #: The specific trait selected on the object
     name = Str
-
-#-------------------------------------------------------------------------
-#  'TableModel' class:
-#-------------------------------------------------------------------------
 
 
 class TableModel(GridModel):

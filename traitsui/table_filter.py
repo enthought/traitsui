@@ -60,10 +60,6 @@ GenericTableFilterRuleOperation = Trait('=', {
     'ends with': 'ends_with'
 })
 
-#-------------------------------------------------------------------------
-#  'TableFilter' class:
-#-------------------------------------------------------------------------
-
 
 class TableFilter(HasPrivateTraits):
     """ Filter for items displayed in a table.
@@ -176,10 +172,6 @@ class TableFilter(HasPrivateTraits):
                 ((self.name == self._name) or (self.name == ''))):
             self.name = self._name = self.description()
 
-#-------------------------------------------------------------------------
-#  'EvalTableFilter' class:
-#-------------------------------------------------------------------------
-
 
 class EvalTableFilter(TableFilter):
     """ A table filter based on evaluating an expression.
@@ -218,10 +210,6 @@ class EvalTableFilter(TableFilter):
             satisfies the filter.
         """
         return self.expression
-
-#-------------------------------------------------------------------------
-#  'GenericTableFilterRule' class:
-#-------------------------------------------------------------------------
 
 
 class GenericTableFilterRule(HasPrivateTraits):
@@ -347,10 +335,6 @@ class GenericTableFilterRule(HasPrivateTraits):
     def ends_with(self, value1, value2):
         return (value1[-len(value2):].lower() == value2.lower())
 
-#-------------------------------------------------------------------------
-#  'GenericTableFilterRuleEnabledColumn' class:
-#-------------------------------------------------------------------------
-
 
 class GenericTableFilterRuleEnabledColumn(ObjectColumn):
     """ Table column that indicates whether a filter rule is enabled.
@@ -363,10 +347,6 @@ class GenericTableFilterRuleEnabledColumn(ObjectColumn):
             return u'\N{HEAVY CHECK MARK}'
         else:
             return ''
-
-#-------------------------------------------------------------------------
-#  'GenericTableFilterRuleAndOrColumn' class:
-#-------------------------------------------------------------------------
 
 
 class GenericTableFilterRuleAndOrColumn(ObjectColumn):
@@ -381,10 +361,6 @@ class GenericTableFilterRuleAndOrColumn(ObjectColumn):
             return 'or'
         return ''
 
-#-------------------------------------------------------------------------
-#  'GenericTableFilterRuleNameColumn' class:
-#-------------------------------------------------------------------------
-
 
 class GenericTableFilterRuleNameColumn(ObjectColumn):
     """ Table column for the name of an object trait.
@@ -394,10 +370,6 @@ class GenericTableFilterRuleNameColumn(ObjectColumn):
         """ Returns the traits editor of the column for a specified object.
         """
         return object.name_editor
-
-#-------------------------------------------------------------------------
-#  'GenericTableFilterRuleValueColumn' class:
-#-------------------------------------------------------------------------
 
 
 class GenericTableFilterRuleValueColumn(ObjectColumn):
@@ -420,10 +392,6 @@ generic_table_filter_rule_columns = [
     ObjectColumn(name='operation'),
     GenericTableFilterRuleValueColumn(name='value')
 ]
-
-#-------------------------------------------------------------------------
-#  'RuleTableFilter' class:
-#-------------------------------------------------------------------------
 
 
 class RuleTableFilter(TableFilter):
@@ -579,10 +547,6 @@ menu_table_filter_rule_columns = [
     ObjectColumn(name='operation'),
     GenericTableFilterRuleValueColumn(name='value')
 ]
-
-#-------------------------------------------------------------------------
-#  'MenuTableFilter' class:
-#-------------------------------------------------------------------------
 
 
 class MenuTableFilter(RuleTableFilter):

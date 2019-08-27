@@ -98,10 +98,6 @@ class _ValueEditor(Editor):
         """
         return self._ui.get_error_controls()
 
-#-------------------------------------------------------------------------
-#  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
-
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for tree-based value editors.

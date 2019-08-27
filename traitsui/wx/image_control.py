@@ -24,10 +24,6 @@
 from __future__ import absolute_import
 import wx
 
-#-------------------------------------------------------------------------
-#  'ImageControl' class:
-#-------------------------------------------------------------------------
-
 
 class ImageControl(wx.Window):
     """ A wxPython control that displays an image, which can be selected or

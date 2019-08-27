@@ -32,10 +32,6 @@ from traitsui.wx.editor \
 from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
-#-------------------------------------------------------------------------
-#  '_FlashEditor' class:
-#-------------------------------------------------------------------------
-
 
 class _FlashEditor(Editor):
     """ Traits UI Flash editor.

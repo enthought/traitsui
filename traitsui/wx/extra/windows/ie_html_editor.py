@@ -52,10 +52,6 @@ from traitsui.basic_editor_factory \
 RELATIVE_OBJECTS_PATTERN = re.compile(
     r'src=["\'](?!https?:)([\s\w/\.]+?)["\']', re.IGNORECASE)
 
-#-------------------------------------------------------------------------
-#  '_IEHTMLEditor' class:
-#-------------------------------------------------------------------------
-
 
 class _IEHTMLEditor(Editor):
     """ Traits UI MS Internet Explorer editor.

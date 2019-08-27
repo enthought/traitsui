@@ -35,10 +35,6 @@ from .editor \
 from .key_event_to_name \
     import key_event_to_name
 
-#-------------------------------------------------------------------------
-#  'KeyBindingEditor' class:
-#-------------------------------------------------------------------------
-
 
 class KeyBindingEditor(Editor):
     """ An editor for modifying bindings of keys to controls.
@@ -108,10 +104,6 @@ class KeyBindingEditor(Editor):
         """ Handles a clear field event.
         """
         self.value = ''
-
-#-------------------------------------------------------------------------
-#  'KeyBindingCtrl' class:
-#-------------------------------------------------------------------------
 
 
 class KeyBindingCtrl(QtGui.QLabel):

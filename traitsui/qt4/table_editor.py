@@ -44,10 +44,6 @@ else:
     def set_qheader_section_resize_mode(header):
         return header.setResizeMode
 
-#-------------------------------------------------------------------------
-#  'TableEditor' class:
-#-------------------------------------------------------------------------
-
 
 class TableEditor(Editor, BaseTableEditor):
     """ Editor that presents data in a table. Optionally, tables can have

@@ -90,10 +90,6 @@ class SimpleEditor(Editor):
 
         super(SimpleEditor, self).dispose()
 
-#-------------------------------------------------------------------------
-#  'CustomEditor' class:
-#-------------------------------------------------------------------------
-
 
 class CustomEditor(SimpleEditor):
     """ Custom style editor for a button, which can contain an image.

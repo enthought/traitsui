@@ -524,10 +524,6 @@ class GUIToolkit(Toolkit):
 #        import value_editor as ve
 #        return ve.ToolkitEditorFactory( *args, **traits )
 
-#-------------------------------------------------------------------------
-#  'DragHandler' class:
-#-------------------------------------------------------------------------
-
 
 class DragHandler(HasPrivateTraits):
     """ Handler for drag events.
