@@ -70,11 +70,6 @@ class ToolkitEditorFactory(BasicEditorFactory):
     #: Should links be opened in an external browser?
     open_externally = false
 
-    #-------------------------------------------------------------------------
-    #  Parses the contents of a formatted text string into the corresponding
-    #  HTML:
-    #-------------------------------------------------------------------------
-
     def parse_text(self, text):
         """ Parses the contents of a formatted text string into the
             corresponding HTML.
@@ -108,10 +103,6 @@ class ToolkitEditorFactory(BasicEditorFactory):
                 paragraphs[i] = '<p>%s</p>' % paragraph
         return '\n'.join(paragraphs)
 
-    #-------------------------------------------------------------------------
-    #  Parses a code block:
-    #-------------------------------------------------------------------------
-
     def parse_block(self, lines, i):
         """ Parses a code block.
         """
@@ -134,15 +125,7 @@ class ToolkitEditorFactory(BasicEditorFactory):
                  line.strip()) for line in lines[i: j]]
         return (j, block_template % '\n<br>'.join(temp))
 
-    #-------------------------------------------------------------------------
-    #  Parses a list:
-    #-------------------------------------------------------------------------
-
-    def parse_list(self, lines, i):
-        """ Parses a list.
-        """
-        line = lines[i]
-        m = self.indent(line)
+    def m = self.indent(line)
         kind = line[m]
         result = ['<li>' + line[m + 1:].strip()]
         n = len(lines)
@@ -165,10 +148,6 @@ class ToolkitEditorFactory(BasicEditorFactory):
                 j += 1
         style = ['ul', 'ol'][kind == '*']
         return (j, list_template % (style, '\n'.join(result), style))
-
-    #-------------------------------------------------------------------------
-    #  Calculates the amount of white space at the beginning of a line:
-    #-------------------------------------------------------------------------
 
     def indent(self, line):
         """ Calculates the amount of white space at the beginning of a line.

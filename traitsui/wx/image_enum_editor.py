@@ -53,11 +53,6 @@ class ReadonlyEditor(Editor):
     """ Read-only style of image enumeration editor, which displays a single
     ImageControl, representing the object trait's value.
     """
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -71,10 +66,6 @@ class ReadonlyEditor(Editor):
                  self.factory.suffix),
                 False,
                 self.factory._image_path))
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -100,11 +91,6 @@ class SimpleEditor(ReadonlyEditor):
     displays a dialog box for selecting an image corresponding to a different
     value.
     """
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -113,10 +99,6 @@ class SimpleEditor(ReadonlyEditor):
         self.control.Selected(True)
         self.control.Handler(self.popup_editor)
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking the ImageControl to display the pop-up dialog:
-    #-------------------------------------------------------------------------
 
     def popup_editor(self, control):
         """ Handles the user clicking the ImageControl to display the pop-up
@@ -140,20 +122,11 @@ class CustomEditor(Editor):
 
     update_handler = Any  # Callback to call when any button clicked
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self._create_image_grid(parent)
-
-    #-------------------------------------------------------------------------
-    #  Populates a specified window with a grid of image buttons:
-    #-------------------------------------------------------------------------
 
     def _create_image_grid(self, parent):
         """ Populates a specified window with a grid of image buttons.
@@ -191,20 +164,12 @@ class CustomEditor(Editor):
         # Finish setting up the control layout:
         panel.SetSizerAndFit(sizer)
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking on an ImageControl to set an object value:
-    #-------------------------------------------------------------------------
-
     def update_object(self, control):
         """ Handles the user clicking on an ImageControl to set an object value.
         """
         self.value = control.value
         if self.update_handler is not None:
             self.update_handler()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -222,10 +187,6 @@ class CustomEditor(Editor):
 class ImageEnumDialog(wx.Frame):
     """ Dialog box for selecting an ImageControl
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, editor):
         """ Initializes the object.
         """
@@ -254,19 +215,11 @@ class ImageEnumDialog(wx.Frame):
         position_window(self, parent=editor.control)
         self.Show()
 
-    #-------------------------------------------------------------------------
-    #  Closes the dialog:
-    #-------------------------------------------------------------------------
-
     def _on_close_dialog(self, event):
         """ Closes the dialog.
         """
         if not event.GetActive():
             self._close_dialog()
-
-    #-------------------------------------------------------------------------
-    #  Closes the dialog:
-    #-------------------------------------------------------------------------
 
     def _close_dialog(self):
         """ Closes the dialog.

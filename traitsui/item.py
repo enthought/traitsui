@@ -255,10 +255,6 @@ class Item(ViewSubElement):
     #: status (passed through to the item's editor):
     invalid = Str
 
-    #-------------------------------------------------------------------------
-    #  Initialize the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, value=None, **traits):
         """ Initializes the item object.
         """
@@ -288,19 +284,11 @@ class Item(ViewSubElement):
         if value != '':
             self.name = value
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object is replacable by an Include object:
-    #-------------------------------------------------------------------------
-
     def is_includable(self):
         """ Returns a Boolean indicating whether the object is replaceable by an
             Include object.
         """
         return (self.id != '')
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the Item represents a spacer or separator:
-    #-------------------------------------------------------------------------
 
     def is_spacer(self):
         """ Returns True if the item represents a spacer or separator.
@@ -309,10 +297,6 @@ class Item(ViewSubElement):
 
         return ((name == '') or (name == '_') or
                 (all_digits.match(name) is not None))
-
-    #-------------------------------------------------------------------------
-    #  Gets the help text associated with the Item in a specified UI:
-    #-------------------------------------------------------------------------
 
     def get_help(self, ui):
         """ Gets the help text associated with the Item in a specified UI.
@@ -328,10 +312,6 @@ class Item(ViewSubElement):
         object = eval(self.object_, globals(), ui.context)
 
         return object.base_trait(self.name).get_help()
-
-    #-------------------------------------------------------------------------
-    #  Gets the label to use for a specified Item in a specified UI:
-    #-------------------------------------------------------------------------
 
     def get_label(self, ui):
         """ Gets the label to use for a specified Item.
@@ -375,10 +355,6 @@ class Item(ViewSubElement):
 
         return tlabel(object, name, label)
 
-    #-------------------------------------------------------------------------
-    #  Returns an id used to identify the item:
-    #-------------------------------------------------------------------------
-
     def get_id(self):
         """ Returns an ID used to identify the item.
         """
@@ -386,10 +362,6 @@ class Item(ViewSubElement):
             return self.id
 
         return self.name
-
-    #-------------------------------------------------------------------------
-    #  Parses a '<width,height>' value from the string definition:
-    #-------------------------------------------------------------------------
 
     def _parse_size(self, value):
         """ Parses a '<width,height>' value from the string definition.
@@ -407,10 +379,6 @@ class Item(ViewSubElement):
 
         return value
 
-    #-------------------------------------------------------------------------
-    #  Parses a '`tooltip`' value from the string definition:
-    #-------------------------------------------------------------------------
-
     def _parse_tooltip(self, value):
         """ Parses a *tooltip* value from the string definition.
         """
@@ -421,20 +389,12 @@ class Item(ViewSubElement):
 
         return value
 
-    #-------------------------------------------------------------------------
-    #  Sets a specified trait to a specified string converted to a float:
-    #-------------------------------------------------------------------------
-
     def _set_float(self, name, value):
         """ Sets a specified trait to a specified string converted to a float.
         """
         value = value.strip()
         if value != '':
             setattr(self, name, float(value))
-
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' version of the Item:
-    #-------------------------------------------------------------------------
 
     def __repr__(self):
         """ Returns a "pretty print" version of the Item.
@@ -511,10 +471,6 @@ class UReadonly(Readonly):
 class Label(Item):
     """ An item that is a label.
     """
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, label, **traits):
         super(Label, self).__init__(

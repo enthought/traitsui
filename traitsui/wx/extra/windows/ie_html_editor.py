@@ -101,11 +101,6 @@ class _IEHTMLEditor(Editor):
     #: The current page content as HTML:
     html = Property
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -133,10 +128,6 @@ class _IEHTMLEditor(Editor):
         parent.Bind(iewin.EVT_DocumentComplete, self._page_loaded_modified, ie)
         parent.Bind(iewin.EVT_NewWindow2, self._new_window_modified, ie)
         parent.Bind(iewin.EVT_BeforeNavigate2, self._navigate_requested, ie)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

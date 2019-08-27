@@ -28,11 +28,6 @@ from ..editors.title_editor import TitleEditor
 
 class SimpleEditor(Editor):
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -44,10 +39,6 @@ class SimpleEditor(Editor):
                      QtCore.Qt.TextSelectableByMouse)
             self.control.setTextInteractionFlags(flags)
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the

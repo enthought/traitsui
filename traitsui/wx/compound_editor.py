@@ -55,11 +55,6 @@ class CompoundEditor(Editor):
     #: The kind of editor to create for each list item
     kind = Str
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -89,19 +84,11 @@ class CompoundEditor(Editor):
 
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         pass
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disposes of the contents of an editor.

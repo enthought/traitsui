@@ -43,10 +43,6 @@ from .color_editor \
 class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
     """ wxPython editor factory for color editors.
     """
-    #-------------------------------------------------------------------------
-    #  Gets the wxPython color equivalent of the object:
-    #-------------------------------------------------------------------------
-
     def to_wx_color(self, editor, color=None):
         """ Gets the wxPython color equivalent of the object trait.
         """
@@ -61,20 +57,12 @@ class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
                              int(color[2] * 255.0))
         return color
 
-    #-------------------------------------------------------------------------
-    #  Gets the application equivalent of a wxPython value:
-    #-------------------------------------------------------------------------
-
     def from_wx_color(self, color):
         """ Gets the application equivalent of a wxPython value.
         """
         return (color.Red() / 255.0,
                 color.Green() / 255.0,
                 color.Blue() / 255.0)
-
-    #-------------------------------------------------------------------------
-    #  Returns the text representation of a specified color value:
-    #-------------------------------------------------------------------------
 
     def str_color(self, color):
         """ Returns the text representation of a specified color value.

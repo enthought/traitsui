@@ -44,11 +44,6 @@ from .constants \
 class SimpleEditor(Editor):
     """ Simple style of editor for Boolean values, which displays a check box.
     """
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -57,18 +52,10 @@ class SimpleEditor(Editor):
         self.control.stateChanged.connect(self.update_object)
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking on the checkbox:
-    #-------------------------------------------------------------------------
-
     def update_object(self, state):
         """ Handles the user clicking the checkbox.
         """
         self.value = bool(state)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -88,11 +75,6 @@ class ReadonlyEditor(Editor):
     """ Read-only style of editor for Boolean values, which displays static text
     of either "True" or "False".
     """
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.

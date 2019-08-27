@@ -64,11 +64,6 @@ class SimpleEditor(EditorWithList):
     #: Checklist item values
     values = List
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -76,19 +71,11 @@ class SimpleEditor(EditorWithList):
         self.create_control(parent)
         super(SimpleEditor, self).init(parent)
 
-    #-------------------------------------------------------------------------
-    #  Creates the initial editor control:
-    #-------------------------------------------------------------------------
-
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
         self.control = QtGui.QComboBox()
         self.control.activated[int].connect(self.update_object)
-
-    #-------------------------------------------------------------------------
-    #  Handles the list of legal check list values being updated:
-    #-------------------------------------------------------------------------
 
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
@@ -118,10 +105,6 @@ class SimpleEditor(EditorWithList):
 
         self.rebuild_editor()
 
-    #-------------------------------------------------------------------------
-    #  Rebuilds the editor after its definition is modified:
-    #-------------------------------------------------------------------------
-
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
         """
@@ -131,10 +114,6 @@ class SimpleEditor(EditorWithList):
             control.addItem(name)
         self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user selecting a new value from the combo box:
-    #-------------------------------------------------------------------------
-
     def update_object(self, index):
         """ Handles the user selecting a new value from the combo box.
         """
@@ -142,10 +121,6 @@ class SimpleEditor(EditorWithList):
         if not isinstance(self.value, six.string_types):
             value = [value]
         self.value = value
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -167,10 +142,6 @@ class CustomEditor(SimpleEditor):
         boxes.
     """
 
-    #-------------------------------------------------------------------------
-    #  Creates the initial editor control:
-    #-------------------------------------------------------------------------
-
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
@@ -180,10 +151,6 @@ class CustomEditor(SimpleEditor):
 
         self._mapper = QtCore.QSignalMapper()
         self._mapper.mapped[six.text_type].connect(self.update_object)
-
-    #-------------------------------------------------------------------------
-    #  Rebuilds the editor after its definition is modified:
-    #-------------------------------------------------------------------------
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
@@ -227,10 +194,6 @@ class CustomEditor(SimpleEditor):
                     index += incr[j]
                     n -= 1
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking one of the 'custom' check boxes:
-    #-------------------------------------------------------------------------
-
     def update_object(self, label):
         """ Handles the user clicking one of the custom check boxes.
         """
@@ -245,10 +208,6 @@ class CustomEditor(SimpleEditor):
             cur_value = ','.join(cur_value)
 
         self.value = cur_value
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -269,10 +228,6 @@ class CustomEditor(SimpleEditor):
 class TextEditor(BaseTextEditor):
     """ Text style of editor for checklists, which displays a text field.
     """
-
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event=None):
         """ Handles the user changing the contents of the edit control.

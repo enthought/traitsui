@@ -45,10 +45,6 @@ class ToolkitEditorFactory(BasicEditorFactory):
     #: Arguments to be passed to the user's custom editor factory
     args = Tuple
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, *args, **traits):
         if len(args) >= 1:
             self.factory = args[0]

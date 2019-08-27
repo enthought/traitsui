@@ -45,21 +45,12 @@ class UIEditor(Editor):
     #: The Traits UI created by the editor
     editor_ui = Instance(UI)
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.editor_ui = self.init_ui(parent).trait_set(parent=self.ui)
         self.control = self.editor_ui.control
-
-    #-------------------------------------------------------------------------
-    #  Creates the traits UI for the editor (can be overridden by a subclass):
-    #-------------------------------------------------------------------------
 
     def init_ui(self, parent):
         """ Creates the traits UI for the editor.
@@ -69,10 +60,6 @@ class UIEditor(Editor):
                                                'editor': self},
                                       parent=parent)
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the
             editor.
@@ -80,10 +67,6 @@ class UIEditor(Editor):
         # Do nothing, since the embedded traits UI should handle the updates
         # itself, without our meddling:
         pass
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -94,10 +77,6 @@ class UIEditor(Editor):
 
         super(UIEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
-
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
@@ -105,20 +84,11 @@ class UIEditor(Editor):
 
 #-- UI preference save/restore interface ---------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
-
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
         self.editor_ui.set_prefs(prefs)
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.

@@ -37,17 +37,9 @@ class ButtonEditor(Editor):
     #: Action associated with the button
     action = Instance(Action)
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, **traits):
         # XXX Why does this need to be an Editor subclass? -- CJW
         HasPrivateTraits.__init__(self, **traits)
-
-    #-------------------------------------------------------------------------
-    #  Handles the associated button being clicked:
-    #-------------------------------------------------------------------------
 
     def perform(self):
         """ Handles the associated button being clicked.
@@ -318,23 +310,11 @@ class BaseDialog(BasePanel):
 
         self.ok.setEnabled(errors == 0)
 
-    #-------------------------------------------------------------------------
-    #  Adds a menu bar to the dialog:
-    #-------------------------------------------------------------------------
-
-    def _add_menubar(self):
-        """Adds a menu bar to the dialog.
-        """
-        menubar = self.ui.view.menubar
-        if menubar is not None:
+    def if menubar is not None:
             self._last_group = self._last_parent = None
             self.control.layout().setMenuBar(
                 menubar.create_menu_bar(self.control, self))
             self._last_group = self._last_parent = None
-
-    #-------------------------------------------------------------------------
-    #  Adds a tool bar to the dialog:
-    #-------------------------------------------------------------------------
 
     def _add_toolbar(self):
         """ Adds a toolbar to the dialog.
@@ -346,10 +326,6 @@ class BaseDialog(BasePanel):
             qt_toolbar.setMovable(False)
             self.control._mw.addToolBar(qt_toolbar)
             self._last_group = self._last_parent = None
-
-    #-------------------------------------------------------------------------
-    #  Adds a status bar to the dialog:
-    #-------------------------------------------------------------------------
 
     def _add_statusbar(self):
         """ Adds a statusbar to the dialog.

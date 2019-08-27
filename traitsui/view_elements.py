@@ -54,11 +54,6 @@ class ViewElements(HasStrictTraits):
     #: Dictionary containing the named ViewElement items
     content = content_trait
 
-    #-------------------------------------------------------------------------
-    #  Finds a specified ViewElement within the specified (optional) search
-    #  context:
-    #-------------------------------------------------------------------------
-
     def find(self, name, stack=None):
         """ Finds a specified ViewElement within the specified (optional) search
             context.
@@ -93,11 +88,6 @@ class ViewElements(HasStrictTraits):
         # Indicate no match was found:
         return None
 
-    #-------------------------------------------------------------------------
-    #  Returns a sorted list of all names accessible from the ViewElements
-    #  object that are of a specified (ViewElement) type:
-    #-------------------------------------------------------------------------
-
     def filter_by(self, klass=None):
         """ Returns a sorted list of all names accessible from the ViewElements
             object that are of a specified (ViewElement) type.
@@ -120,19 +110,11 @@ class ViewElements(HasStrictTraits):
         # Return the result:
         return result
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'parents' list being updated:
-    #-------------------------------------------------------------------------
-
     def _parents__changed(self):
         self._search_order = None
 
     def _parents_items_changed(self):
         self._search_order = None
-
-    #-------------------------------------------------------------------------
-    #  Returns the current search order (computing it if necessary):
-    #-------------------------------------------------------------------------
 
     def _get_search_order(self):
         if self._search_order is None:
@@ -174,10 +156,6 @@ class ViewElements(HasStrictTraits):
             for seq in seqs:
                 if seq[0] == candidate:
                     del seq[0]
-
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' version of the ViewElements object:
-    #-------------------------------------------------------------------------
 
     def __repr__(self):
         """ Returns a "pretty print" version of the ViewElements object.

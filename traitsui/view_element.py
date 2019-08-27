@@ -46,12 +46,6 @@ class ViewElement(HasPrivateTraits):
     """ An element of a view.
     """
 
-    #-------------------------------------------------------------------------
-    #  Replaces any items which have an 'id' with an Include object with the
-    #  same 'id', and puts the object with the 'id' into the specified
-    #  ViewElements object:
-    #-------------------------------------------------------------------------
-
     def replace_include(self, view_elements):
         """ Searches the current object's **content** attribute for objects that
         have an **id** attribute, and replaces each one with an Include object
@@ -64,10 +58,6 @@ class ViewElement(HasPrivateTraits):
             Object containing Group, Item, and Include objects
         """
         pass  # Normally overridden in a subclass
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object is replacable by an Include object:
-    #-------------------------------------------------------------------------
 
     def is_includable(self):
         """ Returns whether the object is replacable by an Include object.
@@ -132,10 +122,6 @@ class ViewSubElement(ViewElement):
     #: External help context identifier:
     help_id = HelpId
 
-    #-------------------------------------------------------------------------
-    #  Splits a string at a specified character:
-    #-------------------------------------------------------------------------
-
     def _split(self, name, value, char, finder, assign, result):
         """ Splits a string at a specified character.
         """
@@ -149,10 +135,6 @@ class ViewSubElement(ViewElement):
 
         return items[result]
 
-    #-------------------------------------------------------------------------
-    #  Sets an object trait if a specified option string is found:
-    #-------------------------------------------------------------------------
-
     def _option(self, string, option, name, value):
         """ Sets a object trait if a specified option string is found.
         """
@@ -162,10 +144,6 @@ class ViewSubElement(ViewElement):
             setattr(self, name, value)
 
         return string
-
-    #-------------------------------------------------------------------------
-    #  Parses any of the one character forms of the 'style' trait:
-    #-------------------------------------------------------------------------
 
     def _parse_style(self, value):
         """ Parses any of the one-character forms of the **style** trait.
@@ -177,10 +155,6 @@ class ViewSubElement(ViewElement):
         value = self._split('style', value, ';', str_rfind, 1, 0)
 
         return value
-
-    #-------------------------------------------------------------------------
-    #  Parses a '[label]' value from the string definition:
-    #-------------------------------------------------------------------------
 
     def _parse_label(self, value):
         """ Parses a '[label]' value from the string definition.
@@ -199,18 +173,10 @@ class ViewSubElement(ViewElement):
 
         return (value, empty)
 
-    #-------------------------------------------------------------------------
-    #  Handles a label being found in the string definition:
-    #-------------------------------------------------------------------------
-
     def _parsed_label(self):
         """ Handles a label being found in the string definition.
         """
         pass
-
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' version of a specified trait value:
-    #-------------------------------------------------------------------------
 
     def _repr_value(self, value, prefix='', suffix='', ignore=''):
         """ Returns a "pretty print" version of a specified Item trait value.
@@ -219,10 +185,6 @@ class ViewSubElement(ViewElement):
             return ''
 
         return '%s%s%s' % (prefix, value, suffix)
-
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' version of a list of traits:
-    #-------------------------------------------------------------------------
 
     def _repr_options(self, *names):
         """ Returns a 'pretty print' version of a list of traits.
@@ -239,10 +201,6 @@ class ViewSubElement(ViewElement):
                                for name, value in result])
 
         return None
-
-    #-------------------------------------------------------------------------
-    #  Indents each line in a specified string by a specified number of spaces:
-    #-------------------------------------------------------------------------
 
     def _indent(self, string, indent='    '):
         """ Indents each line in a specified string by 4 spaces.

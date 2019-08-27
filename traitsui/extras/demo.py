@@ -144,10 +144,6 @@ class DemoFileHandler(Handler):
     #: The current 'info' object (for use by the 'write' method):
     info = Instance(UIInfo)
 
-    #-------------------------------------------------------------------------
-    #  Initializes the view:
-    #-------------------------------------------------------------------------
-
     def init(self, info):
         # Save the reference to the current 'info' object:
         self.info = info
@@ -200,10 +196,6 @@ class DemoFileHandler(Handler):
         """ Executes the file in df.path in the namespace of locals."""
         with io.open(df.path, 'r', encoding='utf-8') as fp:
             exec(compile(fp.read(), df.path, 'exec'), locals, locals)
-
-    #-------------------------------------------------------------------------
-    #  Closes the view:
-    #-------------------------------------------------------------------------
 
     def closed(self, info, is_ok):
         """ Closes the view.

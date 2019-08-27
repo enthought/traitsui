@@ -78,10 +78,6 @@ class ArrayStructure(HasTraits):
     #: The constructed View for the array
     view = Instance(View)
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, editor):
         """ Initializes the object.
         """
@@ -177,10 +173,6 @@ class ArrayStructure(HasTraits):
 
         return View(Group(show_labels=False, *content))
 
-    #-------------------------------------------------------------------------
-    #  Updates the underlying tuple when any field changes value:
-    #-------------------------------------------------------------------------
-
     def _field_changed(self):
         """ Updates the underlying array when any field changes value.
         """
@@ -219,11 +211,6 @@ class SimpleEditor(Editor):
     # Is the editor read-only?
     readonly = false
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -232,10 +219,6 @@ class SimpleEditor(Editor):
         ui = _as.view.ui(_as, parent, kind='subpanel')
         ui.parent = self.ui
         self.control = ui.control
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -259,10 +242,6 @@ class SimpleEditor(Editor):
                         setattr(_as, 'f%d_%d' % (i, j), object[i, j])
 
             self._busy = False
-
-    #-------------------------------------------------------------------------
-    #  Updates the array value associated with the editor:
-    #-------------------------------------------------------------------------
 
     def update_array(self, value):
         """ Updates the array value associated with the editor.

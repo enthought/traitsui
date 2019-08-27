@@ -94,11 +94,6 @@ class SimpleEditor(Editor):
     #: External objects referenced in the HTML are relative to this URL
     base_url = Str
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -110,10 +105,6 @@ class SimpleEditor(Editor):
 
         self.base_url = self.factory.base_url
         self.sync_value(self.factory.base_url_name, 'base_url', 'from')
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the

@@ -56,11 +56,6 @@ class _ValueEditor(Editor):
     #: Is the value editor scrollable? This values overrides the default.
     scrollable = True
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -83,10 +78,6 @@ class _ValueEditor(Editor):
         self._ui.parent = self.ui
         self.control = self._ui.control
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the
             editor.
@@ -95,20 +86,12 @@ class _ValueEditor(Editor):
                              value=self.value,
                              readonly=self.readonly)
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
         self._ui.dispose()
 
         super(_ValueEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.

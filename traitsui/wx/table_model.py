@@ -102,14 +102,6 @@ class TableModel(GridModel):
     #: The current 'auto_add' row
     auto_add_row = Any
 
-    #-------------------------------------------------------------------------
-    #  'object' interface:
-    #-------------------------------------------------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, **traits):
         """ Initializes the object.
         """
@@ -142,10 +134,6 @@ class TableModel(GridModel):
 
     #-- TableModel Interface -------------------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the model when it is no longer needed:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the model when it is no longer needed.
         """
@@ -170,19 +158,10 @@ class TableModel(GridModel):
         # Clean-up any links that should be broken:
         self.editor = None
 
-    #-------------------------------------------------------------------------
-    #  Returns all model items matching the current filter:
-    #-------------------------------------------------------------------------
-
     def get_filtered_items(self):
         """ Returns all model items matching the current filter.
         """
         return self.__filtered_items()
-
-    #-------------------------------------------------------------------------
-    #  Returns a single specified item from those items matching the current
-    #  filter:
-    #-------------------------------------------------------------------------
 
     def get_filtered_item(self, index=0):
         """ Returns a single specified item from those items matching the
@@ -195,11 +174,6 @@ class TableModel(GridModel):
                          '%d' % (index, len(self.__filtered_items())))
             return None
 
-    #-------------------------------------------------------------------------
-    #  Returns the raw, unfiltered index corresponding to a specified filtered
-    #  index:
-    #-------------------------------------------------------------------------
-
     def raw_index_of(self, row):
         """ Returns the raw, unfiltered index corresponding to a specified
             filtered index.
@@ -208,10 +182,6 @@ class TableModel(GridModel):
             return row
 
         return self.editor.filtered_indices[row]
-
-    #-------------------------------------------------------------------------
-    #  Inserts an object after a specified filtered index:
-    #-------------------------------------------------------------------------
 
     def insert_filtered_item_after(self, index, item):
         """ Inserts an object after a specified filtered index.
@@ -230,10 +200,6 @@ class TableModel(GridModel):
         self._filtered_cache = None
         return (mapped_index, sorted)
 
-    #-------------------------------------------------------------------------
-    #  Deletes the object at the specified filtered index:
-    #-------------------------------------------------------------------------
-
     def delete_filtered_item_at(self, index):
         """ Deletes the object at the specified filtered index.
         """
@@ -247,20 +213,12 @@ class TableModel(GridModel):
         self._filtered_cache = None
         return (mapped_index, object)
 
-    #-------------------------------------------------------------------------
-    #  Updates the table view when columns have been changed:
-    #-------------------------------------------------------------------------
-
     def update_columns(self):
         """ Updates the table view when columns have been changed.
         """
         self._columns = None
         self.fire_structure_changed()
         self.editor.refresh()
-
-    #-------------------------------------------------------------------------
-    #  Resets any sorting being performed on the underlying model:
-    #-------------------------------------------------------------------------
 
     def no_column_sort(self):
         """ Resets any sorting being performed on the underlying model.
@@ -271,10 +229,6 @@ class TableModel(GridModel):
 
     #-- Event Handlers -------------------------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Handles the contents of the filter being changed:
-    #-------------------------------------------------------------------------
-
     @on_trait_change('filter.+')
     def _filter_modified(self):
         """ Handles the contents of the filter being changed.
@@ -282,10 +236,6 @@ class TableModel(GridModel):
         self._filtered_cache = None
         self.fire_structure_changed()
         self.editor.filter_modified()
-
-    #-------------------------------------------------------------------------
-    #  Handles the grid firing a 'click' event:
-    #-------------------------------------------------------------------------
 
     def _click_changed(self, event):
         """ Handles the grid firing a 'click' event.
@@ -308,10 +258,6 @@ class TableModel(GridModel):
         # Invoke the column's click handler:
         column.on_click(object)
 
-    #-------------------------------------------------------------------------
-    #  Handles the grid firing a 'dclick' event:
-    #-------------------------------------------------------------------------
-
     def _dclick_changed(self, event):
         """ Handles the grid firing a 'dclick' event.
         """
@@ -325,10 +271,6 @@ class TableModel(GridModel):
 
         # Invoke the column's double-click handler:
         column.on_dclick(object)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user modifying the current 'auto_add' mode row:
-    #-------------------------------------------------------------------------
 
     def on_auto_add_row(self):
         """ Handles the user modifying the current 'auto_add' mode row.
@@ -619,10 +561,6 @@ class TableModel(GridModel):
         return self.__get_column(col).get_vertical_alignment(
             self.get_filtered_item(row))
 
-    #-------------------------------------------------------------------------
-    #  Protected 'GridModel' interface:
-    #-------------------------------------------------------------------------
-
     def _insert_rows(self, pos, num_rows):
         """ Inserts *num_rows* at *pos*; fires an event only if a factory
         method for new rows is defined or the model is not empty. Otherwise,
@@ -692,10 +630,6 @@ class TableModel(GridModel):
 
         return self.editor.move_column(self.__get_column(frm), to_column)
 
-    #-------------------------------------------------------------------------
-    #  Protected interface:
-    #-------------------------------------------------------------------------
-
     def _set_data_on_row(self, row, column, value):
         """ Sets the cell specified by (*row*, *col*) to *value, which
             can be either a member of the row object, or a no-argument method
@@ -720,10 +654,6 @@ class TableModel(GridModel):
             del items[row]
 
         return num_rows
-
-    #-------------------------------------------------------------------------
-    #  Trait event handlers:
-    #-------------------------------------------------------------------------
 
     def _on_data_changed(self):
         """ Forces the grid to refresh when the underlying list changes.
@@ -765,10 +695,6 @@ class TableModel(GridModel):
             column.get_object(object).edit_traits(
                 view=view,
                 parent=(x, y, dx, dy))
-
-    #-------------------------------------------------------------------------
-    #  Private interface:
-    #-------------------------------------------------------------------------
 
     def _bounds_for(self, row, col):
         """ Returns the coordinates and size of the specified cell in the form:

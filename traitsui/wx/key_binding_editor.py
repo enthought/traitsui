@@ -65,20 +65,11 @@ class KeyBindingEditor(Editor):
     #: Clear field event
     clear = Event
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.control = KeyBindingCtrl(self, parent, size=wx.Size(160, 19))
-
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user entering input data in the edit control.
@@ -89,19 +80,11 @@ class KeyBindingEditor(Editor):
         except:
             pass
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         self.control.Refresh()
-
-    #-------------------------------------------------------------------------
-    #  Updates the current focus setting of the control:
-    #-------------------------------------------------------------------------
 
     def update_focus(self, has_focus):
         """ Updates the current focus setting of the control.
@@ -109,10 +92,6 @@ class KeyBindingEditor(Editor):
         if has_focus:
             self._binding.border_size = 1
             self.object.owner.focus_owner = self._binding
-
-    #-------------------------------------------------------------------------
-    #  Handles a keyboard event:
-    #-------------------------------------------------------------------------
 
     def _key_changed(self, event):
         """ Handles a keyboard event.
@@ -130,10 +109,6 @@ class KeyBindingEditor(Editor):
 
         self.value = key_name
 
-    #-------------------------------------------------------------------------
-    #  Handles a clear field event:
-    #-------------------------------------------------------------------------
-
     def _clear_changed(self):
         """ Handles a clear field event.
         """
@@ -147,10 +122,6 @@ class KeyBindingEditor(Editor):
 class KeyBindingCtrl(wx.Window):
     """ wxPython control for editing key bindings.
     """
-
-    #-------------------------------------------------------------------------
-    #  Initialize the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, editor, parent, wid=-1, pos=wx.DefaultPosition,
                  size=wx.DefaultSize):
@@ -181,25 +152,13 @@ class KeyBindingCtrl(wx.Window):
         # Handle key events:
         wx.EVT_CHAR(self, self._on_char)
 
-    #-------------------------------------------------------------------------
-    #  Handle keyboard keys being pressed:
-    #-------------------------------------------------------------------------
-
     def _on_char(self, event):
         """ Handle keyboard keys being pressed.
         """
         self.editor.key = event
 
-    #-------------------------------------------------------------------------
-    #  Erase background event handler:
-    #-------------------------------------------------------------------------
-
     def _on_erase_background(self, event):
         pass
-
-    #-------------------------------------------------------------------------
-    #  Do a GUI toolkit specific screen update:
-    #-------------------------------------------------------------------------
 
     def _paint(self, event):
         """ Updates the screen.
@@ -216,18 +175,10 @@ class KeyBindingCtrl(wx.Window):
         wdc.SetFont(self.GetFont())
         wdc.DrawText(self.editor.str_value, 5, 3)
 
-    #-------------------------------------------------------------------------
-    #  Sets the keyboard focus to this window:
-    #-------------------------------------------------------------------------
-
     def _set_focus(self, event):
         """ Sets the keyboard focus to this window.
         """
         self.SetFocus()
-
-    #-------------------------------------------------------------------------
-    #  Handles getting/losing the focus:
-    #-------------------------------------------------------------------------
 
     def _get_focus(self, event):
         """ Handles getting the focus.
@@ -240,10 +191,6 @@ class KeyBindingCtrl(wx.Window):
         """
         self.editor.has_focus = False
         self.Refresh()
-
-    #-------------------------------------------------------------------------
-    #  Handles the user double clicking the control to clear its contents:
-    #-------------------------------------------------------------------------
 
     def _clear_contents(self, event):
         """ Handles the user double clicking the control to clear its contents.

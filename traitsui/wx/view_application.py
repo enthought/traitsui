@@ -33,10 +33,6 @@ import wx
 from pyface.util.guisupport import is_event_loop_running_wx, \
     start_event_loop_wx
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
-
 # File to redirect output to. If '', output goes to stdout.
 redirect_filename = ''
 
@@ -113,10 +109,6 @@ def view_application(context, view, kind, handler, id, scrollable, args):
 class ViewApplication(wx.App):
     """ Modal window that contains a stand-alone application.
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, context, view, kind, handler, id, scrollable, args):
         """ Initializes the object.
         """
@@ -135,10 +127,6 @@ class ViewApplication(wx.App):
 
         # Start the event loop in an IPython-conforming manner.
         start_event_loop_wx(self)
-
-    #-------------------------------------------------------------------------
-    #  Handles application initialization:
-    #-------------------------------------------------------------------------
 
     def OnInit(self):
         """ Handles application initialization.

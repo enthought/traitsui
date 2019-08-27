@@ -88,10 +88,6 @@ class KeyBinding(HasStrictTraits):
         )
     )
 
-    #-------------------------------------------------------------------------
-    #  Handles a binding trait being changed:
-    #-------------------------------------------------------------------------
-
     def _binding_changed(self):
         if self.owner is not None:
             self.owner.binding_modified = self
@@ -155,10 +151,6 @@ class KeyBindings(HasPrivateTraits):
                        width=0.4,
                        height=0.4)
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, *bindings, **traits):
         super(KeyBindings, self).__init__(**traits)
 
@@ -170,10 +162,6 @@ class KeyBindings(HasPrivateTraits):
                                         maxlen=n,
                                         mode='list'))
         self.bindings = [binding.trait_set(owner=self) for binding in bindings]
-
-    #-------------------------------------------------------------------------
-    #  Processes a keyboard event:
-    #-------------------------------------------------------------------------
 
     def do(self, event, controllers=[], *args, **kw):
         """ Processes a keyboard event.
@@ -188,10 +176,6 @@ class KeyBindings(HasPrivateTraits):
         return self._do(toolkit().key_event_to_name(event),
                         controllers, args, kw.get('recursive', False))
 
-    #-------------------------------------------------------------------------
-    #  Merges another set of key bindings into this set:
-    #-------------------------------------------------------------------------
-
     def merge(self, key_bindings):
         """ Merges another set of key bindings into this set.
         """
@@ -205,19 +189,11 @@ class KeyBindings(HasPrivateTraits):
                 binding2.binding1 = binding.binding1
                 binding2.binding2 = binding.binding2
 
-    #-------------------------------------------------------------------------
-    #  Returns a clone of the KeyBindings object:
-    #-------------------------------------------------------------------------
-
     def clone(self, **traits):
         """ Returns a clone of the KeyBindings object.
         """
         return self.__class__(*self.bindings, **traits).trait_set(
             **self.get('prefix', 'suffix'))
-
-    #-------------------------------------------------------------------------
-    #  Dispose of the object:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Dispose of the object.
@@ -231,20 +207,12 @@ class KeyBindings(HasPrivateTraits):
 
         self.parent = self._root = self.focus_owner = None
 
-    #-------------------------------------------------------------------------
-    #  Edits a possibly hierarchical set of KeyBindings:
-    #-------------------------------------------------------------------------
-
     def edit(self):
         """ Edits a possibly hierarchical set of KeyBindings.
         """
         bindings = list(set(self.root._get_bindings([])))
         bindings.sort(key=lambda x: '%s%02d' % (x.binding1[-1:], x.binding1))
         KeyBindings(bindings).edit_traits()
-
-    #-------------------------------------------------------------------------
-    #  Returns the current binding for a specified key (if any):
-    #-------------------------------------------------------------------------
 
     def key_binding_for(self, binding, key_name):
         """ Returns the current binding for a specified key (if any).
@@ -300,10 +268,6 @@ class KeyBindings(HasPrivateTraits):
             item.parent = self
 
     #-- object Method Overrides ----------------------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Restores the state of a previously pickled object:
-    #-------------------------------------------------------------------------
 
     def __setstate__(self, state):
         """ Restores the state of a previously pickled object.

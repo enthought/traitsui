@@ -116,11 +116,6 @@ class SimpleEditor(Editor):
        Add: self.add_empty()
     """
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -154,10 +149,6 @@ class SimpleEditor(Editor):
             dispatch='ui')
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -169,10 +160,6 @@ class SimpleEditor(Editor):
         self._dispose_items()
 
         super(SimpleEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -279,11 +266,6 @@ class SimpleEditor(Editor):
         list_pane.SetupScrolling()
         list_pane.GetParent().Layout()
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when an item in the object trait changes external to
-    #  the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor_item(self, obj, name, event):
         """ Updates the editor when an item in the object trait changes
         externally to the editor.
@@ -301,10 +283,6 @@ class SimpleEditor(Editor):
                 proxy.value = event.added[0]
                 break
 
-    #-------------------------------------------------------------------------
-    #  Creates an empty list entry (so the user can add a new item):
-    #-------------------------------------------------------------------------
-
     def empty_list(self):
         """ Creates an empty list entry (so the user can add a new item).
         """
@@ -315,10 +293,6 @@ class SimpleEditor(Editor):
         pcontrol = wx.StaticText(self.control, -1, '   (Empty List)')
         pcontrol.proxy = control.proxy = proxy
         self.reload_sizer([(control, pcontrol)])
-
-    #-------------------------------------------------------------------------
-    #  Reloads the layout from the specified list of ( button, proxy ) pairs:
-    #-------------------------------------------------------------------------
 
     def reload_sizer(self, controls, extra=0):
         """ Reloads the layout from the specified list of ( button, proxy )
@@ -336,19 +310,11 @@ class SimpleEditor(Editor):
         sizer.Layout()
         self.control.SetVirtualSize(sizer.GetMinSize())
 
-    #-------------------------------------------------------------------------
-    #  Returns the associated object list and current item index:
-    #-------------------------------------------------------------------------
-
     def get_info(self):
         """ Returns the associated object list and current item index.
         """
         proxy = self._cur_control.proxy
         return (proxy.list, proxy.index)
-
-    #-------------------------------------------------------------------------
-    #  Displays the empty list editor popup menu:
-    #-------------------------------------------------------------------------
 
     def popup_empty_menu(self, control):
         """ Displays the empty list editor popup menu.
@@ -357,10 +323,6 @@ class SimpleEditor(Editor):
         menu = MakeMenu(self.empty_list_menu, self, True, self.control).menu
         self.control.PopupMenu(menu, control.GetPosition())
         menu.Destroy()
-
-    #-------------------------------------------------------------------------
-    #  Displays the list editor popup menu:
-    #-------------------------------------------------------------------------
 
     def popup_menu(self, control):
         """ Displays the list editor popup menu.
@@ -386,10 +348,6 @@ class SimpleEditor(Editor):
         self.control.PopupMenu(menu, (x + 8, y + 32))
         menu.Destroy()
 
-    #-------------------------------------------------------------------------
-    #  Adds a new value at the specified list index:
-    #-------------------------------------------------------------------------
-
     def add_item(self, offset):
         """ Adds a new value at the specified list index.
         """
@@ -400,27 +358,15 @@ class SimpleEditor(Editor):
         self.value = list[:index] + [value] + list[index:]
         wx.CallAfter(self.update_editor)
 
-    #-------------------------------------------------------------------------
-    #  Inserts a new item before the current item:
-    #-------------------------------------------------------------------------
-
     def add_before(self):
         """ Inserts a new item before the current item.
         """
         self.add_item(0)
 
-    #-------------------------------------------------------------------------
-    #  Inserts a new item after the current item:
-    #-------------------------------------------------------------------------
-
     def add_after(self):
         """ Inserts a new item after the current item.
         """
         self.add_item(1)
-
-    #-------------------------------------------------------------------------
-    #  Adds a new item when the list is empty:
-    #-------------------------------------------------------------------------
 
     def add_empty(self):
         """ Adds a new item when the list is empty.
@@ -428,20 +374,12 @@ class SimpleEditor(Editor):
         list, index = self.get_info()
         self.add_item(0)
 
-    #-------------------------------------------------------------------------
-    #  Delete the current item:
-    #-------------------------------------------------------------------------
-
     def delete_item(self):
         """ Delete the current item.
         """
         list, index = self.get_info()
         self.value = list[:index] + list[index + 1:]
         wx.CallAfter(self.update_editor)
-
-    #-------------------------------------------------------------------------
-    #  Move the current item up one in the list:
-    #-------------------------------------------------------------------------
 
     def move_up(self):
         """ Move the current item up one in the list.
@@ -451,10 +389,6 @@ class SimpleEditor(Editor):
                       list[index + 1:])
         wx.CallAfter(self.update_editor)
 
-    #-------------------------------------------------------------------------
-    #  Moves the current item down one in the list:
-    #-------------------------------------------------------------------------
-
     def move_down(self):
         """ Moves the current item down one in the list.
         """
@@ -463,20 +397,12 @@ class SimpleEditor(Editor):
                       list[index + 2:])
         wx.CallAfter(self.update_editor)
 
-    #-------------------------------------------------------------------------
-    #  Moves the current item to the top of the list:
-    #-------------------------------------------------------------------------
-
     def move_top(self):
         """ Moves the current item to the top of the list.
         """
         list, index = self.get_info()
         self.value = [list[index]] + list[:index] + list[index + 1:]
         wx.CallAfter(self.update_editor)
-
-    #-------------------------------------------------------------------------
-    #  Moves the current item to the bottom of the list:
-    #-------------------------------------------------------------------------
 
     def move_bottom(self):
         """ Moves the current item to the bottom of the list.
@@ -581,11 +507,6 @@ class NotebookEditor(Editor):
     #: The currently selected notebook page object:
     selected = Any
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -613,10 +534,6 @@ class NotebookEditor(Editor):
         # Set of selection synchronization:
         self.sync_value(self.factory.selected, 'selected')
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -641,10 +558,6 @@ class NotebookEditor(Editor):
 
         if self.ui.info.initialized:
             self.update_layout()
-
-    #-------------------------------------------------------------------------
-    #  Handles some subset of the trait's list being updated:
-    #-------------------------------------------------------------------------
 
     def update_editor_item(self, event):
         """ Handles an update to some subset of the trait's list.
@@ -679,10 +592,6 @@ class NotebookEditor(Editor):
 
         self.update_layout()
 
-    #-------------------------------------------------------------------------
-    #  Closes all currently open notebook pages:
-    #-------------------------------------------------------------------------
-
     def close_all(self):
         """ Closes all currently open notebook pages.
         """
@@ -697,10 +606,6 @@ class NotebookEditor(Editor):
         self._uis = []
         self._pages = {}
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -709,10 +614,6 @@ class NotebookEditor(Editor):
         self.close_all()
 
         super(NotebookEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Adds a group of new DockControls to the view:
-    #-------------------------------------------------------------------------
 
     def add_controls(self, controls):
         """ Adds a group of new DockControls to the view.
@@ -729,19 +630,11 @@ class NotebookEditor(Editor):
             # to the selected object, if any.
             self._selected_changed(None, self.selected)
 
-    #-------------------------------------------------------------------------
-    #  Updates the layout of the DockWindow:
-    #-------------------------------------------------------------------------
-
     def update_layout(self):
         """ Updates the layout of the DockWindow.
         """
         self.control.Layout()
         self.control.Refresh()
-
-    #-------------------------------------------------------------------------
-    #  Handles the trait defining a particular page's name being changed:
-    #-------------------------------------------------------------------------
 
     def update_page_name(self):
         """ Handles the trait defining a particular page's name being changed.
@@ -769,10 +662,6 @@ class NotebookEditor(Editor):
 
         if changed:
             self.update_layout()
-
-    #-------------------------------------------------------------------------
-    #  Creates a DockControl for a specified object:
-    #-------------------------------------------------------------------------
 
     def _create_page(self, object):
         """ Creates a DockControl for a specified object.
@@ -867,19 +756,10 @@ class DockableListElement(DockableViewElement):
     #: The editor this dockable item is associated with:
     editor = Instance(NotebookEditor)
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not it is OK to close the control, and if it is OK,
-    #  then it closes the DockControl itself:
-    #-------------------------------------------------------------------------
-
     def dockable_close(self, dock_control, force):
         """ Returns whether it is OK to close the control.
         """
         return self.close_dock_control(dock_control, force)
-
-    #-------------------------------------------------------------------------
-    #  Closes a DockControl:
-    #-------------------------------------------------------------------------
 
     def close_dock_control(self, dock_control, abort):
         """ Closes a DockControl.
@@ -894,10 +774,6 @@ class DockableListElement(DockableViewElement):
                 del self.editor.value[i]
 
         return False
-
-    #-------------------------------------------------------------------------
-    #  Handles a notebook tab being activated or deactivated.
-    #-------------------------------------------------------------------------
 
     def dockable_tab_activated(self, dock_control, activated):
         """ Handles a notebook tab being activated or deactivated.

@@ -100,11 +100,6 @@ class CustomEditor(Editor):
     #: The view to use for displaying the instance:
     view = AView
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -192,10 +187,6 @@ class CustomEditor(Editor):
         self.trait_setq(view=factory.view)
         self.sync_value(factory.view_name, 'view', 'from')
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -223,19 +214,11 @@ class CustomEditor(Editor):
 
         super(CustomEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Creates the editor control:
-    #-------------------------------------------------------------------------
-
     def create_editor(self, parent, sizer):
         """ Creates the editor control.
         """
         self._panel = TraitsUIPanel(parent, -1)
         sizer.Add(self._panel, 1, wx.EXPAND)
-
-    #-------------------------------------------------------------------------
-    #  Gets the current list of InstanceChoiceItem items:
-    #-------------------------------------------------------------------------
 
     def _get_items(self):
         """ Gets the current list of InstanceChoiceItem items.
@@ -259,10 +242,6 @@ class CustomEditor(Editor):
         self._items = items
 
         return items
-
-    #-------------------------------------------------------------------------
-    #  Rebuilds the object selector list:
-    #-------------------------------------------------------------------------
 
     def rebuild_items(self):
         """ Rebuilds the object selector list.
@@ -292,10 +271,6 @@ class CustomEditor(Editor):
             except:
                 pass
 
-    #-------------------------------------------------------------------------
-    #  Returns the InstanceChoiceItem for a specified object:
-    #-------------------------------------------------------------------------
-
     def item_for(self, object):
         """ Returns the InstanceChoiceItem for a specified object.
         """
@@ -304,10 +279,6 @@ class CustomEditor(Editor):
                 return item
 
         return None
-
-    #-------------------------------------------------------------------------
-    #  Returns the view to use for a specified object:
-    #-------------------------------------------------------------------------
 
     def view_for(self, object, item):
         """ Returns the view to use for a specified object.
@@ -321,10 +292,6 @@ class CustomEditor(Editor):
 
         return self.ui.handler.trait_view_for(self.ui.info, view, object,
                                               self.object_name, self.name)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user selecting a new value from the combo box:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user selecting a new value from the combo box.
@@ -346,10 +313,6 @@ class CustomEditor(Editor):
                 self.value = object
                 self.resynch_editor()
                 break
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -381,11 +344,6 @@ class CustomEditor(Editor):
                 choice.SetStringSelection(name)
             else:
                 choice.SetValue(name)
-
-    #-------------------------------------------------------------------------
-    #  Resynchronizes the contents of the editor when the object trait changes
-    #  external to the editor:
-    #-------------------------------------------------------------------------
 
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait
@@ -467,18 +425,10 @@ class CustomEditor(Editor):
                 if parent is not None:
                     parent.SendSizeEvent()
 
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
-
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
-
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
@@ -487,11 +437,6 @@ class CustomEditor(Editor):
 
     #-- UI preference save/restore interface ---------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
-
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
@@ -499,10 +444,6 @@ class CustomEditor(Editor):
         ui = self._ui
         if (ui is not None) and (prefs.get('id') == ui.id):
             ui.set_prefs(prefs.get('prefs'))
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
@@ -516,10 +457,6 @@ class CustomEditor(Editor):
 
     #-- Drag and drop event handlers -----------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dropped on the control:
-    #-------------------------------------------------------------------------
-
     def wx_dropped_on(self, x, y, data, drag_result):
         """ Handles a Python object being dropped on the tree.
         """
@@ -531,10 +468,6 @@ class CustomEditor(Editor):
                 return drag_result
 
         return wx.DragNone
-
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dragged over the control:
-    #-------------------------------------------------------------------------
 
     def wx_drag_over(self, x, y, data, drag_result):
         """ Handles a Python object being dragged over the tree.
@@ -564,20 +497,12 @@ class SimpleEditor(CustomEditor):
     orientation = wx.HORIZONTAL
     extra = 2
 
-    #-------------------------------------------------------------------------
-    #  Creates the editor control:
-    #-------------------------------------------------------------------------
-
     def create_editor(self, parent, sizer):
         """ Creates the editor control (a button).
         """
         self._button = button = wx.Button(parent, -1, '')
         sizer.Add(button, 1, wx.EXPAND | wx.LEFT, 5)
         wx.EVT_BUTTON(button, button.GetId(), self.edit_instance)
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -587,10 +512,6 @@ class SimpleEditor(CustomEditor):
             wx.EVT_BUTTON(button, button.GetId(), None)
 
         super(SimpleEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Edit the contents of the object trait when the user clicks the button:
-    #-------------------------------------------------------------------------
 
     def edit_instance(self, event):
         """ Edit the contents of the object trait when the user clicks the
@@ -614,11 +535,6 @@ class SimpleEditor(CustomEditor):
             # have its own:
             if ui.history is None:
                 ui.history = self.ui.history
-
-    #-------------------------------------------------------------------------
-    #  Resynchronizes the contents of the editor when the object trait changes
-    #  external to the editor:
-    #-------------------------------------------------------------------------
 
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait

@@ -135,10 +135,6 @@ class Panel(BaseDialog):
     """ wxPython user interface panel for Traits-based user interfaces.
     """
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, ui, parent, allow_buttons):
         """ Initializes the object.
         """
@@ -235,36 +231,20 @@ class Panel(BaseDialog):
 
         cpanel.SetSizerAndFit(sw_sizer)
 
-    #-----------------------------------------------------------------------
-    #  Handles the undo history 'undoable' state changing:
-    #-----------------------------------------------------------------------
-
     def _on_undoable(self, state):
         """ Handles a change to the "undoable" state of the undo history.
         """
         self.undo.Enable(state)
-
-    #-------------------------------------------------------------------------
-    #  Handles the undo history 'redoable' state changing:
-    #-------------------------------------------------------------------------
 
     def _on_redoable(self, state):
         """ Handles a change to the "redoable" state of the undo history.
         """
         self.redo.Enable(state)
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'revert' state changing:
-    #-------------------------------------------------------------------------
-
     def _on_revertable(self, state):
         """ Handles a change to the "revert" state.
         """
         self.revert.Enable(state)
-
-    #-------------------------------------------------------------------------
-    #  Adds an optional tool bar to the dialog (base class override):
-    #-------------------------------------------------------------------------
 
     def add_toolbar(self, sizer):
         """ Adds an optional toolbar to the dialog.
@@ -473,10 +453,6 @@ class FillPanel(object):
     """ A subpanel for a single group of items.
     """
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, panel, group, ui, suppress_label, is_dock_window,
                  create_panel):
         """ Initializes the object.
@@ -621,10 +597,6 @@ class FillPanel(object):
                             export=group.export,
                             control=panel)])
 
-    #-------------------------------------------------------------------------
-    #  Adds a set of groups or items separated by splitter bars to a DockWindow:
-    #-------------------------------------------------------------------------
-
     def add_dock_window_splitter_items(self, window, content, group):
         """ Adds a set of groups or items separated by splitter bars to a
             DockWindow.
@@ -642,10 +614,6 @@ class FillPanel(object):
 
         # Return the DockSection we created:
         return result
-
-    #-------------------------------------------------------------------------
-    #  Adds a single group or item to a DockWindow:
-    #-------------------------------------------------------------------------
 
     def add_dock_window_splitter_item(self, window, item, group):
         """ Adds a single group or item to a DockWindow.
@@ -677,20 +645,11 @@ class FillPanel(object):
                 export=item.export,
                 control=panel)])
 
-    #-------------------------------------------------------------------------
-    #  Adds a set of groups or items as vertical notebook pages to a vertical
-    #  notebook:
-    #-------------------------------------------------------------------------
-
     def create_fold_for_items(self, window, content):
         """ Adds a set of groups or items as vertical notebook pages to a
             vertical notebook.
         """
         raise NotImplementedError('VFold is not implemented for Wx backend')
-
-    #-------------------------------------------------------------------------
-    #  Adds a single group or item to a vertical notebook:
-    #-------------------------------------------------------------------------
 
     def create_fold_for_item(self, notebook, item):
         """ Adds a single group or item to a vertical notebook.
@@ -715,18 +674,10 @@ class FillPanel(object):
         # Return the new notebook page:
         return page
 
-    #-------------------------------------------------------------------------
-    #  Adds a single Item to a notebook:
-    #-------------------------------------------------------------------------
-
     def add_notebook_item(self, item, parent, sizer):
         """ Adds a single Item to a notebook.
         """
         self.add_items([item], parent, sizer)
-
-    #-------------------------------------------------------------------------
-    #  Adds a list of Group objects to the panel:
-    #-------------------------------------------------------------------------
 
     def add_groups(self, content, panel):
         """ Adds a list of Group objects to the panel.
@@ -757,10 +708,6 @@ class FillPanel(object):
                     if subgroup.orientation == 'horizontal':
                         style |= wx.ALIGN_CENTER_VERTICAL
                 sizer.Add(sg_sizer, growable, style, 2)
-
-    #-------------------------------------------------------------------------
-    #  Adds a list of Item objects to the panel:
-    #-------------------------------------------------------------------------
 
     def add_items(self, content, panel, sizer):
         """ Adds a list of Item objects to the panel.
@@ -1063,10 +1010,6 @@ class FillPanel(object):
 
             sizer.Add(item_sizer, growable, wx.EXPAND | wx.ALL, 2)
 
-    #-------------------------------------------------------------------------
-    #  Creates an item label:
-    #-------------------------------------------------------------------------
-
     def create_label(self, item, ui, desc, parent, sizer, suffix=':',
                      pad_side=wx.LEFT, border=False):
         """ Creates an item label.
@@ -1096,20 +1039,12 @@ class FillPanel(object):
 
         return control
 
-    #-------------------------------------------------------------------------
-    #  Creates a dummy item label:
-    #-------------------------------------------------------------------------
-
     def dummy_label(self, parent, sizer):
         """ Creates an item label.
         """
         control = wx.StaticText(parent, -1, '', style=wx.ALIGN_RIGHT)
         sizer.Add(control, 0)
         return control
-
-    #-------------------------------------------------------------------------
-    #  Adds 'emphasis' to a specified control:
-    #-------------------------------------------------------------------------
 
     def _add_emphasis(self, control):
         """ Adds emphasis to a specified control's font.
@@ -1124,10 +1059,6 @@ class FillPanel(object):
                                     font.GetStyle(),
                                     wx.BOLD)
         control.SetFont(emphasis_font)
-
-    #-------------------------------------------------------------------------
-    #  Sets the owner of a specified control and all of its children:
-    #-------------------------------------------------------------------------
 
     def _set_owner(self, control, owner):
         control._owner = owner
@@ -1152,11 +1083,6 @@ class DockWindowGroupEditor(GroupEditor):
 
     #-- UI preference save/restore interface ---------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
-
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
@@ -1167,10 +1093,6 @@ class DockWindowGroupEditor(GroupEditor):
             structure = prefs
         self.dock_window.GetSizer().SetStructure(self.dock_window, structure)
         self.dock_window.Layout()
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
@@ -1187,10 +1109,6 @@ class DockWindowGroupEditor(GroupEditor):
 class HTMLHelpWindow(wx.Frame):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, parent, html, scale_dx, scale_dy):
         """ Initializes the object.
@@ -1217,10 +1135,6 @@ class HTMLHelpWindow(wx.Frame):
         # Position and show the dialog:
         position_window(self, parent=parent)
         self.Show()
-
-    #-------------------------------------------------------------------------
-    #  Handles the window being closed:
-    #-------------------------------------------------------------------------
 
     def _on_ok(self, event):
         """ Handles the window being closed.

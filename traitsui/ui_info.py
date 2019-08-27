@@ -45,20 +45,12 @@ class UIInfo(HasPrivateTraits):
     #: Indicates whether the UI has finished initialization
     initialized = Bool(False)
 
-    #-------------------------------------------------------------------------
-    #  Bind's all of the associated context objects as traits of the object:
-    #-------------------------------------------------------------------------
-
     def bind_context(self):
         """ Binds all of the associated context objects as traits of the
             object.
         """
         for name, value in self.ui.context.items():
             self.bind(name, value)
-
-    #-------------------------------------------------------------------------
-    #  Binds a name to a value if it is not already bound:
-    #-------------------------------------------------------------------------
 
     def bind(self, name, value, id=None):
         """ Binds a name to a value if it is not already bound.

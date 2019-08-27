@@ -133,10 +133,6 @@ class Editor(HasPrivateTraits):
     #: The current editor invalid state status:
     invalid = Bool(False)
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, parent, **traits):
         """ Initializes the editor object.
         """
@@ -154,10 +150,6 @@ class Editor(HasPrivateTraits):
         # Synchronize the application invalid state status with the editor's:
         self.sync_value(self.factory.invalid, 'invalid', 'from')
 
-    #-------------------------------------------------------------------------
-    #  Finishes editor set-up:
-    #-------------------------------------------------------------------------
-
     def prepare(self, parent):
         """ Finishes setting up the editor.
         """
@@ -169,29 +161,16 @@ class Editor(HasPrivateTraits):
         self._sync_values()
         self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         raise NotImplementedError
 
-    #-------------------------------------------------------------------------
-    #  Assigns focus to the editor's underlying toolkit widget:
-    #-------------------------------------------------------------------------
-
     def set_focus(self):
         """ Assigns focus to the editor's underlying toolkit widget.
         """
         raise NotImplementedError
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -245,18 +224,10 @@ class Editor(HasPrivateTraits):
         """
         return ('%s.%s' % (self.object_name, self.name)).split('.', 1)[1]
 
-    #-------------------------------------------------------------------------
-    #  Returns the trait the editor is editing (Property implementation):
-    #-------------------------------------------------------------------------
-
     def _get_value_trait(self):
         """ Returns the trait the editor is editing (Property implementation).
         """
         return self.object.trait(self.name)
-
-    #-------------------------------------------------------------------------
-    #  Gets/Sets the associated object trait's value:
-    #-------------------------------------------------------------------------
 
     def _get_value(self):
         return getattr(self.object, self.name, Undefined)
@@ -283,10 +254,6 @@ class Editor(HasPrivateTraits):
         finally:
             self._no_update = False
 
-    #-------------------------------------------------------------------------
-    #  Returns the text representation of a specified object trait value:
-    #-------------------------------------------------------------------------
-
     def string_value(self, value, format_func=None):
         """ Returns the text representation of a specified object trait value.
 
@@ -294,18 +261,10 @@ class Editor(HasPrivateTraits):
         """
         return self.factory.string_value(value, format_func)
 
-    #-------------------------------------------------------------------------
-    #  Returns the text representation of the object trait:
-    #-------------------------------------------------------------------------
-
     def _get_str_value(self):
         """ Returns the text representation of the object trait.
         """
         return self.string_value(getattr(self.object, self.name, Undefined))
-
-    #-------------------------------------------------------------------------
-    #  Returns the text representation of a specified value:
-    #-------------------------------------------------------------------------
 
     def _str(self, value):
         """ Returns the text representation of a specified value.
@@ -323,10 +282,6 @@ class Editor(HasPrivateTraits):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
-
-    #-------------------------------------------------------------------------
-    #  Performs updates when the object trait changes:
-    #-------------------------------------------------------------------------
 
     def _update_editor(self, object, name, old_value, new_value):
         """ Performs updates when the object trait changes.
@@ -364,10 +319,6 @@ class Editor(HasPrivateTraits):
         if not self._no_update:
             # Update the editor control to reflect the current object state:
             self.update_editor()
-
-    #-------------------------------------------------------------------------
-    #  Logs a change made in the editor:
-    #-------------------------------------------------------------------------
 
     def log_change(self, undo_factory, *undo_args):
         """ Logs a change made in the editor.
@@ -416,12 +367,6 @@ class Editor(HasPrivateTraits):
                         old_value=old_value,
                         new_value=new_value)
 
-    #-------------------------------------------------------------------------
-    #  Returns a tuple of the form ( context_object, name[.name...], callable )
-    #  for a specified extended name of the form: name or
-    #  context_object_name.name[.name...]:
-    #-------------------------------------------------------------------------
-
     def parse_extended_name(self, name):
         """ Returns a tuple of the form ( context_object, 'name[.name...],
             callable ) for a specified extended name of the form: 'name' or
@@ -434,11 +379,6 @@ class Editor(HasPrivateTraits):
             object, name = self.ui.context[name[: col]], name[col + 1:]
 
         return (object, name, eval("lambda obj=object: obj." + name))
-
-    #-------------------------------------------------------------------------
-    #  Initializes and synchronizes (as needed) editor traits with the value of
-    #  corresponding factory traits:
-    #-------------------------------------------------------------------------
 
     def _sync_values(self):
         """ Initializes and synchronizes (as needed) editor traits with the
@@ -454,10 +394,6 @@ class Editor(HasPrivateTraits):
                                 self_trait.is_list is True)
             elif value is not Undefined:
                 setattr(self, name, value)
-
-    #-------------------------------------------------------------------------
-    #  Sets synchronization between an editor trait and a user object trait:
-    #-------------------------------------------------------------------------
 
     def sync_value(self, user_name, editor_name, mode='both',
                    is_list=False, is_event=False):
@@ -613,20 +549,11 @@ class Editor(HasPrivateTraits):
 
     #-- UI preference save/restore interface ---------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
-
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
         pass
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.

@@ -52,11 +52,6 @@ class SimpleEditor(Editor):
     #: The button label
     label = Str
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -67,16 +62,8 @@ class SimpleEditor(Editor):
         wx.EVT_BUTTON(parent, self.control.GetId(), self.update_object)
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'label' trait being changed:
-    #-------------------------------------------------------------------------
-
     def _label_changed(self, label):
         self.control.SetLabel(self.string_value(label))
-
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking the button by setting the value on the object:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user clicking the button by setting the factory value
@@ -90,19 +77,11 @@ class SimpleEditor(Editor):
             self.object.edit_traits(view=factory.view,
                                     parent=self.control)
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
         """
         pass
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -119,11 +98,6 @@ class SimpleEditor(Editor):
 class CustomEditor(SimpleEditor):
     """ Custom style editor for a button, which can contain an image.
     """
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -152,10 +126,6 @@ class CustomEditor(SimpleEditor):
         self.sync_value(self.factory.label_value, 'label', 'from')
 
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disposes of the contents of an editor.

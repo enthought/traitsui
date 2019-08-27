@@ -82,10 +82,6 @@ class ToolkitEditorFactory(EditorFactory):
 
     traits_view = View(['label', 'value', '|[]'])
 
-    #-------------------------------------------------------------------------
-    #  Implementation of the 'value' property:
-    #-------------------------------------------------------------------------
-
     def _get_value(self):
         return self._value
 
@@ -99,10 +95,6 @@ class ToolkitEditorFactory(EditorFactory):
                     self._value = float(value)
                 except:
                     pass
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, **traits):
         self._value = 0

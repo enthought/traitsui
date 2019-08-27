@@ -64,10 +64,6 @@ options_pat = re.compile(r'(.*)\[(.*)\](.*)')
 class MakeMenu:
     """ Manages creation of menus.
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, desc, owner, popup=False, window=None):
         """ Initializes the object.
         """
@@ -86,10 +82,6 @@ class MakeMenu:
             self.menu = menu = QtGui.QMenuBar()
             self.parse(menu, -1)
             window.setMenuBar(menu)
-
-    #-------------------------------------------------------------------------
-    #  Recursively parses menu items from the description:
-    #-------------------------------------------------------------------------
 
     def parse(self, menu, indent):
         """ Recursively parses menu items from the description.
@@ -201,10 +193,6 @@ class MakeMenu:
                 act = menu.addMenu(submenu)
                 act.setStatusTip(help)
 
-    #-------------------------------------------------------------------------
-    #  Returns the body of an inline method:
-    #-------------------------------------------------------------------------
-
     def get_body(self, indent):
         """ Returns the body of an inline method.
         """
@@ -220,10 +208,6 @@ class MakeMenu:
             return result
         return '  pass'
 
-    #-------------------------------------------------------------------------
-    #  Returns the QAction associated with a specified name:
-    #-------------------------------------------------------------------------
-
     def get_action(self, name):
         """ Returns the QAction associated with a specified name.
         """
@@ -231,10 +215,6 @@ class MakeMenu:
             return self.names[name]
 
         return name
-
-    #-------------------------------------------------------------------------
-    #  Checks (or unchecks) a menu item specified by name:
-    #-------------------------------------------------------------------------
 
     def checked(self, name, check=None):
         """ Checks (or unchecks) a menu item specified by name.
@@ -246,10 +226,6 @@ class MakeMenu:
 
         act.setChecked(check)
 
-    #-------------------------------------------------------------------------
-    #  Enables (or disables) a menu item specified by name:
-    #-------------------------------------------------------------------------
-
     def enabled(self, name, enable=None):
         """ Enables (or disables) a menu item specified by name.
         """
@@ -259,10 +235,6 @@ class MakeMenu:
             return act.isEnabled()
 
         act.setEnabled(enable)
-
-    #-------------------------------------------------------------------------
-    #  Gets/Sets the label for a menu item:
-    #-------------------------------------------------------------------------
 
     def label(self, name, label=None):
         """ Gets or sets the label for a menu item.

@@ -70,10 +70,6 @@ class Handler(HasPrivateTraits):
     Traits-based user interface.
     """
 
-    #-------------------------------------------------------------------------
-    #  Informs the handler what the UIInfo object for a View will be:
-    #-------------------------------------------------------------------------
-
     def init_info(self, info):
         """ Informs the handler what the UIInfo object for a View will be.
 
@@ -84,10 +80,6 @@ class Handler(HasPrivateTraits):
             being edited.
         """
         pass
-
-    #-------------------------------------------------------------------------
-    #  Initializes the controls of a user interface:
-    #-------------------------------------------------------------------------
 
     def init(self, info):
         """ Initializes the controls of a user interface.
@@ -112,10 +104,6 @@ class Handler(HasPrivateTraits):
         """
         return True
 
-    #-------------------------------------------------------------------------
-    #  Positions a dialog-based user interface on the display:
-    #-------------------------------------------------------------------------
-
     def position(self, info):
         """ Positions a dialog-based user interface on the display.
 
@@ -134,10 +122,6 @@ class Handler(HasPrivateTraits):
             The UIInfo object associated with the window
         """
         toolkit().position(info.ui)
-
-    #-------------------------------------------------------------------------
-    #  Handles a request to close a dialog-based user interface by the user:
-    #-------------------------------------------------------------------------
 
     def close(self, info, is_ok):
         """ Handles the user attempting to close a dialog-based user interface.
@@ -166,10 +150,6 @@ class Handler(HasPrivateTraits):
         """
         return True
 
-    #-------------------------------------------------------------------------
-    #  Handles a dialog-based user interface being closed by the user:
-    #-------------------------------------------------------------------------
-
     def closed(self, info, is_ok):
         """ Handles a dialog-based user interface being closed by the user.
 
@@ -186,27 +166,15 @@ class Handler(HasPrivateTraits):
         """
         return
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'Revert' button being clicked:
-    #-------------------------------------------------------------------------
-
     def revert(self, info):
         """ Handles the **Revert** button being clicked.
         """
         return
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'Apply' button being clicked:
-    #-------------------------------------------------------------------------
-
     def apply(self, info):
         """ Handles the **Apply** button being clicked.
         """
         return
-
-    #-------------------------------------------------------------------------
-    #  Shows the help associated with the view:
-    #-------------------------------------------------------------------------
 
     def show_help(self, info, control=None):
         """ Shows the help associated with the view.
@@ -227,10 +195,6 @@ class Handler(HasPrivateTraits):
         if control is None:
             control = info.ui.control
         on_help_call()(info, control)
-
-    #-------------------------------------------------------------------------
-    #  Dispatches generic menu and toolbar events:
-    #-------------------------------------------------------------------------
 
     def perform(self, info, action, event):
         """ Perform computation for an action.
@@ -302,10 +266,6 @@ class Handler(HasPrivateTraits):
                          if name in info.ui.context]
         return handlers
 
-    #-------------------------------------------------------------------------
-    #  Handles setting a specified object trait's value:
-    #-------------------------------------------------------------------------
-
     def setattr(self, info, object, name, value):
         """ Handles the user setting a specified object trait's value.
 
@@ -332,10 +292,6 @@ class Handler(HasPrivateTraits):
 
         """
         setattr(object, name, value)
-
-    #-------------------------------------------------------------------------
-    #  Gets a specified View object:
-    #-------------------------------------------------------------------------
 
     def trait_view_for(self, info, view, object, object_name, trait_name):
         """ Gets a specified View object.
@@ -383,10 +339,6 @@ class Handler(HasPrivateTraits):
 
 #-- 'DockWindowHandler' interface implementation -------------------------
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not a specified object can be inserted into the view:
-    #-------------------------------------------------------------------------
-
     def can_drop(self, info, object):
         """ Can the specified object be inserted into the view?
         """
@@ -399,17 +351,8 @@ class Handler(HasPrivateTraits):
         return ((drop_class is not None) and
                 isinstance(object, drop_class))
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not a specified external view category can be
-    #  imported:
-    #-------------------------------------------------------------------------
-
     def can_import(self, info, category):
         return (category in info.ui.view.imports)
-
-    #-------------------------------------------------------------------------
-    #  Returns the DockControl object for a specified object:
-    #-------------------------------------------------------------------------
 
     def dock_control_for(self, info, parent, object):
         """ Returns the DockControl object for a specified object.
@@ -468,20 +411,12 @@ class Handler(HasPrivateTraits):
 
         return dc
 
-    #-------------------------------------------------------------------------
-    #  Creates a new view of a specified control:
-    #-------------------------------------------------------------------------
-
     def open_view_for(self, control, use_mouse=True):
         """ Creates a new view of a specified control.
         """
         from pyface.dock.api import DockWindowShell
 
         DockWindowShell(control, use_mouse=use_mouse)
-
-    #-------------------------------------------------------------------------
-    #  Handles a DockWindow becoming empty:
-    #-------------------------------------------------------------------------
 
     def dock_window_empty(self, dock_window):
         """ Handles a DockWindow becoming empty.
@@ -490,10 +425,6 @@ class Handler(HasPrivateTraits):
             dock_window.control.GetParent.Destroy()
 
 #-- HasTraits overrides: -------------------------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Edits the object's traits: (Overrides HasTraits)
-    #-------------------------------------------------------------------------
 
     def edit_traits(self, view=None, parent=None, kind=None,
                     context=None, handler=None, id='',
@@ -516,10 +447,6 @@ class Handler(HasPrivateTraits):
             scrollable,
             args)
 
-    #-------------------------------------------------------------------------
-    #  Configure the object's traits (Overrides HasTraits):
-    #-------------------------------------------------------------------------
-
     def configure_traits(self, filename=None, view=None,
                          kind=None, edit=True,
                          context=None, handler=None,
@@ -532,19 +459,11 @@ class Handler(HasPrivateTraits):
 
 #-- Private Methods: -----------------------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Handles an 'Undo' change request:
-    #-------------------------------------------------------------------------
-
     def _on_undo(self, info):
         """ Handles an "Undo" change request.
         """
         if info.ui.history is not None:
             info.ui.history.undo()
-
-    #-------------------------------------------------------------------------
-    #  Handles a 'Redo' change request:
-    #-------------------------------------------------------------------------
 
     def _on_redo(self, info):
         """ Handles a "Redo" change request.
@@ -552,20 +471,12 @@ class Handler(HasPrivateTraits):
         if info.ui.history is not None:
             info.ui.history.redo()
 
-    #-------------------------------------------------------------------------
-    #  Handles a 'Revert' all changes request:
-    #-------------------------------------------------------------------------
-
     def _on_revert(self, info):
         """ Handles a "Revert all changes" request.
         """
         if info.ui.history is not None:
             info.ui.history.revert()
             self.revert(info)
-
-    #-------------------------------------------------------------------------
-    #  Handles a 'Close' request:
-    #-------------------------------------------------------------------------
 
     def _on_close(self, info):
         """ Handles a "Close" request.
@@ -648,10 +559,6 @@ class Controller(Handler):
             A list of objects that may potentially have action methods on them.
         """
         return [self, self.model]
-
-    #-------------------------------------------------------------------------
-    #  Informs the handler what the UIInfo object for a View will be:
-    #-------------------------------------------------------------------------
 
     def init_info(self, info):
         """ Informs the handler what the UIInfo object for a View will be.

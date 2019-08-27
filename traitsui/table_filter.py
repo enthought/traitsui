@@ -132,32 +132,17 @@ class TableFilter(HasPrivateTraits):
 
     filter_view = Group()
 
-    #-------------------------------------------------------------------------
-    #  Returns whether a specified object meets the filter/search criteria:
-    #  (Should normally be overridden)
-    #-------------------------------------------------------------------------
-
     def filter(self, object):
         """ Returns whether a specified object meets the filter or search
         criteria.
         """
         return self.allowed(object)
 
-    #-------------------------------------------------------------------------
-    #  Returns a user readable description of what kind of object will
-    #  satisfy the filter:
-    #  (Should normally be overridden):
-    #-------------------------------------------------------------------------
-
     def description(self):
         """ Returns a user-readable description of what kind of object
         satisfies the filter.
         """
         return self.desc
-
-    #-------------------------------------------------------------------------
-    #  Edits the contents of the filter:
-    #-------------------------------------------------------------------------
 
     def edit(self, object):
         """ Edits the contents of the filter.
@@ -216,11 +201,6 @@ class EvalTableFilter(TableFilter):
 
     filter_view = Group('expression')
 
-    #-------------------------------------------------------------------------
-    #  Returns whether a specified object meets the filter/search criteria:
-    #  (Should normally be overridden)
-    #-------------------------------------------------------------------------
-
     def filter(self, object):
         """ Returns whether a specified object meets the filter or search
         criteria.
@@ -232,12 +212,6 @@ class EvalTableFilter(TableFilter):
                         object.get(*self._traits))
         except:
             return False
-
-    #-------------------------------------------------------------------------
-    #  Returns a user readable description of what kind of object will
-    #  satisfy the filter:
-    #  (Should normally be overridden):
-    #-------------------------------------------------------------------------
 
     def description(self):
         """ Returns a user readable description of what kind of object
@@ -289,10 +263,6 @@ class GenericTableFilterRule(HasPrivateTraits):
     #: Traits that are ignored by the _anytrait_changed() handler
     ignored_traits = ['filter', 'name_editor', 'value_editor']
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, **traits):
         super(GenericTableFilterRule, self).__init__(**traits)
         if self.name == '':
@@ -301,10 +271,6 @@ class GenericTableFilterRule(HasPrivateTraits):
                 names.sort()
                 self.name = names[0]
                 self.enabled = False
-
-    #-------------------------------------------------------------------------
-    #  Handles the value of the 'name' trait changing:
-    #-------------------------------------------------------------------------
 
     def _name_changed(self, name):
         """ Handles a change to the value of the **name** trait.
@@ -324,11 +290,6 @@ class GenericTableFilterRule(HasPrivateTraits):
             if name != 'enabled':
                 self.enabled = True
 
-    #-------------------------------------------------------------------------
-    #  Clones a new object from this one, optionally copying only a specified
-    #  set of traits:
-    #-------------------------------------------------------------------------
-
     def clone_traits(self, traits=None, memo=None, copy=None,
                      **metadata):
         """ Clones a new object from this one, optionally copying only a
@@ -337,18 +298,10 @@ class GenericTableFilterRule(HasPrivateTraits):
             traits, memo, copy, **metadata).trait_set(
                 enabled=self.enabled, name=self.name)
 
-    #-------------------------------------------------------------------------
-    #  Returns a description of the filter:
-    #-------------------------------------------------------------------------
-
     def description(self):
         """ Returns a description of the filter.
         """
         return '%s %s %s' % (self.name, self.operation, self.value)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether the rule is true for a specified object:
-    #-------------------------------------------------------------------------
 
     def is_true(self, object):
         """ Returns whether the rule is true for a specified object.
@@ -403,10 +356,6 @@ class GenericTableFilterRuleEnabledColumn(ObjectColumn):
     """ Table column that indicates whether a filter rule is enabled.
     """
 
-    #-------------------------------------------------------------------------
-    #  Returns the value of the column for a specified object:
-    #-------------------------------------------------------------------------
-
     def get_value(self, object):
         """ Returns the traits editor of the column for a specified object.
         """
@@ -425,10 +374,6 @@ class GenericTableFilterRuleAndOrColumn(ObjectColumn):
         or disjoining ('or').
     """
 
-    #-------------------------------------------------------------------------
-    #  Returns the value of the column for a specified object:
-    #-------------------------------------------------------------------------
-
     def get_value(self, object):
         """ Returns the traits editor of the column for a specified object.
         """
@@ -445,10 +390,6 @@ class GenericTableFilterRuleNameColumn(ObjectColumn):
     """ Table column for the name of an object trait.
     """
 
-    #-------------------------------------------------------------------------
-    #  Returns the traits editor of the column for a specified object:
-    #-------------------------------------------------------------------------
-
     def get_editor(self, object):
         """ Returns the traits editor of the column for a specified object.
         """
@@ -462,10 +403,6 @@ class GenericTableFilterRuleNameColumn(ObjectColumn):
 class GenericTableFilterRuleValueColumn(ObjectColumn):
     """ Table column for the value of an object trait.
     """
-
-    #-------------------------------------------------------------------------
-    #  Returns the traits editor of the column for a specified object:
-    #-------------------------------------------------------------------------
 
     def get_editor(self, object):
         """ Returns the traits editor of the column for a specified object.
@@ -529,11 +466,6 @@ class RuleTableFilter(TableFilter):
         buttons=['Cancel']
     )
 
-    #-------------------------------------------------------------------------
-    #  Returns whether a specified object meets the filter/search criteria:
-    #  (Should normally be overridden)
-    #-------------------------------------------------------------------------
-
     def filter(self, object):
         """ Returns whether a specified object meets the filter or search
         criteria.
@@ -548,12 +480,6 @@ class RuleTableFilter(TableFilter):
                 is_true = rule.is_true(object)
             is_first = False
         return is_true
-
-    #-------------------------------------------------------------------------
-    #  Returns a user readable description of what kind of object will
-    #  satisfy the filter:
-    #  (Should normally be overridden):
-    #-------------------------------------------------------------------------
 
     def description(self):
         """ Returns a user-readable description of the kind of object that
@@ -579,10 +505,6 @@ class RuleTableFilter(TableFilter):
             return ' or '.join(['(%s)' % t for t in ors])
 
         return super(RuleTableFilter, self).description()
-
-    #-------------------------------------------------------------------------
-    #  Edits the contents of the filter:
-    #-------------------------------------------------------------------------
 
     def edit_view(self, object):
         """ Return a view to use for editing the filter.
@@ -612,10 +534,6 @@ class RuleTableFilter(TableFilter):
             width=0.4,
             height=0.3)
 
-    #-------------------------------------------------------------------------
-    #  Returns a table editor to use for editing the filter:
-    #-------------------------------------------------------------------------
-
     def _get_table_editor(self, names):
         """ Returns a table editor to use for editing the filter.
         """
@@ -633,10 +551,6 @@ class RuleTableFilter(TableFilter):
                                'filter': self,
                                'name_editor': EnumEditor(values=names)})
 
-    #-------------------------------------------------------------------------
-    #  Returns the state to be pickled (override of object):
-    #-------------------------------------------------------------------------
-
     def __getstate__(self):
         """ Returns the state to be pickled.
 
@@ -647,10 +561,6 @@ class RuleTableFilter(TableFilter):
             del dict['_object']
             del dict['_trait_values']
         return dict
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'rules' trait being changed:
-    #-------------------------------------------------------------------------
 
     def _rules_changed(self, rules):
         """ Handles a change to the **rules** trait.
@@ -689,11 +599,6 @@ class MenuTableFilter(RuleTableFilter):
     #: Overrides the persistence ID of the view
     view_id = Str('traitsui.table_filter.MenuTableFilter')
 
-    #-------------------------------------------------------------------------
-    #  Returns whether a specified object meets the filter/search criteria:
-    #  (Should normally be overridden)
-    #-------------------------------------------------------------------------
-
     def filter(self, object):
         """ Returns whether a specified object meets the filter or search
         criteria.
@@ -702,12 +607,6 @@ class MenuTableFilter(RuleTableFilter):
             if rule.enabled and (not rule.is_true(object)):
                 return False
         return True
-
-    #-------------------------------------------------------------------------
-    #  Returns a user readable description of what kind of object will
-    #  satisfy the filter:
-    #  (Should normally be overridden):
-    #-------------------------------------------------------------------------
 
     def description(self):
         """ Returns a user8readable description of what kind of object
@@ -718,10 +617,6 @@ class MenuTableFilter(RuleTableFilter):
         if result != '':
             return result
         return 'All items'
-
-    #-------------------------------------------------------------------------
-    #  Returns a table editor to use for editing the filter:
-    #-------------------------------------------------------------------------
 
     def _get_table_editor(self, names):
         """ Returns a table editor to use for editing the filter.

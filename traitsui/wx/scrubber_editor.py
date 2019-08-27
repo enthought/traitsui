@@ -86,11 +86,6 @@ class _ScrubberEditor(Editor):
         'right': wx.TE_RIGHT
     }
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -154,10 +149,6 @@ class _ScrubberEditor(Editor):
         # notification to fire):
         self._reset_scrubber()
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -180,10 +171,6 @@ class _ScrubberEditor(Editor):
 
         super(_ScrubberEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -193,10 +180,6 @@ class _ScrubberEditor(Editor):
         self._refresh()
 
         self._enum_completed()
-
-    #-------------------------------------------------------------------------
-    #  Updates the object when the scrubber value changes:
-    #-------------------------------------------------------------------------
 
     def update_object(self, value):
         """ Updates the object when the scrubber value changes.
@@ -213,10 +196,6 @@ class _ScrubberEditor(Editor):
                 if value != self.value:
                     self.value = value
                     self.update_editor()
-
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
 
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.

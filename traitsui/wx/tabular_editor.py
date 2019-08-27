@@ -230,11 +230,6 @@ class TabularEditor(Editor):
     #: Flag for marking whether the update was within the visible area
     _update_visible = Bool(False)
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.

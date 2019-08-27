@@ -92,11 +92,6 @@ class SimpleEditor(Editor):
        Add: self.add_empty()
     """
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -142,10 +137,6 @@ class SimpleEditor(Editor):
             dispatch='ui')
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -158,10 +149,6 @@ class SimpleEditor(Editor):
             remove=True)
 
         super(SimpleEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -227,11 +214,6 @@ class SimpleEditor(Editor):
         if self.control.widget() is None:
             self.control.setWidget(list_pane)
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when an item in the object trait changes external to
-    #  the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor_item(self, event):
         """ Updates the editor when an item in the object trait changes
         externally to the editor.
@@ -251,10 +233,6 @@ class SimpleEditor(Editor):
             if proxy.index == event.index:
                 proxy.value = event.added[0]
                 break
-
-    #-------------------------------------------------------------------------
-    #  Creates an empty list entry (so the user can add a new item):
-    #-------------------------------------------------------------------------
 
     def empty_list(self):
         """ Creates an empty list entry (so the user can add a new item).
@@ -278,19 +256,11 @@ class SimpleEditor(Editor):
         layout.addWidget(control, 0, 1)
         layout.addWidget(pcontrol, 0, 0)
 
-    #-------------------------------------------------------------------------
-    #  Returns the associated object list and current item index:
-    #-------------------------------------------------------------------------
-
     def get_info(self):
         """ Returns the associated object list and current item index.
         """
         proxy = self._cur_control.proxy
         return (proxy.list, proxy.index)
-
-    #-------------------------------------------------------------------------
-    #  Displays the empty list editor popup menu:
-    #-------------------------------------------------------------------------
 
     def popup_empty_menu(self, index):
         """ Displays the empty list editor popup menu.
@@ -298,10 +268,6 @@ class SimpleEditor(Editor):
         self._cur_control = control = self.buttons[index]
         menu = MakeMenu(self.empty_list_menu, self, True, control).menu
         menu.exec_(control.mapToGlobal(QtCore.QPoint(4, 24)))
-
-    #-------------------------------------------------------------------------
-    #  Displays the list editor popup menu:
-    #-------------------------------------------------------------------------
 
     def popup_menu(self, index):
         """ Displays the list editor popup menu.
@@ -323,10 +289,6 @@ class SimpleEditor(Editor):
 
         menu.exec_(sender.mapToGlobal(QtCore.QPoint(4, 24)))
 
-    #-------------------------------------------------------------------------
-    #  Adds a new value at the specified list index:
-    #-------------------------------------------------------------------------
-
     def add_item(self, offset):
         """ Adds a new value at the specified list index.
         """
@@ -337,27 +299,15 @@ class SimpleEditor(Editor):
         self.value = list[:index] + [value] + list[index:]
         self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Inserts a new item before the current item:
-    #-------------------------------------------------------------------------
-
     def add_before(self):
         """ Inserts a new item before the current item.
         """
         self.add_item(0)
 
-    #-------------------------------------------------------------------------
-    #  Inserts a new item after the current item:
-    #-------------------------------------------------------------------------
-
     def add_after(self):
         """ Inserts a new item after the current item.
         """
         self.add_item(1)
-
-    #-------------------------------------------------------------------------
-    #  Adds a new item when the list is empty:
-    #-------------------------------------------------------------------------
 
     def add_empty(self):
         """ Adds a new item when the list is empty.
@@ -365,20 +315,12 @@ class SimpleEditor(Editor):
         list, index = self.get_info()
         self.add_item(0)
 
-    #-------------------------------------------------------------------------
-    #  Delete the current item:
-    #-------------------------------------------------------------------------
-
     def delete_item(self):
         """ Delete the current item.
         """
         list, index = self.get_info()
         self.value = list[:index] + list[index + 1:]
         self.update_editor()
-
-    #-------------------------------------------------------------------------
-    #  Move the current item up one in the list:
-    #-------------------------------------------------------------------------
 
     def move_up(self):
         """ Move the current item up one in the list.
@@ -388,10 +330,6 @@ class SimpleEditor(Editor):
                       list[index + 1:])
         self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Moves the current item down one in the list:
-    #-------------------------------------------------------------------------
-
     def move_down(self):
         """ Moves the current item down one in the list.
         """
@@ -400,20 +338,12 @@ class SimpleEditor(Editor):
                       list[index + 2:])
         self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Moves the current item to the top of the list:
-    #-------------------------------------------------------------------------
-
     def move_top(self):
         """ Moves the current item to the top of the list.
         """
         list, index = self.get_info()
         self.value = [list[index]] + list[:index] + list[index + 1:]
         self.update_editor()
-
-    #-------------------------------------------------------------------------
-    #  Moves the current item to the bottom of the list:
-    #-------------------------------------------------------------------------
 
     def move_bottom(self):
         """ Moves the current item to the bottom of the list.
@@ -532,11 +462,6 @@ class NotebookEditor(Editor):
     #: The currently selected notebook page object:
     selected = Any
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -587,10 +512,6 @@ class NotebookEditor(Editor):
         # Set of selection synchronization:
         self.sync_value(self.factory.selected, 'selected')
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -607,10 +528,6 @@ class NotebookEditor(Editor):
 
         if self.selected:
             self._selected_changed(self.selected)
-
-    #-------------------------------------------------------------------------
-    #  Handles some subset of the trait's list being updated:
-    #-------------------------------------------------------------------------
 
     def update_editor_item(self, event):
         """ Handles an update to some subset of the trait's list.
@@ -651,10 +568,6 @@ class NotebookEditor(Editor):
         if first_page is not None:
             self.control.setCurrentWidget(first_page)
 
-    #-------------------------------------------------------------------------
-    #  Closes the currently selected tab:
-    #-------------------------------------------------------------------------
-
     def close_current(self, force=False):
         """ Closes the currently selected tab:
         """
@@ -683,10 +596,6 @@ class NotebookEditor(Editor):
             del self._pagewidgets[name]
         return
 
-    #-------------------------------------------------------------------------
-    #  Closes all currently open notebook pages:
-    #-------------------------------------------------------------------------
-
     def close_all(self):
         """ Closes all currently open notebook pages.
         """
@@ -704,10 +613,6 @@ class NotebookEditor(Editor):
 
         self.control.clear()
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -716,10 +621,6 @@ class NotebookEditor(Editor):
         self.close_all()
 
         super(NotebookEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Handles the trait defining a particular page's name being changed:
-    #-------------------------------------------------------------------------
 
     def update_page_name(self, object, name, old, new):
         """ Handles the trait defining a particular page's name being changed.
@@ -744,10 +645,6 @@ class NotebookEditor(Editor):
                             '???'))
                 self.control.setTabText(self.control.indexOf(page), name)
                 break
-
-    #-------------------------------------------------------------------------
-    #  Creates a page for a specified object and adds it to the tab widget:
-    #-------------------------------------------------------------------------
 
     def _create_page(self, object):
         # Create the view for the object:

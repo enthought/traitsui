@@ -55,11 +55,6 @@ class SimpleEditor(Editor):
     the text field displays an editor-specific dialog box for changing the
     value.
     """
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -162,10 +157,6 @@ class ReadonlyEditor(Editor):
             self.control.setAlignment(alignment)
 
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

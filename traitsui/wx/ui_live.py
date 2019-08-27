@@ -137,10 +137,6 @@ class LiveWindow(BaseDialog):
     """ User interface window that immediately updates its underlying object(s).
     """
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def init(self, ui, parent, style):
         self.is_modal = (style == MODAL)
         window_style = 0
@@ -313,10 +309,6 @@ class LiveWindow(BaseDialog):
         window.SetSizer(sw_sizer)
         window.Fit()
 
-    #-------------------------------------------------------------------------
-    #  Closes the dialog window:
-    #-------------------------------------------------------------------------
-
     def close(self, rc=wx.ID_OK):
         """ Closes the dialog window.
         """
@@ -329,10 +321,6 @@ class LiveWindow(BaseDialog):
         ui.finish()
         self.ui = self.undo = self.redo = self.revert = self.control = None
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking the window/dialog 'close' button/icon:
-    #-------------------------------------------------------------------------
-
     def _on_close_page(self, event):
         """ Handles the user clicking the window/dialog "close" button/icon.
         """
@@ -340,10 +328,6 @@ class LiveWindow(BaseDialog):
             self._on_cancel(event)
         else:
             self._on_ok(event)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user giving focus to another window for a 'popup' view:
-    #-------------------------------------------------------------------------
 
     def _on_close_popup(self, event):
         """ Handles the user giving focus to another window for a 'popup' view.
@@ -357,10 +341,6 @@ class LiveWindow(BaseDialog):
             if self._on_ok():
                 self._monitor.Stop()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking the 'OK' button:
-    #-------------------------------------------------------------------------
-
     def _on_ok(self, event=None):
         """ Handles the user clicking the **OK** button.
         """
@@ -371,20 +351,12 @@ class LiveWindow(BaseDialog):
 
         return False
 
-    #-------------------------------------------------------------------------
-    #  Handles the user hitting the 'Esc'ape key:
-    #-------------------------------------------------------------------------
-
     def _on_key(self, event):
         """ Handles the user pressing the Escape key.
         """
         if event.GetKeyCode() == 0x1B:
             self._on_close_page(event)
 
-
-    #-------------------------------------------------------------------------
-    #  Handles a 'Cancel' all changes request:
-    #-------------------------------------------------------------------------
 
     def _on_cancel(self, event):
         """ Handles a request to cancel all changes.
@@ -393,36 +365,20 @@ class LiveWindow(BaseDialog):
             self._on_revert(event)
             self.close(wx.ID_CANCEL)
 
-    #-------------------------------------------------------------------------
-    #  Handles editing errors:
-    #-------------------------------------------------------------------------
-
     def _on_error(self, errors):
         """ Handles editing errors.
         """
         self.ok.Enable(errors == 0)
-
-    #-------------------------------------------------------------------------
-    #  Handles the undo history 'undoable' state changing:
-    #-------------------------------------------------------------------------
 
     def _on_undoable(self, state):
         """ Handles a change to the "undoable" state of the undo history
         """
         self.undo.Enable(state)
 
-    #-------------------------------------------------------------------------
-    #  Handles the undo history 'redoable' state changing:
-    #-------------------------------------------------------------------------
-
     def _on_redoable(self, state):
         """ Handles a change to the "redoable state of the undo history.
         """
         self.redo.Enable(state)
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'revert' state changing:
-    #-------------------------------------------------------------------------
 
     def _on_revertable(self, state):
         """ Handles a change to the "revert" state.

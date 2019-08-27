@@ -104,10 +104,6 @@ def view_application(context, view, kind, handler, id, scrollable, args):
 class ViewApplication(object):
     """ Modal window that contains a stand-alone application.
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, context, view, kind, handler, id, scrollable, args):
         """ Initializes the object.
         """

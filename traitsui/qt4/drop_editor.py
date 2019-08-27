@@ -41,11 +41,6 @@ class SimpleEditor(Editor):
     #: Background color when it is OK to drop objects.
     ok_color = DropColor
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -67,20 +62,12 @@ class SimpleEditor(Editor):
 
         self.control._qt4_editor = self
 
-    #-------------------------------------------------------------------------
-    #  Returns the text representation of a specified object trait value:
-    #-------------------------------------------------------------------------
-
     def string_value(self, value):
         """ Returns the text representation of a specified object trait value.
         """
         if value is None:
             return ''
         return str(value)
-
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
 
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
@@ -97,10 +84,6 @@ class _DropEventFilter(QtCore.QObject):
         elif typ == QtCore.QEvent.DragEnter:
             self.dragEnterEvent(event)
         return super(_DropEventFilter, self).eventFilter(source, event)
-
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dropped on the control:
-    #-------------------------------------------------------------------------
 
     def dropEvent(self, e):
         """ Handles a Python object being dropped on the tree.
@@ -129,10 +112,6 @@ class _DropEventFilter(QtCore.QObject):
                 editor._no_update = False
 
             e.acceptProposedAction()
-
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dragged over the control:
-    #-------------------------------------------------------------------------
 
     def dragEnterEvent(self, e):
         """ Handles a Python object being dragged over the tree.

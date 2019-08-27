@@ -82,11 +82,6 @@ class SimpleEditor(Editor):
     The editor displays an editor for each of the fields in the tuple, based on
     the type of each field.
     """
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -97,10 +92,6 @@ class SimpleEditor(Editor):
         self.control = ui.control
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the
             editor.
@@ -108,10 +99,6 @@ class SimpleEditor(Editor):
         ts = self._ts
         for i, value in enumerate(self.value):
             setattr(ts, 'f%d' % i, value)
-
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
@@ -138,10 +125,6 @@ class TupleStructure(HasTraits):
 
     #: Number of tuple fields
     fields = Int
-
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
 
     def __init__(self, editor):
         """ Initializes the object.
@@ -213,10 +196,6 @@ class TupleStructure(HasTraits):
                 group.content.append(item)
 
         self.view = View(Group(show_labels=(len_labels != 0), *content))
-
-    #-------------------------------------------------------------------------
-    #  Updates the underlying tuple when any field changes value:
-    #-------------------------------------------------------------------------
 
     def _field_changed(self, name, old, new):
         """ Updates the underlying tuple when any field changes value.

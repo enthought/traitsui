@@ -65,11 +65,6 @@ class SimpleEditor(SimpleTextEditor):
     #: The popup file control (an Instance( PopupFile )):
     popup = Any
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -135,10 +130,6 @@ class SimpleEditor(SimpleTextEditor):
 
         super(SimpleEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Handles the history 'value' trait being changed:
-    #-------------------------------------------------------------------------
-
     @on_trait_change('history:value')
     def _history_value_changed(self, value):
         """ Handles the history 'value' trait being changed.
@@ -146,20 +137,12 @@ class SimpleEditor(SimpleTextEditor):
         if not self._no_update:
             self._update(value)
 
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
-
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.
         """
         if isinstance(event, wx.FocusEvent):
             event.Skip()
         self._update(self._file_name.GetValue())
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -171,10 +154,6 @@ class SimpleEditor(SimpleTextEditor):
             self._no_update = False
         else:
             self._file_name.SetValue(self.str_value)
-
-    #-------------------------------------------------------------------------
-    #  Displays the pop-up file dialog:
-    #-------------------------------------------------------------------------
 
     def show_file_dialog(self, event):
         """ Displays the pop-up file dialog.
@@ -192,10 +171,6 @@ class SimpleEditor(SimpleTextEditor):
 
                 self.value = file_name
                 self.update_editor()
-
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
@@ -318,11 +293,6 @@ class CustomEditor(SimpleTextEditor):
     #: Event fired when the user double-clicks a file:
     dclick = Event
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -357,10 +327,6 @@ class CustomEditor(SimpleTextEditor):
 
         super(CustomEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
-
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.
         """
@@ -372,10 +338,6 @@ class CustomEditor(SimpleTextEditor):
 
                 self.value = path
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -383,55 +345,31 @@ class CustomEditor(SimpleTextEditor):
         if exists(self.str_value):
             self.control.SetPath(self.str_value)
 
-    #-------------------------------------------------------------------------
-    #  Returns the basic style to use for the control:
-    #-------------------------------------------------------------------------
-
     def get_style(self):
         """ Returns the basic style to use for the control.
         """
         return wx.DIRCTRL_EDIT_LABELS
-
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self._tree
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'filter' trait being changed:
-    #-------------------------------------------------------------------------
-
     def _filter_changed(self):
         """ Handles the 'filter' trait being changed.
         """
         self.control.SetFilter('|'.join(self.filter[:]))
-
-    #-------------------------------------------------------------------------
-    #  Handles the user double-clicking on a file name:
-    #-------------------------------------------------------------------------
 
     def _on_dclick(self, event):
         """ Handles the user double-clicking on a file name.
         """
         self.dclick = self.control.GetPath()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user hovering on a file name for a tooltip:
-    #-------------------------------------------------------------------------
-
     def _on_tooltip(self, event):
         """ Handles the user hovering on a file name for a tooltip.
         """
         text = self._tree.GetItemText(event.GetItem())
         event.SetToolTip(text)
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'reload' trait being changed:
-    #-------------------------------------------------------------------------
 
     def _reload_changed(self):
         """ Handles the 'reload' trait being changed.

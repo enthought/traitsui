@@ -111,11 +111,6 @@ class SourceEditor(Editor):
     squiggle_lines = List(Int)
     squiggle_color = Str
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -208,10 +203,6 @@ class SourceEditor(Editor):
                                  self._position_changed)
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
-
     def wx_update_object(self, event):
         """ Handles the user entering input data in the edit control.
         """
@@ -231,10 +222,6 @@ class SourceEditor(Editor):
                 self.control.Refresh()
             except TraitError as excp:
                 pass
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -260,16 +247,8 @@ class SourceEditor(Editor):
 
         self._locked = False
 
-    #-------------------------------------------------------------------------
-    #  Handles the calltip being clicked:
-    #-------------------------------------------------------------------------
-
     def _calltip_clicked(self, event):
         self.calltip_clicked = True
-
-    #-------------------------------------------------------------------------
-    #  Handles the set of 'marked lines' being changed:
-    #-------------------------------------------------------------------------
 
     def _mark_lines_changed(self):
         """ Handles the set of marked lines being changed.
@@ -288,10 +267,6 @@ class SourceEditor(Editor):
     def _mark_lines_items_changed(self):
         self._mark_lines_changed()
 
-    #-------------------------------------------------------------------------
-    #  Handles the currently 'selected line' being changed:
-    #-------------------------------------------------------------------------
-
     def _selected_line_changed(self):
         """ Handles a change in which line is currently selected.
         """
@@ -306,27 +281,15 @@ class SourceEditor(Editor):
 
         control.Refresh()
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'line' trait being changed:
-    #-------------------------------------------------------------------------
-
     def _line_changed(self, line):
         if not self._locked:
             self.control.GotoLine(line - 1)
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'column' trait being changed:
-    #-------------------------------------------------------------------------
 
     def _column_changed(self, column):
         if not self._locked:
             control = self.control
             line = control.LineFromPosition(control.GetCurrentPos())
             control.GotoPos(control.PositionFromLine(line) + column - 1)
-
-    #-------------------------------------------------------------------------
-    #  Handles the cursor position being changed:
-    #-------------------------------------------------------------------------
 
     def _position_changed(self, event):
         """ Handles the cursor position being changed.
@@ -340,19 +303,11 @@ class SourceEditor(Editor):
         self._locked = False
         self.selected_text = control.GetSelectedText()
 
-    #-------------------------------------------------------------------------
-    #  Handles a key being pressed within the editor:
-    #-------------------------------------------------------------------------
-
     def key_pressed(self, event):
         """ Handles a key being pressed within the editor.
         """
         self.factory.key_bindings.do(event.event, self.ui.handler,
                                      self.ui.info)
-
-    #-------------------------------------------------------------------------
-    #  Handles the styling of the editor:
-    #-------------------------------------------------------------------------
 
     def _dim_color_changed(self):
         self.control.StyleSetForeground(self._dim_style_number, self.dim_color)
@@ -416,19 +371,11 @@ class SourceEditor(Editor):
                 self.control.StartStyling(position, stc.STC_INDIC2_MASK)
                 self.control.SetStyling(style_length, stc.STC_STYLE_DEFAULT)
 
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
-
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         self.control.SetBackgroundColour(ErrorColor)
         self.control.Refresh()
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -446,11 +393,6 @@ class SourceEditor(Editor):
 
     #-- UI preference save/restore interface ---------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
-
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
@@ -459,10 +401,6 @@ class SourceEditor(Editor):
             key_bindings = prefs.get('key_bindings')
             if key_bindings is not None:
                 self.factory.key_bindings.merge(key_bindings)
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.

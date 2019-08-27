@@ -90,10 +90,6 @@ class MakeMenu:
     #: Initialize the globally unique menu ID:
     cur_id = 1000
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, desc, owner, popup=False, window=None):
         """ Initializes the object.
         """
@@ -115,10 +111,6 @@ class MakeMenu:
             window.SetMenuBar(menu)
             if len(self.keys) > 0:
                 window.SetAcceleratorTable(wx.AcceleratorTable(self.keys))
-
-    #-------------------------------------------------------------------------
-    #  Recursively parses menu items from the description:
-    #-------------------------------------------------------------------------
 
     def parse(self, menu, indent):
         """ Recursively parses menu items from the description.
@@ -237,10 +229,6 @@ class MakeMenu:
                 # not understand 'MenuAppend'):
                 menu.Append(submenu, label)
 
-    #-------------------------------------------------------------------------
-    #  Returns the body of an inline method:
-    #-------------------------------------------------------------------------
-
     def get_body(self, indent):
         """ Returns the body of an inline method.
         """
@@ -256,20 +244,12 @@ class MakeMenu:
             return result
         return '  pass'
 
-    #-------------------------------------------------------------------------
-    #  Returns the id associated with a specified name:
-    #-------------------------------------------------------------------------
-
     def get_id(self, name):
         """ Returns the ID associated with a specified name.
         """
         if isinstance(name, six.string_types):
             return self.names[name]
         return name
-
-    #-------------------------------------------------------------------------
-    #  Checks (or unchecks) a menu item specified by name:
-    #-------------------------------------------------------------------------
 
     def checked(self, name, check=None):
         """ Checks (or unchecks) a menu item specified by name.
@@ -278,20 +258,12 @@ class MakeMenu:
             return self.menu.IsChecked(self.get_id(name))
         self.menu.Check(self.get_id(name), check)
 
-    #-------------------------------------------------------------------------
-    #  Enables (or disables) a menu item specified by name:
-    #-------------------------------------------------------------------------
-
     def enabled(self, name, enable=None):
         """ Enables (or disables) a menu item specified by name.
         """
         if enable is None:
             return self.menu.IsEnabled(self.get_id(name))
         self.menu.Enable(self.get_id(name), enable)
-
-    #-------------------------------------------------------------------------
-    #  Gets/Sets the label for a menu item:
-    #-------------------------------------------------------------------------
 
     def label(self, name, label=None):
         """ Gets or sets the label for a menu item.

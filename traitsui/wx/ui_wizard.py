@@ -207,36 +207,20 @@ def page_changing(event):
 class UIWizardPage(wz.PyWizardPage):
     """ A page within a wizard interface.
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, wizard, pages):
         wz.PyWizardPage.__init__(self, wizard)
         self.next = self.previous = self.editor = None
         self.pages = pages
-
-    #-------------------------------------------------------------------------
-    #  Sets the next page after this one:
-    #-------------------------------------------------------------------------
 
     def SetNext(self, page):
         """ Sets the next page after this one.
         """
         self.next = page
 
-    #-------------------------------------------------------------------------
-    #  Sets the previous page before this one:
-    #-------------------------------------------------------------------------
-
     def SetPrev(self, page):
         """ Sets the previous page to this one.
         """
         self.previous = page
-
-    #-------------------------------------------------------------------------
-    #  Returns the next page after this one:
-    #-------------------------------------------------------------------------
 
     def GetNext(self):
         """ Returns the next page after this one.
@@ -250,10 +234,6 @@ class UIWizardPage(wz.PyWizardPage):
                 if page.id == next:
                     return page
         return self.next
-
-    #-------------------------------------------------------------------------
-    #  Returns the previous page before this one:
-    #-------------------------------------------------------------------------
 
     def GetPrev(self):
         """ Returns the previous page to this one.

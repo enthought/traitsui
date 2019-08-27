@@ -168,10 +168,6 @@ class TreeNode(HasPrivateTraits):
     #: A cache for listeners that need to keep state.
     _listener_cache = Dict
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, **traits):
         super(TreeNode, self).__init__(**traits)
         if self.icon_path == '':
@@ -191,45 +187,25 @@ class TreeNode(HasPrivateTraits):
 
     #-- Overridable Methods: -------------------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Returns whether chidren of this object are allowed or not:
-    #-------------------------------------------------------------------------
-
     def allows_children(self, object):
         """ Returns whether this object can have children.
         """
         return (self.children != '')
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object has children:
-    #-------------------------------------------------------------------------
 
     def has_children(self, object):
         """ Returns whether the object has children.
         """
         return (len(self.get_children(object)) > 0)
 
-    #-------------------------------------------------------------------------
-    #  Gets the object's children:
-    #-------------------------------------------------------------------------
-
     def get_children(self, object):
         """ Gets the object's children.
         """
         return getattr(object, self.children, None)
 
-    #-------------------------------------------------------------------------
-    #  Gets the object's children identifier:
-    #-------------------------------------------------------------------------
-
     def get_children_id(self, object):
         """ Gets the object's children identifier.
         """
         return self.children
-
-    #-------------------------------------------------------------------------
-    #  Appends a child to the object's children:
-    #-------------------------------------------------------------------------
 
     def append_child(self, object, child):
         """ Appends a child to the object's children.
@@ -237,22 +213,11 @@ class TreeNode(HasPrivateTraits):
         children = self.get_children(object)
         children.append(child)
 
-    #-------------------------------------------------------------------------
-    #  Inserts a child into the object's children:
-    #-------------------------------------------------------------------------
-
     def insert_child(self, object, index, child):
         """ Inserts a child into the object's children.
         """
         children = self.get_children(object)
         children[index:index] = [child]
-
-    #-------------------------------------------------------------------------
-    #  Confirms that a specified object can be deleted or not:
-    #  Result = True:  Delete object with no further prompting
-    #         = False: Do not delete object
-    #         = other: Take default action (may prompt user to confirm delete)
-    #-------------------------------------------------------------------------
 
     def confirm_delete(self, object):
         """ Checks whether a specified object can be deleted.
@@ -266,19 +231,10 @@ class TreeNode(HasPrivateTraits):
         """
         return None
 
-    #-------------------------------------------------------------------------
-    #  Deletes a child at a specified index from the object's children:
-    #-------------------------------------------------------------------------
-
     def delete_child(self, object, index):
         """ Deletes a child at a specified index from the object's children.
         """
         del self.get_children(object)[index]
-
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'children replaced' on a specified
-    #  object:
-    #-------------------------------------------------------------------------
 
     def when_children_replaced(self, object, listener, remove):
         """ Sets up or removes a listener for children being replaced on a
@@ -287,21 +243,12 @@ class TreeNode(HasPrivateTraits):
         object.on_trait_change(listener, self.children, remove=remove,
                                dispatch='fast_ui')
 
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'children changed' on a specified
-    #  object:
-    #-------------------------------------------------------------------------
-
     def when_children_changed(self, object, listener, remove):
         """ Sets up or removes a listener for children being changed on a
         specified object.
         """
         object.on_trait_change(listener, self.children + '_items',
                                remove=remove, dispatch='fast_ui')
-
-    #-------------------------------------------------------------------------
-    #  Gets the label to display for a specified object:
-    #-------------------------------------------------------------------------
 
     def get_label(self, object):
         """ Gets the label to display for a specified object.
@@ -317,20 +264,12 @@ class TreeNode(HasPrivateTraits):
 
         return self.formatter(object, label)
 
-    #-------------------------------------------------------------------------
-    #  Sets the label for a specified object:
-    #-------------------------------------------------------------------------
-
     def set_label(self, object, label):
         """ Sets the label for a specified object.
         """
         label_name = self.label
         if label_name[:1] != '=':
             xsetattr(object, label_name, label)
-
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'label changed' on a specified object:
-    #-------------------------------------------------------------------------
 
     def when_label_changed(self, object, listener, remove):
         """ Sets up or removes a listener for the label being changed on a
@@ -399,10 +338,6 @@ class TreeNode(HasPrivateTraits):
             object.on_trait_change(wrapped_listener, trait + '_items',
                                    remove=remove, dispatch='ui')
 
-    #-------------------------------------------------------------------------
-    #  Gets the tooltip to display for a specified object:
-    #-------------------------------------------------------------------------
-
     def get_tooltip(self, object):
         """ Gets the tooltip to display for a specified object.
         """
@@ -420,10 +355,6 @@ class TreeNode(HasPrivateTraits):
 
         return self.tooltip_formatter(object, tooltip)
 
-    #-------------------------------------------------------------------------
-    #  Returns the icon for a specified object:
-    #-------------------------------------------------------------------------
-
     def get_icon(self, object, is_expanded):
         """ Returns the icon for a specified object.
         """
@@ -435,19 +366,10 @@ class TreeNode(HasPrivateTraits):
 
         return self.icon_group
 
-    #-------------------------------------------------------------------------
-    #  Returns the path used to locate an object's icon:
-    #-------------------------------------------------------------------------
-
     def get_icon_path(self, object):
         """ Returns the path used to locate an object's icon.
         """
         return self.icon_path
-
-    #-------------------------------------------------------------------------
-    #  Returns the name to use when adding a new object instance (displayed in
-    #  the 'New' submenu):
-    #-------------------------------------------------------------------------
 
     def get_name(self, object):
         """ Returns the name to use when adding a new object instance
@@ -455,18 +377,10 @@ class TreeNode(HasPrivateTraits):
         """
         return self.name
 
-    #-------------------------------------------------------------------------
-    #  Gets the View to use when editing an object:
-    #-------------------------------------------------------------------------
-
     def get_view(self, object):
         """ Gets the view to use when editing an object.
         """
         return self.view
-
-    #-------------------------------------------------------------------------
-    #  Returns the right-click context menu for an object:
-    #-------------------------------------------------------------------------
 
     def get_menu(self, object):
         """ Returns the right-click context menu for an object.
@@ -489,55 +403,30 @@ class TreeNode(HasPrivateTraits):
         """ Return the renderer for the object and column. """
         return self.renderer
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be renamed:
-    #-------------------------------------------------------------------------
-
     def can_rename(self, object):
         """ Returns whether the object's children can be renamed.
         """
         return self.rename
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object can be renamed:
-    #-------------------------------------------------------------------------
 
     def can_rename_me(self, object):
         """ Returns whether the object can be renamed.
         """
         return self.rename_me
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be copied:
-    #-------------------------------------------------------------------------
-
     def can_copy(self, object):
         """ Returns whether the object's children can be copied.
         """
         return self.copy
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be deleted:
-    #-------------------------------------------------------------------------
 
     def can_delete(self, object):
         """ Returns whether the object's children can be deleted.
         """
         return self.delete
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object can be deleted:
-    #-------------------------------------------------------------------------
-
     def can_delete_me(self, object):
         """ Returns whether the object can be deleted.
         """
         return self.delete_me
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be inserted (or just
-    #  appended):
-    #-------------------------------------------------------------------------
 
     def can_insert(self, object):
         """ Returns whether the object's children can be inserted (vs.
@@ -545,19 +434,11 @@ class TreeNode(HasPrivateTraits):
         """
         return self.insert
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children should be auto-opened:
-    #-------------------------------------------------------------------------
-
     def can_auto_open(self, object):
         """ Returns whether the object's children should be automatically
         opened.
         """
         return self.auto_open
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children should be auto-closed:
-    #-------------------------------------------------------------------------
 
     def can_auto_close(self, object):
         """ Returns whether the object's children should be automatically
@@ -565,20 +446,11 @@ class TreeNode(HasPrivateTraits):
         """
         return self.auto_close
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not this is the node that should handle a specified
-    #  object:
-    #-------------------------------------------------------------------------
-
     def is_node_for(self, object):
         """ Returns whether this is the node that handles a specified object.
         """
         return (isinstance(object, self.node_for_class) or
                 object.has_traits_interface(*self.node_for_interface))
-
-    #-------------------------------------------------------------------------
-    #  Returns whether a given 'add_object' can be added to an object:
-    #-------------------------------------------------------------------------
 
     def can_add(self, object, add_object):
         """ Returns whether a given object is droppable on the node.
@@ -595,27 +467,15 @@ class TreeNode(HasPrivateTraits):
 
         return False
 
-    #-------------------------------------------------------------------------
-    #  Returns the list of classes that can be added to the object:
-    #-------------------------------------------------------------------------
-
     def get_add(self, object):
         """ Returns the list of classes that can be added to the object.
         """
         return self.add
 
-    #-------------------------------------------------------------------------
-    #  Returns the 'draggable' version of a specified object:
-    #-------------------------------------------------------------------------
-
     def get_drag_object(self, object):
         """ Returns a draggable version of a specified object.
         """
         return object
-
-    #-------------------------------------------------------------------------
-    #  Returns a droppable version of a specified object:
-    #-------------------------------------------------------------------------
 
     def drop_object(self, object, dropped_object):
         """ Returns a droppable version of a specified object.
@@ -633,10 +493,6 @@ class TreeNode(HasPrivateTraits):
 
         return dropped_object
 
-    #-------------------------------------------------------------------------
-    #  Handles an object being selected:
-    #-------------------------------------------------------------------------
-
     def select(self, object):
         """ Handles an object being selected.
         """
@@ -645,10 +501,6 @@ class TreeNode(HasPrivateTraits):
             return None
 
         return True
-
-    #-------------------------------------------------------------------------
-    #  Handles an object being clicked:
-    #-------------------------------------------------------------------------
 
     def click(self, object):
         """ Handles an object being clicked.
@@ -659,10 +511,6 @@ class TreeNode(HasPrivateTraits):
 
         return True
 
-    #-------------------------------------------------------------------------
-    #  Handles an object being double-clicked:
-    #-------------------------------------------------------------------------
-
     def dclick(self, object):
         """ Handles an object being double-clicked.
         """
@@ -672,10 +520,6 @@ class TreeNode(HasPrivateTraits):
 
         return True
 
-    #-------------------------------------------------------------------------
-    #  Handles an object being activated:
-    #-------------------------------------------------------------------------
-
     def activated(self, object):
         """ Handles an object being activated.
         """
@@ -684,10 +528,6 @@ class TreeNode(HasPrivateTraits):
             return None
 
         return True
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not a specified object class can be added to the node:
-    #-------------------------------------------------------------------------
 
     def is_addable(self, klass):
         """ Returns whether a specified object class can be added to the node.
@@ -700,10 +540,6 @@ class TreeNode(HasPrivateTraits):
                 return True
 
         return False
-
-    #-------------------------------------------------------------------------
-    #  Returns the class of an object:
-    #-------------------------------------------------------------------------
 
     def _class_for(self, object):
         """ Returns the class of an object.
@@ -1381,66 +1217,35 @@ class ITreeNodeAdapterBridge(HasPrivateTraits):
 
 class ObjectTreeNode(TreeNode):
 
-    #-------------------------------------------------------------------------
-    #  Returns whether chidren of this object are allowed or not:
-    #-------------------------------------------------------------------------
-
     def allows_children(self, object):
         """ Returns whether this object can have children.
         """
         return object.tno_allows_children(self)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object has children:
-    #-------------------------------------------------------------------------
 
     def has_children(self, object):
         """ Returns whether the object has children.
         """
         return object.tno_has_children(self)
 
-    #-------------------------------------------------------------------------
-    #  Gets the object's children:
-    #-------------------------------------------------------------------------
-
     def get_children(self, object):
         """ Gets the object's children.
         """
         return object.tno_get_children(self)
-
-    #-------------------------------------------------------------------------
-    #  Gets the object's children identifier:
-    #-------------------------------------------------------------------------
 
     def get_children_id(self, object):
         """ Gets the object's children identifier.
         """
         return object.tno_get_children_id(self)
 
-    #-------------------------------------------------------------------------
-    #  Appends a child to the object's children:
-    #-------------------------------------------------------------------------
-
     def append_child(self, object, child):
         """ Appends a child to the object's children.
         """
         return object.tno_append_child(self, child)
 
-    #-------------------------------------------------------------------------
-    #  Inserts a child into the object's children:
-    #-------------------------------------------------------------------------
-
     def insert_child(self, object, index, child):
         """ Inserts a child into the object's children.
         """
         return object.tno_insert_child(self, index, child)
-
-    #-------------------------------------------------------------------------
-    #  Confirms that a specified object can be deleted or not:
-    #  Result = True:  Delete object with no further prompting
-    #         = False: Do not delete object
-    #         = other: Take default action (may prompt user to confirm delete)
-    #-------------------------------------------------------------------------
 
     def confirm_delete(self, object):
         """ Checks whether a specified object can be deleted.
@@ -1454,19 +1259,10 @@ class ObjectTreeNode(TreeNode):
         """
         return object.tno_confirm_delete(self)
 
-    #-------------------------------------------------------------------------
-    #  Deletes a child at a specified index from the object's children:
-    #-------------------------------------------------------------------------
-
     def delete_child(self, object, index):
         """ Deletes a child at a specified index from the object's children.
         """
         return object.tno_delete_child(self, index)
-
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'children replaced' on a specified
-    #  object:
-    #-------------------------------------------------------------------------
 
     def when_children_replaced(self, object, listener, remove):
         """ Sets up or removes a listener for children being replaced on a
@@ -1474,38 +1270,21 @@ class ObjectTreeNode(TreeNode):
         """
         return object.tno_when_children_replaced(self, listener, remove)
 
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'children changed' on a specified
-    #  object:
-    #-------------------------------------------------------------------------
-
     def when_children_changed(self, object, listener, remove):
         """ Sets up or removes a listener for children being changed on a
             specified object.
         """
         return object.tno_when_children_changed(self, listener, remove)
 
-    #-------------------------------------------------------------------------
-    #  Gets the label to display for a specified object:
-    #-------------------------------------------------------------------------
-
     def get_label(self, object):
         """ Gets the label to display for a specified object.
         """
         return object.tno_get_label(self)
 
-    #-------------------------------------------------------------------------
-    #  Sets the label for a specified object:
-    #-------------------------------------------------------------------------
-
     def set_label(self, object, label):
         """ Sets the label for a specified object.
         """
         return object.tno_set_label(self, label)
-
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'label changed' on a specified object:
-    #-------------------------------------------------------------------------
 
     def when_label_changed(self, object, listener, remove):
         """ Sets up or removes a listener for the label being changed on a
@@ -1513,37 +1292,20 @@ class ObjectTreeNode(TreeNode):
         """
         return object.tno_when_label_changed(self, listener, remove)
 
-    #-------------------------------------------------------------------------
-    #  Gets the tooltip to display for a specified object:
-    #-------------------------------------------------------------------------
-
     def get_tooltip(self, object):
         """ Gets the tooltip to display for a specified object.
         """
         return object.tno_get_tooltip(self)
-
-    #-------------------------------------------------------------------------
-    #  Returns the icon for a specified object:
-    #-------------------------------------------------------------------------
 
     def get_icon(self, object, is_expanded):
         """ Returns the icon for a specified object.
         """
         return object.tno_get_icon(self, is_expanded)
 
-    #-------------------------------------------------------------------------
-    #  Returns the path used to locate an object's icon:
-    #-------------------------------------------------------------------------
-
     def get_icon_path(self, object):
         """ Returns the path used to locate an object's icon.
         """
         return object.tno_get_icon_path(self)
-
-    #-------------------------------------------------------------------------
-    #  Returns the name to use when adding a new object instance (displayed in
-    #  the 'New' submenu):
-    #-------------------------------------------------------------------------
 
     def get_name(self, object):
         """ Returns the name to use when adding a new object instance
@@ -1551,73 +1313,40 @@ class ObjectTreeNode(TreeNode):
         """
         return object.tno_get_name(self)
 
-    #-------------------------------------------------------------------------
-    #  Gets the View to use when editing an object:
-    #-------------------------------------------------------------------------
-
     def get_view(self, object):
         """ Gets the view to use when editing an object.
         """
         return object.tno_get_view(self)
-
-    #-------------------------------------------------------------------------
-    #  Returns the right-click context menu for an object:
-    #-------------------------------------------------------------------------
 
     def get_menu(self, object):
         """ Returns the right-click context menu for an object.
         """
         return object.tno_get_menu(self)
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be renamed:
-    #-------------------------------------------------------------------------
-
     def can_rename(self, object):
         """ Returns whether the object's children can be renamed.
         """
         return object.tno_can_rename(self)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object can be renamed:
-    #-------------------------------------------------------------------------
 
     def can_rename_me(self, object):
         """ Returns whether the object can be renamed.
         """
         return object.tno_can_rename_me(self)
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be copied:
-    #-------------------------------------------------------------------------
-
     def can_copy(self, object):
         """ Returns whether the object's children can be copied.
         """
         return object.tno_can_copy(self)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be deleted:
-    #-------------------------------------------------------------------------
 
     def can_delete(self, object):
         """ Returns whether the object's children can be deleted.
         """
         return object.tno_can_delete(self)
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object can be deleted:
-    #-------------------------------------------------------------------------
-
     def can_delete_me(self, object):
         """ Returns whether the object can be deleted.
         """
         return object.tno_can_delete_me(self)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be inserted (or just
-    #  appended):
-    #-------------------------------------------------------------------------
 
     def can_insert(self, object):
         """ Returns whether the object's children can be inserted (vs.
@@ -1625,30 +1354,17 @@ class ObjectTreeNode(TreeNode):
         """
         return object.tno_can_insert(self)
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children should be auto-opened:
-    #-------------------------------------------------------------------------
-
     def can_auto_open(self, object):
         """ Returns whether the object's children should be automatically
             opened.
         """
         return object.tno_can_auto_open(self)
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children should be auto-closed:
-    #-------------------------------------------------------------------------
-
     def can_auto_close(self, object):
         """ Returns whether the object's children should be automatically
             closed.
         """
         return object.tno_can_auto_close(self)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not this is the node that should handle a specified
-    #  object:
-    #-------------------------------------------------------------------------
 
     def is_node_for(self, object):
         """ Returns whether this is the node that should handle a
@@ -1659,72 +1375,40 @@ class ObjectTreeNode(TreeNode):
 
         return False
 
-    #-------------------------------------------------------------------------
-    #  Returns whether a given 'add_object' can be added to an object:
-    #-------------------------------------------------------------------------
-
     def can_add(self, object, add_object):
         """ Returns whether a given object is droppable on the node.
         """
         return object.tno_can_add(self, add_object)
-
-    #-------------------------------------------------------------------------
-    #  Returns the list of classes that can be added to the object:
-    #-------------------------------------------------------------------------
 
     def get_add(self, object):
         """ Returns the list of classes that can be added to the object.
         """
         return object.tno_get_add(self)
 
-    #-------------------------------------------------------------------------
-    #  Returns the 'draggable' version of a specified object:
-    #-------------------------------------------------------------------------
-
     def get_drag_object(self, object):
         """ Returns a draggable version of a specified object.
         """
         return object.tno_get_drag_object(self)
-
-    #-------------------------------------------------------------------------
-    #  Returns a droppable version of a specified object:
-    #-------------------------------------------------------------------------
 
     def drop_object(self, object, dropped_object):
         """ Returns a droppable version of a specified object.
         """
         return object.tno_drop_object(self, dropped_object)
 
-    #-------------------------------------------------------------------------
-    #  Handles an object being selected:
-    #-------------------------------------------------------------------------
-
     def select(self, object):
         """ Handles an object being selected.
         """
         return object.tno_select(self)
-
-    #-------------------------------------------------------------------------
-    #  Handles an object being clicked:
-    #-------------------------------------------------------------------------
 
     def click(self, object):
         """ Handles an object being clicked.
         """
         return object.tno_click(self)
 
-    #-------------------------------------------------------------------------
-    #  Handles an object being double-clicked:
-    #-------------------------------------------------------------------------
-
     def dclick(self, object):
         """ Handles an object being double-clicked.
         """
         return object.tno_dclick(self)
-
-    #-------------------------------------------------------------------------
-    #  Handles an object being activated:
-    #-------------------------------------------------------------------------
 
     def activated(self, object):
         """ Handles an object being activated.
@@ -1743,67 +1427,36 @@ class TreeNodeObject(HasPrivateTraits):
     #: A cache for listeners that need to keep state.
     _listener_cache = Dict
 
-    #-------------------------------------------------------------------------
-    #  Returns whether chidren of this object are allowed or not:
-    #-------------------------------------------------------------------------
-
     def tno_allows_children(self, node):
         """ Returns whether this object allows children.
         """
         return (node.children != '')
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object has children:
-    #-------------------------------------------------------------------------
 
     def tno_has_children(self, node):
         """ Returns whether this object has children.
         """
         return (len(self.tno_get_children(node)) > 0)
 
-    #-------------------------------------------------------------------------
-    #  Gets the object's children:
-    #-------------------------------------------------------------------------
-
     def tno_get_children(self, node):
         """ Gets the object's children.
         """
         return getattr(self, node.children, None)
-
-    #-------------------------------------------------------------------------
-    #  Gets the object's children identifier:
-    #-------------------------------------------------------------------------
 
     def tno_get_children_id(self, node):
         """ Gets the object's children identifier.
         """
         return node.children
 
-    #-------------------------------------------------------------------------
-    #  Appends a child to the object's children:
-    #-------------------------------------------------------------------------
-
     def tno_append_child(self, node, child):
         """ Appends a child to the object's children.
         """
         self.tno_get_children(node).append(child)
-
-    #-------------------------------------------------------------------------
-    #  Inserts a child into the object's children:
-    #-------------------------------------------------------------------------
 
     def tno_insert_child(self, node, index, child):
         """ Inserts a child into the object's children.
         """
         children = self.tno_get_children(node)
         children[index:index] = [child]
-
-    #-------------------------------------------------------------------------
-    #  Confirms that a specified object can be deleted or not:
-    #  Result = True:  Delete object with no further prompting
-    #         = False: Do not delete object
-    #         = other: Take default action (may prompt user to confirm delete)
-    #-------------------------------------------------------------------------
 
     def tno_confirm_delete(self, node):
         """ Checks whether a specified object can be deleted.
@@ -1817,20 +1470,11 @@ class TreeNodeObject(HasPrivateTraits):
         """
         return None
 
-    #-------------------------------------------------------------------------
-    #  Deletes a child at a specified index from the object's children:
-    #-------------------------------------------------------------------------
-
     def tno_delete_child(self, node, index):
         """ Deletes a child at a specified index from the object's children.
         """
 
         del self.tno_get_children(node)[index]
-
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'children replaced' on a specified
-    #  object:
-    #-------------------------------------------------------------------------
 
     def tno_when_children_replaced(self, node, listener, remove):
         """ Sets up or removes a listener for children being replaced on a
@@ -1839,21 +1483,12 @@ class TreeNodeObject(HasPrivateTraits):
         self.on_trait_change(listener, node.children, remove=remove,
                              dispatch='fast_ui')
 
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'children changed' on a specified
-    #  object:
-    #-------------------------------------------------------------------------
-
     def tno_when_children_changed(self, node, listener, remove):
         """ Sets up or removes a listener for children being changed on a
         specified object.
         """
         self.on_trait_change(listener, node.children + '_items',
                              remove=remove, dispatch='fast_ui')
-
-    #-------------------------------------------------------------------------
-    #  Gets the label to display for a specified object:
-    #-------------------------------------------------------------------------
 
     def tno_get_label(self, node):
         """ Gets the label to display for a specified object.
@@ -1869,20 +1504,12 @@ class TreeNodeObject(HasPrivateTraits):
 
         return node.formatter(self, label)
 
-    #-------------------------------------------------------------------------
-    #  Sets the label for a specified node:
-    #-------------------------------------------------------------------------
-
     def tno_set_label(self, node, label):
         """ Sets the label for a specified object.
         """
         label_name = node.label
         if label_name[:1] != '=':
             xsetattr(self, label_name, label)
-
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'label changed' on a specified object:
-    #-------------------------------------------------------------------------
 
     def tno_when_label_changed(self, node, listener, remove):
         """ Sets up or removes a listener for  the label being changed on a
@@ -1905,10 +1532,6 @@ class TreeNodeObject(HasPrivateTraits):
             self.on_trait_change(wrapped_listener, label, remove=remove,
                                  dispatch='ui')
 
-    #-------------------------------------------------------------------------
-    #  Gets the tooltip to display for a specified object:
-    #-------------------------------------------------------------------------
-
     def tno_get_tooltip(self, node):
         """ Gets the tooltip to display for a specified object.
         """
@@ -1926,10 +1549,6 @@ class TreeNodeObject(HasPrivateTraits):
 
         return node.tooltip_formatter(self, tooltip)
 
-    #-------------------------------------------------------------------------
-    #  Returns the icon for a specified object:
-    #-------------------------------------------------------------------------
-
     def tno_get_icon(self, node, is_expanded):
         """ Returns the icon for a specified object.
         """
@@ -1941,19 +1560,10 @@ class TreeNodeObject(HasPrivateTraits):
 
         return node.icon_group
 
-    #-------------------------------------------------------------------------
-    #  Returns the path used to locate an object's icon:
-    #-------------------------------------------------------------------------
-
     def tno_get_icon_path(self, node):
         """ Returns the path used to locate an object's icon.
         """
         return node.icon_path
-
-    #-------------------------------------------------------------------------
-    #  Returns the name to use when adding a new object instance (displayed in
-    #  the 'New' submenu):
-    #-------------------------------------------------------------------------
 
     def tno_get_name(self, node):
         """ Returns the name to use when adding a new object instance
@@ -1961,73 +1571,40 @@ class TreeNodeObject(HasPrivateTraits):
         """
         return node.name
 
-    #-------------------------------------------------------------------------
-    #  Gets the View to use when editing an object:
-    #-------------------------------------------------------------------------
-
     def tno_get_view(self, node):
         """ Gets the view to use when editing an object.
         """
         return node.view
-
-    #-------------------------------------------------------------------------
-    #  Returns the right-click context menu for an object:
-    #-------------------------------------------------------------------------
 
     def tno_get_menu(self, node):
         """ Returns the right-click context menu for an object.
         """
         return node.menu
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be renamed:
-    #-------------------------------------------------------------------------
-
     def tno_can_rename(self, node):
         """ Returns whether the object's children can be renamed.
         """
         return node.rename
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object can be renamed:
-    #-------------------------------------------------------------------------
 
     def tno_can_rename_me(self, node):
         """ Returns whether the object can be renamed.
         """
         return node.rename_me
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be copied:
-    #-------------------------------------------------------------------------
-
     def tno_can_copy(self, node):
         """ Returns whether the object's children can be copied.
         """
         return node.copy
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be deleted:
-    #-------------------------------------------------------------------------
 
     def tno_can_delete(self, node):
         """ Returns whether the object's children can be deleted.
         """
         return node.delete
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object can be deleted:
-    #-------------------------------------------------------------------------
-
     def tno_can_delete_me(self, node):
         """ Returns whether the object can be deleted.
         """
         return node.delete_me
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be inserted (or just
-    #  appended):
-    #-------------------------------------------------------------------------
 
     def tno_can_insert(self, node):
         """ Returns whether the object's children can be inserted (vs.
@@ -2035,19 +1612,11 @@ class TreeNodeObject(HasPrivateTraits):
         """
         return node.insert
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children should be auto-opened:
-    #-------------------------------------------------------------------------
-
     def tno_can_auto_open(self, node):
         """ Returns whether the object's children should be automatically
         opened.
         """
         return node.auto_open
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children should be auto-closed:
-    #-------------------------------------------------------------------------
 
     def tno_can_auto_close(self, node):
         """ Returns whether the object's children should be automatically
@@ -2055,21 +1624,12 @@ class TreeNodeObject(HasPrivateTraits):
         """
         return node.auto_close
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not this is the node that should handle a specified
-    #  object:
-    #-------------------------------------------------------------------------
-
     def tno_is_node_for(self, node):
         """ Returns whether this is the node that should handle a
             specified object.
         """
         return (isinstance(self, node.node_for_class) or
                 self.has_traits_interface(*node.node_for_interface))
-
-    #-------------------------------------------------------------------------
-    #  Returns whether a given 'add_object' can be added to an object:
-    #-------------------------------------------------------------------------
 
     def tno_can_add(self, node, add_object):
         """ Returns whether a given object is droppable on the node.
@@ -2086,27 +1646,15 @@ class TreeNodeObject(HasPrivateTraits):
 
         return False
 
-    #-------------------------------------------------------------------------
-    #  Returns the list of classes that can be added to the object:
-    #-------------------------------------------------------------------------
-
     def tno_get_add(self, node):
         """ Returns the list of classes that can be added to the object.
         """
         return node.add
 
-    #-------------------------------------------------------------------------
-    #  Returns the 'draggable' version of a specified object:
-    #-------------------------------------------------------------------------
-
     def tno_get_drag_object(self, node):
         """ Returns a draggable version of a specified object.
         """
         return self
-
-    #-------------------------------------------------------------------------
-    #  Returns a droppable version of a specified object:
-    #-------------------------------------------------------------------------
 
     def tno_drop_object(self, node, dropped_object):
         """ Returns a droppable version of a specified object.
@@ -2122,10 +1670,6 @@ class TreeNodeObject(HasPrivateTraits):
                 if isinstance(dropped_object, item):
                     return dropped_object
 
-    #-------------------------------------------------------------------------
-    #  Handles an object being selected:
-    #-------------------------------------------------------------------------
-
     def tno_select(self, node):
         """ Handles an object being selected.
         """
@@ -2134,10 +1678,6 @@ class TreeNodeObject(HasPrivateTraits):
             return None
 
         return True
-
-    #-------------------------------------------------------------------------
-    #  Handles an object being clicked:
-    #-------------------------------------------------------------------------
 
     def tno_click(self, node):
         """ Handles an object being clicked.
@@ -2148,10 +1688,6 @@ class TreeNodeObject(HasPrivateTraits):
 
         return True
 
-    #-------------------------------------------------------------------------
-    #  Handles an object being double-clicked:
-    #-------------------------------------------------------------------------
-
     def tno_dclick(self, node):
         """ Handles an object being double-clicked.
         """
@@ -2160,10 +1696,6 @@ class TreeNodeObject(HasPrivateTraits):
             return None
 
         return True
-
-    #-------------------------------------------------------------------------
-    #  Handles an object being activated:
-    #-------------------------------------------------------------------------
 
     def tno_activated(self, node):
         """ Handles an object being activated.
@@ -2191,47 +1723,26 @@ class MultiTreeNode(TreeNode):
     #: List of TreeNodes (one for each sub-item list)
     nodes = List(TreeNode)
 
-    #-------------------------------------------------------------------------
-    #  Returns whether chidren of this object are allowed or not:
-    #-------------------------------------------------------------------------
-
     def allows_children(self, object):
         """ Returns whether this object can have children (True for this
         class).
         """
         return True
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object has children:
-    #-------------------------------------------------------------------------
-
     def has_children(self, object):
         """ Returns whether this object has children (True for this class).
         """
         return True
-
-    #-------------------------------------------------------------------------
-    #  Gets the object's children:
-    #-------------------------------------------------------------------------
 
     def get_children(self, object):
         """ Gets the object's children.
         """
         return [(object, node) for node in self.nodes]
 
-    #-------------------------------------------------------------------------
-    #  Gets the object's children identifier:
-    #-------------------------------------------------------------------------
-
     def get_children_id(self, object):
         """ Gets the object's children identifier.
         """
         return ''
-
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'children replaced' on a specified
-    #  object:
-    #-------------------------------------------------------------------------
 
     def when_children_replaced(self, object, listener, remove):
         """ Sets up or removes a listener for children being replaced on a
@@ -2239,38 +1750,21 @@ class MultiTreeNode(TreeNode):
         """
         pass
 
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'children changed' on a specified
-    #  object:
-    #-------------------------------------------------------------------------
-
     def when_children_changed(self, object, listener, remove):
         """ Sets up or removes a listener for children being changed on a
         specified object.
         """
         pass
 
-    #-------------------------------------------------------------------------
-    #  Gets the label to display for a specified object:
-    #-------------------------------------------------------------------------
-
     def get_label(self, object):
         """ Gets the label to display for a specified object.
         """
         return self.root_node.get_label(object)
 
-    #-------------------------------------------------------------------------
-    #  Sets the label for a specified object:
-    #-------------------------------------------------------------------------
-
     def set_label(self, object, label):
         """ Sets the label for a specified object.
         """
         return self.root_node.set_label(object, label)
-
-    #-------------------------------------------------------------------------
-    #  Sets up/Tears down a listener for 'label changed' on a specified object:
-    #-------------------------------------------------------------------------
 
     def when_label_changed(self, object, listener, remove):
         """ Sets up or removes a listener for the label being changed on a
@@ -2278,28 +1772,15 @@ class MultiTreeNode(TreeNode):
         """
         return self.root_node.when_label_changed(object, listener, remove)
 
-    #-------------------------------------------------------------------------
-    #  Returns the icon for a specified object:
-    #-------------------------------------------------------------------------
-
     def get_icon(self, object, is_expanded):
         """ Returns the icon for a specified object.
         """
         return self.root_node.get_icon(object, is_expanded)
 
-    #-------------------------------------------------------------------------
-    #  Returns the path used to locate an object's icon:
-    #-------------------------------------------------------------------------
-
     def get_icon_path(self, object):
         """ Returns the path used to locate an object's icon.
         """
         return self.root_node.get_icon_path(object)
-
-    #-------------------------------------------------------------------------
-    #  Returns the name to use when adding a new object instance (displayed in
-    #  the 'New' submenu):
-    #-------------------------------------------------------------------------
 
     def get_name(self, object):
         """ Returns the name to use when adding a new object instance
@@ -2307,27 +1788,15 @@ class MultiTreeNode(TreeNode):
         """
         return self.root_node.get_name(object)
 
-    #-------------------------------------------------------------------------
-    #  Gets the View to use when editing an object:
-    #-------------------------------------------------------------------------
-
     def get_view(self, object):
         """ Gets the view to use when editing an object.
         """
         return self.root_node.get_view(object)
 
-    #-------------------------------------------------------------------------
-    #  Returns the right-click context menu for an object:
-    #-------------------------------------------------------------------------
-
     def get_menu(self, object):
         """ Returns the right-click context menu for an object.
         """
         return self.root_node.get_menu(object)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be renamed:
-    #-------------------------------------------------------------------------
 
     def can_rename(self, object):
         """ Returns whether the object's children can be renamed (False for
@@ -2335,27 +1804,15 @@ class MultiTreeNode(TreeNode):
         """
         return False
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object can be renamed:
-    #-------------------------------------------------------------------------
-
     def can_rename_me(self, object):
         """ Returns whether the object can be renamed (False for this class).
         """
         return False
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be copied:
-    #-------------------------------------------------------------------------
-
     def can_copy(self, object):
         """ Returns whether the object's children can be copied.
         """
         return self.root_node.can_copy(object)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be deleted:
-    #-------------------------------------------------------------------------
 
     def can_delete(self, object):
         """ Returns whether the object's children can be deleted (False for
@@ -2363,19 +1820,10 @@ class MultiTreeNode(TreeNode):
         """
         return False
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object can be deleted:
-    #-------------------------------------------------------------------------
-
     def can_delete_me(self, object):
         """ Returns whether the object can be deleted (True for this class).
         """
         return True
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children can be inserted (or just
-    #  appended):
-    #-------------------------------------------------------------------------
 
     def can_insert(self, object):
         """ Returns whether the object's children can be inserted (False,
@@ -2383,19 +1831,11 @@ class MultiTreeNode(TreeNode):
         """
         return False
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children should be auto-opened:
-    #-------------------------------------------------------------------------
-
     def can_auto_open(self, object):
         """ Returns whether the object's children should be automatically
         opened.
         """
         return self.root_node.can_auto_open(object)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object's children should be auto-closed:
-    #-------------------------------------------------------------------------
 
     def can_auto_close(self, object):
         """ Returns whether the object's children should be automatically
@@ -2403,73 +1843,41 @@ class MultiTreeNode(TreeNode):
         """
         return self.root_node.can_auto_close(object)
 
-    #-------------------------------------------------------------------------
-    #  Returns whether a given 'add_object' can be added to an object:
-    #-------------------------------------------------------------------------
-
     def can_add(self, object, add_object):
         """ Returns whether a given object is droppable on the node (False for
         this class).
         """
         return False
 
-    #-------------------------------------------------------------------------
-    #  Returns the list of classes that can be added to the object:
-    #-------------------------------------------------------------------------
-
     def get_add(self, object):
         """ Returns the list of classes that can be added to the object.
         """
         return []
-
-    #-------------------------------------------------------------------------
-    #  Returns the 'draggable' version of a specified object:
-    #-------------------------------------------------------------------------
 
     def get_drag_object(self, object):
         """ Returns a draggable version of a specified object.
         """
         return self.root_node.get_drag_object(object)
 
-    #-------------------------------------------------------------------------
-    #  Returns a droppable version of a specified object:
-    #-------------------------------------------------------------------------
-
     def drop_object(self, object, dropped_object):
         """ Returns a droppable version of a specified object.
         """
         return self.root_node.drop_object(object, dropped_object)
-
-    #-------------------------------------------------------------------------
-    #  Handles an object being selected:
-    #-------------------------------------------------------------------------
 
     def select(self, object):
         """ Handles an object being selected.
         """
         return self.root_node.select(object)
 
-    #-------------------------------------------------------------------------
-    #  Handles an object being clicked:
-    #-------------------------------------------------------------------------
-
     def click(self, object):
         """ Handles an object being clicked.
         """
         return self.root_node.click(object)
 
-    #-------------------------------------------------------------------------
-    #  Handles an object being double-clicked:
-    #-------------------------------------------------------------------------
-
     def dclick(self, object):
         """ Handles an object being double-clicked.
         """
         return self.root_node.dclick(object)
-
-    #-------------------------------------------------------------------------
-    #  Handles an object being activated:
-    #-------------------------------------------------------------------------
 
     def activated(self, object):
         """ Handles an object being activated.

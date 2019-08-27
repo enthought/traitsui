@@ -63,10 +63,6 @@ class TraitFont(TraitHandler):
     descriptor strings; the value actually assigned is the corresponding
     canonical font descriptor string.
     """
-    #--------------------------------------------------------------------------
-    #  Validates that the value is a valid font:
-    #--------------------------------------------------------------------------
-
     def validate(self, object, name, value):
         """ Validates that the value is a valid font descriptor string.
         """

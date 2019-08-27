@@ -52,11 +52,6 @@ class _HistoryEditor(Editor):
     #: The history control:
     history = Any
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -77,10 +72,6 @@ class _HistoryEditor(Editor):
 
         super(_HistoryEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
-
     @on_trait_change('history:value')
     def _value_changed(self, value):
         """ Handles the history object's 'value' trait being changed.
@@ -96,10 +87,6 @@ class _HistoryEditor(Editor):
 
             do_later(self.trait_set, _dont_update=False)
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -110,10 +97,6 @@ class _HistoryEditor(Editor):
             self.history.error = False
             self._dont_update = False
 
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
-
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
@@ -121,21 +104,12 @@ class _HistoryEditor(Editor):
 
     #-- UI preference save/restore interface ---------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
-
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
         self.history.history = \
             prefs.get('history', [])[: self.factory.entries]
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.

@@ -38,11 +38,6 @@ class SimpleEditor(Editor):
     """ Simple Traits UI time editor that wraps QTimeEdit.
     """
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -50,10 +45,6 @@ class SimpleEditor(Editor):
         self.control = QtGui.QTimeEdit()
 
         self.control.timeChanged.connect(self.update_object)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -63,10 +54,6 @@ class SimpleEditor(Editor):
         if value:
             q_date = QtCore.QTime(value.hour, value.minute, value.second)
             self.control.setTime(q_date)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, q_time):
         """ Handles the user entering input data in the edit control.

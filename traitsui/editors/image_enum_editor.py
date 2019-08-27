@@ -59,21 +59,12 @@ class ToolkitEditorFactory(EditorFactory):
     #: Module used to derive the path to the image files:
     module = Module
 
-    #-------------------------------------------------------------------------
-    #  Performs any initialization needed after all constructor traits have
-    #  been set:
-    #-------------------------------------------------------------------------
-
     def init(self):
         """ Performs any initialization needed after all constructor traits
             have been set.
         """
         super(ToolkitEditorFactory, self).init()
         self._update_path()
-
-    #-------------------------------------------------------------------------
-    #  Handles one of the items defining the path being updated:
-    #-------------------------------------------------------------------------
 
     @on_trait_change('path, klass, module')
     def _update_path(self):

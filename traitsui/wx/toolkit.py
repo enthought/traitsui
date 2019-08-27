@@ -91,11 +91,6 @@ set_ui_handler(ui_handler)
 class GUIToolkit(Toolkit):
     """ Implementation class for wxPython toolkit.
     """
-    #-------------------------------------------------------------------------
-    #  Create wxPython specific user interfaces using information from the
-    #  specified UI object:
-    #-------------------------------------------------------------------------
-
     def ui_panel(self, ui, parent):
         """ Creates a wxPython panel-based user interface using information
             from the specified UI object.
@@ -203,10 +198,6 @@ class GUIToolkit(Toolkit):
         return view_application.view_application(context, view, kind, handler,
                                                  id, scrollable, args)
 
-    #-------------------------------------------------------------------------
-    #  Positions the associated dialog window on the display:
-    #-------------------------------------------------------------------------
-
     def position(self, ui):
         """ Positions the associated dialog window on the display.
         """
@@ -289,19 +280,11 @@ class GUIToolkit(Toolkit):
         # Position and size the window as requested:
         window.SetDimensions(max(0, x), max(0, y), width, height)
 
-    #-------------------------------------------------------------------------
-    #  Shows a 'Help' window for a specified UI and control:
-    #-------------------------------------------------------------------------
-
     def show_help(self, ui, control):
         """ Shows a help window for a specified UI and control.
         """
         from . import ui_panel
         ui_panel.show_help(ui, control)
-
-    #-------------------------------------------------------------------------
-    #  Saves user preference information associated with a UI window:
-    #-------------------------------------------------------------------------
 
     def save_window(self, ui):
         """ Saves user preference information associated with a UI window.
@@ -309,10 +292,6 @@ class GUIToolkit(Toolkit):
         from . import helper
 
         helper.save_window(ui)
-
-    #-------------------------------------------------------------------------
-    #  Rebuilds a UI after a change to the content of the UI:
-    #-------------------------------------------------------------------------
 
     def rebuild_ui(self, ui):
         """ Rebuilds a UI after a change to the content of the UI.
@@ -335,18 +314,10 @@ class GUIToolkit(Toolkit):
             if sizer is not None:
                 sizer.Add(ui.control, 1, wx.EXPAND)
 
-    #-------------------------------------------------------------------------
-    #  Sets the title for the UI window:
-    #-------------------------------------------------------------------------
-
     def set_title(self, ui):
         """ Sets the title for the UI window.
         """
         ui.control.SetTitle(ui.title)
-
-    #-------------------------------------------------------------------------
-    #  Sets the icon for the UI window:
-    #-------------------------------------------------------------------------
 
     def set_icon(self, ui):
         """ Sets the icon for the UI window.
@@ -356,21 +327,12 @@ class GUIToolkit(Toolkit):
         if isinstance(ui.icon, ImageResource):
             ui.control.SetIcon(ui.icon.create_icon())
 
-    #-------------------------------------------------------------------------
-    #  Converts a keystroke event into a corresponding key name:
-    #-------------------------------------------------------------------------
-
     def key_event_to_name(self, event):
         """ Converts a keystroke event into a corresponding key name.
         """
         from . import key_event_to_name
 
         return key_event_to_name.key_event_to_name(event)
-
-    #-------------------------------------------------------------------------
-    #  Hooks all specified events for all controls in a ui so that they can be
-    #  routed to the correct event handler:
-    #-------------------------------------------------------------------------
 
     def hook_events(self, ui, control, events=None, handler=None):
         """ Hooks all specified events for all controls in a UI so that they
@@ -412,10 +374,6 @@ class GUIToolkit(Toolkit):
         for child in control.GetChildren():
             self.hook_events(ui, child, events, handler)
 
-    #-------------------------------------------------------------------------
-    #  Routes a 'hooked' event to the correct handler method:
-    #-------------------------------------------------------------------------
-
     def route_event(self, ui, event):
         """ Routes a hooked event to the correct handler method.
         """
@@ -436,29 +394,13 @@ class GUIToolkit(Toolkit):
         if (method is None) or (method(ui.info, owner, event) is False):
             event.Skip()
 
-    #-------------------------------------------------------------------------
-    #  Indicates that an event should continue to be processed by the toolkit
-    #-------------------------------------------------------------------------
-
     def skip_event(self, event):
         """ Indicates that an event should continue to be processed by the
             toolkit.
         """
         event.Skip()
 
-    #-------------------------------------------------------------------------
-    #  Destroys a specified GUI toolkit control:
-    #-------------------------------------------------------------------------
-
-    def destroy_control(self, control):
-        """ Destroys a specified GUI toolkit control.
-        """
-        _popEventHandlers(control)
-        control.Destroy()
-
-    #-------------------------------------------------------------------------
-    #  Destroys all of the child controls of a specified GUI toolkit control:
-    #-------------------------------------------------------------------------
+    def control.Destroy()
 
     def destroy_children(self, control):
         """ Destroys all of the child controls of a specified GUI toolkit
@@ -468,20 +410,11 @@ class GUIToolkit(Toolkit):
             _popEventHandlers(child)
         control.DestroyChildren()
 
-    #-------------------------------------------------------------------------
-    #  Returns a ( width, height ) tuple containing the size of a specified
-    #  toolkit image:
-    #-------------------------------------------------------------------------
-
     def image_size(self, image):
         """ Returns a ( width, height ) tuple containing the size of a
             specified toolkit image.
         """
         return (image.GetWidth(), image.GetHeight())
-
-    #-------------------------------------------------------------------------
-    #  Returns a dictionary of useful constants:
-    #-------------------------------------------------------------------------
 
     def constants(self):
         """ Returns a dictionary of useful constants.
@@ -611,36 +544,20 @@ class DragHandler(HasPrivateTraits):
 
 #-- Drag and drop event handlers: ----------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dropped on the control:
-    #-------------------------------------------------------------------------
-
     def wx_dropped_on(self, x, y, data, drag_result):
         """ Handles a Python object being dropped on the window.
         """
         return self._drag_event('dropped_on', x, y, data, drag_result)
-
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dragged over the control:
-    #-------------------------------------------------------------------------
 
     def wx_drag_over(self, x, y, data, drag_result):
         """ Handles a Python object being dragged over the tree.
         """
         return self._drag_event('drag_over', x, y, data, drag_result)
 
-    #-------------------------------------------------------------------------
-    #  Handles a dragged Python object leaving the window:
-    #-------------------------------------------------------------------------
-
     def wx_drag_leave(self, data):
         """ Handles a dragged Python object leaving the window.
         """
         return self._drag_event('drag_leave')
-
-    #-------------------------------------------------------------------------
-    #  Handles routing a drag event to the appropriate handler:
-    #-------------------------------------------------------------------------
 
     def _drag_event(self, suffix, x=None, y=None, data=None,
                     drag_result=None):

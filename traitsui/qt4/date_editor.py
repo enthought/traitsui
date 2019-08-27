@@ -42,11 +42,6 @@ class SimpleEditor(Editor):
     """ Simple Traits UI date editor that wraps QDateEdit.
     """
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -82,10 +77,6 @@ class SimpleEditor(Editor):
 
         self.control.dateChanged.connect(self.update_object)
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -94,10 +85,6 @@ class SimpleEditor(Editor):
         if value:
             q_date = QtCore.QDate(value.year, value.month, value.day)
             self.control.setDate(q_date)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, q_date):
         """ Handles the user entering input data in the edit control.
@@ -120,11 +107,6 @@ class CustomEditor(Editor):
     #: Selected dates (used when multi_select is true)
     _selected = Set(Date)
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -135,10 +117,6 @@ class CustomEditor(Editor):
             self.control.setMaximumDate(QtCore.QDate.currentDate())
 
         self.control.clicked.connect(self.update_object)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -154,10 +132,6 @@ class CustomEditor(Editor):
                 for date in value:
                     self.apply_style(self.factory.selected_style, date)
                 self._selected = set(value)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, q_date):
         """ Handles the user entering input data in the edit control.
@@ -181,10 +155,6 @@ class CustomEditor(Editor):
     def select_date(self, date):
         self._selected.add(date)
         self.apply_style(self.factory.selected_style, date)
-
-    #-------------------------------------------------------------------------
-    #  Helper methods for applying styling
-    #-------------------------------------------------------------------------
 
     def set_unselected_style(self, style, date):
         """ Set the style used for a date when it is not selected."""

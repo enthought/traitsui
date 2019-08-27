@@ -324,19 +324,11 @@ class View(ViewElement):
     revert = Bool(False)
     help = Bool(False)
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, *values, **traits):
         """ Initializes the object.
         """
         ViewElement.__init__(self, **traits)
         self.set_content(*values)
-
-    #-------------------------------------------------------------------------
-    #  Sets the content of a view:
-    #-------------------------------------------------------------------------
 
     def set_content(self, *values):
         """ Sets the content of a view.
@@ -364,10 +356,6 @@ class View(ViewElement):
 
         # Wrap all of the content up into a Group and save it as our content:
         self.content = Group(container=self, *content)
-
-    #-------------------------------------------------------------------------
-    #  Creates a UI user interface object:
-    #-------------------------------------------------------------------------
 
     def ui(self, context, parent=None, kind=None,
             view_elements=None, handler=None,
@@ -445,12 +433,6 @@ class View(ViewElement):
 
         return ui
 
-    #-------------------------------------------------------------------------
-    #  Replaces any items which have an 'id' with an Include object with the
-    #  same 'id', and puts the object with the 'id' into the specified
-    #  ViewElements object:
-    #-------------------------------------------------------------------------
-
     def replace_include(self, view_elements):
         """ Replaces any items that have an ID with an Include object with
             the same ID, and puts the object with the ID into the specified
@@ -458,10 +440,6 @@ class View(ViewElement):
         """
         if self.content is not None:
             self.content.replace_include(view_elements)
-
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' version of the View:
-    #-------------------------------------------------------------------------
 
     def __repr__(self):
         """ Returns a "pretty print" version of the View.

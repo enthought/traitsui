@@ -64,11 +64,6 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
         static image representing the object trait's value.
     """
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -76,10 +71,6 @@ class ReadonlyEditor(BaseEditor, BaseEnumEditor):
         self.control = QtGui.QLabel()
         self.control.setPixmap(self.get_pixmap(self.str_value))
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -96,10 +87,6 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
     """ Simple style of image enumeration editor, which displays a combo box.
     """
 
-    #-------------------------------------------------------------------------
-    #  Returns the QComboBox used for the editor control:
-    #-------------------------------------------------------------------------
-
     def create_combo_box(self):
         """ Returns the QComboBox used for the editor control.
         """
@@ -107,10 +94,6 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         control.setSizePolicy(QtGui.QSizePolicy.Maximum,
                               QtGui.QSizePolicy.Maximum)
         return control
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -130,11 +113,6 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
                 self.control.setCurrentIndex(row)
             self._no_enum_update -= 1
 
-    #-------------------------------------------------------------------------
-    #  Rebuilds the contents of the editor whenever the original factory
-    #  object's 'values' trait changes:
-    #-------------------------------------------------------------------------
-
     def rebuild_editor(self):
         """ Rebuilds the contents of the editor whenever the original factory
             object's **values** trait changes.
@@ -153,10 +131,6 @@ class CustomEditor(BaseEditor, CustomEnumEditor):
     #: Is the button layout row-major or column-major? This value overrides the
     #: default.
     row_major = True
-
-    #-------------------------------------------------------------------------
-    #  Returns the QAbstractButton used for the radio button:
-    #-------------------------------------------------------------------------
 
     def create_button(self, name):
         """ Returns the QAbstractButton used for the radio button.

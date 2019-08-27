@@ -76,19 +76,11 @@ class Include(ViewSubElement):
     #: The name of the substitutable content
     id = Str
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, id, **traits):
         """ Initializes the Include object.
         """
         super(ViewSubElement, self).__init__(**traits)
         self.id = id
-
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' version of the Include:
-    #-------------------------------------------------------------------------
 
     def __repr__(self):
         """ Returns a "pretty print" version of the Include object.

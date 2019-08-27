@@ -52,11 +52,6 @@ class SimpleEditor(Editor):
     #: Background color when it is OK to drop objects.
     ok_color = DropColor
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -70,10 +65,6 @@ class SimpleEditor(Editor):
         self.control.SetBackgroundColour(self.ok_color)
         self.control.SetDropTarget(PythonDropTarget(self))
 
-    #-------------------------------------------------------------------------
-    #  Returns the text representation of a specified object trait value:
-    #-------------------------------------------------------------------------
-
     def string_value(self, value):
         """ Returns the text representation of a specified object trait value.
         """
@@ -81,20 +72,12 @@ class SimpleEditor(Editor):
             return ''
         return str(value)
 
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
-
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
 
 #----- Drag and drop event handlers: -------------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dropped on the control:
-    #-------------------------------------------------------------------------
 
     def wx_dropped_on(self, x, y, data, drag_result):
         """ Handles a Python object being dropped on the tree.
@@ -119,10 +102,6 @@ class SimpleEditor(Editor):
             return drag_result
 
         return wx.DragNone
-
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dragged over the control:
-    #-------------------------------------------------------------------------
 
     def wx_drag_over(self, x, y, data, drag_result):
         """ Handles a Python object being dragged over the tree.

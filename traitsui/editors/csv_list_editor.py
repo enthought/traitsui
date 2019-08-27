@@ -337,10 +337,6 @@ class CSVListEditor(TextEditor):
 
         return evaluate, fmt_func
 
-    #-------------------------------------------------------------------------
-    #  Methods that generate backend toolkit-specific editors.
-    #-------------------------------------------------------------------------
-
     def simple_editor(self, ui, object, name, description, parent):
         """ Generates an editor using the "simple" style.
         """

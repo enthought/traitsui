@@ -60,10 +60,6 @@ class DockableViewElement(HasPrivateTraits, IDockable):
 
 #-- IDockable interface --------------------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Should the current DockControl be closed before creating the new one:
-    #-------------------------------------------------------------------------
-
     def dockable_should_close(self):
         """ Should the current DockControl be closed before creating the new
             one?
@@ -97,10 +93,6 @@ class DockableViewElement(HasPrivateTraits, IDockable):
 
         return (self.should_close or (self.element is None))
 
-    #-------------------------------------------------------------------------
-    #  Gets a control that can be docked into a DockWindow:
-    #-------------------------------------------------------------------------
-
     def dockable_get_control(self, parent):
         """ Gets a control that can be docked into a DockWindow.
         """
@@ -120,10 +112,6 @@ class DockableViewElement(HasPrivateTraits, IDockable):
 
         return ui.control
 
-    #-------------------------------------------------------------------------
-    #  Allows the object to override the default DockControl settings:
-    #-------------------------------------------------------------------------
-
     def dockable_init_dockcontrol(self, dock_control):
         """ Allows the object to override the default DockControl settings.
         """
@@ -136,10 +124,6 @@ class DockableViewElement(HasPrivateTraits, IDockable):
 
         dock_control.trait_set(dockable=dockable,
                                on_close=dockable.close_dock_control)
-
-    #-------------------------------------------------------------------------
-    #  Handles the closing of a DockControl containing a Traits UI:
-    #-------------------------------------------------------------------------
 
     def close_dock_control(self, dock_control, abort):
         """ Handles the closing of a DockControl containing a Traits UI.

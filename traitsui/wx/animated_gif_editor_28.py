@@ -49,11 +49,6 @@ class _AnimatedGIFEditor(Editor):
     #: Is the animated GIF file currently playing?
     playing = Bool(True)
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -63,10 +58,6 @@ class _AnimatedGIFEditor(Editor):
         self.control.SetUseWindowBackgroundColour()
         self.sync_value(self.factory.playing, 'playing', 'from')
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -80,10 +71,6 @@ class _AnimatedGIFEditor(Editor):
 
         if self.playing:
             self.control.Play()
-
-    #-------------------------------------------------------------------------
-    #  Handles the editor 'playing' trait being changed:
-    #-------------------------------------------------------------------------
 
     def _playing_changed(self):
         if self._file_loaded:

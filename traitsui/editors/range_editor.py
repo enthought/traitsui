@@ -119,11 +119,6 @@ class ToolkitEditorFactory(EditorFactory):
                          '|[Number of columns for integer custom style]<>']
                         ])
 
-    #-------------------------------------------------------------------------
-    #  Performs any initialization needed after all constructor traits have
-    #  been set:
-    #-------------------------------------------------------------------------
-
     def init(self, handler=None):
         """ Performs any initialization needed after all constructor traits
             have been set.
@@ -149,10 +144,6 @@ class ToolkitEditorFactory(EditorFactory):
 
             if (self.high is None) and (self.high_name == ''):
                 self.high = 1.0
-
-    #-------------------------------------------------------------------------
-    #  Define the 'low' and 'high' traits:
-    #-------------------------------------------------------------------------
 
     def _get_low(self):
         return self._low

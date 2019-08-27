@@ -61,10 +61,6 @@ class BaseRangeEditor(Editor):
     #: Function to evaluate floats/ints
     evaluate = Any
 
-    #-------------------------------------------------------------------------
-    #  Sets the associated object trait's value:
-    #-------------------------------------------------------------------------
-
     def _set_value(self, value):
         if self.evaluate is not None:
             value = self.evaluate(value)
@@ -94,11 +90,6 @@ class SimpleSliderEditor(BaseRangeEditor):
 
     #: Formatting string used to format value and labels
     format = Str
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -183,10 +174,6 @@ class SimpleSliderEditor(BaseRangeEditor):
         self.set_tooltip(self._label_hi)
         self.set_tooltip(text)
 
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the current slider value:
-    #-------------------------------------------------------------------------
-
     def update_object_on_scroll(self, pos):
         """ Handles the user changing the current slider value.
         """
@@ -197,10 +184,6 @@ class SimpleSliderEditor(BaseRangeEditor):
         except Exception as exc:
             from traitsui.api import raise_to_debug
             raise_to_debug()
-
-    #-------------------------------------------------------------------------
-    #  Handle the user pressing the 'Enter' key in the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object_on_enter(self):
         """ Handles the user pressing the Enter key in the text field.
@@ -234,10 +217,6 @@ class SimpleSliderEditor(BaseRangeEditor):
         except TraitError as excp:
             pass
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -262,18 +241,10 @@ class SimpleSliderEditor(BaseRangeEditor):
         finally:
             self.control.slider.blockSignals(blocked)
 
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
-
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self.control.text
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'low'/'high' traits being changed:
-    #-------------------------------------------------------------------------
 
     def _low_changed(self, low):
         if self.value < low:
@@ -378,11 +349,6 @@ class LargeRangeSliderEditor(BaseRangeEditor):
     #: Flag indicating that the UI is in the process of being updated
     ui_changing = Bool(False)
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -474,10 +440,6 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         # Update the ranges and button just in case.
         self.update_range_ui()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the current slider value:
-    #-------------------------------------------------------------------------
-
     def update_object_on_scroll(self, pos):
         """ Handles the user changing the current slider value.
         """
@@ -491,10 +453,6 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         else:
             self.value = int(value)
 
-    #-------------------------------------------------------------------------
-    #  Handle the user pressing the 'Enter' key in the edit control:
-    #-------------------------------------------------------------------------
-
     def update_object_on_enter(self):
         """ Handles the user pressing the Enter key in the text field.
         """
@@ -502,10 +460,6 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             self.value = eval(six.text_type(self.control.text.text()).strip())
         except TraitError as excp:
             pass
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -619,18 +573,10 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             else:
                 self._format = '%.3f'
 
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
-
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self.control.text
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'low'/'high' traits being changed:
-    #-------------------------------------------------------------------------
 
     def _low_changed(self, low):
         if self.control is not None:
@@ -670,11 +616,6 @@ class SimpleSpinEditor(BaseRangeEditor):
     # High value for the slider range
     high = Any
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -698,10 +639,6 @@ class SimpleSpinEditor(BaseRangeEditor):
         self.control.valueChanged.connect(self.update_object)
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Handle the user selecting a new value from the spin control:
-    #-------------------------------------------------------------------------
-
     def update_object(self, value):
         """ Handles the user selecting a new value in the spin box.
         """
@@ -710,10 +647,6 @@ class SimpleSpinEditor(BaseRangeEditor):
             self.value = value
         finally:
             self._locked = False
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -728,10 +661,6 @@ class SimpleSpinEditor(BaseRangeEditor):
                 raise_to_debug()
             finally:
                 self.control.blockSignals(blocked)
-
-    #-------------------------------------------------------------------------
-    #  Handles the 'low'/'high' traits being changed:
-    #-------------------------------------------------------------------------
 
     def _low_changed(self, low):
         if self.value < low:
@@ -773,11 +702,6 @@ class RangeTextEditor(TextEditor):
     #: Function to evaluate floats/ints
     evaluate = Any
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -785,10 +709,6 @@ class RangeTextEditor(TextEditor):
         TextEditor.init(self, parent)
         self.evaluate = self.factory.evaluate
         self.sync_value(self.factory.evaluate_name, 'evaluate', 'from')
-
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self):
         """ Handles the user entering input data in the edit control.

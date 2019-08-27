@@ -41,11 +41,6 @@ from .editor \
 class CustomEditor(Editor):
     """ Wrapper for a custom editor control
     """
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -60,10 +55,6 @@ class CustomEditor(Editor):
             control.SetBackgroundColour(wx.RED)
             control.SetForegroundColour(wx.WHITE)
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

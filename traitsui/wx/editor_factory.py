@@ -68,11 +68,6 @@ class SimpleEditor(Editor):
     #: Has the left mouse button been pressed:
     left_down = Bool(False)
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -81,10 +76,6 @@ class SimpleEditor(Editor):
         wx.EVT_LEFT_DOWN(self.control, self._enable_popup_editor)
         wx.EVT_LEFT_UP(self.control, self._show_popup_editor)
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Creates the control to use for the simple editor:
-    #-------------------------------------------------------------------------
 
     def create_control(self, parent):
         """ Creates the control to use for the simple editor.
@@ -125,11 +116,6 @@ class TextEditor(Editor):
         field, containing a text representation of the object trait value.
     """
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -139,10 +125,6 @@ class TextEditor(Editor):
         wx.EVT_KILL_FOCUS(self.control, self.update_object)
         wx.EVT_TEXT_ENTER(parent, self.control.GetId(), self.update_object)
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.
@@ -170,11 +152,6 @@ class ReadonlyEditor(Editor):
 
     # layout_style = 0  # Style for imbedding control in a sizer (override)
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -189,10 +166,6 @@ class ReadonlyEditor(Editor):
             self.layout_style = 0
 
         self.set_tooltip()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

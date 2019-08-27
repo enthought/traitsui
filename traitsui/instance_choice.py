@@ -50,54 +50,30 @@ class InstanceChoiceItem(HasPrivateTraits):
     #: Does this item create new instances?
     is_factory = Bool(False)
 
-    #-------------------------------------------------------------------------
-    #  Returns the name of the item:
-    #-------------------------------------------------------------------------
-
     def get_name(self, object=None):
         """ Returns the name of the item.
         """
         return self.name
-
-    #-------------------------------------------------------------------------
-    #  Return the view associated with the object:
-    #-------------------------------------------------------------------------
 
     def get_view(self):
         """ Returns the view associated with the object.
         """
         return self.view
 
-    #-------------------------------------------------------------------------
-    #  Returns the object associated with the item:
-    #-------------------------------------------------------------------------
-
     def get_object(self):
         """ Returns the object associated with the item.
         """
         raise NotImplementedError
-
-    #-------------------------------------------------------------------------
-    #  Indicates whether a specified object is compatible with the item:
-    #-------------------------------------------------------------------------
 
     def is_compatible(self, object):
         """ Indicates whether a specified object is compatible with the item.
         """
         raise NotImplementedError
 
-    #-------------------------------------------------------------------------
-    #  Indicates whether the item can be selected by the user:
-    #-------------------------------------------------------------------------
-
     def is_selectable(self):
         """ Indicates whether the item can be selected by the user.
         """
         return True
-
-    #-------------------------------------------------------------------------
-    #  Indicates whether the item supports drag and drop:
-    #-------------------------------------------------------------------------
 
     def is_droppable(self):
         """ Indicates whether the item supports drag and drop.
@@ -121,10 +97,6 @@ class InstanceChoice(InstanceChoiceItem):
     #: The name of the object trait containing its user interface name:
     name_trait = Str('name')
 
-    #-------------------------------------------------------------------------
-    #  Returns the name of the item:
-    #-------------------------------------------------------------------------
-
     def get_name(self, object=None):
         """ Returns the name of the item.
         """
@@ -137,18 +109,10 @@ class InstanceChoice(InstanceChoiceItem):
 
         return user_name_for(self.object.__class__.__name__)
 
-    #-------------------------------------------------------------------------
-    #  Returns the object associated with the item:
-    #-------------------------------------------------------------------------
-
     def get_object(self):
         """ Returns the object associated with the item.
         """
         return self.object
-
-    #-------------------------------------------------------------------------
-    #  Indicates whether a specified object is compatible with the item:
-    #-------------------------------------------------------------------------
 
     def is_compatible(self, object):
         """ Indicates whether a specified object is compatible with the item.
@@ -186,10 +150,6 @@ class InstanceFactoryChoice(InstanceChoiceItem):
     #: Does this item create new instances? This value overrides the default.
     is_factory = True
 
-    #-------------------------------------------------------------------------
-    #  Returns the name of the item:
-    #-------------------------------------------------------------------------
-
     def get_name(self, object=None):
         """ Returns the name of the item.
         """
@@ -207,27 +167,15 @@ class InstanceFactoryChoice(InstanceChoiceItem):
 
         return user_name_for(klass.__name__)
 
-    #-------------------------------------------------------------------------
-    #  Returns the object associated with the item:
-    #-------------------------------------------------------------------------
-
     def get_object(self):
         """ Returns the object associated with the item.
         """
         return self.klass(*self.args, **self.kw_args)
 
-    #-------------------------------------------------------------------------
-    #  Indicates whether the item supports drag and drop:
-    #-------------------------------------------------------------------------
-
     def is_droppable(self):
         """ Indicates whether the item supports drag and drop.
         """
         return self.droppable
-
-    #-------------------------------------------------------------------------
-    #  Indicates whether a specified object is compatible with the item:
-    #-------------------------------------------------------------------------
 
     def is_compatible(self, object):
         """ Indicates whether a specified object is compatible with the item.
@@ -235,10 +183,6 @@ class InstanceFactoryChoice(InstanceChoiceItem):
         if issubclass(type(self.klass), type):
             return isinstance(object, self.klass)
         return isinstance(object, self.get_object().__class__)
-
-    #-------------------------------------------------------------------------
-    #  Indicates whether the item can be selected by the user:
-    #-------------------------------------------------------------------------
 
     def is_selectable(self):
         """ Indicates whether the item can be selected by the user.

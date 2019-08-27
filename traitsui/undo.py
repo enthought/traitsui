@@ -44,27 +44,15 @@ SimpleTypes = (six.text_type, bytes) + NumericTypes
 class AbstractUndoItem(HasPrivateTraits):
     """ Abstract base class for undo items.
     """
-    #-------------------------------------------------------------------------
-    #  Undoes the change:
-    #-------------------------------------------------------------------------
-
     def undo(self):
         """ Undoes the change.
         """
         raise NotImplementedError
 
-    #-------------------------------------------------------------------------
-    #  Re-does the change:
-    #-------------------------------------------------------------------------
-
     def redo(self):
         """ Re-does the change.
         """
         raise NotImplementedError
-
-    #-------------------------------------------------------------------------
-    #  Merges two undo items if possible:
-    #-------------------------------------------------------------------------
 
     def merge_undo(self, undo_item):
         """ Merges two undo items if possible.
@@ -92,10 +80,6 @@ class UndoItem(AbstractUndoItem):
     #: New value of the changed trait
     new_value = Property
 
-    #-------------------------------------------------------------------------
-    #  Implementation of the 'old_value' and 'new_value' properties:
-    #-------------------------------------------------------------------------
-
     def _get_old_value(self):
         return self._old_value
 
@@ -112,10 +96,6 @@ class UndoItem(AbstractUndoItem):
             value = value[:]
         self._new_value = value
 
-    #-------------------------------------------------------------------------
-    #  Undoes the change:
-    #-------------------------------------------------------------------------
-
     def undo(self):
         """ Undoes the change.
         """
@@ -125,10 +105,6 @@ class UndoItem(AbstractUndoItem):
             from traitsui.api import raise_to_debug
             raise_to_debug()
 
-    #-------------------------------------------------------------------------
-    #  Re-does the change:
-    #-------------------------------------------------------------------------
-
     def redo(self):
         """ Re-does the change.
         """
@@ -137,10 +113,6 @@ class UndoItem(AbstractUndoItem):
         except Exception:
             from traitsui.api import raise_to_debug
             raise_to_debug()
-
-    #-------------------------------------------------------------------------
-    #  Merges two undo items if possible:
-    #-------------------------------------------------------------------------
 
     def merge_undo(self, undo_item):
         """ Merges two undo items if possible.
@@ -206,10 +178,6 @@ class UndoItem(AbstractUndoItem):
                     return True
         return False
 
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' form of the object:
-    #-------------------------------------------------------------------------
-
     def __repr__(self):
         """ Returns a "pretty print" form of the object.
         """
@@ -241,10 +209,6 @@ class ListUndoItem(AbstractUndoItem):
     #: Items removed from the list
     removed = List
 
-    #-------------------------------------------------------------------------
-    #  Undoes the change:
-    #-------------------------------------------------------------------------
-
     def undo(self):
         """ Undoes the change.
         """
@@ -255,10 +219,6 @@ class ListUndoItem(AbstractUndoItem):
             from traitsui.api import raise_to_debug
             raise_to_debug()
 
-    #-------------------------------------------------------------------------
-    #  Re-does the change:
-    #-------------------------------------------------------------------------
-
     def redo(self):
         """ Re-does the change.
         """
@@ -268,10 +228,6 @@ class ListUndoItem(AbstractUndoItem):
         except Exception:
             from traitsui.api import raise_to_debug
             raise_to_debug()
-
-    #-------------------------------------------------------------------------
-    #  Merges two undo items if possible:
-    #-------------------------------------------------------------------------
 
     def merge_undo(self, undo_item):
         """ Merges two undo items if possible.
@@ -297,10 +253,6 @@ class ListUndoItem(AbstractUndoItem):
                     else:
                         return True
         return False
-
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' form of the object:
-    #-------------------------------------------------------------------------
 
     def __repr__(self):
         """ Returns a 'pretty print' form of the object.
@@ -334,10 +286,6 @@ class UndoHistory(HasStrictTraits):
     #: Can an action be redone?
     can_redo = Property
 
-    #-------------------------------------------------------------------------
-    #  Adds an UndoItem to the history:
-    #-------------------------------------------------------------------------
-
     def add(self, undo_item, extend=False):
         """ Adds an UndoItem to the history.
         """
@@ -361,10 +309,6 @@ class UndoHistory(HasStrictTraits):
         if self.now <= old_len:
             self.redoable = False
 
-    #-------------------------------------------------------------------------
-    #  Extends the most recent 'undo' item:
-    #-------------------------------------------------------------------------
-
     def extend(self, undo_item):
         """ Extends the undo history.
 
@@ -375,10 +319,6 @@ class UndoHistory(HasStrictTraits):
             undo_list = self.history[self.now - 1]
             if not undo_list[-1].merge_undo(undo_item):
                 undo_list.append(undo_item)
-
-    #-------------------------------------------------------------------------
-    #  Undo an operation:
-    #-------------------------------------------------------------------------
 
     def undo(self):
         """ Undoes an operation.
@@ -393,10 +333,6 @@ class UndoHistory(HasStrictTraits):
             if self.now == (len(self.history) - 1):
                 self.redoable = True
 
-    #-------------------------------------------------------------------------
-    #  Redo an operation:
-    #-------------------------------------------------------------------------
-
     def redo(self):
         """ Redoes an operation.
         """
@@ -409,10 +345,6 @@ class UndoHistory(HasStrictTraits):
             if self.now == len(self.history):
                 self.redoable = False
 
-    #-------------------------------------------------------------------------
-    #  Reverts all changes made so far and clears the history:
-    #-------------------------------------------------------------------------
-
     def revert(self):
         """ Reverts all changes made so far and clears the history.
         """
@@ -422,10 +354,6 @@ class UndoHistory(HasStrictTraits):
             items = history[i]
             for j in range(len(items) - 1, -1, -1):
                 items[j].undo()
-
-    #-------------------------------------------------------------------------
-    #  Clears the undo history
-    #-------------------------------------------------------------------------
 
     def clear(self):
         """ Clears the undo history.
@@ -439,18 +367,10 @@ class UndoHistory(HasStrictTraits):
         if old_now < old_len:
             self.redoable = False
 
-    #-------------------------------------------------------------------------
-    #  Are there any undoable operations?
-    #-------------------------------------------------------------------------
-
     def _get_can_undo(self):
         """ Are there any undoable operations?
         """
         return self.now > 0
-
-    #-------------------------------------------------------------------------
-    #  Are there any redoable operations?
-    #-------------------------------------------------------------------------
 
     def _get_can_redo(self):
         """ Are there any redoable operations?
@@ -472,10 +392,6 @@ class UndoHistoryUndoItem(AbstractUndoItem):
     #: The undo history to undo or redo
     history = Instance(UndoHistory)
 
-    #-------------------------------------------------------------------------
-    #  Undoes the change:
-    #-------------------------------------------------------------------------
-
     def undo(self):
         """ Undoes the change.
         """
@@ -484,10 +400,6 @@ class UndoHistoryUndoItem(AbstractUndoItem):
             items = history.history[i]
             for j in range(len(items) - 1, -1, -1):
                 items[j].undo()
-
-    #-------------------------------------------------------------------------
-    #  Re-does the change:
-    #-------------------------------------------------------------------------
 
     def redo(self):
         """ Re-does the change.

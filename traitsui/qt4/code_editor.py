@@ -168,10 +168,6 @@ class SourceEditor(Editor):
         # Set the control tooltip:
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -181,10 +177,6 @@ class SourceEditor(Editor):
             self._widget.code.focus_lost.disconnect(self.update_object)
 
         super(SourceEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self):
         """ Handles the user entering input data in the edit control.
@@ -197,10 +189,6 @@ class SourceEditor(Editor):
                 self.value = value
             except TraitError as excp:
                 pass
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -222,21 +210,12 @@ class SourceEditor(Editor):
 
         self._locked = False
 
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
-
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
 
     #-- UI preference save/restore interface ---------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
@@ -247,18 +226,10 @@ class SourceEditor(Editor):
             if key_bindings is not None:
                 self.factory.key_bindings.merge(key_bindings)
 
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
-
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
         return {'key_bindings': self.factory.key_bindings}
-
-    #-------------------------------------------------------------------------
-    #  Handles the set of 'marked lines' being changed:
-    #-------------------------------------------------------------------------
 
     def _mark_lines_changed(self):
         """ Handles the set of marked lines being changed.
@@ -268,10 +239,6 @@ class SourceEditor(Editor):
 
     def _mark_lines_items_changed(self):
         self._mark_lines_changed()
-
-    #-------------------------------------------------------------------------
-    #  Handles the currently 'selected line' being changed:
-    #-------------------------------------------------------------------------
 
     def _selection_changed(self):
         self.selected_text = six.text_type(
@@ -295,10 +262,6 @@ class SourceEditor(Editor):
         if self.factory.auto_scroll:
             control.centerCursor()
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'line' trait being changed:
-    #-------------------------------------------------------------------------
-
     def _line_changed(self, line):
         if not self._locked:
             _, column = self._widget.get_line_column()
@@ -306,18 +269,10 @@ class SourceEditor(Editor):
             if self.factory.auto_scroll:
                 self._widget.centerCursor()
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'column' trait being changed:
-    #-------------------------------------------------------------------------
-
     def _column_changed(self, column):
         if not self._locked:
             line, _ = self._widget.get_line_column()
             self._widget.set_line_column(line, column)
-
-    #-------------------------------------------------------------------------
-    #  Handles the cursor position being changed:
-    #-------------------------------------------------------------------------
 
     def _position_changed(self):
         """ Handles the cursor position being changed.
@@ -330,10 +285,6 @@ class SourceEditor(Editor):
         if self.factory.auto_scroll:
             self._widget.centerCursor()
 
-    #-------------------------------------------------------------------------
-    #  Handles a key being pressed within the editor:
-    #-------------------------------------------------------------------------
-
     def _key_pressed_changed(self, event):
         """ Handles a key being pressed within the editor.
         """
@@ -345,10 +296,6 @@ class SourceEditor(Editor):
             processed = False
         if not processed and event.event.matches(QtGui.QKeySequence.Find):
             self._find_widget.show()
-
-    #-------------------------------------------------------------------------
-    #  Handles the styling of the editor:
-    #-------------------------------------------------------------------------
 
     def _dim_color_changed(self):
         pass

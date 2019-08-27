@@ -188,10 +188,6 @@ class Group(ViewSubElement):
     #: Requested height of the group (calculated from heights of contents)
     height = Property(Float, depends_on='content')
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, *values, **traits):
         """ Initializes the group object.
         """
@@ -233,10 +229,6 @@ class Group(ViewSubElement):
     def _dock_theme_default(self):
         return dock_window_theme()
 
-    #-------------------------------------------------------------------------
-    #  Gets the label to use for a specified Group in a specified UI:
-    #-------------------------------------------------------------------------
-
     def get_label(self, ui):
         """ Gets the label to use this group.
         """
@@ -245,21 +237,11 @@ class Group(ViewSubElement):
 
         return 'Group'
 
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the object is replacable by an Include object:
-    #-------------------------------------------------------------------------
-
     def is_includable(self):
         """ Returns a Boolean value indicating whether the object is replacable
         by an Include object.
         """
         return (self.id != '')
-
-    #-------------------------------------------------------------------------
-    #  Replaces any items which have an 'id' with an Include object with the
-    #  same 'id', and puts the object with the 'id' into the specified
-    #  ViewElements object:
-    #-------------------------------------------------------------------------
 
     def replace_include(self, view_elements):
         """ Replaces any items that have an **id** attribute with an Include
@@ -280,12 +262,6 @@ class Group(ViewSubElement):
                 self.content[i] = Include(id)
                 view_elements.content[id] = item
             item.replace_include(view_elements)
-
-    #-------------------------------------------------------------------------
-    #  Returns a ShadowGroup for the Group which recursively resolves all
-    #  imbedded Include objects and which replaces all imbedded Group objects
-    #  with a corresponding ShadowGroup:
-    #-------------------------------------------------------------------------
 
     def get_shadow(self, ui):
         """ Returns a ShadowGroup object for the current Group object, which
@@ -316,19 +292,11 @@ class Group(ViewSubElement):
         # Return the ShadowGroup:
         return ShadowGroup(shadow=self, content=content, groups=groups)
 
-    #-------------------------------------------------------------------------
-    #  Sets the correct container for the content:
-    #-------------------------------------------------------------------------
-
     def set_container(self):
         """ Sets the correct container for the content.
         """
         for item in self.content:
             item.container = self
-
-    #-------------------------------------------------------------------------
-    #  Returns whether the object should be defined in the user interface:
-    #-------------------------------------------------------------------------
 
     def _defined_when(self, ui, value):
         """ Should the object be defined in the user interface?
@@ -336,10 +304,6 @@ class Group(ViewSubElement):
         if value.defined_when == '':
             return True
         return ui.eval_when(value.defined_when)
-
-    #-------------------------------------------------------------------------
-    #  Parses Group options specified as a string:
-    #-------------------------------------------------------------------------
 
     def _parse(self, value):
         """ Parses Group options specified as a string.
@@ -368,18 +332,10 @@ class Group(ViewSubElement):
         if value != '':
             self.object = value
 
-    #-------------------------------------------------------------------------
-    #  Handles a label being found in the string definition:
-    #-------------------------------------------------------------------------
-
     def _parsed_label(self):
         """ Handles a label being found in the string definition.
         """
         self.show_border = True
-
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' version of the Group:
-    #-------------------------------------------------------------------------
 
     def __repr__(self):
         """ Returns a "pretty print" version of the Group.
@@ -706,13 +662,6 @@ class ShadowGroup(Group):
     #: Style sheet for the panel
     style_sheet = ShadowDelegate
 
-    #-------------------------------------------------------------------------
-    #  Returns the contents of the ShadowGroup within a specified user interface
-    #  building context. This makes sure that all Group types are of the same
-    #  type (i.e. Group or Item) and that all Include objects have been replaced
-    #  by their substituted values:
-    #-------------------------------------------------------------------------
-
     def get_content(self, allow_groups=True):
         """ Returns the contents of the Group within a specified context for
         building a user interface.
@@ -752,10 +701,6 @@ class ShadowGroup(Group):
         # Return the resulting list of objects:
         return result
 
-    #-------------------------------------------------------------------------
-    #  Returns an id used to identify the group:
-    #-------------------------------------------------------------------------
-
     def get_id(self):
         """ Returns an ID for the group.
         """
@@ -764,18 +709,10 @@ class ShadowGroup(Group):
 
         return ':'.join([item.get_id() for item in self.get_content()])
 
-    #-------------------------------------------------------------------------
-    #  Sets the correct container for the content:
-    #-------------------------------------------------------------------------
-
     def set_container(self):
         """ Sets the correct container for the content.
         """
         pass
-
-    #-------------------------------------------------------------------------
-    #  Creates a sub-Group for any items contained in a specified list:
-    #-------------------------------------------------------------------------
 
     def _flush_items(self, content, items):
         """ Creates a sub-group for any items contained in a specified list.
@@ -794,10 +731,6 @@ class ShadowGroup(Group):
                     orientation=self.orientation
                 ))
             del items[:]
-
-    #-------------------------------------------------------------------------
-    #  Returns a 'pretty print' version of the Group:
-    #-------------------------------------------------------------------------
 
     def __repr__(self):
         """ Returns a "pretty print" version of the Group.

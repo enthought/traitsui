@@ -102,10 +102,6 @@ def ui_dialog(ui, parent, is_modal):
 class ModalDialog(BaseDialog):
     """ Modal dialog box for Traits-based user interfaces.
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def init(self, ui, parent, is_modal):
         self.is_modal = is_modal
         style = 0
@@ -231,10 +227,6 @@ class ModalDialog(BaseDialog):
         # Lay all of the dialog contents out:
         window.SetSizerAndFit(sw_sizer)
 
-    #-------------------------------------------------------------------------
-    #  Closes the dialog window:
-    #-------------------------------------------------------------------------
-
     def close(self, rc=wx.ID_OK):
         """ Closes the dialog window.
         """
@@ -247,10 +239,6 @@ class ModalDialog(BaseDialog):
         ui.finish()
         self.ui = self.apply = self.revert = self.help = self.control = None
 
-    #-------------------------------------------------------------------------
-    #  Creates a copy of a 'context' dictionary:
-    #-------------------------------------------------------------------------
-
     def _copy_context(self, context):
         """ Creates a copy of a *context* dictionary.
         """
@@ -262,10 +250,6 @@ class ModalDialog(BaseDialog):
                 result[name] = None
 
         return result
-
-    #-------------------------------------------------------------------------
-    #  Applies the traits in the 'from' context to the 'to' context:
-    #-------------------------------------------------------------------------
 
     def _apply_context(self, from_context, to_context):
         """ Applies the traits in the *from_context* to the *to_context*.
@@ -281,10 +265,6 @@ class ModalDialog(BaseDialog):
             if on_apply is not None:
                 on_apply()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking the window/dialog 'close' button/icon:
-    #-------------------------------------------------------------------------
-
     def _on_close_page(self, event):
         """ Handles the user clicking the window/dialog "close" button/icon.
         """
@@ -293,20 +273,12 @@ class ModalDialog(BaseDialog):
         else:
             self._on_cancel(event)
 
-    #-------------------------------------------------------------------------
-    #  Closes the window and saves changes (if allowed by the handler):
-    #-------------------------------------------------------------------------
-
     def _on_ok(self, event=None):
         """ Closes the window and saves changes (if allowed by the handler).
         """
         if self.ui.handler.close(self.ui.info, True):
             self._apply_context(self.ui.context, self.ui._context)
             self.close(wx.ID_OK)
-
-    #-------------------------------------------------------------------------
-    #  Closes the window and discards changes (if allowed by the handler):
-    #-------------------------------------------------------------------------
 
     def _on_cancel(self, event=None):
         """ Closes the window and discards changes (if allowed by the handler).
@@ -316,19 +288,11 @@ class ModalDialog(BaseDialog):
             self.close(wx.ID_CANCEL)
 
 
-    #-------------------------------------------------------------------------
-    #  Handles the user hitting the 'Esc'ape key:
-    #-------------------------------------------------------------------------
-
     def _on_key(self, event):
         """ Handles the user pressing the Escape key.
         """
         if event.GetKeyCode() == 0x1B:
             self._on_close_page(event)
-
-    #-------------------------------------------------------------------------
-    #  Handles an 'Apply' all changes request:
-    #-------------------------------------------------------------------------
 
     def _on_apply(self, event):
         """ Handles a request to apply changes.
@@ -340,10 +304,6 @@ class ModalDialog(BaseDialog):
         ui.handler.apply(ui.info)
         ui.modified = False
 
-    #-------------------------------------------------------------------------
-    #  Handles a 'Revert' all changes request:
-    #-------------------------------------------------------------------------
-
     def _on_revert(self, event):
         """ Handles a request to revert changes.
         """
@@ -354,18 +314,10 @@ class ModalDialog(BaseDialog):
         ui.handler.revert(ui.info)
         ui.modified = False
 
-    #-------------------------------------------------------------------------
-    #  Handles the user interface 'modified' state changing:
-    #-------------------------------------------------------------------------
-
     def _on_applyable(self, state):
         """ Handles a change to the "modified" state of the user interface .
         """
         self.apply.Enable(state)
-
-    #-------------------------------------------------------------------------
-    #  Handles editing errors:
-    #-------------------------------------------------------------------------
 
     def _on_error(self, errors):
         """ Handles editing errors.

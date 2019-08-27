@@ -59,18 +59,10 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
             color = wx.Colour(*[int(round(c * 255.0)) for c in color])
         return color
 
-    #--------------------------------------------------------------------------
-    #  Gets the application equivalent of a wxPython value:
-    #--------------------------------------------------------------------------
-
     def from_wx_color(self, color):
         """ Gets the application equivalent of a wxPython value.
         """
         return color.Red(), color.Green(), color.Blue()
-
-    #--------------------------------------------------------------------------
-    #  Returns the text representation of a specified color value:
-    #--------------------------------------------------------------------------
 
     def str_color(self, color):
         """ Returns the text representation of a specified color value.
@@ -155,10 +147,6 @@ class SimpleColorEditor(BaseSimpleEditor):
         self.control.Bind(wx.EVT_COMBOBOX, self.color_selected)
         return
 
-    #--------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #--------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -209,10 +197,6 @@ class CustomColorEditor(BaseSimpleEditor):
     background color is the color value. Selecting the text field displays
     a dialog box for selecting a new color value.
     """
-
-    #--------------------------------------------------------------------------
-    #  Invokes the pop-up editor for an object trait:
-    #--------------------------------------------------------------------------
 
     def init(self, parent):
         """
@@ -266,10 +250,6 @@ class CustomColorEditor(BaseSimpleEditor):
         self.control.SetBackgroundColour(color)
         self._text_control.SetValue(self.string_value(color))
 
-    #--------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #--------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -322,20 +302,11 @@ class ReadonlyColorEditor(BaseReadonlyEditor):
     whose background color is the color value.
     """
 
-    #--------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #--------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
         self.control = wx.TextCtrl(parent, style=wx.TE_READONLY)
-
-    #--------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #--------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -344,10 +315,6 @@ class ReadonlyColorEditor(BaseReadonlyEditor):
         #super(ReadonlyColorEditor, self).update_editor()
         self.control.SetValue(self.string_value(self.value))
         set_color(self)
-
-    #--------------------------------------------------------------------------
-    #  Returns the text representation of a specified color value:
-    #--------------------------------------------------------------------------
 
     def string_value(self, color):
         """ Returns the text representation of a specified color value.
@@ -368,10 +335,6 @@ class TextColorEditor(BaseTextEditor):
     whose background color is the color value.
     """
 
-    #--------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #--------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -389,10 +352,6 @@ class TextColorEditor(BaseTextEditor):
             set_color(self)
         except TraitError:
             pass
-
-    #--------------------------------------------------------------------------
-    #  Returns the text representation of a specified color value:
-    #--------------------------------------------------------------------------
 
     def string_value(self, color):
         """ Returns the text representation of a specified color value.

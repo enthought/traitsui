@@ -71,11 +71,6 @@ class SimpleEditor(EditorWithList):
     #: Checklist item values
     values = List
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -84,20 +79,12 @@ class SimpleEditor(EditorWithList):
         super(SimpleEditor, self).init(parent)
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Creates the initial editor control:
-    #-------------------------------------------------------------------------
-
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
         self.control = wx.Choice(parent, -1,
                                  wx.Point(0, 0), wx.Size(100, 20), [])
         wx.EVT_CHOICE(parent, self.control.GetId(), self.update_object)
-
-    #-------------------------------------------------------------------------
-    #  Handles the list of legal check list values being updated:
-    #-------------------------------------------------------------------------
 
     def list_updated(self, values):
         """ Handles updates to the list of legal checklist values.
@@ -126,10 +113,6 @@ class SimpleEditor(EditorWithList):
 
         self.rebuild_editor()
 
-    #-------------------------------------------------------------------------
-    #  Rebuilds the editor after its definition is modified:
-    #-------------------------------------------------------------------------
-
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
         """
@@ -140,10 +123,6 @@ class SimpleEditor(EditorWithList):
 
         self.update_editor()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user selecting a new value from the combo box:
-    #-------------------------------------------------------------------------
-
     def update_object(self, event):
         """ Handles the user selecting a new value from the combo box.
         """
@@ -152,10 +131,6 @@ class SimpleEditor(EditorWithList):
             value = [value]
 
         self.value = value
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -177,19 +152,11 @@ class CustomEditor(SimpleEditor):
         boxes.
     """
 
-    #-------------------------------------------------------------------------
-    #  Creates the initial editor control:
-    #-------------------------------------------------------------------------
-
     def create_control(self, parent):
         """ Creates the initial editor control.
         """
         # Create a panel to hold all of the check boxes
         self.control = panel = TraitsUIPanel(parent, -1)
-
-    #-------------------------------------------------------------------------
-    #  Rebuilds the editor after its definition is modified:
-    #-------------------------------------------------------------------------
 
     def rebuild_editor(self):
         """ Rebuilds the editor after its definition is modified.
@@ -253,10 +220,6 @@ class CustomEditor(SimpleEditor):
         panel.Layout()
         panel.Refresh()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user clicking one of the 'custom' check boxes:
-    #-------------------------------------------------------------------------
-
     def update_object(self, event):
         """ Handles the user clicking one of the custom check boxes.
         """
@@ -269,10 +232,6 @@ class CustomEditor(SimpleEditor):
         if isinstance(self.value, six.string_types):
             cur_value = ','.join(cur_value)
         self.value = cur_value
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -291,10 +250,6 @@ class CustomEditor(SimpleEditor):
 class TextEditor(BaseTextEditor):
     """ Text style of editor for checklists, which displays a text field.
     """
-
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.

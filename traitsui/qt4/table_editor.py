@@ -134,11 +134,6 @@ class TableEditor(Editor, BaseTableEditor):
     #: An image being converted:
     image = Image
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """Finishes initializing the editor by creating the underlying toolkit
         widget."""
@@ -292,10 +287,6 @@ class TableEditor(Editor, BaseTableEditor):
         # Initialize the ItemDelegates for each column
         self._update_columns()
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor."""
 
@@ -321,10 +312,6 @@ class TableEditor(Editor, BaseTableEditor):
             remove=True)
 
         super(TableEditor, self).dispose()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """Updates the editor when the object trait changes externally to the
@@ -369,18 +356,10 @@ class TableEditor(Editor, BaseTableEditor):
             prefs['column_state'] = header.saveState().data()
         return prefs
 
-    #-------------------------------------------------------------------------
-    #  Requests that the underlying table widget to redraw itself:
-    #-------------------------------------------------------------------------
-
     def refresh_editor(self):
         """Requests that the underlying table widget to redraw itself."""
 
         self.table_view.viewport().update()
-
-    #-------------------------------------------------------------------------
-    #  Creates a new row object using the provided factory:
-    #-------------------------------------------------------------------------
 
     def create_new_row(self):
         """Creates a new row object using the provided factory."""
@@ -393,10 +372,6 @@ class TableEditor(Editor, BaseTableEditor):
         return self.ui.evaluate(factory.row_factory,
                                 *factory.row_factory_args, **kw)
 
-    #-------------------------------------------------------------------------
-    #  Returns the raw list of model objects:
-    #-------------------------------------------------------------------------
-
     def items(self):
         """Returns the raw list of model objects."""
 
@@ -408,10 +383,6 @@ class TableEditor(Editor, BaseTableEditor):
             items = ReversedList(items)
 
         return items
-
-    #-------------------------------------------------------------------------
-    #  Perform actions without notifying the underlying table view or model:
-    #-------------------------------------------------------------------------
 
     def callx(self, func, *args, **kw):
         """Call a function without notifying the underlying table view or
@@ -435,10 +406,6 @@ class TableEditor(Editor, BaseTableEditor):
                 setattr(self, name, value)
         finally:
             self._no_notify = old
-
-    #-------------------------------------------------------------------------
-    #  Sets the current selection to a set of specified objects:
-    #-------------------------------------------------------------------------
 
     def set_selection(self, objects=[], notify=True):
         """Sets the current selection to a set of specified objects."""

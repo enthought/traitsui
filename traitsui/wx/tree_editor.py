@@ -99,11 +99,6 @@ class SimpleEditor(Editor):
     #: The event fired when the application wants to veto an operation:
     veto = Event
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -247,10 +242,6 @@ class SimpleEditor(Editor):
         if PythonDropTarget is not None:
             tree.SetDropTarget(PythonDropTarget(self))
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -276,10 +267,6 @@ class SimpleEditor(Editor):
 
         super(SimpleEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'selection' trait being changed:
-    #-------------------------------------------------------------------------
-
     def _selection_changed(self, selection):
         """ Handles the **selection** event.
         """
@@ -288,28 +275,16 @@ class SimpleEditor(Editor):
         except:
             pass
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'selected' trait being changed:
-    #-------------------------------------------------------------------------
-
     def _selected_changed(self, selected):
         """ Handles the **selected** trait being changed.
         """
         if not self._no_update_selected:
             self._selection_changed(selected)
 
-    #-------------------------------------------------------------------------
-    #  Handles the 'veto' event being fired:
-    #-------------------------------------------------------------------------
-
     def _veto_changed(self):
         """ Handles the 'veto' event being fired.
         """
         self._veto = True
-
-    #-------------------------------------------------------------------------
-    #  Returns the style settings used for displaying the wx tree:
-    #-------------------------------------------------------------------------
 
     def _get_style(self):
         """ Returns the style settings used for displaying the wx tree.
@@ -330,10 +305,6 @@ class SimpleEditor(Editor):
 
         return style
 
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
-
     def update_object(self, event):
         """ Handles the user entering input data in the edit control.
         """
@@ -343,10 +314,6 @@ class SimpleEditor(Editor):
             self.control.Refresh()
         except TraitError:
             pass
-
-    #-------------------------------------------------------------------------
-    #  Saves the current 'expanded' state of all tree nodes:
-    #-------------------------------------------------------------------------
 
     def _save_state(self):
         tree = self._tree
@@ -365,10 +332,6 @@ class SimpleEditor(Editor):
                 for cnid in self._nodes(node):
                     nodes_to_do.append(cnid)
         return state
-
-    #-------------------------------------------------------------------------
-    #  Restores the 'expanded' state of all tree nodes:
-    #-------------------------------------------------------------------------
 
     def _restore_state(self, state):
         if not state:
@@ -389,10 +352,6 @@ class SimpleEditor(Editor):
                             if current_state:
                                 tree.Expand(cnid)
                             nodes_to_do.append(cnid)
-
-    #-------------------------------------------------------------------------
-    #  Expands all nodes starting from the current selection:
-    #-------------------------------------------------------------------------
 
     def expand_all(self):
         """ Expands all nodes, starting from the selected node.
@@ -416,10 +375,6 @@ class SimpleEditor(Editor):
                     _do_expand(n)
                     nodes_to_do.append(n)
 
-    #-------------------------------------------------------------------------
-    #  Expands from the specified node the specified number of sub-levels:
-    #-------------------------------------------------------------------------
-
     def expand_levels(self, nid, levels, expand=True):
         """ Expands from the specified node the specified number of sub-levels.
         """
@@ -432,10 +387,6 @@ class SimpleEditor(Editor):
                     self._tree.Expand(nid)
                 for cnid in self._nodes(nid):
                     self.expand_levels(cnid, levels - 1)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -472,28 +423,15 @@ class SimpleEditor(Editor):
 
             # fixme: Clear the current editor (if any)...
 
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
-
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
         """
         return self._tree
 
-    #-------------------------------------------------------------------------
-    #  Appends a new node to the specified node:
-    #-------------------------------------------------------------------------
-
     def _append_node(self, nid, node, object):
         """ Appends a new node to the specified node.
         """
         return self._insert_node(nid, None, node, object)
-
-    #-------------------------------------------------------------------------
-    #  Inserts a new node before a specified index into the children of the
-    #  specified node:
-    #-------------------------------------------------------------------------
 
     def _insert_node(self, nid, index, node, object):
         """ Inserts a new node before a specified index into the children of the
@@ -519,10 +457,6 @@ class SimpleEditor(Editor):
 
         # Return the newly created node:
         return cnid
-
-    #-------------------------------------------------------------------------
-    #  Deletes a specified tree node and all its children:
-    #-------------------------------------------------------------------------
 
     def _delete_node(self, nid):
         """ Deletes a specified tree node and all of its children.
@@ -554,10 +488,6 @@ class SimpleEditor(Editor):
         if (self._editor is not None) and (nid == self._editor._editor_nid):
             self._clear_editor()
 
-    #-------------------------------------------------------------------------
-    #  Expands the contents of a specified node (if required):
-    #-------------------------------------------------------------------------
-
     def _expand_node(self, nid):
         """ Expands the contents of a specified node (if required).
         """
@@ -573,10 +503,6 @@ class SimpleEditor(Editor):
             # Indicate the item is now populated:
             self._set_node_data(nid, (True, node, object))
 
-    #-------------------------------------------------------------------------
-    #  Returns each of the child nodes of a specified node id:
-    #-------------------------------------------------------------------------
-
     def _nodes(self, nid):
         """ Returns each of the child nodes of a specified node.
         """
@@ -591,10 +517,6 @@ class SimpleEditor(Editor):
         """
         return [cnid for cnid in self._nodes(nid)]
 
-    #-------------------------------------------------------------------------
-    #  Return the index of a specified node id within its parent:
-    #-------------------------------------------------------------------------
-
     def _node_index(self, nid):
         pnid = self._tree.GetItemParent(nid)
         if not pnid.IsOk():
@@ -606,18 +528,10 @@ class SimpleEditor(Editor):
 
                 return (pnode, pobject, i)
 
-    #-------------------------------------------------------------------------
-    #  Returns whether a specified object has any children:
-    #-------------------------------------------------------------------------
-
     def _has_children(self, node, object):
         """ Returns whether a specified object has any children.
         """
         return (node.allows_children(object) and node.has_children(object))
-
-    #-------------------------------------------------------------------------
-    #  Returns whether a given object is droppable on the node:
-    #-------------------------------------------------------------------------
 
     def _is_droppable(self, node, object, add_object, for_insert):
         """ Returns whether a given object is droppable on the node.
@@ -627,10 +541,6 @@ class SimpleEditor(Editor):
 
         return node.can_add(object, add_object)
 
-    #-------------------------------------------------------------------------
-    #  Returns a droppable version of a specified object:
-    #-------------------------------------------------------------------------
-
     def _drop_object(self, node, object, dropped_object, make_copy=True):
         """ Returns a droppable version of a specified object.
         """
@@ -639,10 +549,6 @@ class SimpleEditor(Editor):
             return new_object
 
         return copy.deepcopy(new_object)
-
-    #-------------------------------------------------------------------------
-    #  Returns the icon index for the specified object:
-    #-------------------------------------------------------------------------
 
     def _get_icon(self, node, object, is_expanded=False):
         """ Returns the index of the specified object icon.
@@ -677,10 +583,6 @@ class SimpleEditor(Editor):
 
         return self._image_list.GetIndex(image)
 
-    #-------------------------------------------------------------------------
-    #  Adds the event listeners for a specified object:
-    #-------------------------------------------------------------------------
-
     def _add_listeners(self, node, object):
         """ Adds the event listeners for a specified object.
         """
@@ -690,10 +592,6 @@ class SimpleEditor(Editor):
 
         node.when_label_changed(object, self._label_updated, False)
 
-    #-------------------------------------------------------------------------
-    #  Removes any event listeners from a specified object:
-    #-------------------------------------------------------------------------
-
     def _remove_listeners(self, node, object):
         """ Removes any event listeners from a specified object.
         """
@@ -702,11 +600,6 @@ class SimpleEditor(Editor):
             node.when_children_changed(object, self._children_updated, True)
 
         node.when_label_changed(object, self._label_updated, True)
-
-    #-------------------------------------------------------------------------
-    #  Returns the tree node data for a specified object in the form
-    #  ( expanded, node, nid ):
-    #-------------------------------------------------------------------------
 
     def _object_info(self, object, name=''):
         """ Returns the tree node data for a specified object in the form
@@ -734,10 +627,6 @@ class SimpleEditor(Editor):
                 result.append((expanded, node, nid))
 
         return result
-
-    #-------------------------------------------------------------------------
-    #  Returns the TreeNode associated with a specified object:
-    #-------------------------------------------------------------------------
 
     def _node_for(self, object):
         """ Returns the TreeNode associated with a specified object.
@@ -793,10 +682,6 @@ class SimpleEditor(Editor):
 
         return (object, multi_node)
 
-    #-------------------------------------------------------------------------
-    #  Returns the TreeNode associated with a specified class:
-    #-------------------------------------------------------------------------
-
     def _node_for_class(self, klass):
         """ Returns the TreeNode associated with a specified class.
         """
@@ -804,10 +689,6 @@ class SimpleEditor(Editor):
             if issubclass(klass, tuple(node.node_for)):
                 return node
         return None
-
-    #-------------------------------------------------------------------------
-    #  Returns the node and class associated with a specified class name:
-    #-------------------------------------------------------------------------
 
     def _node_for_class_name(self, class_name):
         """ Returns the node and class associated with a specified class name.
@@ -818,18 +699,10 @@ class SimpleEditor(Editor):
                     return (node, klass)
         return (None, None)
 
-    #-------------------------------------------------------------------------
-    #  Updates the icon for a specified node:
-    #-------------------------------------------------------------------------
-
     def _update_icon(self, event, is_expanded):
         """ Updates the icon for a specified node.
         """
         self._update_icon_for_nid(event.GetItem())
-
-    #-------------------------------------------------------------------------
-    #  Updates the icon for a specified node id:
-    #-------------------------------------------------------------------------
 
     def _update_icon_for_nid(self, nid):
         """ Updates the icon for a specified node ID.
@@ -839,10 +712,6 @@ class SimpleEditor(Editor):
             icon = self._get_icon(node, object, expanded)
             self._tree.SetItemImage(nid, icon, wx.TreeItemIcon_Normal)
             self._tree.SetItemImage(nid, icon, wx.TreeItemIcon_Selected)
-
-    #-------------------------------------------------------------------------
-    #  Unpacks an event to see whether a tree item was involved:
-    #-------------------------------------------------------------------------
 
     def _unpack_event(self, event):
         """ Unpacks an event to see whether a tree item was involved.
@@ -864,10 +733,6 @@ class SimpleEditor(Editor):
 
         return (None, None, None, nid, point)
 
-    #-------------------------------------------------------------------------
-    #  Returns information about the node at a specified point:
-    #-------------------------------------------------------------------------
-
     def _hit_test(self, point):
         """ Returns information about the node at a specified point.
         """
@@ -875,10 +740,6 @@ class SimpleEditor(Editor):
         if nid.IsOk():
             return self._get_node_data(nid) + (nid, point)
         return (None, None, None, nid, point)
-
-    #-------------------------------------------------------------------------
-    #  Begins an 'undoable' transaction:
-    #-------------------------------------------------------------------------
 
     def _begin_undo(self):
         """ Begins an "undoable" transaction.
@@ -888,17 +749,9 @@ class SimpleEditor(Editor):
         if (ui._undoable == -1) and (ui.history is not None):
             ui._undoable = ui.history.now
 
-    #-------------------------------------------------------------------------
-    #  Ends an 'undoable' transaction:
-    #-------------------------------------------------------------------------
-
     def _end_undo(self):
         if self._undoable.pop() == -1:
             self.ui._undoable = -1
-
-    #-------------------------------------------------------------------------
-    #  Gets an 'undo' item for a change made to a node's children:
-    #-------------------------------------------------------------------------
 
     def _get_undo_item(self, object, name, event):
         return ListUndoItem(object=object,
@@ -906,10 +759,6 @@ class SimpleEditor(Editor):
                             index=event.index,
                             added=event.added,
                             removed=event.removed)
-
-    #-------------------------------------------------------------------------
-    #  Performs an undoable 'append' operation:
-    #-------------------------------------------------------------------------
 
     def _undoable_append(self, node, object, data, make_copy=True):
         """ Performs an undoable append operation.
@@ -922,10 +771,6 @@ class SimpleEditor(Editor):
         finally:
             self._end_undo()
 
-    #-------------------------------------------------------------------------
-    #  Performs an undoable 'insert' operation:
-    #-------------------------------------------------------------------------
-
     def _undoable_insert(self, node, object, index, data, make_copy=True):
         """ Performs an undoable insert operation.
         """
@@ -937,10 +782,6 @@ class SimpleEditor(Editor):
         finally:
             self._end_undo()
 
-    #-------------------------------------------------------------------------
-    #  Performs an undoable 'delete' operation:
-    #-------------------------------------------------------------------------
-
     def _undoable_delete(self, node, object, index):
         """ Performs an undoable delete operation.
         """
@@ -949,10 +790,6 @@ class SimpleEditor(Editor):
             node.delete_child(object, index)
         finally:
             self._end_undo()
-
-    #-------------------------------------------------------------------------
-    #  Gets the id associated with a specified object (if any):
-    #-------------------------------------------------------------------------
 
     def _get_object_nid(self, object, name=''):
         """ Gets the ID associated with a specified object (if any).
@@ -967,10 +804,6 @@ class SimpleEditor(Editor):
         else:
             return info[0][1]
 
-    #-------------------------------------------------------------------------
-    #  Clears the current editor pane (if any):
-    #-------------------------------------------------------------------------
-
     def _clear_editor(self):
         """ Clears the current editor pane (if any).
         """
@@ -979,10 +812,6 @@ class SimpleEditor(Editor):
             editor.SetSizer(None)
             editor._node_ui.dispose()
             editor._node_ui = editor._editor_nid = None
-
-    #-------------------------------------------------------------------------
-    #  Gets/Sets the node specific data:
-    #-------------------------------------------------------------------------
 
     def _get_node_data(self, nid):
         """ Gets the node specific data.
@@ -1002,19 +831,10 @@ class SimpleEditor(Editor):
 
 #----- User callable methods: --------------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Gets the object associated with a specified node:
-    #-------------------------------------------------------------------------
-
     def get_object(self, nid):
         """ Gets the object associated with a specified node.
         """
         return self._get_node_data(nid)[2]
-
-    #-------------------------------------------------------------------------
-    #  Returns the object which is the immmediate parent of a specified object
-    #  in the tree:
-    #-------------------------------------------------------------------------
 
     def get_parent(self, object, name=''):
         """ Returns the object that is the immmediate parent of a specified
@@ -1028,10 +848,6 @@ class SimpleEditor(Editor):
 
         return None
 
-    #-------------------------------------------------------------------------
-    #  Returns the node associated with a specified object:
-    #-------------------------------------------------------------------------
-
     def get_node(self, object, name=''):
         """ Returns the node associated with a specified object.
         """
@@ -1042,10 +858,6 @@ class SimpleEditor(Editor):
         return None
 
     #-- Tree Event Handlers: -------------------------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Handles a tree node expanding:
-    #-------------------------------------------------------------------------
 
     def _on_tree_item_expanding(self, event):
         """ Handles a tree node expanding.
@@ -1079,18 +891,10 @@ class SimpleEditor(Editor):
         # yet):
         self._expand_node(nid)
 
-    #-------------------------------------------------------------------------
-    #  Handles a tree node being expanded:
-    #-------------------------------------------------------------------------
-
     def _on_tree_item_expanded(self, event):
         """ Handles a tree node being expanded.
         """
         self._update_icon(event, True)
-
-    #-------------------------------------------------------------------------
-    #  Handles a tree node collapsing:
-    #-------------------------------------------------------------------------
 
     def _on_tree_item_collapsing(self, event):
         """ Handles a tree node collapsing.
@@ -1099,18 +903,10 @@ class SimpleEditor(Editor):
             self._veto = False
             event.Veto()
 
-    #-------------------------------------------------------------------------
-    #  Handles a tree node being collapsed:
-    #-------------------------------------------------------------------------
-
     def _on_tree_item_collapsed(self, event):
         """ Handles a tree node being collapsed.
         """
         self._update_icon(event, False)
-
-    #-------------------------------------------------------------------------
-    #  Handles a tree node being selected:
-    #-------------------------------------------------------------------------
 
     def _on_tree_sel_changed(self, event=None):
         """ Handles a tree node being selected.
@@ -1217,10 +1013,6 @@ class SimpleEditor(Editor):
         # allow other events to be processed
         event.Skip(True)
 
-    #-------------------------------------------------------------------------
-    #  Handles a tree item being activated:
-    #-------------------------------------------------------------------------
-
     def _on_tree_item_activated(self, event):
         """ Handles a tree item being activated.
         """
@@ -1240,10 +1032,6 @@ class SimpleEditor(Editor):
         # Change it occur on mouse double click only.
         self.dclick = object
 
-    #-------------------------------------------------------------------------
-    #  Handles the user starting to edit a tree node label:
-    #-------------------------------------------------------------------------
-
     def _on_tree_begin_label_edit(self, event):
         """ Handles the user starting to edit a tree node label.
         """
@@ -1261,10 +1049,6 @@ class SimpleEditor(Editor):
 
         event.Veto()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user completing tree node label editing:
-    #-------------------------------------------------------------------------
-
     def _on_tree_end_label_edit(self, event):
         """ Handles the user completing tree node label editing.
         """
@@ -1281,10 +1065,6 @@ class SimpleEditor(Editor):
                 pass
         event.Veto()
 
-    #-------------------------------------------------------------------------
-    #  Handles a drag operation starting on a tree node:
-    #-------------------------------------------------------------------------
-
     def _on_tree_begin_drag(self, event):
         """ Handles a drag operation starting on a tree node.
         """
@@ -1297,10 +1077,6 @@ class SimpleEditor(Editor):
                                      node.get_drag_object(object))
                 finally:
                     self._dragging = None
-
-    #-------------------------------------------------------------------------
-    #  Handles a tooltip request on a tree node:
-    #-------------------------------------------------------------------------
 
     def _on_tree_item_gettooltip(self, event):
         """ Handles a tooltip request on a tree node.
@@ -1315,10 +1091,6 @@ class SimpleEditor(Editor):
                     event.SetToolTip(tooltip)
 
         event.Skip()
-
-    #-------------------------------------------------------------------------
-    #  Handles a tree item being double-clicked:
-    #-------------------------------------------------------------------------
 
     def _on_left_dclick(self, event):
         """ Handle left mouse dclick to emit dclick event for associated node.
@@ -1343,10 +1115,6 @@ class SimpleEditor(Editor):
         # Allow normal mouse event processing to occur:
         event.Skip()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user left clicking on a tree node:
-    #-------------------------------------------------------------------------
-
     def _on_left_down(self, event):
         """ Handles the user right clicking on a tree node.
         """
@@ -1364,10 +1132,6 @@ class SimpleEditor(Editor):
 
         # Allow normal mouse event processing to occur:
         event.Skip()
-
-    #-------------------------------------------------------------------------
-    #  Handles the user right clicking on a tree node:
-    #-------------------------------------------------------------------------
 
     def _on_right_down(self, event):
         """ Handles the user right clicking on a tree node.
@@ -1424,10 +1188,6 @@ class SimpleEditor(Editor):
             self._data = self._context = self._menu_node = \
                 self._menu_parent_node = self._menu_parent_object = None
 
-    #-------------------------------------------------------------------------
-    #  Returns the standard contextual pop-up menu:
-    #-------------------------------------------------------------------------
-
     def _standard_menu(self, node, object):
         """ Returns the standard contextual pop-up menu.
         """
@@ -1440,10 +1200,6 @@ class SimpleEditor(Editor):
             actions[0:0] = [Menu(name='New', *items), Separator()]
 
         return Menu(*actions)
-
-    #-------------------------------------------------------------------------
-    #  Returns a list of Actions that will create 'new' objects:
-    #-------------------------------------------------------------------------
 
     def _new_actions(self, node, object):
         """ Returns a list of Actions that will create new objects.
@@ -1467,10 +1223,6 @@ class SimpleEditor(Editor):
                                action="editor._menu_new_node('%s',%s)" %
                                (class_name, prompt)))
         return items
-
-    #-------------------------------------------------------------------------
-    #  Menu action helper methods:
-    #-------------------------------------------------------------------------
 
     def _is_copyable(self, object):
         parent = self._menu_parent_node
@@ -1513,10 +1265,6 @@ class SimpleEditor(Editor):
         return (can_rename and self._menu_node.can_rename_me(object))
 
 #----- Drag and drop event handlers: -------------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dropped on the tree:
-    #-------------------------------------------------------------------------
 
     def wx_dropped_on(self, x, y, data, drag_result):
         """ Handles a Python object being dropped on the tree.
@@ -1578,10 +1326,6 @@ class SimpleEditor(Editor):
 
         return wx.DragNone
 
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dragged over the tree:
-    #-------------------------------------------------------------------------
-
     def wx_drag_over(self, x, y, data, drag_result):
         """ Handles a Python object being dragged over the tree.
         """
@@ -1602,11 +1346,6 @@ class SimpleEditor(Editor):
 
         return wx.DragNone
 
-    #-------------------------------------------------------------------------
-    #  Makes sure that the target is not the same as or a child of the source
-    #  object:
-    #-------------------------------------------------------------------------
-
     def _is_drag_ok(self, snid, source, target):
         if (snid is None) or (target is source):
             return False
@@ -1620,10 +1359,6 @@ class SimpleEditor(Editor):
 
 #----- pyface.action 'controller' interface implementation: --------------
 
-    #-------------------------------------------------------------------------
-    #  Adds a menu item to the menu being constructed:
-    #-------------------------------------------------------------------------
-
     def add_to_menu(self, menu_item):
         """ Adds a menu item to the menu bar being constructed.
         """
@@ -1631,18 +1366,10 @@ class SimpleEditor(Editor):
         self.eval_when(action.enabled_when, menu_item, 'enabled')
         self.eval_when(action.checked_when, menu_item, 'checked')
 
-    #-------------------------------------------------------------------------
-    #  Adds a tool bar item to the tool bar being constructed:
-    #-------------------------------------------------------------------------
-
     def add_to_toolbar(self, toolbar_item):
         """ Adds a toolbar item to the toolbar being constructed.
         """
         self.add_to_menu(toolbar_item)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether the menu action should be defined in the user interface:
-    #-------------------------------------------------------------------------
 
     def can_add_to_menu(self, action):
         """ Returns whether the action should be defined in the user interface.
@@ -1657,20 +1384,11 @@ class SimpleEditor(Editor):
 
         return True
 
-    #-------------------------------------------------------------------------
-    #  Returns whether the toolbar action should be defined in the user
-    #  interface:
-    #-------------------------------------------------------------------------
-
     def can_add_to_toolbar(self, action):
         """ Returns whether the toolbar action should be defined in the user
             interface.
         """
         return self.can_add_to_menu(action)
-
-    #-------------------------------------------------------------------------
-    #  Performs the action described by a specified Action object:
-    #-------------------------------------------------------------------------
 
     def perform(self, action, action_event=None):
         """ Performs the action described by a specified Action object.
@@ -1709,11 +1427,6 @@ class SimpleEditor(Editor):
 
 #----- Menu support methods: ---------------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Evaluates a condition within a defined context and sets a specified
-    #  object trait based on the (assumed) boolean result:
-    #-------------------------------------------------------------------------
-
     def eval_when(self, condition, object, trait):
         """ Evaluates a condition within a defined context, and sets a
         specified object trait based on the result, which is assumed to be a
@@ -1727,10 +1440,6 @@ class SimpleEditor(Editor):
 
 #----- Menu event handlers: ----------------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Copies the current tree node object to the paste buffer:
-    #-------------------------------------------------------------------------
-
     def _menu_copy_node(self):
         """ Copies the current tree node object to the paste buffer.
         """
@@ -1738,10 +1447,6 @@ class SimpleEditor(Editor):
 
         clipboard.data = self._data[1]
         self._data = None
-
-    #-------------------------------------------------------------------------
-    #   Cuts the current tree node object into the paste buffer:
-    #-------------------------------------------------------------------------
 
     def _menu_cut_node(self):
         """  Cuts the current tree node object into the paste buffer.
@@ -1753,10 +1458,6 @@ class SimpleEditor(Editor):
         self._data = None
         self._undoable_delete(*self._node_index(nid))
 
-    #-------------------------------------------------------------------------
-    #  Pastes the current contents of the paste buffer into the current node:
-    #-------------------------------------------------------------------------
-
     def _menu_paste_node(self):
         """ Pastes the current contents of the paste buffer into the current
             node.
@@ -1766,10 +1467,6 @@ class SimpleEditor(Editor):
         node, object, nid = self._data
         self._data = None
         self._undoable_append(node, object, clipboard.object_data, False)
-
-    #-------------------------------------------------------------------------
-    #  Deletes the current node from the tree:
-    #-------------------------------------------------------------------------
 
     def _menu_delete_node(self):
         """ Deletes the current node from the tree.
@@ -1792,10 +1489,6 @@ class SimpleEditor(Editor):
 
             self._undoable_delete(*self._node_index(nid))
 
-    #-------------------------------------------------------------------------
-    #  Renames the current tree node:
-    #-------------------------------------------------------------------------
-
     def _menu_rename_node(self):
         """ Renames the current tree node.
         """
@@ -1806,10 +1499,6 @@ class SimpleEditor(Editor):
             label = object_label.label.strip()
             if label != '':
                 node.set_label(object, label)
-
-    #-------------------------------------------------------------------------
-    #  Adds a new object to the current node:
-    #-------------------------------------------------------------------------
 
     def _menu_new_node(self, class_name, prompt=False):
         """ Adds a new object to the current node.
@@ -1828,10 +1517,6 @@ class SimpleEditor(Editor):
                 self._tree.SelectItem(self._tree.GetLastChild(nid))
 
     #-- Model event handlers -------------------------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Handles the children of a node being completely replaced:
-    #-------------------------------------------------------------------------
 
     def _children_replaced(self, object, name='', new=None):
         """ Handles the children of a node being completely replaced.
@@ -1859,10 +1544,6 @@ class SimpleEditor(Editor):
             # Try to expand the node (if requested):
             if node.can_auto_open(object):
                 tree.Expand(nid)
-
-    #-------------------------------------------------------------------------
-    #  Handles the children of a node being changed:
-    #-------------------------------------------------------------------------
 
     def _children_updated(self, object, name, event):
         """ Handles the children of a node being changed.
@@ -1907,10 +1588,6 @@ class SimpleEditor(Editor):
                 if (nid != root) or not self.factory.hide_root:
                     tree.Expand(nid)
 
-    #-------------------------------------------------------------------------
-    #   Handles the label of an object being changed:
-    #-------------------------------------------------------------------------
-
     def _label_updated(self, object, name, label):
         """  Handles the label of an object being changed.
         """
@@ -1924,11 +1601,6 @@ class SimpleEditor(Editor):
 
 #-- UI preference save/restore interface ---------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
-
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
@@ -1939,10 +1611,6 @@ class SimpleEditor(Editor):
             else:
                 structure = prefs
             self.control.GetSizer().SetStructure(self.control, structure)
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.

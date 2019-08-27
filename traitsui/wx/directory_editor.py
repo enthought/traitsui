@@ -47,10 +47,6 @@ class SimpleEditor(SimpleFileEditor):
         and a **Browse** button that opens a directory-selection dialog box.
     """
 
-    #-------------------------------------------------------------------------
-    #  Creates the correct type of file dialog or popup:
-    #-------------------------------------------------------------------------
-
     def _create_file_dialog(self):
         """ Creates the correct type of file dialog.
         """
@@ -76,18 +72,10 @@ class CustomEditor(CustomFileEditor):
         the file system.
     """
 
-    #-------------------------------------------------------------------------
-    #  Returns the basic style to use for the control:
-    #-------------------------------------------------------------------------
-
     def get_style(self):
         """ Returns the basic style to use for the control.
         """
         return (wx.DIRCTRL_DIR_ONLY | wx.DIRCTRL_EDIT_LABELS)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user changing the contents of the edit control:
-    #-------------------------------------------------------------------------
 
     def update_object(self, event):
         """ Handles the user changing the contents of the edit control.

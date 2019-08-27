@@ -119,18 +119,10 @@ def create_traitsfont(value):
 class TraitsFont(wx.Font):
     """ A Traits-specific wx.Font.
     """
-    #-------------------------------------------------------------------------
-    #  Returns the pickleable form of a TraitsFont object:
-    #-------------------------------------------------------------------------
-
     def __reduce_ex__(self, protocol):
         """ Returns the pickleable form of a TraitsFont object.
         """
         return (create_traitsfont, (font_to_str(self), ))
-
-    #-------------------------------------------------------------------------
-    #  Returns a printable form of the font:
-    #-------------------------------------------------------------------------
 
     def __str__(self):
         """ Returns a printable form of the font.
@@ -147,10 +139,6 @@ class TraitWXFont(TraitHandler):
     descriptor strings; the value actually assigned is the corresponding
     TraitsFont.
     """
-    #-------------------------------------------------------------------------
-    #  Validates that the value is a valid font:
-    #-------------------------------------------------------------------------
-
     def validate(self, object, name, value):
         """ Validates that the value is a valid font descriptor string. If so,
         it returns the corresponding TraitsFont; otherwise, it raises a

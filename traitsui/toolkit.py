@@ -114,11 +114,6 @@ class Toolkit(Toolkit):
     """ Abstract base class for GUI toolkits.
     """
 
-    #-------------------------------------------------------------------------
-    #  Create GUI toolkit specific user interfaces using information from the
-    #  specified UI object:
-    #-------------------------------------------------------------------------
-
     def ui_panel(self, ui, parent):
         """ Creates a GUI-toolkit-specific panel-based user interface using
             information from the specified UI object.

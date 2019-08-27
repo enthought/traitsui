@@ -59,11 +59,6 @@ class SimpleEditor(Editor):
     #: Function used to evaluate textual user input:
     evaluate = evaluate_trait
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -108,10 +103,6 @@ class SimpleEditor(Editor):
         self.set_error_state(False)
         self.set_tooltip()
 
-    #-------------------------------------------------------------------------
-    #  Handles the user entering input data in the edit control:
-    #-------------------------------------------------------------------------
-
     def update_object(self):
         """ Handles the user entering input data in the edit control.
         """
@@ -127,10 +118,6 @@ class SimpleEditor(Editor):
 
             except TraitError as excp:
                 pass
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -152,10 +139,6 @@ class SimpleEditor(Editor):
             self._error = None
             self.ui.errors -= 1
             self.set_error_state(False)
-
-    #-------------------------------------------------------------------------
-    #  Gets the actual value corresponding to what the user typed:
-    #-------------------------------------------------------------------------
 
     def _get_user_value(self):
         """ Gets the actual value corresponding to what the user typed.
@@ -180,10 +163,6 @@ class SimpleEditor(Editor):
 
         return ret
 
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
-
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
@@ -192,10 +171,6 @@ class SimpleEditor(Editor):
             self.ui.errors += 1
 
         self.set_error_state(True)
-
-    #-------------------------------------------------------------------------
-    #  Returns whether or not the editor is in an error state:
-    #-------------------------------------------------------------------------
 
     def in_error_state(self):
         """ Returns whether or not the editor is in an error state.
@@ -231,10 +206,6 @@ class ReadonlyEditor(BaseReadonlyEditor):
             flags = (self.control.textInteractionFlags() |
                      QtCore.Qt.TextSelectableByMouse)
             self.control.setTextInteractionFlags(flags)
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the

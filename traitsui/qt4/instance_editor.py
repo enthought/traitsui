@@ -73,11 +73,6 @@ class CustomEditor(Editor):
     #: The view to use for displaying the instance
     view = AView
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -167,19 +162,11 @@ class CustomEditor(Editor):
         self.trait_setq(view=factory.view)
         self.sync_value(factory.view_name, 'view', 'from')
 
-    #-------------------------------------------------------------------------
-    #  Creates the editor control:
-    #-------------------------------------------------------------------------
-
     def create_editor(self, parent, layout):
         """ Creates the editor control.
         """
         self._panel = QtGui.QWidget()
         layout.addWidget(self._panel)
-
-    #-------------------------------------------------------------------------
-    #  Gets the current list of InstanceChoiceItem items:
-    #-------------------------------------------------------------------------
 
     def _get_items(self):
         """ Gets the current list of InstanceChoiceItem items.
@@ -203,10 +190,6 @@ class CustomEditor(Editor):
         self._items = items
 
         return items
-
-    #-------------------------------------------------------------------------
-    #  Rebuilds the object selector list:
-    #-------------------------------------------------------------------------
 
     def rebuild_items(self):
         """ Rebuilds the object selector list.
@@ -235,10 +218,6 @@ class CustomEditor(Editor):
             except:
                 pass
 
-    #-------------------------------------------------------------------------
-    #  Returns the InstanceChoiceItem for a specified object:
-    #-------------------------------------------------------------------------
-
     def item_for(self, object):
         """ Returns the InstanceChoiceItem for a specified object.
         """
@@ -247,10 +226,6 @@ class CustomEditor(Editor):
                 return item
 
         return None
-
-    #-------------------------------------------------------------------------
-    #  Returns the view to use for a specified object:
-    #-------------------------------------------------------------------------
 
     def view_for(self, object, item):
         """ Returns the view to use for a specified object.
@@ -264,10 +239,6 @@ class CustomEditor(Editor):
 
         return self.ui.handler.trait_view_for(self.ui.info, view, object,
                                               self.object_name, self.name)
-
-    #-------------------------------------------------------------------------
-    #  Handles the user selecting a new value from the combo box:
-    #-------------------------------------------------------------------------
 
     def update_object(self, index):
         """ Handles the user selecting a new value from the combo box.
@@ -286,10 +257,6 @@ class CustomEditor(Editor):
 
         self.value = object
         self.resynch_editor()
-
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -312,11 +279,6 @@ class CustomEditor(Editor):
                 choice.setCurrentIndex(idx)
             else:
                 choice.setText(name)
-
-    #-------------------------------------------------------------------------
-    #  Resynchronizes the contents of the editor when the object trait changes
-    #  external to the editor:
-    #-------------------------------------------------------------------------
 
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait
@@ -368,10 +330,6 @@ class CustomEditor(Editor):
             # FIXME: Handle stretch.
             layout.addWidget(control)
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -395,18 +353,10 @@ class CustomEditor(Editor):
 
         super(CustomEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Handles an error that occurs while setting the object's trait value:
-    #-------------------------------------------------------------------------
-
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
         pass
-
-    #-------------------------------------------------------------------------
-    #  Returns the editor's control for indicating error status:
-    #-------------------------------------------------------------------------
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
@@ -415,11 +365,6 @@ class CustomEditor(Editor):
 
     #-- UI preference save/restore interface ---------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the
-    #  editor:
-    #-------------------------------------------------------------------------
-
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
@@ -427,10 +372,6 @@ class CustomEditor(Editor):
         ui = self._ui
         if (ui is not None) and (prefs.get('id') == ui.id):
             ui.set_prefs(prefs.get('prefs'))
-
-    #-------------------------------------------------------------------------
-    #  Returns any user preference information associated with the editor:
-    #-------------------------------------------------------------------------
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
@@ -464,10 +405,6 @@ class SimpleEditor(CustomEditor):
     orientation = QtGui.QBoxLayout.LeftToRight
     extra = 2
 
-    #-------------------------------------------------------------------------
-    #  Creates the editor control:
-    #-------------------------------------------------------------------------
-
     def create_editor(self, parent, layout):
         """ Creates the editor control (a button).
         """
@@ -476,10 +413,6 @@ class SimpleEditor(CustomEditor):
         self._button.clicked.connect(self.edit_instance)
         # Make sure the editor is properly disposed if parent UI is closed
         self._button.destroyed.connect(self._parent_closed)
-
-    #-------------------------------------------------------------------------
-    #  Edit the contents of the object trait when the user clicks the button:
-    #-------------------------------------------------------------------------
 
     def edit_instance(self):
         """ Edit the contents of the object trait when the user clicks the
@@ -506,11 +439,6 @@ class SimpleEditor(CustomEditor):
 
         else:
             self._dialog_ui = None
-
-    #-------------------------------------------------------------------------
-    #  Resynchronizes the contents of the editor when the object trait changes
-    #  external to the editor:
-    #-------------------------------------------------------------------------
 
     def resynch_editor(self):
         """ Resynchronizes the contents of the editor when the object trait

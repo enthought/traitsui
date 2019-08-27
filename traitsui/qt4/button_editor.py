@@ -50,11 +50,6 @@ class SimpleEditor(Editor):
     #: The selected item in the drop-down menu.
     selected_item = Str
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -144,11 +139,6 @@ class CustomEditor(SimpleEditor):
         'radio': QtGui.QRadioButton,
         'toolbar': QtGui.QToolButton
     }
-
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit

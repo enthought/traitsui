@@ -27,10 +27,6 @@ from ..toolkit import toolkit_object
 
 class _PopupEditor(UIEditor):
 
-    #-------------------------------------------------------------------------
-    #  Creates the traits UI for the editor:
-    #-------------------------------------------------------------------------
-
     def init_ui(self, parent):
         """ Creates the traits UI for the editor.
         """

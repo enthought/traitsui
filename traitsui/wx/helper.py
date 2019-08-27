@@ -544,10 +544,6 @@ def init_wx_handlers(control, object, prefix=''):
 
 class GroupEditor(Editor):
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, **traits):
         """ Initializes the object.
         """

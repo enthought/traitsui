@@ -94,11 +94,6 @@ class SimpleEditor(Editor):
     #: Is the editor a drag source?
     drag_source = Bool(True)
 
-    #-------------------------------------------------------------------------
-    #  Finishes initializing the editor by creating the underlying toolkit
-    #  widget:
-    #-------------------------------------------------------------------------
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -149,10 +144,6 @@ class SimpleEditor(Editor):
         wx.EVT_MOTION(control, self._mouse_move)
         wx.EVT_PAINT(control, self._on_paint)
 
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of an editor:
-    #-------------------------------------------------------------------------
-
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
@@ -164,10 +155,6 @@ class SimpleEditor(Editor):
 
         super(SimpleEditor, self).dispose()
 
-    #-------------------------------------------------------------------------
-    #  Updates the editor when the object trait changes external to the editor:
-    #-------------------------------------------------------------------------
-
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
             editor.
@@ -175,10 +162,6 @@ class SimpleEditor(Editor):
         return
 
 #-- Private Methods ------------------------------------------------------
-
-    #-------------------------------------------------------------------------
-    #  Returns the processed version of a drag request's data:
-    #-------------------------------------------------------------------------
 
     def _get_drag_data(self, data):
         """ Returns the processed version of a drag request's data.
@@ -210,10 +193,6 @@ class SimpleEditor(Editor):
                         data = object
 
         return data
-
-    #-------------------------------------------------------------------------
-    #  Returns the unpickled version of a specified file (if possible):
-    #-------------------------------------------------------------------------
 
     def _unpickle(self, file_name):
         """ Returns the unpickled version of a specified file (if possible).
@@ -278,10 +257,6 @@ class SimpleEditor(Editor):
 
 #----- Drag and drop event handlers: -------------------------------------
 
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dropped on the control:
-    #-------------------------------------------------------------------------
-
     def wx_dropped_on(self, x, y, data, drag_result):
         """ Handles a Python object being dropped on the tree.
         """
@@ -290,10 +265,6 @@ class SimpleEditor(Editor):
             return drag_result
         except:
             return wx.DragNone
-
-    #-------------------------------------------------------------------------
-    #  Handles a Python object being dragged over the control:
-    #-------------------------------------------------------------------------
 
     def wx_drag_over(self, x, y, data, drag_result):
         """ Handles a Python object being dragged over the tree.
@@ -346,10 +317,6 @@ class ReadonlyEditor(SimpleEditor):
 class FileDropSource(wx.DropSource):
     """ Represents a draggable file.
     """
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, source, files):
         """ Initializes the object.
         """
@@ -372,10 +339,6 @@ class FileDropSource(wx.DropSource):
         super(FileDropSource, self).__init__(source)
         self.SetData(data_object)
         self.result = self.DoDragDrop(True)
-
-    #-------------------------------------------------------------------------
-    #  Called when the data has been dropped:
-    #-------------------------------------------------------------------------
 
     def on_dropped(self, drag_result):
         """ Called when the data has been dropped. """

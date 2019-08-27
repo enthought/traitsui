@@ -215,19 +215,11 @@ class UI(HasPrivateTraits):
         'key_bindings', 'icon', 'rebuild',
     ]
 
-    #-------------------------------------------------------------------------
-    #  Initializes the traits object:
-    #-------------------------------------------------------------------------
-
     def traits_init(self):
         """ Initializes the traits object.
         """
         self.info = UIInfo(ui=self)
         self.handler.init_info(self.info)
-
-    #-------------------------------------------------------------------------
-    #  Creates a user interface from the associated View template object:
-    #-------------------------------------------------------------------------
 
     def ui(self, parent, kind):
         """ Creates a user interface from the associated View template object.
@@ -238,10 +230,6 @@ class UI(HasPrivateTraits):
                                   dispatch='ui')
         self.rebuild = getattr(toolkit(), 'ui_' + kind)
         self.rebuild(self, parent)
-
-    #-------------------------------------------------------------------------
-    #  Disposes of the contents of a user interface:
-    #-------------------------------------------------------------------------
 
     def dispose(self, result=None, abort=False):
         """ Disposes of the contents of a user interface.
@@ -258,10 +246,6 @@ class UI(HasPrivateTraits):
             # Finish disposing of the user interface:
             self.finish()
 
-    #-------------------------------------------------------------------------
-    #  Recycles the user interface prior to rebuilding it:
-    #-------------------------------------------------------------------------
-
     def recycle(self):
         """ Recycles the user interface prior to rebuilding it.
         """
@@ -273,10 +257,6 @@ class UI(HasPrivateTraits):
 
         # Reset all recyclable traits:
         self.reset_traits(self.recyclable_traits)
-
-    #-------------------------------------------------------------------------
-    #  Finishes a user interface:
-    #-------------------------------------------------------------------------
 
     def finish(self):
         """ Finishes disposing of a user interface.
@@ -314,10 +294,6 @@ class UI(HasPrivateTraits):
 
         self.destroyed = True
 
-    #-------------------------------------------------------------------------
-    #  Resets the contents of the user interface:
-    #-------------------------------------------------------------------------
-
     def reset(self, destroy=True):
         """ Resets the contents of a user interface.
         """
@@ -343,11 +319,6 @@ class UI(HasPrivateTraits):
 
         for dispatcher in self._dispatchers:
             dispatcher.remove()
-
-    #-------------------------------------------------------------------------
-    #  Find the definition of the specified Include object in the current user
-    #  interface building context:
-    #-------------------------------------------------------------------------
 
     def find(self, include):
         """ Finds the definition of the specified Include object in the current
@@ -390,27 +361,15 @@ class UI(HasPrivateTraits):
 
         return result
 
-    #-------------------------------------------------------------------------
-    #  Returns the current search stack level:
-    #-------------------------------------------------------------------------
-
     def push_level(self):
         """ Returns the current search stack level.
         """
         return len(self._search)
 
-    #-------------------------------------------------------------------------
-    #  Restores a previously pushed search stack level:
-    #-------------------------------------------------------------------------
-
     def pop_level(self, level):
         """ Restores a previously pushed search stack level.
         """
         del self._search[: len(self._search) - level]
-
-    #-------------------------------------------------------------------------
-    #  Performs all post user interface creation processing:
-    #-------------------------------------------------------------------------
 
     def prepare_ui(self):
         """ Performs all processing that occurs after the user interface is
@@ -478,10 +437,6 @@ class UI(HasPrivateTraits):
         # Indicate that the user interface has been initialized:
         info.initialized = True
 
-    #-------------------------------------------------------------------------
-    #  Synchronize context object traits with view editor traits:
-    #-------------------------------------------------------------------------
-
     def sync_view(self):
         """ Synchronize context object traits with view editor traits.
         """
@@ -515,10 +470,6 @@ class UI(HasPrivateTraits):
                         "context object." %
                         (editor_id, metadata, trait_name, name))
 
-    #-------------------------------------------------------------------------
-    #  Gets the current value of a specified extended trait name:
-    #-------------------------------------------------------------------------
-
     def get_extended_value(self, name):
         """ Gets the current value of a specified extended trait name.
         """
@@ -533,10 +484,6 @@ class UI(HasPrivateTraits):
             value = getattr(value, name)
 
         return value
-
-    #-------------------------------------------------------------------------
-    #  Restores any saved user preference information associated with the UI:
-    #-------------------------------------------------------------------------
 
     def restore_prefs(self):
         """ Retrieves and restores any saved user preference information
@@ -554,10 +501,6 @@ class UI(HasPrivateTraits):
                     pass
 
         return None
-
-    #-------------------------------------------------------------------------
-    #  Restores user preference information for the UI:
-    #-------------------------------------------------------------------------
 
     def set_prefs(self, prefs):
         """ Sets the values of user preferences for the UI.
@@ -580,10 +523,6 @@ class UI(HasPrivateTraits):
 
         return None
 
-    #-------------------------------------------------------------------------
-    #  Saves any user preference information associated with the UI:
-    #-------------------------------------------------------------------------
-
     def save_prefs(self, prefs=None):
         """ Saves any user preference information associated with the UI.
         """
@@ -597,10 +536,6 @@ class UI(HasPrivateTraits):
             if db is not None:
                 db[id] = self.get_prefs(prefs)
                 db.close()
-
-    #-------------------------------------------------------------------------
-    #  Gets the preferences to be saved for the user interface:
-    #-------------------------------------------------------------------------
 
     def get_prefs(self, prefs=None):
         """ Gets the preferences to be saved for the user interface.
@@ -622,10 +557,6 @@ class UI(HasPrivateTraits):
 
         return ui_prefs
 
-    #-------------------------------------------------------------------------
-    #  Gets a reference to the traits UI preference database:
-    #-------------------------------------------------------------------------
-
     def get_ui_db(self, mode='r'):
         """ Returns a reference to the Traits UI preference database.
         """
@@ -635,19 +566,10 @@ class UI(HasPrivateTraits):
         except:
             return None
 
-    #-------------------------------------------------------------------------
-    #  Returns a list of editors for the given trait name.
-    #-------------------------------------------------------------------------
-
     def get_editors(self, name):
         """ Returns a list of editors for the given trait name.
         """
         return [editor for editor in self._editors if editor.name == name]
-
-    #-------------------------------------------------------------------------
-    #  Returns the list of editor error controls contained by the user
-    #  interface:
-    #-------------------------------------------------------------------------
 
     def get_error_controls(self):
         """ Returns the list of editor error controls contained by the user
@@ -663,21 +585,11 @@ class UI(HasPrivateTraits):
 
         return controls
 
-    #-------------------------------------------------------------------------
-    #  Adds a Handler method to the list of methods to be called once the user
-    #  interface has been constructed:
-    #-------------------------------------------------------------------------
-
     def add_defined(self, method):
         """ Adds a Handler method to the list of methods to be called once the
             user interface has been constructed.
         """
         self._defined.append(method)
-
-    #-------------------------------------------------------------------------
-    #  Add's a conditionally enabled Editor object to the list of monitored
-    #  'visible_when' objects:
-    #-------------------------------------------------------------------------
 
     def add_visible(self, visible_when, editor):
         """ Adds a conditionally enabled Editor object to the list of monitored
@@ -690,11 +602,6 @@ class UI(HasPrivateTraits):
             pass
             # fixme: Log an error here...
 
-    #-------------------------------------------------------------------------
-    #  Add's a conditionally enabled Editor object to the list of monitored
-    #  'enabled_when' objects:
-    #-------------------------------------------------------------------------
-
     def add_enabled(self, enabled_when, editor):
         """ Adds a conditionally enabled Editor object to the list of monitored
             'enabled_when' objects.
@@ -706,11 +613,6 @@ class UI(HasPrivateTraits):
             pass
             # fixme: Log an error here...
 
-    #-------------------------------------------------------------------------
-    #  Add's a conditionally checked (menu/toolbar) Editor object to the list of
-    #  monitored 'checked_when' objects:
-    #-------------------------------------------------------------------------
-
     def add_checked(self, checked_when, editor):
         """ Adds a conditionally enabled (menu) Editor object to the list of
             monitored 'checked_when' objects.
@@ -721,10 +623,6 @@ class UI(HasPrivateTraits):
         except:
             pass
             # fixme: Log an error here...
-
-    #-------------------------------------------------------------------------
-    #  Performs an 'undoable' action:
-    #-------------------------------------------------------------------------
 
     def do_undoable(self, action, *args, **kw):
         """ Performs an action that can be undone.
@@ -739,18 +637,10 @@ class UI(HasPrivateTraits):
             if undoable == -1:
                 self._undoable = -1
 
-    #-------------------------------------------------------------------------
-    #  Routes a 'hooked' event to the correct handler method:
-    #-------------------------------------------------------------------------
-
     def route_event(self, event):
         """ Routes a "hooked" event to the correct handler method.
         """
         toolkit().route_event(self, event)
-
-    #-------------------------------------------------------------------------
-    #  Handles key events when the view has a set of KeyBindings:
-    #-------------------------------------------------------------------------
 
     def key_handler(self, event, skip=True):
         """ Handles key events.
@@ -768,10 +658,6 @@ class UI(HasPrivateTraits):
 
         return handled
 
-    #-------------------------------------------------------------------------
-    #  Evaluates a specified function in the UI's context:
-    #-------------------------------------------------------------------------
-
     def evaluate(self, function, *args, **kw_args):
         """ Evaluates a specified function in the UI's **context**.
         """
@@ -785,10 +671,6 @@ class UI(HasPrivateTraits):
         context['ui'] = self
         context['handler'] = self.handler
         return eval(function, globals(), context)(*args, **kw_args)
-
-    #-------------------------------------------------------------------------
-    #  Evaluates an expression in the UI's 'context' and returns the result:
-    #-------------------------------------------------------------------------
 
     def eval_when(self, when, result=True):
         """ Evaluates an expression in the UI's **context** and returns the
@@ -804,10 +686,6 @@ class UI(HasPrivateTraits):
         del context['ui']
 
         return result
-
-    #-------------------------------------------------------------------------
-    #  Gets the context to use for evaluating an expression:
-    #-------------------------------------------------------------------------
 
     def _get_context(self, context):
         """ Gets the context to use for evaluating an expression.
@@ -832,12 +710,6 @@ class UI(HasPrivateTraits):
 
         return context2
 
-    #-------------------------------------------------------------------------
-    #  Sets the 'visible', 'enabled' and/or 'checked' state for all Editors
-    #  controlled by a 'visible_when', 'enabled_when' or 'checked_when'
-    #  expression:
-    #-------------------------------------------------------------------------
-
     def _evaluate_when(self):
         """ Set the 'visible', 'enabled', and 'checked' states for all Editors
             controlled by a 'visible_when', 'enabled_when' or 'checked_when'
@@ -859,11 +731,6 @@ class UI(HasPrivateTraits):
         self._evaluate_condition(self._visible, 'visible', at_init)
         self._evaluate_condition(self._enabled, 'enabled', at_init)
         self._evaluate_condition(self._checked, 'checked', at_init)
-
-    #-------------------------------------------------------------------------
-    #  Evaluates a list of ( eval, editor ) pairs and sets a specified trait on
-    #  each editor to reflect the boolean truth of the expression evaluated:
-    #-------------------------------------------------------------------------
 
     def _evaluate_condition(self, conditions, trait, at_init=False):
         """ Evaluates a list of (eval, editor) pairs and sets a specified trait
@@ -931,11 +798,6 @@ class UI(HasPrivateTraits):
             setattr(editor, trait, False)
         for editor in activate:
             setattr(editor, trait, True)
-
-    #-------------------------------------------------------------------------
-    #  Implementation of the '_groups' property:
-    #  (Returns the top-level Groups for the view (after resolving Includes))
-    #-------------------------------------------------------------------------
 
     def _get__groups(self):
         """ Returns the top-level Groups for the view (after resolving
@@ -1009,10 +871,6 @@ class UI(HasPrivateTraits):
 
 class Dispatcher(object):
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, method, info, object, method_name):
         """ Initializes the object.
         """
@@ -1022,18 +880,10 @@ class Dispatcher(object):
         self.method_name = method_name
         object.on_trait_change(self.dispatch, method_name, dispatch='ui')
 
-    #-------------------------------------------------------------------------
-    #  Dispatches the method:
-    #-------------------------------------------------------------------------
-
     def dispatch(self):
         """ Dispatches the method.
         """
         self.method(self.info)
-
-    #-------------------------------------------------------------------------
-    #  Remove the dispatcher:
-    #-------------------------------------------------------------------------
 
     def remove(self):
         """ Removes the dispatcher.

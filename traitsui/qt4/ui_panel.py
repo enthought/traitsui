@@ -1234,10 +1234,6 @@ class HTMLHelpWindow(QtGui.QDialog):
     """ Window for displaying Traits-based help text with HTML formatting.
     """
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, parent, html, scale_dx, scale_dy):
         """ Initializes the object.
         """

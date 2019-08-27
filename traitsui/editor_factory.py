@@ -84,31 +84,17 @@ class EditorFactory(HasPrivateTraits):
     #: The editor class to use for 'readonly' style views.
     readonly_editor_class = Property
 
-    #-------------------------------------------------------------------------
-    #  Initializes the object:
-    #-------------------------------------------------------------------------
-
     def __init__(self, *args, **traits):
         """ Initializes the factory object.
         """
         HasPrivateTraits.__init__(self, **traits)
         self.init(*args)
 
-    #-------------------------------------------------------------------------
-    #  Performs any initialization needed after all constructor traits have
-    #  been set:
-    #-------------------------------------------------------------------------
-
     def init(self):
         """ Performs any initialization needed after all constructor traits
             have been set.
         """
         pass
-
-    #-------------------------------------------------------------------------
-    #  Returns the value of a specified extended name of the form: name or
-    #  context_object_name.name[.name...]:
-    #-------------------------------------------------------------------------
 
     def named_value(self, name, ui):
         """ Returns the value of a specified extended name of the form: name or
@@ -310,10 +296,6 @@ class EditorWithListFactory(EditorFactory):
 
     #: Fired when the **values** trait has been updated:
     values_modified = Event
-
-    #-------------------------------------------------------------------------
-    #  Recomputes the mappings whenever the 'values' trait is changed:
-    #-------------------------------------------------------------------------
 
     def _values_changed(self):
         """ Recomputes the mappings whenever the **values** trait is changed.
