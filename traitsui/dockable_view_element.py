@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   12/14/2005
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Defines the DockableViewElement class, which allows Traits UIs and
     Traits UI elements to be docked in external PyFace DockWindow windows.
 """
-
 
 
 from __future__ import absolute_import
@@ -35,9 +34,9 @@ from .view_element import ViewSubElement
 
 from pyface.dock.idockable import IDockable
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'DockableViewElement' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class DockableViewElement(HasPrivateTraits, IDockable):
@@ -45,9 +44,9 @@ class DockableViewElement(HasPrivateTraits, IDockable):
         PyFace DockWindow windows.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The Traits UI that can be docked with an external DockWindow
     ui = Instance(UI)
@@ -58,7 +57,7 @@ class DockableViewElement(HasPrivateTraits, IDockable):
     #: Should the DockControl be closed on redocking?
     should_close = Bool(False)
 
-#-- IDockable interface --------------------------------------------------
+    # -- IDockable interface --------------------------------------------------
 
     def dockable_should_close(self):
         """ Should the current DockControl be closed before creating the new
@@ -72,8 +71,11 @@ class DockableViewElement(HasPrivateTraits, IDockable):
             element = Group().trait_set(content=[element])
 
         group = Group().trait_set(content=[element])
-        self._view = View().trait_set(**self.ui.view.get()).trait_set(
-            content=group, title='')
+        self._view = (
+            View()
+            .trait_set(**self.ui.view.get())
+            .trait_set(content=group, title="")
+        )
 
         # FIXME: The following private traits are being set here to facilitate
         # rebuilding the ui (which will require the context and the handler).
@@ -91,15 +93,18 @@ class DockableViewElement(HasPrivateTraits, IDockable):
         # self.ui.dispose()
         self._handler = self.ui.handler
 
-        return (self.should_close or (self.element is None))
+        return self.should_close or (self.element is None)
 
     def dockable_get_control(self, parent):
         """ Gets a control that can be docked into a DockWindow.
         """
         # Create the new UI:
-        ui = self._view.ui(self._context, parent=parent,
-                           kind='subpanel',
-                           handler=self._handler)
+        ui = self._view.ui(
+            self._context,
+            parent=parent,
+            kind="subpanel",
+            handler=self._handler,
+        )
 
         # Discard the reference to the view created previously:
         self._view = None
@@ -117,13 +122,14 @@ class DockableViewElement(HasPrivateTraits, IDockable):
         """
         dockable = self
         if self.element is not None:
-            dockable = DockableViewElement(ui=self._ui,
-                                           element=self.element,
-                                           should_close=True)
+            dockable = DockableViewElement(
+                ui=self._ui, element=self.element, should_close=True
+            )
             self._ui = None
 
-        dock_control.trait_set(dockable=dockable,
-                               on_close=dockable.close_dock_control)
+        dock_control.trait_set(
+            dockable=dockable, on_close=dockable.close_dock_control
+        )
 
     def close_dock_control(self, dock_control, abort):
         """ Handles the closing of a DockControl containing a Traits UI.

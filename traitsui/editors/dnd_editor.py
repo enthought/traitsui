@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: David C. Morrill
 #  Date:   06/25/2006
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the editor factory for a drag-and-drop editor. A drag-and-drop
     editor represents its value as a simple image which, depending upon the
@@ -22,25 +22,24 @@
 """
 
 
-
 from __future__ import absolute_import
 
 from pyface.ui_traits import Image
 
 from ..editor_factory import EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for drag-and-drop editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The image to use for the target:
     image = Image
@@ -51,5 +50,3 @@ class ToolkitEditorFactory(EditorFactory):
 
 # Define the DNDEditor class.
 DNDEditor = ToolkitEditorFactory
-
-

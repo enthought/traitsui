@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -10,19 +10,19 @@
 #
 #  Thanks for using Enthought open source!
 #
-#------------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------
 
 
 from __future__ import absolute_import
-from traitsui.ui_editors.array_view_editor \
-    import _ArrayViewEditor as BaseArrayViewEditor
+from traitsui.ui_editors.array_view_editor import (
+    _ArrayViewEditor as BaseArrayViewEditor,
+)
 
 from .ui_editor import UIEditor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  '_ArrayViewEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class _ArrayViewEditor(BaseArrayViewEditor, UIEditor):

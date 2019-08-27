@@ -1,5 +1,3 @@
-
-
 from __future__ import absolute_import
 
 from traits.api import Float, Enum, Any, Property
@@ -20,42 +18,43 @@ from ..ui_editor import UIEditor
 
 from ..toolkit import toolkit_object
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  '_PopupEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class _PopupEditor(UIEditor):
-
     def init_ui(self, parent):
         """ Creates the traits UI for the editor.
         """
-        return self.object.edit_traits(view=self.base_view(),
-                                       parent=parent)
+        return self.object.edit_traits(view=self.base_view(), parent=parent)
 
     def base_view(self):
         """ Returns the View that allows the popup view to be displayed.
         """
         return View(
-            Item(self.name,
-                 show_label=False,
-                 style='readonly',
-                 editor=TextEditor(view=self.popup_view()),
-                 padding=-4,
-                 ),
-            kind='subpanel'
+            Item(
+                self.name,
+                show_label=False,
+                style="readonly",
+                editor=TextEditor(view=self.popup_view()),
+                padding=-4,
+            ),
+            kind="subpanel",
         )
 
     def popup_view(self):
         """ Returns the popup View.
         """
         factory = self.factory
-        item = Item(self.name,
-                    show_label=False,
-                    padding=-4,
-                    style=factory.style,
-                    height=factory.height,
-                    width=factory.width)
+        item = Item(
+            self.name,
+            show_label=False,
+            padding=-4,
+            style=factory.style,
+            height=factory.height,
+            width=factory.width,
+        )
 
         editor = factory.editor
         if editor is not None:
@@ -65,9 +64,10 @@ class _PopupEditor(UIEditor):
 
         return View(item, kind=factory.kind)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'PopupEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class PopupEditor(BasicEditorFactory):
@@ -76,7 +76,7 @@ class PopupEditor(BasicEditorFactory):
     klass = Property
 
     #: The kind of popup to use:
-    kind = Enum('popover', 'popup', 'info')
+    kind = Enum("popover", "popup", "info")
 
     #: The editor to use for the pop-up view (can be None (use default editor),
     #: an EditorFactory instance, or a callable that returns an EditorFactory
@@ -95,4 +95,4 @@ class PopupEditor(BasicEditorFactory):
     def _get_klass(self):
         """ The class used to construct editor objects.
         """
-        return toolkit_object('popup_editor:_PopupEditor')
+        return toolkit_object("popup_editor:_PopupEditor")

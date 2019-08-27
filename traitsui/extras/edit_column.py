@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2006, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: Bryce Hendrix
 #  Date:   09/13/2007
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the table column descriptor used for editing the object represented
     by the row
 """
-
 
 
 from __future__ import absolute_import
@@ -26,16 +25,15 @@ from __future__ import absolute_import
 from traits.etsconfig.api import ETSConfig
 from ..table_column import ObjectColumn
 
-if ETSConfig.toolkit == 'wx':
+if ETSConfig.toolkit == "wx":
     from pyface.ui.wx.grid.edit_renderer import EditRenderer
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'EditColumn' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class EditColumn(ObjectColumn):
-
     def __init__(self, **traits):
         """ Initializes the object.
         """
@@ -44,7 +42,7 @@ class EditColumn(ObjectColumn):
         # force the renderer to be a edit renderer
         self.renderer = EditRenderer()
 
-        self.label = ''
+        self.label = ""
 
     def get_cell_color(self, object):
         """ Returns the cell background color for the column for a specified

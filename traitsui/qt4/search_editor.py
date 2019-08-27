@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Copyright (c) 20011, Enthought, Inc.
 #  All rights reserved.
 #
@@ -10,7 +10,7 @@
 #  Thanks for using Enthought open source!
 #
 #  Author: Evan Patterson
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # System library imports
 from __future__ import absolute_import
@@ -43,7 +43,7 @@ class SearchWidget(QtGui.QLineEdit):
         self.setPalette(palette)
 
         if self.text() == self._desc:
-            self.setText('')
+            self.setText("")
             self.update()
 
         super(SearchWidget, self).focusInEvent(event)
@@ -63,15 +63,15 @@ class SearchWidget(QtGui.QLineEdit):
         """ Sets the greyed-out descriptive text.
         """
         palette = QtGui.QApplication.instance().palette()
-        palette.setColor(QtGui.QPalette.Text,
-                         palette.color(QtGui.QPalette.Dark))
+        palette.setColor(
+            QtGui.QPalette.Text, palette.color(QtGui.QPalette.Dark)
+        )
         self.setPalette(palette)
         self.setText(self._desc)
         self.update()
 
 
 class SearchEditor(Editor):
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -92,7 +92,7 @@ class SearchEditor(Editor):
         """
         if not self._no_update:
             self.value = str(self.control.text())
-            if self.factory.search_event_trait != '':
+            if self.factory.search_event_trait != "":
                 setattr(self.object, self.factory.search_event_trait, True)
 
     def update_editor(self):

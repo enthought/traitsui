@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: David C. Morrill
 #  Date:   05/20/2007
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ A traits UI editor for editing tabular data (arrays, list of tuples, lists
     of objects, etc).
@@ -30,12 +30,11 @@ from ..basic_editor_factory import BasicEditorFactory
 from ..toolkit import toolkit_object
 
 
-
 class TabularEditor(BasicEditorFactory):
     """ Editor factory for tabular editors.
     """
 
-    #-- Trait Definitions ----------------------------------------------------
+    # -- Trait Definitions ----------------------------------------------------
 
     #: The editor class to be created:
     klass = Property
@@ -142,11 +141,13 @@ class TabularEditor(BasicEditorFactory):
     stretch_last_section = Bool(True)
 
     #: The adapter from trait values to editor values:
-    adapter = Instance('traitsui.tabular_adapter.TabularAdapter', ())
+    adapter = Instance("traitsui.tabular_adapter.TabularAdapter", ())
 
     #: What type of operations are allowed on the list:
-    operations = List(Enum('delete', 'insert', 'append', 'edit', 'move'),
-                      ['delete', 'insert', 'append', 'edit', 'move'])
+    operations = List(
+        Enum("delete", "insert", "append", "edit", "move"),
+        ["delete", "insert", "append", "edit", "move"],
+    )
 
     #: Are 'drag_move' operations allowed (i.e. True), or should they always be
     #: treated as 'drag_copy' operations (i.e. False):
@@ -158,6 +159,4 @@ class TabularEditor(BasicEditorFactory):
     def _get_klass(self):
         """ Returns the toolkit-specific editor class to be instantiated.
         """
-        return toolkit_object('tabular_editor:TabularEditor')
-
-
+        return toolkit_object("tabular_editor:TabularEditor")

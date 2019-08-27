@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   07/01/2005
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the filter object used to filter items displayed in a table editor.
 """
-
 
 
 from __future__ import absolute_import
@@ -33,7 +32,8 @@ from traits.api import (
     Instance,
     List,
     Str,
-    Trait)
+    Trait,
+)
 
 from .editor_factory import EditorFactory
 from .editors.api import EnumEditor
@@ -44,39 +44,42 @@ from .menu import Action
 from .table_column import ObjectColumn
 from .view import View
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
-GenericTableFilterRuleOperation = Trait('=', {
-    '=': 'eq',
-    '<>': 'ne',
-    '<': 'lt',
-    '<=': 'le',
-    '>': 'gt',
-    '>=': 'ge',
-    'contains': 'contains',
-    'starts with': 'starts_with',
-    'ends with': 'ends_with'
-})
+GenericTableFilterRuleOperation = Trait(
+    "=",
+    {
+        "=": "eq",
+        "<>": "ne",
+        "<": "lt",
+        "<=": "le",
+        ">": "gt",
+        ">=": "ge",
+        "contains": "contains",
+        "starts with": "starts_with",
+        "ends with": "ends_with",
+    },
+)
 
 
 class TableFilter(HasPrivateTraits):
     """ Filter for items displayed in a table.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: UI name of this filter (so the user can identify it in the UI)
-    name = Str('Default filter')
+    name = Str("Default filter")
 
     #: Default name that can be automatically overridden
-    _name = Str('Default filter')
+    _name = Str("Default filter")
 
     #: A user-readable description of what kind of object satisfies the filter
-    desc = Str('All items')
+    desc = Str("All items")
 
     #: A callable function that returns whether the passed object is allowed
     #: by the filter
@@ -85,46 +88,54 @@ class TableFilter(HasPrivateTraits):
     #: Is the filter a template (i.e., non-deletable, non-editable)?
     template = Bool(False)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Class constants:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Traits that are ignored by the _anytrait_changed() handler
-    ignored_traits = ['_name', 'template', 'desc']
+    ignored_traits = ["_name", "template", "desc"]
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     traits_view = View(
-        'name{Filter name}', '_',
-        Include('filter_view'),
-        title='Edit Filter',
+        "name{Filter name}",
+        "_",
+        Include("filter_view"),
+        title="Edit Filter",
         width=0.2,
-        buttons=['OK',
-                 'Cancel',
-                 Action(
-                     name='Help',
-                     action='show_help',
-                     defined_when="ui.view_elements.content['filter_view']"
-                     ".help_id != ''"
-                 )
-                 ]
+        buttons=[
+            "OK",
+            "Cancel",
+            Action(
+                name="Help",
+                action="show_help",
+                defined_when="ui.view_elements.content['filter_view']"
+                ".help_id != ''",
+            ),
+        ],
     )
 
-    searchable_view = View([
-        [Include('search_view'), '|[]'],
-        ['handler.status~', '|[]<>'],
-        ['handler.find_next`Find the next matching item`',
-         'handler.find_previous`Find the previous matching item`',
-         'handler.select`Select all matching items`',
-         'handler.OK`Exit search`', '-<>'],
-        '|<>'],
-        title='Search for',
-        kind='livemodal',
-        width=0.25)
+    searchable_view = View(
+        [
+            [Include("search_view"), "|[]"],
+            ["handler.status~", "|[]<>"],
+            [
+                "handler.find_next`Find the next matching item`",
+                "handler.find_previous`Find the previous matching item`",
+                "handler.select`Select all matching items`",
+                "handler.OK`Exit search`",
+                "-<>",
+            ],
+            "|<>",
+        ],
+        title="Search for",
+        kind="livemodal",
+        width=0.25,
+    )
 
-    search_view = Group(Include('filter_view'))
+    search_view = Group(Include("filter_view"))
 
     filter_view = Group()
 
@@ -143,8 +154,7 @@ class TableFilter(HasPrivateTraits):
     def edit(self, object):
         """ Edits the contents of the filter.
         """
-        return self.edit_traits(view=self.edit_view(object),
-                                kind='livemodal')
+        return self.edit_traits(view=self.edit_view(object), kind="livemodal")
 
     def edit_view(self, object):
         """ Return a view to use for editing the filter.
@@ -156,20 +166,21 @@ class TableFilter(HasPrivateTraits):
         """
         return None
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  'object' interface:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def __str__(self):
         return self.name
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Event handlers:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _anytrait_changed(self, name, old, new):
-        if ((name not in self.ignored_traits) and
-                ((self.name == self._name) or (self.name == ''))):
+        if (name not in self.ignored_traits) and (
+            (self.name == self._name) or (self.name == "")
+        ):
             self.name = self._name = self.description()
 
 
@@ -177,21 +188,21 @@ class EvalTableFilter(TableFilter):
     """ A table filter based on evaluating an expression.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Override the standard **name** trait
-    name = 'Default evaluation filter'
+    name = "Default evaluation filter"
 
     #: Python expression which will be applied to each table item
     expression = Expression
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    filter_view = Group('expression')
+    filter_view = Group("expression")
 
     def filter(self, object):
         """ Returns whether a specified object meets the filter or search
@@ -200,8 +211,7 @@ class EvalTableFilter(TableFilter):
         if self._traits is None:
             self._traits = object.trait_names()
         try:
-            return eval(self.expression_, globals(),
-                        object.get(*self._traits))
+            return eval(self.expression_, globals(), object.get(*self._traits))
         except:
             return False
 
@@ -216,18 +226,18 @@ class GenericTableFilterRule(HasPrivateTraits):
     """ A general rule used by a table filter.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Filter this rule is part of
-    filter = Instance('RuleTableFilter')
+    filter = Instance("RuleTableFilter")
 
     #: Is this rule enabled?
     enabled = Bool(False)
 
     #: Is this rule an 'and' rule or an 'or' rule?
-    and_or = Enum('and', 'or')
+    and_or = Enum("and", "or")
 
     #: EnumEditor used to edit the **name** trait:
     name_editor = Instance(EditorFactory)
@@ -244,16 +254,16 @@ class GenericTableFilterRule(HasPrivateTraits):
     #: Value to use in the operation when applying the rule to an object
     value = Any
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Class constants:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Traits that are ignored by the _anytrait_changed() handler
-    ignored_traits = ['filter', 'name_editor', 'value_editor']
+    ignored_traits = ["filter", "name_editor", "value_editor"]
 
     def __init__(self, **traits):
         super(GenericTableFilterRule, self).__init__(**traits)
-        if self.name == '':
+        if self.name == "":
             names = list(self.filter._trait_values.keys())
             if len(names) > 0:
                 names.sort()
@@ -268,28 +278,29 @@ class GenericTableFilterRule(HasPrivateTraits):
             self.value = filter._trait_values.get(name)
             self.value_editor = filter._object.base_trait(name).get_editor()
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Event handlers:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _anytrait_changed(self, name, old, new):
         if (name not in self.ignored_traits) and (self.filter is not None):
             self.filter.modified = True
-            if name != 'enabled':
+            if name != "enabled":
                 self.enabled = True
 
-    def clone_traits(self, traits=None, memo=None, copy=None,
-                     **metadata):
+    def clone_traits(self, traits=None, memo=None, copy=None, **metadata):
         """ Clones a new object from this one, optionally copying only a
         specified set of traits."""
-        return super(GenericTableFilterRule, self).clone_traits(
-            traits, memo, copy, **metadata).trait_set(
-                enabled=self.enabled, name=self.name)
+        return (
+            super(GenericTableFilterRule, self)
+            .clone_traits(traits, memo, copy, **metadata)
+            .trait_set(enabled=self.enabled, name=self.name)
+        )
 
     def description(self):
         """ Returns a description of the filter.
         """
-        return '%s %s %s' % (self.name, self.operation, self.value)
+        return "%s %s %s" % (self.name, self.operation, self.value)
 
     def is_true(self, object):
         """ Returns whether the rule is true for a specified object.
@@ -304,36 +315,36 @@ class GenericTableFilterRule(HasPrivateTraits):
         except:
             return False
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Implemenations of the various rule operations:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def eq(self, value1, value2):
-        return (value1 == value2)
+        return value1 == value2
 
     def ne(self, value1, value2):
-        return (value1 != value2)
+        return value1 != value2
 
     def lt(self, value1, value2):
-        return (value1 < value2)
+        return value1 < value2
 
     def le(self, value1, value2):
-        return (value1 <= value2)
+        return value1 <= value2
 
     def gt(self, value1, value2):
-        return (value1 > value2)
+        return value1 > value2
 
     def ge(self, value1, value2):
-        return (value1 >= value2)
+        return value1 >= value2
 
     def contains(self, value1, value2):
-        return (value1.lower().find(value2.lower()) >= 0)
+        return value1.lower().find(value2.lower()) >= 0
 
     def starts_with(self, value1, value2):
-        return (value1[: len(value2)].lower() == value2.lower())
+        return value1[: len(value2)].lower() == value2.lower()
 
     def ends_with(self, value1, value2):
-        return (value1[-len(value2):].lower() == value2.lower())
+        return value1[-len(value2) :].lower() == value2.lower()
 
 
 class GenericTableFilterRuleEnabledColumn(ObjectColumn):
@@ -343,10 +354,10 @@ class GenericTableFilterRuleEnabledColumn(ObjectColumn):
     def get_value(self, object):
         """ Returns the traits editor of the column for a specified object.
         """
-        if hasattr(object, 'enabled') and object.enabled:
-            return u'\N{HEAVY CHECK MARK}'
+        if hasattr(object, "enabled") and object.enabled:
+            return u"\N{HEAVY CHECK MARK}"
         else:
-            return ''
+            return ""
 
 
 class GenericTableFilterRuleAndOrColumn(ObjectColumn):
@@ -357,9 +368,9 @@ class GenericTableFilterRuleAndOrColumn(ObjectColumn):
     def get_value(self, object):
         """ Returns the traits editor of the column for a specified object.
         """
-        if object.and_or == 'or':
-            return 'or'
-        return ''
+        if object.and_or == "or":
+            return "or"
+        return ""
 
 
 class GenericTableFilterRuleNameColumn(ObjectColumn):
@@ -381,16 +392,17 @@ class GenericTableFilterRuleValueColumn(ObjectColumn):
         """
         return object.value_editor
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Defines the columns to display in the generic filter rule table:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Columns to display in the table for generic filter rules.
 generic_table_filter_rule_columns = [
-    GenericTableFilterRuleAndOrColumn(name='and_or', label='or'),
-    GenericTableFilterRuleNameColumn(name='name'),
-    ObjectColumn(name='operation'),
-    GenericTableFilterRuleValueColumn(name='value')
+    GenericTableFilterRuleAndOrColumn(name="and_or", label="or"),
+    GenericTableFilterRuleNameColumn(name="name"),
+    ObjectColumn(name="operation"),
+    GenericTableFilterRuleValueColumn(name="value"),
 ]
 
 
@@ -398,12 +410,12 @@ class RuleTableFilter(TableFilter):
     """ A table filter based on rules.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Overrides the default **name** trait
-    name = 'Default rule-based filter'
+    name = "Default rule-based filter"
 
     #: List of the filter rules to be applied
     rules = List(GenericTableFilterRule)
@@ -412,7 +424,7 @@ class RuleTableFilter(TableFilter):
     modified = Event
 
     #: Persistence ID of the view
-    view_id = Str('traitsui.table_filter.RuleTableFilter')
+    view_id = Str("traitsui.table_filter.RuleTableFilter")
 
     #: Sample object that the filter will apply to
     _object = Any
@@ -420,18 +432,19 @@ class RuleTableFilter(TableFilter):
     #: Map of trait names and default values
     _trait_values = Any
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     error_view = View(
-        Item(label='A menu or rule based filter can only be created for '
-             'tables with at least one entry'
-             ),
-        title='Error Creating Filter',
-        kind='livemodal',
+        Item(
+            label="A menu or rule based filter can only be created for "
+            "tables with at least one entry"
+        ),
+        title="Error Creating Filter",
+        kind="livemodal",
         close_result=False,
-        buttons=['Cancel']
+        buttons=["Cancel"],
     )
 
     def filter(self, object):
@@ -440,7 +453,7 @@ class RuleTableFilter(TableFilter):
         """
         is_first = is_true = True
         for rule in self.rules:
-            if rule.and_or == 'or':
+            if rule.and_or == "or":
                 if is_true and (not is_first):
                     return True
                 is_true = True
@@ -457,20 +470,20 @@ class RuleTableFilter(TableFilter):
         ands = []
         if len(self.rules) > 0:
             for rule in self.rules:
-                if rule.and_or == 'or':
+                if rule.and_or == "or":
                     if len(ands) > 0:
-                        ors.append(' and '.join(ands))
+                        ors.append(" and ".join(ands))
                         ands = []
                 ands.append(rule.description())
 
         if len(ands) > 0:
-            ors.append(' and '.join(ands))
+            ors.append(" and ".join(ands))
 
         if len(ors) == 1:
             return ors[0]
 
         if len(ors) > 1:
-            return ' or '.join(['(%s)' % t for t in ors])
+            return " or ".join(["(%s)" % t for t in ors])
 
         return super(RuleTableFilter, self).description()
 
@@ -484,40 +497,50 @@ class RuleTableFilter(TableFilter):
         """
         self._object = object
         if object is None:
-            return self.edit_traits(view='error_view')
+            return self.edit_traits(view="error_view")
 
         names = object.editable_traits()
         self._trait_values = object.get(names)
         return View(
-            [['name{Filter name}', '_'],
-             [Item('rules',
-                   id='rules_table',
-                   editor=self._get_table_editor(names)),
-                '|<>']],
+            [
+                ["name{Filter name}", "_"],
+                [
+                    Item(
+                        "rules",
+                        id="rules_table",
+                        editor=self._get_table_editor(names),
+                    ),
+                    "|<>",
+                ],
+            ],
             id=self.view_id,
-            title='Edit Filter',
-            kind='livemodal',
+            title="Edit Filter",
+            kind="livemodal",
             resizable=True,
-            buttons=['OK', 'Cancel'],
+            buttons=["OK", "Cancel"],
             width=0.4,
-            height=0.3)
+            height=0.3,
+        )
 
     def _get_table_editor(self, names):
         """ Returns a table editor to use for editing the filter.
         """
         from .api import TableEditor
 
-        return TableEditor(columns=generic_table_filter_rule_columns,
-                           orientation='vertical',
-                           deletable=True,
-                           sortable=False,
-                           configurable=False,
-                           auto_size=False,
-                           auto_add=True,
-                           row_factory=GenericTableFilterRule,
-                           row_factory_kw={
-                               'filter': self,
-                               'name_editor': EnumEditor(values=names)})
+        return TableEditor(
+            columns=generic_table_filter_rule_columns,
+            orientation="vertical",
+            deletable=True,
+            sortable=False,
+            configurable=False,
+            auto_size=False,
+            auto_add=True,
+            row_factory=GenericTableFilterRule,
+            row_factory_kw={
+                "filter": self,
+                "name_editor": EnumEditor(values=names),
+            },
+        )
 
     def __getstate__(self):
         """ Returns the state to be pickled.
@@ -525,9 +548,9 @@ class RuleTableFilter(TableFilter):
         This definition overrides **object**.
         """
         dict = self.__dict__.copy()
-        if '_object' in dict:
-            del dict['_object']
-            del dict['_trait_values']
+        if "_object" in dict:
+            del dict["_object"]
+            del dict["_trait_values"]
         return dict
 
     def _rules_changed(self, rules):
@@ -536,16 +559,17 @@ class RuleTableFilter(TableFilter):
         for rule in rules:
             rule.filter = self
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Defines the columns to display in the menu filter rule table:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Columns to display in the table for menu filters.
 menu_table_filter_rule_columns = [
-    GenericTableFilterRuleEnabledColumn(name='enabled', label=''),
-    GenericTableFilterRuleNameColumn(name='name'),
-    ObjectColumn(name='operation'),
-    GenericTableFilterRuleValueColumn(name='value')
+    GenericTableFilterRuleEnabledColumn(name="enabled", label=""),
+    GenericTableFilterRuleNameColumn(name="name"),
+    ObjectColumn(name="operation"),
+    GenericTableFilterRuleValueColumn(name="value"),
 ]
 
 
@@ -553,15 +577,15 @@ class MenuTableFilter(RuleTableFilter):
     """ A table filter based on a menu of rules.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Overrides the default **name** trait
-    name = 'Default menu-based filter'
+    name = "Default menu-based filter"
 
     #: Overrides the persistence ID of the view
-    view_id = Str('traitsui.table_filter.MenuTableFilter')
+    view_id = Str("traitsui.table_filter.MenuTableFilter")
 
     def filter(self, object):
         """ Returns whether a specified object meets the filter or search
@@ -576,11 +600,12 @@ class MenuTableFilter(RuleTableFilter):
         """ Returns a user8readable description of what kind of object
             satisfies the filter.
         """
-        result = ' and '.join([rule.description() for rule in self.rules
-                               if rule.enabled])
-        if result != '':
+        result = " and ".join(
+            [rule.description() for rule in self.rules if rule.enabled]
+        )
+        if result != "":
             return result
-        return 'All items'
+        return "All items"
 
     def _get_table_editor(self, names):
         """ Returns a table editor to use for editing the filter.
@@ -590,33 +615,38 @@ class MenuTableFilter(RuleTableFilter):
         names = self._object.editable_traits()
         name_editor = EnumEditor(values=names)
         if len(self.rules) == 0:
-            self.rules = [GenericTableFilterRule(
-                filter=self,
-                name_editor=name_editor).trait_set(
-                name=name)
-                for name in names]
+            self.rules = [
+                GenericTableFilterRule(
+                    filter=self, name_editor=name_editor
+                ).trait_set(name=name)
+                for name in names
+            ]
             for rule in self.rules:
                 rule.enabled = False
 
-        return TableEditor(columns=menu_table_filter_rule_columns,
-                           orientation='vertical',
-                           deletable=True,
-                           sortable=False,
-                           configurable=False,
-                           auto_size=False,
-                           auto_add=True,
-                           row_factory=GenericTableFilterRule,
-                           row_factory_kw={
-                               'filter': self,
-                               'name_editor': name_editor})
+        return TableEditor(
+            columns=menu_table_filter_rule_columns,
+            orientation="vertical",
+            deletable=True,
+            sortable=False,
+            configurable=False,
+            auto_size=False,
+            auto_add=True,
+            row_factory=GenericTableFilterRule,
+            row_factory_kw={"filter": self, "name_editor": name_editor},
+        )
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Define some standard template filters:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
-EvalFilterTemplate = EvalTableFilter(name='Evaluation filter template',
-                                     template=True)
-RuleFilterTemplate = RuleTableFilter(name='Rule-based filter template',
-                                     template=True)
-MenuFilterTemplate = MenuTableFilter(name='Menu-based filter template',
-                                     template=True)
+EvalFilterTemplate = EvalTableFilter(
+    name="Evaluation filter template", template=True
+)
+RuleFilterTemplate = RuleTableFilter(
+    name="Rule-based filter template", template=True
+)
+MenuFilterTemplate = MenuTableFilter(
+    name="Menu-based filter template", template=True
+)

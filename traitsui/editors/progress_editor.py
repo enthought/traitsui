@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -10,11 +10,10 @@
 #
 #  Thanks for using Enthought open source!
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the progress editor factory for all traits toolkit backends,
 """
-
 
 
 from __future__ import absolute_import
@@ -28,9 +27,9 @@ class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for code editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The title
     title = Str
@@ -65,5 +64,3 @@ class ToolkitEditorFactory(EditorFactory):
 
 # Define the Code Editor class.
 ProgressEditor = ToolkitEditorFactory
-
-

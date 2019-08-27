@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,10 +13,9 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """ Defines the set editor factory for all traits user interface toolkits.
 """
-
 
 
 from __future__ import absolute_import
@@ -25,17 +24,18 @@ from ..editor_factory import EditorWithListFactory
 
 from traits.api import Bool, Str
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorWithListFactory):
     """ Editor factory for editors for sets.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Are the items in the set ordered (vs. unordered)?
     ordered = Bool(False)
@@ -49,7 +49,6 @@ class ToolkitEditorFactory(EditorWithListFactory):
     #: Title of right column:
     right_column_title = Str
 
+
 # Define the SetEditor class
 SetEditor = ToolkitEditorFactory
-
-

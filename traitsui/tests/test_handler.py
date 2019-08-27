@@ -17,14 +17,20 @@ from unittest import TestCase
 from pyface.action.api import ActionEvent
 from traits.api import HasTraits, Bool
 from traitsui.api import (
-    Action, CloseAction, Handler, HelpAction, RedoAction, RevertAction, UI,
-    UndoAction
+    Action,
+    CloseAction,
+    Handler,
+    HelpAction,
+    RedoAction,
+    RevertAction,
+    UI,
+    UndoAction,
 )
 
 
 class PyfaceAction(Action):
 
-    name = 'Test Action'
+    name = "Test Action"
 
     performed = Bool
 
@@ -34,7 +40,7 @@ class PyfaceAction(Action):
 
 class TraitsUIAction(Action):
 
-    name = 'Test Action'
+    name = "Test Action"
 
     performed = Bool
 
@@ -121,13 +127,12 @@ class SampleObject(HasTraits):
 
 
 class TestHandler(TestCase):
-
     def test_perform_pyface_action(self):
         object = SampleObject()
         handler = SampleHandler()
         action = PyfaceAction()
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)
@@ -139,7 +144,7 @@ class TestHandler(TestCase):
         handler = SampleHandler()
         action = TraitsUIAction()
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)
@@ -155,9 +160,9 @@ class TestHandler(TestCase):
     def test_perform_action_handler(self):
         object = SampleObject()
         handler = SampleHandler()
-        action = TraitsUIAction(name='action', action='action_handler')
+        action = TraitsUIAction(name="action", action="action_handler")
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)
@@ -173,9 +178,9 @@ class TestHandler(TestCase):
     def test_perform_info_action_handler(self):
         object = SampleObject()
         handler = SampleHandler()
-        action = TraitsUIAction(name='action', action='info_action_handler')
+        action = TraitsUIAction(name="action", action="info_action_handler")
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)
@@ -191,9 +196,9 @@ class TestHandler(TestCase):
     def test_perform_click_handler(self):
         object = SampleObject()
         handler = SampleHandler()
-        action = TraitsUIAction(name='action', action='')
+        action = TraitsUIAction(name="action", action="")
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)
@@ -209,9 +214,9 @@ class TestHandler(TestCase):
     def test_perform_object_handler(self):
         object = SampleObject()
         handler = SampleHandler()
-        action = TraitsUIAction(name='action', action='object_action_handler')
+        action = TraitsUIAction(name="action", action="object_action_handler")
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)
@@ -224,7 +229,7 @@ class TestHandler(TestCase):
         handler = SampleHandler()
         action = UndoAction
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)
@@ -236,7 +241,7 @@ class TestHandler(TestCase):
         handler = SampleHandler()
         action = RedoAction
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)
@@ -248,7 +253,7 @@ class TestHandler(TestCase):
         handler = SampleHandler()
         action = RevertAction
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)
@@ -260,7 +265,7 @@ class TestHandler(TestCase):
         handler = SampleHandler()
         action = CloseAction
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)
@@ -272,7 +277,7 @@ class TestHandler(TestCase):
         handler = SampleHandler()
         action = HelpAction
         event = ActionEvent()
-        ui = UI(handler=handler, context={'object': object})
+        ui = UI(handler=handler, context={"object": object})
         info = ui.info
 
         handler.perform(info, action, event)

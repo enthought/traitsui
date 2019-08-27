@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,17 +13,15 @@
 #  Author: David C. Morrill
 #  Date:   10/25/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the HTML help templates used for formatting Traits UI help pages.
 """
 
 
-
 from __future__ import absolute_import
 
 from traits.api import HasStrictTraits, Str
-
 
 
 # Default HTML for a single Item's help window
@@ -80,23 +78,25 @@ GroupHelp = """
   </TR>
 </TABLE>"""
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'HelpTemplate' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class HelpTemplate(HasStrictTraits):
     """ Contains HTML templates for displaying help.
     """
+
     item_html = Str(ItemHTML)  # Item popup help window HTML document
     group_html = Str(GroupHTML)  # Group help window HTML document
     item_help = Str(ItemHelp)  # Single group item HTML
     group_help = Str(GroupHelp)  # Group level help HTML
-    no_group_help = Str('')        # Missing group level help HTML
+    no_group_help = Str("")  # Missing group level help HTML
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Gets/Sets the current HelpTemplate in use:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 _help_template = HelpTemplate()
 

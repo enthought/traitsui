@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,33 +8,27 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various text editors for the PyQt user interface toolkit.
 """
 
 
-
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
-from traits.api \
-    import TraitError
+from traits.api import TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.text_editor file.
-from traitsui.editors.text_editor \
-    import evaluate_trait, ToolkitEditorFactory
+from traitsui.editors.text_editor import evaluate_trait, ToolkitEditorFactory
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .editor_factory \
-    import ReadonlyEditor as BaseReadonlyEditor
+from .editor_factory import ReadonlyEditor as BaseReadonlyEditor
 
-from .constants \
-    import OKColor
+from .constants import OKColor
 import six
 
 
@@ -48,9 +42,9 @@ class SimpleEditor(Editor):
     #: Background color when input is OK:
     ok_color = OKColor
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Function used to evaluate textual user input:
     evaluate = evaluate_trait
@@ -62,12 +56,12 @@ class SimpleEditor(Editor):
         factory = self.factory
         wtype = self.base_style
         self.evaluate = factory.evaluate
-        self.sync_value(factory.evaluate_name, 'evaluate', 'from')
+        self.sync_value(factory.evaluate_name, "evaluate", "from")
 
         if not factory.multi_line or factory.is_grid_cell or factory.password:
             wtype = QtGui.QLineEdit
 
-        multi_line = (wtype is not QtGui.QLineEdit)
+        multi_line = wtype is not QtGui.QLineEdit
         if multi_line:
             self.scrollable = True
 
@@ -171,7 +165,7 @@ class SimpleEditor(Editor):
     def in_error_state(self):
         """ Returns whether or not the editor is in an error state.
         """
-        return (self.invalid or self._error)
+        return self.invalid or self._error
 
 
 class CustomEditor(SimpleEditor):
@@ -191,8 +185,10 @@ class ReadonlyEditor(BaseReadonlyEditor):
         super(ReadonlyEditor, self).init(parent)
 
         if self.factory.readonly_allow_selection:
-            flags = (self.control.textInteractionFlags() |
-                     QtCore.Qt.TextSelectableByMouse)
+            flags = (
+                self.control.textInteractionFlags()
+                | QtCore.Qt.TextSelectableByMouse
+            )
             self.control.setTextInteractionFlags(flags)
 
     def update_editor(self):
@@ -202,14 +198,14 @@ class ReadonlyEditor(BaseReadonlyEditor):
         new_value = self.str_value
 
         if self.factory.password:
-            new_value = '*' * len(new_value)
+            new_value = "*" * len(new_value)
 
         self.control.setText(new_value)
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'TextEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Same as SimpleEditor for a text editor.
 TextEditor = SimpleEditor

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,61 +13,60 @@
 #  Author: David C. Morrill
 #  Date:   12/22/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Trait definition for a wxPython-based font.
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import Trait, TraitHandler, TraitError
+from traits.api import Trait, TraitHandler, TraitError
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Convert a string into a valid 'wxFont' object (if possible):
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Mapping of strings to valid wxFont families
 font_families = {
-    'default': wx.FONTFAMILY_DEFAULT,
-    'decorative': wx.FONTFAMILY_DECORATIVE,
-    'roman': wx.FONTFAMILY_ROMAN,
-    'script': wx.FONTFAMILY_SCRIPT,
-    'swiss': wx.FONTFAMILY_SWISS,
-    'modern': wx.FONTFAMILY_MODERN
+    "default": wx.FONTFAMILY_DEFAULT,
+    "decorative": wx.FONTFAMILY_DECORATIVE,
+    "roman": wx.FONTFAMILY_ROMAN,
+    "script": wx.FONTFAMILY_SCRIPT,
+    "swiss": wx.FONTFAMILY_SWISS,
+    "modern": wx.FONTFAMILY_MODERN,
 }
 
 # Mapping of strings to wxFont styles
-font_styles = {
-    'slant': wx.FONTSTYLE_SLANT,
-    'italic': wx.FONTSTYLE_ITALIC
-}
+font_styles = {"slant": wx.FONTSTYLE_SLANT, "italic": wx.FONTSTYLE_ITALIC}
 
 # Mapping of strings wxFont weights
-font_weights = {
-    'light': wx.FONTWEIGHT_LIGHT,
-    'bold': wx.FONTWEIGHT_BOLD
-}
+font_weights = {"light": wx.FONTWEIGHT_LIGHT, "bold": wx.FONTWEIGHT_BOLD}
 
 # Strings to ignore in text representations of fonts
-font_noise = ['pt', 'point', 'family']
+font_noise = ["pt", "point", "family"]
 
 
 def font_to_str(font):
     """ Converts a wx.Font into a string description of itself.
     """
-    weight = {wx.FONTWEIGHT_LIGHT: ' Light',
-              wx.FONTWEIGHT_BOLD: ' Bold'}.get(font.GetWeight(), '')
-    style = {wx.FONTSTYLE_SLANT: ' Slant',
-             wx.FONTSTYLE_ITALIC: ' Italic'}.get(font.GetStyle(), '')
-    underline = ''
+    weight = {wx.FONTWEIGHT_LIGHT: " Light", wx.FONTWEIGHT_BOLD: " Bold"}.get(
+        font.GetWeight(), ""
+    )
+    style = {wx.FONTSTYLE_SLANT: " Slant", wx.FONTSTYLE_ITALIC: " Italic"}.get(
+        font.GetStyle(), ""
+    )
+    underline = ""
     if font.GetUnderlined():
-        underline = ' underline'
-    return '%s point %s%s%s%s' % (
-           font.GetPointSize(), font.GetFaceName(), style, weight, underline)
+        underline = " underline"
+    return "%s point %s%s%s%s" % (
+        font.GetPointSize(),
+        font.GetFaceName(),
+        style,
+        weight,
+        underline,
+    )
 
 
 def create_traitsfont(value):
@@ -90,7 +89,7 @@ def create_traitsfont(value):
             style = font_styles[lword]
         elif lword in font_weights:
             weight = font_weights[lword]
-        elif lword == 'underline':
+        elif lword == "underline":
             underline = 1
         elif lword not in font_noise:
             if point_size is None:
@@ -100,26 +99,29 @@ def create_traitsfont(value):
                 except:
                     pass
             facename.append(word)
-    return TraitsFont(point_size or 10, family, style, weight, underline,
-                      ' '.join(facename))
+    return TraitsFont(
+        point_size or 10, family, style, weight, underline, " ".join(facename)
+    )
 
 
 class TraitsFont(wx.Font):
     """ A Traits-specific wx.Font.
     """
+
     def __reduce_ex__(self, protocol):
         """ Returns the pickleable form of a TraitsFont object.
         """
-        return (create_traitsfont, (font_to_str(self), ))
+        return (create_traitsfont, (font_to_str(self),))
 
     def __str__(self):
         """ Returns a printable form of the font.
         """
         return font_to_str(self)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'TraitWXFont' class'
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class TraitWXFont(TraitHandler):
@@ -127,6 +129,7 @@ class TraitWXFont(TraitHandler):
     descriptor strings; the value actually assigned is the corresponding
     TraitsFont.
     """
+
     def validate(self, object, name, value):
         """ Validates that the value is a valid font descriptor string. If so,
         it returns the corresponding TraitsFont; otherwise, it raises a
@@ -140,16 +143,18 @@ class TraitWXFont(TraitHandler):
         except:
             pass
 
-        raise TraitError(object, name, 'a font descriptor string',
-                         repr(value))
+        raise TraitError(object, name, "a font descriptor string", repr(value))
 
     def info(self):
-        return ("a string describing a font (e.g. '12 pt bold italic "
-                "swiss family Arial' or 'default 12')")
+        return (
+            "a string describing a font (e.g. '12 pt bold italic "
+            "swiss family Arial' or 'default 12')"
+        )
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Define a wxPython specific font trait:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 ### Note: Declare the editor to be a function which returns the FontEditor
 # class from traits ui to avoid circular import issues. For backwards
@@ -161,11 +166,13 @@ class TraitWXFont(TraitHandler):
 
 def get_font_editor(*args, **traits):
     from .font_editor import ToolkitEditorFactory
+
     return ToolkitEditorFactory(*args, **traits)
+
 
 fh = TraitWXFont()
 WxFont = Trait(
-    wx.SystemSettings.GetFont(
-        wx.SYS_DEFAULT_GUI_FONT),
+    wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT),
     fh,
-    editor=get_font_editor)
+    editor=get_font_editor,
+)

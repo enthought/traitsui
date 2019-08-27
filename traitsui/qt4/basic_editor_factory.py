@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -10,7 +10,7 @@
 #
 #  Thanks for using Enthought open source!
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 ## Deprecated proxy for the BasicEditorFactory class declared in
 # traitsui, declared here just for backward compatibility.
@@ -18,13 +18,14 @@
 from __future__ import absolute_import
 import warnings
 
-from traitsui.basic_editor_factory \
-    import BasicEditorFactory as AbstractBasicEditorFactory
+from traitsui.basic_editor_factory import (
+    BasicEditorFactory as AbstractBasicEditorFactory,
+)
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'BasicEditorFactory' class
 #   Deprecated alias for traitsui.editor_factory.EditorFactory
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class BasicEditorFactory(AbstractBasicEditorFactory):
@@ -34,7 +35,8 @@ class BasicEditorFactory(AbstractBasicEditorFactory):
 
     def __init__(self, *args, **kwds):
         super(BasicEditorFactory, self).__init__(*args, **kwds)
-        warnings.warn("DEPRECATED: Use traitsui.basic_editor_factory"
-                      ".BasicEditorFactory instead.", DeprecationWarning)
-
-
+        warnings.warn(
+            "DEPRECATED: Use traitsui.basic_editor_factory"
+            ".BasicEditorFactory instead.",
+            DeprecationWarning,
+        )

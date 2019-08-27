@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   01/27/2006
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the code editor factory for all traits toolkit backends,
 useful for tools such as debuggers.
 """
-
 
 
 from __future__ import absolute_import
@@ -27,18 +26,18 @@ from traits.api import Instance, Str, Color, Enum, Bool
 
 from ..editor_factory import EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for code editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Object trait containing list of line numbers to mark (optional)
     mark_lines = Str
@@ -64,7 +63,7 @@ class ToolkitEditorFactory(EditorFactory):
     selected_color = Color(0xA4FFFF)
 
     #: Where should the search toolbar be placed?
-    search = Enum('top', 'bottom', 'none')
+    search = Enum("top", "bottom", "none")
 
     #: Background color for lines that match the current search
     search_color = Color(0xFFFF94)
@@ -88,13 +87,13 @@ class ToolkitEditorFactory(EditorFactory):
     auto_scroll = Bool(True)
 
     #: Optional key bindings associated with the editor
-    key_bindings = Instance('traitsui.key_bindings.KeyBindings')
+    key_bindings = Instance("traitsui.key_bindings.KeyBindings")
 
     #: Calltip clicked event
     calltip_clicked = Str
 
     #: The lexer to use. Default is 'python'; 'null' indicates no lexing.
-    lexer = Str('python')
+    lexer = Str("python")
 
     #: Object trait containing the list of line numbers to dim (optional)
     dim_lines = Str
@@ -113,5 +112,3 @@ class ToolkitEditorFactory(EditorFactory):
 
 # Define the Code Editor class.
 CodeEditor = ToolkitEditorFactory
-
-

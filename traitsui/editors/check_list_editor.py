@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -11,12 +11,11 @@
 #
 #  Author: David C. Morrill
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the editor factory for multi-selection enumerations, for all traits toolkit
 backends.
 """
-
 
 
 from __future__ import absolute_import
@@ -25,21 +24,22 @@ from traits.api import Range
 
 from ..editor_factory import EditorWithListFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorWithListFactory):
     """ Editor factory for checklists.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Number of columns to use when the editor is displayed as a grid
     cols = Range(1, 20)
+
 
 # Define the CheckListEditor class
 CheckListEditor = ToolkitEditorFactory

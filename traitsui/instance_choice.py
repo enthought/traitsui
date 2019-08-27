@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   08/25/2005
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various instance descriptors used by the instance editor and
     instance editor factory classes.
 """
-
 
 
 from __future__ import absolute_import
@@ -33,9 +32,9 @@ import six
 
 class InstanceChoiceItem(HasPrivateTraits):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: User interface name for the item
     name = Str
@@ -79,20 +78,20 @@ class InstanceChoiceItem(HasPrivateTraits):
 
 class InstanceChoice(InstanceChoiceItem):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Object associated with the item
     object = Any
 
     #: The name of the object trait containing its user interface name:
-    name_trait = Str('name')
+    name_trait = Str("name")
 
     def get_name(self, object=None):
         """ Returns the name of the item.
         """
-        if self.name != '':
+        if self.name != "":
             return self.name
 
         name = getattr(self.object, self.name_trait, None)
@@ -109,14 +108,14 @@ class InstanceChoice(InstanceChoiceItem):
     def is_compatible(self, object):
         """ Indicates whether a specified object is compatible with the item.
         """
-        return (object is self.object)
+        return object is self.object
 
 
 class InstanceFactoryChoice(InstanceChoiceItem):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Indicates whether an instance compatible with this item can be dragged and
     #: dropped rather than created
@@ -141,10 +140,10 @@ class InstanceFactoryChoice(InstanceChoiceItem):
     def get_name(self, object=None):
         """ Returns the name of the item.
         """
-        if self.name != '':
+        if self.name != "":
             return self.name
 
-        name = getattr(object, 'name', None)
+        name = getattr(object, "name", None)
         if isinstance(name, six.string_types):
             return name
 
@@ -180,9 +179,9 @@ class InstanceFactoryChoice(InstanceChoiceItem):
 
 class InstanceDropChoice(InstanceFactoryChoice):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Indicates whether an instance compatible with this item can be dragged and
     #: dropped rather than created . This value overrides the default.

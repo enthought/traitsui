@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,46 +13,40 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various image enumeration editors for the wxPython user interface toolkit.
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import Any
+from traits.api import Any
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.image_enum_editor file.
-from traitsui.editors.image_enum_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.image_enum_editor import ToolkitEditorFactory
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .helper \
-    import bitmap_cache, position_window, TraitsUIPanel
+from .helper import bitmap_cache, position_window, TraitsUIPanel
 
-from .constants \
-    import WindowColor
+from .constants import WindowColor
 
-from .image_control \
-    import ImageControl
+from .image_control import ImageControl
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ReadonlyEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ReadonlyEditor(Editor):
     """ Read-only style of image enumeration editor, which displays a single
     ImageControl, representing the object trait's value.
     """
+
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -60,12 +54,12 @@ class ReadonlyEditor(Editor):
         self.control = ImageControl(
             parent,
             bitmap_cache(
-                '%s%s%s' %
-                (self.factory.prefix,
-                 self.str_value,
-                 self.factory.suffix),
+                "%s%s%s"
+                % (self.factory.prefix, self.str_value, self.factory.suffix),
                 False,
-                self.factory._image_path))
+                self.factory._image_path,
+            ),
+        )
 
     def update_editor(self):
         """ Updates the editor when the object trait changes externally to the
@@ -73,12 +67,12 @@ class ReadonlyEditor(Editor):
         """
         self.control.Bitmap(
             bitmap_cache(
-                '%s%s%s' %
-                (self.factory.prefix,
-                 self.str_value,
-                 self.factory.suffix),
+                "%s%s%s"
+                % (self.factory.prefix, self.str_value, self.factory.suffix),
                 False,
-                self.factory._image_path))
+                self.factory._image_path,
+            )
+        )
 
 
 class SimpleEditor(ReadonlyEditor):
@@ -87,6 +81,7 @@ class SimpleEditor(ReadonlyEditor):
     displays a dialog box for selecting an image corresponding to a different
     value.
     """
+
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -108,9 +103,10 @@ class CustomEditor(Editor):
     ImageControls. The user can click an image to select the corresponding
     value.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     update_handler = Any  # Callback to call when any button clicked
 
@@ -141,14 +137,13 @@ class CustomEditor(Editor):
             control = ImageControl(
                 panel,
                 bitmap_cache(
-                    '%s%s%s' %
-                    (factory.prefix,
-                     name,
-                     factory.suffix),
+                    "%s%s%s" % (factory.prefix, name, factory.suffix),
                     False,
-                    factory._image_path),
+                    factory._image_path,
+                ),
                 value == cur_value,
-                self.update_object)
+                self.update_object,
+            )
             control.value = value
             sizer.Add(control, 0, wx.ALL, 2)
             self.set_tooltip(control)
@@ -175,22 +170,24 @@ class CustomEditor(Editor):
 class ImageEnumDialog(wx.Frame):
     """ Dialog box for selecting an ImageControl
     """
+
     def __init__(self, editor):
         """ Initializes the object.
         """
-        wx.Frame.__init__(self, editor.control, -1, '',
-                          style=wx.SIMPLE_BORDER)
+        wx.Frame.__init__(self, editor.control, -1, "", style=wx.SIMPLE_BORDER)
         self.SetBackgroundColour(WindowColor)
         wx.EVT_ACTIVATE(self, self._on_close_dialog)
         self._closed = False
 
-        dlg_editor = CustomEditor(self,
-                                  factory=editor.factory,
-                                  ui=editor.ui,
-                                  object=editor.object,
-                                  name=editor.name,
-                                  description=editor.description,
-                                  update_handler=self._close_dialog)
+        dlg_editor = CustomEditor(
+            self,
+            factory=editor.factory,
+            ui=editor.ui,
+            object=editor.object,
+            name=editor.name,
+            description=editor.description,
+            update_handler=self._close_dialog,
+        )
 
         dlg_editor.init(self)
 
@@ -215,5 +212,3 @@ class ImageEnumDialog(wx.Frame):
         if not self._closed:
             self._closed = True
             self.Destroy()
-
-

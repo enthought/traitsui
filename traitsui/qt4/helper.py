@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,7 +8,7 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines helper functions and classes used to define PyQt-based trait
     editors and trait editor factories.
@@ -25,14 +25,14 @@ from traitsui.ui_traits import SequenceTypes
 import six
 
 
-is_pyqt = (qt_api in {'pyqt', 'pyqt5'})
+is_pyqt = qt_api in {"pyqt", "pyqt5"}
 
 
 #: Layout orientation for a control and its associated editor
-Orientation = Enum('horizontal', 'vertical')
+Orientation = Enum("horizontal", "vertical")
 
 #: Dock-related stubs.
-DockStyle = Enum('horizontal', 'vertical', 'tab', 'fixed')
+DockStyle = Enum("horizontal", "vertical", "tab", "fixed")
 
 
 def pixmap_cache(name, path=None):
@@ -42,18 +42,18 @@ def pixmap_cache(name, path=None):
     contain a path component, 'path' is used (or if 'path' is not specified,
     the local 'images' directory is used).
     """
-    if name[:1] == '@':
-        image = convert_image(name.replace(' ', '_').lower())
+    if name[:1] == "@":
+        image = convert_image(name.replace(" ", "_").lower())
         if image is not None:
             return image.create_image()
 
     name_path, name = os.path.split(name)
-    name = name.replace(' ', '_').lower()
+    name = name.replace(" ", "_").lower()
     if name_path:
         filename = os.path.join(name_path, name)
     else:
         if path is None:
-            filename = os.path.join(os.path.dirname(__file__), 'images', name)
+            filename = os.path.join(os.path.dirname(__file__), "images", name)
         else:
             filename = os.path.join(path, name)
     filename = os.path.abspath(filename)
@@ -118,8 +118,9 @@ def position_window(window, width=None, height=None, parent=None):
     y += cdy + fheight
 
     # Position the window (making sure it will fit on the screen).
-    window.move(max(0, min(x, screen_dx - width)),
-                max(0, min(y, screen_dy - height)))
+    window.move(
+        max(0, min(x, screen_dx - width)), max(0, min(y, screen_dy - height))
+    )
 
 
 def restore_window(ui):
@@ -183,6 +184,7 @@ class IconButton(QtGui.QPushButton):
 # ------------------------------------------------------------------------
 # Text Rendering helpers
 # ------------------------------------------------------------------------
+
 
 def wrap_text_with_elision(text, font, width, height):
     """ Wrap paragraphs to fit inside a given size, eliding if too long.

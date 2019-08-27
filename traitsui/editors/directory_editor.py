@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Enthought, Inc.
 # All rights reserved.
 #
@@ -11,27 +11,26 @@
 #
 #  Author: David C. Morrill
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """ Defines the directory editor factory for all traits toolkit backends.
 """
-
 
 
 from __future__ import absolute_import
 
 from .file_editor import ToolkitEditorFactory as EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for directory editors.
     """
+
     pass
+
 
 # Define the DirectoryEditor class
 DirectoryEditor = ToolkitEditorFactory
-
-

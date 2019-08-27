@@ -94,6 +94,7 @@ CV = ContextValue
 
 # Trait definitions useful in defining bindable editor traits ---------------
 
+
 def CVType(type, **metadata):
     """ Factory that creates an Either type or ContextValue trait.
 
@@ -113,7 +114,7 @@ def CVType(type, **metadata):
         A trait which can either hold a constant of the specified
         type or an instance of the ContextValue class.
     """
-    metadata.setdefault('sync_value', 'to')
+    metadata.setdefault("sync_value", "to")
     return Either(type, InstanceOfContextValue, **metadata)
 
 

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2006, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   01/05/2006
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the tree-based Python value editor and the value editor factory.
 """
-
 
 
 from __future__ import absolute_import
@@ -34,18 +33,18 @@ from ..editor_factory import EditorFactory
 
 from ..editor import Editor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class _ValueEditor(Editor):
     """ Simple style of editor for values, which displays a tree.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Is the editor read only?
     readonly = false
@@ -65,15 +64,13 @@ class _ValueEditor(Editor):
             auto_open=self.factory.auto_open,
             hide_root=True,
             editable=False,
-            nodes=value_tree_nodes
+            nodes=value_tree_nodes,
         )
-        self._ui = self.edit_traits(parent=parent, view=View(
-            Item('root',
-                 show_label=False,
-                 editor=editor
-                 ),
-            kind='subpanel'
-        )
+        self._ui = self.edit_traits(
+            parent=parent,
+            view=View(
+                Item("root", show_label=False, editor=editor), kind="subpanel"
+            ),
         )
         self._ui.parent = self.ui
         self.control = self._ui.control
@@ -82,9 +79,7 @@ class _ValueEditor(Editor):
         """ Updates the editor when the object trait changes external to the
             editor.
         """
-        self.root = RootNode(name='',
-                             value=self.value,
-                             readonly=self.readonly)
+        self.root = RootNode(name="", value=self.value, readonly=self.readonly)
 
     def dispose(self):
         """ Disposes of the contents of an editor.
@@ -103,14 +98,13 @@ class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for tree-based value editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Number of tree levels to automatically open
     auto_open = Int(2)
 
+
 # Define the ValueEditor class.
 ValueEditor = ToolkitEditorFactory
-
-

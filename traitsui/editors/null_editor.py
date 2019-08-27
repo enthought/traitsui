@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   07/26/2006
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Defines a completely empty editor, intended to be used as a spacer.
 """
-
 
 
 from __future__ import absolute_import
@@ -30,11 +29,10 @@ from ..toolkit import toolkit_object
 
 
 def null_editor(*args, **traits):
-    return toolkit_object('null_editor:NullEditor')(*args, **traits)
+    return toolkit_object("null_editor:NullEditor")(*args, **traits)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 NullEditor = BasicEditorFactory(klass=null_editor)
-
-

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/18/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the abstract ViewElement class that all trait view template items
     (i.e., View, Group, Item, Include) derive from.
 """
-
 
 
 from __future__ import absolute_import
@@ -27,19 +26,24 @@ import re
 
 from traits.api import HasPrivateTraits, Trait, Bool
 
-from .ui_traits import (AnObject, DockStyle, EditorStyle, ExportType,
-                        HelpId, Image)
+from .ui_traits import (
+    AnObject,
+    DockStyle,
+    EditorStyle,
+    ExportType,
+    HelpId,
+    Image,
+)
 
 from .util import str_rfind
-
 
 
 label_pat = re.compile(r"^(.*)\[(.*)\](.*)$", re.MULTILINE | re.DOTALL)
 label_pat2 = re.compile(r"^(.*){(.*)}(.*)$", re.MULTILINE | re.DOTALL)
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ViewElement' class (abstract):
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ViewElement(HasPrivateTraits):
@@ -70,9 +74,9 @@ class DefaultViewElement(ViewElement):
         value is a view element.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The default context object to edit:
     object = AnObject
@@ -92,25 +96,26 @@ class DefaultViewElement(ViewElement):
     #: Should labels be added to items in a group?
     show_labels = Bool(True)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # The container trait used by ViewSubElements:
 Container = Trait(DefaultViewElement(), ViewElement)
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ViewSubElement' class (abstract):
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ViewSubElement(ViewElement):
     """ Abstract class representing elements that can be contained in a view.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The object this ViewSubElement is contained in; must be a ViewElement.
     container = Container
@@ -125,8 +130,8 @@ class ViewSubElement(ViewElement):
         if col < 0:
             return value
 
-        items = (value[:col].strip(), value[col + 1:].strip())
-        if items[assign] != '':
+        items = (value[:col].strip(), value[col + 1 :].strip())
+        if items[assign] != "":
             setattr(self, name, items[assign])
 
         return items[result]
@@ -136,7 +141,7 @@ class ViewSubElement(ViewElement):
         """
         col = string.find(option)
         if col >= 0:
-            string = string[: col] + string[col + len(option):]
+            string = string[:col] + string[col + len(option) :]
             setattr(self, name, value)
 
         return string
@@ -144,11 +149,11 @@ class ViewSubElement(ViewElement):
     def _parse_style(self, value):
         """ Parses any of the one-character forms of the **style** trait.
         """
-        value = self._option(value, '$', 'style', 'simple')
-        value = self._option(value, '@', 'style', 'custom')
-        value = self._option(value, '*', 'style', 'text')
-        value = self._option(value, '~', 'style', 'readonly')
-        value = self._split('style', value, ';', str_rfind, 1, 0)
+        value = self._option(value, "$", "style", "simple")
+        value = self._option(value, "@", "style", "custom")
+        value = self._option(value, "*", "style", "text")
+        value = self._option(value, "~", "style", "readonly")
+        value = self._split("style", value, ";", str_rfind, 1, 0)
 
         return value
 
@@ -164,7 +169,7 @@ class ViewSubElement(ViewElement):
         empty = False
         if match is not None:
             self.label = match.group(2).strip()
-            empty = (self.label == '')
+            empty = self.label == ""
             value = match.group(1) + match.group(3)
 
         return (value, empty)
@@ -174,13 +179,13 @@ class ViewSubElement(ViewElement):
         """
         pass
 
-    def _repr_value(self, value, prefix='', suffix='', ignore=''):
+    def _repr_value(self, value, prefix="", suffix="", ignore=""):
         """ Returns a "pretty print" version of a specified Item trait value.
         """
         if value == ignore:
-            return ''
+            return ""
 
-        return '%s%s%s' % (prefix, value, suffix)
+        return "%s%s%s" % (prefix, value, suffix)
 
     def _repr_options(self, *names):
         """ Returns a 'pretty print' version of a list of traits.
@@ -193,12 +198,13 @@ class ViewSubElement(ViewElement):
 
         if len(result) > 0:
             n = max([len(name) for name, value in result])
-            return ',\n'.join(['%s = %s' % (name.ljust(n), value)
-                               for name, value in result])
+            return ",\n".join(
+                ["%s = %s" % (name.ljust(n), value) for name, value in result]
+            )
 
         return None
 
-    def _indent(self, string, indent='    '):
+    def _indent(self, string, indent="    "):
         """ Indents each line in a specified string by 4 spaces.
         """
-        return '\n'.join([indent + s for s in string.split('\n')])
+        return "\n".join([indent + s for s in string.split("\n")])

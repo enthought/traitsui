@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2009, Enthought, Inc.
 # All rights reserved.
 #
@@ -10,7 +10,7 @@
 #
 # Author: Evan Patterson
 # Date: 06/25/09
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ A renderer which will display a cell-specific image in addition to some
     text displayed in the same way the default renderer would.
@@ -33,9 +33,9 @@ class TableImageRenderer(TableDelegate):
     #: Should the image be scaled to the size of the cell
     scale_to_cell = Bool(True)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  TableImageRenderer interface
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def get_image_for_obj(self, value, row, col):
         """ Return the image for the cell given the raw cell value and the row
@@ -43,9 +43,9 @@ class TableImageRenderer(TableDelegate):
         """
         return None
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  QAbstractItemDelegate interface
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def paint(self, painter, option, index):
         """ Overriden to draw images.

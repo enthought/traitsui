@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/25/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines various helper functions that are useful for creating Traits-based
     user interfaces.
 """
-
 
 
 from __future__ import absolute_import
@@ -31,31 +30,31 @@ from .ui_traits import SequenceTypes
 import six
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Layout orientation for a control and its associated editor
-Orientation = Enum('horizontal', 'vertical')
+Orientation = Enum("horizontal", "vertical")
 
 # Docking drag bar style:
-DockStyle = Enum('horizontal', 'vertical', 'tab', 'fixed')
+DockStyle = Enum("horizontal", "vertical", "tab", "fixed")
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Return a 'user-friendly' name for a specified trait:
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 
 def user_name_for(name):
     """ Returns a "user-friendly" name for a specified trait.
     """
-    name = name.replace('_', ' ')
+    name = name.replace("_", " ")
     name = name[:1].upper() + name[1:]
-    result = ''
+    result = ""
     last_lower = 0
     for c in name:
         if c.isupper() and last_lower:
-            result += ' '
+            result += " "
         last_lower = c.islower()
         result += c
     return result
@@ -67,11 +66,11 @@ def commatize(value):
     """
     s = str(abs(value))
     s = s.rjust(((len(s) + 2) / 3) * 3)
-    result = ','.join([s[i: i + 3] for i in range(0, len(s), 3)]).lstrip()
+    result = ",".join([s[i : i + 3] for i in range(0, len(s), 3)]).lstrip()
     if value >= 0:
         return result
 
-    return '-' + result
+    return "-" + result
 
 
 def enum_values_changed(values, strfunc=six.text_type):
@@ -82,7 +81,7 @@ def enum_values_changed(values, strfunc=six.text_type):
         data = [(strfunc(v), n) for n, v in values.items()]
         if len(data) > 0:
             data.sort(key=itemgetter(0))
-            col = data[0][0].find(':') + 1
+            col = data[0][0].find(":") + 1
             if col > 0:
                 data = [(n[col:], v) for n, v in data]
     elif not isinstance(values, SequenceTypes):

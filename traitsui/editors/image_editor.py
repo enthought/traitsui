@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   06/05/2007
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Traits UI 'display only' image editor.
 """
-
 
 
 from __future__ import absolute_import
@@ -29,9 +28,9 @@ from ..basic_editor_factory import BasicEditorFactory
 
 from ..toolkit import toolkit_object
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ImageEditor' editor factory class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ImageEditor(BasicEditorFactory):
@@ -61,6 +60,4 @@ class ImageEditor(BasicEditorFactory):
     def _get_klass(self):
         """ Returns the editor class to be instantiated.
         """
-        return toolkit_object('image_editor:_ImageEditor')
-
-
+        return toolkit_object("image_editor:_ImageEditor")

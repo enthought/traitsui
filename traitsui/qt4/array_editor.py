@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: David C. Morrill
 #  Date:   01/10/2006
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines array editors for the PyQt user interface toolkit.
 """
@@ -23,15 +23,16 @@
 # compatibility. The class has been moved to the
 # traitsui.editors.array_editor file.
 from __future__ import absolute_import
-from traitsui.editors.array_editor \
-    import SimpleEditor as BaseSimpleEditor, ToolkitEditorFactory
+from traitsui.editors.array_editor import (
+    SimpleEditor as BaseSimpleEditor,
+    ToolkitEditorFactory,
+)
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class SimpleEditor(BaseSimpleEditor, Editor):
@@ -47,5 +48,3 @@ class ReadonlyEditor(SimpleEditor):
 
     #: Set the value of the readonly trait.
     readonly = True
-
-

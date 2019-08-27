@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,7 +8,7 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the key binding editor for use with the KeyBinding class. This is a
 specialized editor used to associate a particular key with a control (i.e., the
@@ -16,32 +16,30 @@ key binding editor).
 """
 
 
-
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
-from traits.api \
-    import Bool, Event
+from traits.api import Bool, Event
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.key_binding_editor file.
-from traitsui.editors.key_binding_editor \
-    import KeyBindingEditor as ToolkitEditorFactory
+from traitsui.editors.key_binding_editor import (
+    KeyBindingEditor as ToolkitEditorFactory,
+)
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .key_event_to_name \
-    import key_event_to_name
+from .key_event_to_name import key_event_to_name
 
 
 class KeyBindingEditor(Editor):
     """ An editor for modifying bindings of keys to controls.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Does the editor's control have focus currently?
     has_focus = Bool(False)
@@ -87,15 +85,18 @@ class KeyBindingEditor(Editor):
         key_name = key_event_to_name(event)
         cur_binding = binding.owner.key_binding_for(binding, key_name)
         if cur_binding is not None:
-            if QtGui.QMessageBox.question(
-                self.control,
-                "Duplicate Key Definition",
-                "'%s' has already been assigned to '%s'.\n"
-                "Do you wish to continue?" %
-                (key_name,
-                 cur_binding.description),
-                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
-                    QtGui.QMessageBox.No) != QtGui.QMessageBox.Yes:
+            if (
+                QtGui.QMessageBox.question(
+                    self.control,
+                    "Duplicate Key Definition",
+                    "'%s' has already been assigned to '%s'.\n"
+                    "Do you wish to continue?"
+                    % (key_name, cur_binding.description),
+                    QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
+                    QtGui.QMessageBox.No,
+                )
+                != QtGui.QMessageBox.Yes
+            ):
                 return
 
         self.value = key_name
@@ -103,12 +104,13 @@ class KeyBindingEditor(Editor):
     def _clear_changed(self):
         """ Handles a clear field event.
         """
-        self.value = ''
+        self.value = ""
 
 
 class KeyBindingCtrl(QtGui.QLabel):
     """ PyQt control for editing key bindings.
     """
+
     def __init__(self, editor, parent=None):
         super(KeyBindingCtrl, self).__init__(parent)
 
@@ -145,7 +147,7 @@ class KeyBindingCtrl(QtGui.QLabel):
 
         if self.editor.has_focus:
             p.setRenderHint(QtGui.QPainter.Antialiasing, True)
-            pen = QtGui.QPen(QtGui.QColor('tomato'))
+            pen = QtGui.QPen(QtGui.QColor("tomato"))
             pen.setWidth(2)
             p.setPen(pen)
             p.drawRect(1, 1, w - 2, h - 2)

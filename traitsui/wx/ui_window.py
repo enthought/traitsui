@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,25 +13,22 @@
 #  Author: David C. Morrill
 #  Date:   08/23/2008
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ A base class for creating custom Traits UI windows.
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import HasPrivateTraits, Instance, Property
+from traits.api import HasPrivateTraits, Instance, Property
 
-from .helper \
-    import init_wx_handlers, BufferDC
+from .helper import init_wx_handlers, BufferDC
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'UIWindow' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class UIWindow(HasPrivateTraits):
@@ -50,15 +47,15 @@ class UIWindow(HasPrivateTraits):
     #: The current height of the window:
     height = Property
 
-    #-- Public Methods -------------------------------------------------------
+    # -- Public Methods -------------------------------------------------------
 
     def __init__(self, parent, **traits):
         """ Creates and initializes the window.
         """
         super(UIWindow, self).__init__(**traits)
-        self.control = wx.Window(parent, -1,
-                                 size=self.size,
-                                 style=wx.FULL_REPAINT_ON_RESIZE)
+        self.control = wx.Window(
+            parent, -1, size=self.size, style=wx.FULL_REPAINT_ON_RESIZE
+        )
         init_wx_handlers(self.control, self)
 
     def refresh(self, x=None, y=None, dx=None, dy=None):
@@ -80,7 +77,7 @@ class UIWindow(HasPrivateTraits):
         """
         self.control.ReleaseMouse()
 
-    #-- wxPython Event Handlers ----------------------------------------------
+    # -- wxPython Event Handlers ----------------------------------------------
 
     def _erase_background(self, event):
         """ Never, ever, do anything in this handler.
@@ -100,7 +97,7 @@ class UIWindow(HasPrivateTraits):
         """
         pass
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     def _get_width(self):
         return self.control.GetClientSize()[0]

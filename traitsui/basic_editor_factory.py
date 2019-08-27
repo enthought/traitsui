@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the BasicEditorFactory class, which allows creating editor
     factories that use the same class for creating all editor styles.
 """
-
 
 
 from __future__ import absolute_import
@@ -28,23 +27,21 @@ from traits.api import Any
 from .editor_factory import EditorFactory
 
 
-
-
 class BasicEditorFactory(EditorFactory):
     """ Base class for editor factories that use the same class for creating
         all editor styles.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     # Editor class to be instantiated
     klass = Any
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Property getters.
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_simple_editor_class(self):
         """ Returns the editor class to use for "simple" style views.
@@ -78,5 +75,3 @@ class BasicEditorFactory(EditorFactory):
         new = self.clone_traits()
         new.trait_set(**traits)
         return new
-
-

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2012, Enthought, Inc.
 #  All rights reserved.
@@ -13,14 +13,13 @@
 #  Author: Ioannis Tziakos
 #  Date:   11 Jan 2012
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various text editors for the wxPython user interface toolkit.
     The module is mainly a place-folder for TextEditor factories that have
     been augmented to also listen to changes in the items of the list object.
 
 """
-
 
 
 from .text_editor import SimpleEditor as WXSimpleEditor
@@ -31,19 +30,23 @@ from ..editors.csv_list_editor import _prepare_method, _dispose_method
 
 class SimpleEditor(WXSimpleEditor):
     """ Simple Editor style for CSVListEditor. """
+
     prepare = _prepare_method
     dispose = _dispose_method
 
 
 class CustomEditor(WXCustomEditor):
     """ Custom Editor style for CSVListEditor. """
+
     prepare = _prepare_method
     dispose = _dispose_method
 
 
 class ReadonlyEditor(WXReadonlyEditor):
     """ Readonly Editor style for CSVListEditor. """
+
     prepare = _prepare_method
     dispose = _dispose_method
+
 
 TextEditor = SimpleEditor

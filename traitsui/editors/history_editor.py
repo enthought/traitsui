@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Defines a text editor which displays a text field and maintains a history
     of previously entered values.
 """
-
 
 
 from __future__ import absolute_import
@@ -34,11 +33,12 @@ from ..toolkit import toolkit_object
 
 
 def history_editor(*args, **traits):
-    return toolkit_object('history_editor:_HistoryEditor')(*args, **traits)
+    return toolkit_object("history_editor:_HistoryEditor")(*args, **traits)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(BasicEditorFactory):
@@ -52,4 +52,3 @@ class ToolkitEditorFactory(BasicEditorFactory):
 
 
 HistoryEditor = ToolkitEditorFactory(klass=history_editor)
-

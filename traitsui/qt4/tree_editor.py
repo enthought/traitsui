@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # Copyright (c) 2019, Enthought Inc.
 # All rights reserved.
@@ -9,11 +9,10 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the tree editor for the PyQt user interface toolkit.
 """
-
 
 
 from __future__ import absolute_import
@@ -31,10 +30,18 @@ from pyface.ui_traits import convert_image
 from pyface.timer.api import do_later
 from traits.api import Any, Event, Int
 from traitsui.editors.tree_editor import (
-    CopyAction, CutAction, DeleteAction, NewAction, PasteAction, RenameAction,
+    CopyAction,
+    CutAction,
+    DeleteAction,
+    NewAction,
+    PasteAction,
+    RenameAction,
 )
 from traitsui.tree_node import (
-    ITreeNodeAdapterBridge, MultiTreeNode, ObjectTreeNode, TreeNode
+    ITreeNodeAdapterBridge,
+    MultiTreeNode,
+    ObjectTreeNode,
+    TreeNode,
 )
 from traitsui.menu import Menu, Action, Separator
 from traitsui.ui_traits import SequenceTypes
@@ -57,9 +64,10 @@ DEFAULT_WRAP_RENDERER = WordWrapRenderer()
 class SimpleEditor(Editor):
     """ Simple style of tree editor.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Is the tree editor is scrollable? This value overrides the default.
     scrollable = True
@@ -155,14 +163,15 @@ class SimpleEditor(Editor):
                 sa.setWidgetResizable(True)
                 sa._node_ui = sa._editor_nid = None
 
-                if factory.orientation == 'horizontal':
+                if factory.orientation == "horizontal":
                     orient = QtCore.Qt.Horizontal
                 else:
                     orient = QtCore.Qt.Vertical
 
                 self.control = splitter = QtGui.QSplitter(orient)
-                splitter.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                                       QtGui.QSizePolicy.Expanding)
+                splitter.setSizePolicy(
+                    QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+                )
                 splitter.addWidget(self._tree)
                 splitter.addWidget(sa)
         else:
@@ -183,20 +192,21 @@ class SimpleEditor(Editor):
         self._undoable = []
 
         # Synchronize external object traits with the editor:
-        self.sync_value(factory.refresh, 'refresh')
-        self.sync_value(factory.selected, 'selected')
-        self.sync_value(factory.activated, 'activated', 'to')
-        self.sync_value(factory.click, 'click', 'to')
-        self.sync_value(factory.dclick, 'dclick', 'to')
-        self.sync_value(factory.veto, 'veto', 'from')
+        self.sync_value(factory.refresh, "refresh")
+        self.sync_value(factory.selected, "selected")
+        self.sync_value(factory.activated, "activated", "to")
+        self.sync_value(factory.click, "click", "to")
+        self.sync_value(factory.dclick, "dclick", "to")
+        self.sync_value(factory.veto, "veto", "from")
 
     def _selection_changed(self, selection):
         """ Handles the **selection** event.
         """
         try:
             tree = self._tree
-            if (not isinstance(selection, six.string_types) and
-                    isinstance(selection, collections.Iterable)):
+            if not isinstance(selection, six.string_types) and isinstance(
+                selection, collections.Iterable
+            ):
 
                 item_selection = QtGui.QItemSelection()
                 for sel in selection:
@@ -205,11 +215,13 @@ class SimpleEditor(Editor):
                     item_selection.append(QtGui.QItemSelectionRange(idx))
 
                 tree.selectionModel().select(
-                    item_selection, QtGui.QItemSelectionModel.ClearAndSelect)
+                    item_selection, QtGui.QItemSelectionModel.ClearAndSelect
+                )
             else:
                 tree.setCurrentItem(self._object_info(selection)[2])
         except:
             from traitsui.api import raise_to_debug
+
             raise_to_debug()
 
     def _selected_changed(self, selected):
@@ -315,11 +327,12 @@ class SimpleEditor(Editor):
         column_labels = node.get_column_labels(object)
 
         for i, (header, label) in enumerate(
-                zip_longest(self.factory.column_headers[1:], column_labels), 1):
+            zip_longest(self.factory.column_headers[1:], column_labels), 1
+        ):
             renderer = node.get_renderer(object, i)
             handles_text = renderer.handles_text if renderer else False
             if header is None or label is None or handles_text:
-                nid.setText(i, '')
+                nid.setText(i, "")
             else:
                 nid.setText(i, label)
 
@@ -335,8 +348,8 @@ class SimpleEditor(Editor):
             nid.insertChild(index, cnid)
 
         renderer = node.get_renderer(object)
-        handles_text = getattr(renderer, 'handles_text', False)
-        handles_icon = getattr(renderer, 'handles_icon', False)
+        handles_text = getattr(renderer, "handles_text", False)
+        handles_icon = getattr(renderer, "handles_icon", False)
         if not (self.factory.word_wrap or handles_text):
             cnid.setText(0, node.get_label(object))
         if not handles_icon:
@@ -361,9 +374,9 @@ class SimpleEditor(Editor):
             return
         expanded, node, object = self._get_node_data(nid)
         renderer = node.get_renderer(object)
-        handles_text = getattr(renderer, 'handles_text', False)
+        handles_text = getattr(renderer, "handles_text", False)
         if self.factory.word_wrap or handles_text:
-            nid.setText(col, '')
+            nid.setText(col, "")
         else:
             nid.setText(col, node.get_label(object))
 
@@ -382,7 +395,8 @@ class SimpleEditor(Editor):
         has_children = self._has_children(node, object)
         self._set_node_data(cnid, (False, node, object))
         self._map.setdefault(id(object), []).append(
-            (node.get_children_id(object), cnid))
+            (node.get_children_id(object), cnid)
+        )
         self._add_listeners(node, object)
 
         # Automatically expand the new node (if requested):
@@ -408,7 +422,7 @@ class SimpleEditor(Editor):
 
         # See if it is a dummy.
         pnid = nid.parent()
-        if pnid is not None and getattr(pnid, '_dummy', None) is nid:
+        if pnid is not None and getattr(pnid, "_dummy", None) is nid:
             pnid.removeChild(nid)
             del pnid._dummy
             return
@@ -439,7 +453,8 @@ class SimpleEditor(Editor):
         # If the deleted node had an active editor panel showing, remove it:
         # Note: QTreeWidgetItem does not have an equal operator, so use id()
         if (self._editor is not None) and (
-                id(nid) == id(self._editor._editor_nid)):
+            id(nid) == id(self._editor._editor_nid)
+        ):
             self._clear_editor()
 
     def _expand_node(self, nid):
@@ -450,7 +465,7 @@ class SimpleEditor(Editor):
         # Lazily populate the item's children:
         if not expanded:
             # Remove any dummy node.
-            dummy = getattr(nid, '_dummy', None)
+            dummy = getattr(nid, "_dummy", None)
             if dummy is not None:
                 nid.removeChild(dummy)
                 del nid._dummy
@@ -487,16 +502,16 @@ class SimpleEditor(Editor):
     def _has_children(self, node, object):
         """ Returns whether a specified object has any children.
         """
-        return (node.allows_children(object) and node.has_children(object))
+        return node.allows_children(object) and node.has_children(object)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Returns the icon index for the specified object:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     STD_ICON_MAP = {
-        '<item>': QtGui.QStyle.SP_FileIcon,
-        '<group>': QtGui.QStyle.SP_DirClosedIcon,
-        '<open>': QtGui.QStyle.SP_DirOpenIcon
+        "<item>": QtGui.QStyle.SP_FileIcon,
+        "<group>": QtGui.QStyle.SP_DirClosedIcon,
+        "<open>": QtGui.QStyle.SP_DirOpenIcon,
     }
 
     def _get_icon(self, node, object, is_expanded=False):
@@ -507,7 +522,7 @@ class SimpleEditor(Editor):
 
         icon_name = node.get_icon(object, is_expanded)
         if isinstance(icon_name, six.string_types):
-            if icon_name.startswith('@'):
+            if icon_name.startswith("@"):
                 image_resource = convert_image(icon_name, 4)
                 return image_resource.create_icon()
             elif icon_name in self.STD_ICON_MAP:
@@ -539,9 +554,9 @@ class SimpleEditor(Editor):
 
         else:
             raise ValueError(
-                "Icon value must be a string or color or color tuple or " +
-                "IImageResource instance: " +
-                "given {!r}".format(icon_name)
+                "Icon value must be a string or color or color tuple or "
+                + "IImageResource instance: "
+                + "given {!r}".format(icon_name)
             )
 
         file_name = image_resource.absolute_path
@@ -563,7 +578,8 @@ class SimpleEditor(Editor):
 
         node.when_label_changed(object, self._label_updated, False)
         node.when_column_labels_change(
-            object, self._column_labels_updated, False)
+            object, self._column_labels_updated, False
+        )
 
     def _remove_listeners(self, node, object):
         """ Removes any event listeners from a specified object.
@@ -575,9 +591,10 @@ class SimpleEditor(Editor):
 
         node.when_label_changed(object, self._label_updated, True)
         node.when_column_labels_change(
-            object, self._column_labels_updated, True)
+            object, self._column_labels_updated, True
+        )
 
-    def _object_info(self, object, name=''):
+    def _object_info(self, object, name=""):
         """ Returns the tree node data for a specified object in the form
             ( expanded, node, nid ).
         """
@@ -592,7 +609,7 @@ class SimpleEditor(Editor):
 
         return (expanded, node, nid)
 
-    def _object_info_for(self, object, name=''):
+    def _object_info_for(self, object, name=""):
         """ Returns the tree node data for a specified object as a list of the
             form: [ ( expanded, node, nid ), ... ].
         """
@@ -607,14 +624,16 @@ class SimpleEditor(Editor):
     def _node_for(self, object):
         """ Returns the TreeNode associated with a specified object.
         """
-        if ((isinstance(object, tuple)) and (len(object) == 2) and
-                isinstance(object[1], TreeNode)):
+        if (
+            (isinstance(object, tuple))
+            and (len(object) == 2)
+            and isinstance(object[1], TreeNode)
+        ):
             return object
 
         # Select all nodes which understand this object:
         factory = self.factory
-        nodes = [node for node in factory.nodes
-                 if node.is_node_for(object)]
+        nodes = [node for node in factory.nodes if node.is_node_for(object)]
 
         # If only one found, we're done, return it:
         if len(nodes) == 1:
@@ -639,7 +658,7 @@ class SimpleEditor(Editor):
         # found, just use the first selected node as the 'root node':
         root_node = None
         for i, node in enumerate(nodes):
-            if node.children == '':
+            if node.children == "":
                 root_node = node
                 del nodes[i]
                 break
@@ -647,14 +666,14 @@ class SimpleEditor(Editor):
             root_node = nodes[0]
 
         # If we have a matching MultiTreeNode already cached, return it:
-        key = (root_node, ) + tuple(nodes)
+        key = (root_node,) + tuple(nodes)
         if key in factory.multi_nodes:
             return (object, factory.multi_nodes[key])
 
         # Otherwise create one, cache it, and return it:
         factory.multi_nodes[key] = multi_node = MultiTreeNode(
-            root_node=root_node,
-            nodes=nodes)
+            root_node=root_node, nodes=nodes
+        )
 
         return (object, multi_node)
 
@@ -698,11 +717,13 @@ class SimpleEditor(Editor):
             self.ui._undoable = -1
 
     def _get_undo_item(self, object, name, event):
-        return ListUndoItem(object=object,
-                            name=name,
-                            index=event.index,
-                            added=event.added,
-                            removed=event.removed)
+        return ListUndoItem(
+            object=object,
+            name=name,
+            index=event.index,
+            added=event.added,
+            removed=event.removed,
+        )
 
     def _undoable_append(self, node, object, data, make_copy=True):
         """ Performs an undoable append operation.
@@ -735,7 +756,7 @@ class SimpleEditor(Editor):
         finally:
             self._end_undo()
 
-    def _get_object_nid(self, object, name=''):
+    def _get_object_nid(self, object, name=""):
         """ Gets the ID associated with a specified object (if any).
         """
         info = self._map.get(id(object))
@@ -756,9 +777,9 @@ class SimpleEditor(Editor):
             editor._node_ui.dispose()
             editor._node_ui = editor._editor_nid = None
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Gets/Sets the node specific data:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @staticmethod
     def _get_node_data(nid):
@@ -770,14 +791,14 @@ class SimpleEditor(Editor):
         """ Sets the node specific data. """
         nid._py_data = data
 
-#----- User callable methods: --------------------------------------------
+    # ----- User callable methods: --------------------------------------------
 
     def get_object(self, nid):
         """ Gets the object associated with a specified node.
         """
         return self._get_node_data(nid)[2]
 
-    def get_parent(self, object, name=''):
+    def get_parent(self, object, name=""):
         """ Returns the object that is the immmediate parent of a specified
             object in the tree.
         """
@@ -788,7 +809,7 @@ class SimpleEditor(Editor):
                 return self.get_object(pnid)
         return None
 
-    def get_node(self, object, name=''):
+    def get_node(self, object, name=""):
         """ Returns the node associated with a specified object.
         """
         nid = self._get_object_nid(object, name)
@@ -796,7 +817,7 @@ class SimpleEditor(Editor):
             return self._get_node_data(nid)[1]
         return None
 
-#----- Tree event handlers: ----------------------------------------------
+    # ----- Tree event handlers: ----------------------------------------------
 
     def _on_item_expanded(self, nid):
         """ Handles a tree node being expanded.
@@ -892,7 +913,7 @@ class SimpleEditor(Editor):
             not_handled = True
 
         # Set the value of the new selection:
-        if self.factory.selection_mode == 'single':
+        if self.factory.selection_mode == "single":
             self._no_update_selected = True
             self.selected = object
             self._no_update_selected = False
@@ -920,15 +941,15 @@ class SimpleEditor(Editor):
                 if view is None or isinstance(view, str):
                     view = object.trait_view(view)
 
-                if (self.ui.history is not None) or (view.kind == 'subpanel'):
-                    ui = object.edit_traits(parent=editor,
-                                            view=view,
-                                            kind='subpanel')
+                if (self.ui.history is not None) or (view.kind == "subpanel"):
+                    ui = object.edit_traits(
+                        parent=editor, view=view, kind="subpanel"
+                    )
                 else:
                     # Otherwise, just set up our own new one:
-                    ui = object.edit_traits(parent=editor,
-                                            view=view,
-                                            kind='panel')
+                    ui = object.edit_traits(
+                        parent=editor, view=view, kind="panel"
+                    )
 
                 # Make our UI the parent of the new UI:
                 ui.parent = self.ui
@@ -956,11 +977,13 @@ class SimpleEditor(Editor):
         _, node, object = self._get_node_data(nid)
 
         self._data = (node, object, nid)
-        self._context = {'object': object,
-                         'editor': self,
-                         'node': node,
-                         'info': self.ui.info,
-                         'handler': self.ui.handler}
+        self._context = {
+            "object": object,
+            "editor": self,
+            "node": node,
+            "info": self.ui.info,
+            "handler": self.ui.handler,
+        }
 
         # Try to get the parent node of the node clicked on:
         pnid = nid.parent()
@@ -984,10 +1007,10 @@ class SimpleEditor(Editor):
             group = menu.find_group(NewAction)
             if group is not None:
                 # Only set it the first time:
-                group.id = ''
+                group.id = ""
                 actions = self._new_actions(node, object)
                 if len(actions) > 0:
-                    group.insert(0, Menu(name='New', *actions))
+                    group.insert(0, Menu(name="New", *actions))
 
         else:
             # All other values mean no menu should be displayed:
@@ -999,19 +1022,29 @@ class SimpleEditor(Editor):
             qmenu.exec_(self._tree.mapToGlobal(pos))
 
         # Reset all menu related cached values:
-        self._data = self._context = self._menu_node = \
-            self._menu_parent_node = self._menu_parent_object = None
+        self._data = (
+            self._context
+        ) = (
+            self._menu_node
+        ) = self._menu_parent_node = self._menu_parent_object = None
 
     def _standard_menu(self, node, object):
         """ Returns the standard contextual pop-up menu.
         """
-        actions = [CutAction, CopyAction, PasteAction, Separator(),
-                   DeleteAction, Separator(), RenameAction]
+        actions = [
+            CutAction,
+            CopyAction,
+            PasteAction,
+            Separator(),
+            DeleteAction,
+            Separator(),
+            RenameAction,
+        ]
 
         # See if the 'New' menu section should be added:
         items = self._new_actions(node, object)
         if len(items) > 0:
-            actions[0:0] = [Menu(name='New', *items), Separator()]
+            actions[0:0] = [Menu(name="New", *items), Separator()]
 
         return Menu(*actions)
 
@@ -1030,34 +1063,40 @@ class SimpleEditor(Editor):
                 if add_node is not None:
                     class_name = klass.__name__
                     name = add_node.get_name(object)
-                    if name == '':
+                    if name == "":
                         name = class_name
                     items.append(
-                        Action(name=name,
-                               action="editor._menu_new_node('%s',%s)" %
-                               (class_name, prompt)))
+                        Action(
+                            name=name,
+                            action="editor._menu_new_node('%s',%s)"
+                            % (class_name, prompt),
+                        )
+                    )
         return items
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Menu action helper methods:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _is_copyable(self, object):
         parent = self._menu_parent_node
         if isinstance(parent, ObjectTreeNode):
             return parent.can_copy(self._menu_parent_object)
-        return ((parent is not None) and parent.can_copy(object))
+        return (parent is not None) and parent.can_copy(object)
 
     def _is_cutable(self, object):
         parent = self._menu_parent_node
         if isinstance(parent, ObjectTreeNode):
-            can_cut = (parent.can_copy(self._menu_parent_object) and
-                       parent.can_delete(self._menu_parent_object))
+            can_cut = parent.can_copy(
+                self._menu_parent_object
+            ) and parent.can_delete(self._menu_parent_object)
         else:
-            can_cut = ((parent is not None) and
-                       parent.can_copy(object) and
-                       parent.can_delete(object))
-        return (can_cut and self._menu_node.can_delete_me(object))
+            can_cut = (
+                (parent is not None)
+                and parent.can_copy(object)
+                and parent.can_delete(object)
+            )
+        return can_cut and self._menu_node.can_delete_me(object)
 
     def _is_pasteable(self, object):
         return self._menu_node.can_add(object, clipboard.instance_type)
@@ -1067,17 +1106,17 @@ class SimpleEditor(Editor):
         if isinstance(parent, ObjectTreeNode):
             can_delete = parent.can_delete(self._menu_parent_object)
         else:
-            can_delete = ((parent is not None) and parent.can_delete(object))
-        return (can_delete and self._menu_node.can_delete_me(object))
+            can_delete = (parent is not None) and parent.can_delete(object)
+        return can_delete and self._menu_node.can_delete_me(object)
 
     def _is_renameable(self, object):
         parent = self._menu_parent_node
         if isinstance(parent, ObjectTreeNode):
             can_rename = parent.can_rename(self._menu_parent_object)
         else:
-            can_rename = ((parent is not None) and parent.can_rename(object))
+            can_rename = (parent is not None) and parent.can_rename(object)
 
-        can_rename = (can_rename and self._menu_node.can_rename_me(object))
+        can_rename = can_rename and self._menu_node.can_rename_me(object)
 
         # Set the widget item's editable flag appropriately.
         nid = self._get_object_nid(object)
@@ -1107,14 +1146,14 @@ class SimpleEditor(Editor):
 
         return copy.deepcopy(new_object)
 
-#----- pyface.action 'controller' interface implementation: --------------
+    # ----- pyface.action 'controller' interface implementation: --------------
 
     def add_to_menu(self, menu_item):
         """ Adds a menu item to the menu bar being constructed.
         """
         action = menu_item.item.action
-        self.eval_when(action.enabled_when, menu_item, 'enabled')
-        self.eval_when(action.checked_when, menu_item, 'checked')
+        self.eval_when(action.enabled_when, menu_item, "enabled")
+        self.eval_when(action.checked_when, menu_item, "checked")
 
     def add_to_toolbar(self, toolbar_item):
         """ Adds a toolbar item to the toolbar being constructed.
@@ -1124,11 +1163,11 @@ class SimpleEditor(Editor):
     def can_add_to_menu(self, action):
         """ Returns whether the action should be defined in the user interface.
         """
-        if action.defined_when != '':
+        if action.defined_when != "":
             if not eval(action.defined_when, globals(), self._context):
                 return False
 
-        if action.visible_when != '':
+        if action.visible_when != "":
             if not eval(action.visible_when, globals(), self._context):
                 return False
 
@@ -1151,18 +1190,24 @@ class SimpleEditor(Editor):
         info = self.ui.info
         handler = self.ui.handler
 
-        if method_name.find('.') >= 0:
-            if method_name.find('(') < 0:
-                method_name += '()'
+        if method_name.find(".") >= 0:
+            if method_name.find("(") < 0:
+                method_name += "()"
             try:
-                eval(method_name, globals(),
-                     {'object': object,
-                      'editor': self,
-                      'node': node,
-                      'info': info,
-                      'handler': handler})
+                eval(
+                    method_name,
+                    globals(),
+                    {
+                        "object": object,
+                        "editor": self,
+                        "node": node,
+                        "info": info,
+                        "handler": handler,
+                    },
+                )
             except:
                 from traitsui.api import raise_to_debug
+
                 raise_to_debug()
             return
 
@@ -1174,14 +1219,14 @@ class SimpleEditor(Editor):
         if action.on_perform is not None:
             action.on_perform(object)
 
-#----- Menu support methods: ---------------------------------------------
+    # ----- Menu support methods: ---------------------------------------------
 
     def eval_when(self, condition, object, trait):
         """ Evaluates a condition within a defined context, and sets a
         specified object trait based on the result, which is assumed to be a
         Boolean.
         """
-        if condition != '':
+        if condition != "":
             value = True
             try:
                 if not eval(condition, globals(), self._context):
@@ -1189,11 +1234,11 @@ class SimpleEditor(Editor):
             except Exception as e:
                 logger.warning(
                     "Exception (%s) raised when evaluating the "
-                    "condition %s. Returning True." %
-                    (e, condition))
+                    "condition %s. Returning True." % (e, condition)
+                )
             setattr(object, trait, value)
 
-#----- Menu event handlers: ----------------------------------------------
+    # ----- Menu event handlers: ----------------------------------------------
 
     def _menu_copy_node(self):
         """ Copies the current tree node object to the paste buffer.
@@ -1228,8 +1273,12 @@ class SimpleEditor(Editor):
                 if self.ui.history is None:
                     # If no undo history, ask user to confirm the delete:
                     butn = QtGui.QMessageBox.question(
-                        self._tree, "Confirm Deletion", "Are you sure you want to delete %s?" %
-                        node.get_label(object), QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+                        self._tree,
+                        "Confirm Deletion",
+                        "Are you sure you want to delete %s?"
+                        % node.get_label(object),
+                        QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
+                    )
                     if butn != QtGui.QMessageBox.Yes:
                         return
 
@@ -1256,7 +1305,7 @@ class SimpleEditor(Editor):
         old_label = node.get_label(object)
 
         if new_label != old_label:
-            if new_label != '':
+            if new_label != "":
                 node.set_label(object, new_label)
             else:
                 self._set_label(nid, col)
@@ -1269,7 +1318,8 @@ class SimpleEditor(Editor):
         new_node, new_class = self._node_for_class_name(class_name)
         new_object = new_class()
         if (not prompt) or new_object.edit_traits(
-                parent=self.control, kind='livemodal').result:
+            parent=self.control, kind="livemodal"
+        ).result:
             self._undoable_append(node, object, new_object, False)
 
             # Automatically select the new object if editing is being
@@ -1277,9 +1327,9 @@ class SimpleEditor(Editor):
             if self.factory.editable:
                 self._tree.setCurrentItem(nid.child(nid.childCount() - 1))
 
-#----- Model event handlers: ---------------------------------------------
+    # ----- Model event handlers: ---------------------------------------------
 
-    def _children_replaced(self, object, name='', new=None):
+    def _children_replaced(self, object, name="", new=None):
         """ Handles the children of a node being completely replaced.
         """
         tree = self._tree
@@ -1299,7 +1349,7 @@ class SimpleEditor(Editor):
                     if child_node is not None:
                         self._append_node(nid, child_node, child)
             else:
-                dummy = getattr(nid, '_dummy', None)
+                dummy = getattr(nid, "_dummy", None)
                 if dummy is None and len(children) > 0:
                     # if model now has children add dummy child
                     nid._dummy = QtGui.QTreeWidgetItem(nid)
@@ -1330,7 +1380,7 @@ class SimpleEditor(Editor):
             children = node.get_children(object)
 
             # If the new children aren't all at the end, remove/add them all:
-            #if (n > 0) and ((start + n) != len( children )):
+            # if (n > 0) and ((start + n) != len( children )):
             #    self._children_replaced( object, name, event )
             #    return
 
@@ -1338,7 +1388,7 @@ class SimpleEditor(Editor):
             # expanded:
             if expanded:
                 # Remove all of the children that were deleted:
-                for cnid in self._nodes_for(nid)[start: end]:
+                for cnid in self._nodes_for(nid)[start:end]:
                     self._delete_node(cnid)
 
                 remaining = len(children) - len(event.removed)
@@ -1347,13 +1397,15 @@ class SimpleEditor(Editor):
                 for child in event.added:
                     child, child_node = self._node_for(child)
                     if child_node is not None:
-                        insert_index = (start + child_index) if \
-                            (start <= remaining) else None
-                        self._insert_node(nid, insert_index, child_node,
-                                          child)
+                        insert_index = (
+                            (start + child_index)
+                            if (start <= remaining)
+                            else None
+                        )
+                        self._insert_node(nid, insert_index, child_node, child)
                         child_index += 1
             else:
-                dummy = getattr(nid, '_dummy', None)
+                dummy = getattr(nid, "_dummy", None)
                 if dummy is None and len(children) > 0:
                     # if model now has children add dummy child
                     nid._dummy = QtGui.QTreeWidgetItem(nid)
@@ -1401,7 +1453,7 @@ class SimpleEditor(Editor):
         finally:
             self._tree.blockSignals(blk)
 
-#-- UI preference save/restore interface ---------------------------------
+    # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
@@ -1409,7 +1461,7 @@ class SimpleEditor(Editor):
         """
         if isinstance(self.control, QtGui.QSplitter):
             if isinstance(prefs, dict):
-                structure = prefs.get('structure')
+                structure = prefs.get("structure")
             else:
                 structure = prefs
 
@@ -1417,22 +1469,23 @@ class SimpleEditor(Editor):
         header = self._tree.header()
         self.control.setExpandsOnDoubleClick(self.factory.expands_on_dclick)
 
-        if header is not None and 'column_state' in prefs:
-            header.restoreState(prefs['column_state'])
+        if header is not None and "column_state" in prefs:
+            header.restoreState(prefs["column_state"])
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
         prefs = {}
         if isinstance(self.control, QtGui.QSplitter):
-            prefs['structure'] = self.control.saveState().data()
+            prefs["structure"] = self.control.saveState().data()
         header = self._tree.header()
         if header is not None:
-            prefs['column_state'] = header.saveState().data()
+            prefs["column_state"] = header.saveState().data()
 
         return prefs
 
-#-- End UI preference save/restore interface -----------------------------
+
+# -- End UI preference save/restore interface -----------------------------
 
 
 class _TreeWidget(QtGui.QTreeWidget):
@@ -1463,14 +1516,17 @@ class _TreeWidget(QtGui.QTreeWidget):
         self.setAlternatingRowColors(editor.factory.alternating_row_colors)
         padding = editor.factory.vertical_padding
         if padding > 0:
-            self.setStyleSheet("""
+            self.setStyleSheet(
+                """
             QTreeView::item {
                 padding-top: %spx;
                 padding-bottom: %spx;
             }
-            """ % (padding, padding))
+            """
+                % (padding, padding)
+            )
 
-        if editor.factory.selection_mode == 'extended':
+        if editor.factory.selection_mode == "extended":
             self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
 
         self.itemExpanded.connect(editor._on_item_expanded)
@@ -1506,7 +1562,10 @@ class _TreeWidget(QtGui.QTreeWidget):
         # Calculate the hotspot so that the pixmap appears on top of the
         # original item.
         nid_rect = self.visualItemRect(nid)
-        hspos = self.viewport().mapFromGlobal(QtGui.QCursor.pos()) - nid_rect.topLeft()
+        hspos = (
+            self.viewport().mapFromGlobal(QtGui.QCursor.pos())
+            - nid_rect.topLeft()
+        )
 
         _, node, object = self._editor._get_node_data(nid)
 
@@ -1523,9 +1582,8 @@ class _TreeWidget(QtGui.QTreeWidget):
         option = self.viewOptions()
         option.state |= QtGui.QStyle.State_Selected
         option.rect = QtCore.QRect(
-            nid_rect.topLeft() -
-            rect.topLeft(),
-            nid_rect.size())
+            nid_rect.topLeft() - rect.topLeft(), nid_rect.size()
+        )
         self.itemDelegate().paint(painter, option, self.indexFromItem(nid))
 
         painter.end()
@@ -1578,46 +1636,51 @@ class _TreeWidget(QtGui.QTreeWidget):
 
         action, to_node, to_object, to_index, data = self._get_action(e)
 
-        if action == 'append':
+        if action == "append":
             if dragging is not None:
                 data = self._editor._drop_object(
-                    to_node, to_object, data, False)
+                    to_node, to_object, data, False
+                )
                 if data is not None:
                     try:
                         editor._begin_undo()
-                        editor._undoable_delete(
-                            *editor._node_index(dragging))
+                        editor._undoable_delete(*editor._node_index(dragging))
                         editor._undoable_append(
-                            to_node, to_object, data, False)
+                            to_node, to_object, data, False
+                        )
                     finally:
                         editor._end_undo()
             else:
                 data = editor._drop_object(to_node, to_object, data, True)
                 if data is not None:
                     editor._undoable_append(to_node, to_object, data, False)
-        elif action == 'insert':
+        elif action == "insert":
             if dragging is not None:
                 data = editor._drop_object(to_node, to_object, data, False)
                 if data is not None:
-                    from_node, from_object, from_index = \
-                        editor._node_index(dragging)
-                    if ((to_object is from_object) and
-                            (to_index > from_index)):
+                    from_node, from_object, from_index = editor._node_index(
+                        dragging
+                    )
+                    if (to_object is from_object) and (to_index > from_index):
                         to_index -= 1
                     try:
                         editor._begin_undo()
-                        editor._undoable_delete(from_node, from_object,
-                                                from_index)
-                        editor._undoable_insert(to_node, to_object, to_index,
-                                                data, False)
+                        editor._undoable_delete(
+                            from_node, from_object, from_index
+                        )
+                        editor._undoable_insert(
+                            to_node, to_object, to_index, data, False
+                        )
                     finally:
                         editor._end_undo()
             else:
                 data = self._editor._drop_object(
-                    to_node, to_object, data, True)
+                    to_node, to_object, data, True
+                )
                 if data is not None:
-                    editor._undoable_insert(to_node, to_object, to_index,
-                                            data, False)
+                    editor._undoable_insert(
+                        to_node, to_object, to_index, data, False
+                    )
         else:
             return
 
@@ -1655,10 +1718,11 @@ class _TreeWidget(QtGui.QTreeWidget):
         data = PyMimeData.coerce(event.mimeData()).instance()
         _, node, object = editor._get_node_data(nid)
 
-        if event.proposedAction() == QtCore.Qt.MoveAction and \
-                editor._is_droppable(node, object, data, False):
+        if event.proposedAction() == QtCore.Qt.MoveAction and editor._is_droppable(
+            node, object, data, False
+        ):
             # append to node being dropped on
-            action = 'append'
+            action = "append"
             to_node = node
             to_object = object
             to_index = None
@@ -1670,10 +1734,10 @@ class _TreeWidget(QtGui.QTreeWidget):
                 action = None
             elif editor._is_droppable(to_node, to_object, data, True):
                 # insert into the parent of the node being dropped on
-                action = 'insert'
+                action = "insert"
             elif editor._is_droppable(to_node, to_object, data, False):
                 # append to the parent of the node being dropped on
-                action = 'append'
+                action = "append"
             else:
                 # parent can't be modified, can't do anything
                 action = None
@@ -1683,6 +1747,7 @@ class _TreeWidget(QtGui.QTreeWidget):
 
 class TreeItemDelegate(QtGui.QStyledItemDelegate):
     """ A delegate class to draw wrapped text labels """
+
     # FIXME: sizeHint() should return the size required by the label,
     # which is dependent on the width available, which is different for
     # each item due to the nested tree structure. However the option.rect
@@ -1704,9 +1769,7 @@ class TreeItemDelegate(QtGui.QStyledItemDelegate):
             return super(TreeItemDelegate, self).sizeHint(option, index)
 
         size_context = (option, index)
-        size = renderer.size(
-            self.editor, node, column, instance, size_context
-        )
+        size = renderer.size(self.editor, node, column, instance, size_context)
         if size is None:
             return QtCore.QSize(1, 21)
         else:

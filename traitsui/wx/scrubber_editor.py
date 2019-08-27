@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,46 +13,43 @@
 #  Author: David C. Morrill
 #  Date:   07/14/2008
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Traits UI simple, scrubber-based integer or float value editor.
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-from math \
-    import log10, pow
+from math import log10, pow
 
-from traits.api \
-    import Any, BaseRange, BaseEnum, Str, Float, TraitError, \
-    on_trait_change
+from traits.api import (
+    Any,
+    BaseRange,
+    BaseEnum,
+    Str,
+    Float,
+    TraitError,
+    on_trait_change,
+)
 
-from traitsui.api \
-    import View, Item, EnumEditor
+from traitsui.api import View, Item, EnumEditor
 
 # FIXME: ScrubberEditor is a proxy class defined here just for backward
 # compatibility (represents the editor factory for scrubber editors).
 # The class has been moved to traitsui.editors.scrubber_editor
-from traitsui.editors.scrubber_editor \
-    import ScrubberEditor
+from traitsui.editors.scrubber_editor import ScrubberEditor
 
-from traitsui.wx.editor \
-    import Editor
+from traitsui.wx.editor import Editor
 
-from pyface.timer.api \
-    import do_after
+from pyface.timer.api import do_after
 
-from .constants \
-    import ErrorColor
+from .constants import ErrorColor
 
-from .image_slice \
-    import paint_parent
+from .image_slice import paint_parent
 
-from .helper \
-    import disconnect, disconnect_no_id, BufferDC
+from .helper import disconnect, disconnect_no_id, BufferDC
 
 
 class _ScrubberEditor(Editor):
@@ -74,12 +71,12 @@ class _ScrubberEditor(Editor):
     #: The mapping to use (only for Enum's):
     mapping = Any
 
-    #-- Class Variables ------------------------------------------------------
+    # -- Class Variables ------------------------------------------------------
 
     text_styles = {
-        'left': wx.TE_LEFT,
-        'center': wx.TE_CENTRE,
-        'right': wx.TE_RIGHT
+        "left": wx.TE_LEFT,
+        "center": wx.TE_CENTRE,
+        "right": wx.TE_RIGHT,
     }
 
     def init(self, parent):
@@ -89,7 +86,7 @@ class _ScrubberEditor(Editor):
         factory = self.factory
 
         # Establish the range of the slider:
-        low_name = high_name = ''
+        low_name = high_name = ""
         low, high = factory.low, factory.high
         if high <= low:
             low = high = None
@@ -97,25 +94,27 @@ class _ScrubberEditor(Editor):
             if isinstance(handler, BaseRange):
                 low_name, high_name = handler._low_name, handler._high_name
 
-                if low_name == '':
+                if low_name == "":
                     low = handler._low
 
-                if high_name == '':
+                if high_name == "":
                     high = handler._high
 
             elif isinstance(handler, BaseEnum):
-                if handler.name == '':
+                if handler.name == "":
                     self.mapping = handler.values
                 else:
-                    self.sync_value(handler.name, 'mapping', 'from')
+                    self.sync_value(handler.name, "mapping", "from")
 
                 low, high = 0, self.high
 
         # Create the control:
-        self.control = control = wx.Window(parent, -1,
-                                           size=wx.Size(50, 18),
-                                           style=wx.FULL_REPAINT_ON_RESIZE |
-                                           wx.TAB_TRAVERSAL)
+        self.control = control = wx.Window(
+            parent,
+            -1,
+            size=wx.Size(50, 18),
+            style=wx.FULL_REPAINT_ON_RESIZE | wx.TAB_TRAVERSAL,
+        )
 
         # Set up the painting event handlers:
         wx.EVT_ERASE_BACKGROUND(control, self._erase_background)
@@ -134,12 +133,12 @@ class _ScrubberEditor(Editor):
         wx.EVT_SIZE(control, self._resize)
 
         # Set the tooltip:
-        self._can_set_tooltip = (not self.set_tooltip())
+        self._can_set_tooltip = not self.set_tooltip()
 
         # Save the values we calculated:
         self.trait_set(low=low, high=high)
-        self.sync_value(low_name, 'low', 'from')
-        self.sync_value(high_name, 'high', 'from')
+        self.sync_value(low_name, "low", "from")
+        self.sync_value(high_name, "high", "from")
 
         # Force a reset (in case low = high = None, which won't cause a
         # notification to fire):
@@ -160,7 +159,8 @@ class _ScrubberEditor(Editor):
             wx.EVT_LEFT_UP,
             wx.EVT_MOTION,
             wx.EVT_MOUSEWHEEL,
-            wx.EVT_SIZE)
+            wx.EVT_SIZE,
+        )
 
         # Disconnect the pop-up text event handlers:
         self._disconnect_text()
@@ -198,33 +198,33 @@ class _ScrubberEditor(Editor):
         """
         pass
 
-    #-- Trait Event Handlers -------------------------------------------------
+    # -- Trait Event Handlers -------------------------------------------------
 
     def _mapping_changed(self, mapping):
         """ Handles the Enum mapping being changed.
         """
         self.high = len(mapping) - 1
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
-    @on_trait_change('low, high')
+    @on_trait_change("low, high")
     def _reset_scrubber(self):
         """ Sets the the current tooltip.
         """
         low, high = self.low, self.high
         if self._can_set_tooltip:
             if self.mapping is not None:
-                tooltip = '[%s]' % (', '.join(self.mapping))
+                tooltip = "[%s]" % (", ".join(self.mapping))
                 if len(tooltip) > 80:
-                    tooltip = ''
+                    tooltip = ""
             elif high is None:
-                tooltip = ''
+                tooltip = ""
                 if low is not None:
-                    tooltip = '[%g..]' % low
+                    tooltip = "[%g..]" % low
             elif low is None:
-                tooltip = '[..%g]' % high
+                tooltip = "[..%g]" % high
             else:
-                tooltip = '[%g..%g]' % (low, high)
+                tooltip = "[%g..%g]" % (low, high)
 
             self.control.SetToolTipString(tooltip)
 
@@ -248,9 +248,9 @@ class _ScrubberEditor(Editor):
         wdx, wdy = self.control.GetClientSizeTuple()
         ty = ((wdy - (tdy - descent)) / 2) - 1
         alignment = self.factory.alignment
-        if alignment == 'left':
+        if alignment == "left":
             tx = 0
-        elif alignment == 'center':
+        elif alignment == "center":
             tx = (wdx - tdx) / 2
         else:
             tx = wdx - tdx
@@ -262,7 +262,8 @@ class _ScrubberEditor(Editor):
         """
         if self._text_size is None:
             self._text_size = self.control.GetFullTextExtent(
-                self.text.strip() or 'M')
+                self.text.strip() or "M"
+            )
 
         return self._text_size
 
@@ -313,14 +314,18 @@ class _ScrubberEditor(Editor):
     def _pop_up_enum(self):
         self._ui = self.object.edit_traits(
             view=View(
-                Item(self.name,
-                     id='drop_down',
-                     show_label=False,
-                     padding=-4,
-                     editor=EnumEditor(name='editor.mapping')),
-                kind='subpanel'),
+                Item(
+                    self.name,
+                    id="drop_down",
+                    show_label=False,
+                    padding=-4,
+                    editor=EnumEditor(name="editor.mapping"),
+                ),
+                kind="subpanel",
+            ),
             parent=self.control,
-            context={'object': self.object, 'editor': self})
+            context={"object": self.object, "editor": self},
+        )
 
         dx, dy = self.control.GetSizeTuple()
         drop_down = self._ui.info.drop_down.control
@@ -330,10 +335,14 @@ class _ScrubberEditor(Editor):
 
     def _pop_up_text(self):
         control = self.control
-        self._text = text = wx.TextCtrl(control, -1, str(self.value),
-                                        size=control.GetSize(),
-                                        style=self.text_styles[self.factory.alignment] |
-                                        wx.TE_PROCESS_ENTER)
+        self._text = text = wx.TextCtrl(
+            control,
+            -1,
+            str(self.value),
+            size=control.GetSize(),
+            style=self.text_styles[self.factory.alignment]
+            | wx.TE_PROCESS_ENTER,
+        )
         text.SetSelection(-1, -1)
         text.SetFocus()
         wx.EVT_TEXT_ENTER(control, text.GetId(), self._text_completed)
@@ -363,7 +372,8 @@ class _ScrubberEditor(Editor):
                 wx.EVT_KILL_FOCUS,
                 wx.EVT_ENTER_WINDOW,
                 wx.EVT_LEAVE_WINDOW,
-                wx.EVT_CHAR)
+                wx.EVT_CHAR,
+            )
 
     def _init_value(self):
         """ Initializes the current value when the user begins a drag or moves
@@ -377,7 +387,7 @@ class _ScrubberEditor(Editor):
         else:
             self._value = self.value
 
-    #--- wxPython Event Handlers ---------------------------------------------
+    # --- wxPython Event Handlers ---------------------------------------------
 
     def _erase_background(self, event):
         """ Do not erase the background here (do it in the 'on_paint' handler).
@@ -437,9 +447,11 @@ class _ScrubberEditor(Editor):
     def _set_focus(self, event):
         """ Handle the control getting the keyboard focus.
         """
-        if ((not self._ignore_focus) and
-            (self._x is None) and
-                (self._text is None)):
+        if (
+            (not self._ignore_focus)
+            and (self._x is None)
+            and (self._text is None)
+        ):
             self._pop_up_editor()
 
         event.Skip()
@@ -568,8 +580,9 @@ class _ScrubberEditor(Editor):
         """
         if self._ui is not None:
             self._ignore_focus = True
-            disconnect_no_id(self._ui.info.drop_down.control,
-                             wx.EVT_KILL_FOCUS)
+            disconnect_no_id(
+                self._ui.info.drop_down.control, wx.EVT_KILL_FOCUS
+            )
             self._ui.dispose()
             del self._ui
 

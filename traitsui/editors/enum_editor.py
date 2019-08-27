@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Enthought, Inc.
 # All rights reserved.
 #
@@ -11,11 +11,10 @@
 #
 #  Author: David C. Morrill
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """ Defines the editor factory for single-selection enumerations, for all traits
     user interface toolkits.
 """
-
 
 
 from __future__ import absolute_import
@@ -29,28 +28,28 @@ from traits.api import Any, Range, Enum, Bool
 
 from ..toolkit import toolkit_object
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Supported display modes for a custom style editor
-Mode = Enum('radio', 'list')
+Mode = Enum("radio", "list")
 
 # Supported display modes for a custom style editor
-CompletionMode = Enum('inline', 'popup')
+CompletionMode = Enum("inline", "popup")
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorWithListFactory):
     """ Editor factory for enumeration editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: (Optional) Function used to evaluate text input:
     evaluate = Any
@@ -67,31 +66,31 @@ class ToolkitEditorFactory(EditorWithListFactory):
     #: Completion mode for editors with text-entry (Qt only):
     completion_mode = CompletionMode
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  'Editor' factory methods:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_custom_editor_class(self):
         """ Returns the editor class to use for "custom" style views.
         Overridden to return the editor class for the specified mode.
         """
-        editor_file_name = \
-            os.path.basename(sys.modules[self.__class__.__module__].
-                             __file__)
+        editor_file_name = os.path.basename(
+            sys.modules[self.__class__.__module__].__file__
+        )
         try:
-            if self.mode == 'radio':
-                return toolkit_object(editor_file_name.split('.')[0] +
-                                      ':RadioEditor',
-                                      raise_exceptions=True)
+            if self.mode == "radio":
+                return toolkit_object(
+                    editor_file_name.split(".")[0] + ":RadioEditor",
+                    raise_exceptions=True,
+                )
             else:
-                return toolkit_object(editor_file_name.split('.')[0] +
-                                      ':ListEditor',
-                                      raise_exceptions=True)
+                return toolkit_object(
+                    editor_file_name.split(".")[0] + ":ListEditor",
+                    raise_exceptions=True,
+                )
         except:
             return super(ToolkitEditorFactory, self)._get_custom_editor_class()
 
 
 # Define the EnumEditor class.
 EnumEditor = ToolkitEditorFactory
-
-

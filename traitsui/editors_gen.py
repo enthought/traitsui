@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Enthought, Inc.
 # All rights reserved.
 #
@@ -11,7 +11,7 @@
 #
 #
 # Author: Vibha Srinivasan <vibha@enthought.com>
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Generates a file containing definitions for editors defined in the various
 backends.
@@ -23,7 +23,7 @@ import glob
 from io import open
 
 
-def gen_editor_definitions(target_filename='editors.py'):
+def gen_editor_definitions(target_filename="editors.py"):
     """ Generates a file containing definitions for editors defined in the
        various backends.
 
@@ -39,22 +39,23 @@ def gen_editor_definitions(target_filename='editors.py'):
                          <name of the Editor or the EditorFactory class'
     """
 
-    definition_files = glob.glob('*_definition.py')
+    definition_files = glob.glob("*_definition.py")
     new_editors = []
     for file in definition_files:
-        import_path = file.rstrip('.py')
+        import_path = file.rstrip(".py")
         mod = __import__(import_path, globals=globals(), level=1)
         for name in dir(mod):
-            if '_definition' in name:
+            if "_definition" in name:
                 new_editors.append(getattr(mod, name))
-    target_file = open(target_filename, 'a')
+    target_file = open(target_filename, "a")
     for editor_name in new_editors:
-        function = "\ndef %s( *args, **traits ):\n" % editor_name.split(':')[1]
+        function = "\ndef %s( *args, **traits ):\n" % editor_name.split(":")[1]
         target_file.write(function)
-        func_code = ' ' * 4 + 'from toolkit import toolkit_object\n'
-        func_code += ' ' * 4 + \
-                     'return toolkit_object("%s")( *args, **traits )' \
-                     % editor_name
+        func_code = " " * 4 + "from toolkit import toolkit_object\n"
+        func_code += (
+            " " * 4
+            + 'return toolkit_object("%s")( *args, **traits )' % editor_name
+        )
         target_file.write(func_code)
-        target_file.write('\n\n')
+        target_file.write("\n\n")
     target_file.close()

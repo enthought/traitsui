@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the image enumeration editor factory for all traits user interface
 toolkits.
 """
-
 
 
 from __future__ import absolute_import
@@ -33,17 +32,18 @@ from traits.api import Module, Type, Unicode, on_trait_change
 
 from .enum_editor import ToolkitEditorFactory as EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for image enumeration editors.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #: Prefix to add to values to form image names:
     prefix = Unicode
 
@@ -66,33 +66,33 @@ class ToolkitEditorFactory(EditorFactory):
         super(ToolkitEditorFactory, self).init()
         self._update_path()
 
-    @on_trait_change('path, klass, module')
+    @on_trait_change("path, klass, module")
     def _update_path(self):
         """ Handles one of the items defining the path being updated.
         """
-        if self.path != '':
+        if self.path != "":
             self._image_path = self.path
         elif self.klass is not None:
             module = self.klass.__module__
-            if module == '___main___':
-                module = '__main__'
+            if module == "___main___":
+                module = "__main__"
             try:
                 self._image_path = join(
-                    dirname(
-                        sys.modules[module].__file__),
-                    'images')
+                    dirname(sys.modules[module].__file__), "images"
+                )
             except:
                 self._image_path = self.path
-                dirs = [join(dirname(sys.argv[0]), 'images'),
-                        join(getcwd(), 'images')]
+                dirs = [
+                    join(dirname(sys.argv[0]), "images"),
+                    join(getcwd(), "images"),
+                ]
                 for d in dirs:
                     if exists(d):
                         self._image_path = d
                         break
         elif self.module is not None:
-            self._image_path = join(dirname(self.module.__file__), 'images')
+            self._image_path = join(dirname(self.module.__file__), "images")
+
 
 # Define the ImageEnumEditor class.
 ImageEnumEditor = ToolkitEditorFactory
-
-

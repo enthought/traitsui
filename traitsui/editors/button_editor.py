@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the button editor factory for all traits toolkit backends.
 """
-
 
 
 from __future__ import absolute_import
@@ -30,18 +29,18 @@ from ..ui_traits import AView
 from ..view import View
 import six
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for buttons.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     # Value to set when the button is clicked
     value = Property
@@ -68,19 +67,19 @@ class ToolkitEditorFactory(EditorFactory):
     height_padding = Range(0, 31, 5)
 
     # Presentation style
-    style = Enum('button', 'radio', 'toolbar', 'checkbox')
+    style = Enum("button", "radio", "toolbar", "checkbox")
 
     # Orientation of the text relative to the image
-    orientation = Enum('vertical', 'horizontal')
+    orientation = Enum("vertical", "horizontal")
 
     # The optional view to display when the button is clicked:
     view = AView
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definition:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    traits_view = View(['label', 'value', '|[]'])
+    traits_view = View(["label", "value", "|[]"])
 
     def _get_value(self):
         return self._value
@@ -103,5 +102,3 @@ class ToolkitEditorFactory(EditorFactory):
 
 # Define the ButtonEditor class
 ButtonEditor = ToolkitEditorFactory
-
-

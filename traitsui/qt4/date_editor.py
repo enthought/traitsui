@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: Evan Patterson
 #  Date:   08/03/2009
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ A Traits UI editor for datetime.date objects.
 """
-
 
 
 from __future__ import absolute_import, print_function
@@ -43,32 +42,38 @@ class SimpleEditor(Editor):
             widget.
         """
         self.control = QtGui.QDateEdit()
-        if hasattr(self.factory, 'qt_date_format'):
+        if hasattr(self.factory, "qt_date_format"):
             self.control.setDisplayFormat(self.factory.qt_date_format)
 
         if not self.factory.allow_future:
             self.control.setMaximumDate(QtCore.QDate.currentDate())
 
-        if getattr(self.factory, 'maximum_date_name', None):
+        if getattr(self.factory, "maximum_date_name", None):
             obj, extended_name, func = self.parse_extended_name(
-                self.factory.maximum_date_name)
+                self.factory.maximum_date_name
+            )
             self.factory.maximum_date = func()
 
-        if getattr(self.factory, 'minimum_date_name', None):
+        if getattr(self.factory, "minimum_date_name", None):
             obj, extended_name, func = self.parse_extended_name(
-                self.factory.minimum_date_name)
+                self.factory.minimum_date_name
+            )
             self.factory.minimum_date = func()
 
-        if getattr(self.factory, 'minimum_date', None):
-            min_date = QtCore.QDate(self.factory.minimum_date.year,
-                                    self.factory.minimum_date.month,
-                                    self.factory.minimum_date.day)
+        if getattr(self.factory, "minimum_date", None):
+            min_date = QtCore.QDate(
+                self.factory.minimum_date.year,
+                self.factory.minimum_date.month,
+                self.factory.minimum_date.day,
+            )
             self.control.setMinimumDate(min_date)
 
-        if getattr(self.factory, 'maximum_date', None):
-            max_date = QtCore.QDate(self.factory.maximum_date.year,
-                                    self.factory.maximum_date.month,
-                                    self.factory.maximum_date.day)
+        if getattr(self.factory, "maximum_date", None):
+            max_date = QtCore.QDate(
+                self.factory.maximum_date.year,
+                self.factory.maximum_date.month,
+                self.factory.maximum_date.day,
+            )
             self.control.setMaximumDate(max_date)
 
         self.control.dateChanged.connect(self.update_object)
@@ -179,9 +184,10 @@ class CustomEditor(Editor):
         for date in self._selected:
             self.apply_unselected_style(date)
 
-#------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 # 'ReadonlyEditor' class:
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 
 class ReadonlyEditor(BaseReadonlyEditor):
@@ -197,9 +203,9 @@ class ReadonlyEditor(BaseReadonlyEditor):
             return self.value.strftime(self.factory.strftime)
 
 
-#------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 # Helper functions for styling
-#------------------------------------------------------------------------
+# ------------------------------------------------------------------------
 
 
 def _apply_cellformat(cf, textformat):
@@ -255,11 +261,8 @@ def _color_to_brush(color):
 
 
 def _brush_to_color(brush):
-    if brush.style() == 0:   # Qt.BrushStyle.NoBrush
+    if brush.style() == 0:  # Qt.BrushStyle.NoBrush
         return None
 
     color = brush.color()
-    return (
-        color.red(), color.green(), color.blue(), color.alpha()
-    )
-
+    return (color.red(), color.green(), color.blue(), color.alpha())

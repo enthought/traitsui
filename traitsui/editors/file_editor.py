@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Enthought, Inc.
 # All rights reserved.
 #
@@ -11,10 +11,9 @@
 #
 #  Author: David C. Morrill
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """ Defines the file editor factory for all traits toolkit backends.
 """
-
 
 
 from __future__ import absolute_import
@@ -30,25 +29,25 @@ from ..group import Group
 
 from .text_editor import ToolkitEditorFactory as EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Wildcard filter:
 filter_trait = List(Unicode)
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for file editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Wildcard filter to apply to the file dialog:
     filter = filter_trait
@@ -91,20 +90,25 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: The style of file dialog to use when the 'Browse...' button is clicked
     #: Should be one of 'open' or 'save'
-    dialog_style = Str('open')
+    dialog_style = Str("open")
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definition:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    traits_view = View([['<options>',
-                         'truncate_ext{Automatically truncate file extension?}',
-                         '|options:[Options]>'],
-                        ['filter', '|[Wildcard filters]<>']])
+    traits_view = View(
+        [
+            [
+                "<options>",
+                "truncate_ext{Automatically truncate file extension?}",
+                "|options:[Options]>",
+            ],
+            ["filter", "|[Wildcard filters]<>"],
+        ]
+    )
 
     extras = Group()
 
+
 # Define the FileEditor class.
 FileEditor = ToolkitEditorFactory
-
-

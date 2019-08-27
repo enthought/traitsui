@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the base wxPython EditorFactory class and classes the various
     styles of editors used in a Traits-based user interface.
 """
-
 
 
 from __future__ import absolute_import
@@ -26,22 +25,18 @@ import warnings
 
 import wx
 
-from traits.api \
-    import TraitError, Any, Bool, Event, Str
+from traits.api import TraitError, Any, Bool, Event, Str
 
-from traitsui.editor_factory \
-    import EditorFactory as BaseEditorFactory
+from traitsui.editor_factory import EditorFactory as BaseEditorFactory
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .constants \
-    import WindowColor
+from .constants import WindowColor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'EditorFactory' class
 #   Deprecated alias for traitsui.editor_factory.EditorFactory
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class EditorFactory(BaseEditorFactory):
@@ -50,8 +45,11 @@ class EditorFactory(BaseEditorFactory):
 
     def __init__(self, *args, **kwds):
         super(EditorFactory, self).__init__(*args, **kwds)
-        warnings.warn("DEPRECATED: Use traitsui.editor_factory."
-                      ".EditorFactory instead.", DeprecationWarning)
+        warnings.warn(
+            "DEPRECATED: Use traitsui.editor_factory."
+            ".EditorFactory instead.",
+            DeprecationWarning,
+        )
 
 
 class SimpleEditor(Editor):
@@ -78,11 +76,11 @@ class SimpleEditor(Editor):
         """
         return wx.TextCtrl(parent, -1, self.str_value, style=wx.TE_READONLY)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Invokes the pop-up editor for an object trait:
     #
     #  (Normally overridden in a subclass)
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def popup_editor(self, event):
         """ Invokes the pop-up editor for an object trait.
@@ -112,8 +110,9 @@ class TextEditor(Editor):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
-        self.control = wx.TextCtrl(parent, -1, self.str_value,
-                                   style=wx.TE_PROCESS_ENTER)
+        self.control = wx.TextCtrl(
+            parent, -1, self.str_value, style=wx.TE_PROCESS_ENTER
+        )
         wx.EVT_KILL_FOCUS(self.control, self.update_object)
         wx.EVT_TEXT_ENTER(parent, self.control.GetId(), self.update_object)
         self.set_tooltip()
@@ -134,9 +133,9 @@ class ReadonlyEditor(Editor):
         field, containing a text representation of the object trait value.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     # layout_style = 0  # Style for imbedding control in a sizer (override)
 
@@ -146,11 +145,16 @@ class ReadonlyEditor(Editor):
         """
         if (self.item.resizable is True) or (self.item.height != -1.0):
             self.control = wx.TextCtrl(
-                parent, -1, self.str_value, style=wx.NO_BORDER | wx.TE_MULTILINE | wx.TE_READONLY)
+                parent,
+                -1,
+                self.str_value,
+                style=wx.NO_BORDER | wx.TE_MULTILINE | wx.TE_READONLY,
+            )
             self.control.SetBackgroundColour(WindowColor)
         else:
-            self.control = wx.StaticText(parent, -1, self.str_value,
-                                         style=wx.ALIGN_LEFT)
+            self.control = wx.StaticText(
+                parent, -1, self.str_value, style=wx.ALIGN_LEFT
+            )
             self.layout_style = 0
 
         self.set_tooltip()

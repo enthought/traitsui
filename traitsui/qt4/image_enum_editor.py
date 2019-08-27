@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: Evan Patterson
 #  Date:   08/11/2009
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various image enumeration editors for the PyQt user interface
     toolkit.
 """
-
 
 
 from __future__ import absolute_import
@@ -36,7 +35,6 @@ from .enum_editor import RadioEditor as CustomEnumEditor
 from .helper import pixmap_cache
 
 
-
 class BaseEditor(object):
     """ The base class for the different styles of ImageEnumEditor.
     """
@@ -47,7 +45,7 @@ class BaseEditor(object):
         if name is None:
             return None
         factory = self.factory
-        name = ''.join((factory.prefix, name, factory.suffix))
+        name = "".join((factory.prefix, name, factory.suffix))
         return pixmap_cache(name, factory._image_path)
 
 
@@ -79,8 +77,9 @@ class SimpleEditor(BaseEditor, SimpleEnumEditor):
         """ Returns the QComboBox used for the editor control.
         """
         control = ImageEnumComboBox(self)
-        control.setSizePolicy(QtGui.QSizePolicy.Maximum,
-                              QtGui.QSizePolicy.Maximum)
+        control.setSizePolicy(
+            QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum
+        )
         return control
 
     def update_editor(self):
@@ -129,9 +128,10 @@ class CustomEditor(BaseEditor, CustomEnumEditor):
 
         return button
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Custom Qt objects used in the SimpleEditor:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ImageEnumComboBox(QtGui.QComboBox):
@@ -176,12 +176,19 @@ class ImageEnumComboBox(QtGui.QComboBox):
 
         editor = self._editor
         pixmap = editor.get_pixmap(editor.inverse_mapping[editor.value])
-        arrow = self.style().subControlRect(QtGui.QStyle.CC_ComboBox,
-                                            option, QtGui.QStyle.SC_ComboBoxArrow, None)
+        arrow = self.style().subControlRect(
+            QtGui.QStyle.CC_ComboBox,
+            option,
+            QtGui.QStyle.SC_ComboBoxArrow,
+            None,
+        )
         option.rect.setWidth(option.rect.width() - arrow.width())
-        target = QtGui.QStyle.alignedRect(QtCore.Qt.LeftToRight,
-                                          QtCore.Qt.AlignCenter,
-                                          pixmap.size(), option.rect)
+        target = QtGui.QStyle.alignedRect(
+            QtCore.Qt.LeftToRight,
+            QtCore.Qt.AlignCenter,
+            pixmap.size(),
+            option.rect,
+        )
         painter.drawPixmap(target, pixmap)
 
     def sizeHint(self):
@@ -194,13 +201,13 @@ class ImageEnumComboBox(QtGui.QComboBox):
 
         option = QtGui.QStyleOptionComboBox()
         self.initStyleOption(option)
-        size = self.style().sizeFromContents(QtGui.QStyle.CT_ComboBox, option,
-                                             size, self)
+        size = self.style().sizeFromContents(
+            QtGui.QStyle.CT_ComboBox, option, size, self
+        )
         return size
 
 
 class ImageEnumTablePopupView(QtGui.QTableView):
-
     def __init__(self, parent):
         """ Configure the appearence of the table view.
         """
@@ -233,7 +240,7 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
     def displayText(self, value, locale):
         """ Reimplemented to display nothing.
         """
-        return ''
+        return ""
 
     def paint(self, painter, option, mi):
         """ Reimplemented to draw images.
@@ -245,9 +252,12 @@ class ImageEnumItemDelegate(QtGui.QStyledItemDelegate):
         name = mi.data(QtCore.Qt.DisplayRole)
         pixmap = self._get_pixmap(name)
         if pixmap is not None:
-            target = QtGui.QStyle.alignedRect(QtCore.Qt.LeftToRight,
-                                              QtCore.Qt.AlignCenter,
-                                              pixmap.size(), option.rect)
+            target = QtGui.QStyle.alignedRect(
+                QtCore.Qt.LeftToRight,
+                QtCore.Qt.AlignCenter,
+                pixmap.size(),
+                option.rect,
+            )
             painter.drawPixmap(target, pixmap)
 
     def sizeHint(self, option, mi):

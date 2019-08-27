@@ -37,29 +37,38 @@ class _BoundsEditor(Editor):
         self.format = factory.format
 
         self.evaluate = factory.evaluate
-        self.sync_value(factory.evaluate_name, 'evaluate', 'from')
+        self.sync_value(factory.evaluate_name, "evaluate", "from")
 
-        self.sync_value(factory.low_name, 'low', 'both')
-        self.sync_value(factory.high_name, 'high', 'both')
+        self.sync_value(factory.low_name, "low", "both")
+        self.sync_value(factory.high_name, "high", "both")
 
         self.control = panel = TraitsUIPanel(parent, -1)
         sizer = wx.FlexGridSizer(2, 3, 0, 0)
 
         # low text box
-        self._label_lo = wx.TextCtrl(panel, -1, self.format % self.low,
-                                     size=wx.Size(56, 20),
-                                     style=wx.TE_PROCESS_ENTER)
+        self._label_lo = wx.TextCtrl(
+            panel,
+            -1,
+            self.format % self.low,
+            size=wx.Size(56, 20),
+            style=wx.TE_PROCESS_ENTER,
+        )
         sizer.Add(self._label_lo, 0, wx.ALIGN_CENTER)
         wx.EVT_TEXT_ENTER(
-            panel,
-            self._label_lo.GetId(),
-            self.update_low_on_enter)
+            panel, self._label_lo.GetId(), self.update_low_on_enter
+        )
         wx.EVT_KILL_FOCUS(self._label_lo, self.update_low_on_enter)
 
         # low slider
-        self.control.lslider = Slider(panel, -1, 0, 0, 10000,
-                                      size=wx.Size(100, 20),
-                                      style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
+        self.control.lslider = Slider(
+            panel,
+            -1,
+            0,
+            0,
+            10000,
+            size=wx.Size(100, 20),
+            style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS,
+        )
         self.control.lslider.SetValue(self._convert_to_slider(self.low))
         self.control.lslider.SetTickFreq(1000, 1)
         self.control.lslider.SetPageSize(1000)
@@ -71,9 +80,14 @@ class _BoundsEditor(Editor):
         # high slider
         sizer.AddStretchSpacer(0)
         self.control.rslider = Slider(
-            panel, -1, self._convert_to_slider(
-                self.high), 0, 10000, size=wx.Size(
-                100, 20), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
+            panel,
+            -1,
+            self._convert_to_slider(self.high),
+            0,
+            10000,
+            size=wx.Size(100, 20),
+            style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS,
+        )
         self.control.rslider.SetTickFreq(1000, 1)
         self.control.rslider.SetPageSize(1000)
         self.control.rslider.SetLineSize(100)
@@ -81,14 +95,17 @@ class _BoundsEditor(Editor):
         sizer.Add(self.control.rslider, 1, wx.EXPAND)
 
         # high text box
-        self._label_hi = wx.TextCtrl(panel, -1, self.format % self.high,
-                                     size=wx.Size(56, 20),
-                                     style=wx.TE_PROCESS_ENTER)
+        self._label_hi = wx.TextCtrl(
+            panel,
+            -1,
+            self.format % self.high,
+            size=wx.Size(56, 20),
+            style=wx.TE_PROCESS_ENTER,
+        )
         sizer.Add(self._label_hi, 0, wx.ALIGN_CENTER)
         wx.EVT_TEXT_ENTER(
-            panel,
-            self._label_hi.GetId(),
-            self.update_high_on_enter)
+            panel, self._label_hi.GetId(), self.update_high_on_enter
+        )
         wx.EVT_KILL_FOCUS(self._label_hi, self.update_high_on_enter)
 
         self.set_tooltip(self.control.lslider)
@@ -180,7 +197,9 @@ class _BoundsEditor(Editor):
             self.min = self.low
 
     def _step_size(self):
-        slider_delta = self.control.lslider.GetMax() - self.control.lslider.GetMin()
+        slider_delta = (
+            self.control.lslider.GetMax() - self.control.lslider.GetMin()
+        )
         range_delta = self.max - self.min
 
         return float(range_delta) / slider_delta
@@ -191,7 +210,10 @@ class _BoundsEditor(Editor):
 
     def _convert_to_slider(self, value):
         self._check_max_and_min()
-        return self.control.lslider.GetMin() + (value - self.min) / self._step_size()
+        return (
+            self.control.lslider.GetMin()
+            + (value - self.min) / self._step_size()
+        )
 
     def _low_changed(self, low):
         if self.control is None:

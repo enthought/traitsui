@@ -23,7 +23,7 @@ from traitsui.api import Controller
 
 
 class FooModel(HasTraits):
-    my_str = Str('hallo')
+    my_str = Str("hallo")
 
 
 class FooController(Controller):
@@ -32,14 +32,14 @@ class FooController(Controller):
     model = Instance(FooModel)
 
     def _model_default(self):
-        return FooModel(my_str='meh')
+        return FooModel(my_str="meh")
 
 
 def test_construction():
     # check default constructor.
     dialog = FooController()
     nose.tools.assert_is_not_none(dialog.model)
-    nose.tools.assert_equal(dialog.model.my_str, 'meh')
+    nose.tools.assert_equal(dialog.model.my_str, "meh")
 
     # check initialization when `model` is explcitly passed in.
     new_model = FooModel()

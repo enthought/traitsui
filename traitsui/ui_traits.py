@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,71 +13,94 @@
 #  Author: David C. Morrill
 #  Date:   10/14/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines common traits used within the traits.ui package.
 """
 
 
-
 from __future__ import absolute_import
 
-from pyface.ui_traits import (Alignment, Border, HasBorder, HasMargin, Image,
-                             Margin, Position, convert_bitmap, convert_image)
-from traits.api import (Any, Delegate, Enum, Expression, Float, HasStrictTraits,
-    List, Range, Str, Trait, TraitError, TraitPrefixList, TraitType)
+from pyface.ui_traits import (
+    Alignment,
+    Border,
+    HasBorder,
+    HasMargin,
+    Image,
+    Margin,
+    Position,
+    convert_bitmap,
+    convert_image,
+)
+from traits.api import (
+    Any,
+    Delegate,
+    Enum,
+    Expression,
+    Float,
+    HasStrictTraits,
+    List,
+    Range,
+    Str,
+    Trait,
+    TraitError,
+    TraitPrefixList,
+    TraitType,
+)
 import six
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Orientation trait:
-Orientation = Trait('vertical',
-                    TraitPrefixList('vertical', 'horizontal'))
+Orientation = Trait("vertical", TraitPrefixList("vertical", "horizontal"))
 
 # Styles for user interface elements:
 EditorStyle = style_trait = Trait(
-    'simple',
-    TraitPrefixList(
-        'simple',
-        'custom',
-        'text',
-        'readonly'),
-    cols=4)
+    "simple", TraitPrefixList("simple", "custom", "text", "readonly"), cols=4
+)
 
 # Group layout trait:
-Layout = Trait('normal',
-               TraitPrefixList('normal', 'split', 'tabbed', 'flow', 'fold'))
+Layout = Trait(
+    "normal", TraitPrefixList("normal", "split", "tabbed", "flow", "fold")
+)
 
 # Trait for the default object being edited:
-AnObject = Expression('object')
+AnObject = Expression("object")
 
 # The default dock style to use:
-DockStyle = dock_style_trait = Enum('fixed', 'horizontal', 'vertical', 'tab',
-                                    desc="the default docking style to use")
+DockStyle = dock_style_trait = Enum(
+    "fixed",
+    "horizontal",
+    "vertical",
+    "tab",
+    desc="the default docking style to use",
+)
 
 # The category of elements dragged out of the view:
-ExportType = Str(desc='the category of elements dragged out of the view')
+ExportType = Str(desc="the category of elements dragged out of the view")
 
 # Delegate a trait value to the object's **container** trait:
-ContainerDelegate = container_delegate = Delegate('container',
-                                                  listenable=False)
+ContainerDelegate = container_delegate = Delegate(
+    "container", listenable=False
+)
 
 # An identifier for the external help context:
 HelpId = help_id_trait = Str(desc="the external help context identifier")
 
 # A button to add to a view:
 AButton = Any
-#AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
+# AButton = Trait( '', Str, Instance( 'traitsui.menu.Action' ) )
 
 # The set of buttons to add to the view:
-Buttons = List(AButton,
-               desc='the action buttons to add to the bottom of the view')
+Buttons = List(
+    AButton, desc="the action buttons to add to the bottom of the view"
+)
 
 # View trait specified by name or instance:
 AView = Any
-#AView = Trait( '', Str, Instance( 'traitsui.view.View' ) )
+# AView = Trait( '', Str, Instance( 'traitsui.view.View' ) )
 
 # FIXME: on AButton and AView: TraitCompound handlers with deferred-import
 # Instance traits are just broken. The Instance trait tries to update the
@@ -86,15 +109,15 @@ AView = Any
 # fast_validate table is not updated although the TraitCompound's slow_validates
 # table is modified.
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'StatusItem' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class StatusItem(HasStrictTraits):
 
     #: The name of the trait the status information will be synched with:
-    name = Str('status')
+    name = Str("status")
 
     #: The width of the status field. The possible values are:
     #:
@@ -111,9 +134,10 @@ class StatusItem(HasStrictTraits):
         if value is not None:
             self.name = value
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'ViewStatus' trait:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ViewStatus(TraitType):
@@ -125,8 +149,10 @@ class ViewStatus(TraitType):
     default_value = None
 
     #: A description of the type of value this trait accepts:
-    info_text = ('None, a string, a single StatusItem instance, or a list or '
-                 'tuple of strings and/or StatusItem instances')
+    info_text = (
+        "None, a string, a single StatusItem instance, or a list or "
+        "tuple of strings and/or StatusItem instances"
+    )
 
     def validate(self, object, name, value):
         """ Validates that a specified value is valid for this trait.
@@ -155,9 +181,9 @@ class ViewStatus(TraitType):
         self.error(object, name, value)
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ATheme' trait:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def convert_theme(value, level=3):
@@ -166,7 +192,7 @@ def convert_theme(value, level=3):
     if not isinstance(value, six.string_types):
         return value
 
-    if (value[:1] == '@') and (value.find(':') >= 2):
+    if (value[:1] == "@") and (value.find(":") >= 2):
         try:
             from .image.image import ImageLibrary
 
@@ -178,6 +204,7 @@ def convert_theme(value, level=3):
             return info.theme
 
     from .theme import Theme
+
     return Theme(image=convert_image(value, level + 1))
 
 
@@ -190,7 +217,7 @@ class ATheme(TraitType):
     default_value = None
 
     #: A description of the type of value this trait accepts:
-    info_text = 'a Theme or string that can be used to define one'
+    info_text = "a Theme or string that can be used to define one"
 
     def __init__(self, value=None, **metadata):
         """ Creates an ATheme trait.
@@ -217,15 +244,16 @@ class ATheme(TraitType):
 
         self.error(object, name, value)
 
-#-------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
 #  Other trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # The spacing between two items:
 Spacing = Range(-32, 32, 3)
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Other definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 SequenceTypes = (tuple, list)

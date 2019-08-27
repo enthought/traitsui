@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: Evan Patterson
 #  Date:   06/25/09
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ A single line text widget that supports functionality common to native
     search widgets.
@@ -56,4 +56,4 @@ class SearchEditor(BasicEditorFactory):
     def _get_klass(self):
         """ Returns the toolkit-specific editor class to be instantiated.
         """
-        return toolkit_object('search_editor:SearchEditor')
+        return toolkit_object("search_editor:SearchEditor")

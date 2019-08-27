@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,12 @@
 #  Author: David C. Morrill
 #  Date:   08/29/2007
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Defines an ArrayViewEditor for displaying 1-d or 2-d arrays of values.
 """
 
-#-- Imports --------------------------------------------------------------
+# -- Imports --------------------------------------------------------------
 
 from __future__ import absolute_import
 
@@ -32,7 +32,7 @@ from ..toolkit import toolkit_object
 
 from ..ui_editor import UIEditor
 
-#-- Tabular Adapter Definition -------------------------------------------
+# -- Tabular Adapter Definition -------------------------------------------
 
 
 class ArrayViewAdapter(TabularAdapter):
@@ -43,7 +43,7 @@ class ArrayViewAdapter(TabularAdapter):
     #: Should array rows and columns be transposed:
     transpose = Bool(False)
 
-    alignment = 'right'
+    alignment = "right"
     index_text = Property
 
     def _get_index_text(self):
@@ -62,8 +62,7 @@ class ArrayViewAdapter(TabularAdapter):
             if self.transpose:
                 return getattr(object, trait)[:, row]
 
-            return super(ArrayViewAdapter, self).get_item(object, trait,
-                                                          row)
+            return super(ArrayViewAdapter, self).get_item(object, trait, row)
 
         return getattr(object, trait)[row]
 
@@ -74,6 +73,7 @@ class ArrayViewAdapter(TabularAdapter):
             return getattr(object, trait).shape[1]
 
         return super(ArrayViewAdapter, self).len(object, trait)
+
 
 # Define the actual abstract Traits UI array view editor (each backend should
 # implement its own editor that inherits from this class.
@@ -90,21 +90,24 @@ class _ArrayViewEditor(UIEditor):
     #: The tabular adapter being used for the editor view:
     adapter = Instance(ArrayViewAdapter)
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _array_view(self):
         """ Return the view used by the editor.
         """
         return View(
-            Item('object.object.' + self.name,
-                 id='tabular_editor',
-                 show_label=False,
-                 editor=TabularEditor(show_titles=self.show_titles,
-                                      editable=False,
-                                      adapter=self.adapter)
-                 ),
-            id='array_view_editor',
-            resizable=True
+            Item(
+                "object.object." + self.name,
+                id="tabular_editor",
+                show_label=False,
+                editor=TabularEditor(
+                    show_titles=self.show_titles,
+                    editable=False,
+                    adapter=self.adapter,
+                ),
+            ),
+            id="array_view_editor",
+            resizable=True,
         )
 
     def init_ui(self, parent):
@@ -114,15 +117,16 @@ class _ArrayViewEditor(UIEditor):
         shape = self.value.shape
         len_shape = len(shape)
         if (len_shape == 0) or (len_shape > 2):
-            raise ValueError("ArrayViewEditor can only display 1D or 2D "
-                             "arrays")
+            raise ValueError(
+                "ArrayViewEditor can only display 1D or 2D " "arrays"
+            )
 
         factory = self.factory
         cols = 1
         titles = factory.titles
         n = len(titles)
-        self.show_titles = (n > 0)
-        is_2d = (len_shape == 2)
+        self.show_titles = n > 0
+        is_2d = len_shape == 2
         if is_2d:
             index = 1
             if factory.transpose:
@@ -135,28 +139,32 @@ class _ArrayViewEditor(UIEditor):
                     if (cols % n) == 0:
                         titles, old_titles, i = [], titles, 0
                         while len(titles) < cols:
-                            titles.extend('%s%d' % (title, i)
-                                          for title in old_titles)
+                            titles.extend(
+                                "%s%d" % (title, i) for title in old_titles
+                            )
                             i += 1
                     else:
-                        titles.extend([''] * (cols - n))
+                        titles.extend([""] * (cols - n))
             else:
-                titles = ['Data %d' % i for i in range(cols)]
+                titles = ["Data %d" % i for i in range(cols)]
 
         columns = [(title, i) for i, title in enumerate(titles)]
 
         if factory.show_index:
-            columns.insert(0, ('Index', 'index'))
+            columns.insert(0, ("Index", "index"))
 
-        self.adapter = ArrayViewAdapter(is_2d=is_2d,
-                                        columns=columns,
-                                        transpose=factory.transpose,
-                                        format=factory.format,
-                                        font=factory.font)
+        self.adapter = ArrayViewAdapter(
+            is_2d=is_2d,
+            columns=columns,
+            transpose=factory.transpose,
+            format=factory.format,
+            font=factory.font,
+        )
 
-        return self.edit_traits(view='_array_view',
-                                parent=parent,
-                                kind='subpanel')
+        return self.edit_traits(
+            view="_array_view", parent=parent, kind="subpanel"
+        )
+
 
 # Define the ArrayViewEditor class used by client code:
 
@@ -176,12 +184,12 @@ class ArrayViewEditor(BasicEditorFactory):
     transpose = Bool(False)
 
     #: The format used to display each array element:
-    format = Str('%s')
+    format = Str("%s")
 
     #: The font to use for displaying each array element:
-    font = Font('Courier 10')
+    font = Font("Courier 10")
 
     def _get_klass(self):
         """ The class used to construct editor objects.
         """
-        return toolkit_object('array_view_editor:_ArrayViewEditor')
+        return toolkit_object("array_view_editor:_ArrayViewEditor")

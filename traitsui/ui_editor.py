@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   03/03/2006
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the BasicUIEditor class, which allows creating editors that define
     their function by creating an embedded Traits UI.
 """
-
 
 
 from __future__ import absolute_import
@@ -29,18 +28,18 @@ from .ui import UI
 
 from .editor import Editor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'UIEditor' base class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class UIEditor(Editor):
     """ An editor that creates an embedded Traits UI.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The Traits UI created by the editor
     editor_ui = Instance(UI)
@@ -55,10 +54,11 @@ class UIEditor(Editor):
     def init_ui(self, parent):
         """ Creates the traits UI for the editor.
         """
-        return self.value.edit_traits(view=self.trait_view(),
-                                      context={'object': self.value,
-                                               'editor': self},
-                                      parent=parent)
+        return self.value.edit_traits(
+            view=self.trait_view(),
+            context={"object": self.value, "editor": self},
+            parent=parent,
+        )
 
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the
@@ -82,7 +82,7 @@ class UIEditor(Editor):
         """
         return self.editor_ui.get_error_controls()
 
-#-- UI preference save/restore interface ---------------------------------
+    # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
@@ -94,5 +94,3 @@ class UIEditor(Editor):
         """ Returns any user preference information associated with the editor.
         """
         return self.editor_ui.get_prefs()
-
-

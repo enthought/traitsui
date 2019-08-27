@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,12 +8,11 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various editors for multi-selection enumerations, for the PyQt
 user interface toolkit.
 """
-
 
 
 from __future__ import absolute_import, division
@@ -22,20 +21,16 @@ import logging
 
 from pyface.qt import QtCore, QtGui
 
-from traits.api \
-    import List, Unicode, TraitError
+from traits.api import List, Unicode, TraitError
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.check_list_editor file.
-from traitsui.editors.check_list_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.check_list_editor import ToolkitEditorFactory
 
-from .editor_factory \
-    import TextEditor as BaseTextEditor
+from .editor_factory import TextEditor as BaseTextEditor
 
-from .editor \
-    import EditorWithList
+from .editor import EditorWithList
 import six
 
 
@@ -46,17 +41,18 @@ logger = logging.getLogger(__name__)
 capitalize = lambda s: s.capitalize()
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 class SimpleEditor(EditorWithList):
     """ Simple style of editor for checklists, which displays a combo box.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Checklist item names
     names = List(Unicode)
@@ -86,7 +82,6 @@ class SimpleEditor(EditorWithList):
         self.values = valid_values = [x[0] for x in values]
         self.names = [x[1] for x in values]
 
-
         # Make sure the current value is still legal:
         modified = False
         cur_value = parse_value(self.value)
@@ -96,11 +91,15 @@ class SimpleEditor(EditorWithList):
                     del cur_value[i]
                     modified = True
                 except TypeError as e:
-                    logger.warn('Unable to remove non-current value [%s] from '
-                                'values %s', cur_value[i], values)
+                    logger.warn(
+                        "Unable to remove non-current value [%s] from "
+                        "values %s",
+                        cur_value[i],
+                        values,
+                    )
         if modified:
             if isinstance(self.value, six.string_types):
-                cur_value = ','.join(cur_value)
+                cur_value = ",".join(cur_value)
             self.value = cur_value
 
         self.rebuild_editor()
@@ -128,7 +127,8 @@ class SimpleEditor(EditorWithList):
         """
         try:
             self.control.setCurrentIndex(
-                self.values.index(parse_value(self.value)[0]))
+                self.values.index(parse_value(self.value)[0])
+            )
         except:
             pass
 
@@ -165,7 +165,7 @@ class CustomEditor(SimpleEditor):
         incr = [n // cols] * cols
         rem = n % cols
         for i in range(cols):
-            incr[i] += (rem > i)
+            incr[i] += rem > i
         incr[-1] = -sum(incr[:-1]) + 1
 
         # Add the set of all possible choices:
@@ -201,7 +201,7 @@ class CustomEditor(SimpleEditor):
             cur_value.remove(cb.value)
 
         if isinstance(self.value, six.string_types):
-            cur_value = ','.join(cur_value)
+            cur_value = ",".join(cur_value)
 
         self.value = cur_value
 
@@ -234,9 +234,10 @@ class TextEditor(BaseTextEditor):
         except TraitError as excp:
             pass
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Parse a value into a list:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def parse_value(value):
@@ -246,4 +247,4 @@ def parse_value(value):
         return []
     if not isinstance(value, six.string_types):
         return value[:]
-    return [x.strip() for x in value.split(',')]
+    return [x.strip() for x in value.split(",")]

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,35 +13,32 @@
 #  Author: David C. Morrill
 #  Date:   11/01/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Creates a wxPython user interface for a specified UI object, where the UI
     is "live", meaning that it immediately updates its underlying object(s).
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-from .helper \
-    import restore_window, save_window, TraitsUIScrolledPanel
+from .helper import restore_window, save_window, TraitsUIScrolledPanel
 
-from .ui_base \
-    import BaseDialog
+from .ui_base import BaseDialog
 
-from .ui_panel \
-    import panel, show_help
+from .ui_panel import panel, show_help
 
-from .constants \
-    import DefaultTitle, WindowColor, screen_dy, \
-    scrollbar_dx
-from traitsui.undo \
-    import UndoHistory
+from .constants import DefaultTitle, WindowColor, screen_dy, scrollbar_dx
+from traitsui.undo import UndoHistory
 
-from traitsui.menu \
-    import UndoButton, RevertButton, OKButton, CancelButton, HelpButton
-
+from traitsui.menu import (
+    UndoButton,
+    RevertButton,
+    OKButton,
+    CancelButton,
+    HelpButton,
+)
 
 
 # Types of supported windows:
@@ -54,9 +51,9 @@ INFO = 4
 # Types of 'popup' dialogs:
 Popups = {POPUP, POPOVER, INFO}
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Creates a 'live update' wxPython user interface for a specified UI object:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def ui_live(ui, parent):
@@ -134,53 +131,67 @@ class LiveWindow(BaseDialog):
     """
 
     def init(self, ui, parent, style):
-        self.is_modal = (style == MODAL)
+        self.is_modal = style == MODAL
         window_style = 0
         view = ui.view
         if view.resizable:
             window_style |= wx.RESIZE_BORDER
 
         title = view.title
-        if title == '':
+        if title == "":
             title = DefaultTitle
 
         history = ui.history
         window = ui.control
         if window is not None:
             if history is not None:
-                history.on_trait_change(self._on_undoable, 'undoable',
-                                        remove=True)
-                history.on_trait_change(self._on_redoable, 'redoable',
-                                        remove=True)
-                history.on_trait_change(self._on_revertable, 'undoable',
-                                        remove=True)
+                history.on_trait_change(
+                    self._on_undoable, "undoable", remove=True
+                )
+                history.on_trait_change(
+                    self._on_redoable, "redoable", remove=True
+                )
+                history.on_trait_change(
+                    self._on_revertable, "undoable", remove=True
+                )
             window.SetSizer(None)
             ui.reset()
         else:
             self.ui = ui
             if style == MODAL:
                 if view.resizable:
-                    window_style |= (wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX)
+                    window_style |= wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
                 window = wx.Dialog(
-                    parent, -1, title, style=window_style | wx.DEFAULT_DIALOG_STYLE)
+                    parent,
+                    -1,
+                    title,
+                    style=window_style | wx.DEFAULT_DIALOG_STYLE,
+                )
             elif style == NONMODAL:
                 if parent is not None:
-                    window_style |= (wx.FRAME_FLOAT_ON_PARENT |
-                                     wx.FRAME_NO_TASKBAR)
-                window = wx.Frame(parent, -1, title, style=window_style |
-                                  (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER)))
+                    window_style |= (
+                        wx.FRAME_FLOAT_ON_PARENT | wx.FRAME_NO_TASKBAR
+                    )
+                window = wx.Frame(
+                    parent,
+                    -1,
+                    title,
+                    style=window_style
+                    | (wx.DEFAULT_FRAME_STYLE & (~wx.RESIZE_BORDER)),
+                )
             else:
                 if window_style == 0:
                     window_style = wx.SIMPLE_BORDER
                 if parent is not None:
-                    window_style |= (wx.FRAME_FLOAT_ON_PARENT |
-                                     wx.FRAME_NO_TASKBAR)
+                    window_style |= (
+                        wx.FRAME_FLOAT_ON_PARENT | wx.FRAME_NO_TASKBAR
+                    )
 
                 if isinstance(parent, tuple):
-                    window = wx.Frame(None, -1, '', style=window_style)
+                    window = wx.Frame(None, -1, "", style=window_style)
                     window._control_region = parent
                 else:
-                    window = wx.Frame(parent, -1, '', style=window_style)
+                    window = wx.Frame(parent, -1, "", style=window_style)
                 window._kind = ui.view.kind
                 self._monitor = MouseMonitor(ui)
 
@@ -192,13 +203,16 @@ class LiveWindow(BaseDialog):
             wx.EVT_CHAR(window, self._on_key)
 
         self.set_icon(view.icon)
-        buttons = [self.coerce_button(button)
-                   for button in view.buttons]
+        buttons = [self.coerce_button(button) for button in view.buttons]
         nbuttons = len(buttons)
-        no_buttons = ((nbuttons == 1) and self.is_button(buttons[0], ''))
-        has_buttons = (
-            (not no_buttons) and (
-                (nbuttons > 0) or view.undo or view.revert or view.ok or view.cancel))
+        no_buttons = (nbuttons == 1) and self.is_button(buttons[0], "")
+        has_buttons = (not no_buttons) and (
+            (nbuttons > 0)
+            or view.undo
+            or view.revert
+            or view.ok
+            or view.cancel
+        )
         if has_buttons or (view.menubar is not None):
             if history is None:
                 history = UndoHistory()
@@ -218,8 +232,11 @@ class LiveWindow(BaseDialog):
             sw.SetScrollRate(16, 16)
             max_dy = (2 * screen_dy) / 3
             sw.SetSizer(sizer)
-            sw.SetSize(wx.Size(tsdx + ((tsdy > max_dy) * scrollbar_dx),
-                               min(tsdy, max_dy)))
+            sw.SetSize(
+                wx.Size(
+                    tsdx + ((tsdy > max_dy) * scrollbar_dx), min(tsdy, max_dy)
+                )
+            )
         else:
             sw = panel(ui, window)
 
@@ -254,44 +271,56 @@ class LiveWindow(BaseDialog):
                 button = self.coerce_button(button)
                 default = raw_button == view.default_button
 
-                if self.is_button(button, 'Undo'):
+                if self.is_button(button, "Undo"):
                     self.undo = self.add_button(
-                        button, b_sizer, self._on_undo, False, default=default)
-                    self.redo = self.add_button(button, b_sizer,
-                                                self._on_redo, False, 'Redo')
-                    history.on_trait_change(self._on_undoable, 'undoable',
-                                            dispatch='ui')
-                    history.on_trait_change(self._on_redoable, 'redoable',
-                                            dispatch='ui')
+                        button, b_sizer, self._on_undo, False, default=default
+                    )
+                    self.redo = self.add_button(
+                        button, b_sizer, self._on_redo, False, "Redo"
+                    )
+                    history.on_trait_change(
+                        self._on_undoable, "undoable", dispatch="ui"
+                    )
+                    history.on_trait_change(
+                        self._on_redoable, "redoable", dispatch="ui"
+                    )
                     if history.can_undo:
                         self._on_undoable(True)
 
                     if history.can_redo:
                         self._on_redoable(True)
 
-                elif self.is_button(button, 'Revert'):
+                elif self.is_button(button, "Revert"):
                     self.revert = self.add_button(
-                        button, b_sizer, self._on_revert, False, default=default)
-                    history.on_trait_change(self._on_revertable, 'undoable',
-                                            dispatch='ui')
+                        button,
+                        b_sizer,
+                        self._on_revert,
+                        False,
+                        default=default,
+                    )
+                    history.on_trait_change(
+                        self._on_revertable, "undoable", dispatch="ui"
+                    )
                     if history.can_undo:
                         self._on_revertable(True)
 
-                elif self.is_button(button, 'OK'):
-                    self.ok = self.add_button(button, b_sizer, self._on_ok,
-                                              default=default)
-                    ui.on_trait_change(self._on_error, 'errors',
-                                       dispatch='ui')
+                elif self.is_button(button, "OK"):
+                    self.ok = self.add_button(
+                        button, b_sizer, self._on_ok, default=default
+                    )
+                    ui.on_trait_change(self._on_error, "errors", dispatch="ui")
 
-                elif self.is_button(button, 'Cancel'):
-                    self.add_button(button, b_sizer, self._on_cancel,
-                                    default=default)
+                elif self.is_button(button, "Cancel"):
+                    self.add_button(
+                        button, b_sizer, self._on_cancel, default=default
+                    )
 
-                elif self.is_button(button, 'Help'):
-                    self.add_button(button, b_sizer, self._on_help,
-                                    default=default)
+                elif self.is_button(button, "Help"):
+                    self.add_button(
+                        button, b_sizer, self._on_help, default=default
+                    )
 
-                elif not self.is_button(button, ''):
+                elif not self.is_button(button, ""):
                     self.add_button(button, b_sizer, default=default)
 
             sw_sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
@@ -309,7 +338,7 @@ class LiveWindow(BaseDialog):
         """ Closes the dialog window.
         """
         ui = self.ui
-        ui.result = (rc == wx.ID_OK)
+        ui.result = rc == wx.ID_OK
         save_window(ui)
         if self.is_modal:
             self.control.EndModal(rc)
@@ -353,7 +382,6 @@ class LiveWindow(BaseDialog):
         if event.GetKeyCode() == 0x1B:
             self._on_close_page(event)
 
-
     def _on_cancel(self, event):
         """ Handles a request to cancel all changes.
         """
@@ -391,9 +419,9 @@ class MouseMonitor(wx.Timer):
         super(MouseMonitor, self).__init__()
         self.ui = ui
         kind = ui.view.kind
-        self.is_activated = self.is_info = (kind == 'info')
+        self.is_activated = self.is_info = kind == "info"
         self.border = 3
-        if kind == 'popup':
+        if kind == "popup":
             self.border = 10
         self.Start(100)
 
@@ -424,8 +452,12 @@ class MouseMonitor(wx.Timer):
                     px, py, pdx, pdy = parent.GetScreenRect()
                 else:
                     px, py, pdx, pdy = control._control_region
-                if ((mx < px) or (mx >= (px + pdx)) or
-                        (my < py) or (my >= (py + pdy))):
+                if (
+                    (mx < px)
+                    or (mx >= (px + pdx))
+                    or (my < py)
+                    or (my >= (py + pdy))
+                ):
                     ui.owner.close_popup()
                     self.is_activated = False
 
@@ -433,8 +465,12 @@ class MouseMonitor(wx.Timer):
                 # Allow for a 'dead zone' border around the window to allow for
                 # small motor control problems:
                 border = self.border
-                if ((mx < (cx - border)) or (mx >= (cx + cdx + border)) or
-                        (my < (cy - border)) or (my >= (cy + cdy + border))):
+                if (
+                    (mx < (cx - border))
+                    or (mx >= (cx + cdx + border))
+                    or (my < (cy - border))
+                    or (my >= (cy + cdy + border))
+                ):
                     ui.owner.close_popup()
                     self.is_activated = False
         elif (cx <= mx < (cx + cdx)) and (cy <= my < (cy + cdy)):

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,8 +8,7 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------
 
 
 from __future__ import absolute_import
@@ -27,7 +26,6 @@ from ..editors.title_editor import TitleEditor
 
 
 class SimpleEditor(Editor):
-
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -35,8 +33,10 @@ class SimpleEditor(Editor):
         self._control = HeadingText(None)
         self.control = self._control.control
         if self.factory.allow_selection:
-            flags = (self.control.textInteractionFlags() |
-                     QtCore.Qt.TextSelectableByMouse)
+            flags = (
+                self.control.textInteractionFlags()
+                | QtCore.Qt.TextSelectableByMouse
+            )
             self.control.setTextInteractionFlags(flags)
         self.set_tooltip()
 
@@ -45,6 +45,7 @@ class SimpleEditor(Editor):
             editor.
         """
         self._control.text = self.str_value
+
 
 CustomEditor = SimpleEditor
 ReadonlyEditor = SimpleEditor

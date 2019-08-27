@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,11 +8,10 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the set editors for the PyQt user interface toolkit.
 """
-
 
 
 from __future__ import absolute_import
@@ -21,17 +20,13 @@ from pyface.qt import QtCore, QtGui
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.set_editor file.
-from traitsui.editors.set_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.set_editor import ToolkitEditorFactory
 
-from traitsui.helper \
-    import enum_values_changed
+from traitsui.helper import enum_values_changed
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from traits.api \
-    import Instance, Property
+from traits.api import Instance, Property
 import six
 
 
@@ -45,9 +40,9 @@ class SimpleEditor(Editor):
     selected item up or down in right-side list box.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The top level QLayout for the editor:
     root_layout = Instance(QtGui.QLayout)
@@ -73,48 +68,55 @@ class SimpleEditor(Editor):
         self.root_layout.setContentsMargins(0, 0, 0, 0)
 
         factory = self.factory
-        if factory.name != '':
-            self._object, self._name, self._value = \
-                self.parse_extended_name(factory.name)
+        if factory.name != "":
+            self._object, self._name, self._value = self.parse_extended_name(
+                factory.name
+            )
             self.values_changed()
-            self._object.on_trait_change(self._values_changed,
-                                         self._name, dispatch='ui')
+            self._object.on_trait_change(
+                self._values_changed, self._name, dispatch="ui"
+            )
         else:
-            factory.on_trait_change(self.update_editor, 'values_modified',
-                                    dispatch='ui')
+            factory.on_trait_change(
+                self.update_editor, "values_modified", dispatch="ui"
+            )
 
         blayout = QtGui.QVBoxLayout()
 
-        self._unused = self._create_listbox(0, self._on_unused, self._on_use,
-                                            factory.left_column_title)
+        self._unused = self._create_listbox(
+            0, self._on_unused, self._on_use, factory.left_column_title
+        )
 
         self._use_all = self._unuse_all = self._up = self._down = None
 
         if factory.can_move_all:
-            self._use_all = self._create_button('>>', blayout,
-                                                self._on_use_all)
+            self._use_all = self._create_button(
+                ">>", blayout, self._on_use_all
+            )
 
-        self._use = self._create_button('>', blayout, self._on_use)
-        self._unuse = self._create_button('<', blayout, self._on_unuse)
+        self._use = self._create_button(">", blayout, self._on_use)
+        self._unuse = self._create_button("<", blayout, self._on_unuse)
 
         if factory.can_move_all:
-            self._unuse_all = self._create_button('<<', blayout,
-                                                  self._on_unuse_all)
+            self._unuse_all = self._create_button(
+                "<<", blayout, self._on_unuse_all
+            )
 
         if factory.ordered:
-            self._up = self._create_button('Move Up', blayout, self._on_up)
-            self._down = self._create_button('Move Down', blayout,
-                                             self._on_down)
+            self._up = self._create_button("Move Up", blayout, self._on_up)
+            self._down = self._create_button(
+                "Move Down", blayout, self._on_down
+            )
 
         self.root_layout.addLayout(blayout, 1, 1, QtCore.Qt.AlignCenter)
 
-        self._used = self._create_listbox(2, self._on_value, self._on_unuse,
-                                          factory.right_column_title)
+        self._used = self._create_listbox(
+            2, self._on_value, self._on_unuse, factory.right_column_title
+        )
 
         self.context_object.on_trait_change(
-            self.update_editor,
-            self.extended_name + '_items?',
-            dispatch='ui')
+            self.update_editor, self.extended_name + "_items?", dispatch="ui"
+        )
 
     def _get_names(self):
         """ Gets the current set of enumeration names.
@@ -172,8 +174,9 @@ class SimpleEditor(Editor):
     def values_changed(self):
         """ Recomputes the cached data based on the underlying enumeration model.
         """
-        self._names, self._mapping, self._inverse_mapping = \
-            enum_values_changed(self._value(), self.string_value)
+        self._names, self._mapping, self._inverse_mapping = enum_values_changed(
+            self._value(), self.string_value
+        )
 
     def _values_changed(self):
         """ Handles the underlying object model's enumeration set being changed.
@@ -253,16 +256,17 @@ class SimpleEditor(Editor):
         """ Disposes of the contents of an editor.
         """
         if self._object is not None:
-            self._object.on_trait_change(self._values_changed,
-                                         self._name, remove=True)
+            self._object.on_trait_change(
+                self._values_changed, self._name, remove=True
+            )
         else:
-            self.factory.on_trait_change(self.update_editor,
-                                         'values_modified', remove=True)
+            self.factory.on_trait_change(
+                self.update_editor, "values_modified", remove=True
+            )
 
         self.context_object.on_trait_change(
-            self.update_editor,
-            self.extended_name + '_items?',
-            remove=True)
+            self.update_editor, self.extended_name + "_items?", remove=True
+        )
 
         super(SimpleEditor, self).dispose()
 
@@ -285,19 +289,23 @@ class SimpleEditor(Editor):
 
     def _on_use(self):
         self._unused_items, self.value = self._transfer_items(
-            self._unused, self._used, self._unused_items, self.value)
+            self._unused, self._used, self._unused_items, self.value
+        )
 
     def _on_unuse(self):
         self.value, self._unused_items = self._transfer_items(
-            self._used, self._unused, self.value, self._unused_items)
+            self._used, self._unused, self.value, self._unused_items
+        )
 
     def _on_use_all(self):
         self._unused_items, self.value = self._transfer_all(
-            self._unused, self._used, self._unused_items, self.value)
+            self._unused, self._used, self._unused_items, self.value
+        )
 
     def _on_unuse_all(self):
         self.value, self._unused_items = self._transfer_all(
-            self._used, self._unused, self.value, self._unused_items)
+            self._used, self._unused, self.value, self._unused_items
+        )
 
     def _on_up(self):
         self._move_item(-1)
@@ -316,7 +324,8 @@ class SimpleEditor(Editor):
             index_to = list_to.count()
             list_from.item(0).setSelected(True)
             list_to.insertItems(
-                index_to, self._get_selected_strings(list_from))
+                index_to, self._get_selected_strings(list_from)
+            )
             list_from.takeItem(0)
             values_to.append(values_from[0])
             del values_from[0]
@@ -360,7 +369,9 @@ class SimpleEditor(Editor):
             # If right list is ordered, keep moved items selected:
             if self.factory.ordered:
                 items = list_to.findItems(
-                    item_label, QtCore.Qt.MatchFixedString | QtCore.Qt.MatchCaseSensitive)
+                    item_label,
+                    QtCore.Qt.MatchFixedString | QtCore.Qt.MatchCaseSensitive,
+                )
                 if items:
                     items[0].setSelected(True)
 
@@ -398,46 +409,55 @@ class SimpleEditor(Editor):
         else:
             index = index_from
             values = [value[index_to], value[index_from]]
-        self.value = value[: index] + values + value[index + 2:]
+        self.value = value[:index] + values + value[index + 2 :]
+
     def _check_up_down(self):
         """ Sets the proper enabled state for the up and down buttons.
         """
         if self.factory.ordered:
             selected = self._used.selectedItems()
-            self._up.setEnabled(len(selected) == 1 and
-                                selected[0] is not self._used.item(0))
+            self._up.setEnabled(
+                len(selected) == 1 and selected[0] is not self._used.item(0)
+            )
             self._down.setEnabled(
-                len(selected) == 1 and selected[0] is not self._used.item(
-                    self._used.count() - 1))
+                len(selected) == 1
+                and selected[0] is not self._used.item(self._used.count() - 1)
+            )
 
     def _check_left_right(self):
         """ Sets the proper enabled state for the left and right buttons.
         """
-        self._use.setEnabled(self._unused.count() > 0 and
-                             self._get_first_selection(self._unused) >= 0)
-        self._unuse.setEnabled(self._used.count() > 0 and
-                               self._get_first_selection(self._used) >= 0)
+        self._use.setEnabled(
+            self._unused.count() > 0
+            and self._get_first_selection(self._unused) >= 0
+        )
+        self._unuse.setEnabled(
+            self._used.count() > 0
+            and self._get_first_selection(self._used) >= 0
+        )
 
         if self.factory.can_move_all:
             self._use_all.setEnabled(
-                self._unused.count() > 0 and self._get_first_selection(
-                    self._unused) >= 0)
+                self._unused.count() > 0
+                and self._get_first_selection(self._unused) >= 0
+            )
             self._unuse_all.setEnabled(
-                self._used.count() > 0 and self._get_first_selection(
-                    self._used) >= 0)
+                self._used.count() > 0
+                and self._get_first_selection(self._used) >= 0
+            )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Returns a list of the selected strings in the listbox
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_selected_strings(self, listbox):
         """ Returns a list of the selected strings in the given *listbox*.
         """
         return [six.text_type(itm.text()) for itm in listbox.selectedItems()]
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Returns the index of the first (or only) selected item.
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_first_selection(self, listbox):
         """ Returns the index of the first (or only) selected item.

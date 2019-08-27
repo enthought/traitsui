@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,10 +13,9 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """ Defines the table editor factory for all traits user interface toolkits.
 """
-
 
 
 from __future__ import absolute_import
@@ -37,7 +36,8 @@ from traits.api import (
     Bool,
     Callable,
     Range,
-    on_trait_change)
+    on_trait_change,
+)
 
 from ..editor_factory import EditorFactory
 
@@ -56,14 +56,13 @@ from ..view import View
 from .enum_editor import EnumEditor
 
 
-
 # The filter used to indicate that the user wants to customize the current
 # filter
-customize_filter = TableFilter(name='Customize...')
+customize_filter = TableFilter(name="Customize...")
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # A trait whose value can be True, False, or a callable function
 BoolOrCallable = Trait(False, Bool, Callable)
@@ -73,16 +72,15 @@ class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for table editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: List of initial table column descriptors
-    columns = List(Instance('traitsui.table_column.TableColumn'))
+    columns = List(Instance("traitsui.table_column.TableColumn"))
 
     #: List of other table column descriptors (not initially displayed)
-    other_columns = List(
-        Instance('traitsui.table_column.TableColumn'))
+    other_columns = List(Instance("traitsui.table_column.TableColumn"))
 
     #: The object trait containing the list of column descriptors
     columns_name = Str
@@ -98,11 +96,10 @@ class ToolkitEditorFactory(EditorFactory):
     filter_name = Str
 
     #: Initial filter that should be applied to the table
-    filter = Instance('traitsui.table_filter.TableFilter')
+    filter = Instance("traitsui.table_filter.TableFilter")
 
     #: List of available filters that can be applied to the table
-    filters = List(Instance(
-        'traitsui.table_filter.TableFilter'))
+    filters = List(Instance("traitsui.table_filter.TableFilter"))
 
     #: The optional extended trait name of the trait used to notify that the
     #: filter has changed and the displayed objects should be updated.
@@ -111,10 +108,10 @@ class ToolkitEditorFactory(EditorFactory):
 
     #: Filter object used to allow a user to search the table.
     #: NOTE: If left as None, the table will not be searchable.
-    search = Instance('traitsui.table_filter.TableFilter')
+    search = Instance("traitsui.table_filter.TableFilter")
 
     #: Default context menu to display when any cell is right-clicked
-    menu = Instance('traitsui.menu.Menu')
+    menu = Instance("traitsui.menu.Menu")
 
     #: Default trait name containg menu
     menu_name = Str
@@ -149,7 +146,8 @@ class ToolkitEditorFactory(EditorFactory):
         "maximum",
         "expanding",
         "minimum_expanding",
-        "ignored")
+        "ignored",
+    )
     v_size_policy = Enum(
         None,
         "preferred",
@@ -158,7 +156,8 @@ class ToolkitEditorFactory(EditorFactory):
         "maximum",
         "expanding",
         "minimum_expanding",
-        "ignored")
+        "ignored",
+    )
 
     #: Should a new row automatically be added to the end of the table to allow
     #: the user to create new entries? If True, **row_factory** must be set.
@@ -173,7 +172,7 @@ class ToolkitEditorFactory(EditorFactory):
     #: View to use when editing table items.
     #: NOTE: If not specified, the table items are not editable in a separate
     #: pane of the editor.
-    edit_view = AView(' ')
+    edit_view = AView(" ")
 
     #: The handler to apply to **edit_view**
     edit_view_handler = Instance(Handler)
@@ -276,7 +275,7 @@ class ToolkitEditorFactory(EditorFactory):
     #:   Single cells are selected. Only one cell can be selected at once.
     #: cells
     #:   Single cells are selected. More than one cell can be selected at once.
-    selection_mode = Enum('row', 'rows', 'column', 'columns', 'cell', 'cells')
+    selection_mode = Enum("row", "rows", "column", "columns", "cell", "cells")
 
     #: The optional extended name of the trait that the current selection is
     #: synced with:
@@ -324,54 +323,82 @@ class ToolkitEditorFactory(EditorFactory):
     source_model_factory = Callable()
     model_factory = Callable()
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    traits_view = View(['{Initial columns}@',
-                        Item('columns', resizable=True),
-                        '{Other columns}@',
-                        Item('other_columns', resizable=True),
-                        '|{Columns}<>'],
-                       [['deletable{Are items deletable?}', '9',
-                         'editable{Are items editable?}', '9',
-                         '-[Item Options]>'],
-                        ['show_column_labels{Show column labels?}', '9',
-                         'configurable{Are columns user configurable?}', '9',
-                            'auto_size{Should columns auto size?}',
-                            '-[Column Options]>'],
-                        ['sortable{Are columns sortable?}',
-                         Item('sort_model{Does sorting affect the model?}',
-                              enabled_when='sortable'),
-                         '-[Sorting Options]>'],
-                        [['show_lines{Show grid lines?}',
-                          '|>'],
-                         ['_', 'line_color{Grid line color}@',
-                          '|<>'],
-                         '|[Grid Line Options]'],
-                        '|{Options}'],
-                       [['cell_color{Text color}@',
-                         'cell_bg_color{Background color}@',
-                         'cell_read_only_bg_color{Read only color}@',
-                         '|[Cell Colors]'],
-                        ['cell_font',
-                         '|[Cell Font]<>'],
-                        '|{Cell}'],
-                       [['label_color{Text color}@',
-                         'label_bg_color{Background color}@',
-                         '|[Label Colors]'],
-                        ['label_font@',
-                         '|[Label Font]<>'],
-                        '|{Label}'],
-                       [['selection_color{Text color}@',
-                         'selection_bg_color{Background color}@',
-                         '|[Selection Colors]'],
-                        '|{Selection}'],
-                       height=0.5)
+    traits_view = View(
+        [
+            "{Initial columns}@",
+            Item("columns", resizable=True),
+            "{Other columns}@",
+            Item("other_columns", resizable=True),
+            "|{Columns}<>",
+        ],
+        [
+            [
+                "deletable{Are items deletable?}",
+                "9",
+                "editable{Are items editable?}",
+                "9",
+                "-[Item Options]>",
+            ],
+            [
+                "show_column_labels{Show column labels?}",
+                "9",
+                "configurable{Are columns user configurable?}",
+                "9",
+                "auto_size{Should columns auto size?}",
+                "-[Column Options]>",
+            ],
+            [
+                "sortable{Are columns sortable?}",
+                Item(
+                    "sort_model{Does sorting affect the model?}",
+                    enabled_when="sortable",
+                ),
+                "-[Sorting Options]>",
+            ],
+            [
+                ["show_lines{Show grid lines?}", "|>"],
+                ["_", "line_color{Grid line color}@", "|<>"],
+                "|[Grid Line Options]",
+            ],
+            "|{Options}",
+        ],
+        [
+            [
+                "cell_color{Text color}@",
+                "cell_bg_color{Background color}@",
+                "cell_read_only_bg_color{Read only color}@",
+                "|[Cell Colors]",
+            ],
+            ["cell_font", "|[Cell Font]<>"],
+            "|{Cell}",
+        ],
+        [
+            [
+                "label_color{Text color}@",
+                "label_bg_color{Background color}@",
+                "|[Label Colors]",
+            ],
+            ["label_font@", "|[Label Font]<>"],
+            "|{Label}",
+        ],
+        [
+            [
+                "selection_color{Text color}@",
+                "selection_bg_color{Background color}@",
+                "|[Selection Colors]",
+            ],
+            "|{Selection}",
+        ],
+        height=0.5,
+    )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  'Editor' factory methods:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def readonly_editor(self, ui, object, name, description, parent):
         """ Generates an "editor" that is read-only.
@@ -381,25 +408,25 @@ class ToolkitEditorFactory(EditorFactory):
         """
         self.editable = False
         return super(ToolkitEditorFactory, self).readonly_editor(
-            ui, object, name, description, parent)
+            ui, object, name, description, parent
+        )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Event handlers:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    @on_trait_change('filters[]')
+    @on_trait_change("filters[]")
     def _update_filter_editor(self, object, name, old, new):
         """ Handles the set of filters associated with the editor's factory
             being changed.
         """
-        values = {None: '000:No filter'}
+        values = {None: "000:No filter"}
         i = 0
         for filter in self.filters:
             if not filter.template:
                 i += 1
-                values[filter] = '%03d:%s' % (i, filter.name)
-        values[customize_filter] = '%03d:%s' % ((i + 1),
-                                                customize_filter.name)
+                values[filter] = "%03d:%s" % (i, filter.name)
+        values[customize_filter] = "%03d:%s" % ((i + 1), customize_filter.name)
         if self._filter_editor is None:
             self._filter_editor = EnumEditor(values=values)
         else:
@@ -409,40 +436,42 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the TableEditor class
 TableEditor = ToolkitEditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Base class for toolkit-specific editors
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class BaseTableEditor(object):
     """ Base class for toolkit-specific editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Interface for toolkit-specific editors:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def set_menu_context(self, selection, object, column):
         """Call before creating a context menu for a cell, then set self as the
            controller for the menu.
         """
-        self._menu_context = {'selection': selection,
-                              'object': object,
-                              'column': column,
-                              'editor': self,
-                              'info': self.ui.info,
-                              'handler': self.ui.handler}
+        self._menu_context = {
+            "selection": selection,
+            "object": object,
+            "column": column,
+            "editor": self,
+            "info": self.ui.info,
+            "handler": self.ui.handler,
+        }
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  pyface.action 'controller' interface implementation:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def add_to_menu(self, menu_item):
         """ Adds a menu item to the menu bar being constructed.
         """
         action = menu_item.item.action
-        self.eval_when(action.enabled_when, menu_item, 'enabled')
-        self.eval_when(action.checked_when, menu_item, 'checked')
+        self.eval_when(action.enabled_when, menu_item, "enabled")
+        self.eval_when(action.checked_when, menu_item, "checked")
 
     def add_to_toolbar(self, toolbar_item):
         """ Adds a toolbar item to the toolbar being constructed.
@@ -452,14 +481,12 @@ class BaseTableEditor(object):
     def can_add_to_menu(self, action):
         """ Returns whether the action should be defined in the user interface.
         """
-        if action.defined_when != '':
-            if not eval(action.defined_when, globals(),
-                        self._menu_context):
+        if action.defined_when != "":
+            if not eval(action.defined_when, globals(), self._menu_context):
                 return False
 
-        if action.visible_when != '':
-            if not eval(action.visible_when, globals(),
-                        self._menu_context):
+        if action.visible_when != "":
+            if not eval(action.visible_when, globals(), self._menu_context):
                 return False
 
         return True
@@ -481,11 +508,11 @@ class BaseTableEditor(object):
         handler = self.ui.handler
         context = self._menu_context
         self._menu_context = None
-        selection = context['selection']
+        selection = context["selection"]
 
-        if method_name.find('.') >= 0:
-            if method_name.find('(') < 0:
-                method_name += '()'
+        if method_name.find(".") >= 0:
+            if method_name.find("(") < 0:
+                method_name += "()"
             try:
                 eval(method_name, globals(), context)
             except:
@@ -504,21 +531,22 @@ class BaseTableEditor(object):
 
         action.perform(selection)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Menu support methods:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def eval_when(self, condition, object, trait):
         """ Evaluates a condition within a defined context and sets a specified
         object trait based on the result, which is assumed to be a Boolean.
         """
-        if condition != '':
+        if condition != "":
             value = bool(eval(condition, globals(), self._menu_context))
             setattr(object, trait, value)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Helper class for toolkit-specific editors to implement 'reversed' option:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ReversedList(object):
@@ -555,8 +583,7 @@ class ReversedList(object):
     def __setslice__(self, i, j, values):
         """ Sets a slice of a list to the contents of a specified sequence.
         """
-        return self.list.__setslice__(self._index(i), self._index(j),
-                                      values)
+        return self.list.__setslice__(self._index(i), self._index(j), values)
 
     def __delitem__(self, index):
         """ Deletes the item at a specified index.
@@ -567,9 +594,9 @@ class ReversedList(object):
         """ Returns the "reversed" value for a specified index.
         """
         if index < 0:
-            return (-1 - index)
+            return -1 - index
 
-        result = (len(self.list) - index - 1)
+        result = len(self.list) - index - 1
         if result >= 0:
             return result
 

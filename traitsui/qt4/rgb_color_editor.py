@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,7 +8,7 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines a subclass of the base PyQt color editor factory, for colors
 that are represented as tuples of the form ( *red*, *green*, *blue* ), where
@@ -16,23 +16,20 @@ that are represented as tuples of the form ( *red*, *green*, *blue* ), where
 """
 
 
-
 from __future__ import absolute_import
 from pyface.qt import QtGui
 
-from traits.trait_base \
-    import SequenceTypes
+from traits.trait_base import SequenceTypes
 
 # Note: The ToolkitEditorFactory class imported from color_editor is a
 # subclass of the abstract ToolkitEditorFactory class
 # (in traitsui.api) with qt4-specific methods defined.
 # We need to override the implementations of the qt4-specific methods here.
-from .color_editor \
-    import ToolkitEditorFactory as BaseColorToolkitEditorFactory
+from .color_editor import ToolkitEditorFactory as BaseColorToolkitEditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  The PyQt4 ToolkitEditorFactory class.
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
@@ -43,7 +40,7 @@ class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
         """ Gets the PyQt color equivalent of the object trait.
         """
         try:
-            color = getattr(editor.object, editor.name + '_')
+            color = getattr(editor.object, editor.name + "_")
         except AttributeError:
             color = getattr(editor.object, editor.name)
 
@@ -61,7 +58,9 @@ class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
         """ Returns the text representation of a specified color value.
         """
         if type(color) in SequenceTypes:
-            return "(%d,%d,%d)" % (int(color[0] * 255.0),
-                                   int(color[1] * 255.0),
-                                   int(color[2] * 255.0))
+            return "(%d,%d,%d)" % (
+                int(color[0] * 255.0),
+                int(color[1] * 255.0),
+                int(color[2] * 255.0),
+            )
         return color

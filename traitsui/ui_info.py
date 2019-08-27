@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/13/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the UIInfo class used to represent the object and editor content of
     an active Traits-based user interface.
 """
-
 
 
 from __future__ import absolute_import
@@ -31,12 +30,12 @@ class UIInfo(HasPrivateTraits):
     user interface
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Bound to a UI object at UIInfo construction time
-    ui = Instance('traitsui.ui.UI', allow_none=True)
+    ui = Instance("traitsui.ui.UI", allow_none=True)
 
     #: Indicates whether the UI has finished initialization
     initialized = Bool(False)
@@ -56,5 +55,5 @@ class UIInfo(HasPrivateTraits):
 
         if not hasattr(self, name):
             self.add_trait(name, Constant(value))
-            if id != '':
+            if id != "":
                 self.ui._names.append(id)

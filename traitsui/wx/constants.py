@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: David C. Morrill
 #  Date:   10/22/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines constants used by the wxPython implementation of the various text
     editors and text editor factories.
@@ -25,11 +25,11 @@ import sys
 import wx
 
 #: Define platform and wx version constants:
-is_mac = (sys.platform == 'darwin')
-is_wx26 = (float('.'.join(wx.__version__.split('.')[0:2])) < 2.8)
+is_mac = sys.platform == "darwin"
+is_wx26 = float(".".join(wx.__version__.split(".")[0:2])) < 2.8
 
 #: Default dialog title
-DefaultTitle = 'Edit properties'
+DefaultTitle = "Edit properties"
 
 #: Color of valid input
 OKColor = wx.WHITE

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,40 +8,53 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various font editors and the font editor factory, for the
     PyQt user interface toolkit..
 """
 
 
-
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
 
-from traitsui.editors.font_editor \
-    import ToolkitEditorFactory as BaseToolkitEditorFactory
+from traitsui.editors.font_editor import (
+    ToolkitEditorFactory as BaseToolkitEditorFactory,
+)
 
-from .editor_factory \
-    import SimpleEditor as BaseSimpleEditor, \
-    TextEditor as BaseTextEditor, \
-    ReadonlyEditor as BaseReadonlyEditor
+from .editor_factory import (
+    SimpleEditor as BaseSimpleEditor,
+    TextEditor as BaseTextEditor,
+    ReadonlyEditor as BaseReadonlyEditor,
+)
 
-from .editor \
-    import Editor
+from .editor import Editor
 import six
-
 
 
 # Standard font point sizes
 PointSizes = [
-    '8', '9', '10', '11', '12', '14', '16', '18',
-    '20', '22', '24', '26', '28', '36', '48', '72'
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "14",
+    "16",
+    "18",
+    "20",
+    "22",
+    "24",
+    "26",
+    "28",
+    "36",
+    "48",
+    "72",
 ]
 
-#---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 #  The PyQtToolkitEditorFactory class.
-#---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 ## We need to add qt4-specific methods to the editor factory, and so we create
 ## a subclass of the BaseToolkitEditorFactory.
 
@@ -49,6 +62,7 @@ PointSizes = [
 class ToolkitEditorFactory(BaseToolkitEditorFactory):
     """ PyQt editor factory for font editors.
     """
+
     def to_qt4_font(self, editor):
         """ Returns a QFont object corresponding to a specified object's font
         trait.
@@ -63,12 +77,19 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
     def str_font(self, font):
         """ Returns the text representation of the specified object trait value.
         """
-        weight = {QtGui.QFont.Light: ' Light',
-                  QtGui.QFont.Bold: ' Bold'}.get(font.weight(), '')
-        style = {QtGui.QFont.StyleOblique: ' Slant',
-                 QtGui.QFont.StyleItalic: ' Italic'}.get(font.style(), '')
-        return '%s point %s%s%s' % (
-               font.pointSize(), font.family(), style, weight)
+        weight = {QtGui.QFont.Light: " Light", QtGui.QFont.Bold: " Bold"}.get(
+            font.weight(), ""
+        )
+        style = {
+            QtGui.QFont.StyleOblique: " Slant",
+            QtGui.QFont.StyleItalic: " Italic",
+        }.get(font.style(), "")
+        return "%s point %s%s%s" % (
+            font.pointSize(),
+            font.family(),
+            style,
+            weight,
+        )
 
 
 class SimpleFontEditor(BaseSimpleEditor):
@@ -76,11 +97,13 @@ class SimpleFontEditor(BaseSimpleEditor):
     a text representation of the font value (using that font if possible).
     Clicking the field displays a font selection dialog box.
     """
+
     def popup_editor(self):
         """ Invokes the pop-up editor for an object trait.
         """
-        fnt, ok = QtGui.QFontDialog.getFont(self.factory.to_qt4_font(self),
-                                            self.control)
+        fnt, ok = QtGui.QFontDialog.getFont(
+            self.factory.to_qt4_font(self), self.control
+        )
 
         if ok:
             self.value = self.factory.from_qt4_font(fnt)
@@ -107,6 +130,7 @@ class CustomFontEditor(Editor):
         * A combo box containing all available type face names.
         * A combo box containing the available type sizes.
     """
+
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
@@ -175,7 +199,7 @@ class CustomFontEditor(Editor):
         try:
             idx = PointSizes.index(str(font.pointSize()))
         except ValueError:
-            idx = PointSizes.index('9')
+            idx = PointSizes.index("9")
 
         self._point_size.setCurrentIndex(idx)
 
@@ -189,7 +213,7 @@ class CustomFontEditor(Editor):
         """
         return [self._font, self._facename, self._point_size]
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _set_font(self, font):
         """ Sets the font used by the text control to the specified font.
@@ -203,6 +227,7 @@ class TextFontEditor(BaseTextEditor):
     containing a text representation of the font value (using that font if
     possible).
     """
+
     def update_object(self):
         """ Handles the user changing the contents of the edit control.
         """
@@ -226,6 +251,7 @@ class ReadonlyFontEditor(BaseReadonlyEditor):
     containing a text representation of the font value (using that font if
     possible).
     """
+
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the
             editor.
@@ -238,9 +264,10 @@ class ReadonlyFontEditor(BaseReadonlyEditor):
         """
         return self.factory.str_font(font)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Set the editor control's font to match a specified font:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def set_font(editor):

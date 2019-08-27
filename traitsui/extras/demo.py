@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   09/15/2005
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ A Traits UI demo that borrows heavily from the design of the wxPython demo.
 """
-
 
 
 from __future__ import absolute_import
@@ -31,42 +30,77 @@ from io import StringIO
 import io
 from configobj import ConfigObj
 
-from traits.api import (HasTraits, HasPrivateTraits, Str, Instance, Property,
-                        Any, Code, HTML, true, false, Dict)
+from traits.api import (
+    HasTraits,
+    HasPrivateTraits,
+    Str,
+    Instance,
+    Property,
+    Any,
+    Code,
+    HTML,
+    true,
+    false,
+    Dict,
+)
 
-from traitsui.api import (TreeEditor, ObjectTreeNode, TreeNodeObject, View,
-                          Item, VSplit, Tabbed, VGroup, HGroup, Heading,
-                          Handler, UIInfo, InstanceEditor, HTMLEditor, Include,
-                          spring)
+from traitsui.api import (
+    TreeEditor,
+    ObjectTreeNode,
+    TreeNodeObject,
+    View,
+    Item,
+    VSplit,
+    Tabbed,
+    VGroup,
+    HGroup,
+    Heading,
+    Handler,
+    UIInfo,
+    InstanceEditor,
+    HTMLEditor,
+    Include,
+    spring,
+)
 
 from os import listdir
 
-from os.path import (join, isdir, split, splitext, dirname, basename, abspath,
-                     exists, isabs)
+from os.path import (
+    join,
+    isdir,
+    split,
+    splitext,
+    dirname,
+    basename,
+    abspath,
+    exists,
+    isabs,
+)
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Global data:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Define the code used to populate the 'execfile' dictionary:
 exec_str = """from traits.api import *
 
 """
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 #  Return a 'user-friendly' name for a specified string:
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 
 def user_name_for(name):
-    name = name.replace('_', ' ')
+    name = name.replace("_", " ")
     return name[:1].upper() + name[1:]
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Parses the contents of a specified source file into module comment and
 #  source text:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def extract_docstring_from_source(source):
@@ -90,18 +124,18 @@ def extract_docstring_from_source(source):
 
     for ttype, tstring, tstart, tend, tline in python_tokens:
         token_name = token.tok_name[ttype]
-        if token_name == 'STRING' and tstart[1] == 0:
+        if token_name == "STRING" and tstart[1] == 0:
             break
     else:
         # No docstrings found. Return blank docstring and all the source.
-        return '', source.strip()
+        return "", source.strip()
 
     source_lines = source.splitlines()
 
     # Extract module docstring lines and recombine
-    docstring = eval('\n'.join(source_lines[tstart[0] - 1:tend[0]]))
-    source_lines = source_lines[:tstart[0] - 1] + source_lines[tend[0]:]
-    source = '\n'.join(source_lines)
+    docstring = eval("\n".join(source_lines[tstart[0] - 1 : tend[0]]))
+    source_lines = source_lines[: tstart[0] - 1] + source_lines[tend[0] :]
+    source = "\n".join(source_lines)
     source = source.strip()
 
     return docstring, source
@@ -118,28 +152,30 @@ def parse_source(file_name):
         The source code, sans docstring.
     """
     try:
-        with io.open(file_name, 'r', encoding='utf-8') as fh:
+        with io.open(file_name, "r", encoding="utf-8") as fh:
             source_code = fh.read()
         return extract_docstring_from_source(source_code)
     except Exception:
         # Print an error message instead of failing silently.
         # Ideally, the message would be output to the "log" tab.
         import traceback
+
         traceback_text = traceback.format_exc()
         error_fmt = u"""Sorry, something went wrong.\n\n{}"""
         error_msg = error_fmt.format(traceback_text)
-        return (error_msg, '')
+        return (error_msg, "")
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'DemoFileHandler' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 class DemoFileHandler(Handler):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The current 'info' object (for use by the 'write' method):
     info = Instance(UIInfo)
@@ -150,7 +186,7 @@ class DemoFileHandler(Handler):
 
         # Set up the 'print' logger:
         df = info.object
-        df.log = ''
+        df.log = ""
         sys.stdout = sys.stderr = self
 
         # Read in the demo source file:
@@ -162,29 +198,29 @@ class DemoFileHandler(Handler):
         sys.path.append(dirname(df.path))
 
         locals = df.parent.init_dic
-        locals['__name__'] = '___main___'
-        locals['__file__'] = df.path
-        sys.modules['__main__'].__file__ = df.path
+        locals["__name__"] = "___main___"
+        locals["__file__"] = df.path
+        sys.modules["__main__"].__file__ = df.path
         try:
-            with io.open(df.path, 'r', encoding='utf-8') as fp:
-                exec(compile(fp.read(), df.path, 'exec'), locals, locals)
-            demo = self._get_object('modal_popup', locals)
+            with io.open(df.path, "r", encoding="utf-8") as fp:
+                exec(compile(fp.read(), df.path, "exec"), locals, locals)
+            demo = self._get_object("modal_popup", locals)
             if demo is not None:
                 demo = ModalDemoButton(demo=demo)
             else:
-                demo = self._get_object('popup', locals)
+                demo = self._get_object("popup", locals)
                 if demo is not None:
                     demo = DemoButton(demo=demo)
                 else:
-                    demo = self._get_object('demo', locals)
+                    demo = self._get_object("demo", locals)
             # FIXME: If a 'demo' object could not be found, then try to execute
             # the file setting __name__ to __main__. A lot of test scripts have
             # the actual test running when __name__==__main__ and so we can at
             # least run all test examples this way. Use a do_later loop so as to
             # finish building the current UI before running the test.
             if demo is None:
-                locals['__name__'] = '__main__'
-                #do_later(self.execute_test, df, locals)
+                locals["__name__"] = "__main__"
+                # do_later(self.execute_test, df, locals)
         except Exception as excp:
             demo = DemoError(msg=str(excp))
 
@@ -194,17 +230,17 @@ class DemoFileHandler(Handler):
 
     def execute_test(self, df, locals):
         """ Executes the file in df.path in the namespace of locals."""
-        with io.open(df.path, 'r', encoding='utf-8') as fp:
-            exec(compile(fp.read(), df.path, 'exec'), locals, locals)
+        with io.open(df.path, "r", encoding="utf-8") as fp:
+            exec(compile(fp.read(), df.path, "exec"), locals, locals)
 
     def closed(self, info, is_ok):
         """ Closes the view.
         """
         info.object.demo = None
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Get a specified object from the execution dictionary:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_object(self, name, dic):
         object = dic.get(name) or dic.get(name.capitalize())
@@ -220,9 +256,9 @@ class DemoFileHandler(Handler):
 
         return None
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Handles 'print' output:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def write(self, text):
         self.info.object.log += text
@@ -230,84 +266,80 @@ class DemoFileHandler(Handler):
     def flush(self):
         pass
 
+
 # Create a singleton instance:
 demo_file_handler = DemoFileHandler()
 
 
 class DemoError(HasPrivateTraits):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The error message text:
     msg = Code
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     traits_view = View(
         VGroup(
-            Heading('Error in source file'),
-            Item('msg', style='custom', show_label=False),
+            Heading("Error in source file"),
+            Item("msg", style="custom", show_label=False),
         )
     )
 
 
 class DemoButton(HasPrivateTraits):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The demo to be launched via a button:
     demo = Instance(HasTraits)
 
     #: The demo view item to use:
-    demo_item = Item('demo',
-                     show_label=False,
-                     editor=InstanceEditor(label='Run demo...', kind='live')
-                     )
+    demo_item = Item(
+        "demo",
+        show_label=False,
+        editor=InstanceEditor(label="Run demo...", kind="live"),
+    )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     traits_view = View(
         VGroup(
-            VGroup(
-                Heading('Click the button to run the demo:'),
-                '20'
-            ),
-            HGroup(
-                spring,
-                Include('demo_item'),
-                spring
-            )
+            VGroup(Heading("Click the button to run the demo:"), "20"),
+            HGroup(spring, Include("demo_item"), spring),
         ),
-        resizable=True
+        resizable=True,
     )
 
 
 class ModalDemoButton(DemoButton):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The demo view item to use:
-    demo_item = Item('demo',
-                     show_label=False,
-                     editor=InstanceEditor(label='Run demo...', kind='modal')
-                     )
+    demo_item = Item(
+        "demo",
+        show_label=False,
+        editor=InstanceEditor(label="Run demo...", kind="modal"),
+    )
 
 
 class DemoTreeNodeObject(TreeNodeObject):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Cached result of 'tno_has_children':
     _has_children = Any
@@ -315,18 +347,18 @@ class DemoTreeNodeObject(TreeNodeObject):
     #: Cached result of 'tno_get_children':
     _get_children = Any
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Returns whether chidren of this object are allowed or not:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def tno_allows_children(self, node):
         """ Returns whether chidren of this object are allowed or not.
         """
         return self.allows_children
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Returns whether or not the object has children:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def tno_has_children(self, node=None):
         """ Returns whether or not the object has children.
@@ -336,9 +368,9 @@ class DemoTreeNodeObject(TreeNodeObject):
 
         return self._has_children
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Gets the object's children:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def tno_get_children(self, node):
         """ Gets the object's children.
@@ -348,18 +380,18 @@ class DemoTreeNodeObject(TreeNodeObject):
 
         return self._get_children
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Returns whether or not the object has children:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def has_children(self, node):
         """ Returns whether or not the object has children.
         """
         raise NotImplementedError
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Gets the object's children:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def get_children(self, node):
         """ Gets the object's children.
@@ -369,9 +401,9 @@ class DemoTreeNodeObject(TreeNodeObject):
 
 class DemoFile(DemoTreeNodeObject):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Parent of this file:
     parent = Any
@@ -401,16 +433,16 @@ class DemoFile(DemoTreeNodeObject):
     log = Code
 
     _nice_name = Str
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Implementation of the 'path' property:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_path(self):
-        return join(self.parent.path, self.name + '.py')
+        return join(self.parent.path, self.name + ".py")
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Implementation of the 'nice_name' property:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_nice_name(self):
         if not self._nice_name:
@@ -420,11 +452,11 @@ class DemoFile(DemoTreeNodeObject):
     def _set_nice_name(self, value):
         old = self.nice_name
         self._nice_name = value
-        self.trait_property_changed('nice_name', old, value)
+        self.trait_property_changed("nice_name", old, value)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Returns whether or not the object has children:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def has_children(self):
         """ Returns whether or not the object has children.
@@ -434,9 +466,9 @@ class DemoFile(DemoTreeNodeObject):
 
 class DemoPath(DemoTreeNodeObject):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Parent of this package:
     parent = Any
@@ -475,34 +507,34 @@ class DemoPath(DemoTreeNodeObject):
     #: Cached value of the nice_name property.
     _nice_name = Str
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Implementation of the 'path' property:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_path(self):
         return join(self.parent.path, self.name)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Implementation of the 'nice_name' property:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_nice_name(self):
         if not self._nice_name:
             self._nice_name = user_name_for(self.name)
         return self._nice_name
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Setter for the 'nice_name' property:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _set_nice_name(self, value):
         old = self.nice_name
         self._nice_name = value
-        self.trait_property_changed('nice_name', old, value)
+        self.trait_property_changed("nice_name", old, value)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Implementation of the 'description' property:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_description(self):
         if self._description is None:
@@ -510,9 +542,9 @@ class DemoPath(DemoTreeNodeObject):
 
         return self._description
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Implementation of the 'source' property:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_source(self):
         if self._source is None:
@@ -520,13 +552,13 @@ class DemoPath(DemoTreeNodeObject):
 
         return self._source
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Implementation of the 'init_dic' property:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_init_dic(self):
         init_dic = {}
-        description, source = parse_source(join(self.path, '__init__.py'))
+        description, source = parse_source(join(self.path, "__init__.py"))
         exec((exec_str + source), init_dic)
         return init_dic
 
@@ -535,30 +567,31 @@ class DemoPath(DemoTreeNodeObject):
         #        this method causes the tree to behave as if the DemoPath object
         #        had been selected instead of a DemoFile object. May be due to
         #        an 'anytrait' listener in the TreeEditor?
-        #if self._init_dic is None:
+        # if self._init_dic is None:
         #   self._init_dic = {}
         #   #exec self.source in self._init_dic
-        #return self._init_dic.copy()
+        # return self._init_dic.copy()
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Initializes the description and source from the path's '__init__.py'
     #  file:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_init(self):
         if self.use_files:
             # Read in the '__init__.py' source file (if any):
             self._description, source = parse_source(
-                join(self.path, '__init__.py'))
+                join(self.path, "__init__.py")
+            )
         else:
-            self._description = ('<img src="traits_ui_demo.jpg">')
-            source = ''
+            self._description = '<img src="traits_ui_demo.jpg">'
+            source = ""
 
         self._source = exec_str + source
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Returns whether or not the object has children:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def has_children(self):
         """ Returns whether or not the object has children.
@@ -571,14 +604,14 @@ class DemoPath(DemoTreeNodeObject):
 
             if self.use_files:
                 name, ext = splitext(name)
-                if (ext == '.py') and (name != '__init__'):
+                if (ext == ".py") and (name != "__init__"):
                     return True
 
         return False
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Gets the object's children:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def get_children(self):
         """ Gets the object's children.
@@ -589,9 +622,9 @@ class DemoPath(DemoTreeNodeObject):
             children = self.get_children_from_datastructure()
         return children
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Gets the object's children based on the filesystem structure.
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def get_children_from_datastructure(self):
         """ Gets the object's children based on the filesystem structure.
         """
@@ -607,19 +640,19 @@ class DemoPath(DemoTreeNodeObject):
 
             elif self.use_files:
                 name, ext = splitext(name)
-                if (ext == '.py') and (name != '__init__'):
+                if (ext == ".py") and (name != "__init__"):
                     files.append(DemoFile(parent=self, name=name))
 
-        sort_key = operator.attrgetter('name')
+        sort_key = operator.attrgetter("name")
         dirs.sort(key=sort_key)
         files.sort(key=sort_key)
 
-        return (dirs + files)
+        return dirs + files
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Gets the object's children as specified in its configuration file or
     # dictionary.
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def get_children_from_config(self):
         """
@@ -639,8 +672,8 @@ class DemoPath(DemoTreeNodeObject):
         dirs = []
         files = []
         for keyword, value in self.config_dict.items():
-            if not value.get('no_demo'):
-                sourcedir = value.pop('sourcedir', None)
+            if not value.get("no_demo"):
+                sourcedir = value.pop("sourcedir", None)
                 if sourcedir is not None:
                     # This is a demo directory.
                     demoobj = DemoPath(parent=self, name=sourcedir)
@@ -649,22 +682,24 @@ class DemoPath(DemoTreeNodeObject):
                     dirs.append(demoobj)
                 else:
                     names = []
-                    filenames = value.pop('files', [])
+                    filenames = value.pop("files", [])
                     if not isinstance(filenames, list):
                         filenames = [filenames]
                     for filename in filenames:
                         filename = join(self.path, filename)
                         for name in glob.iglob(filename):
                             pathname, ext = splitext(name)
-                            if (ext == '.py') and \
-                                    (basename(pathname) != '__init__'):
+                            if (ext == ".py") and (
+                                basename(pathname) != "__init__"
+                            ):
                                 names.append(pathname)
                     if len(names) > 1:
                         config_dict = {}
                         for name in names:
-                            config_dict[basename(name)] = {'files':
-                                                           name + '.py'}
-                        demoobj = DemoPath(parent=self, name='')
+                            config_dict[basename(name)] = {
+                                "files": name + ".py"
+                            }
+                        demoobj = DemoPath(parent=self, name="")
                         demoobj.nice_name = keyword
                         demoobj.config_dict = config_dict
                         dirs.append(demoobj)
@@ -673,15 +708,15 @@ class DemoPath(DemoTreeNodeObject):
                         file.nice_name = keyword
                         files.append(file)
 
-        sort_key = operator.attrgetter('nice_name')
+        sort_key = operator.attrgetter("nice_name")
         dirs.sort(key=sort_key)
         files.sort(key=sort_key)
 
-        return (dirs + files)
+        return dirs + files
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Returns whether the specified path contains any .py files:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def has_py_files(self, path):
         for name in listdir(path):
@@ -692,99 +727,88 @@ class DemoPath(DemoTreeNodeObject):
 
             else:
                 name, ext = splitext(name)
-                if ext == '.py':
+                if ext == ".py":
                     return True
 
         return False
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Defines the demo tree editor:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 path_view = View(
     Tabbed(
-        Item('description',
-             label='Description',
-             show_label=False,
-             style='readonly',
-             editor=HTMLEditor(format_text=True)
-             ),
-        Item('source',
-             label='Source',
-             show_label=False,
-             style='custom'
-             ),
-        export='DockWindowShell',
-        id='tabbed'
+        Item(
+            "description",
+            label="Description",
+            show_label=False,
+            style="readonly",
+            editor=HTMLEditor(format_text=True),
+        ),
+        Item("source", label="Source", show_label=False, style="custom"),
+        export="DockWindowShell",
+        id="tabbed",
     ),
-    id='traitsui.demos.demo.path_view',
-    #dock    = 'horizontal'
+    id="traitsui.demos.demo.path_view",
+    # dock    = 'horizontal'
 )
 
 demo_view = View(
-    #VSplit(
+    # VSplit(
     Tabbed(
-        Item('description',
-             label='Description',
-             show_label=False,
-             style='readonly',
-             editor=HTMLEditor(format_text=True)
-             ),
-        Item('source',
-             label='Source',
-             show_label=False,
-             style='custom'
-             ),
-        Item('demo',
-             label='Demo',
-             show_label=False,
-             style='custom',
-             resizable=True,
-             # FIXME:
-             # visible_when doesn't work correctly yet (for wx atleast)
-             # for tabbed items. Needs more investigation.
-                   visible_when='demo',
-             ),
-        Item('log',
-             show_label=False,
-             style='readonly'
-             ),
-        export='DockWindowShell',
-        id='tabbed',
+        Item(
+            "description",
+            label="Description",
+            show_label=False,
+            style="readonly",
+            editor=HTMLEditor(format_text=True),
+        ),
+        Item("source", label="Source", show_label=False, style="custom"),
+        Item(
+            "demo",
+            label="Demo",
+            show_label=False,
+            style="custom",
+            resizable=True,
+            # FIXME:
+            # visible_when doesn't work correctly yet (for wx atleast)
+            # for tabbed items. Needs more investigation.
+            visible_when="demo",
+        ),
+        Item("log", show_label=False, style="readonly"),
+        export="DockWindowShell",
+        id="tabbed",
     ),
     # JDM moving log panel provisionally to its own tab, distracting here.
-    #VGroup(
-    #Item( 'log',
-    #show_label = False,
-    #style      = 'readonly'
-    #),
-    #label = 'Log'
-    #),
-    #export = 'DockWindowShell',
-    #id     = 'vsplit'
-    #),
-    id='traitsui.demos.demo.file_view',
-    #dock    = 'horizontal',
-    handler=demo_file_handler
+    # VGroup(
+    # Item( 'log',
+    # show_label = False,
+    # style      = 'readonly'
+    # ),
+    # label = 'Log'
+    # ),
+    # export = 'DockWindowShell',
+    # id     = 'vsplit'
+    # ),
+    id="traitsui.demos.demo.file_view",
+    # dock    = 'horizontal',
+    handler=demo_file_handler,
 )
 
 demo_tree_editor = TreeEditor(
     nodes=[
-        ObjectTreeNode(node_for=[DemoPath],
-                       label='nice_name',
-                       view=path_view),
-        ObjectTreeNode(node_for=[DemoFile],
-                       label='nice_name',
-                       view=demo_view)
+        ObjectTreeNode(node_for=[DemoPath], label="nice_name", view=path_view),
+        ObjectTreeNode(node_for=[DemoFile], label="nice_name", view=demo_view),
     ]
 )
 
 
 class Demo(HasPrivateTraits):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Path to the root demo directory:
     path = Str
@@ -795,22 +819,23 @@ class Demo(HasPrivateTraits):
     #: Title for the demo
     title = Str
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def default_traits_view(self):
         """ Constructs the default traits view."""
 
         traits_view = View(
-            Item(name='root',
-                 id='root',
-                 show_label=False,
-                 editor=demo_tree_editor
-                 ),
+            Item(
+                name="root",
+                id="root",
+                show_label=False,
+                editor=demo_tree_editor,
+            ),
             title=self.title,
-            id='traitsui.demos.demo.Demo',
-            #dock      = 'horizontal',
+            id="traitsui.demos.demo.Demo",
+            # dock      = 'horizontal',
             resizable=True,
             # JDM: Seems that QT interface does not deal well with these size
             # limits.
@@ -820,34 +845,37 @@ class Demo(HasPrivateTraits):
             #    Internal C++ object (_StickyDialog) already deleted.
             # No, actually sometimes we get the latter even with them.
             width=950,
-            height=900
+            height=900,
         )
         return traits_view
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Handles the 'root' trait being changed:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _root_changed(self, root):
         """ Handles the 'root' trait being changed.
         """
         root.parent = self
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Function to run the demo:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
-def demo(use_files=False, dir_name=None, config_filename='',
-         title='Traits UI Demos'):
+def demo(
+    use_files=False, dir_name=None, config_filename="", title="Traits UI Demos"
+):
     if dir_name is None:
         dir_name = dirname(abspath(sys.argv[0]))
     path, name = split(dir_name)
     if len(config_filename) > 0 and not isabs(config_filename):
         config_filename = join(path, name, config_filename)
-    Demo(path=path,
-         title=title,
-         root=DemoPath(name=name,
-                       use_files=use_files,
-                       config_filename=config_filename)
-         ).configure_traits()
+    Demo(
+        path=path,
+        title=title,
+        root=DemoPath(
+            name=name, use_files=use_files, config_filename=config_filename
+        ),
+    ).configure_traits()

@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: David C. Morrill
 #  Date:   06/06/2007
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Class to aid in automatically computing the 'slice' points for a specified
     ImageResource and then drawing it that it can be 'stretched' to fit a larger
@@ -21,33 +21,27 @@
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-from colorsys \
-    import rgb_to_hls
+from colorsys import rgb_to_hls
 
-from numpy \
-    import reshape, fromstring, uint8
+from numpy import reshape, fromstring, uint8
 
-from traits.api \
-    import HasPrivateTraits, Instance, Int, List, Color, Enum, Bool
+from traits.api import HasPrivateTraits, Instance, Int, List, Color, Enum, Bool
 
-from pyface.image_resource \
-    import ImageResource
+from pyface.image_resource import ImageResource
 
-from .constants \
-    import WindowColor
+from .constants import WindowColor
 
 from .constants import is_mac
 import traitsui.wx.constants
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Recursively paint the parent's background if they have an associated image
 #  slice.
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def paint_parent(dc, window):
@@ -55,7 +49,7 @@ def paint_parent(dc, window):
         image slice.
     """
     parent = window.GetParent()
-    slice = getattr(parent, '_image_slice', None)
+    slice = getattr(parent, "_image_slice", None)
     if slice is not None:
         x, y = window.GetPositionTuple()
         dx, dy = parent.GetSizeTuple()
@@ -63,7 +57,7 @@ def paint_parent(dc, window):
     else:
         # Otherwise, just paint the normal window background color:
         dx, dy = window.GetClientSizeTuple()
-        if is_mac and hasattr(window, '_border') and window._border:
+        if is_mac and hasattr(window, "_border") and window._border:
             dc.SetBackgroundMode(wx.TRANSPARENT)
             dc.SetBrush(wx.Brush(wx.Colour(0, 0, 0, 0)))
         else:
@@ -73,14 +67,15 @@ def paint_parent(dc, window):
 
     return slice
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'ImageSlice' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ImageSlice(HasPrivateTraits):
 
-    #-- Trait Definitions ----------------------------------------------------
+    # -- Trait Definitions ----------------------------------------------------
 
     #: The ImageResource to be sliced and drawn:
     image = Instance(ImageResource)
@@ -117,7 +112,7 @@ class ImageSlice(HasPrivateTraits):
     #: Should debugging slice lines be drawn?
     debug = Bool(False)
 
-    #-- Private Traits -------------------------------------------------------
+    # -- Private Traits -------------------------------------------------------
 
     #: The current image's opaque bitmap:
     opaque_bitmap = Instance(wx.Bitmap)
@@ -137,7 +132,7 @@ class ImageSlice(HasPrivateTraits):
     fdx = Int
     fdy = Int
 
-    #-- Public Methods -------------------------------------------------------
+    # -- Public Methods -------------------------------------------------------
 
     def fill(self, dc, x, y, dx, dy, transparent=False):
         """ 'Stretch fill' the specified region of a device context with the
@@ -158,28 +153,56 @@ class ImageSlice(HasPrivateTraits):
         # Calculate vertical slice sizes to use for source and destination:
         n = len(dxs)
         if n == 1:
-            pdxs = [(0, 0), (1, max(1, tdx / 2)), (sdx - 2, sdx - 2),
-                    (1, max(1, tdx - (tdx / 2))), (0, 0)]
+            pdxs = [
+                (0, 0),
+                (1, max(1, tdx / 2)),
+                (sdx - 2, sdx - 2),
+                (1, max(1, tdx - (tdx / 2))),
+                (0, 0),
+            ]
         elif n == 3:
-            pdxs = [(dxs[0], dxs[0]), (dxs[1], max(0, tdx)), (0, 0),
-                    (0, 0), (dxs[2], dxs[2])]
+            pdxs = [
+                (dxs[0], dxs[0]),
+                (dxs[1], max(0, tdx)),
+                (0, 0),
+                (0, 0),
+                (dxs[2], dxs[2]),
+            ]
         else:
-            pdxs = [(dxs[0], dxs[0]), (dxs[1], max(0, tdx / 2)),
-                    (dxs[2], dxs[2]), (dxs[3], max(0, tdx - (tdx / 2))),
-                    (dxs[4], dxs[4])]
+            pdxs = [
+                (dxs[0], dxs[0]),
+                (dxs[1], max(0, tdx / 2)),
+                (dxs[2], dxs[2]),
+                (dxs[3], max(0, tdx - (tdx / 2))),
+                (dxs[4], dxs[4]),
+            ]
 
         # Calculate horizontal slice sizes to use for source and destination:
         n = len(dys)
         if n == 1:
-            pdys = [(0, 0), (1, max(1, tdy / 2)), (sdy - 2, sdy - 2),
-                    (1, max(1, tdy - (tdy / 2))), (0, 0)]
+            pdys = [
+                (0, 0),
+                (1, max(1, tdy / 2)),
+                (sdy - 2, sdy - 2),
+                (1, max(1, tdy - (tdy / 2))),
+                (0, 0),
+            ]
         elif n == 3:
-            pdys = [(dys[0], dys[0]), (dys[1], max(0, tdy)), (0, 0),
-                    (0, 0), (dys[2], dys[2])]
+            pdys = [
+                (dys[0], dys[0]),
+                (dys[1], max(0, tdy)),
+                (0, 0),
+                (0, 0),
+                (dys[2], dys[2]),
+            ]
         else:
-            pdys = [(dys[0], dys[0]), (dys[1], max(0, tdy / 2)),
-                    (dys[2], dys[2]), (dys[3], max(0, tdy - (tdy / 2))),
-                    (dys[4], dys[4])]
+            pdys = [
+                (dys[0], dys[0]),
+                (dys[1], max(0, tdy / 2)),
+                (dys[2], dys[2]),
+                (dys[3], max(0, tdy - (tdy / 2))),
+                (dys[4], dys[4]),
+            ]
 
         # Iterate over each cell, performing a stretch fill from the source
         # image to the destination window:
@@ -196,8 +219,9 @@ class ImageSlice(HasPrivateTraits):
                         break
 
                     if wdx != 0:
-                        self._fill(idc, ix0, iy0, idx, idy,
-                                   dc, x0, y0, wdx, wdy)
+                        self._fill(
+                            idc, ix0, iy0, idx, idy, dc, x0, y0, wdx, wdy
+                        )
                         x0 += wdx
                     ix0 += idx
                 y0 += wdy
@@ -206,20 +230,23 @@ class ImageSlice(HasPrivateTraits):
         if self.debug:
             dc.SetPen(wx.Pen(wx.RED))
             dc.DrawLine(x, y + self.top, last_x, y + self.top)
-            dc.DrawLine(x, last_y - self.bottom - 1,
-                        last_x, last_y - self.bottom - 1)
+            dc.DrawLine(
+                x, last_y - self.bottom - 1, last_x, last_y - self.bottom - 1
+            )
             dc.DrawLine(x + self.left, y, x + self.left, last_y)
-            dc.DrawLine(last_x - self.right - 1, y,
-                        last_x - self.right - 1, last_y)
+            dc.DrawLine(
+                last_x - self.right - 1, y, last_x - self.right - 1, last_y
+            )
 
-    #-- Event Handlers -------------------------------------------------------
+    # -- Event Handlers -------------------------------------------------------
 
     def _image_changed(self, image):
         """ Handles the 'image' trait being changed.
         """
         # Save the original bitmap as the transparent version:
-        self.transparent_bitmap = bitmap = \
-            image.create_image().ConvertToBitmap()
+        self.transparent_bitmap = (
+            bitmap
+        ) = image.create_image().ConvertToBitmap()
 
         # Save the bitmap size information:
         self.dx = dx = bitmap.GetWidth()
@@ -241,7 +268,7 @@ class ImageSlice(HasPrivateTraits):
         # Finally, analyze the image to find out its characteristics:
         self._analyze_bitmap()
 
-    #-- Private Methods ------------------------------------------------------
+    # -- Private Methods ------------------------------------------------------
 
     def _analyze_bitmap(self):
         """ Analyzes the bitmap.
@@ -335,7 +362,8 @@ class ImageSlice(HasPrivateTraits):
             self.label_color = self._find_best_color(data, x, self.xtop / 2)
         else:
             self.label_color = self._find_best_color(
-                data, x, dy - (self.xbottom / 2) - 1)
+                data, x, dy - (self.xbottom / 2) - 1
+            )
 
     def _fill(self, idc, ix, iy, idx, idy, dc, x, y, dx, dy):
         """ Performs a stretch fill of a region of an image into a region of a
@@ -394,33 +422,60 @@ class ImageSlice(HasPrivateTraits):
             width = right - left + 1
 
             # Try to extend all edges that are still 'scanning':
-            nl = (l and (left > 0) and
-                  self._is_equal(data, left - 1, top, left, top, 1, height))
+            nl = (
+                l
+                and (left > 0)
+                and self._is_equal(data, left - 1, top, left, top, 1, height)
+            )
 
-            nr = (r and (right < last_x) and
-                  self._is_equal(data, right + 1, top, right, top, 1, height))
+            nr = (
+                r
+                and (right < last_x)
+                and self._is_equal(data, right + 1, top, right, top, 1, height)
+            )
 
-            nt = (t and (top > 0) and
-                  self._is_equal(data, left, top - 1, left, top, width, 1))
+            nt = (
+                t
+                and (top > 0)
+                and self._is_equal(data, left, top - 1, left, top, width, 1)
+            )
 
-            nb = (b and (bottom < last_y) and
-                  self._is_equal(data, left, bottom + 1, left, bottom,
-                                 width, 1))
+            nb = (
+                b
+                and (bottom < last_y)
+                and self._is_equal(
+                    data, left, bottom + 1, left, bottom, width, 1
+                )
+            )
 
             # Now check the corners of the edges:
-            tl = ((not nl) or (not nt) or
-                  self._is_equal(data, left - 1, top - 1, left, top, 1, 1))
+            tl = (
+                (not nl)
+                or (not nt)
+                or self._is_equal(data, left - 1, top - 1, left, top, 1, 1)
+            )
 
-            tr = ((not nr) or (not nt) or
-                  self._is_equal(data, right + 1, top - 1, right, top, 1, 1))
+            tr = (
+                (not nr)
+                or (not nt)
+                or self._is_equal(data, right + 1, top - 1, right, top, 1, 1)
+            )
 
-            bl = ((not nl) or (not nb) or
-                  self._is_equal(data, left - 1, bottom + 1, left, bottom,
-                                 1, 1))
+            bl = (
+                (not nl)
+                or (not nb)
+                or self._is_equal(
+                    data, left - 1, bottom + 1, left, bottom, 1, 1
+                )
+            )
 
-            br = ((not nr) or (not nb) or
-                  self._is_equal(data, right + 1, bottom + 1, right, bottom,
-                                 1, 1))
+            br = (
+                (not nr)
+                or (not nb)
+                or self._is_equal(
+                    data, right + 1, bottom + 1, right, bottom, 1, 1
+                )
+            )
 
             # Calculate the new edge 'scanning' values:
             l = nl and tl and bl
@@ -457,13 +512,18 @@ class ImageSlice(HasPrivateTraits):
         """ Determines if two identically sized regions of an image array are
             'the same' (i.e. within some slight color variance of each other).
         """
-        return (abs(data[y0: y0 + dy, x0: x0 + dx] -
-                    data[y1: y1 + dy, x1: x1 + dx]).sum() < 0.10 * dx * dy)
+        return (
+            abs(
+                data[y0 : y0 + dy, x0 : x0 + dx]
+                - data[y1 : y1 + dy, x1 : x1 + dx]
+            ).sum()
+            < 0.10 * dx * dy
+        )
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Returns a (possibly cached) ImageSlice:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 image_slice_cache = {}
 

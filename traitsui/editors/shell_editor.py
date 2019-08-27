@@ -38,9 +38,9 @@ class _ShellEditor(Editor):
     #: Is the shell editor is scrollable? This value overrides the default.
     scrollable = True
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # 'Editor' Interface
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -59,21 +59,24 @@ class _ShellEditor(Editor):
         self.control = shell.control
         if locals is None:
             object = self.object
-            shell.bind('self', object)
-            shell.on_trait_change(self.update_object, 'command_executed',
-                                  dispatch='ui')
+            shell.bind("self", object)
+            shell.on_trait_change(
+                self.update_object, "command_executed", dispatch="ui"
+            )
             if not isinstance(value, dict):
-                object.on_trait_change(self.update_any, dispatch='ui')
+                object.on_trait_change(self.update_any, dispatch="ui")
             else:
                 self._base_locals = locals = {}
                 for name in self._shell.interpreter().locals.keys():
                     locals[name] = None
 
         # Synchronize any editor events:
-        self.sync_value(self.factory.command_to_execute,
-                        'command_to_execute', 'from')
-        self.sync_value(self.factory.command_executed,
-                        'command_executed', 'to')
+        self.sync_value(
+            self.factory.command_to_execute, "command_to_execute", "from"
+        )
+        self.sync_value(
+            self.factory.command_executed, "command_executed", "to"
+        )
 
         self.set_tooltip()
 
@@ -134,8 +137,9 @@ class _ShellEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        self._shell.on_trait_change(self.update_object, 'command_executed',
-                                    remove=True)
+        self._shell.on_trait_change(
+            self.update_object, "command_executed", remove=True
+        )
         if self._base_locals is None:
             self.object.on_trait_change(self.update_any, remove=True)
 
@@ -147,8 +151,8 @@ class _ShellEditor(Editor):
         """
         shell = self._shell
         try:
-            history = prefs.get('history', [])
-            history_index = prefs.get('history_index', -1)
+            history = prefs.get("history", [])
+            history_index = prefs.get("history_index", -1)
             shell.set_history(history, history_index)
         except:
             pass
@@ -157,11 +161,11 @@ class _ShellEditor(Editor):
         """ Returns any user preference information associated with the editor.
         """
         history, history_index = self._shell.get_history()
-        return {'history': history, 'history_index': history_index}
+        return {"history": history, "history_index": history_index}
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Private Interface
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     # Trait change handlers --------------------------------------------------
 
@@ -174,6 +178,7 @@ class _ShellEditor(Editor):
 
 
 # Editor factory for shell editors.
+
 
 class ToolkitEditorFactory(BasicEditorFactory):
 
@@ -194,7 +199,8 @@ class ToolkitEditorFactory(BasicEditorFactory):
     def _get_klass(self):
         """ Returns the toolkit-specific editor class to be used in the UI.
         """
-        return toolkit_object('shell_editor:_ShellEditor')
+        return toolkit_object("shell_editor:_ShellEditor")
+
 
 # Define the ShellEditor
 ShellEditor = ToolkitEditorFactory

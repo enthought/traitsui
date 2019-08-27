@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the Boolean editor factory for all traits toolkit backends.
 """
-
 
 
 from __future__ import absolute_import
@@ -32,48 +31,54 @@ from ..view import View
 
 from .text_editor import ToolkitEditorFactory as EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Mapping from user input text to Boolean values
-mapping_trait = Dict(Str, Any, {'True': True,
-                                'true': True,
-                                't': True,
-                                'yes': True,
-                                'y': True,
-                                'False': False,
-                                'false': False,
-                                'f': False,
-                                'no': False,
-                                'n': False,
-                                })
+mapping_trait = Dict(
+    Str,
+    Any,
+    {
+        "True": True,
+        "true": True,
+        "t": True,
+        "yes": True,
+        "y": True,
+        "False": False,
+        "false": False,
+        "f": False,
+        "no": False,
+        "n": False,
+    },
+)
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for Boolean editors.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Dictionary mapping user input to other values.
     #: These definitions override definitions in the 'text_editor' version
     mapping = mapping_trait
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definition:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     traits_view = View()
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  EditorFactory methods
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_custom_editor_class(self):
         """ Returns the editor class to use for "custom" style views.
@@ -87,5 +92,3 @@ class ToolkitEditorFactory(EditorFactory):
 
 # Define the BooleanEditor class
 BooleanEditor = ToolkitEditorFactory
-
-

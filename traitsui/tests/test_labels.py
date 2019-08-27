@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2012, Enthought, Inc.
 #  All rights reserved.
@@ -11,7 +11,7 @@
 #  Author: Pietro Berkes
 #  Date:   Feb 2012
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """
 Test the creation and layout of labels.
@@ -39,15 +39,9 @@ class ShowRightLabelsDialog(HasTraits):
 
     traits_view = View(
         VGroup(
-            VGroup(
-                Item('bool_item'),
-                show_left=False
-            ),
-            VGroup(
-                Item('bool_item'),
-                show_left=True
-            ),
-        ),
+            VGroup(Item("bool_item"), show_left=False),
+            VGroup(Item("bool_item"), show_left=True),
+        )
     )
 
 
@@ -61,18 +55,12 @@ class HResizeTestDialog(HasTraits):
 
     traits_view = View(
         VGroup(
-            HGroup(
-                Item('bool_item', springy=True),
-                show_left=False
-            ),
-            VGroup(
-                Item('txt_item', resizable=True),
-                show_left=False
-            ),
+            HGroup(Item("bool_item", springy=True), show_left=False),
+            VGroup(Item("txt_item", resizable=True), show_left=False),
         ),
         width=_DIALOG_WIDTH,
         height=100,
-        resizable=True
+        resizable=True,
     )
 
 
@@ -86,18 +74,12 @@ class VResizeTestDialog(HasTraits):
 
     traits_view = View(
         VGroup(
-            VGroup(
-                Item('bool_item', resizable=True),
-                show_left=False
-            ),
-            VGroup(
-                Item('txt_item', resizable=True),
-                show_left=False
-            ),
+            VGroup(Item("bool_item", resizable=True), show_left=False),
+            VGroup(Item("txt_item", resizable=True), show_left=False),
         ),
         width=_DIALOG_WIDTH,
         height=100,
-        resizable=True
+        resizable=True,
     )
 
 
@@ -109,10 +91,10 @@ class NoLabelResizeTestDialog(HasTraits):
 
     traits_view = View(
         VGroup(
-            Item('bool_item', resizable=True, show_label=False),
-            show_left=False
+            Item("bool_item", resizable=True, show_label=False),
+            show_left=False,
         ),
-        resizable=True
+        resizable=True,
     )
 
 
@@ -121,19 +103,20 @@ class EnableWhenDialog(HasTraits):
 
     bool_item = Bool(True)
 
-    labelled_item = Str('test')
+    labelled_item = Str("test")
 
-    unlabelled_item = Str('test')
+    unlabelled_item = Str("test")
 
     traits_view = View(
         VGroup(
-            Item('bool_item',),
-            Item('labelled_item', enabled_when='bool_item'),
-            Item('unlabelled_item', enabled_when='bool_item', show_label=False),
+            Item("bool_item"),
+            Item("labelled_item", enabled_when="bool_item"),
+            Item(
+                "unlabelled_item", enabled_when="bool_item", show_label=False
+            ),
         ),
-        resizable=True
+        resizable=True,
     )
-
 
 
 @skip_if_not_qt4
@@ -151,10 +134,10 @@ def test_qt_show_labels_right_without_colon():
         labels = ui.control.findChildren(qt.QtGui.QLabel)
 
         # the first is shown to the right, so no colon
-        nose.tools.assert_false(labels[0].text().endswith(':'))
+        nose.tools.assert_false(labels[0].text().endswith(":"))
 
         # the second is shown to the right, it should have a colon
-        nose.tools.assert_true(labels[1].text().endswith(':'))
+        nose.tools.assert_true(labels[1].text().endswith(":"))
 
 
 def _test_qt_labels_right_resizing(dialog_class):
@@ -230,6 +213,7 @@ def is_enabled(control):
     else:
         raise NotImplementedError()
 
+
 @skip_if_null
 def test_labels_enabled_when():
     # Behaviour: label should enable/disable along with editor
@@ -238,10 +222,10 @@ def test_labels_enabled_when():
         dialog = EnableWhenDialog()
         ui = dialog.edit_traits()
 
-        labelled_editor  = ui.get_editors('labelled_item')[0]
+        labelled_editor = ui.get_editors("labelled_item")[0]
 
         if is_current_backend_qt4():
-            unlabelled_editor  = ui.get_editors('unlabelled_item')[0]
+            unlabelled_editor = ui.get_editors("unlabelled_item")[0]
             nose.tools.assert_is_none(unlabelled_editor.label_control)
 
         nose.tools.assert_true(is_enabled(labelled_editor.label_control))

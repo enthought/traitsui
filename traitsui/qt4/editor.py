@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,24 +8,20 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the base class for PyQt editors.
 """
 
 
-
 from __future__ import absolute_import
 from pyface.qt import QtGui
 
-from traits.api \
-    import HasTraits, Instance, Str, Callable
+from traits.api import HasTraits, Instance, Str, Callable
 
-from traitsui.api \
-    import Editor as UIEditor
+from traitsui.api import Editor as UIEditor
 
-from .constants \
-    import OKColor, ErrorColor
+from .constants import OKColor, ErrorColor
 
 
 class Editor(UIEditor):
@@ -74,20 +70,21 @@ class Editor(UIEditor):
             control = self.control
 
         QtGui.QMessageBox.information(
-            control, self.description + ' value error', str(excp))
+            control, self.description + " value error", str(excp)
+        )
 
     def set_tooltip(self, control=None):
         """ Sets the tooltip for a specified control.
         """
         desc = self.description
-        if desc == '':
+        if desc == "":
             desc = self.object.base_trait(self.name).tooltip
             if desc is None:
                 desc = self.object.base_trait(self.name).desc
                 if desc is None:
                     return False
 
-                desc = 'Specifies ' + desc
+                desc = "Specifies " + desc
 
         if control is None:
             control = self.control
@@ -113,8 +110,9 @@ class Editor(UIEditor):
         else:
             for i in range(control.count()):
                 itm = control.itemAt(i)
-                self._enabled_changed_helper((itm.widget() or itm.layout()),
-                                             enabled)
+                self._enabled_changed_helper(
+                    (itm.widget() or itm.layout()), enabled
+                )
 
     def _visible_changed(self, visible):
         """Handles the **visible** state of the editor being changed.
@@ -128,8 +126,13 @@ class Editor(UIEditor):
         self._visible_changed_helper(self.control, visible)
 
         page = self.control.parent()
-        if page is None or page.parent() is None or page.parent().parent(
-        ) is None or page.layout() is None or page.layout().count() != 1:
+        if (
+            page is None
+            or page.parent() is None
+            or page.parent().parent() is None
+            or page.layout() is None
+            or page.layout().count() != 1
+        ):
             return
 
         # The TabWidget (representing the notebook) has a StackedWidget inside it,
@@ -140,8 +143,11 @@ class Editor(UIEditor):
         stack_widget = page.parent()
         notebook = stack_widget.parent()
         is_tabbed_group = notebook.property("traits_tabbed_group")
-        if notebook is None or not isinstance(
-                notebook, QtGui.QTabWidget) or not is_tabbed_group:
+        if (
+            notebook is None
+            or not isinstance(notebook, QtGui.QTabWidget)
+            or not is_tabbed_group
+        ):
             return
 
         if not visible:
@@ -156,8 +162,10 @@ class Editor(UIEditor):
         else:
             # Check to see if our parent has previously-stored tab
             # index and text attributes
-            if (getattr(self, "_tab_index", None) is not None and
-                    getattr(self, "_tab_text", None) is not None):
+            if (
+                getattr(self, "_tab_index", None) is not None
+                and getattr(self, "_tab_text", None) is not None
+            ):
                 page.setVisible(True)
                 notebook.insertTab(self._tab_index, page, self._tab_text)
         return
@@ -171,8 +179,9 @@ class Editor(UIEditor):
         else:
             for i in range(control.count()):
                 itm = control.itemAt(i)
-                self._visible_changed_helper((itm.widget() or itm.layout()),
-                                             visible)
+                self._visible_changed_helper(
+                    (itm.widget() or itm.layout()), visible
+                )
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
@@ -205,11 +214,12 @@ class Editor(UIEditor):
 
             if state:
                 color = ErrorColor
-                if getattr(item, '_ok_color', None) is None:
+                if getattr(item, "_ok_color", None) is None:
                     item._ok_color = QtGui.QColor(
-                        pal.color(QtGui.QPalette.Base))
+                        pal.color(QtGui.QPalette.Base)
+                    )
             else:
-                color = getattr(item, '_ok_color', OKColor)
+                color = getattr(item, "_ok_color", OKColor)
 
             pal.setColor(QtGui.QPalette.Base, color)
             item.setPalette(pal)
@@ -226,19 +236,20 @@ class Editor(UIEditor):
 
     def _perform(self, action):
         method_name = action.action
-        info = self._menu_context['info']
-        handler = self._menu_context['handler']
-        object = self._menu_context['object']
-        selection = self._menu_context['selection']
-        self._menu_context['action'] = action
+        info = self._menu_context["info"]
+        handler = self._menu_context["handler"]
+        object = self._menu_context["object"]
+        selection = self._menu_context["selection"]
+        self._menu_context["action"] = action
 
-        if method_name.find('.') >= 0:
-            if method_name.find('(') < 0:
-                method_name += '()'
+        if method_name.find(".") >= 0:
+            if method_name.find("(") < 0:
+                method_name += "()"
             try:
                 eval(method_name, globals(), self._menu_context)
             except:
                 from traitsui.api import raise_to_debug
+
                 raise_to_debug()
             return
 
@@ -257,13 +268,14 @@ class Editor(UIEditor):
         specified object trait based on the result, which is assumed to be a
         Boolean.
         """
-        if condition != '':
+        if condition != "":
             value = True
             try:
                 if not eval(condition, globals(), self._menu_context):
                     value = False
             except:
                 from traitsui.api import raise_to_debug
+
                 raise_to_debug()
             setattr(object, trait, value)
 
@@ -271,33 +283,33 @@ class Editor(UIEditor):
         """ Adds a menu item to the menu bar being constructed.
         """
         action = menu_item.item.action
-        self.eval_when(action.enabled_when, menu_item, 'enabled')
-        self.eval_when(action.checked_when, menu_item, 'checked')
+        self.eval_when(action.enabled_when, menu_item, "enabled")
+        self.eval_when(action.checked_when, menu_item, "checked")
 
     def can_add_to_menu(self, action):
         """ Returns whether the action should be defined in the user interface.
         """
-        if action.defined_when != '':
+        if action.defined_when != "":
 
             try:
                 if not eval(
-                        action.defined_when,
-                        globals(),
-                        self._menu_context):
+                    action.defined_when, globals(), self._menu_context
+                ):
                     return False
             except:
                 from traitsui.api import raise_to_debug
+
                 raise_to_debug()
 
-        if action.visible_when != '':
+        if action.visible_when != "":
             try:
                 if not eval(
-                        action.visible_when,
-                        globals(),
-                        self._menu_context):
+                    action.visible_when, globals(), self._menu_context
+                ):
                     return False
             except:
                 from traitsui.api import raise_to_debug
+
                 raise_to_debug()
 
         return True
@@ -354,9 +366,10 @@ class Editor(UIEditor):
 class EditorWithList(Editor):
     """ Editor for an object that contains a list.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Object containing the list being monitored
     list_object = Instance(HasTraits)
@@ -372,31 +385,32 @@ class EditorWithList(Editor):
         """
         factory = self.factory
         name = factory.name
-        if name != '':
-            self.list_object, self.list_name, self.list_value = \
-                self.parse_extended_name(name)
+        if name != "":
+            self.list_object, self.list_name, self.list_value = self.parse_extended_name(
+                name
+            )
         else:
-            self.list_object, self.list_name = factory, 'values'
+            self.list_object, self.list_name = factory, "values"
             self.list_value = lambda: factory.values
 
-        self.list_object.on_trait_change(self._list_updated,
-                                         self.list_name, dispatch='ui')
         self.list_object.on_trait_change(
-            self._list_updated,
-            self.list_name + '_items',
-            dispatch='ui')
+            self._list_updated, self.list_name, dispatch="ui"
+        )
+        self.list_object.on_trait_change(
+            self._list_updated, self.list_name + "_items", dispatch="ui"
+        )
 
         self._list_updated()
 
     def dispose(self):
         """ Disconnects the listeners set up by the constructor.
         """
-        self.list_object.on_trait_change(self._list_updated,
-                                         self.list_name, remove=True)
         self.list_object.on_trait_change(
-            self._list_updated,
-            self.list_name + '_items',
-            remove=True)
+            self._list_updated, self.list_name, remove=True
+        )
+        self.list_object.on_trait_change(
+            self._list_updated, self.list_name + "_items", remove=True
+        )
 
         super(EditorWithList, self).dispose()
 

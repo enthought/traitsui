@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,33 +13,32 @@
 #  Author: David C. Morrill
 #  Date:   03/02/2007
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Traits UI 'display only' LED numeric editor.
 """
 
 
-
 from __future__ import absolute_import
-from wx.gizmos \
-    import LEDNumberCtrl, LED_ALIGN_LEFT, LED_ALIGN_CENTER, LED_ALIGN_RIGHT
+from wx.gizmos import (
+    LEDNumberCtrl,
+    LED_ALIGN_LEFT,
+    LED_ALIGN_CENTER,
+    LED_ALIGN_RIGHT,
+)
 
-from traits.api \
-    import Enum
+from traits.api import Enum
 
-from traitsui.wx.editor \
-    import Editor
+from traitsui.wx.editor import Editor
 
-from traitsui.basic_editor_factory \
-    import BasicEditorFactory
-
+from traitsui.basic_editor_factory import BasicEditorFactory
 
 
 # LED alignment styles:
 LEDStyles = {
-    'left': LED_ALIGN_LEFT,
-    'center': LED_ALIGN_CENTER,
-    'right': LED_ALIGN_RIGHT,
+    "left": LED_ALIGN_LEFT,
+    "center": LED_ALIGN_CENTER,
+    "right": LED_ALIGN_RIGHT,
 }
 
 
@@ -61,9 +60,10 @@ class _LEDEditor(Editor):
         """
         self.control.SetValue(self.str_value)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # wxPython editor factory for LED editors:
 
@@ -74,4 +74,4 @@ class LEDEditor(BasicEditorFactory):
     klass = _LEDEditor
 
     #: The alignment of the numeric text within the control:
-    alignment = Enum('right', 'left', 'center')
+    alignment = Enum("right", "left", "center")

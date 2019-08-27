@@ -35,7 +35,7 @@ def get_expected_lines(text, width):
     expected_lines = []
     for paragraph in text.splitlines():
         if not paragraph.strip():
-            expected_lines.append('')
+            expected_lines.append("")
             continue
         expected_lines += textwrap.wrap(paragraph, width)
     return expected_lines
@@ -43,7 +43,6 @@ def get_expected_lines(text, width):
 
 @skip_if_not_qt4
 class TestWrapText(unittest.TestCase):
-
     def test_wrap_text_basic(self):
         font = create_traitsfont("Courier")
         font_metrics = QtGui.QFontMetrics(font)
@@ -56,7 +55,9 @@ class TestWrapText(unittest.TestCase):
 
         lines = wrap_text_with_elision(lorem_ipsum, font, width, height)
 
-        self.assertEqual(lines, [line.rstrip() for line in lorem_ipsum.splitlines()])
+        self.assertEqual(
+            lines, [line.rstrip() for line in lorem_ipsum.splitlines()]
+        )
 
     def test_wrap_text_empty(self):
         font = create_traitsfont("Courier")
@@ -105,10 +106,10 @@ class TestWrapText(unittest.TestCase):
         # just check end of last line shows elision.
         # In most systems elision is marked with ellipsis
         # but it has been reported as "..." on NetBSD.
-        if lines[19][-1] == '.':
-            self.assertEqual(lines[19][-3:], '...')
+        if lines[19][-1] == ".":
+            self.assertEqual(lines[19][-3:], "...")
         else:
-            self.assertEqual(lines[19][-1], '\u2026')
+            self.assertEqual(lines[19][-1], "\u2026")
 
     def test_wrap_text_short(self):
         font = create_traitsfont("Courier")

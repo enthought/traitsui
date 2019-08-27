@@ -7,12 +7,14 @@
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 
 from __future__ import absolute_import
-from traitsui.ui_editors.data_frame_editor \
-    import _DataFrameEditor as BaseDataFrameEditor
+from traitsui.ui_editors.data_frame_editor import (
+    _DataFrameEditor as BaseDataFrameEditor,
+)
 
 from .ui_editor import UIEditor
 
 
 class _DataFrameEditor(BaseDataFrameEditor, UIEditor):
     """ Wx Toolkit implementation of the DataFrameEditor """
+
     pass

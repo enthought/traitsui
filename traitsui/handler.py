@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,17 +13,17 @@
 #  Author: David C. Morrill
 #  Date:   10/07/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the Handler class used to manage and control the editing process in
     a Traits-based user interface.
 """
 
 
-
 from __future__ import absolute_import
 
 import six
+
 if six.PY2:
     from inspect import getargspec
 else:
@@ -38,9 +38,9 @@ from .view_element import ViewElement
 from .helper import user_name_for
 from .ui_info import UIInfo
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Closes a DockControl (if allowed by the associated traits UI Handler):
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def close_dock_control(dock_control):
@@ -215,10 +215,10 @@ class Handler(HasPrivateTraits):
         standard menu action items that are needed (eg. "Close", "Undo",
         "Redo", "Help", etc.) get dispatched correctly.
         """
-        if action.action != '':
+        if action.action != "":
             method_name = action.action
         else:
-            method_name = '_{}_clicked'.format(action.name.lower())
+            method_name = "_{}_clicked".format(action.name.lower())
 
         for object in self.get_perform_handlers(info):
             method = getattr(object, method_name, None)
@@ -257,9 +257,12 @@ class Handler(HasPrivateTraits):
         """
         handlers = [self]
         if info is not None:
-            additional_objects = ['object', 'model']
-            handlers += [info.ui.context[name] for name in additional_objects
-                         if name in info.ui.context]
+            additional_objects = ["object", "model"]
+            handlers += [
+                info.ui.context[name]
+                for name in additional_objects
+                if name in info.ui.context
+            ]
         return handlers
 
     def setattr(self, info, object, name, value):
@@ -309,20 +312,22 @@ class Handler(HasPrivateTraits):
         #       name, and 'name' is the trait name. It returns the first view
         #       or method result which is defined on the handler:
         klass = object.__class__.__name__
-        cname = '%s_%s' % (object_name, trait_name)
-        aview = ''
+        cname = "%s_%s" % (object_name, trait_name)
+        aview = ""
         if view:
-            aview = '_' + view
-        names = ['%s_%s%s' % (cname, klass, aview),
-                 '%s%s' % (cname, aview),
-                 '%s%s' % (klass, aview)]
+            aview = "_" + view
+        names = [
+            "%s_%s%s" % (cname, klass, aview),
+            "%s%s" % (cname, aview),
+            "%s%s" % (klass, aview),
+        ]
         if view:
             names.append(view)
         for name in names:
             result = self.trait_view(name)
             if result is not None:
                 return result
-            method = getattr(self, 'trait_view_for_%s' % name, None)
+            method = getattr(self, "trait_view_for_%s" % name, None)
             if callable(method):
                 result = method(info, object)
                 if result is not None:
@@ -332,8 +337,7 @@ class Handler(HasPrivateTraits):
         # view on the object itself, or the object's default view:
         return object.trait_view(view) or object.trait_view()
 
-
-#-- 'DockWindowHandler' interface implementation -------------------------
+    # -- 'DockWindowHandler' interface implementation -------------------------
 
     def can_drop(self, info, object):
         """ Can the specified object be inserted into the view?
@@ -344,11 +348,10 @@ class Handler(HasPrivateTraits):
             return self.can_import(info, object.export)
 
         drop_class = info.ui.view.drop_class
-        return ((drop_class is not None) and
-                isinstance(object, drop_class))
+        return (drop_class is not None) and isinstance(object, drop_class)
 
     def can_import(self, info, category):
-        return (category in info.ui.view.imports)
+        return category in info.ui.view.imports
 
     def dock_control_for(self, info, parent, object):
         """ Returns the DockControl object for a specified object.
@@ -362,12 +365,12 @@ class Handler(HasPrivateTraits):
             try:
                 name = object.label
             except:
-                name = ''
+                name = ""
         if len(name) == 0:
             name = user_name_for(object.__class__.__name__)
 
         image = None
-        export = ''
+        export = ""
         if isinstance(object, DockControl):
             dock_control = object
             image = dock_control.image
@@ -382,8 +385,9 @@ class Handler(HasPrivateTraits):
             # If DockControl was closed, then reset it to point to the new
             # control:
             if close:
-                dock_control.trait_set(control=control,
-                                       style=parent.owner.style)
+                dock_control.trait_set(
+                    control=control, style=parent.owner.style
+                )
                 dockable.dockable_init_dockcontrol(dock_control)
                 return dock_control
 
@@ -396,12 +400,14 @@ class Handler(HasPrivateTraits):
             export = ui.view.export
             control = ui.control
 
-        dc = DockControl(control=control,
-                         name=name,
-                         export=export,
-                         style=parent.owner.style,
-                         image=image,
-                         closeable=True)
+        dc = DockControl(
+            control=control,
+            name=name,
+            export=export,
+            style=parent.owner.style,
+            image=image,
+            closeable=True,
+        )
 
         dockable.dockable_init_dockcontrol(dc)
 
@@ -420,11 +426,19 @@ class Handler(HasPrivateTraits):
         if dock_window.auto_close:
             dock_window.control.GetParent.Destroy()
 
-#-- HasTraits overrides: -------------------------------------------------
+    # -- HasTraits overrides: -------------------------------------------------
 
-    def edit_traits(self, view=None, parent=None, kind=None,
-                    context=None, handler=None, id='',
-                    scrollable=None, **args):
+    def edit_traits(
+        self,
+        view=None,
+        parent=None,
+        kind=None,
+        context=None,
+        handler=None,
+        id="",
+        scrollable=None,
+        **args
+    ):
         """ Edits the object's traits.
         """
         if context is None:
@@ -441,19 +455,36 @@ class Handler(HasPrivateTraits):
             handler,
             id,
             scrollable,
-            args)
+            args,
+        )
 
-    def configure_traits(self, filename=None, view=None,
-                         kind=None, edit=True,
-                         context=None, handler=None,
-                         id='', scrollable=None, **args):
+    def configure_traits(
+        self,
+        filename=None,
+        view=None,
+        kind=None,
+        edit=True,
+        context=None,
+        handler=None,
+        id="",
+        scrollable=None,
+        **args
+    ):
         """ Configures the object's traits.
         """
         return super(HasPrivateTraits, self).configure_traits(
-            filename, view, kind, edit, context, handler or self, id,
-            scrollable, **args)
+            filename,
+            view,
+            kind,
+            edit,
+            context,
+            handler or self,
+            id,
+            scrollable,
+            **args
+        )
 
-#-- Private Methods: -----------------------------------------------------
+    # -- Private Methods: -----------------------------------------------------
 
     def _on_undo(self, info):
         """ Handles an "Undo" change request.
@@ -480,9 +511,10 @@ class Handler(HasPrivateTraits):
         if (info.ui.owner is not None) and self.close(info, True):
             info.ui.owner.close()
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Default handler:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 _default_handler = Handler()
 
@@ -510,7 +542,7 @@ class Controller(Handler):
         unadorned trait names. (e.g., ``Item('name')``).
     """
 
-    #-- Trait Definitions ----------------------------------------------------
+    # -- Trait Definitions ----------------------------------------------------
 
     #: The model this handler defines a view and controller for
     model = Instance(HasTraits)
@@ -518,7 +550,7 @@ class Controller(Handler):
     #: The Info object associated with the controller
     info = Instance(UIInfo)
 
-    #-- HasTraits Method Overrides -------------------------------------------
+    # -- HasTraits Method Overrides -------------------------------------------
 
     def __init__(self, model=None, **metadata):
         """ Initializes the object and sets the model (if supplied).
@@ -531,9 +563,9 @@ class Controller(Handler):
         """ Returns the default context to use for editing or configuring
             traits.
         """
-        return {'object': self.model, 'controller': self, 'handler': self}
+        return {"object": self.model, "controller": self, "handler": self}
 
-    #-- Handler Method Overrides ---------------------------------------------
+    # -- Handler Method Overrides ---------------------------------------------
 
     def get_perform_handlers(self, info):
         """ Return a list of objects which can handle actions.
@@ -575,13 +607,13 @@ class ModelView(Controller):
         in its View definition using unadorned trait names.
     """
 
-    #-- HasTraits Method Overrides -------------------------------------------
+    # -- HasTraits Method Overrides -------------------------------------------
 
     def trait_context(self):
         """ Returns the default context to use for editing or configuring
             traits.
         """
-        return {'object': self, 'handler': self, 'model': self.model}
+        return {"object": self, "handler": self, "model": self.model}
 
 
 class ViewHandler(Handler):

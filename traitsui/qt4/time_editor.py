@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: Evan Patterson
 #  Date:   08/04/2009
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ A Traits UI editor for datetime.time objects.
 """
-
 
 
 from __future__ import absolute_import, print_function
@@ -60,12 +59,13 @@ class SimpleEditor(Editor):
         try:
             self.value = datetime.time(hour, minute, second)
         except ValueError:
-            print('Invalid time:', hour, minute, second)
+            print("Invalid time:", hour, minute, second)
             raise
 
-#------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
 # 'ReadonlyEditor' class:
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 
 class ReadonlyEditor(BaseReadonlyEditor):

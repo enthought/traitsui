@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,31 +13,32 @@
 #  Author: David C. Morrill
 #  Date:   01/10/2006
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines array editors for the WX user interface toolkit.
 """
-
 
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.array_editor file.
 from __future__ import absolute_import
-from traitsui.editors.array_editor \
-    import SimpleEditor as BaseSimpleEditor, ToolkitEditorFactory
+from traitsui.editors.array_editor import (
+    SimpleEditor as BaseSimpleEditor,
+    ToolkitEditorFactory,
+)
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class SimpleEditor(BaseSimpleEditor, Editor):
     """ Simple style of editor for arrays.
     """
+
     # FIXME: This class has been re-defined here simply so it inherits from the
     # wx Editor class.
     pass
@@ -47,5 +48,3 @@ class ReadonlyEditor(SimpleEditor):
 
     #: Set the value of the readonly trait.
     readonly = True
-
-

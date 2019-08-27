@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2014, Enthought, Inc.
 #  All rights reserved.
@@ -11,7 +11,7 @@
 #  Author: Ioannis Tziakos
 #  Date:   Aug 2014
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """
 Test cases for the TupleEditor object.
 """
@@ -32,22 +32,21 @@ class DummyModel(HasStrictTraits):
 
     data = Tuple(Float, Float, Str)
 
-    traits_view = View(Item(name='data', editor=TupleEditor()))
+    traits_view = View(Item(name="data", editor=TupleEditor()))
 
 
 class TestTupleEditor(UnittestTools, unittest.TestCase):
-
     @skip_if_null
     def test_value_update(self):
         # Regression test for #179
         model = DummyModel()
         ui = model.edit_traits()
         try:
-            with self.assertTraitChanges(model, 'data', count=1):
-                model.data = (3, 4.6, 'nono')
+            with self.assertTraitChanges(model, "data", count=1):
+                model.data = (3, 4.6, "nono")
         finally:
             ui.dispose()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.run()

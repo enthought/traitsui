@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,34 +13,33 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various editors for single-selection enumerations, for the
 wxPython user interface toolkit.
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import Property
+from traits.api import Property
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.drop_editor file.
-from traitsui.editors.enum_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.enum_editor import ToolkitEditorFactory
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .constants \
-    import OKColor, ErrorColor
+from .constants import OKColor, ErrorColor
 
-from .helper \
-    import enum_values_changed, TraitsUIPanel, disconnect, disconnect_no_id
+from .helper import (
+    enum_values_changed,
+    TraitsUIPanel,
+    disconnect,
+    disconnect_no_id,
+)
 from functools import reduce
 
 
@@ -48,17 +47,18 @@ from functools import reduce
 capitalize = lambda s: s.capitalize()
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'BaseEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 class BaseEditor(Editor):
     """ Base class for enumeration editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Current set of enumeration names:
     names = Property
@@ -74,15 +74,18 @@ class BaseEditor(Editor):
             widget.
         """
         factory = self.factory
-        if factory.name != '':
-            self._object, self._name, self._value = \
-                self.parse_extended_name(factory.name)
+        if factory.name != "":
+            self._object, self._name, self._value = self.parse_extended_name(
+                factory.name
+            )
             self.values_changed()
-            self._object.on_trait_change(self._values_changed,
-                                         ' ' + self._name, dispatch='ui')
+            self._object.on_trait_change(
+                self._values_changed, " " + self._name, dispatch="ui"
+            )
         else:
-            factory.on_trait_change(self.rebuild_editor, 'values_modified',
-                                    dispatch='ui')
+            factory.on_trait_change(
+                self.rebuild_editor, "values_modified", dispatch="ui"
+            )
 
     def _get_names(self):
         """ Gets the current set of enumeration names.
@@ -117,8 +120,9 @@ class BaseEditor(Editor):
     def values_changed(self):
         """ Recomputes the cached data based on the underlying enumeration model.
         """
-        self._names, self._mapping, self._inverse_mapping = \
-            enum_values_changed(self._value())
+        self._names, self._mapping, self._inverse_mapping = enum_values_changed(
+            self._value()
+        )
 
     def _values_changed(self):
         """ Handles the underlying object model's enumeration set being changed.
@@ -130,17 +134,20 @@ class BaseEditor(Editor):
         """ Disposes of the contents of an editor.
         """
         if self._object is not None:
-            self._object.on_trait_change(self._values_changed,
-                                         ' ' + self._name, remove=True)
+            self._object.on_trait_change(
+                self._values_changed, " " + self._name, remove=True
+            )
         else:
-            self.factory.on_trait_change(self.rebuild_editor,
-                                         'values_modified', remove=True)
+            self.factory.on_trait_change(
+                self.rebuild_editor, "values_modified", remove=True
+            )
 
         super(BaseEditor, self).dispose()
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class SimpleEditor(BaseEditor):
@@ -156,16 +163,22 @@ class SimpleEditor(BaseEditor):
         factory = self.factory
 
         if factory.evaluate is None:
-            self.control = control = wx.Choice(parent, -1, wx.Point(0, 0),
-                                               wx.Size(-1, -1), self.names)
+            self.control = control = wx.Choice(
+                parent, -1, wx.Point(0, 0), wx.Size(-1, -1), self.names
+            )
             wx.EVT_CHOICE(parent, self.control.GetId(), self.update_object)
         else:
-            self.control = control = wx.ComboBox(parent, -1, '',
-                                                 wx.Point(0, 0), wx.Size(-1, -1), self.names,
-                                                 style=wx.CB_DROPDOWN)
+            self.control = control = wx.ComboBox(
+                parent,
+                -1,
+                "",
+                wx.Point(0, 0),
+                wx.Size(-1, -1),
+                self.names,
+                style=wx.CB_DROPDOWN,
+            )
             wx.EVT_COMBOBOX(parent, control.GetId(), self.update_object)
-            wx.EVT_TEXT_ENTER(parent, control.GetId(),
-                              self.update_text_object)
+            wx.EVT_TEXT_ENTER(parent, control.GetId(), self.update_text_object)
             wx.EVT_KILL_FOCUS(control, self.on_kill_focus)
 
             if (not factory.is_grid_cell) and factory.auto_set:
@@ -177,8 +190,9 @@ class SimpleEditor(BaseEditor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        disconnect(self.control,
-                   wx.EVT_COMBOBOX, wx.EVT_TEXT_ENTER, wx.EVT_TEXT)
+        disconnect(
+            self.control, wx.EVT_COMBOBOX, wx.EVT_TEXT_ENTER, wx.EVT_TEXT
+        )
 
         disconnect_no_id(self.control, wx.EVT_KILL_FOCUS)
 
@@ -206,6 +220,7 @@ class SimpleEditor(BaseEditor):
 
         except:
             from traitsui.api import raise_to_debug
+
             raise_to_debug()
 
         self._no_enum_update -= 1
@@ -247,7 +262,8 @@ class SimpleEditor(BaseEditor):
             if self.factory.evaluate is None:
                 try:
                     self.control.SetStringSelection(
-                        self.inverse_mapping[self.value])
+                        self.inverse_mapping[self.value]
+                    )
                 except:
                     pass
             else:
@@ -338,7 +354,7 @@ class RadioEditor(BaseEditor):
         """
         value = self.value
         for button in self.control.GetChildren():
-            state = (button.value == value)
+            state = button.value == value
             button.SetValue(state)
             if state:
                 button.SetFocus()
@@ -364,7 +380,7 @@ class RadioEditor(BaseEditor):
         incr = [n / cols] * cols
         rem = n % cols
         for i in range(cols):
-            incr[i] += (rem > i)
+            incr[i] += rem > i
         incr[-1] = -(reduce(lambda x, y: x + y, incr[:-1], 0) - 1)
         if cols > 1:
             sizer = wx.GridSizer(0, cols, 2, 4)
@@ -383,14 +399,15 @@ class RadioEditor(BaseEditor):
                     control.value = mapping[name]
                     style = 0
                     control.SetValue(name == cur_name)
-                    wx.EVT_RADIOBUTTON(panel, control.GetId(),
-                                       self.update_object)
+                    wx.EVT_RADIOBUTTON(
+                        panel, control.GetId(), self.update_object
+                    )
                     self.set_tooltip(control)
                     index += incr[j]
                     n -= 1
                 else:
-                    control = wx.RadioButton(panel, -1, '')
-                    control.value = ''
+                    control = wx.RadioButton(panel, -1, "")
+                    control.value = ""
                     control.Show(False)
                 sizer.Add(control, 0, wx.NORTH, 5)
 
@@ -410,9 +427,14 @@ class ListEditor(BaseEditor):
         super(ListEditor, self).init(parent)
 
         # Create a panel to hold all of the radio buttons:
-        self.control = wx.ListBox(parent, -1, wx.Point(0, 0),
-                                  wx.Size(-1, -1), self.names,
-                                  style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
+        self.control = wx.ListBox(
+            parent,
+            -1,
+            wx.Point(0, 0),
+            wx.Size(-1, -1),
+            self.names,
+            style=wx.LB_SINGLE | wx.LB_NEEDED_SB,
+        )
         wx.EVT_LISTBOX(parent, self.control.GetId(), self.update_object)
         self.set_tooltip()
 
@@ -463,5 +485,3 @@ class ListEditor(BaseEditor):
 
         # fixme: Is this line necessary?
         self.update_editor()
-
-

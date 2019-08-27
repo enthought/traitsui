@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,18 +13,16 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the base class for wxPython editors.
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import HasTraits, Int, Instance, Str, Callable
+from traits.api import HasTraits, Int, Instance, Str, Callable
 
 # CIRCULAR IMPORT FIXME:
 # We are importing from the source instead of from the api in order to
@@ -35,20 +33,18 @@ from traits.api \
 # to an import of the wx 'toolkit' causing a circular import problem.
 # Another solution could be to move the GroupEditor object from helper to this
 # file.
-from traitsui.editor \
-    import Editor as UIEditor
+from traitsui.editor import Editor as UIEditor
 
-from .constants \
-    import WindowColor, OKColor, ErrorColor
+from .constants import WindowColor, OKColor, ErrorColor
 
 
 class Editor(UIEditor):
     """ Base class for wxPython editors for Traits-based UIs.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Style for embedding control in a sizer:
     layout_style = Int(wx.EXPAND)
@@ -79,9 +75,12 @@ class Editor(UIEditor):
     def error(self, excp):
         """ Handles an error that occurs while setting the object's trait value.
         """
-        dlg = wx.MessageDialog(self.control, str(excp),
-                               self.description + ' value error',
-                               wx.OK | wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(
+            self.control,
+            str(excp),
+            self.description + " value error",
+            wx.OK | wx.ICON_INFORMATION,
+        )
         dlg.ShowModal()
         dlg.Destroy()
 
@@ -89,14 +88,14 @@ class Editor(UIEditor):
         """ Sets the tooltip for a specified control.
         """
         desc = self.description
-        if desc == '':
+        if desc == "":
             desc = self.object.base_trait(self.name).tooltip
             if desc is None:
                 desc = self.object.base_trait(self.name).desc
                 if desc is None:
                     return False
 
-                desc = 'Specifies ' + desc
+                desc = "Specifies " + desc
 
         if control is None:
             control = self.control
@@ -126,6 +125,7 @@ class Editor(UIEditor):
         # notebook page:
         sizer = parent.GetSizer()
         from pyface.dock.api import DockSizer
+
         if isinstance(sizer, DockSizer):
             dock_controls = sizer.GetContents().get_controls(False)
             for dock_control in dock_controls:
@@ -171,10 +171,10 @@ class Editor(UIEditor):
         for item in control:
             if state:
                 color = ErrorColor
-                if getattr(item, '_ok_color', None) is None:
+                if getattr(item, "_ok_color", None) is None:
                     item._ok_color = item.GetBackgroundColour()
             else:
-                color = getattr(item, '_ok_color', None)
+                color = getattr(item, "_ok_color", None)
                 if color is None:
                     color = OKColor
                     if isinstance(item, wx.Panel):
@@ -192,9 +192,10 @@ class Editor(UIEditor):
 class EditorWithList(Editor):
     """ Editor for an object that contains a list.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Object containing the list being monitored
     list_object = Instance(HasTraits)
@@ -210,15 +211,17 @@ class EditorWithList(Editor):
         """
         factory = self.factory
         name = factory.name
-        if name != '':
-            self.list_object, self.list_name, self.list_value = \
-                self.parse_extended_name(name)
+        if name != "":
+            self.list_object, self.list_name, self.list_value = self.parse_extended_name(
+                name
+            )
         else:
-            self.list_object, self.list_name = factory, 'values'
+            self.list_object, self.list_name = factory, "values"
             self.list_value = lambda: factory.values
 
         self.list_object.on_trait_change(
-            self._list_updated, self.list_name + '[]', dispatch='ui')
+            self._list_updated, self.list_name + "[]", dispatch="ui"
+        )
 
         self._list_updated()
 
@@ -226,7 +229,8 @@ class EditorWithList(Editor):
         """ Disconnects the listeners set up by the constructor.
         """
         self.list_object.on_trait_change(
-            self._list_updated, self.list_name + '[]', remove=True)
+            self._list_updated, self.list_name + "[]", remove=True
+        )
 
         super(EditorWithList, self).dispose()
 

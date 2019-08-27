@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: Evan Patterson
 #  Date:   07/21/2009
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Traits UI 'display only' image editor.
 """
-
 
 
 from __future__ import absolute_import
@@ -34,9 +33,9 @@ from traitsui.editors.image_editor import ImageEditor
 
 from .editor import Editor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'QImageView' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # backported and modified from Enaml ImageView
 
@@ -66,9 +65,9 @@ class QImageView(QFrame):
 
         self.setBackgroundRole(QPalette.Window)
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Private API
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def paintEvent(self, event):
         """ A custom paint event handler which draws the image according
         to the current size constraints.
@@ -90,8 +89,8 @@ class QImageView(QFrame):
         if not self._scaled_contents:
             # If the image isn't scaled, it is centered if possible.
             # Otherwise, it's painted at the origin and clipped.
-            paint_x = max(0, int(width / 2. - pm_width / 2.))
-            paint_y = max(0, int(height / 2. - pm_height / 2.))
+            paint_x = max(0, int(width / 2.0 - pm_width / 2.0))
+            paint_y = max(0, int(height / 2.0 - pm_height / 2.0))
             paint_width = pm_width
             paint_height = pm_height
         else:
@@ -121,17 +120,17 @@ class QImageView(QFrame):
                     paint_width = min(pm_width, width)
             # In all cases of scaling, we know that the scaled image is
             # no larger than the paint area, and can thus be centered.
-            paint_x = int(width / 2. - paint_width / 2.)
-            paint_y = int(height / 2. - paint_height / 2.)
+            paint_x = int(width / 2.0 - paint_width / 2.0)
+            paint_y = int(height / 2.0 - paint_height / 2.0)
 
         # Finally, draw the pixmap into the calculated rect.
         painter = QPainter(self)
         painter.setRenderHint(QPainter.SmoothPixmapTransform)
         painter.drawPixmap(paint_x, paint_y, paint_width, paint_height, pixmap)
 
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Public API
-    #--------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def sizeHint(self):
         """ Returns a appropriate size hint for the image based on the
         underlying QPixmap.
@@ -148,7 +147,11 @@ class QImageView(QFrame):
 
         """
         pixmap = self._pixmap
-        if pixmap is not None and not self._allow_clipping and not self._scaled_contents:
+        if (
+            pixmap is not None
+            and not self._allow_clipping
+            and not self._scaled_contents
+        ):
             return pixmap.size()
         return super(QImageView, self).sizeHint()
 
@@ -255,9 +258,10 @@ class QImageView(QFrame):
         self.update()
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  '_ImageEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 class _ImageEditor(Editor):
     """ Traits UI 'display only' image editor.

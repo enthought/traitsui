@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/29/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines a wxPython ImageControl widget that is used by various trait
     editors to display trait values iconically.
 """
-
 
 
 from __future__ import absolute_import
@@ -32,20 +31,26 @@ class ImageControl(wx.Window):
 
     #: Pens used to draw the 'selection' marker:
     _selectedPenDark = wx.Pen(
-        wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DSHADOW), 1,
-        wx.SOLID)
+        wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DSHADOW), 1, wx.SOLID
+    )
 
     _selectedPenLight = wx.Pen(
-        wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DHIGHLIGHT), 1,
-        wx.SOLID)
+        wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DHIGHLIGHT), 1, wx.SOLID
+    )
 
-    def __init__(self, parent, bitmap, selected=None, handler=None,
-                 padding=10):
+    def __init__(
+        self, parent, bitmap, selected=None, handler=None, padding=10
+    ):
         """ Initializes the object.
         """
-        wx.Window.__init__(self, parent, -1,
-                           size=wx.Size(bitmap.GetWidth() + padding,
-                                        bitmap.GetHeight() + padding))
+        wx.Window.__init__(
+            self,
+            parent,
+            -1,
+            size=wx.Size(
+                bitmap.GetWidth() + padding, bitmap.GetHeight() + padding
+            ),
+        )
         self._bitmap = bitmap
         self._selected = selected
         self._handler = handler
@@ -65,12 +70,14 @@ class ImageControl(wx.Window):
         """ Gets or sets the selection state of the image.
         """
         if selected is not None:
-            selected = (selected != 0)
+            selected = selected != 0
             if selected != self._selected:
                 if selected:
                     for control in self.GetParent().GetChildren():
-                        if (isinstance(control, ImageControl) and
-                                control.Selected()):
+                        if (
+                            isinstance(control, ImageControl)
+                            and control.Selected()
+                        ):
                             control.Selected(False)
                             break
 

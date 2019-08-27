@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2006, Enthought, Inc.
 #  All rights reserved.
@@ -13,20 +13,18 @@
 #  Author: David C. Morrill
 #  Date:   01/05/2006
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the tree-based Python value editor and the value editor factory,
     for the wxPython user interface toolkit.
 """
 
 
-
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.value_editor file.
 from __future__ import absolute_import
-from traitsui.editors.value_editor \
-    import _ValueEditor, ToolkitEditorFactory
+from traitsui.editors.value_editor import _ValueEditor, ToolkitEditorFactory
 
 from .editor import Editor
 
@@ -45,5 +43,3 @@ class ReadonlyEditor(_ValueEditor, Editor):
 
     #: Override the value of the readonly trait.
     readonly = True
-
-

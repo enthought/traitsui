@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,29 +13,30 @@
 #  Author: David C. Morrill
 #  Date:   09/27/2005
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Editor that displays an interactive Python shell.
 """
-
 
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.shell_editor file.
 from __future__ import absolute_import
-from traitsui.editors.shell_editor \
-    import _ShellEditor as BaseShellEditor, ToolkitEditorFactory
+from traitsui.editors.shell_editor import (
+    _ShellEditor as BaseShellEditor,
+    ToolkitEditorFactory,
+)
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ShellEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class _ShellEditor(BaseShellEditor, Editor):
     """ Editor that displays an interactive Python shell.
     """
+
     pass

@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   07/14/2007
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Defines the theme style information for a DockWindow and its components.
 """
-
 
 
 from __future__ import absolute_import
@@ -28,13 +27,11 @@ from traits.api import HasPrivateTraits, Bool
 from .ui_traits import ATheme
 
 
-
-
 class DockWindowTheme(HasPrivateTraits):
     """ Defines the theme style information for a DockWindow and its components.
     """
 
-    #-- Public Trait Definitions ---------------------------------------------
+    # -- Public Trait Definitions ---------------------------------------------
 
     #: Use the theme background color as the DockWindow background color?
     use_theme_color = Bool(True)
@@ -75,9 +72,10 @@ class DockWindowTheme(HasPrivateTraits):
     #: Horizontal drag bar theme:
     horizontal_drag = ATheme
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Define the default theme:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # The current default DockWindow theme:
 _dock_window_theme = None

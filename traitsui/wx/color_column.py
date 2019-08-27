@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -12,14 +12,17 @@
 #
 #  Author: David C. Morrill
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Table column object for Color traits.
 """
 
 from __future__ import absolute_import
 import warnings
-warnings.warn("traitsui.wx.color_column is deprecated. Use the "
-              "backend-independent implementation in traitsui.color_column")
+
+warnings.warn(
+    "traitsui.wx.color_column is deprecated. Use the "
+    "backend-independent implementation in traitsui.color_column"
+)
 
 from traitsui.color_column import ColorColumn

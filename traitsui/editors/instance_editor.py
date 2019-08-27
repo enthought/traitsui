@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the instance editor factory for all traits user interface
 toolkits.
 """
-
 
 
 from __future__ import absolute_import
@@ -33,18 +32,18 @@ from ..instance_choice import InstanceChoice, InstanceChoiceItem
 
 from ..editor_factory import EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for instance editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: List of items describing the types of selectable or editable instances
     values = List(InstanceChoiceItem)
@@ -89,22 +88,23 @@ class ToolkitEditorFactory(EditorFactory):
     kind = AKind
 
     #: The orientation of the instance editor relative to the instance selector
-    orientation = Enum('default', 'horizontal', 'vertical')
+    orientation = Enum("default", "horizontal", "vertical")
 
     #: The default adapter class used to create InstanceChoice compatible
     #: adapters for instance objects:
     adapter = Type(InstanceChoice, allow_none=False)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    traits_view = View([['label{Button label}',
-                         'view{View name}', '|[]'],
-                        ['kind@', '|[Pop-up editor style]<>']])
+    traits_view = View(
+        [
+            ["label{Button label}", "view{View name}", "|[]"],
+            ["kind@", "|[Pop-up editor style]<>"],
+        ]
+    )
 
 
 # Define the InstanceEditor class.
 InstanceEditor = ToolkitEditorFactory
-
-

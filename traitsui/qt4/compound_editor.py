@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,37 +8,34 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the compound editor and the compound editor factory for the
 PyQt user interface toolkit.
 """
 
 
-
 from __future__ import absolute_import
 from pyface.qt import QtGui
 
-from traits.api \
-    import Str
+from traits.api import Str
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.compound_editor file.
-from traitsui.editors.compound_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.compound_editor import ToolkitEditorFactory
 
-from .editor \
-    import Editor
+from .editor import Editor
 
 
 class CompoundEditor(Editor):
     """ Editor for compound traits, which displays editors for each of the
     combined traits, in the appropriate style.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The kind of editor to create for each list item
     kind = Str
@@ -54,14 +51,9 @@ class CompoundEditor(Editor):
         # Add all of the component trait editors:
         self._editors = editors = []
         for factory in self.factory.editors:
-            editor = getattr(
-                factory,
-                self.kind)(
-                self.ui,
-                self.object,
-                self.name,
-                self.description,
-                None)
+            editor = getattr(factory, self.kind)(
+                self.ui, self.object, self.name, self.description, None
+            )
             editor.prepare(self.control)
             layout.addWidget(editor.control)
             editors.append(editor)
@@ -85,7 +77,7 @@ class SimpleEditor(CompoundEditor):
 
     #: The kind of editor to create for each list item. This value overrides
     #: the default.
-    kind = 'simple_editor'
+    kind = "simple_editor"
 
 
 class CustomEditor(CompoundEditor):
@@ -93,4 +85,4 @@ class CustomEditor(CompoundEditor):
     #: The kind of editor to create for each list item. This value overrides
     #: the default.
 
-    kind = 'custom_editor'
+    kind = "custom_editor"

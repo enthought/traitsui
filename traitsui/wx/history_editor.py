@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,30 +13,25 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Defines a text editor which displays a text field and maintains a history
     of previously entered values.
 """
 
 
-
 from __future__ import absolute_import
-from traits.api \
-    import Any, on_trait_change
+from traits.api import Any, on_trait_change
 
-from pyface.timer.api \
-    import do_later
+from pyface.timer.api import do_later
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .history_control \
-    import HistoryControl
+from .history_control import HistoryControl
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  '_HistoryEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class _HistoryEditor(Editor):
@@ -45,9 +40,9 @@ class _HistoryEditor(Editor):
         specified by the 'entries' trait of the HistoryEditor factory.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The history control:
     history = Any
@@ -59,7 +54,8 @@ class _HistoryEditor(Editor):
         self.history = history = HistoryControl(
             value=self.value,
             entries=self.factory.entries,
-            auto_set=self.factory.auto_set)
+            auto_set=self.factory.auto_set,
+        )
         self.control = history.create_control(parent)
 
         self.set_tooltip()
@@ -72,7 +68,7 @@ class _HistoryEditor(Editor):
 
         super(_HistoryEditor, self).dispose()
 
-    @on_trait_change('history:value')
+    @on_trait_change("history:value")
     def _value_changed(self, value):
         """ Handles the history object's 'value' trait being changed.
         """
@@ -102,14 +98,13 @@ class _HistoryEditor(Editor):
         """
         pass
 
-    #-- UI preference save/restore interface ---------------------------------
+    # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
-        self.history.history = \
-            prefs.get('history', [])[: self.factory.entries]
+        self.history.history = prefs.get("history", [])[: self.factory.entries]
 
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
@@ -121,6 +116,4 @@ class _HistoryEditor(Editor):
             self.history.set_value(self.value)
             self._dont_update = False
 
-        return {'history': self.history.history[:]}
-
-
+        return {"history": self.history.history[:]}

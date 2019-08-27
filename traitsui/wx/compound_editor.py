@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,44 +13,40 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the compound editor and the compound editor factory for the
     wxPython user interface toolkit.
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import Str
+from traits.api import Str
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.compound_editor file.
-from traitsui.editors.compound_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.compound_editor import ToolkitEditorFactory
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .helper \
-    import TraitsUIPanel
+from .helper import TraitsUIPanel
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'CompoundEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class CompoundEditor(Editor):
     """ Editor for compound traits, which displays editors for each of the
     combined traits, in the appropriate style.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The kind of editor to create for each list item
     kind = Str
@@ -66,17 +62,13 @@ class CompoundEditor(Editor):
         # Add all of the component trait editors:
         self._editors = editors = []
         for factory in self.factory.editors:
-            editor = getattr(
-                factory,
-                self.kind)(
-                self.ui,
-                self.object,
-                self.name,
-                self.description,
-                panel)
+            editor = getattr(factory, self.kind)(
+                self.ui, self.object, self.name, self.description, panel
+            )
             editor.prepare(panel)
-            sizer.Add(editor.control, 1,
-                      wx.TOP | wx.BOTTOM | editor.layout_style, 3)
+            sizer.Add(
+                editor.control, 1, wx.TOP | wx.BOTTOM | editor.layout_style, 3
+            )
             editors.append(editor)
 
         # Set-up the layout:
@@ -103,7 +95,7 @@ class SimpleEditor(CompoundEditor):
 
     #: The kind of editor to create for each list item. This value overrides
     #: the default.
-    kind = 'simple_editor'
+    kind = "simple_editor"
 
 
 class CustomEditor(CompoundEditor):
@@ -111,6 +103,4 @@ class CustomEditor(CompoundEditor):
     #: The kind of editor to create for each list item. This value overrides
     #: the default.
 
-    kind = 'custom_editor'
-
-
+    kind = "custom_editor"

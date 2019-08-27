@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   02/04/2005
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the help interface for displaying the help associated with a
     Traits UI View object.
 """
-
 
 
 from __future__ import absolute_import
@@ -30,6 +29,7 @@ def default_show_help(info, control):
     """ Default handler for showing the help associated with a view.
     """
     toolkit().show_help(info.ui, control)
+
 
 # The default handler for showing help
 show_help = default_show_help

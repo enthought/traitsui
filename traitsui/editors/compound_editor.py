@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Enthought, Inc.
 # All rights reserved.
 #
@@ -11,11 +11,10 @@
 #
 #  Author: David C. Morrill
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the compound editor factory for all traits toolkit backends.
 """
-
 
 
 from __future__ import absolute_import
@@ -24,24 +23,25 @@ from traits.api import List, true
 
 from ..editor_factory import EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # List of component editor factories used to build a compound editor
 editors_trait = List(EditorFactory)
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for compound editors.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Component editor factories used to build the editor
     editors = editors_trait
@@ -52,5 +52,3 @@ class ToolkitEditorFactory(EditorFactory):
 
 # Define the CompoundEditor class
 CompoundEditor = ToolkitEditorFactory
-
-

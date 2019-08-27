@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,37 +13,31 @@
 #  Author: David C. Morrill
 #  Date:   03/02/2007
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Defines an editor for playing animated GIF files.
 """
 
 
-
 from __future__ import absolute_import
-from wx.animate \
-    import GIFAnimationCtrl
+from wx.animate import GIFAnimationCtrl
 
-from traits.api \
-    import Bool, Str
+from traits.api import Bool, Str
 
-from traitsui.wx.editor \
-    import Editor
+from traitsui.wx.editor import Editor
 
-from traitsui.basic_editor_factory \
-    import BasicEditorFactory
+from traitsui.basic_editor_factory import BasicEditorFactory
 
-from pyface.timer.api \
-    import do_after
+from pyface.timer.api import do_after
 
 
 class _AnimatedGIFEditor(Editor):
     """ Editor that displays an animated GIF file.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Is the animated GIF file currently playing?
     playing = Bool(True)
@@ -54,7 +48,7 @@ class _AnimatedGIFEditor(Editor):
         """
         self.control = GIFAnimationCtrl(parent, -1)
         self.control.GetPlayer().UseBackgroundColour(True)
-        self.sync_value(self.factory.playing, 'playing', 'from')
+        self.sync_value(self.factory.playing, "playing", "from")
         self.set_tooltip()
 
     def update_editor(self):
@@ -96,9 +90,10 @@ class _AnimatedGIFEditor(Editor):
             except:
                 pass
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # wxPython editor factory for animated GIF editors:
 

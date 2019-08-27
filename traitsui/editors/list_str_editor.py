@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   05/08/2007
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Traits UI editor factory for editing lists of strings.
 """
-
 
 
 from __future__ import absolute_import
@@ -30,16 +29,16 @@ from ..toolkit import toolkit_object
 
 from pyface.image_resource import ImageResource
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ListStrEditor' editor factory class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ListStrEditor(BasicEditorFactory):
     """ Editor factory for list of string editors.
     """
 
-    #-- Trait Definitions ----------------------------------------------------
+    # -- Trait Definitions ----------------------------------------------------
 
     #: The editor class to be created:
     klass = Property
@@ -88,15 +87,16 @@ class ListStrEditor(BasicEditorFactory):
     auto_add = Bool(False)
 
     #: The adapter from list items to editor values:
-    adapter = Instance('traitsui.list_str_adapter.ListStrAdapter',
-                       ())
+    adapter = Instance("traitsui.list_str_adapter.ListStrAdapter", ())
 
     #: The optional extended name of the trait containing the adapter:
     adapter_name = Str
 
     #: What type of operations are allowed on the list:
-    operations = List(Enum('delete', 'insert', 'append', 'edit', 'move'),
-                      ['delete', 'insert', 'append', 'edit', 'move'])
+    operations = List(
+        Enum("delete", "insert", "append", "edit", "move"),
+        ["delete", "insert", "append", "edit", "move"],
+    )
 
     #: Are 'drag_move' operations allowed (i.e. True), or should they always be
     #: treated as 'drag_copy' operations (i.e. False):
@@ -116,5 +116,4 @@ class ListStrEditor(BasicEditorFactory):
     def _get_klass(self):
         """ Returns the editor class to be created.
         """
-        return toolkit_object('list_str_editor:_ListStrEditor')
-
+        return toolkit_object("list_str_editor:_ListStrEditor")

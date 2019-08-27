@@ -40,8 +40,10 @@ def assert_toolkit_import(names):
     to be imported.
     """
     if ETSConfig.toolkit and ETSConfig.toolkit not in names:
-        raise RuntimeError("Importing from %s backend after selecting %s "
-                           "backend!" % (names[0], ETSConfig.toolkit))
+        raise RuntimeError(
+            "Importing from %s backend after selecting %s "
+            "backend!" % (names[0], ETSConfig.toolkit)
+        )
 
 
 def toolkit_object(name, raise_exceptions=False):
@@ -69,9 +71,12 @@ def toolkit_object(name, raise_exceptions=False):
         toolkit()
     obj = _toolkit(name)
 
-    if raise_exceptions and obj.__name__ == 'Unimplemented':
-        raise RuntimeError("Can't import {} for backend {}".format(
-            repr(name), _toolkit.toolkit))
+    if raise_exceptions and obj.__name__ == "Unimplemented":
+        raise RuntimeError(
+            "Can't import {} for backend {}".format(
+                repr(name), _toolkit.toolkit
+            )
+        )
 
     return obj
 
@@ -104,9 +109,9 @@ def toolkit(*toolkits):
 
     if _toolkit is None:
         if len(toolkits) > 0:
-            _toolkit = find_toolkit('traitsui.toolkits', toolkits)
+            _toolkit = find_toolkit("traitsui.toolkits", toolkits)
         else:
-            _toolkit = find_toolkit('traitsui.toolkits')
+            _toolkit = find_toolkit("traitsui.toolkits")
     return _toolkit
 
 
@@ -119,73 +124,91 @@ class Toolkit(Toolkit):
             information from the specified UI object.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def ui_subpanel(self, ui, parent):
         """ Creates a GUI-toolkit-specific subpanel-based user interface using
             information from the specified UI object.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def ui_livemodal(self, ui, parent):
         """ Creates a GUI-toolkit-specific modal "live update" dialog user
             interface using information from the specified UI object.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def ui_live(self, ui, parent):
         """ Creates a GUI-toolkit-specific non-modal "live update" window user
             interface using information from the specified UI object.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def ui_modal(self, ui, parent):
         """ Creates a GUI-toolkit-specific modal dialog user interface using
             information from the specified UI object.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def ui_nonmodal(self, ui, parent):
         """ Creates a GUI-toolkit-specific non-modal dialog user interface using
             information from the specified UI object.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def ui_popup(self, ui, parent):
         """ Creates a GUI-toolkit-specific temporary "live update" popup dialog
             user interface using information from the specified UI object.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def ui_popover(self, ui, parent):
         """ Creates a GUI-toolkit-specific temporary "live update" popup dialog
             user interface using information from the specified UI object.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def ui_info(self, ui, parent):
         """ Creates a GUI-toolkit-specific temporary "live update" popup dialog
             user interface using information from the specified UI object.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def ui_wizard(self, ui, parent):
         """ Creates a GUI-toolkit-specific wizard dialog user interface using
             information from the specified UI object.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
-    def view_application(self, context, view, kind=None, handler=None,
-                         id='', scrollable=None, args=None):
+    def view_application(
+        self,
+        context,
+        view,
+        kind=None,
+        handler=None,
+        id="",
+        scrollable=None,
+        args=None,
+    ):
         """ Creates a GUI-toolkit-specific modal dialog user interface that
             runs as a complete application using information from the
             specified View object.
@@ -218,89 +241,103 @@ class Toolkit(Toolkit):
 
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def position(self, ui):
         """ Positions the associated dialog window on the display.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def show_help(self, ui, control):
         """ Shows a Help window for a specified UI and control.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def set_title(self, ui):
         """ Sets the title for the UI window.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def set_icon(self, ui):
         """ Sets the icon for the UI window.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def save_window(self, ui):
         """ Saves user preference information associated with a UI window.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def rebuild_ui(self, ui):
         """ Rebuilds a UI after a change to the content of the UI.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def key_event_to_name(self, event):
         """ Converts a keystroke event into a corresponding key name.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def hook_events(self, ui, control, events=None, handler=None):
         """ Hooks all specified events for all controls in a UI so that they
             can be routed to the correct event handler.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def route_event(self, ui, event):
         """ Routes a "hooked" event to the corrent handler method.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def skip_event(self, event):
         """ Indicates that an event should continue to be processed by the
             toolkit.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def destroy_control(self, control):
         """ Destroys a specified GUI toolkit control.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def destroy_children(self, control):
         """ Destroys all of the child controls of a specified GUI toolkit
             control.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def image_size(self, image):
         """ Returns a ( width, height ) tuple containing the size of a
             specified toolkit image.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def constants(self):
         """ Returns a dictionary of useful constants.
@@ -311,184 +348,227 @@ class Toolkit(Toolkit):
               specific color format.
         """
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  GUI toolkit dependent trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def color_trait(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def rgb_color_trait(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def rgba_color_trait(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def font_trait(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def kiva_font_trait(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  'Editor' class methods:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def ui_editor(self):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  'EditorFactory' factory methods:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def array_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def boolean_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def button_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def check_list_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def code_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def color_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def compound_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def custom_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def directory_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def drop_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def dnd_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def enum_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def file_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def font_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def key_binding_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def history_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def html_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def image_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def image_enum_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def instance_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def list_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def list_str_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def null_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def ordered_set_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def plot_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def range_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def rgb_color_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def rgba_color_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def shell_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def table_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def tabular_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def text_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def title_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def tree_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def tuple_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )
 
     def value_editor(self, *args, **traits):
         raise NotImplementedError(
-            not_implemented_message.format(ETSConfig.toolkit))
+            not_implemented_message.format(ETSConfig.toolkit)
+        )

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2013, Enthought, Inc.
 #  All rights reserved.
@@ -11,7 +11,7 @@
 #  Author: Corran Webster
 #  Date:   Oct 2013
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """
 Test case for bug (wx, Mac OS X)
@@ -28,8 +28,11 @@ from traitsui.view import View
 from traitsui.editors.list_str_editor import ListStrEditor
 
 from traitsui.tests._tools import (
-    press_ok_button, skip_if_not_qt4, skip_if_not_wx,
-    store_exceptions_on_all_threads)
+    press_ok_button,
+    skip_if_not_qt4,
+    skip_if_not_wx,
+    store_exceptions_on_all_threads,
+)
 
 
 class ListStrEditorWithSelectedIndex(HasTraits):
@@ -38,44 +41,50 @@ class ListStrEditorWithSelectedIndex(HasTraits):
     selected_indices = List(Int())
     selected = Str()
 
+
 single_select_view = View(
-    Item('values',
-         show_label=False,
-         editor=ListStrEditor(
-             selected_index='selected_index',
-             editable=False),
-         ),
-    buttons=['OK'])
+    Item(
+        "values",
+        show_label=False,
+        editor=ListStrEditor(selected_index="selected_index", editable=False),
+    ),
+    buttons=["OK"],
+)
 
 multi_select_view = View(
-    Item('values',
-         show_label=False,
-         editor=ListStrEditor(
-             multi_select=True,
-             selected_index='selected_indices',
-             editable=False),
-         ),
-    buttons=['OK'])
+    Item(
+        "values",
+        show_label=False,
+        editor=ListStrEditor(
+            multi_select=True,
+            selected_index="selected_indices",
+            editable=False,
+        ),
+    ),
+    buttons=["OK"],
+)
 
 single_select_item_view = View(
-    Item('values',
-         show_label=False,
-         editor=ListStrEditor(
-             selected='selected',
-             editable=False),
-         ),
-    buttons=['OK'])
+    Item(
+        "values",
+        show_label=False,
+        editor=ListStrEditor(selected="selected", editable=False),
+    ),
+    buttons=["OK"],
+)
 
 
 def get_selected(control):
     """ Returns a list of the indices of all currently selected list items.
     """
     import wx
+
     selected = []
     item = -1
     while True:
-        item = control.GetNextItem(item, wx.LIST_NEXT_ALL,
-                                   wx.LIST_STATE_SELECTED)
+        item = control.GetNextItem(
+            item, wx.LIST_NEXT_ALL, wx.LIST_STATE_SELECTED
+        )
         if item == -1:
             break
         selected.append(item)
@@ -88,14 +97,14 @@ def test_wx_list_str_selected_index():
 
     with store_exceptions_on_all_threads():
         obj = ListStrEditorWithSelectedIndex(
-            values=['value1', 'value2'],
-            selected_index=1)
+            values=["value1", "value2"], selected_index=1
+        )
         ui = obj.edit_traits(view=single_select_view)
 
         # the following is equivalent to setting the text in the text control,
         # then pressing OK
 
-        liststrctrl = ui.control.FindWindowByName('listCtrl')
+        liststrctrl = ui.control.FindWindowByName("listCtrl")
         selected_1 = get_selected(liststrctrl)
 
         obj.selected_index = 0
@@ -115,14 +124,14 @@ def test_wx_list_str_multi_selected_index():
 
     with store_exceptions_on_all_threads():
         obj = ListStrEditorWithSelectedIndex(
-            values=['value1', 'value2'],
-            selected_indices=[1])
+            values=["value1", "value2"], selected_indices=[1]
+        )
         ui = obj.edit_traits(view=multi_select_view)
 
         # the following is equivalent to setting the text in the text control,
         # then pressing OK
 
-        liststrctrl = ui.control.FindWindowByName('listCtrl')
+        liststrctrl = ui.control.FindWindowByName("listCtrl")
         selected_1 = get_selected(liststrctrl)
 
         obj.selected_indices = [0]
@@ -144,7 +153,7 @@ def test_selection_listener_disconnected():
     from pyface.ui.qt4.util.event_loop_helper import EventLoopHelper
     from pyface.ui.qt4.util.testing import event_loop
 
-    obj = ListStrEditorWithSelectedIndex(values=['value1', 'value2'])
+    obj = ListStrEditorWithSelectedIndex(values=["value1", "value2"])
 
     with store_exceptions_on_all_threads():
         qt_app = QApplication.instance()
@@ -160,18 +169,20 @@ def test_selection_listener_disconnected():
         # now run again and change the selection
         ui = obj.edit_traits(view=single_select_item_view)
         with event_loop():
-            editor = ui.get_editors('values')[0]
+            editor = ui.get_editors("values")[0]
 
             list_view = editor.list_view
             mi = editor.model.index(1)
-            list_view.selectionModel().select(mi, QItemSelectionModel.ClearAndSelect)
+            list_view.selectionModel().select(
+                mi, QItemSelectionModel.ClearAndSelect
+            )
 
-    obj.selected = 'value2'
+    obj.selected = "value2"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Executing the file opens the dialog for manual testing
     editor = ListStrEditorWithSelectedIndex(
-        values=['value1', 'value2'],
-        selected_index=1)
+        values=["value1", "value2"], selected_index=1
+    )
     editor.configure_traits(view=single_select_view)

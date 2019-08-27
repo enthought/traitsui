@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: Judah De Paula
 #  Date:   10/7/2008
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """
 A Traits UI editor that wraps a WX timer control.
 
@@ -30,8 +30,7 @@ import datetime
 import wx.lib.masked as masked
 
 from traitsui.wx.editor import Editor
-from traitsui.wx.text_editor \
-    import ReadonlyEditor as TextReadonlyEditor
+from traitsui.wx.text_editor import ReadonlyEditor as TextReadonlyEditor
 
 
 class SimpleEditor(Editor):
@@ -72,31 +71,38 @@ class SimpleEditor(Editor):
             time.SetSecond(self.value.second)
             self.control.SetValue(time)
         return
-#-- end SimpleEditor definition ------------------------------------------
 
 
-#------------------------------------------------------------------------------
-#--  Text Editor
-#------------------------------------------------------------------------------
+# -- end SimpleEditor definition ------------------------------------------
+
+
+# ------------------------------------------------------------------------------
+# --  Text Editor
+# ------------------------------------------------------------------------------
 # TODO: Write me.  Possibly use TextEditor as a model to show a string
 # representation of the time, and have enter-set do a time evaluation.
 class TextEditor(SimpleEditor):
     pass
-#-- end TextEditor definition -------------------------------------------------
 
 
-#------------------------------------------------------------------------------
-#--  Custom Editor
-#------------------------------------------------------------------------------
+# -- end TextEditor definition -------------------------------------------------
+
+
+# ------------------------------------------------------------------------------
+# --  Custom Editor
+# ------------------------------------------------------------------------------
 # TODO: Write me.
 class CustomEditor(SimpleEditor):
     pass
-#-- end TextEditor definition -------------------------------------------------
 
 
-#------------------------------------------------------------------------------
-#--  Readonly Editor
-#------------------------------------------------------------------------------
+# -- end TextEditor definition -------------------------------------------------
+
+
+# ------------------------------------------------------------------------------
+# --  Readonly Editor
+# ------------------------------------------------------------------------------
+
 
 class ReadonlyEditor(TextReadonlyEditor):
     """ Use a TextEditor for the view. """
@@ -108,7 +114,8 @@ class ReadonlyEditor(TextReadonlyEditor):
         else:
             return self.value.strftime(self.factory.strftime)
 
-#-- end ReadonlyEditor definition ---------------------------------------------
+
+# -- end ReadonlyEditor definition ---------------------------------------------
 
 
-#-- eof -----------------------------------------------------------------------
+# -- eof -----------------------------------------------------------------------

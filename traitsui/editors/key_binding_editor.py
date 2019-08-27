@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """ Defines the key binding editor for use with the KeyBinding class. This is a
 specialized editor used to associate a particular key with a control (i.e., the
 key binding editor).
 """
-
 
 
 from __future__ import absolute_import
@@ -32,13 +31,14 @@ from ..toolkit import toolkit_object
 
 
 def key_binding_editor(*args, **traits):
-    return toolkit_object('key_binding_editor:KeyBindingEditor')(*args,
-                                                                 **traits)
+    return toolkit_object("key_binding_editor:KeyBindingEditor")(
+        *args, **traits
+    )
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 KeyBindingEditor = ToolkitEditorFactory = BasicEditorFactory(
-    klass=key_binding_editor)
-
-
+    klass=key_binding_editor
+)

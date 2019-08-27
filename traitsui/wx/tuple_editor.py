@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,27 +13,26 @@
 #  Author: David C. Morrill
 #  Date:   12/13/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the tuple editor for the wxPython user interface toolkit.
 """
-
-
 
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.tuple_editor file.
 from __future__ import absolute_import
-from traitsui.editors.tuple_editor \
-    import SimpleEditor as BaseSimpleEditor, ToolkitEditorFactory
+from traitsui.editors.tuple_editor import (
+    SimpleEditor as BaseSimpleEditor,
+    ToolkitEditorFactory,
+)
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class SimpleEditor(BaseSimpleEditor, Editor):
@@ -42,6 +41,5 @@ class SimpleEditor(BaseSimpleEditor, Editor):
         The editor displays an editor for each of the fields in the tuple,
         based on the type of each field.
     """
+
     pass
-
-

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   11/01/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Creates a panel-based wxPython user interface for a specified UI object.
 """
-
 
 
 from __future__ import absolute_import
@@ -25,48 +24,45 @@ import wx
 import wx.html as wh
 import re
 
-from cgi \
-    import escape
+from cgi import escape
 
-from traits.api \
-    import Instance, Undefined
+from traits.api import Instance, Undefined
 
-from traitsui.api \
-    import Group
+from traitsui.api import Group
 
-from traitsui.undo \
-    import UndoHistory
+from traitsui.undo import UndoHistory
 
-from traitsui.dockable_view_element \
-    import DockableViewElement
+from traitsui.dockable_view_element import DockableViewElement
 
-from traitsui.help_template \
-    import help_template
+from traitsui.help_template import help_template
 
-from traitsui.menu \
-    import UndoButton, RevertButton, HelpButton
+from traitsui.menu import UndoButton, RevertButton, HelpButton
 
-from pyface.dock.api \
-    import DockWindow, DockSizer, DockSection, DockRegion, DockControl
+from pyface.dock.api import (
+    DockWindow,
+    DockSizer,
+    DockSection,
+    DockRegion,
+    DockControl,
+)
 
-from pyface.sizers.flow \
-    import FlowSizer
+from pyface.sizers.flow import FlowSizer
 
-from .helper \
-    import position_window, TraitsUIPanel, TraitsUIScrolledPanel, GroupEditor
+from .helper import (
+    position_window,
+    TraitsUIPanel,
+    TraitsUIScrolledPanel,
+    GroupEditor,
+)
 
-from .constants \
-    import screen_dx, screen_dy, WindowColor
+from .constants import screen_dx, screen_dy, WindowColor
 
-from .ui_base \
-    import BaseDialog
+from .ui_base import BaseDialog
 from .constants import is_mac
 
 
-
-
 # Pattern of all digits
-all_digits = re.compile(r'\d+')
+all_digits = re.compile(r"\d+")
 
 # Global font used for emphasis
 emphasis_font = None
@@ -102,7 +98,7 @@ def ui_panel_for(ui, parent, buttons):
     parent.Thaw()
 
     control._parent = parent
-    control._object = ui.context.get('object')
+    control._object = ui.context.get("object")
     control._ui = ui
     try:
         ui.prepare_ui()
@@ -130,12 +126,11 @@ class Panel(BaseDialog):
         # Reset any existing history listeners:
         history = ui.history
         if history is not None:
-            history.on_trait_change(self._on_undoable,
-                                    'undoable', remove=True)
-            history.on_trait_change(self._on_redoable,
-                                    'redoable', remove=True)
-            history.on_trait_change(self._on_revertable,
-                                    'undoable', remove=True)
+            history.on_trait_change(self._on_undoable, "undoable", remove=True)
+            history.on_trait_change(self._on_redoable, "redoable", remove=True)
+            history.on_trait_change(
+                self._on_revertable, "undoable", remove=True
+            )
 
         # Determine if we need any buttons or an 'undo' history:
         buttons = [self.coerce_button(button) for button in view.buttons]
@@ -150,14 +145,15 @@ class Panel(BaseDialog):
 
         if allow_buttons and (history is None):
             for button in buttons:
-                if (self.is_button(button, 'Undo') or
-                        self.is_button(button, 'Revert')):
+                if self.is_button(button, "Undo") or self.is_button(
+                    button, "Revert"
+                ):
                     history = UndoHistory()
                     break
         ui.history = history
 
         # Create a container panel to put everything in:
-        cpanel = getattr(self, 'control', None)
+        cpanel = getattr(self, "control", None)
         if cpanel is not None:
             cpanel.SetSizer(None)
             cpanel.DestroyChildren()
@@ -177,38 +173,47 @@ class Panel(BaseDialog):
         else:
             sw = panel(ui, cpanel)
 
-        if ((title != '') and
-                (not isinstance(getattr(parent, 'owner', None), DockWindow))):
-            sw_sizer.Add(heading_text(cpanel, text=title).control, 0,
-                         wx.EXPAND)
+        if (title != "") and (
+            not isinstance(getattr(parent, "owner", None), DockWindow)
+        ):
+            sw_sizer.Add(
+                heading_text(cpanel, text=title).control, 0, wx.EXPAND
+            )
 
         self.add_toolbar(sw_sizer)
 
         sw_sizer.Add(sw, 1, wx.EXPAND)
 
-        if (allow_buttons and
-                ((nbuttons != 1) or (not self.is_button(buttons[0], '')))):
+        if allow_buttons and (
+            (nbuttons != 1) or (not self.is_button(buttons[0], ""))
+        ):
             # Add the special function buttons:
             sw_sizer.Add(wx.StaticLine(cpanel, -1), 0, wx.EXPAND)
             b_sizer = wx.BoxSizer(wx.HORIZONTAL)
             for button in buttons:
-                if self.is_button(button, 'Undo'):
-                    self.undo = self.add_button(button, b_sizer,
-                                                self._on_undo, False)
-                    self.redo = self.add_button(button, b_sizer,
-                                                self._on_redo, False, 'Redo')
-                    history.on_trait_change(self._on_undoable, 'undoable',
-                                            dispatch='ui')
-                    history.on_trait_change(self._on_redoable, 'redoable',
-                                            dispatch='ui')
-                elif self.is_button(button, 'Revert'):
-                    self.revert = self.add_button(button, b_sizer,
-                                                  self._on_revert, False)
-                    history.on_trait_change(self._on_revertable, 'undoable',
-                                            dispatch='ui')
-                elif self.is_button(button, 'Help'):
+                if self.is_button(button, "Undo"):
+                    self.undo = self.add_button(
+                        button, b_sizer, self._on_undo, False
+                    )
+                    self.redo = self.add_button(
+                        button, b_sizer, self._on_redo, False, "Redo"
+                    )
+                    history.on_trait_change(
+                        self._on_undoable, "undoable", dispatch="ui"
+                    )
+                    history.on_trait_change(
+                        self._on_redoable, "redoable", dispatch="ui"
+                    )
+                elif self.is_button(button, "Revert"):
+                    self.revert = self.add_button(
+                        button, b_sizer, self._on_revert, False
+                    )
+                    history.on_trait_change(
+                        self._on_revertable, "undoable", dispatch="ui"
+                    )
+                elif self.is_button(button, "Help"):
                     self.add_button(button, b_sizer, self._on_help)
-                elif not self.is_button(button, ''):
+                elif not self.is_button(button, ""):
                     self.add_button(button, b_sizer)
 
             sw_sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
@@ -236,15 +241,17 @@ class Panel(BaseDialog):
         toolbar = self.ui.view.toolbar
         if toolbar is not None:
             self._last_group = self._last_parent = None
-            sizer.Add(toolbar.create_tool_bar(self.control, self),
-                      0, wx.EXPAND)
+            sizer.Add(
+                toolbar.create_tool_bar(self.control, self), 0, wx.EXPAND
+            )
             self._last_group = self._last_parent = None
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Creates a panel-based wxPython user interface for a specified UI object:
 #
 #  Note: This version does not modify the UI object passed to it.
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def panel(ui, parent):
@@ -264,7 +271,8 @@ def panel(ui, parent):
         if len(content) == 1:
             # Fill the panel with the Group's content:
             sg_sizer, resizable, contents = fill_panel_for_group(
-                panel, content[0], ui)
+                panel, content[0], ui
+            )
             sizer = panel.GetSizer()
             if sizer is not sg_sizer:
                 sizer.Add(sg_sizer, 1, wx.EXPAND)
@@ -286,23 +294,25 @@ def panel(ui, parent):
     # Return the notebook as the result:
     return nb
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Creates a notebook and adds a list of groups or items to it as separate
 #  pages:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
-def create_notebook_for_items(content, ui, parent, group,
-                              item_handler=None, is_dock_window=False):
+def create_notebook_for_items(
+    content, ui, parent, group, item_handler=None, is_dock_window=False
+):
     """ Creates a notebook and adds a list of groups or items to it as separate
         pages.
     """
     if is_dock_window:
         nb = parent
     else:
-        dw = DockWindow(parent, handler=ui.handler,
-                        handler_args=(ui.info, ),
-                        id=ui.id)
+        dw = DockWindow(
+            parent, handler=ui.handler, handler_args=(ui.info,), id=ui.id
+        )
         if group is not None:
             dw.theme = group.dock_theme
         nb = dw.control
@@ -316,14 +326,15 @@ def create_notebook_for_items(content, ui, parent, group,
             # Create the group as a nested DockWindow item:
             if item.selected:
                 active = index
-            sg_sizer, resizable, contents = \
-                fill_panel_for_group(nb, item, ui, suppress_label=True,
-                                     is_dock_window=True)
+            sg_sizer, resizable, contents = fill_panel_for_group(
+                nb, item, ui, suppress_label=True, is_dock_window=True
+            )
 
             # If the result is a region (i.e. notebook) with only one page,
             # collapse it down into just the contents of the region:
-            if (isinstance(contents, DockRegion) and
-                    (len(contents.contents) == 1)):
+            if isinstance(contents, DockRegion) and (
+                len(contents.contents) == 1
+            ):
                 contents = contents.contents[0]
 
             # Add the content to the notebook as a new page:
@@ -333,22 +344,25 @@ def create_notebook_for_items(content, ui, parent, group,
             # specified set of controls:
             page_name = item.get_label(ui)
             count += 1
-            if page_name == '':
-                page_name = 'Page %d' % count
+            if page_name == "":
+                page_name = "Page %d" % count
 
             sizer = wx.BoxSizer(wx.VERTICAL)
 
             panel = TraitsUIPanel(nb, -1)
             panel.SetSizer(sizer)
 
-            pages.append(DockControl(name=page_name,
-                                     image=item.image,
-                                     id=item.get_id(),
-                                     style=item.dock,
-                                     dockable=DockableViewElement(
-                                         ui=ui, element=item),
-                                     export=item.export,
-                                     control=panel))
+            pages.append(
+                DockControl(
+                    name=page_name,
+                    image=item.image,
+                    id=item.get_id(),
+                    style=item.dock,
+                    dockable=DockableViewElement(ui=ui, element=item),
+                    export=item.export,
+                    control=panel,
+                )
+            )
             item_handler(item, panel, sizer)
             panel.GetSizer().Fit(panel)
 
@@ -374,18 +388,19 @@ def show_help(ui, button):
     """
     group = ui._groups[ui._active_group]
     template = help_template()
-    if group.help != '':
+    if group.help != "":
         header = template.group_help % escape(group.help)
     else:
         header = template.no_group_help
     fields = []
     for item in group.get_content(False):
         if not item.is_spacer():
-            fields.append(template.item_help % (
-                escape(item.get_label(ui)),
-                escape(item.get_help(ui))))
-    html = template.group_html % (header, '\n'.join(fields))
-    HTMLHelpWindow(button, html, .25, .33)
+            fields.append(
+                template.item_help
+                % (escape(item.get_label(ui)), escape(item.get_help(ui)))
+            )
+    html = template.group_html % (header, "\n".join(fields))
+    HTMLHelpWindow(button, html, 0.25, 0.33)
 
 
 def show_help_popup(event):
@@ -397,19 +412,26 @@ def show_help_popup(event):
     # Note: The following check is necessary because under Linux, we get back
     # a control which does not have the 'help' trait defined (it is the parent
     # of the object with the 'help' trait):
-    help = getattr(control, 'help', None)
+    help = getattr(control, "help", None)
     if help is not None:
         html = template.item_html % (control.GetLabel(), help)
-        HTMLHelpWindow(control, html, .25, .13)
+        HTMLHelpWindow(control, html, 0.25, 0.13)
 
 
-def fill_panel_for_group(panel, group, ui, suppress_label=False,
-                         is_dock_window=False, create_panel=False):
+def fill_panel_for_group(
+    panel,
+    group,
+    ui,
+    suppress_label=False,
+    is_dock_window=False,
+    create_panel=False,
+):
     """ Builds the user interface for a specified Group within a specified
         Panel.
     """
-    fp = FillPanel(panel, group, ui, suppress_label, is_dock_window,
-                   create_panel)
+    fp = FillPanel(
+        panel, group, ui, suppress_label, is_dock_window, create_panel
+    )
     return (fp.control or fp.sizer, fp.resizable, fp.dock_contents)
 
 
@@ -417,8 +439,9 @@ class FillPanel(object):
     """ A subpanel for a single group of items.
     """
 
-    def __init__(self, panel, group, ui, suppress_label, is_dock_window,
-                 create_panel):
+    def __init__(
+        self, panel, group, ui, suppress_label, is_dock_window, create_panel
+    ):
         """ Initializes the object.
         """
         # Get the contents of the group:
@@ -428,11 +451,11 @@ class FillPanel(object):
         self.control = self.sizer = editor = None
         self.ui = ui
         self.group = group
-        self.is_horizontal = (group.orientation == 'horizontal')
+        self.is_horizontal = group.orientation == "horizontal"
         layout = group.layout
         is_scrolled_panel = group.scrollable
-        is_splitter = (layout == 'split')
-        is_tabbed = (layout == 'tabbed')
+        is_splitter = layout == "split"
+        is_tabbed = layout == "tabbed"
         id = group.id
 
         # Assume our contents are not resizable:
@@ -441,16 +464,23 @@ class FillPanel(object):
         if is_dock_window and (is_splitter or is_tabbed):
             if is_splitter:
                 self.dock_contents = self.add_dock_window_splitter_items(
-                    panel, content, group)
+                    panel, content, group
+                )
             else:
                 self.resizable = group.springy
                 self.dock_contents = create_notebook_for_items(
-                    content, ui, panel, group, self.add_notebook_item, True)
+                    content, ui, panel, group, self.add_notebook_item, True
+                )
             return
 
-        if (is_dock_window or create_panel or is_scrolled_panel or
-                (id != '') or (group.visible_when != '') or
-                (group.enabled_when != '')):
+        if (
+            is_dock_window
+            or create_panel
+            or is_scrolled_panel
+            or (id != "")
+            or (group.visible_when != "")
+            or (group.enabled_when != "")
+        ):
             if is_scrolled_panel:
                 new_panel = TraitsUIScrolledPanel(panel)
                 new_panel.SetMinSize(panel.GetMinSize())
@@ -467,11 +497,11 @@ class FillPanel(object):
                 editor = DockWindowGroupEditor(control=panel, ui=ui)
             else:
                 editor = GroupEditor(control=panel)
-            if id != '':
+            if id != "":
                 ui.info.bind(group.id, editor)
-            if group.visible_when != '':
+            if group.visible_when != "":
                 ui.add_visible(group.visible_when, editor)
-            if group.enabled_when != '':
+            if group.enabled_when != "":
                 ui.add_enabled(group.enabled_when, editor)
 
         self.panel = panel
@@ -484,7 +514,7 @@ class FillPanel(object):
             orientation = wx.VERTICAL
 
         # Set up a group with or without a border around its contents:
-        label = ''
+        label = ""
         if not suppress_label:
             label = group.label
 
@@ -493,13 +523,17 @@ class FillPanel(object):
             self._set_owner(box, group)
             self.sizer = wx.StaticBoxSizer(box, orientation)
         else:
-            if layout == 'flow':
+            if layout == "flow":
                 self.sizer = FlowSizer(orientation)
             else:
                 self.sizer = wx.BoxSizer(orientation)
-            if label != '':
-                self.sizer.Add(heading_text(panel, text=label).control,
-                               0, wx.EXPAND | wx.LEFT | wx.TOP | wx.RIGHT, 4)
+            if label != "":
+                self.sizer.Add(
+                    heading_text(panel, text=label).control,
+                    0,
+                    wx.EXPAND | wx.LEFT | wx.TOP | wx.RIGHT,
+                    4,
+                )
 
         # If no sizer has been specified for the panel yet, make the new sizer
         # the layout sizer for the panel:
@@ -514,34 +548,40 @@ class FillPanel(object):
                 panel.SetupScrolling(scroll_x=False)
 
         if is_splitter:
-            dw = DockWindow(panel, handler=ui.handler,
-                            handler_args=(ui.info, ),
-                            id=ui.id,
-                            theme=group.dock_theme).control
+            dw = DockWindow(
+                panel,
+                handler=ui.handler,
+                handler_args=(ui.info,),
+                id=ui.id,
+                theme=group.dock_theme,
+            ).control
             if editor is not None:
                 editor.dock_window = dw
 
             dw.SetSizer(
                 DockSizer(
                     contents=self.add_dock_window_splitter_items(
-                        dw,
-                        content,
-                        group)))
+                        dw, content, group
+                    )
+                )
+            )
             self.sizer.Add(dw, 1, wx.EXPAND)
         elif len(content) > 0:
             if is_tabbed:
                 self.resizable = group.springy
-                dw = create_notebook_for_items(content, ui, panel, group,
-                                               self.add_notebook_item)
+                dw = create_notebook_for_items(
+                    content, ui, panel, group, self.add_notebook_item
+                )
                 if editor is not None:
                     editor.dock_window = dw
 
                 self.sizer.Add(dw, self.resizable, wx.EXPAND)
             # Check if content is all Group objects:
-            elif layout == 'fold':
+            elif layout == "fold":
                 self.resizable = True
-                self.sizer.Add(self.create_fold_for_items(panel, content),
-                               1, wx.EXPAND)
+                self.sizer.Add(
+                    self.create_fold_for_items(panel, content), 1, wx.EXPAND
+                )
             elif isinstance(content[0], Group):
                 # If so, add them to the panel and exit:
                 self.add_groups(content, panel)
@@ -551,22 +591,28 @@ class FillPanel(object):
         # If the caller is a DockWindow, we need to define the content we are
         # adding to it:
         if is_dock_window:
-            self.dock_contents = DockRegion(contents=[
-                DockControl(name=group.get_label(self.ui),
-                            image=group.image,
-                            id=group.get_id(),
-                            style=group.dock,
-                            dockable=DockableViewElement(
-                            ui=ui, element=group),
-                            export=group.export,
-                            control=panel)])
+            self.dock_contents = DockRegion(
+                contents=[
+                    DockControl(
+                        name=group.get_label(self.ui),
+                        image=group.image,
+                        id=group.get_id(),
+                        style=group.dock,
+                        dockable=DockableViewElement(ui=ui, element=group),
+                        export=group.export,
+                        control=panel,
+                    )
+                ]
+            )
 
     def add_dock_window_splitter_items(self, window, content, group):
         """ Adds a set of groups or items separated by splitter bars to a
             DockWindow.
         """
-        contents = [self.add_dock_window_splitter_item(window, item, group)
-                    for item in content]
+        contents = [
+            self.add_dock_window_splitter_item(window, item, group)
+            for item in content
+        ]
 
         # Create a splitter group to hold the contents:
         result = DockSection(contents=contents, is_row=self.is_horizontal)
@@ -584,7 +630,8 @@ class FillPanel(object):
         """
         if isinstance(item, Group):
             sizer, resizable, contents = fill_panel_for_group(
-                window, item, self.ui, suppress_label=True, is_dock_window=True)
+                window, item, self.ui, suppress_label=True, is_dock_window=True
+            )
             self.resizable |= resizable
 
             return contents
@@ -599,21 +646,25 @@ class FillPanel(object):
 
         self.add_items([item], panel, sizer)
 
-        return DockRegion(contents=[
-            DockControl(name=item.get_label(self.ui),
-                        image=item.image,
-                        id=item.get_id(),
-                        style=item.dock,
-                        dockable=DockableViewElement(
-                ui=self.ui, element=item),
-                export=item.export,
-                control=panel)])
+        return DockRegion(
+            contents=[
+                DockControl(
+                    name=item.get_label(self.ui),
+                    image=item.image,
+                    id=item.get_id(),
+                    style=item.dock,
+                    dockable=DockableViewElement(ui=self.ui, element=item),
+                    export=item.export,
+                    control=panel,
+                )
+            ]
+        )
 
     def create_fold_for_items(self, window, content):
         """ Adds a set of groups or items as vertical notebook pages to a
             vertical notebook.
         """
-        raise NotImplementedError('VFold is not implemented for Wx backend')
+        raise NotImplementedError("VFold is not implemented for Wx backend")
 
     def create_fold_for_item(self, notebook, item):
         """ Adds a single group or item to a vertical notebook.
@@ -624,7 +675,12 @@ class FillPanel(object):
         # Create the page contents:
         if isinstance(item, Group):
             panel, resizable, contents = fill_panel_for_group(
-                page.parent, item, self.ui, suppress_label=True, create_panel=True)
+                page.parent,
+                item,
+                self.ui,
+                suppress_label=True,
+                create_panel=True,
+            )
         else:
             panel = TraitsUIPanel(page.parent, -1)
             sizer = wx.BoxSizer(wx.VERTICAL)
@@ -651,8 +707,9 @@ class FillPanel(object):
         # Process each group:
         for subgroup in content:
             # Add the sub-group to the panel:
-            sg_sizer, sg_resizable, contents = \
-                fill_panel_for_group(panel, subgroup, self.ui)
+            sg_sizer, sg_resizable, contents = fill_panel_for_group(
+                panel, subgroup, self.ui
+            )
 
             # If the sub-group is resizable:
             if sg_resizable:
@@ -669,7 +726,7 @@ class FillPanel(object):
                 if self.is_horizontal:
                     if subgroup.springy:
                         growable = 1
-                    if subgroup.orientation == 'horizontal':
+                    if subgroup.orientation == "horizontal":
                         style |= wx.ALIGN_CENTER_VERTICAL
                 sizer.Add(sg_sizer, growable, style, 2)
 
@@ -721,9 +778,9 @@ class FillPanel(object):
             name = item.name
 
             # Check if is a label:
-            if name == '':
+            if name == "":
                 label = item.label
-                if label != '':
+                if label != "":
                     # Update the column counter:
                     col += col_incr
 
@@ -732,16 +789,18 @@ class FillPanel(object):
                     if (cols > 1) and show_labels:
                         item_sizer.Add((1, 1))
 
-                    if item.style == 'simple':
+                    if item.style == "simple":
                         # Add a simple text label:
-                        label = wx.StaticText(panel, -1, label,
-                                              style=wx.ALIGN_LEFT)
+                        label = wx.StaticText(
+                            panel, -1, label, style=wx.ALIGN_LEFT
+                        )
                         item_sizer.Add(label, 0, wx.EXPAND)
                     else:
                         # Add the label to the sizer:
                         label = heading_text(panel, text=label).control
-                        item_sizer.Add(label, 0,
-                                       wx.TOP | wx.BOTTOM | wx.EXPAND, 3)
+                        item_sizer.Add(
+                            label, 0, wx.TOP | wx.BOTTOM | wx.EXPAND, 3
+                        )
 
                     if item.emphasized:
                         self._add_emphasis(label)
@@ -753,27 +812,27 @@ class FillPanel(object):
             col += col_incr
 
             # Check if it is a separator:
-            if name == '_':
+            if name == "_":
                 for i in range(cols):
                     if self.is_horizontal:
                         # Add a vertical separator:
-                        line = wx.StaticLine(panel, -1,
-                                             style=wx.LI_VERTICAL)
-                        item_sizer.Add(line, 0,
-                                       wx.LEFT | wx.RIGHT | wx.EXPAND, 2)
+                        line = wx.StaticLine(panel, -1, style=wx.LI_VERTICAL)
+                        item_sizer.Add(
+                            line, 0, wx.LEFT | wx.RIGHT | wx.EXPAND, 2
+                        )
                     else:
                         # Add a horizontal separator:
-                        line = wx.StaticLine(panel, -1,
-                                             style=wx.LI_HORIZONTAL)
-                        item_sizer.Add(line, 0,
-                                       wx.TOP | wx.BOTTOM | wx.EXPAND, 2)
+                        line = wx.StaticLine(panel, -1, style=wx.LI_HORIZONTAL)
+                        item_sizer.Add(
+                            line, 0, wx.TOP | wx.BOTTOM | wx.EXPAND, 2
+                        )
                     self._set_owner(line, item)
                 # Continue on to the next Item in the list:
                 continue
 
             # Convert a blank to a 5 pixel spacer:
-            if name == ' ':
-                name = '5'
+            if name == " ":
+                name = "5"
 
             # Check if it is a spacer:
             if all_digits.match(name):
@@ -796,7 +855,7 @@ class FillPanel(object):
             trait = object.base_trait(name)
             desc = trait.tooltip
             if desc is None:
-                desc = 'Specifies ' + trait.desc if trait.desc else ''
+                desc = "Specifies " + trait.desc if trait.desc else ""
 
             label = None
 
@@ -804,9 +863,14 @@ class FillPanel(object):
             # user interface:
             if show_left:
                 if item.show_label:
-                    label = self.create_label(item, ui, desc, panel,
-                                              item_sizer,
-                                              border=group.show_border)
+                    label = self.create_label(
+                        item,
+                        ui,
+                        desc,
+                        panel,
+                        item_sizer,
+                        border=group.show_border,
+                    )
                 elif (cols > 1) and show_labels:
                     label = self.dummy_label(panel, item_sizer)
 
@@ -818,6 +882,7 @@ class FillPanel(object):
                 # If still no editor factory found, use a default text editor:
                 if editor_factory is None:
                     from .text_editor import ToolkitEditorFactory
+
                     editor_factory = ToolkitEditorFactory()
 
                 # If the item has formatting traits set them in the editor
@@ -825,23 +890,22 @@ class FillPanel(object):
                 if item.format_func is not None:
                     editor_factory.format_func = item.format_func
 
-                if item.format_str != '':
+                if item.format_str != "":
                     editor_factory.format_str = item.format_str
 
                 # If the item has an invalid state extended trait name, set it
                 # in the editor factory:
-                if item.invalid != '':
+                if item.invalid != "":
                     editor_factory.invalid = item.invalid
 
             # Set up the background image (if used):
             item_panel = panel
 
             # Create the requested type of editor from the editor factory:
-            factory_method = getattr(editor_factory, item.style + '_editor')
-            editor = factory_method(ui, object, name, item.tooltip,
-                                    item_panel).trait_set(
-                item=item,
-                object_name=item.object)
+            factory_method = getattr(editor_factory, item.style + "_editor")
+            editor = factory_method(
+                ui, object, name, item.tooltip, item_panel
+            ).trait_set(item=item, object_name=item.object)
 
             # Tell editor to actually build the editing widget:
             editor.prepare(item_panel)
@@ -909,27 +973,28 @@ class FillPanel(object):
             # If the handler wants to be notified when the editor is created,
             # add it to the list of methods to be called when the UI is
             # complete:
-            defined = getattr(handler, id + '_defined', None)
+            defined = getattr(handler, id + "_defined", None)
             if defined is not None:
                 ui.add_defined(defined)
 
             # If the editor is conditionally visible, add the visibility
             # 'expression' and the editor to the UI object's list of monitored
             # objects:
-            if item.visible_when != '':
+            if item.visible_when != "":
                 ui.add_visible(item.visible_when, editor)
 
             # If the editor is conditionally enabled, add the enabling
             # 'expression' and the editor to the UI object's list of monitored
             # objects:
-            if item.enabled_when != '':
+            if item.enabled_when != "":
                 ui.add_enabled(item.enabled_when, editor)
 
             # Add the created editor control to the sizer with the appropriate
             # layout flags and values:
             ui._scrollable |= scrollable
-            item_resizable = ((item.resizable is True) or
-                              ((item.resizable is Undefined) and scrollable))
+            item_resizable = (item.resizable is True) or (
+                (item.resizable is Undefined) and scrollable
+            )
             if item_resizable:
                 growable = growable or 500
                 self.resizable = True
@@ -945,16 +1010,20 @@ class FillPanel(object):
             if not show_labels:
                 layout_style |= wx.EXPAND
 
-            item_sizer.Add(control, growable,
-                           flags | layout_style | wx.ALIGN_CENTER_VERTICAL,
-                           max(0, border_size + padding + item.padding))
+            item_sizer.Add(
+                control,
+                growable,
+                flags | layout_style | wx.ALIGN_CENTER_VERTICAL,
+                max(0, border_size + padding + item.padding),
+            )
 
             # If we are displaying labels on the right, add the label to the
             # user interface:
             if not show_left:
                 if item.show_label:
-                    label = self.create_label(item, ui, desc, panel,
-                                              item_sizer, '', wx.RIGHT)
+                    label = self.create_label(
+                        item, ui, desc, panel, item_sizer, "", wx.RIGHT
+                    )
                 elif (cols > 1) and show_labels:
                     label = self.dummy_label(panel, item_sizer)
 
@@ -974,16 +1043,29 @@ class FillPanel(object):
 
             sizer.Add(item_sizer, growable, wx.EXPAND | wx.ALL, 2)
 
-    def create_label(self, item, ui, desc, parent, sizer, suffix=':',
-                     pad_side=wx.LEFT, border=False):
+    def create_label(
+        self,
+        item,
+        ui,
+        desc,
+        parent,
+        sizer,
+        suffix=":",
+        pad_side=wx.LEFT,
+        border=False,
+    ):
         """ Creates an item label.
         """
         label = item.get_label(ui)
-        if (label == '') or (label[-1:] in '?=:;,.<>/\\"\'-+#|'):
-            suffix = ''
+        if (label == "") or (label[-1:] in "?=:;,.<>/\\\"'-+#|"):
+            suffix = ""
 
-        control = wx.StaticText(parent, -1, label+suffix,
-            style=wx.ALIGN_LEFT | wx.SIMPLE_BORDER if border else wx.NO_BORDER)
+        control = wx.StaticText(
+            parent,
+            -1,
+            label + suffix,
+            style=wx.ALIGN_LEFT | wx.SIMPLE_BORDER if border else wx.NO_BORDER,
+        )
 
         self._set_owner(control, item)
 
@@ -991,14 +1073,18 @@ class FillPanel(object):
             self._add_emphasis(control)
 
         # XXX: Turning off help popups for now
-        #wx.EVT_LEFT_UP( control, show_help_popup )
+        # wx.EVT_LEFT_UP( control, show_help_popup )
 
         control.help = item.get_help(ui)
         control.SetToolTip(wx.ToolTip(item.get_help(ui)))
-        sizer.Add(control, 0, self.label_flags | wx.ALIGN_TOP |
-                  pad_side, self.label_pad)
+        sizer.Add(
+            control,
+            0,
+            self.label_flags | wx.ALIGN_TOP | pad_side,
+            self.label_pad,
+        )
 
-        if desc != '':
+        if desc != "":
             control.SetToolTipString(desc)
 
         return control
@@ -1006,7 +1092,7 @@ class FillPanel(object):
     def dummy_label(self, parent, sizer):
         """ Creates an item label.
         """
-        control = wx.StaticText(parent, -1, '', style=wx.ALIGN_RIGHT)
+        control = wx.StaticText(parent, -1, "", style=wx.ALIGN_RIGHT)
         sizer.Add(control, 0)
         return control
 
@@ -1018,10 +1104,12 @@ class FillPanel(object):
         control.SetForegroundColour(emphasis_color)
         if emphasis_font is None:
             font = control.GetFont()
-            emphasis_font = wx.Font(font.GetPointSize() + 1,
-                                    font.GetFamily(),
-                                    font.GetStyle(),
-                                    wx.BOLD)
+            emphasis_font = wx.Font(
+                font.GetPointSize() + 1,
+                font.GetFamily(),
+                font.GetStyle(),
+                wx.BOLD,
+            )
         control.SetFont(emphasis_font)
 
     def _set_owner(self, control, owner):
@@ -1034,21 +1122,21 @@ class DockWindowGroupEditor(GroupEditor):
     """ Editor for a group which displays a DockWindow.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: DockWindow for the group
     dock_window = Instance(wx.Window)
 
-    #-- UI preference save/restore interface ---------------------------------
+    # -- UI preference save/restore interface ---------------------------------
 
     def restore_prefs(self, prefs):
         """ Restores any saved user preference information associated with the
             editor.
         """
         if isinstance(prefs, dict):
-            structure = prefs.get('structure')
+            structure = prefs.get("structure")
         else:
             structure = prefs
         self.dock_window.GetSizer().SetStructure(self.dock_window, structure)
@@ -1057,9 +1145,9 @@ class DockWindowGroupEditor(GroupEditor):
     def save_prefs(self):
         """ Returns any user preference information associated with the editor.
         """
-        return {'structure': self.dock_window.GetSizer().GetStructure()}
+        return {"structure": self.dock_window.GetSizer().GetStructure()}
 
-    #-- End UI preference save/restore interface -----------------------------
+    # -- End UI preference save/restore interface -----------------------------
 
 
 class HTMLHelpWindow(wx.Frame):
@@ -1069,7 +1157,7 @@ class HTMLHelpWindow(wx.Frame):
     def __init__(self, parent, html, scale_dx, scale_dy):
         """ Initializes the object.
         """
-        wx.Frame.__init__(self, parent, -1, 'Help', style=wx.SIMPLE_BORDER)
+        wx.Frame.__init__(self, parent, -1, "Help", style=wx.SIMPLE_BORDER)
         self.SetBackgroundColour(WindowColor)
 
         # Wrap the dialog around the image button panel:
@@ -1080,13 +1168,14 @@ class HTMLHelpWindow(wx.Frame):
         sizer.Add(html_control, 1, wx.EXPAND)
         sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
         b_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        button = wx.Button(self, -1, 'OK')
+        button = wx.Button(self, -1, "OK")
         wx.EVT_BUTTON(self, button.GetId(), self._on_ok)
         b_sizer.Add(button, 0)
         sizer.Add(b_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
         self.SetSizer(sizer)
-        self.SetSize(wx.Size(int(scale_dx * screen_dx),
-                             int(scale_dy * screen_dy)))
+        self.SetSize(
+            wx.Size(int(scale_dx * screen_dx), int(scale_dy * screen_dy))
+        )
 
         # Position and show the dialog:
         position_window(self, parent=parent)
@@ -1097,9 +1186,10 @@ class HTMLHelpWindow(wx.Frame):
         """
         self.Destroy()
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Creates a PyFace HeadingText control:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 HeadingText = None
 

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2011, Enthought, Inc.
 # All rights reserved.
 #
@@ -9,7 +9,7 @@
 # Thanks for using Enthought open source!
 #
 # Author: Evan Patterson
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines a Traits UI View that allows for the customization of Qt-specific
     widget properties.
@@ -46,21 +46,31 @@ class QtView(View):
     # name, the order is undefined.
     tab_order = List(Str)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Creates a UI user interface object:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    def ui(self, context, parent=None, kind=None, view_elements=None,
-           handler=None, id='', scrollable=None, args=None):
-        ui = super(QtView, self).ui(context, parent, kind, view_elements,
-                                    handler, id, scrollable, args)
+    def ui(
+        self,
+        context,
+        parent=None,
+        kind=None,
+        view_elements=None,
+        handler=None,
+        id="",
+        scrollable=None,
+        args=None,
+    ):
+        ui = super(QtView, self).ui(
+            context, parent, kind, view_elements, handler, id, scrollable, args
+        )
 
         if self.style_sheet:
             ui.control.setStyleSheet(self.style_sheet)
 
         if self.style_sheet_path:
             try:
-                with open(self.style_sheet_path, 'r', encoding='utf8') as f:
+                with open(self.style_sheet_path, "r", encoding="utf8") as f:
                     ui.control.setStyleSheet(f.read())
             except IOError:
                 logger.exception("Error loading Qt style sheet")
@@ -74,9 +84,9 @@ class QtView(View):
 
         return ui
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Private interface:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_editor_control(self, ui, name):
         control = None

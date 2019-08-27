@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2006, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: Jason Sugg
 #  Date:   03/28/2006
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the table column descriptor used for toggleable columns.
 """
-
 
 
 from __future__ import absolute_import
@@ -26,16 +25,15 @@ from traits.etsconfig.api import ETSConfig
 
 from ..table_column import ObjectColumn
 
-if ETSConfig.toolkit == 'wx':
+if ETSConfig.toolkit == "wx":
     from pyface.ui.wx.grid.checkbox_renderer import CheckboxRenderer
-elif ETSConfig.toolkit == 'qt4':
+elif ETSConfig.toolkit == "qt4":
     from ..qt4.extra.checkbox_renderer import CheckboxRenderer
 else:
     raise NotImplementedError("No checkbox renderer for backend")
 
 
 class CheckboxColumn(ObjectColumn):
-
     def __init__(self, **traits):
         """ Initializes the object.
         """

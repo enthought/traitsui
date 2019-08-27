@@ -13,7 +13,6 @@ from traits.api import undefined
 
 
 class _LEDEditor(Editor):
-
     def init(self, parent):
         self.control = QtGui.QLCDNumber()
         self.control.setSegmentStyle(QtGui.QLCDNumber.Flat)

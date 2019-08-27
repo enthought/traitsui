@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: Judah De Paula
 #  Date:   10/7/2008
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ A Traits UI editor that wraps a WX timer control.
 """
@@ -29,18 +29,18 @@ class TimeEditor(EditorFactory):
     """ Editor factory for time editors.  Generates _TimeEditor()s.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    #-- ReadonlyEditor traits ------------------------------------------------
+    # -- ReadonlyEditor traits ------------------------------------------------
 
     #: Message to show when Time is None.
-    message = Str('Undefined')
+    message = Str("Undefined")
 
     #: The string representation of the time to show.  Uses time.strftime
     #: format.
-    strftime = Str('%I:%M:%S %p')
+    strftime = Str("%I:%M:%S %p")
 
     #: An optional view to display when a read-only text editor is clicked:
     view = AView

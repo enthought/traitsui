@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: Judah De Paula
 #  Date:   10/7/2008
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ A Traits UI editor that wraps a WX calendar panel.
 """
@@ -54,23 +54,23 @@ class DateEditor(EditorFactory):
     """ Editor factory for date/time editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    #-- ReadonlyEditor traits ------------------------------------------------
+    # -- ReadonlyEditor traits ------------------------------------------------
 
     #: Message to show when Date is None.
-    message = Str('Undefined')
+    message = Str("Undefined")
 
     #: The string representation of the date to show.  Uses time.strftime
     #: format.
-    strftime = Str('%B %d %Y (%a)')
+    strftime = Str("%B %d %Y (%a)")
 
     #: An optional view to display when a read-only text editor is clicked:
     view = AView
 
-    #-- CustomEditor traits --------------------------------------------------
+    # -- CustomEditor traits --------------------------------------------------
 
     #: Should users be able to pick future dates when using the CustomEditor?
     allow_future = Bool(True)
@@ -94,7 +94,7 @@ class DateEditor(EditorFactory):
     #:     'min_change' -- Change all to same state, with min days changing.
     #:                     For example 1 selected and 9 not, then they would
     #:                     all get unselected.
-    on_mixed_select = Enum('toggle', 'on', 'off', 'max_change', 'min_change')
+    on_mixed_select = Enum("toggle", "on", "off", "max_change", "min_change")
 
     #: How much space to put between the individual months.
     padding = Int(5)
@@ -105,9 +105,5 @@ class DateEditor(EditorFactory):
     #: Style used when a date is selected.
     selected_style = Instance(
         CellFormat,
-        kw={
-            "bold": True,
-            "fgcolor": (255, 255, 255),
-            "bgcolor": (0, 128, 0),
-        },
+        kw={"bold": True, "fgcolor": (255, 255, 255), "bgcolor": (0, 128, 0)},
     )

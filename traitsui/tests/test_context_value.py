@@ -27,15 +27,14 @@ class CVExample(HasTraits):
 
     cv_str = CVStr
 
-    cv_unicode = CVType(Unicode, something='meta', sync_value='both')
+    cv_unicode = CVType(Unicode, something="meta", sync_value="both")
 
 
 class TestContextvalue(UnittestTools, unittest.TestCase):
-
     def test_context_value(self):
-        cv = ContextValue('trait_name')
+        cv = ContextValue("trait_name")
 
-        self.assertEqual(cv.name, 'trait_name')
+        self.assertEqual(cv.name, "trait_name")
 
     def test_cv_float_constant(self):
         cve = CVExample(cv_float=1.1)
@@ -43,7 +42,7 @@ class TestContextvalue(UnittestTools, unittest.TestCase):
         self.assertEqual(cve.cv_float, 1.1)
 
     def test_cv_float_context_value(self):
-        cv = ContextValue('trait_name')
+        cv = ContextValue("trait_name")
         cve = CVExample(cv_float=cv)
 
         self.assertIs(cve.cv_float, cv)
@@ -54,29 +53,29 @@ class TestContextvalue(UnittestTools, unittest.TestCase):
         self.assertEqual(cve.cv_int, 1)
 
     def test_cv_int_context_value(self):
-        cv = ContextValue('trait_name')
+        cv = ContextValue("trait_name")
         cve = CVExample(cv_int=cv)
 
         self.assertIs(cve.cv_int, cv)
 
     def test_cv_str_constant(self):
-        cve = CVExample(cv_str='test')
+        cve = CVExample(cv_str="test")
 
-        self.assertEqual(cve.cv_str, 'test')
+        self.assertEqual(cve.cv_str, "test")
 
     def test_cv_str_context_value(self):
-        cv = ContextValue('trait_name')
+        cv = ContextValue("trait_name")
         cve = CVExample(cv_str=cv)
 
         self.assertIs(cve.cv_str, cv)
 
     def test_cv_unicode_constant(self):
-        cve = CVExample(cv_unicode=u'test')
+        cve = CVExample(cv_unicode=u"test")
 
-        self.assertEqual(cve.cv_unicode, u'test')
+        self.assertEqual(cve.cv_unicode, u"test")
 
     def test_cv_unicode_context_value(self):
-        cv = ContextValue('trait_name')
+        cv = ContextValue("trait_name")
         cve = CVExample(cv_unicode=cv)
 
         self.assertIs(cve.cv_unicode, cv)
@@ -87,10 +86,10 @@ class TestContextvalue(UnittestTools, unittest.TestCase):
 
     def test_metadata(self):
         cve = CVExample()
-        t = cve.trait('cv_unicode')
+        t = cve.trait("cv_unicode")
 
-        self.assertEqual(t.something, 'meta')
-        self.assertEqual(t.sync_value, 'both')
+        self.assertEqual(t.something, "meta")
+        self.assertEqual(t.sync_value, "both")
 
-        t = cve.trait('cv_float')
-        self.assertEqual(t.sync_value, 'to')
+        t = cve.trait("cv_float")
+        self.assertEqual(t.sync_value, "to")

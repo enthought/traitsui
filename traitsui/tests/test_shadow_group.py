@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2014, Enthought, Inc.
 #  All rights reserved.
@@ -8,7 +8,7 @@
 #  under the conditions described in the aforementioned license.  The license
 #  is also available online at http://www.enthought.com/licenses/BSD.txt
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """ Tests for the ShadowGroup class.
 """
 
@@ -20,7 +20,6 @@ from traitsui.group import ShadowGroup
 
 
 class TestShadowGroup(unittest.TestCase):
-
     def test_creation_sets_shadow_first(self):
         group = Group()
         # We end up with a DelegationError if the 'shadow' trait is not set
@@ -28,11 +27,11 @@ class TestShadowGroup(unittest.TestCase):
         # we can't control, so we throw in a good number of other traits to
         # increase the chance that some other trait is set first.
         shadow_group = ShadowGroup(
-            label='dummy',
+            label="dummy",
             show_border=True,
             show_labels=True,
             show_left=True,
-            orientation='horizontal',
+            orientation="horizontal",
             scrollable=True,
             shadow=group,
         )

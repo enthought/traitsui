@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the font editor factory for all traits user interface toolkits.
 """
-
 
 
 from __future__ import absolute_import
@@ -26,14 +25,15 @@ from ..editor_factory import EditorFactory
 
 from ..toolkit import toolkit_object
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for font editors.
     """
+
     pass
 
 
@@ -55,11 +55,8 @@ def FontEditor(*args, **traits):
     """
 
     try:
-        return toolkit_object(
-            'font_editor:ToolkitEditorFactory', True)(
-            *args, **traits)
+        return toolkit_object("font_editor:ToolkitEditorFactory", True)(
+            *args, **traits
+        )
     except Exception as e:
         return ToolkitEditorFactory(*args, **traits)
-
-
-

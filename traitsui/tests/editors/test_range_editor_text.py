@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2012, Enthought, Inc.
 #  All rights reserved.
@@ -11,7 +11,7 @@
 #  Author: Pietro Berkes
 #  Date:   Jan 2012
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """
 Test case for bug (wx, Mac OS X)
@@ -38,8 +38,8 @@ class NumberWithRangeEditor(HasTraits):
 
     traits_view = View(
         Item(label="Range should be 3 to 8. Enter 1, then press OK"),
-        Item('number', editor=RangeEditor(low=3, high=8, mode='text')),
-        buttons=['OK']
+        Item("number", editor=RangeEditor(low=3, high=8, mode="text")),
+        buttons=["OK"],
     )
 
 
@@ -50,8 +50,7 @@ class FloatWithRangeEditor(HasTraits):
     number = Float(5.0)
 
     traits_view = View(
-        Item('number', editor=RangeEditor(low=0.0, high=12.0)),
-        buttons=['OK']
+        Item("number", editor=RangeEditor(low=0.0, high=12.0)), buttons=["OK"]
     )
 
 
@@ -68,8 +67,8 @@ def test_wx_text_editing():
         # the following is equivalent to setting the text in the text control,
         # then pressing OK
 
-        textctrl = ui.control.FindWindowByName('text')
-        textctrl.SetValue('1')
+        textctrl = ui.control.FindWindowByName("text")
+        textctrl.SetValue("1")
 
         # press the OK button and close the dialog
         press_ok_button(ui)
@@ -93,18 +92,18 @@ def test_avoid_slider_feedback():
         # then pressing OK
         lineedit = ui.control.findChild(qt.QtGui.QLineEdit)
         lineedit.setFocus()
-        lineedit.setText('4')
+        lineedit.setText("4")
         lineedit.editingFinished.emit()
 
         # press the OK button and close the dialog
         press_ok_button(ui)
 
     # the number trait should be 4 extactly
-    print (num.number)
+    print(num.number)
     assert num.number == 4.0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Executing the file opens the dialog for manual testing
     num = NumberWithTextEditor()
     num.configure_traits()

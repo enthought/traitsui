@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   07/13/2007
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Defines 'theme' related classes.
 """
-
 
 
 from __future__ import absolute_import
@@ -26,14 +25,14 @@ from traits.api import HasPrivateTraits
 
 from .ui_traits import Image, HasBorder, HasMargin, Alignment
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'Theme' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class Theme(HasPrivateTraits):
 
-    #-- Public Traits --------------------------------------------------------
+    # -- Public Traits --------------------------------------------------------
 
     #: The background image to use for the theme:
     image = Image
@@ -53,7 +52,7 @@ class Theme(HasPrivateTraits):
     #: Note: The 'content_color' and 'label_color' traits should be added by a
     #: toolkit-specific category...
 
-    #-- Constructor ----------------------------------------------------------
+    # -- Constructor ----------------------------------------------------------
 
     def __init__(self, image=None, **traits):
         """ Initializes the object.
@@ -62,6 +61,7 @@ class Theme(HasPrivateTraits):
             self.image = image
 
         super(Theme, self).__init__(**traits)
+
 
 # Create a default theme:
 default_theme = Theme()

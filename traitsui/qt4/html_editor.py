@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -10,13 +10,12 @@
 #
 #  Thanks for using Enthought open source!
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the HTML "editor" for the QT4 user interface toolkit.
     HTML editors interpret and display HTML-formatted text, but do not
     modify it.
 """
-
 
 
 from __future__ import absolute_import
@@ -28,18 +27,18 @@ from traits.api import Str
 
 from .editor import Editor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class SimpleEditor(Editor):
     """ Simple style editor for HTML.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Is the HTML editor scrollable? This values override the default.
     scrollable = True
@@ -52,8 +51,9 @@ class SimpleEditor(Editor):
             widget.
         """
         self.control = QtWebKit.QWebView()
-        self.control.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                                   QtGui.QSizePolicy.Expanding)
+        self.control.setSizePolicy(
+            QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding
+        )
 
         if self.factory.open_externally:
             page = self.control.page()
@@ -61,7 +61,7 @@ class SimpleEditor(Editor):
             page.linkClicked.connect(self._link_clicked)
 
         self.base_url = self.factory.base_url
-        self.sync_value(self.factory.base_url_name, 'base_url', 'from')
+        self.sync_value(self.factory.base_url_name, "base_url", "from")
 
     def update_editor(self):
         """ Updates the editor when the object trait changes external to the
@@ -78,12 +78,10 @@ class SimpleEditor(Editor):
         else:
             self.control.setHtml(text)
 
-    #-- Event Handlers -------------------------------------------------------
+    # -- Event Handlers -------------------------------------------------------
 
     def _base_url_changed(self):
         self.update_editor()
 
     def _link_clicked(self, url):
         webbrowser.open_new(url.toString())
-
-

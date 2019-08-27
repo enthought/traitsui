@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -12,11 +12,10 @@
 #
 #  Author: David C. Morrill
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the title editor factory for all traits toolkit backends.
 """
-
 
 
 from __future__ import absolute_import
@@ -40,13 +39,11 @@ class ToolkitEditorFactory(EditorFactory):
         the backend package.
 
         """
-        SimpleEditor = toolkit_object('title_editor:SimpleEditor')
+        SimpleEditor = toolkit_object("title_editor:SimpleEditor")
         return SimpleEditor
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 TitleEditor = ToolkitEditorFactory
-
-

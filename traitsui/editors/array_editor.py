@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   01/10/2006
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the array editor factory for all traits toolkit backends.
 """
-
 
 
 from __future__ import absolute_import
@@ -39,18 +38,18 @@ from ..group import Group
 
 from ..item import Item
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for array editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Width of the individual fields
     width = Int(-80)
@@ -64,9 +63,9 @@ class ToolkitEditorFactory(EditorFactory):
 
 class ArrayStructure(HasTraits):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Editor that this structure is linked to
     editor = Instance(Editor)
@@ -84,9 +83,9 @@ class ArrayStructure(HasTraits):
         width = editor.factory.width
 
         # Set up the correct style for each filed:
-        style = 'simple'
+        style = "simple"
         if editor.readonly:
-            style = 'readonly'
+            style = "readonly"
 
         # Get the array we are mirroring:
         object = editor.value
@@ -94,7 +93,7 @@ class ArrayStructure(HasTraits):
         # Determine the correct trait type to use for each element:
         trait = Float
 
-        if object.dtype.type == 'i':
+        if object.dtype.type == "i":
             trait = Int
 
         if len(object.shape) == 1:
@@ -102,11 +101,11 @@ class ArrayStructure(HasTraits):
         elif len(object.shape) == 2:
             self.view = self._two_dim_view(object, style, width, trait)
         else:
-            raise TraitError('Only 1D or 2D arrays supported')
+            raise TraitError("Only 1D or 2D arrays supported")
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  1D view:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _one_dim_view(self, object, style, width, trait):
         content = []
@@ -115,30 +114,35 @@ class ArrayStructure(HasTraits):
         format_func = self.editor.factory.format_func
         format_str = self.editor.factory.format_str
         for i in range(shape[0]):
-            name = 'f%d' % i
-            self.add_trait(name,
-                           trait(object[i],
-                                 event='field',
-                                 auto_set=self.editor.factory.auto_set,
-                                 enter_set=self.editor.factory.enter_set)
-                           )
-            items.append(Item(name=name,
-                              style=style,
-                              width=width,
-                              format_func=format_func,
-                              format_str=format_str,
-                              padding=-3))
+            name = "f%d" % i
+            self.add_trait(
+                name,
+                trait(
+                    object[i],
+                    event="field",
+                    auto_set=self.editor.factory.auto_set,
+                    enter_set=self.editor.factory.enter_set,
+                ),
+            )
+            items.append(
+                Item(
+                    name=name,
+                    style=style,
+                    width=width,
+                    format_func=format_func,
+                    format_str=format_str,
+                    padding=-3,
+                )
+            )
 
-        group = Group(orientation='horizontal',
-                      show_labels=False,
-                      *items)
+        group = Group(orientation="horizontal", show_labels=False, *items)
         content.append(group)
 
         return View(Group(show_labels=False, *content))
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  2D view:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _two_dim_view(self, object, style, width, trait):
         content = []
@@ -148,23 +152,28 @@ class ArrayStructure(HasTraits):
         for i in range(shape[0]):
             items = []
             for j in range(shape[1]):
-                name = 'f%d_%d' % (i, j)
-                self.add_trait(name,
-                               trait(object[i, j],
-                                     event='field',
-                                     auto_set=self.editor.factory.auto_set,
-                                     enter_set=self.editor.factory.enter_set)
-                               )
-                items.append(Item(name=name,
-                                  style=style,
-                                  width=width,
-                                  format_func=format_func,
-                                  format_str=format_str,
-                                  padding=-3))
+                name = "f%d_%d" % (i, j)
+                self.add_trait(
+                    name,
+                    trait(
+                        object[i, j],
+                        event="field",
+                        auto_set=self.editor.factory.auto_set,
+                        enter_set=self.editor.factory.enter_set,
+                    ),
+                )
+                items.append(
+                    Item(
+                        name=name,
+                        style=style,
+                        width=width,
+                        format_func=format_func,
+                        format_str=format_str,
+                        padding=-3,
+                    )
+                )
 
-            group = Group(orientation='horizontal',
-                          show_labels=False,
-                          *items)
+            group = Group(orientation="horizontal", show_labels=False, *items)
             content.append(group)
 
         return View(Group(show_labels=False, *content))
@@ -182,27 +191,28 @@ class ArrayStructure(HasTraits):
             # 1D
             if len(shape) == 1:
                 for i in range(shape[0]):
-                    value[i] = getattr(self, 'f%d' % i)
+                    value[i] = getattr(self, "f%d" % i)
             # 2D
             elif len(shape) == 2:
                 for i in range(shape[0]):
                     for j in range(shape[1]):
-                        value[i, j] = getattr(self, 'f%d_%d' % (i, j))
+                        value[i, j] = getattr(self, "f%d_%d" % (i, j))
 
             self.editor.update_array(value)
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Toolkit-independent 'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 class SimpleEditor(Editor):
     """ Simple style of editor for arrays.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     # Is the editor read-only?
     readonly = false
@@ -212,7 +222,7 @@ class SimpleEditor(Editor):
             widget.
         """
         self._as = _as = ArrayStructure(self)
-        ui = _as.view.ui(_as, parent, kind='subpanel')
+        ui = _as.view.ui(_as, parent, kind="subpanel")
         ui.parent = self.ui
         self.control = ui.control
 
@@ -230,12 +240,12 @@ class SimpleEditor(Editor):
             # 1D
             if len(shape) == 1:
                 for i in range(shape[0]):
-                    setattr(_as, 'f%d' % i, object[i])
+                    setattr(_as, "f%d" % i, object[i])
             # 2D
             elif len(shape) == 2:
                 for i in range(shape[0]):
                     for j in range(shape[1]):
-                        setattr(_as, 'f%d_%d' % (i, j), object[i, j])
+                        setattr(_as, "f%d_%d" % (i, j), object[i, j])
 
             self._busy = False
 
@@ -249,5 +259,3 @@ class SimpleEditor(Editor):
 
 # Define the ArrayEditor class
 ArrayEditor = ToolkitEditorFactory
-
-

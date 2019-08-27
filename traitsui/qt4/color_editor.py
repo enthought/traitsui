@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,7 +8,7 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various color editors for the PyQt user interface toolkit.
 """
@@ -16,30 +16,28 @@
 from __future__ import absolute_import, division
 
 
-
 from pyface.qt import QtCore, QtGui
 
-from traitsui.editors.color_editor \
-    import ToolkitEditorFactory as BaseToolkitEditorFactory
+from traitsui.editors.color_editor import (
+    ToolkitEditorFactory as BaseToolkitEditorFactory,
+)
 
-from .editor_factory \
-    import SimpleEditor as BaseSimpleEditor, \
-    TextEditor as BaseTextEditor, \
-    ReadonlyEditor as BaseReadonlyEditor
+from .editor_factory import (
+    SimpleEditor as BaseSimpleEditor,
+    TextEditor as BaseTextEditor,
+    ReadonlyEditor as BaseReadonlyEditor,
+)
 
-from .editor \
-    import Editor
+from .editor import Editor
 import six
-
-
 
 
 # Standard color samples:
 color_samples = []
 
-#---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 #  The PyQt ToolkitEditorFactory class.
-#---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 ## We need to add qt4-specific methods to the editor factory (since all editors
 ## will be accessing these functions. Making these functions global functions
@@ -55,7 +53,7 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
         """ Gets the PyQt color equivalent of the object trait.
         """
         if self.mapped:
-            return getattr(editor.object, editor.name + '_')
+            return getattr(editor.object, editor.name + "_")
 
         return getattr(editor.object, editor.name)
 
@@ -71,10 +69,17 @@ class ToolkitEditorFactory(BaseToolkitEditorFactory):
             alpha = color.alpha()
             if alpha == 255:
                 return "(%d,%d,%d)" % (
-                    color.red(), color.green(), color.blue())
+                    color.red(),
+                    color.green(),
+                    color.blue(),
+                )
 
             return "(%d,%d,%d,%d)" % (
-                color.red(), color.green(), color.blue(), alpha)
+                color.red(),
+                color.green(),
+                color.blue(),
+                alpha,
+            )
 
         return color
 
@@ -93,10 +98,7 @@ class SimpleColorEditor(BaseSimpleEditor):
         if not self.factory.use_native_dialog:
             options |= QtGui.QColorDialog.DontUseNativeDialog
         color = QtGui.QColorDialog.getColor(
-            color,
-            self.control,
-            u'Select Color',
-            options,
+            color, self.control, u"Select Color", options
         )
 
         if color.isValid():
@@ -129,7 +131,7 @@ class CustomColorEditor(Editor):
     def dispose(self):
         """ Disposes of the contents of an editor.
         """
-        if getattr(self, '_simple_field', None) is not None:
+        if getattr(self, "_simple_field", None) is not None:
             self._simple_field.dispose()
             self._simple_field = None
         super(CustomColorEditor, self).dispose()
@@ -143,7 +145,7 @@ class CustomColorEditor(Editor):
     def update_object_from_swatch(self, color_text):
         """ Updates the object trait when a color swatch is clicked.
         """
-        color = QtGui.QColor(*[int(part) for part in color_text.split(',')])
+        color = QtGui.QColor(*[int(part) for part in color_text.split(",")])
         self.value = self.factory.from_qt4_color(color)
         self.update_editor()
 
@@ -201,9 +203,10 @@ class ReadonlyColorEditor(BaseReadonlyEditor):
         """
         return self.factory.str_color(color)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #   Sets the color of the specified editor's color control:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 def set_color(editor):
@@ -214,16 +217,17 @@ def set_color(editor):
 
     pal.setColor(QtGui.QPalette.Base, color)
 
-    if (color.red() > 192 or color.blue() > 192 or color.green() > 192):
+    if color.red() > 192 or color.blue() > 192 or color.green() > 192:
         pal.setColor(QtGui.QPalette.Text, QtCore.Qt.black)
     else:
         pal.setColor(QtGui.QPalette.Text, QtCore.Qt.white)
 
     editor.control.setPalette(pal)
 
-#----------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------
 #  Creates a custom color editor panel for a specified editor:
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 
 class FixedButton(QtGui.QPushButton):
@@ -252,7 +256,8 @@ def color_editor_for(editor, parent):
     panel.setContentsMargins(0, 0, 0, 0)
 
     swatch_editor = editor.factory.simple_editor(
-        editor.ui, editor.object, editor.name, editor.description, None)
+        editor.ui, editor.object, editor.name, editor.description, None
+    )
     swatch_editor.prepare(parent)
     panel.addWidget(swatch_editor.control)
 
@@ -280,7 +285,7 @@ def color_editor_for(editor, parent):
         for c in range(cols):
             control = FixedButton()
             color = color_samples[r * cols + c]
-            color_text = '%d,%d,%d,%d' % color.getRgb()
+            color_text = "%d,%d,%d,%d" % color.getRgb()
             control.setStyleSheet(sheet_template % color_text)
             control.setAttribute(QtCore.Qt.WA_LayoutUsesWidgetRect, True)
 

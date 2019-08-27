@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: David C. Morrill
 #  Date:   10/07/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Adding this statement for backwards compatibility (since editors.py was a
 # file prior to version 3.0.3).
 
@@ -65,4 +65,5 @@ from .api import (
     ScrubberEditor,
     TabularEditor,
     ProgressEditor,
-    SearchEditor)
+    SearchEditor,
+)

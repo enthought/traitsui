@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,33 +13,30 @@
 #  Author: David C. Morrill
 #  Date:   03/11/2007
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Traits UI MS Flash editor.
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-if wx.Platform == '__WXMSW__':
+if wx.Platform == "__WXMSW__":
     from wx.lib.flashwin import FlashWindow
 
-from traitsui.wx.editor \
-    import Editor
+from traitsui.wx.editor import Editor
 
-from traitsui.basic_editor_factory \
-    import BasicEditorFactory
+from traitsui.basic_editor_factory import BasicEditorFactory
 
 
 class _FlashEditor(Editor):
     """ Traits UI Flash editor.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Is the table editor is scrollable? This value overrides the default.
     scrollable = True
@@ -56,16 +53,17 @@ class _FlashEditor(Editor):
             editor.
         """
         value = self.str_value.strip()
-        if value.find('://') < 0:
-            value = 'file://' + value
+        if value.find("://") < 0:
+            value = "file://" + value
 
         wx.BeginBusyCursor()
         self.control.LoadMovie(0, value)
         wx.EndBusyCursor()
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Create the editor factory object:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # wxPython editor factory for Flash editors:
 

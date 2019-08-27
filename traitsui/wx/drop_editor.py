@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   04/13/2005
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines a drop target editor for the wxPython user interface toolkit. A
     drop target editor handles drag and drop operations as a drop target.
 """
-
 
 
 from __future__ import absolute_import
@@ -27,21 +26,17 @@ import wx
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.drop_editor file.
-from traitsui.editors.drop_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.drop_editor import ToolkitEditorFactory
 
-from pyface.wx.drag_and_drop \
-    import PythonDropTarget, clipboard
+from pyface.wx.drag_and_drop import PythonDropTarget, clipboard
 
-from .text_editor \
-    import SimpleEditor as Editor
+from .text_editor import SimpleEditor as Editor
 
-from .constants \
-    import DropColor
+from .constants import DropColor
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'SimpleEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class SimpleEditor(Editor):
@@ -57,8 +52,9 @@ class SimpleEditor(Editor):
             widget.
         """
         if self.factory.readonly:
-            self.control = wx.TextCtrl(parent, -1, self.str_value,
-                                       style=wx.TE_READONLY)
+            self.control = wx.TextCtrl(
+                parent, -1, self.str_value, style=wx.TE_READONLY
+            )
             self.set_tooltip()
         else:
             super(SimpleEditor, self).init(parent)
@@ -69,7 +65,7 @@ class SimpleEditor(Editor):
         """ Returns the text representation of a specified object trait value.
         """
         if value is None:
-            return ''
+            return ""
         return str(value)
 
     def error(self, excp):
@@ -77,7 +73,7 @@ class SimpleEditor(Editor):
         """
         pass
 
-#----- Drag and drop event handlers: -------------------------------------
+    # ----- Drag and drop event handlers: -------------------------------------
 
     def wx_dropped_on(self, x, y, data, drag_result):
         """ Handles a Python object being dropped on the tree.
@@ -85,15 +81,15 @@ class SimpleEditor(Editor):
         klass = self.factory.klass
         value = data
         if self.factory.binding:
-            value = getattr(clipboard, 'node', None)
+            value = getattr(clipboard, "node", None)
         if (klass is None) or isinstance(data, klass):
             self._no_update = True
             try:
-                if hasattr(value, 'drop_editor_value'):
+                if hasattr(value, "drop_editor_value"):
                     self.value = value.drop_editor_value()
                 else:
                     self.value = value
-                if hasattr(value, 'drop_editor_update'):
+                if hasattr(value, "drop_editor_update"):
                     value.drop_editor_update(self.control)
                 else:
                     self.control.SetValue(self.str_value)
@@ -107,15 +103,15 @@ class SimpleEditor(Editor):
         """ Handles a Python object being dragged over the tree.
         """
         if self.factory.binding:
-            data = getattr(clipboard, 'node', None)
+            data = getattr(clipboard, "node", None)
         try:
-            self.object.base_trait(self.name).validate(self.object,
-                                                       self.name, data)
+            self.object.base_trait(self.name).validate(
+                self.object, self.name, data
+            )
             return drag_result
         except:
             return wx.DragNone
 
+
 # Define the Text and ReadonlyEditor for use by the editor factory.
 TextEditor = ReadonlyEditor = SimpleEditor
-
-

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   07/01/2005
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the table column descriptor used by the editor and editor factory
     classes for numeric and table editors.
 """
-
 
 
 from __future__ import absolute_import, print_function
@@ -40,7 +39,8 @@ from traits.api import (
     Instance,
     Int,
     Property,
-    Str)
+    Str,
+)
 
 from traits.trait_base import user_name_for, xgetattr
 
@@ -52,37 +52,36 @@ from .view import View
 # Set up a logger:
 import logging
 import six
+
 logger = logging.getLogger(__name__)
 
 
-
-
 # Flag used to indicate user has not specified a column label
-UndefinedLabel = '???'
+UndefinedLabel = "???"
 
 
 class TableColumn(HasPrivateTraits):
     """ Represents a column in a table editor.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Column label to use for this column:
     label = Str(UndefinedLabel)
 
     #: Type of data contained by the column:
-    type = Enum('text')
+    type = Enum("text")
 
     #: Text color for this column:
-    text_color = Color('black')
+    text_color = Color("black")
 
     #: Text font for this column:
     text_font = Either(None, Font)
 
     #: Cell background color for this column:
-    cell_color = Either(Color('white'), None)
+    cell_color = Either(Color("white"), None)
 
     #: Cell background color for non-editable columns:
     read_only_cell_color = Either(Color(0xF4F3EE), None)
@@ -91,10 +90,10 @@ class TableColumn(HasPrivateTraits):
     graph_color = Color(0xDDD9CC)
 
     #: Horizontal alignment of text in the column:
-    horizontal_alignment = Enum('left', ['left', 'center', 'right'])
+    horizontal_alignment = Enum("left", ["left", "center", "right"])
 
     #: Vertical alignment of text in the column:
-    vertical_alignment = Enum('center', ['top', 'center', 'bottom'])
+    vertical_alignment = Enum("center", ["top", "center", "bottom"])
 
     #: Horizontal cell margin
     horizontal_margin = Int(4)
@@ -158,9 +157,9 @@ class TableColumn(HasPrivateTraits):
     #: Optional maximum value a numeric cell value can have:
     maximum = Float(trait_value=True)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #:  Returns the actual object being edited:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def get_object(self, object):
         """ Returns the actual object being edited.
@@ -293,8 +292,9 @@ class TableColumn(HasPrivateTraits):
 
         This is deprecated.
         """
-        return ((self.key(object1) > self.key(object2)) -
-                (self.key(object1) < self.key(object2)))
+        return (self.key(object1) > self.key(object2)) - (
+            self.key(object1) < self.key(object2)
+        )
 
     def __str__(self):
         """ Returns the string representation of the table column.
@@ -306,9 +306,9 @@ class ObjectColumn(TableColumn):
     """ A column for editing objects.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Name of the object trait associated with this column:
     name = Str
@@ -323,34 +323,39 @@ class ObjectColumn(TableColumn):
     style = EditorStyle
 
     #: Format string to apply to column values:
-    format = Str('%s')
+    format = Str("%s")
 
     #: Format function to apply to column values:
     format_func = Callable
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait view definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    traits_view = View([['name', 'label', 'type',
-                         '|[Column Information]'],
-                        ['horizontal_alignment{Horizontal}@',
-                         'vertical_alignment{Vertical}@',
-                         '|[Alignment]'],
-                        ['editable', '9', 'droppable', '9', 'visible',
-                         '-[Options]>'],
-                        '|{Column}'],
-                       [['text_color@', 'cell_color@',
-                         'read_only_cell_color@',
-                         '|[UI Colors]'],
-                        '|{Colors}'],
-                       [['text_font@',
-                         '|[Font]<>'],
-                        '|{Font}'],
-                       ['menu@',
-                        '|{Menu}'],
-                       ['editor@',
-                        '|{Editor}'])
+    traits_view = View(
+        [
+            ["name", "label", "type", "|[Column Information]"],
+            [
+                "horizontal_alignment{Horizontal}@",
+                "vertical_alignment{Vertical}@",
+                "|[Alignment]",
+            ],
+            ["editable", "9", "droppable", "9", "visible", "-[Options]>"],
+            "|{Column}",
+        ],
+        [
+            [
+                "text_color@",
+                "cell_color@",
+                "read_only_cell_color@",
+                "|[UI Colors]",
+            ],
+            "|{Colors}",
+        ],
+        [["text_font@", "|[Font]<>"], "|{Font}"],
+        ["menu@", "|{Menu}"],
+        ["editor@", "|{Editor}"],
+    )
 
     def _get_label(self):
         """ Gets the label of the column.
@@ -362,7 +367,7 @@ class ObjectColumn(TableColumn):
     def _set_label(self, label):
         old, self._label = self._label, label
         if old != label:
-            self.trait_property_changed('label', old, label)
+            self.trait_property_changed("label", old, label)
 
     def get_raw_value(self, object):
         """ Gets the unformatted value of the column for a specified object.
@@ -371,6 +376,7 @@ class ObjectColumn(TableColumn):
             return xgetattr(self.get_object(object), self.name)
         except Exception as e:
             from traitsui.api import raise_to_debug
+
             raise_to_debug()
             return None
 
@@ -381,11 +387,13 @@ class ObjectColumn(TableColumn):
             if self.format_func is not None:
                 return self.format_func(self.get_raw_value(object))
 
-            return self.format % (self.get_raw_value(object), )
+            return self.format % (self.get_raw_value(object),)
         except:
-            logger.exception('Error occurred trying to format a %s value' %
-                             self.__class__.__name__)
-            return 'Format!'
+            logger.exception(
+                "Error occurred trying to format a %s value"
+                % self.__class__.__name__
+            )
+            return "Format!"
 
     def get_drag_value(self, object):
         """Returns the drag value for the column.
@@ -437,20 +445,20 @@ class ObjectColumn(TableColumn):
         """
         object = self.get_object(object)
         name = self.name
-        col = name.rfind('.')
+        col = name.rfind(".")
         if col < 0:
             return (object, name)
 
-        return (xgetattr(object, name[:col]), name[col + 1:])
+        return (xgetattr(object, name[:col]), name[col + 1 :])
 
 
 class ExpressionColumn(ObjectColumn):
     """ A column for displaying computed values.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The Python expression used to return the value of the column:
     expression = Expression
@@ -466,10 +474,12 @@ class ExpressionColumn(ObjectColumn):
         """ Gets the unformatted value of the column for a specified object.
         """
         try:
-            return eval(self.expression_, self.globals, {'object': object})
+            return eval(self.expression_, self.globals, {"object": object})
         except Exception:
-            logger.exception('Error evaluating table column expression: %s' %
-                             self.expression)
+            logger.exception(
+                "Error evaluating table column expression: %s"
+                % self.expression
+            )
             return None
 
 
@@ -477,15 +487,15 @@ class NumericColumn(ObjectColumn):
     """ A column for editing Numeric arrays.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Column label to use for this column
     label = Property
 
     #: Text color this column when selected
-    selected_text_color = Color('black')
+    selected_text_color = Color("black")
 
     #: Text font for this column when selected
     selected_text_font = Font
@@ -494,11 +504,11 @@ class NumericColumn(ObjectColumn):
     selected_cell_color = Color(0xD8FFD8)
 
     #: Formatting string for the cell value
-    format = Str('%s')
+    format = Str("%s")
 
     #: Horizontal alignment of text in the column; this value overrides the
     #: default.
-    horizontal_alignment = 'center'
+    horizontal_alignment = "center"
 
     def _get_label(self):
         """ Gets the label of the column.
@@ -510,7 +520,7 @@ class NumericColumn(ObjectColumn):
     def _set_label(self, label):
         old, self._label = self._label, label
         if old != label:
-            self.trait_property_changed('label', old, label)
+            self.trait_property_changed("label", old, label)
 
     def get_type(self, object):
         """ Gets the type of data for the column for a specified object row.
@@ -576,11 +586,11 @@ class NumericColumn(ObjectColumn):
         try:
             value = getattr(object, self.name)
             try:
-                return self.format % (value, )
+                return self.format % (value,)
             except:
-                return 'Format!'
+                return "Format!"
         except:
-            return 'Undefined!'
+            return "Undefined!"
 
     def set_value(self, object, row, value):
         """ Sets the value of the column for a specified object row.
@@ -601,8 +611,10 @@ class NumericColumn(ObjectColumn):
     def _is_selected(self, object):
         """ Returns whether a specified object row is selected.
         """
-        if hasattr(object, 'model_selection') \
-                and object.model_selection is not None:
+        if (
+            hasattr(object, "model_selection")
+            and object.model_selection is not None
+        ):
             return True
         return False
 
@@ -611,11 +623,11 @@ class ListColumn(TableColumn):
     """ A column for editing lists.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    #Label to use for this column
+    # Label to use for this column
     label = Property
 
     #: Index of the list element associated with this column
@@ -624,24 +636,28 @@ class ListColumn(TableColumn):
     # Is this column editable? This value overrides the base class default.
     editable = False
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait view definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    traits_view = View([['index', 'label', 'type', '|[Column Information]'],
-                        ['text_color@', 'cell_color@', '|[UI Colors]']])
+    traits_view = View(
+        [
+            ["index", "label", "type", "|[Column Information]"],
+            ["text_color@", "cell_color@", "|[UI Colors]"],
+        ]
+    )
 
     def _get_label(self):
         """ Gets the label of the column.
         """
         if self._label is not None:
             return self._label
-        return 'Column %d' % (self.index + 1)
+        return "Column %d" % (self.index + 1)
 
     def _set_label(self, label):
         old, self._label = self._label, label
         if old != label:
-            self.trait_property_changed('label', old, label)
+            self.trait_property_changed("label", old, label)
 
     def get_value(self, object):
         """ Gets the value of the column for a specified object.

@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2007, Enthought, Inc.
 #  All rights reserved.
@@ -13,35 +13,29 @@
 #  Author: David C. Morrill
 #  Date:   06/05/2007
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Traits UI 'display only' image editor.
 """
 
 
-
 from __future__ import absolute_import
-from pyface.image_resource \
-    import ImageResource
+from pyface.image_resource import ImageResource
 
-from traitsui.ui_traits \
-    import convert_bitmap
+from traitsui.ui_traits import convert_bitmap
 
 # FIXME: ImageEditor is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.image_editor file.
-from traitsui.editors.image_editor \
-    import ImageEditor
+from traitsui.editors.image_editor import ImageEditor
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .image_control \
-    import ImageControl
+from .image_control import ImageControl
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  '_ImageEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class _ImageEditor(Editor):
@@ -56,8 +50,7 @@ class _ImageEditor(Editor):
         if image is None:
             image = self.value
 
-        self.control = ImageControl(parent, convert_bitmap(image),
-                                    padding=0)
+        self.control = ImageControl(parent, convert_bitmap(image), padding=0)
 
         self.set_tooltip()
 
@@ -69,5 +62,3 @@ class _ImageEditor(Editor):
             value = self.value
             if isinstance(value, ImageResource):
                 self.control.Bitmap(convert_bitmap(value))
-
-

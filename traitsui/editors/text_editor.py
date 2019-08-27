@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2008, Enthought, Inc.
 #  All rights reserved.
@@ -13,11 +13,10 @@
 #  Author: David C. Morrill
 #  Date:   10/07/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the text editor factory for all traits toolkit backends.
 """
-
 
 
 from __future__ import absolute_import
@@ -35,9 +34,9 @@ from ..ui_traits import AView
 
 from ..editor_factory import EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  Define a simple identity mapping:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class _Identity(object):
@@ -47,9 +46,10 @@ class _Identity(object):
     def __call__(self, value):
         return value
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Trait definitions:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Mapping from user input text to other value
 mapping_trait = Dict(Str, Any)
@@ -57,18 +57,18 @@ mapping_trait = Dict(Str, Any)
 # Function used to evaluate textual user input
 evaluate_trait = Any(_Identity())
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for text editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Dictionary that maps user input to other values
     mapping = mapping_trait
@@ -102,19 +102,22 @@ class ToolkitEditorFactory(EditorFactory):
     #: In a read-only text editor, allow selection and copying of the text.
     readonly_allow_selection = Bool(False)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Traits view definition:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    traits_view = View(['auto_set{Set value when text is typed}',
-                        'enter_set{Set value when enter is pressed}',
-                        'multi_line{Allow multiple lines of text}',
-                        '<extras>',
-                        '|options:[Options]>'])
+    traits_view = View(
+        [
+            "auto_set{Set value when text is typed}",
+            "enter_set{Set value when enter is pressed}",
+            "multi_line{Allow multiple lines of text}",
+            "<extras>",
+            "|options:[Options]>",
+        ]
+    )
 
-    extras = Group('password{Is this a password field?}')
+    extras = Group("password{Is this a password field?}")
+
 
 # Define the TextEditor class.
 TextEditor = ToolkitEditorFactory
-
-

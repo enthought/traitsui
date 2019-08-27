@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2007, Riverbank Computing Limited
 # All rights reserved.
 #
@@ -8,23 +8,21 @@
 
 #
 # Author: Riverbank Computing Limited
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines constants used by the PyQt implementation of the various text
 editors and text editor factories.
 """
 
 
-
 from __future__ import absolute_import
 from pyface.qt import QtGui
-
 
 
 _palette = QtGui.QApplication.palette()
 
 # Default dialog title
-DefaultTitle = 'Edit properties'
+DefaultTitle = "Edit properties"
 
 # Color of valid input
 OKColor = _palette.color(QtGui.QPalette.Base)

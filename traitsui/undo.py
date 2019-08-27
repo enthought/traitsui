@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/07/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the manager for Undo and Redo history for Traits user interface
     support.
 """
-
 
 
 from __future__ import absolute_import
@@ -27,10 +26,18 @@ import collections
 
 import six
 
-from traits.api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
-                        Instance, Int, List, Property, Str, Trait)
-
-
+from traits.api import (
+    Event,
+    HasPrivateTraits,
+    HasStrictTraits,
+    HasTraits,
+    Instance,
+    Int,
+    List,
+    Property,
+    Str,
+    Trait,
+)
 
 
 NumericTypes = six.integer_types + (float, complex)
@@ -40,6 +47,7 @@ SimpleTypes = (six.text_type, bytes) + NumericTypes
 class AbstractUndoItem(HasPrivateTraits):
     """ Abstract base class for undo items.
     """
+
     def undo(self):
         """ Undoes the change.
         """
@@ -59,9 +67,10 @@ class AbstractUndoItem(HasPrivateTraits):
 class UndoItem(AbstractUndoItem):
     """ A change to an object trait, which can be undone.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Object the change occurred on
     object = Trait(HasTraits)
@@ -95,6 +104,7 @@ class UndoItem(AbstractUndoItem):
             setattr(self.object, self.name, self.old_value)
         except Exception:
             from traitsui.api import raise_to_debug
+
             raise_to_debug()
 
     def redo(self):
@@ -104,6 +114,7 @@ class UndoItem(AbstractUndoItem):
             setattr(self.object, self.name, self.new_value)
         except Exception:
             from traitsui.api import raise_to_debug
+
             raise_to_debug()
 
     def merge_undo(self, undo_item):
@@ -111,9 +122,11 @@ class UndoItem(AbstractUndoItem):
         """
         # Undo items are potentially mergeable only if they are of the same
         # class and refer to the same object trait, so check that first:
-        if (isinstance(undo_item, self.__class__) and
-            (self.object is undo_item.object) and
-                (self.name == undo_item.name)):
+        if (
+            isinstance(undo_item, self.__class__)
+            and (self.object is undo_item.object)
+            and (self.name == undo_item.name)
+        ):
             v1 = self.new_value
             v2 = undo_item.new_value
             t1 = type(v1)
@@ -132,7 +145,7 @@ class UndoItem(AbstractUndoItem):
                     i = 0
                     while (i < n) and (v1[i] == v2[i]):
                         i += 1
-                    if v1[i + (n2 <= n1):] == v2[i + (n2 >= n1):]:
+                    if v1[i + (n2 <= n1) :] == v2[i + (n2 >= n1) :]:
                         self.new_value = v2
                         return True
 
@@ -151,9 +164,11 @@ class UndoItem(AbstractUndoItem):
                                 for i, item in enumerate(v1):
                                     titem = type(item)
                                     item2 = v2[i]
-                                    if ((titem not in SimpleTypes) or
-                                        (not isinstance(item2, titem)) or
-                                            (item != item2)):
+                                    if (
+                                        (titem not in SimpleTypes)
+                                        or (not isinstance(item2, titem))
+                                        or (item != item2)
+                                    ):
                                         diffs += 1
                                         if diffs >= 2:
                                             return False
@@ -175,16 +190,23 @@ class UndoItem(AbstractUndoItem):
         """
         n = self.name
         cn = self.object.__class__.__name__
-        return 'undo( %s.%s = %s )\nredo( %s.%s = %s )' % (
-            cn, n, self.old_value, cn, n, self.new_value)
+        return "undo( %s.%s = %s )\nredo( %s.%s = %s )" % (
+            cn,
+            n,
+            self.old_value,
+            cn,
+            n,
+            self.new_value,
+        )
 
 
 class ListUndoItem(AbstractUndoItem):
     """ A change to a list, which can be undone.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Object that the change occurred on
     object = Trait(HasTraits)
@@ -202,9 +224,10 @@ class ListUndoItem(AbstractUndoItem):
         """
         try:
             list = getattr(self.object, self.name)
-            list[self.index: (self.index + len(self.added))] = self.removed
+            list[self.index : (self.index + len(self.added))] = self.removed
         except Exception:
             from traitsui.api import raise_to_debug
+
             raise_to_debug()
 
     def redo(self):
@@ -212,9 +235,10 @@ class ListUndoItem(AbstractUndoItem):
         """
         try:
             list = getattr(self.object, self.name)
-            list[self.index: (self.index + len(self.removed))] = self.added
+            list[self.index : (self.index + len(self.removed))] = self.added
         except Exception:
             from traitsui.api import raise_to_debug
+
             raise_to_debug()
 
     def merge_undo(self, undo_item):
@@ -223,14 +247,17 @@ class ListUndoItem(AbstractUndoItem):
         # Discard undo items that are identical to us. This is to eliminate
         # the same undo item being created by multiple listeners monitoring the
         # same list for changes:
-        if (isinstance(undo_item, self.__class__) and
-            (self.object is undo_item.object) and
-            (self.name == undo_item.name) and
-                (self.index == undo_item.index)):
+        if (
+            isinstance(undo_item, self.__class__)
+            and (self.object is undo_item.object)
+            and (self.name == undo_item.name)
+            and (self.index == undo_item.index)
+        ):
             added = undo_item.added
             removed = undo_item.removed
-            if ((len(self.added) == len(added)) and
-                    (len(self.removed) == len(removed))):
+            if (len(self.added) == len(added)) and (
+                len(self.removed) == len(removed)
+            ):
                 for i, item in enumerate(self.added):
                     if item is not added[i]:
                         break
@@ -245,17 +272,22 @@ class ListUndoItem(AbstractUndoItem):
     def __repr__(self):
         """ Returns a 'pretty print' form of the object.
         """
-        return 'undo( %s.%s[%d:%d] = %s )' % (
-            self.object.__class__.__name__, self.name, self.index,
-            self.index + len(self.removed), self.added)
+        return "undo( %s.%s[%d:%d] = %s )" % (
+            self.object.__class__.__name__,
+            self.name,
+            self.index,
+            self.index + len(self.removed),
+            self.added,
+        )
 
 
 class UndoHistory(HasStrictTraits):
     """ Manages a list of undoable changes.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: List of accumulated undo changes
     history = List
@@ -365,9 +397,10 @@ class UndoHistory(HasStrictTraits):
 class UndoHistoryUndoItem(AbstractUndoItem):
     """ An undo item for the undo history.
     """
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: The undo history to undo or redo
     history = Instance(UndoHistory)

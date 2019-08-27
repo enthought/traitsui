@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright (c) 2008, Enthought, Inc.
 # All rights reserved.
 #
@@ -11,12 +11,11 @@
 #
 #  Author: David C. Morrill
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 """ Defines a drop editor factory for all traits toolkit backends.
     A drop target editor handles drag and drop operations as a drop
     target.
 """
-
 
 
 from __future__ import absolute_import
@@ -25,18 +24,18 @@ from traits.api import Any, Bool
 
 from .text_editor import ToolkitEditorFactory as EditorFactory
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ToolkitEditorFactory' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ToolkitEditorFactory(EditorFactory):
     """ Editor factory for drop editors.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Allowable drop objects must be of this class (optional)
     klass = Any
@@ -47,7 +46,6 @@ class ToolkitEditorFactory(EditorFactory):
     #: Can the user type into the editor, or is it read only?
     readonly = Bool(True)
 
+
 # Define the DropEditor class.
 DropEditor = ToolkitEditorFactory
-
-

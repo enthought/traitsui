@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: David C. Morrill
 #  Date:   05/20/2005
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Defines the key binding editor for use with the KeyBinding class. This is a
     specialized editor used to associate a particular key with a control (i.e.,
@@ -21,40 +21,36 @@
 """
 
 
-
 from __future__ import absolute_import
 import wx
 
-from traits.api \
-    import Event, false
+from traits.api import Event, false
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.key_binding_editor file.
-from traitsui.editors.key_binding_editor \
-    import KeyBindingEditor as ToolkitEditorFactory
+from traitsui.editors.key_binding_editor import (
+    KeyBindingEditor as ToolkitEditorFactory,
+)
 
-from pyface.wx.dialog \
-    import confirmation
+from pyface.wx.dialog import confirmation
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .key_event_to_name \
-    import key_event_to_name
+from .key_event_to_name import key_event_to_name
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'KeyBindingEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class KeyBindingEditor(Editor):
     """ An editor for modifying bindings of keys to controls.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Does the editor's control have focus currently?
     has_focus = false
@@ -100,11 +96,16 @@ class KeyBindingEditor(Editor):
         key_name = key_event_to_name(event)
         cur_binding = binding.owner.key_binding_for(binding, key_name)
         if cur_binding is not None:
-            if confirmation(None,
-                            "'%s' has already been assigned to '%s'.\n"
-                            "Do you wish to continue?" % (
-                                key_name, cur_binding.description),
-                            'Duplicate Key Definition') == 5104:
+            if (
+                confirmation(
+                    None,
+                    "'%s' has already been assigned to '%s'.\n"
+                    "Do you wish to continue?"
+                    % (key_name, cur_binding.description),
+                    "Duplicate Key Definition",
+                )
+                == 5104
+            ):
                 return
 
         self.value = key_name
@@ -112,19 +113,25 @@ class KeyBindingEditor(Editor):
     def _clear_changed(self):
         """ Handles a clear field event.
         """
-        self.value = ''
+        self.value = ""
 
 
 class KeyBindingCtrl(wx.Window):
     """ wxPython control for editing key bindings.
     """
 
-    def __init__(self, editor, parent, wid=-1, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize):
+    def __init__(
+        self,
+        editor,
+        parent,
+        wid=-1,
+        pos=wx.DefaultPosition,
+        size=wx.DefaultSize,
+    ):
 
-        super(KeyBindingCtrl, self).__init__(parent, wid, pos, size,
-                                             style=wx.CLIP_CHILDREN |
-                                             wx.WANTS_CHARS)
+        super(KeyBindingCtrl, self).__init__(
+            parent, wid, pos, size, style=wx.CLIP_CHILDREN | wx.WANTS_CHARS
+        )
         # Save the reference to the controlling editor object:
         self.editor = editor
 
@@ -192,5 +199,3 @@ class KeyBindingCtrl(wx.Window):
         """ Handles the user double clicking the control to clear its contents.
         """
         self.editor.clear = True
-
-

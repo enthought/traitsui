@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   10/07/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the abstract EditorFactory class, which represents a factory for
     creating the Editor objects used in a Traits-based user interface.
 """
-
 
 
 from __future__ import absolute_import, print_function
@@ -28,7 +27,13 @@ import logging
 import six
 
 from traits.api import (
-    HasPrivateTraits, Callable, Str, Bool, Event, Any, Property
+    HasPrivateTraits,
+    Callable,
+    Str,
+    Bool,
+    Event,
+    Any,
+    Property,
 )
 
 from .helper import enum_values_changed
@@ -37,9 +42,9 @@ from .toolkit import toolkit_object
 
 logger = logging.getLogger(__name__)
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'EditorFactory' abstract base class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class EditorFactory(HasPrivateTraits):
@@ -47,9 +52,9 @@ class EditorFactory(HasPrivateTraits):
         user interface.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Function to use for string formatting
     format_func = Callable
@@ -100,7 +105,7 @@ class EditorFactory(HasPrivateTraits):
         """ Returns the value of a specified extended name of the form: name or
             context_object_name.name[.name...]:
         """
-        names = name.split('.')
+        names = name.split(".")
 
         if len(names) == 1:
             # fixme: This will produce incorrect values if the actual Item the
@@ -109,73 +114,84 @@ class EditorFactory(HasPrivateTraits):
             # solution will probably involve providing the Item as an argument,
             # but it is currently not available at the time this method needs to
             # be called...
-            names.insert(0, 'object')
+            names.insert(0, "object")
 
         value = ui.context[names[0]]
         for name in names[1:]:
             value = getattr(value, name)
 
         return value
-    #-------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     #  Methods that generate backend toolkit-specific editors.
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def simple_editor(self, ui, object, name, description, parent):
         """ Generates an editor using the "simple" style.
         """
-        return self.simple_editor_class(parent,
-                                        factory=self,
-                                        ui=ui,
-                                        object=object,
-                                        name=name,
-                                        description=description)
+        return self.simple_editor_class(
+            parent,
+            factory=self,
+            ui=ui,
+            object=object,
+            name=name,
+            description=description,
+        )
 
     def custom_editor(self, ui, object, name, description, parent):
         """ Generates an editor using the "custom" style.
         """
-        return self.custom_editor_class(parent,
-                                        factory=self,
-                                        ui=ui,
-                                        object=object,
-                                        name=name,
-                                        description=description)
+        return self.custom_editor_class(
+            parent,
+            factory=self,
+            ui=ui,
+            object=object,
+            name=name,
+            description=description,
+        )
 
     def text_editor(self, ui, object, name, description, parent):
         """ Generates an editor using the "text" style.
         """
-        return self.text_editor_class(parent,
-                                      factory=self,
-                                      ui=ui,
-                                      object=object,
-                                      name=name,
-                                      description=description)
+        return self.text_editor_class(
+            parent,
+            factory=self,
+            ui=ui,
+            object=object,
+            name=name,
+            description=description,
+        )
 
     def readonly_editor(self, ui, object, name, description, parent):
         """ Generates an "editor" that is read-only.
         """
-        return self.readonly_editor_class(parent,
-                                          factory=self,
-                                          ui=ui,
-                                          object=object,
-                                          name=name,
-                                          description=description)
+        return self.readonly_editor_class(
+            parent,
+            factory=self,
+            ui=ui,
+            object=object,
+            name=name,
+            description=description,
+        )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Private methods
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @classmethod
     def _get_toolkit_editor(cls, class_name):
         """
         Returns the editor by name class_name in the backend package.
         """
-        editor_factory_modules = [factory_class.__module__
-                                  for factory_class in cls.mro()
-                                  if issubclass(factory_class, EditorFactory)]
+        editor_factory_modules = [
+            factory_class.__module__
+            for factory_class in cls.mro()
+            if issubclass(factory_class, EditorFactory)
+        ]
         for index, editor_module in enumerate(editor_factory_modules):
             try:
-                editor_module_name = editor_module.split('.')[-1]
-                object_ref = ':'.join([editor_module_name, class_name])
+                editor_module_name = editor_module.split(".")[-1]
+                object_ref = ":".join([editor_module_name, class_name])
                 return toolkit_object(object_ref, True)
             except RuntimeError as e:
                 msg = "Can't import toolkit_object '{}': {}"
@@ -196,7 +212,7 @@ class EditorFactory(HasPrivateTraits):
         if self.format_func is not None:
             return self.format_func(value)
 
-        if self.format_str != '':
+        if self.format_str != "":
             return self.format_str % value
 
         if format_func is not None:
@@ -204,9 +220,9 @@ class EditorFactory(HasPrivateTraits):
 
         return six.text_type(value)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Property getters
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _get_simple_editor_class(self):
         """ Returns the editor class to use for "simple" style views.
@@ -217,11 +233,11 @@ class EditorFactory(HasPrivateTraits):
 
         """
         try:
-            SimpleEditor = self._get_toolkit_editor('SimpleEditor')
+            SimpleEditor = self._get_toolkit_editor("SimpleEditor")
         except Exception as e:
             msg = "Can't import SimpleEditor for {}: {}"
             logger.debug(msg.format(self.__class__, e))
-            SimpleEditor = toolkit_object('editor_factory:SimpleEditor')
+            SimpleEditor = toolkit_object("editor_factory:SimpleEditor")
         return SimpleEditor
 
     def _get_custom_editor_class(self):
@@ -232,7 +248,7 @@ class EditorFactory(HasPrivateTraits):
 
         """
         try:
-            CustomEditor = self._get_toolkit_editor('CustomEditor')
+            CustomEditor = self._get_toolkit_editor("CustomEditor")
         except Exception as e:
             msg = "Can't import CustomEditor for {}: {}"
             logger.debug(msg.format(self.__class__, e))
@@ -248,11 +264,11 @@ class EditorFactory(HasPrivateTraits):
 
         """
         try:
-            TextEditor = self._get_toolkit_editor('TextEditor')
+            TextEditor = self._get_toolkit_editor("TextEditor")
         except Exception as e:
             msg = "Can't import TextEditor for {}: {}"
             logger.debug(msg.format(self.__class__, e))
-            TextEditor = toolkit_object('editor_factory:TextEditor')
+            TextEditor = toolkit_object("editor_factory:TextEditor")
         return TextEditor
 
     def _get_readonly_editor_class(self):
@@ -264,32 +280,33 @@ class EditorFactory(HasPrivateTraits):
 
         """
         try:
-            ReadonlyEditor = self._get_toolkit_editor('ReadonlyEditor')
+            ReadonlyEditor = self._get_toolkit_editor("ReadonlyEditor")
         except Exception as e:
             msg = "Can't import ReadonlyEditor for {}: {}"
             logger.debug(msg.format(self.__class__, e))
-            ReadonlyEditor = toolkit_object('editor_factory:ReadonlyEditor')
+            ReadonlyEditor = toolkit_object("editor_factory:ReadonlyEditor")
         return ReadonlyEditor
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'EditorWithListFactory' abstract base class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 class EditorWithListFactory(EditorFactory):
     """ Base class for factories of editors for objects that contain lists.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Values to enumerate (can be a list, tuple, dict, or a CTrait or
     #: TraitHandler that is "mapped"):
     values = Any
 
     #: Extended name of the trait on **object** containing the enumeration data:
-    object = Str('object')
+    object = Str("object")
 
     #: Name of the trait on 'object' containing the enumeration data
     name = Str
@@ -300,7 +317,8 @@ class EditorWithListFactory(EditorFactory):
     def _values_changed(self):
         """ Recomputes the mappings whenever the **values** trait is changed.
         """
-        self._names, self._mapping, self._inverse_mapping = \
-            enum_values_changed(self.values, strfunc=self.string_value)
+        self._names, self._mapping, self._inverse_mapping = enum_values_changed(
+            self.values, strfunc=self.string_value
+        )
 
         self.values_modified = True

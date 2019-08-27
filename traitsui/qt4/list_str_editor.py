@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #  Copyright (c) 2009, Enthought, Inc.
 #  All rights reserved.
@@ -13,7 +13,7 @@
 #  Author: Evan Patterson
 #  Date:   08/05/2009
 #
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 """ Traits UI editor for editing lists of strings.
 """
@@ -24,8 +24,18 @@ from pyface.qt import QtCore, QtGui, is_qt5
 import collections
 
 from pyface.image_resource import ImageResource
-from traits.api import Any, Bool, Event, Int, Instance, List, \
-    Property, Str, TraitListEvent, NO_COMPARE
+from traits.api import (
+    Any,
+    Bool,
+    Event,
+    Int,
+    Instance,
+    List,
+    Property,
+    Str,
+    TraitListEvent,
+    NO_COMPARE,
+)
 from traitsui.list_str_adapter import ListStrAdapter
 
 from .editor import Editor
@@ -33,16 +43,13 @@ from .list_str_model import ListStrModel
 from traitsui.menu import Menu
 
 
-
-
-
 class _ListStrEditor(Editor):
     """ Traits UI editor for editing lists of strings.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     # The list view control associated with the editor:
     list_view = Any
@@ -93,9 +100,9 @@ class _ListStrEditor(Editor):
     #: The current search string:
     search = Str
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Editor interface:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def init(self, parent):
         """ Finishes initializing the editor by creating the underlying toolkit
@@ -105,7 +112,7 @@ class _ListStrEditor(Editor):
 
         # Set up the adapter to use:
         self.adapter = factory.adapter
-        self.sync_value(factory.adapter_name, 'adapter', 'from')
+        self.sync_value(factory.adapter_name, "adapter", "from")
 
         # Create the list model and accompanying controls:
         self.model = ListStrModel(editor=self)
@@ -140,32 +147,37 @@ class _ListStrEditor(Editor):
 
         # Initialize the editor title:
         self.title = factory.title
-        self.sync_value(factory.title_name, 'title', 'from')
+        self.sync_value(factory.title_name, "title", "from")
 
         # Set up the selection listener
         if factory.multi_select:
-            self.sync_value(factory.selected, 'multi_selected', 'both',
-                            is_list=True)
-            self.sync_value(factory.selected_index, 'multi_selected_indices',
-                            'both', is_list=True)
+            self.sync_value(
+                factory.selected, "multi_selected", "both", is_list=True
+            )
+            self.sync_value(
+                factory.selected_index,
+                "multi_selected_indices",
+                "both",
+                is_list=True,
+            )
         else:
-            self.sync_value(factory.selected, 'selected', 'both')
-            self.sync_value(factory.selected_index, 'selected_index', 'both')
+            self.sync_value(factory.selected, "selected", "both")
+            self.sync_value(factory.selected_index, "selected_index", "both")
 
         # Synchronize other interesting traits as necessary:
-        self.sync_value(factory.activated, 'activated', 'to')
-        self.sync_value(factory.activated_index, 'activated_index', 'to')
+        self.sync_value(factory.activated, "activated", "to")
+        self.sync_value(factory.activated_index, "activated_index", "to")
 
-        self.sync_value(factory.right_clicked, 'right_clicked', 'to')
+        self.sync_value(factory.right_clicked, "right_clicked", "to")
         self.sync_value(
-            factory.right_clicked_index,
-            'right_clicked_index',
-            'to')
+            factory.right_clicked_index, "right_clicked_index", "to"
+        )
 
         # Make sure we listen for 'items' changes as well as complete list
         # replacements:
         self.context_object.on_trait_change(
-            self.update_editor, self.extended_name + '_items', dispatch='ui')
+            self.update_editor, self.extended_name + "_items", dispatch="ui"
+        )
 
         # Create the mapping from user supplied images to QIcons:
         for image_resource in factory.images:
@@ -173,7 +185,8 @@ class _ListStrEditor(Editor):
 
         # Refresh the editor whenever the adapter changes:
         self.on_trait_change(
-            self.refresh_editor, 'adapter.+update', dispatch='ui')
+            self.refresh_editor, "adapter.+update", dispatch="ui"
+        )
 
         # Set the list control's tooltip:
         self.set_tooltip()
@@ -182,10 +195,12 @@ class _ListStrEditor(Editor):
         """ Disposes of the contents of an editor.
         """
         self.context_object.on_trait_change(
-            self.update_editor, self.extended_name + '_items', remove=True)
+            self.update_editor, self.extended_name + "_items", remove=True
+        )
 
         self.on_trait_change(
-            self.refresh_editor, 'adapter.+update', remove=True)
+            self.refresh_editor, "adapter.+update", remove=True
+        )
 
         super(Editor, self).dispose()
 
@@ -202,9 +217,9 @@ class _ListStrEditor(Editor):
             else:
                 self._selected_changed(self.selected)
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  ListStrEditor interface:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def refresh_editor(self):
         """ Requests that the underlying list widget to redraw itself.
@@ -248,12 +263,13 @@ class _ListStrEditor(Editor):
         """ Returns whether or not the index is the special 'auto add' item at
             the end of the list.
         """
-        return (self.factory.auto_add and
-                (index >= self.adapter.len(self.object, self.name)))
+        return self.factory.auto_add and (
+            index >= self.adapter.len(self.object, self.name)
+        )
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Private interface:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     def _add_image(self, image_resource):
         """ Adds a new image to the image map.
@@ -265,12 +281,12 @@ class _ListStrEditor(Editor):
 
         return image
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     def _get_item_count(self):
-        return (self.model.rowCount(None) - self.factory.auto_add)
+        return self.model.rowCount(None) - self.factory.auto_add
 
-    #-- Trait Event Handlers -------------------------------------------------
+    # -- Trait Event Handlers -------------------------------------------------
 
     def _selected_changed(self, selected):
         """ Handles the editor's 'selected' trait being changed.
@@ -327,8 +343,10 @@ class _ListStrEditor(Editor):
             smodel = self.list_view.selectionModel()
             smodel.clearSelection()
             for selected_index in selected_indices:
-                smodel.select(self.model.index(selected_index),
-                              QtGui.QItemSelectionModel.Select)
+                smodel.select(
+                    self.model.index(selected_index),
+                    QtGui.QItemSelectionModel.Select,
+                )
             if selected_indices:
                 self.list_view.scrollTo(self.model.index(selected_indices[-1]))
 
@@ -338,13 +356,17 @@ class _ListStrEditor(Editor):
         if not self._no_update:
             smodel = self.list_view.selectionModel()
             for selected_index in event.removed:
-                smodel.select(self.model.index(selected_index),
-                              QtGui.QItemSelectionModel.Deselect)
+                smodel.select(
+                    self.model.index(selected_index),
+                    QtGui.QItemSelectionModel.Deselect,
+                )
             for selected_index in event.added:
-                smodel.select(self.model.index(selected_index),
-                              QtGui.QItemSelectionModel.Select)
+                smodel.select(
+                    self.model.index(selected_index),
+                    QtGui.QItemSelectionModel.Select,
+                )
 
-    #-- List Control Event Handlers ------------------------------------------
+    # -- List Control Event Handlers ------------------------------------------
 
     def _on_activate(self, mi):
         """ Handle a cell being activated.
@@ -359,7 +381,8 @@ class _ListStrEditor(Editor):
         if mi.isValid():
             self.right_clicked_index = index = mi.row()
             self.right_clicked = self.adapter.get_item(
-                self.object, self.name, index)
+                self.object, self.name, index
+            )
 
     def _on_row_selection(self, added, removed):
         """ Handle the row selection being changed.
@@ -369,8 +392,9 @@ class _ListStrEditor(Editor):
             indices = self.list_view.selectionModel().selectedRows()
             if len(indices):
                 self.selected_index = indices[0].row()
-                self.selected = self.adapter.get_item(self.object, self.name,
-                                                      self.selected_index)
+                self.selected = self.adapter.get_item(
+                    self.object, self.name, self.selected_index
+                )
             else:
                 self.selected_index = -1
                 self.selected = None
@@ -384,9 +408,10 @@ class _ListStrEditor(Editor):
         try:
             indices = self.list_view.selectionModel().selectedRows()
             self.multi_selected_indices = indices = [i.row() for i in indices]
-            self.multi_selected = [self.adapter.get_item(self.object,
-                                                         self.name, i)
-                                   for i in self.multi_selected_indices]
+            self.multi_selected = [
+                self.adapter.get_item(self.object, self.name, i)
+                for i in self.multi_selected_indices
+            ]
         finally:
             self._no_update = False
 
@@ -404,20 +429,23 @@ class _ListStrEditor(Editor):
         if menu is not None:
             qmenu = menu.create_menu(self.list_view, self)
 
-            self._menu_context = {'selection': self.object,
-                                  'object': self.object,
-                                  'editor': self,
-                                  'index': index,
-                                  'info': self.ui.info,
-                                  'handler': self.ui.handler}
+            self._menu_context = {
+                "selection": self.object,
+                "object": self.object,
+                "editor": self,
+                "index": index,
+                "info": self.ui.info,
+                "handler": self.ui.handler,
+            }
 
             qmenu.exec_(self.list_view.mapToGlobal(pos))
 
             self._menu_context = None
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Qt widgets that have been configured to behave as expected by Traits UI:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class _ItemDelegate(QtGui.QStyledItemDelegate):
@@ -439,8 +467,8 @@ class _ItemDelegate(QtGui.QStyledItemDelegate):
             painter.save()
             painter.setPen(option.palette.color(QtGui.QPalette.Dark))
             painter.drawLine(
-                option.rect.bottomLeft(),
-                option.rect.bottomRight())
+                option.rect.bottomLeft(), option.rect.bottomRight()
+            )
             painter.restore()
 
 
@@ -489,9 +517,12 @@ class _ListView(QtGui.QListView):
 
         # Note that setting 'EditKeyPressed' as an edit trigger does not work on
         # most platforms, which is why we do this here.
-        if (event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return) and
-            self.state() != QtGui.QAbstractItemView.EditingState and
-                factory.editable and 'edit' in factory.operations):
+        if (
+            event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return)
+            and self.state() != QtGui.QAbstractItemView.EditingState
+            and factory.editable
+            and "edit" in factory.operations
+        ):
             if factory.multi_select:
                 indices = editor.multi_selected_indices
                 row = indices[0] if len(indices) == 1 else -1
@@ -502,8 +533,11 @@ class _ListView(QtGui.QListView):
                 event.accept()
                 self.edit(editor.model.index(row))
 
-        elif (event.key() in (QtCore.Qt.Key_Backspace, QtCore.Qt.Key_Delete) and
-              factory.editable and 'delete' in factory.operations):
+        elif (
+            event.key() in (QtCore.Qt.Key_Backspace, QtCore.Qt.Key_Delete)
+            and factory.editable
+            and "delete" in factory.operations
+        ):
             event.accept()
 
             if factory.multi_select:
@@ -521,10 +555,14 @@ class _ListView(QtGui.QListView):
                 editor.model.removeRow(row)
                 # Handle the case of deleting the last item in the list.
                 editor.selected_index = min(
-                    row, editor.adapter.len(editor.object, editor.name) - 1)
+                    row, editor.adapter.len(editor.object, editor.name) - 1
+                )
 
-        elif (event.key() == QtCore.Qt.Key_Insert and
-              factory.editable and 'insert' in factory.operations):
+        elif (
+            event.key() == QtCore.Qt.Key_Insert
+            and factory.editable
+            and "insert" in factory.operations
+        ):
             event.accept()
 
             if factory.multi_select:

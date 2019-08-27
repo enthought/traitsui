@@ -1,4 +1,3 @@
-
 from __future__ import absolute_import
 from traits.api import Bool, List, Str
 from .date_editor import CellFormat, DateEditor
@@ -27,5 +26,6 @@ class ToolkitEditorFactory(DateEditor):
     #: A list of strings that will be offered as an alternative to specifying
     #: an absolute date, and instead specify a relative date.
     relative_dates = List()
+
 
 StyledDateEditor = ToolkitEditorFactory

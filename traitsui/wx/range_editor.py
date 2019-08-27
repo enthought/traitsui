@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005, Enthought, Inc.
 #  All rights reserved.
@@ -13,51 +13,43 @@
 #  Author: David C. Morrill
 #  Date:   10/21/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the various range editors for the wxPython user interface toolkit.
 """
-
 
 
 from __future__ import absolute_import
 import sys
 import wx
 
-from math \
-    import log10
+from math import log10
 
-from traits.api \
-    import TraitError, Str, Float, Any, Bool
+from traits.api import TraitError, Str, Float, Any, Bool
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward
 # compatibility. The class has been moved to the
 # traitsui.editors.range_editor file.
-from traitsui.editors.range_editor \
-    import ToolkitEditorFactory
+from traitsui.editors.range_editor import ToolkitEditorFactory
 
-from .editor_factory \
-    import TextEditor
+from .editor_factory import TextEditor
 
-from .editor \
-    import Editor
+from .editor import Editor
 
-from .constants \
-    import OKColor, ErrorColor
+from .constants import OKColor, ErrorColor
 
-from .helper \
-    import TraitsUIPanel, Slider
+from .helper import TraitsUIPanel, Slider
 
 
-if not hasattr(wx, 'wx.wxEVT_SCROLL_ENDSCROLL'):
+if not hasattr(wx, "wx.wxEVT_SCROLL_ENDSCROLL"):
     wxEVT_SCROLL_ENDSCROLL = wx.wxEVT_SCROLL_CHANGED
 else:
     wxEVT_SCROLL_ENDSCROLL = wx.wxEVT_SCROLL_ENDSCROLL
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'BaseRangeEditor' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class BaseRangeEditor(Editor):
@@ -65,9 +57,9 @@ class BaseRangeEditor(Editor):
         when assigning numbers the object trait.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Function to evaluate floats/ints
     evaluate = Any
@@ -85,9 +77,9 @@ class SimpleSliderEditor(BaseRangeEditor):
     in the text field.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Low value for the slider range
     low = Any
@@ -115,58 +107,73 @@ class SimpleSliderEditor(BaseRangeEditor):
         self.format = factory.format
 
         self.evaluate = factory.evaluate
-        self.sync_value(factory.evaluate_name, 'evaluate', 'from')
+        self.sync_value(factory.evaluate_name, "evaluate", "from")
 
         size = wx.DefaultSize
         if factory.label_width > 0:
             size = wx.Size(factory.label_width, 20)
 
-        self.sync_value(factory.low_name, 'low', 'from')
-        self.sync_value(factory.high_name, 'high', 'from')
+        self.sync_value(factory.low_name, "low", "from")
+        self.sync_value(factory.high_name, "high", "from")
         self.control = panel = TraitsUIPanel(parent, -1)
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         fvalue = self.value
 
         if not (self.low <= fvalue <= self.high):
-            fvalue_text = ''
+            fvalue_text = ""
             fvalue = self.low
         else:
             try:
                 fvalue_text = self.format % fvalue
             except (ValueError, TypeError) as e:
-                fvalue_text = ''
+                fvalue_text = ""
 
         ivalue = self._convert_to_slider(fvalue)
 
         self._label_lo = wx.StaticText(
-            panel, -1, '999999', size=size, style=wx.ALIGN_RIGHT | wx.ST_NO_AUTORESIZE)
+            panel,
+            -1,
+            "999999",
+            size=size,
+            style=wx.ALIGN_RIGHT | wx.ST_NO_AUTORESIZE,
+        )
         sizer.Add(self._label_lo, 0, wx.ALIGN_CENTER)
-        panel.slider = slider = Slider(panel, -1, ivalue, 0, 10000,
-                                       size=wx.Size(80, 20),
-                                       style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
+        panel.slider = slider = Slider(
+            panel,
+            -1,
+            ivalue,
+            0,
+            10000,
+            size=wx.Size(80, 20),
+            style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS,
+        )
         slider.SetTickFreq(1000)
         slider.SetValue(1)
         slider.SetPageSize(1000)
         slider.SetLineSize(100)
         wx.EVT_SCROLL(slider, self.update_object_on_scroll)
         sizer.Add(slider, 1, wx.EXPAND)
-        self._label_hi = wx.StaticText(panel, -1, '999999', size=size)
+        self._label_hi = wx.StaticText(panel, -1, "999999", size=size)
         sizer.Add(self._label_hi, 0, wx.ALIGN_CENTER)
 
-        panel.text = text = wx.TextCtrl(panel, -1, fvalue_text,
-                                        size=wx.Size(56, 20),
-                                        style=wx.TE_PROCESS_ENTER)
+        panel.text = text = wx.TextCtrl(
+            panel,
+            -1,
+            fvalue_text,
+            size=wx.Size(56, 20),
+            style=wx.TE_PROCESS_ENTER,
+        )
         wx.EVT_TEXT_ENTER(panel, text.GetId(), self.update_object_on_enter)
         wx.EVT_KILL_FOCUS(text, self.update_object_on_enter)
 
         sizer.Add(text, 0, wx.LEFT | wx.EXPAND, 4)
 
         low_label = factory.low_label
-        if factory.low_name != '':
+        if factory.low_name != "":
             low_label = self.format % self.low
 
         high_label = factory.high_label
-        if factory.high_name != '':
+        if factory.high_name != "":
             high_label = self.format % self.high
 
         self._label_lo.SetLabel(low_label)
@@ -184,11 +191,17 @@ class SimpleSliderEditor(BaseRangeEditor):
         """
         value = self._convert_from_slider(event.GetPosition())
         event_type = event.GetEventType()
-        if ((event_type == wxEVT_SCROLL_ENDSCROLL) or
-            (self.factory.auto_set and
-             (event_type == wx.wxEVT_SCROLL_THUMBTRACK)) or
-            (self.factory.enter_set and
-             (event_type == wx.wxEVT_SCROLL_THUMBRELEASE))):
+        if (
+            (event_type == wxEVT_SCROLL_ENDSCROLL)
+            or (
+                self.factory.auto_set
+                and (event_type == wx.wxEVT_SCROLL_THUMBTRACK)
+            )
+            or (
+                self.factory.enter_set
+                and (event_type == wx.wxEVT_SCROLL_THUMBRELEASE)
+            )
+        ):
             try:
                 self.ui_changing = True
                 self.control.text.SetValue(self.format % value)
@@ -228,7 +241,8 @@ class SimpleSliderEditor(BaseRangeEditor):
             self.value = value
             if not self.ui_changing:
                 self.control.slider.SetValue(
-                    self._convert_to_slider(self.value))
+                    self._convert_to_slider(self.value)
+                )
             self.control.text.SetBackgroundColour(OKColor)
             self.control.text.Refresh()
             if self._error is not None:
@@ -255,7 +269,7 @@ class SimpleSliderEditor(BaseRangeEditor):
             text = self.format % value
             1 / (self.low <= value <= self.high)
         except:
-            text = ''
+            text = ""
             value = self.low
 
         ivalue = self._convert_to_slider(value)
@@ -266,8 +280,9 @@ class SimpleSliderEditor(BaseRangeEditor):
         """ Returns the slider setting corresponding to the user-supplied value.
         """
         if self.high > self.low:
-            ivalue = int((float(value - self.low) /
-                          (self.high - self.low)) * 10000.0)
+            ivalue = int(
+                (float(value - self.low) / (self.high - self.low)) * 10000.0
+            )
         else:
             ivalue = self.low
         return ivalue
@@ -276,8 +291,7 @@ class SimpleSliderEditor(BaseRangeEditor):
         """ Returns the float or integer value corresponding to the slider
         setting.
         """
-        value = self.low + ((float(ivalue) / 10000.0) *
-                            (self.high - self.low))
+        value = self.low + ((float(ivalue) / 10000.0) * (self.high - self.low))
         if not self.factory.is_float:
             value = int(round(value))
         return value
@@ -310,9 +324,9 @@ class SimpleSliderEditor(BaseRangeEditor):
             self.update_editor()
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 class LogRangeSliderEditor(SimpleSliderEditor):
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     """ A slider editor for log-spaced values
     """
 
@@ -320,8 +334,11 @@ class LogRangeSliderEditor(SimpleSliderEditor):
         """ Returns the slider setting corresponding to the user-supplied value.
         """
         value = max(value, self.low)
-        ivalue = int((log10(value) - log10(self.low)) /
-                     (log10(self.high) - log10(self.low)) * 10000.0)
+        ivalue = int(
+            (log10(value) - log10(self.low))
+            / (log10(self.high) - log10(self.low))
+            * 10000.0
+        )
         return ivalue
 
     def _convert_from_slider(self, ivalue):
@@ -331,7 +348,7 @@ class LogRangeSliderEditor(SimpleSliderEditor):
         value = float(ivalue) / 10000.0 * (log10(self.high) - log10(self.low))
         # Do this to handle floating point errors, where fvalue may exceed
         # self.high.
-        fvalue = min(self.low * 10**(value), self.high)
+        fvalue = min(self.low * 10 ** (value), self.high)
         if not self.factory.is_float:
             fvalue = int(round(fvalue))
         return fvalue
@@ -345,9 +362,9 @@ class LargeRangeSliderEditor(BaseRangeEditor):
        slider let the user move the displayed range higher or lower.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Low value for the slider range
     low = Any(0)
@@ -376,9 +393,9 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         self.evaluate = factory.evaluate
 
         # Hook up the traits to listen to the object.
-        self.sync_value(factory.low_name, 'low', 'from')
-        self.sync_value(factory.high_name, 'high', 'from')
-        self.sync_value(factory.evaluate_name, 'evaluate', 'from')
+        self.sync_value(factory.low_name, "low", "from")
+        self.sync_value(factory.high_name, "high", "from")
+        self.sync_value(factory.evaluate_name, "evaluate", "from")
 
         self.init_range()
         low = self.cur_low
@@ -392,7 +409,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             fvalue_text = self._format % fvalue
             1 / (low <= fvalue <= high)
         except:
-            fvalue_text = ''
+            fvalue_text = ""
             fvalue = low
 
         if high > low:
@@ -401,23 +418,33 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             ivalue = low
 
         # Lower limit label:
-        label_lo = wx.StaticText(panel, -1, '999999')
+        label_lo = wx.StaticText(panel, -1, "999999")
         panel.label_lo = label_lo
         sizer.Add(label_lo, 2, wx.ALIGN_CENTER)
 
         # Lower limit button:
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_GO_BACK,
-                                       size=(15, 15))
-        button_lo = wx.BitmapButton(panel, -1, bitmap=bmp, size=(-1, 20),
-                                    style=wx.BU_EXACTFIT | wx.NO_BORDER)
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_GO_BACK, size=(15, 15))
+        button_lo = wx.BitmapButton(
+            panel,
+            -1,
+            bitmap=bmp,
+            size=(-1, 20),
+            style=wx.BU_EXACTFIT | wx.NO_BORDER,
+        )
         panel.button_lo = button_lo
         button_lo.Bind(wx.EVT_BUTTON, self.reduce_range, button_lo)
         sizer.Add(button_lo, 1, wx.ALIGN_CENTER)
 
         # Slider:
-        panel.slider = slider = Slider(panel, -1, ivalue, 0, 10000,
-                                       size=wx.Size(80, 20),
-                                       style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
+        panel.slider = slider = Slider(
+            panel,
+            -1,
+            ivalue,
+            0,
+            10000,
+            size=wx.Size(80, 20),
+            style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS,
+        )
         slider.SetTickFreq(1000)
         slider.SetValue(1)
         slider.SetPageSize(1000)
@@ -426,23 +453,31 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         sizer.Add(slider, 6, wx.EXPAND)
 
         # Upper limit button:
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_GO_FORWARD,
-                                       size=(15, 15))
-        button_hi = wx.BitmapButton(panel, -1, bitmap=bmp, size=(-1, 20),
-                                    style=wx.BU_EXACTFIT | wx.NO_BORDER)
+        bmp = wx.ArtProvider.GetBitmap(wx.ART_GO_FORWARD, size=(15, 15))
+        button_hi = wx.BitmapButton(
+            panel,
+            -1,
+            bitmap=bmp,
+            size=(-1, 20),
+            style=wx.BU_EXACTFIT | wx.NO_BORDER,
+        )
         panel.button_hi = button_hi
         button_hi.Bind(wx.EVT_BUTTON, self.increase_range, button_hi)
         sizer.Add(button_hi, 1, wx.ALIGN_CENTER)
 
         # Upper limit label:
-        label_hi = wx.StaticText(panel, -1, '999999')
+        label_hi = wx.StaticText(panel, -1, "999999")
         panel.label_hi = label_hi
         sizer.Add(label_hi, 2, wx.ALIGN_CENTER)
 
         # Text entry:
-        panel.text = text = wx.TextCtrl(panel, -1, fvalue_text,
-                                        size=wx.Size(56, 20),
-                                        style=wx.TE_PROCESS_ENTER)
+        panel.text = text = wx.TextCtrl(
+            panel,
+            -1,
+            fvalue_text,
+            size=wx.Size(56, 20),
+            style=wx.TE_PROCESS_ENTER,
+        )
         wx.EVT_TEXT_ENTER(panel, text.GetId(), self.update_object_on_enter)
         wx.EVT_KILL_FOCUS(text, self.update_object_on_enter)
 
@@ -465,17 +500,22 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         """
         low = self.cur_low
         high = self.cur_high
-        value = low + ((float(event.GetPosition()) / 10000.0) *
-                       (high - low))
+        value = low + ((float(event.GetPosition()) / 10000.0) * (high - low))
         self.control.text.SetValue(self._format % value)
         event_type = event.GetEventType()
         try:
             self.ui_changing = True
-            if ((event_type == wxEVT_SCROLL_ENDSCROLL) or
-                (self.factory.auto_set and
-                 (event_type == wx.wxEVT_SCROLL_THUMBTRACK)) or
-                (self.factory.enter_set and
-                 (event_type == wx.wxEVT_SCROLL_THUMBRELEASE))):
+            if (
+                (event_type == wxEVT_SCROLL_ENDSCROLL)
+                or (
+                    self.factory.auto_set
+                    and (event_type == wx.wxEVT_SCROLL_THUMBTRACK)
+                )
+                or (
+                    self.factory.enter_set
+                    and (event_type == wx.wxEVT_SCROLL_THUMBRELEASE)
+                )
+            ):
                 if self.factory.is_float:
                     self.value = value
                 else:
@@ -588,7 +628,7 @@ class LargeRangeSliderEditor(BaseRangeEditor):
             cur_low = max(value - 10, low)
             cur_high = min(value + 10, high)
         else:
-            d = 0.5 * (10**int(log10(mag) + 1))
+            d = 0.5 * (10 ** int(log10(mag) + 1))
             cur_low = max(low, value - d)
             cur_high = min(high, value + d)
 
@@ -635,18 +675,17 @@ class LargeRangeSliderEditor(BaseRangeEditor):
         self.update_range_ui()
 
     def _set_format(self):
-        self._format = '%d'
+        self._format = "%d"
         factory = self.factory
         low, high = self.cur_low, self.cur_high
         diff = high - low
         if factory.is_float:
             if diff > 99999:
-                self._format = '%.2g'
+                self._format = "%.2g"
             elif diff > 1:
-                self._format = '%%.%df' % max(0, 4 -
-                                              int(log10(high - low)))
+                self._format = "%%.%df" % max(0, 4 - int(log10(high - low)))
             else:
-                self._format = '%.3f'
+                self._format = "%.3f"
 
     def get_error_control(self):
         """ Returns the editor's control for indicating error status.
@@ -678,9 +717,9 @@ class SimpleSpinEditor(BaseRangeEditor):
     """ A simple style of range editor that displays a spin box control.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Low value for the slider range
     low = Any
@@ -699,14 +738,13 @@ class SimpleSpinEditor(BaseRangeEditor):
         if not factory.high_name:
             self.high = factory.high
 
-        self.sync_value(factory.low_name, 'low', 'from')
-        self.sync_value(factory.high_name, 'high', 'from')
+        self.sync_value(factory.low_name, "low", "from")
+        self.sync_value(factory.high_name, "high", "from")
         low = self.low
         high = self.high
-        self.control = wx.SpinCtrl(parent, -1, self.str_value,
-                                   min=low,
-                                   max=high,
-                                   initial=self.value)
+        self.control = wx.SpinCtrl(
+            parent, -1, self.str_value, min=low, max=high, initial=self.value
+        )
         wx.EVT_SPINCTRL(parent, self.control.GetId(), self.update_object)
         if wx.VERSION < (3, 0):
             wx.EVT_TEXT(parent, self.control.GetId(), self.update_object)
@@ -760,9 +798,9 @@ class RangeTextEditor(TextEditor):
         changes color to indicate an error.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Low value for the slider range
     low = Any
@@ -783,12 +821,13 @@ class RangeTextEditor(TextEditor):
         if not self.factory.high_name:
             self.high = self.factory.high
 
-        self.sync_value(self.factory.low_name, 'low', 'from')
-        self.sync_value(self.factory.high_name, 'high', 'from')
+        self.sync_value(self.factory.low_name, "low", "from")
+        self.sync_value(self.factory.high_name, "high", "from")
 
         if self.factory.enter_set:
-            control = wx.TextCtrl(parent, -1, self.str_value,
-                                  style=wx.TE_PROCESS_ENTER)
+            control = wx.TextCtrl(
+                parent, -1, self.str_value, style=wx.TE_PROCESS_ENTER
+            )
             wx.EVT_TEXT_ENTER(parent, control.GetId(), self.update_object)
         else:
             control = wx.TextCtrl(parent, -1, self.str_value)
@@ -799,7 +838,7 @@ class RangeTextEditor(TextEditor):
             wx.EVT_TEXT(parent, control.GetId(), self.update_object)
 
         self.evaluate = self.factory.evaluate
-        self.sync_value(self.factory.evaluate_name, 'evaluate', 'from')
+        self.sync_value(self.factory.evaluate_name, "evaluate", "from")
 
         self.control = control
         self.set_tooltip()
@@ -877,48 +916,52 @@ class RangeTextEditor(TextEditor):
 
 
 def SimpleEnumEditor(parent, factory, ui, object, name, description):
-    return CustomEnumEditor(parent, factory, ui, object, name, description,
-                            'simple')
+    return CustomEnumEditor(
+        parent, factory, ui, object, name, description, "simple"
+    )
 
 
-def CustomEnumEditor(parent, factory, ui, object, name, description,
-                     style='custom'):
+def CustomEnumEditor(
+    parent, factory, ui, object, name, description, style="custom"
+):
     """ Factory adapter that returns a enumeration editor of the specified
         style.
     """
     if factory._enum is None:
         import traitsui.editors.enum_editor as enum_editor
+
         factory._enum = enum_editor.ToolkitEditorFactory(
             values=list(range(factory.low, factory.high + 1)),
-            cols=factory.cols)
+            cols=factory.cols,
+        )
 
-    if style == 'simple':
-        return factory._enum.simple_editor(ui, object, name, description,
-                                           parent)
+    if style == "simple":
+        return factory._enum.simple_editor(
+            ui, object, name, description, parent
+        )
 
     return factory._enum.custom_editor(ui, object, name, description, parent)
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  Defines the mapping between editor factory 'mode's and Editor classes:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Mapping between editor factory modes and simple editor classes
 SimpleEditorMap = {
-    'slider': SimpleSliderEditor,
-    'xslider': LargeRangeSliderEditor,
-    'spinner': SimpleSpinEditor,
-    'enum': SimpleEnumEditor,
-    'text': RangeTextEditor,
-    'logslider': LogRangeSliderEditor
+    "slider": SimpleSliderEditor,
+    "xslider": LargeRangeSliderEditor,
+    "spinner": SimpleSpinEditor,
+    "enum": SimpleEnumEditor,
+    "text": RangeTextEditor,
+    "logslider": LogRangeSliderEditor,
 }
 # Mapping between editor factory modes and custom editor classes
 CustomEditorMap = {
-    'slider': SimpleSliderEditor,
-    'xslider': LargeRangeSliderEditor,
-    'spinner': SimpleSpinEditor,
-    'enum': CustomEnumEditor,
-    'text': RangeTextEditor,
-    'logslider': LogRangeSliderEditor
+    "slider": SimpleSliderEditor,
+    "xslider": LargeRangeSliderEditor,
+    "spinner": SimpleSpinEditor,
+    "enum": CustomEnumEditor,
+    "text": RangeTextEditor,
+    "logslider": LogRangeSliderEditor,
 }
-
-

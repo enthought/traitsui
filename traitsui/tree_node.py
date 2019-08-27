@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 #
 #  Copyright (c) 2005-19, Enthought, Inc.
 #  All rights reserved.
@@ -13,12 +13,11 @@
 #  Author: David C. Morrill
 #  Date:   12/03/2004
 #
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 """ Defines the tree node descriptor used by the tree editor and tree editor
     factory classes.
 """
-
 
 
 from __future__ import absolute_import
@@ -26,20 +25,35 @@ from __future__ import absolute_import
 import six
 
 from traits.api import (
-    AdaptedTo, Adapter, Any, Bool, Callable, Dict, Either,
-    HasPrivateTraits, Instance, Interface, isinterface, List, Property,
-    Str, cached_property
+    AdaptedTo,
+    Adapter,
+    Any,
+    Bool,
+    Callable,
+    Dict,
+    Either,
+    HasPrivateTraits,
+    Instance,
+    Interface,
+    isinterface,
+    List,
+    Property,
+    Str,
+    cached_property,
 )
 
 from traits.trait_base import (
-    SequenceTypes, get_resource_path, xgetattr, xsetattr
+    SequenceTypes,
+    get_resource_path,
+    xgetattr,
+    xsetattr,
 )
 
 from .ui_traits import AView
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'TreeNode' class:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class TreeNode(HasPrivateTraits):
@@ -47,9 +61,9 @@ class TreeNode(HasPrivateTraits):
         classes.
     """
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: Name of trait containing children (if '', the node is a leaf). Nested
     #: attributes are allowed, e.g., 'library.books'
@@ -103,10 +117,10 @@ class TreeNode(HasPrivateTraits):
     node_for = List(Any)
 
     #: Tuple of object classes that the node applies to
-    node_for_class = Property(depends_on='node_for')
+    node_for_class = Property(depends_on="node_for")
 
     #: List of object interfaces that the node applies to
-    node_for_interface = Property(depends_on='node_for')
+    node_for_interface = Property(depends_on="node_for")
 
     #: Function for formatting the label
     formatter = Callable
@@ -141,13 +155,13 @@ class TreeNode(HasPrivateTraits):
     menu = Any
 
     #: Name of leaf item icon
-    icon_item = Str('<item>')
+    icon_item = Str("<item>")
 
     #: Name of group item icon
-    icon_group = Str('<group>')
+    icon_group = Str("<group>")
 
     #: Name of opened group item icon
-    icon_open = Str('<open>')
+    icon_open = Str("<open>")
 
     #: Resource path used to locate the node icon
     icon_path = Str
@@ -170,32 +184,32 @@ class TreeNode(HasPrivateTraits):
 
     def __init__(self, **traits):
         super(TreeNode, self).__init__(**traits)
-        if self.icon_path == '':
+        if self.icon_path == "":
             self.icon_path = get_resource_path()
 
-    #-- Property Implementations ---------------------------------------------
+    # -- Property Implementations ---------------------------------------------
 
     @cached_property
     def _get_node_for_class(self):
-        return tuple([klass for klass in self.node_for
-                      if not isinterface(klass)])
+        return tuple(
+            [klass for klass in self.node_for if not isinterface(klass)]
+        )
 
     @cached_property
     def _get_node_for_interface(self):
-        return [klass for klass in self.node_for
-                if isinterface(klass)]
+        return [klass for klass in self.node_for if isinterface(klass)]
 
-    #-- Overridable Methods: -------------------------------------------------
+    # -- Overridable Methods: -------------------------------------------------
 
     def allows_children(self, object):
         """ Returns whether this object can have children.
         """
-        return (self.children != '')
+        return self.children != ""
 
     def has_children(self, object):
         """ Returns whether the object has children.
         """
-        return (len(self.get_children(object)) > 0)
+        return len(self.get_children(object)) > 0
 
     def get_children(self, object):
         """ Gets the object's children.
@@ -240,24 +254,29 @@ class TreeNode(HasPrivateTraits):
         """ Sets up or removes a listener for children being replaced on a
         specified object.
         """
-        object.on_trait_change(listener, self.children, remove=remove,
-                               dispatch='fast_ui')
+        object.on_trait_change(
+            listener, self.children, remove=remove, dispatch="fast_ui"
+        )
 
     def when_children_changed(self, object, listener, remove):
         """ Sets up or removes a listener for children being changed on a
         specified object.
         """
-        object.on_trait_change(listener, self.children + '_items',
-                               remove=remove, dispatch='fast_ui')
+        object.on_trait_change(
+            listener,
+            self.children + "_items",
+            remove=remove,
+            dispatch="fast_ui",
+        )
 
     def get_label(self, object):
         """ Gets the label to display for a specified object.
         """
         label = self.label
-        if label[:1] == '=':
+        if label[:1] == "=":
             return label[1:]
 
-        label = xgetattr(object, label, '')
+        label = xgetattr(object, label, "")
 
         if self.formatter is None:
             return label
@@ -268,7 +287,7 @@ class TreeNode(HasPrivateTraits):
         """ Sets the label for a specified object.
         """
         label_name = self.label
-        if label_name[:1] != '=':
+        if label_name[:1] != "=":
             xsetattr(object, label_name, label)
 
     def when_label_changed(self, object, listener, remove):
@@ -276,9 +295,10 @@ class TreeNode(HasPrivateTraits):
         specified object.
         """
         label = self.label
-        if label[:1] != '=':
-            memo = ('label', label, object, listener)
+        if label[:1] != "=":
+            memo = ("label", label, object, listener)
             if not remove:
+
                 def wrapped_listener(target, name, new):
                     """ Ensure listener gets called with correct object. """
                     return listener(object, name, new)
@@ -289,8 +309,9 @@ class TreeNode(HasPrivateTraits):
                 if wrapped_listener is None:
                     return
 
-            object.on_trait_change(wrapped_listener, label, remove=remove,
-                                   dispatch='ui')
+            object.on_trait_change(
+                wrapped_listener, label, remove=remove, dispatch="ui"
+            )
 
     def get_column_labels(self, object):
         """ Get the labels for any columns that have been defined.
@@ -299,7 +320,8 @@ class TreeNode(HasPrivateTraits):
         labels = xgetattr(object, trait, [])
         formatted = []
         for formatter, label in six.moves.zip_longest(
-                self.column_formatters, labels):
+            self.column_formatters, labels
+        ):
             # If the list of column formatters is shorter than the list of
             # labels, then zip_longest() will extend it with Nones. Just pass
             # the label as preformatted. Similarly, explicitly using None in
@@ -320,9 +342,10 @@ class TreeNode(HasPrivateTraits):
         handle either case.
         """
         trait = self.column_labels
-        if trait != '':
-            memo = ('column_label', trait, object, listener)
+        if trait != "":
+            memo = ("column_label", trait, object, listener)
             if not remove:
+
                 def wrapped_listener(target, name, new):
                     """ Ensure listener gets called with correct object. """
                     return listener(object, name, new)
@@ -333,22 +356,27 @@ class TreeNode(HasPrivateTraits):
                 if wrapped_listener is None:
                     return
 
-            object.on_trait_change(wrapped_listener, trait, remove=remove,
-                                   dispatch='ui')
-            object.on_trait_change(wrapped_listener, trait + '_items',
-                                   remove=remove, dispatch='ui')
+            object.on_trait_change(
+                wrapped_listener, trait, remove=remove, dispatch="ui"
+            )
+            object.on_trait_change(
+                wrapped_listener,
+                trait + "_items",
+                remove=remove,
+                dispatch="ui",
+            )
 
     def get_tooltip(self, object):
         """ Gets the tooltip to display for a specified object.
         """
         tooltip = self.tooltip
-        if tooltip == '':
+        if tooltip == "":
             return tooltip
 
-        if tooltip[:1] == '=':
+        if tooltip[:1] == "=":
             return tooltip[1:]
 
-        tooltip = xgetattr(object, tooltip, '')
+        tooltip = xgetattr(object, tooltip, "")
 
         if self.tooltip_formatter is None:
             return tooltip
@@ -449,8 +477,9 @@ class TreeNode(HasPrivateTraits):
     def is_node_for(self, object):
         """ Returns whether this is the node that handles a specified object.
         """
-        return (isinstance(object, self.node_for_class) or
-                object.has_traits_interface(*self.node_for_interface))
+        return isinstance(
+            object, self.node_for_class
+        ) or object.has_traits_interface(*self.node_for_interface)
 
     def can_add(self, object, add_object):
         """ Returns whether a given object is droppable on the node.
@@ -549,13 +578,13 @@ class TreeNode(HasPrivateTraits):
 
         return object.__class__
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'ITreeNode' class
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ITreeNode(Interface):
-
     def allows_children(self):
         """ Returns whether this object can have children.
         """
@@ -724,9 +753,10 @@ class ITreeNode(Interface):
         """ Handles an object being activated.
         """
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'ITreeNodeAdapter' class
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ITreeNodeAdapter(Adapter):
@@ -769,7 +799,7 @@ class ITreeNodeAdapter(Adapter):
     def get_children_id(self):
         """ Gets the object's children identifier.
         """
-        return ''
+        return ""
 
     def append_child(self, child):
         """ Appends a child to the object's children.
@@ -813,7 +843,7 @@ class ITreeNodeAdapter(Adapter):
     def get_label(self):
         """ Gets the label to display for a specified object.
         """
-        return 'No label specified'
+        return "No label specified"
 
     def set_label(self, label):
         """ Sets the label for a specified object.
@@ -845,23 +875,23 @@ class ITreeNodeAdapter(Adapter):
     def get_tooltip(self):
         """ Gets the tooltip to display for a specified object.
         """
-        return ''
+        return ""
 
     def get_icon(self, is_expanded):
         """ Returns the icon for a specified object.
         """
-        return '<item>'
+        return "<item>"
 
     def get_icon_path(self):
         """ Returns the path used to locate an object's icon.
         """
-        return ''
+        return ""
 
     def get_name(self):
         """ Returns the name to use when adding a new object instance
             (displayed in the "New" submenu).
         """
-        return ''
+        return ""
 
     def get_view(self):
         """ Gets the view to use when editing an object.
@@ -971,9 +1001,10 @@ class ITreeNodeAdapter(Adapter):
         """
         pass
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'ITreeNodeAdapterBridge' class
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class ITreeNodeAdapterBridge(HasPrivateTraits):
@@ -985,7 +1016,7 @@ class ITreeNodeAdapterBridge(HasPrivateTraits):
     #: The ITreeNode adapter being bridged:
     adapter = AdaptedTo(ITreeNode)
 
-    #-- TreeNode implementation ----------------------------------------------
+    # -- TreeNode implementation ----------------------------------------------
 
     def allows_children(self, object):
         """ Returns whether this object can have children.
@@ -1211,12 +1242,12 @@ class ITreeNodeAdapterBridge(HasPrivateTraits):
 # FIXME RTK: add the column_labels API to the following TreeNodes, too.
 
 
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 #  'ObjectTreeNode' class
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
 
 class ObjectTreeNode(TreeNode):
-
     def allows_children(self, object):
         """ Returns whether this object can have children.
         """
@@ -1426,12 +1457,12 @@ class TreeNodeObject(HasPrivateTraits):
     def tno_allows_children(self, node):
         """ Returns whether this object allows children.
         """
-        return (node.children != '')
+        return node.children != ""
 
     def tno_has_children(self, node):
         """ Returns whether this object has children.
         """
-        return (len(self.tno_get_children(node)) > 0)
+        return len(self.tno_get_children(node)) > 0
 
     def tno_get_children(self, node):
         """ Gets the object's children.
@@ -1476,21 +1507,26 @@ class TreeNodeObject(HasPrivateTraits):
         """ Sets up or removes a listener for children being replaced on a
         specified object.
         """
-        self.on_trait_change(listener, node.children, remove=remove,
-                             dispatch='fast_ui')
+        self.on_trait_change(
+            listener, node.children, remove=remove, dispatch="fast_ui"
+        )
 
     def tno_when_children_changed(self, node, listener, remove):
         """ Sets up or removes a listener for children being changed on a
         specified object.
         """
-        self.on_trait_change(listener, node.children + '_items',
-                             remove=remove, dispatch='fast_ui')
+        self.on_trait_change(
+            listener,
+            node.children + "_items",
+            remove=remove,
+            dispatch="fast_ui",
+        )
 
     def tno_get_label(self, node):
         """ Gets the label to display for a specified object.
         """
         label = node.label
-        if label[:1] == '=':
+        if label[:1] == "=":
             return label[1:]
 
         label = xgetattr(self, label)
@@ -1504,7 +1540,7 @@ class TreeNodeObject(HasPrivateTraits):
         """ Sets the label for a specified object.
         """
         label_name = node.label
-        if label_name[:1] != '=':
+        if label_name[:1] != "=":
             xsetattr(self, label_name, label)
 
     def tno_when_label_changed(self, node, listener, remove):
@@ -1512,9 +1548,10 @@ class TreeNodeObject(HasPrivateTraits):
         specified object.
         """
         label = node.label
-        if label[:1] != '=':
-            memo = ('label', label, node, listener)
+        if label[:1] != "=":
+            memo = ("label", label, node, listener)
             if not remove:
+
                 def wrapped_listener(target, name, new):
                     """ Ensure listener gets called with correct object. """
                     return listener(self, name, new)
@@ -1525,17 +1562,18 @@ class TreeNodeObject(HasPrivateTraits):
                 if wrapped_listener is None:
                     return
 
-            self.on_trait_change(wrapped_listener, label, remove=remove,
-                                 dispatch='ui')
+            self.on_trait_change(
+                wrapped_listener, label, remove=remove, dispatch="ui"
+            )
 
     def tno_get_tooltip(self, node):
         """ Gets the tooltip to display for a specified object.
         """
         tooltip = node.tooltip
-        if tooltip == '':
+        if tooltip == "":
             return tooltip
 
-        if tooltip[:1] == '=':
+        if tooltip[:1] == "=":
             return tooltip[1:]
 
         tooltip = xgetattr(self, tooltip)
@@ -1624,8 +1662,9 @@ class TreeNodeObject(HasPrivateTraits):
         """ Returns whether this is the node that should handle a
             specified object.
         """
-        return (isinstance(self, node.node_for_class) or
-                self.has_traits_interface(*node.node_for_interface))
+        return isinstance(
+            self, node.node_for_class
+        ) or self.has_traits_interface(*node.node_for_interface)
 
     def tno_can_add(self, node, add_object):
         """ Returns whether a given object is droppable on the node.
@@ -1702,16 +1741,17 @@ class TreeNodeObject(HasPrivateTraits):
 
         return True
 
-#-------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
 #  'MultiTreeNode' object:
-#-------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 
 class MultiTreeNode(TreeNode):
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     #  Trait definitions:
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     #: TreeNode that applies to the base object itself
     root_node = Instance(TreeNode)
@@ -1738,7 +1778,7 @@ class MultiTreeNode(TreeNode):
     def get_children_id(self, object):
         """ Gets the object's children identifier.
         """
-        return ''
+        return ""
 
     def when_children_replaced(self, object, listener, remove):
         """ Sets up or removes a listener for children being replaced on a
