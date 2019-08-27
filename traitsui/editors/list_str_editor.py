@@ -115,6 +115,10 @@ class ListStrEditor(BasicEditorFactory):
     # - False: Do not display a context menu
     menu = Any
 
+    # The optional extended name of the trait used to indicate that a complete
+    # table update is needed:
+    update = Str
+
     def _get_klass(self):
         """ Returns the editor class to be created.
         """
