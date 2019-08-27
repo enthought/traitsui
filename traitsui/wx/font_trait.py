@@ -55,10 +55,6 @@ font_weights = {
 # Strings to ignore in text representations of fonts
 font_noise = ['pt', 'point', 'family']
 
-#-------------------------------------------------------------------------
-#  Converts a wx.Font into a string description of itself:
-#-------------------------------------------------------------------------
-
 
 def font_to_str(font):
     """ Converts a wx.Font into a string description of itself.
@@ -72,10 +68,6 @@ def font_to_str(font):
         underline = ' underline'
     return '%s point %s%s%s%s' % (
            font.GetPointSize(), font.GetFaceName(), style, weight, underline)
-
-#-------------------------------------------------------------------------
-#  Create a TraitFont object from a string description:
-#-------------------------------------------------------------------------
 
 
 def create_traitsfont(value):

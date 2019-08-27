@@ -720,10 +720,6 @@ def SimpleEnumEditor(parent, factory, ui, object, name, description):
     return CustomEnumEditor(parent, factory, ui, object, name, description,
                             'simple')
 
-#-------------------------------------------------------------------------
-#  'CustomEnumEditor' factory adaptor:
-#-------------------------------------------------------------------------
-
 
 def CustomEnumEditor(parent, factory, ui, object, name, description,
                      style='custom'):

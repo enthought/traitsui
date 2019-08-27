@@ -125,7 +125,11 @@ class ToolkitEditorFactory(BasicEditorFactory):
                  line.strip()) for line in lines[i: j]]
         return (j, block_template % '\n<br>'.join(temp))
 
-    def m = self.indent(line)
+    def parse_list(self, lines, i):
+        """ Parses a list.
+        """
+        line = lines[i]
+        m = self.indent(line)
         kind = line[m]
         result = ['<li>' + line[m + 1:].strip()]
         n = len(lines)

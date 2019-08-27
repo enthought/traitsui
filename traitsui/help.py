@@ -25,10 +25,6 @@ from __future__ import absolute_import
 
 from .toolkit import toolkit
 
-#-------------------------------------------------------------------------
-#  Default handler for showing the help associated with a view:
-#-------------------------------------------------------------------------
-
 
 def default_show_help(info, control):
     """ Default handler for showing the help associated with a view.
@@ -37,10 +33,6 @@ def default_show_help(info, control):
 
 # The default handler for showing help
 show_help = default_show_help
-
-#-------------------------------------------------------------------------
-#  Allows an application to change the default show help handler:
-#-------------------------------------------------------------------------
 
 
 def on_help_call(new_show_help=None):

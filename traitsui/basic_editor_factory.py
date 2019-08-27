@@ -74,7 +74,7 @@ class BasicEditorFactory(EditorFactory):
         """
         return self.klass
 
-    def__call__(self, *args, **traits):
+    def __call__(self, *args, **traits):
         new = self.clone_traits()
         new.trait_set(**traits)
         return new

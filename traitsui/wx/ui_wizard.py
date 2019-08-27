@@ -46,10 +46,6 @@ from traits.api \
 # Trait that allows only None or a string value
 none_str_trait = Trait('', None, str)
 
-#-------------------------------------------------------------------------
-#  Creates a wizard-based wxPython user interface for a specified UI object:
-#-------------------------------------------------------------------------
-
 
 def ui_wizard(ui, parent):
     """ Creates a wizard-based wxPython user interface for a specified UI
@@ -172,10 +168,6 @@ def ui_wizard(ui, parent):
     ui.finish()
     ui.context = ui._context
     ui._context = {}
-
-#-------------------------------------------------------------------------
-#  Handles the user attempting to change the current wizard page:
-#-------------------------------------------------------------------------
 
 
 def page_changing(event):

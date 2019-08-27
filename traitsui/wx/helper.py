@@ -69,10 +69,6 @@ _bitmap_cache = {}
 app_path = None
 traits_path = None
 
-#-------------------------------------------------------------------------
-#  Convert an image file name to a cached bitmap:
-#-------------------------------------------------------------------------
-
 
 def bitmap_cache(name, standard_size, path=None):
     """ Converts an image file name to a cached bitmap.
@@ -135,20 +131,12 @@ def choice_width(values):
     """
     return max([len(x) for x in values]) * 6
 
-#-------------------------------------------------------------------------
-#  Saves the user preference items for a specified UI:
-#-------------------------------------------------------------------------
-
 
 def save_window(ui):
     """ Saves the user preference items for a specified UI.
     """
     control = ui.control
     ui.save_prefs(control.GetPositionTuple() + control.GetSizeTuple())
-
-#-------------------------------------------------------------------------
-#  Restores the user preference items for a specified UI:
-#-------------------------------------------------------------------------
 
 
 def restore_window(ui, is_popup=False):
@@ -260,10 +248,6 @@ def position_window(window, width=None, height=None, parent=None):
 
     window.SetDimensions(x, y, dx, dy)
 
-#-------------------------------------------------------------------------
-#  Returns the top-level window for a specified control:
-#-------------------------------------------------------------------------
-
 
 def top_level_window_for(control):
     """ Returns the top-level window for a specified control.
@@ -274,10 +258,6 @@ def top_level_window_for(control):
         parent = control.GetParent()
 
     return control
-
-#-------------------------------------------------------------------------
-#  Recomputes the mappings for a new set of enumeration values:
-#-------------------------------------------------------------------------
 
 
 def enum_values_changed(values):
@@ -313,10 +293,6 @@ def enum_values_changed(values):
         inverse_mapping[value] = name
 
     return (names, mapping, inverse_mapping)
-
-#-------------------------------------------------------------------------
-#  Disconnects a wx event handle from its associated control:
-#-------------------------------------------------------------------------
 
 
 def disconnect(control, *events):

@@ -310,7 +310,11 @@ class BaseDialog(BasePanel):
 
         self.ok.setEnabled(errors == 0)
 
-    def if menubar is not None:
+    def _add_menubar(self):
+        """Adds a menu bar to the dialog.
+        """
+        menubar = self.ui.view.menubar
+        if menubar is not None:
             self._last_group = self._last_parent = None
             self.control.layout().setMenuBar(
                 menubar.create_menu_bar(self.control, self))

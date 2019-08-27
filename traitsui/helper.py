@@ -60,10 +60,6 @@ def user_name_for(name):
         result += c
     return result
 
-#-------------------------------------------------------------------------
-#  Format a number with embedded commas:
-#-------------------------------------------------------------------------
-
 
 def commatize(value):
     """ Formats a specified value as an integer string with embedded commas.
@@ -76,10 +72,6 @@ def commatize(value):
         return result
 
     return '-' + result
-
-#-------------------------------------------------------------------------
-#  Recomputes the mappings for a new set of enumeration values:
-#-------------------------------------------------------------------------
 
 
 def enum_values_changed(values, strfunc=six.text_type):

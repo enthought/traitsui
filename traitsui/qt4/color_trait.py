@@ -22,10 +22,6 @@ from traits.api \
     import Trait, TraitError
 import six
 
-#-------------------------------------------------------------------------
-#  Convert a number into a QColor object:
-#-------------------------------------------------------------------------
-
 
 def convert_to_color(object, name, value):
     """ Converts a number into a QColor object.
@@ -91,10 +87,6 @@ for name in QtGui.QColor.colorNames():
 def get_color_editor(*args, **traits):
     from traitsui.qt4.color_editor import ToolkitEditorFactory
     return ToolkitEditorFactory(*args, **traits)
-
-#-------------------------------------------------------------------------
-#  Define PyQt specific color traits:
-#-------------------------------------------------------------------------
 
 
 def PyQtColor(default='white', allow_none=False, **metadata):

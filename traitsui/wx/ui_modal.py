@@ -38,29 +38,17 @@ from .constants \
 from traitsui.menu \
     import ApplyButton, RevertButton, OKButton, CancelButton, HelpButton
 
-#-------------------------------------------------------------------------
-#  Creates a modal wxPython user interface for a specified UI object:
-#-------------------------------------------------------------------------
-
 
 def ui_modal(ui, parent):
     """ Creates a modal wxPython user interface for a specified UI object.
     """
     ui_dialog(ui, parent, True)
 
-#-------------------------------------------------------------------------
-#  Creates a non-modal wxPython user interface for a specified UI object:
-#-------------------------------------------------------------------------
-
 
 def ui_nonmodal(ui, parent):
     """ Creates a non-modal wxPython user interface for a specified UI object.
     """
     ui_dialog(ui, parent, False)
-
-#-------------------------------------------------------------------------
-#  Creates a wxPython dialog-based user interface for a specified UI object:
-#-------------------------------------------------------------------------
 
 
 def ui_dialog(ui, parent, is_modal):

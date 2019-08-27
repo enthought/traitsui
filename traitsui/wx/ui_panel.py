@@ -74,19 +74,11 @@ emphasis_font = None
 # Global color used for emphasis
 emphasis_color = wx.Colour(0, 0, 127)
 
-#-------------------------------------------------------------------------
-#  Creates a panel-based wxPython user interface for a specified UI object:
-#-------------------------------------------------------------------------
-
 
 def ui_panel(ui, parent):
     """ Creates a panel-based wxPython user interface for a specified UI object.
     """
     ui_panel_for(ui, parent, True)
-
-#-------------------------------------------------------------------------
-#  Creates a subpanel-based wxPython user interface for a specified UI object:
-#-------------------------------------------------------------------------
 
 
 def ui_subpanel(ui, parent):
@@ -95,10 +87,6 @@ def ui_subpanel(ui, parent):
         specified in the UI object).
     """
     ui_panel_for(ui, parent, False)
-
-#-------------------------------------------------------------------------
-#  Creates a panel-based wxPython user interface for a specified UI object:
-#-------------------------------------------------------------------------
 
 
 def ui_panel_for(ui, parent, buttons):
@@ -375,18 +363,10 @@ def create_notebook_for_items(content, ui, parent, group,
     # Return the notebook as the result:
     return nb
 
-#-------------------------------------------------------------------------
-#  Handles a notebook page being 'turned':
-#-------------------------------------------------------------------------
-
 
 def _page_changed(event):
     nb = event.GetEventObject()
     nb.ui._active_group = event.GetSelection()
-
-#-------------------------------------------------------------------------
-#  Displays a help window for the specified UI's active Group:
-#-------------------------------------------------------------------------
 
 
 def show_help(ui, button):
@@ -407,10 +387,6 @@ def show_help(ui, button):
     html = template.group_html % (header, '\n'.join(fields))
     HTMLHelpWindow(button, html, .25, .33)
 
-#-------------------------------------------------------------------------
-#  Displays a pop-up help window for a single trait:
-#-------------------------------------------------------------------------
-
 
 def show_help_popup(event):
     """ Displays a pop-up help window for a single trait.
@@ -425,10 +401,6 @@ def show_help_popup(event):
     if help is not None:
         html = template.item_html % (control.GetLabel(), help)
         HTMLHelpWindow(control, html, .25, .13)
-
-#-------------------------------------------------------------------------
-#  Builds the user interface for a specified Group within a specified Panel:
-#-------------------------------------------------------------------------
 
 
 def fill_panel_for_group(panel, group, ui, suppress_label=False,

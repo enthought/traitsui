@@ -343,10 +343,6 @@ def _size_hint_wrapper(f, ui):
         return size
     return sizeHint
 
-#-------------------------------------------------------------------------
-#  Displays a help window for the specified UI's active Group:
-#-------------------------------------------------------------------------
-
 
 def show_help(ui, button):
     """ Displays a help window for the specified UI's active Group.
@@ -365,10 +361,6 @@ def show_help(ui, button):
                 cgi.escape(item.get_help(ui))))
     html = template.group_html % (header, '\n'.join(fields))
     HTMLHelpWindow(button, html, .25, .33)
-
-#-------------------------------------------------------------------------
-#  Displays a pop-up help window for a single trait:
-#-------------------------------------------------------------------------
 
 
 def show_help_popup(event):

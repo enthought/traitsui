@@ -68,10 +68,6 @@ def message(message='', title='Message', buttons=['OK'],
                                    kind='modal'))
     return ui.result
 
-#-------------------------------------------------------------------------
-#  Displays a user specified error message:
-#-------------------------------------------------------------------------
-
 
 def error(message='', title='Message', buttons=['OK', 'Cancel'],
           parent=None):

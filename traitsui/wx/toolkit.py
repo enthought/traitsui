@@ -400,7 +400,11 @@ class GUIToolkit(Toolkit):
         """
         event.Skip()
 
-    def control.Destroy()
+    def destroy_control(self, control):
+        """ Destroys a specified GUI toolkit control.
+        """
+        _popEventHandlers(control)
+        control.Destroy()
 
     def destroy_children(self, control):
         """ Destroys all of the child controls of a specified GUI toolkit
