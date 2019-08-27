@@ -52,4 +52,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the DNDEditor class.
 DNDEditor = ToolkitEditorFactory
 
-# EOF #########################################################################
+

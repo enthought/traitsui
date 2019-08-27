@@ -123,4 +123,4 @@ class _HistoryEditor(Editor):
 
         return {'history': self.history.history[:]}
 
-# EOF #########################################################################
+

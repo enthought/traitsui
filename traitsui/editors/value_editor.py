@@ -117,4 +117,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the ValueEditor class.
 ValueEditor = ToolkitEditorFactory
 
-#--EOF-------------------------------------------------------------------------
+

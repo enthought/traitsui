@@ -160,4 +160,4 @@ class TabularEditor(BasicEditorFactory):
         """
         return toolkit_object('tabular_editor:TabularEditor')
 
-### EOF #######################################################################
+

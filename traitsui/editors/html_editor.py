@@ -156,4 +156,4 @@ class ToolkitEditorFactory(BasicEditorFactory):
 
 HTMLEditor = ToolkitEditorFactory(klass=html_editor)
 
-#-EOF--------------------------------------------------------------------------
+

@@ -472,4 +472,4 @@ class ListEditor(BaseEditor):
         # fixme: Is this line necessary?
         self.update_editor()
 
-### EOF #######################################################################
+

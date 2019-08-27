@@ -63,4 +63,4 @@ class ImageEditor(BasicEditorFactory):
         """
         return toolkit_object('image_editor:_ImageEditor')
 
-#-- EOF -----------------------------------------------------------------------
+

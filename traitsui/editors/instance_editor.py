@@ -107,4 +107,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the InstanceEditor class.
 InstanceEditor = ToolkitEditorFactory
 
-### EOF #######################################################################
+

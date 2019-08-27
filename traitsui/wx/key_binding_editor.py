@@ -197,4 +197,4 @@ class KeyBindingCtrl(wx.Window):
         """
         self.editor.clear = True
 
-### EOF #######################################################################
+

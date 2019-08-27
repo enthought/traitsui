@@ -786,4 +786,4 @@ class DockableListElement(DockableViewElement):
                 self.editor.selected = value[1]
                 break
 
-### EOF #######################################################################
+

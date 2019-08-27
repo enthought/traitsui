@@ -52,4 +52,4 @@ class ToolkitEditorFactory(BasicEditorFactory):
 
 
 HistoryEditor = ToolkitEditorFactory(klass=history_editor)
-# EOF #########################################################################
+

@@ -70,4 +70,4 @@ class _ImageEditor(Editor):
             if isinstance(value, ImageResource):
                 self.control.Bitmap(convert_bitmap(value))
 
-### EOF #######################################################################
+

@@ -86,4 +86,4 @@ class SimpleEditor(Editor):
     def _link_clicked(self, url):
         webbrowser.open_new(url.toString())
 
-#-EOF--------------------------------------------------------------------------
+

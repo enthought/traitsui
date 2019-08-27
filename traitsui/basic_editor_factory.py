@@ -79,4 +79,4 @@ class BasicEditorFactory(EditorFactory):
         new.trait_set(**traits)
         return new
 
-## EOF ########################################################################
+

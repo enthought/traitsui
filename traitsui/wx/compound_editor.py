@@ -121,4 +121,4 @@ class CustomEditor(CompoundEditor):
 
     kind = 'custom_editor'
 
-#-- EOF ----------------------------------------------------------------------
+

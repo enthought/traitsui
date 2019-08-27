@@ -548,4 +548,4 @@ class SimpleEditor(CustomEditor):
             button.SetLabel(label)
             button.Enable(isinstance(self.value, HasTraits))
 
-### EOF #######################################################################
+

@@ -462,4 +462,4 @@ class FileDropTarget(wx.FileDropTarget):
 
         return True
 
-### EOF #######################################################################
+

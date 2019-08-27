@@ -18,4 +18,4 @@ from .ui_editor \
 
 class _PopupEditor(BasePopupEditor, UIEditor):
     pass
-#--EOF-------------------------------------------------------------------------
+

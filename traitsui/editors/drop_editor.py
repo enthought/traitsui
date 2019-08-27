@@ -50,4 +50,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the DropEditor class.
 DropEditor = ToolkitEditorFactory
 
-### EOF #######################################################################
+

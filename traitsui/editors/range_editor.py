@@ -307,4 +307,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the RangeEditor class
 RangeEditor = ToolkitEditorFactory
 
-### EOF ---------------------------------------------------------------------
+

@@ -135,4 +135,4 @@ class CustomEditor(SimpleEditor):
 
         super(CustomEditor, self).dispose()
 
-### EOF #######################################################################
+

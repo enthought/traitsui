@@ -95,4 +95,4 @@ class UIEditor(Editor):
         """
         return self.editor_ui.get_prefs()
 
-#-- EOF ----------------------------------------------------------------------
+

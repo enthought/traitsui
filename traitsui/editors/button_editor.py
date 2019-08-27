@@ -104,4 +104,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the ButtonEditor class
 ButtonEditor = ToolkitEditorFactory
 
-### EOF ---------------------------------------------------------------------
+

@@ -88,4 +88,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the BooleanEditor class
 BooleanEditor = ToolkitEditorFactory
 
-#- EOF -----------------------------------------------------------------------
+

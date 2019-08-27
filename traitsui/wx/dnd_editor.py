@@ -344,4 +344,4 @@ class FileDropSource(wx.DropSource):
         """ Called when the data has been dropped. """
         return
 
-## EOF ########################################################################
+

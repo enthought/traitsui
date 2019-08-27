@@ -37,4 +37,4 @@ class BasicEditorFactory(AbstractBasicEditorFactory):
         warnings.warn("DEPRECATED: Use traitsui.basic_editor_factory"
                       ".BasicEditorFactory instead.", DeprecationWarning)
 
-#---EOF-------------------------------------------------------------------
+

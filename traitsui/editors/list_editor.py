@@ -217,4 +217,4 @@ class ListItemProxy(HasTraits):
 # Define the ListEditor class
 ListEditor = ToolkitEditorFactory
 
-### EOF ---------------------------------------------------------------------
+

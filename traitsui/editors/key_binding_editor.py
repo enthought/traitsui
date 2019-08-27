@@ -41,4 +41,4 @@ def key_binding_editor(*args, **traits):
 KeyBindingEditor = ToolkitEditorFactory = BasicEditorFactory(
     klass=key_binding_editor)
 
-### EOF ------------------------------------------------------------------
+

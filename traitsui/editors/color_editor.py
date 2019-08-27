@@ -84,4 +84,4 @@ def ColorEditor(*args, **traits):
     except:
         return ToolkitEditorFactory(*args, **traits)
 
-## EOF #######################################################################
+

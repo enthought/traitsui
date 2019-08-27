@@ -114,4 +114,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the Code Editor class.
 CodeEditor = ToolkitEditorFactory
 
-### EOF #######################################################################
+

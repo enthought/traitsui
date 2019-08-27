@@ -117,4 +117,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the TextEditor class.
 TextEditor = ToolkitEditorFactory
 
-### EOF #######################################################################
+

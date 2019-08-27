@@ -117,4 +117,4 @@ class ListStrEditor(BasicEditorFactory):
         """ Returns the editor class to be created.
         """
         return toolkit_object('list_str_editor:_ListStrEditor')
-##EOF #########################################################################
+

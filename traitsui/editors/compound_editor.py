@@ -53,4 +53,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the CompoundEditor class
 CompoundEditor = ToolkitEditorFactory
 
-## EOF ########################################################################
+

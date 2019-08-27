@@ -52,4 +52,4 @@ class ToolkitEditorFactory(EditorWithListFactory):
 # Define the SetEditor class
 SetEditor = ToolkitEditorFactory
 
-### EOF ---------------------------------------------------------------------
+

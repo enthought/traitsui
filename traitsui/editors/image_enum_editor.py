@@ -95,4 +95,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the ImageEnumEditor class.
 ImageEnumEditor = ToolkitEditorFactory
 
-## EOF ########################################################################
+

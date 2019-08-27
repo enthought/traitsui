@@ -210,4 +210,4 @@ class TupleStructure(HasTraits):
 # Define the TupleEditor class.
 TupleEditor = ToolkitEditorFactory
 
-### EOF #######################################################################
+

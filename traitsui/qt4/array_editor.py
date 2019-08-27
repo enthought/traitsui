@@ -52,4 +52,4 @@ class ReadonlyEditor(SimpleEditor):
     #: Set the value of the readonly trait.
     readonly = True
 
-### EOF #######################################################################
+

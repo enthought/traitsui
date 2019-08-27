@@ -44,4 +44,4 @@ class SimpleEditor(BaseSimpleEditor, Editor):
     """
     pass
 
-### EOF #######################################################################
+

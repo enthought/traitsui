@@ -94,4 +94,4 @@ class ToolkitEditorFactory(EditorWithListFactory):
 # Define the EnumEditor class.
 EnumEditor = ToolkitEditorFactory
 
-### EOF #######################################################################
+

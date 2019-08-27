@@ -254,4 +254,4 @@ class SimpleEditor(Editor):
 # Define the ArrayEditor class
 ArrayEditor = ToolkitEditorFactory
 
-### EOF ---------------------------------------------------------------------
+

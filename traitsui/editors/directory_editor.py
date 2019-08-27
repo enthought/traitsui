@@ -34,4 +34,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the DirectoryEditor class
 DirectoryEditor = ToolkitEditorFactory
 
-### EOF #######################################################################
+

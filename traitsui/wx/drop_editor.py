@@ -118,4 +118,4 @@ class SimpleEditor(Editor):
 # Define the Text and ReadonlyEditor for use by the editor factory.
 TextEditor = ReadonlyEditor = SimpleEditor
 
-### EOF ##################################################################
+

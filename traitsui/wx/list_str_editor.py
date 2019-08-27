@@ -933,4 +933,4 @@ class _ListStrEditor(Editor):
             self.index = index + 1
             adapter.set_text(object, name, index, text)
 
-#--EOF-------------------------------------------------------------------------
+

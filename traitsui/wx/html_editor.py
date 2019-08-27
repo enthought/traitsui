@@ -124,4 +124,4 @@ class SimpleEditor(Editor):
         self.control.base_url = url
         self.update_editor()
 
-#--EOF-------------------------------------------------------------------------
+

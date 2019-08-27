@@ -418,4 +418,4 @@ class ReadonlyEditor(SourceEditor):
     #: Set the value of the readonly trait.
     readonly = True
 
-### EOF ##################################################################
+

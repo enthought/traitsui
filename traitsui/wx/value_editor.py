@@ -46,4 +46,4 @@ class ReadonlyEditor(_ValueEditor, Editor):
     #: Override the value of the readonly trait.
     readonly = True
 
-### EOF #######################################################################
+

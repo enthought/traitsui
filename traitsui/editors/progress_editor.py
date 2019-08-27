@@ -66,4 +66,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the Code Editor class.
 ProgressEditor = ToolkitEditorFactory
 
-### EOF #######################################################################
+

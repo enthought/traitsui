@@ -15,4 +15,4 @@ from .ui_editor \
 class _ArrayViewEditor(BaseArrayViewEditor, UIEditor):
     pass
 
-#--EOF-------------------------------------------------------------------------
+

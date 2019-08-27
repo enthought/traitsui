@@ -228,4 +228,4 @@ class ImageEnumDialog(wx.Frame):
             self._closed = True
             self.Destroy()
 
-### EOF #######################################################################
+

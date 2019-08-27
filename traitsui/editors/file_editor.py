@@ -107,4 +107,4 @@ class ToolkitEditorFactory(EditorFactory):
 # Define the FileEditor class.
 FileEditor = ToolkitEditorFactory
 
-## EOF ########################################################################
+

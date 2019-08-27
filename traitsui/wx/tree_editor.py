@@ -1647,4 +1647,4 @@ class ObjectLabel(HasStrictTraits):
                        kind='modal',
                        buttons=['OK', 'Cancel'])
 
-### EOF #######################################################################
+

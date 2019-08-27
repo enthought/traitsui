@@ -73,4 +73,4 @@ class ScrubberEditor(BasicEditorFactory):
         """
         return toolkit_object('scrubber_editor:_ScrubberEditor')
 
-### EOF ##################################################################
+

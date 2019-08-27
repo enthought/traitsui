@@ -945,4 +945,4 @@ CustomEditorMap = {
     'logslider': LogRangeSliderEditor
 }
 
-### EOF #######################################################################
+

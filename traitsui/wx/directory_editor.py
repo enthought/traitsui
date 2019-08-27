@@ -102,4 +102,4 @@ class PopupDirectory(PopupFile):
         """
         return isdir(path)
 
-### EOF ##################################################################
+

@@ -62,4 +62,4 @@ class ToolkitEditorFactory(BasicEditorFactory):
 # Define the CustomEditor class.
 CustomEditor = ToolkitEditorFactory
 
-### EOF #######################################################################
+
