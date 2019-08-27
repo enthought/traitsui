@@ -18,9 +18,7 @@
 """ Traits UI editor factory for editing lists of strings.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

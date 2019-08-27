@@ -18,9 +18,7 @@
 """ Creates a panel-based wxPython user interface for a specified UI object.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx
@@ -65,9 +63,7 @@ from .ui_base \
 from .constants import is_mac
 
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Pattern of all digits
 all_digits = re.compile(r'\d+')

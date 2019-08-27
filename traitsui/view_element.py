@@ -19,9 +19,7 @@
     (i.e., View, Group, Item, Include) derive from.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 
@@ -34,9 +32,7 @@ from .ui_traits import (AnObject, DockStyle, EditorStyle, ExportType,
 
 from .util import str_rfind
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 label_pat = re.compile(r"^(.*)\[(.*)\](.*)$", re.MULTILINE | re.DOTALL)
 label_pat2 = re.compile(r"^(.*){(.*)}(.*)$", re.MULTILINE | re.DOTALL)

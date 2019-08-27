@@ -18,9 +18,7 @@
 """ Traits UI editor for editing lists of strings.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx

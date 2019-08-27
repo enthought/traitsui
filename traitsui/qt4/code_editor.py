@@ -14,9 +14,7 @@
 interface toolkit, useful for tools such as debuggers.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
@@ -38,9 +36,7 @@ from .editor import Editor
 from .helper import pixmap_cache
 import six
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Marker line constants:
 MARK_MARKER = 0  # Marks a marked line

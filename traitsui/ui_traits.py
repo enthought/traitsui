@@ -18,9 +18,7 @@
 """ Defines common traits used within the traits.ui package.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

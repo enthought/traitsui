@@ -18,9 +18,7 @@
 """ Defines the theme style information for a DockWindow and its components.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 
@@ -29,9 +27,7 @@ from traits.api import HasPrivateTraits, Bool
 
 from .ui_traits import ATheme
 
-#-------------------------------------------------------------------------
-#  'DockWindowTheme' class:
-#-------------------------------------------------------------------------
+
 
 
 class DockWindowTheme(HasPrivateTraits):

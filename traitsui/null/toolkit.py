@@ -19,9 +19,7 @@
     the 'null' (do nothing) user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 
@@ -29,9 +27,7 @@ from ..toolkit import Toolkit
 
 from ..editor_factory import EditorFactory
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Create a dummy singleton editor factory:
 null_editor_factory = EditorFactory()

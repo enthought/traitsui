@@ -18,9 +18,7 @@
 """ Defines the filter object used to filter items displayed in a table editor.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

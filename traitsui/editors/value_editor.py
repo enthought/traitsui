@@ -18,9 +18,7 @@
 """ Defines the tree-based Python value editor and the value editor factory.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

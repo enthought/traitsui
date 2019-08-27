@@ -19,9 +19,7 @@
     opening and saving files.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import, print_function
 
@@ -75,9 +73,7 @@ from .helper import commatize
 
 from .toolkit import toolkit
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Maximum text file size to process:
 MAX_SIZE = 16 * 1024 * 1024

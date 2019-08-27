@@ -18,9 +18,7 @@
 """ Defines a completely empty editor, intended to be used as a spacer.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

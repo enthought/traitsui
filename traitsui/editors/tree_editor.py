@@ -16,9 +16,7 @@
 """ Defines the tree editor factory for all traits user interface toolkits.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

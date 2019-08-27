@@ -18,9 +18,7 @@
 """ Trait definition for a wxPython-based color.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 from __future__ import absolute_import
 import wx
 

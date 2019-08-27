@@ -19,9 +19,7 @@
     editors and trait editor factories.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from operator import itemgetter

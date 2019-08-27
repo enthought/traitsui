@@ -13,9 +13,7 @@
 """ Defines the various list editors for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui

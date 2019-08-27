@@ -19,9 +19,7 @@
     the wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 # Make sure that importimg from this backend is OK:
 from __future__ import absolute_import
@@ -48,9 +46,7 @@ from traitsui.toolkit import Toolkit
 from .constants import WindowColor, screen_dx, screen_dy
 from .helper import position_window
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 EventSuffix = {
     wx.wxEVT_LEFT_DOWN: 'left_down',

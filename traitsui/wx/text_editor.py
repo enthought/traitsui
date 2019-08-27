@@ -18,9 +18,7 @@
 """ Defines the various text editors for the wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#------------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx
@@ -43,9 +41,7 @@ from .editor_factory \
 from .constants \
     import OKColor
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Readonly text editor with view state colors:
 HoverColor = wx.LIGHT_GREY

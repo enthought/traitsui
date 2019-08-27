@@ -18,9 +18,7 @@
 """ Defines the default DockWindow theme.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 
@@ -28,9 +26,7 @@ from .dock_window_theme import DockWindowTheme
 
 from .theme import Theme
 
-#-------------------------------------------------------------------------
-#  Define the default theme:
-#-------------------------------------------------------------------------
+
 
 # The original DockWindows UI redone as a theme:
 default_dock_window_theme = DockWindowTheme(

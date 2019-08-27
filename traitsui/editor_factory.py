@@ -19,9 +19,7 @@
     creating the Editor objects used in a Traits-based user interface.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import, print_function
 

@@ -18,9 +18,7 @@
 """ A base class for creating custom Traits UI windows.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx

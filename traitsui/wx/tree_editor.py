@@ -18,9 +18,7 @@
 """ Defines the tree editor for the wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import os

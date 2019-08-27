@@ -19,9 +19,7 @@
     Traits UI elements to be docked in external PyFace DockWindow windows.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

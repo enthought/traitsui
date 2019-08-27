@@ -18,9 +18,7 @@
 """ Traits UI simple, scrubber-based integer or float value editor.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx

@@ -14,9 +14,7 @@
 """ Defines the table editor for the PyQt user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

@@ -18,17 +18,13 @@
 """ Defines the HTML help templates used for formatting Traits UI help pages.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 
 from traits.api import HasStrictTraits, Str
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Default HTML for a single Item's help window
 ItemHTML = """

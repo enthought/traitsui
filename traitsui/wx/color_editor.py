@@ -14,9 +14,7 @@
 """ Defines the various color editors for the Wx user interface toolkit.
 """
 
-#------------------------------------------------------------------------------
-#  Imports:
-#------------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx

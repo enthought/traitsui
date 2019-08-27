@@ -19,9 +19,7 @@
     HTML-formatted text, but do not modify it.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 
@@ -37,9 +35,7 @@ from ..toolkit import toolkit_object
 def html_editor(*args, **traits):
     return toolkit_object('html_editor:SimpleEditor')(*args, **traits)
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Template used to create code blocks embedded in the module comment
 block_template = """<center><table width="95%%"><tr><td bgcolor="#ECECEC"><tt>

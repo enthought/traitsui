@@ -18,16 +18,12 @@
 """ Converts a wx.KeyEvent to a standardized "name".
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Mapping from wxPython special key names to Enable key names
 key_map = {

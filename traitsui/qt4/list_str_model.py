@@ -18,9 +18,7 @@
 """ Defines the table model used by the tabular editor.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import, unicode_literals
 
@@ -29,9 +27,7 @@ from pyface.qt import QtCore, QtGui
 from traitsui.ui_traits import SequenceTypes
 import six
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # MIME type for internal table drag/drop operations
 mime_type = 'traits-ui-list-str-editor'

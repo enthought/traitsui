@@ -20,9 +20,7 @@
     been augmented to also listen to changes in the items of the list object.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#------------------------------------------------------------------------------
+
 
 from .text_editor import SimpleEditor as QtSimpleEditor
 from .text_editor import CustomEditor as QtCustomEditor

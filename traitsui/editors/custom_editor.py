@@ -18,9 +18,7 @@
 """ Defines the editor factory used to wrap a non-Traits based custom control.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

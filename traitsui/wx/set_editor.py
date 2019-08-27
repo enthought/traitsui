@@ -21,9 +21,7 @@
 """ Defines the set editors for the wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx

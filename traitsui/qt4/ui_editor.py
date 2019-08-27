@@ -16,9 +16,7 @@
     their function by creating an embedded Traits UI.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from traitsui.ui_editor import UIEditor as BaseUIEditor

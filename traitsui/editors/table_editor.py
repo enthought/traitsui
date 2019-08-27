@@ -17,9 +17,7 @@
 """ Defines the table editor factory for all traits user interface toolkits.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 
@@ -57,9 +55,7 @@ from ..view import View
 
 from .enum_editor import EnumEditor
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # The filter used to indicate that the user wants to customize the current
 # filter

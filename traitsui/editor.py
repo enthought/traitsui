@@ -19,9 +19,7 @@
     an object trait in a Traits-based user interface.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

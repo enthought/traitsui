@@ -14,9 +14,7 @@
 complete application, using information from the specified UI object.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 # Standard library imports.
 from __future__ import absolute_import

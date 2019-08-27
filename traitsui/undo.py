@@ -19,9 +19,7 @@
     support.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 
@@ -33,9 +31,7 @@ from traits.api import (Event, HasPrivateTraits, HasStrictTraits, HasTraits,
                         Instance, Int, List, Property, Str, Trait)
 
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 NumericTypes = six.integer_types + (float, complex)
 SimpleTypes = (six.text_type, bytes) + NumericTypes

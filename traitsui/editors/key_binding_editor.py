@@ -19,9 +19,7 @@ specialized editor used to associate a particular key with a control (i.e., the
 key binding editor).
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

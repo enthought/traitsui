@@ -19,9 +19,7 @@
     interface.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 
@@ -61,9 +59,7 @@ from .item import Item
 
 from .group import Group, ShadowGroup
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # List of **kind** types for views that must have a **parent** window specified
 kind_must_have_parent = ('panel', 'subpanel')

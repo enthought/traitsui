@@ -18,9 +18,7 @@
 """ Exports the symbols defined by the traits.ui package.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

@@ -18,9 +18,7 @@
 """ Editor factory for scrubber-based integer or float value editors.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

@@ -22,9 +22,7 @@
     target.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx
@@ -62,9 +60,7 @@ from pyface.image_resource \
 from .editor \
     import Editor
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # The image to use when the editor accepts files:
 file_image = ImageResource('file').create_image()

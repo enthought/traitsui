@@ -18,9 +18,7 @@
 """ Defines the table column descriptor used for toggleable columns.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

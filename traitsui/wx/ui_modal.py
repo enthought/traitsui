@@ -18,9 +18,7 @@
 """ Creates a wxPython user interface for a specified UI object.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx

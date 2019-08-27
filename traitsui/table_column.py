@@ -19,9 +19,7 @@
     classes for numeric and table editors.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import, print_function
 
@@ -57,9 +55,7 @@ import six
 logger = logging.getLogger(__name__)
 
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Flag used to indicate user has not specified a column label
 UndefinedLabel = '???'

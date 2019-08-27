@@ -12,9 +12,7 @@
 """Creates a panel-based PyQt user interface for a specified UI object.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import, division
 
@@ -48,9 +46,7 @@ from .editor \
     import Editor
 
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 #: Characters that are considered punctuation symbols at the end of a label.
 #: If a label ends with one of these charactes, we do not append a colon.

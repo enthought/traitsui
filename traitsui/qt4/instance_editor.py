@@ -14,9 +14,7 @@
     the PyQt user interface toolkit..
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
@@ -36,9 +34,7 @@ from .drop_editor import _DropEventFilter
 from .constants import DropColor
 from .helper import position_window
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 OrientationMap = {
     'default': None,

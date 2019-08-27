@@ -42,9 +42,7 @@ Menu Description Syntax::
 A line beginning with a hyphen (-) is interpreted as a menu separator.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import, print_function
 
@@ -53,9 +51,7 @@ import re
 from pyface.qt import QtGui
 import six
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 help_pat = re.compile(r'(.*){(.*)}(.*)')
 options_pat = re.compile(r'(.*)\[(.*)\](.*)')

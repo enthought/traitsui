@@ -18,9 +18,7 @@
 """ A Traits UI demo that borrows heavily from the design of the wxPython demo.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

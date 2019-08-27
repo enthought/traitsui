@@ -13,16 +13,12 @@
 """ Converts a QKeyEvent to a standardized "name".
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from pyface.qt import QtCore
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Mapping from PyQt keypad key names to Pyface key names.
 keypad_map = {

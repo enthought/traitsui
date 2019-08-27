@@ -19,9 +19,7 @@
     wxPython user interface toolkit..
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx
@@ -42,9 +40,7 @@ from .editor \
 from .helper \
     import TraitsUIPanel, disconnect
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Standard font point sizes
 PointSizes = [

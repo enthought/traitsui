@@ -19,9 +19,7 @@
     drop target editor handles drag and drop operations as a drop target.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx

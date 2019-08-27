@@ -18,9 +18,7 @@
 """ Defines the color editor factory for the all traits toolkit backends.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

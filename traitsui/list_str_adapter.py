@@ -18,9 +18,7 @@
 """  Defines adapter interfaces for use with the ListStrEditor.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

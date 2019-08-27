@@ -18,9 +18,7 @@
 """ Define an editor that displays a string value as a title.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from .editor \

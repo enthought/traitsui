@@ -21,9 +21,7 @@
 
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#------------------------------------------------------------------------------
+
 
 from .text_editor import SimpleEditor as WXSimpleEditor
 from .text_editor import CustomEditor as WXCustomEditor

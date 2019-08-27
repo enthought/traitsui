@@ -18,9 +18,7 @@
 """ Defines the array editor factory for all traits toolkit backends.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

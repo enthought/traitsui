@@ -18,9 +18,7 @@
 """ Defines tree node classes and editors for various types of values.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

@@ -15,9 +15,7 @@ that are represented as tuples of the form ( *red*, *green*, *blue* ), where
 *red*, *green* and *blue* are floats in the range from 0.0 to 1.0.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from pyface.qt import QtGui

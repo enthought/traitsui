@@ -17,9 +17,7 @@
 """ Defines the list editor factory for the traits user interface toolkits..
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 

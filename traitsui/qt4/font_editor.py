@@ -14,9 +14,7 @@
     PyQt user interface toolkit..
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
@@ -33,9 +31,7 @@ from .editor \
     import Editor
 import six
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Standard font point sizes
 PointSizes = [

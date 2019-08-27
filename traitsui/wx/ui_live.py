@@ -19,9 +19,7 @@
     is "live", meaning that it immediately updates its underlying object(s).
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx
@@ -44,9 +42,7 @@ from traitsui.undo \
 from traitsui.menu \
     import UndoButton, RevertButton, OKButton, CancelButton, HelpButton
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Types of supported windows:
 NONMODAL = 0

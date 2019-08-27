@@ -13,9 +13,7 @@
 """ Trait definition for a PyQt-based font.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from pyface.qt import QtGui

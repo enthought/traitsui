@@ -18,9 +18,7 @@
 """ Traits UI 'display only' LED numeric editor.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from wx.gizmos \
@@ -35,9 +33,7 @@ from traitsui.wx.editor \
 from traitsui.basic_editor_factory \
     import BasicEditorFactory
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # LED alignment styles:
 LEDStyles = {

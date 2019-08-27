@@ -19,9 +19,7 @@
     a Traits-based user interface.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 
@@ -41,9 +39,7 @@ from .util import str_find, str_rfind
 from .editor_factory import EditorFactory
 import six
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Pattern of all digits:
 all_digits = re.compile(r'\d+')

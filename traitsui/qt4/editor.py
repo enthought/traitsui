@@ -13,9 +13,7 @@
 """ Defines the base class for PyQt editors.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from pyface.qt import QtGui

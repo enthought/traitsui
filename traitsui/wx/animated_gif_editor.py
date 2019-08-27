@@ -18,9 +18,7 @@
 """ Defines an editor for playing animated GIF files.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 import wx

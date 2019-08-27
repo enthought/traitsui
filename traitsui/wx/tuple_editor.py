@@ -18,9 +18,7 @@
 """ Defines the tuple editor for the wxPython user interface toolkit.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 
 # FIXME: ToolkitEditorFactory is a proxy class defined here just for backward

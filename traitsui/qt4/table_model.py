@@ -12,9 +12,7 @@
 """ Defines the table model used by the table editor.
 """
 
-#-------------------------------------------------------------------------
-#  Imports:
-#-------------------------------------------------------------------------
+
 
 from __future__ import absolute_import
 from pyface.qt import QtCore, QtGui
@@ -25,9 +23,7 @@ from .clipboard import PyMimeData
 
 import six
 
-#-------------------------------------------------------------------------
-#  Constants:
-#-------------------------------------------------------------------------
+
 
 # Mapping for trait alignment values to qt4 horizontal alignment constants
 h_alignment_map = {
